@@ -45,7 +45,10 @@ public static class MapLoading
 
                colorToProvId.AddOrUpdate(currentColor, new List<Point> { new Point(x, y) }, (_, value) =>
                {
-                  value.Add(new Point(x, y));
+                  lock (value)
+                  {
+                     value.Add(new Point(x, y));
+                  }
                   return value;
                });
 
@@ -58,7 +61,10 @@ public static class MapLoading
                   if (nCol != currentColor)
                      colorToBorder.AddOrUpdate(currentColor, new List<Point> { new Point(x, y) }, (_, value) =>
                      {
-                        value.Add(new Point(x, y));
+                        lock (value)
+                        {
+                           value.Add(new Point(x, y));
+                        }
                         return value;
                      });
                }
@@ -71,7 +77,10 @@ public static class MapLoading
                   if (eCol != currentColor)
                      colorToBorder.AddOrUpdate(currentColor, new List<Point> { new Point(x, y) }, (_, value) =>
                      {
-                        value.Add(new Point(x, y));
+                        lock (value)
+                        {
+                           value.Add(new Point(x, y));
+                        }
                         return value;
                      });
                }
@@ -85,7 +94,10 @@ public static class MapLoading
                   if (sCol != currentColor)
                      colorToBorder.AddOrUpdate(currentColor, new List<Point> { new Point(x, y) }, (_, value) =>
                      {
-                        value.Add(new Point(x, y));
+                        lock (value)
+                        {
+                           value.Add(new Point(x, y));
+                        }
                         return value;
                      });
                }
@@ -98,7 +110,10 @@ public static class MapLoading
                   if (wCol != currentColor)
                      colorToBorder.AddOrUpdate(currentColor, new List<Point> { new Point(x, y) }, (_, value) =>
                      {
-                        value.Add(new Point(x, y));
+                        lock (value)
+                        {
+                           value.Add(new Point(x, y));
+                        }
                         return value;
                      });
                }
