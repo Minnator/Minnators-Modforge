@@ -51,8 +51,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data.cs" />
+    <Compile Include="DataClasses\Optimizer.cs" />
+    <Compile Include="DataClasses\Province.cs" />
     <Compile Include="DebugMaps.cs" />
-    <Compile Include="MapLoading.cs" />
+    <Compile Include="Loading\DefinitionLoading.cs" />
+    <Compile Include="Loading\MapLoading.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="MapWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -83,5 +87,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -4,16 +4,18 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms.VisualStyles;
+using Editor.DataClasses;
 
 namespace Editor;
 
 public static class MapLoading
 {
    [SuppressMessage("ReSharper", "UseCollectionExpression")]
-   public static void LoadMap()
+   public static void LoadMap(ref Log loadingLog)
    {
       var path = @"S:\SteamLibrary\steamapps\common\Europa Universalis IV\map\provinces.bmp";
 
@@ -24,7 +26,6 @@ public static class MapLoading
       var height = bmp.Height;
       var stride = bmpData.Stride;
       var scan0 = bmpData.Scan0;
-      var bpp = 24; // bits per pixel (24 is the default for bmp)
 
       ConcurrentDictionary<Color, List<Point>> colorToProvId = new ();
       ConcurrentDictionary<Color, List<Point>> colorToBorder = new ();
@@ -41,13 +42,14 @@ public static class MapLoading
 
             for (var x = 0; x < width; x++)
             {
+               var currentPoint = new Point(x, y);
                var currentColor = Color.FromArgb(row[x * 3 + 2], row[x * 3 + 1], row[x * 3]);
 
-               colorToProvId.AddOrUpdate(currentColor, new List<Point> { new Point(x, y) }, (_, value) =>
+               colorToProvId.AddOrUpdate(currentColor, new List<Point> { currentPoint }, (_, value) =>
                {
-                  lock (value)
+                  lock (value) // Is required to prevent race conditions in the List object
                   {
-                     value.Add(new Point(x, y));
+                     value.Add(currentPoint);
                   }
                   return value;
                });
@@ -57,13 +59,12 @@ public static class MapLoading
                {
                   var nRow = (byte*)scan0 + ((y - 1) * stride);
                   var rowIndex = x * 3;
-                  var nCol = Color.FromArgb(nRow[rowIndex + 2], nRow[rowIndex + 1], nRow[rowIndex]);
-                  if (nCol != currentColor)
-                     colorToBorder.AddOrUpdate(currentColor, new List<Point> { new Point(x, y) }, (_, value) =>
+                  if (Color.FromArgb(nRow[rowIndex + 2], nRow[rowIndex + 1], nRow[rowIndex]) != currentColor)
+                     colorToBorder.AddOrUpdate(currentColor, new List<Point> { currentPoint }, (_, value) =>
                      {
                         lock (value)
                         {
-                           value.Add(new Point(x, y));
+                           value.Add(currentPoint);
                         }
                         return value;
                      });
@@ -73,13 +74,12 @@ public static class MapLoading
                if (x < width - 1)
                {
                   var rowIndex = (x + 1) * 3;
-                  var eCol = Color.FromArgb(row[rowIndex + 2], row[rowIndex + 1], row[rowIndex]);
-                  if (eCol != currentColor)
-                     colorToBorder.AddOrUpdate(currentColor, new List<Point> { new Point(x, y) }, (_, value) =>
+                  if (Color.FromArgb(row[rowIndex + 2], row[rowIndex + 1], row[rowIndex]) != currentColor)
+                     colorToBorder.AddOrUpdate(currentColor, new List<Point> { currentPoint }, (_, value) =>
                      {
                         lock (value)
                         {
-                           value.Add(new Point(x, y));
+                           value.Add(currentPoint);
                         }
                         return value;
                      });
@@ -90,13 +90,12 @@ public static class MapLoading
                {
                   var sRow = (byte*)scan0 + ((y + 1) * stride);
                   var rowIndex = x * 3;
-                  var sCol = Color.FromArgb(sRow[rowIndex + 2], sRow[rowIndex + 1], sRow[rowIndex]);
-                  if (sCol != currentColor)
-                     colorToBorder.AddOrUpdate(currentColor, new List<Point> { new Point(x, y) }, (_, value) =>
+                  if (Color.FromArgb(sRow[rowIndex + 2], sRow[rowIndex + 1], sRow[rowIndex]) != currentColor)
+                     colorToBorder.AddOrUpdate(currentColor, new List<Point> { currentPoint }, (_, value) =>
                      {
                         lock (value)
                         {
-                           value.Add(new Point(x, y));
+                           value.Add(currentPoint);
                         }
                         return value;
                      });
@@ -106,13 +105,12 @@ public static class MapLoading
                if (x > 0)
                {
                   var rowIndex = (x - 1) * 3;
-                  var wCol = Color.FromArgb(row[rowIndex + 2], row[rowIndex + 1], row[rowIndex]);
-                  if (wCol != currentColor)
-                     colorToBorder.AddOrUpdate(currentColor, new List<Point> { new Point(x, y) }, (_, value) =>
+                  if (Color.FromArgb(row[rowIndex + 2], row[rowIndex + 1], row[rowIndex]) != currentColor)
+                     colorToBorder.AddOrUpdate(currentColor, new List<Point> { currentPoint }, (_, value) =>
                      {
                         lock (value)
                         {
-                           value.Add(new Point(x, y));
+                           value.Add(currentPoint);
                         }
                         return value;
                      });
@@ -124,19 +122,27 @@ public static class MapLoading
 
 
       sw.Stop();
+
+      loadingLog.WriteTimeStamp("Pixel Initialisation", sw.ElapsedMilliseconds);
+
       Debug.WriteLine($"Initialization took {sw.ElapsedMilliseconds}ms");
-      Debug.WriteLine($"Found {colorToProvId.Count} provinces and {colorToBorder.Count} borders");
-
-      var totalPointsInColorToId = colorToProvId.Values.Sum(list => list.Count);
-      Debug.WriteLine($"Total points in colorToProvId: {totalPointsInColorToId} of {width * height} pixels");
-
       sw.Restart();
       DebugMaps.DrawAllBorder(colorToBorder, new Size(width, height), @"C:\Users\david\Downloads\borders.bmp");
       sw.Stop();
       Debug.WriteLine($"Drawing Borders took {sw.ElapsedMilliseconds}ms");
+      loadingLog.WriteTimeStamp("Drawing Borders", sw.ElapsedMilliseconds);
       sw.Restart();
       DebugMaps.DrawAllBorder(colorToProvId, new Size(width, height), @"C:\Users\david\Downloads\provinces.bmp");
       sw.Stop();
+      loadingLog.WriteTimeStamp("Drawing Provinces", sw.ElapsedMilliseconds);
       Debug.WriteLine($"Drawing Provinces took {sw.ElapsedMilliseconds}ms");
+      sw.Restart();
+      var optimizedProvId = Optimizer.OptimizePixelStructures(colorToProvId);
+      var optimizedBorder = Optimizer.OptimizePixelStructures(colorToBorder);
+      sw.Stop();
+      loadingLog.WriteTimeStamp("Optimizing data structures", sw.ElapsedMilliseconds);
+      Debug.WriteLine($"Optimizing data structures took {sw.ElapsedMilliseconds}ms");
    }
+
+   
 }
