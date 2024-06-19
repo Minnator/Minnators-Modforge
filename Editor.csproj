@@ -50,10 +50,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Consts.cs" />
+    <Compile Include="Controls\ControlFactory.cs" />
+    <Compile Include="Controls\PannablePictureBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Data.cs" />
+    <Compile Include="DataClasses\ModProject.cs" />
     <Compile Include="DataClasses\Optimizer.cs" />
     <Compile Include="DataClasses\Province.cs" />
     <Compile Include="DebugMaps.cs" />
+    <Compile Include="DebugPrints.cs" />
     <Compile Include="Loading\DefinitionLoading.cs" />
     <Compile Include="Loading\MapLoading.cs" />
     <Compile Include="Log.cs" />
@@ -65,6 +72,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="MapWindow.resx">
+      <DependentUpon>MapWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

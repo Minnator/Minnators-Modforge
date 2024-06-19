@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Editor.DataClasses;
 
-namespace Editor;
+namespace Editor.Loading;
 
 public static class DefinitionLoading
 {
@@ -20,9 +17,8 @@ public static class DefinitionLoading
       sw.Start();
       var provinces = new Dictionary<int, Province>(lines.Count);
       var colorToId = new Dictionary<Color, int>(lines.Count);
-      
       var regex = new Regex(@"\s*(?:(\d+);(\d+);(\d+);(\d+);(.*);).*");
-      
+
       foreach (var line in lines)
       {
          var match = regex.Match(line);
@@ -35,7 +31,7 @@ public static class DefinitionLoading
              !int.TryParse(match.Groups[3].Value, out var g) ||
              !int.TryParse(match.Groups[4].Value, out var b))
          {
-            MessageBox.Show($"Invalid values in the definition line: {line}","Corrupted definitions.csv");
+            MessageBox.Show($"Invalid values in the definition line: {line}", "Corrupted definitions.csv");
             throw new Exception("Corrupted definitions.csv");
          }
 
@@ -48,25 +44,12 @@ public static class DefinitionLoading
          };
 
          //There are some duplicate colors in the definition file in vanilla, so we link to the first found
-         if (!colorToId.TryGetValue(color, out var existingId)) 
+         if (!colorToId.TryGetValue(color, out _))
             colorToId.Add(color, id);
       }
-
       sw.Stop();
       loadingLog.WriteTimeStamp("DefinitionLoading", sw.ElapsedMilliseconds);
 
       return [.. provinces.Values];
    }
-
-   public static void PrintLoadedDefinitions (Province[] provinces)
-   {
-      var sb = new StringBuilder();
-      sb.AppendLine($"Loaded [{provinces.Length}] provinces:");
-      foreach (var province in provinces)
-      {
-         sb.AppendLine($"Id: {province.Id,4}, Color: {province.Color}");
-      }
-      File.WriteAllText(@"C:\Users\david\Downloads\definition.txt", sb.ToString());
-   }
-
 }

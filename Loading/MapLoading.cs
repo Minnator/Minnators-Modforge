@@ -4,41 +4,34 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Forms.VisualStyles;
 using Editor.DataClasses;
 
-namespace Editor;
+namespace Editor.Loading;
 
 public static class MapLoading
 {
    [SuppressMessage("ReSharper", "UseCollectionExpression")]
-   public static void LoadMap(ref Log loadingLog)
+   public static (ConcurrentDictionary<Color, List<Point>>, ConcurrentDictionary<Color, List<Point>>) LoadMap(
+      ref Log loadingLog, string path)
    {
-      var path = @"S:\SteamLibrary\steamapps\common\Europa Universalis IV\map\provinces.bmp";
-
-      // loading the map to get the width and height
       using var bmp = new Bitmap(path);
       var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
       var width = bmp.Width;
       var height = bmp.Height;
       var stride = bmpData.Stride;
       var scan0 = bmpData.Scan0;
+      var sw = new Stopwatch();
 
       ConcurrentDictionary<Color, List<Point>> colorToProvId = new ();
       ConcurrentDictionary<Color, List<Point>> colorToBorder = new ();
-
       
-      var sw = new Stopwatch();
       sw.Start();
-
       Parallel.For(0, height, y =>
       {
          unsafe
          {
-            var row = (byte*)scan0 + (y * stride);
+            var row = (byte*)scan0 + y * stride;
 
             for (var x = 0; x < width; x++)
             {
@@ -53,7 +46,6 @@ public static class MapLoading
                   }
                   return value;
                });
-
                // Check if the pixel north is in the bounds of the image and if the color is different
                if (y > 0)
                {
@@ -72,8 +64,7 @@ public static class MapLoading
 
                // Check if the pixel east is in the bounds of the image and if the color is different
                if (x < width - 1)
-               {
-                  var rowIndex = (x + 1) * 3;
+               { var rowIndex = (x + 1) * 3;
                   if (Color.FromArgb(row[rowIndex + 2], row[rowIndex + 1], row[rowIndex]) != currentColor)
                      colorToBorder.AddOrUpdate(currentColor, new List<Point> { currentPoint }, (_, value) =>
                      {
@@ -84,7 +75,6 @@ public static class MapLoading
                         return value;
                      });
                }
-
                // Check if the pixel south is in the bounds of the image and if the color is different
                if (y < height - 1)
                {
@@ -100,7 +90,6 @@ public static class MapLoading
                         return value;
                      });
                }
-
                // Check if the pixel west is in the bounds of the image and if the color is different
                if (x > 0)
                {
@@ -119,29 +108,20 @@ public static class MapLoading
          }
       });
 
-
-
       sw.Stop();
-
       loadingLog.WriteTimeStamp("Pixel Initialisation", sw.ElapsedMilliseconds);
-
-      Debug.WriteLine($"Initialization took {sw.ElapsedMilliseconds}ms");
-      sw.Restart();
-      DebugMaps.DrawAllBorder(colorToBorder, new Size(width, height), @"C:\Users\david\Downloads\borders.bmp");
-      sw.Stop();
-      Debug.WriteLine($"Drawing Borders took {sw.ElapsedMilliseconds}ms");
-      loadingLog.WriteTimeStamp("Drawing Borders", sw.ElapsedMilliseconds);
-      sw.Restart();
-      DebugMaps.DrawAllBorder(colorToProvId, new Size(width, height), @"C:\Users\david\Downloads\provinces.bmp");
-      sw.Stop();
-      loadingLog.WriteTimeStamp("Drawing Provinces", sw.ElapsedMilliseconds);
-      Debug.WriteLine($"Drawing Provinces took {sw.ElapsedMilliseconds}ms");
-      sw.Restart();
-      var optimizedProvId = Optimizer.OptimizePixelStructures(colorToProvId);
-      var optimizedBorder = Optimizer.OptimizePixelStructures(colorToBorder);
-      sw.Stop();
-      loadingLog.WriteTimeStamp("Optimizing data structures", sw.ElapsedMilliseconds);
-      Debug.WriteLine($"Optimizing data structures took {sw.ElapsedMilliseconds}ms");
+      if (Consts.DEBUG)
+      {
+         sw.Restart();
+         DebugMaps.DrawAllBorder(colorToBorder, new Size(width, height), @"C:\Users\david\Downloads\borders.bmp");
+         sw.Stop();
+         loadingLog.WriteTimeStamp("Drawing Borders", sw.ElapsedMilliseconds);
+         sw.Restart();
+         DebugMaps.DrawAllBorder(colorToProvId, new Size(width, height), @"C:\Users\david\Downloads\provinces.bmp");
+         sw.Stop();
+         loadingLog.WriteTimeStamp("Drawing Provinces", sw.ElapsedMilliseconds);
+      }
+      return (colorToProvId, colorToBorder);
    }
 
    
