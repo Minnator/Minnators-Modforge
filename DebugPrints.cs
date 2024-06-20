@@ -18,4 +18,22 @@ public static class DebugPrints
       }
       File.WriteAllText(@"C:\Users\david\Downloads\provincesDEBUG.txt", sb.ToString());
    }
+
+   public static void PrintAdjacencies()
+   {
+      var sb = new StringBuilder();
+      foreach (var kvp in Data.AdjacentProvinces)
+      {
+         sb.Append($"ProvincePtr: [{kvp.Key,4}] is adjacent to: [");
+         foreach (var adj in kvp.Value)
+         {
+            sb.Append($"{adj,4}, ");
+         }
+         if (kvp.Value.Length > 0)
+            sb.Remove(sb.Length - 2, 2);
+         sb.Append("]");
+         sb.AppendLine();
+      }
+      File.WriteAllText(@"C:\Users\david\Downloads\adjacenciesDEBUG.txt", sb.ToString());
+   }
 }

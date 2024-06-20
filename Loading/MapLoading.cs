@@ -121,6 +121,10 @@ public static class MapLoading
          sw.Stop();
          loadingLog.WriteTimeStamp("Drawing Provinces", sw.ElapsedMilliseconds);
       }
+
+      Data.MapWidth = width;
+      Data.MapHeight = height;
+
       return (colorToProvId, colorToBorder);
    }
 

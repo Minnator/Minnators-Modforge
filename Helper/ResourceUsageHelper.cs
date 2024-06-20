@@ -13,9 +13,11 @@ namespace Editor.Helper
       private static PerformanceCounter? cpuUsage;
       private static PerformanceCounter? memoryUsage;
 
-      public static Timer Updater { get; set; } = null!;
+      private static Timer Updater { get; set; } = null!;
       private static string _appName = string.Empty;
 
+      // Initialize the resource usage helper by setting the application name and starting the timer
+      // Add PerformanceCounters for CPU and memory usage
       public static void Initialize(MapWindow mapWindow)
       {
          _appName = Process.GetCurrentProcess().ProcessName;
@@ -26,6 +28,7 @@ namespace Editor.Helper
          memoryUsage = new PerformanceCounter("Process", "Private Bytes", _appName, true);
       }
 
+      // Update the CPU and memory usage
       public static void UpdateResources()
       {
          if (cpuUsage == null || memoryUsage == null)
@@ -39,6 +42,7 @@ namespace Editor.Helper
       {
          UpdateResources();
 
+         // If the window is disposed, stop updating
          if (_mapWindow.Disposing || _mapWindow.IsDisposed)
             Updater.Dispose();
 

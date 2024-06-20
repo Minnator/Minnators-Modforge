@@ -52,6 +52,7 @@ namespace Editor
          LoadingLog.Close();
          LoadingLog = null!;
 
+         AdjacencyHelper.CalculateAdjacency();
       }
 
       // Loads the map into the created PannablePictureBox
@@ -64,8 +65,10 @@ namespace Editor
 
       private void LoadDefinitionAndMap(ref Log loadingLog)
       {
+         //TODO Remove hardcoded path
+         Data.MapPath = Path.Combine(Project.VanillaPath, "map", "provinces.bmp");
          var (colorToProvId, colorToBorder) = MapLoading.LoadMap(
-            ref loadingLog, Path.Combine(Project.VanillaPath, "map", "provinces.bmp"));
+            ref loadingLog, Data.MapPath);
          var provinces = DefinitionLoading.LoadDefinition([.. File.ReadAllLines(@"S:\SteamLibrary\steamapps\common\Europa Universalis IV\map\definition.csv")], ref loadingLog);
 
          Optimizer.OptimizeProvinces(provinces, colorToProvId, colorToBorder, Project.MapSize.Width * Project.MapSize.Height, ref loadingLog);

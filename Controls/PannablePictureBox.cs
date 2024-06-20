@@ -10,14 +10,14 @@ namespace Editor.Controls;
 
 public sealed class PannablePictureBox : PictureBox
 {
-   private bool _isPainting;
-
-   private Point _startingPoint = Point.Empty;
-   private Point _movingPoint = Point.Empty;
-   private bool _panning = false;
+   private bool _isPainting; // Prevents double locking of bitmaps when painting
    public event EventHandler ImageChanged = null!;
-   public Selection Selection;
 
+   // ------------------------------ Province Selection ------------------------------
+   public Selection Selection; // Contains the selected provinces public to retrieve the selected provinces
+   private int _lastInvalidatedProvince = -1; // Contains the invalidated province from the last MouseMove event to clear it
+
+   // ------------------------------ Image Layers ------------------------------
    //Bitmaps from bottom to top render order: Image, Overlay, SelectionOverlay
    public new Bitmap Image
    {
@@ -42,10 +42,13 @@ public sealed class PannablePictureBox : PictureBox
    public Bitmap Overlay = null!;
    public Bitmap SelectionOverlay = null!;
 
-   private readonly Panel _parentPanel;
-   private readonly MapWindow _mapWindow;
-   private int _lastInvalidatedProvince = -1; // Contains the invalidated provice from the last MouseMove event to clear it
-   public bool AllowPanning { get; set; } = true;
+   // ------------------------------ Panning ------------------------------
+   private readonly Panel _parentPanel; // Reference to the panel which contains the PictureBox to scroll it
+   private readonly MapWindow _mapWindow; // Reference to the main window to update the selected province count
+   private Point _startingPoint = Point.Empty;
+   private Point _movingPoint = Point.Empty;
+   private bool _panning = false;
+   private bool AllowPanning { get; set; } = true; // If true, the user can pan the map by holding the middle mouse button
 
    public PannablePictureBox(string path, ref Panel parentPanel, MapWindow mapWindow)
    {
@@ -54,17 +57,26 @@ public sealed class PannablePictureBox : PictureBox
       MouseUp += PictureBox1_MouseUp;
       MouseClick += OnMouseClick_Click;
 
-      Selection = new Selection(this);
+      Selection = new Selection(this); // Initialize the selection class which manages the province selection
       Image = new Bitmap(path);
       _parentPanel = parentPanel;
       _mapWindow = mapWindow;
    }
+   private void OnImageChanged(EventArgs e)
+   {
+      ImageChanged?.Invoke(this, e);
+      Width = Image.Width;
+      Height = Image.Height;
+   }
 
    private void OnMouseClick_Click (object sender, MouseEventArgs e)
    {
+      // ------------------------------ Panning ------------------------------
+      // We don't want to mess with the selection if the user is panning
       if (e.Button == MouseButtons.Middle)
          return;
 
+      // ------------------------------ Province Selection ------------------------------
       if (!Data.ColorToProvPtr.TryGetValue(Color.FromArgb(Image.GetPixel(e.X, e.Y).ToArgb()), out var ptr)) return;
       //check if ctrl is pressed
       if (ModifierKeys == Keys.Control) 
@@ -74,15 +86,7 @@ public sealed class PannablePictureBox : PictureBox
 
       _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvPtr.Count);
    }
-
-
-   private void OnImageChanged(EventArgs e)
-   {
-      ImageChanged?.Invoke(this, e);
-      Width = Image.Width;
-      Height = Image.Height;
-   }
-
+   
    private void PictureBox_MouseDown(object sender, MouseEventArgs e)
    {
       // ------------------------------ Province Selection ------------------------------
@@ -125,6 +129,7 @@ public sealed class PannablePictureBox : PictureBox
 
    private void PictureBox1_MouseMove(object sender, MouseEventArgs e)
    {
+      // ------------------------------ Out of Bounds Check ------------------------------
       if (e.X < 0 || e.Y < 0 || e.X >= Image.Width || e.Y >= Image.Height)
          return;
 

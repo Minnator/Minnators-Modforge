@@ -11,25 +11,9 @@ namespace Editor.DataClasses;
 
 public static class Optimizer
 {
-   public static Dictionary<Color, Point[]> OptimizeDataStructures(ConcurrentDictionary<Color, List<Point>> old)
-   {
-      return old.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.ToArray());
-   }
-
-   public static Point[][] OptimizePixelStructures(ConcurrentDictionary<Color, List<Point>> input)
-   {
-      var output = new Point[input.Count][];
-      var i = 0;
-
-      foreach (var kvp in input)
-      {
-         output[i] = [.. kvp.Value];
-         i++;
-      }
-
-      return output;
-   }
-
+   // Optimizes the provinces by copying the pixels and borders to one large array each and only saving pointers in the provinces
+   // to where their points start and end. Also calculates the bounds of the provinces.
+   // This allows for duplicate points in the BorderPixels array but increases performance.
    public static void OptimizeProvinces(Province[] provinces, ConcurrentDictionary<Color, List<Point>> colorToProvId, ConcurrentDictionary<Color, List<Point>> colorToBorder, int pixelCount, ref Log log)
    {
       var sw = new Stopwatch();
@@ -42,7 +26,6 @@ public static class Optimizer
       var borderPtr = 0;
       var provincePtr = 0;
       
-
       foreach (var province in provinces)
       {
          var color = Color.FromArgb(province.Color.R, province.Color.G, province.Color.B);
@@ -67,21 +50,23 @@ public static class Optimizer
          borderPtr += province.BorderCnt;
 
          //calculate the bounds of the provinces
-         province.Bounds = MathHelper.GetBoundingBox(colorToBorder[color].ToArray());
+         province.Bounds = MathHelper.GetBoundingRectangle(colorToBorder[color].ToArray());
 
       }
 
       sw.Stop();
-      Debug.WriteLine($"OptimizeProvinces took {sw.ElapsedMilliseconds}ms");
+      //Debug.WriteLine($"OptimizeProvinces took {sw.ElapsedMilliseconds}ms");
       log.WriteTimeStamp("OptimizeProvinces", sw.ElapsedMilliseconds);
-      var elapsed = sw.ElapsedMilliseconds;
-      Debug.WriteLine($"Per Province Cost: {elapsed / (float)provinces.Length * 1000} µs");
+      //var elapsed = sw.ElapsedMilliseconds;
+      //Debug.WriteLine($"Per Province Cost: {elapsed / (float)provinces.Length * 1000} µs");
 
+      // Set the optimized data to the Data class
       Data.BorderPixels = borders;
       Data.Pixels = pixels;
       Data.Provinces = provinces;
       Data.ColorToProvPtr = dic;
 
+      // Free up memory from the ConcurrentDictionaries
       colorToBorder.Clear();
       colorToProvId.Clear();
    }

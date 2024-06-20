@@ -4,11 +4,13 @@ namespace Editor.Helper;
 
 public static class MathHelper
 {
+   // Returns true if the two rectangles intersect
    public static bool RectanglesIntercept (Rectangle r1, Rectangle r2)
    {
       return r1.X < r2.X + r2.Width && r1.X + r1.Width > r2.X && r1.Y < r2.Y + r2.Height && r1.Y + r1.Height > r2.Y;
    }
 
+   // Returns the points of the rectangle Border in clockwise order
    public static Point[] GetRectanglePoints(Rectangle rect)
    {
       if (rect.Width < 2 || rect.Height < 2)
@@ -28,7 +30,8 @@ public static class MathHelper
       return points;
    }
 
-   public static Rectangle GetBoundingBox (Point[] points)
+   // Returns the bounding rectangle of the given points
+   public static Rectangle GetBoundingRectangle (Point[] points)
    {
       if (points.Length == 0)
          return Rectangle.Empty;
@@ -48,10 +51,10 @@ public static class MathHelper
          if (points[i].Y > maxY)
             maxY = points[i].Y;
       }
-
       return new Rectangle(minX, minY, maxX - minX + 1, maxY - minY + 1);
    }
 
+   // Clamps the given value between the given min and max
    public static T Clamp<T> (T value, T min, T max) where T : System.IComparable<T>
    {
       if (value.CompareTo(min) < 0)
