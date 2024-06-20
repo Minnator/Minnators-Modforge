@@ -46,6 +46,8 @@ public static class DefinitionLoading
          //There are some duplicate colors in the definition file in vanilla, so we link to the first found
          if (!colorToId.TryGetValue(color, out _))
             colorToId.Add(color, id);
+         else 
+            Debug.WriteLine($"Duplicate color found in definition file: {color}");
       }
       sw.Stop();
       loadingLog.WriteTimeStamp("DefinitionLoading", sw.ElapsedMilliseconds);

@@ -48,6 +48,10 @@ public static class Optimizer
          var color = Color.FromArgb(province.Color.R, province.Color.G, province.Color.B);
          dic[color] = provincePtr;
 
+         //set the province pointer for the province itself
+         province.SelfPtr = provincePtr;
+         provincePtr++;
+
          //copy the pixels of the province to the pixel array
          if (!colorToProvId.ContainsKey(color))
             continue;
@@ -65,9 +69,6 @@ public static class Optimizer
          //calculate the bounds of the provinces
          province.Bounds = MathHelper.GetBoundingBox(colorToBorder[color].ToArray());
 
-         //set the province pointer for the province itself
-         province.SelfPtr = provincePtr;
-         provincePtr++;
       }
 
       sw.Stop();

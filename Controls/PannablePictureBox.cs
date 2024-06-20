@@ -58,11 +58,14 @@ public sealed class PannablePictureBox : PictureBox
 
    private void OnMouseClick_Click (object sender, MouseEventArgs e)
    {
+      if (e.Button == MouseButtons.Middle)
+         return;
+
       if (!Data.ColorToProvPtr.TryGetValue(Color.FromArgb(Image.GetPixel(e.X, e.Y).ToArgb()), out var ptr)) return;
       //check if ctrl is pressed
       if (ModifierKeys == Keys.Control) 
          Selection.Add(ptr);
-      else if (!Selection.IsInRectSelection && ModifierKeys != Keys.Shift && !_panning)
+      else if (!Selection.IsInRectSelection && ModifierKeys != Keys.Shift)
          Selection.MarkNext(ptr);
    }
 
@@ -84,7 +87,7 @@ public sealed class PannablePictureBox : PictureBox
       }
       // ------------------------------ Panning ------------------------------
       if (AllowPanning)
-         if (e.Button == MouseButtons.Left)
+         if (e.Button == MouseButtons.Middle)
          {
             _panning = true;
             _startingPoint = e.Location;
@@ -103,7 +106,7 @@ public sealed class PannablePictureBox : PictureBox
       
       // ------------------------------ Panning ------------------------------
       if (AllowPanning)
-         if (e.Button == MouseButtons.Left)
+         if (e.Button == MouseButtons.Middle)
          {
             _panning = false;
             Cursor = Cursors.Default; // Optional: revert cursor back to default

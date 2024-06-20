@@ -43,7 +43,7 @@ public static class MapDrawHelper
       Array.Copy(Data.BorderPixels, province.BorderPtr, points, 0, province.BorderCnt);
       return DrawOnMap(province.Bounds, points, color, bmp);
    }
-
+   
 
    // ================================ Private Methods ================================
    private static Rectangle GetBoundingBox(ref Point[] points)
@@ -59,7 +59,7 @@ public static class MapDrawHelper
    // ------------------------------ 24bpp ------------------------------
    #region 24bpp Drawing
    // !!24bpp!! Draws the given Array of Points on the given Bitmap with the given Color in parallel
-   public static void DrawPixels24BppParallel(Rectangle rect, Point[] points, Color color, Bitmap bmp)
+   private static void DrawPixels24BppParallel(Rectangle rect, Point[] points, Color color, Bitmap bmp)
    {
       var bmpData = bmp.LockBits(rect, ImageLockMode.WriteOnly, bmp.PixelFormat);
 
@@ -83,7 +83,7 @@ public static class MapDrawHelper
       bmp.UnlockBits(bmpData);
    }
    // !!24bpp!! Draws the given Array of Points on the given Bitmap with the given Color
-   public static void DrawPixels24Bpp(Rectangle rect, Point[] points, Color color, Bitmap bmp)
+   private static void DrawPixels24Bpp(Rectangle rect, Point[] points, Color color, Bitmap bmp)
    {
       var bmpData = bmp.LockBits(rect, ImageLockMode.WriteOnly, bmp.PixelFormat);
 
