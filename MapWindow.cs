@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Editor.Controls;
 using Editor.DataClasses;
+using Editor.Helper;
 using Editor.Loading;
 
 namespace Editor
@@ -33,20 +34,42 @@ namespace Editor
       public MapWindow()
       {
          InitGui();
-         
-         var (colorToProvId, colorToBorder) = MapLoading.LoadMap(
-            ref LoadingLog, Path.Combine(Project.VanillaPath, "map", "provinces.bmp"));
-         var provinces = DefinitionLoading.LoadDefinition([.. File.ReadAllLines(@"S:\SteamLibrary\steamapps\common\Europa Universalis IV\map\definition.csv")], ref LoadingLog);
+         LoadDefinitionAndMap(ref LoadingLog);
+         DrawProvinceBorder();
 
-         Optimizer.OptimizeProvinces(provinces, colorToProvId, colorToBorder, Project.MapSize.Width * Project.MapSize.Height);
+         GC.Collect();
+         LoadingLog.Close();
+         LoadingLog = null!;
 
       }
 
-      public void InitGui()
+      // Loads the map into the created PannablePictureBox
+      private void InitGui()
       {
          InitializeComponent();
          MapPictureBox = ControlFactory.GetPannablePictureBox(@"S:\SteamLibrary\steamapps\common\Europa Universalis IV\map\provinces.bmp", ref MapPanel);
          MapPanel.Controls.Add(MapPictureBox);
       }
+
+      private void LoadDefinitionAndMap(ref Log loadingLog)
+      {
+         var (colorToProvId, colorToBorder) = MapLoading.LoadMap(
+            ref loadingLog, Path.Combine(Project.VanillaPath, "map", "provinces.bmp"));
+         var provinces = DefinitionLoading.LoadDefinition([.. File.ReadAllLines(@"S:\SteamLibrary\steamapps\common\Europa Universalis IV\map\definition.csv")], ref loadingLog);
+
+         Optimizer.OptimizeProvinces(provinces, colorToProvId, colorToBorder, Project.MapSize.Width * Project.MapSize.Height, ref loadingLog);
+      }
+
+      private void DrawProvinceBorder()
+      {
+         var rect = new Rectangle(0, 0, Project.MapSize.Width, Project.MapSize.Height);
+         using var g = Graphics.FromImage(MapPictureBox.Overlay);
+         g.Clear(Color.Transparent);
+         MapHelper.DrawOnMap(rect, Data.BorderPixels, Color.Black, MapPictureBox.Image);
+         MapPictureBox.Invalidate();
+         MapPictureBox.Overlay.Save(@"C:\Users\david\Downloads\borderTest.bmp", ImageFormat.Png);
+
+      }
+
    }
 }
