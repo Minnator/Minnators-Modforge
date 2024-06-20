@@ -64,6 +64,7 @@
     <Compile Include="DebugPrints.cs" />
     <Compile Include="Helper\MapDrawHelper.cs" />
     <Compile Include="Helper\MathHelper.cs" />
+    <Compile Include="Helper\ResourceUsageHelper.cs" />
     <Compile Include="Loading\DefinitionLoading.cs" />
     <Compile Include="Loading\MapLoading.cs" />
     <Compile Include="Log.cs" />

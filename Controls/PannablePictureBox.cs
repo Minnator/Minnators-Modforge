@@ -41,10 +41,11 @@ public sealed class PannablePictureBox : PictureBox
    public Bitmap SelectionOverlay = null!;
 
    private readonly Panel _parentPanel;
+   private readonly MapWindow _mapWindow;
    private int _lastInvalidatedProvince = -1; // Contains the invalidated provice from the last MouseMove event to clear it
    public bool AllowPanning { get; set; } = true;
 
-   public PannablePictureBox(string path, ref Panel parentPanel)
+   public PannablePictureBox(string path, ref Panel parentPanel, MapWindow mapWindow)
    {
       MouseDown += PictureBox_MouseDown;
       MouseMove += PictureBox1_MouseMove;
@@ -54,6 +55,7 @@ public sealed class PannablePictureBox : PictureBox
       Selection = new Selection(this);
       Image = new Bitmap(path);
       _parentPanel = parentPanel;
+      _mapWindow = mapWindow;
    }
 
    private void OnMouseClick_Click (object sender, MouseEventArgs e)
@@ -67,6 +69,8 @@ public sealed class PannablePictureBox : PictureBox
          Selection.Add(ptr);
       else if (!Selection.IsInRectSelection && ModifierKeys != Keys.Shift)
          Selection.MarkNext(ptr);
+
+      _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvPtr.Count);
    }
 
 
@@ -85,6 +89,8 @@ public sealed class PannablePictureBox : PictureBox
          Selection.EnterRectangleSelection(e.Location);
          return;
       }
+      _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvPtr.Count);
+
       // ------------------------------ Panning ------------------------------
       if (AllowPanning)
          if (e.Button == MouseButtons.Middle)
@@ -93,6 +99,7 @@ public sealed class PannablePictureBox : PictureBox
             _startingPoint = e.Location;
             Cursor = Cursors.Hand; // Optional: change cursor to hand while panning
          }
+
    }
 
    private void PictureBox1_MouseUp(object sender, MouseEventArgs e)
@@ -103,7 +110,8 @@ public sealed class PannablePictureBox : PictureBox
          Selection.ExitRectangleSelection();
          return;
       }
-      
+      _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvPtr.Count);
+
       // ------------------------------ Panning ------------------------------
       if (AllowPanning)
          if (e.Button == MouseButtons.Middle)
@@ -115,9 +123,12 @@ public sealed class PannablePictureBox : PictureBox
 
    private void PictureBox1_MouseMove(object sender, MouseEventArgs e)
    {
+      if (e.X < 0 || e.Y < 0 || e.X >= Image.Width || e.Y >= Image.Height) return;
+
       // ------------------------------ Province Selection ------------------------------
       if (ModifierKeys == Keys.Shift && Selection.IsInRectSelection)
          Selection.MarkAllInRectangle(e.Location);
+      _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvPtr.Count);
 
       // ------------------------------ Province Highlighting ------------------------------
       if (Data.ColorToProvPtr.TryGetValue(Color.FromArgb(Image.GetPixel(e.X, e.Y).ToArgb()), out var ptr))

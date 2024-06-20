@@ -10,10 +10,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using Editor.Controls;
 using Editor.DataClasses;
 using Editor.Helper;
 using Editor.Loading;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Editor
 {
@@ -21,7 +23,9 @@ namespace Editor
    {
       public readonly Log LoadingLog = new (@"C:\Users\david\Downloads", "Loading");
       public readonly Log ErrorLog = new (@"C:\Users\david\Downloads", "Error");
-      
+
+      public readonly string? ApplicationName;
+
       public PannablePictureBox MapPictureBox = null!;
 
       public ModProject Project = new ()
@@ -33,7 +37,14 @@ namespace Editor
 
       public MapWindow()
       {
+         ApplicationName = System.Diagnostics.Process.GetCurrentProcess().ProcessName;
+
+         Debug.WriteLine($"APPLICATION NAME: {ApplicationName}");
+
          InitGui();
+
+         ResourceUsageHelper.Initialize(this);
+
          LoadDefinitionAndMap(ref LoadingLog);
          DrawProvinceBorder();
 
@@ -47,7 +58,7 @@ namespace Editor
       private void InitGui()
       {
          InitializeComponent();
-         MapPictureBox = ControlFactory.GetPannablePictureBox(@"S:\SteamLibrary\steamapps\common\Europa Universalis IV\map\provinces.bmp", ref MapPanel);
+         MapPictureBox = ControlFactory.GetPannablePictureBox(@"S:\SteamLibrary\steamapps\common\Europa Universalis IV\map\provinces.bmp", ref MapPanel, this);
          MapPanel.Controls.Add(MapPictureBox);
       }
 
@@ -71,5 +82,24 @@ namespace Editor
 
       }
 
+      public void SetSelectedProvinceSum(int sum)
+      {
+         SelectedProvinceSum.Text = $"ProvSum: [{sum}]";
+      }
+
+      public void UpdateMemoryUsage(float memoryUsage)
+      {
+         if (InvokeRequired) Invoke(new MethodInvoker(delegate { RamUsageStrip.Text = $"RAM: [{Math.Round(memoryUsage)} MB]"; }));
+      }
+
+      public void UpdateCpuUsage (float cpuUsage)
+      {
+         if (InvokeRequired) Invoke(new MethodInvoker(delegate { CpuUsageStrip.Text = $"CPU: [{Math.Round(cpuUsage, 2)}%]"; }));
+      }
+
+      private void MapWindow_FormClosing(object sender, FormClosingEventArgs e)
+      {
+         ResourceUsageHelper.Dispose();
+      }
    }
 }
