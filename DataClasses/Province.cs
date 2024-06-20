@@ -12,4 +12,5 @@ public class Province
    public int PixelPtr { get; set; }
    public int PixelCnt { get; set; }
    public Rectangle Bounds { get; set; }
+   public Point Center { get; set; }
 }

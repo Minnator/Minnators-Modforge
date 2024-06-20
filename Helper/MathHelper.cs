@@ -10,6 +10,12 @@ public static class MathHelper
       return r1.X < r2.X + r2.Width && r1.X + r1.Width > r2.X && r1.Y < r2.Y + r2.Height && r1.Y + r1.Height > r2.Y;
    }
 
+   // Returns the center of the rectangle
+   public static Point GetCenter (Rectangle rect)
+   {
+      return new Point(rect.X + rect.Width / 2, rect.Y + rect.Height / 2);
+   }
+
    // Returns the points of the rectangle Border in clockwise order
    public static Point[] GetRectanglePoints(Rectangle rect)
    {
