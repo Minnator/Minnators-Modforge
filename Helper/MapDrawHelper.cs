@@ -44,18 +44,6 @@ public static class MapDrawHelper
       return DrawOnMap(province.Bounds, points, color, bmp);
    }
    
-
-   // ================================ Private Methods ================================
-   private static Rectangle GetBoundingBox(ref Point[] points)
-   {
-      var minX = points.Min(p => p.X);
-      var minY = points.Min(p => p.Y);
-      var maxX = points.Max(p => p.X);
-      var maxY = points.Max(p => p.Y);
-
-      return new Rectangle(minX, minY, maxX - minX + 1, maxY - minY + 1);
-   }
-
    // ------------------------------ 24bpp ------------------------------
    #region 24bpp Drawing
    // !!24bpp!! Draws the given Array of Points on the given Bitmap with the given Color in parallel

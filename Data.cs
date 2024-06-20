@@ -17,4 +17,15 @@ public static class Data
    {
       return Provinces[ColorToProvPtr[color]];
    }
+
+   public static List<Province> GetAllProvincesInRectangle(Rectangle rect)
+   {
+      var provinces = new List<Province>();
+      foreach (var province in Provinces)
+      {
+         if (province.Bounds.IntersectsWith(rect))
+            provinces.Add(province);
+      }
+      return provinces;
+   }
 }
