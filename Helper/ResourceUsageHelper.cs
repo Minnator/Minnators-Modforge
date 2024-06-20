@@ -39,6 +39,9 @@ namespace Editor.Helper
       {
          UpdateResources();
 
+         if (_mapWindow.Disposing || _mapWindow.IsDisposed)
+            Updater.Dispose();
+
          _mapWindow.UpdateMemoryUsage(_memoryUsage);
          _mapWindow.UpdateCpuUsage(_cpuUsage);
       }

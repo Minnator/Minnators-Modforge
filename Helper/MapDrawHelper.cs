@@ -129,26 +129,31 @@ public static class MapDrawHelper
    {
       var bmpData = bmp.LockBits(rect, ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
 
-      unsafe
+      try
       {
-         var a = color.A;
-         var r = color.R;
-         var g = color.G;
-         var b = color.B;
-         var scan0 = (byte*)bmpData.Scan0.ToPointer();
-
-         Parallel.ForEach(points, point =>
+         unsafe
          {
-            var index = (point.Y - rect.Y) * bmpData.Stride + (point.X - rect.X) * 4;
+            var a = color.A;
+            var r = color.R;
+            var g = color.G;
+            var b = color.B;
+            var scan0 = (byte*)bmpData.Scan0.ToPointer();
 
-            scan0[index] = b;       // Blue component
-            scan0[index + 1] = g;   // Green component
-            scan0[index + 2] = r;   // Red component
-            scan0[index + 3] = a;   // Alpha component
-         });
+            Parallel.ForEach(points, point =>
+            {
+               var index = (point.Y - rect.Y) * bmpData.Stride + (point.X - rect.X) * 4;
+
+               scan0[index] = b; // Blue component
+               scan0[index + 1] = g; // Green component
+               scan0[index + 2] = r; // Red component
+               scan0[index + 3] = a; // Alpha component
+            });
+         }
       }
-
-      bmp.UnlockBits(bmpData);
+      finally 
+      {
+         bmp.UnlockBits(bmpData);
+      }
    }
    #endregion
 

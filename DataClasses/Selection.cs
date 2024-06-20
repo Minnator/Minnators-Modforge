@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.CodeDom;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Editor.Controls;
@@ -9,8 +10,10 @@ namespace Editor.DataClasses;
 public class Selection(PannablePictureBox pannablePictureBox)
 {
    public Color color = Color.Aquamarine;
-   public Point rectangelPoint = Point.Empty;
+   public Point RectanglePoint = Point.Empty;
    public bool IsInRectSelection;
+
+   private Point _lastRectPoint = Point.Empty;
 
    public List<int> SelectedProvPtr { get; set; } = [];
 
@@ -61,26 +64,41 @@ public class Selection(PannablePictureBox pannablePictureBox)
 
    public void MarkAllInRectangle(Point point)
    {
-      if (rectangelPoint != Point.Empty)
+      if (RectanglePoint != Point.Empty)
       {
+         DrawRectangle(_lastRectPoint, Color.Transparent);
          List<int> provincePtr = [];
          foreach (var province in Data.Provinces)
-            if (MathHelper.RectanglesIntercept(province.Bounds, MathHelper.GetBoundingBox([rectangelPoint, point])))
+            if (MathHelper.RectanglesIntercept(province.Bounds, MathHelper.GetBoundingBox([RectanglePoint, point])))
                provincePtr.Add(province.SelfPtr);
          Clear();
          AddRange(provincePtr, false);
+
+         DrawRectangle(point, Color.Red);
       }
+   }
+
+   public void DrawRectangle(Point refPoint, Color rectColor)
+   {
+      var rect = MathHelper.GetBoundingBox([RectanglePoint, refPoint]);
+      pannablePictureBox.Invalidate(MapDrawHelper.DrawOnMap(rect, MathHelper.GetRectanglePoints(rect), rectColor,
+         pannablePictureBox.SelectionOverlay));
+      _lastRectPoint = refPoint;
    }
 
    public void EnterRectangleSelection(Point startPoint)
    {
-      rectangelPoint = startPoint;
+      RectanglePoint = startPoint;
       IsInRectSelection = true;
    }
 
    public void ExitRectangleSelection()
    {
-      rectangelPoint = Point.Empty;
+      DrawRectangle(_lastRectPoint, Color.Transparent);
+      RectanglePoint = Point.Empty;
       IsInRectSelection = false;
+      var proPtrs = new List<int>(SelectedProvPtr);
+      Clear();
+      AddRange(proPtrs);
    }
 }

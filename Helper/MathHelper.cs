@@ -9,7 +9,7 @@ public static class MathHelper
       return r1.X < r2.X + r2.Width && r1.X + r1.Width > r2.X && r1.Y < r2.Y + r2.Height && r1.Y + r1.Height > r2.Y;
    }
 
-   public static Point[] GetAllPointsOnRectangleBorder(Rectangle rect)
+   public static Point[] GetRectanglePoints(Rectangle rect)
    {
       if (rect.Width < 2 || rect.Height < 2)
          return [];

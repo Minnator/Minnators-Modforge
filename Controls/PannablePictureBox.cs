@@ -10,6 +10,8 @@ namespace Editor.Controls;
 
 public sealed class PannablePictureBox : PictureBox
 {
+   private bool _isPainting;
+
    private Point _startingPoint = Point.Empty;
    private Point _movingPoint = Point.Empty;
    private bool _panning = false;
@@ -123,7 +125,8 @@ public sealed class PannablePictureBox : PictureBox
 
    private void PictureBox1_MouseMove(object sender, MouseEventArgs e)
    {
-      if (e.X < 0 || e.Y < 0 || e.X >= Image.Width || e.Y >= Image.Height) return;
+      if (e.X < 0 || e.Y < 0 || e.X >= Image.Width || e.Y >= Image.Height)
+         return;
 
       // ------------------------------ Province Selection ------------------------------
       if (ModifierKeys == Keys.Shift && Selection.IsInRectSelection)
@@ -152,8 +155,12 @@ public sealed class PannablePictureBox : PictureBox
    protected override void OnPaint(PaintEventArgs pe)
    {
       base.OnPaint(pe);
+      if (_isPainting)
+         return;
+      _isPainting = true;
       pe.Graphics.DrawImage(Image, 0, 0, Image.Width, Image.Height);
       pe.Graphics.DrawImage(Overlay, 0, 0, Image.Width, Image.Height);
       pe.Graphics.DrawImage(SelectionOverlay, 0, 0, Image.Width, Image.Height);
+      _isPainting = false;
    }
 }
