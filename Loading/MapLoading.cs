@@ -5,14 +5,13 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Threading.Tasks;
-using Editor.DataClasses;
 
 namespace Editor.Loading;
 
 public static class MapLoading
 {
    [SuppressMessage("ReSharper", "UseCollectionExpression")]
-   public static (ConcurrentDictionary<Color, List<Point>>, ConcurrentDictionary<Color, List<Point>>) LoadMap(
+   public static (ConcurrentDictionary<Color, List<Point>>, ConcurrentDictionary<Color, List<Point>>, ConcurrentDictionary<Color, HashSet<Color>>) LoadMap(
       ref Log loadingLog, string path)
    {
       using var bmp = new Bitmap(path);
@@ -25,6 +24,7 @@ public static class MapLoading
 
       ConcurrentDictionary<Color, List<Point>> colorToProvId = new ();
       ConcurrentDictionary<Color, List<Point>> colorToBorder = new ();
+      ConcurrentDictionary<Color, HashSet<Color>> colorToAdj = new ();
       
       sw.Start();
       Parallel.For(0, height, y =>
@@ -51,64 +51,115 @@ public static class MapLoading
                {
                   var nRow = (byte*)scan0 + ((y - 1) * stride);
                   var rowIndex = x * 3;
-                  if (Color.FromArgb(nRow[rowIndex + 2], nRow[rowIndex + 1], nRow[rowIndex]) != currentColor)
+                  var colN = Color.FromArgb(nRow[rowIndex + 2], nRow[rowIndex + 1], nRow[rowIndex]);
+                  if (colN != currentColor)
+                  {
                      colorToBorder.AddOrUpdate(currentColor, new List<Point> { currentPoint }, (_, value) =>
                      {
                         lock (value)
                         {
                            value.Add(currentPoint);
                         }
+
                         return value;
                      });
+                     
+                     colorToAdj.AddOrUpdate(currentColor, new HashSet<Color> { colN }, (_, value) =>
+                     {
+                        lock (value)
+                        {
+                           value.Add(colN);
+                        }
+                        return value;
+                     });
+                  }
                }
 
                // Check if the pixel east is in the bounds of the image and if the color is different
                if (x < width - 1)
-               { var rowIndex = (x + 1) * 3;
-                  if (Color.FromArgb(row[rowIndex + 2], row[rowIndex + 1], row[rowIndex]) != currentColor)
+               { 
+                  var rowIndex = (x + 1) * 3;
+                  var colN = Color.FromArgb(row[rowIndex + 2], row[rowIndex + 1], row[rowIndex]);
+                  if (colN != currentColor)
+                  {
                      colorToBorder.AddOrUpdate(currentColor, new List<Point> { currentPoint }, (_, value) =>
                      {
                         lock (value)
                         {
                            value.Add(currentPoint);
                         }
+
                         return value;
                      });
+                     colorToAdj.AddOrUpdate(currentColor, new HashSet<Color> { colN }, (_, value) =>
+                     {
+                        lock (value)
+                        {
+                           value.Add(colN);
+                        }
+                        return value;
+                     });
+                  }
                }
                // Check if the pixel south is in the bounds of the image and if the color is different
                if (y < height - 1)
                {
                   var sRow = (byte*)scan0 + ((y + 1) * stride);
                   var rowIndex = x * 3;
-                  if (Color.FromArgb(sRow[rowIndex + 2], sRow[rowIndex + 1], sRow[rowIndex]) != currentColor)
+                  var colN = Color.FromArgb(sRow[rowIndex + 2], sRow[rowIndex + 1], sRow[rowIndex]);
+                  if (colN != currentColor)
+                  {
                      colorToBorder.AddOrUpdate(currentColor, new List<Point> { currentPoint }, (_, value) =>
                      {
                         lock (value)
                         {
                            value.Add(currentPoint);
                         }
+
                         return value;
                      });
+                     colorToAdj.AddOrUpdate(currentColor, new HashSet<Color> { colN }, (_, value) =>
+                     {
+                        lock (value)
+                        {
+                           value.Add(colN);
+                        }
+                        return value;
+                     });
+                  }
                }
                // Check if the pixel west is in the bounds of the image and if the color is different
                if (x > 0)
                {
                   var rowIndex = (x - 1) * 3;
-                  if (Color.FromArgb(row[rowIndex + 2], row[rowIndex + 1], row[rowIndex]) != currentColor)
+                  var colN = Color.FromArgb(row[rowIndex + 2], row[rowIndex + 1], row[rowIndex]);
+                  if (colN != currentColor)
+                  {
                      colorToBorder.AddOrUpdate(currentColor, new List<Point> { currentPoint }, (_, value) =>
                      {
                         lock (value)
                         {
                            value.Add(currentPoint);
                         }
+
                         return value;
                      });
+                     colorToAdj.AddOrUpdate(currentColor, new HashSet<Color> { colN }, (_, value) =>
+                     {
+                        lock (value)
+                        {
+                           value.Add(colN);
+                        }
+                        return value;
+                     });
+                  }
                }
             }
          }
       });
 
       sw.Stop();
+      Debug.WriteLine($"Map Loading took {sw.ElapsedMilliseconds}ms");
       loadingLog.WriteTimeStamp("Pixel Initialisation", sw.ElapsedMilliseconds);
       if (Consts.DEBUG)
       {
@@ -124,9 +175,7 @@ public static class MapLoading
 
       Data.MapWidth = width;
       Data.MapHeight = height;
-
-      return (colorToProvId, colorToBorder);
+      
+      return (colorToProvId, colorToBorder, colorToAdj);
    }
-
-   
 }

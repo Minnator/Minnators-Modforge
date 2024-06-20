@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Drawing;
 using Editor.DataClasses;
 
@@ -21,6 +22,7 @@ public static class Data
    public static Dictionary<Color, int> ColorToProvPtr = null!;
    public static Dictionary<int, int[]> AdjacentProvinces = null!;
 
+   public static ConcurrentDictionary<Color, HashSet<Color>> colorToAdj = new();
 
    // returns the province by its color
    public static Province GetProvince(Color color) => Provinces[ColorToProvPtr[color]];

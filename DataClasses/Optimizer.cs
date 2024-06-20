@@ -1,9 +1,11 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Editor.Helper;
 
@@ -71,5 +73,22 @@ public static class Optimizer
       colorToProvId.Clear();
    }
 
+   public static void OptimizeAdjacencies(ConcurrentDictionary<Color, HashSet<Color>> colorToAdj, ref Log log)
+   {
+      var sw = new Stopwatch();
+      sw.Start();
+      var adjacencyList = new Dictionary<int, int[]>(Data.Provinces.Length);
+
+      foreach (var kvp in colorToAdj) 
+         adjacencyList.Add(Data.ColorToProvPtr[kvp.Key], kvp.Value.Select(color => Data.ColorToProvPtr[color]).ToArray());
+
+      sw.Stop();
+      //Debug.WriteLine($"Adjacency calculation took {sw.ElapsedMilliseconds}ms");
+      log.WriteTimeStamp("Adjacency optimization", sw.ElapsedMilliseconds); Data.AdjacentProvinces = adjacencyList;
+
+
+      // Free up memory from the ConcurrentDictionary
+      colorToAdj.Clear();
+   }
 
 }
