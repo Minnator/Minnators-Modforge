@@ -59,9 +59,11 @@
     <Compile Include="DataClasses\ModProject.cs" />
     <Compile Include="DataClasses\Optimizer.cs" />
     <Compile Include="DataClasses\Province.cs" />
+    <Compile Include="DataClasses\Selection.cs" />
     <Compile Include="DebugMaps.cs" />
     <Compile Include="DebugPrints.cs" />
-    <Compile Include="Helper\MapHelper.cs" />
+    <Compile Include="Helper\MapDrawHelper.cs" />
+    <Compile Include="Helper\MathHelper.cs" />
     <Compile Include="Loading\DefinitionLoading.cs" />
     <Compile Include="Loading\MapLoading.cs" />
     <Compile Include="Log.cs" />

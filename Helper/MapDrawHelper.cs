@@ -7,12 +7,14 @@ using Editor.DataClasses;
 
 namespace Editor.Helper;
 
-public static class MapHelper
+public static class MapDrawHelper
 {
    // ================================ Public Methods ================================
    // Draws the given Array of Points on the given Bitmap with the given Color
    public static Rectangle DrawOnMap(Rectangle rect, Point[] points, Color color, Bitmap bmp)
    {
+      if (points.Length == 0)
+         return rect;
       switch (bmp.PixelFormat)
       {
          case PixelFormat.Format24bppRgb when points.Length > 4000:

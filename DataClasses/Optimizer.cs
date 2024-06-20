@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Editor.Helper;
 
 namespace Editor.DataClasses;
 
@@ -46,7 +47,6 @@ public static class Optimizer
       {
          var color = Color.FromArgb(province.Color.R, province.Color.G, province.Color.B);
          dic[color] = provincePtr;
-         provincePtr++;
 
          //copy the pixels of the province to the pixel array
          if (!colorToProvId.ContainsKey(color))
@@ -63,7 +63,11 @@ public static class Optimizer
          borderPtr += province.BorderCnt;
 
          //calculate the bounds of the provinces
-         province.Bounds = GetBoundingBox(colorToBorder[color].ToArray());
+         province.Bounds = MathHelper.GetBoundingBox(colorToBorder[color].ToArray());
+
+         //set the province pointer for the province itself
+         province.SelfPtr = provincePtr;
+         provincePtr++;
       }
 
       sw.Stop();
@@ -82,15 +86,4 @@ public static class Optimizer
    }
 
 
-   private static Rectangle GetBoundingBox(Point[] points)
-   {
-      if (points.Length == 0)
-         return Rectangle.Empty;
-      var minX = points.Min(p => p.X);
-      var minY = points.Min(p => p.Y);
-      var maxX = points.Max(p => p.X);
-      var maxY = points.Max(p => p.Y);
-
-      return new Rectangle(minX, minY, maxX - minX + 1, maxY - minY + 1);
-   }
 }

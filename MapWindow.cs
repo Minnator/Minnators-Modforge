@@ -65,7 +65,7 @@ namespace Editor
          var rect = new Rectangle(0, 0, Project.MapSize.Width, Project.MapSize.Height);
          using var g = Graphics.FromImage(MapPictureBox.Overlay);
          g.Clear(Color.Transparent);
-         MapHelper.DrawOnMap(rect, Data.BorderPixels, Color.Black, MapPictureBox.Image);
+         MapDrawHelper.DrawOnMap(rect, Data.BorderPixels, Color.Black, MapPictureBox.Image);
          MapPictureBox.Invalidate();
          MapPictureBox.Overlay.Save(@"C:\Users\david\Downloads\borderTest.bmp", ImageFormat.Png);
 
