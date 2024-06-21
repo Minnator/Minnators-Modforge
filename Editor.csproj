@@ -57,6 +57,7 @@
     </Compile>
     <Compile Include="Data.cs" />
     <Compile Include="DataClasses\Area.cs" />
+    <Compile Include="DataClasses\Continent.cs" />
     <Compile Include="DataClasses\ModProject.cs" />
     <Compile Include="DataClasses\Optimizer.cs" />
     <Compile Include="DataClasses\Province.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Helper\ResourceUsageHelper.cs" />
     <Compile Include="Helper\Saving.cs" />
     <Compile Include="Loading\AreaLoading.cs" />
+    <Compile Include="Loading\ContinentLoading.cs" />
     <Compile Include="Loading\DefaultMapLoading.cs" />
     <Compile Include="Loading\DefinitionLoading.cs" />
     <Compile Include="Loading\MapLoading.cs" />

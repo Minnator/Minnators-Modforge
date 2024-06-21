@@ -15,6 +15,7 @@ public class Province
 
    // Data form the Game
    public string Area { get; set; } = string.Empty;
+   public string Continent { get; set; } = string.Empty;
 
 
 

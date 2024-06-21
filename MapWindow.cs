@@ -48,6 +48,8 @@ namespace Editor
          DefaultMapLoading.Load(Project.VanillaPath, ref LoadingLog);
          AreaLoading.Load(Project.VanillaPath, ref LoadingLog);
          RegionLoading.Load(Project.VanillaPath, ref LoadingLog);
+         SuperRegionLoading.Load(Project.VanillaPath, ref LoadingLog);
+         ContinentLoading.Load(Project.VanillaPath, ref LoadingLog);
          DrawProvinceBorder();
          
          GC.Collect();
