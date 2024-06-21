@@ -43,14 +43,19 @@ namespace Editor
 
          InitGui();
 
-         ResourceUsageHelper.Initialize(this);
 
          LoadDefinitionAndMap(ref LoadingLog);
          DrawProvinceBorder();
 
+         DebugMaps.DrawAdjacencyNumbers(new Bitmap(Data.MapPath));
+
          GC.Collect();
          LoadingLog.Close();
          LoadingLog = null!;
+
+
+         ResourceUsageHelper.Initialize(this);
+
       }
 
       // Loads the map into the created PannablePictureBox

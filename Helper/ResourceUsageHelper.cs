@@ -23,7 +23,7 @@ namespace Editor.Helper
          _appName = Process.GetCurrentProcess().ProcessName;
          
          _mapWindow = mapWindow;
-         Updater = new Timer(OnTimerTick, null, 0, 1000);
+         Updater = new Timer(OnTimerTick, null, 2000, 1000);
          cpuUsage = new PerformanceCounter("Process", "% Processor Time", _appName, true);
          memoryUsage = new PerformanceCounter("Process", "Private Bytes", _appName, true);
       }
