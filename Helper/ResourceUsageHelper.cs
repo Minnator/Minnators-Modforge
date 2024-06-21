@@ -30,7 +30,7 @@ namespace Editor.Helper
       }
 
       // Update the CPU and memory usage
-      public static void UpdateResources()
+      private static void UpdateResources()
       {
          if (cpuUsage == null || memoryUsage == null)
             return;

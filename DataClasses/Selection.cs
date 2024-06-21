@@ -104,12 +104,12 @@ public class Selection(PannablePictureBox pannablePictureBox)
    // Draws a rectangle on the map in reference to the RectanglePoint
    private void DrawRectangle(Point refPoint, Color rectColor, Bitmap bmp)
    {
-      pannablePictureBox.IsPainting = true;
+      //pannablePictureBox.IsPainting = true;
       var rect = MathHelper.GetBounds([RectanglePoint, refPoint]);
       pannablePictureBox.Invalidate(MapDrawHelper.DrawOnMap(rect, MathHelper.GetRectanglePoints(rect), rectColor,
          bmp));
       _lastRectPoint = refPoint;
-      pannablePictureBox.IsPainting = false;
+      //pannablePictureBox.IsPainting = false;
    }
 
    // Enters the rectangle selection and sets the starting point

@@ -55,7 +55,7 @@ namespace Editor
          GC.Collect();
          LoadingLog.Close();
          LoadingLog = null!;
-         
+
          ResourceUsageHelper.Initialize(this);
 
          DebugPrints.PrintRegions();

@@ -162,10 +162,10 @@ public sealed class PannablePictureBox : PictureBox
       base.OnPaint(pe);
       if (IsPainting)
          return;
-      IsPainting = true;
+      //IsPainting = true;
       pe.Graphics.DrawImage(Image, 0, 0, Image.Width, Image.Height);
       pe.Graphics.DrawImage(SelectionOverlay, 0, 0, Image.Width, Image.Height);
       pe.Graphics.DrawImage(Overlay, 0, 0, Image.Width, Image.Height);
-      IsPainting = false;
+      //IsPainting = false;
    }
 }
