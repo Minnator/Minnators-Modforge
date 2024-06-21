@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Editor.Helper
 {
@@ -21,9 +22,9 @@ namespace Editor.Helper
       public static void Initialize(MapWindow mapWindow)
       {
          _appName = Process.GetCurrentProcess().ProcessName;
-         
+
          _mapWindow = mapWindow;
-         Updater = new Timer(OnTimerTick, null, 2000, 1000);
+         Updater = new Timer(OnTimerTick, null, 0, 1000);
          cpuUsage = new PerformanceCounter("Process", "% Processor Time", _appName, true);
          memoryUsage = new PerformanceCounter("Process", "Private Bytes", _appName, true);
       }
@@ -38,16 +39,19 @@ namespace Editor.Helper
          _memoryUsage = memoryUsage.NextValue() / 1024 / 1024; // Convert bytes to MB
       }
 
-      private static void OnTimerTick(object sender)
+      private static void OnTimerTick(object state)
       {
-         UpdateResources();
+         Task.Run(() =>
+         {
+            UpdateResources();
 
-         // If the window is disposed, stop updating
-         if (_mapWindow.Disposing || _mapWindow.IsDisposed)
-            Updater.Dispose();
+            // If the window is disposed, stop updating
+            if (_mapWindow.Disposing || _mapWindow.IsDisposed)
+               Updater.Dispose();
 
-         _mapWindow.UpdateMemoryUsage(_memoryUsage);
-         _mapWindow.UpdateCpuUsage(_cpuUsage);
+            _mapWindow.UpdateMemoryUsage(_memoryUsage);
+            _mapWindow.UpdateCpuUsage(_cpuUsage);
+         });
       }
 
       public static void Dispose()

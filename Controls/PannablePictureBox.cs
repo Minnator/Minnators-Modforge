@@ -10,7 +10,7 @@ namespace Editor.Controls;
 
 public sealed class PannablePictureBox : PictureBox
 {
-   private bool _isPainting; // Prevents double locking of bitmaps when painting
+   public bool IsPainting; // Prevents double locking of bitmaps when painting
    public event EventHandler ImageChanged = null!;
 
    // ------------------------------ Province Selection ------------------------------
@@ -160,12 +160,12 @@ public sealed class PannablePictureBox : PictureBox
    protected override void OnPaint(PaintEventArgs pe)
    {
       base.OnPaint(pe);
-      if (_isPainting)
+      if (IsPainting)
          return;
-      _isPainting = true;
+      IsPainting = true;
       pe.Graphics.DrawImage(Image, 0, 0, Image.Width, Image.Height);
-      pe.Graphics.DrawImage(Overlay, 0, 0, Image.Width, Image.Height);
       pe.Graphics.DrawImage(SelectionOverlay, 0, 0, Image.Width, Image.Height);
-      _isPainting = false;
+      pe.Graphics.DrawImage(Overlay, 0, 0, Image.Width, Image.Height);
+      IsPainting = false;
    }
 }

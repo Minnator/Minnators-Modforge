@@ -46,14 +46,11 @@ namespace Editor
 
          LoadDefinitionAndMap(ref LoadingLog);
          DrawProvinceBorder();
-
-         DebugMaps.DrawAdjacencyNumbers(new Bitmap(Data.MapPath));
-
+         
          GC.Collect();
          LoadingLog.Close();
          LoadingLog = null!;
-
-
+         
          ResourceUsageHelper.Initialize(this);
 
       }

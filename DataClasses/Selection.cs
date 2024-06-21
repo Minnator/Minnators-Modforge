@@ -2,6 +2,7 @@
 using Editor.Helper;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace Editor.DataClasses;
 
@@ -61,30 +62,52 @@ public class Selection(PannablePictureBox pannablePictureBox)
 
    public bool Contains(int provPtr) => SelectedProvPtr.Contains(provPtr);
 
-   // Marks all provinces in the rectangle which is defined by the RectanglePoint and the given point
+
    public void MarkAllInRectangle(Point point)
    {
       if (RectanglePoint == Point.Empty) 
          return;
 
-      DrawRectangle(_lastRectPoint, Color.Transparent);
+      // Remove the last selection rectangle
+      DrawRectangle(_lastRectPoint, Color.Transparent, pannablePictureBox.Overlay);
       List<int> provincePtr = [];
+      List<int> provPtrAdd = [];
+      List<int> provPtrRemove = [];
+      // Get all provinces which are in the rectangle
       foreach (var province in Data.Provinces)
          if (MathHelper.RectanglesIntercept(province.Bounds, MathHelper.GetBounds([RectanglePoint, point])))
             provincePtr.Add(province.SelfPtr);
 
-      Clear();
-      AddRange(provincePtr, false);
-      DrawRectangle(point, Color.Red);
+      var intersection = MathHelper.GetIntersection(MathHelper.GetBounds([RectanglePoint, point]), MathHelper.GetBounds([RectanglePoint, _lastRectPoint]));
+
+      // Provinces which are not in the intersection of the two rectangles are added to the add list as they are in the new
+      // rectangle but not yet drawn
+      foreach (var province in provincePtr)
+      {
+         if (!MathHelper.RectanglesIntercept(Data.Provinces[province].Bounds, intersection))
+            provPtrAdd.Add(province);
+      }
+
+      foreach (var province in SelectedProvPtr)
+      {
+         if (!MathHelper.RectanglesIntercept(Data.Provinces[province].Bounds, intersection))
+            provPtrRemove.Add(province);
+      }
+      
+      AddRange(provPtrAdd, false);
+      RemoveRange(provPtrRemove);
+      DrawRectangle(point, Color.Red, pannablePictureBox.Overlay);
    }
 
    // Draws a rectangle on the map in reference to the RectanglePoint
-   private void DrawRectangle(Point refPoint, Color rectColor)
+   private void DrawRectangle(Point refPoint, Color rectColor, Bitmap bmp)
    {
+      pannablePictureBox.IsPainting = true;
       var rect = MathHelper.GetBounds([RectanglePoint, refPoint]);
       pannablePictureBox.Invalidate(MapDrawHelper.DrawOnMap(rect, MathHelper.GetRectanglePoints(rect), rectColor,
-         pannablePictureBox.SelectionOverlay));
+         bmp));
       _lastRectPoint = refPoint;
+      pannablePictureBox.IsPainting = false;
    }
 
    // Enters the rectangle selection and sets the starting point
@@ -97,7 +120,7 @@ public class Selection(PannablePictureBox pannablePictureBox)
    // Exits the rectangle selection and redraws the Selection ones to remove the red rectangle
    public void ExitRectangleSelection()
    {
-      DrawRectangle(_lastRectPoint, Color.Transparent);
+      DrawRectangle(_lastRectPoint, Color.Transparent, pannablePictureBox.Overlay);
       RectanglePoint = Point.Empty;
       IsInRectSelection = false;
       var proPtrs = new List<int>(SelectedProvPtr);
