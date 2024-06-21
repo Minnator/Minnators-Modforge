@@ -52,7 +52,7 @@ public static class Optimizer
          borderPtr += province.BorderCnt;
 
          //calculate the bounds of the provinces and set the center
-         province.Bounds = MathHelper.GetBoundingRectangle([.. colorToBorder[color]]);
+         province.Bounds = MathHelper.GetBounds([.. colorToBorder[color]]);
          province.Center = new Point(province.Bounds.X + province.Bounds.Width / 2, province.Bounds.Y + province.Bounds.Height / 2);
 
       }

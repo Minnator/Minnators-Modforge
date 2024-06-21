@@ -37,7 +37,7 @@ public static class MathHelper
    }
 
    // Returns the bounding rectangle of the given points
-   public static Rectangle GetBoundingRectangle (Point[] points)
+   public static Rectangle GetBounds (Point[] points)
    {
       if (points.Length == 0)
          return Rectangle.Empty;

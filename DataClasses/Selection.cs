@@ -70,7 +70,7 @@ public class Selection(PannablePictureBox pannablePictureBox)
       DrawRectangle(_lastRectPoint, Color.Transparent);
       List<int> provincePtr = [];
       foreach (var province in Data.Provinces)
-         if (MathHelper.RectanglesIntercept(province.Bounds, MathHelper.GetBoundingRectangle([RectanglePoint, point])))
+         if (MathHelper.RectanglesIntercept(province.Bounds, MathHelper.GetBounds([RectanglePoint, point])))
             provincePtr.Add(province.SelfPtr);
 
       Clear();
@@ -81,7 +81,7 @@ public class Selection(PannablePictureBox pannablePictureBox)
    // Draws a rectangle on the map in reference to the RectanglePoint
    private void DrawRectangle(Point refPoint, Color rectColor)
    {
-      var rect = MathHelper.GetBoundingRectangle([RectanglePoint, refPoint]);
+      var rect = MathHelper.GetBounds([RectanglePoint, refPoint]);
       pannablePictureBox.Invalidate(MapDrawHelper.DrawOnMap(rect, MathHelper.GetRectanglePoints(rect), rectColor,
          pannablePictureBox.SelectionOverlay));
       _lastRectPoint = refPoint;

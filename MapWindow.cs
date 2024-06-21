@@ -51,8 +51,6 @@ namespace Editor
          GC.Collect();
          LoadingLog.Close();
          LoadingLog = null!;
-
-         //AdjacencyHelper.Calculate();
       }
 
       // Loads the map into the created PannablePictureBox

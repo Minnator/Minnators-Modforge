@@ -5,8 +5,10 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Editor;
+using Editor.Helper;
 
 public static class DebugMaps
 {
@@ -69,45 +71,48 @@ public static class DebugMaps
       Debug.WriteLine("Total time: " + milisecons.Sum() + " ms");
    }
 
-   public static Bitmap DrawBorder(Point[] points, Color color, Bitmap bmp)
+   public static void DrawAdjacencyNumbers(Bitmap bmp1)
    {
-      var rect = GetBoundingBox(points);
-      var bmpData = bmp.LockBits(rect, ImageLockMode.WriteOnly, bmp.PixelFormat);
+      var bmp = new Bitmap(bmp1);
+      byte col = 0;
+
+      using var g = Graphics.FromImage(bmp);
 
       unsafe
       {
-         try
-         {
-            var r = color.R;
-            var g = color.G;
-            var b = color.B;
-            var scan0 = (byte*)bmpData.Scan0.ToPointer();
 
+         // Draw the adjacency numbers on the provinces
+         foreach (var prov in Data.Provinces)
+         {
+            if (Data.AdjacentProvinces.TryGetValue(prov.SelfPtr, out var province))
+            {
+               var str = $"{province.Length}";
+               var font = new Font("Arial", 8);
+               var size = g.MeasureString(str, font);
+               var pointS = new Point(prov.Center.X - (int)size.Width / 2, prov.Center.Y - (int)size.Height / 2);
+
+               g.DrawString(str, font, Brushes.Black, pointS);
+            }
+            if (prov.BorderCnt < 4)
+               continue;
+            var points = new Point[prov.BorderCnt];
+            Array.Copy(Data.BorderPixels, prov.BorderPtr, points, 0, prov.BorderCnt);
+            var bmpData = bmp.LockBits(prov.Bounds, ImageLockMode.ReadWrite, bmp.PixelFormat);
+            var scan0 = (byte*)bmpData.Scan0.ToPointer();
             foreach (var point in points)
             {
-               var index = (point.Y - rect.Y) * bmpData.Stride + (point.X - rect.X) * 3;
+               var index = (point.Y - prov.Bounds.Y) * bmpData.Stride + (point.X - prov.Bounds.X) * 4;
 
-               scan0[index] = b;       // Blue component
-               scan0[index + 1] = g;   // Green component
-               scan0[index + 2] = r;   // Red component
+               scan0[index] = col;       // Blue component
+               scan0[index + 1] = col;   // Green component
+               scan0[index + 2] = col;   // Red component
             }
-         }
-         finally
-         {
             bmp.UnlockBits(bmpData);
          }
       }
 
-      return bmp;
+      bmp.Save("C:\\Users\\david\\Downloads\\adjacency.png", ImageFormat.Png);
+      bmp.Dispose();
    }
 
-   public static Rectangle GetBoundingBox(Point[] points)
-   {
-      int minX = points.Min(p => p.X);
-      int minY = points.Min(p => p.Y);
-      int maxX = points.Max(p => p.X);
-      int maxY = points.Max(p => p.Y);
-
-      return new Rectangle(minX, minY, maxX - minX + 1, maxY - minY + 1);
-   }
 }
