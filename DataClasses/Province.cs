@@ -13,4 +13,18 @@ public class Province
    public int PixelCnt { get; set; }
    public Rectangle Bounds { get; set; }
    public Point Center { get; set; }
+
+
+
+   public override bool Equals(object? obj)
+   {
+      if (obj is Province other)
+         return Id == other.Id;
+      return false;
+   }
+   
+   public override int GetHashCode()
+   {
+      return Id.GetHashCode();
+   }
 }

@@ -18,12 +18,11 @@ public static class Data
    public static Point[] Pixels = null!;
 
    // Contains the provinces and options to access them
+   // ProvPtr is the index of the province in the Provinces array
    public static Province[] Provinces = null!;
    public static Dictionary<Color, int> ColorToProvPtr = null!;
    public static Dictionary<int, int[]> AdjacentProvinces = null!;
-
-   public static ConcurrentDictionary<Color, HashSet<Color>> colorToAdj = new();
-
+   
    // returns the province by its color
    public static Province GetProvince(Color color) => Provinces[ColorToProvPtr[color]];
 

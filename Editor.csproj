@@ -63,9 +63,13 @@
     <Compile Include="DebugMaps.cs" />
     <Compile Include="DebugPrints.cs" />
     <Compile Include="Helper\AdjacencyHelper.cs" />
+    <Compile Include="Helper\IO.cs" />
     <Compile Include="Helper\MapDrawHelper.cs" />
     <Compile Include="Helper\MathHelper.cs" />
+    <Compile Include="Helper\Parsing.cs" />
     <Compile Include="Helper\ResourceUsageHelper.cs" />
+    <Compile Include="Helper\Saving.cs" />
+    <Compile Include="Loading\DefaultMapLoading.cs" />
     <Compile Include="Loading\DefinitionLoading.cs" />
     <Compile Include="Loading\MapLoading.cs" />
     <Compile Include="Log.cs" />
