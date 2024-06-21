@@ -47,6 +47,7 @@ namespace Editor
          LoadDefinitionAndMap(ref LoadingLog);
          DefaultMapLoading.Load(Project.VanillaPath, ref LoadingLog);
          AreaLoading.Load(Project.VanillaPath, ref LoadingLog);
+         RegionLoading.Load(Project.VanillaPath, ref LoadingLog);
          DrawProvinceBorder();
          
          GC.Collect();
@@ -55,6 +56,7 @@ namespace Editor
          
          ResourceUsageHelper.Initialize(this);
 
+         DebugPrints.PrintRegions();
          //DebugMaps.AreasToMap();
       }
 

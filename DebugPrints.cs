@@ -36,4 +36,26 @@ public static class DebugPrints
       }
       File.WriteAllText(@"C:\Users\david\Downloads\adjacenciesDEBUG.txt", sb.ToString());
    }
+
+   public static void PrintRegions()
+   {
+      var sb = new StringBuilder();
+      foreach (var region in Data.Regions.Values)
+      {
+         sb.AppendLine($"Region: {region.Name} = {{");
+         foreach (var regionArea in region.Areas)
+         {
+            sb.AppendLine($"\t{regionArea}");
+         }
+
+         foreach (var monsoon in region.Monsoon)
+         {
+            sb.AppendLine($"\t{monsoon.Start} -- {monsoon.End}");
+         }
+
+         sb.AppendLine("}");
+
+      }
+      File.WriteAllText(@"C:\Users\david\Downloads\regionsDEBUG.txt", sb.ToString());
+   }
 }

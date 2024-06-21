@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Editor.DataClasses;
 
 namespace Editor.Helper;
 
@@ -23,5 +24,15 @@ public static class Parsing
    {
       var index = line.IndexOf('#');
       return index == -1 ? line : line.Substring(0, index);
+   }
+
+   public static List<string> GetStringList(string value)
+   {
+      List<string> strList = [];
+
+      var matches = Regex.Matches(value, @"\s*(\w+)");
+      foreach (var match in matches) 
+         strList.Add(match.ToString());
+      return strList;
    }
 }

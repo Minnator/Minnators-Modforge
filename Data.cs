@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using Editor.DataClasses;
+using Region = Editor.DataClasses.Region;
 
 namespace Editor;
 
@@ -29,8 +30,9 @@ public static class Data
    public static HashSet<int> CoastalProvinces = null!;
    // In Game Groups
    public static Dictionary<string, Area> Areas = null!;
-   
-   
+   public static Dictionary<string, Region> Regions { get; set; }
+
+
    // returns the province by its color
    public static Province GetProvince(Color color) => Provinces[ColorToProvId[color]];
 
