@@ -61,43 +61,45 @@ public class Selection(PannablePictureBox pannablePictureBox)
    public void Clear() => RemoveRange(SelectedProvPtr);
 
    public bool Contains(int provPtr) => SelectedProvPtr.Contains(provPtr);
-
-
+   
    public void MarkAllInRectangle(Point point)
    {
-      if (RectanglePoint == Point.Empty) 
+      if (RectanglePoint == Point.Empty)
          return;
 
       // Remove the last selection rectangle
       DrawRectangle(_lastRectPoint, Color.Transparent, pannablePictureBox.Overlay);
-      List<int> provincePtr = [];
-      List<int> provPtrAdd = [];
-      List<int> provPtrRemove = [];
-      // Get all provinces which are in the rectangle
+
+      // Precompute the bounds
+      var currentRectBounds = MathHelper.GetBounds([RectanglePoint, point]);
+      var lastRectBounds = MathHelper.GetBounds([RectanglePoint, _lastRectPoint]);
+      var intersection = MathHelper.GetIntersection(currentRectBounds, lastRectBounds);
+
+      var provPtrAdd = new List<int>();
+      var provPtrRemove = new List<int>();
+
+      // Get all provinces which are in the rectangle but not in the intersection
       foreach (var province in Data.Provinces)
-         if (MathHelper.RectanglesIntercept(province.Bounds, MathHelper.GetBounds([RectanglePoint, point])))
-            provincePtr.Add(province.SelfPtr);
-
-      var intersection = MathHelper.GetIntersection(MathHelper.GetBounds([RectanglePoint, point]), MathHelper.GetBounds([RectanglePoint, _lastRectPoint]));
-
-      // Provinces which are not in the intersection of the two rectangles are added to the add list as they are in the new
-      // rectangle but not yet drawn
-      foreach (var province in provincePtr)
       {
-         if (!MathHelper.RectanglesIntercept(Data.Provinces[province].Bounds, intersection))
-            provPtrAdd.Add(province);
+         if (MathHelper.RectanglesIntercept(province.Bounds, currentRectBounds))
+            if (!MathHelper.RectanglesIntercept(province.Bounds, intersection)) 
+               provPtrAdd.Add(province.SelfPtr);
       }
 
+      // Provinces which are in the previous selection but not in the current intersection
       foreach (var province in SelectedProvPtr)
       {
-         if (!MathHelper.RectanglesIntercept(Data.Provinces[province].Bounds, intersection))
+         if (!MathHelper.RectanglesIntercept(Data.Provinces[province].Bounds, intersection)) 
             provPtrRemove.Add(province);
       }
-      
+
       AddRange(provPtrAdd, false);
       RemoveRange(provPtrRemove);
+
+      // Draw the new selection rectangle
       DrawRectangle(point, Color.Red, pannablePictureBox.Overlay);
    }
+
 
    // Draws a rectangle on the map in reference to the RectanglePoint
    private void DrawRectangle(Point refPoint, Color rectColor, Bitmap bmp)
