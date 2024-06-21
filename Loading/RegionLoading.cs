@@ -50,6 +50,12 @@ public static class RegionLoading
                monsoons.Add(new Monsoon(monsoonMatch.Groups["start"].Value, monsoonMatch.Groups["end"].Value));
          }
          regionDictionary.Add(regionName, new Region(regionName, areas, monsoons));
+
+         foreach (var area in areas)
+         {
+            if (Data.Areas.TryGetValue(area, out var ar))
+               ar.Region = regionName;
+         }
       }
 
       Data.Regions = regionDictionary;

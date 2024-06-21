@@ -8,6 +8,7 @@ public class Area(string name, int[] provinces)
    public string Edict { get; set; } = string.Empty;
    public float Prosperity { get; set; } = 0;
    public bool IsStated { get; set; } = false;
+   public string Region { get; set; } = string.Empty;
 
    public override bool Equals(object? obj)
    {

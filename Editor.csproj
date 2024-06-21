@@ -62,6 +62,7 @@
     <Compile Include="DataClasses\Province.cs" />
     <Compile Include="DataClasses\Region.cs" />
     <Compile Include="DataClasses\Selection.cs" />
+    <Compile Include="DataClasses\SuperRegion.cs" />
     <Compile Include="DebugMaps.cs" />
     <Compile Include="DebugPrints.cs" />
     <Compile Include="Helper\AdjacencyHelper.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Loading\DefinitionLoading.cs" />
     <Compile Include="Loading\MapLoading.cs" />
     <Compile Include="Loading\RegionLoading.cs" />
+    <Compile Include="Loading\SuperRegionLoading.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="MapWindow.cs">
       <SubType>Form</SubType>

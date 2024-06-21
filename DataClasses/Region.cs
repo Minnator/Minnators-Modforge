@@ -8,6 +8,7 @@ public class Region(string name)
    public string Name { get; } = name;
    public List<string> Areas { get; set; } = [];
    public List<Monsoon> Monsoon { get; set; } = [];
+   public string SuperRegion { get; set; } = string.Empty;
 
    public Region (string name, List<string> areas) : this(name)
    {
