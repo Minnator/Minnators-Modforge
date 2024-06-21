@@ -18,22 +18,11 @@ public static class Data
    public static Point[] Pixels = null!;
 
    // Contains the provinces and options to access them
-   // ProvPtr is the index of the province in the Provinces array
-   public static Province[] Provinces = null!;
-   public static Dictionary<Color, int> ColorToProvPtr = null!;
+   public static Dictionary<int, Province> Provinces = null!;
+   public static Dictionary<Color, int> ColorToProvId = null!;
    public static Dictionary<int, int[]> AdjacentProvinces = null!;
    
    // returns the province by its color
-   public static Province GetProvince(Color color) => Provinces[ColorToProvPtr[color]];
+   public static Province GetProvince(Color color) => Provinces[ColorToProvId[color]];
 
-   public static List<Province> GetAllProvincesInRectangle(Rectangle rect)
-   {
-      var provinces = new List<Province>();
-      foreach (var province in Provinces)
-      {
-         if (province.Bounds.IntersectsWith(rect))
-            provinces.Add(province);
-      }
-      return provinces;
-   }
 }

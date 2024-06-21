@@ -12,7 +12,7 @@ public static class DebugPrints
    {
       var sb = new StringBuilder();
       sb.AppendLine("ID   .. Pixels .. PixelPrt .. Borders .. BorderPtr");
-      foreach (var province in Data.Provinces)
+      foreach (var province in Data.Provinces.Values)
       {
          sb.AppendLine($"ID: {province.Id,4} .. {province.PixelCnt,6} .. {province.PixelPtr,8} .. {province.BorderCnt,6} .. {province.BorderPtr,8}");
       }

@@ -82,9 +82,9 @@ public static class DebugMaps
       {
 
          // Draw the adjacency numbers on the provinces
-         foreach (var prov in Data.Provinces)
+         foreach (var prov in Data.Provinces.Values)
          {
-            if (Data.AdjacentProvinces.TryGetValue(prov.SelfPtr, out var province))
+            if (Data.AdjacentProvinces.TryGetValue(prov.Id, out var province))
             {
                var str = $"{province.Length}";
                var font = new Font("Arial", 8);

@@ -23,19 +23,16 @@ public static class Optimizer
       var pixels = new Point[pixelCount];
       var borders = new Point[colorToBorder.Values.Sum(list => list.Count)];
       var dic = new Dictionary<Color, int>(provinces.Length);
+      var provs = new Dictionary<int, Province>(provinces.Length);
 
       var pixelPtr = 0;
       var borderPtr = 0;
-      var provincePtr = 0;
       
       foreach (var province in provinces)
       {
          var color = Color.FromArgb(province.Color.R, province.Color.G, province.Color.B);
-         dic[color] = provincePtr;
+         dic[color] = province.Id;
 
-         //set the province pointer for the province itself
-         province.SelfPtr = provincePtr;
-         provincePtr++;
 
          //copy the pixels of the province to the pixel array
          if (!colorToProvId.ContainsKey(color))
@@ -55,6 +52,8 @@ public static class Optimizer
          province.Bounds = MathHelper.GetBounds([.. colorToBorder[color]]);
          province.Center = new Point(province.Bounds.X + province.Bounds.Width / 2, province.Bounds.Y + province.Bounds.Height / 2);
 
+         // add the province to the dictionary
+         provs.Add(province.Id, province);
       }
 
       sw.Stop();
@@ -66,8 +65,8 @@ public static class Optimizer
       // Set the optimized data to the Data class
       Data.BorderPixels = borders;
       Data.Pixels = pixels;
-      Data.Provinces = provinces;
-      Data.ColorToProvPtr = dic;
+      Data.Provinces = provs;
+      Data.ColorToProvId = dic;
 
       // Free up memory from the ConcurrentDictionaries
       colorToBorder.Clear();
@@ -78,10 +77,10 @@ public static class Optimizer
    {
       var sw = new Stopwatch();
       sw.Start();
-      var adjacencyList = new Dictionary<int, int[]>(Data.Provinces.Length);
+      var adjacencyList = new Dictionary<int, int[]>(Data.Provinces.Count);
 
       foreach (var kvp in colorToAdj) 
-         adjacencyList.Add(Data.ColorToProvPtr[kvp.Key], kvp.Value.Select(color => Data.ColorToProvPtr[color]).ToArray());
+         adjacencyList.Add(Data.ColorToProvId[kvp.Key], kvp.Value.Select(color => Data.ColorToProvId[color]).ToArray());
 
       sw.Stop();
       //Debug.WriteLine($"Adjacency calculation took {sw.ElapsedMilliseconds}ms");

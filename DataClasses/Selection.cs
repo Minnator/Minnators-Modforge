@@ -79,11 +79,11 @@ public class Selection(PannablePictureBox pannablePictureBox)
       var provPtrRemove = new List<int>();
 
       // Get all provinces which are in the rectangle but not in the intersection
-      foreach (var province in Data.Provinces)
+      foreach (var province in Data.Provinces.Values)
       {
          if (MathHelper.RectanglesIntercept(province.Bounds, currentRectBounds))
             if (!MathHelper.RectanglesIntercept(province.Bounds, intersection)) 
-               provPtrAdd.Add(province.SelfPtr);
+               provPtrAdd.Add(province.Id);
       }
 
       // Provinces which are in the previous selection but not in the current intersection

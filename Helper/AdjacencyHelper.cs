@@ -17,14 +17,14 @@ public static class AdjacencyHelper
       var sw = new Stopwatch();
       sw.Start();
       Debug.WriteLine("Calculating Adjacencies");
-      var provinceDict = Data.ColorToProvPtr;
+      var provinceDict = Data.ColorToProvId;
       Dictionary<int, int[]> adjacencyList = [];
       var height = Data.MapHeight;
       var width = Data.MapWidth;
 
       using var bmp = new Bitmap(Data.MapPath);
       
-      foreach (var province in Data.Provinces)
+      foreach (var province in Data.Provinces.Values)
       {
          var borderPixels = new Point[province.BorderCnt];
          Array.Copy(Data.BorderPixels, province.BorderPtr, borderPixels, 0, province.BorderCnt);
@@ -56,7 +56,7 @@ public static class AdjacencyHelper
             }
 
          }
-         adjacencyList.Add(province.SelfPtr, [.. adjacencies]);
+         adjacencyList.Add(province.Id, [.. adjacencies]);
       }
 
       sw.Stop();
@@ -78,21 +78,21 @@ public static class AdjacencyHelper
       Dictionary<int, HashSet<int>> adjacencyList = [];
       var intersectCount = 0;
 
-      foreach (var province in provinces)
+      foreach (var province in provinces.Values)
       {
          var rect = GetFluffyRect(province.Bounds);
 
-         foreach (var innerProv in provinces)
+         foreach (var innerProv in provinces.Values)
          {
             if (MathHelper.RectanglesIntercept(rect, innerProv.Bounds))
             {
                intersectCount++;
                if (CheckBorders(province, innerProv, bmp))
                {
-                  if (!adjacencyList.ContainsKey(province.SelfPtr))
-                     adjacencyList.Add(province.SelfPtr, [innerProv.SelfPtr]);
+                  if (!adjacencyList.ContainsKey(province.Id))
+                     adjacencyList.Add(province.Id, [innerProv.Id]);
                   else
-                     adjacencyList[province.SelfPtr].Add(innerProv.SelfPtr);
+                     adjacencyList[province.Id].Add(innerProv.Id);
                }
             }
          }

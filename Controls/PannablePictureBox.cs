@@ -77,7 +77,7 @@ public sealed class PannablePictureBox : PictureBox
          return;
 
       // ------------------------------ Province Selection ------------------------------
-      if (!Data.ColorToProvPtr.TryGetValue(Color.FromArgb(Image.GetPixel(e.X, e.Y).ToArgb()), out var ptr)) return;
+      if (!Data.ColorToProvId.TryGetValue(Color.FromArgb(Image.GetPixel(e.X, e.Y).ToArgb()), out var ptr)) return;
       //check if ctrl is pressed
       if (ModifierKeys == Keys.Control) 
          Selection.Add(ptr);
@@ -139,7 +139,7 @@ public sealed class PannablePictureBox : PictureBox
       _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvPtr.Count);
 
       // ------------------------------ Province Highlighting ------------------------------
-      if (Data.ColorToProvPtr.TryGetValue(Color.FromArgb(Image.GetPixel(e.X, e.Y).ToArgb()), out var ptr))
+      if (Data.ColorToProvId.TryGetValue(Color.FromArgb(Image.GetPixel(e.X, e.Y).ToArgb()), out var ptr))
       {
          if (_lastInvalidatedProvince != -1) 
             Invalidate(MapDrawHelper.DrawProvinceBorder(_lastInvalidatedProvince, Color.Transparent, Overlay));

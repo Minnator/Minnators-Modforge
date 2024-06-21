@@ -28,7 +28,7 @@ public static class DefaultMapLoading
       AddProvincesToDictionary(match.Groups["LakeProvs"].Value, lake);
       AddProvincesToDictionary(match.Groups["CostalProvs"].Value, land);
 
-      foreach (var p in Data.Provinces)
+      foreach (var p in Data.Provinces.Values)
       {
          if (sea.Contains(p.Id) || rnv.Contains(p.Id) || lake.Contains(p.Id) || coastal.Contains(p.Id))
             continue;
