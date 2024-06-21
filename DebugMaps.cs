@@ -115,4 +115,26 @@ public static class DebugMaps
       bmp.Dispose();
    }
 
+   public static void PrintProvinceTypeMap()
+   {
+      var bmp = BitMapHelper.GenerateBitmap(id =>
+      {
+         if (Data.Provinces.TryGetValue(id, out var prov))
+         {
+            if (Data.LandProvinces.Contains(prov.Id))
+               return Color.Green;
+            if (Data.SeaProvinces.Contains(prov.Id))
+               return Color.Blue;
+            if (Data.LakeProvinces.Contains(prov.Id))
+               return Color.LightBlue;
+            if (Data.CoastalProvinces.Contains(prov.Id))
+               return Color.Yellow;
+         }
+         return Color.Black;
+      });
+
+      bmp.Save("C:\\Users\\david\\Downloads\\provinceTypeMap.png", ImageFormat.Png);
+      bmp.Dispose();
+   }
+
 }

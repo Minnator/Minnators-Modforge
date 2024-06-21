@@ -21,6 +21,12 @@ public static class Data
    public static Dictionary<int, Province> Provinces = null!;
    public static Dictionary<Color, int> ColorToProvId = null!;
    public static Dictionary<int, int[]> AdjacentProvinces = null!;
+
+   // Province Groups
+   public static HashSet<int> LandProvinces = null!;
+   public static HashSet<int> SeaProvinces = null!;
+   public static HashSet<int> LakeProvinces = null!;
+   public static HashSet<int> CoastalProvinces = null!;
    
    // returns the province by its color
    public static Province GetProvince(Color color) => Provinces[ColorToProvId[color]];

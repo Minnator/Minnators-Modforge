@@ -9,7 +9,7 @@ namespace Editor.Loading;
 
 public static class DefaultMapLoading
 {
-   private static void Load(string folder)
+   public static void Load(string folder)
    {
       var path = Path.Combine(folder, "map", "default.map");
       var content = IO.ReadAllInUTF8(path);
@@ -43,7 +43,10 @@ public static class DefaultMapLoading
          land.Remove(p);
       }
 
-
+      Data.LandProvinces = land;
+      Data.SeaProvinces = sea;
+      Data.LakeProvinces = lake;
+      Data.CoastalProvinces = coastal;
    }
 
    private static void AddProvincesToDictionary(string provinceList, HashSet<int> hashSet)
