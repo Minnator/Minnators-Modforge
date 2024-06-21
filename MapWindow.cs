@@ -83,13 +83,12 @@ namespace Editor
 
       private void DrawProvinceBorder()
       {
+         var sw = Stopwatch.StartNew();
          var rect = new Rectangle(0, 0, Project.MapSize.Width, Project.MapSize.Height);
-         using var g = Graphics.FromImage(MapPictureBox.Overlay);
-         g.Clear(Color.Transparent);
          MapDrawHelper.DrawOnMap(rect, Data.BorderPixels, Color.Black, MapPictureBox.Image);
-         MapPictureBox.Invalidate();
-         MapPictureBox.Overlay.Save(@"C:\Users\david\Downloads\borderTest.bmp", ImageFormat.Png);
-
+         MapPictureBox.Invalidate(rect);
+         sw.Stop();
+         LoadingLog.WriteTimeStamp("Drawing Borders", sw.ElapsedMilliseconds);
       }
 
       public void SetSelectedProvinceSum(int sum)

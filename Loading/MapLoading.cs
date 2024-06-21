@@ -145,6 +145,11 @@ public static class MapLoading
       Debug.WriteLine($"Map Loading took {sw.ElapsedMilliseconds}ms");
       loadingLog.WriteTimeStamp("Pixel Initialisation", sw.ElapsedMilliseconds);
 
+      Data.MapWidth = width;
+      Data.MapHeight = height;
+
+      return (colorToProvId, colorToBorder, colorToAdj);
+
       if (Consts.DEBUG)
       {
          sw.Restart();
@@ -158,9 +163,5 @@ public static class MapLoading
          loadingLog.WriteTimeStamp("Drawing Provinces", sw.ElapsedMilliseconds);
       }
 
-      Data.MapWidth = width;
-      Data.MapHeight = height;
-
-      return (colorToProvId, colorToBorder, colorToAdj);
    }
 }
