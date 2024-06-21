@@ -125,8 +125,5 @@ public class Selection(PannablePictureBox pannablePictureBox)
       DrawRectangle(_lastRectPoint, Color.Transparent, pannablePictureBox.Overlay);
       RectanglePoint = Point.Empty;
       IsInRectSelection = false;
-      var proPtrs = new List<int>(SelectedProvPtr);
-      Clear();
-      AddRange(proPtrs);
    }
 }

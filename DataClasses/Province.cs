@@ -13,6 +13,9 @@ public class Province
    public Rectangle Bounds { get; set; }
    public Point Center { get; set; }
 
+   // Data form the Game
+   public string Area { get; set; } = string.Empty;
+
 
 
    public override bool Equals(object? obj)

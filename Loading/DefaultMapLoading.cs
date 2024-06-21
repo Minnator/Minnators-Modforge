@@ -1,16 +1,17 @@
-﻿using Editor.DataClasses;
+﻿using Editor.Helper;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
-using Editor.Helper;
 
 namespace Editor.Loading;
 
 public static class DefaultMapLoading
 {
-   public static void Load(string folder)
+   public static void Load(string folder, ref Log loadingLog)
    {
+      var sw = new Stopwatch();
+      sw.Start();
       var path = Path.Combine(folder, "map", "default.map");
       var content = IO.ReadAllInUTF8(path);
       const string pattern = @"\bmax_provinces\b\s+=\s+(?<maxProv>\d*)\s*\bsea_starts\b\s+=\s+{(?<seaProvs>[^\}]*)}[.\s\S]*\bonly_used_for_random\b\s+=\s+{(?<RnvProvs>[^\}]*)}[.\s\S]*\blakes\b\s+=\s+{(?<LakeProvs>[^\}]*)}[.\s\S]*\bforce_coastal\b\s+=\s+{(?<CostalProvs>[^\}]*)";
@@ -47,6 +48,9 @@ public static class DefaultMapLoading
       Data.SeaProvinces = sea;
       Data.LakeProvinces = lake;
       Data.CoastalProvinces = coastal;
+
+      sw.Stop();
+      loadingLog.WriteTimeStamp("Parsing default.map", sw.ElapsedMilliseconds);
    }
 
    private static void AddProvincesToDictionary(string provinceList, HashSet<int> hashSet)

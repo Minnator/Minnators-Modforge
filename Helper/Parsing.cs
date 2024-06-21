@@ -19,4 +19,9 @@ public static class Parsing
       return idList;
    }
 
+   public static string RemoveCommentFromLine(string line)
+   {
+      var index = line.IndexOf('#');
+      return index == -1 ? line : line.Substring(0, index);
+   }
 }

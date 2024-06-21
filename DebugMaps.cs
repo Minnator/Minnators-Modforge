@@ -137,4 +137,25 @@ public static class DebugMaps
       bmp.Dispose();
    }
 
+   public static void AreasToMap()
+   {
+      Dictionary<string, Color> color = [];
+      var rand = new Random();
+      
+      foreach (var area in Data.Areas.Values)
+         color.Add(area.Name, Color.FromArgb(rand.Next(256), rand.Next(256), rand.Next(256)));
+
+      var bmp = BitMapHelper.GenerateBitmap(id =>
+      {
+         if (Data.Provinces.TryGetValue(id, out var prov))
+         {
+            if (Data.Areas.TryGetValue(prov.Area, out var area))
+               return color[area.Name];
+         }
+         return Color.Black;
+      });
+
+      bmp.Save("C:\\Users\\david\\Downloads\\areas.png", ImageFormat.Png);
+      bmp.Dispose();
+   }
 }

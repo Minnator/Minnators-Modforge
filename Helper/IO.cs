@@ -48,6 +48,20 @@ internal static class IO
       }
    }
 
+   public static string[] ReadAllLinesInUTF8(string path)
+   {
+      if (!File.Exists(path))
+         return [];
+      try
+      {
+         return File.ReadAllLines(path, Encoding.UTF8);
+      }
+      catch (IOException)
+      {
+         return [];
+      }
+   }
+
    public static bool WriteAllInANSI(string path, string data, bool append)
    {
       if (!File.Exists(path))

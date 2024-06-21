@@ -30,17 +30,15 @@ public class BitMapHelper
       // Calculate stride (bytes per row)
       var stride = bitmapData.Stride;
       var bytesPerPixel = Image.GetPixelFormatSize(bmp.PixelFormat) / 8;
-
-      var provinces = Data.Provinces.Values.ToArray();
-
+      
       unsafe
       {
-         Parallel.For(0, Data.Provinces.Count, prov =>
+         Parallel.ForEach(Data.Provinces.Values, province =>
          {
-            var points = new Point[provinces[prov].PixelCnt];
-            Array.Copy(Data.Pixels, provinces[prov].PixelPtr, points, 0, provinces[prov].PixelCnt);
+            var points = new Point[province.PixelCnt];
+            Array.Copy(Data.Pixels, province.PixelPtr, points, 0, province.PixelCnt);
 
-            var color = method(provinces[prov].Id);
+            var color = method(province.Id);
 
             var ptr = (byte*)bitmapData.Scan0;
             foreach (var point in points)

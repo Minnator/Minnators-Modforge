@@ -27,6 +27,9 @@ public static class Data
    public static HashSet<int> SeaProvinces = null!;
    public static HashSet<int> LakeProvinces = null!;
    public static HashSet<int> CoastalProvinces = null!;
+   // In Game Groups
+   public static Dictionary<string, Area> Areas = null!;
+   
    
    // returns the province by its color
    public static Province GetProvince(Color color) => Provinces[ColorToProvId[color]];

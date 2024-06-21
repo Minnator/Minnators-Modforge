@@ -45,7 +45,8 @@ namespace Editor
 
 
          LoadDefinitionAndMap(ref LoadingLog);
-         DefaultMapLoading.Load(Project.VanillaPath);
+         DefaultMapLoading.Load(Project.VanillaPath, ref LoadingLog);
+         AreaLoading.Load(Project.VanillaPath, ref LoadingLog);
          DrawProvinceBorder();
          
          GC.Collect();
@@ -53,6 +54,8 @@ namespace Editor
          LoadingLog = null!;
          
          ResourceUsageHelper.Initialize(this);
+
+         //DebugMaps.AreasToMap();
       }
 
       // Loads the map into the created PannablePictureBox
