@@ -3,6 +3,7 @@ using Editor.Helper;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Editor.Commands;
 
 namespace Editor.DataClasses;
 
@@ -75,17 +76,9 @@ public class Selection(PannablePictureBox pannablePictureBox)
       var lastRectBounds = MathHelper.GetBounds([RectanglePoint, _lastRectPoint]);
       var intersection = MathHelper.GetIntersection(currentRectBounds, lastRectBounds);
 
-      var provPtrAdd = new List<int>();
+      var provPtrAdd = MathHelper.GetProvincesInRectangle(currentRectBounds);
       var provPtrRemove = new List<int>();
-
-      // Get all provinces which are in the rectangle but not in the intersection
-      foreach (var province in Data.Provinces.Values)
-      {
-         if (MathHelper.RectanglesIntercept(province.Bounds, currentRectBounds))
-            if (!MathHelper.RectanglesIntercept(province.Bounds, intersection)) 
-               provPtrAdd.Add(province.Id);
-      }
-
+      
       // Provinces which are in the previous selection but not in the current intersection
       foreach (var province in SelectedProvPtr)
       {
@@ -122,6 +115,8 @@ public class Selection(PannablePictureBox pannablePictureBox)
    // Exits the rectangle selection and redraws the Selection ones to remove the red rectangle
    public void ExitRectangleSelection()
    {
+      var rect = MathHelper.GetBounds([RectanglePoint, _lastRectPoint]);
+      Data.HistoryManager.AddCommand(new CRectangleSelection(rect, pannablePictureBox), HistoryType.ComplexSelection);
       DrawRectangle(_lastRectPoint, Color.Transparent, pannablePictureBox.Overlay);
       RectanglePoint = Point.Empty;
       IsInRectSelection = false;

@@ -51,12 +51,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\CAddSingleSelection.cs" />
+    <Compile Include="Commands\CRectangleSelection.cs" />
     <Compile Include="Commands\CSelectionMarkNext.cs" />
     <Compile Include="Commands\CInitial.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\HistoryManager.cs" />
     <Compile Include="Consts.cs" />
     <Compile Include="Controls\ControlFactory.cs" />
+    <Compile Include="Controls\HistoryTreeNode.cs" />
     <Compile Include="Controls\PannablePictureBox.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -81,9 +81,9 @@ public sealed class PannablePictureBox : PictureBox
       if (!Data.ColorToProvId.TryGetValue(Color.FromArgb(Image.GetPixel(e.X, e.Y).ToArgb()), out var ptr)) return;
       //check if ctrl is pressed
       if (ModifierKeys == Keys.Control) 
-         Data.HistoryManager.AddCommand(new CAddSingleSelection(ptr, this));
+         Data.HistoryManager.AddCommand(new CAddSingleSelection(ptr, this), HistoryType.SimpleSelection);
       else if (!Selection.IsInRectSelection && ModifierKeys != Keys.Shift)
-         Data.HistoryManager.AddCommand(new CSelectionMarkNext(ptr, this));
+         Data.HistoryManager.AddCommand(new CSelectionMarkNext(ptr, this), HistoryType.SimpleSelection);
 
       _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvPtr.Count);
    }

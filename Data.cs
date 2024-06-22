@@ -7,6 +7,13 @@ using Region = Editor.DataClasses.Region;
 
 namespace Editor;
 
+public enum HistoryType
+{
+   SimpleSelection,
+   ComplexSelection,
+   Action
+}
+
 //contains all required and used data across the application and instances of forms.
 public static class Data
 {
@@ -41,5 +48,7 @@ public static class Data
 
    // returns the province by its color
    public static Province GetProvince(Color color) => Provinces[ColorToProvId[color]];
+
+
 
 }

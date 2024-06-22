@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
+using Editor.DataClasses;
 
 namespace Editor.Helper;
 
@@ -77,5 +79,16 @@ public static class MathHelper
       if (value.CompareTo(max) > 0)
          return max;
       return value;
+   }
+
+   public static List<int> GetProvincesInRectangle (Rectangle rect)
+   {
+      var provinces = new List<int>();
+      foreach (var province in Data.Provinces.Values)
+      {
+         if (RectanglesIntercept(province.Bounds, rect))
+            provinces.Add(province.Id);
+      }
+      return provinces;
    }
 }

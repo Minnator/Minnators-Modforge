@@ -1,6 +1,8 @@
 ﻿using System;
 using Editor.Commands;
 using System.Windows.Forms;
+using System.Xml.Linq;
+using Editor.Controls;
 
 namespace Editor
 {
@@ -15,23 +17,45 @@ namespace Editor
 
       public void Visualize(HistoryNode rootNode)
       {
-         var root = AddToNode(rootNode);
-
          HistoryTreeView.Nodes.Clear();
+         var root = new HistoryTreeNode("Root", HistoryType.Action);
          HistoryTreeView.Nodes.Add(root);
+         AddToNode(rootNode, root);
+         HistoryTreeView.Nodes.RemoveAt(0);
          HistoryTreeView.ExpandAll();
       }
-
-
-      private static TreeNode AddToNode(HistoryNode history)
+      
+      public void VisualizeFull(HistoryNode rootNode)
       {
-         var node = new TreeNode(history.Command.GetDescription());
+         HistoryTreeView.Nodes.Clear();
+         HistoryTreeView.Nodes.Add(AddToNodeFull(rootNode));
+         HistoryTreeView.ExpandAll();
+      }
+      
+      private static TreeNode AddToNodeFull(HistoryNode history)
+      {
+         var node = new HistoryTreeNode(history.Command.GetDescription(), history.Type);
          node.Tag = history.Id;
 
-         foreach (var child in history.Children) 
-            node.Nodes.Add(AddToNode(child));
+         foreach (var child in history.Children)
+            node.Nodes.Add(AddToNodeFull(child));
 
          return node;
+      }
+
+      private static void AddToNode(HistoryNode history, HistoryTreeNode parent)
+      {
+         // only add nodes if they are a ComplexSelection or an Action
+         if (history.Type is HistoryType.ComplexSelection or HistoryType.Action)
+         {
+            var node = new HistoryTreeNode(history.Command.GetDescription(), history.Type);
+            node.Tag = history.Id;
+            parent.Nodes.Add(node);
+            parent = node;
+         }
+
+         foreach (var child in history.Children)
+            AddToNode(child, parent);
       }
 
       private void RestoreButton_Click(object sender, System.EventArgs e)
@@ -41,6 +65,18 @@ namespace Editor
 
          _callback.Invoke((int)HistoryTreeView.SelectedNode.Tag);
          Close();
+      }
+
+      private void ShowAllSelections_CheckedChanged(object sender, EventArgs e)
+      {
+         if (ShowAllSelections.Checked)
+         {
+            VisualizeFull(Data.HistoryManager.GetRoot());
+         }
+         else
+         {
+            Visualize(Data.HistoryManager.GetRoot());
+         }
       }
    }
 }

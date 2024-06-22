@@ -8,6 +8,8 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
+#nullable enable
+
 namespace Editor
 {
    public partial class MapWindow : Form
@@ -53,10 +55,6 @@ namespace Editor
          Data.HistoryManager.UndoDepthChanged += UpdateUndoDepth;
          Data.HistoryManager.RedoDepthChanged += UpdateRedoDepth;
 
-         DebugPrints.PrintRegions();
-         //DebugMaps.AreasToMap();
-
-         DebugPrints.TestHistory();
       }
 
       // Loads the map into the created PannablePictureBox
@@ -124,7 +122,7 @@ namespace Editor
       private void RevertInSelectionHistory(object sender, EventArgs e)
       {
          var historyTreeView = new HistoryTree(Data.HistoryManager.RevertTo);
-         historyTreeView.Visualize(Data.HistoryManager.GetRoot());
+         historyTreeView.VisualizeFull(Data.HistoryManager.GetRoot());
          historyTreeView.ShowDialog();
       }
 

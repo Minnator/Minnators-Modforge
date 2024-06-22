@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace Editor.Commands;
 
+#nullable enable
 public class HistoryManager
 {
    private int _nodeId = 0;
@@ -12,7 +13,7 @@ public class HistoryManager
 
    public HistoryManager(ICommand initial)
    {
-      _current = new HistoryNode(_nodeId++, initial);
+      _current = new HistoryNode(_nodeId++, initial, HistoryType.Action);
       _root = _current;
    }
 
@@ -22,9 +23,9 @@ public class HistoryManager
    public event EventHandler<int>? RedoDepthChanged;
    
    // Add a new command to the history
-   public void AddCommand(ICommand newCommand)
+   public void AddCommand(ICommand newCommand, HistoryType type = HistoryType.Action)
    {
-      var newNode = new HistoryNode(_nodeId++, newCommand, _current);
+      var newNode = new HistoryNode(_nodeId++, newCommand, type, _current);
       _current.Children.Add(newNode);
       _current = newNode;
 
@@ -183,7 +184,7 @@ public class HistoryManager
    public void Clear()
    {
       _nodeId = 0;
-      _root = _current = new HistoryNode(_nodeId++, new CInitial());
+      _root = _current = new HistoryNode(_nodeId++, new CInitial(), HistoryType.Action);
       _current = _root;
       UndoDepthChanged?.Invoke(this, GetUndoDepth());
       RedoDepthChanged?.Invoke(this, GetRedoDepth());
@@ -194,11 +195,12 @@ public class HistoryManager
 //============================================================
 // A Node for the HistoryManager to store the history of commands for undo/redo
 
-public class HistoryNode(int id, ICommand command, HistoryNode parent = null!)
+public class HistoryNode(int id, ICommand command, HistoryType type, HistoryNode parent = null!)
 {
    public int Id { get; } = id;
    public ICommand Command { get; } = command;
    public HistoryNode Parent { get; } = parent;
+   public HistoryType Type { get; } = type;
    public List<HistoryNode> Children { get; } = [];
 
    public HistoryNode GetChildWithId(int id)
