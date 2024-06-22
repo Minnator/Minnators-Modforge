@@ -50,6 +50,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\CAddSingleSelection.cs" />
+    <Compile Include="Commands\CSelectionMarkNext.cs" />
+    <Compile Include="Commands\CInitial.cs" />
+    <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Commands\HistoryManager.cs" />
     <Compile Include="Consts.cs" />
     <Compile Include="Controls\ControlFactory.cs" />
     <Compile Include="Controls\PannablePictureBox.cs">
@@ -74,6 +79,12 @@
     <Compile Include="Helper\Parsing.cs" />
     <Compile Include="Helper\ResourceUsageHelper.cs" />
     <Compile Include="Helper\Saving.cs" />
+    <Compile Include="HistoryTree.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HistoryTree.Designer.cs">
+      <DependentUpon>HistoryTree.cs</DependentUpon>
+    </Compile>
     <Compile Include="Loading\AreaLoading.cs" />
     <Compile Include="Loading\ContinentLoading.cs" />
     <Compile Include="Loading\DefaultMapLoading.cs" />
@@ -90,6 +101,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="HistoryTree.resx">
+      <DependentUpon>HistoryTree.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MapWindow.resx">
       <DependentUpon>MapWindow.cs</DependentUpon>
     </EmbeddedResource>

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
+using Editor.Commands;
 using Editor.DataClasses;
 using Editor.Helper;
 
@@ -80,9 +81,9 @@ public sealed class PannablePictureBox : PictureBox
       if (!Data.ColorToProvId.TryGetValue(Color.FromArgb(Image.GetPixel(e.X, e.Y).ToArgb()), out var ptr)) return;
       //check if ctrl is pressed
       if (ModifierKeys == Keys.Control) 
-         Selection.Add(ptr);
+         Data.HistoryManager.AddCommand(new CAddSingleSelection(ptr, this));
       else if (!Selection.IsInRectSelection && ModifierKeys != Keys.Shift)
-         Selection.MarkNext(ptr);
+         Data.HistoryManager.AddCommand(new CSelectionMarkNext(ptr, this));
 
       _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvPtr.Count);
    }
@@ -162,10 +163,10 @@ public sealed class PannablePictureBox : PictureBox
       base.OnPaint(pe);
       if (IsPainting)
          return;
-      //IsPainting = true;
+      IsPainting = true;
       pe.Graphics.DrawImage(Image, 0, 0, Image.Width, Image.Height);
       pe.Graphics.DrawImage(SelectionOverlay, 0, 0, Image.Width, Image.Height);
       pe.Graphics.DrawImage(Overlay, 0, 0, Image.Width, Image.Height);
-      //IsPainting = false;
+      IsPainting = false;
    }
 }

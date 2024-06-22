@@ -1,10 +1,35 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.Text;
+using Editor.Commands;
 
 namespace Editor;
 
 public static class DebugPrints
 {
+
+   public static void TestHistory()
+   {
+      var history = new HistoryManager(new CInitial());
+      history.AddCommand(new CInitial());
+      history.AddCommand(new CInitial());
+      history.AddCommand(new CInitial());
+      history.Undo();
+      history.Undo();
+      history.AddCommand(new CInitial());
+      history.AddCommand(new CInitial());
+      history.Undo();
+      history.AddCommand(new CInitial());
+      history.Undo();
+      history.AddCommand(new CInitial());
+      history.AddCommand(new CInitial());
+
+      // Pop up the history tree form
+      var historyTree = new HistoryTree(history.RevertTo);
+      historyTree.Visualize(history.GetRoot());
+      historyTree.ShowDialog();
+   }
+
 
 
 

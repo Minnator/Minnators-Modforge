@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
+using Editor.Commands;
 using Editor.DataClasses;
 using Region = Editor.DataClasses.Region;
 
@@ -9,6 +10,9 @@ namespace Editor;
 //contains all required and used data across the application and instances of forms.
 public static class Data
 {
+   // History Manager
+   public static HistoryManager HistoryManager = new(new CInitial());
+
    // Contains the map image bounds and path
    public static int MapWidth;
    public static int MapHeight;

@@ -1,21 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Xml.Linq;
-using Editor.Controls;
+﻿using Editor.Controls;
 using Editor.DataClasses;
 using Editor.Helper;
 using Editor.Loading;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
 
 namespace Editor
 {
@@ -57,9 +48,15 @@ namespace Editor
          LoadingLog = null!;
 
          ResourceUsageHelper.Initialize(this);
+         //HistoryResourceHelper.Initialize(this);
+
+         Data.HistoryManager.UndoDepthChanged += UpdateUndoDepth;
+         Data.HistoryManager.RedoDepthChanged += UpdateRedoDepth;
 
          DebugPrints.PrintRegions();
          //DebugMaps.AreasToMap();
+
+         DebugPrints.TestHistory();
       }
 
       // Loads the map into the created PannablePictureBox
@@ -93,24 +90,47 @@ namespace Editor
          LoadingLog.WriteTimeStamp("Drawing Borders", sw.ElapsedMilliseconds);
       }
 
+      #region ToolStrip update methods
       public void SetSelectedProvinceSum(int sum)
       {
          SelectedProvinceSum.Text = $"ProvSum: [{sum}]";
       }
+
+      #region Resource Updater MethodInvokation
 
       public void UpdateMemoryUsage(float memoryUsage)
       {
          if (InvokeRequired) Invoke(new MethodInvoker(delegate { RamUsageStrip.Text = $"RAM: [{Math.Round(memoryUsage)} MB]"; }));
       }
 
-      public void UpdateCpuUsage (float cpuUsage)
+      public void UpdateCpuUsage(float cpuUsage)
       {
          if (InvokeRequired) Invoke(new MethodInvoker(delegate { CpuUsageStrip.Text = $"CPU: [{Math.Round(cpuUsage, 2)}%]"; }));
       }
 
+      #endregion
+
+      #region HistoryManager Event Handlers
+      private void UpdateRedoDepth(object sender, int e) => RedoDepthLabel.Text = $"Redos [{e}]";
+      private void UpdateUndoDepth(object sender, int e) => UndoDepthLabel.Text = $"Undos [{e}]";
+      #endregion
+      #endregion
+
       private void MapWindow_FormClosing(object sender, FormClosingEventArgs e)
       {
          ResourceUsageHelper.Dispose();
+      }
+
+      private void RevertInSelectionHistory(object sender, EventArgs e)
+      {
+         var historyTreeView = new HistoryTree(Data.HistoryManager.RevertTo);
+         historyTreeView.Visualize(Data.HistoryManager.GetRoot());
+         historyTreeView.ShowDialog();
+      }
+
+      private void DeleteHistoryToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         Data.HistoryManager.Clear();
       }
    }
 }
