@@ -31,5 +31,5 @@ public class CAddSingleSelection : ICommand
       Execute();
    }
 
-   public string GetDescription() => $"Add province {_provinceId} to selection";
+   public string GetDescription() => $"Add province [{Data.Provinces[_provinceId].GetLocalisation()}] to selection";
 }

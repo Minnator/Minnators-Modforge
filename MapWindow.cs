@@ -43,6 +43,7 @@ namespace Editor
          RegionLoading.Load(Project.VanillaPath, ref LoadingLog);
          SuperRegionLoading.Load(Project.VanillaPath, ref LoadingLog);
          ContinentLoading.Load(Project.VanillaPath, ref LoadingLog);
+         LocalisationLoading.Load(Project.ModPath, Project.VanillaPath, Project.Language, ref LoadingLog);
          DrawProvinceBorder();
          
          GC.Collect();
@@ -119,6 +120,8 @@ namespace Editor
          ResourceUsageHelper.Dispose();
       }
 
+      #region History interface interactions
+
       private void RevertInSelectionHistory(object sender, EventArgs e)
       {
          var historyTreeView = new HistoryTree(Data.HistoryManager.RevertTo);
@@ -130,5 +133,7 @@ namespace Editor
       {
          Data.HistoryManager.Clear();
       }
+
+      #endregion
    }
 }

@@ -18,6 +18,10 @@ public class Province
    public string Continent { get; set; } = string.Empty;
 
 
+   public string GetLocalisation()
+   {
+      return Data.Localisation.TryGetValue($"PROV{Id}", out var loc) ? loc : Id.ToString();
+   }
 
    public override bool Equals(object? obj)
    {

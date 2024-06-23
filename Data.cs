@@ -18,7 +18,7 @@ public enum HistoryType
 public static class Data
 {
    // History Manager
-   public static HistoryManager HistoryManager = new(new CInitial());
+   public static readonly HistoryManager HistoryManager = new(new CInitial());
 
    // Contains the map image bounds and path
    public static int MapWidth;
@@ -45,6 +45,9 @@ public static class Data
    public static Dictionary<string, SuperRegion> SuperRegions { get; set; }
    public static Dictionary<string, Continent> Continents { get; set; }
 
+   // Localisation
+   public static Dictionary<string, string> Localisation { get; set; } = [];
+   public static Dictionary<string, string> LocalisationCollisions { get; set; } = [];
 
    // returns the province by its color
    public static Province GetProvince(Color color) => Provinces[ColorToProvId[color]];

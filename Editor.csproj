@@ -75,6 +75,7 @@
     <Compile Include="DebugPrints.cs" />
     <Compile Include="Helper\AdjacencyHelper.cs" />
     <Compile Include="Helper\BitMapHelper.cs" />
+    <Compile Include="Helper\FilesHelper.cs" />
     <Compile Include="Helper\IO.cs" />
     <Compile Include="Helper\MapDrawHelper.cs" />
     <Compile Include="Helper\MathHelper.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Loading\ContinentLoading.cs" />
     <Compile Include="Loading\DefaultMapLoading.cs" />
     <Compile Include="Loading\DefinitionLoading.cs" />
+    <Compile Include="Loading\LocalisationLoading.cs" />
     <Compile Include="Loading\MapLoading.cs" />
     <Compile Include="Loading\RegionLoading.cs" />
     <Compile Include="Loading\SuperRegionLoading.cs" />
