@@ -41,9 +41,9 @@ public static class Data
    public static HashSet<int> CoastalProvinces = null!;
    // In Game Groups
    public static Dictionary<string, Area> Areas = null!;
-   public static Dictionary<string, Region> Regions { get; set; }
-   public static Dictionary<string, SuperRegion> SuperRegions { get; set; }
-   public static Dictionary<string, Continent> Continents { get; set; }
+   public static Dictionary<string, Region> Regions { get; set; } = [];
+   public static Dictionary<string, SuperRegion> SuperRegions { get; set; } = [];
+   public static Dictionary<string, Continent> Continents { get; set; } = [];
 
    // Localisation
    public static Dictionary<string, string> Localisation { get; set; } = [];

@@ -149,19 +149,5 @@ public static class MapLoading
       Data.MapHeight = height;
 
       return (colorToProvId, colorToBorder, colorToAdj);
-
-      if (Consts.DEBUG)
-      {
-         sw.Restart();
-         DebugMaps.DrawAllBorder(colorToBorder, new Size(width, height), @"C:\Users\david\Downloads\borders.bmp");
-         sw.Stop();
-         loadingLog.WriteTimeStamp("Drawing Borders", sw.ElapsedMilliseconds);
-
-         sw.Restart();
-         DebugMaps.DrawAllBorder(colorToProvId, new Size(width, height), @"C:\Users\david\Downloads\provinces.bmp");
-         sw.Stop();
-         loadingLog.WriteTimeStamp("Drawing Provinces", sw.ElapsedMilliseconds);
-      }
-
    }
 }

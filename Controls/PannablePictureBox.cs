@@ -157,11 +157,11 @@ public sealed class PannablePictureBox : PictureBox
       {
          Selection.LassoSelection.Add(e.Location);
          Invalidate(Geometry.GetBounds([.. Selection.LassoSelection]));
-         return;
       }
 
       if (ModifierKeys == Keys.Shift && Selection.State == SelectionState.Rectangle)
-         Selection.MarkAllInRectangle(e.Location);
+         Selection.PreviewAllInRectangle(e.Location);
+
       _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvinces.Count);
 
       // ------------------------------ Province Highlighting ------------------------------

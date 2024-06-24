@@ -2,6 +2,8 @@
 
 namespace Editor.DataClasses;
 
+#nullable enable
+
 public class Province
 {
    // Management data

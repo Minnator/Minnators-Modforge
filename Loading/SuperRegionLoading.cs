@@ -10,8 +10,7 @@ namespace Editor.Loading;
 
 public static class SuperRegionLoading
 {
-   private static string _mainPatter = @"(?<name>.*)\s*=\s*{\s*(?<regions>[\w\s]+)\s*\s*}";
-   private static string _subPattern = @"\s*(?<region>\w+)";
+   private const string MAIN_PATTER = @"(?<name>.*)\s*=\s*{\s*(?<regions>[\w\s]+)\s*\s*}";
 
 
    public static void Load(string folder, ref Log log)
@@ -26,7 +25,7 @@ public static class SuperRegionLoading
          sb.Append(Parsing.RemoveCommentFromLine(line));
 
       var content = sb.ToString();
-      var matches = Regex.Matches(content, _mainPatter, RegexOptions.Multiline);
+      var matches = Regex.Matches(content, MAIN_PATTER, RegexOptions.Multiline);
       foreach (Match match in matches)
       {
          var superRegionName = match.Groups["name"].Value;

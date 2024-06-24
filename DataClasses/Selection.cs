@@ -30,6 +30,7 @@ public class Selection(PannablePictureBox pannablePictureBox)
 
    // List of selected provinces
    public List<int> SelectedProvinces { get; set; } = [];
+   public List<int> SelectionPreview { get; set; } = [];
 
    // Setting the clearPolygonSelection to false will clear the polygon selection
    public bool ClearPolygonSelection
@@ -53,36 +54,44 @@ public class Selection(PannablePictureBox pannablePictureBox)
    }
 
    // Adds a province to the selection and redraws the border, allows for deselecting
-   public void Add(int provPtr, bool allowDeselect = true)
+   public void Add(int provId, bool allowDeselect = true, bool isPreview = false)
    {
-      if (!SelectedProvinces.Contains(provPtr))
+      if (isPreview)
       {
-         SelectedProvinces.Add(provPtr);
-         pannablePictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(provPtr, SelectionColor, pannablePictureBox.SelectionOverlay));
+         SelectionPreview.Add(provId);
       }
-      else if (allowDeselect)
-         Remove(provPtr);
-   }
-
-   public void AddRange(IEnumerable<int> provPtrs, bool allowDeselect = true)
-   {
-      foreach (var provPtr in provPtrs)
-         Add(provPtr, allowDeselect);
-   }
-
-   public void Remove(int provPtr)
-   {
-      if (SelectedProvinces.Contains(provPtr))
+      else
       {
-         SelectedProvinces.Remove(provPtr);
-         pannablePictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(provPtr, Color.Transparent, pannablePictureBox.SelectionOverlay));
+         if (allowDeselect && SelectedProvinces.Contains(provId))
+         {
+            Remove(provId);
+            return;
+         }
+         SelectedProvinces.Add(provId);
       }
+      
+      pannablePictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(provId, SelectionColor, pannablePictureBox.SelectionOverlay));
    }
 
-   public void RemoveRange(List<int> provPtrs)
+   public void AddRange(IEnumerable<int> provIds, bool allowDeselect = true, bool isPreview = false)
    {
-      for (var i = provPtrs.Count - 1; i >= 0; i--)
-         Remove(provPtrs[i]);
+      foreach (var provPtr in provIds)
+         Add(provPtr, allowDeselect, isPreview);
+   }
+
+   public void Remove(int provId, bool isPreview = false)
+   {
+      if (isPreview)
+         SelectionPreview.Remove(provId);
+      else
+         SelectedProvinces.Remove(provId);
+      pannablePictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(provId, Color.Transparent, pannablePictureBox.SelectionOverlay));
+   }
+
+   public void RemoveRange(List<int> provIds, bool isPreview = false)
+   {
+      for (var i = provIds.Count - 1; i >= 0; i--)
+         Remove(provIds[i], isPreview);
    }
 
    public void Clear() => RemoveRange(SelectedProvinces);
@@ -96,7 +105,7 @@ public class Selection(PannablePictureBox pannablePictureBox)
       AddRange(ids, false);
    }
 
-   public void MarkAllInRectangle(Point point)
+   public void PreviewAllInRectangle(Point point)
    {
       if (_rectanglePoint == Point.Empty)
          return;
@@ -119,8 +128,8 @@ public class Selection(PannablePictureBox pannablePictureBox)
             provPtrRemove.Add(province);
       }
 
-      AddRange(provPtrAdd, false);
-      RemoveRange(provPtrRemove);
+      AddRange(provPtrAdd, false, true);
+      RemoveRange(provPtrRemove, true);
 
       // Draw the new selection rectangle
       DrawRectangle(point, SelectionOutlineColor, pannablePictureBox.Overlay);

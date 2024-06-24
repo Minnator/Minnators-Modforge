@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 
+#nullable enable
 namespace DataVisualizer;
 
 public enum SaveFeedback
@@ -74,7 +75,7 @@ internal static class Saving
 
    private static SaveFeedback TryCreatePath(string? path)
    {
-      if (!Path.IsPathRooted(path))
+      if (path == null || !Path.IsPathRooted(path))
          return SaveFeedback.InvalidPath;
 
       var directories = path.Split(Path.DirectorySeparatorChar);
