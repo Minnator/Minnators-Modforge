@@ -153,8 +153,8 @@ public static class Geometry
 		return diff;
 	}
 
-   public static List<int> GetPolygonDiffLasPoint(List<int> polygon)
+   public static List<Point> GetPolygonDiffLasPoint(List<Point> polygon)
    {
-      return [polygon[0], polygon[polygon.Count - 1], polygon[polygon.Count - 2]];
+      return [polygon[0], polygon[polygon.Count - 1], polygon[polygon.Count - 2], polygon[polygon.Count - 3]];
    }
 }

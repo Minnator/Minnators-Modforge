@@ -123,9 +123,8 @@ public sealed class PannablePictureBox : PictureBox
       // ------------------------------ Province Selection ------------------------------
       if (ModifierKeys == Keys.Alt)
       {
+         Selection.ExitLassoSelection();
          Data.HistoryManager.AddCommand(new CLassoSelection(this), HistoryType.ComplexSelection);
-         Selection.ClearPolygonSelection = true;
-         Selection.State = SelectionState.Single;
          return;
       }
 
@@ -156,6 +155,7 @@ public sealed class PannablePictureBox : PictureBox
       if (ModifierKeys == Keys.Alt && Selection.State == SelectionState.Lasso)
       {
          Selection.LassoSelection.Add(e.Location);
+         Selection.PreviewAllInPolygon();
          Invalidate(Geometry.GetBounds([.. Selection.LassoSelection]));
       }
 
@@ -200,7 +200,7 @@ public sealed class PannablePictureBox : PictureBox
       // Draw the selection lasso
       if (Selection.State == SelectionState.Lasso && Selection.LassoSelection.Count > 2)
       {
-         pe.Graphics.DrawPolygon(new Pen(Selection.SelectionColor, 2), Selection.LassoSelection.ToArray());
+         pe.Graphics.DrawPolygon(new Pen(Selection.SelectionOutlineColor, 1), Selection.LassoSelection.ToArray());
       }
       if (Selection.ClearPolygonSelection && Selection.LassoSelection.Count > 2)
       {

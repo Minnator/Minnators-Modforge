@@ -4,6 +4,7 @@ using Editor.Helper;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Security.Cryptography;
 
 namespace Editor.DataClasses;
@@ -41,7 +42,6 @@ public class Selection(PannablePictureBox pannablePictureBox)
       {
          if (!value)
          {
-            Debug.WriteLine($"Lasso had {LassoSelection.Count} points");
             LassoSelection = [];
          }
          _clearPolygonSelection = value;
@@ -107,6 +107,17 @@ public class Selection(PannablePictureBox pannablePictureBox)
       AddRange(ids, false);
    }
 
+   public void PreviewAllInPolygon()
+   {
+      if (LassoSelection.Count < 3)
+         return;
+
+      var polyDiff = Geometry.GetPolygonDiffLasPoint(LassoSelection);
+      var provDiff = Geometry.GetProvincesInPolygon(polyDiff);
+
+      AddRange(provDiff, false, true);
+   }
+
    public void PreviewAllInRectangle(Point point)
    {
       if (_rectanglePoint == Point.Empty)
@@ -163,5 +174,13 @@ public class Selection(PannablePictureBox pannablePictureBox)
       _rectanglePoint = Point.Empty;
       SelectionPreview = [];
       State = SelectionState.Single;
+   }
+
+   public void ExitLassoSelection()
+   {
+      ClearPolygonSelection = true;
+      State = SelectionState.Single;
+      RemoveRange(SelectionPreview.ToList(), true);
+      SelectionPreview = [];
    }
 }
