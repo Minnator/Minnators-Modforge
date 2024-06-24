@@ -25,19 +25,19 @@ public class CRectangleSelection :ICommand
 
    public void Undo()
    {
-      var ids = MathHelper.GetProvincesInRectangle(_rectangle);
+      var ids = Geometry.GetProvinceIdsInRectangle(_rectangle);
       _pb.Selection.RemoveRange(ids);
    }
 
    public void Redo()
    {
-      var ids = MathHelper.GetProvincesInRectangle(_rectangle);
+      var ids = Geometry.GetProvinceIdsInRectangle(_rectangle);
       _pb.Selection.AddRange(ids);
    }
 
    public string GetDescription()
    {
-      var count = MathHelper.GetProvincesInRectangle(_rectangle).Count;
+      var count = Geometry.GetProvinceIdsInRectangle(_rectangle).Count;
       return $"Select {count} provinces in rectangle";
    }
 }

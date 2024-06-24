@@ -1,24 +1,50 @@
 ﻿using Editor.Controls;
 using Editor.Helper;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Editor.Commands;
 
 namespace Editor.DataClasses;
 
+public enum SelectionState
+{
+   Single,
+   Rectangle,
+   Lasso
+}
 public class Selection(PannablePictureBox pannablePictureBox)
 {
    // Settable color of the selection
-   public Color color = Color.DarkOrange;
+   public Color Color = Color.Red;
 
    // ------------------- Rectangle Selection -------------------
-   private Point RectanglePoint = Point.Empty; // Point which defines the starting point of the rectangle selection
-   public bool IsInRectSelection; // True if the user is currently in the rectangle selection
+   private Point _rectanglePoint = Point.Empty; // Point which defines the starting point of the rectangle selection
+   public SelectionState State = SelectionState.Single; // State of the selection
    private Point _lastRectPoint = Point.Empty; // Last point of the rectangle selection used to clear the rectangle
    
+   // ------------------- Draw Selection -------------------
+   public List<Point> LassoSelection = []; // List of points which define the selection polygon
+   private bool _clearPolygonSelection;
+
    // List of selected provinces
    public List<int> SelectedProvPtr { get; set; } = [];
+
+   // Setting the clearPolygonSelection to false will clear the polygon selection
+   public bool ClearPolygonSelection
+   {
+      get => _clearPolygonSelection;
+      set
+      {
+         if (!value)
+         {
+            Debug.WriteLine($"Lasso had {LassoSelection.Count} points");
+            LassoSelection = [];
+         }
+         _clearPolygonSelection = value;
+      }
+   }
 
    public void MarkNext(int provPtr)
    {
@@ -32,7 +58,7 @@ public class Selection(PannablePictureBox pannablePictureBox)
       if (!SelectedProvPtr.Contains(provPtr))
       {
          SelectedProvPtr.Add(provPtr);
-         pannablePictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(provPtr, color, pannablePictureBox.SelectionOverlay));
+         pannablePictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(provPtr, Color, pannablePictureBox.SelectionOverlay));
       }
       else if (allowDeselect)
          Remove(provPtr);
@@ -62,27 +88,34 @@ public class Selection(PannablePictureBox pannablePictureBox)
    public void Clear() => RemoveRange(SelectedProvPtr);
 
    public bool Contains(int provPtr) => SelectedProvPtr.Contains(provPtr);
-   
+
+   public void LassoSelect(int[] ids)
+   {
+      if (LassoSelection.Count < 2)
+         return;
+      AddRange(ids, false);
+   }
+
    public void MarkAllInRectangle(Point point)
    {
-      if (RectanglePoint == Point.Empty)
+      if (_rectanglePoint == Point.Empty)
          return;
 
       // Remove the last selection rectangle
       DrawRectangle(_lastRectPoint, Color.Transparent, pannablePictureBox.Overlay);
 
       // Precompute the bounds
-      var currentRectBounds = MathHelper.GetBounds([RectanglePoint, point]);
-      var lastRectBounds = MathHelper.GetBounds([RectanglePoint, _lastRectPoint]);
-      var intersection = MathHelper.GetIntersection(currentRectBounds, lastRectBounds);
+      var currentRectBounds = Geometry.GetBounds([_rectanglePoint, point]);
+      var lastRectBounds = Geometry.GetBounds([_rectanglePoint, _lastRectPoint]);
+      var intersection = Geometry.GetIntersection(currentRectBounds, lastRectBounds);
 
-      var provPtrAdd = MathHelper.GetProvincesInRectangle(currentRectBounds);
+      var provPtrAdd = Geometry.GetProvinceIdsInRectangle(currentRectBounds);
       var provPtrRemove = new List<int>();
       
       // Provinces which are in the previous selection but not in the current intersection
       foreach (var province in SelectedProvPtr)
       {
-         if (!MathHelper.RectanglesIntercept(Data.Provinces[province].Bounds, intersection)) 
+         if (!Geometry.RectanglesIntercept(Data.Provinces[province].Bounds, intersection)) 
             provPtrRemove.Add(province);
       }
 
@@ -98,8 +131,8 @@ public class Selection(PannablePictureBox pannablePictureBox)
    private void DrawRectangle(Point refPoint, Color rectColor, Bitmap bmp)
    {
       pannablePictureBox.IsPainting = true;
-      var rect = MathHelper.GetBounds([RectanglePoint, refPoint]);
-      pannablePictureBox.Invalidate(MapDrawHelper.DrawOnMap(rect, MathHelper.GetRectanglePoints(rect), rectColor,
+      var rect = Geometry.GetBounds([_rectanglePoint, refPoint]);
+      pannablePictureBox.Invalidate(MapDrawHelper.DrawOnMap(rect, Geometry.GetRectanglePoints(rect), rectColor,
          bmp));
       _lastRectPoint = refPoint;
       pannablePictureBox.IsPainting = false;
@@ -108,17 +141,17 @@ public class Selection(PannablePictureBox pannablePictureBox)
    // Enters the rectangle selection and sets the starting point
    public void EnterRectangleSelection(Point startPoint)
    {
-      RectanglePoint = startPoint;
-      IsInRectSelection = true;
+      _rectanglePoint = startPoint;
+      State = SelectionState.Rectangle;
    }
 
    // Exits the rectangle selection and redraws the Selection ones to remove the red rectangle
    public void ExitRectangleSelection()
    {
-      var rect = MathHelper.GetBounds([RectanglePoint, _lastRectPoint]);
+      var rect = Geometry.GetBounds([_rectanglePoint, _lastRectPoint]);
       Data.HistoryManager.AddCommand(new CRectangleSelection(rect, pannablePictureBox), HistoryType.ComplexSelection);
       DrawRectangle(_lastRectPoint, Color.Transparent, pannablePictureBox.Overlay);
-      RectanglePoint = Point.Empty;
-      IsInRectSelection = false;
+      _rectanglePoint = Point.Empty;
+      State = SelectionState.Single;
    }
 }

@@ -84,7 +84,7 @@ public static class AdjacencyHelper
 
          foreach (var innerProv in provinces.Values)
          {
-            if (MathHelper.RectanglesIntercept(rect, innerProv.Bounds))
+            if (Geometry.RectanglesIntercept(rect, innerProv.Bounds))
             {
                intersectCount++;
                if (CheckBorders(province, innerProv, bmp))

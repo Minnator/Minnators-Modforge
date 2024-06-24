@@ -4,6 +4,7 @@ namespace Editor.DataClasses;
 
 public class Province
 {
+   // Management data
    public int Id { get; set; }
    public Color Color { get; set; }
    public int BorderPtr { get; set; }

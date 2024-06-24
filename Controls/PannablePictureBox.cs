@@ -9,6 +9,8 @@ using Editor.Helper;
 
 namespace Editor.Controls;
 
+
+
 public sealed class PannablePictureBox : PictureBox
 {
    public bool IsPainting; // Prevents double locking of bitmaps when painting
@@ -48,7 +50,7 @@ public sealed class PannablePictureBox : PictureBox
    private readonly MapWindow _mapWindow; // Reference to the main window to update the selected province count
    private Point _startingPoint = Point.Empty;
    private Point _movingPoint = Point.Empty;
-   private bool _panning = false;
+   private bool _panning;
    private bool AllowPanning { get; set; } = true; // If true, the user can pan the map by holding the middle mouse button
 
    public PannablePictureBox(string path, ref Panel parentPanel, MapWindow mapWindow)
@@ -78,11 +80,12 @@ public sealed class PannablePictureBox : PictureBox
          return;
 
       // ------------------------------ Province Selection ------------------------------
-      if (!Data.ColorToProvId.TryGetValue(Color.FromArgb(Image.GetPixel(e.X, e.Y).ToArgb()), out var ptr)) return;
+      if (!Data.ColorToProvId.TryGetValue(Color.FromArgb(Image.GetPixel(e.X, e.Y).ToArgb()), out var ptr)) 
+         return;
       //check if ctrl is pressed
-      if (ModifierKeys == Keys.Control) 
+      if (ModifierKeys == Keys.Control && Selection.State == SelectionState.Single) 
          Data.HistoryManager.AddCommand(new CAddSingleSelection(ptr, this), HistoryType.SimpleSelection);
-      else if (!Selection.IsInRectSelection && ModifierKeys != Keys.Shift)
+      else if (ModifierKeys != Keys.Shift && Selection.State == SelectionState.Single)
          Data.HistoryManager.AddCommand(new CSelectionMarkNext(ptr, this), HistoryType.SimpleSelection);
 
       _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvPtr.Count);
@@ -91,33 +94,48 @@ public sealed class PannablePictureBox : PictureBox
    private void PictureBox_MouseDown(object sender, MouseEventArgs e)
    {
       // ------------------------------ Province Selection ------------------------------
-      if (ModifierKeys == Keys.Shift)
+      switch (ModifierKeys)
       {
-         Selection.EnterRectangleSelection(e.Location);
-         return;
+         case Keys.Alt:
+            Selection.State = SelectionState.Lasso;
+            return;
+         case Keys.Shift:
+            Selection.EnterRectangleSelection(e.Location);
+            return;
       }
-      _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvPtr.Count);
 
+      _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvPtr.Count);
+      
       // ------------------------------ Panning ------------------------------
       if (AllowPanning)
+      {
          if (e.Button == MouseButtons.Middle)
          {
             _panning = true;
             _startingPoint = e.Location;
             Cursor = Cursors.Hand; // Optional: change cursor to hand while panning
          }
-
+      }
    }
 
    private void PictureBox1_MouseUp(object sender, MouseEventArgs e)
    { 
       // ------------------------------ Province Selection ------------------------------
-      if (Selection.IsInRectSelection)
+      if (ModifierKeys == Keys.Alt)
+      {
+         Data.HistoryManager.AddCommand(new CLassoSelection(this), HistoryType.ComplexSelection);
+         Selection.ClearPolygonSelection = true;
+         Selection.State = SelectionState.Single;
+         return;
+      }
+
+      if (Selection.State == SelectionState.Rectangle)
       {
          Selection.ExitRectangleSelection();
          return;
       }
       _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvPtr.Count);
+
 
       // ------------------------------ Panning ------------------------------
       if (AllowPanning)
@@ -135,12 +153,20 @@ public sealed class PannablePictureBox : PictureBox
          return;
 
       // ------------------------------ Province Selection ------------------------------
-      if (ModifierKeys == Keys.Shift && Selection.IsInRectSelection)
+      if (ModifierKeys == Keys.Alt && Selection.State == SelectionState.Lasso)
+      {
+         Selection.LassoSelection.Add(e.Location);
+         Invalidate(Geometry.GetBounds([.. Selection.LassoSelection]));
+         return;
+      }
+
+      if (ModifierKeys == Keys.Shift && Selection.State == SelectionState.Rectangle)
          Selection.MarkAllInRectangle(e.Location);
       _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvPtr.Count);
 
       // ------------------------------ Province Highlighting ------------------------------
-      if (Data.ColorToProvId.TryGetValue(Color.FromArgb(Image.GetPixel(e.X, e.Y).ToArgb()), out var ptr))
+      if (Data.ColorToProvId.TryGetValue(Color.FromArgb(Image.GetPixel(e.X, e.Y).ToArgb()), out var ptr) && 
+          ptr != _lastInvalidatedProvince)
       {
          if (_lastInvalidatedProvince != -1) 
             Invalidate(MapDrawHelper.DrawProvinceBorder(_lastInvalidatedProvince, Color.Transparent, Overlay));
@@ -150,12 +176,14 @@ public sealed class PannablePictureBox : PictureBox
 
       // ------------------------------ Panning ------------------------------
       if (AllowPanning)
+      {
          if (_panning)
          {
             _movingPoint = new Point(-(_parentPanel.AutoScrollPosition.X + e.X - _startingPoint.X),
                -(_parentPanel.AutoScrollPosition.Y + e.Y - _startingPoint.Y));
             _parentPanel.AutoScrollPosition = _movingPoint;
          }
+      }
    }
 
    protected override void OnPaint(PaintEventArgs pe)
@@ -164,9 +192,21 @@ public sealed class PannablePictureBox : PictureBox
       if (IsPainting)
          return;
       IsPainting = true;
+      // Draw the layers to the screen
       pe.Graphics.DrawImage(Image, 0, 0, Image.Width, Image.Height);
       pe.Graphics.DrawImage(SelectionOverlay, 0, 0, Image.Width, Image.Height);
       pe.Graphics.DrawImage(Overlay, 0, 0, Image.Width, Image.Height);
+
+      // Draw the selection lasso
+      if (Selection.State == SelectionState.Lasso && Selection.LassoSelection.Count > 2)
+      {
+         pe.Graphics.DrawPolygon(new Pen(Selection.Color, 2), Selection.LassoSelection.ToArray());
+      }
+      if (Selection.ClearPolygonSelection && Selection.LassoSelection.Count > 2)
+      {
+         Invalidate(Geometry.GetBounds([.. Selection.LassoSelection]));
+         Selection.ClearPolygonSelection = false;
+      }
       IsPainting = false;
    }
 }
