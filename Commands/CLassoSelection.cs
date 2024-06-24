@@ -10,12 +10,13 @@ public class CLassoSelection : ICommand
    private readonly PannablePictureBox _pb;
    private readonly List<int> _selectionDelta;
 
-   public CLassoSelection(PannablePictureBox pb)
+   public CLassoSelection(PannablePictureBox pb, bool executeOnInit = true)
    {
       _pb = pb;
       var selection = Geometry.GetProvincesInPolygon(pb.Selection.LassoSelection);
-      _selectionDelta = selection.Except(pb.Selection.SelectedProvPtr).ToList();
-      Execute();
+      _selectionDelta = selection.Except(pb.Selection.SelectedProvinces).ToList();
+      if (executeOnInit)
+         Execute();
    }
 
    public void Execute()

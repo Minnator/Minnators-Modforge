@@ -117,10 +117,10 @@ public static class Geometry
       return provinces;
    }
 
-   // Returns true if the given rectangle is inside the polygon
-   public static bool IsInPolygon(List<Point> polygon, Point provCenter)
+   // Returns true if the given point is inside the polygon
+   public static bool IsInPolygon(List<Point> polygon, Point point)
    {
-      return IsPointInPolygon(provCenter, polygon);
+      return IsPointInPolygon(point, polygon);
    }
 
    // Method to check if a point is within a polygon, if the point lies on the left for an uneven number of edges it is inside the polygon
@@ -137,39 +137,5 @@ public static class Geometry
          }
       }
       return isInside;
-   }
-
-   // Method to check if two line segments intersect
-   public static bool DoLinesIntersect(Point p1, Point p2, Point q1, Point q2)
-   {
-      var o1 = Orientation(p1, p2, q1);
-      var o2 = Orientation(p1, p2, q2);
-      var o3 = Orientation(q1, q2, p1);
-      var o4 = Orientation(q1, q2, p2);
-
-      // General case
-      if (o1 != o2 && o3 != o4)
-         return true;
-
-      // Special cases
-      if (o1 == 0 && OnSegment(p1, q1, p2)) return true;
-      if (o2 == 0 && OnSegment(p1, q2, p2)) return true;
-      if (o3 == 0 && OnSegment(q1, p1, q2)) return true;
-      if (o4 == 0 && OnSegment(q1, p2, q2)) return true;
-
-      return false;
-   }
-
-   // Helper method to find the orientation of ordered triplet (p, q, r) using cross product
-   public static int Orientation(Point p, Point q, Point r)
-   {
-      return (q.Y - p.Y) * (r.X - q.X) - (q.X - p.X) * (r.Y - q.Y);
-   }
-
-   // Helper method to check if point q lies on a line segment pr
-   public static bool OnSegment(Point p, Point q, Point r)
-   {
-      return q.X <= Math.Max(p.X, r.X) && q.X >= Math.Min(p.X, r.X) &&
-             q.Y <= Math.Max(p.Y, r.Y) && q.Y >= Math.Min(p.Y, r.Y);
    }
 }

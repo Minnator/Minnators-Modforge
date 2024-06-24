@@ -88,7 +88,7 @@ public sealed class PannablePictureBox : PictureBox
       else if (ModifierKeys != Keys.Shift && Selection.State == SelectionState.Single)
          Data.HistoryManager.AddCommand(new CSelectionMarkNext(ptr, this), HistoryType.SimpleSelection);
 
-      _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvPtr.Count);
+      _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvinces.Count);
    }
    
    private void PictureBox_MouseDown(object sender, MouseEventArgs e)
@@ -104,7 +104,7 @@ public sealed class PannablePictureBox : PictureBox
             return;
       }
 
-      _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvPtr.Count);
+      _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvinces.Count);
       
       // ------------------------------ Panning ------------------------------
       if (AllowPanning)
@@ -134,7 +134,7 @@ public sealed class PannablePictureBox : PictureBox
          Selection.ExitRectangleSelection();
          return;
       }
-      _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvPtr.Count);
+      _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvinces.Count);
 
 
       // ------------------------------ Panning ------------------------------
@@ -162,7 +162,7 @@ public sealed class PannablePictureBox : PictureBox
 
       if (ModifierKeys == Keys.Shift && Selection.State == SelectionState.Rectangle)
          Selection.MarkAllInRectangle(e.Location);
-      _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvPtr.Count);
+      _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvinces.Count);
 
       // ------------------------------ Province Highlighting ------------------------------
       if (Data.ColorToProvId.TryGetValue(Color.FromArgb(Image.GetPixel(e.X, e.Y).ToArgb()), out var ptr) && 
@@ -200,7 +200,7 @@ public sealed class PannablePictureBox : PictureBox
       // Draw the selection lasso
       if (Selection.State == SelectionState.Lasso && Selection.LassoSelection.Count > 2)
       {
-         pe.Graphics.DrawPolygon(new Pen(Selection.Color, 2), Selection.LassoSelection.ToArray());
+         pe.Graphics.DrawPolygon(new Pen(Selection.SelectionColor, 2), Selection.LassoSelection.ToArray());
       }
       if (Selection.ClearPolygonSelection && Selection.LassoSelection.Count > 2)
       {

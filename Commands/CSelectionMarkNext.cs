@@ -19,7 +19,7 @@ public class CSelectionMarkNext : ICommand
 
    public void Execute()
    {
-      _selectedProvinces = [.. _pb.Selection.SelectedProvPtr];
+      _selectedProvinces = [.. _pb.Selection.SelectedProvinces];
       _pb.Selection.MarkNext(_provinceId);
    }
 

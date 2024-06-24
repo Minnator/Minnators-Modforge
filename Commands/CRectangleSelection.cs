@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using Editor.Controls;
 using Editor.Helper;
 
@@ -6,12 +8,12 @@ namespace Editor.Commands;
 
 public class CRectangleSelection :ICommand
 {
-   private readonly Rectangle _rectangle;
    private readonly PannablePictureBox _pb;
+   private readonly List<int> _selectionDelta;
    public CRectangleSelection(Rectangle rectangle, PannablePictureBox pb, bool executeOnInit = true)
    {
-      _rectangle = rectangle;
       _pb = pb;
+      _selectionDelta = Geometry.GetProvinceIdsInRectangle(rectangle).Except(_pb.Selection.SelectedProvinces).ToList();
 
       if (executeOnInit)
          Execute();
@@ -20,24 +22,21 @@ public class CRectangleSelection :ICommand
 
    public void Execute()
    {
-      // We do not execute code here as the command is added without the need to do it.
+      _pb.Selection.AddRange(_selectionDelta, false);
    }
 
    public void Undo()
    {
-      var ids = Geometry.GetProvinceIdsInRectangle(_rectangle);
-      _pb.Selection.RemoveRange(ids);
+      _pb.Selection.RemoveRange(_selectionDelta);
    }
 
    public void Redo()
    {
-      var ids = Geometry.GetProvinceIdsInRectangle(_rectangle);
-      _pb.Selection.AddRange(ids);
+      _pb.Selection.AddRange(_selectionDelta);
    }
 
    public string GetDescription()
    {
-      var count = Geometry.GetProvinceIdsInRectangle(_rectangle).Count;
-      return $"Select {count} provinces in rectangle";
+      return $"Select {_selectionDelta.Count} provinces in rectangle";
    }
 }

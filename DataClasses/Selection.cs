@@ -1,10 +1,9 @@
-﻿using Editor.Controls;
+﻿using Editor.Commands;
+using Editor.Controls;
 using Editor.Helper;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
-using Editor.Commands;
 
 namespace Editor.DataClasses;
 
@@ -17,7 +16,8 @@ public enum SelectionState
 public class Selection(PannablePictureBox pannablePictureBox)
 {
    // Settable color of the selection
-   public Color Color = Color.Red;
+   public Color SelectionColor = Color.Orange;
+   public Color SelectionOutlineColor = Color.Red;
 
    // ------------------- Rectangle Selection -------------------
    private Point _rectanglePoint = Point.Empty; // Point which defines the starting point of the rectangle selection
@@ -29,7 +29,7 @@ public class Selection(PannablePictureBox pannablePictureBox)
    private bool _clearPolygonSelection;
 
    // List of selected provinces
-   public List<int> SelectedProvPtr { get; set; } = [];
+   public List<int> SelectedProvinces { get; set; } = [];
 
    // Setting the clearPolygonSelection to false will clear the polygon selection
    public bool ClearPolygonSelection
@@ -55,10 +55,10 @@ public class Selection(PannablePictureBox pannablePictureBox)
    // Adds a province to the selection and redraws the border, allows for deselecting
    public void Add(int provPtr, bool allowDeselect = true)
    {
-      if (!SelectedProvPtr.Contains(provPtr))
+      if (!SelectedProvinces.Contains(provPtr))
       {
-         SelectedProvPtr.Add(provPtr);
-         pannablePictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(provPtr, Color, pannablePictureBox.SelectionOverlay));
+         SelectedProvinces.Add(provPtr);
+         pannablePictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(provPtr, SelectionColor, pannablePictureBox.SelectionOverlay));
       }
       else if (allowDeselect)
          Remove(provPtr);
@@ -72,9 +72,9 @@ public class Selection(PannablePictureBox pannablePictureBox)
 
    public void Remove(int provPtr)
    {
-      if (SelectedProvPtr.Contains(provPtr))
+      if (SelectedProvinces.Contains(provPtr))
       {
-         SelectedProvPtr.Remove(provPtr);
+         SelectedProvinces.Remove(provPtr);
          pannablePictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(provPtr, Color.Transparent, pannablePictureBox.SelectionOverlay));
       }
    }
@@ -85,9 +85,9 @@ public class Selection(PannablePictureBox pannablePictureBox)
          Remove(provPtrs[i]);
    }
 
-   public void Clear() => RemoveRange(SelectedProvPtr);
+   public void Clear() => RemoveRange(SelectedProvinces);
 
-   public bool Contains(int provPtr) => SelectedProvPtr.Contains(provPtr);
+   public bool Contains(int provPtr) => SelectedProvinces.Contains(provPtr);
 
    public void LassoSelect(int[] ids)
    {
@@ -113,7 +113,7 @@ public class Selection(PannablePictureBox pannablePictureBox)
       var provPtrRemove = new List<int>();
       
       // Provinces which are in the previous selection but not in the current intersection
-      foreach (var province in SelectedProvPtr)
+      foreach (var province in SelectedProvinces)
       {
          if (!Geometry.RectanglesIntercept(Data.Provinces[province].Bounds, intersection)) 
             provPtrRemove.Add(province);
@@ -123,7 +123,7 @@ public class Selection(PannablePictureBox pannablePictureBox)
       RemoveRange(provPtrRemove);
 
       // Draw the new selection rectangle
-      DrawRectangle(point, Color.Red, pannablePictureBox.Overlay);
+      DrawRectangle(point, SelectionOutlineColor, pannablePictureBox.Overlay);
    }
 
 
