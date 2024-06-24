@@ -6,7 +6,7 @@ namespace Editor.Helper;
 
 internal static class IO
 {
-   private static Encoding encoding;
+   private static readonly Encoding encoding;
 
    static IO()
    {

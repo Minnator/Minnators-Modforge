@@ -4,6 +4,7 @@ using Editor.Helper;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Security.Cryptography;
 
 namespace Editor.DataClasses;
 
@@ -58,6 +59,8 @@ public class Selection(PannablePictureBox pannablePictureBox)
    {
       if (isPreview)
       {
+         if (SelectionPreview.Contains(provId))
+            return;
          SelectionPreview.Add(provId);
       }
       else
@@ -109,7 +112,6 @@ public class Selection(PannablePictureBox pannablePictureBox)
    {
       if (_rectanglePoint == Point.Empty)
          return;
-
       // Remove the last selection rectangle
       DrawRectangle(_lastRectPoint, Color.Transparent, pannablePictureBox.Overlay);
 
@@ -118,11 +120,12 @@ public class Selection(PannablePictureBox pannablePictureBox)
       var lastRectBounds = Geometry.GetBounds([_rectanglePoint, _lastRectPoint]);
       var intersection = Geometry.GetIntersection(currentRectBounds, lastRectBounds);
 
+      _lastRectPoint = point;
       var provPtrAdd = Geometry.GetProvinceIdsInRectangle(currentRectBounds);
-      var provPtrRemove = new List<int>();
-      
+      List<int> provPtrRemove = [];
+
       // Provinces which are in the previous selection but not in the current intersection
-      foreach (var province in SelectedProvinces)
+      foreach (var province in SelectionPreview)
       {
          if (!Geometry.RectanglesIntercept(Data.Provinces[province].Bounds, intersection)) 
             provPtrRemove.Add(province);
@@ -141,9 +144,7 @@ public class Selection(PannablePictureBox pannablePictureBox)
    {
       pannablePictureBox.IsPainting = true;
       var rect = Geometry.GetBounds([_rectanglePoint, refPoint]);
-      pannablePictureBox.Invalidate(MapDrawHelper.DrawOnMap(rect, Geometry.GetRectanglePoints(rect), rectColor,
-         bmp));
-      _lastRectPoint = refPoint;
+      pannablePictureBox.Invalidate(MapDrawHelper.DrawOnMap(rect, Geometry.GetRectanglePoints(rect), rectColor, bmp));
       pannablePictureBox.IsPainting = false;
    }
 
@@ -161,6 +162,7 @@ public class Selection(PannablePictureBox pannablePictureBox)
       Data.HistoryManager.AddCommand(new CRectangleSelection(rect, pannablePictureBox), HistoryType.ComplexSelection);
       DrawRectangle(_lastRectPoint, Color.Transparent, pannablePictureBox.Overlay);
       _rectanglePoint = Point.Empty;
+      SelectionPreview = [];
       State = SelectionState.Single;
    }
 }

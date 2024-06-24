@@ -34,8 +34,10 @@ namespace Editor
       
       private static TreeNode AddToNodeFull(HistoryNode history)
       {
-         var node = new HistoryTreeNode(history.Command.GetDescription(), history.Type);
-         node.Tag = history.Id;
+         var node = new HistoryTreeNode(history.Command.GetDescription(), history.Type)
+         {
+            Tag = history.Id
+         };
 
          foreach (var child in history.Children)
             node.Nodes.Add(AddToNodeFull(child));
@@ -48,8 +50,10 @@ namespace Editor
          // only add nodes if they are a ComplexSelection or an Action
          if (history.Type is HistoryType.ComplexSelection or HistoryType.Action)
          {
-            var node = new HistoryTreeNode(history.Command.GetDescription(), history.Type);
-            node.Tag = history.Id;
+            var node = new HistoryTreeNode(history.Command.GetDescription(), history.Type)
+            {
+               Tag = history.Id
+            };
             parent.Nodes.Add(node);
             parent = node;
          }

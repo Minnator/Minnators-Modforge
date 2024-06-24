@@ -74,7 +74,6 @@
     <Compile Include="DataClasses\SuperRegion.cs" />
     <Compile Include="DebugMaps.cs" />
     <Compile Include="DebugPrints.cs" />
-    <Compile Include="Helper\AdjacencyHelper.cs" />
     <Compile Include="Helper\BitMapHelper.cs" />
     <Compile Include="Helper\FilesHelper.cs" />
     <Compile Include="Helper\IO.cs" />

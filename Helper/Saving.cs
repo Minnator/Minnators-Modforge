@@ -1,10 +1,9 @@
-﻿using Editor.Helper;
+﻿#nullable enable
 using System;
 using System.IO;
 using System.Windows.Forms;
 
-#nullable enable
-namespace DataVisualizer;
+namespace Editor.Helper;
 
 public enum SaveFeedback
 {
@@ -32,7 +31,7 @@ internal static class Saving
       return SaveFeedback.Ok;
    }
 
-   public static SaveFeedback TrySaveBytes(string path, byte[] data, bool append = false, bool inform = true)
+   public static SaveFeedback TrySaveBytes(string path, byte[] data, bool inform = true)
    {
       if (!File.Exists(path))
       {
@@ -95,24 +94,14 @@ internal static class Saving
    {
       if (feedback == SaveFeedback.Ok || !inform)
          return feedback;
-      string message;
-      switch (feedback)
+      string message = feedback switch
       {
-         case SaveFeedback.Error:
-            message = $"An error occurred while saving the file: \"{path}\"";
-            break;
-         case SaveFeedback.InvalidPath:
-            message = $"The path: \"{path}\" is invalid";
-            break;
-         case SaveFeedback.NonExistentPath:
-            message = $"The path: \"{path}\" does not exist and could not be created.";
-            break;
-         case SaveFeedback.CanNotAccess:
-            message = $"The path: \"{path}\" could not be accessed. It may be used by another process!";
-            break;
-         default:
-            throw new ArgumentOutOfRangeException(nameof(feedback), feedback, null);
-      }
+         SaveFeedback.Error => $"An error occurred while saving the file: \"{path}\"",
+         SaveFeedback.InvalidPath => $"The path: \"{path}\" is invalid",
+         SaveFeedback.NonExistentPath => $"The path: \"{path}\" does not exist and could not be created.",
+         SaveFeedback.CanNotAccess => $"The path: \"{path}\" could not be accessed. It may be used by another process!",
+         _ => throw new ArgumentOutOfRangeException(nameof(feedback), feedback, null)
+      };
       MessageBox.Show(message, "Saving Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
       return feedback;
    }
