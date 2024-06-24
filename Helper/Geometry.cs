@@ -138,4 +138,23 @@ public static class Geometry
       }
       return isInside;
    }
+
+	public static List<int> GetPolygonDiff(List<int> p1, List<int> p2)
+	{
+		var diff = new List<int>();
+		var p2Set = new HashSet<int>(p2);
+      
+		foreach (var id in p1)
+		{
+			if (!p2Set.Contains(id))
+				diff.Add(id);
+		}
+
+		return diff;
+	}
+
+   public static List<int> GetPolygonDiffLasPoint(List<int> polygon)
+   {
+      return [polygon[0], polygon[polygon.Count - 1], polygon[polygon.Count - 2]];
+   }
 }

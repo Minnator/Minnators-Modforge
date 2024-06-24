@@ -31,7 +31,7 @@ public class Selection(PannablePictureBox pannablePictureBox)
 
    // List of selected provinces
    public List<int> SelectedProvinces { get; set; } = [];
-   public List<int> SelectionPreview { get; set; } = [];
+   public HashSet<int> SelectionPreview { get; set; } = [];
 
    // Setting the clearPolygonSelection to false will clear the polygon selection
    public bool ClearPolygonSelection
@@ -59,9 +59,8 @@ public class Selection(PannablePictureBox pannablePictureBox)
    {
       if (isPreview)
       {
-         if (SelectionPreview.Contains(provId))
+         if (!SelectionPreview.Add(provId))
             return;
-         SelectionPreview.Add(provId);
       }
       else
       {
