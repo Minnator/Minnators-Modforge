@@ -52,7 +52,7 @@ public static class DebugMaps
    {
       var sw = Stopwatch.StartNew();
 
-      var bmp = BitMapHelper.GenerateBitmap(GetColorArea);
+      var bmp = BitMapHelper.GenerateBitmapFromProvinces(GetColorArea);
       
       MapDrawHelper.DrawAllProvinceBorders(bmp, Color.Black);
       bmp.Save("C:\\Users\\david\\Downloads\\areas.png", ImageFormat.Png);
@@ -230,7 +230,7 @@ public static class DebugMaps
 
    public static void PrintProvinceTypeMap()
    {
-      var bmp = BitMapHelper.GenerateBitmap(id =>
+      var bmp = BitMapHelper.GenerateBitmapFromProvinces(id =>
       {
          if (Data.Provinces.TryGetValue(id, out var prov))
          {
@@ -258,7 +258,7 @@ public static class DebugMaps
       foreach (var area in Data.Areas.Values)
          color.Add(area.Name, Color.FromArgb(rand.Next(256), rand.Next(256), rand.Next(256)));
 
-      var bmp = BitMapHelper.GenerateBitmap(id =>
+      var bmp = BitMapHelper.GenerateBitmapFromProvinces(id =>
       {
          if (Data.Provinces.TryGetValue(id, out var prov))
          {

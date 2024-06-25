@@ -15,7 +15,7 @@ public class BitMapHelper
    /// <param name="method"></param>
    /// <returns></returns>
    /// <exception cref="ArgumentNullException"></exception>
-   public static Bitmap GenerateBitmap(Func<int, Color> method)
+   public static Bitmap GenerateBitmapFromProvinces(Func<int, Color> method)
    {
       var sw = new Stopwatch();
       sw.Start();

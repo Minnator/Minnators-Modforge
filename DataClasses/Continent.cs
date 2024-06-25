@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using Editor.Interfaces;
 
 namespace Editor.DataClasses;
 
-public class Continent (string name, List<int> provinces)
+public class Continent(string name, List<int> provinces) : IProvinceCollection
 {
     public string Name { get; } = name;
     public List<int> Provinces { get; set; } = provinces;
@@ -17,5 +18,25 @@ public class Continent (string name, List<int> provinces)
     public override int GetHashCode()
     {
         return Name.GetHashCode();
+    }
+
+    public int[] GetProvinceIds()
+    {
+        return Provinces.ToArray();
+    }
+
+    public List<IProvinceCollection> ScopeIn()
+    {
+        var provs = new List<IProvinceCollection>();
+        foreach (var province in Provinces)
+        {
+            provs.Add(Data.Provinces[province]);
+        }
+        return provs;
+    }
+
+    public IProvinceCollection? ScopeOut()
+    {
+        return null;
     }
 }

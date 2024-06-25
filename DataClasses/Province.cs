@@ -1,10 +1,13 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Data;
+using System.Drawing;
+using Editor.Interfaces;
 
 namespace Editor.DataClasses;
 
 #nullable enable
 
-public class Province
+public class Province : IProvinceCollection
 {
    // Management data
    public int Id { get; set; }
@@ -36,5 +39,20 @@ public class Province
    public override int GetHashCode()
    {
       return Id.GetHashCode();
+   }
+
+   public int[] GetProvinceIds()
+   {
+      return [Id];
+   }
+
+   public IProvinceCollection ScopeOut()
+   {
+      return Data.Areas[Area];
+   }
+
+   public List<IProvinceCollection>? ScopeIn()
+   {
+      return [this];
    }
 }

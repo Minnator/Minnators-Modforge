@@ -1,8 +1,10 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
+using Editor.Interfaces;
 
 namespace Editor.DataClasses;
 
-public class Area(string name, int[] provinces, Color color)
+public class Area(string name, int[] provinces, Color color) : IProvinceCollection
 {
    public string Name { get; } = name;
    // Contains the provinces in the area will be editable as the array is only a few elements long
@@ -23,5 +25,23 @@ public class Area(string name, int[] provinces, Color color)
    public override int GetHashCode()
    {
       return Name.GetHashCode();
+   }
+
+   public int[] GetProvinceIds()
+   {
+      return Provinces;
+   }
+
+   public IProvinceCollection ScopeOut()
+   {
+      return Data.Regions[Region];
+   }
+
+   public List<IProvinceCollection>? ScopeIn()
+   {
+      var provs = new List<IProvinceCollection>();
+      foreach (var province in Provinces) 
+         provs.Add(Data.Provinces[province]);
+      return provs;
    }
 }

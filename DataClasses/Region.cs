@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Runtime.InteropServices;
+using Editor.Interfaces;
 
 namespace Editor.DataClasses;
 
-public class Region(string name)
+public class Region(string name) : IProvinceCollection
 {
    public string Name { get; } = name;
    public List<string> Areas { get; set; } = [];
@@ -30,6 +32,29 @@ public class Region(string name)
    public override int GetHashCode()
    {
       return Name.GetHashCode();
+   }
+
+   public int[] GetProvinceIds()
+   {
+      var provinces = new List<int>();
+      foreach (var area in Areas) 
+         provinces.AddRange(Data.Areas[area].GetProvinceIds());
+      return provinces.ToArray();
+   }
+
+   public IProvinceCollection ScopeOut()
+   {
+      return Data.SuperRegions[SuperRegion];
+   }
+
+   public List<IProvinceCollection> ScopeIn()
+   {
+      var areas = new List<IProvinceCollection>();
+      foreach (var area in Areas)
+      {
+         areas.Add(Data.Areas[area]);
+      }
+      return areas;
    }
 }
 
