@@ -16,7 +16,7 @@ public class LocalisationLoading
       var sw = Stopwatch.StartNew();
       var modLocPath = Path.Combine(modFolder, "localisation");
       var vanillaLocPath = Path.Combine(vanillaFolder, "localisation");
-      var files = FilesHelper.GetAllFilesInFolder(vanillaLocPath, $"*_l_{language}.yml");
+      var files = FilesHelper.GetAllFilesInFolder(vanillaLocPath, $"*_l_{language.ToString().ToLower()}.yml");
       files.AddRange(FilesHelper.GetAllFilesInFolder(modLocPath, $"*_l_{language}.yml"));
 
       var regex = new Regex(@"\s*(?<key>.*):\d\s+""(?<value>.*)""", RegexOptions.Compiled);

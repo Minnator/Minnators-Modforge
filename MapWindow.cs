@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
 #nullable enable
 
@@ -39,7 +40,7 @@ namespace Editor
 
          LoadDefinitionAndMap(ref LoadingLog);
          DefaultMapLoading.Load(Project.VanillaPath, ref LoadingLog);
-         AreaLoading.Load(Project.VanillaPath, ref LoadingLog);
+         AreaLoading.Load(Project.VanillaPath, Project.ColorProvider, ref LoadingLog);
          RegionLoading.Load(Project.VanillaPath, ref LoadingLog);
          SuperRegionLoading.Load(Project.VanillaPath, ref LoadingLog);
          ContinentLoading.Load(Project.VanillaPath, ref LoadingLog);
@@ -138,7 +139,7 @@ namespace Editor
 
       private void debugToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         DebugMaps.DrawAreasOnMap();
+         DebugMaps.MapModeDrawing();
       }
    }
 }

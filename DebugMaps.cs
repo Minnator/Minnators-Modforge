@@ -1,28 +1,60 @@
-﻿using System;
+﻿using Editor;
+using Editor.Helper;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
-using Editor;
-using Editor.Helper;
+using static System.Net.Mime.MediaTypeNames;
 
 public static class DebugMaps
 {
-   private static Dictionary<string, Color> colors = new();
+   public static void MapModeDrawing()
+   {
+      
+      var sw = Stopwatch.StartNew();
+
+      var bmp = new Bitmap(Data.MapWidth, Data.MapHeight);
+
+      foreach (var area in Data.Areas.Values) 
+         MapDrawHelper.DrawProvinceCollection(area.Provinces, area.Color, bmp, true);
+
+      MapDrawHelper.DrawAllProvinceBorders(bmp, Color.Black);
+      bmp.Save("C:\\Users\\david\\Downloads\\areas12.png", ImageFormat.Png);
+      sw.Stop();
+      Debug.WriteLine($"MapModeDrawing: {sw.ElapsedMilliseconds} ms");
+      DrawAreasOnMap();
+      return;
+      Test();
+   }
+
+   public static void MapModeDrawing2()
+   {
+      var sw = Stopwatch.StartNew();
+
+      var bmp = new Bitmap(Data.MapWidth, Data.MapHeight);
+      foreach (var province in Data.Provinces.Values)
+      {
+         MapDrawHelper.DrawProvince(province.Id, province.Color, bmp);
+      }
+      MapDrawHelper.DrawAllProvinceBorders(bmp, Color.Black);
+
+      bmp.Save("C:\\Users\\david\\Downloads\\areas.png", ImageFormat.Png);
+      sw.Stop();
+      Debug.WriteLine($"MapModeDrawing2: {sw.ElapsedMilliseconds} ms");
+   }
+
 
    public static void DrawAreasOnMap()
    {
-      var rand = new Random();
-
-      foreach (var area in Data.Areas.Values)
-         colors.Add(area.Name, Color.FromArgb(rand.Next(256), rand.Next(256), rand.Next(256)));
-
       var sw = Stopwatch.StartNew();
+
       var bmp = BitMapHelper.GenerateBitmap(GetColorArea);
+      
+      MapDrawHelper.DrawAllProvinceBorders(bmp, Color.Black);
       bmp.Save("C:\\Users\\david\\Downloads\\areas.png", ImageFormat.Png);
       sw.Stop();
       Debug.WriteLine($"DrawAreasOnMap: {sw.ElapsedMilliseconds} ms");
@@ -30,11 +62,33 @@ public static class DebugMaps
 
    public static Color GetColorArea(int id)
    {
-      if (colors.TryGetValue(Data.Provinces[id].Area, out var color))
+      if (Data.Provinces.TryGetValue(id, out var prov))
       {
-         return color;
+         if (Data.Areas.TryGetValue(prov.Area, out var area))
+         {
+            return area.Color;
+         }
       }
       return Color.Black;
+   }
+
+   public static void Test()
+   {
+      var sw = Stopwatch.StartNew();
+      var provincePixels = Data.Provinces.Values.SelectMany(province =>
+      {
+         var points = new Point[province.PixelCnt];
+         Array.Copy(Data.Pixels, province.PixelPtr, points, 0, province.PixelCnt);
+         return points;
+      }).ToArray();
+      
+      sw.Stop();
+      Debug.WriteLine($"Test: {sw.ElapsedMilliseconds} ms {provincePixels.Length}");
+      var ids = Data.Provinces.Values.Select(province => province.Id).ToArray();
+      sw.Restart();
+      var points = MapDrawHelper.GetAllPixelPoints(ids);
+      sw.Stop();
+      Debug.WriteLine($"Test2: {sw.ElapsedMilliseconds} ms {points.Length}");
    }
 
 

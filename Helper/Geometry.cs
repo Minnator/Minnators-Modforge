@@ -73,6 +73,29 @@ public static class Geometry
       return new Rectangle(minX, minY, maxX - minX + 1, maxY - minY + 1);
    }
 
+   public static Rectangle GetBounds(List<Rectangle> rects)
+   {
+      if (rects.Count == 0)
+         return Rectangle.Empty;
+      var minX = rects[0].X;
+      var minY = rects[0].Y;
+      var maxX = rects[0].X + rects[0].Width;
+      var maxY = rects[0].Y + rects[0].Height;
+
+      for (var i = 1; i < rects.Count; i++)
+      {
+         if (rects[i].X < minX)
+            minX = rects[i].X;
+         if (rects[i].X + rects[i].Width > maxX)
+            maxX = rects[i].X + rects[i].Width;
+         if (rects[i].Y < minY)
+            minY = rects[i].Y;
+         if (rects[i].Y + rects[i].Height > maxY)
+            maxY = rects[i].Y + rects[i].Height;
+      }
+      return new Rectangle(minX, minY, maxX - minX, maxY - minY);
+   }
+
    // Clamps the given value between the given min and max
    public static T Clamp<T> (T value, T min, T max) where T : System.IComparable<T>
    {

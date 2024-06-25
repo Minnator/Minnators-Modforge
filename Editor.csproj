@@ -75,6 +75,7 @@
     <Compile Include="DebugMaps.cs" />
     <Compile Include="DebugPrints.cs" />
     <Compile Include="Helper\BitMapHelper.cs" />
+    <Compile Include="Helper\ColorProvider.cs" />
     <Compile Include="Helper\FilesHelper.cs" />
     <Compile Include="Helper\IO.cs" />
     <Compile Include="Helper\MapDrawHelper.cs" />

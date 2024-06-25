@@ -54,7 +54,7 @@ public class BitMapHelper
 
       bmp.UnlockBits(bitmapData);
       sw.Stop();
-      Debug.WriteLine($"Generating Bitmap took {sw.ElapsedMilliseconds}ms");
+      //Debug.WriteLine($"Generating Bitmap took {sw.ElapsedMilliseconds}ms");
       return bmp;
    }
 }
