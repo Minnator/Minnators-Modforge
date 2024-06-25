@@ -12,26 +12,48 @@ using Editor.Helper;
 
 public static class DebugMaps
 {
-
-
-
-
+   private static Dictionary<string, Color> colors = new();
 
    public static void DrawAreasOnMap()
    {
+      var rand = new Random();
+
+      foreach (var area in Data.Areas.Values)
+         colors.Add(area.Name, Color.FromArgb(rand.Next(256), rand.Next(256), rand.Next(256)));
+
       var sw = Stopwatch.StartNew();
-      var bmp = new Bitmap(Data.MapWidth, Data.MapHeight, PixelFormat.Format24bppRgb);
-      var g = Graphics.FromImage(bmp);
+      var bmp = BitMapHelper.GenerateBitmap(GetColorArea);
+      bmp.Save("C:\\Users\\david\\Downloads\\areas.png", ImageFormat.Png);
+      sw.Stop();
+      Debug.WriteLine($"DrawAreasOnMap: {sw.ElapsedMilliseconds} ms");
+   }
+
+   public static Color GetColorArea(int id)
+   {
+      if (colors.TryGetValue(Data.Provinces[id].Area, out var color))
+      {
+         return color;
+      }
+      return Color.Black;
+   }
+
+
+
+   public static void DrawAreasOnMap2()
+   {
+      var sw = Stopwatch.StartNew();
+      var bmp = new Bitmap(Data.MapWidth, Data.MapHeight, PixelFormat.Format32bppRgb);
+      using var g = Graphics.FromImage(bmp);
+      var rand = new Random();
 
       foreach (var area in Data.Areas.Values)
       {
-         var color = Color.FromArgb(new Random().Next(256), new Random().Next(256), new Random().Next(256));
+         var color = Color.FromArgb(rand.Next(256), rand.Next(256), rand.Next(256));
          for (int i = 0; i < area.Provinces.Length; i++)
          {
             var prov = Data.Provinces[area.Provinces[i]];
-            var points = new Point[prov.PixelCnt];
-            Array.Copy(Data.Pixels, prov.PixelPtr, points, 0, prov.PixelCnt);
-
+            var points = new Point[prov.BorderCnt];
+            Array.Copy(Data.BorderPixels, prov.BorderPtr, points, 0, prov.BorderCnt);
             g.FillPolygon(new SolidBrush(color), points);
          }
       }

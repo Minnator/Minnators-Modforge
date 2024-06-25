@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace Editor.Loading;
 
@@ -18,27 +19,25 @@ public static class AreaLoading
       var areaDictionary = new Dictionary<string, Area>();
 
       // Define the regex pattern to match area definitions
-      var provinceRegex = new Regex(@"^(?<name>[A-Za-z_]*)\s*=\s*{(?:\s*(?!#|color)[A-Za-z_]+\s*)+}", RegexOptions.Multiline);
+      var areaRegex = new Regex(@"(?<name>[A-Za-z_]*)\s*=\s*{(?<ids>[0-9\s]*)}\s*", RegexOptions.Multiline);
+      var sb = new System.Text.StringBuilder();
 
       foreach (var line in newContent)
       {
-         // Skip empty lines and lines starting with '#' or containing 'color'
-         if (string.IsNullOrWhiteSpace(line) || line.StartsWith("#") || line.Contains("color"))
-            continue;
-
-         var match = provinceRegex.Match(line);
-         if (!match.Success)
-            continue;
-
+         sb.Append(Parsing.RemoveCommentFromLine(line));
+      }
+      var areaString = sb.ToString();
+      areaString = Regex.Replace(areaString, @"(?<color>color\s*=\s*{\s*(?:[0-9]{1,3}\s*){3}})", "");
+      Clipboard.SetText(areaString);
+      foreach (Match match in areaRegex.Matches(areaString))
+      {
          var areaName = match.Groups["name"].Value;
 
-         areaDictionary.Add(areaName, new Area(areaName, [.. Parsing.GetProvincesList(match.Value)]));
+         areaDictionary.Add(areaName, new Area(areaName, [.. Parsing.GetProvincesList(match.Groups["ids"].Value)]));
 
          foreach (var provinceId in areaDictionary[areaName].Provinces)
-            if (Data.Provinces.TryGetValue(provinceId, out var province)) 
-               province.Area = areaName;
+            if (Data.Provinces.TryGetValue(provinceId, out var province)) province.Area = areaName;
       }
-
       Data.Areas = areaDictionary;
 
       sw.Stop();
