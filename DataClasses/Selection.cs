@@ -112,10 +112,16 @@ public class Selection(PannablePictureBox pannablePictureBox)
       if (LassoSelection.Count < 3)
          return;
 
-      var polyDiff = Geometry.GetPolygonDiffLasPoint(LassoSelection);
-      var provDiff = Geometry.GetProvincesInPolygon(polyDiff);
+      var polyDiff = Geometry.GetPolygonDiffLastPoint(LassoSelection);
+      var provDiff = Geometry.GetProvincesInPolygon(polyDiff); 
+      
+      if (provDiff.Count == 0)
+         return;
 
-      AddRange(provDiff, false, true);
+      if (SelectionPreview.Contains(provDiff[0]))
+         RemoveRange(provDiff, true);
+      else
+         AddRange(provDiff, false, true);
    }
 
    public void PreviewAllInRectangle(Point point)

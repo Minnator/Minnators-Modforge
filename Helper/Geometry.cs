@@ -131,7 +131,7 @@ public static class Geometry
       for (int i = 0, j = count - 1; i < count; j = i++)
       {
          if (((polygon[i].Y > point.Y) != (polygon[j].Y > point.Y)) &&
-             (point.X < (polygon[j].X - polygon[i].X) * (point.Y - polygon[i].Y) / (polygon[j].Y - polygon[i].Y) + polygon[i].X))
+             (point.X < ((polygon[j].X - polygon[i].X) * (point.Y - polygon[i].Y) / (float)(polygon[j].Y - polygon[i].Y) + polygon[i].X)))
          {
             isInside = !isInside;
          }
@@ -139,22 +139,19 @@ public static class Geometry
       return isInside;
    }
 
-	public static List<int> GetPolygonDiff(List<int> p1, List<int> p2)
-	{
-		var diff = new List<int>();
-		var p2Set = new HashSet<int>(p2);
-      
-		foreach (var id in p1)
-		{
-			if (!p2Set.Contains(id))
-				diff.Add(id);
-		}
-
-		return diff;
-	}
-
-   public static List<Point> GetPolygonDiffLasPoint(List<Point> polygon)
+   public static List<Point> GetPolygonDiff(List<Point> polygon, List<Point> diff)
    {
-      return [polygon[0], polygon[polygon.Count - 1], polygon[polygon.Count - 2], polygon[polygon.Count - 3]];
+      var diffPolygon = new List<Point>();
+      foreach (var point in polygon)
+      {
+         if (!diff.Contains(point))
+            diffPolygon.Add(point);
+      }
+      return diffPolygon;
+   }
+
+   public static List<Point> GetPolygonDiffLastPoint(List<Point> polygon)
+   {
+      return [polygon[0], polygon[polygon.Count - 1], polygon[polygon.Count - 2]];
    }
 }
