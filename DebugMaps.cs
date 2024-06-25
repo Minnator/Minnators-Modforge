@@ -12,6 +12,43 @@ using Editor.Helper;
 
 public static class DebugMaps
 {
+
+
+
+
+
+   public static void DrawAreasOnMap()
+   {
+      var sw = Stopwatch.StartNew();
+      var bmp = new Bitmap(Data.MapWidth, Data.MapHeight, PixelFormat.Format24bppRgb);
+      var g = Graphics.FromImage(bmp);
+
+      foreach (var area in Data.Areas.Values)
+      {
+         var color = Color.FromArgb(new Random().Next(256), new Random().Next(256), new Random().Next(256));
+         for (int i = 0; i < area.Provinces.Length; i++)
+         {
+            var prov = Data.Provinces[area.Provinces[i]];
+            var points = new Point[prov.PixelCnt];
+            Array.Copy(Data.Pixels, prov.PixelPtr, points, 0, prov.PixelCnt);
+
+            g.FillPolygon(new SolidBrush(color), points);
+         }
+      }
+
+      sw.Stop();
+      Debug.WriteLine($"DrawAreasOnMap: {sw.ElapsedMilliseconds} ms");
+
+      bmp.Save("C:\\Users\\david\\Downloads\\areas.png", ImageFormat.Png);
+   }
+
+
+
+
+
+
+
+
    public static unsafe void DrawAllBorder(ConcurrentDictionary<Color, List<Point>> points, Size size, string saveTo)
    {
       // Create a new Bitmap with specified size

@@ -32,6 +32,7 @@
          this.filesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.historyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.selectionHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+         this.DeleteHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.MapPanel = new System.Windows.Forms.Panel();
          this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
          this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -42,7 +43,7 @@
          this.RedoDepthLabel = new System.Windows.Forms.ToolStripLabel();
          this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
          this.SelectedProvinceSum = new System.Windows.Forms.ToolStripLabel();
-         this.DeleteHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+         this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.MapMenuStrip.SuspendLayout();
          this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
          this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -54,7 +55,8 @@
          // 
          this.MapMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.filesToolStripMenuItem,
-            this.historyToolStripMenuItem});
+            this.historyToolStripMenuItem,
+            this.debugToolStripMenuItem});
          this.MapMenuStrip.Location = new System.Drawing.Point(0, 0);
          this.MapMenuStrip.Name = "MapMenuStrip";
          this.MapMenuStrip.Size = new System.Drawing.Size(1295, 24);
@@ -79,9 +81,16 @@
          // selectionHistoryToolStripMenuItem
          // 
          this.selectionHistoryToolStripMenuItem.Name = "selectionHistoryToolStripMenuItem";
-         this.selectionHistoryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+         this.selectionHistoryToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
          this.selectionHistoryToolStripMenuItem.Text = "View History Tree";
          this.selectionHistoryToolStripMenuItem.Click += new System.EventHandler(this.RevertInSelectionHistory);
+         // 
+         // DeleteHistoryToolStripMenuItem
+         // 
+         this.DeleteHistoryToolStripMenuItem.Name = "DeleteHistoryToolStripMenuItem";
+         this.DeleteHistoryToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+         this.DeleteHistoryToolStripMenuItem.Text = "Delete History";
+         this.DeleteHistoryToolStripMenuItem.Click += new System.EventHandler(this.DeleteHistoryToolStripMenuItem_Click);
          // 
          // MapPanel
          // 
@@ -169,12 +178,12 @@
          this.SelectedProvinceSum.Size = new System.Drawing.Size(49, 22);
          this.SelectedProvinceSum.Text = "ProSum";
          // 
-         // DeleteHistoryToolStripMenuItem
+         // debugToolStripMenuItem
          // 
-         this.DeleteHistoryToolStripMenuItem.Name = "DeleteHistoryToolStripMenuItem";
-         this.DeleteHistoryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-         this.DeleteHistoryToolStripMenuItem.Text = "Delete History";
-         this.DeleteHistoryToolStripMenuItem.Click += new System.EventHandler(this.DeleteHistoryToolStripMenuItem_Click);
+         this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
+         this.debugToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
+         this.debugToolStripMenuItem.Text = "Debug";
+         this.debugToolStripMenuItem.Click += new System.EventHandler(this.debugToolStripMenuItem_Click);
          // 
          // MapWindow
          // 
@@ -220,6 +229,7 @@
       private System.Windows.Forms.ToolStripMenuItem historyToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem selectionHistoryToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem DeleteHistoryToolStripMenuItem;
+      private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
    }
 }
 

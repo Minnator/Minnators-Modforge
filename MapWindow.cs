@@ -135,5 +135,10 @@ namespace Editor
       }
 
       #endregion
+
+      private void debugToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         DebugMaps.DrawAreasOnMap();
+      }
    }
 }

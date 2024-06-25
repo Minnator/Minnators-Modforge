@@ -14,6 +14,15 @@ public enum HistoryType
    Action
 }
 
+public enum MapMode
+{
+   Provinces = 1, //default
+   Areas = 2,
+   Regions = 3,
+   SuperRegions = 4,
+   Continents = 5,
+}
+
 //contains all required and used data across the application and instances of forms.
 public static class Data
 {
