@@ -37,7 +37,7 @@ public static class DebugPrints
    {
       var sb = new StringBuilder();
       sb.AppendLine("ID   .. Pixels .. PixelPrt .. Borders .. BorderPtr");
-      foreach (var province in Data.Provinces.Values)
+      foreach (var province in Globals.Provinces.Values)
       {
          sb.AppendLine($"ID: {province.Id,4} .. {province.PixelCnt,6} .. {province.PixelPtr,8} .. {province.BorderCnt,6} .. {province.BorderPtr,8}");
       }
@@ -47,7 +47,7 @@ public static class DebugPrints
    public static void PrintAdjacencies()
    {
       var sb = new StringBuilder();
-      foreach (var kvp in Data.AdjacentProvinces)
+      foreach (var kvp in Globals.AdjacentProvinces)
       {
          sb.Append($"ProvincePtr: [{kvp.Key,4}] is adjacent to: [");
          foreach (var adj in kvp.Value)
@@ -65,7 +65,7 @@ public static class DebugPrints
    public static void PrintRegions()
    {
       var sb = new StringBuilder();
-      foreach (var region in Data.Regions.Values)
+      foreach (var region in Globals.Regions.Values)
       {
          sb.AppendLine($"Region: {region.Name} = {{");
          foreach (var regionArea in region.Areas)

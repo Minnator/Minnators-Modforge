@@ -143,7 +143,7 @@ public class Selection(PannablePictureBox pannablePictureBox)
       // Provinces which are in the previous selection but not in the current intersection
       foreach (var province in SelectionPreview)
       {
-         if (!Geometry.RectanglesIntercept(Data.Provinces[province].Bounds, intersection)) 
+         if (!Geometry.RectanglesIntercept(Globals.Provinces[province].Bounds, intersection)) 
             provPtrRemove.Add(province);
       }
 
@@ -175,7 +175,7 @@ public class Selection(PannablePictureBox pannablePictureBox)
    public void ExitRectangleSelection()
    {
       var rect = Geometry.GetBounds([_rectanglePoint, _lastRectPoint]);
-      Data.HistoryManager.AddCommand(new CRectangleSelection(rect, pannablePictureBox), HistoryType.ComplexSelection);
+      Globals.HistoryManager.AddCommand(new CRectangleSelection(rect, pannablePictureBox), HistoryType.ComplexSelection);
       DrawRectangle(_lastRectPoint, Color.Transparent, pannablePictureBox.Overlay);
       _rectanglePoint = Point.Empty;
       SelectionPreview = [];

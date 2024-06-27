@@ -31,9 +31,7 @@ namespace Editor
 
       public MapWindow()
       {
-         ApplicationName = System.Diagnostics.Process.GetCurrentProcess().ProcessName;
-
-         Debug.WriteLine($"APPLICATION NAME: {ApplicationName}");
+         ApplicationName = Process.GetCurrentProcess().ProcessName;
 
          InitGui();
 
@@ -45,8 +43,11 @@ namespace Editor
          SuperRegionLoading.Load(Project.VanillaPath, ref LoadingLog);
          ContinentLoading.Load(Project.VanillaPath, ref LoadingLog);
          LocalisationLoading.Load(Project.ModPath, Project.VanillaPath, Project.Language, ref LoadingLog);
-         DrawProvinceBorder();
-         
+
+
+         // MUST BE LAST in the loading sequence
+         Globals.MapModeManager = new (MapPictureBox); // Initialize the MapModeManager
+         Globals.MapModeManager.SetCurrentMapMode("Provinces"); // Default map mode
          GC.Collect();
          LoadingLog.Close();
          LoadingLog = null!;
@@ -54,41 +55,31 @@ namespace Editor
          ResourceUsageHelper.Initialize(this);
          //HistoryResourceHelper.Initialize(this);
 
-         Data.HistoryManager.UndoDepthChanged += UpdateUndoDepth;
-         Data.HistoryManager.RedoDepthChanged += UpdateRedoDepth;
+         Globals.HistoryManager.UndoDepthChanged += UpdateUndoDepth;
+         Globals.HistoryManager.RedoDepthChanged += UpdateRedoDepth;
 
       }
+
 
       // Loads the map into the created PannablePictureBox
       private void InitGui()
       {
          InitializeComponent();
-         MapPictureBox = ControlFactory.GetPannablePictureBox(@"S:\SteamLibrary\steamapps\common\Europa Universalis IV\map\provinces.bmp", ref MapPanel, this);
+         MapPictureBox = ControlFactory.GetPannablePictureBox(ref MapPanel, this);
          MapPanel.Controls.Add(MapPictureBox);
       }
 
       private void LoadDefinitionAndMap(ref Log loadingLog)
       {
-         var provinces = DefinitionLoading.LoadDefinition([.. File.ReadAllLines(@"S:\SteamLibrary\steamapps\common\Europa Universalis IV\map\definition.csv")], ref loadingLog);
-         //TODO Remove hardcoded path
-         Data.MapPath = Path.Combine(Project.VanillaPath, "map", "provinces.bmp");
-         var (colorToProvId, colorToBorder, adjacency) = MapLoading.LoadMap(
-            ref loadingLog, Data.MapPath);
+         var provinces = DefinitionLoading.LoadDefinition([.. File.ReadAllLines(Path.Combine(Project.VanillaPath, "map", "definition.csv"))], ref loadingLog);
+         Globals.MapPath = Path.Combine(Project.VanillaPath, "map", "provinces.bmp");
+         var (colorToProvId, colorToBorder, adjacency) = MapLoading.LoadMap(ref loadingLog, Globals.MapPath);
 
          Optimizer.OptimizeProvinces(provinces, colorToProvId, colorToBorder, Project.MapSize.Width * Project.MapSize.Height, ref loadingLog);
 
          Optimizer.OptimizeAdjacencies(adjacency, ref loadingLog);
       }
 
-      private void DrawProvinceBorder()
-      {
-         var sw = Stopwatch.StartNew();
-         var rect = new Rectangle(0, 0, Project.MapSize.Width, Project.MapSize.Height);
-         MapDrawHelper.DrawOnMap(rect, Data.BorderPixels, Color.Black, MapPictureBox.Image);
-         MapPictureBox.Invalidate(rect);
-         sw.Stop();
-         LoadingLog.WriteTimeStamp("Drawing Borders", sw.ElapsedMilliseconds);
-      }
 
       #region ToolStrip update methods
       public void SetSelectedProvinceSum(int sum)
@@ -125,14 +116,14 @@ namespace Editor
 
       private void RevertInSelectionHistory(object sender, EventArgs e)
       {
-         var historyTreeView = new HistoryTree(Data.HistoryManager.RevertTo);
-         historyTreeView.VisualizeFull(Data.HistoryManager.GetRoot());
+         var historyTreeView = new HistoryTree(Globals.HistoryManager.RevertTo);
+         historyTreeView.VisualizeFull(Globals.HistoryManager.GetRoot());
          historyTreeView.ShowDialog();
       }
 
       private void DeleteHistoryToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         Data.HistoryManager.Clear();
+         Globals.HistoryManager.Clear();
       }
 
       #endregion

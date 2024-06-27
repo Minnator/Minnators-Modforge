@@ -53,7 +53,7 @@ public sealed class PannablePictureBox : PictureBox
    private bool _panning;
    private bool AllowPanning { get; set; } = true; // If true, the user can pan the map by holding the middle mouse button
 
-   public PannablePictureBox(string path, ref Panel parentPanel, MapWindow mapWindow)
+   public PannablePictureBox(ref Panel parentPanel, MapWindow mapWindow)
    {
       MouseDown += PictureBox_MouseDown;
       MouseMove += PictureBox1_MouseMove;
@@ -61,7 +61,6 @@ public sealed class PannablePictureBox : PictureBox
       MouseClick += OnMouseClick_Click;
 
       Selection = new Selection(this); // Initialize the selection class which manages the province selection
-      Image = new Bitmap(path);
       _parentPanel = parentPanel;
       _mapWindow = mapWindow;
    }
@@ -80,13 +79,13 @@ public sealed class PannablePictureBox : PictureBox
          return;
 
       // ------------------------------ Province Selection ------------------------------
-      if (!Data.ColorToProvId.TryGetValue(Color.FromArgb(Image.GetPixel(e.X, e.Y).ToArgb()), out var ptr)) 
+      if (!Globals.MapModeManager.GetProvince(e.Location, out var ptr)) 
          return;
       //check if ctrl is pressed
       if (ModifierKeys == Keys.Control && Selection.State == SelectionState.Single) 
-         Data.HistoryManager.AddCommand(new CAddSingleSelection(ptr, this), HistoryType.SimpleSelection);
+         Globals.HistoryManager.AddCommand(new CAddSingleSelection(ptr.Id, this), HistoryType.SimpleSelection);
       else if (ModifierKeys != Keys.Shift && Selection.State == SelectionState.Single)
-         Data.HistoryManager.AddCommand(new CSelectionMarkNext(ptr, this), HistoryType.SimpleSelection);
+         Globals.HistoryManager.AddCommand(new CSelectionMarkNext(ptr.Id, this), HistoryType.SimpleSelection);
 
       _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvinces.Count);
    }
@@ -124,7 +123,7 @@ public sealed class PannablePictureBox : PictureBox
       if (ModifierKeys == Keys.Alt)
       {
          Selection.ExitLassoSelection();
-         Data.HistoryManager.AddCommand(new CLassoSelection(this), HistoryType.ComplexSelection);
+         Globals.HistoryManager.AddCommand(new CLassoSelection(this), HistoryType.ComplexSelection);
          return;
       }
 
@@ -165,13 +164,12 @@ public sealed class PannablePictureBox : PictureBox
       _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvinces.Count);
 
       // ------------------------------ Province Highlighting ------------------------------
-      if (Data.ColorToProvId.TryGetValue(Color.FromArgb(Image.GetPixel(e.X, e.Y).ToArgb()), out var ptr) && 
-          ptr != _lastInvalidatedProvince)
+      if (Globals.MapModeManager.GetProvince(e.Location, out var ptr) && ptr.Id != _lastInvalidatedProvince)
       {
          if (_lastInvalidatedProvince != -1) 
             Invalidate(MapDrawHelper.DrawProvinceBorder(_lastInvalidatedProvince, Color.Transparent, Overlay));
-         Invalidate(MapDrawHelper.DrawProvinceBorder(ptr, Color.Aqua, Overlay));
-         _lastInvalidatedProvince = ptr;
+         Invalidate(MapDrawHelper.DrawProvinceBorder(ptr.Id, Color.Aqua, Overlay));
+         _lastInvalidatedProvince = ptr.Id;
       }
 
       // ------------------------------ Panning ------------------------------

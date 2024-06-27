@@ -13,7 +13,7 @@ public class Area(string name, int[] provinces, Color color) : IProvinceCollecti
    public float Prosperity { get; set; } = 0;
    public bool IsStated { get; set; } = false;
    public string Region { get; set; } = string.Empty;
-   public Color Color = color;
+   public Color Color { get; set; }= color;
 
    public override bool Equals(object? obj)
    {
@@ -34,14 +34,14 @@ public class Area(string name, int[] provinces, Color color) : IProvinceCollecti
 
    public IProvinceCollection ScopeOut()
    {
-      return Data.Regions[Region];
+      return Globals.Regions[Region];
    }
 
    public List<IProvinceCollection>? ScopeIn()
    {
       var provs = new List<IProvinceCollection>();
       foreach (var province in Provinces) 
-         provs.Add(Data.Provinces[province]);
+         provs.Add(Globals.Provinces[province]);
       return provs;
    }
 }

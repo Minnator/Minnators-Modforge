@@ -33,6 +33,7 @@
          this.historyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.selectionHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.DeleteHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+         this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.MapPanel = new System.Windows.Forms.Panel();
          this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
          this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -43,7 +44,7 @@
          this.RedoDepthLabel = new System.Windows.Forms.ToolStripLabel();
          this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
          this.SelectedProvinceSum = new System.Windows.Forms.ToolStripLabel();
-         this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+         this.MapModeComboBox = new System.Windows.Forms.ToolStripComboBox();
          this.MapMenuStrip.SuspendLayout();
          this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
          this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -56,17 +57,18 @@
          this.MapMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.filesToolStripMenuItem,
             this.historyToolStripMenuItem,
+            this.MapModeComboBox,
             this.debugToolStripMenuItem});
          this.MapMenuStrip.Location = new System.Drawing.Point(0, 0);
          this.MapMenuStrip.Name = "MapMenuStrip";
-         this.MapMenuStrip.Size = new System.Drawing.Size(1295, 24);
+         this.MapMenuStrip.Size = new System.Drawing.Size(1295, 27);
          this.MapMenuStrip.TabIndex = 0;
          this.MapMenuStrip.Text = "menuStrip1";
          // 
          // filesToolStripMenuItem
          // 
          this.filesToolStripMenuItem.Name = "filesToolStripMenuItem";
-         this.filesToolStripMenuItem.Size = new System.Drawing.Size(42, 20);
+         this.filesToolStripMenuItem.Size = new System.Drawing.Size(42, 23);
          this.filesToolStripMenuItem.Text = "Files";
          // 
          // historyToolStripMenuItem
@@ -75,7 +77,7 @@
             this.selectionHistoryToolStripMenuItem,
             this.DeleteHistoryToolStripMenuItem});
          this.historyToolStripMenuItem.Name = "historyToolStripMenuItem";
-         this.historyToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
+         this.historyToolStripMenuItem.Size = new System.Drawing.Size(57, 23);
          this.historyToolStripMenuItem.Text = "History";
          // 
          // selectionHistoryToolStripMenuItem
@@ -92,13 +94,20 @@
          this.DeleteHistoryToolStripMenuItem.Text = "Delete History";
          this.DeleteHistoryToolStripMenuItem.Click += new System.EventHandler(this.DeleteHistoryToolStripMenuItem_Click);
          // 
+         // debugToolStripMenuItem
+         // 
+         this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
+         this.debugToolStripMenuItem.Size = new System.Drawing.Size(54, 23);
+         this.debugToolStripMenuItem.Text = "Debug";
+         this.debugToolStripMenuItem.Click += new System.EventHandler(this.debugToolStripMenuItem_Click);
+         // 
          // MapPanel
          // 
          this.MapPanel.AutoScroll = true;
          this.MapPanel.Dock = System.Windows.Forms.DockStyle.Fill;
          this.MapPanel.Location = new System.Drawing.Point(0, 0);
          this.MapPanel.Name = "MapPanel";
-         this.MapPanel.Size = new System.Drawing.Size(1295, 754);
+         this.MapPanel.Size = new System.Drawing.Size(1295, 751);
          this.MapPanel.TabIndex = 1;
          // 
          // toolStripContainer1
@@ -111,13 +120,13 @@
          // toolStripContainer1.ContentPanel
          // 
          this.toolStripContainer1.ContentPanel.Controls.Add(this.MapPanel);
-         this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1295, 754);
+         this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1295, 751);
          this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
          this.toolStripContainer1.LeftToolStripPanelVisible = false;
-         this.toolStripContainer1.Location = new System.Drawing.Point(0, 24);
+         this.toolStripContainer1.Location = new System.Drawing.Point(0, 27);
          this.toolStripContainer1.Name = "toolStripContainer1";
          this.toolStripContainer1.RightToolStripPanelVisible = false;
-         this.toolStripContainer1.Size = new System.Drawing.Size(1295, 779);
+         this.toolStripContainer1.Size = new System.Drawing.Size(1295, 776);
          this.toolStripContainer1.TabIndex = 2;
          this.toolStripContainer1.Text = "toolStripContainer1";
          this.toolStripContainer1.TopToolStripPanelVisible = false;
@@ -178,12 +187,10 @@
          this.SelectedProvinceSum.Size = new System.Drawing.Size(49, 22);
          this.SelectedProvinceSum.Text = "ProSum";
          // 
-         // debugToolStripMenuItem
+         // MapModeComboBox
          // 
-         this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
-         this.debugToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
-         this.debugToolStripMenuItem.Text = "Debug";
-         this.debugToolStripMenuItem.Click += new System.EventHandler(this.debugToolStripMenuItem_Click);
+         this.MapModeComboBox.Name = "MapModeComboBox";
+         this.MapModeComboBox.Size = new System.Drawing.Size(121, 23);
          // 
          // MapWindow
          // 
@@ -230,6 +237,7 @@
       private System.Windows.Forms.ToolStripMenuItem selectionHistoryToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem DeleteHistoryToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
+      private System.Windows.Forms.ToolStripComboBox MapModeComboBox;
    }
 }
 

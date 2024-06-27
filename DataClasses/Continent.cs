@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 using Editor.Interfaces;
 
 namespace Editor.DataClasses;
@@ -7,6 +8,7 @@ public class Continent(string name, List<int> provinces) : IProvinceCollection
 {
     public string Name { get; } = name;
     public List<int> Provinces { get; set; } = provinces;
+    public Color Color { get; set; }
 
     public override bool Equals(object? obj)
     {
@@ -30,7 +32,7 @@ public class Continent(string name, List<int> provinces) : IProvinceCollection
         var provs = new List<IProvinceCollection>();
         foreach (var province in Provinces)
         {
-            provs.Add(Data.Provinces[province]);
+            provs.Add(Globals.Provinces[province]);
         }
         return provs;
     }

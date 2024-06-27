@@ -75,11 +75,11 @@ namespace Editor
       {
          if (ShowAllSelections.Checked)
          {
-            VisualizeFull(Data.HistoryManager.GetRoot());
+            VisualizeFull(Globals.HistoryManager.GetRoot());
          }
          else
          {
-            Visualize(Data.HistoryManager.GetRoot());
+            Visualize(Globals.HistoryManager.GetRoot());
          }
       }
    }

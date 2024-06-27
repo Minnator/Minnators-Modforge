@@ -8,19 +8,17 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Threading.Tasks;
+using Editor.Interfaces;
 using static System.Net.Mime.MediaTypeNames;
 
 public static class DebugMaps
 {
    public static void MapModeDrawing()
    {
-      
+      List<IProvinceCollection> areas = [.. Globals.Areas.Values];
       var sw = Stopwatch.StartNew();
 
-      var bmp = new Bitmap(Data.MapWidth, Data.MapHeight);
-
-      foreach (var area in Data.Areas.Values) 
-         MapDrawHelper.DrawProvinceCollection(area.Provinces, area.Color, bmp, true);
+      var bmp = BitMapHelper.GenerateBitmapFromProvinceCollection(areas);
 
       MapDrawHelper.DrawAllProvinceBorders(bmp, Color.Black);
       bmp.Save("C:\\Users\\david\\Downloads\\areas12.png", ImageFormat.Png);
@@ -35,8 +33,8 @@ public static class DebugMaps
    {
       var sw = Stopwatch.StartNew();
 
-      var bmp = new Bitmap(Data.MapWidth, Data.MapHeight);
-      foreach (var province in Data.Provinces.Values)
+      var bmp = new Bitmap(Globals.MapWidth, Globals.MapHeight);
+      foreach (var province in Globals.Provinces.Values)
       {
          MapDrawHelper.DrawProvince(province.Id, province.Color, bmp);
       }
@@ -62,9 +60,9 @@ public static class DebugMaps
 
    public static Color GetColorArea(int id)
    {
-      if (Data.Provinces.TryGetValue(id, out var prov))
+      if (Globals.Provinces.TryGetValue(id, out var prov))
       {
-         if (Data.Areas.TryGetValue(prov.Area, out var area))
+         if (Globals.Areas.TryGetValue(prov.Area, out var area))
          {
             return area.Color;
          }
@@ -75,16 +73,16 @@ public static class DebugMaps
    public static void Test()
    {
       var sw = Stopwatch.StartNew();
-      var provincePixels = Data.Provinces.Values.SelectMany(province =>
+      var provincePixels = Globals.Provinces.Values.SelectMany(province =>
       {
          var points = new Point[province.PixelCnt];
-         Array.Copy(Data.Pixels, province.PixelPtr, points, 0, province.PixelCnt);
+         Array.Copy(Globals.Pixels, province.PixelPtr, points, 0, province.PixelCnt);
          return points;
       }).ToArray();
       
       sw.Stop();
       Debug.WriteLine($"Test: {sw.ElapsedMilliseconds} ms {provincePixels.Length}");
-      var ids = Data.Provinces.Values.Select(province => province.Id).ToArray();
+      var ids = Globals.Provinces.Values.Select(province => province.Id).ToArray();
       sw.Restart();
       var points = MapDrawHelper.GetAllPixelPoints(ids);
       sw.Stop();
@@ -96,18 +94,18 @@ public static class DebugMaps
    public static void DrawAreasOnMap2()
    {
       var sw = Stopwatch.StartNew();
-      var bmp = new Bitmap(Data.MapWidth, Data.MapHeight, PixelFormat.Format32bppRgb);
+      var bmp = new Bitmap(Globals.MapWidth, Globals.MapHeight, PixelFormat.Format32bppRgb);
       using var g = Graphics.FromImage(bmp);
       var rand = new Random();
 
-      foreach (var area in Data.Areas.Values)
+      foreach (var area in Globals.Areas.Values)
       {
          var color = Color.FromArgb(rand.Next(256), rand.Next(256), rand.Next(256));
          for (int i = 0; i < area.Provinces.Length; i++)
          {
-            var prov = Data.Provinces[area.Provinces[i]];
+            var prov = Globals.Provinces[area.Provinces[i]];
             var points = new Point[prov.BorderCnt];
-            Array.Copy(Data.BorderPixels, prov.BorderPtr, points, 0, prov.BorderCnt);
+            Array.Copy(Globals.BorderPixels, prov.BorderPtr, points, 0, prov.BorderCnt);
             g.FillPolygon(new SolidBrush(color), points);
          }
       }
@@ -195,9 +193,9 @@ public static class DebugMaps
       {
 
          // Draw the adjacency numbers on the provinces
-         foreach (var prov in Data.Provinces.Values)
+         foreach (var prov in Globals.Provinces.Values)
          {
-            if (Data.AdjacentProvinces.TryGetValue(prov.Id, out var province))
+            if (Globals.AdjacentProvinces.TryGetValue(prov.Id, out var province))
             {
                var str = $"{province.Length}";
                var font = new Font("Arial", 8);
@@ -209,7 +207,7 @@ public static class DebugMaps
             if (prov.BorderCnt < 4)
                continue;
             var points = new Point[prov.BorderCnt];
-            Array.Copy(Data.BorderPixels, prov.BorderPtr, points, 0, prov.BorderCnt);
+            Array.Copy(Globals.BorderPixels, prov.BorderPtr, points, 0, prov.BorderCnt);
             var bmpData = bmp.LockBits(prov.Bounds, ImageLockMode.ReadWrite, bmp.PixelFormat);
             var scan0 = (byte*)bmpData.Scan0.ToPointer();
             foreach (var point in points)
@@ -232,15 +230,15 @@ public static class DebugMaps
    {
       var bmp = BitMapHelper.GenerateBitmapFromProvinces(id =>
       {
-         if (Data.Provinces.TryGetValue(id, out var prov))
+         if (Globals.Provinces.TryGetValue(id, out var prov))
          {
-            if (Data.LandProvinces.Contains(prov.Id))
+            if (Globals.LandProvinces.Contains(prov.Id))
                return Color.Green;
-            if (Data.SeaProvinces.Contains(prov.Id))
+            if (Globals.SeaProvinces.Contains(prov.Id))
                return Color.Blue;
-            if (Data.LakeProvinces.Contains(prov.Id))
+            if (Globals.LakeProvinces.Contains(prov.Id))
                return Color.LightBlue;
-            if (Data.CoastalProvinces.Contains(prov.Id))
+            if (Globals.CoastalProvinces.Contains(prov.Id))
                return Color.Yellow;
          }
          return Color.Black;
@@ -255,14 +253,14 @@ public static class DebugMaps
       Dictionary<string, Color> color = [];
       var rand = new Random();
       
-      foreach (var area in Data.Areas.Values)
+      foreach (var area in Globals.Areas.Values)
          color.Add(area.Name, Color.FromArgb(rand.Next(256), rand.Next(256), rand.Next(256)));
 
       var bmp = BitMapHelper.GenerateBitmapFromProvinces(id =>
       {
-         if (Data.Provinces.TryGetValue(id, out var prov))
+         if (Globals.Provinces.TryGetValue(id, out var prov))
          {
-            if (Data.Areas.TryGetValue(prov.Area, out var area))
+            if (Globals.Areas.TryGetValue(prov.Area, out var area))
                return color[area.Name];
          }
          return Color.Black;

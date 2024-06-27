@@ -36,9 +36,9 @@ public static class AreaLoading
          areaDictionary.Add(areaName, new Area(areaName, [.. Parsing.GetProvincesList(match.Groups["ids"].Value)], provider.GetRandomColor()));
 
          foreach (var provinceId in areaDictionary[areaName].Provinces)
-            if (Data.Provinces.TryGetValue(provinceId, out var province)) province.Area = areaName;
+            if (Globals.Provinces.TryGetValue(provinceId, out var province)) province.Area = areaName;
       }
-      Data.Areas = areaDictionary;
+      Globals.Areas = areaDictionary;
 
       sw.Stop();
       log.WriteTimeStamp("Parsing Areas", sw.ElapsedMilliseconds);

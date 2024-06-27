@@ -33,11 +33,11 @@ public static class ContinentLoading
          continentDictionary.Add(name, new Continent(name, provinces));
 
          foreach (var provinceId in continentDictionary[name].Provinces)
-            if (Data.Provinces.TryGetValue(provinceId, out var province))
+            if (Globals.Provinces.TryGetValue(provinceId, out var province))
                province.Continent = name;
       }
 
-      Data.Continents = continentDictionary;
+      Globals.Continents = continentDictionary;
 
       sw.Stop();
       log.WriteTimeStamp("Parsing Continents", sw.ElapsedMilliseconds);

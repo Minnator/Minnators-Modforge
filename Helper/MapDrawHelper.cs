@@ -40,23 +40,23 @@ public static class MapDrawHelper
    // Draws the border of the given province on the given Bitmap with the given Color
    public static Rectangle DrawProvinceBorder(int provincePtr, Color color, Bitmap bmp)
    {
-      var province = Data.Provinces[provincePtr];
+      var province = Globals.Provinces[provincePtr];
       var points = new Point[province.BorderCnt];
-      Array.Copy(Data.BorderPixels, province.BorderPtr, points, 0, province.BorderCnt);
+      Array.Copy(Globals.BorderPixels, province.BorderPtr, points, 0, province.BorderCnt);
       return DrawOnMap(province.Bounds, points, color, bmp);
    }
 
    public static Rectangle DrawProvince(int provincePtr, Color color, Bitmap bmp)
    {
-      var province = Data.Provinces[provincePtr];
+      var province = Globals.Provinces[provincePtr];
       var points = new Point[province.PixelCnt];
-      Array.Copy(Data.Pixels, province.PixelPtr, points, 0, province.PixelCnt);
+      Array.Copy(Globals.Pixels, province.PixelPtr, points, 0, province.PixelCnt);
       return DrawOnMap(province.Bounds, points, color, bmp);
    }
 
    public static void DrawAllProvinceBorders(Bitmap bmp, Color color)
    {
-      DrawOnMap(new Rectangle(0, 0, bmp.Width, bmp.Height), Data.BorderPixels, color, bmp);
+      DrawOnMap(new Rectangle(0, 0, bmp.Width, bmp.Height), Globals.BorderPixels, color, bmp);
    }
 
    public static Rectangle DrawProvinceCollection (int[] provinceIds, Color color, Bitmap bmp, bool forceSingleDraw)
@@ -66,8 +66,8 @@ public static class MapDrawHelper
       List<Rectangle> rects = [];
       foreach (var provinceId in provinceIds)
       {
-         DrawProvince(provinceId, Data.Provinces[provinceId].Color, bmp);
-         rects.Add(Data.Provinces[provinceId].Bounds);
+         DrawProvince(provinceId, Globals.Provinces[provinceId].Color, bmp);
+         rects.Add(Globals.Provinces[provinceId].Bounds);
       }
       return Geometry.GetBounds(rects);
    }
@@ -80,20 +80,20 @@ public static class MapDrawHelper
       foreach (var provinceId in provinceIds)
       {
          DrawProvinceBorder(provinceId, color, bmp);
-         rects.Add(Data.Provinces[provinceId].Bounds);
+         rects.Add(Globals.Provinces[provinceId].Bounds);
       }
       return Geometry.GetBounds(rects);
    }
 
    private static Rectangle DrawBorderCollection (int[] provinceIds, Color color, Bitmap bmp)
    {
-     var rects = provinceIds.Select(ptr => Data.Provinces[ptr].Bounds).ToList();
+     var rects = provinceIds.Select(ptr => Globals.Provinces[ptr].Bounds).ToList();
       return DrawOnMap(Geometry.GetBounds(rects), GetAllBorderPoints(provinceIds), color, bmp);
    }
 
    private static Rectangle DrawProvinceCollection (int[] provinceIds, Color color, Bitmap bmp)
    {
-      var rects = provinceIds.Select(ptr => Data.Provinces[ptr].Bounds).ToList();
+      var rects = provinceIds.Select(ptr => Globals.Provinces[ptr].Bounds).ToList();
       return DrawOnMap(Geometry.GetBounds(rects), GetAllPixelPoints(provinceIds), color, bmp);
    }
 
@@ -102,14 +102,14 @@ public static class MapDrawHelper
       var cnt = 0;
       foreach (var p in provinceIds)
       {
-         cnt += Data.Provinces[p].PixelCnt;
+         cnt += Globals.Provinces[p].PixelCnt;
       }
       var points = new Point[cnt];
       var index = 0;
       foreach (var p in provinceIds)
       {
-         var prov = Data.Provinces[p];
-         Array.Copy(Data.Pixels, prov.PixelPtr, points, index, prov.PixelCnt);
+         var prov = Globals.Provinces[p];
+         Array.Copy(Globals.Pixels, prov.PixelPtr, points, index, prov.PixelCnt);
          index += prov.PixelCnt;
       }
       return points;
@@ -119,14 +119,14 @@ public static class MapDrawHelper
       var cnt = 0;
       foreach (var p in provinceIds)
       {
-         cnt += Data.Provinces[p].BorderCnt;
+         cnt += Globals.Provinces[p].BorderCnt;
       }
       var points = new Point[cnt];
       var index = 0;
       foreach (var p in provinceIds)
       {
-         var prov = Data.Provinces[p];
-         Array.Copy(Data.BorderPixels, prov.BorderPtr, points, index, prov.BorderCnt);
+         var prov = Globals.Provinces[p];
+         Array.Copy(Globals.BorderPixels, prov.BorderPtr, points, index, prov.BorderCnt);
          index += prov.BorderCnt;
       }
       return points;

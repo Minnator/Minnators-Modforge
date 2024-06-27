@@ -145,8 +145,8 @@ public static class MapLoading
       Debug.WriteLine($"Map Loading took {sw.ElapsedMilliseconds}ms");
       loadingLog.WriteTimeStamp("Pixel Initialisation", sw.ElapsedMilliseconds);
 
-      Data.MapWidth = width;
-      Data.MapHeight = height;
+      Globals.MapWidth = width;
+      Globals.MapHeight = height;
 
       return (colorToProvId, colorToBorder, colorToAdj);
    }

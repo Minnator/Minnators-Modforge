@@ -109,7 +109,7 @@ public static class Geometry
    public static List<int> GetProvinceIdsInRectangle (Rectangle rect)
    {
       var provinces = new List<int>();
-      foreach (var province in Data.Provinces.Values)
+      foreach (var province in Globals.Provinces.Values)
       {
          if (RectanglesIntercept(province.Bounds, rect))
             provinces.Add(province.Id);
@@ -120,7 +120,7 @@ public static class Geometry
    public static List<Province> GetProvincesInRectangle(Rectangle rect)
    {
       var provinces = new List<Province>();
-      foreach (var province in Data.Provinces.Values)
+      foreach (var province in Globals.Provinces.Values)
       {
          if (RectanglesIntercept(province.Bounds, rect))
             provinces.Add(province);

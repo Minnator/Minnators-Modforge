@@ -35,13 +35,13 @@ public static class SuperRegionLoading
 
          foreach (var region in regions)
          {
-            if (Data.Regions.TryGetValue(region, out var reg))
+            if (Globals.Regions.TryGetValue(region, out var reg))
                reg.SuperRegion = region;
          }
       }
 
 
-      Data.SuperRegions = superRegionDictionary;
+      Globals.SuperRegions = superRegionDictionary;
 
       sw.Stop();
       log.WriteTimeStamp("Parsing Super Regions", sw.ElapsedMilliseconds);

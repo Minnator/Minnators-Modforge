@@ -29,7 +29,7 @@ public static class DefaultMapLoading
       AddProvincesToDictionary(match.Groups["LakeProvs"].Value, lake);
       AddProvincesToDictionary(match.Groups["CostalProvs"].Value, land);
 
-      foreach (var p in Data.Provinces.Values)
+      foreach (var p in Globals.Provinces.Values)
       {
          if (sea.Contains(p.Id) || rnv.Contains(p.Id) || lake.Contains(p.Id) || coastal.Contains(p.Id))
             continue;
@@ -44,10 +44,10 @@ public static class DefaultMapLoading
          land.Remove(p);
       }
 
-      Data.LandProvinces = land;
-      Data.SeaProvinces = sea;
-      Data.LakeProvinces = lake;
-      Data.CoastalProvinces = coastal;
+      Globals.LandProvinces = land;
+      Globals.SeaProvinces = sea;
+      Globals.LakeProvinces = lake;
+      Globals.CoastalProvinces = coastal;
 
       sw.Stop();
       loadingLog.WriteTimeStamp("Parsing default.map", sw.ElapsedMilliseconds);

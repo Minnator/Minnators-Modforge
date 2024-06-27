@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
 using Editor.Commands;
@@ -24,10 +25,13 @@ public enum MapMode
 }
 
 //contains all required and used data across the application and instances of forms.
-public static class Data
+public static class Globals
 {
    // History Manager
    public static readonly HistoryManager HistoryManager = new(new CInitial());
+
+   // Contains the current map mode
+   public static MapModeManager MapModeManager = null!;
 
    // Contains the map image bounds and path
    public static int MapWidth;
@@ -57,10 +61,5 @@ public static class Data
    // Localisation
    public static Dictionary<string, string> Localisation { get; set; } = [];
    public static Dictionary<string, string> LocalisationCollisions { get; set; } = [];
-
-   // returns the province by its color
-   public static Province GetProvince(Color color) => Provinces[ColorToProvId[color]];
-
-
 
 }

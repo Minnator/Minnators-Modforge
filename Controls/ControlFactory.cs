@@ -5,9 +5,9 @@ namespace Editor.Controls;
 public static class ControlFactory
 {
 
-   public static PannablePictureBox GetPannablePictureBox(string path, ref Panel panel, MapWindow mapWindow)
+   public static PannablePictureBox GetPannablePictureBox(ref Panel panel, MapWindow mapWindow)
    {
-      return new PannablePictureBox(path, ref panel, mapWindow);
+      return new PannablePictureBox(ref panel, mapWindow);
    }
 
 }

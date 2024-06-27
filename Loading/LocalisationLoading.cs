@@ -63,8 +63,8 @@ public class LocalisationLoading
          }
       });
 
-      Data.Localisation = loc;
-      Data.LocalisationCollisions = collisions;
+      Globals.Localisation = loc;
+      Globals.LocalisationCollisions = collisions;
       sw.Stop();
       log.WriteTimeStamp($"Localisation loaded [{collisions.Count}] collisions", sw.ElapsedMilliseconds);
    }

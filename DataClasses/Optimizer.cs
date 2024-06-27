@@ -62,11 +62,11 @@ public static class Optimizer
       //var elapsed = sw.ElapsedMilliseconds;
       //Debug.WriteLine($"Per Province Cost: {elapsed / (float)provinces.Length * 1000} µs");
 
-      // Set the optimized data to the Data class
-      Data.BorderPixels = borders;
-      Data.Pixels = pixels;
-      Data.Provinces = provs;
-      Data.ColorToProvId = dic;
+      // Set the optimized data to the Globals class
+      Globals.BorderPixels = borders;
+      Globals.Pixels = pixels;
+      Globals.Provinces = provs;
+      Globals.ColorToProvId = dic;
 
       // Free up memory from the ConcurrentDictionaries
       colorToBorder.Clear();
@@ -77,14 +77,14 @@ public static class Optimizer
    {
       var sw = new Stopwatch();
       sw.Start();
-      var adjacencyList = new Dictionary<int, int[]>(Data.Provinces.Count);
+      var adjacencyList = new Dictionary<int, int[]>(Globals.Provinces.Count);
 
       foreach (var kvp in colorToAdj) 
-         adjacencyList.Add(Data.ColorToProvId[kvp.Key], kvp.Value.Select(color => Data.ColorToProvId[color]).ToArray());
+         adjacencyList.Add(Globals.ColorToProvId[kvp.Key], kvp.Value.Select(color => Globals.ColorToProvId[color]).ToArray());
 
       sw.Stop();
       //Debug.WriteLine($"Adjacency calculation took {sw.ElapsedMilliseconds}ms");
-      log.WriteTimeStamp("Adjacency optimization", sw.ElapsedMilliseconds); Data.AdjacentProvinces = adjacencyList;
+      log.WriteTimeStamp("Adjacency optimization", sw.ElapsedMilliseconds); Globals.AdjacentProvinces = adjacencyList;
 
       // Free up memory from the ConcurrentDictionary
       colorToAdj.Clear();

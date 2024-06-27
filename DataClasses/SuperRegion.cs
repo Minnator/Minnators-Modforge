@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 using Editor.Interfaces;
 
 namespace Editor.DataClasses;
@@ -7,6 +8,7 @@ public class SuperRegion(string name) : IProvinceCollection
 {
    public string Name { get; } = name;
    public List<string> Regions { get; set; } = [];
+   public Color Color { get; set; }
 
    public SuperRegion (string name, List<string> regions) : this(name)
    {
@@ -29,7 +31,7 @@ public class SuperRegion(string name) : IProvinceCollection
    {
       var provinces = new List<int>();
       foreach (var region in Regions) 
-         provinces.AddRange(Data.Regions[region].GetProvinceIds());
+         provinces.AddRange(Globals.Regions[region].GetProvinceIds());
       return provinces.ToArray();
    }
 
@@ -43,7 +45,7 @@ public class SuperRegion(string name) : IProvinceCollection
       var regions = new List<IProvinceCollection>();
       foreach (var region in Regions)
       {
-         regions.Add(Data.Regions[region]);
+         regions.Add(Globals.Regions[region]);
       }
       return regions;
    }

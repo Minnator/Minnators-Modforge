@@ -34,5 +34,5 @@ public class CSelectionMarkNext : ICommand
       _pb.Selection.MarkNext(_provinceId);
    }
 
-   public string GetDescription() => $"Mark province [{Data.Provinces[_provinceId].GetLocalisation()}] as selected";
+   public string GetDescription() => $"Mark province [{Globals.Provinces[_provinceId].GetLocalisation()}] as selected";
 }

@@ -53,12 +53,12 @@ public static class RegionLoading
 
          foreach (var area in areas)
          {
-            if (Data.Areas.TryGetValue(area, out var ar))
+            if (Globals.Areas.TryGetValue(area, out var ar))
                ar.Region = regionName;
          }
       }
 
-      Data.Regions = regionDictionary;
+      Globals.Regions = regionDictionary;
       sw.Stop();
       log.WriteTimeStamp("Parsing regions", sw.ElapsedMilliseconds);
    }

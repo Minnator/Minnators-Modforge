@@ -19,14 +19,14 @@ public class Province : IProvinceCollection
    public Rectangle Bounds { get; set; }
    public Point Center { get; set; }
 
-   // Data form the Game
+   // Globals form the Game
    public string Area { get; set; } = string.Empty;
    public string Continent { get; set; } = string.Empty;
 
 
    public string GetLocalisation()
    {
-      return Data.Localisation.TryGetValue($"PROV{Id}", out var loc) ? loc : Id.ToString();
+      return Globals.Localisation.TryGetValue($"PROV{Id}", out var loc) ? loc : Id.ToString();
    }
 
    public override bool Equals(object? obj)
@@ -48,7 +48,7 @@ public class Province : IProvinceCollection
 
    public IProvinceCollection ScopeOut()
    {
-      return Data.Areas[Area];
+      return Globals.Areas[Area];
    }
 
    public List<IProvinceCollection>? ScopeIn()
