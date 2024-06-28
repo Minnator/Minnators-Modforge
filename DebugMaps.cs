@@ -25,10 +25,24 @@ public static class DebugMaps
       sw.Stop();
       Debug.WriteLine($"MapModeDrawing: {sw.ElapsedMilliseconds} ms");
       DrawAreasOnMap();
+      Debug.WriteLine($"----------------------------------------------");
       return;
       Test();
    }
 
+
+
+   public static void DrawAreasOnMap()
+   {
+      var sw = Stopwatch.StartNew();
+
+      var bmp = BitMapHelper.GenerateBitmapFromProvinces(GetColorArea);
+      
+      MapDrawHelper.DrawAllProvinceBorders(bmp, Color.Black);
+      bmp.Save("C:\\Users\\david\\Downloads\\areas.png", ImageFormat.Png);
+      sw.Stop();
+      Debug.WriteLine($"DrawAreasOnMap: {sw.ElapsedMilliseconds} ms");
+   }
    public static void MapModeDrawing2()
    {
       var sw = Stopwatch.StartNew();
@@ -43,19 +57,6 @@ public static class DebugMaps
       bmp.Save("C:\\Users\\david\\Downloads\\areas.png", ImageFormat.Png);
       sw.Stop();
       Debug.WriteLine($"MapModeDrawing2: {sw.ElapsedMilliseconds} ms");
-   }
-
-
-   public static void DrawAreasOnMap()
-   {
-      var sw = Stopwatch.StartNew();
-
-      var bmp = BitMapHelper.GenerateBitmapFromProvinces(GetColorArea);
-      
-      MapDrawHelper.DrawAllProvinceBorders(bmp, Color.Black);
-      bmp.Save("C:\\Users\\david\\Downloads\\areas.png", ImageFormat.Png);
-      sw.Stop();
-      Debug.WriteLine($"DrawAreasOnMap: {sw.ElapsedMilliseconds} ms");
    }
 
    public static Color GetColorArea(int id)
@@ -84,7 +85,7 @@ public static class DebugMaps
       Debug.WriteLine($"Test: {sw.ElapsedMilliseconds} ms {provincePixels.Length}");
       var ids = Globals.Provinces.Values.Select(province => province.Id).ToArray();
       sw.Restart();
-      var points = MapDrawHelper.GetAllPixelPoints(ids);
+      MapDrawHelper.GetAllPixelPoints(ids, out var points);
       sw.Stop();
       Debug.WriteLine($"Test2: {sw.ElapsedMilliseconds} ms {points.Length}");
    }

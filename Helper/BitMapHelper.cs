@@ -32,9 +32,10 @@ public class BitMapHelper
       // Calculate stride (bytes per row)
       var stride = bitmapData.Stride;
       var bytesPerPixel = Image.GetPixelFormatSize(bmp.PixelFormat) / 8;
-      
+
       unsafe
       {
+
          Parallel.ForEach(Globals.Provinces.Values, province =>
          {
             var points = new Point[province.PixelCnt];
@@ -82,21 +83,34 @@ public class BitMapHelper
       var stride = bitmapData.Stride;
       var bytesPerPixel = Image.GetPixelFormatSize(bmp.PixelFormat) / 8;
 
+      var options = new ParallelOptions
+      {
+         MaxDegreeOfParallelism = 1
+      };
+
+      var pixels = new Point[Globals.Pixels.Length];
+
       unsafe
       {
-         Parallel.ForEach(collection, collect =>
+         Parallel.ForEach(collection, options, collect =>
          {
-            var points = MapDrawHelper.GetAllPixelPoints(collect.GetProvinceIds());
+            //MapDrawHelper.GetAllPixelPoints(collect.GetProvinceIds(), out var points);
+            MapDrawHelper.GetAllPixelPtrs(collect.GetProvinceIds(), out var ptrs);
             var color = collect.Color;
 
             var ptr = (byte*)bitmapData.Scan0;
-            foreach (var point in points)
-            {
-               var index = point.Y * stride + point.X * bytesPerPixel;
 
-               ptr[index + 2] = color.R;
-               ptr[index + 1] = color.G;
-               ptr[index] = color.B;
+            for (var i = 0; i < ptrs.GetLength(0); i++)
+            {
+               for (var j = ptrs[i, 0]; j < ptrs[i, 1] + ptrs[i, 0]; j++)
+               {
+                  var point = pixels[j];
+                  var index = pixels[j].Y * stride + point.X * bytesPerPixel;
+
+                  ptr[index + 2] = color.R;
+                  ptr[index + 1] = color.G;
+                  ptr[index] = color.B;
+               }
             }
          });
       }

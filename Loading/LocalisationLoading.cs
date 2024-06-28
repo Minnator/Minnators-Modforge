@@ -24,6 +24,7 @@ public class LocalisationLoading
       var loc = new Dictionary<string, string>();
       var collisions = new Dictionary<string, string>();
 
+      //TODO Concurrent crash
       Parallel.ForEach(files, fileName =>
       {
          var lines = IO.ReadAllLinesInUTF8(fileName);

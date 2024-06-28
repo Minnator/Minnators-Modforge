@@ -94,17 +94,18 @@ public static class MapDrawHelper
    private static Rectangle DrawProvinceCollection (int[] provinceIds, Color color, Bitmap bmp)
    {
       var rects = provinceIds.Select(ptr => Globals.Provinces[ptr].Bounds).ToList();
-      return DrawOnMap(Geometry.GetBounds(rects), GetAllPixelPoints(provinceIds), color, bmp);
+      GetAllPixelPoints(provinceIds, out var points);
+      return DrawOnMap(Geometry.GetBounds(rects), points, color, bmp);
    }
 
-   public static Point[] GetAllPixelPoints (int[] provinceIds)
+   public static void GetAllPixelPoints (int[] provinceIds, out Point[] points)
    {
       var cnt = 0;
       foreach (var p in provinceIds)
       {
          cnt += Globals.Provinces[p].PixelCnt;
       }
-      var points = new Point[cnt];
+      points = new Point[cnt];
       var index = 0;
       foreach (var p in provinceIds)
       {
@@ -112,8 +113,19 @@ public static class MapDrawHelper
          Array.Copy(Globals.Pixels, prov.PixelPtr, points, index, prov.PixelCnt);
          index += prov.PixelCnt;
       }
-      return points;
    }
+
+   public static void GetAllPixelPtrs(int[] ids, out int[,] ptrs)
+   {
+      ptrs = new int[ids.Length, 2];
+      for (var i = 0; i < ids.Length; i++)
+      {
+         var prov = Globals.Provinces[ids[i]];
+         ptrs[i, 0] = prov.PixelPtr;
+         ptrs[i, 1] = prov.PixelCnt;
+      }
+   }
+
    public static Point[] GetAllBorderPoints (int[] provinceIds)
    {
       var cnt = 0;
