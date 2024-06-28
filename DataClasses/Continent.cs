@@ -3,7 +3,7 @@ using System.Drawing;
 using Editor.Interfaces;
 
 namespace Editor.DataClasses;
-
+#nullable enable
 public class Continent(string name, List<int> provinces) : IProvinceCollection
 {
     public string Name { get; } = name;

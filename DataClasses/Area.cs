@@ -3,7 +3,7 @@ using System.Drawing;
 using Editor.Interfaces;
 
 namespace Editor.DataClasses;
-
+#nullable enable
 public class Area(string name, int[] provinces, Color color) : IProvinceCollection
 {
    public string Name { get; } = name;

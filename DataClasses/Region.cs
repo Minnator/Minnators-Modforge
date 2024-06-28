@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using Editor.Interfaces;
 
 namespace Editor.DataClasses;
-
+#nullable enable
 public class Region(string name) : IProvinceCollection
 {
    public string Name { get; } = name;

@@ -6,22 +6,19 @@ using Editor.Loading;
 
 namespace Editor.MapModes;
 
-public class ContinentMapMode : IMapMode
+public sealed class ContinentMapMode : Interfaces.MapMode
 {
-   public Bitmap Bitmap { get; set; }
-   public void RenderMapMode(Func<int, Color> method)
+   public ContinentMapMode()
    {
-      Bitmap?.Dispose();
-      Bitmap = BitMapHelper.GenerateBitmapFromProvinces(GetProvinceColor);
-      MapDrawHelper.DrawAllProvinceBorders(Bitmap, Color.Black);
+      RenderMapMode(GetProvinceColor);
    }
 
-   public string GetMapModeName()
+   public override string GetMapModeName()
    {
       return "Continents";
    }
 
-   public Color GetProvinceColor(int id)
+   public override Color GetProvinceColor(int id)
    {
       if (Globals.Provinces.TryGetValue(id, out var province))
          if (Globals.Continents.TryGetValue(province.Continent, out var continent))
@@ -29,20 +26,4 @@ public class ContinentMapMode : IMapMode
       return Color.DarkGray;
    }
 
-   public void Update(Rectangle rect)
-   {
-      Update(Geometry.GetProvinceIdsInRectangle(rect));
-   }
-
-   public void Update(List<int> ids)
-   {
-      foreach (var id in ids)
-         Update(id);
-   }
-
-   public void Update(int id)
-   {
-      MapDrawHelper.DrawProvince(id, GetProvinceColor(id), Bitmap);
-      MapDrawHelper.DrawProvinceBorder(id, Color.Black, Bitmap);
-   }
 }

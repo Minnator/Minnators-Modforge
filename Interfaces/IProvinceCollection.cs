@@ -2,7 +2,7 @@
 using System.Drawing;
 
 namespace Editor.Interfaces;
-
+#nullable enable
 public interface IProvinceCollection
 {
    public int[] GetProvinceIds();

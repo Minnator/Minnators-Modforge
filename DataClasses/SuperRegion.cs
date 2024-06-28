@@ -3,7 +3,7 @@ using System.Drawing;
 using Editor.Interfaces;
 
 namespace Editor.DataClasses;
-
+#nullable enable
 public class SuperRegion(string name) : IProvinceCollection
 {
    public string Name { get; } = name;

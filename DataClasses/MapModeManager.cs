@@ -10,9 +10,9 @@ namespace Editor.DataClasses;
 
 public class MapModeManager
 {
-   private List<IMapMode> MapModes { get; } = [];
-   private IMapMode CurrentMapMode { get; set; } = null!;
-   private IMapMode IdMapMode { get; set; } = null!;
+   private List<Interfaces.MapMode> MapModes { get; } = [];
+   private Interfaces.MapMode CurrentMapMode { get; set; } = null!;
+   private Interfaces.MapMode IdMapMode { get; set; } = null!;
    private PannablePictureBox PictureBox { get; set; }
 
    public MapModeManager(PannablePictureBox pictureBox)
@@ -27,17 +27,20 @@ public class MapModeManager
       MapModes.Add(new AreaMapMode());
       MapModes.Add(new RegionsMapMode());
       MapModes.Add(new SuperRegionMapMode());
+      MapModes.Add(new ContinentMapMode());
+      MapModes.Add(new ProvinceIdMapMode());
+
 
       // We set the default map mode to retrieve province colors
       IdMapMode = GetMapMode("Provinces");
    }
 
-   public List<IMapMode> GetMapModes()
+   public List<Interfaces.MapMode> GetMapModes()
    {
       return MapModes;
    }
 
-   public IMapMode GetMapMode(string name)
+   public Interfaces.MapMode GetMapMode(string name)
    {
       return MapModes.Find(mode => mode.GetMapModeName() == name);
    }
