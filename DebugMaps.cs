@@ -15,6 +15,22 @@ public static class DebugMaps
 {
    public static void MapModeDrawing()
    {
+      var sw = Stopwatch.StartNew();
+
+      var bmp = new Bitmap(Globals.MapModeManager.GetMapMode("Provinces").Bitmap);
+      BitMapHelper.WriteOnProvince(GetProvinceIDString, bmp);
+      bmp.Save("C:\\Users\\david\\Downloads\\areas.png", ImageFormat.Png);
+      sw.Stop();
+      Debug.WriteLine($"MapModeDrawing: {sw.ElapsedMilliseconds} ms");
+   }
+
+   private static string GetProvinceIDString(int id)
+   {
+      return id.ToString();
+   }
+
+   public static void MapModeDrawing3()
+   {
       List<IProvinceCollection> areas = [.. Globals.Areas.Values];
       var sw = Stopwatch.StartNew();
 

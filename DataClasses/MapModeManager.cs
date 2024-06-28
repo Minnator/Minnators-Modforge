@@ -34,7 +34,7 @@ public class MapModeManager
       // We set the default map mode to retrieve province colors
       IdMapMode = GetMapMode("Provinces");
    }
-
+   
    public List<Interfaces.MapMode> GetMapModes()
    {
       return MapModes;

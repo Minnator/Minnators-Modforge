@@ -7,7 +7,7 @@ namespace Editor.Interfaces;
 
 public abstract class MapMode
 {
-   public Bitmap Bitmap { get; set; } = null!;
+   public Bitmap Bitmap { get; private set; } = null!;
    
    public virtual void RenderMapMode(Func<int, Color> method)
    {

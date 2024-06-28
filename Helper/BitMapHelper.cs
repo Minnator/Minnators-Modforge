@@ -11,6 +11,24 @@ namespace Editor.Helper;
 
 public class BitMapHelper
 {
+
+   public static void WriteOnProvince(Func<int, string> method, Bitmap bmp)
+   {
+      var font = new Font("Arial", 6);
+      var brush = new SolidBrush(Color.Black);
+      var graphics = Graphics.FromImage(bmp);
+
+      foreach (var province in Globals.Provinces.Values)
+      {
+         var text = method(province.Id);
+         var textWidth = (int)graphics.MeasureString(text, font).Width;
+         var textHeight = (int)graphics.MeasureString(text, font).Height;
+
+         graphics.DrawString(text, font, brush, province.Center.X - textWidth / 2, province.Center.Y - textHeight / 2);
+      }
+
+   }
+
    /// <summary>
    /// The Bitmap needs to be Disposed after use
    /// </summary>

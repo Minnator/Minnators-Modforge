@@ -55,6 +55,7 @@ namespace Editor
          Globals.HistoryManager.UndoDepthChanged += UpdateUndoDepth;
          Globals.HistoryManager.RedoDepthChanged += UpdateRedoDepth;
 
+         ProvinceParser.ParseAllProvinces(Project.ModPath, Project.VanillaPath);
       }
 
       private void InitMapModes(ref Log log)
