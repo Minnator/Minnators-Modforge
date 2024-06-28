@@ -31,6 +31,8 @@ public sealed class PannablePictureBox : PictureBox
          {
             _image = value;
             // Crate transparent overlay and selection bitmaps
+            if (_image == null!) 
+               return;
             Overlay = new Bitmap(_image.Width, _image.Height, PixelFormat.Format32bppArgb);
             SelectionOverlay = new Bitmap(_image.Width, _image.Height, PixelFormat.Format32bppArgb);
             using var g = Graphics.FromImage(Overlay);
@@ -147,7 +149,7 @@ public sealed class PannablePictureBox : PictureBox
    private void PictureBox1_MouseMove(object sender, MouseEventArgs e)
    {
       // ------------------------------ Out of Bounds Check ------------------------------
-      if (e.X < 0 || e.Y < 0 || e.X >= Image.Width || e.Y >= Image.Height)
+      if (Image == null! || e.X < 0 || e.Y < 0 || e.X >= Image.Width || e.Y >= Image.Height)
          return;
 
       // ------------------------------ Province Selection ------------------------------
@@ -191,9 +193,10 @@ public sealed class PannablePictureBox : PictureBox
          return;
       IsPainting = true;
       // Draw the layers to the screen
-      pe.Graphics.DrawImage(Image, 0, 0, Image.Width, Image.Height);
-      pe.Graphics.DrawImage(SelectionOverlay, 0, 0, Image.Width, Image.Height);
-      pe.Graphics.DrawImage(Overlay, 0, 0, Image.Width, Image.Height);
+      if (Image != null!) 
+         pe.Graphics.DrawImage(Image, 0, 0, Image.Width, Image.Height);
+      pe.Graphics.DrawImage(SelectionOverlay, 0, 0, SelectionOverlay.Width, SelectionOverlay.Height);
+      pe.Graphics.DrawImage(Overlay, 0, 0, Overlay.Width, Overlay.Height);
 
       // Draw the selection lasso
       if (Selection.State == SelectionState.Lasso && Selection.LassoSelection.Count > 2)

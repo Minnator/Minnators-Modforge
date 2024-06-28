@@ -13,7 +13,7 @@ public static class RegionLoading
    private static string _pattern =
       @"(?<regionName>[A-Za-z_]+)\s*=\s*{\s*areas\s*=\s*{\s*(?<areas>(?:\s*[A-Za-z_]+\s*)+)\s*}\s*(?<monsoons>(?:monsoon\s*=\s*{\s*(?:\s*[0-9.]+\s*)+\s*}\s*)*)}";
 
-   public static void Load(string folder, ref Log log)
+   public static void Load(string folder, ColorProviderRgb colorProvider, ref Log log)
    {
       var sw = new Stopwatch();
       sw.Start();
@@ -49,13 +49,18 @@ public static class RegionLoading
             foreach (Match monsoonMatch in monsoonMatches) 
                monsoons.Add(new Monsoon(monsoonMatch.Groups["start"].Value, monsoonMatch.Groups["end"].Value));
          }
-         regionDictionary.Add(regionName, new Region(regionName, areas, monsoons));
+         var region = new Region(regionName, areas, monsoons)
+         {
+            Color = colorProvider.GetRandomColor()
+         };
+         regionDictionary.Add(regionName, region);
 
          foreach (var area in areas)
          {
             if (Globals.Areas.TryGetValue(area, out var ar))
                ar.Region = regionName;
          }
+         
       }
 
       Globals.Regions = regionDictionary;

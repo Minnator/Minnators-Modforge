@@ -6,11 +6,11 @@ using Editor.Loading;
 
 namespace Editor.MapModes;
 
-public class ProvinceMapMode : IMapMode
+public class RegionsMapMode : IMapMode
 {
    public Bitmap Bitmap { get; set; } = null!;
 
-   public ProvinceMapMode()
+   public RegionsMapMode()
    {
       RenderMapMode(GetProvinceColor);
    }
@@ -24,24 +24,32 @@ public class ProvinceMapMode : IMapMode
 
    public string GetMapModeName()
    {
-      return "Provinces";
+      return "Regions";
    }
 
-   public Color GetProvinceColor(int provinceId)
+   public Color GetProvinceColor(int id)
    {
-      return Globals.Provinces[provinceId].Color;
+      if (Globals.Provinces.TryGetValue(id, out var province))
+         if (Globals.Areas.TryGetValue(province.Area, out var areas))
+            if (Globals.Regions.TryGetValue(areas.Region, out var region))
+               return region.Color;
+      return Color.DarkGray;
    }
 
-   // We don't need these methods for this map mode as it is not interactive
    public void Update(Rectangle rect)
    {
+      Update(Geometry.GetProvinceIdsInRectangle(rect));
    }
 
    public void Update(List<int> ids)
    {
+      foreach (var id in ids)
+         Update(id);
    }
 
    public void Update(int id)
    {
+      MapDrawHelper.DrawProvince(id, GetProvinceColor(id), Bitmap);
+      MapDrawHelper.DrawProvinceBorder(id, Color.Black, Bitmap);
    }
 }

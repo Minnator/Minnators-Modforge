@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Editor.Controls;
@@ -23,6 +24,9 @@ public class MapModeManager
    private void InitializeAllMapModes()
    {
       MapModes.Add(new ProvinceMapMode());
+      MapModes.Add(new AreaMapMode());
+      MapModes.Add(new RegionsMapMode());
+      MapModes.Add(new SuperRegionMapMode());
 
       // We set the default map mode to retrieve province colors
       IdMapMode = GetMapMode("Provinces");

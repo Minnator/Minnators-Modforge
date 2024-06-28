@@ -32,7 +32,7 @@ public static class Parsing
 
       var matches = Regex.Matches(value, @"\s*(\w+)");
       foreach (var match in matches) 
-         strList.Add(match.ToString());
+         strList.Add(match.ToString().Trim());
       return strList;
    }
 }

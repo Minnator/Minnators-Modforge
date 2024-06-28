@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -57,10 +58,19 @@ public class LocalisationLoading
             }
          }
 
-         lock (loc)
+         try
          {
-            foreach (var kvp in threadDict)
-               loc.Add(kvp.Key, kvp.Value);
+
+            lock (loc)
+            {
+               foreach (var kvp in threadDict)
+                  loc.Add(kvp.Key, kvp.Value);
+            }
+         }
+         catch (Exception e)
+         {
+            Debug.WriteLine(e);
+            throw;
          }
       });
 

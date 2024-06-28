@@ -4,10 +4,8 @@ using Editor.Helper;
 using Editor.Loading;
 using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using static System.Net.Mime.MediaTypeNames;
 
 #nullable enable
 
@@ -39,15 +37,14 @@ namespace Editor
          LoadDefinitionAndMap(ref LoadingLog);
          DefaultMapLoading.Load(Project.VanillaPath, ref LoadingLog);
          AreaLoading.Load(Project.VanillaPath, Project.ColorProvider, ref LoadingLog);
-         RegionLoading.Load(Project.VanillaPath, ref LoadingLog);
-         SuperRegionLoading.Load(Project.VanillaPath, ref LoadingLog);
+         RegionLoading.Load(Project.VanillaPath, Project.ColorProvider, ref LoadingLog);
+         SuperRegionLoading.Load(Project.VanillaPath, Project.ColorProvider, ref LoadingLog);
          ContinentLoading.Load(Project.VanillaPath, ref LoadingLog);
          LocalisationLoading.Load(Project.ModPath, Project.VanillaPath, Project.Language, ref LoadingLog);
 
 
          // MUST BE LAST in the loading sequence
-         Globals.MapModeManager = new (MapPictureBox); // Initialize the MapModeManager
-         Globals.MapModeManager.SetCurrentMapMode("Provinces"); // Default map mode
+         InitMapModes(ref LoadingLog);
          GC.Collect();
          LoadingLog.Close();
          LoadingLog = null!;
@@ -58,6 +55,21 @@ namespace Editor
          Globals.HistoryManager.UndoDepthChanged += UpdateUndoDepth;
          Globals.HistoryManager.RedoDepthChanged += UpdateRedoDepth;
 
+      }
+
+      private void InitMapModes(ref Log log)
+      {
+
+         var sw = Stopwatch.StartNew();
+         Globals.MapModeManager = new(MapPictureBox); // Initialize the MapModeManager
+         //Globals.MapModeManager.SetCurrentMapMode("Provinces"); // Default map mode
+         foreach (var mode in Globals.MapModeManager.GetMapModes())
+         {
+            MapModeComboBox.Items.Add(mode.GetMapModeName());
+         }
+         MapModeComboBox.SelectedIndex = 0;
+         sw.Stop();
+         log.WriteTimeStamp("Initializing MapModes", sw.ElapsedMilliseconds);
       }
 
 
@@ -131,6 +143,17 @@ namespace Editor
       private void debugToolStripMenuItem_Click(object sender, EventArgs e)
       {
          DebugMaps.MapModeDrawing();
+      }
+
+      private void MapModeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+      {
+         Globals.MapModeManager.SetCurrentMapMode(MapModeComboBox.SelectedItem.ToString());
+         GC.Collect(); // We force the garbage collector to collect the old bitmap
+      }
+
+      private void gCToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         GC.Collect();
       }
    }
 }

@@ -102,7 +102,11 @@
     <Compile Include="Loading\RegionLoading.cs" />
     <Compile Include="Loading\SuperRegionLoading.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="MapModes\AreaMapMode.cs" />
+    <Compile Include="MapModes\ContinentMapMode.cs" />
     <Compile Include="MapModes\ProvinceMapMode.cs" />
+    <Compile Include="MapModes\RegionsMapMode.cs" />
+    <Compile Include="MapModes\SuperRegionMapMode.cs" />
     <Compile Include="MapWindow.cs">
       <SubType>Form</SubType>
     </Compile>
