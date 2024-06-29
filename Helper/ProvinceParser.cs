@@ -53,6 +53,23 @@ public static class ProvinceParser
 
    }
 
+   private static List<HistoryEntry> ParseHistoriesFromStream(string path)
+   {
+      if (!File.Exists(path))
+         throw new Exception($"File does not exist: {path} or can not access");
+
+      using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
+      using var reader = new StreamReader(fileStream);
+
+      List<HistoryEntry> entries = [];
+      var regex = new Regex(DATE_PATTERN);
+
+      while (!reader.EndOfStream)
+      {
+         
+      }
+   }
+
    private static List<HistoryEntry> ParseHistoryEntriesFromFile(string file)
    {
       if (!IO.ReadAllInANSI(file, out var fileContent))
