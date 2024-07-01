@@ -8,6 +8,16 @@ namespace Editor;
 public static class DebugPrints
 {
 
+   public static void PrintProvinceHistories()
+   {
+      var sb = new StringBuilder();
+      foreach (var province in Globals.Provinces.Values)
+      {
+         
+      }
+      File.WriteAllText(@"C:\Users\david\Downloads\provinceHistoriesDEBUG.txt", sb.ToString());
+   }
+
    public static void TestHistory()
    {
       var history = new HistoryManager(new CInitial());

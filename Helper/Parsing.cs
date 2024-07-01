@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Text.RegularExpressions;
 using Editor.DataClasses;
+using Group = Editor.DataClasses.Group;
 
 namespace Editor.Helper;
 
@@ -98,6 +101,12 @@ public static class Parsing
       return index == -1 ? line : line.Substring(0, index);
    }
 
+   public static string GetCommentFromLine(string line)
+   {
+      var index = line.IndexOf('#');
+      return index == -1 ? "" : line.Substring(index + 1);
+   }
+
    public static (string, string) RemoveAndGetCommentFromString(string str)
    {
       var index = str.IndexOf('#');
@@ -113,4 +122,38 @@ public static class Parsing
          strList.Add(match.ToString().Trim());
       return strList;
    }
+
+   public static List<Group> GetGroups(ref string value, int index, out int last)
+   {
+      List<Group> groups = [];
+      Stack<int> stack = [];
+      last = index;
+
+      for (var i = index; i < value.Length; i++)
+      {
+         var c = value[i];
+         if (c == '{')
+            stack.Push(i);
+         else if (value[i] == '}')
+         {
+            if (stack.Count == 0)
+               throw new ProvinceParsingException(i, value);
+
+            var start = stack.Pop();
+            groups.Add(new (start, i, value.Substring (start, i - start + 1)));
+            if (stack.Count == 0)
+            {
+               last = i;
+               break;
+            }
+         }
+      }
+      if (stack.Count > 0)
+         throw new ProvinceParsingException(value.Length, value);
+      return groups;
+   }
+
 }
+
+
+public class ProvinceParsingException(int index, string value) : Exception($"Could not parse province at index {index}: {value}");

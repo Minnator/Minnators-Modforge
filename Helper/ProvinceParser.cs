@@ -5,9 +5,17 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using Editor.DataClasses;
+using Group = Editor.DataClasses.Group;
 
 namespace Editor.Helper;
+
+public struct ParsingProvince(List<HistoryEntry> entries, string remainder)
+{
+   public List<HistoryEntry> Entries = entries;
+   public string Remainder = remainder;
+}
 
 public static class ProvinceParser
 {
@@ -18,21 +26,23 @@ public static class ProvinceParser
    {
       var sw = Stopwatch.StartNew();
       var files = FilesHelper.GetFilesFromModAndVanillaUniquely(modFolder, vanillaFolder, "history", "provinces");
-      Dictionary<int, List<HistoryEntry>> entries = [];
-      ParseIdsFromFileNames(files, entries);
+      Dictionary<int, ParsingProvince> entries = [];
+      ParseProvinces(files, entries);
 
       sw.Stop();
       Debug.WriteLine($"Parsing provinces took {sw.ElapsedMilliseconds} ms");
 
       var totalEntryCount = 0;
       foreach (var entry in entries) 
-         totalEntryCount += entry.Value.Count;
+         totalEntryCount += entry.Value.Entries.Count;
 
       Debug.WriteLine($"Total entries: {totalEntryCount}");
 
+      Debug.WriteLine(entries[1].Remainder);
+
    }
 
-   private static void ParseIdsFromFileNames(List<string> files, Dictionary<int, List<HistoryEntry>> entries)
+   private static void ParseProvinces(List<string> files, Dictionary<int, ParsingProvince> entries)
    {
       var idPattern = new Regex(ID_FROM_FILE_NAME_PATTERN);
       
@@ -42,7 +52,9 @@ public static class ProvinceParser
          if (!match.Success || !int.TryParse(match.Groups[1].Value, out var id))
             throw new Exception($"Could not parse province id from file name: {file}\nCould not match \'<number> - <.*>\'");
 
-         entries.Add(id, ParseHistoryEntriesFromFile(file));
+         var historyEntries = ParesHistoryFile(file, out var remainder);
+
+         entries.Add(id, new (historyEntries, remainder));
 
          // Percentage of completion
          if (entries.Count % 20 == 0)
@@ -53,21 +65,45 @@ public static class ProvinceParser
 
    }
 
-   private static List<HistoryEntry> ParseHistoriesFromStream(string path)
+   private static List<HistoryEntry> ParesHistoryFile(string path, out string remainder)
    {
       if (!File.Exists(path))
          throw new Exception($"File does not exist: {path} or can not access");
-
-      using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
-      using var reader = new StreamReader(fileStream);
-
-      List<HistoryEntry> entries = [];
+      IO.ReadAllInANSI(path, out var fileContent );
+      
+      var entries = new List<HistoryEntry>();
       var regex = new Regex(DATE_PATTERN);
+      var endOfLastMatch = 0;
+      remainder = fileContent;
 
-      while (!reader.EndOfStream)
+      while (true)
       {
-         
+         // Match and parse the date
+         var match = regex.Match(fileContent, endOfLastMatch);
+         if (!match.Success)
+            break;
+         if (!DateTime.TryParse(match.Value, out var date))
+            throw new Exception($"Could not parse date: {match.Value} at position {match.Index} in file {path}");
+
+         var groups = Parsing.GetGroups(ref fileContent, match.Index, out var last);
+
+         endOfLastMatch = last + 1;
+         var historyContent = fileContent.Substring(match.Index, endOfLastMatch - match.Index);
+         var (content, comment) = Parsing.RemoveAndGetCommentFromString(historyContent);
+         HistoryEntry entry = new(date, content, groups, comment)
+         {
+            Start = match.Index,
+            End = endOfLastMatch
+         };
+         entries.Add(entry);
       }
+
+      for (var i = entries.Count - 1; i >= 0; i--)
+      {
+         remainder = remainder.Remove(entries[i].Start, entries[i].End - entries[i].Start);
+      }
+
+      return entries;
    }
 
    private static List<HistoryEntry> ParseHistoryEntriesFromFile(string file)
@@ -83,7 +119,6 @@ public static class ProvinceParser
 
       while (true)
       {
-
          var match = regex.Match(fileContent, eol);
          if (!match.Success)
             break;
