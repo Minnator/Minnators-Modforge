@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using Editor.Commands;
 using Editor.DataClasses;
+using Editor.Helper;
 using Region = Editor.DataClasses.Region;
 
 namespace Editor;
@@ -27,6 +28,10 @@ public enum MapMode
 //contains all required and used data across the application and instances of forms.
 public static class Globals
 {
+   //TEMP
+   public static List<ParsingProvince> ParsingProvinces = null!;
+
+
    // History Manager
    public static readonly HistoryManager HistoryManager = new(new CInitial());
 
@@ -46,6 +51,9 @@ public static class Globals
    public static Dictionary<int, Province> Provinces = null!;
    public static Dictionary<Color, int> ColorToProvId = null!;
    public static Dictionary<int, int[]> AdjacentProvinces = null!;
+
+   // Country Groups
+   public static Dictionary<Tag, Country> Countries = null!;
 
    // Province Groups
    public static HashSet<int> LandProvinces = null!;

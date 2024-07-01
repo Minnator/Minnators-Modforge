@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
-using Editor.DataClasses;
 using Group = Editor.DataClasses.Group;
 
 namespace Editor.Helper;
@@ -132,13 +130,14 @@ public static class Parsing
       List<Group> groups = [];
       Stack<int> stack = [];
       last = index;
+      var len = value.Length;
 
-      for (var i = index; i < value.Length; i++)
+      for (var i = index; i < len; i++)
       {
          var c = value[i];
          if (c == '{')
             stack.Push(i);
-         else if (value[i] == '}')
+         else if (c == '}')
          {
             if (stack.Count == 0)
                throw new ProvinceParsingException(i, value);
@@ -153,10 +152,14 @@ public static class Parsing
          }
       }
       if (stack.Count > 0)
-         throw new ProvinceParsingException(value.Length, value);
+         throw new ProvinceParsingException(len, value);
       return groups;
    }
 
+   public static bool YesNo (string value)
+   {
+      return value.ToLower().Equals("yes");
+   }
 }
 
 

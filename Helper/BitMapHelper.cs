@@ -113,14 +113,14 @@ public class BitMapHelper
          Parallel.ForEach(collection, options, collect =>
          {
             //MapDrawHelper.GetAllPixelPoints(collect.GetProvinceIds(), out var points);
-            MapDrawHelper.GetAllPixelPtrs(collect.GetProvinceIds(), out var ptrs);
+            MapDrawHelper.GetAllPixelPtrs(collect.GetProvinceIds(), out var id);
             var color = collect.Color;
 
             var ptr = (byte*)bitmapData.Scan0;
 
-            for (var i = 0; i < ptrs.GetLength(0); i++)
+            for (var i = 0; i < id.GetLength(0); i++)
             {
-               for (var j = ptrs[i, 0]; j < ptrs[i, 1] + ptrs[i, 0]; j++)
+               for (var j = id[i, 0]; j < id[i, 1] + id[i, 0]; j++)
                {
                   var point = pixels[j];
                   var index = pixels[j].Y * stride + point.X * bytesPerPixel;

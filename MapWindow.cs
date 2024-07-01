@@ -141,9 +141,9 @@ namespace Editor
 
       #endregion
 
-      private void debugToolStripMenuItem_Click(object sender, EventArgs e)
+      private  void debugToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         DebugMaps.MapModeDrawing();
+         DebugPrints.PrintAllAttributes(Globals.ParsingProvinces);
       }
 
       private void MapModeComboBox_SelectedIndexChanged(object sender, EventArgs e)

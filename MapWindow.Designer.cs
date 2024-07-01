@@ -30,6 +30,7 @@
       {
          this.MapMenuStrip = new System.Windows.Forms.MenuStrip();
          this.filesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+         this.gCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.historyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.selectionHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.DeleteHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,7 +46,6 @@
          this.RedoDepthLabel = new System.Windows.Forms.ToolStripLabel();
          this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
          this.SelectedProvinceSum = new System.Windows.Forms.ToolStripLabel();
-         this.gCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.MapMenuStrip.SuspendLayout();
          this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
          this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -73,6 +73,13 @@
          this.filesToolStripMenuItem.Name = "filesToolStripMenuItem";
          this.filesToolStripMenuItem.Size = new System.Drawing.Size(42, 23);
          this.filesToolStripMenuItem.Text = "Files";
+         // 
+         // gCToolStripMenuItem
+         // 
+         this.gCToolStripMenuItem.Name = "gCToolStripMenuItem";
+         this.gCToolStripMenuItem.Size = new System.Drawing.Size(90, 22);
+         this.gCToolStripMenuItem.Text = "GC";
+         this.gCToolStripMenuItem.Click += new System.EventHandler(this.gCToolStripMenuItem_Click);
          // 
          // historyToolStripMenuItem
          // 
@@ -196,13 +203,6 @@
          this.SelectedProvinceSum.Name = "SelectedProvinceSum";
          this.SelectedProvinceSum.Size = new System.Drawing.Size(49, 22);
          this.SelectedProvinceSum.Text = "ProSum";
-         // 
-         // gCToolStripMenuItem
-         // 
-         this.gCToolStripMenuItem.Name = "gCToolStripMenuItem";
-         this.gCToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-         this.gCToolStripMenuItem.Text = "GC";
-         this.gCToolStripMenuItem.Click += new System.EventHandler(this.gCToolStripMenuItem_Click);
          // 
          // MapWindow
          // 
