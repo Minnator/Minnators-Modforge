@@ -41,10 +41,6 @@ public static class ProvinceParser
       Dictionary<int, ParsingProvince> entries = [];
       ParseProvinces(files, entries);
       
-      sw.Stop();
-      Debug.WriteLine($"Parsing provinces took {sw.ElapsedMilliseconds} ms for {entries.Count}");
-      sw.Restart();
-
       foreach (var entry in entries.Values)
       {
          if (entry == null)
@@ -54,14 +50,9 @@ public static class ProvinceParser
          entry.Attributes = attributes;
       }
 
-      sw.Stop();
-      Debug.WriteLine($"Parsing attributes took {sw.ElapsedMilliseconds} ms for {entries.Count}");
-
-      sw.Restart();
       AssignProvinceAttributes([.. entries.Values]);
       sw.Stop();
-      Debug.WriteLine($"Assigning attributes took {sw.ElapsedMilliseconds} ms for {entries.Count}");
-
+      Debug.WriteLine($"Parsing provinces took {sw.ElapsedMilliseconds} ms for {entries.Count}");
    }
 
    private static void ParseProvinces(List<string> files, Dictionary<int, ParsingProvince> entries)

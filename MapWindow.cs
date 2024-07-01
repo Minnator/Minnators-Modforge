@@ -143,7 +143,7 @@ namespace Editor
 
       private  void debugToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         DebugPrints.PrintAllAttributes(Globals.ParsingProvinces);
+
       }
 
       private void MapModeComboBox_SelectedIndexChanged(object sender, EventArgs e)
