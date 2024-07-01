@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -61,7 +62,6 @@ public static class ProvinceParser
       sw.Stop();
       Debug.WriteLine($"Assigning attributes took {sw.ElapsedMilliseconds} ms for {entries.Count}");
 
-      Globals.ParsingProvinces = [.. entries.Values];
    }
 
    private static void ParseProvinces(List<string> files, Dictionary<int, ParsingProvince> entries)
@@ -83,18 +83,23 @@ public static class ProvinceParser
          return;
       StringBuilder sb = new(content);
 
-      var matches = AttributeRegex.Matches(content);
-      foreach (Match match in matches)
+      var lines = content.Split('\n');
+
+      for (var index = lines.Length - 1; index >= 0; index--)
       {
+         var lineContent = Parsing.RemoveAndGetCommentFromString(lines[index]);
+         var match = AttributeRegex.Match(lineContent);
+
+         if (!match.Success)
+            continue;
          var key = match.Groups["key"].Value;
          if (!UniqueAttributeKeys.Contains(key))
             continue;
          var value = match.Groups["value"].Value;
          attributes.Add(new(key, value));
-      }
 
-      for (var i = matches.Count - 1; i >= 0; i--)
-         sb.Remove(matches[i].Index, matches[i].Length);
+         sb.Remove(match.Index, match.Length);
+      }
    }
 
    private static List<HistoryEntry> ParesHistoryFromProvinceFile(string path, out string remainder)

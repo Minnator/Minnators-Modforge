@@ -28,10 +28,6 @@ public enum MapMode
 //contains all required and used data across the application and instances of forms.
 public static class Globals
 {
-   //TEMP
-   public static List<ParsingProvince> ParsingProvinces = null!;
-
-
    // History Manager
    public static readonly HistoryManager HistoryManager = new(new CInitial());
 

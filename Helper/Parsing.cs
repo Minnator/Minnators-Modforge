@@ -109,10 +109,10 @@ public static class Parsing
       return index == -1 ? "" : line.Substring(index + 1);
    }
 
-   public static (string, string) RemoveAndGetCommentFromString(string str)
+   public static string RemoveAndGetCommentFromString(string str)
    {
       var index = str.IndexOf('#');
-      return index == -1 ? (str, "") : (str.Substring(0, index), str.Substring(index + 1));
+      return index == -1 ? str : str.Substring(0, index);
    }
 
    public static List<string> GetStringList(string value)
