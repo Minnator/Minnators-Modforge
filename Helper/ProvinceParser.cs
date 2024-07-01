@@ -47,7 +47,7 @@ public static class ProvinceParser
       {
          var match = IdRegex.Match(file);
          if (!match.Success || !int.TryParse(match.Groups[1].Value, out var id))
-            throw new($"Could not parse province id from file name: {file}\nCould not match \'<number> - <.*>\'");
+            throw new($"Could not parse province id from file name: {file}\nCould not match \'<number> <.*>\'");
 
          var historyEntries = ParesHistoryFile(file, out var remainder);
 
