@@ -25,7 +25,8 @@ internal static class IO
          return false;
       try
       {
-         data = File.ReadAllText(path, encoding);
+         using StreamReader reader = new (path, encoding);
+         data = reader.ReadToEnd();
          return true;
       }
       catch (IOException)

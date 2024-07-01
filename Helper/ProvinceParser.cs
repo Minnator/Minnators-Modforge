@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Editor.DataClasses;
@@ -38,8 +39,6 @@ public static class ProvinceParser
 
       Debug.WriteLine($"Total entries: {totalEntryCount}");
 
-      Debug.WriteLine(entries[1].Remainder);
-
    }
 
    private static void ParseProvinces(List<string> files, Dictionary<int, ParsingProvince> entries)
@@ -57,11 +56,12 @@ public static class ProvinceParser
          entries.Add(id, new (historyEntries, remainder));
 
          // Percentage of completion
-         if (entries.Count % 20 == 0)
+         if (entries.Count % 500 == 0)
          {
-            Debug.WriteLine($"{entries.Count,4} / {files.Count,4} [{entries.Count * 100 / files.Count,3}%] files parsed");
+            Debug.WriteLine($"[{entries.Count * 100 / files.Count,3}%] files parsed");
          }
       }
+      Debug.WriteLine($"[100%] files parsed");
 
    }
 
@@ -69,8 +69,8 @@ public static class ProvinceParser
    {
       if (!File.Exists(path))
          throw new Exception($"File does not exist: {path} or can not access");
-      IO.ReadAllInANSI(path, out var fileContent );
-      
+      IO.ReadAllInANSI(path, out var fileContent);
+
       var entries = new List<HistoryEntry>();
       var regex = new Regex(DATE_PATTERN);
       var endOfLastMatch = 0;
@@ -86,22 +86,24 @@ public static class ProvinceParser
             throw new Exception($"Could not parse date: {match.Value} at position {match.Index} in file {path}");
 
          var groups = Parsing.GetGroups(ref fileContent, match.Index, out var last);
-
+         var eol = Parsing.GetLineEndingAfterComment(last, ref fileContent);
          endOfLastMatch = last + 1;
          var historyContent = fileContent.Substring(match.Index, endOfLastMatch - match.Index);
          var (content, comment) = Parsing.RemoveAndGetCommentFromString(historyContent);
          HistoryEntry entry = new(date, content, groups, comment)
          {
             Start = match.Index,
-            End = endOfLastMatch
+            End = Math.Max(eol, endOfLastMatch)
          };
          entries.Add(entry);
       }
 
+      StringBuilder remainderBuilder = new(remainder);
       for (var i = entries.Count - 1; i >= 0; i--)
       {
-         remainder = remainder.Remove(entries[i].Start, entries[i].End - entries[i].Start);
+         remainderBuilder.Remove(entries[i].Start, entries[i].End - entries[i].Start);
       }
+      remainder = remainderBuilder.ToString();
 
       return entries;
    }
