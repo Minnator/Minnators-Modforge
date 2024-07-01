@@ -85,12 +85,16 @@ public static class Parsing
       return (-1, -1);
    }
 
-   public static int GetLineEndingAfterComment(int index, ref string str)
+   public static int GetLineEndingAfterComment(int index, ref string str, out string comment)
    {
+      comment = string.Empty;
       for (var i = index; i < str.Length; i++)
       {
          if (str[i] == '\n')
+         {
+            comment = str.Substring(index, i - index);
             return i;
+         }
       }
       return -1;
    }
