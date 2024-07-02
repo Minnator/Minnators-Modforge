@@ -1,13 +1,16 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+using Editor.Helper;
 
 namespace Editor.MapModes;
 
 public sealed class ProvinceIdMapMode : Interfaces.MapMode
 {
-
-   public ProvinceIdMapMode()
+   public override void RenderMapMode(Func<int, Color> method)
    {
-      RenderMapMode(GetProvinceColor);
+      Bitmap?.Dispose();
+      Bitmap = BitMapHelper.GenerateBitmapFromProvinces(GetProvinceColor);
+      MapDrawHelper.DrawAllProvinceBorders(Bitmap, Color.Black);
    }
 
    public override string GetMapModeName()

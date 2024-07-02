@@ -10,7 +10,7 @@ public sealed class ContinentMapMode : Interfaces.MapMode
 {
    public ContinentMapMode()
    {
-      RenderMapMode(GetProvinceColor);
+
    }
 
    public override string GetMapModeName()

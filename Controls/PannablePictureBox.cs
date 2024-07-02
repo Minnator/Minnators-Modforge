@@ -148,6 +148,8 @@ public sealed class PannablePictureBox : PictureBox
 
    private void PictureBox1_MouseMove(object sender, MouseEventArgs e)
    {
+      if (Globals.State == State.Loading || Globals.State == State.Initializing)
+         return;
       // ------------------------------ Out of Bounds Check ------------------------------
       if (Image == null! || e.X < 0 || e.Y < 0 || e.X >= Image.Width || e.Y >= Image.Height)
          return;

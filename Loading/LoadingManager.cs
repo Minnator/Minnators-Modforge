@@ -8,24 +8,24 @@ namespace Editor.Loading;
 
 public static class LoadingManager
 {
-   public static void LoadGameAndModDataToApplication(ModProject project, ref Log LoadingLog, MapWindow mw)
+   public static void LoadGameAndModDataToApplication(ModProject project, ref Log loadingLog, MapWindow mw)
    {
 
-      LoadDefinitionAndMap(ref LoadingLog, project);
-      DefaultMapLoading.Load(project.VanillaPath, ref LoadingLog);
-      AreaLoading.Load(project.VanillaPath, project.ColorProvider, ref LoadingLog);
-      RegionLoading.Load(project.VanillaPath, project.ColorProvider, ref LoadingLog);
-      SuperRegionLoading.Load(project.VanillaPath, project.ColorProvider, ref LoadingLog);
-      ContinentLoading.Load(project.VanillaPath, ref LoadingLog);
-      LocalisationLoading.Load(project.ModPath, project.VanillaPath, project.Language, ref LoadingLog);
-      ProvinceParser.ParseAllProvinces(project.ModPath, project.VanillaPath, ref LoadingLog);
+      LoadDefinitionAndMap(ref loadingLog, project);
+      DefaultMapLoading.Load(project.VanillaPath, ref loadingLog);
+      AreaLoading.Load(project.VanillaPath, project.ColorProvider, ref loadingLog);
+      RegionLoading.Load(project.VanillaPath, project.ColorProvider, ref loadingLog);
+      SuperRegionLoading.Load(project.VanillaPath, project.ColorProvider, ref loadingLog);
+      ContinentLoading.Load(project.VanillaPath, ref loadingLog);
+      LocalisationLoading.Load(project.ModPath, project.VanillaPath, project.Language, ref loadingLog);
+      ProvinceParser.ParseAllProvinces(project.ModPath, project.VanillaPath, ref loadingLog);
 
       // MUST BE LAST in the loading sequence
-      InitMapModes(ref LoadingLog, mw);
+      InitMapModes(ref loadingLog, mw);
       
       GC.Collect();
-      LoadingLog.Close();
-      LoadingLog = null!;
+      loadingLog.Close();
+      loadingLog = null!;
    }
 
    public static void InitializeComponents(MapWindow mw)
@@ -44,7 +44,9 @@ public static class LoadingManager
 
       var sw = Stopwatch.StartNew();
       Globals.MapModeManager = new(mw.MapPictureBox); // Initialize the MapModeManager
-      //Globals.MapModeManager.SetCurrentMapMode("Provinces"); // Default map mode
+      Globals.MapModeManager.InitializeAllMapModes(); // Initialize all map modes
+      Globals.MapModeManager.SetCurrentMapMode("Provinces"); // Default map mode
+
       foreach (var mode in Globals.MapModeManager.GetMapModes())
       {
          mw.MapModeComboBox.Items.Add(mode.GetMapModeName());

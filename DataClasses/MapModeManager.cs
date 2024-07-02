@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using Editor.Controls;
 using Editor.Loading;
@@ -12,27 +14,30 @@ public class MapModeManager
 {
    private List<Interfaces.MapMode> MapModes { get; } = [];
    private Interfaces.MapMode CurrentMapMode { get; set; } = null!;
-   private Interfaces.MapMode IdMapMode { get; set; } = null!;
+   private ProvinceIdMapMode IdMapMode { get; set; } = null!;
    private PannablePictureBox PictureBox { get; set; }
+   public Bitmap ShareLiveBitmap { get; set; }
 
    public MapModeManager(PannablePictureBox pictureBox)
    {
       PictureBox = pictureBox;
-      InitializeAllMapModes();
+      ShareLiveBitmap = new(Globals.MapWidth, Globals.MapHeight, PixelFormat.Format24bppRgb);
    }
 
-   private void InitializeAllMapModes()
+   public void InitializeAllMapModes()
    {
       MapModes.Add(new ProvinceMapMode());
       MapModes.Add(new AreaMapMode());
       MapModes.Add(new RegionsMapMode());
       MapModes.Add(new SuperRegionMapMode());
       MapModes.Add(new ContinentMapMode());
-      MapModes.Add(new ProvinceIdMapMode());
 
 
       // We set the default map mode to retrieve province colors
-      IdMapMode = GetMapMode("Provinces");
+
+      IdMapMode = new ();
+      IdMapMode.RenderMapMode(IdMapMode.GetProvinceColor);
+
    }
    
    public List<Interfaces.MapMode> GetMapModes()
@@ -56,7 +61,13 @@ public class MapModeManager
    public void SetCurrentMapMode(string name)
    {
       CurrentMapMode = GetMapMode(name);
-      PictureBox.Image = CurrentMapMode.Bitmap; // We point the PictureBox to the new bitmap
+      if (Globals.MapModeRendering == MapModeRendering.Live)
+      {
+         CurrentMapMode.RenderMapMode(CurrentMapMode.GetProvinceColor);
+         PictureBox.Image = ShareLiveBitmap;
+      }
+      else
+         PictureBox.Image = CurrentMapMode.Bitmap; // We point the PictureBox to the new bitmap
       PictureBox.Invalidate(); // We force the PictureBox to redraw
    }
 
@@ -70,5 +81,4 @@ public class MapModeManager
       province = null!;
       return false;
    }
-
 }

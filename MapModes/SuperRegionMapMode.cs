@@ -10,7 +10,7 @@ public sealed class SuperRegionMapMode : Interfaces.MapMode
 {
    public SuperRegionMapMode()
    {
-      RenderMapMode(GetProvinceColor);
+
    }
 
 

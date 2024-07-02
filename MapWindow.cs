@@ -27,10 +27,16 @@ namespace Editor
 
       public MapWindow()
       {
+         //pause gui updates
+         SuspendLayout();
          InitGui();
 
          LoadingManager.LoadGameAndModDataToApplication(Project, ref LoadingLog, this);
          LoadingManager.InitializeComponents(this);
+
+         //resume gui updates
+         ResumeLayout();
+         Globals.State = State.Running;
       }
 
 

@@ -13,15 +13,6 @@ public enum HistoryType
    Action
 }
 
-public enum MapMode
-{
-   Provinces = 1, //default
-   Areas = 2,
-   Regions = 3,
-   SuperRegions = 4,
-   Continents = 5,
-}
-
 public enum State
 {
    Loading,
@@ -30,11 +21,20 @@ public enum State
    Waiting
 }
 
+public enum MapModeRendering
+{
+   Live,
+   LiveBackground,
+   Cached,
+}
+
 //contains all required and used data across the application and instances of forms.
 public static class Globals
 {
    // Contains the current state of the application
    public static State State = State.Loading;
+
+   public static MapModeRendering MapModeRendering { get; set; } = MapModeRendering.Live;
 
    // History Manager
    public static readonly HistoryManager HistoryManager = new(new CInitial());

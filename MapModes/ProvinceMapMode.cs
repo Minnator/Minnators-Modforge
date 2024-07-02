@@ -10,7 +10,7 @@ public sealed class ProvinceMapMode : Interfaces.MapMode
 {
    public ProvinceMapMode()
    {
-      RenderMapMode(GetProvinceColor);
+
    }
 
    public override string GetMapModeName()
