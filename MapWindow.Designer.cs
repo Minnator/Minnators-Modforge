@@ -249,7 +249,7 @@
       private System.Windows.Forms.ToolStripMenuItem selectionHistoryToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem DeleteHistoryToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
-      private System.Windows.Forms.ToolStripComboBox MapModeComboBox;
+      public System.Windows.Forms.ToolStripComboBox MapModeComboBox;
       private System.Windows.Forms.ToolStripMenuItem gCToolStripMenuItem;
    }
 }

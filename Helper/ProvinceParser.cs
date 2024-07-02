@@ -38,13 +38,16 @@ public static class ProvinceParser
       "add_claim", "add_core", "add_local_autonomy", "add_nationalism", "base_manpower", "base_production", "base_tax", "capital", "center_of_trade", "controller", "culture", "discovered_by", "extra_cost", "fort_15th", "hre", "is_city", "native_ferocity", "native_hostileness", "native_size", "owner", "religion", "seat_in_parliament", "trade_goods", "tribal_owner", "unrest", "shipyard", "revolt_risk"
       ];
 
-   public static void ParseAllProvinces(string modFolder, string vanillaFolder)
+   public static void ParseAllProvinces(string modFolder, string vanillaFolder, ref Log loadingLog)
    {
-      var files = FilesHelper.GetFilesFromModAndVanillaUniquely(modFolder, vanillaFolder, "history", "provinces");
-      
       var sw = Stopwatch.StartNew();
 
+      var files = FilesHelper.GetFilesFromModAndVanillaUniquely(modFolder, vanillaFolder, "history", "provinces");
       ParseProvinces(files, out var entries);
+
+      sw.Stop();
+      loadingLog.WriteTimeStamp("Parsing provinces", sw.ElapsedMilliseconds);
+      sw.Restart();
 
       foreach (var entry in entries.Values)
       {
@@ -56,8 +59,8 @@ public static class ProvinceParser
 
       AssignProvinceAttributes([.. entries.Values]);
       sw.Stop();
-      Debug.WriteLine($"Parsing provinces took {sw.ElapsedMilliseconds} ms for {entries.Count}");
-
+      loadingLog.WriteTimeStamp("Assigning province attributes", sw.ElapsedMilliseconds);
+      Debug.WriteLine($"Parsing and Init of provinces took {sw.ElapsedMilliseconds} ms for {entries.Count}");
    }
 
    private static void GetMultilineAttributes(string entryRemainder, out List<MultilineAttribute> attrs)

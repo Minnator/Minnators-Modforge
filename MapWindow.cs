@@ -16,8 +16,6 @@ namespace Editor
       public readonly Log LoadingLog = new (@"C:\Users\david\Downloads", "Loading");
       public readonly Log ErrorLog = new (@"C:\Users\david\Downloads", "Error");
 
-      public readonly string? ApplicationName;
-
       public PannablePictureBox MapPictureBox = null!;
 
       public ModProject Project = new ()
@@ -29,48 +27,10 @@ namespace Editor
 
       public MapWindow()
       {
-         ApplicationName = Process.GetCurrentProcess().ProcessName;
-
          InitGui();
 
-
-         LoadDefinitionAndMap(ref LoadingLog);
-         DefaultMapLoading.Load(Project.VanillaPath, ref LoadingLog);
-         AreaLoading.Load(Project.VanillaPath, Project.ColorProvider, ref LoadingLog);
-         RegionLoading.Load(Project.VanillaPath, Project.ColorProvider, ref LoadingLog);
-         SuperRegionLoading.Load(Project.VanillaPath, Project.ColorProvider, ref LoadingLog);
-         ContinentLoading.Load(Project.VanillaPath, ref LoadingLog);
-         LocalisationLoading.Load(Project.ModPath, Project.VanillaPath, Project.Language, ref LoadingLog);
-
-
-         // MUST BE LAST in the loading sequence
-         InitMapModes(ref LoadingLog);
-         GC.Collect();
-         LoadingLog.Close();
-         LoadingLog = null!;
-
-         ResourceUsageHelper.Initialize(this);
-         //HistoryResourceHelper.Initialize(this);
-
-         Globals.HistoryManager.UndoDepthChanged += UpdateUndoDepth;
-         Globals.HistoryManager.RedoDepthChanged += UpdateRedoDepth;
-
-         ProvinceParser.ParseAllProvinces(Project.ModPath, Project.VanillaPath);
-      }
-
-      private void InitMapModes(ref Log log)
-      {
-
-         var sw = Stopwatch.StartNew();
-         Globals.MapModeManager = new(MapPictureBox); // Initialize the MapModeManager
-         //Globals.MapModeManager.SetCurrentMapMode("Provinces"); // Default map mode
-         foreach (var mode in Globals.MapModeManager.GetMapModes())
-         {
-            MapModeComboBox.Items.Add(mode.GetMapModeName());
-         }
-         MapModeComboBox.SelectedIndex = 0;
-         sw.Stop();
-         log.WriteTimeStamp("Initializing MapModes", sw.ElapsedMilliseconds);
+         LoadingManager.LoadGameAndModDataToApplication(Project, ref LoadingLog, this);
+         LoadingManager.InitializeComponents(this);
       }
 
 
@@ -82,16 +42,6 @@ namespace Editor
          MapPanel.Controls.Add(MapPictureBox);
       }
 
-      private void LoadDefinitionAndMap(ref Log loadingLog)
-      {
-         var provinces = DefinitionLoading.LoadDefinition([.. File.ReadAllLines(Path.Combine(Project.VanillaPath, "map", "definition.csv"))], ref loadingLog);
-         Globals.MapPath = Path.Combine(Project.VanillaPath, "map", "provinces.bmp");
-         var (colorToProvId, colorToBorder, adjacency) = MapLoading.LoadMap(ref loadingLog, Globals.MapPath);
-
-         Optimizer.OptimizeProvinces(provinces, colorToProvId, colorToBorder, Project.MapSize.Width * Project.MapSize.Height, ref loadingLog);
-
-         Optimizer.OptimizeAdjacencies(adjacency, ref loadingLog);
-      }
 
 
       #region ToolStrip update methods
@@ -115,8 +65,9 @@ namespace Editor
       #endregion
 
       #region HistoryManager Event Handlers
-      private void UpdateRedoDepth(object sender, int e) => RedoDepthLabel.Text = $"Redos [{e}]";
-      private void UpdateUndoDepth(object sender, int e) => UndoDepthLabel.Text = $"Undos [{e}]";
+
+      public void UpdateRedoDepth(object sender, int e) => RedoDepthLabel.Text = $"Redos [{e}]";
+      public void UpdateUndoDepth(object sender, int e) => UndoDepthLabel.Text = $"Undos [{e}]";
       #endregion
       #endregion
 

@@ -26,6 +26,7 @@ public enum State
 {
    Loading,
    Running,
+   Initializing,
    Waiting
 }
 
