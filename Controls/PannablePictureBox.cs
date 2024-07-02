@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.Windows.Forms;
 using Editor.Commands;
 using Editor.DataClasses;
+using Editor.Forms;
 using Editor.Helper;
 
 namespace Editor.Controls;
@@ -15,6 +16,10 @@ public sealed class PannablePictureBox : PictureBox
 {
    public bool IsPainting; // Prevents double locking of bitmaps when painting
    public event EventHandler ImageChanged = null!;
+
+   // ------------------------------ ToolTip ------------------------------
+   public ToolTip MapToolTip = new(); // Contains the tooltip for the map
+   public bool ShowToolTip { get; set; } = true; // If true, the tooltip will be shown
 
    // ------------------------------ Province Selection ------------------------------
    public Selection Selection; // Contains the selected provinces public to retrieve the selected provinces
@@ -153,7 +158,7 @@ public sealed class PannablePictureBox : PictureBox
       // ------------------------------ Out of Bounds Check ------------------------------
       if (Image == null! || e.X < 0 || e.Y < 0 || e.X >= Image.Width || e.Y >= Image.Height)
          return;
-
+      
       // ------------------------------ Province Selection ------------------------------
       if (ModifierKeys == Keys.Alt && Selection.State == SelectionState.Lasso)
       {
@@ -174,6 +179,10 @@ public sealed class PannablePictureBox : PictureBox
             Invalidate(MapDrawHelper.DrawProvinceBorder(_lastInvalidatedProvince, Color.Transparent, Overlay));
          Invalidate(MapDrawHelper.DrawProvinceBorder(province.Id, Color.Aqua, Overlay));
          _lastInvalidatedProvince = province.Id;
+
+         // Update the tooltip
+         if (ShowToolTip)
+            MapToolTip.SetToolTip(this, ToolTipBuilder.BuildToolTip(Globals.ToolTipText, province.Id));
       }
 
       // ------------------------------ Panning ------------------------------

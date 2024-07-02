@@ -8,6 +8,17 @@ namespace Editor.Forms
       public ToolTipCustomizer()
       {
          InitGui();
+         LoadOldToolTip();
+      }
+
+      private void LoadOldToolTip()
+      {
+         foreach (var line in Globals.ToolTipText.Split('\n'))
+         {
+            if (line.Length == 0)
+               continue;
+            ToolTipPreview.Items.Add(line);
+         }
       }
 
       private void InitGui()
@@ -15,7 +26,7 @@ namespace Editor.Forms
          InitializeComponent();
          InputTextBox.AutoCompleteCustomSource.AddRange([.. Globals.ToolTippableAttributes]);
          ToolTipPreview.Columns.Add(new ColumnHeader("Tooltip Row"));
-         ToolTipPreview.View = View.List;
+         ToolTipPreview.View = View.Details;
       }
 
       private void AddButton_Click(object sender, System.EventArgs e)

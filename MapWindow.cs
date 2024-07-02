@@ -1,13 +1,11 @@
-﻿using Editor.Controls;
+﻿using System;
+using System.Drawing.Imaging;
+using System.Windows.Forms;
+using Editor.Controls;
 using Editor.DataClasses;
+using Editor.Forms;
 using Editor.Helper;
 using Editor.Loading;
-using System;
-using System.Diagnostics;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Windows.Forms;
-using Editor.Forms;
 
 #nullable enable
 
@@ -131,6 +129,11 @@ namespace Editor
          var toolTipCustomizer = new ToolTipCustomizer();
          // Show the ToolTipCustomizer as a popup
          toolTipCustomizer.Show();
+      }
+
+      private void ShowToolTipMenuItem_Click(object sender, EventArgs e)
+      {
+         MapPictureBox.ShowToolTip = ShowToolTipMenuItem.Checked;
       }
    }
 }

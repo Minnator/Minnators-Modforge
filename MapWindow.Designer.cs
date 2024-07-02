@@ -49,6 +49,7 @@
          this.SelectedProvinceSum = new System.Windows.Forms.ToolStripLabel();
          this.toolTipCustomizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.openCustomizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+         this.ShowToolTipMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.MapMenuStrip.SuspendLayout();
          this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
          this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -219,7 +220,8 @@
          // toolTipCustomizerToolStripMenuItem
          // 
          this.toolTipCustomizerToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openCustomizerToolStripMenuItem});
+            this.openCustomizerToolStripMenuItem,
+            this.ShowToolTipMenuItem});
          this.toolTipCustomizerToolStripMenuItem.Name = "toolTipCustomizerToolStripMenuItem";
          this.toolTipCustomizerToolStripMenuItem.Size = new System.Drawing.Size(120, 23);
          this.toolTipCustomizerToolStripMenuItem.Text = "ToolTip Customizer";
@@ -230,6 +232,16 @@
          this.openCustomizerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
          this.openCustomizerToolStripMenuItem.Text = "Open Customizer";
          this.openCustomizerToolStripMenuItem.Click += new System.EventHandler(this.openCustomizerToolStripMenuItem_Click);
+         // 
+         // ShowToolTipMenuItem
+         // 
+         this.ShowToolTipMenuItem.Checked = true;
+         this.ShowToolTipMenuItem.CheckOnClick = true;
+         this.ShowToolTipMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+         this.ShowToolTipMenuItem.Name = "ShowToolTipMenuItem";
+         this.ShowToolTipMenuItem.Size = new System.Drawing.Size(180, 22);
+         this.ShowToolTipMenuItem.Text = "Show ToolTip";
+         this.ShowToolTipMenuItem.Click += new System.EventHandler(this.ShowToolTipMenuItem_Click);
          // 
          // MapWindow
          // 
@@ -281,6 +293,7 @@
       private System.Windows.Forms.ToolStripMenuItem saveCurrentMapModeToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem toolTipCustomizerToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem openCustomizerToolStripMenuItem;
+      private System.Windows.Forms.ToolStripMenuItem ShowToolTipMenuItem;
    }
 }
 

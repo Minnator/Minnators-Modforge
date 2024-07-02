@@ -51,7 +51,7 @@ public static class Globals
    public static string MapPath = null!;
 
    // ToolTip
-   public static string ToolTipText = string.Empty;
+   public static string ToolTipText = $"Id:   [$id$]\nName: [$name$]\nArea: [$area$]";
 
    // Contains the border pixels of the provinces
    public static Point[] BorderPixels = null!;
