@@ -33,3 +33,8 @@ public struct Group(int start, int end, string content)
    public int End { get; set; } = end;
 }
 
+public struct MultilineAttribute(string name, List<KeyValuePair<string, string>> values)
+{
+   public string Name { get; set; } = name;
+   public List<KeyValuePair<string, string>> Values { get; set; } = values;
+}

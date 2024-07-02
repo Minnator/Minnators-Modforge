@@ -2,6 +2,7 @@
 using System.Data;
 using System.Drawing;
 using Editor.Interfaces;
+using static Editor.Helper.ProvinceEventHandler;
 
 namespace Editor.DataClasses;
 
@@ -9,6 +10,32 @@ namespace Editor.DataClasses;
 
 public class Province : IProvinceCollection
 {
+   private List<Tag> _claims = [];
+   private List<Tag> _cores = [];
+   private Tag _controller = Tag.Empty;
+   private Tag _owner = Tag.Empty;
+   private Tag _tribalOwner = Tag.Empty;
+   private int _baseManpower;
+   private int _baseTax;
+   private int _baseProduction;
+   private int _centerOfTrade;
+   private int _extraCost;
+   private int _nativeFerocity;
+   private int _nativeHostileness;
+   private int _nativeSize;
+   private int _revoltRisk;
+   private int _localAutonomy;
+   private int _nationalism;
+   private List<string> _discoveredBy = [];
+   private string _capital = string.Empty;
+   private string _culture = string.Empty;
+   private string _religion = string.Empty;
+   private bool _hasFort15Th;
+   private bool _isHre;
+   private bool _isCity;
+   private bool _isSeatInParliament;
+   private TradeGood _tradeGood;
+
    #region ManagementData
 
    // Management data
@@ -32,30 +59,260 @@ public class Province : IProvinceCollection
 
    #endregion
 
+   #region Observable Province Data
+
    // Province data
-   public List<Tag> Claims { get; set; } = [];
-   public List<Tag> Cores { get; set; } = [];
-   public Tag Controller { get; set; } = Tag.Empty;
-   public Tag Owner { get; set; } = Tag.Empty;
-   public Tag TribalOwner { get; set; } = Tag.Empty;
-   public int BaseManpower { get; set; }
-   public int BaseTax { get; set; }
-   public int BaseProduction { get; set; }
-   public int CenterOfTrade { get; set; }
-   public int ExtraCost { get; set; }
-   public int NativeFerocity { get; set; }
-   public int NativeHostileness { get; set; }
-   public int NativeSize { get; set; }
-   public int RevoltRisk { get; set; }
-   public List<string> DiscoveredBy { get; set; } = [];
-   public string Capital { get; set; } = string.Empty;
-   public string Culture { get; set; } = string.Empty;
-   public string Religion { get; set; } = string.Empty;
-   public bool HasFort15Th { get; set; } // TODO parse to check other buildings
-   public bool IsHre { get; set; }
-   public bool IsCity { get; set; }
-   public bool IsSeatInParliament { get; set; }
-   public TradeGood TradeGood { get; set; }
+   public List<Tag> Claims
+   {
+      get => _claims;
+      set
+      {
+         RaiseProvinceClaimsChanged(Id, value, _claims, nameof(Claims));
+         _claims = value;
+      }
+   }
+
+   public List<Tag> Cores
+   {
+      get => _cores;
+      set
+      {
+         RaiseProvinceCoresChanged(Id, value, _cores, nameof(Cores));
+         _cores = value;
+      }
+   }
+
+   public Tag Controller
+   {
+      get => _controller;
+      set
+      {
+         RaiseProvinceControllerChanged(Id, value, _controller, nameof(Controller));
+         _controller = value;
+      }
+   }
+
+   public Tag Owner
+   {
+      get => _owner;
+      set
+      {
+         RaiseProvinceOwnerChanged(Id, value, _owner, nameof(Owner));
+         _owner = value;
+      }
+   }
+
+   public Tag TribalOwner
+   {
+      get => _tribalOwner;
+      set
+      {
+         RaiseProvinceTribalOwnerChanged(Id, value, _tribalOwner, nameof(TribalOwner));
+         _tribalOwner = value;
+      }
+   }
+
+   public int BaseManpower
+   {
+      get => _baseManpower;
+      set
+      {
+         RaiseProvinceBaseManpowerChanged(Id, value, _baseManpower, nameof(BaseManpower));
+         _baseManpower = value;
+      }
+   }
+
+   public int BaseTax
+   {
+      get => _baseTax;
+      set
+      {
+         RaiseProvinceBaseTaxChanged(Id, value, _baseTax, nameof(BaseTax));
+         _baseTax = value;
+      }
+   }
+
+   public int BaseProduction
+   {
+      get => _baseProduction;
+      set
+      {
+         RaiseProvinceBaseProductionChanged(Id, value, _baseProduction, nameof(BaseProduction));
+         _baseProduction = value;
+      }
+   }
+
+   public int CenterOfTrade
+   {
+      get => _centerOfTrade;
+      set
+      {
+         RaiseProvinceCenterOfTradeLevelChanged(Id, value, _centerOfTrade, nameof(CenterOfTrade));
+         _centerOfTrade = value;
+      }
+   }
+
+   public int ExtraCost
+   {
+      get => _extraCost;
+      set
+      {
+         RaiseProvinceExtraCostChanged(Id, value, _extraCost, nameof(ExtraCost));
+         _extraCost = value;
+      }
+   }
+
+   public int NativeFerocity
+   {
+      get => _nativeFerocity;
+      set
+      {
+         RaiseProvinceNativeFerocityChanged(Id, value, _nativeFerocity, nameof(NativeFerocity));
+         _nativeFerocity = value;
+      }
+   }
+
+   public int NativeHostileness
+   {
+      get => _nativeHostileness;
+      set
+      {
+         RaiseProvinceNativeHostilenessChanged(Id, value, _nativeHostileness, nameof(NativeHostileness));
+         _nativeHostileness = value;
+      }
+   }
+
+   public int NativeSize
+   {
+      get => _nativeSize;
+      set
+      {
+         RaiseProvinceNativeSizeChanged(Id, value, _nativeSize, nameof(NativeSize));
+         _nativeSize = value;
+      }
+   }
+
+   public int RevoltRisk
+   {
+      get => _revoltRisk;
+      set
+      {
+         RaiseProvinceRevoltRiskChanged(Id, value, _revoltRisk, nameof(RevoltRisk));
+         _revoltRisk = value;
+      }
+   }
+
+   public int LocalAutonomy
+   {
+      get => _localAutonomy;
+      set
+      {
+         RaiseProvinceLocalAutonomyChanged(Id, value, _localAutonomy, nameof(LocalAutonomy));
+         _localAutonomy = value;
+      }
+   }
+
+   public int Nationalism
+   {
+      get => _nationalism;
+      set
+      {
+         RaiseProvinceNationalismChanged(Id, value, _nationalism, nameof(Nationalism));
+         _nationalism = value;
+      }
+   }
+
+   public List<string> DiscoveredBy
+   {
+      get => _discoveredBy;
+      set
+      {
+         RaiseProvinceDiscoveredByChanged(Id, value, _discoveredBy, nameof(DiscoveredBy));
+         _discoveredBy = value;
+      }
+   }
+
+   public string Capital
+   {
+      get => _capital;
+      set
+      {
+         RaiseProvinceCapitalChanged(Id, value, _capital, nameof(Capital));
+         _capital = value;
+      }
+   }
+
+   public string Culture
+   {
+      get => _culture;
+      set
+      {
+         RaiseProvinceCultureChanged(Id, value, _culture, nameof(Culture));
+         _culture = value;
+      }
+   }
+
+   public string Religion
+   {
+      get => _religion;
+      set
+      {
+         RaiseProvinceReligionChanged(Id, value, _religion, nameof(Religion));
+         _religion = value;
+      }
+   }
+
+   public bool HasFort15Th
+   {
+      get => _hasFort15Th;
+      set
+      {
+         RaiseProvinceHasFort15thChanged(Id, value, _hasFort15Th, nameof(HasFort15Th));
+         _hasFort15Th = value;
+      }
+   } // TODO parse to check other buildings
+
+   public bool IsHre
+   {
+      get => _isHre;
+      set
+      {
+         RaiseProvinceIsHreChanged(Id, value, _isHre, nameof(IsHre));
+         _isHre = value;
+      }
+   }
+
+   public bool IsCity
+   {
+      get => _isCity;
+      set
+      {
+         RaiseProvinceIsCityChanged(Id, value, _isCity, nameof(IsCity));
+         _isCity = value;
+      }
+   }
+
+   public bool IsSeatInParliament
+   {
+      get => _isSeatInParliament;
+      set
+      {
+         RaiseProvinceIsSeatInParliamentChanged(Id, value, _isSeatInParliament, nameof(IsSeatInParliament));
+         _isSeatInParliament = value;
+      }
+   }
+
+   public TradeGood TradeGood
+   {
+      get => _tradeGood;
+      set
+      {
+         RaiseProvinceTradeGoodChanged(Id, value, _tradeGood, nameof(TradeGood));
+         _tradeGood = value;
+      }
+   }
+   #endregion
+   // ======================================== Methods ========================================
 
 
    public string GetLocalisation()

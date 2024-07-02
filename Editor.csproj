@@ -86,7 +86,7 @@
     <Compile Include="Helper\Geometry.cs" />
     <Compile Include="DataClasses\MapModeManager.cs" />
     <Compile Include="Helper\Parsing.cs" />
-    <Compile Include="Helper\ProvinceDataHandler.cs" />
+    <Compile Include="Helper\ProvinceEventHandler.cs" />
     <Compile Include="Helper\ProvinceParser.cs" />
     <Compile Include="Helper\ResourceUsageHelper.cs" />
     <Compile Include="Helper\Saving.cs" />

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Editor.DataClasses;
 
@@ -15,6 +16,7 @@ public class ParsingProvince(List<HistoryEntry> entries, string remainder)
    public List<HistoryEntry> Entries = entries;
    public string Remainder = remainder;
    public List<KeyValuePair<string, string>> Attributes = [];
+   public List<MultilineAttribute> MultilineAttributes = [];
    public int Id { get; set; }
 }
 
@@ -24,9 +26,13 @@ public static class ProvinceParser
    private const string DATE_PATTERN = @"\d{1,4}\.\d{1,2}\.\d{1,2}";
    private const string ATTRIBUTE_PATTERN = "(?<key>\\w+)\\s*=\\s*(?<value>\"[^\"]*\"|[\\w-]+)";
 
+   private const string MULTILINE_ATTRIBUTE_PATTERN =
+      "(?<name>[A-Za-z_.0-9]+)\\s*=\\s*\\{\\s*(?<pairs>(?:\\s*[A-Za-z_.0-9]+\\s*=\\s*[^}\\s]+(?:\\s*\\n?)*)*)\\s*\\}\\s*(?<comment>#.*)?";
+
    private static readonly Regex DateRegex = new (DATE_PATTERN, RegexOptions.Compiled);
    private static readonly Regex IdRegex = new (ID_FROM_FILE_NAME_PATTERN, RegexOptions.Compiled);
    private static readonly Regex AttributeRegex = new (ATTRIBUTE_PATTERN, RegexOptions.Compiled);
+   private static readonly Regex MultilineAttributeRegex = new (MULTILINE_ATTRIBUTE_PATTERN, RegexOptions.Compiled);
 
    private static readonly HashSet<string> UniqueAttributeKeys = [
       "add_claim", "add_core", "add_local_autonomy", "add_nationalism", "base_manpower", "base_production", "base_tax", "capital", "center_of_trade", "controller", "culture", "discovered_by", "extra_cost", "fort_15th", "hre", "is_city", "native_ferocity", "native_hostileness", "native_size", "owner", "religion", "seat_in_parliament", "trade_goods", "tribal_owner", "unrest", "shipyard", "revolt_risk"
@@ -38,38 +44,56 @@ public static class ProvinceParser
       
       var sw = Stopwatch.StartNew();
 
-      Dictionary<int, ParsingProvince> entries = [];
-      ParseProvinces(files, entries);
-      
+      ParseProvinces(files, out var entries);
+
       foreach (var entry in entries.Values)
       {
-         if (entry == null)
-            continue;
-         List<KeyValuePair<string, string>> attributes = [];
-         GetProvinceAttributesKeyValuePairs(entry.Remainder, attributes);
+         GetMultilineAttributes(entry.Remainder, out var multilineAttributes);
+         entry.MultilineAttributes = multilineAttributes;
+         GetProvinceSpecificAttributes(ref entry.Remainder, out var attributes);
          entry.Attributes = attributes;
       }
 
       AssignProvinceAttributes([.. entries.Values]);
       sw.Stop();
       Debug.WriteLine($"Parsing provinces took {sw.ElapsedMilliseconds} ms for {entries.Count}");
+
    }
 
-   private static void ParseProvinces(List<string> files, Dictionary<int, ParsingProvince> entries)
+   private static void GetMultilineAttributes(string entryRemainder, out List<MultilineAttribute> attrs)
    {
+      attrs = [];
+      var matches = MultilineAttributeRegex.Matches(entryRemainder);
+      if (matches.Count == 0) // Add a check for matches to prevent the overhead of entering the loop as it is only needed in very few cases
+         return;
+      foreach (Match match in matches)
+      {
+         GetAttributes(match.Groups["pairs"].Value, out var values);
+         attrs.Add(new(match.Groups["name"].Value, values));
+      }
+   }
+
+   private static void ParseProvinces(List<string> files, out Dictionary<int, ParsingProvince> entries)
+   {
+      entries = [];
+      var provinces = entries;
       Parallel.ForEach(files, file =>
       {
          var match = IdRegex.Match(file);
          if (!match.Success || !int.TryParse(match.Groups[1].Value, out var id))
             throw new($"Could not parse province id from file name: {file}\nCould not match \'<number> <.*>\'");
          var historyEntries = ParesHistoryFromProvinceFile(file, out var remainder);
-         entries.Add(id, new(historyEntries, remainder){Id = id});
+         lock (provinces)
+         {
+            provinces.Add(id, new(historyEntries, remainder){Id = id});
+         }
       });
       Debug.WriteLine($"History files parsed");
    }
 
-   private static void GetProvinceAttributesKeyValuePairs(string content, List<KeyValuePair<string, string>> attributes)
+   private static void GetAttributes(string content, out List<KeyValuePair<string, string>> attributes)
    {
+      attributes = [];
       if (string.IsNullOrEmpty(content))
          return;
       StringBuilder sb = new(content);
@@ -83,15 +107,33 @@ public static class ProvinceParser
 
          if (!match.Success)
             continue;
+         attributes.Add(new(match.Groups["key"].Value, match.Groups["value"].Value));
+
+         sb.Remove(match.Index, match.Length);
+      }
+   }
+   private static void GetProvinceSpecificAttributes(ref string content, out List<KeyValuePair<string, string>> attributes)
+   {
+      attributes = [];
+      if (string.IsNullOrEmpty(content))
+         return;
+
+      var lines = content.Split('\n');
+
+      foreach (var line in lines)
+      {
+         var match = AttributeRegex.Match(Parsing.RemoveAndGetCommentFromString(line));
+
+         if (!match.Success)
+            continue;
          var key = match.Groups["key"].Value;
          if (!UniqueAttributeKeys.Contains(key))
             continue;
          var value = match.Groups["value"].Value;
          attributes.Add(new(key, value));
-
-         sb.Remove(match.Index, match.Length);
       }
    }
+
 
    private static List<HistoryEntry> ParesHistoryFromProvinceFile(string path, out string remainder)
    {
@@ -110,6 +152,7 @@ public static class ProvinceParser
          if (!DateTime.TryParse(match.Value, out var date))
             throw new ($"Could not parse date: {match.Value} at position {match.Index} in file {path}");
 
+         // Get child groups and the line ending after the last group
          var groups = Parsing.GetGroups(ref fileContent, match.Index, out var lastGroupEnding);
          var eol = Parsing.GetLineEndingAfterComment(lastGroupEnding, ref fileContent, out var comment);
 
@@ -117,7 +160,7 @@ public static class ProvinceParser
 
          var content = fileContent.Substring(match.Index, endOfLastMatch - match.Index);
 
-
+         // Create the history entry and add it to the list
          HistoryEntry entry = new(date, content, groups, comment)
          {
             Start = match.Index,
@@ -127,6 +170,7 @@ public static class ProvinceParser
          entries.Add(entry);
       }
 
+      // Remove all entries from the remainder to prevent future misinterpretation in the MultilineAttribute parsing
       StringBuilder remainderBuilder = new(remainder);
       for (var i = entries.Count - 1; i >= 0; i--) 
          remainderBuilder.Remove(entries[i].Start, entries[i].End - entries[i].Start);
@@ -248,6 +292,18 @@ public static class ProvinceParser
                      prov.RevoltRisk = risk;
                   else
                      throw new AttributeParsingException ($"Could not parse revolt_risk: {att.Value} for province id {prov.Id}");
+                  break;
+               case "add_local_autonomy":
+                  if (int.TryParse(att.Value, out var autonomy))
+                     prov.LocalAutonomy = autonomy;
+                  else
+                     throw new AttributeParsingException ($"Could not parse add_local_autonomy: {att.Value} for province id {prov.Id}");
+                  break;
+               case "add_nationalism":
+                  if (int.TryParse(att.Value, out var nationalism))
+                     prov.Nationalism = nationalism;
+                  else
+                     throw new AttributeParsingException ($"Could not parse add_nationalism: {att.Value} for province id {prov.Id}");
                   break;
                default:
                   Debug.WriteLine($"Unknown attribute {att.Key} for province id {prov.Id}");

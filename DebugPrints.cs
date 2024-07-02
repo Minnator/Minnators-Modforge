@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Editor.Commands;
 using Editor.Helper;
 
@@ -10,6 +11,10 @@ namespace Editor;
 
 public static class DebugPrints
 {
+
+
+
+
 
    public static void PrintAllAttributes(List<ParsingProvince> provinces)
    {
