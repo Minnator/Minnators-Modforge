@@ -98,6 +98,7 @@
       <DependentUpon>HistoryTree.cs</DependentUpon>
     </Compile>
     <Compile Include="Interfaces\IProvinceCollection.cs" />
+    <Compile Include="Loading\LoadingManager.cs" />
     <Compile Include="Loading\AreaLoading.cs" />
     <Compile Include="Loading\ContinentLoading.cs" />
     <Compile Include="Loading\DefaultMapLoading.cs" />

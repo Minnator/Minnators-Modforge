@@ -235,4 +235,20 @@ public static class ProvinceEventHandler
       OnProvinceContinentChanged.Invoke(id, new (value, oldValue, propertyName));
       RaiseProvinceDataChanged(id, value, oldValue, propertyName);
    }
+
+   // History
+   public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceHistoryChanged = delegate { };
+   public static void RaiseProvinceHistoryChanged(int id, object value, object oldValue, string propertyName)
+   {
+      OnProvinceHistoryChanged.Invoke(id, new (value, oldValue, propertyName));
+      RaiseProvinceDataChanged(id, value, oldValue, propertyName);
+   }
+
+   // MultilineAttributes
+   public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceMultilineAttributesChanged = delegate { };
+   public static void RaiseProvinceMultilineAttributesChanged(int id, object value, object oldValue, string propertyName)
+   {
+      OnProvinceMultilineAttributesChanged.Invoke(id, new (value, oldValue, propertyName));
+      RaiseProvinceDataChanged(id, value, oldValue, propertyName);
+   }
 }

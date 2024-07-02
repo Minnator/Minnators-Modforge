@@ -37,6 +37,8 @@ public class Province : IProvinceCollection
    private TradeGood _tradeGood;
    private string _area = string.Empty;
    private string _continent = string.Empty;
+   private List<HistoryEntry> _history = [];
+   private List<MultilineAttribute> _multilineAttributes = [];
 
    #region ManagementData
 
@@ -53,6 +55,8 @@ public class Province : IProvinceCollection
 
    #endregion
 
+   // Events for the ProvinceValues will only be raised if the State is Running otherwise they will be supressed to improve performance when loading
+
    #region Globals from the game
 
    // Globals from the Game
@@ -61,7 +65,8 @@ public class Province : IProvinceCollection
       get => _area;
       set
       {
-         RaiseProvinceAreaChanged(Id, value, _area, nameof(Area));
+         if (Globals.State == State.Running)
+            RaiseProvinceAreaChanged(Id, value, _area, nameof(Area));
          _area = value;
       }
    }
@@ -71,7 +76,8 @@ public class Province : IProvinceCollection
       get => _continent;
       set
       {
-         RaiseProvinceContinentChanged(Id, value, _continent, nameof(Continent));
+         if (Globals.State == State.Running)
+            RaiseProvinceContinentChanged(Id, value, _continent, nameof(Continent));
          _continent = value;
       }
    }
@@ -86,7 +92,8 @@ public class Province : IProvinceCollection
       get => _claims;
       set
       {
-         RaiseProvinceClaimsChanged(Id, value, _claims, nameof(Claims));
+         if (Globals.State == State.Running)
+            RaiseProvinceClaimsChanged(Id, value, _claims, nameof(Claims));
          _claims = value;
       }
    }
@@ -96,7 +103,8 @@ public class Province : IProvinceCollection
       get => _cores;
       set
       {
-         RaiseProvinceCoresChanged(Id, value, _cores, nameof(Cores));
+         if (Globals.State == State.Running)
+            RaiseProvinceCoresChanged(Id, value, _cores, nameof(Cores));
          _cores = value;
       }
    }
@@ -106,7 +114,8 @@ public class Province : IProvinceCollection
       get => _controller;
       set
       {
-         RaiseProvinceControllerChanged(Id, value, _controller, nameof(Controller));
+         if (Globals.State == State.Running)
+            RaiseProvinceControllerChanged(Id, value, _controller, nameof(Controller));
          _controller = value;
       }
    }
@@ -116,7 +125,8 @@ public class Province : IProvinceCollection
       get => _owner;
       set
       {
-         RaiseProvinceOwnerChanged(Id, value, _owner, nameof(Owner));
+         if (Globals.State == State.Running)
+            RaiseProvinceOwnerChanged(Id, value, _owner, nameof(Owner));
          _owner = value;
       }
    }
@@ -126,7 +136,8 @@ public class Province : IProvinceCollection
       get => _tribalOwner;
       set
       {
-         RaiseProvinceTribalOwnerChanged(Id, value, _tribalOwner, nameof(TribalOwner));
+         if (Globals.State == State.Running)
+            RaiseProvinceTribalOwnerChanged(Id, value, _tribalOwner, nameof(TribalOwner));
          _tribalOwner = value;
       }
    }
@@ -136,7 +147,8 @@ public class Province : IProvinceCollection
       get => _baseManpower;
       set
       {
-         RaiseProvinceBaseManpowerChanged(Id, value, _baseManpower, nameof(BaseManpower));
+         if (Globals.State == State.Running)
+            RaiseProvinceBaseManpowerChanged(Id, value, _baseManpower, nameof(BaseManpower));
          _baseManpower = value;
       }
    }
@@ -146,7 +158,8 @@ public class Province : IProvinceCollection
       get => _baseTax;
       set
       {
-         RaiseProvinceBaseTaxChanged(Id, value, _baseTax, nameof(BaseTax));
+         if (Globals.State == State.Running)
+            RaiseProvinceBaseTaxChanged(Id, value, _baseTax, nameof(BaseTax));
          _baseTax = value;
       }
    }
@@ -156,7 +169,8 @@ public class Province : IProvinceCollection
       get => _baseProduction;
       set
       {
-         RaiseProvinceBaseProductionChanged(Id, value, _baseProduction, nameof(BaseProduction));
+         if (Globals.State == State.Running)
+            RaiseProvinceBaseProductionChanged(Id, value, _baseProduction, nameof(BaseProduction));
          _baseProduction = value;
       }
    }
@@ -166,7 +180,8 @@ public class Province : IProvinceCollection
       get => _centerOfTrade;
       set
       {
-         RaiseProvinceCenterOfTradeLevelChanged(Id, value, _centerOfTrade, nameof(CenterOfTrade));
+         if (Globals.State == State.Running)
+            RaiseProvinceCenterOfTradeLevelChanged(Id, value, _centerOfTrade, nameof(CenterOfTrade));
          _centerOfTrade = value;
       }
    }
@@ -176,7 +191,8 @@ public class Province : IProvinceCollection
       get => _extraCost;
       set
       {
-         RaiseProvinceExtraCostChanged(Id, value, _extraCost, nameof(ExtraCost));
+         if (Globals.State == State.Running)
+            RaiseProvinceExtraCostChanged(Id, value, _extraCost, nameof(ExtraCost));
          _extraCost = value;
       }
    }
@@ -186,7 +202,8 @@ public class Province : IProvinceCollection
       get => _nativeFerocity;
       set
       {
-         RaiseProvinceNativeFerocityChanged(Id, value, _nativeFerocity, nameof(NativeFerocity));
+         if (Globals.State == State.Running)
+            RaiseProvinceNativeFerocityChanged(Id, value, _nativeFerocity, nameof(NativeFerocity));
          _nativeFerocity = value;
       }
    }
@@ -196,7 +213,8 @@ public class Province : IProvinceCollection
       get => _nativeHostileness;
       set
       {
-         RaiseProvinceNativeHostilenessChanged(Id, value, _nativeHostileness, nameof(NativeHostileness));
+         if (Globals.State == State.Running)
+            RaiseProvinceNativeHostilenessChanged(Id, value, _nativeHostileness, nameof(NativeHostileness));
          _nativeHostileness = value;
       }
    }
@@ -206,7 +224,8 @@ public class Province : IProvinceCollection
       get => _nativeSize;
       set
       {
-         RaiseProvinceNativeSizeChanged(Id, value, _nativeSize, nameof(NativeSize));
+         if (Globals.State == State.Running)
+            RaiseProvinceNativeSizeChanged(Id, value, _nativeSize, nameof(NativeSize));
          _nativeSize = value;
       }
    }
@@ -216,7 +235,8 @@ public class Province : IProvinceCollection
       get => _revoltRisk;
       set
       {
-         RaiseProvinceRevoltRiskChanged(Id, value, _revoltRisk, nameof(RevoltRisk));
+         if (Globals.State == State.Running)
+            RaiseProvinceRevoltRiskChanged(Id, value, _revoltRisk, nameof(RevoltRisk));
          _revoltRisk = value;
       }
    }
@@ -226,7 +246,8 @@ public class Province : IProvinceCollection
       get => _localAutonomy;
       set
       {
-         RaiseProvinceLocalAutonomyChanged(Id, value, _localAutonomy, nameof(LocalAutonomy));
+         if (Globals.State == State.Running)
+            RaiseProvinceLocalAutonomyChanged(Id, value, _localAutonomy, nameof(LocalAutonomy));
          _localAutonomy = value;
       }
    }
@@ -236,7 +257,8 @@ public class Province : IProvinceCollection
       get => _nationalism;
       set
       {
-         RaiseProvinceNationalismChanged(Id, value, _nationalism, nameof(Nationalism));
+         if (Globals.State == State.Running)
+            RaiseProvinceNationalismChanged(Id, value, _nationalism, nameof(Nationalism));
          _nationalism = value;
       }
    }
@@ -246,7 +268,8 @@ public class Province : IProvinceCollection
       get => _discoveredBy;
       set
       {
-         RaiseProvinceDiscoveredByChanged(Id, value, _discoveredBy, nameof(DiscoveredBy));
+         if (Globals.State == State.Running)
+            RaiseProvinceDiscoveredByChanged(Id, value, _discoveredBy, nameof(DiscoveredBy));
          _discoveredBy = value;
       }
    }
@@ -256,7 +279,8 @@ public class Province : IProvinceCollection
       get => _capital;
       set
       {
-         RaiseProvinceCapitalChanged(Id, value, _capital, nameof(Capital));
+         if (Globals.State == State.Running)
+            RaiseProvinceCapitalChanged(Id, value, _capital, nameof(Capital));
          _capital = value;
       }
    }
@@ -266,7 +290,8 @@ public class Province : IProvinceCollection
       get => _culture;
       set
       {
-         RaiseProvinceCultureChanged(Id, value, _culture, nameof(Culture));
+         if (Globals.State == State.Running)
+            RaiseProvinceCultureChanged(Id, value, _culture, nameof(Culture));
          _culture = value;
       }
    }
@@ -276,7 +301,8 @@ public class Province : IProvinceCollection
       get => _religion;
       set
       {
-         RaiseProvinceReligionChanged(Id, value, _religion, nameof(Religion));
+         if (Globals.State == State.Running)
+            RaiseProvinceReligionChanged(Id, value, _religion, nameof(Religion));
          _religion = value;
       }
    }
@@ -286,7 +312,8 @@ public class Province : IProvinceCollection
       get => _hasFort15Th;
       set
       {
-         RaiseProvinceHasFort15thChanged(Id, value, _hasFort15Th, nameof(HasFort15Th));
+         if (Globals.State == State.Running)
+            RaiseProvinceHasFort15thChanged(Id, value, _hasFort15Th, nameof(HasFort15Th));
          _hasFort15Th = value;
       }
    } // TODO parse to check other buildings
@@ -296,7 +323,8 @@ public class Province : IProvinceCollection
       get => _isHre;
       set
       {
-         RaiseProvinceIsHreChanged(Id, value, _isHre, nameof(IsHre));
+         if (Globals.State == State.Running)
+            RaiseProvinceIsHreChanged(Id, value, _isHre, nameof(IsHre));
          _isHre = value;
       }
    }
@@ -306,7 +334,8 @@ public class Province : IProvinceCollection
       get => _isCity;
       set
       {
-         RaiseProvinceIsCityChanged(Id, value, _isCity, nameof(IsCity));
+         if (Globals.State == State.Running)
+            RaiseProvinceIsCityChanged(Id, value, _isCity, nameof(IsCity));
          _isCity = value;
       }
    }
@@ -316,7 +345,8 @@ public class Province : IProvinceCollection
       get => _isSeatInParliament;
       set
       {
-         RaiseProvinceIsSeatInParliamentChanged(Id, value, _isSeatInParliament, nameof(IsSeatInParliament));
+         if (Globals.State == State.Running)
+            RaiseProvinceIsSeatInParliamentChanged(Id, value, _isSeatInParliament, nameof(IsSeatInParliament));
          _isSeatInParliament = value;
       }
    }
@@ -326,10 +356,34 @@ public class Province : IProvinceCollection
       get => _tradeGood;
       set
       {
-         RaiseProvinceTradeGoodChanged(Id, value, _tradeGood, nameof(TradeGood));
+         if (Globals.State == State.Running)
+            RaiseProvinceTradeGoodChanged(Id, value, _tradeGood, nameof(TradeGood));
          _tradeGood = value;
       }
    }
+
+   public List<HistoryEntry> History
+   {
+      get => _history;
+      set
+      {
+         if (Globals.State == State.Running)
+            RaiseProvinceHistoryChanged(Id, value, _history, nameof(History));
+         _history = value;
+      }
+   }
+
+   public List<MultilineAttribute> MultilineAttributes
+   {
+      get => _multilineAttributes;
+      set
+      {
+         if (Globals.State == State.Running)
+            RaiseProvinceMultilineAttributesChanged(Id, value, _multilineAttributes, nameof(MultilineAttributes));
+         _multilineAttributes = value;
+      }
+   }
+
    #endregion
    // ======================================== Methods ========================================
 

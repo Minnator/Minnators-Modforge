@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using Editor.Commands;
 using Editor.DataClasses;
-using Editor.Helper;
 using Region = Editor.DataClasses.Region;
 
 namespace Editor;
@@ -25,9 +22,19 @@ public enum MapMode
    Continents = 5,
 }
 
+public enum State
+{
+   Loading,
+   Running,
+   Waiting
+}
+
 //contains all required and used data across the application and instances of forms.
 public static class Globals
 {
+   // Contains the current state of the application
+   public static State State = State.Loading;
+
    // History Manager
    public static readonly HistoryManager HistoryManager = new(new CInitial());
 
