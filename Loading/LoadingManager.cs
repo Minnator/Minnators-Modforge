@@ -17,13 +17,8 @@ public static class LoadingManager
       RegionLoading.Load(project.VanillaPath, project.ColorProvider, ref loadingLog);
       SuperRegionLoading.Load(project.VanillaPath, project.ColorProvider, ref loadingLog);
       ContinentLoading.Load(project.VanillaPath, ref loadingLog);
-      
+      LocalisationLoading.Load(project.ModPath, project.VanillaPath, project.Language, ref loadingLog);
       ProvinceParser.ParseAllProvinces(project.ModPath, project.VanillaPath, ref loadingLog);
-
-      for (int i = 0; i < 100; i++)
-      {
-         LocalisationLoading.Load(project.ModPath, project.VanillaPath, project.Language, ref loadingLog);
-      }
 
       // MUST BE LAST in the loading sequence
       InitMapModes(ref loadingLog, mw);

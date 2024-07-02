@@ -31,6 +31,7 @@
          this.MapMenuStrip = new System.Windows.Forms.MenuStrip();
          this.filesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.gCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+         this.saveCurrentMapModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.historyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.selectionHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.DeleteHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -46,7 +47,8 @@
          this.RedoDepthLabel = new System.Windows.Forms.ToolStripLabel();
          this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
          this.SelectedProvinceSum = new System.Windows.Forms.ToolStripLabel();
-         this.saveCurrentMapModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+         this.toolTipCustomizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+         this.openCustomizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.MapMenuStrip.SuspendLayout();
          this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
          this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -59,6 +61,7 @@
          this.MapMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.filesToolStripMenuItem,
             this.historyToolStripMenuItem,
+            this.toolTipCustomizerToolStripMenuItem,
             this.MapModeComboBox,
             this.debugToolStripMenuItem});
          this.MapMenuStrip.Location = new System.Drawing.Point(0, 0);
@@ -83,6 +86,13 @@
          this.gCToolStripMenuItem.Text = "GC";
          this.gCToolStripMenuItem.Click += new System.EventHandler(this.gCToolStripMenuItem_Click);
          // 
+         // saveCurrentMapModeToolStripMenuItem
+         // 
+         this.saveCurrentMapModeToolStripMenuItem.Name = "saveCurrentMapModeToolStripMenuItem";
+         this.saveCurrentMapModeToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+         this.saveCurrentMapModeToolStripMenuItem.Text = "Save Current MapMode";
+         this.saveCurrentMapModeToolStripMenuItem.Click += new System.EventHandler(this.SaveCurrentMapModeToolStripMenuItem_Click);
+         // 
          // historyToolStripMenuItem
          // 
          this.historyToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -95,14 +105,14 @@
          // selectionHistoryToolStripMenuItem
          // 
          this.selectionHistoryToolStripMenuItem.Name = "selectionHistoryToolStripMenuItem";
-         this.selectionHistoryToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+         this.selectionHistoryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
          this.selectionHistoryToolStripMenuItem.Text = "View History Tree";
          this.selectionHistoryToolStripMenuItem.Click += new System.EventHandler(this.RevertInSelectionHistory);
          // 
          // DeleteHistoryToolStripMenuItem
          // 
          this.DeleteHistoryToolStripMenuItem.Name = "DeleteHistoryToolStripMenuItem";
-         this.DeleteHistoryToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+         this.DeleteHistoryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
          this.DeleteHistoryToolStripMenuItem.Text = "Delete History";
          this.DeleteHistoryToolStripMenuItem.Click += new System.EventHandler(this.DeleteHistoryToolStripMenuItem_Click);
          // 
@@ -206,12 +216,20 @@
          this.SelectedProvinceSum.Size = new System.Drawing.Size(49, 22);
          this.SelectedProvinceSum.Text = "ProSum";
          // 
-         // saveCurrentMapModeToolStripMenuItem
+         // toolTipCustomizerToolStripMenuItem
          // 
-         this.saveCurrentMapModeToolStripMenuItem.Name = "saveCurrentMapModeToolStripMenuItem";
-         this.saveCurrentMapModeToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-         this.saveCurrentMapModeToolStripMenuItem.Text = "Save Current MapMode";
-         this.saveCurrentMapModeToolStripMenuItem.Click += new System.EventHandler(this.SaveCurrentMapModeToolStripMenuItem_Click);
+         this.toolTipCustomizerToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openCustomizerToolStripMenuItem});
+         this.toolTipCustomizerToolStripMenuItem.Name = "toolTipCustomizerToolStripMenuItem";
+         this.toolTipCustomizerToolStripMenuItem.Size = new System.Drawing.Size(120, 23);
+         this.toolTipCustomizerToolStripMenuItem.Text = "ToolTip Customizer";
+         // 
+         // openCustomizerToolStripMenuItem
+         // 
+         this.openCustomizerToolStripMenuItem.Name = "openCustomizerToolStripMenuItem";
+         this.openCustomizerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+         this.openCustomizerToolStripMenuItem.Text = "Open Customizer";
+         this.openCustomizerToolStripMenuItem.Click += new System.EventHandler(this.openCustomizerToolStripMenuItem_Click);
          // 
          // MapWindow
          // 
@@ -261,6 +279,8 @@
       public System.Windows.Forms.ToolStripComboBox MapModeComboBox;
       private System.Windows.Forms.ToolStripMenuItem gCToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem saveCurrentMapModeToolStripMenuItem;
+      private System.Windows.Forms.ToolStripMenuItem toolTipCustomizerToolStripMenuItem;
+      private System.Windows.Forms.ToolStripMenuItem openCustomizerToolStripMenuItem;
    }
 }
 

@@ -68,6 +68,13 @@
     <Compile Include="DataClasses\Settings\Settings.cs" />
     <Compile Include="DataClasses\Tag.cs" />
     <Compile Include="DataClasses\TradeGood.cs" />
+    <Compile Include="Forms\ToolTipCustomizer\ToolTipCustomizer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ToolTipCustomizer\ToolTipCustomizer.Designer.cs">
+      <DependentUpon>ToolTipCustomizer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ToolTipCustomizer\ToolTipBuilder.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="DataClasses\Area.cs" />
     <Compile Include="DataClasses\Continent.cs" />
@@ -92,10 +99,10 @@
     <Compile Include="Helper\ProvinceParser.cs" />
     <Compile Include="Helper\ResourceUsageHelper.cs" />
     <Compile Include="Helper\Saving.cs" />
-    <Compile Include="HistoryTree.cs">
+    <Compile Include="Forms\HistoryTree.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="HistoryTree.Designer.cs">
+    <Compile Include="Forms\HistoryTree.Designer.cs">
       <DependentUpon>HistoryTree.cs</DependentUpon>
     </Compile>
     <Compile Include="Interfaces\IProvinceCollection.cs" />
@@ -125,7 +132,10 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="HistoryTree.resx">
+    <EmbeddedResource Include="Forms\ToolTipCustomizer\ToolTipCustomizer.resx">
+      <DependentUpon>ToolTipCustomizer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HistoryTree.resx">
       <DependentUpon>HistoryTree.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MapWindow.resx">

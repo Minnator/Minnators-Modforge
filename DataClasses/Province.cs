@@ -147,9 +147,10 @@ public class Province : IProvinceCollection
       get => _baseManpower;
       set
       {
-         if (Globals.State == State.Running)
-            RaiseProvinceBaseManpowerChanged(Id, value, _baseManpower, nameof(BaseManpower));
+         var old = _baseManpower;
          _baseManpower = value;
+         if (Globals.State == State.Running)
+            RaiseProvinceBaseManpowerChanged(Id, value, old, nameof(BaseManpower));
       }
    }
 
@@ -158,9 +159,10 @@ public class Province : IProvinceCollection
       get => _baseTax;
       set
       {
-         if (Globals.State == State.Running)
-            RaiseProvinceBaseTaxChanged(Id, value, _baseTax, nameof(BaseTax));
+         var old = _baseTax;
          _baseTax = value;
+         if (Globals.State == State.Running)
+            RaiseProvinceBaseTaxChanged(Id, value, old, nameof(BaseTax));
       }
    }
 
@@ -169,9 +171,10 @@ public class Province : IProvinceCollection
       get => _baseProduction;
       set
       {
-         if (Globals.State == State.Running)
-            RaiseProvinceBaseProductionChanged(Id, value, _baseProduction, nameof(BaseProduction));
+         var old = _baseProduction;
          _baseProduction = value;
+         if (Globals.State == State.Running)
+            RaiseProvinceBaseProductionChanged(Id, value, old, nameof(BaseProduction));
       }
    }
 
@@ -386,6 +389,46 @@ public class Province : IProvinceCollection
 
    #endregion
    // ======================================== Methods ========================================
+
+   public object GetAttribute(string key)
+   {
+      return key.ToLower() switch
+      {
+         "base_manpower" => BaseManpower,
+         "base_tax" => BaseTax,
+         "base_production" => BaseProduction,
+         "total_development" => GetTotalDevelopment(),
+         "area" => Area,
+         "continent" => Continent,
+         "claims" => Claims,
+         "cores" => Cores,
+         "controller" => Controller,
+         "owner" => Owner,
+         "tribal_owner" => TribalOwner,
+         "center_of_trade" => CenterOfTrade,
+         "extra_cost" => ExtraCost,
+         "native_ferocity" => NativeFerocity,
+         "native_hostileness" => NativeHostileness,
+         "native_size" => NativeSize,
+         "revolt_risk" => RevoltRisk,
+         "local_autonomy" => LocalAutonomy,
+         "nationalism" => Nationalism,
+         "discovered_by" => DiscoveredBy,
+         "capital" => Capital,
+         "culture" => Culture,
+         "religion" => Religion,
+         "has_fort_15th" => HasFort15Th,
+         "is_hre" => IsHre,
+         "is_city" => IsCity,
+         "is_seat_in_parliament" => IsSeatInParliament,
+         "trade_good" => TradeGood,
+         "history" => History,
+         "multiline_attributes" => MultilineAttributes,
+         "id" => Id,
+         "name" => GetLocalisation(),
+         _ => default!
+      };
+   }
 
    public int GetTotalDevelopment()
    {

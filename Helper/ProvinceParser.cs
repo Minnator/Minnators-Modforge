@@ -34,9 +34,6 @@ public static class ProvinceParser
    private static readonly Regex AttributeRegex = new (ATTRIBUTE_PATTERN, RegexOptions.Compiled);
    private static readonly Regex MultilineAttributeRegex = new (MULTILINE_ATTRIBUTE_PATTERN, RegexOptions.Compiled);
 
-   private static readonly HashSet<string> UniqueAttributeKeys = [
-      "add_claim", "add_core", "add_local_autonomy", "add_nationalism", "base_manpower", "base_production", "base_tax", "capital", "center_of_trade", "controller", "culture", "discovered_by", "extra_cost", "fort_15th", "hre", "is_city", "native_ferocity", "native_hostileness", "native_size", "owner", "religion", "seat_in_parliament", "trade_goods", "tribal_owner", "unrest", "shipyard", "revolt_risk"
-      ];
 
    public static void ParseAllProvinces(string modFolder, string vanillaFolder, ref Log loadingLog)
    {
@@ -130,7 +127,7 @@ public static class ProvinceParser
          if (!match.Success)
             continue;
          var key = match.Groups["key"].Value;
-         if (!UniqueAttributeKeys.Contains(key))
+         if (!Globals.UniqueAttributeKeys.Contains(key))
             continue;
          var value = match.Groups["value"].Value;
          attributes.Add(new(key, value));

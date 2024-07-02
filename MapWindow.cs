@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
+using Editor.Forms;
 
 #nullable enable
 
@@ -123,6 +124,13 @@ namespace Editor
       {
          var downloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\";
          MapPictureBox.Image.Save($@"{downloadFolder}{MapModeComboBox.SelectedItem}.png", ImageFormat.Png);
+      }
+
+      private void openCustomizerToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         var toolTipCustomizer = new ToolTipCustomizer();
+         // Show the ToolTipCustomizer as a popup
+         toolTipCustomizer.Show();
       }
    }
 }

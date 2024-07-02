@@ -50,6 +50,9 @@ public static class Globals
    public static int MapHeight;
    public static string MapPath = null!;
 
+   // ToolTip
+   public static string ToolTipText = string.Empty;
+
    // Contains the border pixels of the provinces
    public static Point[] BorderPixels = null!;
    public static Point[] Pixels = null!;
@@ -77,4 +80,12 @@ public static class Globals
    public static Dictionary<string, string> Localisation { get; set; } = [];
    public static Dictionary<string, string> LocalisationCollisions { get; set; } = [];
 
+
+   public static readonly HashSet<string> UniqueAttributeKeys = [
+      "add_claim", "add_core", "add_local_autonomy", "add_nationalism", "base_manpower", "base_production", "base_tax", "capital", "center_of_trade", "controller", "culture", "discovered_by", "extra_cost", "fort_15th", "hre", "is_city", "native_ferocity", "native_hostileness", "native_size", "owner", "religion", "seat_in_parliament", "trade_goods", "tribal_owner", "unrest", "shipyard", "revolt_risk"
+   ];
+
+   public static List<string> ToolTippableAttributes = [ 
+      "base_manpower", "base_tax", "base_production",  "total_development", "area", "continent", "claims", "cores", "controller", "owner", "tribal_owner", "center_of_trade", "extra_cost", "native_ferocity", "native_hostileness", "native_size", "revolt_risk", "local_autonomy", "nationalism", "discovered_by", "capital", "culture", "religion", "has_fort_15th", "is_hre", "is_city", "is_seat_in_parliament", "trade_good", "history", "multiline_attributes", "id", "name"
+   ];
 }
