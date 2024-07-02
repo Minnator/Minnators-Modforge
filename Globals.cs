@@ -2,6 +2,7 @@
 using System.Drawing;
 using Editor.Commands;
 using Editor.DataClasses;
+using Editor.Helper;
 using Region = Editor.DataClasses.Region;
 
 namespace Editor;
@@ -33,7 +34,6 @@ public static class Globals
 {
    // Contains the current state of the application
    public static State State = State.Loading;
-
    public static MapModeRendering MapModeRendering { get; set; } = MapModeRendering.Live;
 
    // History Manager
@@ -41,6 +41,9 @@ public static class Globals
 
    // Contains the current map mode
    public static MapModeManager MapModeManager = null!;
+
+   // Color Provider
+   public static ColorProviderRgb ColorProvider = new();
 
    // Contains the map image bounds and path
    public static int MapWidth;

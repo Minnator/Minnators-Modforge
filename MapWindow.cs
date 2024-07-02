@@ -102,7 +102,10 @@ namespace Editor
 
       private  void debugToolStripMenuItem_Click(object sender, EventArgs e)
       {
-
+         Globals.Provinces[1].BaseManpower = 50;
+         Globals.Provinces[2].BaseManpower = 50;
+         Globals.Provinces[3].BaseManpower = 50;
+         Globals.Provinces[4].BaseManpower = 50;
       }
 
       private void MapModeComboBox_SelectedIndexChanged(object sender, EventArgs e)

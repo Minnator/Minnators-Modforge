@@ -387,7 +387,10 @@ public class Province : IProvinceCollection
    #endregion
    // ======================================== Methods ========================================
 
-
+   public int GetTotalDevelopment()
+   {
+      return BaseManpower + BaseTax + BaseProduction;
+   }
    public string GetLocalisation()
    {
       return Globals.Localisation.TryGetValue($"PROV{Id}", out var loc) ? loc : Id.ToString();

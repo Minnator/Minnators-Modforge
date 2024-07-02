@@ -112,6 +112,7 @@
     <Compile Include="Log.cs" />
     <Compile Include="MapModes\AreaMapMode.cs" />
     <Compile Include="MapModes\ContinentMapMode.cs" />
+    <Compile Include="MapModes\DevelopmentMapMode.cs" />
     <Compile Include="MapModes\ProvinceIdMapMode.cs" />
     <Compile Include="MapModes\ProvinceMapMode.cs" />
     <Compile Include="MapModes\RegionsMapMode.cs" />

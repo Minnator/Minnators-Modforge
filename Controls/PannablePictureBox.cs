@@ -168,12 +168,12 @@ public sealed class PannablePictureBox : PictureBox
       _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvinces.Count);
 
       // ------------------------------ Province Highlighting ------------------------------
-      if (Globals.MapModeManager.GetProvince(e.Location, out var ptr) && ptr.Id != _lastInvalidatedProvince)
+      if (Globals.MapModeManager.GetProvince(e.Location, out var province) && province.Id != _lastInvalidatedProvince)
       {
          if (_lastInvalidatedProvince != -1) 
             Invalidate(MapDrawHelper.DrawProvinceBorder(_lastInvalidatedProvince, Color.Transparent, Overlay));
-         Invalidate(MapDrawHelper.DrawProvinceBorder(ptr.Id, Color.Aqua, Overlay));
-         _lastInvalidatedProvince = ptr.Id;
+         Invalidate(MapDrawHelper.DrawProvinceBorder(province.Id, Color.Aqua, Overlay));
+         _lastInvalidatedProvince = province.Id;
       }
 
       // ------------------------------ Panning ------------------------------

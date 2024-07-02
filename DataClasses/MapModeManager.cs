@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
 using Editor.Controls;
-using Editor.Loading;
 using Editor.MapModes;
 
 namespace Editor.DataClasses;
@@ -13,9 +9,9 @@ namespace Editor.DataClasses;
 public class MapModeManager
 {
    private List<Interfaces.MapMode> MapModes { get; } = [];
-   private Interfaces.MapMode CurrentMapMode { get; set; } = null!;
+   public Interfaces.MapMode CurrentMapMode { get; set; } = null!;
    private ProvinceIdMapMode IdMapMode { get; set; } = null!;
-   private PannablePictureBox PictureBox { get; set; }
+   public PannablePictureBox PictureBox { get; set; }
    public Bitmap ShareLiveBitmap { get; set; }
 
    public MapModeManager(PannablePictureBox pictureBox)
@@ -31,6 +27,7 @@ public class MapModeManager
       MapModes.Add(new RegionsMapMode());
       MapModes.Add(new SuperRegionMapMode());
       MapModes.Add(new ContinentMapMode());
+      MapModes.Add(new DevelopmentMapMode());
 
 
       // We set the default map mode to retrieve province colors

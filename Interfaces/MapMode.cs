@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms;
-using Editor.DataClasses;
 using Editor.Helper;
 
 namespace Editor.Interfaces;
@@ -29,6 +27,8 @@ public abstract class MapMode
          default:
             throw new ArgumentOutOfRangeException();
       }
+      Globals.MapModeManager.PictureBox.Image = Globals.MapModeManager.ShareLiveBitmap;
+      Globals.MapModeManager.PictureBox.Invalidate();
    }
 
    public virtual string GetMapModeName()
@@ -58,11 +58,11 @@ public abstract class MapMode
       {
          case MapModeRendering.Cached:
             MapDrawHelper.DrawProvince(id, GetProvinceColor(id), Bitmap);
-            MapDrawHelper.DrawProvinceBorder(id, Color.Black, Bitmap);
+            Globals.MapModeManager.PictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(id, Color.Black, Bitmap));
             break;
          case MapModeRendering.Live:
             MapDrawHelper.DrawProvince(id, GetProvinceColor(id), Globals.MapModeManager.ShareLiveBitmap);
-            MapDrawHelper.DrawProvinceBorder(id, Color.Black, Globals.MapModeManager.ShareLiveBitmap);
+            Globals.MapModeManager.PictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(id, Color.Black, Globals.MapModeManager.ShareLiveBitmap));
             break;
       }
    }

@@ -57,21 +57,24 @@ public class LocalisationLoading
                }
             }
          }
-
-         try
+         lock (loc)
          {
-
-            lock (loc)
+            foreach (var kvp in threadDict)
             {
-               foreach (var kvp in threadDict)
+               if (!loc.ContainsKey(kvp.Key))
                   loc.Add(kvp.Key, kvp.Value);
+               else
+               {
+                  lock (collisions)
+                  {
+                     if (!collisions.ContainsKey(kvp.Key))
+                        collisions.Add(kvp.Key, kvp.Value);
+                     collisions[kvp.Key] = kvp.Value;
+                  }
+               }
             }
          }
-         catch (Exception e)
-         {
-            Debug.WriteLine(e);
-            throw;
-         }
+         threadDict.Clear();
       });
 
       Globals.Localisation = loc;
