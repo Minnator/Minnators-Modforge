@@ -65,6 +65,7 @@
     </Compile>
     <Compile Include="DataClasses\Country.cs" />
     <Compile Include="DataClasses\HistoryEntry.cs" />
+    <Compile Include="DataClasses\Settings\Settings.cs" />
     <Compile Include="DataClasses\Tag.cs" />
     <Compile Include="DataClasses\TradeGood.cs" />
     <Compile Include="Globals.cs" />

@@ -4,6 +4,7 @@ using Editor.Helper;
 using Editor.Loading;
 using System;
 using System.Diagnostics;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
 
@@ -36,6 +37,7 @@ namespace Editor
 
          //resume gui updates
          ResumeLayout();
+         // Enable the Application
          Globals.State = State.Running;
       }
 
@@ -112,6 +114,12 @@ namespace Editor
       private void gCToolStripMenuItem_Click(object sender, EventArgs e)
       {
          GC.Collect();
+      }
+
+      private void SaveCurrentMapModeToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         var downloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\";
+         MapPictureBox.Image.Save($@"{downloadFolder}{MapModeComboBox.SelectedItem}.png", ImageFormat.Png);
       }
    }
 }
