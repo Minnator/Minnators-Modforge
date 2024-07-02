@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Windows.Forms;
 
 namespace Editor.Helper;
 
@@ -220,6 +217,22 @@ public static class ProvinceEventHandler
    public static void RaiseProvinceTradeGoodChanged(int id, object value, object oldValue, string propertyName)
    {
       OnProvinceTradeGoodChanged.Invoke(id, new (value, oldValue, propertyName));
+      RaiseProvinceDataChanged(id, value, oldValue, propertyName);
+   }
+
+   // Area
+   public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceAreaChanged = delegate { };
+   public static void RaiseProvinceAreaChanged(int id, object value, object oldValue, string propertyName)
+   {
+      OnProvinceAreaChanged.Invoke(id, new (value, oldValue, propertyName));
+      RaiseProvinceDataChanged(id, value, oldValue, propertyName);
+   }
+
+   // Continent
+   public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceContinentChanged = delegate { };
+   public static void RaiseProvinceContinentChanged(int id, object value, object oldValue, string propertyName)
+   {
+      OnProvinceContinentChanged.Invoke(id, new (value, oldValue, propertyName));
       RaiseProvinceDataChanged(id, value, oldValue, propertyName);
    }
 }

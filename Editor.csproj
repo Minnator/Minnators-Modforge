@@ -81,6 +81,7 @@
     <Compile Include="Helper\BitMapHelper.cs" />
     <Compile Include="Helper\ColorProvider.cs" />
     <Compile Include="Helper\FilesHelper.cs" />
+    <Compile Include="Helper\GlobalEventHandlers.cs" />
     <Compile Include="Helper\IO.cs" />
     <Compile Include="Helper\MapDrawHelper.cs" />
     <Compile Include="Helper\Geometry.cs" />

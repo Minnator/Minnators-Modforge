@@ -35,6 +35,8 @@ public class Province : IProvinceCollection
    private bool _isCity;
    private bool _isSeatInParliament;
    private TradeGood _tradeGood;
+   private string _area = string.Empty;
+   private string _continent = string.Empty;
 
    #region ManagementData
 
@@ -54,8 +56,25 @@ public class Province : IProvinceCollection
    #region Globals from the game
 
    // Globals from the Game
-   public string Area { get; set; } = string.Empty;
-   public string Continent { get; set; } = string.Empty;
+   public string Area
+   {
+      get => _area;
+      set
+      {
+         RaiseProvinceAreaChanged(Id, value, _area, nameof(Area));
+         _area = value;
+      }
+   }
+
+   public string Continent
+   {
+      get => _continent;
+      set
+      {
+         RaiseProvinceContinentChanged(Id, value, _continent, nameof(Continent));
+         _continent = value;
+      }
+   }
 
    #endregion
 
