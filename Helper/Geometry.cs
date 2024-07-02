@@ -177,4 +177,9 @@ public static class Geometry
    {
       return [polygon[0], polygon[polygon.Count - 1], polygon[polygon.Count - 2]];
    }
+
+   public static Rectangle GetBounds(List<int> selection)
+   {
+      return GetBounds(selection.Select(id => Globals.Provinces[id].Bounds.Location).ToArray());
+   }
 }

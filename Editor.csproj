@@ -58,6 +58,7 @@
     <Compile Include="Commands\CInitial.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\HistoryManager.cs" />
+    <Compile Include="Commands\CDeselect.cs" />
     <Compile Include="Consts.cs" />
     <Compile Include="Controls\ControlFactory.cs" />
     <Compile Include="Controls\HistoryTreeNode.cs" />
@@ -69,6 +70,14 @@
     <Compile Include="DataClasses\Settings\Settings.cs" />
     <Compile Include="DataClasses\Tag.cs" />
     <Compile Include="DataClasses\TradeGood.cs" />
+    <Compile Include="Forms\AdvancedSelections\AdvancedSelectionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AdvancedSelections\AdvancedSelectionsForm.Designer.cs">
+      <DependentUpon>AdvancedSelectionsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AdvancedSelections\ISelectionModifier.cs" />
+    <Compile Include="Forms\AdvancedSelections\SelectionModifiersClass.cs" />
     <Compile Include="Forms\ToolTipCustomizer\ToolTipCustomizer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -133,6 +142,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Forms\AdvancedSelections\AdvancedSelectionsForm.resx">
+      <DependentUpon>AdvancedSelectionsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ToolTipCustomizer\ToolTipCustomizer.resx">
       <DependentUpon>ToolTipCustomizer.cs</DependentUpon>
     </EmbeddedResource>

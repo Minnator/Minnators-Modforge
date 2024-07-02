@@ -27,6 +27,7 @@ namespace Editor
 
       public MapWindow()
       {
+         Globals.MapWindow = this;
          //pause gui updates
          SuspendLayout();
          InitGui();

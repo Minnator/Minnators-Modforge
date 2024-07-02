@@ -2,6 +2,7 @@
 using System.Drawing;
 using Editor.Commands;
 using Editor.DataClasses;
+using Editor.Forms.AdvancedSelections;
 using Editor.Helper;
 using Region = Editor.DataClasses.Region;
 
@@ -32,6 +33,8 @@ public enum MapModeRendering
 //contains all required and used data across the application and instances of forms.
 public static class Globals
 {
+   public static MapWindow MapWindow = null!;
+
    // Contains the current state of the application
    public static State State = State.Loading;
    public static MapModeRendering MapModeRendering { get; set; } = MapModeRendering.Live;
@@ -43,7 +46,7 @@ public static class Globals
    public static MapModeManager MapModeManager = null!;
 
    // Color Provider
-   public static ColorProviderRgb ColorProvider = new();
+   public static readonly ColorProviderRgb ColorProvider = new();
 
    // Contains the map image bounds and path
    public static int MapWidth;
@@ -87,5 +90,9 @@ public static class Globals
 
    public static List<string> ToolTippableAttributes = [ 
       "base_manpower", "base_tax", "base_production",  "total_development", "area", "continent", "claims", "cores", "controller", "owner", "tribal_owner", "center_of_trade", "extra_cost", "native_ferocity", "native_hostileness", "native_size", "revolt_risk", "local_autonomy", "nationalism", "discovered_by", "capital", "culture", "religion", "has_fort_15th", "is_hre", "is_city", "is_seat_in_parliament", "trade_good", "history", "multiline_attributes", "id", "name"
+   ];
+
+   public static List<string> SelectionModifiers = [
+      "Deselection"
    ];
 }

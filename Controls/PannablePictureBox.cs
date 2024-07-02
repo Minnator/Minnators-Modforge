@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Editor.Commands;
 using Editor.DataClasses;
 using Editor.Forms;
+using Editor.Forms.AdvancedSelections;
 using Editor.Helper;
 
 namespace Editor.Controls;
@@ -16,10 +17,12 @@ public sealed class PannablePictureBox : PictureBox
 {
    public bool IsPainting; // Prevents double locking of bitmaps when painting
    public event EventHandler ImageChanged = null!;
+   private AdvancedSelectionsForm? _advancedSelectionsForm = null!;
 
    // ------------------------------ ToolTip ------------------------------
    public ToolTip MapToolTip = new(); // Contains the tooltip for the map
    public bool ShowToolTip { get; set; } = true; // If true, the tooltip will be shown
+
 
    // ------------------------------ Province Selection ------------------------------
    public Selection Selection; // Contains the selected provinces public to retrieve the selected provinces
@@ -82,7 +85,7 @@ public sealed class PannablePictureBox : PictureBox
    {
       // ------------------------------ Panning ------------------------------
       // We don't want to mess with the selection if the user is panning
-      if (e.Button == MouseButtons.Middle)
+      if (e.Button is MouseButtons.Middle or MouseButtons.Right)
          return;
 
       // ------------------------------ Province Selection ------------------------------
@@ -93,7 +96,7 @@ public sealed class PannablePictureBox : PictureBox
          Globals.HistoryManager.AddCommand(new CAddSingleSelection(ptr.Id, this), HistoryType.SimpleSelection);
       else if (ModifierKeys != Keys.Shift && Selection.State == SelectionState.Single)
          Globals.HistoryManager.AddCommand(new CSelectionMarkNext(ptr.Id, this), HistoryType.SimpleSelection);
-
+      
       _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvinces.Count);
    }
    
@@ -139,16 +142,32 @@ public sealed class PannablePictureBox : PictureBox
          Selection.ExitRectangleSelection();
          return;
       }
+      
+      // ------------------------------ Advanced Selections Menu ------------------------------
+      if (e.Button == MouseButtons.Right && ModifierKeys == Keys.Control)
+      {
+         if (_advancedSelectionsForm == null || _advancedSelectionsForm.IsDisposed)
+         {
+            _advancedSelectionsForm = new (this);
+            _advancedSelectionsForm.Show();
+         }
+         else
+            _advancedSelectionsForm.BringToFront();
+         _advancedSelectionsForm.Location = new Point(MousePosition.X, MousePosition.Y);
+      }
+
       _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvinces.Count);
 
 
       // ------------------------------ Panning ------------------------------
       if (AllowPanning)
+      {
          if (e.Button == MouseButtons.Middle)
          {
             _panning = false;
             Cursor = Cursors.Default; // Optional: revert cursor back to default
          }
+      }
    }
 
    private void PictureBox1_MouseMove(object sender, MouseEventArgs e)
