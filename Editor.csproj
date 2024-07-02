@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\CAddSingleSelection.cs" />
+    <Compile Include="Commands\CChangeToolTipText.cs" />
     <Compile Include="Commands\CLassoSelection.cs" />
     <Compile Include="Commands\CRectangleSelection.cs" />
     <Compile Include="Commands\CSelectionMarkNext.cs" />

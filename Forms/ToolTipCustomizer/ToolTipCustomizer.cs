@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Windows.Forms;
+using Editor.Commands;
 
 namespace Editor.Forms
 {
@@ -93,7 +94,8 @@ namespace Editor.Forms
          var str = string.Empty;
          foreach (ListViewItem item in ToolTipPreview.Items) 
             str += item.Text + "\n";
-         Globals.ToolTipText = str.Trim();
+
+         Globals.HistoryManager.AddCommand(new CChangeToolTipText(Globals.ToolTipText, str));
 
          Debug.WriteLine(ToolTipBuilder.BuildToolTip(str, 1));
       }

@@ -14,7 +14,6 @@ public class CSelectionMarkNext : ICommand
 
       if (executeOnInit)
          Execute();
-
    }
 
    public void Execute()
