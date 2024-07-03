@@ -118,6 +118,8 @@
          this.ClientSize = new System.Drawing.Size(242, 104);
          this.Controls.Add(this.tableLayoutPanel1);
          this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+         this.MaximizeBox = false;
+         this.MinimizeBox = false;
          this.Name = "AdvancedSelectionsForm";
          this.Text = "AdvancedSelection";
          this.tableLayoutPanel1.ResumeLayout(false);

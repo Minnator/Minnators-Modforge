@@ -28,6 +28,9 @@ public class MapModeManager
       MapModes.Add(new SuperRegionMapMode());
       MapModes.Add(new ContinentMapMode());
       MapModes.Add(new DevelopmentMapMode());
+      MapModes.Add(new CenterOfTradeMapMode());
+      MapModes.Add(new AutonomyMapMode());
+      MapModes.Add(new FortMapMode());
 
 
       // We set the default map mode to retrieve province colors

@@ -9,8 +9,8 @@ namespace Editor.MapModes;
 
 public class DevelopmentMapMode : MapMode
 {
-   private int Max = int.MinValue;
-   private int Min = int.MaxValue;
+   private int _max = int.MinValue;
+   private int _min = int.MaxValue;
    
    public DevelopmentMapMode()
    {
@@ -26,14 +26,14 @@ public class DevelopmentMapMode : MapMode
          return;
       var modifiedMinMax = false;
 
-      if (newDev > Max)
+      if (newDev > _max)
       {
-         Max = newDev;
+         _max = newDev;
          modifiedMinMax = true;
       }
-      if (newDev < Min)
+      if (newDev < _min)
       {
-         Min = newDev;
+         _min = newDev;
          modifiedMinMax = true;
       }
 
@@ -57,10 +57,10 @@ public class DevelopmentMapMode : MapMode
    {
       foreach (var province in Globals.Provinces.Values)
       {
-         if (province.GetTotalDevelopment() > Max)
-            Max = province.GetTotalDevelopment();
-         if (province.GetTotalDevelopment() < Min)
-            Min = province.GetTotalDevelopment();
+         if (province.GetTotalDevelopment() > _max)
+            _max = province.GetTotalDevelopment();
+         if (province.GetTotalDevelopment() < _min)
+            _min = province.GetTotalDevelopment();
       }
    }
 
@@ -76,12 +76,12 @@ public class DevelopmentMapMode : MapMode
          return Globals.Provinces[id].Color;
 
       var totalDev = Globals.Provinces[id].GetTotalDevelopment();
-      return Globals.ColorProvider.GetColorOnGreenRedShade(Min, Max, totalDev);
+      return Globals.ColorProvider.GetColorOnGreenRedShade(_min, _max, totalDev);
    }
 
 
-   public override string ToString()
+   public override string GetMapModeName()
    {
-      return "Development";
+      return "Total Development";
    }
 }

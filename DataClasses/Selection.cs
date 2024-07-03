@@ -50,8 +50,15 @@ public class Selection(PannablePictureBox pannablePictureBox)
 
    public void MarkNext(int provPtr)
    {
-      Clear();
-      Add(provPtr);
+      if (SelectedProvinces.Count == 1 && SelectedProvinces.Contains(provPtr))
+      {
+         Clear();
+      }
+      else
+      {
+         Clear();
+         Add(provPtr);
+      }
    }
 
    // Adds a province to the selection and redraws the border, allows for deselecting

@@ -128,8 +128,11 @@
     <Compile Include="Loading\SuperRegionLoading.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="MapModes\AreaMapMode.cs" />
+    <Compile Include="MapModes\AutonomyMapMode.cs" />
+    <Compile Include="MapModes\CenterOfTradeMapMode.cs" />
     <Compile Include="MapModes\ContinentMapMode.cs" />
     <Compile Include="MapModes\DevelopmentMapMode.cs" />
+    <Compile Include="MapModes\FortMapMode.cs" />
     <Compile Include="MapModes\ProvinceIdMapMode.cs" />
     <Compile Include="MapModes\ProvinceMapMode.cs" />
     <Compile Include="MapModes\RegionsMapMode.cs" />

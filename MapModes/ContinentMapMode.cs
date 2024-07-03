@@ -10,7 +10,7 @@ public sealed class ContinentMapMode : Interfaces.MapMode
 {
    public ContinentMapMode()
    {
-
+      ProvinceEventHandler.OnProvinceContinentChanged += UpdateProvince;
    }
 
    public override string GetMapModeName()

@@ -183,9 +183,10 @@ public class Province : IProvinceCollection
       get => _centerOfTrade;
       set
       {
-         if (Globals.State == State.Running)
-            RaiseProvinceCenterOfTradeLevelChanged(Id, value, _centerOfTrade, nameof(CenterOfTrade));
+         var old = _centerOfTrade;
          _centerOfTrade = value;
+         if (Globals.State == State.Running)
+            RaiseProvinceCenterOfTradeLevelChanged(Id, value, old, nameof(CenterOfTrade));
       }
    }
 
@@ -249,9 +250,10 @@ public class Province : IProvinceCollection
       get => _localAutonomy;
       set
       {
-         if (Globals.State == State.Running)
-            RaiseProvinceLocalAutonomyChanged(Id, value, _localAutonomy, nameof(LocalAutonomy));
+         var old = _localAutonomy;
          _localAutonomy = value;
+         if (Globals.State == State.Running)
+            RaiseProvinceLocalAutonomyChanged(Id, value, old, nameof(LocalAutonomy));
       }
    }
 
@@ -282,9 +284,10 @@ public class Province : IProvinceCollection
       get => _capital;
       set
       {
-         if (Globals.State == State.Running)
-            RaiseProvinceCapitalChanged(Id, value, _capital, nameof(Capital));
+         var old = _capital;
          _capital = value;
+         if (Globals.State == State.Running)
+            RaiseProvinceCapitalChanged(Id, value, old, nameof(Capital));
       }
    }
 
@@ -315,9 +318,10 @@ public class Province : IProvinceCollection
       get => _hasFort15Th;
       set
       {
-         if (Globals.State == State.Running)
-            RaiseProvinceHasFort15thChanged(Id, value, _hasFort15Th, nameof(HasFort15Th));
+         var old = _hasFort15Th;
          _hasFort15Th = value;
+         if (Globals.State == State.Running)
+            RaiseProvinceHasFort15thChanged(Id, value, old, nameof(HasFort15Th));
       }
    } // TODO parse to check other buildings
 

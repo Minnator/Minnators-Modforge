@@ -16,7 +16,7 @@ public static class LoadingManager
       AreaLoading.Load(project.VanillaPath, project.ColorProvider, ref loadingLog);
       RegionLoading.Load(project.VanillaPath, project.ColorProvider, ref loadingLog);
       SuperRegionLoading.Load(project.VanillaPath, project.ColorProvider, ref loadingLog);
-      ContinentLoading.Load(project.VanillaPath, ref loadingLog);
+      ContinentLoading.Load(project.VanillaPath, project.ColorProvider, ref loadingLog);
       LocalisationLoading.Load(project.ModPath, project.VanillaPath, project.Language, ref loadingLog);
       ProvinceParser.ParseAllProvinces(project.ModPath, project.VanillaPath, ref loadingLog);
 
