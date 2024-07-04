@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Windows.Forms;
 using Editor.Controls;
 using Editor.DataClasses;
@@ -135,6 +136,23 @@ namespace Editor
       private void ShowToolTipMenuItem_Click(object sender, EventArgs e)
       {
          MapPictureBox.ShowToolTip = ShowToolTipMenuItem.Checked;
+      }
+
+      private void testToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         var content =
+            File.ReadAllText(
+               "S:\\SteamLibrary\\steamapps\\common\\Europa Universalis IV\\common\\cultures\\00_cultures.txt");
+         var blocks = Parsing.GetNestedBLocks(0, ref content);
+
+         var sb = new System.Text.StringBuilder();
+         var depth = 0;
+         foreach (var block in blocks)
+         {
+            sb.AppendLine($"{block.Name} with [{block.Blocks.Count}] subblocks");
+         }
+
+         File.WriteAllText("C:\\Users\\david\\Downloads\\00_cultures_parsed.txt", sb.ToString());
       }
    }
 }

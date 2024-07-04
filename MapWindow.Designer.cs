@@ -35,6 +35,9 @@
          this.historyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.selectionHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.DeleteHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+         this.toolTipCustomizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+         this.openCustomizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+         this.ShowToolTipMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.MapModeComboBox = new System.Windows.Forms.ToolStripComboBox();
          this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.MapPanel = new System.Windows.Forms.Panel();
@@ -47,9 +50,7 @@
          this.RedoDepthLabel = new System.Windows.Forms.ToolStripLabel();
          this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
          this.SelectedProvinceSum = new System.Windows.Forms.ToolStripLabel();
-         this.toolTipCustomizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-         this.openCustomizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-         this.ShowToolTipMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+         this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.MapMenuStrip.SuspendLayout();
          this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
          this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -106,16 +107,42 @@
          // selectionHistoryToolStripMenuItem
          // 
          this.selectionHistoryToolStripMenuItem.Name = "selectionHistoryToolStripMenuItem";
-         this.selectionHistoryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+         this.selectionHistoryToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
          this.selectionHistoryToolStripMenuItem.Text = "View History Tree";
          this.selectionHistoryToolStripMenuItem.Click += new System.EventHandler(this.RevertInSelectionHistory);
          // 
          // DeleteHistoryToolStripMenuItem
          // 
          this.DeleteHistoryToolStripMenuItem.Name = "DeleteHistoryToolStripMenuItem";
-         this.DeleteHistoryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+         this.DeleteHistoryToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
          this.DeleteHistoryToolStripMenuItem.Text = "Delete History";
          this.DeleteHistoryToolStripMenuItem.Click += new System.EventHandler(this.DeleteHistoryToolStripMenuItem_Click);
+         // 
+         // toolTipCustomizerToolStripMenuItem
+         // 
+         this.toolTipCustomizerToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openCustomizerToolStripMenuItem,
+            this.ShowToolTipMenuItem});
+         this.toolTipCustomizerToolStripMenuItem.Name = "toolTipCustomizerToolStripMenuItem";
+         this.toolTipCustomizerToolStripMenuItem.Size = new System.Drawing.Size(120, 23);
+         this.toolTipCustomizerToolStripMenuItem.Text = "ToolTip Customizer";
+         // 
+         // openCustomizerToolStripMenuItem
+         // 
+         this.openCustomizerToolStripMenuItem.Name = "openCustomizerToolStripMenuItem";
+         this.openCustomizerToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+         this.openCustomizerToolStripMenuItem.Text = "Open Customizer";
+         this.openCustomizerToolStripMenuItem.Click += new System.EventHandler(this.openCustomizerToolStripMenuItem_Click);
+         // 
+         // ShowToolTipMenuItem
+         // 
+         this.ShowToolTipMenuItem.Checked = true;
+         this.ShowToolTipMenuItem.CheckOnClick = true;
+         this.ShowToolTipMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+         this.ShowToolTipMenuItem.Name = "ShowToolTipMenuItem";
+         this.ShowToolTipMenuItem.Size = new System.Drawing.Size(166, 22);
+         this.ShowToolTipMenuItem.Text = "Show ToolTip";
+         this.ShowToolTipMenuItem.Click += new System.EventHandler(this.ShowToolTipMenuItem_Click);
          // 
          // MapModeComboBox
          // 
@@ -126,6 +153,8 @@
          // 
          // debugToolStripMenuItem
          // 
+         this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.testToolStripMenuItem});
          this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
          this.debugToolStripMenuItem.Size = new System.Drawing.Size(54, 23);
          this.debugToolStripMenuItem.Text = "Debug";
@@ -217,31 +246,12 @@
          this.SelectedProvinceSum.Size = new System.Drawing.Size(49, 22);
          this.SelectedProvinceSum.Text = "ProSum";
          // 
-         // toolTipCustomizerToolStripMenuItem
+         // testToolStripMenuItem
          // 
-         this.toolTipCustomizerToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openCustomizerToolStripMenuItem,
-            this.ShowToolTipMenuItem});
-         this.toolTipCustomizerToolStripMenuItem.Name = "toolTipCustomizerToolStripMenuItem";
-         this.toolTipCustomizerToolStripMenuItem.Size = new System.Drawing.Size(120, 23);
-         this.toolTipCustomizerToolStripMenuItem.Text = "ToolTip Customizer";
-         // 
-         // openCustomizerToolStripMenuItem
-         // 
-         this.openCustomizerToolStripMenuItem.Name = "openCustomizerToolStripMenuItem";
-         this.openCustomizerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-         this.openCustomizerToolStripMenuItem.Text = "Open Customizer";
-         this.openCustomizerToolStripMenuItem.Click += new System.EventHandler(this.openCustomizerToolStripMenuItem_Click);
-         // 
-         // ShowToolTipMenuItem
-         // 
-         this.ShowToolTipMenuItem.Checked = true;
-         this.ShowToolTipMenuItem.CheckOnClick = true;
-         this.ShowToolTipMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-         this.ShowToolTipMenuItem.Name = "ShowToolTipMenuItem";
-         this.ShowToolTipMenuItem.Size = new System.Drawing.Size(180, 22);
-         this.ShowToolTipMenuItem.Text = "Show ToolTip";
-         this.ShowToolTipMenuItem.Click += new System.EventHandler(this.ShowToolTipMenuItem_Click);
+         this.testToolStripMenuItem.Name = "testToolStripMenuItem";
+         this.testToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+         this.testToolStripMenuItem.Text = "Test";
+         this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click);
          // 
          // MapWindow
          // 
@@ -294,6 +304,7 @@
       private System.Windows.Forms.ToolStripMenuItem toolTipCustomizerToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem openCustomizerToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem ShowToolTipMenuItem;
+      private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
    }
 }
 

@@ -55,7 +55,7 @@ public static class DefaultMapLoading
 
    private static void AddProvincesToDictionary(string provinceList, HashSet<int> hashSet)
    {
-      foreach (var item in Parsing.GetProvincesList(provinceList))
+      foreach (var item in Parsing.GetIntListFromString(provinceList))
          hashSet.Add(item);
    }
 }

@@ -33,7 +33,7 @@ public static class AreaLoading
       {
          var areaName = match.Groups["name"].Value;
 
-         areaDictionary.Add(areaName, new Area(areaName, [.. Parsing.GetProvincesList(match.Groups["ids"].Value)], provider.GetRandomColor()));
+         areaDictionary.Add(areaName, new Area(areaName, [.. Parsing.GetIntListFromString(match.Groups["ids"].Value)], provider.GetRandomColor()));
 
          foreach (var provinceId in areaDictionary[areaName].Provinces)
             if (Globals.Provinces.TryGetValue(provinceId, out var province)) province.Area = areaName;
