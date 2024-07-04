@@ -78,7 +78,7 @@ public static class Parsing
                index = str.Length - 1;
             else
                index = newEnd + 1;
-            end = closingMatch.Index;
+            end = newEnd + 1;
             content = str.Substring(start, index - start + 1);
          }
          else
