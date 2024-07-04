@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using Editor.Controls;
@@ -36,7 +37,7 @@ public class MapModeManager
       // We set the default map mode to retrieve province colors
 
       IdMapMode = new ();
-      IdMapMode.RenderMapMode(IdMapMode.GetProvinceColor);
+      IdMapMode.RenderMapMode(IdMapMode.GetProvinceColor); //TODO can be replaced by coping the bitmap from the modfolder if it exists
 
    }
    
@@ -54,7 +55,9 @@ public class MapModeManager
    {
       var names = new List<string>();
       foreach (var mode in MapModes)
+      {
          names.Add(mode.GetMapModeName());
+      }
       return names;
    }
 

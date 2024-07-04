@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Drawing;
+using System.IO;
 using System.Text;
 // ReSharper disable InconsistentNaming
 
@@ -27,6 +28,22 @@ internal static class IO
       {
          using StreamReader reader = new (path, encoding);
          data = reader.ReadToEnd();
+         return true;
+      }
+      catch (IOException)
+      {
+         return false;
+      }
+   }
+
+   public static bool ReadAllLinesANSI(string path, out string[] data)
+   {
+      data = [];
+      if (!File.Exists(path))
+         return false;
+      try
+      {
+         data = File.ReadAllLines(path, encoding);
          return true;
       }
       catch (IOException)

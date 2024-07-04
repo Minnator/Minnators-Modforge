@@ -41,19 +41,17 @@ public static class LoadingManager
 
    private static void InitMapModes(ref Log log, MapWindow mw)
    {
-
       var sw = Stopwatch.StartNew();
       Globals.MapModeManager = new(mw.MapPictureBox); // Initialize the MapModeManager
       Globals.MapModeManager.InitializeAllMapModes(); // Initialize all map modes
-      Globals.MapModeManager.SetCurrentMapMode("Provinces"); // Default map mode
-
-      foreach (var mode in Globals.MapModeManager.GetMapModes())
-      {
-         mw.MapModeComboBox.Items.Add(mode.GetMapModeName());
-      }
-      mw.MapModeComboBox.SelectedIndex = 0;
+      mw.MapModeComboBox.Items.Clear();
+      mw.MapModeComboBox.Items.AddRange([.. Globals.MapModeManager.GetMapModeNames()]);
       sw.Stop();
       log.WriteTimeStamp("Initializing MapModes", sw.ElapsedMilliseconds);
+      sw.Restart();
+      Globals.MapModeManager.SetCurrentMapMode("Provinces"); // Default map mode
+      sw.Stop();
+      log.WriteTimeStamp("Setting default map mode", sw.ElapsedMilliseconds);
    }
 
 
