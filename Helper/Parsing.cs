@@ -45,28 +45,53 @@ public static class Parsing
       return idList;
    }
 
-   public static List<Block> GetNestedBLocks(int index, ref string str)
+   public static List<Block> GetNestedBLocks(int index, ref string str, out int newEnd)
    {
       List<Block> blocks = [];
-      
+      newEnd = index;
+
       while (true)
       {
          var match = OpeningRegex.Match(str, index);
          var closingMatch = ClosingRegex.Match(str, index);
 
          if (!match.Success)
+         {
+            if (closingMatch.Success)
+            {
+               newEnd = closingMatch.Index;
+            }
             return blocks;
-         _blocksCount ++;
-         if (_blocksCount % 10 == 0)
-            Console.WriteLine(_blocksCount);
+         }
+         var nextOpening = OpeningRegex.Match(str, match.Index + match.Length);
          var name = match.Groups["name"].Value;
          var start = match.Index;
          List<Block> subBlocks = [];
-         if (closingMatch.Index > start)
-            subBlocks = GetNestedBLocks(start + match.Length, ref str);
-         var end = closingMatch.Index;
-         var content = str.Substring(start, end - start + 1);
+         var nextIndex = nextOpening.Index;
+         var closingIndex = closingMatch.Index;
+         string content;
+         int end;
+         if (closingIndex > nextIndex)
+         {
+            subBlocks = GetNestedBLocks(start + match.Length, ref str, out newEnd);
+            if (newEnd + 1 >= str.Length)
+               index = str.Length - 1;
+            else
+               index = newEnd + 1;
+            end = closingMatch.Index;
+            content = str.Substring(start, index - start + 1);
+         }
+         else
+         {
+            index = closingIndex + 1;
+            end = closingMatch.Index;
+            content = str.Substring(start, end - start + 1);
+         }
+         
          blocks.Add(new (start, end, name, content, subBlocks));
+         _blocksCount++;
+         if (_blocksCount % 10 == 0)
+            Console.WriteLine(_blocksCount);
       }
    }
 
