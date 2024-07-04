@@ -21,51 +21,51 @@ public class LocalisationLoading
       files.AddRange(FilesHelper.GetAllFilesInFolder(modLocPath, $"*_l_{language}.yml"));
 
       var regex = new Regex(@"\s*(?<key>.*):\d\s+""(?<value>.*)""", RegexOptions.Compiled);
-
+      var sw2 = Stopwatch.StartNew();
       var loc = new Dictionary<string, string>();
       var collisions = new Dictionary<string, string>();
 
-      //TODO Concurrent crash
-      Parallel.ForEach(files, fileName =>
+      for (var i = 0; i < 100; i++)
       {
-         var lines = IO.ReadAllLinesInUTF8(fileName);
-         var threadDict = new Dictionary<string, string>();
-
-         foreach (var line in lines)
+         loc = [];
+         collisions = [];
+         
+         //TODO Concurrent crash
+         Parallel.ForEach(files, fileName =>
          {
-            var match = regex.Match(line);
-            if (match.Success)
+            var lines = IO.ReadAllLinesInUTF8(fileName);
+            var threadDict = new Dictionary<string, string>();
+
+            foreach (var line in lines)
             {
+               var match = regex.Match(line);
+               if (!match.Success) 
+                  continue;
+
                var key = match.Groups["key"].Value;
                var value = match.Groups["value"].Value;
 
                if (loc.TryGetValue(key, out var existingValue))
                {
-                  if (existingValue != value)
-                  {
-                     lock (collisions)
-                     {
-                        if (!collisions.ContainsKey(key))
-                           collisions.Add(key, existingValue);
-                        collisions[key] = value;
-                     }
-                  }
+                  if (existingValue == value) 
+                     continue;
+
+                  if (!collisions.ContainsKey(key))
+                     collisions.Add(key, existingValue);
+                  collisions[key] = value;
                }
                else
                {
                   threadDict.Add(key, value);
                }
             }
-         }
-         lock (loc)
-         {
             foreach (var kvp in threadDict)
             {
-               if (!loc.ContainsKey(kvp.Key))
-                  loc.Add(kvp.Key, kvp.Value);
-               else
+               lock (loc)
                {
-                  lock (collisions)
+                  if (!loc.ContainsKey(kvp.Key))
+                     loc.Add(kvp.Key, kvp.Value);
+                  else
                   {
                      if (!collisions.ContainsKey(kvp.Key))
                         collisions.Add(kvp.Key, kvp.Value);
@@ -73,9 +73,11 @@ public class LocalisationLoading
                   }
                }
             }
-         }
-         threadDict.Clear();
-      });
+            threadDict.Clear();
+         });
+      }
+      sw2.Stop();
+      log.WriteTimeStamp($"Loc loaded in [{sw2.ElapsedMilliseconds / 100}] ms per iteration", sw2.ElapsedMilliseconds / 100);
 
       Globals.Localisation = loc;
       Globals.LocalisationCollisions = collisions;
