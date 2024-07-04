@@ -61,12 +61,12 @@ public static class Parsing
             Console.WriteLine(_blocksCount);
          var name = match.Groups["name"].Value;
          var start = match.Index;
-         var subBlocks = GetNestedBLocks(start + match.Length, ref str);
+         List<Block> subBlocks = [];
+         if (closingMatch.Index > start)
+            subBlocks = GetNestedBLocks(start + match.Length, ref str);
          var end = closingMatch.Index;
          var content = str.Substring(start, end - start + 1);
          blocks.Add(new (start, end, name, content, subBlocks));
-         if (closingMatch.Index < match.Index)
-            return blocks;
       }
    }
 
