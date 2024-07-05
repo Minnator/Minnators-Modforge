@@ -45,6 +45,7 @@ public static class Parsing
       return idList;
    }
 
+
    public static List<Block> GetNestedBLocks(int index, ref string str, out int newEnd)
    {
       List<Block> blocks = [];
@@ -52,10 +53,10 @@ public static class Parsing
 
       while (true)
       {
-         var match = OpeningRegex.Match(str, index);
+         var opening = OpeningRegex.Match(str, index);
          var closingMatch = ClosingRegex.Match(str, index);
 
-         if (!match.Success)
+         if (!opening.Success)
          {
             if (closingMatch.Success)
             {
@@ -63,28 +64,35 @@ public static class Parsing
             }
             return blocks;
          }
-         var nextOpening = OpeningRegex.Match(str, match.Index + match.Length);
-         var name = match.Groups["name"].Value;
-         var start = match.Index;
+         var nextOpening = OpeningRegex.Match(str, opening.Index + opening.Length);
+         var name = opening.Groups["name"].Value;
          List<Block> subBlocks = [];
+         var start = opening.Index; 
          var nextIndex = nextOpening.Index;
          var closingIndex = closingMatch.Index;
          string content;
          int end;
+
+
+         if (closingIndex < start || !nextOpening.Success)
+         {
+            newEnd = closingIndex;
+            return blocks;
+         }
          if (closingIndex > nextIndex)
          {
-            subBlocks = GetNestedBLocks(start + match.Length, ref str, out newEnd);
+            subBlocks = GetNestedBLocks(start + opening.Length + 1, ref str, out newEnd);
             if (newEnd + 1 >= str.Length)
                index = str.Length - 1;
             else
                index = newEnd + 1;
             end = newEnd + 1;
-            content = str.Substring(start, index - start + 1);
+            content = str.Substring(start, end - start + 1);
          }
          else
          {
             index = closingIndex + 1;
-            end = closingMatch.Index;
+            end = closingIndex;
             content = str.Substring(start, end - start + 1);
          }
          

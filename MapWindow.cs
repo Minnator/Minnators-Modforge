@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 using Editor.Controls;
 using Editor.DataClasses;
@@ -140,10 +141,32 @@ namespace Editor
 
       private void testToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         var content =
-            File.ReadAllText(
-               "C:\\Users\\david\\Downloads\\NestedBLocks.txt");
+         //var content = File.ReadAllText("C:\\Users\\david\\Downloads\\NestedBLocks.txt");
+         var content = File.ReadAllText("S:\\SteamLibrary\\steamapps\\common\\Europa Universalis IV\\common\\cultures\\00_cultures.txt");
          var blocks = Parsing.GetNestedBLocks(0, ref content, out _);
+
+         var sb = new StringBuilder();
+         foreach (var block in blocks)
+         {
+            BuildBlockString(0, block, ref sb);
+         }
+         File.WriteAllText("C:\\Users\\david\\Downloads\\NestedBLocksOutput.txt", sb.ToString());
+      }
+
+      private void BuildBlockString(int tabs, Block block, ref StringBuilder sb)
+      {
+         sb.Append(GetTabs(tabs));
+         sb.Append(block.Name);
+         sb.Append("\n");
+         foreach (var subBlock in block.Blocks)
+         {
+            BuildBlockString(tabs + 1, subBlock, ref sb);
+         }
+      }
+
+      private string GetTabs(int tabs)
+      {
+         return new ('\t', tabs);
       }
    }
 }
