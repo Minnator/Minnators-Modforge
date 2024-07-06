@@ -101,7 +101,7 @@ public static class DebugMaps
       Debug.WriteLine($"Test: {sw.ElapsedMilliseconds} ms {provincePixels.Length}");
       var ids = Globals.Provinces.Values.Select(province => province.Id).ToArray();
       sw.Restart();
-      MapDrawHelper.GetAllPixelPoints(ids, out var points);
+      Geometry.GetAllPixelPoints(ids, out var points);
       sw.Stop();
       Debug.WriteLine($"Test2: {sw.ElapsedMilliseconds} ms {points.Length}");
    }

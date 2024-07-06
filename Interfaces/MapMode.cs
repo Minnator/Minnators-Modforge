@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using Editor.Helper;
 
@@ -8,32 +9,44 @@ namespace Editor.Interfaces;
 public abstract class MapMode
 {
    public Bitmap Bitmap { get; set; } = null!;
-   
+   public virtual bool IsLandOnly => false;
+
    public virtual void RenderMapMode(Func<int, Color> method)
    {
       switch (Globals.MapModeRendering)
       {
          case MapModeRendering.LiveBackground:
          case MapModeRendering.Live:
+            var sw = Stopwatch.StartNew();
             Bitmap?.Dispose();
-            Globals.MapModeManager.ShareLiveBitmap = BitMapHelper.GenerateBitmapFromProvinces(method);
+            if (Globals.MapModeManager.PreviousLandOnly)
+            {
+               BitMapHelper.ModifyByProvinceCollection(Globals.MapModeManager.ShareLiveBitmap, Globals.LandProvinceIds, GetProvinceColor);
+            }
+            else
+            {
+               Globals.MapModeManager.ShareLiveBitmap = BitMapHelper.GenerateBitmapFromProvinces(method);
+            }
             MapDrawHelper.DrawAllProvinceBorders(Globals.MapModeManager.ShareLiveBitmap, Color.Black);
+            Globals.MapModeManager.PictureBox.Image = Globals.MapModeManager.ShareLiveBitmap;
+            sw.Stop();
+            Console.WriteLine($"RenderMapMode {GetMapModeName()} took {sw.ElapsedMilliseconds}ms");
             break;
          case MapModeRendering.Cached:
             Bitmap?.Dispose();
             Bitmap = BitMapHelper.GenerateBitmapFromProvinces(GetProvinceColor);
             MapDrawHelper.DrawAllProvinceBorders(Bitmap, Color.Black);
+            Globals.MapModeManager.PictureBox.Image = Bitmap;
             break;
          default:
             throw new ArgumentOutOfRangeException();
       }
-      Globals.MapModeManager.PictureBox.Image = Globals.MapModeManager.ShareLiveBitmap;
       Globals.MapModeManager.PictureBox.Invalidate();
    }
 
    public virtual string GetMapModeName()
    {
-      return "MapMode";
+      return "REPLACE_ME";
    }
 
    public virtual Color GetProvinceColor(int id)

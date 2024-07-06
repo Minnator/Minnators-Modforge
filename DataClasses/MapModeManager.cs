@@ -13,6 +13,7 @@ public class MapModeManager
    public Interfaces.MapMode CurrentMapMode { get; set; } = null!;
    private ProvinceIdMapMode IdMapMode { get; set; } = null!;
    public PannablePictureBox PictureBox { get; set; }
+   public bool PreviousLandOnly { get; set; }
    public Bitmap ShareLiveBitmap { get; set; }
 
    public MapModeManager(PannablePictureBox pictureBox)
@@ -68,6 +69,7 @@ public class MapModeManager
       {
          CurrentMapMode.RenderMapMode(CurrentMapMode.GetProvinceColor);
          PictureBox.Image = ShareLiveBitmap;
+         PreviousLandOnly = CurrentMapMode.IsLandOnly; // We store the previous land only value to save time rendering the map mode if the next one is also land only
       }
       else
          PictureBox.Image = CurrentMapMode.Bitmap; // We point the PictureBox to the new bitmap

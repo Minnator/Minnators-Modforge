@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using Editor.DataClasses;
 using Editor.Interfaces;
 
 namespace Editor.Helper;
 
-public class BitMapHelper
+public static class BitMapHelper
 {
 
    public static void WriteOnProvince(Func<int, string> method, Bitmap bmp)
@@ -27,6 +29,61 @@ public class BitMapHelper
          graphics.DrawString(text, font, brush, province.Center.X - textWidth / 2, province.Center.Y - textHeight / 2);
       }
 
+   }
+
+   public static void ModifyByProvinceCollection(Bitmap bmp, ICollection<int> ids, Func<int, Color> method)
+   {
+      var sw = Stopwatch.StartNew();
+      var provinces = new Province[ids.Count];
+      var cnt = 0;
+      foreach (var id in ids)
+      {
+         provinces[cnt] = Globals.Provinces[id];
+         cnt++;
+      }
+      ModifyByProvinceCollection(bmp, provinces, method);
+      //bmp.Save ("C:\\Users\\david\\Downloads\\Map.png", ImageFormat.Png);
+      sw.Stop();
+      Debug.WriteLine($"Modifying Bitmap took {sw.ElapsedMilliseconds} ms");
+   }
+
+   public static void ModifyByProvinceCollection(Bitmap bmp, ICollection<Province> provinces, Func<int, Color> method)
+   {
+      var sw = Stopwatch.StartNew();
+      var width = bmp.Width;
+      var height = bmp.Height;
+
+      // Lock the bits in memory
+      var bitmapData = bmp.LockBits(new (0, 0, width, height), ImageLockMode.WriteOnly, bmp.PixelFormat);
+
+      // Calculate stride (bytes per row)
+      var stride = bitmapData.Stride;
+      var bytesPerPixel = Image.GetPixelFormatSize(bmp.PixelFormat) / 8;
+
+      unsafe
+      {
+         Parallel.ForEach(provinces, province =>
+         {
+            var points = new Point[province.PixelCnt];
+            Array.Copy(Globals.Pixels, province.PixelPtr, points, 0, province.PixelCnt);
+
+            var color = method(province.Id);
+
+            var ptr = (byte*)bitmapData.Scan0;
+            foreach (var point in points)
+            {
+               var index = point.Y * stride + point.X * bytesPerPixel;
+
+               ptr[index + 2] = color.R;
+               ptr[index + 1] = color.G;
+               ptr[index] = color.B;
+            }
+         });
+      }
+
+      bmp.UnlockBits(bitmapData);
+      sw.Stop();
+      //Debug.WriteLine($"Modifying Bitmap took {sw.ElapsedMilliseconds} ms");
    }
 
    /// <summary>
@@ -113,7 +170,7 @@ public class BitMapHelper
          Parallel.ForEach(collection, options, collect =>
          {
             //MapDrawHelper.GetAllPixelPoints(collect.GetProvinceIds(), out var points);
-            MapDrawHelper.GetAllPixelPtrs(collect.GetProvinceIds(), out var id);
+            Geometry.GetAllPixelPtrs(collect.GetProvinceIds(), out var id);
             var color = collect.Color;
 
             var ptr = (byte*)bitmapData.Scan0;

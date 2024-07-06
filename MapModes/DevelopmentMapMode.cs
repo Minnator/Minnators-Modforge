@@ -11,7 +11,9 @@ public class DevelopmentMapMode : MapMode
 {
    private int _max = int.MinValue;
    private int _min = int.MaxValue;
-   
+
+   public override bool IsLandOnly => true;
+
    public DevelopmentMapMode()
    {
       // Subscribe to events to update the min and max values when a province's development changes

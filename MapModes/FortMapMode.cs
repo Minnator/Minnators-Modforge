@@ -6,6 +6,8 @@ namespace Editor.MapModes;
 public class FortMapMode : Interfaces.MapMode
 {
    //TODO read min an max from defines
+   public override bool IsLandOnly => true;
+
    public FortMapMode()
    {
       // Subscribe to events to update the min and max values when a province's development changes

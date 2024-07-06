@@ -182,4 +182,52 @@ public static class Geometry
    {
       return GetBounds(selection.Select(id => Globals.Provinces[id].Bounds.Location).ToArray());
    }
+
+
+   public static void GetAllPixelPoints(int[] provinceIds, out Point[] points)
+   {
+      var cnt = 0;
+      foreach (var p in provinceIds)
+      {
+         cnt += Globals.Provinces[p].PixelCnt;
+      }
+      points = new Point[cnt];
+      var index = 0;
+      foreach (var p in provinceIds)
+      {
+         var prov = Globals.Provinces[p];
+         Array.Copy(Globals.Pixels, prov.PixelPtr, points, index, prov.PixelCnt);
+         index += prov.PixelCnt;
+      }
+   }
+
+   public static void GetAllPixelPtrs(int[] ids, out int[,] ptrs)
+   {
+      ptrs = new int[ids.Length, 2];
+      for (var i = 0; i < ids.Length; i++)
+      {
+         var prov = Globals.Provinces[ids[i]];
+         ptrs[i, 0] = prov.PixelPtr;
+         ptrs[i, 1] = prov.PixelCnt;
+      }
+   }
+
+   public static Point[] GetAllBorderPoints(int[] provinceIds)
+   {
+      var cnt = 0;
+      foreach (var p in provinceIds)
+      {
+         cnt += Globals.Provinces[p].BorderCnt;
+      }
+      var points = new Point[cnt];
+      var index = 0;
+      foreach (var p in provinceIds)
+      {
+         var prov = Globals.Provinces[p];
+         Array.Copy(Globals.BorderPixels, prov.BorderPtr, points, index, prov.BorderCnt);
+         index += prov.BorderCnt;
+      }
+      return points;
+   }
+
 }

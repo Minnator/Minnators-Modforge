@@ -5,6 +5,7 @@ namespace Editor.MapModes;
 
 public class AutonomyMapMode : Interfaces.MapMode
 {
+   public override bool IsLandOnly => true;
 
    public AutonomyMapMode()
    {

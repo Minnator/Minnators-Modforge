@@ -7,6 +7,8 @@ public class CenterOfTradeMapMode : Interfaces.MapMode
 {
    //TODO read min an max from defines
 
+   public override bool IsLandOnly => true;
+
    public CenterOfTradeMapMode()
    {
       // Subscribe to events to update the min and max values when a province's development changes

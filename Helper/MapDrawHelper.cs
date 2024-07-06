@@ -36,7 +36,34 @@ public static class MapDrawHelper
       }
       return rect;
    }
-   
+
+   public static Rectangle DrawOnMap(ICollection<int> ids, Func<int, Color> func, Bitmap bmp)
+   {
+      if (ids.Count == 0)
+         return Rectangle.Empty;
+
+      List<Rectangle> rects;
+
+      switch (bmp.PixelFormat)
+      {
+         case PixelFormat.Format24bppRgb when ids.Count > Environment.ProcessorCount:
+            DrawPixels24BppParallel(ids, func, bmp, out rects);
+            break;
+         case PixelFormat.Format24bppRgb:
+            DrawPixels24Bpp(ids, func, bmp, out rects);
+            break;
+         case PixelFormat.Format32bppArgb when ids.Count > Environment.ProcessorCount:
+            DrawPixels32BppParallel(ids, func, bmp, out rects);
+            break;
+         case PixelFormat.Format32bppArgb:
+            DrawPixels32Bpp(ids, func, bmp, out rects);
+            break;
+         default:
+            throw new ArgumentOutOfRangeException(nameof(bmp.PixelFormat), "Unknown Bitmap format.");
+      }
+      return Geometry.GetBounds(rects);
+   }
+
    // Draws the border of the given province on the given Bitmap with the given Color
    public static Rectangle DrawProvinceBorder(int provincePtr, Color color, Bitmap bmp)
    {
@@ -88,65 +115,46 @@ public static class MapDrawHelper
    private static Rectangle DrawBorderCollection (int[] provinceIds, Color color, Bitmap bmp)
    {
      var rects = provinceIds.Select(ptr => Globals.Provinces[ptr].Bounds).ToList();
-      return DrawOnMap(Geometry.GetBounds(rects), GetAllBorderPoints(provinceIds), color, bmp);
+      return DrawOnMap(Geometry.GetBounds(rects), Geometry.GetAllBorderPoints(provinceIds), color, bmp);
    }
 
    private static Rectangle DrawProvinceCollection (int[] provinceIds, Color color, Bitmap bmp)
    {
       var rects = provinceIds.Select(ptr => Globals.Provinces[ptr].Bounds).ToList();
-      GetAllPixelPoints(provinceIds, out var points);
+      Geometry.GetAllPixelPoints(provinceIds, out var points);
       return DrawOnMap(Geometry.GetBounds(rects), points, color, bmp);
-   }
-
-   public static void GetAllPixelPoints (int[] provinceIds, out Point[] points)
-   {
-      var cnt = 0;
-      foreach (var p in provinceIds)
-      {
-         cnt += Globals.Provinces[p].PixelCnt;
-      }
-      points = new Point[cnt];
-      var index = 0;
-      foreach (var p in provinceIds)
-      {
-         var prov = Globals.Provinces[p];
-         Array.Copy(Globals.Pixels, prov.PixelPtr, points, index, prov.PixelCnt);
-         index += prov.PixelCnt;
-      }
-   }
-
-   public static void GetAllPixelPtrs(int[] ids, out int[,] ptrs)
-   {
-      ptrs = new int[ids.Length, 2];
-      for (var i = 0; i < ids.Length; i++)
-      {
-         var prov = Globals.Provinces[ids[i]];
-         ptrs[i, 0] = prov.PixelPtr;
-         ptrs[i, 1] = prov.PixelCnt;
-      }
-   }
-
-   public static Point[] GetAllBorderPoints (int[] provinceIds)
-   {
-      var cnt = 0;
-      foreach (var p in provinceIds)
-      {
-         cnt += Globals.Provinces[p].BorderCnt;
-      }
-      var points = new Point[cnt];
-      var index = 0;
-      foreach (var p in provinceIds)
-      {
-         var prov = Globals.Provinces[p];
-         Array.Copy(Globals.BorderPixels, prov.BorderPtr, points, index, prov.BorderCnt);
-         index += prov.BorderCnt;
-      }
-      return points;
    }
 
    // ------------------------------ 24bpp ------------------------------
    #region 24bpp Drawing
    // !!24bpp!! Draws the given Array of Points on the given Bitmap with the given Color in parallel
+
+   private static void DrawPixels24BppParallel(ICollection<int> ids, Func<int, Color> func, Bitmap bmp, out List<Rectangle> rects)
+   {
+      rects = [];
+      foreach (var id in ids)
+      {
+         var province = Globals.Provinces[id];
+         var points = new Point[province.PixelCnt];
+         Array.Copy(Globals.Pixels, province.PixelPtr, points, 0, province.PixelCnt);
+         DrawPixels24BppParallel(province.Bounds, points, func(id), bmp);
+         rects.Add(province.Bounds);
+      }
+   }
+
+   private static void DrawPixels24Bpp (ICollection<int> ids, Func<int, Color> func, Bitmap bmp, out List<Rectangle> rects)
+   {
+      rects = [];
+      foreach (var id in ids)
+      {
+         var province = Globals.Provinces[id];
+         var points = new Point[province.PixelCnt];
+         Array.Copy(Globals.Pixels, province.PixelPtr, points, 0, province.PixelCnt);
+         DrawPixels24Bpp(province.Bounds, points, func(id), bmp);
+         rects.Add(province.Bounds);
+      }
+   }
+   
    private static void DrawPixels24BppParallel(Rectangle rect, Point[] points, Color color, Bitmap bmp)
    {
       var bmpData = bmp.LockBits(rect, ImageLockMode.WriteOnly, bmp.PixelFormat);
@@ -199,6 +207,33 @@ public static class MapDrawHelper
    // ------------------------------ 32bpp ------------------------------
    #region 32bpp Drawing
    // !!32bpp!! Draws the given Array of Points on the given Bitmap with the given Color
+   
+   private static void DrawPixels32Bpp(ICollection<int> ids, Func<int, Color> func, Bitmap bmp, out List<Rectangle> rects)
+   {
+      rects = [];
+      foreach (var id in ids)
+      {
+         var province = Globals.Provinces[id];
+         var points = new Point[province.PixelCnt];
+         Array.Copy(Globals.Pixels, province.PixelPtr, points, 0, province.PixelCnt);
+         DrawPixels32Bpp(province.Bounds, points, func(id), bmp);
+         rects.Add(province.Bounds);
+      }
+   }
+
+   private static void DrawPixels32BppParallel(ICollection<int> ids, Func<int, Color> func, Bitmap bmp, out List<Rectangle> rects)
+   {
+      rects = [];
+      foreach (var id in ids)
+      {
+         var province = Globals.Provinces[id];
+         var points = new Point[province.PixelCnt];
+         Array.Copy(Globals.Pixels, province.PixelPtr, points, 0, province.PixelCnt);
+         DrawPixels32BppParallel(province.Bounds, points, func(id), bmp);
+         rects.Add(province.Bounds);
+      }
+   }
+
    private static void DrawPixels32Bpp(Rectangle rect, Point[] points, Color color, Bitmap bmp)
    {
       var bmpData = bmp.LockBits(rect, ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);

@@ -16,11 +16,14 @@ public static class DefaultMapLoading
       var content = IO.ReadAllInUTF8(path);
       const string pattern = @"\bmax_provinces\b\s+=\s+(?<maxProv>\d*)\s*\bsea_starts\b\s+=\s+{(?<seaProvs>[^\}]*)}[.\s\S]*\bonly_used_for_random\b\s+=\s+{(?<RnvProvs>[^\}]*)}[.\s\S]*\blakes\b\s+=\s+{(?<LakeProvs>[^\}]*)}[.\s\S]*\bforce_coastal\b\s+=\s+{(?<CostalProvs>[^\}]*)";
 
-      var land = new HashSet<int>();
-      var sea = new HashSet<int>();
-      var rnv = new HashSet<int>();
-      var lake = new HashSet<int>();
-      var coastal = new HashSet<int>();
+      HashSet<int> land = [];
+      HashSet<int> sea = [];
+      HashSet<int> rnv = [];
+      HashSet<int> lake = [];
+      HashSet<int> coastal = [];
+
+      List<int> nonLandProvinces = [];
+      List<int> landProvinces = [];
 
       var match = Regex.Match(content, pattern);
 
@@ -31,9 +34,15 @@ public static class DefaultMapLoading
 
       foreach (var p in Globals.Provinces.Values)
       {
-         if (sea.Contains(p.Id) || rnv.Contains(p.Id) || lake.Contains(p.Id) || coastal.Contains(p.Id))
+         if (sea.Contains(p.Id) || lake.Contains(p.Id))
+         {
+            nonLandProvinces.Add(p.Id);
+            continue;
+         }
+         if ( rnv.Contains(p.Id) || coastal.Contains(p.Id))
             continue;
          land.Add(p.Id);
+         landProvinces.Add(p.Id);
       }
 
       foreach (var p in rnv)
@@ -48,6 +57,8 @@ public static class DefaultMapLoading
       Globals.SeaProvinces = sea;
       Globals.LakeProvinces = lake;
       Globals.CoastalProvinces = coastal;
+      Globals.NonLandProvinceIds = [.. nonLandProvinces];
+      Globals.LandProvinceIds = [.. landProvinces];
 
       sw.Stop();
       loadingLog.WriteTimeStamp("Parsing default.map", sw.ElapsedMilliseconds);

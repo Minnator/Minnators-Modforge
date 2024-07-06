@@ -73,6 +73,8 @@ public static class Globals
    public static HashSet<int> SeaProvinces = null!;
    public static HashSet<int> LakeProvinces = null!;
    public static HashSet<int> CoastalProvinces = null!;
+   public static int[] NonLandProvinceIds = null!;
+   public static int[] LandProvinceIds = null!;
    // In Game Groups
    public static Dictionary<string, Area> Areas = null!;
    public static Dictionary<string, Region> Regions { get; set; } = [];
