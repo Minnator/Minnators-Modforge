@@ -54,7 +54,7 @@ public class BitMapHelper
       unsafe
       {
 
-         Parallel.ForEach(Globals.Provinces.Values, province =>
+         Parallel.ForEach(Globals.Provinces.Values, province => // TODO transfer the collection per method call
          {
             var points = new Point[province.PixelCnt];
             Array.Copy(Globals.Pixels, province.PixelPtr, points, 0, province.PixelCnt);

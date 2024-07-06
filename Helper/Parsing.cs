@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Group = Editor.DataClasses.Group;
 
@@ -12,6 +13,34 @@ public class Block(int start, int end, string name, List<IElement> subBlocks) : 
    public string Name { get; set; } = name;
    public List<IElement> Blocks { get; set; } = subBlocks;
    public bool IsBlock => true;
+   public List<Content> GetContentElements
+   {
+      get
+      {
+         List<Content> contents = [];
+         foreach (var block in Blocks)
+         {
+            if (block is Content c)
+               contents.Add(c);
+         }
+         return contents;
+      }
+   }
+
+   public List<Block> GetBlockElements
+   {
+      get
+      {
+         List<Block> blocks = [];
+         foreach (var block in Blocks)
+         {
+            if (block is Block b)
+               blocks.Add(b);
+
+         }
+         return blocks;
+      }
+   }
 }
 
 public class Content(string value) : IElement
@@ -19,7 +48,6 @@ public class Content(string value) : IElement
    public string Value { get; set; } = value;
    public bool IsBlock => false;
 }
-
 public interface IElement
 {
    public bool IsBlock { get; }
@@ -31,10 +59,9 @@ public static class Parsing
 {
    private static readonly Regex OpeningRegex = new (@"(?<name>[\w]+)\s*=\s*{");
    private static readonly Regex ClosingRegex = new (@"}");
-   private static int _blocksCount = 0;
 
    /// <summary>
-   /// Returns a list of <c>int</c> from a string which are seperated by <c>n</c> whitespace chars.
+   /// Returns a list of <c>int</c> from a string which are separated by <c>n</c> whitespace chars.
    /// </summary>
    /// <param name="str"></param>
    /// <returns></returns>
@@ -51,6 +78,69 @@ public static class Parsing
       return idList;
    }
 
+   public static List<IElement> GetNestedBLocks2(int index, ref string str, out int newEnd)
+   {
+      List<IElement> elements = new List<IElement>();
+      newEnd = index;
+      Stack<(int index, List<IElement> elements)> stack = new ();
+      stack.Push((index, elements));
+
+      while (stack.Count > 0)
+      {
+         var (currentIndex, currentElements) = stack.Pop();
+         newEnd = currentIndex;
+
+         while (true)
+         {
+            var opening = OpeningRegex.Match(str, currentIndex);
+            var closingMatch = ClosingRegex.Match(str, currentIndex);
+
+            if (!opening.Success)
+            {
+               if (closingMatch.Success)
+                  newEnd = closingMatch.Index;
+               break;
+            }
+            var nextOpening = OpeningRegex.Match(str, opening.Index + opening.Length);
+            List<IElement> subElements = new List<IElement>();
+            var start = opening.Index;
+            var closingIndex = closingMatch.Index;
+            int end;
+
+            if (closingIndex < start)
+            {
+               newEnd = closingIndex;
+               break;
+            }
+
+            var subString = str.Substring(currentIndex, start - currentIndex).Trim();
+            if (!string.IsNullOrEmpty(subString))
+               currentElements.Add(new Content(subString));
+
+            if (nextOpening.Success && closingIndex > nextOpening.Index)
+            {
+               stack.Push((currentIndex, currentElements));
+               currentIndex = start + opening.Length;
+               stack.Push((currentIndex, subElements));
+               break;
+            }
+            else
+            {
+               currentIndex = closingIndex + 1;
+               end = closingIndex;
+               var subStr = str.Substring(start + opening.Length, end - start - opening.Length).Trim();
+               if (!string.IsNullOrEmpty(subStr))
+                  subElements.Add(new Content(subStr));
+            }
+
+            currentElements.Add(new Block(start, end, opening.Groups["name"].Value, subElements));
+            currentIndex = end + 1;
+         }
+      }
+
+      return elements;
+   }
+
 
    public static List<IElement> GetNestedBLocks(int index, ref string str, out int newEnd)
    {
@@ -64,23 +154,19 @@ public static class Parsing
 
          if (!opening.Success)
          {
-            if (closingMatch.Success)
-            {
+            if (closingMatch.Success) 
                newEnd = closingMatch.Index;
-            }
             return elements;
          }
+
          var nextOpening = OpeningRegex.Match(str, opening.Index + opening.Length);
-         var name = opening.Groups["name"].Value;
          List<IElement> subElements = [];
          var start = opening.Index; 
-         var nextIndex = nextOpening.Index;
          var closingIndex = closingMatch.Index;
-         string content;
          int end;
 
 
-         if (closingIndex < start) // Closing several Blocks
+         if (closingIndex < start) 
          {
             newEnd = closingIndex;
             return elements;
@@ -90,13 +176,12 @@ public static class Parsing
          if (!string.IsNullOrEmpty(subString))
             elements.Add(new Content(subString));
 
-         if (nextOpening.Success && closingIndex > nextIndex) // 
+         if (nextOpening.Success && closingIndex > nextOpening.Index) // 
          {
             subElements = GetNestedBLocks(start + opening.Length, ref str, out newEnd);
             index = end = newEnd + 1;
-            //content = str.Substring(start, end - start + 1);
          }
-         else // Adding next subBlock
+         else 
          {
             index = closingIndex + 1;
             end = closingIndex;
@@ -105,10 +190,7 @@ public static class Parsing
                subElements.Add(new Content(subStr));
          }
          
-         elements.Add(new Block(start, end, name, subElements));
-         _blocksCount++;
-         if (_blocksCount % 10 == 0)
-            Console.WriteLine(_blocksCount);
+         elements.Add(new Block(start, end, opening.Groups["name"].Value, subElements));
       }
    }
 

@@ -15,6 +15,29 @@ public static class DebugPrints
 
 
 
+   public static void BuildBlockString(int tabs, IElement element, ref StringBuilder sb)
+   {
+      if (element.IsBlock)
+      {
+         var block = (Block)element;
+         sb.Append(GetTabs(tabs));
+         sb.Append(block.Name);
+         sb.Append(" : \n");
+         foreach (var subBlock in block.Blocks)
+         {
+            BuildBlockString(tabs + 1, subBlock, ref sb);
+         }
+      }
+      else
+      {
+         sb.Append(GetTabs(tabs) + "\"" + ((Content)element).Value + "\"\n");
+      }
+   }
+
+   private static string GetTabs(int tabs)
+   {
+      return new('\t', tabs);
+   }
 
    public static void PrintAllAttributes(List<ParsingProvince> provinces)
    {

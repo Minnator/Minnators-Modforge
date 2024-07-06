@@ -1,10 +1,9 @@
-﻿using Editor.DataClasses;
-using Editor.Helper;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
+using Editor.DataClasses;
+using Editor.Helper;
 
 namespace Editor.Loading;
 
@@ -26,10 +25,8 @@ public static class AreaLoading
       {
          sb.Append(Parsing.RemoveCommentFromLine(line));
       }
-      var areaString = sb.ToString();
-      areaString = Regex.Replace(areaString, @"(?<color>color\s*=\s*{\s*(?:[0-9]{1,3}\s*){3}})", "");
-      Clipboard.SetText(areaString);
-      foreach (Match match in areaRegex.Matches(areaString))
+
+      foreach (Match match in areaRegex.Matches(Regex.Replace(sb.ToString(), @"(?<color>color\s*=\s*{\s*(?:[0-9]{1,3}\s*){3}})", "")))
       {
          var areaName = match.Groups["name"].Value;
 

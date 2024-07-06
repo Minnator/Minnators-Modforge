@@ -15,11 +15,10 @@ public class CenterOfTradeMapMode : Interfaces.MapMode
 
    public override Color GetProvinceColor(int id)
    {
-      if (Globals.SeaProvinces.Contains(id))
+      if (Globals.SeaProvinces.Contains(id) || Globals.LakeProvinces.Contains(id))
          return Globals.Provinces[id].Color;
 
-      var cotLevel = Globals.Provinces[id].CenterOfTrade;
-      return cotLevel switch
+      return Globals.Provinces[id].CenterOfTrade switch
       {
          0 => Color.DimGray,
          1 => Color.FromArgb(0, 0, 255),

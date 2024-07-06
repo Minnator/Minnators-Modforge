@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
@@ -143,38 +144,18 @@ namespace Editor
       {
          //var content = File.ReadAllText("C:\\Users\\david\\Downloads\\NestedBLocks.txt");
          var content = File.ReadAllText("S:\\SteamLibrary\\steamapps\\common\\Europa Universalis IV\\common\\cultures\\00_cultures.txt");
+         var sw = Stopwatch.StartNew();
          var blocks = Parsing.GetNestedBLocks(0, ref content, out _);
+         sw.Stop();
+         Debug.WriteLine("Parsing cultures took: " + sw.ElapsedMilliseconds + "ms");
 
          var sb = new StringBuilder();
          foreach (var block in blocks)
          {
-            BuildBlockString(0, block, ref sb);
+            DebugPrints.BuildBlockString(0, block, ref sb);
          }
          File.WriteAllText("C:\\Users\\david\\Downloads\\NestedBLocksOutput.txt", sb.ToString());
       }
 
-      private void BuildBlockString(int tabs, IElement element, ref StringBuilder sb)
-      {
-         if (element.IsBlock)
-         {
-            var block = (Block)element;
-            sb.Append(GetTabs(tabs));
-            sb.Append(block.Name);
-            sb.Append(" : \n");
-            foreach (var subBlock in block.Blocks)
-            {
-               BuildBlockString(tabs + 1, subBlock, ref sb);
-            }
-         }
-         else
-         {
-            sb.Append(GetTabs(tabs) + "\"" + ((Content)element).Value + "\"\n");
-         }
-      }
-
-      private string GetTabs(int tabs)
-      {
-         return new ('\t', tabs);
-      }
    }
 }
