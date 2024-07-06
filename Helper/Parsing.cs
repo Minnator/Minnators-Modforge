@@ -46,10 +46,11 @@ public static class Parsing
    }
 
 
-   public static List<Block> GetNestedBLocks(int index, ref string str, out int newEnd)
+   public static List<Block> GetNestedBLocks(int index, ref string str, out int newEnd, out string remainder)
    {
       List<Block> blocks = [];
       newEnd = index;
+      remainder = string.Empty;
 
       while (true)
       {
@@ -74,26 +75,25 @@ public static class Parsing
          int end;
 
 
-         if (closingIndex < start || !nextOpening.Success)
+         if (closingIndex < start) // Closing several Blocks
          {
             newEnd = closingIndex;
             return blocks;
          }
-         if (closingIndex > nextIndex)
+
+         remainder += str.Substring(index, start - index).Trim() + Environment.NewLine;
+
+         if (nextOpening.Success && closingIndex > nextIndex) // 
          {
-            subBlocks = GetNestedBLocks(start + opening.Length + 1, ref str, out newEnd);
-            if (newEnd + 1 >= str.Length)
-               index = str.Length - 1;
-            else
-               index = newEnd + 1;
-            end = newEnd + 1;
-            content = str.Substring(start, end - start + 1);
+            subBlocks = GetNestedBLocks(start + opening.Length, ref str, out newEnd, out content);
+            index = end = newEnd + 1;
+            //content = str.Substring(start, end - start + 1);
          }
-         else
+         else // Adding next subBlock
          {
             index = closingIndex + 1;
             end = closingIndex;
-            content = str.Substring(start, end - start + 1);
+            content = str.Substring(start + opening.Length, end - start - opening.Length).Trim();
          }
          
          blocks.Add(new (start, end, name, content, subBlocks));

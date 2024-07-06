@@ -143,7 +143,7 @@ namespace Editor
       {
          //var content = File.ReadAllText("C:\\Users\\david\\Downloads\\NestedBLocks.txt");
          var content = File.ReadAllText("S:\\SteamLibrary\\steamapps\\common\\Europa Universalis IV\\common\\cultures\\00_cultures.txt");
-         var blocks = Parsing.GetNestedBLocks(0, ref content, out _);
+         var blocks = Parsing.GetNestedBLocks(0, ref content, out _, out _);
 
          var sb = new StringBuilder();
          foreach (var block in blocks)
@@ -157,7 +157,14 @@ namespace Editor
       {
          sb.Append(GetTabs(tabs));
          sb.Append(block.Name);
-         sb.Append("\n");
+         sb.Append(" : \n");
+         var values = block.Value.Split('\n');
+         foreach (var val in values)
+         {
+            if (string.IsNullOrWhiteSpace(val))
+               continue;
+            sb.Append(GetTabs(tabs + 1)).Append(val).Append("\n");
+         }
          foreach (var subBlock in block.Blocks)
          {
             BuildBlockString(tabs + 1, subBlock, ref sb);
