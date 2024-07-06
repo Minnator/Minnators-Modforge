@@ -5,18 +5,24 @@ using Group = Editor.DataClasses.Group;
 
 namespace Editor.Helper;
 
-public struct Block(int start, int end, string name, string value, List<Block> subBlocks)
+public class Block(int start, int end, string name, List<IElement> subBlocks) : IElement
 {
    public int Start { get; set; } = start;
    public int End { get; set; } = end;
    public string Name { get; set; } = name;
-   public string Value { get; set; } = value;
-   public List<Block> Blocks { get; set; } = subBlocks;
+   public List<IElement> Blocks { get; set; } = subBlocks;
+   public bool IsBlock => true;
+}
 
-   public int GetOutermostEnd()
-   {
-      return Blocks.Count == 0 ? End : Blocks[Blocks.Count - 1].GetOutermostEnd();
-   }
+public class Content(string value) : IElement
+{
+   public string Value { get; set; } = value;
+   public bool IsBlock => false;
+}
+
+public interface IElement
+{
+   public bool IsBlock { get; }
 }
 
 public class ParsingException(string message) : Exception(message);
@@ -46,11 +52,10 @@ public static class Parsing
    }
 
 
-   public static List<Block> GetNestedBLocks(int index, ref string str, out int newEnd, out string remainder)
+   public static List<IElement> GetNestedBLocks(int index, ref string str, out int newEnd)
    {
-      List<Block> blocks = [];
+      List<IElement> elements = [];
       newEnd = index;
-      remainder = string.Empty;
 
       while (true)
       {
@@ -63,11 +68,11 @@ public static class Parsing
             {
                newEnd = closingMatch.Index;
             }
-            return blocks;
+            return elements;
          }
          var nextOpening = OpeningRegex.Match(str, opening.Index + opening.Length);
          var name = opening.Groups["name"].Value;
-         List<Block> subBlocks = [];
+         List<IElement> subElements = [];
          var start = opening.Index; 
          var nextIndex = nextOpening.Index;
          var closingIndex = closingMatch.Index;
@@ -78,14 +83,16 @@ public static class Parsing
          if (closingIndex < start) // Closing several Blocks
          {
             newEnd = closingIndex;
-            return blocks;
+            return elements;
          }
 
-         remainder += str.Substring(index, start - index).Trim() + Environment.NewLine;
+         var subString = str.Substring(index, start - index).Trim();
+         if (!string.IsNullOrEmpty(subString))
+            elements.Add(new Content(subString));
 
          if (nextOpening.Success && closingIndex > nextIndex) // 
          {
-            subBlocks = GetNestedBLocks(start + opening.Length, ref str, out newEnd, out content);
+            subElements = GetNestedBLocks(start + opening.Length, ref str, out newEnd);
             index = end = newEnd + 1;
             //content = str.Substring(start, end - start + 1);
          }
@@ -93,10 +100,12 @@ public static class Parsing
          {
             index = closingIndex + 1;
             end = closingIndex;
-            content = str.Substring(start + opening.Length, end - start - opening.Length).Trim();
+            var subStr = str.Substring(start + opening.Length, end - start - opening.Length).Trim();
+            if (!string.IsNullOrEmpty(subStr))
+               subElements.Add(new Content(subStr));
          }
          
-         blocks.Add(new (start, end, name, content, subBlocks));
+         elements.Add(new Block(start, end, name, subElements));
          _blocksCount++;
          if (_blocksCount % 10 == 0)
             Console.WriteLine(_blocksCount);

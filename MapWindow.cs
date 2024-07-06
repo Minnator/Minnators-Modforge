@@ -143,7 +143,7 @@ namespace Editor
       {
          //var content = File.ReadAllText("C:\\Users\\david\\Downloads\\NestedBLocks.txt");
          var content = File.ReadAllText("S:\\SteamLibrary\\steamapps\\common\\Europa Universalis IV\\common\\cultures\\00_cultures.txt");
-         var blocks = Parsing.GetNestedBLocks(0, ref content, out _, out _);
+         var blocks = Parsing.GetNestedBLocks(0, ref content, out _);
 
          var sb = new StringBuilder();
          foreach (var block in blocks)
@@ -153,21 +153,22 @@ namespace Editor
          File.WriteAllText("C:\\Users\\david\\Downloads\\NestedBLocksOutput.txt", sb.ToString());
       }
 
-      private void BuildBlockString(int tabs, Block block, ref StringBuilder sb)
+      private void BuildBlockString(int tabs, IElement element, ref StringBuilder sb)
       {
-         sb.Append(GetTabs(tabs));
-         sb.Append(block.Name);
-         sb.Append(" : \n");
-         var values = block.Value.Split('\n');
-         foreach (var val in values)
+         if (element.IsBlock)
          {
-            if (string.IsNullOrWhiteSpace(val))
-               continue;
-            sb.Append(GetTabs(tabs + 1)).Append(val).Append("\n");
+            var block = (Block)element;
+            sb.Append(GetTabs(tabs));
+            sb.Append(block.Name);
+            sb.Append(" : \n");
+            foreach (var subBlock in block.Blocks)
+            {
+               BuildBlockString(tabs + 1, subBlock, ref sb);
+            }
          }
-         foreach (var subBlock in block.Blocks)
+         else
          {
-            BuildBlockString(tabs + 1, subBlock, ref sb);
+            sb.Append(GetTabs(tabs) + "\"" + ((Content)element).Value + "\"\n");
          }
       }
 
