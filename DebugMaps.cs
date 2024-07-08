@@ -1,18 +1,60 @@
-﻿using Editor;
-using Editor.Helper;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Runtime.Remoting.Channels;
 using System.Threading.Tasks;
+using Editor;
+using Editor.Helper;
 using Editor.Interfaces;
-using static System.Net.Mime.MediaTypeNames;
+using Image = System.Drawing.Image;
 
 public static class DebugMaps
 {
+   public static unsafe void TelescopeImageBenchmark()
+   {
+      Parsing.Test();
+      return;
+      var sw = Stopwatch.StartNew();
+      var bmp = new Bitmap(9000, 6000, PixelFormat.Format24bppRgb);
+      var width = bmp.Width;
+      var height = bmp.Height;
+      var bitmapData = bmp.LockBits(new(0, 0, width, height), ImageLockMode.WriteOnly, bmp.PixelFormat);
+      var scan0 = (byte*)bitmapData.Scan0.ToPointer();
+      for (var i = 0; i < 2000; i++)
+      {
+         DrawEntireMap(6000, 9000, scan0, ref bitmapData);
+         //Console.WriteLine($"Rendering Bitmap {i,3}");
+      }
+      bmp.UnlockBits(bitmapData);
+      sw.Stop();
+      Debug.WriteLine($"TelescopeImageBenchmark: {(sw.ElapsedMilliseconds / 2000f)} ms total {sw.ElapsedMilliseconds}");
+      bmp?.Save("C:\\Users\\david\\Downloads\\telescope.png", ImageFormat.Png);
+   }
+
+   public static unsafe void DrawEntireMap(int height, int width, byte* scan0, ref BitmapData bitmapData)
+   {
+
+      var stride = bitmapData.Stride;
+
+      var paralellOptions = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount};
+
+      var widthReciprocal = 255f / width;
+
+      // Parallelize the iteration over all pixels
+      Parallel.For(0, height, paralellOptions, y =>
+      {
+         for (var x = 0; x < width; x++)
+         {
+            var index = y * stride + x * 3;
+            scan0[index] = 128; // Blue component
+         }
+      });
+   }
+
    public static void MapModeDrawing()
    {
       var sw = Stopwatch.StartNew();

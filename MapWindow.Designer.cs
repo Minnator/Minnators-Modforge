@@ -40,6 +40,7 @@
          this.ShowToolTipMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.MapModeComboBox = new System.Windows.Forms.ToolStripComboBox();
          this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+         this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.MapPanel = new System.Windows.Forms.Panel();
          this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
          this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -50,7 +51,7 @@
          this.RedoDepthLabel = new System.Windows.Forms.ToolStripLabel();
          this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
          this.SelectedProvinceSum = new System.Windows.Forms.ToolStripLabel();
-         this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+         this.telescopeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.MapMenuStrip.SuspendLayout();
          this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
          this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -154,11 +155,19 @@
          // debugToolStripMenuItem
          // 
          this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.testToolStripMenuItem});
+            this.testToolStripMenuItem,
+            this.telescopeToolStripMenuItem});
          this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
          this.debugToolStripMenuItem.Size = new System.Drawing.Size(54, 23);
          this.debugToolStripMenuItem.Text = "Debug";
          this.debugToolStripMenuItem.Click += new System.EventHandler(this.debugToolStripMenuItem_Click);
+         // 
+         // testToolStripMenuItem
+         // 
+         this.testToolStripMenuItem.Name = "testToolStripMenuItem";
+         this.testToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+         this.testToolStripMenuItem.Text = "Test";
+         this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click);
          // 
          // MapPanel
          // 
@@ -246,12 +255,12 @@
          this.SelectedProvinceSum.Size = new System.Drawing.Size(49, 22);
          this.SelectedProvinceSum.Text = "ProSum";
          // 
-         // testToolStripMenuItem
+         // telescopeToolStripMenuItem
          // 
-         this.testToolStripMenuItem.Name = "testToolStripMenuItem";
-         this.testToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-         this.testToolStripMenuItem.Text = "Test";
-         this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click);
+         this.telescopeToolStripMenuItem.Name = "telescopeToolStripMenuItem";
+         this.telescopeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+         this.telescopeToolStripMenuItem.Text = "Telescope";
+         this.telescopeToolStripMenuItem.Click += new System.EventHandler(this.telescopeToolStripMenuItem_Click);
          // 
          // MapWindow
          // 
@@ -305,6 +314,7 @@
       private System.Windows.Forms.ToolStripMenuItem openCustomizerToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem ShowToolTipMenuItem;
       private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
+      private System.Windows.Forms.ToolStripMenuItem telescopeToolStripMenuItem;
    }
 }
 

@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using System.Windows.Forms.VisualStyles;
+using System.Xml.Linq;
 using Group = Editor.DataClasses.Group;
 
 namespace Editor.Helper;
@@ -78,71 +82,51 @@ public static class Parsing
       return idList;
    }
 
-   public static List<IElement> GetNestedBLocks2(int index, ref string str, out int newEnd)
+   public static List<IElement> GetNestedElementsIterative(int index, ref string str)
    {
-      List<IElement> elements = new List<IElement>();
-      newEnd = index;
-      Stack<(int index, List<IElement> elements)> stack = new ();
-      stack.Push((index, elements));
+      List<IElement> elements = [];
 
-      while (stack.Count > 0)
+      var openingMatches = OpeningRegex.Matches(str, index);
+      var closingMatches = ClosingRegex.Matches(str, index);
+      Stack<IElement> stack = [];
+
+      var depth = 0;
+      var elementCnt = 0;
+      var endCnt = 0;
+      foreach (Match openingMatch in openingMatches)
       {
-         var (currentIndex, currentElements) = stack.Pop();
-         newEnd = currentIndex;
+         var start = openingMatch.Index;
+         var end = closingMatches[endCnt].Index;
 
-         while (true)
+         if (end < start)
          {
-            var opening = OpeningRegex.Match(str, currentIndex);
-            var closingMatch = ClosingRegex.Match(str, currentIndex);
+            endCnt++;
 
-            if (!opening.Success)
-            {
-               if (closingMatch.Success)
-                  newEnd = closingMatch.Index;
-               break;
-            }
-            var nextOpening = OpeningRegex.Match(str, opening.Index + opening.Length);
-            List<IElement> subElements = new List<IElement>();
-            var start = opening.Index;
-            var closingIndex = closingMatch.Index;
-            int end;
-
-            if (closingIndex < start)
-            {
-               newEnd = closingIndex;
-               break;
-            }
-
-            var subString = str.Substring(currentIndex, start - currentIndex).Trim();
-            if (!string.IsNullOrEmpty(subString))
-               currentElements.Add(new Content(subString));
-
-            if (nextOpening.Success && closingIndex > nextOpening.Index)
-            {
-               stack.Push((currentIndex, currentElements));
-               currentIndex = start + opening.Length;
-               stack.Push((currentIndex, subElements));
-               break;
-            }
-            else
-            {
-               currentIndex = closingIndex + 1;
-               end = closingIndex;
-               var subStr = str.Substring(start + opening.Length, end - start - opening.Length).Trim();
-               if (!string.IsNullOrEmpty(subStr))
-                  subElements.Add(new Content(subStr));
-            }
-
-            currentElements.Add(new Block(start, end, opening.Groups["name"].Value, subElements));
-            currentIndex = end + 1;
          }
+         else if (end > start)
+         {
+            if (openingMatches[elementCnt + 1].Index > end) // 
+               stack.Push(new Block(start, end, openingMatch.Groups["name"].Value, []));
+         }
+
       }
 
       return elements;
    }
 
+   public class ReferenceStack<T>
+   {
 
-   public static List<IElement> GetNestedBLocks(int index, ref string str, out int newEnd)
+
+
+
+   }
+
+   public static void Test()
+   {
+   }
+
+   public static List<IElement> GetNestedBLocksRecursive(int index, ref string str, out int newEnd)
    {
       List<IElement> elements = [];
       newEnd = index;
@@ -178,7 +162,7 @@ public static class Parsing
 
          if (nextOpening.Success && closingIndex > nextOpening.Index) // 
          {
-            subElements = GetNestedBLocks(start + opening.Length, ref str, out newEnd);
+            subElements = GetNestedBLocksRecursive(start + opening.Length, ref str, out newEnd);
             index = end = newEnd + 1;
          }
          else 
