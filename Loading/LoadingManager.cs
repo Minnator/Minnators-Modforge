@@ -20,6 +20,9 @@ public static class LoadingManager
       LocalisationLoading.Load(project.ModPath, project.VanillaPath, project.Language, ref loadingLog);
       ProvinceParser.ParseAllProvinces(project.ModPath, project.VanillaPath, ref loadingLog);
       CultureLoading.LoadCultures(project, ref loadingLog, ref errorLog);
+      CountryLoading.LoadCountries(project, ref loadingLog, ref errorLog);
+
+      DebugPrints.PrintCountriesBasic();
 
       // MUST BE LAST in the loading sequence
       InitMapModes(ref loadingLog, mw);

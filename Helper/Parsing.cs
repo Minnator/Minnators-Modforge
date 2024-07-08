@@ -62,6 +62,7 @@ public static class Parsing
    private static readonly Regex OpeningRegex = new (@"(?<name>[A-Za-z0-9_]+)\s*=\s*{", RegexOptions.Compiled);
    private static readonly Regex ClosingRegex = new (@"}", RegexOptions.Compiled);
    private static readonly Regex StringListRegex = new(@"(?:""(?:[^""\\]|\\.)*""|\S+)", RegexOptions.Compiled);
+   private static readonly Regex ColorRegex = new(@"(?<r>\d+)\s+(?<g>\d+)\s+(?<b>\d+)", RegexOptions.Compiled);
 
    /// <summary>
    /// Returns a list of <c>int</c> from a string which are separated by <c>n</c> whitespace chars.
@@ -81,12 +82,12 @@ public static class Parsing
       return idList;
    }
 
-   public static unsafe List<Block> GetNestedElementsIterative(int index, ref string str)
+   public static unsafe List<IElement> GetNestedElementsIterative(int index, ref string str)
    {
       var openingMatches = OpeningRegex.Matches(str, index);
       var closingMatches = ClosingRegex.Matches(str, index);
 
-      List<Block> elements = [];
+      List<IElement> elements = [];
       ModifiableStack<IElement> stack = new();
 
       var closingCount = closingMatches.Count;
@@ -99,10 +100,18 @@ public static class Parsing
          // openingMatch is null when there are no more opening brackets, but we need to close the current element.
          var openingMatch = i == openingCount ? null : openingMatches[i];
          var start = openingMatch?.Index ?? int.MaxValue;
-
+         
          if (endCnt >= closingMatches.Count)
             throw new ParsingException("Could not find closing bracket for opening bracket at index " + start);
          var end = closingMatches[endCnt].Index;
+
+         // If there is content before the first opening bracket add it as a content element.
+         if (openedCnt == 0 && start > 0)
+         {
+            var content = str[..start].Trim();
+            if (!string.IsNullOrWhiteSpace(content))
+               elements.Add(new Content(content));
+         }
 
          // While there are closing brackets before the next opening bracket we need to close the current element.
          while (end < start)
@@ -117,7 +126,7 @@ public static class Parsing
             if (start != int.MaxValue)
             {
                var content = str.Substring(end + 1, start - (end + 1)).Trim();
-               if (content.Contains("}"))
+               if (content.Contains('}'))
                {
                   content = string.Empty; //TODO why this so fucked
                }
@@ -143,9 +152,17 @@ public static class Parsing
             else // If the stack is empty, the element is a top level element and thus added to the elements list.
             {
                elements.Add(element);
+               // The stack is empty so there could be content after the last closing bracket to the next opening bracket.
+               if (start != int.MaxValue)
+               {
+                  var content = str[(end + 1)..start].Trim();
+                  if (!string.IsNullOrWhiteSpace(content))
+                  {
+                     elements.Add(new Content(content));
+                  }
+               }
             }
 
-            // Get the next closing bracket.
             if (endCnt >= closingCount)
                break;
             end = nextEnd;
@@ -162,7 +179,7 @@ public static class Parsing
                var nextIndex = openingMatches[openedCnt + 1].Index;
                if (nextIndex < end)
                {
-                  var content = str.Substring(contentStart, nextIndex - contentStart).Trim();
+                  var content = str[contentStart..nextIndex].Trim();
                   if (!string.IsNullOrWhiteSpace(content))
                   {
                      blockElement.Blocks.Add(new Content(content));
@@ -170,7 +187,7 @@ public static class Parsing
                }
                else
                {
-                  var content = str.Substring(contentStart, end - contentStart).Trim();
+                  var content = str[contentStart..end].Trim();
                   if (!string.IsNullOrWhiteSpace(content))
                   {
                      blockElement.Blocks.Add(new Content(content));
@@ -179,7 +196,7 @@ public static class Parsing
             }
             else // Get the content between the opening bracket and the closing bracket.
             {
-               var content = str.Substring(contentStart, end - contentStart).Trim();
+               var content = str[contentStart..end].Trim();
                if (!string.IsNullOrWhiteSpace(content))
                {
                   blockElement.Blocks.Add(new Content(content));
@@ -189,6 +206,7 @@ public static class Parsing
             stack.Push(blockElement);
             openedCnt++;
          }
+
       }
       return elements;
    }
@@ -346,7 +364,7 @@ public static class Parsing
       List<string> strList = [];
 
       var matches = StringListRegex.Matches(value);
-      foreach (var match in matches) 
+      foreach (Match match in matches) 
          strList.Add(match.ToString().Trim());
       return strList;
    }
@@ -387,7 +405,7 @@ public static class Parsing
       var lines = str.Split('\n');
       foreach (var line in lines)
       {
-         sb.Append(RemoveCommentFromLine(line));
+         sb.AppendLine(RemoveCommentFromLine(line));
       }
       str = sb.ToString();
    }
@@ -439,6 +457,19 @@ public static class Parsing
    public static bool YesNo (string value)
    {
       return value.ToLower().Equals("yes");
+   }
+
+   public static Color ParseColor(string str)
+   {
+      var match = ColorRegex.Match(str);
+      if (!match.Success)
+         throw new ParsingException("Could not parse color: " + str);
+
+      var r = int.Parse(match.Groups["r"].Value);
+      var g = int.Parse(match.Groups["g"].Value);
+      var b = int.Parse(match.Groups["b"].Value);
+
+      return Color.FromArgb(r, g, b);
    }
 }
 

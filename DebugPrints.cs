@@ -176,4 +176,21 @@ public static class DebugPrints
       sb.Remove(sb.Length - 2, 2);
       return sb.ToString();
    }
+
+   public static void PrintCountriesBasic()
+   {
+      var sb = new StringBuilder();
+      foreach (var country in Globals.Countries.Values)
+      {
+         sb.AppendLine($"Country: {country.Tag} with score {country.HistoricalScore}");
+         sb.AppendLine($"\tFemale Names: {country.LeaderNames.Count}");
+         sb.AppendLine($"\tArmy Names: {country.ArmyNames.Count}");
+         sb.AppendLine($"\tNavy Names: {country.ShipNames.Count}");
+         sb.AppendLine($"\tMale Names: {country.FleeTNames.Count}");
+         sb.AppendLine($"\tMonarch Names: {country.MonarchNames.Count}");
+         sb.AppendLine($"\tHistorical Ideas: {country.HistoricalIdeas.Count}");
+         sb.AppendLine($"\tHistorical Units: {country.HistoricalUnits.Count}");
+      }
+      File.WriteAllText(@"C:\Users\david\Downloads\countriesDEBUG.txt", sb.ToString());
+   }
 }

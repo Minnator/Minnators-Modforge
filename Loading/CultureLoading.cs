@@ -27,14 +27,16 @@ public static class CultureLoading
       loadingLog.WriteTimeStamp("Analyzing cultures", sw.ElapsedMilliseconds);
    }
 
-   private static (Dictionary<string, CultureGroup>, Dictionary<string, Culture>) GetCultureGroups(ref List<Block> blocks, ref ColorProviderRgb colorProvider, ref Log errorLog)
+   private static (Dictionary<string, CultureGroup>, Dictionary<string, Culture>) GetCultureGroups(ref List<IElement> blocks, ref ColorProviderRgb colorProvider, ref Log errorLog)
    {
       Dictionary<string, Culture> cultureDict = [];
       Dictionary<string, CultureGroup> cultureGroupDict = [];
 
 
-      foreach (var block in blocks)
+      foreach (var element in blocks)
       {
+         if (!(element is Block block))
+            continue;
          var group = new CultureGroup(block.Name);
          group.Color = colorProvider.GetRandomColor();
          var contents = block.GetContentElements;
