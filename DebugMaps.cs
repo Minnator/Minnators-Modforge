@@ -5,12 +5,11 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
-using System.Runtime.Remoting.Channels;
 using System.Threading.Tasks;
-using Editor;
 using Editor.Helper;
 using Editor.Interfaces;
-using Image = System.Drawing.Image;
+
+namespace Editor;
 
 public static class DebugMaps
 {
@@ -30,7 +29,7 @@ public static class DebugMaps
       bmp.UnlockBits(bitmapData);
       sw.Stop();
       Debug.WriteLine($"TelescopeImageBenchmark: {(sw.ElapsedMilliseconds / 2000f)} ms total {sw.ElapsedMilliseconds}");
-      bmp?.Save("C:\\Users\\david\\Downloads\\telescope.png", ImageFormat.Png);
+      bmp.Save("C:\\Users\\david\\Downloads\\telescope.png", ImageFormat.Png);
    }
 
    public static unsafe void DrawEntireMap(int height, int width, byte* scan0, ref BitmapData bitmapData)
@@ -39,8 +38,6 @@ public static class DebugMaps
       var stride = bitmapData.Stride;
 
       var paralellOptions = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount};
-
-      var widthReciprocal = 255f / width;
 
       // Parallelize the iteration over all pixels
       Parallel.For(0, height, paralellOptions, y =>
@@ -58,13 +55,13 @@ public static class DebugMaps
       var sw = Stopwatch.StartNew();
 
       var bmp = new Bitmap(Globals.MapModeManager.GetMapMode("Provinces").Bitmap);
-      BitMapHelper.WriteOnProvince(GetProvinceIDString, bmp);
+      BitMapHelper.WriteOnProvince(GetProvinceIdString, bmp);
       bmp.Save("C:\\Users\\david\\Downloads\\areas.png", ImageFormat.Png);
       sw.Stop();
       Debug.WriteLine($"MapModeDrawing: {sw.ElapsedMilliseconds} ms");
    }
 
-   private static string GetProvinceIDString(int id)
+   private static string GetProvinceIdString(int id)
    {
       return id.ToString();
    }
@@ -82,8 +79,6 @@ public static class DebugMaps
       Debug.WriteLine($"MapModeDrawing: {sw.ElapsedMilliseconds} ms");
       DrawAreasOnMap();
       Debug.WriteLine($"----------------------------------------------");
-      return;
-      Test();
    }
 
 
@@ -132,9 +127,9 @@ public static class DebugMaps
       var sw = Stopwatch.StartNew();
       var provincePixels = Globals.Provinces.Values.SelectMany(province =>
       {
-         var points = new Point[province.PixelCnt];
-         Array.Copy(Globals.Pixels, province.PixelPtr, points, 0, province.PixelCnt);
-         return points;
+         var points2 = new Point[province.PixelCnt];
+         Array.Copy(Globals.Pixels, province.PixelPtr, points2, 0, province.PixelCnt);
+         return points2;
       }).ToArray();
       
       sw.Stop();

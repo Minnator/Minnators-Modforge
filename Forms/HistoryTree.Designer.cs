@@ -1,4 +1,4 @@
-﻿namespace Editor
+﻿namespace Editor.Forms
 {
    partial class HistoryTree
    {

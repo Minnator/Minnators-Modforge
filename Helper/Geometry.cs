@@ -16,10 +16,10 @@ public static class Geometry
 
    public static Rectangle GetIntersection (Rectangle r1, Rectangle r2)
    {
-      var x = System.Math.Max(r1.X, r2.X);
-      var y = System.Math.Max(r1.Y, r2.Y);
-      var width = System.Math.Min(r1.X + r1.Width, r2.X + r2.Width) - x;
-      var height = System.Math.Min(r1.Y + r1.Height, r2.Y + r2.Height) - y;
+      var x = Math.Max(r1.X, r2.X);
+      var y = Math.Max(r1.Y, r2.Y);
+      var width = Math.Min(r1.X + r1.Width, r2.X + r2.Width) - x;
+      var height = Math.Min(r1.Y + r1.Height, r2.Y + r2.Height) - y;
       return new Rectangle(x, y, width, height);
    }
 
@@ -97,7 +97,7 @@ public static class Geometry
    }
 
    // Clamps the given value between the given min and max
-   public static T Clamp<T> (T value, T min, T max) where T : System.IComparable<T>
+   public static T Clamp<T> (T value, T min, T max) where T : IComparable<T>
    {
       if (value.CompareTo(min) < 0)
          return min;

@@ -1,11 +1,9 @@
-﻿using System.Diagnostics;
-using System.Drawing.Imaging;
-using System.Drawing;
-using System.Threading.Tasks;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Threading.Tasks;
 using Editor.DataClasses;
 using Editor.Interfaces;
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
@@ -10,14 +9,14 @@ using Editor.Forms.AdvancedSelections;
 using Editor.Helper;
 
 namespace Editor.Controls;
-
+#nullable enable
 
 
 public sealed class PannablePictureBox : PictureBox
 {
    public bool IsPainting; // Prevents double locking of bitmaps when painting
-   public event EventHandler ImageChanged = null!;
-   private AdvancedSelectionsForm? _advancedSelectionsForm = null!;
+   public event EventHandler? ImageChanged;
+   private AdvancedSelectionsForm? _advancedSelectionsForm;
 
    // ------------------------------ ToolTip ------------------------------
    public ToolTip MapToolTip = new(); // Contains the tooltip for the map
@@ -41,7 +40,7 @@ public sealed class PannablePictureBox : PictureBox
             // Crate transparent overlay and selection bitmaps
             if (_image == null!) 
                return;
-            Overlay = new Bitmap(_image.Width, _image.Height, PixelFormat.Format32bppArgb);
+            Overlay = new (_image.Width, _image.Height, PixelFormat.Format32bppArgb);
             SelectionOverlay = new Bitmap(_image.Width, _image.Height, PixelFormat.Format32bppArgb);
             using var g = Graphics.FromImage(Overlay);
             g.Clear(Color.Transparent);

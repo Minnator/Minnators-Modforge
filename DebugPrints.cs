@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Editor.Commands;
+using Editor.Forms;
 using Editor.Helper;
 
 namespace Editor;

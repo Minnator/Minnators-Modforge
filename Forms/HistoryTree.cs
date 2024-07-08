@@ -1,10 +1,9 @@
 ﻿using System;
-using Editor.Commands;
 using System.Windows.Forms;
-using System.Xml.Linq;
+using Editor.Commands;
 using Editor.Controls;
 
-namespace Editor
+namespace Editor.Forms
 {
    public partial class HistoryTree : Form
    {
@@ -62,7 +61,7 @@ namespace Editor
             AddToNode(child, parent);
       }
 
-      private void RestoreButton_Click(object sender, System.EventArgs e)
+      private void RestoreButton_Click(object sender, EventArgs e)
       {
          if (HistoryTreeView.SelectedNode is null)
             return;

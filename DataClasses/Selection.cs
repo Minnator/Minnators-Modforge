@@ -1,11 +1,9 @@
-﻿using Editor.Commands;
-using Editor.Controls;
-using Editor.Helper;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Security.Cryptography;
+using Editor.Commands;
+using Editor.Controls;
+using Editor.Helper;
 
 namespace Editor.DataClasses;
 

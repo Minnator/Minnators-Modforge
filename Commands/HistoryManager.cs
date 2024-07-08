@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Editor.Commands;
-
 #nullable enable
 public class HistoryManager
 {
-   private int _nodeId = 0;
+   private int _nodeId;
    private HistoryNode _current;
    private HistoryNode _root;
 

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data;
 using System.Drawing;
 using Editor.Interfaces;
 using static Editor.Helper.ProvinceEventHandler;
@@ -465,7 +464,7 @@ public class Province : IProvinceCollection
       return Globals.Areas[Area];
    }
 
-   public List<IProvinceCollection>? ScopeIn()
+   public List<IProvinceCollection> ScopeIn()
    {
       return [this];
    }

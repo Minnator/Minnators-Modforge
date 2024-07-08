@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using Editor.Helper;
-using Editor.Loading;
+﻿using System.Drawing;
 
 namespace Editor.MapModes;
 
 public sealed class SuperRegionMapMode : Interfaces.MapMode
 {
-   public SuperRegionMapMode()
-   {
-
-   }
-
-
    public override string GetMapModeName()
    {
       return "Super Regions";

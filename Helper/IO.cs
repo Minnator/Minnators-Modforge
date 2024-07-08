@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 // ReSharper disable InconsistentNaming
 
@@ -18,6 +17,7 @@ internal static class IO
    /// Reads the entire content of a file in ANSI encoding if the file exists
    /// </summary>
    /// <param name="path"></param>
+   /// <param name="data"></param>
    /// <returns></returns>
    public static bool ReadAllInANSI(string path, out string data)
    {

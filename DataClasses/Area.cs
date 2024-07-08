@@ -37,7 +37,7 @@ public class Area(string name, int[] provinces, Color color) : IProvinceCollecti
       return Globals.Regions[Region];
    }
 
-   public List<IProvinceCollection>? ScopeIn()
+   public List<IProvinceCollection> ScopeIn()
    {
       var provs = new List<IProvinceCollection>();
       foreach (var province in Provinces) 
