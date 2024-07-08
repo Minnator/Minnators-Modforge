@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Text;
+﻿using System.Text;
 // ReSharper disable InconsistentNaming
 
 namespace Editor.Helper;
@@ -8,9 +7,11 @@ internal static class IO
 {
    private static readonly Encoding encoding;
 
+   // Get the ANSI encoding
    static IO()
    {
-      encoding = Encoding.GetEncoding("Windows-1252");
+      Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+      encoding = Encoding.GetEncoding("windows-1250");
    }
 
    /// <summary>

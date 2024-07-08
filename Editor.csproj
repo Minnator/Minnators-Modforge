@@ -1,209 +1,34 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2E019789-0D6B-42E2-95AD-6255E3F15F14}</ProjectGuid>
+    <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Editor</RootNamespace>
     <AssemblyName>Editor 2.0</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <LangVersion>12</LangVersion>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>12</LangVersion>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Editor.Program</StartupObject>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Optimize>True</Optimize>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="DataClasses\Commands\CAddSingleSelection.cs" />
-    <Compile Include="DataClasses\Commands\CChangeToolTipText.cs" />
-    <Compile Include="DataClasses\Commands\CLassoSelection.cs" />
-    <Compile Include="DataClasses\Commands\CRectangleSelection.cs" />
-    <Compile Include="DataClasses\Commands\CSelectionMarkNext.cs" />
-    <Compile Include="DataClasses\Commands\CInitial.cs" />
-    <Compile Include="DataClasses\Commands\ICommand.cs" />
-    <Compile Include="DataClasses\Commands\HistoryManager.cs" />
-    <Compile Include="DataClasses\Commands\CDeselect.cs" />
-    <Compile Include="Consts.cs" />
-    <Compile Include="Controls\ControlFactory.cs" />
-    <Compile Include="Controls\HistoryTreeNode.cs" />
-    <Compile Include="Controls\PannablePictureBox.cs">
+    <Compile Update="Controls\PannablePictureBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataClasses\ConsoleCommands\CsCEcho.cs" />
-    <Compile Include="DataClasses\ConsoleCommands\ConsoleCommand.cs" />
-    <Compile Include="DataClasses\Country.cs" />
-    <Compile Include="DataClasses\Culture.cs" />
-    <Compile Include="DataClasses\HistoryEntry.cs" />
-    <Compile Include="Helper\ConsoleCommandParser.cs" />
-    <Compile Include="Forms\ConsoleForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ConsoleForm.Designer.cs">
-      <DependentUpon>ConsoleForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Loading\CultureLoading.cs" />
-    <Compile Include="DataClasses\MapModes\CultureGroupMapMode.cs" />
-    <Compile Include="DataClasses\MapModes\CultureMapMode.cs" />
-    <Compile Include="ModifiableStack.cs" />
-    <Compile Include="DataClasses\Settings\Settings.cs" />
-    <Compile Include="DataClasses\Tag.cs" />
-    <Compile Include="DataClasses\TradeGood.cs" />
-    <Compile Include="Forms\AdvancedSelections\AdvancedSelectionsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\AdvancedSelections\AdvancedSelectionsForm.Designer.cs">
-      <DependentUpon>AdvancedSelectionsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\AdvancedSelections\ISelectionModifier.cs" />
-    <Compile Include="Forms\AdvancedSelections\SelectionModifiersClass.cs" />
-    <Compile Include="Forms\ToolTipCustomizer\ToolTipCustomizer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ToolTipCustomizer\ToolTipCustomizer.Designer.cs">
-      <DependentUpon>ToolTipCustomizer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\ToolTipCustomizer\ToolTipBuilder.cs" />
-    <Compile Include="Globals.cs" />
-    <Compile Include="DataClasses\Area.cs" />
-    <Compile Include="DataClasses\Continent.cs" />
-    <Compile Include="DataClasses\ModProject.cs" />
-    <Compile Include="DataClasses\Optimizer.cs" />
-    <Compile Include="DataClasses\Province.cs" />
-    <Compile Include="DataClasses\Region.cs" />
-    <Compile Include="DataClasses\Selection.cs" />
-    <Compile Include="DataClasses\SuperRegion.cs" />
-    <Compile Include="DebugMaps.cs" />
-    <Compile Include="DebugPrints.cs" />
-    <Compile Include="Helper\BitMapHelper.cs" />
-    <Compile Include="Helper\ColorProvider.cs" />
-    <Compile Include="Helper\FilesHelper.cs" />
-    <Compile Include="Helper\GlobalEventHandlers.cs" />
-    <Compile Include="Helper\IO.cs" />
-    <Compile Include="Helper\MapDrawHelper.cs" />
-    <Compile Include="Helper\Geometry.cs" />
-    <Compile Include="DataClasses\MapModes\MapModeManager.cs" />
-    <Compile Include="Helper\Parsing.cs" />
-    <Compile Include="Helper\ProvinceEventHandler.cs" />
-    <Compile Include="Helper\ProvinceParser.cs" />
-    <Compile Include="Helper\ResourceUsageHelper.cs" />
-    <Compile Include="Helper\Saving.cs" />
-    <Compile Include="Forms\HistoryTree.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\HistoryTree.Designer.cs">
-      <DependentUpon>HistoryTree.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Interfaces\IProvinceCollection.cs" />
-    <Compile Include="Loading\LoadingManager.cs" />
-    <Compile Include="Loading\AreaLoading.cs" />
-    <Compile Include="Loading\ContinentLoading.cs" />
-    <Compile Include="Loading\DefaultMapLoading.cs" />
-    <Compile Include="Loading\DefinitionLoading.cs" />
-    <Compile Include="Interfaces\MapMode.cs" />
-    <Compile Include="Loading\LocalisationLoading.cs" />
-    <Compile Include="Loading\MapLoading.cs" />
-    <Compile Include="Loading\RegionLoading.cs" />
-    <Compile Include="Loading\SuperRegionLoading.cs" />
-    <Compile Include="Log.cs" />
-    <Compile Include="DataClasses\MapModes\AreaMapMode.cs" />
-    <Compile Include="DataClasses\MapModes\AutonomyMapMode.cs" />
-    <Compile Include="DataClasses\MapModes\CenterOfTradeMapMode.cs" />
-    <Compile Include="DataClasses\MapModes\ContinentMapMode.cs" />
-    <Compile Include="DataClasses\MapModes\DevelopmentMapMode.cs" />
-    <Compile Include="DataClasses\MapModes\FortMapMode.cs" />
-    <Compile Include="DataClasses\MapModes\ProvinceIdMapMode.cs" />
-    <Compile Include="DataClasses\MapModes\ProvinceMapMode.cs" />
-    <Compile Include="DataClasses\MapModes\RegionsMapMode.cs" />
-    <Compile Include="DataClasses\MapModes\SuperRegionMapMode.cs" />
-    <Compile Include="MapWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MapWindow.Designer.cs">
-      <DependentUpon>MapWindow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Forms\AdvancedSelections\AdvancedSelectionsForm.resx">
-      <DependentUpon>AdvancedSelectionsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ConsoleForm.resx">
-      <DependentUpon>ConsoleForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ToolTipCustomizer\ToolTipCustomizer.resx">
-      <DependentUpon>ToolTipCustomizer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\HistoryTree.resx">
-      <DependentUpon>HistoryTree.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MapWindow.resx">
-      <DependentUpon>MapWindow.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <None Include=".editorconfig" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

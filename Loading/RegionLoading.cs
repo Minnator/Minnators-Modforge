@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using Region = Editor.DataClasses.Region;
 
 namespace Editor.Loading;
 
@@ -20,7 +21,7 @@ public static class RegionLoading
       var path = Path.Combine(folder, "map", "region.txt");
       var newContent = IO.ReadAllLinesInUTF8(path);
       List<string> regionContent = [];
-      Dictionary<string, Region> regionDictionary = new();
+      Dictionary<string, Region> regionDictionary = [];
 
       // Filtering Comments and optional that are not important to the regions themselves
       var sb = new StringBuilder();
