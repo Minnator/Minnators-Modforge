@@ -60,6 +60,10 @@ public static class Globals
    public static Point[] BorderPixels = null!;
    public static Point[] Pixels = null!;
 
+   // Culture Groups and Cultures
+   public static Dictionary<string, CultureGroup> CultureGroups = null!;
+   public static Dictionary<string, Culture> Cultures = null!;
+
    // Contains the provinces and options to access them
    public static Dictionary<int, Province> Provinces = null!;
    public static Dictionary<Color, int> ColorToProvId = null!;

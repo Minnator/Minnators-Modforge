@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Editor.DataClasses;
 using Editor.Helper;
 
@@ -8,29 +9,34 @@ namespace Editor.Loading;
 public static class CultureLoading
 {
 
-   public static void LoadCultures(string modPath, string vanillaPath, out List<CultureGroup> groups, ref Log loadingLog, ref Log errorLog)
+   public static void LoadCultures(ModProject project, ref Log loadingLog, ref Log errorLog)
    {
       var sw = Stopwatch.StartNew();
-      FilesHelper.GetFilesUniquelyAndCombineToOne(modPath, vanillaPath, out var culturesContent, "common", "cultures");
+      FilesHelper.GetFilesUniquelyAndCombineToOne(project.ModPath, project.VanillaPath, out var culturesContent, "common", "cultures");
 
       var blocks = Parsing.GetNestedElementsIterative(0, ref culturesContent);
 
-      GetCultureGroups(ref blocks, out groups, ref errorLog);
-
+      var (groups, cultures) = GetCultureGroups(ref blocks, ref project.ColorProvider, ref errorLog);
+      Globals.CultureGroups = groups;
+      Globals.Cultures = cultures;
       sw.Stop();
       loadingLog.WriteTimeStamp("Parsing cultures", sw.ElapsedMilliseconds);
       sw.Restart();
-      AnalyzeCultures(ref groups, ref errorLog);
+      AnalyzeCultures([.. groups.Values], ref errorLog);
       sw.Stop();
       loadingLog.WriteTimeStamp("Analyzing cultures", sw.ElapsedMilliseconds);
    }
 
-   private static void GetCultureGroups(ref List<Block> blocks, out List<CultureGroup> cultureGroups, ref Log errorLog)
+   private static (Dictionary<string, CultureGroup>, Dictionary<string, Culture>) GetCultureGroups(ref List<Block> blocks, ref ColorProviderRgb colorProvider, ref Log errorLog)
    {
-      cultureGroups = [];
+      Dictionary<string, Culture> cultureDict = [];
+      Dictionary<string, CultureGroup> cultureGroupDict = [];
+
+
       foreach (var block in blocks)
       {
          var group = new CultureGroup(block.Name);
+         group.Color = colorProvider.GetRandomColor();
          var contents = block.GetContentElements;
          var cultures = block.GetBlockElements;
 
@@ -47,15 +53,18 @@ public static class CultureLoading
             else
             {
                var culture = new Culture(cult.Name);
+               culture.Color = colorProvider.GetRandomColor();
                SetCultureAttributes(ref culture, cult.GetBlockElements, ref errorLog);
                SetCultureContent(ref culture, cult.GetContentElements, ref errorLog);
                group.Cultures.Add(culture);
+               cultureDict.Add(culture.Name, culture);
             }
          }
-
          SetCultureGroupAttributes(ref group, contents, ref errorLog);
-         cultureGroups.Add(group);
+         cultureGroupDict.Add(group.Name, group);
       }
+
+      return (cultureGroupDict, cultureDict);
    }
 
    private static void SetCultureContent(ref Culture culture, List<Content> cultGetContentElements, ref Log errorLog)
@@ -157,7 +166,7 @@ public static class CultureLoading
       }
    }
 
-   private static void AnalyzeCultures(ref List<CultureGroup> groups, ref Log errorLog)
+   private static void AnalyzeCultures(List<CultureGroup> groups, ref Log errorLog)
    {
       HashSet<string> cultureNames = [];
       HashSet<string> cultureGroupNames = [];

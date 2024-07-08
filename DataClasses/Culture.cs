@@ -12,6 +12,7 @@ public class Culture(string name)
    public string[] FemaleNames = [];
    public string[] DynastyNames = [];
    public List<Tag> Primaries = [];
+   public Color Color = Color.Empty;
 
    public int MaleNamesCount => MaleNames.Length;
    public int FemaleNamesCount => FemaleNames.Length;
