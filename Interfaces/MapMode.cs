@@ -19,13 +19,14 @@ public abstract class MapMode
          case MapModeRendering.Live:
             var sw = Stopwatch.StartNew();
             Bitmap?.Dispose();
-            if (Globals.MapModeManager.PreviousLandOnly)
+            if (Globals.MapModeManager.PreviousLandOnly && !Globals.MapModeManager.RequireFullRedraw)
             {
                BitMapHelper.ModifyByProvinceCollection(Globals.MapModeManager.ShareLiveBitmap, Globals.LandProvinceIds, GetProvinceColor);
             }
             else
             {
                Globals.MapModeManager.ShareLiveBitmap = BitMapHelper.GenerateBitmapFromProvinces(method);
+               Globals.MapModeManager.RequireFullRedraw = false;
             }
             MapDrawHelper.DrawAllProvinceBorders(Globals.MapModeManager.ShareLiveBitmap, Color.Black);
             Globals.MapModeManager.PictureBox.Image = Globals.MapModeManager.ShareLiveBitmap;

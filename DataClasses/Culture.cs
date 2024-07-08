@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace Editor.DataClasses;
@@ -13,6 +14,7 @@ public class Culture(string name)
    public string[] DynastyNames = [];
    public List<Tag> Primaries = [];
    public Color Color = Color.Empty;
+   public string CultureGroup = string.Empty;
 
    public int MaleNamesCount => MaleNames.Length;
    public int FemaleNamesCount => FemaleNames.Length;

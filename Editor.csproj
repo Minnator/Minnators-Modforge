@@ -75,6 +75,8 @@
     <Compile Include="DataClasses\Culture.cs" />
     <Compile Include="DataClasses\HistoryEntry.cs" />
     <Compile Include="Loading\CultureLoading.cs" />
+    <Compile Include="MapModes\CultureGroupMapMode.cs" />
+    <Compile Include="MapModes\CultureMapMode.cs" />
     <Compile Include="ModifiableStack.cs" />
     <Compile Include="DataClasses\Settings\Settings.cs" />
     <Compile Include="DataClasses\Tag.cs" />
@@ -112,7 +114,7 @@
     <Compile Include="Helper\IO.cs" />
     <Compile Include="Helper\MapDrawHelper.cs" />
     <Compile Include="Helper\Geometry.cs" />
-    <Compile Include="DataClasses\MapModeManager.cs" />
+    <Compile Include="MapModes\MapModeManager.cs" />
     <Compile Include="Helper\Parsing.cs" />
     <Compile Include="Helper\ProvinceEventHandler.cs" />
     <Compile Include="Helper\ProvinceParser.cs" />

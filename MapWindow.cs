@@ -114,6 +114,8 @@ namespace Editor
 
       private void MapModeComboBox_SelectedIndexChanged(object sender, EventArgs e)
       {
+         if (MapPictureBox.IsPainting)
+            return;
          Globals.MapModeManager.SetCurrentMapMode(MapModeComboBox.SelectedItem.ToString());
          GC.Collect(); // We force the garbage collector to collect the old bitmap
       }

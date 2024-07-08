@@ -14,6 +14,7 @@ public class MapModeManager
    private ProvinceIdMapMode IdMapMode { get; set; } = null!;
    public PannablePictureBox PictureBox { get; set; }
    public bool PreviousLandOnly { get; set; }
+   public bool RequireFullRedraw { get; set; } = true;
    public Bitmap ShareLiveBitmap { get; set; }
 
    public MapModeManager(PannablePictureBox pictureBox)
@@ -33,6 +34,8 @@ public class MapModeManager
       MapModes.Add(new CenterOfTradeMapMode());
       MapModes.Add(new AutonomyMapMode());
       MapModes.Add(new FortMapMode());
+      MapModes.Add(new CultureGroupMapMode());
+      MapModes.Add(new CultureMapMode());
 
 
       // We set the default map mode to retrieve province colors

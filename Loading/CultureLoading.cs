@@ -52,8 +52,11 @@ public static class CultureLoading
             }
             else
             {
-               var culture = new Culture(cult.Name);
-               culture.Color = colorProvider.GetRandomColor();
+               Culture culture = new (cult.Name)
+               {
+                  Color = colorProvider.GetRandomColor(),
+                  CultureGroup = group.Name
+               };
                SetCultureAttributes(ref culture, cult.GetBlockElements, ref errorLog);
                SetCultureContent(ref culture, cult.GetContentElements, ref errorLog);
                group.Cultures.Add(culture);
