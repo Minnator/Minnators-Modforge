@@ -13,6 +13,21 @@ public abstract class ConsoleCommand
    public virtual RichTextBox Output => Globals.ConsoleForm!.Output;
    public abstract void Execute(string[] args);
 
+   public virtual void ExecuteHelp()
+   {
+      Output.AppendText($"->: {Help}\n");
+   }
+
+   public virtual void ExecuteDescription()
+   {
+      Output.AppendText($"->: {Description}\n");
+   }
+
+   public virtual void ExecuteAliases()
+   {
+      Output.AppendText($"->: Aliases [{string.Join(", ", Aliases)}]\n");
+   }
+
    public virtual bool CheckArgs(string[] args)
    {
       return true;

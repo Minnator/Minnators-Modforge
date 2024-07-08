@@ -1,13 +1,17 @@
 ﻿using System.Windows.Forms;
+using Editor.DataClasses.ConsoleCommands;
+using static System.Windows.Forms.Design.AxImporter;
 
 namespace Editor.Forms
 {
    public partial class ConsoleForm : Form
    {
+
       public ConsoleForm()
       {
          InitializeComponent();
       }
+
 
       private void InputTextBox_KeyUp(object sender, KeyEventArgs e)
       {
@@ -15,20 +19,34 @@ namespace Editor.Forms
          {
             case Keys.Enter:
                // Execute the command
-               Output.Text += InputTextBox.Text + "\n";
+               ConsoleCommandParser.ParseCommand(Input.Text);
+               Input.Text = string.Empty;
                break;
             case Keys.Up:
-               // Get the previous command
-               // if in autocomplete mode, get the previous suggestion
+               Input.Text = ConsoleCommandParser.GetPreviousCommand();
                break;
             case Keys.Down:
-               // Get the next command
-               // if in autocomplete mode, get the next suggestion
-               break;
-            case Keys.Tab: 
-               //show auto complete options for the current context
+               Input.Text = ConsoleCommandParser.GetNextCommand();
                break;
          }
+
       }
+
+      private void ConsoleForm_Load(object sender, EventArgs e)
+      {
+         Input.AutoCompleteCustomSource = [];
+         foreach (var cmd in ConsoleCommandParser.CommandNames)
+            Input.AutoCompleteCustomSource.Add(cmd);
+         Input.AutoCompleteSource = AutoCompleteSource.CustomSource;
+         Input.AutoCompleteMode = AutoCompleteMode.Suggest;
+         Input.Focus();
+      }
+
+      private void Output_TextChanged(object sender, EventArgs e)
+      {
+         Output.SelectionStart = Output.Text.Length;
+         Output.ScrollToCaret();
+      }
+
    }
 }

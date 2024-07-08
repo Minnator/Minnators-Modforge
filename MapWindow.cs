@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Drawing.Imaging;
-using System.IO;
 using System.Text;
-using System.Windows.Forms;
 using Editor.Controls;
 using Editor.DataClasses;
 using Editor.Forms;
 using Editor.Helper;
 using Editor.Loading;
-using Microsoft.Win32.SafeHandles;
-
-#nullable enable
 
 namespace Editor
 {
@@ -170,7 +163,7 @@ namespace Editor
       {
          if (e.KeyCode == Keys.F1)
          {
-            if (Globals.ConsoleForm == null)
+            if (Globals.ConsoleForm == null || Globals.ConsoleForm.IsDisposed)
             {
                Globals.ConsoleForm = new ();
                Globals.ConsoleForm.Show();

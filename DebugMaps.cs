@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Threading.Tasks;
 using Editor.Helper;
 using Editor.Interfaces;
 
