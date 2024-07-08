@@ -9,7 +9,7 @@ using System.Xml.Linq;
 using Group = Editor.DataClasses.Group;
 
 namespace Editor.Helper;
-
+#nullable enable
 public class Block(int start, int end, string name, List<IElement> subBlocks) : IElement
 {
    public int Start { get; set; } = start;
@@ -92,9 +92,12 @@ public static class Parsing
 
       var openedCnt = 0;
       var endCnt = 0;
-      foreach (Match openingMatch in openingMatches)
+      for (var i = 0; i <= openingMatches.Count; i++)
       {
-         var start = openingMatch.Index;
+         // openingMatch is null when there are no more opening brackets, but we need to close the current element.
+         var openingMatch = i == openingMatches.Count ? null : openingMatches[i];
+         var start = openingMatch?.Index ?? int.MaxValue;
+
          if (endCnt >= closingMatches.Count)
             throw new ParsingException("Could not find closing bracket for opening bracket at index " + start);
          var end = closingMatches[endCnt].Index;
@@ -108,11 +111,28 @@ public static class Parsing
             element.End = end;
 
             // if there is content between this closing bracket and the next opening bracket add it as a content element.
-            var contentLength = openingMatch.Index - (end + 1);
-            var content = str.Substring(end + 1, contentLength).Trim();
-            if (!string.IsNullOrWhiteSpace(content))
+            if (start != int.MaxValue)
             {
-               element.Blocks.Add(new Content(content));
+               var contentLength = start - (end + 2);
+               var content = str.Substring(end + 1, contentLength).Trim();
+               if (content.Contains("}"))
+               {
+                  content = string.Empty; //TODO why this so fucked
+               }
+               if (!string.IsNullOrWhiteSpace(content))
+               {
+                  element.Blocks.Add(new Content(content));
+               }
+            }
+            // if there is content between this and the next closing bracket at it to the current element as a content element.
+            else if (endCnt < closingMatches.Count && start > closingMatches[endCnt].Index)
+            {
+               var contentLength = closingMatches[endCnt].Index - (end + 1);
+               var content = str.Substring(end + 1, contentLength).Trim();
+               if (!string.IsNullOrWhiteSpace(content))
+               {
+                  element.Blocks.Add(new Content(content));
+               }
             }
 
             if (stack.Count > 0) // If the stack is not empty, the element is a sub element and thus added to the parent element.
@@ -126,13 +146,15 @@ public static class Parsing
 
             // Get the next closing bracket.
             if (endCnt >= closingMatches.Count)
-               throw new ParsingException("Could not find closing bracket for opening bracket at index " + start);
+               break;
             end = closingMatches[endCnt].Index;
          }
+
          if (end > start)
          {
-            var blockElement = new Block(start, end, openingMatch.Groups["name"].Value, []);
-            if (openedCnt + 1 < openingMatches.Count && openingMatches[openedCnt + 1].Index < end) 
+            //openingMatch cant be null here as it is only null once start is int.MaxValue
+            var blockElement = new Block(start, end, openingMatch!.Groups["name"].Value, []);
+            if (openedCnt + 1 < openingMatches.Count && openingMatches[openedCnt + 1].Index < end)
                // if there is content between this and the next opening bracket without there being a closing bracket add it as a content element.
             {
                var contentStart = start + openingMatch.Length;
@@ -151,11 +173,12 @@ public static class Parsing
                   blockElement.Blocks.Add(new Content(content));
                }
             }
+
             stack.Push(blockElement);
             openedCnt++;
          }
-
       }
+
       return elements;
    }
 

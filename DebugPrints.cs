@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using Editor.Commands;
 using Editor.Helper;
 
@@ -30,7 +28,7 @@ public static class DebugPrints
       }
       else
       {
-         sb.Append(GetTabs(tabs) + "\"" + ((Content)element).Value + "\"\n");
+         //sb.Append(GetTabs(tabs) + "\"" + ((Content)element).Value + "\"\n");
       }
    }
 
