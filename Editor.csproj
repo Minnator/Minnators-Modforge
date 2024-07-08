@@ -56,27 +56,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\CAddSingleSelection.cs" />
-    <Compile Include="Commands\CChangeToolTipText.cs" />
-    <Compile Include="Commands\CLassoSelection.cs" />
-    <Compile Include="Commands\CRectangleSelection.cs" />
-    <Compile Include="Commands\CSelectionMarkNext.cs" />
-    <Compile Include="Commands\CInitial.cs" />
-    <Compile Include="Commands\ICommand.cs" />
-    <Compile Include="Commands\HistoryManager.cs" />
-    <Compile Include="Commands\CDeselect.cs" />
+    <Compile Include="DataClasses\Commands\CAddSingleSelection.cs" />
+    <Compile Include="DataClasses\Commands\CChangeToolTipText.cs" />
+    <Compile Include="DataClasses\Commands\CLassoSelection.cs" />
+    <Compile Include="DataClasses\Commands\CRectangleSelection.cs" />
+    <Compile Include="DataClasses\Commands\CSelectionMarkNext.cs" />
+    <Compile Include="DataClasses\Commands\CInitial.cs" />
+    <Compile Include="DataClasses\Commands\ICommand.cs" />
+    <Compile Include="DataClasses\Commands\HistoryManager.cs" />
+    <Compile Include="DataClasses\Commands\CDeselect.cs" />
     <Compile Include="Consts.cs" />
     <Compile Include="Controls\ControlFactory.cs" />
     <Compile Include="Controls\HistoryTreeNode.cs" />
     <Compile Include="Controls\PannablePictureBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DataClasses\ConsoleCommands\CsCEcho.cs" />
+    <Compile Include="DataClasses\ConsoleCommands\ConsoleCommand.cs" />
     <Compile Include="DataClasses\Country.cs" />
     <Compile Include="DataClasses\Culture.cs" />
     <Compile Include="DataClasses\HistoryEntry.cs" />
+    <Compile Include="Helper\ConsoleCommandParser.cs" />
+    <Compile Include="Forms\ConsoleForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ConsoleForm.Designer.cs">
+      <DependentUpon>ConsoleForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Loading\CultureLoading.cs" />
-    <Compile Include="MapModes\CultureGroupMapMode.cs" />
-    <Compile Include="MapModes\CultureMapMode.cs" />
+    <Compile Include="DataClasses\MapModes\CultureGroupMapMode.cs" />
+    <Compile Include="DataClasses\MapModes\CultureMapMode.cs" />
     <Compile Include="ModifiableStack.cs" />
     <Compile Include="DataClasses\Settings\Settings.cs" />
     <Compile Include="DataClasses\Tag.cs" />
@@ -114,7 +123,7 @@
     <Compile Include="Helper\IO.cs" />
     <Compile Include="Helper\MapDrawHelper.cs" />
     <Compile Include="Helper\Geometry.cs" />
-    <Compile Include="MapModes\MapModeManager.cs" />
+    <Compile Include="DataClasses\MapModes\MapModeManager.cs" />
     <Compile Include="Helper\Parsing.cs" />
     <Compile Include="Helper\ProvinceEventHandler.cs" />
     <Compile Include="Helper\ProvinceParser.cs" />
@@ -138,16 +147,16 @@
     <Compile Include="Loading\RegionLoading.cs" />
     <Compile Include="Loading\SuperRegionLoading.cs" />
     <Compile Include="Log.cs" />
-    <Compile Include="MapModes\AreaMapMode.cs" />
-    <Compile Include="MapModes\AutonomyMapMode.cs" />
-    <Compile Include="MapModes\CenterOfTradeMapMode.cs" />
-    <Compile Include="MapModes\ContinentMapMode.cs" />
-    <Compile Include="MapModes\DevelopmentMapMode.cs" />
-    <Compile Include="MapModes\FortMapMode.cs" />
-    <Compile Include="MapModes\ProvinceIdMapMode.cs" />
-    <Compile Include="MapModes\ProvinceMapMode.cs" />
-    <Compile Include="MapModes\RegionsMapMode.cs" />
-    <Compile Include="MapModes\SuperRegionMapMode.cs" />
+    <Compile Include="DataClasses\MapModes\AreaMapMode.cs" />
+    <Compile Include="DataClasses\MapModes\AutonomyMapMode.cs" />
+    <Compile Include="DataClasses\MapModes\CenterOfTradeMapMode.cs" />
+    <Compile Include="DataClasses\MapModes\ContinentMapMode.cs" />
+    <Compile Include="DataClasses\MapModes\DevelopmentMapMode.cs" />
+    <Compile Include="DataClasses\MapModes\FortMapMode.cs" />
+    <Compile Include="DataClasses\MapModes\ProvinceIdMapMode.cs" />
+    <Compile Include="DataClasses\MapModes\ProvinceMapMode.cs" />
+    <Compile Include="DataClasses\MapModes\RegionsMapMode.cs" />
+    <Compile Include="DataClasses\MapModes\SuperRegionMapMode.cs" />
     <Compile Include="MapWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -158,6 +167,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\AdvancedSelections\AdvancedSelectionsForm.resx">
       <DependentUpon>AdvancedSelectionsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ConsoleForm.resx">
+      <DependentUpon>ConsoleForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ToolTipCustomizer\ToolTipCustomizer.resx">
       <DependentUpon>ToolTipCustomizer.cs</DependentUpon>

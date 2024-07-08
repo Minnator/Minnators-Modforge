@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using Editor.Commands;
 using Editor.DataClasses;
+using Editor.Forms;
 using Editor.Forms.AdvancedSelections;
 using Editor.Helper;
 using Region = Editor.DataClasses.Region;
@@ -33,6 +36,7 @@ public enum MapModeRendering
 //contains all required and used data across the application and instances of forms.
 public static class Globals
 {
+   public static ConsoleForm? ConsoleForm = null;
    public static MapWindow MapWindow = null!;
 
    // Contains the current state of the application

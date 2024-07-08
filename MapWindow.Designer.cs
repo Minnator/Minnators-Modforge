@@ -42,6 +42,7 @@
          this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.telescopeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+         this.refStackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.MapPanel = new System.Windows.Forms.Panel();
          this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
          this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -52,7 +53,6 @@
          this.RedoDepthLabel = new System.Windows.Forms.ToolStripLabel();
          this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
          this.SelectedProvinceSum = new System.Windows.Forms.ToolStripLabel();
-         this.refStackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.MapMenuStrip.SuspendLayout();
          this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
          this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -167,16 +167,21 @@
          // testToolStripMenuItem
          // 
          this.testToolStripMenuItem.Name = "testToolStripMenuItem";
-         this.testToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+         this.testToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
          this.testToolStripMenuItem.Text = "Test";
          this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click);
          // 
          // telescopeToolStripMenuItem
          // 
          this.telescopeToolStripMenuItem.Name = "telescopeToolStripMenuItem";
-         this.telescopeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+         this.telescopeToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
          this.telescopeToolStripMenuItem.Text = "Telescope";
          this.telescopeToolStripMenuItem.Click += new System.EventHandler(this.telescopeToolStripMenuItem_Click);
+         // 
+         // refStackToolStripMenuItem
+         // 
+         this.refStackToolStripMenuItem.Name = "refStackToolStripMenuItem";
+         this.refStackToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
          // 
          // MapPanel
          // 
@@ -264,13 +269,6 @@
          this.SelectedProvinceSum.Size = new System.Drawing.Size(49, 22);
          this.SelectedProvinceSum.Text = "ProSum";
          // 
-         // refStackToolStripMenuItem
-         // 
-         this.refStackToolStripMenuItem.Name = "refStackToolStripMenuItem";
-         this.refStackToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-         this.refStackToolStripMenuItem.Text = "RefStack";
-         this.refStackToolStripMenuItem.Click += new System.EventHandler(this.refStackToolStripMenuItem_Click);
-         // 
          // MapWindow
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -278,12 +276,14 @@
          this.ClientSize = new System.Drawing.Size(1295, 803);
          this.Controls.Add(this.toolStripContainer1);
          this.Controls.Add(this.MapMenuStrip);
+         this.KeyPreview = true;
          this.MainMenuStrip = this.MapMenuStrip;
          this.Name = "MapWindow";
          this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
          this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
          this.Text = "MapWindow";
          this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MapWindow_FormClosing);
+         this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MapWindow_KeyDown);
          this.MapMenuStrip.ResumeLayout(false);
          this.MapMenuStrip.PerformLayout();
          this.toolStripContainer1.BottomToolStripPanel.ResumeLayout(false);

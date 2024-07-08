@@ -10,6 +10,7 @@ using Editor.DataClasses;
 using Editor.Forms;
 using Editor.Helper;
 using Editor.Loading;
+using Microsoft.Win32.SafeHandles;
 
 #nullable enable
 
@@ -165,35 +166,20 @@ namespace Editor
          DebugMaps.TelescopeImageBenchmark();
       }
 
-      public interface ILol
+      private void MapWindow_KeyDown(object sender, KeyEventArgs e)
       {
-         
-      }
-
-      public class ELEMENT(int i) : ILol
-      {
-         public int Value { get; set; } = i;
-
-      }
-
-      private unsafe void refStackToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-         var refStack = new ModifiableStack<ILol>();
-
-         refStack.Push(new ELEMENT (1));
-         refStack.Push(new ELEMENT(2));
-         refStack.Push(new ELEMENT(3));
-
-         var refPeek = (ELEMENT*)refStack.PeekRef();
-
-         // modify the value of the peeked element
-         refPeek->Value = 4;
-
-         List<ELEMENT> elements = [];
-
-
-         Debug.WriteLine(((ELEMENT)refStack.Pop()).Value);
-
+         if (e.KeyCode == Keys.F1)
+         {
+            if (Globals.ConsoleForm == null)
+            {
+               Globals.ConsoleForm = new ();
+               Globals.ConsoleForm.Show();
+            }
+            else
+            {
+               Globals.ConsoleForm.BringToFront();
+            }
+         }
       }
    }
 }
