@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using Editor.DataClasses;
@@ -8,7 +9,7 @@ namespace Editor.Loading;
 
 public static class LoadingManager
 {
-   public static void LoadGameAndModDataToApplication(ModProject project, ref Log loadingLog, MapWindow mw)
+   public static void LoadGameAndModDataToApplication(ModProject project, ref Log loadingLog, ref Log errorLog, MapWindow mw)
    {
 
       LoadDefinitionAndMap(ref loadingLog, project);
@@ -19,6 +20,9 @@ public static class LoadingManager
       ContinentLoading.Load(project.VanillaPath, project.ColorProvider, ref loadingLog);
       LocalisationLoading.Load(project.ModPath, project.VanillaPath, project.Language, ref loadingLog);
       ProvinceParser.ParseAllProvinces(project.ModPath, project.VanillaPath, ref loadingLog);
+      CultureLoading.LoadCultures(project.ModPath, project.VanillaPath, out var cultureGroups, ref loadingLog, ref errorLog);
+
+      DebugPrints.PrintCultures(cultureGroups);
 
       // MUST BE LAST in the loading sequence
       InitMapModes(ref loadingLog, mw);

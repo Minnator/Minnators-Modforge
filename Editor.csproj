@@ -72,8 +72,10 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DataClasses\Country.cs" />
+    <Compile Include="DataClasses\Culture.cs" />
     <Compile Include="DataClasses\HistoryEntry.cs" />
-    <Compile Include="DataClasses\ModifiableStack.cs" />
+    <Compile Include="Loading\CultureLoading.cs" />
+    <Compile Include="ModifiableStack.cs" />
     <Compile Include="DataClasses\Settings\Settings.cs" />
     <Compile Include="DataClasses\Tag.cs" />
     <Compile Include="DataClasses\TradeGood.cs" />

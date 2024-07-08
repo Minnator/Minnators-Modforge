@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Editor.Commands;
+using Editor.DataClasses;
 using Editor.Forms;
 using Editor.Helper;
 
@@ -148,5 +149,31 @@ public static class DebugPrints
 
       }
       File.WriteAllText(@"C:\Users\david\Downloads\regionsDEBUG.txt", sb.ToString());
+   }
+
+   public static void PrintCultures(List<CultureGroup> groups)
+   {
+      var sb = new StringBuilder();
+      foreach (var group in groups)
+      {
+         sb.AppendLine($"Group: {group.Name} with [{group.Cultures.Count}] and names [{group.TotalNameCount}]");
+         foreach (var culture in group.Cultures)
+         {
+            sb.AppendLine($"\tName: {culture.Name} with Names: [{culture.TotalNameCount}] and Primaries: [{culture.Primaries.Count}]");
+         }
+      }
+
+      File.WriteAllText(@"C:\Users\david\Downloads\culturesDEBUG.txt", sb.ToString());
+   }
+
+   public static string GetListAsString<T>(List<T> list) where T : notnull
+   {
+      var sb = new StringBuilder();
+      foreach (var item in list)
+      {
+         sb.Append($"{item.ToString()}, ");
+      }
+      sb.Remove(sb.Length - 2, 2);
+      return sb.ToString();
    }
 }

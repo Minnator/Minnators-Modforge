@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Editor.Helper;
 
@@ -35,11 +36,11 @@ public static class FilesHelper
    }
 
    // Gets all files in a folder with a specific file ending in the folder but only in TopDirectoryOnly and not in subfolders
-   public static List<string> GetFilesFromModAndVanillaUniquely(string modPathIn, string vanillaPathIn, params string[] path)
+   public static List<string> GetFilesFromModAndVanillaUniquely(string modPathIn, string vanillaPathIn, params string[] internalPath)
    {
-      var internalPath = Path.Combine(path);
-      var modPath = Path.Combine(modPathIn, internalPath);
-      var vanillaPath = Path.Combine(vanillaPathIn, internalPath);
+      var folderPath = Path.Combine(internalPath);
+      var modPath = Path.Combine(modPathIn, folderPath);
+      var vanillaPath = Path.Combine(vanillaPathIn, folderPath);
       HashSet<string> fileSet = [];
 
       if (Directory.Exists(modPath)) 
@@ -50,5 +51,16 @@ public static class FilesHelper
             fileSet.Add(file);
 
       return [..fileSet];
+   }
+
+   public static void GetFilesUniquelyAndCombineToOne(string modPathIn, string vanillaPathIn, out string output, params string[] internalPath)
+   {
+      var sb = new StringBuilder();
+      var files = GetFilesFromModAndVanillaUniquely(modPathIn, vanillaPathIn, internalPath);
+      foreach (var file in files)
+      {
+         sb.Append(File.ReadAllText(file)).Append("\n");
+      }
+      output = sb.ToString();
    }
 }

@@ -36,7 +36,7 @@ namespace Editor
          SuspendLayout();
          InitGui();
 
-         LoadingManager.LoadGameAndModDataToApplication(Project, ref LoadingLog, this);
+         LoadingManager.LoadGameAndModDataToApplication(Project, ref LoadingLog, ref ErrorLog, this);
          LoadingManager.InitializeComponents(this);
 
          //resume gui updates

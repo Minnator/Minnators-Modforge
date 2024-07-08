@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text;
 using System.Text.RegularExpressions;
 using Editor.DataClasses;
 using Group = Editor.DataClasses.Group;
@@ -60,6 +61,7 @@ public static class Parsing
 {
    private static readonly Regex OpeningRegex = new (@"(?<name>[A-Za-z0-9_]+)\s*=\s*{", RegexOptions.Compiled);
    private static readonly Regex ClosingRegex = new (@"}", RegexOptions.Compiled);
+   private static readonly Regex StringListRegex = new(@"(?:""(?:[^""\\]|\\.)*""|\S+)", RegexOptions.Compiled);
 
    /// <summary>
    /// Returns a list of <c>int</c> from a string which are separated by <c>n</c> whitespace chars.
@@ -79,12 +81,12 @@ public static class Parsing
       return idList;
    }
 
-   public static unsafe List<IElement> GetNestedElementsIterative(int index, ref string str)
+   public static unsafe List<Block> GetNestedElementsIterative(int index, ref string str)
    {
       var openingMatches = OpeningRegex.Matches(str, index);
       var closingMatches = ClosingRegex.Matches(str, index);
 
-      List<IElement> elements = [];
+      List<Block> elements = [];
       ModifiableStack<IElement> stack = new();
 
       var closingCount = closingMatches.Count;
@@ -243,35 +245,6 @@ public static class Parsing
       }
    }
 
-   public static int GetFirstClosingBracket(int index, ref string str)
-   {
-      return str.IndexOf('}', index);
-   }
-
-   /// <summary>
-   /// Returns the index of the closing bracket of the first opening bracket in the string.
-   /// </summary>
-   /// <param name="str"></param>
-   /// <returns></returns>
-   public static int GetClosingBracketIndex(ref string str)
-   {
-      var bracketCount = 0;
-
-      for (var index = 0; index < str.Length; index++)
-      {
-         var c = str[index];
-
-         if (c == '{')
-            bracketCount++;
-         else if (c == '}') 
-            bracketCount--;
-
-         if (bracketCount == 0)
-            return index;
-      }
-      return -1;
-   }
-
    /// <summary>
    /// Returns the index of the closing bracket of the first opening bracket in the string after position <c>openingBracketIndex</c>.
    /// </summary>
@@ -368,14 +341,55 @@ public static class Parsing
    /// </summary>
    /// <param name="value"></param>
    /// <returns></returns>
-   public static List<string> GetStringList(string value)
+   public static List<string> GetStringList(ref string value)
    {
       List<string> strList = [];
 
-      var matches = Regex.Matches(value, @"\s*(\w+)");
+      var matches = StringListRegex.Matches(value);
       foreach (var match in matches) 
          strList.Add(match.ToString().Trim());
       return strList;
+   }
+
+   // overload in case the string is not passed by referenceable
+   public static List<string> GetStringList(string value)
+   {
+      return GetStringList(ref value);
+   }
+
+   public static List<KeyValuePair<string, string>> GetKeyValueList(string value)
+   {
+      return GetKeyValueList(ref value);
+   }
+
+   public static List<KeyValuePair<string, string>> GetKeyValueList(ref string value)
+   {
+      List<KeyValuePair<string, string>>  keyValueList = [];
+      var lines = value.Split('\n');
+      foreach (var line in lines)
+      {
+         var elements = line.Split('=');
+         if (elements.Length != 2)
+            continue;
+         keyValueList.Add(new(elements[0].Trim(), elements[1].Trim()));
+      }
+      return keyValueList;
+   }
+
+   public static void RemoveCommentFromMultilineString(string value)
+   {
+      RemoveCommentFromMultilineString(ref value);
+   }
+
+   public static void RemoveCommentFromMultilineString(ref string str)
+   {
+      var sb = new StringBuilder();
+      var lines = str.Split('\n');
+      foreach (var line in lines)
+      {
+         sb.Append(RemoveCommentFromLine(line));
+      }
+      str = sb.ToString();
    }
 
    /// <summary>
