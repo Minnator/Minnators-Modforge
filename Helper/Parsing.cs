@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms.VisualStyles;
 using System.Xml.Linq;
+using Editor.DataClasses;
 using Group = Editor.DataClasses.Group;
 
 namespace Editor.Helper;
@@ -88,8 +89,9 @@ public static class Parsing
 
       var openingMatches = OpeningRegex.Matches(str, index);
       var closingMatches = ClosingRegex.Matches(str, index);
-      Stack<IElement> stack = [];
+      ModifiableStack<IElement> stack = new();
 
+      var closingCount = closingMatches.Count;
       var openedCnt = 0;
       var endCnt = 0;
       for (var i = 0; i <= openingMatches.Count; i++)
@@ -109,12 +111,12 @@ public static class Parsing
             endCnt++;
             var element = (Block)stack.Pop();
             element.End = end;
+            var nextEnd = endCnt < closingCount ? closingMatches[endCnt].Index : 0;
 
             // if there is content between this closing bracket and the next opening bracket add it as a content element.
             if (start != int.MaxValue)
             {
-               var contentLength = start - (end + 2);
-               var content = str.Substring(end + 1, contentLength).Trim();
+               var content = str.Substring(end + 1, start - (end + 2)).Trim();
                if (content.Contains("}"))
                {
                   content = string.Empty; //TODO why this so fucked
@@ -125,10 +127,9 @@ public static class Parsing
                }
             }
             // if there is content between this and the next closing bracket at it to the current element as a content element.
-            else if (endCnt < closingMatches.Count && start > closingMatches[endCnt].Index)
+            else if (endCnt < closingCount && start > nextEnd)
             {
-               var contentLength = closingMatches[endCnt].Index - (end + 1);
-               var content = str.Substring(end + 1, contentLength).Trim();
+               var content = str.Substring(end + 1, nextEnd - (end + 1)).Trim();
                if (!string.IsNullOrWhiteSpace(content))
                {
                   element.Blocks.Add(new Content(content));
@@ -145,9 +146,9 @@ public static class Parsing
                elements.Add(element);
 
             // Get the next closing bracket.
-            if (endCnt >= closingMatches.Count)
+            if (endCnt >= closingCount)
                break;
-            end = closingMatches[endCnt].Index;
+            end = nextEnd;
          }
 
          if (end > start)

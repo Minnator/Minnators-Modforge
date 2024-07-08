@@ -145,7 +145,7 @@ namespace Editor
          //var content = File.ReadAllText("C:\\Users\\david\\Downloads\\NestedBLocks.txt");
          var content = File.ReadAllText("S:\\SteamLibrary\\steamapps\\common\\Europa Universalis IV\\common\\cultures\\00_cultures.txt");
          var sw = Stopwatch.StartNew();
-         var blocks = Parsing.GetNestedBLocksRecursive(0, ref content, out _);
+         var blocks = Parsing.GetNestedElementsIterative(0, ref content);
          sw.Stop();
          Debug.WriteLine("Parsing cultures took: " + sw.ElapsedMilliseconds + "ms");
 
@@ -160,6 +160,35 @@ namespace Editor
       private void telescopeToolStripMenuItem_Click(object sender, EventArgs e)
       {
          DebugMaps.TelescopeImageBenchmark();
+      }
+
+      public interface ILol
+      {
+         
+      }
+
+      public class ELEMENT(int i) : ILol
+      {
+         public int Value { get; set; } = i;
+
+      }
+
+      private unsafe void refStackToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         var refStack = new ModifiableStack<ILol>();
+
+         refStack.Push(new ELEMENT (1));
+         refStack.Push(new ELEMENT(2));
+         refStack.Push(new ELEMENT(3));
+
+         var refPeek = (ELEMENT*)refStack.PeekRef();
+
+         // modify the value of the peeked element
+         refPeek->Value = 4;
+
+
+         Debug.WriteLine(((ELEMENT)refStack.Pop()).Value);
+
       }
    }
 }
