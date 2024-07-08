@@ -190,6 +190,8 @@ public static class MapDrawHelper
          var b = color.B;
          var scan0 = (byte*)bmpData.Scan0.ToPointer();
 
+
+
          foreach (var point in points)
          {
             var index = (point.Y - rect.Y) * bmpData.Stride + (point.X - rect.X) * 3;

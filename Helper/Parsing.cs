@@ -90,40 +90,73 @@ public static class Parsing
       var closingMatches = ClosingRegex.Matches(str, index);
       Stack<IElement> stack = [];
 
-      var depth = 0;
-      var elementCnt = 0;
+      var openedCnt = 0;
       var endCnt = 0;
       foreach (Match openingMatch in openingMatches)
       {
          var start = openingMatch.Index;
+         if (endCnt >= closingMatches.Count)
+            throw new ParsingException("Could not find closing bracket for opening bracket at index " + start);
          var end = closingMatches[endCnt].Index;
 
-         if (end < start)
+         // While there are closing brackets before the next opening bracket we need to close the current element.
+         while (end < start)
          {
+            // Get the current element from the stack and update its end.
             endCnt++;
+            var element = (Block)stack.Pop();
+            element.End = end;
 
+            // if there is content between this closing bracket and the next opening bracket add it as a content element.
+            var contentLength = openingMatch.Index - (end + 1);
+            var content = str.Substring(end + 1, contentLength).Trim();
+            if (!string.IsNullOrWhiteSpace(content))
+            {
+               element.Blocks.Add(new Content(content));
+            }
+
+            if (stack.Count > 0) // If the stack is not empty, the element is a sub element and thus added to the parent element.
+            {
+               var element2 = (Block)stack.Pop();
+               element2.Blocks.Add(element);
+               stack.Push(element2);
+            }
+            else // If the stack is empty, the element is a top level element and thus added to the elements list.
+               elements.Add(element);
+
+            // Get the next closing bracket.
+            if (endCnt >= closingMatches.Count)
+               throw new ParsingException("Could not find closing bracket for opening bracket at index " + start);
+            end = closingMatches[endCnt].Index;
          }
-         else if (end > start)
+         if (end > start)
          {
-            if (openingMatches[elementCnt + 1].Index > end) // 
-               stack.Push(new Block(start, end, openingMatch.Groups["name"].Value, []));
+            var blockElement = new Block(start, end, openingMatch.Groups["name"].Value, []);
+            if (openedCnt + 1 < openingMatches.Count && openingMatches[openedCnt + 1].Index < end) 
+               // if there is content between this and the next opening bracket without there being a closing bracket add it as a content element.
+            {
+               var contentStart = start + openingMatch.Length;
+               var content = str.Substring(contentStart, openingMatches[openedCnt + 1].Index - contentStart).Trim();
+               if (!string.IsNullOrWhiteSpace(content))
+               {
+                  blockElement.Blocks.Add(new Content(content));
+               }
+            }
+            else // Get the content between the opening bracket and the closing bracket.
+            {
+               var contentStart = start + openingMatch.Length;
+               var content = str.Substring(contentStart, end - contentStart).Trim();
+               if (!string.IsNullOrWhiteSpace(content))
+               {
+                  blockElement.Blocks.Add(new Content(content));
+               }
+            }
+            stack.Push(blockElement);
+            openedCnt++;
          }
 
       }
-
       return elements;
-   }
-
-   public class ReferenceStack<T>
-   {
-
-
-
-
-   }
-
-   public static void Test()
-   {
    }
 
    public static List<IElement> GetNestedBLocksRecursive(int index, ref string str, out int newEnd)

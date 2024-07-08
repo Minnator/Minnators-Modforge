@@ -16,8 +16,6 @@ public static class DebugMaps
 {
    public static unsafe void TelescopeImageBenchmark()
    {
-      Parsing.Test();
-      return;
       var sw = Stopwatch.StartNew();
       var bmp = new Bitmap(9000, 6000, PixelFormat.Format24bppRgb);
       var width = bmp.Width;
