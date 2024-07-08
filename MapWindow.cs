@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.IO;
@@ -185,6 +186,8 @@ namespace Editor
 
          // modify the value of the peeked element
          refPeek->Value = 4;
+
+         List<ELEMENT> elements = [];
 
 
          Debug.WriteLine(((ELEMENT)refStack.Pop()).Value);

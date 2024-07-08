@@ -36,7 +36,6 @@ public unsafe class ModifiableStack<T>
       return _items[Count - 1];
    }
 
-#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
    public T* PeekRef()
    {
       if (Count == 0) 
@@ -46,7 +45,6 @@ public unsafe class ModifiableStack<T>
          return ptr;
       }
    }
-#pragma warning restore CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
 
    public void Clear()
    {
