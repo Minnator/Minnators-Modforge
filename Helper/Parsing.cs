@@ -61,9 +61,9 @@ public static class Parsing
 {
    private static readonly Regex OpeningRegex = new (@"(?<name>[A-Za-z0-9_]+)\s*=\s*{", RegexOptions.Compiled);
    private static readonly Regex ClosingRegex = new (@"}", RegexOptions.Compiled);
-   private static readonly Regex StringListRegex = new(@"(?:""(?:[^""\\]|\\.)*""|\S+)", RegexOptions.Compiled);
-   private static readonly Regex ColorRegex = new(@"(?<r>\d+)\s+(?<g>\d+)\s+(?<b>\d+)", RegexOptions.Compiled);
-   private static readonly Regex MonarchNameRegex = new(@"([\p{L} ]+) #(\d+)""\s*=\s*(-?\d+)", RegexOptions.Compiled);
+   private static readonly Regex StringListRegex = new (@"(?:""(?:[^""\\]|\\.)*""|\S+)", RegexOptions.Compiled);
+   private static readonly Regex ColorRegex = new (@"(?<r>\d+)\s+(?<g>\d+)\s+(?<b>\d+)", RegexOptions.Compiled);
+   private static readonly Regex MonarchNameRegex = new (@"([\p{L} ]+) #(\d+)""\s*=\s*(-?\d+)", RegexOptions.Compiled);
 
    /// <summary>
    /// Returns a list of <c>int</c> from a string which are separated by <c>n</c> whitespace chars.
@@ -83,6 +83,10 @@ public static class Parsing
       return idList;
    }
 
+   public static List<IElement> GetNestedElementsIterative(int index, string str)
+   {
+      return GetNestedElementsIterative(index, ref str);
+   }
    public static unsafe List<IElement> GetNestedElementsIterative(int index, ref string str)
    {
       var openingMatches = OpeningRegex.Matches(str, index);
@@ -93,6 +97,13 @@ public static class Parsing
 
       var closingCount = closingMatches.Count;
       var openingCount = openingMatches.Count;
+
+      if (closingCount == 0 && openingCount == 0)
+      {
+         elements.Add(new Content(str));
+         return elements;
+      }
+
       var openedCnt = 0;
       var endCnt = 0;
 
@@ -126,7 +137,7 @@ public static class Parsing
             // if there is content between this closing bracket and the next opening bracket add it as a content element.
             if (start != int.MaxValue)
             {
-               var content = str.Substring(end + 1, start - (end + 1)).Trim();
+               var content = str[(end + 1)..start].Trim();
                if (content.Contains('}'))
                {
                   content = string.Empty; //TODO why this so fucked
@@ -139,7 +150,7 @@ public static class Parsing
             // if there is content between this and the next closing bracket at it to the current element as a content element.
             else if (endCnt < closingCount && start > nextEnd)
             {
-               var content = str.Substring(end + 1, nextEnd - (end + 1)).Trim();
+               var content = str[(end + 1)..nextEnd].Trim();
                if (!string.IsNullOrWhiteSpace(content))
                {
                   element.Blocks.Add(new Content(content));
@@ -174,7 +185,7 @@ public static class Parsing
             //openingMatch cant be null here as it is only null once start is int.MaxValue
             var blockElement = new Block(start, end, openingMatch!.Groups["name"].Value, []);
             var contentStart = start + openingMatch.Length;
-            // if there is content between this and the next opening bracket without there being a closing bracket add it as a content element.
+            // if there is content between this and the next opening bracket without there being a closing bracket add it has a content element.
             if (openedCnt + 1 < openingCount)
             {
                var nextIndex = openingMatches[openedCnt + 1].Index;
@@ -189,6 +200,8 @@ public static class Parsing
                else
                {
                   var content = str[contentStart..end].Trim();
+                  if (content.Contains("133 43 27"))
+                     content = string.Empty;
                   if (!string.IsNullOrWhiteSpace(content))
                   {
                      blockElement.Blocks.Add(new Content(content));

@@ -52,7 +52,7 @@ public static class FilesHelper
 
       return [..fileSet];
    }
-
+   
    public static bool GetFileUniquely(string modPathIn, string vanillaPathIn,out string path, params string[] internalPath)
    {
       var folderPath = Path.Combine(internalPath);
