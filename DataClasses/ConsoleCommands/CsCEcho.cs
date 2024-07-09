@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Editor.Controls;
 
 namespace Editor.DataClasses.ConsoleCommands;
 
@@ -12,17 +13,17 @@ public class CsCEcho: ConsoleCommand
    {
       if (args is ["help"])
       {
-         Output.Text += $"->: {Help}\n";
+         Output.WriteLine(Help);
       }
       else if (args.Length == 0)
       {
-         Output.Text += $"->: {Description}\n";
+         Output.WriteLine(Description);
       }
       else
       {
          var text = string.Join(" ", args);
          text = text.Replace("echo", "");
-         Output.AppendText($"-> {text} \n");
+         Output.WriteLine(text);         
       }
    }
 }

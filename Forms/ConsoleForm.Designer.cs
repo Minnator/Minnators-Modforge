@@ -55,6 +55,7 @@
          Output.BackColor = SystemColors.ControlDarkDark;
          Output.BorderStyle = BorderStyle.None;
          Output.Dock = DockStyle.Fill;
+         Output.Font = new Font("Courier New", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
          Output.Location = new Point(4, 3);
          Output.Margin = new Padding(4, 3, 4, 3);
          Output.Name = "Output";

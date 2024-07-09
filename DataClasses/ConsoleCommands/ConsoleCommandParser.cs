@@ -11,7 +11,8 @@ public static class ConsoleCommandParser
    public static string[] CommandNames { get; set; }
    private static readonly Dictionary<string, ConsoleCommand> _commands = new()
    {
-      { "echo", new CsCEcho() }
+      { "echo", new CsCEcho() },
+      { "analyze", new CsCAnalyzeProvince() }
    };
 
    static ConsoleCommandParser()
