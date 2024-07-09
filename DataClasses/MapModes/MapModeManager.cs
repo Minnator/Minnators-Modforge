@@ -3,14 +3,15 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using Editor.Controls;
+using Editor.DataClasses.MapModes;
 using Editor.MapModes;
 
 namespace Editor.DataClasses;
 
 public class MapModeManager
 {
-   private List<Interfaces.MapMode> MapModes { get; } = [];
-   public Interfaces.MapMode CurrentMapMode { get; set; } = null!;
+   private List<MapMode> MapModes { get; } = [];
+   public MapMode CurrentMapMode { get; set; } = null!;
    private ProvinceIdMapMode IdMapMode { get; set; } = null!;
    public PannablePictureBox PictureBox { get; set; }
    public bool PreviousLandOnly { get; set; }
@@ -45,12 +46,12 @@ public class MapModeManager
 
    }
    
-   public List<Interfaces.MapMode> GetMapModes()
+   public List<MapMode> GetMapModes()
    {
       return MapModes;
    }
 
-   public Interfaces.MapMode GetMapMode(string name)
+   public MapMode GetMapMode(string name)
    {
       return MapModes.Find(mode => mode.GetMapModeName() == name);
    }

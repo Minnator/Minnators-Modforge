@@ -13,7 +13,7 @@ public class Country(Tag tag, string fileName)
 
    public List<string> HistoricalIdeas { get; set; } = [];
    public List<string> HistoricalUnits { get; set; } = [];
-   public List<string> MonarchNames { get; set; } = [];
+   public List<MonarchName> MonarchNames { get; set; } = [];
    public List<string> ShipNames { get; set; } = [];
    public List<string> FleeTNames { get; set; } = [];
    public List<string> ArmyNames { get; set; } = [];

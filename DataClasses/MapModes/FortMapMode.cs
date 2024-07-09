@@ -1,9 +1,10 @@
 ﻿using System.Drawing;
+using Editor.DataClasses.MapModes;
 using Editor.Helper;
 
 namespace Editor.MapModes;
 
-public class FortMapMode : Interfaces.MapMode
+public class FortMapMode : MapMode
 {
    //TODO read min an max from defines
    public override bool IsLandOnly => true;

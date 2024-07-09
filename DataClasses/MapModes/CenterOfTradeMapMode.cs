@@ -1,9 +1,10 @@
 ﻿using System.Drawing;
+using Editor.DataClasses.MapModes;
 using Editor.Helper;
 
 namespace Editor.MapModes;
 
-public class CenterOfTradeMapMode : Interfaces.MapMode
+public class CenterOfTradeMapMode : MapMode
 {
    //TODO read min an max from defines
 

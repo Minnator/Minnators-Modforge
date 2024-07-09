@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using Editor.Helper;
 
-namespace Editor.Interfaces;
+namespace Editor.DataClasses.MapModes;
 
 public abstract class MapMode
 {

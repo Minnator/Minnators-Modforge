@@ -63,6 +63,7 @@ public static class Parsing
    private static readonly Regex ClosingRegex = new (@"}", RegexOptions.Compiled);
    private static readonly Regex StringListRegex = new(@"(?:""(?:[^""\\]|\\.)*""|\S+)", RegexOptions.Compiled);
    private static readonly Regex ColorRegex = new(@"(?<r>\d+)\s+(?<g>\d+)\s+(?<b>\d+)", RegexOptions.Compiled);
+   private static readonly Regex MonarchNameRegex = new(@"([\p{L} ]+) #(\d+)""\s*=\s*(-?\d+)", RegexOptions.Compiled);
 
    /// <summary>
    /// Returns a list of <c>int</c> from a string which are separated by <c>n</c> whitespace chars.
@@ -210,7 +211,7 @@ public static class Parsing
       }
       return elements;
    }
-
+   [Obsolete]
    public static List<IElement> GetNestedBLocksRecursive(int index, ref string str, out int newEnd)
    {
       List<IElement> elements = [];
@@ -290,32 +291,6 @@ public static class Parsing
    }
 
    /// <summary>
-   /// Returns the <c>index</c> of the first opening bracket and the <c>index</c> of the closing bracket of the first opening bracket in the string after index <c>index</c>.
-   /// </summary>
-   /// <param name="str"></param>
-   /// <param name="index"></param>
-   /// <returns></returns>
-   public static (int, int) FindOpeningBracketAndClosingBracket(ref string str, int index)
-   {
-      var bracketCount = 0;
-      for (var i = index; i < str.Length; i++)
-      {
-         if (str[i] == '{')
-         {
-            if (bracketCount == 0)
-               return (index, GetClosingBracketIndex(ref str, index));
-            bracketCount++;
-         }
-         else if (str[i] == '}')
-            bracketCount--;
-
-         index++;
-      }
-
-      return (-1, -1);
-   }
-
-   /// <summary>
    /// Returns the <c>comment</c> of the line after the <c>index</c> and the <c>index</c> of the line ending.
    /// </summary>
    /// <param name="index"></param>
@@ -338,15 +313,21 @@ public static class Parsing
 
    public static string RemoveCommentFromLine(string line)
    {
-      var index = line.IndexOf('#');
-      return index == -1 ? line : line.Substring(0, index);
+      var inQuotes = false;
+      for (var i = 0; i < line.Length; i++)
+      {
+         switch (line[i])
+         {
+            case '"':
+               inQuotes = !inQuotes;
+               break;
+            case '#' when !inQuotes:
+               return line[..i];
+         }
+      }
+      return line;
    }
 
-   public static string GetCommentFromLine(string line)
-   {
-      var index = line.IndexOf('#');
-      return index == -1 ? "" : line.Substring(index + 1);
-   }
 
    public static string RemoveAndGetCommentFromString(string str)
    {
@@ -470,6 +451,21 @@ public static class Parsing
       var b = int.Parse(match.Groups["b"].Value);
 
       return Color.FromArgb(r, g, b);
+   }
+
+   public static void ParseMonarchNames(string input, out List<MonarchName> names)
+   {
+      names = [];
+      var matches = MonarchNameRegex.Matches(input);
+
+      foreach (Match match in matches)
+      {
+         var name = match.Groups[1].Value;
+         var ordinal = int.Parse(match.Groups[2].Value);
+         var chance = int.Parse(match.Groups[3].Value);
+
+         names.Add(new (name, ordinal, chance));
+      }
    }
 }
 

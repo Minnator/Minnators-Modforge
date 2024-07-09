@@ -44,9 +44,6 @@ namespace Editor.Loading
          {
             FilesHelper.GetFileUniquely(project.ModPath, project.VanillaPath, out var content, "common", country.FileName);
             Parsing.RemoveCommentFromMultilineString(ref content);
-
-            if (country.Tag == "DAN")
-               Debug.WriteLine(content);
             var blocks = Parsing.GetNestedElementsIterative(0, ref content);
 
             AssignCountryAttributes(country, ref blocks, ref errorLog);
@@ -93,8 +90,11 @@ namespace Editor.Loading
                      country.HistoricalUnits.AddRange(Parsing.GetStringList(unit.Value));
                   break;
                case "monarch_names":
-                  foreach (var name in block.GetContentElements) 
-                     country.MonarchNames.Add(name.Value);
+                  foreach (var name in block.GetContentElements)
+                  {
+                     Parsing.ParseMonarchNames(name.Value, out var monarchNames);
+                     country.MonarchNames.AddRange(monarchNames);
+                  }
                   break;
                case "ship_names":
                   foreach (var name in block.GetContentElements) 

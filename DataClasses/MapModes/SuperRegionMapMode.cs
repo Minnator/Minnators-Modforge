@@ -1,8 +1,9 @@
 ﻿using System.Drawing;
+using Editor.DataClasses.MapModes;
 
 namespace Editor.MapModes;
 
-public sealed class SuperRegionMapMode : Interfaces.MapMode
+public sealed class SuperRegionMapMode : MapMode
 {
    public override string GetMapModeName()
    {

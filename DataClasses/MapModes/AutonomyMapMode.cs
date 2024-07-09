@@ -1,9 +1,10 @@
 ﻿using System.Drawing;
+using Editor.DataClasses.MapModes;
 using Editor.Helper;
 
 namespace Editor.MapModes;
 
-public class AutonomyMapMode : Interfaces.MapMode
+public class AutonomyMapMode : MapMode
 {
    public override bool IsLandOnly => true;
 

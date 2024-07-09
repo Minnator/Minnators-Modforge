@@ -2,8 +2,8 @@
 using System.Drawing;
 using System.Windows.Forms;
 using Editor.DataClasses;
+using Editor.DataClasses.MapModes;
 using Editor.Helper;
-using Editor.Interfaces;
 
 namespace Editor.MapModes;
 

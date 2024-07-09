@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Editor.DataClasses.MapModes;
 using Editor.Helper;
 using Editor.Loading;
 
 namespace Editor.MapModes;
 
-public sealed class AreaMapMode : Interfaces.MapMode
+public sealed class AreaMapMode : MapMode
 {
    public AreaMapMode()
    {

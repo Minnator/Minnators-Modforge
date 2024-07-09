@@ -1,8 +1,9 @@
-﻿using Editor.Helper;
+﻿using Editor.DataClasses.MapModes;
+using Editor.Helper;
 
 namespace Editor.MapModes;
 
-public class CultureMapMode : Interfaces.MapMode
+public class CultureMapMode : MapMode
 {
    public CultureMapMode()
    {
