@@ -77,15 +77,18 @@ public static class ProvinceParser
    {
       entries = [];
       var provinces = entries;
+
       Parallel.ForEach(files, file =>
       {
-         var match = IdRegex.Match(file);
+         var match = IdRegex.Match(Path.GetFileName(file));
          if (!match.Success || !int.TryParse(match.Groups[1].Value, out var id))
             throw new($"Could not parse province id from file name: {file}\nCould not match \'<number> <.*>\'");
          var historyEntries = ParesHistoryFromProvinceFile(file, out var remainder);
+         ParsingProvince province = new(historyEntries, remainder) { Id = id };
          lock (provinces)
          {
-            provinces.Add(id, new(historyEntries, remainder){Id = id});
+            if (!provinces.TryAdd(id, province))
+                Debug.WriteLine($"Could not add province {id} to the dictionary");
          }
       });
       Debug.WriteLine($"History files parsed");
