@@ -135,7 +135,7 @@ public static class Parsing
             var nextEnd = endCnt < closingCount ? closingMatches[endCnt].Index : 0;
 
             // if there is content between this closing bracket and the next opening bracket add it as a content element.
-            if (start != int.MaxValue)
+            if (start != int.MaxValue && stack.Count > 0)
             {
                var content = str[(end + 1)..start].Trim();
                if (content.Contains('}'))
@@ -165,7 +165,15 @@ public static class Parsing
             {
                elements.Add(element);
                // The stack is empty so there could be content after the last closing bracket to the next opening bracket.
-               if (start != int.MaxValue)
+               if (start != int.MaxValue && stack.Count != 0)
+               {
+                  var content = str[(end + 1)..start].Trim();
+                  if (!string.IsNullOrWhiteSpace(content))
+                  {
+                     elements.Add(new Content(content));
+                  }
+               }
+               else if (start != int.MaxValue && stack.Count == 0)
                {
                   var content = str[(end + 1)..start].Trim();
                   if (!string.IsNullOrWhiteSpace(content))
@@ -200,8 +208,6 @@ public static class Parsing
                else
                {
                   var content = str[contentStart..end].Trim();
-                  if (content.Contains("133 43 27"))
-                     content = string.Empty;
                   if (!string.IsNullOrWhiteSpace(content))
                   {
                      blockElement.Blocks.Add(new Content(content));
