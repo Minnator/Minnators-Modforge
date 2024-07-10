@@ -51,7 +51,8 @@ namespace Editor.Loading
          foreach (var file in files)
          {
             var content = IO.ReadAllInUTF8(file);
-            var elements = Parsing.GetNestedElementsIterative(0, content);
+            Parsing.RemoveCommentFromMultilineString(ref content, out var removed);
+            var elements = Parsing.GetNestedElementsIterative(0, removed);
             Tag tag = new(Path.GetFileName(file)[..3]);
             var country = Globals.Countries[tag];
 
@@ -245,6 +246,8 @@ namespace Editor.Loading
             var kvp = Parsing.GetKeyValueList(content.Value);
             if (kvp.Count < 1)
             {
+               if (content.Value.Contains("#-1839"))
+                  Debugger.Break();
                errorLog.Write($"Invalid key value pair in history entry: {content.Value}");
                continue;
             }
