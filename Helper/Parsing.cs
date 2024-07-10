@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
 using Editor.DataClasses;
@@ -59,11 +57,13 @@ public class ParsingException(string message) : Exception(message);
 
 public static class Parsing
 {
-   private static readonly Regex OpeningRegex = new (@"(?<name>[A-Za-z0-9_]+)\s*=\s*{", RegexOptions.Compiled);
+   private static readonly Regex OpeningRegex = new (@"(?<name>[A-Za-z0-9_.]+)\s*=\s*{", RegexOptions.Compiled);
    private static readonly Regex ClosingRegex = new (@"}", RegexOptions.Compiled);
    private static readonly Regex StringListRegex = new (@"(?:""(?:[^""\\]|\\.)*""|\S+)", RegexOptions.Compiled);
    private static readonly Regex ColorRegex = new (@"(?<r>\d+)\s+(?<g>\d+)\s+(?<b>\d+)", RegexOptions.Compiled);
    private static readonly Regex MonarchNameRegex = new (@"([\p{L} ]+) #(\d+)""\s*=\s*(-?\d+)", RegexOptions.Compiled);
+   private static readonly Regex KeyValueRegex = new (@"(?<key>[A-Za-z_0-9-.]+)\s*=\s*(?<value>[A-Za-z_0-9-.]+)", RegexOptions.Compiled);
+
 
    /// <summary>
    /// Returns a list of <c>int</c> from a string which are separated by <c>n</c> whitespace chars.
@@ -351,7 +351,7 @@ public static class Parsing
    public static string RemoveAndGetCommentFromString(string str)
    {
       var index = str.IndexOf('#');
-      return index == -1 ? str : str.Substring(0, index);
+      return index == -1 ? str : str[..index];
    }
 
    /// <summary>
@@ -383,23 +383,21 @@ public static class Parsing
    public static List<KeyValuePair<string, string>> GetKeyValueList(ref string value)
    {
       List<KeyValuePair<string, string>>  keyValueList = [];
-      var lines = value.Split('\n');
-      foreach (var line in lines)
+      RemoveCommentFromMultilineString(value, out var removed);
+      var matches = KeyValueRegex.Matches(removed);
+      foreach (Match match in matches)
       {
-         var elements = line.Split('=');
-         if (elements.Length != 2)
-            continue;
-         keyValueList.Add(new(elements[0].Trim(), elements[1].Trim()));
+         keyValueList.Add(new(match.Groups["key"].Value, match.Groups["value"].Value));
       }
       return keyValueList;
    }
 
-   public static void RemoveCommentFromMultilineString(string value)
+   public static void RemoveCommentFromMultilineString(string value, out string removed)
    {
-      RemoveCommentFromMultilineString(ref value);
+      RemoveCommentFromMultilineString(ref value, out removed);
    }
 
-   public static void RemoveCommentFromMultilineString(ref string str)
+   public static void RemoveCommentFromMultilineString(ref string str, out string removed)
    {
       var sb = new StringBuilder();
       var lines = str.Split('\n');
@@ -407,7 +405,7 @@ public static class Parsing
       {
          sb.AppendLine(RemoveCommentFromLine(line));
       }
-      str = sb.ToString();
+      removed = sb.ToString();
    }
 
    /// <summary>
@@ -485,6 +483,90 @@ public static class Parsing
 
          names.Add(new (name, ordinal, chance));
       }
+   }
+
+   public static void ParsePersonFromString(string content, out Person person, ref Log errorLog)    
+   {
+      person = new();
+      var kvps = GetKeyValueList(content);
+      foreach (var kvp in kvps)
+      {
+         var val = RemoveCommentFromLine(kvp.Value);
+         switch (kvp.Key.ToLower())
+         {
+            case "country_of_origin":
+               person.CountryOfOrigin = val;
+               break;
+            case "name":
+               person.Name = val;
+               break;
+            case "monarch_name":
+               person.MonarchName = val;
+               break;
+            case "dynasty":
+               person.Dynasty = val;
+               break;
+            case "culture":
+               person.Culture = val;
+               break;
+            case "religion":
+               person.Religion = val;
+               break;
+            case "birth_date":
+               person.BirthDate = DateTime.Parse(val);
+               break;
+            case "death_date":
+               person.DeathDate = DateTime.Parse(val);
+               break;
+            case "claim":
+               if (int.TryParse(val, out var claimStrength))
+                  person.ClaimStrength = claimStrength;
+               else 
+                  errorLog.Write("Could not parse claim strength: " + val);
+               break;
+            case "adm":
+               if (int.TryParse(val, out var adm))
+                  person.Adm = adm;
+               else 
+                  errorLog.Write("Could not parse adm: " + val);
+               break;
+            case "dip":
+               if (int.TryParse(val, out var dip))
+                  person.Dip = dip;
+               else 
+                  errorLog.Write("Could not parse dip: " + val);
+               break;
+            case "mil":
+               if (int.TryParse(val, out var mil))
+                  person.Mil = mil;
+               else 
+                  errorLog.Write("Could not parse mil: " + val);
+               break;
+            case "female":
+               person.IsFemale = YesNo(val);
+               break;
+            case "regent":
+               person.IsRegent = YesNo(val);
+               break;
+            case "block_disinherit":
+               person.BlockDisinherit = YesNo(val);
+               break;
+            default:
+               errorLog.Write("Unknown key in Person: " + kvp.Key);
+               break;
+         }
+      }
+   }
+
+   public static Mana ManaFromString(string str)
+   {
+      return str.ToLower() switch
+      {
+         "adm" => Mana.ADM,
+         "dip" => Mana.DIP,
+         "mil" => Mana.MIL,
+         _ => Mana.NONE
+      };
    }
 }
 

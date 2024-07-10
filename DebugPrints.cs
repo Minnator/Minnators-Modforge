@@ -193,4 +193,19 @@ public static class DebugPrints
       }
       File.WriteAllText(@"C:\Users\david\Downloads\countriesDEBUG.txt", sb.ToString());
    }
+
+   public static void PrintTopLevelBlocks(List<IElement> elements)
+   {
+      var sb = new StringBuilder();
+      foreach (var element in elements)
+      {
+         if (element.IsBlock)
+         {
+            var block = (Block)element;
+            BuildBlockString(0, block, ref sb);
+         }
+      }
+
+      File.WriteAllText(@"C:\Users\david\Downloads\topLevelBlocksDEBUG.txt", sb.ToString());
+   }
 }

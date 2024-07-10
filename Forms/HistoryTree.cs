@@ -17,7 +17,7 @@ namespace Editor.Forms
       public void Visualize(HistoryNode rootNode)
       {
          HistoryTreeView.Nodes.Clear();
-         var root = new HistoryTreeNode("Root", HistoryType.Action);
+         var root = new HistoryTreeNode("Root", CommandHistoryType.Action);
          HistoryTreeView.Nodes.Add(root);
          AddToNode(rootNode, root);
          HistoryTreeView.Nodes.RemoveAt(0);
@@ -47,7 +47,7 @@ namespace Editor.Forms
       private static void AddToNode(HistoryNode history, HistoryTreeNode parent)
       {
          // only add nodes if they are a ComplexSelection or an Action
-         if (history.Type is HistoryType.ComplexSelection or HistoryType.Action)
+         if (history.Type is CommandHistoryType.ComplexSelection or CommandHistoryType.Action)
          {
             var node = new HistoryTreeNode(history.Command.GetDescription(), history.Type)
             {

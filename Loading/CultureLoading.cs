@@ -112,8 +112,8 @@ public static class CultureLoading
    {
       foreach (var content in contents)
       {
-         Parsing.RemoveCommentFromMultilineString(content.Value);
-         var kvps = Parsing.GetKeyValueList(content.Value);
+         Parsing.RemoveCommentFromMultilineString(content.Value, out var removed);
+         var kvps = Parsing.GetKeyValueList(removed);
 
          foreach (var kvp in kvps)
          {
@@ -146,23 +146,23 @@ public static class CultureLoading
          if (block.Blocks.Count == 0)
             continue;
          var content = ((Content)block.Blocks[0]).Value;
-         Parsing.RemoveCommentFromMultilineString(ref content);
+         Parsing.RemoveCommentFromMultilineString(ref content, out var removed);
          switch (block.Name.ToLower())
          {
             case "male_names":
-               culture.MaleNames = [.. Parsing.GetStringList(ref content)];
+               culture.MaleNames = [.. Parsing.GetStringList(removed)];
                break;
             case "female_names":
-               culture.FemaleNames = [.. Parsing.GetStringList(ref content)];
+               culture.FemaleNames = [.. Parsing.GetStringList(removed)];
                break;
             case "dynasty_names":
-               culture.DynastyNames = [.. Parsing.GetStringList(ref content)];
+               culture.DynastyNames = [.. Parsing.GetStringList(removed)];
                break;
             case "country":
-               culture.CountryModifiers = Parsing.GetKeyValueList(ref content);
+               culture.CountryModifiers = Parsing.GetKeyValueList(removed);
                break;
             case "province":
-               culture.ProvinceModifiers = Parsing.GetKeyValueList(ref content);
+               culture.ProvinceModifiers = Parsing.GetKeyValueList(removed);
                break;
             default:
                errorLog.Write($"Unknown Group in a cultures file:{block.Name}");

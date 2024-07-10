@@ -92,9 +92,9 @@ public sealed class PannablePictureBox : PictureBox
          return;
       //check if ctrl is pressed
       if (ModifierKeys == Keys.Control && Selection.State == SelectionState.Single) 
-         Globals.HistoryManager.AddCommand(new CAddSingleSelection(ptr.Id, this), HistoryType.SimpleSelection);
+         Globals.HistoryManager.AddCommand(new CAddSingleSelection(ptr.Id, this), CommandHistoryType.SimpleSelection);
       else if (ModifierKeys != Keys.Shift && Selection.State == SelectionState.Single)
-         Globals.HistoryManager.AddCommand(new CSelectionMarkNext(ptr.Id, this), HistoryType.SimpleSelection);
+         Globals.HistoryManager.AddCommand(new CSelectionMarkNext(ptr.Id, this), CommandHistoryType.SimpleSelection);
       
       _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvinces.Count);
    }
@@ -132,7 +132,7 @@ public sealed class PannablePictureBox : PictureBox
       if (ModifierKeys == Keys.Alt)
       {
          Selection.ExitLassoSelection();
-         Globals.HistoryManager.AddCommand(new CLassoSelection(this), HistoryType.ComplexSelection);
+         Globals.HistoryManager.AddCommand(new CLassoSelection(this), CommandHistoryType.ComplexSelection);
          return;
       }
 

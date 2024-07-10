@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Runtime.InteropServices;
-using Editor.Commands;
+﻿using Editor.Commands;
 using Editor.DataClasses;
 using Editor.Forms;
-using Editor.Forms.AdvancedSelections;
 using Editor.Helper;
 using Region = Editor.DataClasses.Region;
 
 namespace Editor;
 
-public enum HistoryType
+public enum CommandHistoryType
 {
    SimpleSelection,
    ComplexSelection,
@@ -25,6 +20,15 @@ public enum State
    Initializing,
    Waiting
 }
+
+public enum Mana
+{
+   ADM,
+   DIP,
+   MIL,
+   NONE
+}
+
 
 public enum MapModeRendering
 {

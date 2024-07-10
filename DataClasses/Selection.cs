@@ -180,7 +180,7 @@ public class Selection(PannablePictureBox pannablePictureBox)
    public void ExitRectangleSelection()
    {
       var rect = Geometry.GetBounds([_rectanglePoint, _lastRectPoint]);
-      Globals.HistoryManager.AddCommand(new CRectangleSelection(rect, pannablePictureBox), HistoryType.ComplexSelection);
+      Globals.HistoryManager.AddCommand(new CRectangleSelection(rect, pannablePictureBox), CommandHistoryType.ComplexSelection);
       DrawRectangle(_lastRectPoint, Color.Transparent, pannablePictureBox.Overlay);
       _rectanglePoint = Point.Empty;
       SelectionPreview = [];

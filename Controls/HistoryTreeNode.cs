@@ -2,11 +2,11 @@
 
 namespace Editor.Controls;
 
-public class HistoryTreeNode(HistoryType historyType) : TreeNode
+public class HistoryTreeNode(CommandHistoryType commandHistoryType) : TreeNode
 {
-   public HistoryType HistoryType { get; } = historyType;
+   public CommandHistoryType CommandHistoryType { get; } = commandHistoryType;
 
-   public HistoryTreeNode(string text, HistoryType historyType): this(historyType)
+   public HistoryTreeNode(string text, CommandHistoryType commandHistoryType): this(commandHistoryType)
    {
       Text = text;
    }
