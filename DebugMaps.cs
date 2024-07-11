@@ -8,6 +8,35 @@ namespace Editor;
 
 public static class DebugMaps
 {
+
+   public static void DrawProvinceGroups(List<KeyValuePair<List<int>, Rectangle>> groups)
+   {
+      //using var adjMap = new Bitmap (Globals.MapWidth, Globals.MapHeight);
+      //MapDrawHelper.DrawAllProvinceBorders(adjMap, Color.Black);
+      //DrawAdjacencyNumbers(adjMap);
+      using var bmp = new Bitmap(Globals.MapWidth, Globals.MapHeight);
+      using var g = Graphics.FromImage(bmp);
+      var rand = new Random();
+
+      foreach (var group in groups)
+      {
+         var color = Color.FromArgb(rand.Next(256), rand.Next(256), rand.Next(256));
+         foreach (var id in group.Key)
+         {
+            if (Globals.Provinces.TryGetValue(id, out var prov))
+            {
+               MapDrawHelper.DrawProvince(prov.Id, color, bmp);
+            }
+         }
+      }
+      MapDrawHelper.DrawAllProvinceBorders(bmp, Color.Black);
+
+      bmp.Save("C:\\Users\\david\\Downloads\\groups.png", ImageFormat.Png);
+   }
+
+
+
+
    public static unsafe void TelescopeImageBenchmark()
    {
       var sw = Stopwatch.StartNew();

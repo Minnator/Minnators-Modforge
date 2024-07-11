@@ -28,274 +28,258 @@
       /// </summary>
       private void InitializeComponent()
       {
-         this.MapMenuStrip = new System.Windows.Forms.MenuStrip();
-         this.filesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-         this.gCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-         this.saveCurrentMapModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-         this.historyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-         this.selectionHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-         this.DeleteHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-         this.toolTipCustomizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-         this.openCustomizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-         this.ShowToolTipMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-         this.MapModeComboBox = new System.Windows.Forms.ToolStripComboBox();
-         this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-         this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-         this.telescopeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-         this.refStackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-         this.MapPanel = new System.Windows.Forms.Panel();
-         this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
-         this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-         this.RamUsageStrip = new System.Windows.Forms.ToolStripLabel();
-         this.CpuUsageStrip = new System.Windows.Forms.ToolStripLabel();
-         this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-         this.UndoDepthLabel = new System.Windows.Forms.ToolStripLabel();
-         this.RedoDepthLabel = new System.Windows.Forms.ToolStripLabel();
-         this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-         this.SelectedProvinceSum = new System.Windows.Forms.ToolStripLabel();
-         this.MapMenuStrip.SuspendLayout();
-         this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
-         this.toolStripContainer1.ContentPanel.SuspendLayout();
-         this.toolStripContainer1.SuspendLayout();
-         this.toolStrip1.SuspendLayout();
-         this.SuspendLayout();
+         MapMenuStrip = new MenuStrip();
+         filesToolStripMenuItem = new ToolStripMenuItem();
+         gCToolStripMenuItem = new ToolStripMenuItem();
+         saveCurrentMapModeToolStripMenuItem = new ToolStripMenuItem();
+         historyToolStripMenuItem = new ToolStripMenuItem();
+         selectionHistoryToolStripMenuItem = new ToolStripMenuItem();
+         DeleteHistoryToolStripMenuItem = new ToolStripMenuItem();
+         toolTipCustomizerToolStripMenuItem = new ToolStripMenuItem();
+         openCustomizerToolStripMenuItem = new ToolStripMenuItem();
+         ShowToolTipMenuItem = new ToolStripMenuItem();
+         MapModeComboBox = new ToolStripComboBox();
+         debugToolStripMenuItem = new ToolStripMenuItem();
+         testToolStripMenuItem = new ToolStripMenuItem();
+         telescopeToolStripMenuItem = new ToolStripMenuItem();
+         refStackToolStripMenuItem = new ToolStripMenuItem();
+         MapPanel = new Panel();
+         toolStripContainer1 = new ToolStripContainer();
+         toolStrip1 = new ToolStrip();
+         RamUsageStrip = new ToolStripLabel();
+         CpuUsageStrip = new ToolStripLabel();
+         toolStripSeparator1 = new ToolStripSeparator();
+         UndoDepthLabel = new ToolStripLabel();
+         RedoDepthLabel = new ToolStripLabel();
+         toolStripSeparator2 = new ToolStripSeparator();
+         SelectedProvinceSum = new ToolStripLabel();
+         MapMenuStrip.SuspendLayout();
+         toolStripContainer1.BottomToolStripPanel.SuspendLayout();
+         toolStripContainer1.ContentPanel.SuspendLayout();
+         toolStripContainer1.SuspendLayout();
+         toolStrip1.SuspendLayout();
+         SuspendLayout();
          // 
          // MapMenuStrip
          // 
-         this.MapMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.filesToolStripMenuItem,
-            this.historyToolStripMenuItem,
-            this.toolTipCustomizerToolStripMenuItem,
-            this.MapModeComboBox,
-            this.debugToolStripMenuItem});
-         this.MapMenuStrip.Location = new System.Drawing.Point(0, 0);
-         this.MapMenuStrip.Name = "MapMenuStrip";
-         this.MapMenuStrip.Size = new System.Drawing.Size(1295, 27);
-         this.MapMenuStrip.TabIndex = 0;
-         this.MapMenuStrip.Text = "menuStrip1";
+         MapMenuStrip.Items.AddRange(new ToolStripItem[] { filesToolStripMenuItem, historyToolStripMenuItem, toolTipCustomizerToolStripMenuItem, MapModeComboBox, debugToolStripMenuItem });
+         MapMenuStrip.Location = new Point(0, 0);
+         MapMenuStrip.Name = "MapMenuStrip";
+         MapMenuStrip.Padding = new Padding(7, 2, 0, 2);
+         MapMenuStrip.Size = new Size(1511, 27);
+         MapMenuStrip.TabIndex = 0;
+         MapMenuStrip.Text = "menuStrip1";
          // 
          // filesToolStripMenuItem
          // 
-         this.filesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.gCToolStripMenuItem,
-            this.saveCurrentMapModeToolStripMenuItem});
-         this.filesToolStripMenuItem.Name = "filesToolStripMenuItem";
-         this.filesToolStripMenuItem.Size = new System.Drawing.Size(42, 23);
-         this.filesToolStripMenuItem.Text = "Files";
+         filesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { gCToolStripMenuItem, saveCurrentMapModeToolStripMenuItem });
+         filesToolStripMenuItem.Name = "filesToolStripMenuItem";
+         filesToolStripMenuItem.Size = new Size(42, 23);
+         filesToolStripMenuItem.Text = "Files";
          // 
          // gCToolStripMenuItem
          // 
-         this.gCToolStripMenuItem.Name = "gCToolStripMenuItem";
-         this.gCToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-         this.gCToolStripMenuItem.Text = "GC";
-         this.gCToolStripMenuItem.Click += new System.EventHandler(this.gCToolStripMenuItem_Click);
+         gCToolStripMenuItem.Name = "gCToolStripMenuItem";
+         gCToolStripMenuItem.Size = new Size(199, 22);
+         gCToolStripMenuItem.Text = "GC";
+         gCToolStripMenuItem.Click += gCToolStripMenuItem_Click;
          // 
          // saveCurrentMapModeToolStripMenuItem
          // 
-         this.saveCurrentMapModeToolStripMenuItem.Name = "saveCurrentMapModeToolStripMenuItem";
-         this.saveCurrentMapModeToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-         this.saveCurrentMapModeToolStripMenuItem.Text = "Save Current MapMode";
-         this.saveCurrentMapModeToolStripMenuItem.Click += new System.EventHandler(this.SaveCurrentMapModeToolStripMenuItem_Click);
+         saveCurrentMapModeToolStripMenuItem.Name = "saveCurrentMapModeToolStripMenuItem";
+         saveCurrentMapModeToolStripMenuItem.Size = new Size(199, 22);
+         saveCurrentMapModeToolStripMenuItem.Text = "Save Current MapMode";
+         saveCurrentMapModeToolStripMenuItem.Click += SaveCurrentMapModeToolStripMenuItem_Click;
          // 
          // historyToolStripMenuItem
          // 
-         this.historyToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.selectionHistoryToolStripMenuItem,
-            this.DeleteHistoryToolStripMenuItem});
-         this.historyToolStripMenuItem.Name = "historyToolStripMenuItem";
-         this.historyToolStripMenuItem.Size = new System.Drawing.Size(57, 23);
-         this.historyToolStripMenuItem.Text = "History";
+         historyToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { selectionHistoryToolStripMenuItem, DeleteHistoryToolStripMenuItem });
+         historyToolStripMenuItem.Name = "historyToolStripMenuItem";
+         historyToolStripMenuItem.Size = new Size(57, 23);
+         historyToolStripMenuItem.Text = "History";
          // 
          // selectionHistoryToolStripMenuItem
          // 
-         this.selectionHistoryToolStripMenuItem.Name = "selectionHistoryToolStripMenuItem";
-         this.selectionHistoryToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
-         this.selectionHistoryToolStripMenuItem.Text = "View History Tree";
-         this.selectionHistoryToolStripMenuItem.Click += new System.EventHandler(this.RevertInSelectionHistory);
+         selectionHistoryToolStripMenuItem.Name = "selectionHistoryToolStripMenuItem";
+         selectionHistoryToolStripMenuItem.Size = new Size(164, 22);
+         selectionHistoryToolStripMenuItem.Text = "View History Tree";
+         selectionHistoryToolStripMenuItem.Click += RevertInSelectionHistory;
          // 
          // DeleteHistoryToolStripMenuItem
          // 
-         this.DeleteHistoryToolStripMenuItem.Name = "DeleteHistoryToolStripMenuItem";
-         this.DeleteHistoryToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
-         this.DeleteHistoryToolStripMenuItem.Text = "Delete History";
-         this.DeleteHistoryToolStripMenuItem.Click += new System.EventHandler(this.DeleteHistoryToolStripMenuItem_Click);
+         DeleteHistoryToolStripMenuItem.Name = "DeleteHistoryToolStripMenuItem";
+         DeleteHistoryToolStripMenuItem.Size = new Size(164, 22);
+         DeleteHistoryToolStripMenuItem.Text = "Delete History";
+         DeleteHistoryToolStripMenuItem.Click += DeleteHistoryToolStripMenuItem_Click;
          // 
          // toolTipCustomizerToolStripMenuItem
          // 
-         this.toolTipCustomizerToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openCustomizerToolStripMenuItem,
-            this.ShowToolTipMenuItem});
-         this.toolTipCustomizerToolStripMenuItem.Name = "toolTipCustomizerToolStripMenuItem";
-         this.toolTipCustomizerToolStripMenuItem.Size = new System.Drawing.Size(120, 23);
-         this.toolTipCustomizerToolStripMenuItem.Text = "ToolTip Customizer";
+         toolTipCustomizerToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openCustomizerToolStripMenuItem, ShowToolTipMenuItem });
+         toolTipCustomizerToolStripMenuItem.Name = "toolTipCustomizerToolStripMenuItem";
+         toolTipCustomizerToolStripMenuItem.Size = new Size(120, 23);
+         toolTipCustomizerToolStripMenuItem.Text = "ToolTip Customizer";
          // 
          // openCustomizerToolStripMenuItem
          // 
-         this.openCustomizerToolStripMenuItem.Name = "openCustomizerToolStripMenuItem";
-         this.openCustomizerToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
-         this.openCustomizerToolStripMenuItem.Text = "Open Customizer";
-         this.openCustomizerToolStripMenuItem.Click += new System.EventHandler(this.openCustomizerToolStripMenuItem_Click);
+         openCustomizerToolStripMenuItem.Name = "openCustomizerToolStripMenuItem";
+         openCustomizerToolStripMenuItem.Size = new Size(166, 22);
+         openCustomizerToolStripMenuItem.Text = "Open Customizer";
+         openCustomizerToolStripMenuItem.Click += openCustomizerToolStripMenuItem_Click;
          // 
          // ShowToolTipMenuItem
          // 
-         this.ShowToolTipMenuItem.Checked = true;
-         this.ShowToolTipMenuItem.CheckOnClick = true;
-         this.ShowToolTipMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-         this.ShowToolTipMenuItem.Name = "ShowToolTipMenuItem";
-         this.ShowToolTipMenuItem.Size = new System.Drawing.Size(166, 22);
-         this.ShowToolTipMenuItem.Text = "Show ToolTip";
-         this.ShowToolTipMenuItem.Click += new System.EventHandler(this.ShowToolTipMenuItem_Click);
+         ShowToolTipMenuItem.Checked = true;
+         ShowToolTipMenuItem.CheckOnClick = true;
+         ShowToolTipMenuItem.CheckState = CheckState.Checked;
+         ShowToolTipMenuItem.Name = "ShowToolTipMenuItem";
+         ShowToolTipMenuItem.Size = new Size(166, 22);
+         ShowToolTipMenuItem.Text = "Show ToolTip";
+         ShowToolTipMenuItem.Click += ShowToolTipMenuItem_Click;
          // 
          // MapModeComboBox
          // 
-         this.MapModeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-         this.MapModeComboBox.Name = "MapModeComboBox";
-         this.MapModeComboBox.Size = new System.Drawing.Size(121, 23);
-         this.MapModeComboBox.SelectedIndexChanged += new System.EventHandler(this.MapModeComboBox_SelectedIndexChanged);
+         MapModeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+         MapModeComboBox.Name = "MapModeComboBox";
+         MapModeComboBox.Size = new Size(140, 23);
+         MapModeComboBox.SelectedIndexChanged += MapModeComboBox_SelectedIndexChanged;
          // 
          // debugToolStripMenuItem
          // 
-         this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.testToolStripMenuItem,
-            this.telescopeToolStripMenuItem,
-            this.refStackToolStripMenuItem});
-         this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
-         this.debugToolStripMenuItem.Size = new System.Drawing.Size(54, 23);
-         this.debugToolStripMenuItem.Text = "Debug";
-         this.debugToolStripMenuItem.Click += new System.EventHandler(this.debugToolStripMenuItem_Click);
+         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem });
+         debugToolStripMenuItem.Name = "debugToolStripMenuItem";
+         debugToolStripMenuItem.Size = new Size(54, 23);
+         debugToolStripMenuItem.Text = "Debug";
+         debugToolStripMenuItem.Click += debugToolStripMenuItem_Click;
          // 
          // testToolStripMenuItem
          // 
-         this.testToolStripMenuItem.Name = "testToolStripMenuItem";
-         this.testToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
-         this.testToolStripMenuItem.Text = "Test";
-         this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click);
+         testToolStripMenuItem.Name = "testToolStripMenuItem";
+         testToolStripMenuItem.Size = new Size(180, 22);
+         testToolStripMenuItem.Text = "Test";
+         testToolStripMenuItem.Click += testToolStripMenuItem_Click;
          // 
          // telescopeToolStripMenuItem
          // 
-         this.telescopeToolStripMenuItem.Name = "telescopeToolStripMenuItem";
-         this.telescopeToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
-         this.telescopeToolStripMenuItem.Text = "Telescope";
-         this.telescopeToolStripMenuItem.Click += new System.EventHandler(this.telescopeToolStripMenuItem_Click);
+         telescopeToolStripMenuItem.Name = "telescopeToolStripMenuItem";
+         telescopeToolStripMenuItem.Size = new Size(180, 22);
+         telescopeToolStripMenuItem.Text = "Telescope";
+         telescopeToolStripMenuItem.Click += telescopeToolStripMenuItem_Click;
          // 
          // refStackToolStripMenuItem
          // 
-         this.refStackToolStripMenuItem.Name = "refStackToolStripMenuItem";
-         this.refStackToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+         refStackToolStripMenuItem.Name = "refStackToolStripMenuItem";
+         refStackToolStripMenuItem.Size = new Size(180, 22);
+         refStackToolStripMenuItem.Click += refStackToolStripMenuItem_Click;
          // 
          // MapPanel
          // 
-         this.MapPanel.AutoScroll = true;
-         this.MapPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-         this.MapPanel.Location = new System.Drawing.Point(0, 0);
-         this.MapPanel.Name = "MapPanel";
-         this.MapPanel.Size = new System.Drawing.Size(1295, 751);
-         this.MapPanel.TabIndex = 1;
+         MapPanel.AutoScroll = true;
+         MapPanel.Dock = DockStyle.Fill;
+         MapPanel.Location = new Point(0, 0);
+         MapPanel.Margin = new Padding(4, 3, 4, 3);
+         MapPanel.Name = "MapPanel";
+         MapPanel.Size = new Size(1511, 875);
+         MapPanel.TabIndex = 1;
          // 
          // toolStripContainer1
          // 
          // 
          // toolStripContainer1.BottomToolStripPanel
          // 
-         this.toolStripContainer1.BottomToolStripPanel.Controls.Add(this.toolStrip1);
+         toolStripContainer1.BottomToolStripPanel.Controls.Add(toolStrip1);
          // 
          // toolStripContainer1.ContentPanel
          // 
-         this.toolStripContainer1.ContentPanel.Controls.Add(this.MapPanel);
-         this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1295, 751);
-         this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-         this.toolStripContainer1.LeftToolStripPanelVisible = false;
-         this.toolStripContainer1.Location = new System.Drawing.Point(0, 27);
-         this.toolStripContainer1.Name = "toolStripContainer1";
-         this.toolStripContainer1.RightToolStripPanelVisible = false;
-         this.toolStripContainer1.Size = new System.Drawing.Size(1295, 776);
-         this.toolStripContainer1.TabIndex = 2;
-         this.toolStripContainer1.Text = "toolStripContainer1";
-         this.toolStripContainer1.TopToolStripPanelVisible = false;
+         toolStripContainer1.ContentPanel.Controls.Add(MapPanel);
+         toolStripContainer1.ContentPanel.Margin = new Padding(4, 3, 4, 3);
+         toolStripContainer1.ContentPanel.Size = new Size(1511, 875);
+         toolStripContainer1.Dock = DockStyle.Fill;
+         toolStripContainer1.LeftToolStripPanelVisible = false;
+         toolStripContainer1.Location = new Point(0, 27);
+         toolStripContainer1.Margin = new Padding(4, 3, 4, 3);
+         toolStripContainer1.Name = "toolStripContainer1";
+         toolStripContainer1.RightToolStripPanelVisible = false;
+         toolStripContainer1.Size = new Size(1511, 900);
+         toolStripContainer1.TabIndex = 2;
+         toolStripContainer1.Text = "toolStripContainer1";
+         toolStripContainer1.TopToolStripPanelVisible = false;
          // 
          // toolStrip1
          // 
-         this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
-         this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.RamUsageStrip,
-            this.CpuUsageStrip,
-            this.toolStripSeparator1,
-            this.UndoDepthLabel,
-            this.RedoDepthLabel,
-            this.toolStripSeparator2,
-            this.SelectedProvinceSum});
-         this.toolStrip1.Location = new System.Drawing.Point(3, 0);
-         this.toolStrip1.Name = "toolStrip1";
-         this.toolStrip1.Size = new System.Drawing.Size(302, 25);
-         this.toolStrip1.TabIndex = 0;
+         toolStrip1.Dock = DockStyle.None;
+         toolStrip1.Items.AddRange(new ToolStripItem[] { RamUsageStrip, CpuUsageStrip, toolStripSeparator1, UndoDepthLabel, RedoDepthLabel, toolStripSeparator2, SelectedProvinceSum });
+         toolStrip1.Location = new Point(3, 0);
+         toolStrip1.Name = "toolStrip1";
+         toolStrip1.Size = new Size(302, 25);
+         toolStrip1.TabIndex = 0;
          // 
          // RamUsageStrip
          // 
-         this.RamUsageStrip.Name = "RamUsageStrip";
-         this.RamUsageStrip.Size = new System.Drawing.Size(48, 22);
-         this.RamUsageStrip.Text = "Ram [0]";
+         RamUsageStrip.Name = "RamUsageStrip";
+         RamUsageStrip.Size = new Size(48, 22);
+         RamUsageStrip.Text = "Ram [0]";
          // 
          // CpuUsageStrip
          // 
-         this.CpuUsageStrip.Name = "CpuUsageStrip";
-         this.CpuUsageStrip.Size = new System.Drawing.Size(47, 22);
-         this.CpuUsageStrip.Text = "CPU [0]";
+         CpuUsageStrip.Name = "CpuUsageStrip";
+         CpuUsageStrip.Size = new Size(47, 22);
+         CpuUsageStrip.Text = "CPU [0]";
          // 
          // toolStripSeparator1
          // 
-         this.toolStripSeparator1.Name = "toolStripSeparator1";
-         this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+         toolStripSeparator1.Name = "toolStripSeparator1";
+         toolStripSeparator1.Size = new Size(6, 25);
          // 
          // UndoDepthLabel
          // 
-         this.UndoDepthLabel.Name = "UndoDepthLabel";
-         this.UndoDepthLabel.Size = new System.Drawing.Size(68, 22);
-         this.UndoDepthLabel.Text = "UndoDepth";
+         UndoDepthLabel.Name = "UndoDepthLabel";
+         UndoDepthLabel.Size = new Size(68, 22);
+         UndoDepthLabel.Text = "UndoDepth";
          // 
          // RedoDepthLabel
          // 
-         this.RedoDepthLabel.Name = "RedoDepthLabel";
-         this.RedoDepthLabel.Size = new System.Drawing.Size(66, 22);
-         this.RedoDepthLabel.Text = "RedoDepth";
+         RedoDepthLabel.Name = "RedoDepthLabel";
+         RedoDepthLabel.Size = new Size(66, 22);
+         RedoDepthLabel.Text = "RedoDepth";
          // 
          // toolStripSeparator2
          // 
-         this.toolStripSeparator2.Name = "toolStripSeparator2";
-         this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+         toolStripSeparator2.Name = "toolStripSeparator2";
+         toolStripSeparator2.Size = new Size(6, 25);
          // 
          // SelectedProvinceSum
          // 
-         this.SelectedProvinceSum.Name = "SelectedProvinceSum";
-         this.SelectedProvinceSum.Size = new System.Drawing.Size(49, 22);
-         this.SelectedProvinceSum.Text = "ProSum";
+         SelectedProvinceSum.Name = "SelectedProvinceSum";
+         SelectedProvinceSum.Size = new Size(49, 22);
+         SelectedProvinceSum.Text = "ProSum";
          // 
          // MapWindow
          // 
-         this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-         this.ClientSize = new System.Drawing.Size(1295, 803);
-         this.Controls.Add(this.toolStripContainer1);
-         this.Controls.Add(this.MapMenuStrip);
-         this.KeyPreview = true;
-         this.MainMenuStrip = this.MapMenuStrip;
-         this.Name = "MapWindow";
-         this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
-         this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-         this.Text = "MapWindow";
-         this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MapWindow_FormClosing);
-         this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MapWindow_KeyDown);
-         this.MapMenuStrip.ResumeLayout(false);
-         this.MapMenuStrip.PerformLayout();
-         this.toolStripContainer1.BottomToolStripPanel.ResumeLayout(false);
-         this.toolStripContainer1.BottomToolStripPanel.PerformLayout();
-         this.toolStripContainer1.ContentPanel.ResumeLayout(false);
-         this.toolStripContainer1.ResumeLayout(false);
-         this.toolStripContainer1.PerformLayout();
-         this.toolStrip1.ResumeLayout(false);
-         this.toolStrip1.PerformLayout();
-         this.ResumeLayout(false);
-         this.PerformLayout();
-
+         AutoScaleDimensions = new SizeF(7F, 15F);
+         AutoScaleMode = AutoScaleMode.Font;
+         ClientSize = new Size(1511, 927);
+         Controls.Add(toolStripContainer1);
+         Controls.Add(MapMenuStrip);
+         KeyPreview = true;
+         MainMenuStrip = MapMenuStrip;
+         Margin = new Padding(4, 3, 4, 3);
+         Name = "MapWindow";
+         SizeGripStyle = SizeGripStyle.Show;
+         StartPosition = FormStartPosition.CenterParent;
+         Text = "MapWindow";
+         FormClosing += MapWindow_FormClosing;
+         KeyDown += MapWindow_KeyDown;
+         MapMenuStrip.ResumeLayout(false);
+         MapMenuStrip.PerformLayout();
+         toolStripContainer1.BottomToolStripPanel.ResumeLayout(false);
+         toolStripContainer1.BottomToolStripPanel.PerformLayout();
+         toolStripContainer1.ContentPanel.ResumeLayout(false);
+         toolStripContainer1.ResumeLayout(false);
+         toolStripContainer1.PerformLayout();
+         toolStrip1.ResumeLayout(false);
+         toolStrip1.PerformLayout();
+         ResumeLayout(false);
+         PerformLayout();
       }
 
       #endregion

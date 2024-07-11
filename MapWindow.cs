@@ -11,12 +11,12 @@ namespace Editor
 {
    public partial class MapWindow : Form
    {
-      public readonly Log LoadingLog = new (@"C:\Users\david\Downloads", "Loading");
-      public readonly Log ErrorLog = new (@"C:\Users\david\Downloads", "Error");
+      public readonly Log LoadingLog = new(@"C:\Users\david\Downloads", "Loading");
+      public readonly Log ErrorLog = new(@"C:\Users\david\Downloads", "Error");
 
       public PannablePictureBox MapPictureBox = null!;
 
-      public ModProject Project = new ()
+      public ModProject Project = new()
       {
          Name = "Vanilla",
          ModPath = Consts.MOD_PATH,
@@ -98,7 +98,7 @@ namespace Editor
 
       #endregion
 
-      private  void debugToolStripMenuItem_Click(object sender, EventArgs e)
+      private void debugToolStripMenuItem_Click(object sender, EventArgs e)
       {
          Globals.Provinces[1].BaseManpower = 50;
          Globals.Provinces[2].BaseManpower = 50;
@@ -165,7 +165,7 @@ namespace Editor
          {
             if (Globals.ConsoleForm == null || Globals.ConsoleForm.IsDisposed)
             {
-               Globals.ConsoleForm = new ();
+               Globals.ConsoleForm = new();
                Globals.ConsoleForm.Show();
             }
             else
@@ -173,6 +173,12 @@ namespace Editor
                Globals.ConsoleForm.BringToFront();
             }
          }
+      }
+
+      private void refStackToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         var groups = Geometry.GetProvinceConnectedGroups(Globals.Countries["TUR"].GetOwnedProvinces);
+         DebugMaps.DrawProvinceGroups(groups);
       }
    }
 }

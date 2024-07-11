@@ -230,4 +230,46 @@ public static class Geometry
       return points;
    }
 
+   public static List<KeyValuePair<List<int>, Rectangle>> GetProvinceConnectedGroups(List<int> ids)
+   {
+      //Bfs to get all connected provinces
+      List<KeyValuePair<List<int>, Rectangle>> groups = [];
+      var visited = new HashSet<int>();
+
+      foreach (var id in ids)
+      {
+         if (visited.Contains(id))
+            continue;
+
+         var group = new List<int>();
+         var bounds = Rectangle.Empty;
+         var queue = new Queue<int>();
+
+         queue.Enqueue(id);
+         visited.Add(id);
+
+         while (queue.Count > 0)
+         {
+            var currentId = queue.Dequeue();
+            var province = Globals.Provinces[currentId];
+
+            group.Add(currentId);
+            bounds = bounds == Rectangle.Empty ? province.Bounds : GetBounds([bounds, province.Bounds]);
+
+            for (var index = 0; index < Globals.AdjacentProvinces[currentId].Length; index++)
+            {
+               var neighborId = Globals.AdjacentProvinces[currentId][index];
+               if (ids.Contains(neighborId) && !visited.Contains(neighborId))
+               {
+                  queue.Enqueue(neighborId);
+                  visited.Add(neighborId);
+               }
+            }
+         }
+
+         groups.Add(new(group, bounds));
+      }
+
+      return groups;
+   }
 }
