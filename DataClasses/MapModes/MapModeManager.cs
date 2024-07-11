@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Imaging;
+﻿using System.Drawing.Imaging;
 using Editor.Controls;
 using Editor.DataClasses.MapModes;
 using Editor.MapModes;
@@ -37,6 +34,7 @@ public class MapModeManager
       MapModes.Add(new FortMapMode());
       MapModes.Add(new CultureGroupMapMode());
       MapModes.Add(new CultureMapMode());
+      MapModes.Add(new CountryMapMode());
 
 
       // We set the default map mode to retrieve province colors

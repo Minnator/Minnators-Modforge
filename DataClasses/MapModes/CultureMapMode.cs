@@ -16,7 +16,7 @@ public class CultureMapMode : MapMode
    {
       if (Globals.Cultures.TryGetValue(Globals.Provinces[id].Culture, out var culture))
          return culture.Color;
-      return System.Drawing.Color.DimGray;
+      return Color.DimGray;
    }
 
    public override string GetMapModeName()

@@ -57,12 +57,55 @@ public class Country(Tag tag, string fileName)
          return null;
       return History.OrderBy(h => h.Date).FirstOrDefault(h => h.Date > date);
    }
+
+   public List<int> GetOwnedProvinces
+   {
+      get
+      {
+         List<int> provinces = [];
+         foreach (var prv in Globals.Provinces.Values)
+         {
+            if (prv.Owner == Tag)
+               provinces.Add(prv.Id);
+         }
+         return provinces;
+      }
+   }
+
+   public List<int> GetCoreProvinces
+   {
+      get
+      {
+         List<int> provinces = [];
+         foreach (var prv in Globals.Provinces.Values)
+         {
+            if (prv.Cores.Contains(Tag))
+               provinces.Add(prv.Id);
+         }
+         return provinces;
+      }
+   }
+
+   public List<int> GetClaimedProvinces
+   {
+      get
+      {
+         List<int> provinces = [];
+         foreach (var prv in Globals.Provinces.Values)
+         {
+            if (prv.Claims.Contains(Tag))
+               provinces.Add(prv.Id);
+         }
+         return provinces;
+      }
+   }
 }
 
 public class CountryHistoryEntry (DateTime date)
 {
    public DateTime Date { get; } = date;
    public List<Person> Persons { get; set; } = [];
+   public List<Leader> Leaders { get; set; } = [];
    public List<KeyValuePair<string, string>> Effects { get; set; } = [];
 
    public bool HasPerson => Persons.Any();
@@ -101,4 +144,38 @@ public struct Person
    public bool IsRegent { get; set; }
    public bool BlockDisinherit { get; set; }
    public Tag CountryOfOrigin { get; set; }
+}
+
+public enum LeaderType
+{
+   General,
+   Admiral,
+   Explorer,
+   Conquistador
+}
+
+public struct Leader
+{
+   public string Name { get; set; } = string.Empty;
+   public int Fire { get; set; } = 0;
+   public int Shock { get; set; } = 0;
+   public int Maneuver { get; set; } = 0;
+   public int Siege { get; set; } = 0;
+   public int Age { get; set; } = 0;
+   public bool IsFemale { get; set; } = false;
+   public LeaderType Type { get; set; } = LeaderType.General;
+   public DateTime DeathDate { get; set; } = DateTime.MinValue;
+   public List<string> Personalities { get; set; } = []; //TODO replace with dynamic enum
+
+   public bool IsAlive => DeathDate == DateTime.MinValue;
+
+   public override string ToString()
+   {
+      return $"{Name} ({Type})";
+   }
+
+   public Leader()
+   {
+
+   }
 }

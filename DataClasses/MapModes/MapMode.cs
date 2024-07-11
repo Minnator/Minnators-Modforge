@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
+﻿using System.Diagnostics;
 using Editor.Helper;
 
 namespace Editor.DataClasses.MapModes;
@@ -19,9 +16,17 @@ public abstract class MapMode
          case MapModeRendering.Live:
             var sw = Stopwatch.StartNew();
             Bitmap?.Dispose();
-            if (Globals.MapModeManager.PreviousLandOnly && !Globals.MapModeManager.RequireFullRedraw)
+
+            if (IsLandOnly)
             {
-               BitMapHelper.ModifyByProvinceCollection(Globals.MapModeManager.ShareLiveBitmap, Globals.LandProvinceIds, GetProvinceColor);
+               if (Globals.MapModeManager.PreviousLandOnly)
+               {
+                  BitMapHelper.ModifyByProvinceCollection(Globals.MapModeManager.ShareLiveBitmap, Globals.LandProvinceIds, GetProvinceColor);
+               }
+               else
+               {
+                  BitMapHelper.ModifyByProvinceCollection(Globals.MapModeManager.ShareLiveBitmap, Globals.NonLandProvinceIds, GetSeaProvinceColor);
+               }
             }
             else
             {
@@ -30,8 +35,9 @@ public abstract class MapMode
             }
             MapDrawHelper.DrawAllProvinceBorders(Globals.MapModeManager.ShareLiveBitmap, Color.Black);
             Globals.MapModeManager.PictureBox.Image = Globals.MapModeManager.ShareLiveBitmap;
+            Globals.MapModeManager.PreviousLandOnly = IsLandOnly;
             sw.Stop();
-            Console.WriteLine($"RenderMapMode {GetMapModeName()} took {sw.ElapsedMilliseconds}ms");
+            Debug.WriteLine($"RenderMapMode {GetMapModeName()} took {sw.ElapsedMilliseconds}ms");
             break;
          case MapModeRendering.Cached:
             Bitmap?.Dispose();
@@ -51,6 +57,11 @@ public abstract class MapMode
    }
 
    public virtual Color GetProvinceColor(int id)
+   {
+      return Globals.Provinces[id].Color;
+   }
+
+   public virtual Color GetSeaProvinceColor(int id)
    {
       return Globals.Provinces[id].Color;
    }

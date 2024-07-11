@@ -559,6 +559,80 @@ public static class Parsing
       }
    }
 
+   public static bool ParseLeaderFromString(string str, ref Log errorLog, out Leader leader)
+   {
+      var kvps = GetKeyValueList(str);
+      leader = new();
+
+      foreach (var kv in kvps)
+      {
+         switch (kv.Key.ToLower())
+         {
+            case "name":
+               leader.Name = kv.Value;
+               break;
+            case "fire":
+               if (int.TryParse(kv.Value, out var fire))
+                  leader.Fire = fire;
+               else
+               {
+                  errorLog.Write($"Could not parse fire: " + kv.Value + $"in leader {leader.Name}");
+                  return false;
+               }
+               break;
+            case "shock":
+               if (int.TryParse(kv.Value, out var shock))
+                  leader.Shock = shock;
+               else
+               {
+                  errorLog.Write("Could not parse shock: " + kv.Value + $"in leader {leader.Name}");
+                  return false;
+               }
+               break;
+            case "manuever":
+               if (int.TryParse(kv.Value, out var maneuver))
+                  leader.Maneuver = maneuver;
+               else
+               {
+                  errorLog.Write("Could not parse maneuver: " + kv.Value + $"in leader {leader.Name}");
+                  return false;
+               }
+               break;
+            case "siege":
+               if (int.TryParse(kv.Value, out var siege))
+                  leader.Siege = siege;
+               else
+               {
+                  errorLog.Write("Could not parse siege: " + kv.Value + $"in leader {leader.Name}");
+                  return false;
+               }
+               break;
+            case "type":
+               if (Enum.TryParse<LeaderType>(kv.Value, true, out var leaderType))
+                  leader.Type = leaderType;
+               else
+               {
+                  errorLog.Write("Could not parse type: " + kv.Value + $" in leader {leader.Name}");
+                  return false;
+               }
+               break;
+            case "female":
+               leader.IsFemale = YesNo(kv.Value);
+               break;
+            case "death_date":
+               leader.DeathDate = DateTime.Parse(kv.Value);
+               break;
+            case "personality":
+               leader.Personalities.Add(kv.Value);
+               break;
+            default:
+               errorLog.Write("Unknown key in Leader: " + kv.Key);
+               return false;
+         }
+      }
+      return true;
+   }
+
    public static Mana ManaFromString(string str)
    {
       return str.ToLower() switch
