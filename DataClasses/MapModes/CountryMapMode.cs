@@ -35,7 +35,7 @@ namespace Editor.DataClasses.MapModes
             if (province.Owner == Tag.Empty)
                return "Country: [Unknown]";
             if (Globals.Countries.TryGetValue(province.Owner, out var country))
-               return $"Country: [{Localisation.GetLoc(country.Tag)} | {country.Tag}]";
+               return $"Country: {country.Tag} ({Localisation.GetLoc(country.Tag)})";
          }
          return "Country: [Unknown]";
       }

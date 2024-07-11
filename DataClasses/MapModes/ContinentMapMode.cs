@@ -31,7 +31,7 @@ public sealed class ContinentMapMode : MapMode
    {
       if (Globals.Provinces.TryGetValue(provinceId, out var province))
          if (Globals.Continents.TryGetValue(province.Continent, out var continent))
-            return $"Continent: [{Localisation.GetLoc(continent.Name)}]";
+            return $"Continent: {continent.Name} ({Localisation.GetLoc(continent.Name)})";
       return "Continent: [Unknown]";
    }
 }

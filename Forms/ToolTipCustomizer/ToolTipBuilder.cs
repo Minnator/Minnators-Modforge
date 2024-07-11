@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Editor.Helper;
 
 namespace Editor.Forms;
 
 public static class ToolTipBuilder
 {
-   private const string TOOLTIP_ATTRIBUTE_REGEX = @"(?<att>\$(?<attrName>.*?)\$)";
+   private const string TOOLTIP_ATTRIBUTE_REGEX = @"\$(?<att>(?<attrName>.*?))(?<useLoc>(?:%L)?\$)";
 
    private static readonly Regex TooltipAttributeRegex = new(TOOLTIP_ATTRIBUTE_REGEX, RegexOptions.Compiled);
 
@@ -24,10 +25,16 @@ public static class ToolTipBuilder
             }
             else
             {
+               bool useLoc = match.Groups["useLoc"].Value.Contains("%L");
                var value = Globals.Provinces[provinceId].GetAttribute(match.Groups["attrName"].Value);
+               if (string.IsNullOrEmpty(value.ToString()))
+               {
+                  lastMatch = match.Index + match.Length;
+                  continue;
+               }
                str = value.GetType() == typeof(ICollection<>)
                   ? string.Join(", ", (ICollection<string>)value)
-                  : value.ToString();
+                  : useLoc ? Localisation.GetLoc(value.ToString()!) : value.ToString();
             }
             // Replace the match with the value
             rawToolTip = rawToolTip.Remove(match.Index, match.Length).Insert(match.Index, str);

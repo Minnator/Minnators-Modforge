@@ -31,7 +31,7 @@ public sealed class AreaMapMode : MapMode
    {
       if (Globals.Provinces.TryGetValue(provinceId, out var province))
          if (Globals.Areas.TryGetValue(province.Area, out var area))
-            return $"Area: [{Localisation.GetLoc(area.Name)}]";
+            return $"Area: {area.Name} ({Localisation.GetLoc(area.Name)})";
       return "Area: [Unknown]";
    }
 }

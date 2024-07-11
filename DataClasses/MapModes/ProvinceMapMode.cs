@@ -26,6 +26,7 @@ public sealed class ProvinceMapMode : MapMode
 
    public override string GetSpecificToolTip(int provinceId)
    {
-      return Globals.Provinces[provinceId].GetLocalisation();
+      var province = Globals.Provinces[provinceId];
+      return $"Province: {province.Id} ({province.GetLocalisation()})";
    }
 }

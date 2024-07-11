@@ -27,7 +27,7 @@ public sealed class SuperRegionMapMode : MapMode
          if (Globals.Areas.TryGetValue(province.Area, out var areas))
             if (Globals.Regions.TryGetValue(areas.Region, out var region))
                if (Globals.SuperRegions.TryGetValue(region.SuperRegion, out var superRegion))
-                  return $"Super Region: [{Localisation.GetLoc(superRegion.Name)}]";
+                  return $"Super Region: {superRegion.Name} ({Localisation.GetLoc(superRegion.Name)})";
       return "Super Region: [Unknown]";
    }
 }
