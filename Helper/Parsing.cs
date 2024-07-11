@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Editor.DataClasses;
 using Group = Editor.DataClasses.Group;
+using static Editor.Helper.TriggersEffectsScopes;
 
 namespace Editor.Helper;
 #nullable enable
@@ -567,6 +568,32 @@ public static class Parsing
          "mil" => Mana.MIL,
          _ => Mana.NONE
       };
+   }
+
+   internal static bool ParseDynamicContent(Block block, out object output)
+   {
+      output = default!;
+      if (IsScope(block.Name))
+      {
+         //TODO parse Scope
+         return true;
+      }
+      if (IsEffect(block.Name))
+      {
+         //TODO parse Effect
+         return true;
+      }
+      if (IsTrigger(block.Name))
+      {
+         //TODO parse Trigger
+         return true;
+      }
+      if (IsConditionStatement(block.Name))
+      {
+         //TODO parse Condition
+         return true;
+      }
+      return false;
    }
 }
 

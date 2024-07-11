@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Editor.DataClasses;
 using Editor.Helper;
+using static Editor.Helper.TriggersEffectsScopes;
 
 namespace Editor.Loading
 {
@@ -173,6 +174,12 @@ namespace Editor.Loading
                case "elector":
                   country.IsElector = Parsing.YesNo(val);
                   break;
+               case "add_truce_with":
+                  //TODO
+                  break;
+               case "add_piety":
+                  //TODO
+                  break;
                default:
                   errorLog.Write($"Unknown key in toppers {country.Tag}: {kvp.Key}");
                   break;
@@ -186,17 +193,8 @@ namespace Editor.Loading
 
          if (!DateTime.TryParse(block.Name, out var date))
          {
-            switch (block.Name)
-            {
-               case "federation":
-               case "change_estate_land_share":
-                  //TODO
-                  break;
-               default:
-                  errorLog.Write($"Invalid date in history block: {block.Name}");
-                  break;
-            }
-            return;
+            if (!Parsing.ParseDynamicContent(block, out _))
+               return;
          }
 
          che = new (date);
@@ -221,16 +219,16 @@ namespace Editor.Loading
                case "monarch":
                case "heir":
                case "queen":
+               case "monarch_consort":
                   Parsing.ParsePersonFromString(block.GetContentElements[0].Value, out var person, ref errorLog);
                   che.Persons.Add(person);
                   break;
                case "leader":
-               case "change_estate_land_share":
-               case "change_price":
-               case "add_ruler_modifier":
                   //TODO
                   break;
                default:
+                  if (Parsing.ParseDynamicContent(block, out _))
+                     break;
                   errorLog.Write($"Unknown block in history entry: {block.Name}");
                   break;
             }
