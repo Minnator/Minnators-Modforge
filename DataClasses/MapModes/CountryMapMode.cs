@@ -27,5 +27,17 @@ namespace Editor.DataClasses.MapModes
       {
          return "Country";
       }
+
+      public override string GetSpecificToolTip(int provinceId)
+      {
+         if (Globals.Provinces.TryGetValue(provinceId, out var province))
+         {
+            if (province.Owner == Tag.Empty)
+               return "Country: [Unknown]";
+            if (Globals.Countries.TryGetValue(province.Owner, out var country))
+               return $"Country: [{Localisation.GetLoc(country.Tag)} | {country.Tag}]";
+         }
+         return "Country: [Unknown]";
+      }
    }
 }

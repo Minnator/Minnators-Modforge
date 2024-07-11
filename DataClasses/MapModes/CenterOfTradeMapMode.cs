@@ -35,4 +35,18 @@ public class CenterOfTradeMapMode : MapMode
    {
       return "Center of Trade";
    }
+
+   public override string GetSpecificToolTip(int provinceId)
+   {
+      if (Globals.Provinces.TryGetValue(provinceId, out var province))
+         return province.CenterOfTrade switch
+         {
+            0 => "No center of trade",
+            1 => "Center of trade: [Level 1]",
+            2 => "Center of trade: [Level 2]",
+            3 => "Center of trade: [Level 3]",
+            _ => "Center of trade: [Unknown]"
+         };
+      return "Center of Trade: [Unknown]";
+   }
 }

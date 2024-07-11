@@ -86,4 +86,11 @@ public class DevelopmentMapMode : MapMode
    {
       return "Total Development";
    }
+
+   public override string GetSpecificToolTip(int provinceId)
+   {
+      if (Globals.Provinces.TryGetValue(provinceId, out var province))
+         return $"Total Development: {province.GetTotalDevelopment()}\nBaseTax: {province.BaseTax}\nBaseProduction: {province.BaseProduction}\nBaseManpower: {province.BaseManpower}";
+      return "Total Development: Unknown";
+   }
 }

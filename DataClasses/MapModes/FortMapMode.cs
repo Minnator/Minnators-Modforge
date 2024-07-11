@@ -46,4 +46,11 @@ public class FortMapMode : MapMode
       return "Fort Level";
    }
 
+   public override string GetSpecificToolTip(int provinceId)
+   {
+      if (Globals.Provinces.TryGetValue(provinceId, out var province))
+         return $"Fort Level: {GetFortLevel(provinceId)}";
+      return $"No fort in {Globals.Provinces[provinceId].GetLocalisation()}";
+   }
+
 }

@@ -25,4 +25,11 @@ public class AutonomyMapMode : MapMode
    {
       return "Autonomy";
    }
+
+   public override string GetSpecificToolTip(int provinceId)
+   {
+      if (Globals.Provinces.TryGetValue(provinceId, out var province))
+         return $"Autonomy: [{province.LocalAutonomy}%]";
+      return "Autonomy: [Unknown]";
+   }
 }

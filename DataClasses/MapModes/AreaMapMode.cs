@@ -26,4 +26,12 @@ public sealed class AreaMapMode : MapMode
             return area.Color;
       return Color.DarkGray;
    }
+
+   public override string GetSpecificToolTip(int provinceId)
+   {
+      if (Globals.Provinces.TryGetValue(provinceId, out var province))
+         if (Globals.Areas.TryGetValue(province.Area, out var area))
+            return $"Area: [{Localisation.GetLoc(area.Name)}]";
+      return "Area: [Unknown]";
+   }
 }

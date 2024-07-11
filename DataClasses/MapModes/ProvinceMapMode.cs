@@ -24,4 +24,8 @@ public sealed class ProvinceMapMode : MapMode
       return Globals.Provinces[provinceId].Color;
    }
 
+   public override string GetSpecificToolTip(int provinceId)
+   {
+      return Globals.Provinces[provinceId].GetLocalisation();
+   }
 }

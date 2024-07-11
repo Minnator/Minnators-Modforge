@@ -23,4 +23,11 @@ public class CultureMapMode : MapMode
    {
       return "Culture";
    }
+
+   public override string GetSpecificToolTip(int provinceId)
+   {
+      if (Globals.Cultures.TryGetValue(Globals.Provinces[provinceId].Culture, out var culture))
+         return $"Culture: [{Localisation.GetLoc(culture.Name)}]";
+      return "Culture: [Unknown]";
+   }
 }

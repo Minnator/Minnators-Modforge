@@ -6,7 +6,7 @@ namespace Editor.DataClasses;
 
 public readonly struct Tag(string tag)
 {
-   public string GetTag { get; } = tag;
+   public string GetTag => _getTag.ToUpper();
 
    public override string ToString()
    {
@@ -55,5 +55,5 @@ public readonly struct Tag(string tag)
 
    // Add an empty state to the Tag struct
    public static readonly Tag Empty = new ("");
-
+   private readonly string _getTag = tag;
 }

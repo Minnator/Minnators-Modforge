@@ -17,10 +17,18 @@ public static class ToolTipBuilder
          var match = TooltipAttributeRegex.Match(rawToolTip, lastMatch);
          if (match.Success)
          {
-            var value = Globals.Provinces[provinceId].GetAttribute(match.Groups["attrName"].Value);
-            var str = value.GetType() == typeof(ICollection<>)
-               ? string.Join(", ", (ICollection<string>)value)
-               : value.ToString();
+            var str = string.Empty;
+            if (match.Groups["attrName"].Value == "MAPMODE_SPECIFIC")
+            {
+               str = Globals.MapModeManager.CurrentMapMode.GetSpecificToolTip(provinceId);
+            }
+            else
+            {
+               var value = Globals.Provinces[provinceId].GetAttribute(match.Groups["attrName"].Value);
+               str = value.GetType() == typeof(ICollection<>)
+                  ? string.Join(", ", (ICollection<string>)value)
+                  : value.ToString();
+            }
             // Replace the match with the value
             rawToolTip = rawToolTip.Remove(match.Index, match.Length).Insert(match.Index, str);
             lastMatch = match.Index + str.Length;

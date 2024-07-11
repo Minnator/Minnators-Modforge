@@ -27,4 +27,11 @@ public sealed class ContinentMapMode : MapMode
       return Color.DarkGray;
    }
 
+   public override string GetSpecificToolTip(int provinceId)
+   {
+      if (Globals.Provinces.TryGetValue(provinceId, out var province))
+         if (Globals.Continents.TryGetValue(province.Continent, out var continent))
+            return $"Continent: [{Localisation.GetLoc(continent.Name)}]";
+      return "Continent: [Unknown]";
+   }
 }

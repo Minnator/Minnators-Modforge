@@ -98,4 +98,11 @@ public abstract class MapMode
             break;
       }
    }
+
+   public virtual string GetSpecificToolTip(int provinceId)
+   {
+      var str = string.Empty;
+      str = GetMapModeName();
+      return str;
+   }
 }
