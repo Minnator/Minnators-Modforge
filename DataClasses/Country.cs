@@ -1,10 +1,33 @@
-﻿namespace Editor.DataClasses;
+﻿using Editor.Interfaces;
 
-public class Country(Tag tag, string fileName)
+namespace Editor.DataClasses;
+
+public class Country(Tag tag, string fileName) : IProvinceCollection
 {
    public Tag Tag { get; } = tag;
    public Tag ColonialParent { get; set; } = Tag.Empty;
    public string FileName { get; } = fileName;
+
+   public int[] GetProvinceIds()
+   {
+      List<int> provinces = [];
+      foreach (var prv in Globals.Provinces.Values)
+      {
+         if (prv.Owner == Tag)
+            provinces.Add(prv.Id);
+      }
+      return [.. provinces];
+   }
+
+   public IProvinceCollection? ScopeOut()
+   {
+      return null; //TODO if there is an overlord return it
+   }
+
+   public List<IProvinceCollection>? ScopeIn()
+   {
+      return null; //TODO if there are vassals return them
+   }
 
    public Color Color { get; set; } = Color.Empty;
    public Color RevolutionaryColor { get; set; } = Color.Empty;

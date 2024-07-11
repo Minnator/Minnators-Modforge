@@ -4,6 +4,7 @@ using System.Linq;
 using Editor.Commands;
 using Editor.Controls;
 using Editor.Helper;
+using Editor.Interfaces;
 
 namespace Editor.DataClasses;
 
@@ -193,5 +194,12 @@ public class Selection(PannablePictureBox pannablePictureBox)
       State = SelectionState.Single;
       RemoveRange(SelectionPreview.ToList(), true);
       SelectionPreview = [];
+   }
+
+   public void SelectProvinceCollection(IProvinceCollection collection, bool append = true)
+   {
+      if (!append)
+         Clear();
+      AddRange(collection.GetProvinceIds());
    }
 }

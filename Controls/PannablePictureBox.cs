@@ -25,7 +25,7 @@ public sealed class PannablePictureBox : PictureBox
 
    // ------------------------------ Province Selection ------------------------------
    public Selection Selection; // Contains the selected provinces public to retrieve the selected provinces
-   private int _lastInvalidatedProvince = -1; // Contains the invalidated province from the last MouseMove event to clear it
+   public int LastInvalidatedProvince = -1; // Contains the invalidated province from the last MouseMove event to clear it
 
    // ------------------------------ Image Layers ------------------------------
    //Bitmaps from bottom to top render order: Image, Overlay, SelectionOverlay
@@ -72,6 +72,9 @@ public sealed class PannablePictureBox : PictureBox
       Selection = new Selection(this); // Initialize the selection class which manages the province selection
       _parentPanel = parentPanel;
       _mapWindow = mapWindow;
+
+
+      ContextMenuStrip = SelectionMenuBuilder.GetSelectionMenu();
    }
    private void OnImageChanged(EventArgs e)
    {
@@ -84,17 +87,24 @@ public sealed class PannablePictureBox : PictureBox
    {
       // ------------------------------ Panning ------------------------------
       // We don't want to mess with the selection if the user is panning
-      if (e.Button is MouseButtons.Middle or MouseButtons.Right)
+      if (e.Button is MouseButtons.Middle)
          return;
 
+
       // ------------------------------ Province Selection ------------------------------
-      if (!Globals.MapModeManager.GetProvince(e.Location, out var ptr)) 
+      if (!Globals.MapModeManager.GetProvince(e.Location, out var province)) 
          return;
+      
+      if (e.Button is MouseButtons.Right && ModifierKeys != Keys.Control)
+      {
+         SelectionMenuBuilder.SetContextMenuStrip(province, ContextMenuStrip!);
+      }
+
       //check if ctrl is pressed
       if (ModifierKeys == Keys.Control && Selection.State == SelectionState.Single) 
-         Globals.HistoryManager.AddCommand(new CAddSingleSelection(ptr.Id, this), CommandHistoryType.SimpleSelection);
-      else if (ModifierKeys != Keys.Shift && Selection.State == SelectionState.Single)
-         Globals.HistoryManager.AddCommand(new CSelectionMarkNext(ptr.Id, this), CommandHistoryType.SimpleSelection);
+         Globals.HistoryManager.AddCommand(new CAddSingleSelection(province.Id, this), CommandHistoryType.SimpleSelection);
+      else if (ModifierKeys != Keys.Shift && Selection.State == SelectionState.Single && e.Button is not MouseButtons.Right)
+         Globals.HistoryManager.AddCommand(new CSelectionMarkNext(province.Id, this), CommandHistoryType.SimpleSelection);
       
       _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvinces.Count);
    }
@@ -191,12 +201,12 @@ public sealed class PannablePictureBox : PictureBox
       _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvinces.Count);
 
       // ------------------------------ Province Highlighting ------------------------------
-      if (Globals.MapModeManager.GetProvince(e.Location, out var province) && province.Id != _lastInvalidatedProvince)
+      if (Globals.MapModeManager.GetProvince(e.Location, out var province) && province.Id != LastInvalidatedProvince)
       {
-         if (_lastInvalidatedProvince != -1) 
-            Invalidate(MapDrawHelper.DrawProvinceBorder(_lastInvalidatedProvince, Color.Transparent, Overlay));
+         if (LastInvalidatedProvince != -1) 
+            Invalidate(MapDrawHelper.DrawProvinceBorder(LastInvalidatedProvince, Color.Transparent, Overlay));
          Invalidate(MapDrawHelper.DrawProvinceBorder(province.Id, Color.Aqua, Overlay));
-         _lastInvalidatedProvince = province.Id;
+         LastInvalidatedProvince = province.Id;
          
          // Update the tooltip
          if (ShowToolTip)
