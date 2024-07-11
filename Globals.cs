@@ -62,7 +62,7 @@ public static class Globals
    public static string MapPath = null!;
 
    // ToolTip
-   public static string ToolTipText = $"$MAPMODE_SPECIFIC$\n------------------\nId:   [$id$]\nName: [$name$]\nArea: [$area$ ($area%L$)]";
+   public static string ToolTipText = $"$MAPMODE_SPECIFIC$\n------------------\nId:   $id$\nName: $name$\nArea: $area$ ($area%L$)";
 
    // Contains the border pixels of the provinces
    public static Point[] BorderPixels = null!;
