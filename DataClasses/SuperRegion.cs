@@ -31,8 +31,9 @@ public class SuperRegion(string name) : IProvinceCollection
    {
       var provinces = new List<int>();
       foreach (var region in Regions) 
-         provinces.AddRange(Globals.Regions[region].GetProvinceIds());
-      return provinces.ToArray();
+         if (Globals.Regions.TryGetValue(region, out Region? value))
+            provinces.AddRange(value.GetProvinceIds());
+      return [.. provinces];
    }
 
    public IProvinceCollection? ScopeOut()
