@@ -251,4 +251,12 @@ public static class ProvinceEventHandler
       OnProvinceMultilineAttributesChanged.Invoke(id, new (value, oldValue, propertyName));
       RaiseProvinceDataChanged(id, value, oldValue, propertyName);
    }
+
+   // latentTradeGood
+   public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceLatentTradeGoodChanged = delegate { };
+   public static void RaiseProvinceLatentTradeGoodChanged(int id, object value, object oldValue, string propertyName)
+   {
+      OnProvinceLatentTradeGoodChanged.Invoke(id, new (value, oldValue, propertyName));
+      RaiseProvinceDataChanged(id, value, oldValue, propertyName);
+   }
 }

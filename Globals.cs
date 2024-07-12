@@ -40,11 +40,6 @@ public enum MapModeRendering
 //contains all required and used data across the application and instances of forms.
 public static class Globals
 {
-   static Globals()
-   {
-      Date = new (1444, 11, 11);
-   }
-
    public static ConsoleForm? ConsoleForm = null;
    public static MapWindow MapWindow = null!;
 

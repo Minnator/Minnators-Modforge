@@ -9,8 +9,6 @@ namespace Editor.DataClasses;
 
 public class Province : IProvinceCollection
 {
-   private List<Tag> _claims = [];
-   private List<Tag> _cores = [];
    private Tag _controller = Tag.Empty;
    private Tag _owner = Tag.Empty;
    private Tag _tribalOwner = Tag.Empty;
@@ -25,18 +23,21 @@ public class Province : IProvinceCollection
    private int _revoltRisk;
    private int _localAutonomy;
    private int _nationalism;
-   private List<string> _discoveredBy = [];
-   private string _capital = string.Empty;
-   private string _culture = string.Empty;
-   private string _religion = string.Empty;
    private bool _hasFort15Th;
    private bool _isHre;
    private bool _isCity;
    private bool _isSeatInParliament;
-   private TradeGood _tradeGood;
+   private string _capital = string.Empty;
+   private string _culture = string.Empty;
+   private string _religion = string.Empty;
    private string _area = string.Empty;
    private string _continent = string.Empty;
-   private List<HistoryEntry> _history = [];
+   private string _latentTradeGood = string.Empty;
+   private List<Tag> _claims = [];
+   private List<Tag> _cores = [];
+   private List<string> _discoveredBy = [];
+   private TradeGood _tradeGood;
+   private List<HistoryEntryOld> _history = [];
    private List<MultilineAttribute> _multilineAttributes = [];
 
    #region ManagementData
@@ -368,7 +369,7 @@ public class Province : IProvinceCollection
       }
    }
 
-   public List<HistoryEntry> History
+   public List<HistoryEntryOld> History
    {
       get => _history;
       set
@@ -390,6 +391,18 @@ public class Province : IProvinceCollection
       }
    }
 
+   public string LatentTradeGood
+   {
+      get => _latentTradeGood;
+      set
+      {
+         if (Globals.State == State.Running)
+            RaiseProvinceLatentTradeGoodChanged(Id, value, _latentTradeGood, nameof(LatentTradeGood));
+         _latentTradeGood = value;
+      }
+   }
+
+
    #endregion
    // ======================================== Methods ========================================
 
@@ -401,7 +414,6 @@ public class Province : IProvinceCollection
          {
             if (entry.Date > Globals.Date)
                continue;
-
          }
          return Owner; //TODO wrong return
       }
@@ -409,9 +421,9 @@ public class Province : IProvinceCollection
 
 
 
-   public void AddHistoryEntry(HistoryEntry entry)
+   public void AddHistoryEntry(HistoryEntryOld entryOld)
    {
-      _history.Add(entry);
+      _history.Add(entryOld);
       SortHistoryEntriesByDate();
    }
 

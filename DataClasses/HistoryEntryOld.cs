@@ -1,10 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Editor.DataClasses;
 
-namespace Editor.DataClasses;
-#nullable enable
+public class HistoryEntry(DateTime date)
+{
+   public DateTime Date { get; set; } = date;
+   public string Comment { get; set; } = string.Empty;
+   public List<Effect> Effects { get; set; } = [];
 
-public class HistoryEntry(DateTime date, string content, string? comment = null)
+}
+
+
+public class HistoryEntryOld(DateTime date, string content, string? comment = null)
 {
    public DateTime Date { get; set; } = date;
    public string Content { get; set; } = content;
@@ -13,7 +18,7 @@ public class HistoryEntry(DateTime date, string content, string? comment = null)
    public int Start { get; set; }
    public int End { get; set; }
 
-   public HistoryEntry(DateTime date, string content, List<Group> groups, string? comment = null) : this(date, content, comment)
+   public HistoryEntryOld(DateTime date, string content, List<Group> groups, string? comment = null) : this(date, content, comment)
    {
       Groups = groups;
    }

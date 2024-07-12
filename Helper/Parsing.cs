@@ -42,6 +42,9 @@ public class Block(int start, int end, string name, List<IElement> subBlocks) : 
          return blocks;
       }
    }
+
+   public bool HasOnlyContent => Blocks.TrueForAll(b => !b.IsBlock);
+   public string GetContent => string.Join("\n", GetContentElements.Select(c => c.Value));
 }
 
 public class Content(string value) : IElement
@@ -129,6 +132,8 @@ public static class Parsing
          // While there are closing brackets before the next opening bracket we need to close the current element.
          while (end < start)
          {
+            if (stack.Count == 0)
+               break;
             // Get the current element from the stack and update its end.
             endCnt++;
             var element = (Block)stack.Pop();
@@ -376,11 +381,23 @@ public static class Parsing
       return GetStringList(ref value);
    }
 
+   /// <summary>
+   /// Removes all comments from a multiline string.
+   /// Parses the string to a list of <c>KeyValuePair</c> with the key and value of each line.
+   /// </summary>
+   /// <param name="value"></param>
+   /// <returns></returns>
    public static List<KeyValuePair<string, string>> GetKeyValueList(string value)
    {
       return GetKeyValueList(ref value);
    }
 
+   /// <summary>
+   /// Removes all comments from a multiline string.
+   /// Parses the string to a list of <c>KeyValuePair</c> with the key and value of each line.
+   /// </summary>
+   /// <param name="value"></param>
+   /// <returns></returns>
    public static List<KeyValuePair<string, string>> GetKeyValueList(ref string value)
    {
       List<KeyValuePair<string, string>>  keyValueList = [];
@@ -668,6 +685,21 @@ public static class Parsing
          return true;
       }
       return false;
+   }
+
+   public static string GetLatentTradeGood(Content content, ref Log errorLog)
+   {
+      if (!IsValidTradeGood(content.Value))
+      {
+         errorLog.Write("Invalid trade good: " + content.Value);
+         return string.Empty;
+      }
+      return content.Value;
+   }
+
+   public static bool IsValidTradeGood(string str)
+   {
+      return true; // TODO parse trade goods
    }
 }
 

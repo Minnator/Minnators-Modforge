@@ -6,6 +6,7 @@ using Editor.DataClasses;
 using Editor.Forms;
 using Editor.Helper;
 using Editor.Loading;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Editor
 {
@@ -45,7 +46,8 @@ namespace Editor
       {
          InitializeComponent();
          MapPictureBox = ControlFactory.GetPannablePictureBox(ref MapPanel, this);
-         MapPanel.Controls.Add(MapPictureBox);
+         MapPanel.Controls.Add(MapPictureBox); 
+         Globals.Date = new(1444, 11, 11);
       }
 
 
