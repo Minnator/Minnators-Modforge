@@ -69,9 +69,11 @@
          pasteToolStripButton = new ToolStripButton();
          toolStripSeparator3 = new ToolStripSeparator();
          helpToolStripButton = new ToolStripButton();
+         DateLabel = new Label();
          MapMenuStrip.SuspendLayout();
          toolStrip1.SuspendLayout();
          tableLayoutPanel1.SuspendLayout();
+         tableLayoutPanel2.SuspendLayout();
          toolStripContainer1.ContentPanel.SuspendLayout();
          toolStripContainer1.RightToolStripPanel.SuspendLayout();
          toolStripContainer1.SuspendLayout();
@@ -291,6 +293,7 @@
          tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
          tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
          tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+         tableLayoutPanel2.Controls.Add(DateLabel, 4, 0);
          tableLayoutPanel2.Dock = DockStyle.Fill;
          tableLayoutPanel2.Location = new Point(400, 0);
          tableLayoutPanel2.Margin = new Padding(0);
@@ -413,6 +416,18 @@
          helpToolStripButton.Size = new Size(22, 20);
          helpToolStripButton.Text = "He&lp";
          // 
+         // DateLabel
+         // 
+         DateLabel.AutoSize = true;
+         DateLabel.Dock = DockStyle.Fill;
+         DateLabel.Location = new Point(891, 3);
+         DateLabel.Margin = new Padding(3);
+         DateLabel.Name = "DateLabel";
+         DateLabel.Size = new Size(217, 20);
+         DateLabel.TabIndex = 0;
+         DateLabel.Text = "-:-:-";
+         DateLabel.TextAlign = ContentAlignment.MiddleCenter;
+         // 
          // MapWindow
          // 
          AutoScaleDimensions = new SizeF(7F, 15F);
@@ -435,6 +450,8 @@
          toolStrip1.PerformLayout();
          tableLayoutPanel1.ResumeLayout(false);
          tableLayoutPanel1.PerformLayout();
+         tableLayoutPanel2.ResumeLayout(false);
+         tableLayoutPanel2.PerformLayout();
          toolStripContainer1.ContentPanel.ResumeLayout(false);
          toolStripContainer1.RightToolStripPanel.ResumeLayout(false);
          toolStripContainer1.RightToolStripPanel.PerformLayout();
@@ -488,6 +505,7 @@
       private ToolStripButton pasteToolStripButton;
       private ToolStripSeparator toolStripSeparator3;
       private ToolStripButton helpToolStripButton;
+      public Label DateLabel;
    }
 }
 

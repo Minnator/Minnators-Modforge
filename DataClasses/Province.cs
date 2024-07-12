@@ -393,6 +393,33 @@ public class Province : IProvinceCollection
    #endregion
    // ======================================== Methods ========================================
 
+   public Tag GetOwnerForDate
+   {
+      get
+      {
+         foreach (var entry in History)
+         {
+            if (entry.Date > Globals.Date)
+               continue;
+
+         }
+         return Owner; //TODO wrong return
+      }
+   }
+
+
+
+   public void AddHistoryEntry(HistoryEntry entry)
+   {
+      _history.Add(entry);
+      SortHistoryEntriesByDate();
+   }
+
+   public void SortHistoryEntriesByDate()
+   {
+      _history.Sort((x, y) => x.Date.CompareTo(y.Date));
+   }
+
    public object GetAttribute(string key)
    {
       return key.ToLower() switch

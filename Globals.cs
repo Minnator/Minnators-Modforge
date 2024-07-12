@@ -40,8 +40,25 @@ public enum MapModeRendering
 //contains all required and used data across the application and instances of forms.
 public static class Globals
 {
+   static Globals()
+   {
+      Date = new (1444, 11, 11);
+   }
+
    public static ConsoleForm? ConsoleForm = null;
    public static MapWindow MapWindow = null!;
+
+   // Date of history
+   private static DateTime _date;
+   public static DateTime Date
+   {
+      get => _date;
+      set
+      {
+         MapWindow.DateLabel.Text = value.ToString("yyyy-MM-dd");
+         _date = value;
+      }
+   }
 
    // Contains the current state of the application
    public static State State = State.Loading;
@@ -129,4 +146,5 @@ public static class Globals
    public static List<string> SelectionModifiers = [
       "Deselection"
    ];
+
 }
