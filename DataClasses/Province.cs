@@ -39,7 +39,6 @@ public class Province : IProvinceCollection
    private List<string> _discoveredBy = [];
    private TradeGood _tradeGood;
    private List<HistoryEntry> _history = [];
-   private List<MultilineAttribute> _multilineAttributes = [];
 
    #region ManagementData
 
@@ -380,18 +379,7 @@ public class Province : IProvinceCollection
          _history = value;
       }
    }
-
-   public List<MultilineAttribute> MultilineAttributes
-   {
-      get => _multilineAttributes;
-      set
-      {
-         if (Globals.State == State.Running)
-            RaiseProvinceMultilineAttributesChanged(Id, value, _multilineAttributes, nameof(MultilineAttributes));
-         _multilineAttributes = value;
-      }
-   }
-
+   
    public string LatentTradeGood
    {
       get => _latentTradeGood;
@@ -463,7 +451,6 @@ public class Province : IProvinceCollection
          "is_seat_in_parliament" => IsSeatInParliament,
          "trade_good" => TradeGood,
          "history" => History,
-         "multiline_attributes" => MultilineAttributes,
          "id" => Id,
          "name" => GetLocalisation(),
          _ => default!

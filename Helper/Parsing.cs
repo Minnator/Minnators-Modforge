@@ -2,7 +2,6 @@
 using System.Text;
 using System.Text.RegularExpressions;
 using Editor.DataClasses;
-using Group = Editor.DataClasses.Group;
 using static Editor.Helper.TriggersEffectsScopes;
 
 namespace Editor.Helper;
@@ -424,45 +423,6 @@ public static class Parsing
          sb.AppendLine(RemoveCommentFromLine(line));
       }
       removed = sb.ToString();
-   }
-
-   /// <summary>
-   /// Returns a list of <c>Group</c> from a string.
-   /// </summary>
-   /// <param name="value"></param>
-   /// <param name="index"></param>
-   /// <param name="last"></param>
-   /// <returns></returns>
-   /// <exception cref="ProvinceParsingException"></exception>
-   public static List<Group> GetGroups(ref string value, int index, out int last)
-   {
-      List<Group> groups = [];
-      Stack<int> stack = [];
-      last = index;
-      var len = value.Length;
-
-      for (var i = index; i < len; i++)
-      {
-         var c = value[i];
-         if (c == '{')
-            stack.Push(i);
-         else if (c == '}')
-         {
-            if (stack.Count == 0)
-               throw new ProvinceParsingException(i, value);
-
-            var start = stack.Pop();
-            groups.Add(new (start, i, value.Substring (start, i - start + 1)));
-            if (stack.Count == 0)
-            {
-               last = i;
-               break;
-            }
-         }
-      }
-      if (stack.Count > 0)
-         throw new ProvinceParsingException(len, value);
-      return groups;
    }
 
    /// <summary>

@@ -38,33 +38,7 @@ public static class DebugPrints
    {
       return new('\t', tabs);
    }
-
-   public static void PrintAllAttributes(List<ParsingProvince> provinces)
-   {
-      var keys = GetAllUniqueAttributeKeys(provinces).ToList();
-      var sb = new StringBuilder();
-      keys.Sort();
-      foreach (var key in keys)
-      {
-         sb.AppendLine(key);
-      }
-      File.WriteAllText(@"C:\Users\david\Downloads\allAttributesDEBUG.txt", sb.ToString());
-   }
-
-   public static HashSet<string> GetAllUniqueAttributeKeys(List<ParsingProvince> provinces)
-   {
-      var keys = new HashSet<string>();
-
-      foreach (var province in provinces)
-      {
-         foreach (var attribute in province.Attributes)
-         {
-            keys.Add(attribute.Key);
-         }
-      }
-      return keys;
-   }
-
+   
    public static void PrintProvinceHistories()
    {
       var sb = new StringBuilder();
