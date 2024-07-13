@@ -180,11 +180,11 @@ public static class ProvinceEventHandler
       RaiseProvinceDataChanged(id, value, oldValue, propertyName);
    }
 
-   // HasFort15th
-   public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceHasFort15thChanged = delegate { };
-   public static void RaiseProvinceHasFort15thChanged(int id, object value, object oldValue, string propertyName)
+   // Buildings
+   public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceBuildingsChanged = delegate { };
+   public static void RaiseProvinceBuildingsChanged(int id, object value, object oldValue, string propertyName)
    {
-      OnProvinceHasFort15thChanged.Invoke(id, new (value, oldValue, propertyName));
+      OnProvinceBuildingsChanged.Invoke(id, new (value, oldValue, propertyName));
       RaiseProvinceDataChanged(id, value, oldValue, propertyName);
    }
 
@@ -244,19 +244,67 @@ public static class ProvinceEventHandler
       RaiseProvinceDataChanged(id, value, oldValue, propertyName);
    }
 
-   // MultilineAttributes
-   public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceMultilineAttributesChanged = delegate { };
-   public static void RaiseProvinceMultilineAttributesChanged(int id, object value, object oldValue, string propertyName)
-   {
-      OnProvinceMultilineAttributesChanged.Invoke(id, new (value, oldValue, propertyName));
-      RaiseProvinceDataChanged(id, value, oldValue, propertyName);
-   }
-
    // latentTradeGood
    public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceLatentTradeGoodChanged = delegate { };
    public static void RaiseProvinceLatentTradeGoodChanged(int id, object value, object oldValue, string propertyName)
    {
       OnProvinceLatentTradeGoodChanged.Invoke(id, new (value, oldValue, propertyName));
+      RaiseProvinceDataChanged(id, value, oldValue, propertyName);
+   }
+
+   // HasRevolt
+   public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceHasRevoltChanged = delegate { };
+   public static void RaiseProvinceHasRevoltChanged(int id, object value, object oldValue, string propertyName)
+   {
+      OnProvinceHasRevoltChanged.Invoke(id, new (value, oldValue, propertyName));
+      RaiseProvinceDataChanged(id, value, oldValue, propertyName);
+   }
+
+   // TradeCompany
+   public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceTradeCompanyChanged = delegate { };
+   public static void RaiseProvinceTradeCompanyChanged(int id, object value, object oldValue, string propertyName)
+   {
+      OnProvinceTradeCompanyChanged.Invoke(id, new (value, oldValue, propertyName));
+      RaiseProvinceDataChanged(id, value, oldValue, propertyName);
+   }
+
+   // TradeCompanyInvestment
+   public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceTradeCompanyInvestmentChanged = delegate { };
+   public static void RaiseProvinceTradeCompanyInvestmentChanged(int id, object value, object oldValue, string propertyName)
+   {
+      OnProvinceTradeCompanyInvestmentChanged.Invoke(id, new (value, oldValue, propertyName));
+      RaiseProvinceDataChanged(id, value, oldValue, propertyName);
+   }
+
+   // ProvinceModifiers
+   public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceProvinceModifiersChanged = delegate { };
+   public static void RaiseProvinceProvinceModifiersChanged(int id, object value, object oldValue, string propertyName)
+   {
+      OnProvinceProvinceModifiersChanged.Invoke(id, new (value, oldValue, propertyName));
+      RaiseProvinceDataChanged(id, value, oldValue, propertyName);
+   }
+
+   // ProvinceTriggeredModifiers
+   public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceProvinceTriggeredModifiersChanged = delegate { };
+   public static void RaiseProvinceProvinceTriggeredModifiersChanged(int id, object value, object oldValue, string propertyName)
+   {
+      OnProvinceProvinceTriggeredModifiersChanged.Invoke(id, new (value, oldValue, propertyName));
+      RaiseProvinceDataChanged(id, value, oldValue, propertyName);
+   }
+
+   // ReformationCenter
+   public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceReformationCenterChanged = delegate { };
+   public static void RaiseProvinceReformationCenterChanged(int id, object value, object oldValue, string propertyName)
+   {
+      OnProvinceReformationCenterChanged.Invoke(id, new (value, oldValue, propertyName));
+      RaiseProvinceDataChanged(id, value, oldValue, propertyName);
+   }
+
+   // PermanentProvinceModifiers
+   public static event EventHandler<ProvinceDataChangedEventArgs> OnProvincePermanentProvinceModifiersChanged = delegate { };
+   public static void RaiseProvincePermanentProvinceModifiersChanged(int id, object value, object oldValue, string propertyName)
+   {
+      OnProvincePermanentProvinceModifiersChanged.Invoke(id, new (value, oldValue, propertyName));
       RaiseProvinceDataChanged(id, value, oldValue, propertyName);
    }
 }

@@ -44,6 +44,7 @@
          testToolStripMenuItem = new ToolStripMenuItem();
          telescopeToolStripMenuItem = new ToolStripMenuItem();
          refStackToolStripMenuItem = new ToolStripMenuItem();
+         DateSelector = new ToolStripComboBox();
          MapPanel = new Panel();
          toolStrip1 = new ToolStrip();
          RamUsageStrip = new ToolStripLabel();
@@ -57,6 +58,7 @@
          toolStripSplitButton1 = new ToolStripSplitButton();
          tableLayoutPanel1 = new TableLayoutPanel();
          tableLayoutPanel2 = new TableLayoutPanel();
+         DateLabel = new Label();
          toolStripContainer1 = new ToolStripContainer();
          toolStrip2 = new ToolStrip();
          newToolStripButton = new ToolStripButton();
@@ -69,7 +71,6 @@
          pasteToolStripButton = new ToolStripButton();
          toolStripSeparator3 = new ToolStripSeparator();
          helpToolStripButton = new ToolStripButton();
-         DateLabel = new Label();
          MapMenuStrip.SuspendLayout();
          toolStrip1.SuspendLayout();
          tableLayoutPanel1.SuspendLayout();
@@ -82,7 +83,7 @@
          // 
          // MapMenuStrip
          // 
-         MapMenuStrip.Items.AddRange(new ToolStripItem[] { filesToolStripMenuItem, historyToolStripMenuItem, toolTipCustomizerToolStripMenuItem, MapModeComboBox, debugToolStripMenuItem });
+         MapMenuStrip.Items.AddRange(new ToolStripItem[] { filesToolStripMenuItem, historyToolStripMenuItem, toolTipCustomizerToolStripMenuItem, MapModeComboBox, debugToolStripMenuItem, DateSelector });
          MapMenuStrip.Location = new Point(0, 0);
          MapMenuStrip.Name = "MapMenuStrip";
          MapMenuStrip.Padding = new Padding(7, 2, 0, 2);
@@ -190,6 +191,13 @@
          refStackToolStripMenuItem.Name = "refStackToolStripMenuItem";
          refStackToolStripMenuItem.Size = new Size(125, 22);
          refStackToolStripMenuItem.Click += refStackToolStripMenuItem_Click;
+         // 
+         // DateSelector
+         // 
+         DateSelector.Items.AddRange(new object[] { "1444.11.11", "1500.1.1", "1600.1.1" });
+         DateSelector.Name = "DateSelector";
+         DateSelector.Size = new Size(121, 23);
+         DateSelector.SelectedIndexChanged += DateSelector_SelectedIndexChanged;
          // 
          // MapPanel
          // 
@@ -302,6 +310,18 @@
          tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
          tableLayoutPanel2.Size = new Size(1111, 26);
          tableLayoutPanel2.TabIndex = 2;
+         // 
+         // DateLabel
+         // 
+         DateLabel.AutoSize = true;
+         DateLabel.Dock = DockStyle.Fill;
+         DateLabel.Location = new Point(891, 3);
+         DateLabel.Margin = new Padding(3);
+         DateLabel.Name = "DateLabel";
+         DateLabel.Size = new Size(217, 20);
+         DateLabel.TabIndex = 0;
+         DateLabel.Text = "-:-:-";
+         DateLabel.TextAlign = ContentAlignment.MiddleCenter;
          // 
          // toolStripContainer1
          // 
@@ -416,18 +436,6 @@
          helpToolStripButton.Size = new Size(22, 20);
          helpToolStripButton.Text = "He&lp";
          // 
-         // DateLabel
-         // 
-         DateLabel.AutoSize = true;
-         DateLabel.Dock = DockStyle.Fill;
-         DateLabel.Location = new Point(891, 3);
-         DateLabel.Margin = new Padding(3);
-         DateLabel.Name = "DateLabel";
-         DateLabel.Size = new Size(217, 20);
-         DateLabel.TabIndex = 0;
-         DateLabel.Text = "-:-:-";
-         DateLabel.TextAlign = ContentAlignment.MiddleCenter;
-         // 
          // MapWindow
          // 
          AutoScaleDimensions = new SizeF(7F, 15F);
@@ -506,6 +514,7 @@
       private ToolStripSeparator toolStripSeparator3;
       private ToolStripButton helpToolStripButton;
       public Label DateLabel;
+      private ToolStripComboBox DateSelector;
    }
 }
 

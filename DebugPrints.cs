@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using Editor.Commands;
 using Editor.DataClasses;
 using Editor.Forms;
@@ -12,6 +9,58 @@ namespace Editor;
 public static class DebugPrints
 {
 
+   public static void PrintAllProvinceHistories()
+   {
+      var sb = new StringBuilder();
+      var sb2 = new StringBuilder();
+      var total = 0;
+      var totalEffects = 0;
+      var validEffects = 0;
+      var invalidEffects = 0;
+      var provDummy = new Province();
+      List<Effect> effects = [];
+      HashSet<string> effectNames = [];
+      foreach (var province in Globals.Provinces.Values)
+      {
+         sb.AppendLine($"Province: {province.Id,4} with {province.History.Count,2} entries:");
+         total += province.History.Count;
+         foreach (var history in province.History)
+         {
+            sb.AppendLine($"\t{DateTime.Now.ToString("yyyy.MM.dd")} [{history.Effects.Count,1}]");
+            totalEffects += history.Effects.Count;
+            effects.AddRange(history.Effects);
+         }
+      }
+
+      foreach (var effect in effects)
+      {
+         effectNames.Add(effect.Name);
+         if (effect.ExecuteProvince(provDummy))
+         {
+            validEffects ++;
+         }
+         else
+         {
+            invalidEffects ++;
+            sb2.AppendLine(effect.ToString());
+         }
+      }
+
+      sb2.Append("\n------------------------------------------------\n");
+      sb2.AppendLine($"{effectNames.Count} different effects: ");
+      foreach (var eff in effectNames)
+      {
+         sb2.AppendLine(eff);
+      }
+
+      sb2.Insert(0, $"Working: {validEffects} | not working: {invalidEffects}\n------------------------------------------------\n");
+      sb2.Insert(0, $"Total: {total} entries with {totalEffects} effects\n");
+      
+      File.WriteAllText(@"C:\Users\david\Downloads\provinceHistoriesEffectsDEBUG.txt", sb2.ToString());
+
+      sb.Insert(0, $"{total} entries with {totalEffects} effects\n------------------------------------------------\n");
+      File.WriteAllText(@"C:\Users\david\Downloads\provinceHistoriesDEBUG.txt", sb.ToString());
+   }
 
 
 

@@ -43,7 +43,11 @@ public class MapModeManager
       IdMapMode.RenderMapMode(IdMapMode.GetProvinceColor); //TODO can be replaced by coping the bitmap from the modfolder if it exists
 
    }
-   
+
+   public void RenderCurrent()
+   {
+      CurrentMapMode.RenderMapMode(CurrentMapMode.GetProvinceColor);
+   }
    public List<MapMode> GetMapModes()
    {
       return MapModes;
@@ -70,8 +74,6 @@ public class MapModeManager
       if (Globals.MapModeRendering == MapModeRendering.Live)
       {
          CurrentMapMode.RenderMapMode(CurrentMapMode.GetProvinceColor);
-         PictureBox.Image = ShareLiveBitmap;
-         PreviousLandOnly = CurrentMapMode.IsLandOnly; // We store the previous land only value to save time rendering the map mode if the next one is also land only
       }
       else
          PictureBox.Image = CurrentMapMode.Bitmap; // We point the PictureBox to the new bitmap
@@ -88,4 +90,5 @@ public class MapModeManager
       province = null!;
       return false;
    }
+
 }

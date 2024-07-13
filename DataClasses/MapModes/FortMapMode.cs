@@ -12,7 +12,7 @@ public class FortMapMode : MapMode
    public FortMapMode()
    {
       // Subscribe to events to update the min and max values when a province's development changes
-      ProvinceEventHandler.OnProvinceHasFort15thChanged += UpdateProvince;
+      ProvinceEventHandler.OnProvinceBuildingsChanged += UpdateProvince;
    }
 
    public override Color GetProvinceColor(int id)
@@ -36,7 +36,7 @@ public class FortMapMode : MapMode
 
    private int GetFortLevel(int id)
    {
-      if (Globals.Provinces[id].HasFort15Th)
+      if (Globals.Provinces[id].Buildings.Contains("fort_15th"))
          return 2;
       return 0;
    }

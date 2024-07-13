@@ -1,4 +1,5 @@
-﻿using Editor.Commands;
+﻿using System.Security.Policy;
+using Editor.Commands;
 using Editor.DataClasses;
 using Editor.Forms;
 using Editor.Helper;
@@ -18,6 +19,7 @@ public enum State
    Loading,
    Running,
    Initializing,
+   LoadingHistory,
    Waiting
 }
 
@@ -51,6 +53,7 @@ public static class Globals
       set
       {
          MapWindow.DateLabel.Text = value.ToString("yyyy-MM-dd");
+         ProvinceHistoryManager.LoadDate(value);
          _date = value;
       }
    }
@@ -113,6 +116,9 @@ public static class Globals
    public static Dictionary<string, string> Localisation { get; set; } = [];
    public static Dictionary<string, string> LocalisationCollisions { get; set; } = [];
 
+   public static readonly HashSet<string> Buildings = [
+      "shipyard", "fort_15th", "fort_16th", "fort_17th", "fort_18th", "textile"
+   ];
 
    public static readonly HashSet<string> UniqueAttributeKeys = [
       "add_claim", "add_core", "add_local_autonomy", "add_nationalism", "base_manpower", "base_production", "base_tax", "capital", "center_of_trade", "controller", "culture", "discovered_by", "extra_cost", "fort_15th", "hre", "is_city", "native_ferocity", "native_hostileness", "native_size", "owner", "religion", "seat_in_parliament", "trade_goods", "tribal_owner", "unrest", "shipyard", "revolt_risk"
@@ -123,7 +129,7 @@ public static class Globals
    ];
 
    public static readonly HashSet<string> Effects = [
-      "change_price", "add_opinion", "add_estate_loyalty", "change_estate_land_share", "add_ruler_modifier", "add_country_modifier"
+      "change_price", "add_opinion", "add_estate_loyalty", "change_estate_land_share", "add_ruler_modifier", "add_country_modifier", "add_base_tax", "add_base_production", "add_base_manpower", "add_local_autonomy", "remove_core", "revolt", "remove_claim", "reformation_center", "add_province_modifier", "remove_province_modifier", "add_to_trade_company", "add_trade_company_investment", "add_permanent_province_modifier", "remove_permanent_province_modifier", "add_province_triggered_modifier", "remove_province_triggered_modifier", "textile", "set_global_flag"
    ];
 
    public static readonly HashSet<string> ScriptedEffects = [

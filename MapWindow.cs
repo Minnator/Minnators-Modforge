@@ -37,6 +37,7 @@ namespace Editor
          //resume gui updates
          ResumeLayout();
          // Enable the Application
+         Globals.Date = new(1444, 11, 11);
          Globals.LoadingLog.Close();
          Globals.State = State.Running;
       }
@@ -47,8 +48,7 @@ namespace Editor
       {
          InitializeComponent();
          MapPictureBox = ControlFactory.GetPannablePictureBox(ref MapPanel, this);
-         MapPanel.Controls.Add(MapPictureBox); 
-         Globals.Date = new(1444, 11, 11);
+         MapPanel.Controls.Add(MapPictureBox);
       }
 
 
@@ -180,8 +180,22 @@ namespace Editor
 
       private void refStackToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         var groups = Geometry.GetProvinceConnectedGroups(Globals.Countries["TUR"].GetOwnedProvinces);
-         DebugMaps.DrawProvinceGroups(groups);
+         List<string> randomTagList = ["TUR", "BRA", "FRA", "POL", "HAB"];
+         var rand = new Random();
+         var nextTag = randomTagList[rand.Next(0, randomTagList.Count - 1)];
+         Debug.WriteLine(nextTag);
+         Globals.Provinces[50].Owner = nextTag;
+      }
+
+      private void DateSelector_SelectedIndexChanged(object sender, EventArgs e)
+      {
+         Globals.State = State.Loading;
+         if (DateTime.TryParse(DateSelector.Text, out var date));
+         {
+            Globals.Date = date;
+         }
+         Globals.State = State.Running;
+         Globals.MapModeManager.RenderCurrent();
       }
    }
 }

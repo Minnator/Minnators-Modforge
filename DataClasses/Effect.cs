@@ -37,9 +37,10 @@ namespace Editor.DataClasses
 
       public virtual bool ExecuteProvince(Province province)
       {
-         if (Globals.UniqueAttributeKeys.Contains(name))
+         if (Globals.UniqueAttributeKeys.Contains(name) || Globals.Effects.Contains(name) || Globals.Buildings.Contains(name))
          {
             province.SetAttribute(Name, Value);
+            return true;
          }
          return false;
       }
@@ -52,7 +53,7 @@ namespace Editor.DataClasses
 
       public override string ToString()
       {
-         return $"{Name} = {Value}";
+         return $"{Name} : {Value}";
       }
    }
 

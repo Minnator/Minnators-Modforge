@@ -13,6 +13,7 @@ public class Province : IProvinceCollection
    private Tag _controller = Tag.Empty;
    private Tag _owner = Tag.Empty;
    private Tag _tribalOwner = Tag.Empty;
+   private Tag _tradeCompany = Tag.Empty;
    private int _baseManpower;
    private int _baseTax;
    private int _baseProduction;
@@ -24,9 +25,9 @@ public class Province : IProvinceCollection
    private int _revoltRisk;
    private int _localAutonomy;
    private int _nationalism;
-   private bool _hasFort15Th;
    private bool _isHre;
    private bool _isCity;
+   private bool _hasRevolt;
    private bool _isSeatInParliament;
    private string _capital = string.Empty;
    private string _culture = string.Empty;
@@ -34,9 +35,15 @@ public class Province : IProvinceCollection
    private string _area = string.Empty;
    private string _continent = string.Empty;
    private string _latentTradeGood = string.Empty;
+   private string _reformationCenter = string.Empty;
    private List<Tag> _claims = [];
    private List<Tag> _cores = [];
    private List<string> _discoveredBy = [];
+   private List<string> _buildings = [];
+   private List<string> _tradeCompanyInvestments = [];
+   private List<string> _provinceModifiers = [];
+   private List<string> _permanentProvinceModifiers = [];
+   private List<string> _provinceTriggeredModifiers = [];
    private TradeGood _tradeGood;
    private List<HistoryEntry> _history = [];
 
@@ -125,9 +132,10 @@ public class Province : IProvinceCollection
       get => _owner;
       set
       {
-         if (Globals.State == State.Running)
-            RaiseProvinceOwnerChanged(Id, value, _owner, nameof(Owner));
+         var old = _owner;
          _owner = value;
+         if (Globals.State == State.Running)
+            RaiseProvinceOwnerChanged(Id, value, old, nameof(Owner));
       }
    }
 
@@ -313,15 +321,15 @@ public class Province : IProvinceCollection
       }
    }
 
-   public bool HasFort15Th
+   public List<string> Buildings
    {
-      get => _hasFort15Th;
+      get => _buildings;
       set
       {
-         var old = _hasFort15Th;
-         _hasFort15Th = value;
+         var old = _buildings;
+         _buildings = value;
          if (Globals.State == State.Running)
-            RaiseProvinceHasFort15thChanged(Id, value, old, nameof(HasFort15Th));
+            RaiseProvinceBuildingsChanged(Id, value, old, nameof(Buildings));
       }
    } // TODO parse to check other buildings
 
@@ -391,6 +399,83 @@ public class Province : IProvinceCollection
       }
    }
 
+   public bool HasRevolt
+   {
+      get => _hasRevolt;
+      set
+      {
+         if (Globals.State == State.Running)
+            RaiseProvinceHasRevoltChanged(Id, value, _hasRevolt, nameof(HasRevolt));
+         _hasRevolt = value;
+      }
+   }
+
+   public string ReformationCenter
+   {
+      get => _reformationCenter;
+      set
+      {
+         if (Globals.State == State.Running)
+            RaiseProvinceReformationCenterChanged(Id, value, _reformationCenter, nameof(ReformationCenter));
+         _reformationCenter = value;
+      }
+   }
+
+   public Tag TradeCompany
+   {
+      get => _tradeCompany;
+      set
+      {
+         if (Globals.State == State.Running)
+            RaiseProvinceTradeCompanyChanged(Id, value, _tradeCompany, nameof(TradeCompany));
+         _tradeCompany = value;
+      }
+   }
+
+   public List<string> TradeCompanyInvestments
+   {
+      get => _tradeCompanyInvestments;
+      set
+      {
+         if (Globals.State == State.Running)
+            RaiseProvinceTradeCompanyInvestmentChanged(Id, value, _tradeCompanyInvestments, nameof(TradeCompanyInvestments));
+         _tradeCompanyInvestments = value;
+      }
+   }
+
+   public List<string> ProvinceModifiers
+   {
+      get => _provinceModifiers;
+      set
+      {
+         if (Globals.State == State.Running)
+            RaiseProvinceProvinceModifiersChanged(Id, value, _provinceModifiers, nameof(ProvinceModifiers));
+         _provinceModifiers = value;
+      }
+   }
+
+   public List<string> PermanentProvinceModifiers
+   {
+      get => _permanentProvinceModifiers;
+      set
+      {
+         if (Globals.State == State.Running)
+            RaiseProvincePermanentProvinceModifiersChanged(Id, value, _permanentProvinceModifiers, nameof(PermanentProvinceModifiers));
+         _permanentProvinceModifiers = value;
+      }
+   }
+
+   public List<string> ProvinceTriggeredModifiers
+   {
+      get => _provinceTriggeredModifiers;
+      set
+      {
+         if (Globals.State == State.Running)
+            RaiseProvinceProvinceTriggeredModifiersChanged(Id, value, _provinceTriggeredModifiers, nameof(ProvinceTriggeredModifiers));
+         _provinceTriggeredModifiers = value;
+      }
+   }
+
 
    #endregion
    // ======================================== Methods ========================================
@@ -418,7 +503,7 @@ public class Province : IProvinceCollection
       _history.Sort((x, y) => x.Date.CompareTo(y.Date));
    }
 
-   public object GetAttribute(string key)
+   public object? GetAttribute(string key)
    {
       return key.ToLower() switch
       {
@@ -445,7 +530,7 @@ public class Province : IProvinceCollection
          "capital" => Capital,
          "culture" => Culture,
          "religion" => Religion,
-         "has_fort_15th" => HasFort15Th,
+         "buildings" => Buildings,
          "is_hre" => IsHre,
          "is_city" => IsCity,
          "is_seat_in_parliament" => IsSeatInParliament,
@@ -453,45 +538,70 @@ public class Province : IProvinceCollection
          "history" => History,
          "id" => Id,
          "name" => GetLocalisation(),
-         _ => default!
+         _ => null
       };
    }
    public void SetAttribute(string name, string value)
    {
+      if (Globals.Buildings.Contains(name))
+      {
+         if (Parsing.YesNo(value))
+            Buildings.Add(name);
+         else
+            Buildings.Remove(name);
+         return;
+      }
+
+
       switch (name)
       {
          case "add_claim":
             Claims.Add(Tag.FromString(value));
             break;
+         case "remove_claim":
+            Claims.Remove(Tag.FromString(value));
+            break;
          case "add_core":
             Cores.Add(Tag.FromString(value));
+            break;
+         case "remove_core":
+            Cores.Remove(Tag.FromString(value));
             break;
          case "base_manpower":
             if (int.TryParse(value, out var manpower))
                BaseManpower = manpower;
             else
-            {
                Globals.ErrorLog.Write($"Could not parse base_manpower: {value} for province id {Id}");
-               BaseManpower = 1;
-            }
+            break;
+         case "add_base_manpower":
+            if (int.TryParse(value, out var manpow))
+               BaseManpower += manpow;
+            else
+               Globals.ErrorLog.Write($"Could not parse add_base_manpower: {value} for province id {Id}");
             break;
          case "base_production":
             if (int.TryParse(value, out var production))
                BaseProduction = production;
             else
-            {
                Globals.ErrorLog.Write($"Could not parse base_production: {value} for province id {Id}");
-               BaseProduction = 1;
-            }
+            break;
+         case "add_base_production":
+            if (int.TryParse(value, out var prod))
+               BaseProduction += prod;
+            else
+               Globals.ErrorLog.Write($"Could not parse add_base_production: {value} for province id {Id}");
             break;
          case "base_tax":
             if (int.TryParse(value, out var tax))
                BaseTax = tax;
             else
-            {
                Globals.ErrorLog.Write($"Could not parse base_tax: {value} for province id {Id}");
-               BaseTax = 1;
-            }
+            break;
+         case "add_base_tax":
+            if (int.TryParse(value, out var btax))
+               BaseTax += btax;
+            else
+               Globals.ErrorLog.Write($"Could not parse add_base_tax: {value} for province id {Id}");
             break;
          case "capital":
             Capital = value;
@@ -518,13 +628,7 @@ public class Province : IProvinceCollection
             if (int.TryParse(value, out var cost))
                ExtraCost = cost;
             else
-            {
                Globals.ErrorLog.Write($"Could not parse extra_cost: {value} for province id {Id}");
-               ExtraCost = 0;
-            }
-            break;
-         case "fort_15th":
-            HasFort15Th = Parsing.YesNo(value);
             break;
          case "hre":
             IsHre = Parsing.YesNo(value);
@@ -536,28 +640,19 @@ public class Province : IProvinceCollection
             if (int.TryParse(value, out var ferocity))
                NativeFerocity = ferocity;
             else
-            {
                Globals.ErrorLog.Write($"Could not parse native_ferocity: {value} for province id {Id}");
-               NativeFerocity = 0;
-            }
             break;
          case "native_hostileness":
             if (int.TryParse(value, out var hostileness))
                NativeHostileness = hostileness;
             else
-            {
                Globals.ErrorLog.Write($"Could not parse native_hostileness: {value} for province id {Id}");
-               NativeHostileness = 0;
-            }
             break;
          case "native_size":
             if (int.TryParse(value, out var size))
                NativeSize = size;
             else
-            {
                Globals.ErrorLog.Write($"Could not parse native_size: {value} for province id {Id}");
-               NativeSize = 0;
-            }
             break;
          case "owner":
             Owner = Tag.FromString(value);
@@ -578,40 +673,62 @@ public class Province : IProvinceCollection
             if (int.TryParse(value, out var unrest))
                RevoltRisk = unrest;
             else
-            {
                Globals.ErrorLog.Write($"Could not parse unrest: {value} for province id {Id}");
-               RevoltRisk = 0;
-            }
             break;
          case "shipyard":
             // TODO parse shipyard
+            break;
+         case "revolt":
+            if (string.IsNullOrWhiteSpace(value))
+               HasRevolt = true;
             break;
          case "revolt_risk":
             if (int.TryParse(value, out var risk))
                RevoltRisk = risk;
             else
-            {
                Globals.ErrorLog.Write($"Could not parse revolt_risk: {value} for province id {Id}");
-               RevoltRisk = 0;
-            }
             break;
          case "add_local_autonomy":
             if (int.TryParse(value, out var autonomy))
                LocalAutonomy = autonomy;
             else
-            {
                Globals.ErrorLog.Write($"Could not parse add_local_autonomy: {value} for province id {Id}");
-               LocalAutonomy = 0;
-            }
             break;
          case "add_nationalism":
             if (int.TryParse(value, out var nationalism))
                Nationalism = nationalism;
             else
-            {
                Globals.ErrorLog.Write($"Could not parse add_nationalism: {value} for province id {Id}");
-               Nationalism = 0;
-            }
+            break;
+         case "add_trade_company_investment":
+            TradeCompanyInvestments.Add(value);
+            break;
+         case "add_to_trade_company":
+            TradeCompany = Tag.FromString(value);
+            break;
+         case "reformation_center":
+            ReformationCenter = value;
+            break;
+         case "add_province_modifier":
+            ProvinceModifiers.Add(value);
+            break;
+         case "remove_province_modifier":
+            ProvinceModifiers.Remove(value);
+            break;
+         case "add_permanent_province_modifier":
+            PermanentProvinceModifiers.Add(value);
+            break;
+         case "remove_permanent_province_modifier":
+            PermanentProvinceModifiers.Remove(value);
+            break;
+         case "add_province_triggered_modifier":
+            ProvinceTriggeredModifiers.Add(value);
+            break;
+         case "remove_province_triggered_modifier":
+            ProvinceTriggeredModifiers.Remove(value);
+            break;
+         // Case to ignore stuff
+         case "set_global_flag":
             break;
          default:
             Globals.ErrorLog.Write($"Unknown attribute {name} for province id {Id}");
