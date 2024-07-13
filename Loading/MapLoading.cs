@@ -10,8 +10,7 @@ namespace Editor.Loading;
 
 public static class MapLoading
 {
-   public static (ConcurrentDictionary<Color, List<Point>>, ConcurrentDictionary<Color, List<Point>>, ConcurrentDictionary<Color, HashSet<Color>>) LoadMap(
-       ref Log loadingLog, string path)
+   public static (ConcurrentDictionary<Color, List<Point>>, ConcurrentDictionary<Color, List<Point>>, ConcurrentDictionary<Color, HashSet<Color>>) LoadMap(string path)
    {
       using var bmp = new Bitmap(path);
       var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
@@ -143,7 +142,7 @@ public static class MapLoading
 
       sw.Stop();
       Debug.WriteLine($"Map Loading took {sw.ElapsedMilliseconds}ms");
-      loadingLog.WriteTimeStamp("Pixel Initialisation", sw.ElapsedMilliseconds);
+      Globals.LoadingLog.WriteTimeStamp("Pixel Initialisation", sw.ElapsedMilliseconds);
 
       Globals.MapWidth = width;
       Globals.MapHeight = height;

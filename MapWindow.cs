@@ -12,8 +12,8 @@ namespace Editor
 {
    public partial class MapWindow : Form
    {
-      public readonly Log LoadingLog = new(@"C:\Users\david\Downloads", "Loading");
-      public readonly Log ErrorLog = new(@"C:\Users\david\Downloads", "Error");
+      //public readonly Log LoadingLog = new(@"C:\Users\david\Downloads", "Loading");
+      //public readonly Log ErrorLog = new(@"C:\Users\david\Downloads", "Error");
 
       public PannablePictureBox MapPictureBox = null!;
 
@@ -31,12 +31,13 @@ namespace Editor
          SuspendLayout();
          InitGui();
 
-         LoadingManager.LoadGameAndModDataToApplication(Project, ref LoadingLog, ref ErrorLog, this);
+         LoadingManager.LoadGameAndModDataToApplication(Project, this);
          LoadingManager.InitializeComponents(this);
 
          //resume gui updates
          ResumeLayout();
          // Enable the Application
+         Globals.LoadingLog.Close();
          Globals.State = State.Running;
       }
 

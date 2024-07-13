@@ -55,6 +55,10 @@ public static class Globals
       }
    }
 
+   // Logs
+   public static readonly Log LoadingLog = new(@"C:\Users\david\Downloads", "Loading"); //TODO: make this a setting and not hardcoded
+   public static readonly Log ErrorLog = new(@"C:\Users\david\Downloads", "Error"); //TODO: make this a setting and not hardcoded
+
    // Contains the current state of the application
    public static State State = State.Loading;
    public static MapModeRendering MapModeRendering { get; set; } = MapModeRendering.Live;

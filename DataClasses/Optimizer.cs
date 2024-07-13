@@ -1,8 +1,5 @@
 ﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
 using Editor.Helper;
 
 namespace Editor.DataClasses;
@@ -12,7 +9,7 @@ public static class Optimizer
    // Optimizes the provinces by copying the pixels and borders to one large array each and only saving pointers in the provinces
    // to where their points start and end. Also calculates the bounds of the provinces.
    // This allows for duplicate points in the BorderPixels array but increases performance.
-   public static void OptimizeProvinces(Province[] provinces, ConcurrentDictionary<Color, List<Point>> colorToProvId, ConcurrentDictionary<Color, List<Point>> colorToBorder, int pixelCount, ref Log log)
+   public static void OptimizeProvinces(Province[] provinces, ConcurrentDictionary<Color, List<Point>> colorToProvId, ConcurrentDictionary<Color, List<Point>> colorToBorder, int pixelCount)
    {
       var sw = new Stopwatch();
       sw.Start();
@@ -54,7 +51,7 @@ public static class Optimizer
 
       sw.Stop();
       //Debug.WriteLine($"OptimizeProvinces took {sw.ElapsedMilliseconds}ms");
-      log.WriteTimeStamp("OptimizeProvinces", sw.ElapsedMilliseconds);
+      Globals.LoadingLog.WriteTimeStamp("OptimizeProvinces", sw.ElapsedMilliseconds);
       //var elapsed = sw.ElapsedMilliseconds;
       //Debug.WriteLine($"Per Province Cost: {elapsed / (float)provinces.Length * 1000} µs");
 
@@ -69,7 +66,7 @@ public static class Optimizer
       colorToProvId.Clear();
    }
 
-   public static void OptimizeAdjacencies(ConcurrentDictionary<Color, HashSet<Color>> colorToAdj, ref Log log)
+   public static void OptimizeAdjacencies(ConcurrentDictionary<Color, HashSet<Color>> colorToAdj)
    {
       var sw = new Stopwatch();
       sw.Start();
@@ -80,7 +77,7 @@ public static class Optimizer
 
       sw.Stop();
       //Debug.WriteLine($"Adjacency calculation took {sw.ElapsedMilliseconds}ms");
-      log.WriteTimeStamp("Adjacency optimization", sw.ElapsedMilliseconds); Globals.AdjacentProvinces = adjacencyList;
+      Globals.LoadingLog.WriteTimeStamp("Adjacency optimization", sw.ElapsedMilliseconds); Globals.AdjacentProvinces = adjacencyList;
 
       // Free up memory from the ConcurrentDictionary
       colorToAdj.Clear();

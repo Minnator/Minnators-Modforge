@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using Editor.DataClasses;
 using Editor.Helper;
 
@@ -9,25 +7,25 @@ namespace Editor.Loading;
 public static class CultureLoading
 {
 
-   public static void LoadCultures(ModProject project, ref Log loadingLog, ref Log errorLog)
+   public static void LoadCultures(ModProject project)
    {
       var sw = Stopwatch.StartNew();
       FilesHelper.GetFilesUniquelyAndCombineToOne(project.ModPath, project.VanillaPath, out var culturesContent, "common", "cultures");
 
       var blocks = Parsing.GetNestedElementsIterative(0, ref culturesContent);
 
-      var (groups, cultures) = GetCultureGroups(ref blocks, ref project.ColorProvider, ref errorLog);
+      var (groups, cultures) = GetCultureGroups(ref blocks, ref project.ColorProvider);
       Globals.CultureGroups = groups;
       Globals.Cultures = cultures;
       sw.Stop();
-      loadingLog.WriteTimeStamp("Parsing cultures", sw.ElapsedMilliseconds);
+      Globals.LoadingLog.WriteTimeStamp("Parsing cultures", sw.ElapsedMilliseconds);
       sw.Restart();
-      AnalyzeCultures([.. groups.Values], ref errorLog);
+      AnalyzeCultures([.. groups.Values]);
       sw.Stop();
-      loadingLog.WriteTimeStamp("Analyzing cultures", sw.ElapsedMilliseconds);
+      Globals.LoadingLog.WriteTimeStamp("Analyzing cultures", sw.ElapsedMilliseconds);
    }
 
-   private static (Dictionary<string, CultureGroup>, Dictionary<string, Culture>) GetCultureGroups(ref List<IElement> blocks, ref ColorProviderRgb colorProvider, ref Log errorLog)
+   private static (Dictionary<string, CultureGroup>, Dictionary<string, Culture>) GetCultureGroups(ref List<IElement> blocks, ref ColorProviderRgb colorProvider)
    {
       Dictionary<string, Culture> cultureDict = [];
       Dictionary<string, CultureGroup> cultureGroupDict = [];
@@ -50,7 +48,7 @@ public static class CultureLoading
             }
             if (cult.Name.Equals("male_names") || cult.Name.Equals("female_names") || cult.Name.Equals("dynasty_names"))
             {
-               SetCultureGroupNames(ref group, cult, ref errorLog);
+               SetCultureGroupNames(ref group, cult);
             }
             else
             {
@@ -59,20 +57,20 @@ public static class CultureLoading
                   Color = colorProvider.GetRandomColor(),
                   CultureGroup = group.Name
                };
-               SetCultureAttributes(ref culture, cult.GetBlockElements, ref errorLog);
-               SetCultureContent(ref culture, cult.GetContentElements, ref errorLog);
+               SetCultureAttributes(ref culture, cult.GetBlockElements);
+               SetCultureContent(ref culture, cult.GetContentElements);
                group.Cultures.Add(culture);
                cultureDict.Add(culture.Name, culture);
             }
          }
-         SetCultureGroupAttributes(ref group, contents, ref errorLog);
+         SetCultureGroupAttributes(ref group, contents);
          cultureGroupDict.Add(group.Name, group);
       }
 
       return (cultureGroupDict, cultureDict);
    }
 
-   private static void SetCultureContent(ref Culture culture, List<Content> cultGetContentElements, ref Log errorLog)
+   private static void SetCultureContent(ref Culture culture, List<Content> cultGetContentElements)
    {
       if (cultGetContentElements.Count == 0)
          return;
@@ -89,7 +87,7 @@ public static class CultureLoading
       }
    }
 
-   private static void SetCultureGroupNames(ref CultureGroup group, Block block, ref Log errorLog)
+   private static void SetCultureGroupNames(ref CultureGroup group, Block block)
    {
       if (block.Blocks.Count == 0)
          return;
@@ -108,7 +106,7 @@ public static class CultureLoading
       }
    }
 
-   private static void SetCultureGroupAttributes(ref CultureGroup group, List<Content> contents, ref Log errorLog)
+   private static void SetCultureGroupAttributes(ref CultureGroup group, List<Content> contents)
    {
       foreach (var content in contents)
       {
@@ -132,14 +130,14 @@ public static class CultureLoading
                   group.ProvinceModifiers = Parsing.GetKeyValueList(kvp.Value);
                   break;
                default:
-                  errorLog.Write($"Unknown Group in a culture group file:{kvp.Key}");
+                  Globals.ErrorLog.Write($"Unknown Group in a culture group file:{kvp.Key}");
                   break;
             }
          }
       }
    }
 
-   private static void SetCultureAttributes(ref Culture culture, List<Block> blocks, ref Log errorLog)
+   private static void SetCultureAttributes(ref Culture culture, List<Block> blocks)
    {
       foreach (var block in blocks)
       {
@@ -165,13 +163,13 @@ public static class CultureLoading
                culture.ProvinceModifiers = Parsing.GetKeyValueList(removed);
                break;
             default:
-               errorLog.Write($"Unknown Group in a cultures file:{block.Name}");
+               Globals.ErrorLog.Write($"Unknown Group in a cultures file:{block.Name}");
                break;
          }
       }
    }
 
-   private static void AnalyzeCultures(List<CultureGroup> groups, ref Log errorLog)
+   private static void AnalyzeCultures(List<CultureGroup> groups)
    {
       HashSet<string> cultureNames = [];
       HashSet<string> cultureGroupNames = [];
@@ -179,12 +177,12 @@ public static class CultureLoading
       foreach (var group in groups)
       {
          if (!cultureGroupNames.Add(group.Name))
-            errorLog.Write($"Duplicate culture group name: {group.Name}");
+            Globals.ErrorLog.Write($"Duplicate culture group name: {group.Name}");
 
          foreach (var culture in group.Cultures)
          {
             if (!cultureNames.Add(culture.Name))
-               errorLog.Write($"Duplicate culture name: {culture.Name}");
+               Globals.ErrorLog.Write($"Duplicate culture name: {culture.Name}");
 
             HashSet<string> duplicateNames = [];
             List<string> nonUniqueNames = [];
@@ -204,7 +202,7 @@ public static class CultureLoading
                   nonUniqueNames.Add(dynasty);
             }
             if (nonUniqueNames.Count > 0)
-               errorLog.Write($"Duplicate names in culture {culture.Name}: {DebugPrints.GetListAsString(nonUniqueNames)}");
+               Globals.ErrorLog.Write($"Duplicate names in culture {culture.Name}: {DebugPrints.GetListAsString(nonUniqueNames)}");
          }
       }
    }

@@ -8,7 +8,7 @@ namespace Editor.Loading;
 
 public static class DefaultMapLoading
 {
-   public static void Load(string folder, ref Log loadingLog)
+   public static void Load(string folder)
    {
       var sw = new Stopwatch();
       sw.Start();
@@ -61,7 +61,7 @@ public static class DefaultMapLoading
       Globals.LandProvinceIds = [.. landProvinces];
 
       sw.Stop();
-      loadingLog.WriteTimeStamp("Parsing default.map", sw.ElapsedMilliseconds);
+      Globals.LoadingLog.WriteTimeStamp("Parsing default.map", sw.ElapsedMilliseconds);
    }
 
    private static void AddProvincesToDictionary(string provinceList, HashSet<int> hashSet)

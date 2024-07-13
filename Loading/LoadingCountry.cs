@@ -12,7 +12,7 @@ namespace Editor.Loading
    {
       private static readonly Regex CountryRegex = new(@"(?<tag>[A-Z]{3})\s*=\s*""(?<path>[^""]+)""", RegexOptions.Compiled);
 
-      public static void LoadCountries(ModProject project, ref Log loadingLog, ref Log errorLog)
+      public static void LoadCountries(ModProject project)
       {
          var sw = Stopwatch.StartNew();
          FilesHelper.GetFilesUniquelyAndCombineToOne(project.ModPath, project.VanillaPath, out var content, "common", "country_tags");
@@ -26,7 +26,7 @@ namespace Editor.Loading
             var tag = new Tag(match.Groups["tag"].Value);
             if (countries.ContainsKey(tag))
             {
-               errorLog.Write($"Duplicate country tag: {tag}");
+               Globals.ErrorLog.Write($"Duplicate country tag: {tag}");
                continue;
             }
             countries.Add(tag, new(tag, match.Groups["path"].Value));
@@ -34,18 +34,18 @@ namespace Editor.Loading
 
          Globals.Countries = countries;
 
-         ParseCountryAttributes(project, ref loadingLog, ref errorLog);
+         ParseCountryAttributes(project);
          sw.Stop();
-         loadingLog.WriteTimeStamp("CountryLoading", sw.ElapsedMilliseconds);
+         Globals.LoadingLog.WriteTimeStamp("CountryLoading", sw.ElapsedMilliseconds);
 
          // Load country history
          sw.Restart();
-         LoadCountryHistories(project, ref loadingLog, ref errorLog);
+         LoadCountryHistories(project);
          sw.Stop();
-         loadingLog.WriteTimeStamp("Loading CountryHistories", sw.ElapsedMilliseconds);
+         Globals.LoadingLog.WriteTimeStamp("Loading CountryHistories", sw.ElapsedMilliseconds);
       }
 
-      private static void LoadCountryHistories(ModProject project, ref Log loadingLog, ref Log errorLog)
+      private static void LoadCountryHistories(ModProject project)
       {
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely(project.ModPath, project.VanillaPath, "history", "countries");
 
@@ -59,25 +59,25 @@ namespace Editor.Loading
 
             foreach (var element in elements)
             {
-               AnalyzeCountryStuff(element, ref errorLog, ref country);
+               AnalyzeCountryStuff(element, ref country);
             }
          }
       }
 
-      private static void AnalyzeCountryStuff(IElement element, ref Log errorLog, ref Country country)
+      private static void AnalyzeCountryStuff(IElement element, ref Country country)
       {
          if (element is Block block)
          {
-            ParseHistoryBlock(block, out var che, ref errorLog);
+            ParseHistoryBlock(block, out var che);
             country.History.Add(che);
          }
          else
          {
-            ParseCountryHistoryAttributes((Content)element, ref country, ref errorLog);
+            ParseCountryHistoryAttributes((Content)element, ref country);
          }
       }
 
-      private static void ParseCountryHistoryAttributes(Content content, ref Country country, ref Log errorLog)
+      private static void ParseCountryHistoryAttributes(Content content, ref Country country)
       {
          foreach (var kvp in Parsing.GetKeyValueList(content.Value))
          {
@@ -123,7 +123,7 @@ namespace Editor.Loading
                   if (int.TryParse(val, out var value))
                      country.Capital = value;
                   else
-                     errorLog.Write($"Invalid capital in {country.Tag}: {val}");
+                     Globals.ErrorLog.Write($"Invalid capital in {country.Tag}: {val}");
                   break;
                case "add_government_reform":
                   country.GovernmentReforms.Add(val);
@@ -135,7 +135,7 @@ namespace Editor.Loading
                   if (int.TryParse(val, out var rank))
                      country.GovernmentRank = rank;
                   else
-                     errorLog.Write($"Invalid government rank in {country.Tag}: {val}");
+                     Globals.ErrorLog.Write($"Invalid government rank in {country.Tag}: {val}");
                   break;
                case "primary_culture":
                   country.PrimaryCulture = val;
@@ -144,31 +144,31 @@ namespace Editor.Loading
                   if (int.TryParse(val, out var capProv))
                      country.FixedCapital = capProv;
                   else
-                     errorLog.Write($"Invalid fixed capital in {country.Tag}: {val}");
+                     Globals.ErrorLog.Write($"Invalid fixed capital in {country.Tag}: {val}");
                   break;
                case "mercantilism":
                   if (int.TryParse(val, out var mercantilism))
                      country.Mercantilism = mercantilism;
                   else
-                     errorLog.Write($"Invalid mercantilism in {country.Tag}: {val}");
+                     Globals.ErrorLog.Write($"Invalid mercantilism in {country.Tag}: {val}");
                   break;
                case "add_army_tradition":
                   if (int.TryParse(val, out var armyTradition))
                      country.ArmyTradition = armyTradition;
                   else
-                     errorLog.Write($"Invalid army tradition in {country.Tag}: {val}");
+                     Globals.ErrorLog.Write($"Invalid army tradition in {country.Tag}: {val}");
                   break;
                case "add_army_professionalism":
                   if (float.TryParse(val, out var armyProfessionalism))
                      country.ArmyProfessionalism = armyProfessionalism;
                   else
-                     errorLog.Write($"Invalid army professionalism in {country.Tag}: {val}");
+                     Globals.ErrorLog.Write($"Invalid army professionalism in {country.Tag}: {val}");
                   break;
                case "add_prestige":
                   if (float.TryParse(val, out var prestige))
                      country.Prestige = prestige;
                   else
-                     errorLog.Write($"Invalid prestige in {country.Tag}: {val}");
+                     Globals.ErrorLog.Write($"Invalid prestige in {country.Tag}: {val}");
                   break;
                case "unlock_cult":
                   country.UnlockedCults.Add(val);
@@ -183,13 +183,13 @@ namespace Editor.Loading
                   //TODO
                   break;
                default:
-                  errorLog.Write($"Unknown key in toppers {country.Tag}: {kvp.Key}");
+                  Globals.ErrorLog.Write($"Unknown key in toppers {country.Tag}: {kvp.Key}");
                   break;
             }
          }
       }
 
-      private static void ParseHistoryBlock(Block block, out CountryHistoryEntry che, ref Log errorLog)
+      private static void ParseHistoryBlock(Block block, out CountryHistoryEntry che)
       {
          che = null!;
 
@@ -200,11 +200,11 @@ namespace Editor.Loading
          }
 
          che = new(date);
-         AssignHistoryEntryAttributes(ref che, block.Blocks, ref errorLog);
-         AssignHistoryEntryContent(ref che, block.GetContentElements, ref errorLog);
+         AssignHistoryEntryAttributes(ref che, block.Blocks);
+         AssignHistoryEntryContent(ref che, block.GetContentElements);
       }
 
-      private static void AssignHistoryEntryAttributes(ref CountryHistoryEntry che, List<IElement> elements, ref Log errorLog)
+      private static void AssignHistoryEntryAttributes(ref CountryHistoryEntry che, List<IElement> elements)
       {
          if (elements.Count == 0)
             return;
@@ -222,23 +222,23 @@ namespace Editor.Loading
                case "heir":
                case "queen":
                case "monarch_consort":
-                  Parsing.ParsePersonFromString(block.GetContentElements[0].Value, out var person, ref errorLog);
+                  Parsing.ParsePersonFromString(block.GetContentElements[0].Value, out var person);
                   che.Persons.Add(person);
                   break;
                case "leader":
-                  Parsing.ParseLeaderFromString(block.GetContentElements[0].Value, ref errorLog, out var leader);
+                  Parsing.ParseLeaderFromString(block.GetContentElements[0].Value, out var leader);
                   che.Leaders.Add(leader);
                   break;
                default:
                   if (Parsing.ParseDynamicContent(block, out _))
                      break;
-                  errorLog.Write($"Unknown block in history entry: {block.Name}");
+                  Globals.ErrorLog.Write($"Unknown block in history entry: {block.Name}");
                   break;
             }
          }
       }
 
-      private static void AssignHistoryEntryContent(ref CountryHistoryEntry che, List<Content> element, ref Log errorLog)
+      private static void AssignHistoryEntryContent(ref CountryHistoryEntry che, List<Content> element)
       {
          if (element.Count == 0)
             return;
@@ -247,7 +247,7 @@ namespace Editor.Loading
             var kvp = Parsing.GetKeyValueList(content.Value);
             if (kvp.Count < 1)
             {
-               errorLog.Write($"Invalid key value pair in history entry: {content.Value}");
+               Globals.ErrorLog.Write($"Invalid key value pair in history entry: {content.Value}");
                continue;
             }
             che.Effects.AddRange(kvp);
@@ -256,11 +256,9 @@ namespace Editor.Loading
 
       #region CountryTags and non history data
 
-      private static void ParseCountryAttributes(ModProject project, ref Log loadingLog, ref Log errorLog)
+      private static void ParseCountryAttributes(ModProject project)
       {
          var sw = Stopwatch.StartNew();
-
-         var log = errorLog;
 
          foreach (var country in Globals.Countries.Values)
          {
@@ -268,20 +266,20 @@ namespace Editor.Loading
             Parsing.RemoveCommentFromMultilineString(ref content, out var removed);
             var blocks = Parsing.GetNestedElementsIterative(0, ref removed);
 
-            AssignCountryAttributes(country, ref blocks, log);
+            AssignCountryAttributes(country, ref blocks);
          }
 
          sw.Stop();
-         loadingLog.WriteTimeStamp("CountryAttributes", sw.ElapsedMilliseconds);
+         Globals.LoadingLog.WriteTimeStamp("CountryAttributes", sw.ElapsedMilliseconds);
       }
 
-      private static void AssignCountryAttributes(Country country, ref List<IElement> blocks, Log errorLog)
+      private static void AssignCountryAttributes(Country country, ref List<IElement> blocks)
       {
          foreach (var element in blocks)
          {
             if (element is not Block block)
             {
-               AssignCountryContent(country, (Content)element, ref errorLog);
+               AssignCountryContent(country, (Content)element);
                continue;
             }
 
@@ -290,7 +288,7 @@ namespace Editor.Loading
                case "color":
                   if (block.Blocks.Count != 1)
                   {
-                     errorLog.Write($"Invalid color block in {country.Tag} at [color]");
+                     Globals.ErrorLog.Write($"Invalid color block in {country.Tag} at [color]");
                      break;
                   }
                   country.Color = Parsing.ParseColor(((Content)block.Blocks[0]).Value);
@@ -298,7 +296,7 @@ namespace Editor.Loading
                case "revolutionary_colors":
                   if (block.Blocks.Count != 1)
                   {
-                     errorLog.Write($"Invalid revolutionary_colors block in {country.Tag} at [revolutionary_colors]");
+                     Globals.ErrorLog.Write($"Invalid revolutionary_colors block in {country.Tag} at [revolutionary_colors]");
                      break;
                   }
                   country.RevolutionaryColor = Parsing.ParseColor(((Content)block.Blocks[0]).Value);
@@ -335,13 +333,13 @@ namespace Editor.Loading
                      country.LeaderNames.AddRange(Parsing.GetStringList(name.Value));
                   break;
                default:
-                  errorLog.Write($"Unknown block in {country.Tag}: {block.Name}");
+                  Globals.ErrorLog.Write($"Unknown block in {country.Tag}: {block.Name}");
                   break;
             }
          }
       }
 
-      private static void AssignCountryContent(Country country, Content element, ref Log errorLog)
+      private static void AssignCountryContent(Country country, Content element)
       {
          foreach (var kvp in Parsing.GetKeyValueList(element.Value))
          {
@@ -370,7 +368,7 @@ namespace Editor.Loading
                   country.SpecialUnitCulture = kvp.Value;
                   break;
                default:
-                  errorLog.Write($"Unknown key in {country.Tag}: {kvp.Key}");
+                  Globals.ErrorLog.Write($"Unknown key in {country.Tag}: {kvp.Key}");
                   break;
             }
          }

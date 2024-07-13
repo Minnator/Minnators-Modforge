@@ -14,7 +14,7 @@ public static class RegionLoading
    private static string _pattern =
       @"(?<regionName>[A-Za-z_]+)\s*=\s*{\s*areas\s*=\s*{\s*(?<areas>(?:\s*[A-Za-z_]+\s*)+)\s*}\s*(?<monsoons>(?:monsoon\s*=\s*{\s*(?:\s*[0-9.]+\s*)+\s*}\s*)*)}";
 
-   public static void Load(string folder, ColorProviderRgb colorProvider, ref Log log)
+   public static void Load(string folder, ColorProviderRgb colorProvider)
    {
       var sw = new Stopwatch();
       sw.Start();
@@ -66,6 +66,6 @@ public static class RegionLoading
 
       Globals.Regions = regionDictionary;
       sw.Stop();
-      log.WriteTimeStamp("Parsing regions", sw.ElapsedMilliseconds);
+      Globals.LoadingLog.WriteTimeStamp("Parsing regions", sw.ElapsedMilliseconds);
    }
 }

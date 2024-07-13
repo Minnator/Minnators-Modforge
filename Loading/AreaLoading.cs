@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
+﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Editor.DataClasses;
 using Editor.Helper;
@@ -9,7 +7,7 @@ namespace Editor.Loading;
 
 public static class AreaLoading
 {
-   public static void Load(string folder, ColorProviderRgb provider, ref Log log)
+   public static void Load(string folder, ColorProviderRgb provider)
    {
       var sw = Stopwatch.StartNew();
       var path = Path.Combine(folder, "map", "area.txt");
@@ -38,7 +36,7 @@ public static class AreaLoading
       Globals.Areas = areaDictionary;
 
       sw.Stop();
-      log.WriteTimeStamp("Parsing Areas", sw.ElapsedMilliseconds);
+      Globals.LoadingLog.WriteTimeStamp("Parsing Areas", sw.ElapsedMilliseconds);
    }
 
 }

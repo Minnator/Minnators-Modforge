@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
+﻿using System.Diagnostics;
 using Editor.DataClasses;
 using Editor.Helper;
 
@@ -8,28 +6,26 @@ namespace Editor.Loading;
 
 public static class LoadingManager
 {
-   public static void LoadGameAndModDataToApplication(ModProject project, ref Log loadingLog, ref Log errorLog, MapWindow mw)
+   public static void LoadGameAndModDataToApplication(ModProject project, MapWindow mw)
    {
 
-      LoadDefinitionAndMap(ref loadingLog, project);
-      DefaultMapLoading.Load(project.VanillaPath, ref loadingLog);
-      AreaLoading.Load(project.VanillaPath, project.ColorProvider, ref loadingLog);
-      RegionLoading.Load(project.VanillaPath, project.ColorProvider, ref loadingLog);
-      SuperRegionLoading.Load(project.VanillaPath, project.ColorProvider, ref loadingLog);
-      ContinentLoading.Load(project.VanillaPath, project.ColorProvider, ref loadingLog);
-      LocalisationLoading.Load(project.ModPath, project.VanillaPath, project.Language, ref loadingLog);
-      ProvinceParser.ParseAllUniqueProvinces(project.ModPath, project.VanillaPath, ref loadingLog, ref errorLog);
-      CultureLoading.LoadCultures(project, ref loadingLog, ref errorLog);
-      CountryLoading.LoadCountries(project, ref loadingLog, ref errorLog);
+      LoadDefinitionAndMap(project);
+      DefaultMapLoading.Load(project.VanillaPath);
+      AreaLoading.Load(project.VanillaPath, project.ColorProvider);
+      RegionLoading.Load(project.VanillaPath, project.ColorProvider);
+      SuperRegionLoading.Load(project.VanillaPath, project.ColorProvider);
+      ContinentLoading.Load(project.VanillaPath, project.ColorProvider);
+      LocalisationLoading.Load(project.ModPath, project.VanillaPath, project.Language);
+      ProvinceParser.ParseAllUniqueProvinces(project.ModPath, project.VanillaPath);
+      CultureLoading.LoadCultures(project);
+      CountryLoading.LoadCountries(project);
 
       DebugPrints.PrintCountriesBasic();
 
       // MUST BE LAST in the loading sequence
-      InitMapModes(ref loadingLog, mw);
+      InitMapModes(mw);
       
       GC.Collect();
-      loadingLog.Close();
-      loadingLog = null!;
    }
 
    public static void InitializeComponents(MapWindow mw)
@@ -43,7 +39,7 @@ public static class LoadingManager
    }
 
 
-   private static void InitMapModes(ref Log log, MapWindow mw)
+   private static void InitMapModes(MapWindow mw)
    {
       var sw = Stopwatch.StartNew();
       Globals.MapModeManager = new(mw.MapPictureBox); // Initialize the MapModeManager
@@ -51,22 +47,22 @@ public static class LoadingManager
       mw.MapModeComboBox.Items.Clear();
       mw.MapModeComboBox.Items.AddRange([.. Globals.MapModeManager.GetMapModeNames()]);
       sw.Stop();
-      log.WriteTimeStamp("Initializing MapModes", sw.ElapsedMilliseconds);
+      Globals.LoadingLog.WriteTimeStamp("Initializing MapModes", sw.ElapsedMilliseconds);
       sw.Restart();
       Globals.MapModeManager.SetCurrentMapMode("Provinces"); // Default map mode
       sw.Stop();
-      log.WriteTimeStamp("Setting default map mode", sw.ElapsedMilliseconds);
+      Globals.LoadingLog.WriteTimeStamp("Setting default map mode", sw.ElapsedMilliseconds);
    }
 
 
-   private static void LoadDefinitionAndMap(ref Log loadingLog, ModProject project)
+   private static void LoadDefinitionAndMap(ModProject project)
    {
-      var provinces = DefinitionLoading.LoadDefinition([.. File.ReadAllLines(Path.Combine(project.VanillaPath, "map", "definition.csv"))], ref loadingLog);
+      var provinces = DefinitionLoading.LoadDefinition([.. File.ReadAllLines(Path.Combine(project.VanillaPath, "map", "definition.csv"))]);
       Globals.MapPath = Path.Combine(project.VanillaPath, "map", "provinces.bmp");
-      var (colorToProvId, colorToBorder, adjacency) = MapLoading.LoadMap(ref loadingLog, Globals.MapPath);
+      var (colorToProvId, colorToBorder, adjacency) = MapLoading.LoadMap(Globals.MapPath);
 
-      Optimizer.OptimizeProvinces(provinces, colorToProvId, colorToBorder, project.MapSize.Width * project.MapSize.Height, ref loadingLog);
+      Optimizer.OptimizeProvinces(provinces, colorToProvId, colorToBorder, project.MapSize.Width * project.MapSize.Height);
 
-      Optimizer.OptimizeAdjacencies(adjacency, ref loadingLog);
+      Optimizer.OptimizeAdjacencies(adjacency);
    }
 }

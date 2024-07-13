@@ -14,7 +14,7 @@ namespace Editor.Loading;
 
 public class LocalisationLoading
 {
-   public static void Load(string modFolder, string vanillaFolder, Language language, ref Log log)
+   public static void Load(string modFolder, string vanillaFolder, Language language)
    {
       var sw = Stopwatch.StartNew();
       var modLocPath = Path.Combine(modFolder, "localisation");
@@ -74,7 +74,7 @@ public class LocalisationLoading
       Globals.Localisation = loc;
       Globals.LocalisationCollisions = collisions;
       sw.Stop();
-      log.WriteTimeStamp($"Localisation loaded [{collisions.Count}] collisions", sw.ElapsedMilliseconds);
+      Globals.LoadingLog.WriteTimeStamp($"Localisation loaded [{collisions.Count}] collisions", sw.ElapsedMilliseconds);
    }
 
    private static void BulkLoading(string modFolder, string vanillaFolder, string language, ref Log loadingLog)

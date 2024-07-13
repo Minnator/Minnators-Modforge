@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
+﻿using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
 using Editor.DataClasses;
@@ -12,7 +10,7 @@ public static class ContinentLoading
 {
    private static readonly string _pattern = @"(?<name>[A-Za-z_]*)\s*=\s*{(?<ids>(?:\s*[0-9]+\s*)*)}";
 
-   public static void Load(string folder, ColorProviderRgb colorProvider, ref Log log)
+   public static void Load(string folder, ColorProviderRgb colorProvider)
    {
       var sw = Stopwatch.StartNew();
       var path = Path.Combine(folder, "map", "continent.txt");
@@ -39,6 +37,6 @@ public static class ContinentLoading
       Globals.Continents = continentDictionary;
 
       sw.Stop();
-      log.WriteTimeStamp("Parsing Continents", sw.ElapsedMilliseconds);
+      Globals.LoadingLog.WriteTimeStamp("Parsing Continents", sw.ElapsedMilliseconds);
    }
 }

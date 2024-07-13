@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
-using Editor.Helper;
-using System.Diagnostics;
-using System.IO;
+﻿using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using Editor.DataClasses;
+using Editor.Helper;
 
 namespace Editor.Loading;
 
@@ -14,7 +11,7 @@ public static class SuperRegionLoading
    private const string MAIN_PATTER = @"(?<name>[a-zA-Z_]*)\s*=\s*{\s*(?<regions>[\w\s]+)\s*\s*}";
 
 
-   public static void Load(string folder, ColorProviderRgb colorProvider, ref Log log)
+   public static void Load(string folder, ColorProviderRgb colorProvider)
    {
       var sw = Stopwatch.StartNew();
       var path = Path.Combine(folder, "map", "superregion.txt");
@@ -62,6 +59,6 @@ public static class SuperRegionLoading
       Globals.SuperRegions = superRegionDictionary;
 
       sw.Stop();
-      log.WriteTimeStamp("Parsing Super Regions", sw.ElapsedMilliseconds);
+      Globals.LoadingLog.WriteTimeStamp("Parsing Super Regions", sw.ElapsedMilliseconds);
    }
 }

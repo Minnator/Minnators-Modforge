@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using Editor.Helper;
 using Editor.Interfaces;
 using static Editor.Helper.ProvinceEventHandler;
 
@@ -37,7 +38,7 @@ public class Province : IProvinceCollection
    private List<Tag> _cores = [];
    private List<string> _discoveredBy = [];
    private TradeGood _tradeGood;
-   private List<HistoryEntryOld> _history = [];
+   private List<HistoryEntry> _history = [];
    private List<MultilineAttribute> _multilineAttributes = [];
 
    #region ManagementData
@@ -369,10 +370,10 @@ public class Province : IProvinceCollection
       }
    }
 
-   public List<HistoryEntryOld> History
+   public List<HistoryEntry> History
    {
       get => _history;
-      set
+      private set
       {
          if (Globals.State == State.Running)
             RaiseProvinceHistoryChanged(Id, value, _history, nameof(History));
@@ -406,22 +407,19 @@ public class Province : IProvinceCollection
    #endregion
    // ======================================== Methods ========================================
 
-   public Tag GetOwnerForDate
+   public void LoadHistoryForDate(DateTime date)
    {
-      get
+      // History Entries are sorted by default. Se w can load entries as long as the date is less than the current date
+      foreach (var he in _history)
       {
-         foreach (var entry in History)
-         {
-            if (entry.Date > Globals.Date)
-               continue;
-         }
-         return Owner; //TODO wrong return
+         if (he.Date <= date)
+            he.Apply(this);
+         else
+            break;
       }
    }
-
-
-
-   public void AddHistoryEntry(HistoryEntryOld entryOld)
+   
+   public void AddHistoryEntry(HistoryEntry entryOld)
    {
       _history.Add(entryOld);
       SortHistoryEntriesByDate();
@@ -470,6 +468,168 @@ public class Province : IProvinceCollection
          "name" => GetLocalisation(),
          _ => default!
       };
+   }
+   public void SetAttribute(string name, string value)
+   {
+      switch (name)
+      {
+         case "add_claim":
+            Claims.Add(Tag.FromString(value));
+            break;
+         case "add_core":
+            Cores.Add(Tag.FromString(value));
+            break;
+         case "base_manpower":
+            if (int.TryParse(value, out var manpower))
+               BaseManpower = manpower;
+            else
+            {
+               Globals.ErrorLog.Write($"Could not parse base_manpower: {value} for province id {Id}");
+               BaseManpower = 1;
+            }
+            break;
+         case "base_production":
+            if (int.TryParse(value, out var production))
+               BaseProduction = production;
+            else
+            {
+               Globals.ErrorLog.Write($"Could not parse base_production: {value} for province id {Id}");
+               BaseProduction = 1;
+            }
+            break;
+         case "base_tax":
+            if (int.TryParse(value, out var tax))
+               BaseTax = tax;
+            else
+            {
+               Globals.ErrorLog.Write($"Could not parse base_tax: {value} for province id {Id}");
+               BaseTax = 1;
+            }
+            break;
+         case "capital":
+            Capital = value;
+            break;
+         case "center_of_trade":
+            if (int.TryParse(value, out var cot))
+               CenterOfTrade = cot;
+            else
+            {
+               Globals.ErrorLog.Write($"Could not parse center_of_trade: {value} for province id {Id}");
+               CenterOfTrade = 0;
+            }
+            break;
+         case "controller":
+            Controller = Tag.FromString(value);
+            break;
+         case "culture":
+            Culture = value;
+            break;
+         case "discovered_by":
+            DiscoveredBy.Add(value);
+            break;
+         case "extra_cost":
+            if (int.TryParse(value, out var cost))
+               ExtraCost = cost;
+            else
+            {
+               Globals.ErrorLog.Write($"Could not parse extra_cost: {value} for province id {Id}");
+               ExtraCost = 0;
+            }
+            break;
+         case "fort_15th":
+            HasFort15Th = Parsing.YesNo(value);
+            break;
+         case "hre":
+            IsHre = Parsing.YesNo(value);
+            break;
+         case "is_city":
+            IsCity = Parsing.YesNo(value);
+            break;
+         case "native_ferocity":
+            if (int.TryParse(value, out var ferocity))
+               NativeFerocity = ferocity;
+            else
+            {
+               Globals.ErrorLog.Write($"Could not parse native_ferocity: {value} for province id {Id}");
+               NativeFerocity = 0;
+            }
+            break;
+         case "native_hostileness":
+            if (int.TryParse(value, out var hostileness))
+               NativeHostileness = hostileness;
+            else
+            {
+               Globals.ErrorLog.Write($"Could not parse native_hostileness: {value} for province id {Id}");
+               NativeHostileness = 0;
+            }
+            break;
+         case "native_size":
+            if (int.TryParse(value, out var size))
+               NativeSize = size;
+            else
+            {
+               Globals.ErrorLog.Write($"Could not parse native_size: {value} for province id {Id}");
+               NativeSize = 0;
+            }
+            break;
+         case "owner":
+            Owner = Tag.FromString(value);
+            break;
+         case "religion":
+            Religion = value;
+            break;
+         case "seat_in_parliament":
+            IsSeatInParliament = Parsing.YesNo(value);
+            break;
+         case "trade_goods":
+            TradeGood = TradeGoodHelper.FromString(value);
+            break;
+         case "tribal_owner":
+            TribalOwner = Tag.FromString(value);
+            break;
+         case "unrest":
+            if (int.TryParse(value, out var unrest))
+               RevoltRisk = unrest;
+            else
+            {
+               Globals.ErrorLog.Write($"Could not parse unrest: {value} for province id {Id}");
+               RevoltRisk = 0;
+            }
+            break;
+         case "shipyard":
+            // TODO parse shipyard
+            break;
+         case "revolt_risk":
+            if (int.TryParse(value, out var risk))
+               RevoltRisk = risk;
+            else
+            {
+               Globals.ErrorLog.Write($"Could not parse revolt_risk: {value} for province id {Id}");
+               RevoltRisk = 0;
+            }
+            break;
+         case "add_local_autonomy":
+            if (int.TryParse(value, out var autonomy))
+               LocalAutonomy = autonomy;
+            else
+            {
+               Globals.ErrorLog.Write($"Could not parse add_local_autonomy: {value} for province id {Id}");
+               LocalAutonomy = 0;
+            }
+            break;
+         case "add_nationalism":
+            if (int.TryParse(value, out var nationalism))
+               Nationalism = nationalism;
+            else
+            {
+               Globals.ErrorLog.Write($"Could not parse add_nationalism: {value} for province id {Id}");
+               Nationalism = 0;
+            }
+            break;
+         default:
+            Globals.ErrorLog.Write($"Unknown attribute {name} for province id {Id}");
+            break;
+      }
    }
 
    public int GetTotalDevelopment()
@@ -531,4 +691,5 @@ public class Province : IProvinceCollection
       }
       return provinces;
    }
+
 }

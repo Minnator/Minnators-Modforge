@@ -30,14 +30,17 @@ namespace Editor.DataClasses
 
    public abstract class Effect(string name, string value, EffectValueType type)
    {
-      public string Name { get; set; } = name;
+      public string Name { get; set; } = name.ToLower();
       public string Value { get; set; } = value;
       public EffectValueType ValueType { get; set; } = type;
       public virtual bool IsComplex => false;
 
       public virtual bool ExecuteProvince(Province province)
       {
-         //TODO implement this
+         if (Globals.UniqueAttributeKeys.Contains(name))
+         {
+            province.SetAttribute(Name, Value);
+         }
          return false;
       }
 

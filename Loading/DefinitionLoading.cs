@@ -12,7 +12,7 @@ namespace Editor.Loading;
 public static class DefinitionLoading
 {
 
-   public static Province[] LoadDefinition(List<string> lines, ref Log loadingLog)
+   public static Province[] LoadDefinition(List<string> lines)
    {
       var sw = Stopwatch.StartNew();
       var provinces = new Dictionary<int, Province>(lines.Count);
@@ -60,7 +60,7 @@ public static class DefinitionLoading
       }
 
       sw.Stop();
-      loadingLog.WriteTimeStamp("DefinitionLoading", sw.ElapsedMilliseconds);
+      Globals.LoadingLog.WriteTimeStamp("DefinitionLoading", sw.ElapsedMilliseconds);
 
       return [.. provinces.Values];
    }

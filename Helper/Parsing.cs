@@ -503,7 +503,7 @@ public static class Parsing
       }
    }
 
-   public static void ParsePersonFromString(string content, out Person person, ref Log errorLog)    
+   public static void ParsePersonFromString(string content, out Person person)    
    {
       person = new();
       var kvps = GetKeyValueList(content);
@@ -539,26 +539,26 @@ public static class Parsing
             case "claim":
                if (int.TryParse(val, out var claimStrength))
                   person.ClaimStrength = claimStrength;
-               else 
-                  errorLog.Write("Could not parse claim strength: " + val);
+               else
+                  Globals.ErrorLog.Write("Could not parse claim strength: " + val);
                break;
             case "adm":
                if (int.TryParse(val, out var adm))
                   person.Adm = adm;
-               else 
-                  errorLog.Write("Could not parse adm: " + val);
+               else
+                  Globals.ErrorLog.Write("Could not parse adm: " + val);
                break;
             case "dip":
                if (int.TryParse(val, out var dip))
                   person.Dip = dip;
-               else 
-                  errorLog.Write("Could not parse dip: " + val);
+               else
+                  Globals.ErrorLog.Write("Could not parse dip: " + val);
                break;
             case "mil":
                if (int.TryParse(val, out var mil))
                   person.Mil = mil;
-               else 
-                  errorLog.Write("Could not parse mil: " + val);
+               else
+                  Globals.ErrorLog.Write("Could not parse mil: " + val);
                break;
             case "female":
                person.IsFemale = YesNo(val);
@@ -570,13 +570,13 @@ public static class Parsing
                person.BlockDisinherit = YesNo(val);
                break;
             default:
-               errorLog.Write("Unknown key in Person: " + kvp.Key);
+               Globals.ErrorLog.Write("Unknown key in Person: " + kvp.Key);
                break;
          }
       }
    }
 
-   public static bool ParseLeaderFromString(string str, ref Log errorLog, out Leader leader)
+   public static bool ParseLeaderFromString(string str, out Leader leader)
    {
       var kvps = GetKeyValueList(str);
       leader = new();
@@ -593,7 +593,7 @@ public static class Parsing
                   leader.Fire = fire;
                else
                {
-                  errorLog.Write($"Could not parse fire: " + kv.Value + $"in leader {leader.Name}");
+                  Globals.ErrorLog.Write($"Could not parse fire: " + kv.Value + $"in leader {leader.Name}");
                   return false;
                }
                break;
@@ -602,7 +602,7 @@ public static class Parsing
                   leader.Shock = shock;
                else
                {
-                  errorLog.Write("Could not parse shock: " + kv.Value + $"in leader {leader.Name}");
+                  Globals.ErrorLog.Write("Could not parse shock: " + kv.Value + $"in leader {leader.Name}");
                   return false;
                }
                break;
@@ -611,7 +611,7 @@ public static class Parsing
                   leader.Maneuver = maneuver;
                else
                {
-                  errorLog.Write("Could not parse maneuver: " + kv.Value + $"in leader {leader.Name}");
+                  Globals.ErrorLog.Write("Could not parse maneuver: " + kv.Value + $"in leader {leader.Name}");
                   return false;
                }
                break;
@@ -620,7 +620,7 @@ public static class Parsing
                   leader.Siege = siege;
                else
                {
-                  errorLog.Write("Could not parse siege: " + kv.Value + $"in leader {leader.Name}");
+                  Globals.ErrorLog.Write("Could not parse siege: " + kv.Value + $"in leader {leader.Name}");
                   return false;
                }
                break;
@@ -629,7 +629,7 @@ public static class Parsing
                   leader.Type = leaderType;
                else
                {
-                  errorLog.Write("Could not parse type: " + kv.Value + $" in leader {leader.Name}");
+                  Globals.ErrorLog.Write("Could not parse type: " + kv.Value + $" in leader {leader.Name}");
                   return false;
                }
                break;
@@ -643,7 +643,7 @@ public static class Parsing
                leader.Personalities.Add(kv.Value);
                break;
             default:
-               errorLog.Write("Unknown key in Leader: " + kv.Key);
+               Globals.ErrorLog.Write("Unknown key in Leader: " + kv.Key);
                return false;
          }
       }
@@ -687,11 +687,11 @@ public static class Parsing
       return false;
    }
 
-   public static string GetLatentTradeGood(Content content, ref Log errorLog)
+   public static string GetLatentTradeGood(Content content)
    {
       if (!IsValidTradeGood(content.Value))
       {
-         errorLog.Write("Invalid trade good: " + content.Value);
+         Globals.ErrorLog.Write("Invalid trade good: " + content.Value);
          return string.Empty;
       }
       return content.Value;
