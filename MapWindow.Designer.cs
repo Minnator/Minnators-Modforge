@@ -45,6 +45,7 @@
          telescopeToolStripMenuItem = new ToolStripMenuItem();
          refStackToolStripMenuItem = new ToolStripMenuItem();
          DateSelector = new ToolStripComboBox();
+         searchToolStripMenuItem = new ToolStripMenuItem();
          MapPanel = new Panel();
          toolStrip1 = new ToolStrip();
          RamUsageStrip = new ToolStripLabel();
@@ -56,7 +57,7 @@
          SelectedProvinceSum = new ToolStripLabel();
          toolStripLabel1 = new ToolStripLabel();
          toolStripSplitButton1 = new ToolStripSplitButton();
-         tableLayoutPanel1 = new TableLayoutPanel();
+         MainLayoutPanel = new TableLayoutPanel();
          tableLayoutPanel2 = new TableLayoutPanel();
          DateLabel = new Label();
          toolStripContainer1 = new ToolStripContainer();
@@ -71,10 +72,9 @@
          pasteToolStripButton = new ToolStripButton();
          toolStripSeparator3 = new ToolStripSeparator();
          helpToolStripButton = new ToolStripButton();
-         searchToolStripMenuItem = new ToolStripMenuItem();
          MapMenuStrip.SuspendLayout();
          toolStrip1.SuspendLayout();
-         tableLayoutPanel1.SuspendLayout();
+         MainLayoutPanel.SuspendLayout();
          tableLayoutPanel2.SuspendLayout();
          toolStripContainer1.ContentPanel.SuspendLayout();
          toolStripContainer1.RightToolStripPanel.SuspendLayout();
@@ -200,6 +200,13 @@
          DateSelector.Size = new Size(121, 23);
          DateSelector.SelectedIndexChanged += DateSelector_SelectedIndexChanged;
          // 
+         // searchToolStripMenuItem
+         // 
+         searchToolStripMenuItem.Name = "searchToolStripMenuItem";
+         searchToolStripMenuItem.Size = new Size(54, 23);
+         searchToolStripMenuItem.Text = "Search";
+         searchToolStripMenuItem.Click += searchToolStripMenuItem_Click;
+         // 
          // MapPanel
          // 
          MapPanel.AutoScroll = true;
@@ -213,7 +220,7 @@
          // 
          // toolStrip1
          // 
-         tableLayoutPanel1.SetColumnSpan(toolStrip1, 2);
+         MainLayoutPanel.SetColumnSpan(toolStrip1, 2);
          toolStrip1.Dock = DockStyle.None;
          toolStrip1.Items.AddRange(new ToolStripItem[] { RamUsageStrip, CpuUsageStrip, toolStripSeparator1, UndoDepthLabel, RedoDepthLabel, toolStripSeparator2, SelectedProvinceSum, toolStripLabel1, toolStripSplitButton1 });
          toolStrip1.Location = new Point(0, 876);
@@ -276,23 +283,23 @@
          toolStripSplitButton1.Size = new Size(32, 21);
          toolStripSplitButton1.Text = "toolStripSplitButton1";
          // 
-         // tableLayoutPanel1
+         // MainLayoutPanel
          // 
-         tableLayoutPanel1.ColumnCount = 2;
-         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 400F));
-         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-         tableLayoutPanel1.Controls.Add(toolStrip1, 0, 2);
-         tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 1, 0);
-         tableLayoutPanel1.Controls.Add(toolStripContainer1, 1, 1);
-         tableLayoutPanel1.Dock = DockStyle.Fill;
-         tableLayoutPanel1.Location = new Point(0, 27);
-         tableLayoutPanel1.Name = "tableLayoutPanel1";
-         tableLayoutPanel1.RowCount = 3;
-         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
-         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 24F));
-         tableLayoutPanel1.Size = new Size(1511, 900);
-         tableLayoutPanel1.TabIndex = 3;
+         MainLayoutPanel.ColumnCount = 2;
+         MainLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 400F));
+         MainLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         MainLayoutPanel.Controls.Add(toolStrip1, 0, 2);
+         MainLayoutPanel.Controls.Add(tableLayoutPanel2, 1, 0);
+         MainLayoutPanel.Controls.Add(toolStripContainer1, 1, 1);
+         MainLayoutPanel.Dock = DockStyle.Fill;
+         MainLayoutPanel.Location = new Point(0, 27);
+         MainLayoutPanel.Name = "MainLayoutPanel";
+         MainLayoutPanel.RowCount = 3;
+         MainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
+         MainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         MainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 24F));
+         MainLayoutPanel.Size = new Size(1511, 900);
+         MainLayoutPanel.TabIndex = 3;
          // 
          // tableLayoutPanel2
          // 
@@ -437,19 +444,12 @@
          helpToolStripButton.Size = new Size(22, 20);
          helpToolStripButton.Text = "He&lp";
          // 
-         // searchToolStripMenuItem
-         // 
-         searchToolStripMenuItem.Name = "searchToolStripMenuItem";
-         searchToolStripMenuItem.Size = new Size(54, 23);
-         searchToolStripMenuItem.Text = "Search";
-         searchToolStripMenuItem.Click += searchToolStripMenuItem_Click;
-         // 
          // MapWindow
          // 
          AutoScaleDimensions = new SizeF(7F, 15F);
          AutoScaleMode = AutoScaleMode.Font;
          ClientSize = new Size(1511, 927);
-         Controls.Add(tableLayoutPanel1);
+         Controls.Add(MainLayoutPanel);
          Controls.Add(MapMenuStrip);
          KeyPreview = true;
          MainMenuStrip = MapMenuStrip;
@@ -465,8 +465,8 @@
          MapMenuStrip.PerformLayout();
          toolStrip1.ResumeLayout(false);
          toolStrip1.PerformLayout();
-         tableLayoutPanel1.ResumeLayout(false);
-         tableLayoutPanel1.PerformLayout();
+         MainLayoutPanel.ResumeLayout(false);
+         MainLayoutPanel.PerformLayout();
          tableLayoutPanel2.ResumeLayout(false);
          tableLayoutPanel2.PerformLayout();
          toolStripContainer1.ContentPanel.ResumeLayout(false);
@@ -506,7 +506,7 @@
       private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem telescopeToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem refStackToolStripMenuItem;
-      private TableLayoutPanel tableLayoutPanel1;
+      private TableLayoutPanel MainLayoutPanel;
       private ToolStripLabel toolStripLabel1;
       private ToolStripSplitButton toolStripSplitButton1;
       private TableLayoutPanel tableLayoutPanel2;

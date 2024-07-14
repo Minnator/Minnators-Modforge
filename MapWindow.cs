@@ -37,6 +37,8 @@ namespace Editor
          Globals.LoadingLog.Close();
          ResourceUsageHelper.Initialize(this);
          Globals.State = State.Running;
+
+         MainLayoutPanel.Controls.Add(new DateControl(new (1444, 11, 11)), 0, 1);
       }
 
 
