@@ -451,6 +451,7 @@
          StartPosition = FormStartPosition.CenterParent;
          Text = "MapWindow";
          FormClosing += MapWindow_FormClosing;
+         Load += MapWindow_Load;
          KeyDown += MapWindow_KeyDown;
          MapMenuStrip.ResumeLayout(false);
          MapMenuStrip.PerformLayout();

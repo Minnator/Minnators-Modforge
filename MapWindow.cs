@@ -6,15 +6,11 @@ using Editor.DataClasses;
 using Editor.Forms;
 using Editor.Helper;
 using Editor.Loading;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Editor
 {
    public partial class MapWindow : Form
    {
-      //public readonly Log LoadingLog = new(@"C:\Users\david\Downloads", "Loading");
-      //public readonly Log ErrorLog = new(@"C:\Users\david\Downloads", "Error");
-
       public PannablePictureBox MapPictureBox = null!;
 
       public ModProject Project = new()
@@ -39,6 +35,7 @@ namespace Editor
          // Enable the Application
          Globals.Date = new(1444, 11, 11);
          Globals.LoadingLog.Close();
+         ResourceUsageHelper.Initialize(this);
          Globals.State = State.Running;
       }
 
@@ -180,11 +177,7 @@ namespace Editor
 
       private void refStackToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         List<string> randomTagList = ["TUR", "BRA", "FRA", "POL", "HAB"];
-         var rand = new Random();
-         var nextTag = randomTagList[rand.Next(0, randomTagList.Count - 1)];
-         Debug.WriteLine(nextTag);
-         Globals.Provinces[50].Owner = nextTag;
+         MapPictureBox.FocusOn(new(2900, 600));
       }
 
       private void DateSelector_SelectedIndexChanged(object sender, EventArgs e)
@@ -196,6 +189,11 @@ namespace Editor
             Globals.MapModeManager.RenderCurrent();
          }
          Globals.State = State.Running;
+      }
+
+      private void MapWindow_Load(object sender, EventArgs e)
+      {
+         MapPictureBox.FocusOn(new(2700, 600));
       }
    }
 }

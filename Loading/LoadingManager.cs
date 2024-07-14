@@ -30,7 +30,6 @@ public static class LoadingManager
 
    public static void InitializeComponents(MapWindow mw)
    {
-      ResourceUsageHelper.Initialize(mw);
       //HistoryResourceHelper.Initialize(this);
 
       Globals.HistoryManager.UndoDepthChanged += mw.UpdateUndoDepth;

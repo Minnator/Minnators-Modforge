@@ -83,6 +83,11 @@ public sealed class PannablePictureBox : PictureBox
       Height = Image.Height;
    }
 
+   public void FocusOn(Point point)
+   {
+      _parentPanel.AutoScrollPosition = new (point.X - _parentPanel.Width / 2, point.Y - _parentPanel.Height / 2);
+   }
+
    private void OnMouseClick_Click (object sender, MouseEventArgs e)
    {
       // ------------------------------ Panning ------------------------------
