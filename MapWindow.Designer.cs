@@ -71,6 +71,7 @@
          pasteToolStripButton = new ToolStripButton();
          toolStripSeparator3 = new ToolStripSeparator();
          helpToolStripButton = new ToolStripButton();
+         searchToolStripMenuItem = new ToolStripMenuItem();
          MapMenuStrip.SuspendLayout();
          toolStrip1.SuspendLayout();
          tableLayoutPanel1.SuspendLayout();
@@ -83,7 +84,7 @@
          // 
          // MapMenuStrip
          // 
-         MapMenuStrip.Items.AddRange(new ToolStripItem[] { filesToolStripMenuItem, historyToolStripMenuItem, toolTipCustomizerToolStripMenuItem, MapModeComboBox, debugToolStripMenuItem, DateSelector });
+         MapMenuStrip.Items.AddRange(new ToolStripItem[] { filesToolStripMenuItem, historyToolStripMenuItem, toolTipCustomizerToolStripMenuItem, MapModeComboBox, debugToolStripMenuItem, DateSelector, searchToolStripMenuItem });
          MapMenuStrip.Location = new Point(0, 0);
          MapMenuStrip.Name = "MapMenuStrip";
          MapMenuStrip.Padding = new Padding(7, 2, 0, 2);
@@ -436,6 +437,13 @@
          helpToolStripButton.Size = new Size(22, 20);
          helpToolStripButton.Text = "He&lp";
          // 
+         // searchToolStripMenuItem
+         // 
+         searchToolStripMenuItem.Name = "searchToolStripMenuItem";
+         searchToolStripMenuItem.Size = new Size(54, 23);
+         searchToolStripMenuItem.Text = "Search";
+         searchToolStripMenuItem.Click += searchToolStripMenuItem_Click;
+         // 
          // MapWindow
          // 
          AutoScaleDimensions = new SizeF(7F, 15F);
@@ -516,6 +524,7 @@
       private ToolStripButton helpToolStripButton;
       public Label DateLabel;
       private ToolStripComboBox DateSelector;
+      private ToolStripMenuItem searchToolStripMenuItem;
    }
 }
 

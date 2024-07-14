@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Editor.DataClasses;
 
 namespace Editor.Controls;
 
@@ -27,5 +28,19 @@ public static class ControlFactory
       var item = new ToolStripMenuItem(text, image);
       item.Enabled = false;
       return item;
+   }
+
+   public static SearchResultButton GetSearchResultButton(bool isProvince, int id, Tag tag)
+   {
+      return new SearchResultButton()
+      {
+         Margin = new (3),
+         Width = 194,
+         Text = isProvince ? Globals.Provinces[id].GetLocalisation() : Globals.Countries[tag].GetLocalisation(),
+         Visible = true,
+         IsProvince = isProvince,
+         ProvinceId = id,
+         CountryTag = tag
+      };
    }
 }

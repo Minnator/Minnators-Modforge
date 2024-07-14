@@ -1,4 +1,6 @@
-﻿using Editor.Interfaces;
+﻿using Editor.Helper;
+using System.Diagnostics.Metrics;
+using Editor.Interfaces;
 
 namespace Editor.DataClasses;
 
@@ -121,6 +123,11 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
          }
          return provinces;
       }
+   }
+
+   public string GetLocalisation()
+   {
+      return Localisation.GetLoc(Tag);
    }
 }
 

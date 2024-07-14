@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Editor;
+namespace Editor.DataClasses;
 
 public class Log(string path, string logName)
 {
@@ -18,7 +18,7 @@ public class Log(string path, string logName)
    {
       _logFile.WriteLine($"{operation.PadRight(40, fillCharacter)} [{milliseconds.ToString().PadLeft(6, fillCharacter)}]ms");
       _logFile.Flush();
-      _logCount ++;
+      _logCount++;
       _totalTime += (int)milliseconds;
    }
 

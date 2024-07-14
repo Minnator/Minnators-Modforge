@@ -161,17 +161,21 @@ namespace Editor
 
       private void MapWindow_KeyDown(object sender, KeyEventArgs e)
       {
-         if (e.KeyCode == Keys.F1)
+         if (ModifierKeys == Keys.Control)
          {
-            if (Globals.ConsoleForm == null || Globals.ConsoleForm.IsDisposed)
+            switch (e.KeyCode)
             {
-               Globals.ConsoleForm = new();
-               Globals.ConsoleForm.Show();
+               case Keys.F:
+                  FormHelper.OpenOrBringToFront(Globals.SearchForm);
+                  break;
             }
-            else
-            {
-               Globals.ConsoleForm.BringToFront();
-            }
+         }
+
+         switch (e.KeyCode)
+         {
+            case Keys.F1:
+               FormHelper.OpenOrBringToFront(Globals.ConsoleForm);
+               break;
          }
       }
 
@@ -194,6 +198,17 @@ namespace Editor
       private void MapWindow_Load(object sender, EventArgs e)
       {
          MapPictureBox.FocusOn(new(2700, 600));
+      }
+
+      private void searchToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         if (Globals.SearchForm == null || Globals.SearchForm.IsDisposed)
+         {
+            Globals.SearchForm = new();
+            Globals.SearchForm.Show();
+         }
+         else
+            Globals.SearchForm.BringToFront();
       }
    }
 }

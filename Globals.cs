@@ -44,6 +44,7 @@ public enum MapModeRendering
 public static class Globals
 {
    public static ConsoleForm? ConsoleForm = null;
+   public static Search? SearchForm = null;
    public static MapWindow MapWindow = null!;
 
    // Date of history
