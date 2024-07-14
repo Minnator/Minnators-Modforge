@@ -1,25 +1,13 @@
 ﻿namespace Editor.Controls
 {
+   public enum DateControlLayout
+   {
+      Horizontal,
+      Vertical
+   }
    public class DateControl : Control
    {
-      private TableLayoutPanel _tableLayoutPanel= new ()
-      {
-         RowStyles =
-         {
-            new (SizeType.Absolute, 20),
-            new (SizeType.Absolute, 27),
-            new (SizeType.Absolute,20),
-         },
-         ColumnStyles =
-         {
-            new (SizeType.Absolute, 40),
-            new (SizeType.Absolute, 20),
-            new (SizeType.Absolute, 20),
-         },
-         Size = new (100, 67),
-         Padding = new (0),
-         Margin = new (0),
-      };
+      private TableLayoutPanel _tableLayoutPanel= new ();
 
       private TextBox _dateTextBox = new ()
       {
@@ -35,9 +23,15 @@
       private readonly IncreaseButton _monthIncreaseButton = new ();
       private readonly IncreaseButton _dayIncreaseButton = new ();
 
-      public DateControl(DateTime date)
+      public DateControl(DateTime date, DateControlLayout layout)
       {
          Date = date;
+         DateControlLayout = layout;
+
+         if (DateControlLayout == DateControlLayout.Vertical) 
+            InitVertical();
+         else
+            InitHorizontal();
 
          _yearIncreaseButton.Click += OnYearIncrease;
          _monthIncreaseButton.Click += OnMonthIncrease;
@@ -45,6 +39,31 @@
          _yearDecreaseButton.Click += OnYearDecrease;
          _monthDecreaseButton.Click += OnMonthDecrease;
          _dayDecreaseButton.Click += OnDayDecrease;
+         
+         Size = _tableLayoutPanel.Size;
+         Controls.Add(_tableLayoutPanel);
+      }
+
+      private void InitVertical()
+      {
+         _tableLayoutPanel = new()
+         {
+            RowStyles =
+            {
+               new(SizeType.Absolute, 20),
+               new(SizeType.Absolute, 27),
+               new(SizeType.Absolute, 20),
+            },
+            ColumnStyles =
+            {
+               new(SizeType.Absolute, 40),
+               new(SizeType.Absolute, 20),
+               new(SizeType.Absolute, 20),
+            },
+            Size = new(100, 67),
+            Padding = new(0),
+            Margin = new(0),
+         };
 
          _tableLayoutPanel.Controls.Add(_dateTextBox, 0, 1);
          _tableLayoutPanel.SetColumnSpan(_dateTextBox, 3);
@@ -56,9 +75,48 @@
          _tableLayoutPanel.Controls.Add(_yearDecreaseButton, 0, 2);
          _tableLayoutPanel.Controls.Add(_monthDecreaseButton, 1, 2);
          _tableLayoutPanel.Controls.Add(_dayDecreaseButton, 2, 2);
-         
-         Size = _tableLayoutPanel.Size;
-         Controls.Add(_tableLayoutPanel);
+      }
+
+      private void InitHorizontal()
+      {
+         _tableLayoutPanel = new()
+         {
+            RowStyles =
+            {
+               new(SizeType.Absolute, 25),
+            },
+            ColumnStyles =
+            {
+               new(SizeType.Absolute, 20),
+               new(SizeType.Absolute, 20),
+               new(SizeType.Absolute, 20),
+               new(SizeType.Absolute, 90), //Date
+               new(SizeType.Absolute, 20),
+               new(SizeType.Absolute, 20),
+               new(SizeType.Absolute, 20),
+            },
+            Size = new(210, 27),
+            Padding = new(0),
+            Margin = new(0),
+         };
+
+         _tableLayoutPanel.Controls.Add(_yearDecreaseButton, 0, 0);
+         _tableLayoutPanel.Controls.Add(_monthDecreaseButton, 1, 0);
+         _tableLayoutPanel.Controls.Add(_dayDecreaseButton, 2, 0);
+
+         _tableLayoutPanel.Controls.Add(_dateTextBox, 3, 0);
+
+         _tableLayoutPanel.Controls.Add(_yearIncreaseButton, 4, 0);
+         _tableLayoutPanel.Controls.Add(_monthIncreaseButton, 5, 0);
+         _tableLayoutPanel.Controls.Add(_dayIncreaseButton, 6, 0);
+
+         _yearDecreaseButton.Text = "<";
+         _monthDecreaseButton.Text = "<";
+         _dayDecreaseButton.Text = "<";
+
+         _yearIncreaseButton.Text = ">";
+         _monthIncreaseButton.Text = ">";
+         _dayIncreaseButton.Text = ">";
       }
 
       public DateTime Date
@@ -66,6 +124,8 @@
          get => DateTime.Parse(_dateTextBox.Text);
          set => _dateTextBox.Text = value.ToString("yyyy/MM/dd");
       }
+
+      public DateControlLayout DateControlLayout { get; set; }
 
       public event EventHandler DateChanged
       {
