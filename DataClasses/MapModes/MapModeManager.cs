@@ -29,6 +29,7 @@ public class MapModeManager(PannablePictureBox pictureBox)
       MapModes.Add(new CultureGroupMapMode());
       MapModes.Add(new CultureMapMode());
       MapModes.Add(new CountryMapMode());
+      MapModes.Add(new TradeGoodsMapMode());
 
 
       // We set the default map mode to retrieve province colors

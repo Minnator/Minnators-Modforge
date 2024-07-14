@@ -171,7 +171,7 @@ namespace Editor
             switch (e.KeyCode)
             {
                case Keys.F:
-                  FormHelper.OpenOrBringToFront(Globals.SearchForm);
+                  Globals.SearchForm = FormHelper.OpenOrBringToFront(Globals.SearchForm);
                   break;
             }
          }
@@ -179,7 +179,7 @@ namespace Editor
          switch (e.KeyCode)
          {
             case Keys.F1:
-               FormHelper.OpenOrBringToFront(Globals.ConsoleForm);
+               Globals.ConsoleForm = FormHelper.OpenOrBringToFront(Globals.ConsoleForm);
                break;
          }
       }

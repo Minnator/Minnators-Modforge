@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using Editor.DataClasses.MapModes;
+﻿using Editor.DataClasses.MapModes;
 using Editor.Helper;
 
 namespace Editor.MapModes;

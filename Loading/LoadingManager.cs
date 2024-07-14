@@ -8,7 +8,7 @@ public static class LoadingManager
 {
    public static void LoadGameAndModDataToApplication(ModProject project, MapWindow mw)
    {
-
+      TradeGoodsLoading.Load(project);
       LoadDefinitionAndMap(project);
       DefaultMapLoading.Load(project.VanillaPath);
       AreaLoading.Load(project.VanillaPath, project.ColorProvider);

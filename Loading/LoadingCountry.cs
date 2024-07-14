@@ -54,7 +54,7 @@ namespace Editor.Loading
          {
             var content = IO.ReadAllInUTF8(file);
             Parsing.RemoveCommentFromMultilineString(ref content, out var removed);
-            var elements = Parsing.GetNestedElementsIterative(0, removed);
+            var elements = Parsing.GetElements(0, removed);
             Tag tag = new(Path.GetFileName(file)[..3]);
             var country = Globals.Countries[tag];
 

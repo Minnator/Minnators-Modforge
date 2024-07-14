@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Editor.Controls;
+﻿using Editor.Controls;
 using Editor.Helper;
 
 namespace Editor.DataClasses.ConsoleCommands;
@@ -12,7 +11,8 @@ public static class ConsoleCommandParser
    private static readonly Dictionary<string, ConsoleCommand> _commands = new()
    {
       { "echo", new CsCEcho() },
-      { "analyze", new CsCAnalyzeProvince() }
+      { "analyze", new CsCAnalyzeProvince() },
+      { "dump", new Dump()}
    };
 
    static ConsoleCommandParser()

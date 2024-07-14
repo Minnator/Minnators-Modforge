@@ -179,7 +179,7 @@ public static class Parsing
             if (stack.Count > 0) // If the stack is not empty, the element is a sub element and thus added to the parent element.
             {
                ((Block*)stack.PeekRef())->Blocks.Add(element);
-               if (contentToNextOpening != null)
+               if (contentToNextOpening != null!)
                   ((Block*)stack.PeekRef())->Blocks.Add(contentToNextOpening);
             }
             else // If the stack is empty, the element is a top level element and thus added to the elements list.

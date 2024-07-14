@@ -90,6 +90,9 @@ public static class Globals
    public static Point[] BorderPixels = null!;
    public static Point[] Pixels = null!;
 
+   // Maps the name of TradeGoods to the TradeGood object
+   public static Dictionary<string, TradeGood> TradeGoods = [];
+
    // Culture Groups and Cultures
    public static Dictionary<string, CultureGroup> CultureGroups = null!;
    public static Dictionary<string, Culture> Cultures = null!;

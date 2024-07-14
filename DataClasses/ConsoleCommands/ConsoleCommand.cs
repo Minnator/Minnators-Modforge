@@ -1,7 +1,4 @@
-﻿using System;
-using System.Windows.Forms;
-
-namespace Editor.DataClasses.ConsoleCommands;
+﻿namespace Editor.DataClasses.ConsoleCommands;
 
 public abstract class ConsoleCommand
 {

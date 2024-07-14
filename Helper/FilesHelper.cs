@@ -35,7 +35,13 @@ public static class FilesHelper
       return files;
    }
 
-   // Gets all files in a folder with a specific file ending in the folder but only in TopDirectoryOnly and not in subfolders
+   /// <summary>
+   /// Gets all file paths in a folder with a <c>.txt</c> file ending in the folder but only in TopDirectoryOnly
+   /// </summary>
+   /// <param name="modPathIn"></param>
+   /// <param name="vanillaPathIn"></param>
+   /// <param name="internalPath"></param>
+   /// <returns></returns>
    public static List<string> GetFilesFromModAndVanillaUniquely(string modPathIn, string vanillaPathIn, params string[] internalPath)
    {
       var folderPath = Path.Combine(internalPath);

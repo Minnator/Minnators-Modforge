@@ -40,7 +40,7 @@ public class ProvinceInitial()
    public List<string> ProvinceModifiers = [];
    public List<string> PermanentProvinceModifiers = [];
    public List<string> ProvinceTriggeredModifiers = [];
-   public TradeGood TradeGood = TradeGood.Unknown;
+   public string TradeGood = "";
    public List<HistoryEntry> History = [];
 }
 
@@ -80,7 +80,7 @@ public class Province : IProvinceCollection
    private List<string> _provinceModifiers = [];
    private List<string> _permanentProvinceModifiers = [];
    private List<string> _provinceTriggeredModifiers = [];
-   private TradeGood _tradeGood;
+   private string _tradeGood = string.Empty;
    private List<HistoryEntry> _history = [];
 
    public ProvinceInitial ProvinceInitial { get; set; } = new();
@@ -404,7 +404,7 @@ public class Province : IProvinceCollection
       }
    }
 
-   public TradeGood TradeGood
+   public string TradeGood
    {
       get => _tradeGood;
       set
@@ -786,7 +786,8 @@ public class Province : IProvinceCollection
             IsSeatInParliament = Parsing.YesNo(value);
             break;
          case "trade_goods":
-            TradeGood = TradeGoodHelper.FromString(value);
+            if (TradeGoodHelper.IsTradeGood(value))
+               TradeGood = value;
             break;
          case "tribal_owner":
             TribalOwner = Tag.FromString(value);

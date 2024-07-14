@@ -31,5 +31,15 @@
       {
          box.AppendText($"{text}\n");
       }
+
+      public static void WriteGoodFeedback(this RichTextBox box, string text)
+      {
+         box.SelectionStart = box.TextLength;
+         box.SelectionLength = 0;
+
+         box.SelectionColor = Color.GreenYellow;
+         box.AppendText($"Success: {text}\n");
+         box.SelectionColor = box.ForeColor;
+      }
    }
 }
