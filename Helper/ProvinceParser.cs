@@ -17,8 +17,7 @@ public static class ProvinceParser
    private static readonly Regex IdRegex = new (ID_FROM_FILE_NAME_PATTERN, RegexOptions.Compiled);
    private static readonly Regex AttributeRegex = new (ATTRIBUTE_PATTERN, RegexOptions.Compiled);
    private static readonly Regex MultilineAttributeRegex = new (MULTILINE_ATTRIBUTE_PATTERN, RegexOptions.Compiled);
-
-
+   
 
    public static void ParseAllUniqueProvinces(string modFolder, string vanillaFolder)
    {
@@ -37,6 +36,7 @@ public static class ProvinceParser
 
    private static void ProcessProvinceFile(string path)
    {
+      // Retrieve the ID from the file name
       var match = IdRegex.Match(Path.GetFileName(path));
       if (!match.Success || !int.TryParse(match.Groups[1].Value, out var id))
       {
@@ -55,39 +55,36 @@ public static class ProvinceParser
 
       foreach (var block in blocks)
       {
+         // Check if the block is a Content or a Block
          if (block is Content content)
          {
-            ParseProvinceContentBlock(ref province, content);
+            // Parse the content, aka the attributes
+            foreach (var att in Parsing.GetKeyValueList(content.Value)) 
+               province.SetAttribute(att.Key, att.Value);
          }
          else
          {
+            // Parse the block, aka the history entries and some special cases
             ParseProvinceBlockBlock(ref province, (Block)block);
          }
       }
 
+      // Copy the initial attributes to the ProvinceInitial to be able to revert to the initial state
       province.InitializeInitial();
-   }
-
-   private static void ParseProvinceContentBlock(ref Province province, Content content)
-   {
-      var attributes = Parsing.GetKeyValueList(content.Value);
-      AssignAttributesToProvince(attributes, ref province);
    }
 
    private static void ParseProvinceBlockBlock(ref Province province, Block block)
    {
       if (!DateTime.TryParse(block.Name, out var date))
       {
-         switch (block.Name.ToLower())
+         if (block.Name.ToLower().Equals("latent_trade_goods"))
          {
-            case "latent_trade_goods":
-               var ltg = Parsing.GetLatentTradeGood(block.GetContentElements[0]);
-               province.LatentTradeGood = ltg;
-               return;
-            default:
-               Globals.ErrorLog.Write($"Could not parse date: {block.Name}");
-               return;
+            var ltg = Parsing.GetLatentTradeGood(block.GetContentElements[0]);
+            province.LatentTradeGood = ltg;
+            return;
          }
+         Globals.ErrorLog.Write($"Could not parse date: {block.Name}");
+         return;
       }
 
       var che = new HistoryEntry(date);
@@ -98,7 +95,7 @@ public static class ProvinceParser
          {
             AddEffectsToHistory(ref che, content);
          }
-         else if (element is Block subBlock && subBlock.HasOnlyContent)
+         else if (element is Block { HasOnlyContent: true } subBlock)
          {
             var ce = EffectFactory.CreateComplexEffect(subBlock.Name, EffectValueType.Complex);
             if (subBlock.Blocks.Count == 0)
@@ -138,14 +135,6 @@ public static class ProvinceParser
          else if (float.TryParse(element.Value, out _))
             type = EffectValueType.Float;
          che.Effects.Add(EffectFactory.CreateSimpleEffect(element.Key, element.Value, type));
-      }
-   }
-
-   private static void AssignAttributesToProvince(List<KeyValuePair<string, string>> attributes, ref Province prov)
-   {
-      foreach (var att in attributes)
-      {
-         prov.SetAttribute(att.Key, att.Value);
       }
    }
 

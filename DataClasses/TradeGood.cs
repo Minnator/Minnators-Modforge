@@ -1,5 +1,4 @@
-﻿using System;
-using Editor.Helper;
+﻿using Editor.Helper;
 
 namespace Editor.DataClasses;
 

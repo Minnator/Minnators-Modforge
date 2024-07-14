@@ -1,6 +1,7 @@
 ﻿using System.Security.Policy;
 using Editor.Commands;
 using Editor.DataClasses;
+using Editor.DataClasses.MapModes;
 using Editor.Forms;
 using Editor.Helper;
 using Region = Editor.DataClasses.Region;

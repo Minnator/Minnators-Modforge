@@ -21,18 +21,21 @@ public abstract class MapMode
             {
                if (Globals.MapModeManager.PreviousLandOnly)
                {
+                  // only update the land provinces
                   BitMapHelper.ModifyByProvinceCollection(Globals.MapModeManager.ShareLiveBitmap, Globals.LandProvinceIds, GetProvinceColor);
                }
                else
                {
+                  // update all provinces but separately for land and sea to use different method which allows for more optimized province color methods
+                  BitMapHelper.ModifyByProvinceCollection(Globals.MapModeManager.ShareLiveBitmap, Globals.LandProvinceIds, GetProvinceColor);
                   BitMapHelper.ModifyByProvinceCollection(Globals.MapModeManager.ShareLiveBitmap, Globals.NonLandProvinceIds, GetSeaProvinceColor);
                }
             }
             else
             {
                Globals.MapModeManager.ShareLiveBitmap = BitMapHelper.GenerateBitmapFromProvinces(method);
-               Globals.MapModeManager.RequireFullRedraw = false;
             }
+
             MapDrawHelper.DrawAllProvinceBorders(Globals.MapModeManager.ShareLiveBitmap, Color.Black);
             Globals.MapModeManager.PictureBox.Image = Globals.MapModeManager.ShareLiveBitmap;
             Globals.MapModeManager.PreviousLandOnly = IsLandOnly;

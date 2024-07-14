@@ -190,12 +190,12 @@ namespace Editor
       private void DateSelector_SelectedIndexChanged(object sender, EventArgs e)
       {
          Globals.State = State.Loading;
-         if (DateTime.TryParse(DateSelector.Text, out var date));
+         if (DateTime.TryParse(DateSelector.Text, out var date))
          {
             Globals.Date = date;
+            Globals.MapModeManager.RenderCurrent();
          }
          Globals.State = State.Running;
-         Globals.MapModeManager.RenderCurrent();
       }
    }
 }

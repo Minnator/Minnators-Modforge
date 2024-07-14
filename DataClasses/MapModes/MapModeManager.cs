@@ -1,25 +1,18 @@
 ﻿using System.Drawing.Imaging;
 using Editor.Controls;
-using Editor.DataClasses.MapModes;
 using Editor.MapModes;
 
-namespace Editor.DataClasses;
+namespace Editor.DataClasses.MapModes;
 
-public class MapModeManager
+public class MapModeManager(PannablePictureBox pictureBox)
 {
    private List<MapMode> MapModes { get; } = [];
    public MapMode CurrentMapMode { get; set; } = null!;
    private ProvinceIdMapMode IdMapMode { get; set; } = null!;
-   public PannablePictureBox PictureBox { get; set; }
+   public PannablePictureBox PictureBox { get; set; } = pictureBox;
    public bool PreviousLandOnly { get; set; }
    public bool RequireFullRedraw { get; set; } = true;
-   public Bitmap ShareLiveBitmap { get; set; }
-
-   public MapModeManager(PannablePictureBox pictureBox)
-   {
-      PictureBox = pictureBox;
-      ShareLiveBitmap = new(Globals.MapWidth, Globals.MapHeight, PixelFormat.Format24bppRgb);
-   }
+   public Bitmap ShareLiveBitmap { get; set; } = new(Globals.MapWidth, Globals.MapHeight, PixelFormat.Format24bppRgb);
 
    public void InitializeAllMapModes()
    {
@@ -48,6 +41,7 @@ public class MapModeManager
    {
       CurrentMapMode.RenderMapMode(CurrentMapMode.GetProvinceColor);
    }
+
    public List<MapMode> GetMapModes()
    {
       return MapModes;
@@ -55,29 +49,21 @@ public class MapModeManager
 
    public MapMode GetMapMode(string name)
    {
-      return MapModes.Find(mode => mode.GetMapModeName() == name);
+      return MapModes.Find(mode => mode.GetMapModeName() == name) ?? throw new InvalidOperationException($"Can not find mapmode {name}");
    }
 
    public List<string> GetMapModeNames()
    {
       var names = new List<string>();
-      foreach (var mode in MapModes)
-      {
+      foreach (var mode in MapModes) 
          names.Add(mode.GetMapModeName());
-      }
       return names;
    }
 
    public void SetCurrentMapMode(string name)
    {
-      CurrentMapMode = GetMapMode(name);
-      if (Globals.MapModeRendering == MapModeRendering.Live)
-      {
-         CurrentMapMode.RenderMapMode(CurrentMapMode.GetProvinceColor);
-      }
-      else
-         PictureBox.Image = CurrentMapMode.Bitmap; // We point the PictureBox to the new bitmap
-      PictureBox.Invalidate(); // We force the PictureBox to redraw
+      CurrentMapMode = GetMapMode(name); 
+      CurrentMapMode.RenderMapMode(CurrentMapMode.GetProvinceColor);
    }
 
    public bool GetProvince(Point point, out Province province)
