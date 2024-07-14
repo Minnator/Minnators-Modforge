@@ -1,6 +1,7 @@
 ﻿using System.Reflection.Metadata.Ecma335;
 using Editor.Analyzers;
 using Editor.Controls;
+using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.DataClasses.ConsoleCommands
 {

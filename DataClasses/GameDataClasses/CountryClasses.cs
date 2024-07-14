@@ -1,6 +1,6 @@
-﻿namespace Editor.DataClasses
+﻿namespace Editor.DataClasses.GameDataClasses
 {
-   public struct MonarchName (string name, int ordinalNumber, int chance)
+   public struct MonarchName(string name, int ordinalNumber, int chance)
    {
       public string Name { get; } = name;
       public int OrdinalNumber { get; } = ordinalNumber;

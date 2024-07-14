@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Editor.Commands;
 using Editor.DataClasses;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Forms;
 using Editor.Helper;
 

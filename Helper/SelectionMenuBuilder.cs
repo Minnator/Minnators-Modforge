@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using Editor.Commands;
 using Editor.Controls;
-using Editor.DataClasses;
+using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.Helper
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace Editor.DataClasses;
+namespace Editor.DataClasses.GameDataClasses;
 
 public class Culture(string name)
 {

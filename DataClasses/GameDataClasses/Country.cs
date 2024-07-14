@@ -2,7 +2,7 @@
 using System.Diagnostics.Metrics;
 using Editor.Interfaces;
 
-namespace Editor.DataClasses;
+namespace Editor.DataClasses.GameDataClasses;
 
 public class Country(Tag tag, string fileName) : IProvinceCollection
 {
@@ -131,7 +131,7 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
    }
 }
 
-public class CountryHistoryEntry (DateTime date)
+public class CountryHistoryEntry(DateTime date)
 {
    public DateTime Date { get; } = date;
    public List<Person> Persons { get; set; } = [];

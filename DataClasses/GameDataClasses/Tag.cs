@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace Editor.DataClasses;
+namespace Editor.DataClasses.GameDataClasses;
 #nullable enable
 
 public readonly struct Tag(string tag)
@@ -16,7 +16,7 @@ public readonly struct Tag(string tag)
    public static Tag FromString(string tag)
    {
       if (tag.Length == 3 || tag.Equals(string.Empty))
-         return new (tag);
+         return new(tag);
       Debug.WriteLine($"False tag {tag}");
       throw new ArgumentException("Tag must be 3 characters long");
    }
@@ -54,6 +54,6 @@ public readonly struct Tag(string tag)
    }
 
    // Add an empty state to the Tag struct
-   public static readonly Tag Empty = new ("");
+   public static readonly Tag Empty = new("");
    private readonly string _getTag = tag;
 }

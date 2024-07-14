@@ -1,9 +1,10 @@
 ﻿using System.Diagnostics;
 
-namespace Editor.DataClasses
+namespace Editor.DataClasses.GameDataClasses
 {
-   public enum EffectValueType {
-      Int, 
+   public enum EffectValueType
+   {
+      Int,
       Float,
       String,
       Bool,

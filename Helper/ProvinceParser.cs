@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
-using Editor.DataClasses;
+using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.Helper;
 

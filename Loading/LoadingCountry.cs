@@ -3,6 +3,7 @@ using System.Diagnostics.Metrics;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Editor.DataClasses;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using static Editor.Helper.TriggersEffectsScopes;
 

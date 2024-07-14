@@ -1,11 +1,11 @@
-﻿using Editor.DataClasses;
+﻿using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using Region = Editor.DataClasses.Region;
+using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor.Loading;
 

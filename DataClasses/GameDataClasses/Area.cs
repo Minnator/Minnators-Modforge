@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using Editor.Interfaces;
+﻿using Editor.Interfaces;
 
-namespace Editor.DataClasses;
+namespace Editor.DataClasses.GameDataClasses;
 #nullable enable
 public class Area(string name, int[] provinces, Color color) : IProvinceCollection
 {
@@ -13,7 +11,7 @@ public class Area(string name, int[] provinces, Color color) : IProvinceCollecti
    public float Prosperity { get; set; } = 0;
    public bool IsStated { get; set; } = false;
    public string Region { get; set; } = string.Empty;
-   public Color Color { get; set; }= color;
+   public Color Color { get; set; } = color;
 
    public override bool Equals(object? obj)
    {
@@ -40,7 +38,7 @@ public class Area(string name, int[] provinces, Color color) : IProvinceCollecti
    public List<IProvinceCollection> ScopeIn()
    {
       var provs = new List<IProvinceCollection>();
-      foreach (var province in Provinces) 
+      foreach (var province in Provinces)
          provs.Add(Globals.Provinces[province]);
       return provs;
    }

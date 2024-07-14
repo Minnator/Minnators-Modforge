@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using Editor.DataClasses;
+using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.Helper;
 

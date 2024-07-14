@@ -1,5 +1,6 @@
 ﻿using System.Drawing.Imaging;
 using Editor.Controls;
+using Editor.DataClasses.GameDataClasses;
 using Editor.MapModes;
 
 namespace Editor.DataClasses.MapModes;

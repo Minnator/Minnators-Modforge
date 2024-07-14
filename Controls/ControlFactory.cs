@@ -1,5 +1,5 @@
 ﻿using System.Windows.Forms;
-using Editor.DataClasses;
+using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.Controls;
 

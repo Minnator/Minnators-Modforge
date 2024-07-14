@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Editor.DataClasses;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 
 namespace Editor.Loading;

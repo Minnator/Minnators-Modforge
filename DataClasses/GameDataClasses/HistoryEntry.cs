@@ -1,4 +1,4 @@
-﻿namespace Editor.DataClasses;
+﻿namespace Editor.DataClasses.GameDataClasses;
 
 public class HistoryEntry(DateTime date)
 {

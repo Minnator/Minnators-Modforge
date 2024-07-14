@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Threading.Tasks;
-using Editor.DataClasses;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Interfaces;
 
 namespace Editor.Helper;

@@ -2,7 +2,7 @@
 using Editor.Interfaces;
 using static Editor.Helper.ProvinceEventHandler;
 
-namespace Editor.DataClasses;
+namespace Editor.DataClasses.GameDataClasses;
 
 public class ProvinceInitial()
 {
@@ -425,7 +425,7 @@ public class Province : IProvinceCollection
          _history = value;
       }
    }
-   
+
    public string LatentTradeGood
    {
       get => _latentTradeGood;
@@ -613,7 +613,7 @@ public class Province : IProvinceCollection
             break;
       }
    }
-   
+
    public void AddHistoryEntry(HistoryEntry entryOld)
    {
       _history.Add(entryOld);
@@ -873,7 +873,7 @@ public class Province : IProvinceCollection
          return Id == other.Id;
       return false;
    }
-   
+
    public override int GetHashCode()
    {
       return Id.GetHashCode();

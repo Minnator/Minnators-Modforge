@@ -2,7 +2,7 @@
 using System.Drawing;
 using Editor.Interfaces;
 
-namespace Editor.DataClasses;
+namespace Editor.DataClasses.GameDataClasses;
 #nullable enable
 public class SuperRegion(string name) : IProvinceCollection
 {
@@ -10,7 +10,7 @@ public class SuperRegion(string name) : IProvinceCollection
    public List<string> Regions { get; set; } = [];
    public Color Color { get; set; }
 
-   public SuperRegion (string name, List<string> regions) : this(name)
+   public SuperRegion(string name, List<string> regions) : this(name)
    {
       Regions = regions;
    }
@@ -30,7 +30,7 @@ public class SuperRegion(string name) : IProvinceCollection
    public int[] GetProvinceIds()
    {
       var provinces = new List<int>();
-      foreach (var region in Regions) 
+      foreach (var region in Regions)
          if (Globals.Regions.TryGetValue(region, out Region? value))
             provinces.AddRange(value.GetProvinceIds());
       return [.. provinces];

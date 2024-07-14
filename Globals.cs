@@ -1,10 +1,11 @@
 ﻿using System.Security.Policy;
 using Editor.Commands;
 using Editor.DataClasses;
+using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.Forms;
 using Editor.Helper;
-using Region = Editor.DataClasses.Region;
+using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor;
 

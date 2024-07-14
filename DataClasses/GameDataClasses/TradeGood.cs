@@ -1,6 +1,6 @@
 ﻿using Editor.Helper;
 
-namespace Editor.DataClasses;
+namespace Editor.DataClasses.GameDataClasses;
 
 public enum TradeGood
 {
@@ -40,10 +40,10 @@ public enum TradeGood
 
 public static class TradeGoodHelper
 {
-   public static TradeGood FromString (string str)
+   public static TradeGood FromString(string str)
    {
       if (Enum.TryParse<TradeGood>(str, true, out var value))
          return value;
-      throw new AttributeParsingException( $"TradeGood {str} not found");
+      throw new AttributeParsingException($"TradeGood {str} not found");
    }
 }
