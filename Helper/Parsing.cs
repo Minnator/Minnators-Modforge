@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using Editor.DataClasses;
@@ -6,7 +7,7 @@ using Editor.DataClasses.GameDataClasses;
 using static Editor.Helper.TriggersEffectsScopes;
 
 namespace Editor.Helper;
-#nullable enable
+
 public class Block(int start, int end, string name, List<IElement> subBlocks) : IElement
 {
    public int Start { get; set; } = start;
@@ -45,12 +46,22 @@ public class Block(int start, int end, string name, List<IElement> subBlocks) : 
 
    public bool HasOnlyContent => Blocks.TrueForAll(b => !b.IsBlock);
    public string GetContent => string.Join("\n", GetContentElements.Select(c => c.Value));
+
+   public Block? GetBlockWithName(string name)
+   {
+      return GetBlockElements.FirstOrDefault(b => b.Name == name);
+   }
 }
 
 public class Content(string value) : IElement
 {
    public string Value { get; set; } = value;
    public bool IsBlock => false;
+
+   public override string ToString()
+   {
+      return Value;
+   }
 }
 public interface IElement
 {
@@ -87,7 +98,7 @@ public static class Parsing
       return idList;
    }
 
-   public static List<IElement> GetNestedElementsIterative(int index, string str)
+   public static List<IElement> GetElements(int index, string str)
    {
       return GetNestedElementsIterative(index, ref str);
    }
@@ -139,6 +150,7 @@ public static class Parsing
             var element = (Block)stack.Pop();
             element.End = end;
             var nextEnd = endCnt < closingCount ? closingMatches[endCnt].Index : 0;
+            Content? contentToNextOpening = null!;
 
             // if there is content between this closing bracket and the next opening bracket add it as a content element.
             if (start != int.MaxValue && stack.Count > 0)
@@ -150,7 +162,8 @@ public static class Parsing
                }
                if (!string.IsNullOrWhiteSpace(content))
                {
-                  element.Blocks.Add(new Content(content));
+                  contentToNextOpening = new (content);
+                  //element.Blocks.Add(new Content(content));
                }
             }
             // if there is content between this and the next closing bracket at it to the current element as a content element.
@@ -166,6 +179,8 @@ public static class Parsing
             if (stack.Count > 0) // If the stack is not empty, the element is a sub element and thus added to the parent element.
             {
                ((Block*)stack.PeekRef())->Blocks.Add(element);
+               if (contentToNextOpening != null)
+                  ((Block*)stack.PeekRef())->Blocks.Add(contentToNextOpening);
             }
             else // If the stack is empty, the element is a top level element and thus added to the elements list.
             {
@@ -436,6 +451,12 @@ public static class Parsing
       return value.ToLower().Equals("yes");
    }
 
+   /// <summary>
+   /// Parses a string to a <c>color</c> if it is in the format <c>"r g b"</c>.
+   /// </summary>
+   /// <param name="str"></param>
+   /// <returns></returns>
+   /// <exception cref="ParsingException"></exception>
    public static Color ParseColor(string str)
    {
       var match = ColorRegex.Match(str);
@@ -447,6 +468,36 @@ public static class Parsing
       var b = int.Parse(match.Groups["b"].Value);
 
       return Color.FromArgb(r, g, b);
+   }
+
+   /// <summary>
+   /// Parses a string to a <c>color</c> if it is in the format <c>"r g b"</c> where each value is a percentage.
+   /// </summary>
+   /// <param name="str"></param>
+   /// <returns></returns>
+   public static Color ParseColorPercental(string str)
+   {
+
+      // Split the string by spaces
+      var components = str.Split(' ');
+
+      if (components.Length != 3)
+      {
+         Globals.ErrorLog.Write("Could not parse color: " + str);
+         return Color.Empty;
+      }
+
+      // Convert each component to a float and multiply by 255
+      var red = float.Parse(components[0], CultureInfo.InvariantCulture) * 255;
+      var green = float.Parse(components[1], CultureInfo.InvariantCulture) * 255;
+      var blue = float.Parse(components[2], CultureInfo.InvariantCulture) * 255;
+
+      // Create and return the Color object
+      return Color.FromArgb(
+         (int)red,
+         (int)green,
+         (int)blue
+      );
    }
 
    public static void ParseMonarchNames(string input, out List<MonarchName> names)
