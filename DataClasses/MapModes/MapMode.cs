@@ -10,11 +10,11 @@ public abstract class MapMode
 
    public virtual void RenderMapMode(Func<int, Color> method)
    {
+      var sw = Stopwatch.StartNew();
       switch (Globals.MapModeRendering)
       {
          case MapModeRendering.LiveBackground:
          case MapModeRendering.Live:
-            var sw = Stopwatch.StartNew();
             Bitmap?.Dispose();
 
             if (IsLandOnly)
@@ -35,12 +35,9 @@ public abstract class MapMode
             {
                Globals.MapModeManager.ShareLiveBitmap = BitMapHelper.GenerateBitmapFromProvinces(method);
             }
-
+            // draw borders on top of the provinces is always needed
             MapDrawHelper.DrawAllProvinceBorders(Globals.MapModeManager.ShareLiveBitmap, Color.Black);
             Globals.MapModeManager.PictureBox.Image = Globals.MapModeManager.ShareLiveBitmap;
-            Globals.MapModeManager.PreviousLandOnly = IsLandOnly;
-            sw.Stop();
-            Debug.WriteLine($"RenderMapMode {GetMapModeName()} took {sw.ElapsedMilliseconds}ms");
             break;
          case MapModeRendering.Cached:
             Bitmap?.Dispose();
@@ -52,6 +49,9 @@ public abstract class MapMode
             throw new ArgumentOutOfRangeException();
       }
       Globals.MapModeManager.PictureBox.Invalidate();
+      Globals.MapModeManager.PreviousLandOnly = IsLandOnly;
+      sw.Stop();
+      Debug.WriteLine($"RenderMapMode {GetMapModeName()} took {sw.ElapsedMilliseconds}ms");
    }
 
    public virtual string GetMapModeName()

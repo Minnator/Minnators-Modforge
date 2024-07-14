@@ -19,10 +19,12 @@ namespace Editor.Helper
          menu.Items.Add(GetCultureGroupSelector());
          menu.Items.Add(GetCultureSelector());
          
+         /*
          foreach (ToolStripMenuItem item in menu.Items)
          {
             Debug.WriteLine($"{item.Text} --> {item.Enabled}");
          }
+         */
 
          return menu;
       }

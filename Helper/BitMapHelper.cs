@@ -31,7 +31,7 @@ public static class BitMapHelper
 
    public static void ModifyByProvinceCollection(Bitmap bmp, ICollection<int> ids, Func<int, Color> method)
    {
-      var sw = Stopwatch.StartNew();
+      //var sw = Stopwatch.StartNew();
       var provinces = new Province[ids.Count];
       var cnt = 0;
       foreach (var id in ids)
@@ -41,13 +41,13 @@ public static class BitMapHelper
       }
       ModifyByProvinceCollection(bmp, provinces, method);
       //bmp.Save ("C:\\Users\\david\\Downloads\\Map.png", ImageFormat.Png);
-      sw.Stop();
-      Debug.WriteLine($"Modifying Bitmap took {sw.ElapsedMilliseconds} ms");
+      //sw.Stop();
+      //Debug.WriteLine($"Modifying Bitmap took {sw.ElapsedMilliseconds} ms");
    }
 
    public static void ModifyByProvinceCollection(Bitmap bmp, ICollection<Province> provinces, Func<int, Color> method)
    {
-      var sw = Stopwatch.StartNew();
+      //var sw = Stopwatch.StartNew();
       var width = bmp.Width;
       var height = bmp.Height;
 
@@ -80,7 +80,7 @@ public static class BitMapHelper
       }
 
       bmp.UnlockBits(bitmapData);
-      sw.Stop();
+      //sw.Stop();
       //Debug.WriteLine($"Modifying Bitmap took {sw.ElapsedMilliseconds} ms");
    }
 

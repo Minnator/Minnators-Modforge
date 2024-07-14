@@ -62,6 +62,8 @@ public class MapModeManager(PannablePictureBox pictureBox)
 
    public void SetCurrentMapMode(string name)
    {
+      if (CurrentMapMode?.GetMapModeName() == name) 
+         return; // no need to change map mode if it is already the same
       CurrentMapMode = GetMapMode(name); 
       CurrentMapMode.RenderMapMode(CurrentMapMode.GetProvinceColor);
    }
