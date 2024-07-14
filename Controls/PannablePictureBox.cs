@@ -243,11 +243,11 @@ public sealed class PannablePictureBox : PictureBox
       pe.Graphics.DrawImage(Overlay, 0, 0, Overlay.Width, Overlay.Height);
 
       // Draw the selection lasso
-      if (Selection.State == SelectionState.Lasso && Selection.LassoSelection.Count > 2)
+      if (Selection is { State: SelectionState.Lasso, LassoSelection.Count: > 2 })
       {
-         pe.Graphics.DrawPolygon(new Pen(Selection.SelectionOutlineColor, 1), Selection.LassoSelection.ToArray());
+         pe.Graphics.DrawPolygon(new(Selection.SelectionOutlineColor, 1), Selection.LassoSelection.ToArray());
       }
-      if (Selection.ClearPolygonSelection && Selection.LassoSelection.Count > 2)
+      if (Selection is { ClearPolygonSelection: true, LassoSelection.Count: > 2 })
       {
          Invalidate(Geometry.GetBounds([.. Selection.LassoSelection]));
          Selection.ClearPolygonSelection = false;
