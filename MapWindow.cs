@@ -202,18 +202,12 @@ namespace Editor
 
       private void MapWindow_Load(object sender, EventArgs e)
       {
-         MapPictureBox.FocusOn(new(2700, 600));
+         MapPictureBox.FocusOn(new(3100, 600));
       }
 
       private void searchToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         if (Globals.SearchForm == null || Globals.SearchForm.IsDisposed)
-         {
-            Globals.SearchForm = new();
-            Globals.SearchForm.Show();
-         }
-         else
-            Globals.SearchForm.BringToFront();
+         FormHelper.OpenOrBringToFront(Globals.SearchForm);
       }
    }
 }

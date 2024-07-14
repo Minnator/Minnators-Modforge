@@ -58,9 +58,14 @@ public static class BitMapHelper
       var stride = bitmapData.Stride;
       var bytesPerPixel = Image.GetPixelFormatSize(bmp.PixelFormat) / 8;
 
+      var parallelOptions = new ParallelOptions
+      {
+         MaxDegreeOfParallelism = Environment.ProcessorCount
+      };
+
       unsafe
       {
-         Parallel.ForEach(provinces, province =>
+         Parallel.ForEach(provinces, parallelOptions ,province =>
          {
             var points = new Point[province.PixelCnt];
             Array.Copy(Globals.Pixels, province.PixelPtr, points, 0, province.PixelCnt);

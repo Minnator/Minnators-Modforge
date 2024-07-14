@@ -11,6 +11,7 @@ public abstract class MapMode
    public virtual void RenderMapMode(Func<int, Color> method)
    {
       var sw = Stopwatch.StartNew();
+      Globals.MapWindow.MapPictureBox.IsPainting = true;
       switch (Globals.MapModeRendering)
       {
          case MapModeRendering.LiveBackground:
@@ -48,6 +49,7 @@ public abstract class MapMode
          default:
             throw new ArgumentOutOfRangeException();
       }
+      Globals.MapWindow.MapPictureBox.IsPainting = false;
       Globals.MapModeManager.PictureBox.Invalidate();
       Globals.MapModeManager.PreviousLandOnly = IsLandOnly;
       sw.Stop();
@@ -84,13 +86,14 @@ public abstract class MapMode
    {
       if (Globals.MapModeManager.CurrentMapMode != this)
          return;
-      if (sender is not int id)
+      if (sender is not int id || (IsLandOnly && !Globals.LandProvinces.Contains(id)))
          return;
       Update(id);
    }
 
    public virtual void Update(int id)
    {
+      Globals.MapWindow.MapPictureBox.IsPainting = true;
       switch (Globals.MapModeRendering)
       {
          case MapModeRendering.Cached:
@@ -102,6 +105,7 @@ public abstract class MapMode
             Globals.MapModeManager.PictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(id, Color.Black, Globals.MapModeManager.ShareLiveBitmap));
             break;
       }
+      Globals.MapWindow.MapPictureBox.IsPainting = false;
    }
 
    public virtual string GetSpecificToolTip(int provinceId)
