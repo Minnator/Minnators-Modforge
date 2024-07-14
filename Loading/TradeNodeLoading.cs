@@ -16,6 +16,22 @@ namespace Editor.Loading
          {
             ParseTradeNodesFromString(IO.ReadAllInUTF8(file));
          }
+
+         SetIncoming();
+      }
+
+      private static void SetIncoming()
+      {
+         foreach (var node in Globals.TradeNodes.Values)
+         {
+            foreach (var outgoing in node.Outgoing)
+            {
+               if (Globals.TradeNodes.TryGetValue(outgoing, out var outgoingNode))
+               {
+                  outgoingNode.Incoming.Add(node.Name);
+               }
+            }
+         }
       }
 
       private static void ParseTradeNodesFromString(string fileContent)

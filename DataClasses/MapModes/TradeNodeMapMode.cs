@@ -27,12 +27,19 @@ namespace Editor.DataClasses.MapModes
          var sb = new StringBuilder();
          sb.AppendLine($"TradeNode: {node.Name} ({Localisation.GetLoc(node.Name)})");
          sb.AppendLine($"Inland: {node.IsInland}");
-         sb.AppendLine($"Outgoing: {node.Outgoing}");
-         foreach (var outgoing in node.Outgoing)
-            sb.Append($" {outgoing},");
-         sb.AppendLine($"Incoming: {node.Incoming}");
-         foreach (var incoming in node.Incoming)
-            sb.Append($" {incoming},");
+         sb.AppendLine($"Outgoing: ");
+         sb.Append("\t");
+         if (node.Outgoing.Count > 0)
+            foreach (var outgoing in node.Outgoing)
+               sb.Append($" {outgoing},");
+         sb.Remove(sb.Length - 1, 1);
+         sb.AppendLine();
+         sb.AppendLine($"Incoming: ");
+         sb.Append("\t");
+         if (node.Incoming.Count > 0)
+            foreach (var incoming in node.Incoming)
+               sb.Append($" {incoming},");
+         sb.Remove(sb.Length - 1, 1);
          return sb.ToString();
       }
    }

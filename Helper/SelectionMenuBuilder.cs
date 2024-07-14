@@ -78,7 +78,8 @@ namespace Editor.Helper
          return ControlFactory.GetToolStripMenuItem("Select Country", (sender, args) =>
          {
             if (Globals.Provinces.TryGetValue(Globals.MapWindow.MapPictureBox.LastInvalidatedProvince, out var province))
-               Globals.HistoryManager.AddCommand(new CCollectionSelection(Globals.MapWindow.MapPictureBox, Globals.Countries[province.Owner]), CommandHistoryType.ComplexSelection);
+               if (Globals.Countries.TryGetValue (province.Owner, out var country))
+                  Globals.HistoryManager.AddCommand(new CCollectionSelection(Globals.MapWindow.MapPictureBox, country), CommandHistoryType.ComplexSelection);
          });
       }
 
