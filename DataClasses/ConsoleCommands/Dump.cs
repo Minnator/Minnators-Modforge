@@ -11,7 +11,7 @@ namespace Editor.DataClasses.ConsoleCommands
       public override string Help { get; } = "dump <object> <[optional]folderPath>";
       public override string[] Aliases { get; } = [];
       private readonly HashSet<string> _validObjects = [
-         "provinces", "countries", "regions", "tradeGoods", "religions", "cultures", "tags", "history", "trade_goods"
+         "provinces", "countries", "regions", "tradeGoods", "religions", "cultures", "tags", "history", "tradegoods", "tradenodes"
       ];
       public override void Execute(string[] args)
       {
@@ -67,8 +67,8 @@ namespace Editor.DataClasses.ConsoleCommands
             case "regions":
                //DumpRegions(path);
                break;
-            case "tradeGoods":
-               //DumpTradeGoods(path);
+            case "tradenodes":
+               TradeNodeHelper.DumpTradeNodes(path);
                break;
             case "religions":
                //DumpReligions(path);
@@ -82,7 +82,7 @@ namespace Editor.DataClasses.ConsoleCommands
             case "history":
                //DumpHistory(path);
                break;
-            case "trade_goods":
+            case "tradegoods":
                TradeGoodHelper.DumpTradeGoods(path);
                break;
          }

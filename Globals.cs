@@ -92,6 +92,7 @@ public static class Globals
 
    // Maps the name of TradeGoods to the TradeGood object
    public static Dictionary<string, TradeGood> TradeGoods = [];
+   public static Dictionary<string, TradeNode> TradeNodes = [];
 
    // Culture Groups and Cultures
    public static Dictionary<string, CultureGroup> CultureGroups = null!;

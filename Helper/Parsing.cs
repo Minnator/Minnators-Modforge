@@ -51,6 +51,11 @@ public class Block(int start, int end, string name, List<IElement> subBlocks) : 
    {
       return GetBlockElements.FirstOrDefault(b => b.Name == name);
    }
+
+   public override string ToString()
+   {
+      return Name;
+   }
 }
 
 public class Content(string value) : IElement
@@ -77,7 +82,7 @@ public static class Parsing
    private static readonly Regex StringListRegex = new (@"(?:""(?:[^""\\]|\\.)*""|\S+)", RegexOptions.Compiled);
    private static readonly Regex ColorRegex = new (@"(?<r>\d+)\s+(?<g>\d+)\s+(?<b>\d+)", RegexOptions.Compiled);
    private static readonly Regex MonarchNameRegex = new (@"([\p{L} ]+) #(\d+)""\s*=\s*(-?\d+)", RegexOptions.Compiled);
-   private static readonly Regex KeyValueRegex = new (@"(?<key>[A-Za-z_0-9-.]+)\s*=\s*(?<value>[A-Za-z_0-9-.]+)", RegexOptions.Compiled);
+   private static readonly Regex KeyValueRegex = new (@"(?<key>[A-Za-z_0-9-.]+)\s*=\s*""?(?<value>[A-Za-z_0-9-.]+)""?", RegexOptions.Compiled);
 
 
    /// <summary>
