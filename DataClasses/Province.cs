@@ -1,12 +1,48 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using Editor.Helper;
+﻿using Editor.Helper;
 using Editor.Interfaces;
 using static Editor.Helper.ProvinceEventHandler;
 
 namespace Editor.DataClasses;
 
-#nullable enable
+public class ProvinceInitial()
+{
+   public Tag Controller = Tag.Empty;
+   public Tag Owner = Tag.Empty;
+   public Tag TribalOwner = Tag.Empty;
+   public Tag TradeCompany = Tag.Empty;
+   public int BaseManpower = 1;
+   public int BaseTax = 1;
+   public int BaseProduction = 1;
+   public int CenterOfTrade = 0;
+   public int ExtraCost = 0;
+   public int NativeFerocity = 0;
+   public int NativeHostileness = 0;
+   public int NativeSize = 0;
+   public int RevoltRisk = 0;
+   public int LocalAutonomy = 0;
+   public int Nationalism = 0;
+   public bool IsHre = false;
+   public bool IsCity = false;
+   public bool HasRevolt = false;
+   public bool IsSeatInParliament = false;
+   public string Capital = string.Empty;
+   public string Culture = string.Empty;
+   public string Religion = string.Empty;
+   public string Area = string.Empty;
+   public string Continent = string.Empty;
+   public string LatentTradeGood = string.Empty;
+   public string ReformationCenter = string.Empty;
+   public List<Tag> Claims = [];
+   public List<Tag> Cores = [];
+   public List<string> DiscoveredBy = [];
+   public List<string> Buildings = [];
+   public List<string> TradeCompanyInvestments = [];
+   public List<string> ProvinceModifiers = [];
+   public List<string> PermanentProvinceModifiers = [];
+   public List<string> ProvinceTriggeredModifiers = [];
+   public TradeGood TradeGood = TradeGood.Unknown;
+   public List<HistoryEntry> History = [];
+}
 
 public class Province : IProvinceCollection
 {
@@ -47,6 +83,8 @@ public class Province : IProvinceCollection
    private TradeGood _tradeGood;
    private List<HistoryEntry> _history = [];
 
+   public ProvinceInitial ProvinceInitial { get; set; } = new();
+
    #region ManagementData
 
    // Management data
@@ -62,7 +100,7 @@ public class Province : IProvinceCollection
 
    #endregion
 
-   // Events for the ProvinceValues will only be raised if the State is Running otherwise they will be supressed to improve performance when loading
+   // Events for the ProvinceValues will only be raised if the State is Running otherwise they will be suppressed to improve performance when loading
 
    #region Globals from the game
 
@@ -480,13 +518,97 @@ public class Province : IProvinceCollection
    #endregion
    // ======================================== Methods ========================================
 
+   /// <summary>
+   /// Copies the Province values to the ProvinceInitial values to be able to revert to the original standard when going back in time
+   /// </summary>
+   public void InitializeInitial()
+   {
+      ProvinceInitial.Area = Area;
+      ProvinceInitial.Continent = Continent;
+      ProvinceInitial.Claims = Claims;
+      ProvinceInitial.Cores = Cores;
+      ProvinceInitial.Controller = Controller;
+      ProvinceInitial.Owner = Owner;
+      ProvinceInitial.TribalOwner = TribalOwner;
+      ProvinceInitial.BaseManpower = BaseManpower;
+      ProvinceInitial.BaseTax = BaseTax;
+      ProvinceInitial.BaseProduction = BaseProduction;
+      ProvinceInitial.CenterOfTrade = CenterOfTrade;
+      ProvinceInitial.ExtraCost = ExtraCost;
+      ProvinceInitial.NativeFerocity = NativeFerocity;
+      ProvinceInitial.NativeHostileness = NativeHostileness;
+      ProvinceInitial.NativeSize = NativeSize;
+      ProvinceInitial.RevoltRisk = RevoltRisk;
+      ProvinceInitial.LocalAutonomy = LocalAutonomy;
+      ProvinceInitial.Nationalism = Nationalism;
+      ProvinceInitial.IsHre = IsHre;
+      ProvinceInitial.IsCity = IsCity;
+      ProvinceInitial.HasRevolt = HasRevolt;
+      ProvinceInitial.IsSeatInParliament = IsSeatInParliament;
+      ProvinceInitial.Capital = Capital;
+      ProvinceInitial.Culture = Culture;
+      ProvinceInitial.Religion = Religion;
+      ProvinceInitial.Buildings = Buildings;
+      ProvinceInitial.TradeGood = TradeGood;
+      ProvinceInitial.History = History;
+      ProvinceInitial.LatentTradeGood = LatentTradeGood;
+      ProvinceInitial.ReformationCenter = ReformationCenter;
+      ProvinceInitial.TradeCompany = TradeCompany;
+      ProvinceInitial.TradeCompanyInvestments = TradeCompanyInvestments;
+      ProvinceInitial.ProvinceModifiers = ProvinceModifiers;
+      ProvinceInitial.PermanentProvinceModifiers = PermanentProvinceModifiers;
+      ProvinceInitial.ProvinceTriggeredModifiers = ProvinceTriggeredModifiers;
+   }
+
+   /// <summary>
+   /// Loads the Province values from the ProvinceInitial values to revert to the original standard when going back in time
+   /// </summary>
+   public void ResetHistory()
+   {
+      Area = ProvinceInitial.Area;
+      Continent = ProvinceInitial.Continent;
+      Claims = ProvinceInitial.Claims;
+      Cores = ProvinceInitial.Cores;
+      Controller = ProvinceInitial.Controller;
+      Owner = ProvinceInitial.Owner;
+      TribalOwner = ProvinceInitial.TribalOwner;
+      BaseManpower = ProvinceInitial.BaseManpower;
+      BaseTax = ProvinceInitial.BaseTax;
+      BaseProduction = ProvinceInitial.BaseProduction;
+      CenterOfTrade = ProvinceInitial.CenterOfTrade;
+      ExtraCost = ProvinceInitial.ExtraCost;
+      NativeFerocity = ProvinceInitial.NativeFerocity;
+      NativeHostileness = ProvinceInitial.NativeHostileness;
+      NativeSize = ProvinceInitial.NativeSize;
+      RevoltRisk = ProvinceInitial.RevoltRisk;
+      LocalAutonomy = ProvinceInitial.LocalAutonomy;
+      Nationalism = ProvinceInitial.Nationalism;
+      IsHre = ProvinceInitial.IsHre;
+      IsCity = ProvinceInitial.IsCity;
+      HasRevolt = ProvinceInitial.HasRevolt;
+      IsSeatInParliament = ProvinceInitial.IsSeatInParliament;
+      Capital = ProvinceInitial.Capital;
+      Culture = ProvinceInitial.Culture;
+      Religion = ProvinceInitial.Religion;
+      Buildings = ProvinceInitial.Buildings;
+      TradeGood = ProvinceInitial.TradeGood;
+      History = ProvinceInitial.History;
+      LatentTradeGood = ProvinceInitial.LatentTradeGood;
+      ReformationCenter = ProvinceInitial.ReformationCenter;
+      TradeCompany = ProvinceInitial.TradeCompany;
+      TradeCompanyInvestments = ProvinceInitial.TradeCompanyInvestments;
+      ProvinceModifiers = ProvinceInitial.ProvinceModifiers;
+      PermanentProvinceModifiers = ProvinceInitial.PermanentProvinceModifiers;
+      ProvinceTriggeredModifiers = ProvinceInitial.ProvinceTriggeredModifiers;
+   }
+
    public void LoadHistoryForDate(DateTime date)
    {
       // History Entries are sorted by default. Se w can load entries as long as the date is less than the current date
-      foreach (var he in _history)
+      foreach (var historyEntry in _history)
       {
-         if (he.Date <= date)
-            he.Apply(this);
+         if (historyEntry.Date <= date)
+            historyEntry.Apply(this);
          else
             break;
       }

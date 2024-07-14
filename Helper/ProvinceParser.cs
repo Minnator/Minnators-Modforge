@@ -65,6 +65,7 @@ public static class ProvinceParser
          }
       }
 
+      province.InitializeInitial();
    }
 
    private static void ParseProvinceContentBlock(ref Province province, Content content)
