@@ -100,11 +100,6 @@ public sealed class PannablePictureBox : PictureBox
       if (!Globals.MapModeManager.GetProvince(e.Location, out var province)) 
          return;
       
-      if (e.Button is MouseButtons.Right && ModifierKeys != Keys.Control)
-      {
-         SelectionMenuBuilder.SetContextMenuStrip(province, ContextMenuStrip!);
-      }
-
       //check if ctrl is pressed
       if (ModifierKeys == Keys.Control && Selection.State == SelectionState.Single) 
          Globals.HistoryManager.AddCommand(new CAddSingleSelection(province.Id, this), CommandHistoryType.SimpleSelection);

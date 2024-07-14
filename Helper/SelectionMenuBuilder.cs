@@ -18,6 +18,7 @@ namespace Editor.Helper
          menu.Items.Add(GetCountrySelector());
          menu.Items.Add(GetCultureGroupSelector());
          menu.Items.Add(GetCultureSelector());
+         menu.Items.Add(GetTradeNodeSelector());
          
          /*
          foreach (ToolStripMenuItem item in menu.Items)
@@ -99,23 +100,18 @@ namespace Editor.Helper
          });
       }
 
-      public static void SetContextMenuStrip(Province province, ContextMenuStrip menu)
+      private static ToolStripItem GetTradeNodeSelector()
       {
-         if (string.IsNullOrEmpty(province.Area))
-            menu.Items[0].Enabled = false;
-         if (string.IsNullOrEmpty(province.Area) || string.IsNullOrEmpty(Globals.Areas[province.Area].Region))
-            menu.Items[1].Enabled = false;
-         if (string.IsNullOrEmpty(province.Area) || string.IsNullOrEmpty(Globals.Areas[province.Area].Region) || string.IsNullOrEmpty(Globals.Regions[Globals.Areas[province.Area].Region].SuperRegion))
-            menu.Items[2].Enabled = false;
-         if (string.IsNullOrEmpty(province.Continent))
-            menu.Items[3].Enabled = false;
-         if (string.IsNullOrEmpty(province.Owner))
-            menu.Items[4].Enabled = false;
-         if (string.IsNullOrEmpty(province.Culture) || string.IsNullOrEmpty(Globals.Cultures[province.Culture].CultureGroup))
-            menu.Items[5].Enabled = false;
-         if (string.IsNullOrEmpty(province.Culture))
-            menu.Items[6].Enabled = false;
-
+         return ControlFactory.GetToolStripMenuItem("Select Trade Node", (sender, args) =>
+         {
+            if (Globals.Provinces.TryGetValue(Globals.MapWindow.MapPictureBox.LastInvalidatedProvince,
+                   out var province))
+            {
+               var node = TradeNodeHelper.GetTradeNodeByProvince(province.Id);
+               Globals.HistoryManager.AddCommand(new CCollectionSelection(Globals.MapWindow.MapPictureBox, node.Members.ToList()), CommandHistoryType.ComplexSelection);
+            }
+         });
       }
+
    }
 }
