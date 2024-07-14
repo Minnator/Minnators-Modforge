@@ -13,6 +13,8 @@
       {
          Dock = DockStyle.Fill,
          TextAlign = HorizontalAlignment.Center,
+         Margin = new(0,1,0,0),
+         Padding = new(0),
       };
       
       private readonly DecreaseButton _yearDecreaseButton = new ();
@@ -41,6 +43,8 @@
          _dayDecreaseButton.Click += OnDayDecrease;
          
          Size = _tableLayoutPanel.Size;
+         Margin = new(0);
+         Padding = new(0);
          Controls.Add(_tableLayoutPanel);
       }
 
@@ -95,14 +99,14 @@
                new(SizeType.Absolute, 20),
                new(SizeType.Absolute, 20),
             },
-            Size = new(210, 27),
+            Size = new(210, 25),
             Padding = new(0),
             Margin = new(0),
          };
 
-         _tableLayoutPanel.Controls.Add(_yearDecreaseButton, 0, 0);
          _tableLayoutPanel.Controls.Add(_monthDecreaseButton, 1, 0);
-         _tableLayoutPanel.Controls.Add(_dayDecreaseButton, 2, 0);
+         _tableLayoutPanel.Controls.Add(_dayDecreaseButton, 0, 0);
+         _tableLayoutPanel.Controls.Add(_yearDecreaseButton, 2, 0);
 
          _tableLayoutPanel.Controls.Add(_dateTextBox, 3, 0);
 
@@ -121,7 +125,12 @@
 
       public DateTime Date
       {
-         get => DateTime.Parse(_dateTextBox.Text);
+         get
+         {
+            if (DateTime.TryParse(_dateTextBox.Text, out var date))
+               return date;
+            return Date;
+         }
          set => _dateTextBox.Text = value.ToString("yyyy/MM/dd");
       }
 

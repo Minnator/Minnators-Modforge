@@ -12,6 +12,7 @@ namespace Editor
    public partial class MapWindow : Form
    {
       public PannablePictureBox MapPictureBox = null!;
+      public DateControl DateControl = new (new(1444, 11, 11), DateControlLayout.Horizontal);
 
       public ModProject Project = new()
       {
@@ -38,7 +39,6 @@ namespace Editor
          ResourceUsageHelper.Initialize(this);
          Globals.State = State.Running;
 
-         MainLayoutPanel.Controls.Add(new DateControl(new (1444, 11, 11), DateControlLayout.Horizontal), 0, 1);
       }
 
 
@@ -48,6 +48,9 @@ namespace Editor
          InitializeComponent();
          MapPictureBox = ControlFactory.GetPannablePictureBox(ref MapPanel, this);
          MapPanel.Controls.Add(MapPictureBox);
+
+         TopStripLayoutPanel.Controls.Add(DateControl, 4, 0);
+         DateControl.DateChanged += (sender, e) => Globals.Date = DateControl.Date;
       }
 
 

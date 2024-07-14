@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using Editor.DataClasses.MapModes;
+﻿using Editor.DataClasses.MapModes;
 using Editor.Helper;
-using Editor.Loading;
 
 namespace Editor.MapModes;
 

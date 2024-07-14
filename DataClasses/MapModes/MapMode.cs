@@ -82,6 +82,8 @@ public abstract class MapMode
 
    public virtual void UpdateProvince(object sender, ProvinceEventHandler.ProvinceDataChangedEventArgs e)
    {
+      if (Globals.MapModeManager.CurrentMapMode != this)
+         return;
       if (sender is not int id)
          return;
       Update(id);

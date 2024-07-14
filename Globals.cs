@@ -54,7 +54,7 @@ public static class Globals
       get => _date;
       set
       {
-         MapWindow.DateLabel.Text = value.ToString("yyyy-MM-dd");
+         MapWindow.DateControl.Date = value;
          ProvinceHistoryManager.LoadDate(value);
          _date = value;
       }

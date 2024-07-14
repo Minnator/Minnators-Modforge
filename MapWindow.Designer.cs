@@ -58,8 +58,7 @@
          toolStripLabel1 = new ToolStripLabel();
          toolStripSplitButton1 = new ToolStripSplitButton();
          MainLayoutPanel = new TableLayoutPanel();
-         tableLayoutPanel2 = new TableLayoutPanel();
-         DateLabel = new Label();
+         TopStripLayoutPanel = new TableLayoutPanel();
          toolStripContainer1 = new ToolStripContainer();
          toolStrip2 = new ToolStrip();
          newToolStripButton = new ToolStripButton();
@@ -75,7 +74,6 @@
          MapMenuStrip.SuspendLayout();
          toolStrip1.SuspendLayout();
          MainLayoutPanel.SuspendLayout();
-         tableLayoutPanel2.SuspendLayout();
          toolStripContainer1.ContentPanel.SuspendLayout();
          toolStripContainer1.RightToolStripPanel.SuspendLayout();
          toolStripContainer1.SuspendLayout();
@@ -289,7 +287,7 @@
          MainLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 400F));
          MainLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
          MainLayoutPanel.Controls.Add(toolStrip1, 0, 2);
-         MainLayoutPanel.Controls.Add(tableLayoutPanel2, 1, 0);
+         MainLayoutPanel.Controls.Add(TopStripLayoutPanel, 1, 0);
          MainLayoutPanel.Controls.Add(toolStripContainer1, 1, 1);
          MainLayoutPanel.Dock = DockStyle.Fill;
          MainLayoutPanel.Location = new Point(0, 27);
@@ -301,35 +299,22 @@
          MainLayoutPanel.Size = new Size(1511, 900);
          MainLayoutPanel.TabIndex = 3;
          // 
-         // tableLayoutPanel2
+         // TopStripLayoutPanel
          // 
-         tableLayoutPanel2.ColumnCount = 5;
-         tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-         tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-         tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-         tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-         tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-         tableLayoutPanel2.Controls.Add(DateLabel, 4, 0);
-         tableLayoutPanel2.Dock = DockStyle.Fill;
-         tableLayoutPanel2.Location = new Point(400, 0);
-         tableLayoutPanel2.Margin = new Padding(0);
-         tableLayoutPanel2.Name = "tableLayoutPanel2";
-         tableLayoutPanel2.RowCount = 1;
-         tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         tableLayoutPanel2.Size = new Size(1111, 26);
-         tableLayoutPanel2.TabIndex = 2;
-         // 
-         // DateLabel
-         // 
-         DateLabel.AutoSize = true;
-         DateLabel.Dock = DockStyle.Fill;
-         DateLabel.Location = new Point(891, 3);
-         DateLabel.Margin = new Padding(3);
-         DateLabel.Name = "DateLabel";
-         DateLabel.Size = new Size(217, 20);
-         DateLabel.TabIndex = 0;
-         DateLabel.Text = "-:-:-";
-         DateLabel.TextAlign = ContentAlignment.MiddleCenter;
+         TopStripLayoutPanel.ColumnCount = 5;
+         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+         TopStripLayoutPanel.Dock = DockStyle.Fill;
+         TopStripLayoutPanel.Location = new Point(400, 0);
+         TopStripLayoutPanel.Margin = new Padding(0);
+         TopStripLayoutPanel.Name = "TopStripLayoutPanel";
+         TopStripLayoutPanel.RowCount = 1;
+         TopStripLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         TopStripLayoutPanel.Size = new Size(1111, 26);
+         TopStripLayoutPanel.TabIndex = 2;
          // 
          // toolStripContainer1
          // 
@@ -467,8 +452,6 @@
          toolStrip1.PerformLayout();
          MainLayoutPanel.ResumeLayout(false);
          MainLayoutPanel.PerformLayout();
-         tableLayoutPanel2.ResumeLayout(false);
-         tableLayoutPanel2.PerformLayout();
          toolStripContainer1.ContentPanel.ResumeLayout(false);
          toolStripContainer1.RightToolStripPanel.ResumeLayout(false);
          toolStripContainer1.RightToolStripPanel.PerformLayout();
@@ -509,7 +492,7 @@
       private TableLayoutPanel MainLayoutPanel;
       private ToolStripLabel toolStripLabel1;
       private ToolStripSplitButton toolStripSplitButton1;
-      private TableLayoutPanel tableLayoutPanel2;
+      private TableLayoutPanel TopStripLayoutPanel;
       private ToolStripContainer toolStripContainer1;
       private ToolStrip toolStrip2;
       private ToolStripButton newToolStripButton;
@@ -522,7 +505,6 @@
       private ToolStripButton pasteToolStripButton;
       private ToolStripSeparator toolStripSeparator3;
       private ToolStripButton helpToolStripButton;
-      public Label DateLabel;
       private ToolStripComboBox DateSelector;
       private ToolStripMenuItem searchToolStripMenuItem;
    }
