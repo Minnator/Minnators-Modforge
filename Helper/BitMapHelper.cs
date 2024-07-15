@@ -12,6 +12,11 @@ namespace Editor.Helper;
 public static class BitMapHelper
 {
 
+   /// <summary>
+   /// Iterates over all provinces and writes the result of the method on the province
+   /// </summary>
+   /// <param name="method"></param>
+   /// <param name="bmp"></param>
    public static void WriteOnProvince(Func<int, string> method, Bitmap bmp)
    {
       var font = new Font("Arial", 6);
@@ -21,6 +26,8 @@ public static class BitMapHelper
       foreach (var province in Globals.Provinces.Values)
       {
          var text = method(province.Id);
+         if (string.IsNullOrEmpty(text))
+            continue;
          var textWidth = (int)graphics.MeasureString(text, font).Width;
          var textHeight = (int)graphics.MeasureString(text, font).Height;
 

@@ -40,12 +40,7 @@ namespace Editor.Loading
                Globals.ErrorLog.Write($"Cant parse Tradegood: Element is not a block: {((Content)element)}");
                continue;
             }
-
-            if (block.Name.Equals("coal"))
-            {
-               Debug.WriteLine("coal");
-            }
-
+            
             var color = block.GetBlockWithName("color");
             if (color is null)
             {

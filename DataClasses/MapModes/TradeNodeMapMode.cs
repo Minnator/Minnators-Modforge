@@ -19,6 +19,19 @@ namespace Editor.DataClasses.MapModes
          return node.Color;
       }
 
+      public override void RenderMapMode(Func<int, Color> method)
+      {
+         base.RenderMapMode(method);
+         BitMapHelper.WriteOnProvince(GetCoTLevel, Globals.MapModeManager.ShareLiveBitmap);
+      }
+
+      private string GetCoTLevel(int provinceId)
+      {
+         if (Globals.Provinces.TryGetValue(provinceId, out var prov) && prov.CenterOfTrade > 0)
+            return prov.CenterOfTrade.ToString();
+         return string.Empty;
+      }
+
       public override string GetSpecificToolTip(int provinceId)
       {
          var node = TradeNodeHelper.GetTradeNodeByProvince(provinceId);
@@ -27,6 +40,9 @@ namespace Editor.DataClasses.MapModes
          var sb = new StringBuilder();
          sb.AppendLine($"TradeNode: {node.Name} ({Localisation.GetLoc(node.Name)})");
          sb.AppendLine($"Inland: {node.IsInland}");
+         if (Globals.Provinces.TryGetValue(provinceId, out var prov))
+            if (prov.CenterOfTrade > 0)
+               sb.AppendLine($"Center of Trade: {prov.CenterOfTrade}");
          sb.AppendLine($"Outgoing: ");
          sb.Append("\t");
          if (node.Outgoing.Count > 0)
