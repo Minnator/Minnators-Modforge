@@ -1,4 +1,4 @@
 # Editor
-![alt text]([http://url/to/img.png](https://imgur.com/a/FJKpz6I))
+![WIP image of Editor](https://imgur.com/a/FJKpz6I)
 
 a tool for Chewy
