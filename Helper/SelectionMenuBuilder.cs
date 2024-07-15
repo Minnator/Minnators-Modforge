@@ -1,7 +1,5 @@
-﻿using System.Diagnostics;
-using Editor.Commands;
+﻿using Editor.Commands;
 using Editor.Controls;
-using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.Helper
 {
@@ -30,7 +28,7 @@ namespace Editor.Helper
          return menu;
       }
 
-      private static ToolStripItem GetAreaSelector()
+      private static ToolStripMenuItem GetAreaSelector()
       {
          return ControlFactory.GetToolStripMenuItem("Select Area", (sender, e) =>
          {
@@ -40,7 +38,7 @@ namespace Editor.Helper
          });
       }
 
-      private static ToolStripItem GetRegionSelector()
+      private static ToolStripMenuItem GetRegionSelector()
       {
          return ControlFactory.GetToolStripMenuItem("Select Region", (sender, args) =>
          {
@@ -51,7 +49,7 @@ namespace Editor.Helper
          });
       }
 
-      private static ToolStripItem GetSuperRegionSelector ()
+      private static ToolStripMenuItem GetSuperRegionSelector ()
       {
          return ControlFactory.GetToolStripMenuItem("Select Super Region", (sender, args) =>
          {
@@ -63,7 +61,7 @@ namespace Editor.Helper
          });
       }
 
-      private static ToolStripItem GetContinentSelector()
+      private static ToolStripMenuItem GetContinentSelector()
       {
          return ControlFactory.GetToolStripMenuItem("Select Continent", (sender, args) =>
          {
@@ -73,7 +71,7 @@ namespace Editor.Helper
          });
       }
 
-      private static ToolStripItem GetCountrySelector()
+      private static ToolStripMenuItem GetCountrySelector()
       {
          return ControlFactory.GetToolStripMenuItem("Select Country", (sender, args) =>
          {
@@ -83,7 +81,7 @@ namespace Editor.Helper
          });
       }
 
-      private static ToolStripItem GetCultureGroupSelector()
+      private static ToolStripMenuItem GetCultureGroupSelector()
       {
          return ControlFactory.GetToolStripMenuItem("Select Culture Group", (sender, args) =>
          {
@@ -92,7 +90,7 @@ namespace Editor.Helper
          });
       }
 
-      private static ToolStripItem GetCultureSelector()
+      private static ToolStripMenuItem GetCultureSelector()
       {
          return ControlFactory.GetToolStripMenuItem("Select Culture", (sender, args) =>
          {
@@ -101,7 +99,7 @@ namespace Editor.Helper
          });
       }
 
-      private static ToolStripItem GetTradeNodeSelector()
+      private static ToolStripMenuItem GetTradeNodeSelector()
       {
          return ControlFactory.GetToolStripMenuItem("Select Trade Node", (sender, args) =>
          {
@@ -109,10 +107,9 @@ namespace Editor.Helper
                    out var province))
             {
                var node = TradeNodeHelper.GetTradeNodeByProvince(province.Id);
-               Globals.HistoryManager.AddCommand(new CCollectionSelection(Globals.MapWindow.MapPictureBox, node.Members.ToList()), CommandHistoryType.ComplexSelection);
+               Globals.HistoryManager.AddCommand(new CCollectionSelection(Globals.MapWindow.MapPictureBox, [.. node.Members]), CommandHistoryType.ComplexSelection);
             }
          });
       }
-
    }
 }

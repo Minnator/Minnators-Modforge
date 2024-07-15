@@ -913,8 +913,9 @@ public class Province : IProvinceCollection
       {
          if (Globals.Cultures.TryGetValue(province.Culture, out var culture))
             if (Globals.CultureGroups.TryGetValue(culture.CultureGroup, out var cultureGroup))
-               if (cultureGroup.Name == Globals.Cultures[Culture].CultureGroup)
-                  provinces.Add(province.Id);
+               if (Globals.Cultures.TryGetValue(Culture, out var cultureToCompare))
+                  if (cultureGroup.Name == cultureToCompare.Name)
+                     provinces.Add(province.Id);
       }
       return provinces;
    }
