@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
+using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.Helper;
@@ -79,8 +80,8 @@ public static class ProvinceParser
       {
          if (block.Name.ToLower().Equals("latent_trade_goods"))
          {
-            var ltg = Parsing.GetLatentTradeGood(block.GetContentElements[0]);
-            province.LatentTradeGood = ltg;
+            if (Parsing.IsValidTradeGood(block.GetContent))
+               province.LatentTradeGood = TradeGoodHelper.StringToTradeGood(block.GetContent).Name;
             return;
          }
          Globals.ErrorLog.Write($"Could not parse date: {block.Name}");

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using Editor.DataClasses;
@@ -8,86 +7,38 @@ using static Editor.Helper.TriggersEffectsScopes;
 
 namespace Editor.Helper;
 
-#region Blocks
-
-
-public class Block(int start, int end, string name, List<IElement> subBlocks) : IElement
-{
-   public int Start { get; set; } = start;
-   public int End { get; set; } = end;
-   public string Name { get; set; } = name;
-   public List<IElement> Blocks { get; set; } = subBlocks;
-   public bool IsBlock => true;
-   public List<Content> GetContentElements
-   {
-      get
-      {
-         List<Content> contents = [];
-         foreach (var block in Blocks)
-         {
-            if (block is Content c)
-               contents.Add(c);
-         }
-         return contents;
-      }
-   }
-
-   public List<Block> GetBlockElements
-   {
-      get
-      {
-         List<Block> blocks = [];
-         foreach (var block in Blocks)
-         {
-            if (block is Block b)
-               blocks.Add(b);
-
-         }
-         return blocks;
-      }
-   }
-
-   public bool HasOnlyContent => Blocks.TrueForAll(b => !b.IsBlock);
-   public string GetContent => string.Join("\n", GetContentElements.Select(c => c.Value));
-
-   public Block? GetBlockWithName(string name)
-   {
-      return GetBlockElements.FirstOrDefault(b => b.Name == name);
-   }
-
-   public override string ToString()
-   {
-      return Name;
-   }
-}
-public class Content(string value) : IElement
-{
-   public string Value { get; set; } = value;
-   public bool IsBlock => false;
-
-   public override string ToString()
-   {
-      return Value;
-   }
-}
-public interface IElement
-{
-   public bool IsBlock { get; }
-}
-#endregion
-
 public class ParsingException(string message) : Exception(message);
 
-public static class Parsing
+public static partial class Parsing
 {
-   private static readonly Regex OpeningRegex = new (@"(?<name>[A-Za-z0-9_.]+)\s*=\s*{", RegexOptions.Compiled);
-   private static readonly Regex ClosingRegex = new (@"}", RegexOptions.Compiled);
-   private static readonly Regex StringListRegex = new (@"(?:""(?:[^""\\]|\\.)*""|\S+)", RegexOptions.Compiled);
-   private static readonly Regex ColorRegex = new (@"(?<r>\d+)\s+(?<g>\d+)\s+(?<b>\d+)", RegexOptions.Compiled);
-   private static readonly Regex MonarchNameRegex = new (@"([\p{L} ]+) #(\d+)""\s*=\s*(-?\d+)", RegexOptions.Compiled);
-   private static readonly Regex KeyValueRegex = new (@"(?<key>[A-Za-z_0-9-.]+)\s*=\s*""?(?<value>[A-Za-z_0-9-.]+)""?", RegexOptions.Compiled);
-   private static readonly Regex FullDateParseRegex = new (@"(?<year>\d{1,4})-(?<month>\d{1,2})-(?<day>\d{1,2})", RegexOptions.Compiled);
+   #region Regexes
 
+   private static readonly Regex OpeningRegex = OpeningRegexGenerate();
+   private static readonly Regex ClosingRegex = ClosingRegexGenerate();
+   private static readonly Regex StringListRegex = StringListRegexGenerate();
+   private static readonly Regex ColorRegex = ColorRegexGenerate();
+   private static readonly Regex MonarchNameRegex = MonarchNameRegexGenerate();
+   private static readonly Regex KeyValueRegex = KeyValueRegexGenerate();
+   private static readonly Regex FullDateParseRegex = FullDateParseRegexGenerate();
+
+   // Generate Regexes during compile time
+   [GeneratedRegex(@"(?<year>\d{1,4})-(?<month>\d{1,2})-(?<day>\d{1,2})", RegexOptions.Compiled)]
+   private static partial Regex FullDateParseRegexGenerate();
+   [GeneratedRegex(@"(?<name>[A-Za-z0-9_.]+)\s*=\s*{", RegexOptions.Compiled)]
+   private static partial Regex OpeningRegexGenerate();
+   [GeneratedRegex(@"}", RegexOptions.Compiled)]
+   private static partial Regex ClosingRegexGenerate();
+   [GeneratedRegex(@"(?:""(?:[^""\\]|\\.)*""|\S+)", RegexOptions.Compiled)]
+   private static partial Regex StringListRegexGenerate();
+   [GeneratedRegex(@"(?<r>\d+)\s+(?<g>\d+)\s+(?<b>\d+)", RegexOptions.Compiled)]
+   private static partial Regex ColorRegexGenerate();
+   [GeneratedRegex(@"([\p{L} ]+) #(\d+)""\s*=\s*(-?\d+)", RegexOptions.Compiled)]
+   private static partial Regex MonarchNameRegexGenerate();
+   [GeneratedRegex(@"(?<key>[A-Za-z_0-9-.]+)\s*=\s*""?(?<value>[A-Za-z_0-9-.]+)""?", RegexOptions.Compiled)]
+   private static partial Regex KeyValueRegexGenerate();
+
+
+   #endregion
 
    /// <summary>
    /// Returns a list of <c>int</c> from a string which are separated by <c>n</c> whitespace chars.
@@ -107,10 +58,24 @@ public static class Parsing
       return idList;
    }
 
+   /// <summary>
+   /// Returns a list of <c>IElement</c> from a string which contains nested blocks can content elements with the format <c>"Block.name = { Block.Content; Block.Blocks }"</c>.
+   /// </summary>
+   /// <param name="index"></param>
+   /// <param name="str"></param>
+   /// <returns></returns>
    public static List<IElement> GetElements(int index, string str)
    {
       return GetNestedElementsIterative(index, ref str);
    }
+
+   /// <summary>
+   /// Returns a list of <c>IElement</c> from a string which contains nested blocks can content elements with the format <c>"Block.name = { Block.Content; Block.Blocks }"</c>.
+   /// </summary>
+   /// <param name="index"></param>
+   /// <param name="str"></param>
+   /// <returns></returns>
+   /// TODO improve performance by rewrite and rethink the logic
    public static unsafe List<IElement> GetNestedElementsIterative(int index, ref string str)
    {
       var openingMatches = OpeningRegex.Matches(str, index);
@@ -260,106 +225,12 @@ public static class Parsing
       }
       return elements;
    }
-   [Obsolete]
-   public static List<IElement> GetNestedBLocksRecursive(int index, ref string str, out int newEnd)
-   {
-      List<IElement> elements = [];
-      newEnd = index;
-
-      while (true)
-      {
-         var opening = OpeningRegex.Match(str, index);
-         var closingMatch = ClosingRegex.Match(str, index);
-
-         if (!opening.Success)
-         {
-            if (closingMatch.Success) 
-               newEnd = closingMatch.Index;
-            return elements;
-         }
-
-         var nextOpening = OpeningRegex.Match(str, opening.Index + opening.Length);
-         List<IElement> subElements = [];
-         var start = opening.Index; 
-         var closingIndex = closingMatch.Index;
-         int end;
-
-
-         if (closingIndex < start) 
-         {
-            newEnd = closingIndex;
-            return elements;
-         }
-
-         var subString = str.Substring(index, start - index).Trim();
-         if (!string.IsNullOrEmpty(subString))
-            elements.Add(new Content(subString));
-
-         if (nextOpening.Success && closingIndex > nextOpening.Index) // 
-         {
-            subElements = GetNestedBLocksRecursive(start + opening.Length, ref str, out newEnd);
-            index = end = newEnd + 1;
-         }
-         else 
-         {
-            index = closingIndex + 1;
-            end = closingIndex;
-            var subStr = str.Substring(start + opening.Length, end - start - opening.Length).Trim();
-            if (!string.IsNullOrEmpty(subStr))
-               subElements.Add(new Content(subStr));
-         }
-         
-         elements.Add(new Block(start, end, opening.Groups["name"].Value, subElements));
-      }
-   }
-
+   
    /// <summary>
-   /// Returns the index of the closing bracket of the first opening bracket in the string after position <c>openingBracketIndex</c>.
+   /// Removes a comment indicated by a <c>#</c> from a line.
    /// </summary>
-   /// <param name="str"></param>
-   /// <param name="openingBracketIndex"></param>
+   /// <param name="line"></param>
    /// <returns></returns>
-   public static int GetClosingBracketIndex(ref string str, int openingBracketIndex)
-   {
-      var bracketCount = 0;
-
-      for (var index = openingBracketIndex; index < str.Length; index++)
-      {
-         var c = str[index];
-
-         if (c == '{')
-            bracketCount++;
-         else if (c == '}')
-            bracketCount--;
-
-         if (bracketCount == 0)
-            return index;
-      }
-
-      return -1;
-   }
-
-   /// <summary>
-   /// Returns the <c>comment</c> of the line after the <c>index</c> and the <c>index</c> of the line ending.
-   /// </summary>
-   /// <param name="index"></param>
-   /// <param name="str"></param>
-   /// <param name="comment"></param>
-   /// <returns></returns>
-   public static int GetLineEndingAfterComment(int index, ref string str, out string comment)
-   {
-      comment = string.Empty;
-      for (var i = index; i < str.Length; i++)
-      {
-         if (str[i] == '\n')
-         {
-            comment = str.Substring(index, i - index);
-            return i;
-         }
-      }
-      return -1;
-   }
-
    public static string RemoveCommentFromLine(string line)
    {
       var inQuotes = false;
@@ -377,13 +248,6 @@ public static class Parsing
       return line;
    }
 
-
-   public static string RemoveAndGetCommentFromString(string str)
-   {
-      var index = str.IndexOf('#');
-      return index == -1 ? str : str[..index];
-   }
-
    /// <summary>
    /// Returns a list of <c>string</c> from a string which are separated by whitespace.
    /// </summary>
@@ -399,14 +263,18 @@ public static class Parsing
       return strList;
    }
 
-   // overload in case the string is not passed by referenceable
+   /// <summary>
+   /// Returns a list of <c>string</c> from a string which are separated by whitespace.
+   /// </summary>
+   /// <param name="value"></param>
+   /// <returns></returns>
    public static List<string> GetStringList(string value)
    {
       return GetStringList(ref value);
    }
 
    /// <summary>
-   /// Removes all comments from a multiline string.
+   /// Removes all comments from the given string.
    /// Parses the string to a list of <c>KeyValuePair</c> with the key and value of each line.
    /// </summary>
    /// <param name="value"></param>
@@ -434,6 +302,11 @@ public static class Parsing
       return keyValueList;
    }
 
+   /// <summary>
+   /// Iterates of all lines in a multiline string and removes comments from each line.
+   /// </summary>
+   /// <param name="value"></param>
+   /// <param name="removed"></param>
    public static void RemoveCommentFromMultilineString(string value, out string removed)
    {
       RemoveCommentFromMultilineString(ref value, out removed);
@@ -443,10 +316,8 @@ public static class Parsing
    {
       var sb = new StringBuilder();
       var lines = str.Split('\n');
-      foreach (var line in lines)
-      {
+      foreach (var line in lines) 
          sb.AppendLine(RemoveCommentFromLine(line));
-      }
       removed = sb.ToString();
    }
 
@@ -509,6 +380,11 @@ public static class Parsing
       );
    }
 
+   /// <summary>
+   /// Returns a list of <c>MonarchName</c> from a string which contains names with ordinal and chance.
+   /// </summary>
+   /// <param name="input"></param>
+   /// <param name="names"></param>
    public static void ParseMonarchNames(string input, out List<MonarchName> names)
    {
       names = [];
@@ -524,6 +400,11 @@ public static class Parsing
       }
    }
 
+   /// <summary>
+   /// Takes in a string and returns a <C>Person</C> with all attributes from the string set.
+   /// </summary>
+   /// <param name="content"></param>
+   /// <param name="person"></param>
    public static void ParsePersonFromString(string content, out Person person)    
    {
       person = new();
@@ -597,6 +478,12 @@ public static class Parsing
       }
    }
 
+   /// <summary>
+   /// Tries to parse a string to a <c>Leader</c> object and sets all attributes from the string.
+   /// </summary>
+   /// <param name="str"></param>
+   /// <param name="leader"></param>
+   /// <returns></returns>
    public static bool ParseLeaderFromString(string str, out Leader leader)
    {
       var kvps = GetKeyValueList(str);
@@ -671,6 +558,11 @@ public static class Parsing
       return true;
    }
 
+   /// <summary>
+   /// Parses a string to the enum <c>Mana</c>.
+   /// </summary>
+   /// <param name="str"></param>
+   /// <returns></returns>
    public static Mana ManaFromString(string str)
    {
       return str.ToLower() switch
@@ -682,6 +574,13 @@ public static class Parsing
       };
    }
 
+   /// <summary>
+   /// TODO Parses a Blocks content to either a <c>Scope</c>, <c>Effect</c>, <c>Trigger</c> or <c>Condition</c>. and returns a bool indicating if the parsing was successful.
+   /// TODO implement this and the the output of it
+   /// </summary>
+   /// <param name="block"></param>
+   /// <param name="output"></param>
+   /// <returns></returns>
    internal static bool ParseDynamicContent(Block block, out object output)
    {
       output = default!;
@@ -707,22 +606,23 @@ public static class Parsing
       }
       return false;
    }
-
-   public static string GetLatentTradeGood(Content content)
-   {
-      if (!IsValidTradeGood(content.Value))
-      {
-         Globals.ErrorLog.Write("Invalid trade good: " + content.Value);
-         return string.Empty;
-      }
-      return content.Value;
-   }
-
+   
+   /// <summary>
+   /// Returns true if the given string is a valid <c>TradeGood</c>.
+   /// </summary>
+   /// <param name="str"></param>
+   /// <returns></returns>
    public static bool IsValidTradeGood(string str)
    {
       return Globals.TradeGoods.ContainsKey(str);
    }
 
+   /// <summary>
+   /// Parses a string to a date if all elements of a date are present: <c>year</c> - <c>month</c> - <c>day</c>.
+   /// </summary>
+   /// <param name="text"></param>
+   /// <param name="date"></param>
+   /// <returns></returns>
    public static bool TryParseFullDate(string text, out DateTime date)
    {
       date = DateTime.MinValue;
@@ -740,7 +640,6 @@ public static class Parsing
       date = new (year, month, day);
       return true;
    }
+
 }
 
-
-public class ProvinceParsingException(int index, string value) : Exception($"Could not parse province at index {index}: {value}");
