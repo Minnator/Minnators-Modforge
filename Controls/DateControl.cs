@@ -1,4 +1,8 @@
-﻿namespace Editor.Controls
+﻿using System.Globalization;
+using Editor.Helper;
+using static Editor.Helper.ProvinceEventHandler;
+
+namespace Editor.Controls
 {
    public enum DateControlLayout
    {
@@ -35,6 +39,8 @@
          else
             InitHorizontal();
 
+         _dateTextBox.TextChanged += OnDateTextChanged;
+
          _yearIncreaseButton.Click += OnYearIncrease;
          _monthIncreaseButton.Click += OnMonthIncrease;
          _dayIncreaseButton.Click += OnDayIncrease;
@@ -47,6 +53,7 @@
          Padding = new(0);
          Controls.Add(_tableLayoutPanel);
       }
+
 
       private void InitVertical()
       {
@@ -123,25 +130,29 @@
          _dayIncreaseButton.Text = ">";
       }
 
+      private DateTime _date;
       public DateTime Date
       {
-         get
+         get => _date;
+         set
          {
-            if (DateTime.TryParse(_dateTextBox.Text, out var date))
-               return date;
-            return Date;
+            if (_date == value)
+               return;
+            _date = value;
+            _dateTextBox.Text = _date.ToString("yyyy-MM-dd");
+            OnDateChanged?.Invoke(this, EventArgs.Empty);
          }
-         set => _dateTextBox.Text = value.ToString("yyyy/MM/dd");
-      }
+      } 
 
       public DateControlLayout DateControlLayout { get; set; }
 
-      public event EventHandler DateChanged
-      {
-         add => _dateTextBox.TextChanged += value;
-         remove => _dateTextBox.TextChanged -= value;
-      }
+      public static event EventHandler<EventArgs> OnDateChanged = delegate { };
 
+      private void OnDateTextChanged(object? sender, EventArgs e)
+      {
+         if (Parsing.TryParseFullDate(_dateTextBox.Text, out var date))
+            Date = date;
+      }
       public void OnYearIncrease (object sender, EventArgs e)
       {
          Date = ModifierKeys switch

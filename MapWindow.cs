@@ -34,11 +34,11 @@ namespace Editor
          //resume gui updates
          ResumeLayout();
          // Enable the Application
-         Globals.Date = new(1444, 11, 11);
+         DateControl.Date = new(1444, 11, 11);
          Globals.LoadingLog.Close();
          ResourceUsageHelper.Initialize(this);
          Globals.State = State.Running;
-
+         MapModeComboBox.SelectedIndex = 11;
       }
 
 
@@ -50,7 +50,7 @@ namespace Editor
          MapPanel.Controls.Add(MapPictureBox);
 
          TopStripLayoutPanel.Controls.Add(DateControl, 4, 0);
-         DateControl.DateChanged += (sender, e) => Globals.Date = DateControl.Date;
+         DateControl.OnDateChanged += OnDateChanged;
       }
 
 
@@ -102,6 +102,11 @@ namespace Editor
       }
 
       #endregion
+
+      private void OnDateChanged(object? sender, EventArgs e)
+      {
+         ProvinceHistoryManager.LoadDate(Globals.Date);
+      }
 
       private void debugToolStripMenuItem_Click(object sender, EventArgs e)
       {
@@ -191,13 +196,7 @@ namespace Editor
 
       private void DateSelector_SelectedIndexChanged(object sender, EventArgs e)
       {
-         Globals.State = State.Loading;
-         if (DateTime.TryParse(DateSelector.Text, out var date))
-         {
-            Globals.Date = date;
-            Globals.MapModeManager.RenderCurrent();
-         }
-         Globals.State = State.Running;
+
       }
 
       private void MapWindow_Load(object sender, EventArgs e)

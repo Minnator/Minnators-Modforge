@@ -1,4 +1,5 @@
-﻿using System.Security.Policy;
+﻿using System.Globalization;
+using System.Security.Policy;
 using Editor.Commands;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
@@ -49,18 +50,13 @@ public static class Globals
    public static MapWindow MapWindow = null!;
 
    // Date of history
-   private static DateTime _date;
    public static DateTime Date
    {
-      get => _date;
-      set
+      get
       {
-         MapWindow.DateControl.Date = value;
-         ProvinceHistoryManager.LoadDate(value);
-         _date = value;
+         return MapWindow.DateControl.Date;
       }
    }
-
    // Logs
    public static readonly Log LoadingLog = new(@"C:\Users\david\Downloads", "Loading"); //TODO: make this a setting and not hardcoded
    public static readonly Log ErrorLog = new(@"C:\Users\david\Downloads", "Error"); //TODO: make this a setting and not hardcoded

@@ -8,6 +8,9 @@ using static Editor.Helper.TriggersEffectsScopes;
 
 namespace Editor.Helper;
 
+#region Blocks
+
+
 public class Block(int start, int end, string name, List<IElement> subBlocks) : IElement
 {
    public int Start { get; set; } = start;
@@ -57,7 +60,6 @@ public class Block(int start, int end, string name, List<IElement> subBlocks) : 
       return Name;
    }
 }
-
 public class Content(string value) : IElement
 {
    public string Value { get; set; } = value;
@@ -72,6 +74,7 @@ public interface IElement
 {
    public bool IsBlock { get; }
 }
+#endregion
 
 public class ParsingException(string message) : Exception(message);
 
@@ -83,6 +86,7 @@ public static class Parsing
    private static readonly Regex ColorRegex = new (@"(?<r>\d+)\s+(?<g>\d+)\s+(?<b>\d+)", RegexOptions.Compiled);
    private static readonly Regex MonarchNameRegex = new (@"([\p{L} ]+) #(\d+)""\s*=\s*(-?\d+)", RegexOptions.Compiled);
    private static readonly Regex KeyValueRegex = new (@"(?<key>[A-Za-z_0-9-.]+)\s*=\s*""?(?<value>[A-Za-z_0-9-.]+)""?", RegexOptions.Compiled);
+   private static readonly Regex FullDateParseRegex = new (@"(?<year>\d{1,4})-(?<month>\d{1,2})-(?<day>\d{1,2})", RegexOptions.Compiled);
 
 
    /// <summary>
@@ -716,7 +720,25 @@ public static class Parsing
 
    public static bool IsValidTradeGood(string str)
    {
-      return true; // TODO parse trade goods
+      return Globals.TradeGoods.ContainsKey(str);
+   }
+
+   public static bool TryParseFullDate(string text, out DateTime date)
+   {
+      date = DateTime.MinValue;
+      var match = FullDateParseRegex.Match(text);
+      if (!match.Success)
+         return false;
+
+      var year = int.Parse(match.Groups["year"].Value);
+      var month = int.Parse(match.Groups["month"].Value);
+      var day = int.Parse(match.Groups["day"].Value);
+
+      if (year < 1 || year > 9999 || month < 1 || month > 12 || day < 1 || day > DateTime.DaysInMonth(year, month))
+         return false;
+
+      date = new (year, month, day);
+      return true;
    }
 }
 
