@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-
-namespace Editor.Helper;
+﻿namespace Editor.Helper;
 
 public class ColorProviderRgb(int seed = 1444)
 {

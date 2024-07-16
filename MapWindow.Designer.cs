@@ -88,6 +88,20 @@
          label4 = new Label();
          ReligionComboBox = new ComboBox();
          CapitalNameTextBox = new TextBox();
+         groupBox3 = new GroupBox();
+         tableLayoutPanel3 = new TableLayoutPanel();
+         label6 = new Label();
+         label7 = new Label();
+         label8 = new Label();
+         ManpowerDevTextBox = new TextBox();
+         ProductionDevTextBox = new TextBox();
+         TaxDevTextBox = new TextBox();
+         groupBox4 = new GroupBox();
+         tableLayoutPanel4 = new TableLayoutPanel();
+         IsCityCheckBox = new CheckBox();
+         IsHreCheckBox = new CheckBox();
+         IsParlimentSeatCheckbox = new CheckBox();
+         HasRevoltCheckBox = new CheckBox();
          COuntryPage = new TabPage();
          ProvinceGroupsPage = new TabPage();
          MapMenuStrip.SuspendLayout();
@@ -105,6 +119,10 @@
          OwnerControllerLayoutPanel.SuspendLayout();
          groupBox2.SuspendLayout();
          tableLayoutPanel2.SuspendLayout();
+         groupBox3.SuspendLayout();
+         tableLayoutPanel3.SuspendLayout();
+         groupBox4.SuspendLayout();
+         tableLayoutPanel4.SuspendLayout();
          SuspendLayout();
          // 
          // MapMenuStrip
@@ -512,6 +530,8 @@
          tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
          tableLayoutPanel1.Controls.Add(groupBox1, 0, 0);
          tableLayoutPanel1.Controls.Add(groupBox2, 1, 0);
+         tableLayoutPanel1.Controls.Add(groupBox3, 1, 2);
+         tableLayoutPanel1.Controls.Add(groupBox4, 0, 1);
          tableLayoutPanel1.Dock = DockStyle.Fill;
          tableLayoutPanel1.Location = new Point(0, 0);
          tableLayoutPanel1.Margin = new Padding(0);
@@ -519,8 +539,9 @@
          tableLayoutPanel1.RowCount = 4;
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 71F));
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 90F));
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 518F));
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
          tableLayoutPanel1.Size = new Size(392, 822);
          tableLayoutPanel1.TabIndex = 0;
          // 
@@ -670,6 +691,186 @@
          CapitalNameTextBox.Size = new Size(95, 23);
          CapitalNameTextBox.TabIndex = 5;
          // 
+         // groupBox3
+         // 
+         groupBox3.Controls.Add(tableLayoutPanel3);
+         groupBox3.Location = new Point(199, 96);
+         groupBox3.Margin = new Padding(3, 0, 3, 0);
+         groupBox3.Name = "groupBox3";
+         groupBox3.Padding = new Padding(0);
+         groupBox3.Size = new Size(190, 90);
+         groupBox3.TabIndex = 2;
+         groupBox3.TabStop = false;
+         groupBox3.Text = "Development";
+         // 
+         // tableLayoutPanel3
+         // 
+         tableLayoutPanel3.ColumnCount = 2;
+         tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         tableLayoutPanel3.Controls.Add(label6, 0, 2);
+         tableLayoutPanel3.Controls.Add(label7, 0, 0);
+         tableLayoutPanel3.Controls.Add(label8, 0, 1);
+         tableLayoutPanel3.Controls.Add(ManpowerDevTextBox, 1, 2);
+         tableLayoutPanel3.Controls.Add(ProductionDevTextBox, 1, 1);
+         tableLayoutPanel3.Controls.Add(TaxDevTextBox, 1, 0);
+         tableLayoutPanel3.Location = new Point(0, 8);
+         tableLayoutPanel3.Margin = new Padding(0, 3, 0, 0);
+         tableLayoutPanel3.Name = "tableLayoutPanel3";
+         tableLayoutPanel3.RowCount = 3;
+         tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+         tableLayoutPanel3.Size = new Size(190, 75);
+         tableLayoutPanel3.TabIndex = 2;
+         tableLayoutPanel3.Paint += tableLayoutPanel3_Paint;
+         // 
+         // label6
+         // 
+         label6.AutoSize = true;
+         label6.Dock = DockStyle.Fill;
+         label6.Location = new Point(3, 50);
+         label6.Name = "label6";
+         label6.Size = new Size(89, 25);
+         label6.TabIndex = 2;
+         label6.Text = "Manpower";
+         label6.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // label7
+         // 
+         label7.AutoSize = true;
+         label7.Dock = DockStyle.Fill;
+         label7.Location = new Point(3, 0);
+         label7.Name = "label7";
+         label7.Size = new Size(89, 25);
+         label7.TabIndex = 0;
+         label7.Text = "Tax";
+         label7.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // label8
+         // 
+         label8.AutoSize = true;
+         label8.Dock = DockStyle.Fill;
+         label8.Location = new Point(3, 25);
+         label8.Name = "label8";
+         label8.Size = new Size(89, 25);
+         label8.TabIndex = 1;
+         label8.Text = "Production";
+         label8.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // ManpowerDevTextBox
+         // 
+         ManpowerDevTextBox.Dock = DockStyle.Fill;
+         ManpowerDevTextBox.Location = new Point(95, 50);
+         ManpowerDevTextBox.Margin = new Padding(0);
+         ManpowerDevTextBox.Name = "ManpowerDevTextBox";
+         ManpowerDevTextBox.Size = new Size(95, 23);
+         ManpowerDevTextBox.TabIndex = 5;
+         // 
+         // ProductionDevTextBox
+         // 
+         ProductionDevTextBox.Dock = DockStyle.Fill;
+         ProductionDevTextBox.Location = new Point(95, 25);
+         ProductionDevTextBox.Margin = new Padding(0);
+         ProductionDevTextBox.Name = "ProductionDevTextBox";
+         ProductionDevTextBox.Size = new Size(95, 23);
+         ProductionDevTextBox.TabIndex = 6;
+         // 
+         // TaxDevTextBox
+         // 
+         TaxDevTextBox.Dock = DockStyle.Fill;
+         TaxDevTextBox.Location = new Point(95, 0);
+         TaxDevTextBox.Margin = new Padding(0);
+         TaxDevTextBox.Name = "TaxDevTextBox";
+         TaxDevTextBox.Size = new Size(95, 23);
+         TaxDevTextBox.TabIndex = 7;
+         // 
+         // groupBox4
+         // 
+         groupBox4.Controls.Add(tableLayoutPanel4);
+         groupBox4.Dock = DockStyle.Fill;
+         groupBox4.Location = new Point(3, 71);
+         groupBox4.Margin = new Padding(3, 0, 3, 0);
+         groupBox4.Name = "groupBox4";
+         groupBox4.Padding = new Padding(0);
+         tableLayoutPanel1.SetRowSpan(groupBox4, 2);
+         groupBox4.Size = new Size(190, 115);
+         groupBox4.TabIndex = 3;
+         groupBox4.TabStop = false;
+         groupBox4.Text = "Booleans";
+         // 
+         // tableLayoutPanel4
+         // 
+         tableLayoutPanel4.ColumnCount = 1;
+         tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         tableLayoutPanel4.Controls.Add(IsCityCheckBox, 0, 0);
+         tableLayoutPanel4.Controls.Add(IsHreCheckBox, 0, 1);
+         tableLayoutPanel4.Controls.Add(IsParlimentSeatCheckbox, 0, 2);
+         tableLayoutPanel4.Controls.Add(HasRevoltCheckBox, 0, 3);
+         tableLayoutPanel4.Location = new Point(0, 15);
+         tableLayoutPanel4.Margin = new Padding(0, 3, 0, 0);
+         tableLayoutPanel4.Name = "tableLayoutPanel4";
+         tableLayoutPanel4.RowCount = 4;
+         tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         tableLayoutPanel4.Size = new Size(190, 100);
+         tableLayoutPanel4.TabIndex = 3;
+         // 
+         // IsCityCheckBox
+         // 
+         IsCityCheckBox.AutoSize = true;
+         IsCityCheckBox.Cursor = Cursors.Hand;
+         IsCityCheckBox.Dock = DockStyle.Fill;
+         IsCityCheckBox.Location = new Point(12, 3);
+         IsCityCheckBox.Margin = new Padding(12, 3, 3, 3);
+         IsCityCheckBox.Name = "IsCityCheckBox";
+         IsCityCheckBox.Size = new Size(175, 19);
+         IsCityCheckBox.TabIndex = 0;
+         IsCityCheckBox.Text = "IsCity";
+         IsCityCheckBox.UseVisualStyleBackColor = true;
+         // 
+         // IsHreCheckBox
+         // 
+         IsHreCheckBox.AutoSize = true;
+         IsHreCheckBox.Cursor = Cursors.Hand;
+         IsHreCheckBox.Dock = DockStyle.Fill;
+         IsHreCheckBox.Location = new Point(12, 28);
+         IsHreCheckBox.Margin = new Padding(12, 3, 3, 3);
+         IsHreCheckBox.Name = "IsHreCheckBox";
+         IsHreCheckBox.Size = new Size(175, 19);
+         IsHreCheckBox.TabIndex = 1;
+         IsHreCheckBox.Text = "IsHre";
+         IsHreCheckBox.UseVisualStyleBackColor = true;
+         // 
+         // IsParlimentSeatCheckbox
+         // 
+         IsParlimentSeatCheckbox.AutoSize = true;
+         IsParlimentSeatCheckbox.Cursor = Cursors.Hand;
+         IsParlimentSeatCheckbox.Dock = DockStyle.Fill;
+         IsParlimentSeatCheckbox.Location = new Point(12, 53);
+         IsParlimentSeatCheckbox.Margin = new Padding(12, 3, 3, 3);
+         IsParlimentSeatCheckbox.Name = "IsParlimentSeatCheckbox";
+         IsParlimentSeatCheckbox.Size = new Size(175, 19);
+         IsParlimentSeatCheckbox.TabIndex = 2;
+         IsParlimentSeatCheckbox.Text = "IsParlimentSeat";
+         IsParlimentSeatCheckbox.UseVisualStyleBackColor = true;
+         // 
+         // HasRevoltCheckBox
+         // 
+         HasRevoltCheckBox.AutoSize = true;
+         HasRevoltCheckBox.Cursor = Cursors.Hand;
+         HasRevoltCheckBox.Dock = DockStyle.Fill;
+         HasRevoltCheckBox.Location = new Point(12, 78);
+         HasRevoltCheckBox.Margin = new Padding(12, 3, 3, 3);
+         HasRevoltCheckBox.Name = "HasRevoltCheckBox";
+         HasRevoltCheckBox.Size = new Size(175, 19);
+         HasRevoltCheckBox.TabIndex = 3;
+         HasRevoltCheckBox.Text = "HasRevolt";
+         HasRevoltCheckBox.UseVisualStyleBackColor = true;
+         // 
          // COuntryPage
          // 
          COuntryPage.Location = new Point(4, 24);
@@ -731,6 +932,12 @@
          groupBox2.ResumeLayout(false);
          tableLayoutPanel2.ResumeLayout(false);
          tableLayoutPanel2.PerformLayout();
+         groupBox3.ResumeLayout(false);
+         tableLayoutPanel3.ResumeLayout(false);
+         tableLayoutPanel3.PerformLayout();
+         groupBox4.ResumeLayout(false);
+         tableLayoutPanel4.ResumeLayout(false);
+         tableLayoutPanel4.PerformLayout();
          ResumeLayout(false);
          PerformLayout();
       }
@@ -792,13 +999,26 @@
       private Label label2;
       private GroupBox groupBox2;
       private TableLayoutPanel tableLayoutPanel2;
-      private ComboBox comboBox2;
       private Label label5;
       private Label label3;
       private Label label4;
       private ComboBox ReligionComboBox;
       private ComboBox CultureComboBox;
       private TextBox CapitalNameTextBox;
+      private GroupBox groupBox3;
+      private TableLayoutPanel tableLayoutPanel3;
+      private Label label6;
+      private Label label7;
+      private Label label8;
+      private TextBox ManpowerDevTextBox;
+      private TextBox ProductionDevTextBox;
+      private TextBox TaxDevTextBox;
+      private GroupBox groupBox4;
+      private TableLayoutPanel tableLayoutPanel4;
+      private CheckBox IsCityCheckBox;
+      private CheckBox IsHreCheckBox;
+      private CheckBox IsParlimentSeatCheckbox;
+      private CheckBox HasRevoltCheckBox;
    }
 }
 

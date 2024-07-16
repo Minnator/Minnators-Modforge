@@ -56,7 +56,7 @@ namespace Editor.Helper
 
       public static void Dispose()
       {
-         Updater.Dispose();
+         Updater?.Dispose();
       }
    }
 }

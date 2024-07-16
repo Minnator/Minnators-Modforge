@@ -13,7 +13,7 @@ namespace Editor
    public partial class MapWindow : Form
    {
       public PannablePictureBox MapPictureBox = null!;
-      public DateControl DateControl = new (new(1444, 11, 11), DateControlLayout.Horizontal);
+      public DateControl DateControl = new(new(1444, 11, 11), DateControlLayout.Horizontal);
 
       public ModProject Project = new()
       {
@@ -37,7 +37,7 @@ namespace Editor
          // Enable the Application
          DateControl.Date = new(1444, 11, 11);
          Globals.LoadingLog.Close();
-         ResourceUsageHelper.Initialize(this);
+         //ResourceUsageHelper.Initialize(this);
          Globals.State = State.Running;
          MapModeComboBox.SelectedIndex = 11;
       }
@@ -220,6 +220,11 @@ namespace Editor
       private void searchToolStripMenuItem_Click(object sender, EventArgs e)
       {
          FormHelper.OpenOrBringToFront(Globals.SearchForm);
+      }
+
+      private void tableLayoutPanel3_Paint(object sender, PaintEventArgs e)
+      {
+
       }
    }
 }

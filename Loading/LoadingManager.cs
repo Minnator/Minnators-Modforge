@@ -31,8 +31,6 @@ public static class LoadingManager
 
    public static void InitializeComponents(MapWindow mw)
    {
-      //HistoryResourceHelper.Initialize(this);
-
       Globals.HistoryManager.UndoDepthChanged += mw.UpdateUndoDepth;
       Globals.HistoryManager.RedoDepthChanged += mw.UpdateRedoDepth;
 
