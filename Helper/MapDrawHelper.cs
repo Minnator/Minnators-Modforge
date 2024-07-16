@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
+﻿using System.Data;
+using System.Diagnostics;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Threading.Tasks;
-using Editor.DataClasses;
+using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.Helper;
 
@@ -294,4 +290,20 @@ public static class MapDrawHelper
    }
    #endregion
 
+
+   public static void DrawOccupations(bool rebelsOnly, Bitmap bmp)
+   {
+      foreach (var province in Globals.Provinces.Values)
+      {
+         if (rebelsOnly && !province.HasRevolt) // Has no rebels but we only want to show rebels
+            continue;
+         if (!rebelsOnly && province is { IsNonRebelOccupied: false, HasRevolt: false }) // has neither rebels nor occupation, but we want to show some
+            continue;
+
+         if (!Geometry.GetIfHasStripePixels(province, rebelsOnly, out var stripePixels))
+            continue;
+
+         DrawOnMap(province.Bounds, stripePixels, province.GetOccupantColor, bmp);
+      }
+   }
 }

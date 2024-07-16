@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Editor.DataClasses.GameDataClasses;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Editor.Helper;
 
@@ -271,5 +272,40 @@ public static class Geometry
       }
 
       return groups;
+   }
+
+   public static bool GetIfHasStripePixels(Province province, bool onlyRebels, out Point[] stripe)
+   {
+      if (onlyRebels)
+      {
+         if (!province.HasRevolt)
+         {
+            stripe = [];
+            return false;
+         }
+         stripe = GetStripeArray(province);
+         return true;
+      }
+
+      if (province is { IsNonRebelOccupied: false, HasRevolt: false })
+      {
+         stripe = [];
+         return false;
+      }
+      stripe = GetStripeArray(province);
+      return true;
+   }
+
+   private static Point[] GetStripeArray(Province province)
+   {
+      List<Point> stripeList = [];
+      var ptr = province.PixelPtr;
+      for (var i = 0; i < province.PixelCnt; i++)
+      {
+         var pixel = Globals.Pixels[ptr + i];
+         if ((pixel.X % 8) > 4)
+            stripeList.Add(pixel);
+      }
+      return [.. stripeList];
    }
 }

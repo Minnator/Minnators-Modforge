@@ -84,7 +84,7 @@ public static class Globals
    public static string MapPath = null!;
 
    // ToolTip
-   public static string ToolTipText = $"$MAPMODE_SPECIFIC$\n------------------\nId:   $id$\nName: $name$\nArea: $area$ ($area%L$)";
+   public static string ToolTipText = $"$MAPMODE_SPECIFIC$\n------------------\nId:   $id$\nName: $name$\nArea: $area$ ($area%L$)\nRevolt: $has_revolt$\nIsOccupied: $is_occupied$";
 
    // Contains the border pixels of the provinces
    public static Point[] BorderPixels = null!;
@@ -161,7 +161,7 @@ public static class Globals
    ];
 
    public static List<string> ToolTippableAttributes = [ 
-      "base_manpower", "base_tax", "base_production",  "total_development", "area", "continent", "claims", "cores", "controller", "owner", "tribal_owner", "center_of_trade", "extra_cost", "native_ferocity", "native_hostileness", "native_size", "revolt_risk", ">local_autonomy", "nationalism", "discovered_by", "capital", "culture", "religion", "has_fort_15th", "is_hre", "is_city", "is_seat_in_parliament", "trade_good", "history", "multiline_attributes", "id", "name"
+      "base_manpower", "base_tax", "base_production",  "total_development", "area", "continent", "claims", "cores", "controller", "owner", "tribal_owner", "center_of_trade", "extra_cost", "native_ferocity", "native_hostileness", "native_size", "revolt_risk", ">local_autonomy", "nationalism", "discovered_by", "capital", "culture", "religion", "has_fort_15th", "is_hre", "is_city", "is_seat_in_parliament", "trade_good", "history", "multiline_attributes", "id", "name", "has_revolt", "is_occupied"
    ];
 
    public static List<string> SelectionModifiers = [

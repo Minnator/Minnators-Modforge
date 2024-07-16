@@ -13,7 +13,7 @@ namespace Editor
    public partial class MapWindow : Form
    {
       public PannablePictureBox MapPictureBox = null!;
-      public DateControl DateControl = new(new(1444, 11, 11), DateControlLayout.Horizontal);
+      public DateControl DateControl = new(DateTime.MinValue, DateControlLayout.Horizontal);
 
       public ModProject Project = new()
       {
@@ -35,10 +35,10 @@ namespace Editor
          //resume gui updates
          ResumeLayout();
          // Enable the Application
-         DateControl.Date = new(1444, 11, 11);
          Globals.LoadingLog.Close();
          //ResourceUsageHelper.Initialize(this);
          Globals.State = State.Running;
+         DateControl.Date = new(1444, 11, 11);
          MapModeComboBox.SelectedIndex = 11;
       }
 

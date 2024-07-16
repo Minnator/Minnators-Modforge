@@ -7,6 +7,7 @@ public abstract class MapMode
 {
    public Bitmap Bitmap { get; set; } = null!;
    public virtual bool IsLandOnly => false;
+   public virtual bool ShowOccupation => false;
 
    public virtual void RenderMapMode(Func<int, Color> method)
    {
@@ -37,17 +38,21 @@ public abstract class MapMode
                Globals.MapModeManager.ShareLiveBitmap = BitMapHelper.GenerateBitmapFromProvinces(method);
             }
             // draw borders on top of the provinces is always needed
+            if (ShowOccupation)
+               MapDrawHelper.DrawOccupations(false, Globals.MapModeManager.ShareLiveBitmap);
             MapDrawHelper.DrawAllProvinceBorders(Globals.MapModeManager.ShareLiveBitmap, Color.Black);
             Globals.MapModeManager.PictureBox.Image = Globals.MapModeManager.ShareLiveBitmap;
             break;
          case MapModeRendering.Cached:
             Bitmap?.Dispose();
             Bitmap = BitMapHelper.GenerateBitmapFromProvinces(GetProvinceColor);
+            if (ShowOccupation)
+               MapDrawHelper.DrawOccupations(false, Bitmap);
             MapDrawHelper.DrawAllProvinceBorders(Bitmap, Color.Black);
             Globals.MapModeManager.PictureBox.Image = Bitmap;
             break;
          default:
-            throw new ArgumentOutOfRangeException();
+            throw new ArgumentOutOfRangeException(nameof(Globals.MapModeRendering), "Unknown Rendering mode for MapModes");
       }
       Globals.MapWindow.MapPictureBox.IsPainting = false;
       Globals.MapModeManager.PictureBox.Invalidate();
@@ -98,10 +103,15 @@ public abstract class MapMode
       {
          case MapModeRendering.Cached:
             MapDrawHelper.DrawProvince(id, GetProvinceColor(id), Bitmap);
+            if (ShowOccupation)
+               MapDrawHelper.DrawOccupations(false, Bitmap);
             Globals.MapModeManager.PictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(id, Color.Black, Bitmap));
             break;
          case MapModeRendering.Live:
+         case MapModeRendering.LiveBackground:
             MapDrawHelper.DrawProvince(id, GetProvinceColor(id), Globals.MapModeManager.ShareLiveBitmap);
+            if (ShowOccupation)
+               MapDrawHelper.DrawOccupations(false, Globals.MapModeManager.ShareLiveBitmap);
             Globals.MapModeManager.PictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(id, Color.Black, Globals.MapModeManager.ShareLiveBitmap));
             break;
       }

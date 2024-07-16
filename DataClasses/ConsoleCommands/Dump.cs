@@ -29,7 +29,7 @@ namespace Editor.DataClasses.ConsoleCommands
          }
          else if (args.Length == 3)
          {
-            if (_validObjects.Contains(args[1]))
+            if (!_validObjects.Contains(args[1]))
             {
                Output.WriteError($"Invalid object [{args[1]}]; can not dump!");
                return;
@@ -44,6 +44,37 @@ namespace Editor.DataClasses.ConsoleCommands
             {
                Output.WriteError($"Invalid path [{args[2]}]; Dumping to default: {defaultPath}");
                DumpObject(args[1], defaultPath);
+               Output.WriteGoodFeedback($"Dumped to {defaultPath}");
+            }
+         }
+         else if (args.Length == 4)
+         {
+            if (!_validObjects.Contains(args[1]))
+            {
+               Output.WriteError($"Invalid object [{args[1]}]; can not dump!");
+               return;
+            }
+
+            if (!int.TryParse(args[2], out var id))
+            {
+               Output.WriteError($"Invalid province id [{args[1]}]; can not dump!");
+               return;
+            }
+            if (Directory.Exists(args[3]))
+            {
+               if (Globals.Provinces.TryGetValue(id, out var province))
+               {
+                  province.DumpHistory(args[3]);
+               }
+               Output.WriteGoodFeedback($"Dumped to {args[2]}");
+            }
+            else
+            {
+               Output.WriteError($"Invalid path [{args[3]}]; Dumping to default: {defaultPath}\n");
+               if (Globals.Provinces.TryGetValue(id, out var province))
+               {
+                  province.DumpHistory(defaultPath);
+               }
                Output.WriteGoodFeedback($"Dumped to {defaultPath}");
             }
          }

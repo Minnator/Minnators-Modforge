@@ -11,6 +11,7 @@ namespace Editor.DataClasses.MapModes
       }
 
       public override bool IsLandOnly => true;
+      public override bool ShowOccupation => true;
 
       public override Color GetProvinceColor(int id)
       {

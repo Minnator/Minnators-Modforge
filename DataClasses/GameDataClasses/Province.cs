@@ -1,4 +1,5 @@
-﻿using Editor.Helper;
+﻿using System.Text;
+using Editor.Helper;
 using Editor.Interfaces;
 using static Editor.Helper.ProvinceEventHandler;
 
@@ -509,6 +510,23 @@ public class Province : IProvinceCollection
 
 
    #endregion
+
+   public bool IsNonRebelOccupied => Owner != Controller && Controller != "REB";
+
+   public Color GetOccupantColor
+   {
+      get
+      {
+         if (HasRevolt)
+            return Color.Black;
+         if (IsNonRebelOccupied)
+         {
+            if (Globals.Countries.TryGetValue(Owner, out var owner))
+               return owner.Color;
+         }
+         return Color.Empty;
+      }
+   }
    // ======================================== Methods ========================================
 
    /// <summary>
@@ -597,6 +615,10 @@ public class Province : IProvinceCollection
       ProvinceTriggeredModifiers = ProvinceData.ProvinceTriggeredModifiers;
    }
 
+   /// <summary>
+   /// Loads the history for the given date
+   /// </summary>
+   /// <param name="date"></param>
    public void LoadHistoryForDate(DateTime date)
    {
       // History Entries are sorted by default. Se w can load entries as long as the date is less than the current date
@@ -615,11 +637,16 @@ public class Province : IProvinceCollection
       SortHistoryEntriesByDate();
    }
 
-   public void SortHistoryEntriesByDate()
+   private void SortHistoryEntriesByDate()
    {
       _history.Sort((x, y) => x.Date.CompareTo(y.Date));
    }
 
+   /// <summary>
+   /// Returns the value of the given key for the province attribute
+   /// </summary>
+   /// <param name="key"></param>
+   /// <returns></returns>
    public object? GetAttribute(string key)
    {
       return key.ToLower() switch
@@ -655,9 +682,17 @@ public class Province : IProvinceCollection
          "history" => History,
          "id" => Id,
          "name" => GetLocalisation(),
+         "has_revolt" => HasRevolt,
+         "is_occupied" => IsNonRebelOccupied,      
          _ => null
       };
    }
+
+   /// <summary>
+   /// Sets the attribute for the province if it exists
+   /// </summary>
+   /// <param name="name"></param>
+   /// <param name="value"></param>
    public void SetAttribute(string name, string value)
    {
       if (Globals.Buildings.Contains(name))
@@ -863,17 +898,6 @@ public class Province : IProvinceCollection
       return Globals.Localisation.TryGetValue($"PROV{Id}", out var loc) ? loc : Id.ToString();
    }
 
-   public override bool Equals(object? obj)
-   {
-      if (obj is Province other)
-         return Id == other.Id;
-      return false;
-   }
-
-   public override int GetHashCode()
-   {
-      return Id.GetHashCode();
-   }
 
    public int[] GetProvinceIds()
    {
@@ -915,4 +939,29 @@ public class Province : IProvinceCollection
       return provinces;
    }
 
+   public void DumpHistory(string path)
+   {
+      var sb = new StringBuilder();
+      foreach (var historyEntry in History)
+         sb.AppendLine(historyEntry.ToString());
+
+      File.WriteAllText(Path.Combine(path, $"{Id.ToString()}_dump.txt"), sb.ToString());
+   }
+
+   public override bool Equals(object? obj)
+   {
+      if (obj is Province other)
+         return Id == other.Id;
+      return false;
+   }
+
+   public override int GetHashCode()
+   {
+      return Id.GetHashCode();
+   }
+
+   public override string ToString()
+   {
+      return $"{Id} ({GetLocalisation()}";
+   }
 }
