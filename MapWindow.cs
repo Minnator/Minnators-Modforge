@@ -204,7 +204,7 @@ namespace Editor
 
       private void refStackToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         MapPictureBox.FocusOn(new(2900, 600));
+         var p149 = Globals.Provinces[149];
       }
 
       private void DateSelector_SelectedIndexChanged(object sender, EventArgs e)

@@ -278,7 +278,7 @@ public static class Geometry
    {
       if (onlyRebels)
       {
-         if (!province.HasRevolt)
+         if (province.Controller != "REB")
          {
             stripe = [];
             return false;
@@ -287,7 +287,7 @@ public static class Geometry
          return true;
       }
 
-      if (province is { IsNonRebelOccupied: false, HasRevolt: false })
+      if (province is { IsNonRebelOccupied: false} && province.Controller != "REB")
       {
          stripe = [];
          return false;
@@ -303,7 +303,7 @@ public static class Geometry
       for (var i = 0; i < province.PixelCnt; i++)
       {
          var pixel = Globals.Pixels[ptr + i];
-         if ((pixel.X % 8) > 4)
+         if (((pixel.X + pixel.Y) % 8) > 4)
             stripeList.Add(pixel);
       }
       return [.. stripeList];

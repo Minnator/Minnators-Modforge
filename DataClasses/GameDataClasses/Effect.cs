@@ -18,13 +18,13 @@ namespace Editor.DataClasses.GameDataClasses
          return new SimpleEffect(name, value, type);
       }
 
-      public static ComplexEffect CreateComplexEffect(string name, EffectValueType type)
+      public static ComplexEffect CreateComplexEffect(string name, string value, EffectValueType type)
       {
          return name.ToLower() switch
          {
-            "revolt" => new RevoltEffect(name, string.Empty, type),
-            "dummy" => new DummyComplexEffect(name, string.Empty, type),
-            _ => new DummyComplexEffect(name, string.Empty, type)
+            "revolt" => new RevoltEffect(name, value, type),
+            "dummy" => new DummyComplexEffect(name, value, type),
+            _ => new DummyComplexEffect(name, value, type)
          };
       }
    }
@@ -69,6 +69,17 @@ namespace Editor.DataClasses.GameDataClasses
 
    public class RevoltEffect(string name, string value, EffectValueType type) : ComplexEffect(name, value, type)
    {
-      // TODO override ExecuteProvince and ExecuteCountry
+      public bool RemovesRevolt => string.IsNullOrWhiteSpace(value);
+      // TODO parse remaingin parameters
+      public override bool ExecuteProvince(Province province)
+      {
+         if (RemovesRevolt)
+         {
+            province.HasRevolt = false;
+            return true;
+         }
+         province.HasRevolt = true;
+         return true;
+      }
    }
 }

@@ -132,7 +132,7 @@ public static partial class Parsing
                var content = str[(end + 1)..start].Trim();
                if (content.Contains('}'))
                {
-                  content = string.Empty; //TODO why this so fucked
+                  content = content.Replace('}', ' ').Trim();
                }
                if (!string.IsNullOrWhiteSpace(content))
                {

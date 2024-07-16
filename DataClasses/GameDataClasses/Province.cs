@@ -833,7 +833,7 @@ public class Province : IProvinceCollection
             break;
          case "revolt":
             if (string.IsNullOrWhiteSpace(value))
-               HasRevolt = true;
+               HasRevolt = false;
             break;
          case "revolt_risk":
             if (int.TryParse(value, out var risk))

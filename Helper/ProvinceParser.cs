@@ -28,6 +28,7 @@ public static class ProvinceParser
       // Get All nested Blocks and Attributes from the files
       var po =  new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 };
       Parallel.ForEach(files, po, ProcessProvinceFile);
+      
       sw.Stop();
       Globals.LoadingLog.WriteTimeStamp("Parsing provinces", sw.ElapsedMilliseconds);
       DebugPrints.PrintAllProvinceHistories();
@@ -49,7 +50,7 @@ public static class ProvinceParser
          return;
       }
 
-      var fileContent = IO.ReadAllInUTF8(path);
+      Parsing.RemoveCommentFromMultilineString(IO.ReadAllInUTF8(path), out var fileContent);
       var blocks = Parsing.GetElements(0, ref fileContent);
 
       foreach (var block in blocks)
@@ -96,7 +97,7 @@ public static class ProvinceParser
          }
          else if (element is Block { HasOnlyContent: true } subBlock)
          {
-            var ce = EffectFactory.CreateComplexEffect(subBlock.Name, EffectValueType.Complex);
+            var ce = EffectFactory.CreateComplexEffect(subBlock.Name, subBlock.GetContent, EffectValueType.Complex);
             if (subBlock.Blocks.Count == 0)
                AddEffectsToComplexEffect(ref ce, string.Empty);
             else
