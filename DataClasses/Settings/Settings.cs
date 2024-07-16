@@ -7,5 +7,5 @@ public class Settings
 
 public class MapModeSettings
 {
-   public bool ShowCountryCapitals { get; set; } = true;
+   public bool ShowCountryCapitals { get; set; } = false;
 }

@@ -40,6 +40,8 @@ public abstract class MapMode
             // draw borders on top of the provinces is always needed
             if (ShowOccupation)
                MapDrawHelper.DrawOccupations(false, Globals.MapModeManager.ShareLiveBitmap);
+            if (Globals.Settings.MapModeSettings.ShowCountryCapitals)
+               MapDrawHelper.DrawCapitals(Globals.MapModeManager.ShareLiveBitmap);
             MapDrawHelper.DrawAllProvinceBorders(Globals.MapModeManager.ShareLiveBitmap, Color.Black);
             Globals.MapModeManager.PictureBox.Image = Globals.MapModeManager.ShareLiveBitmap;
             break;
@@ -48,6 +50,8 @@ public abstract class MapMode
             Bitmap = BitMapHelper.GenerateBitmapFromProvinces(GetProvinceColor);
             if (ShowOccupation)
                MapDrawHelper.DrawOccupations(false, Bitmap);
+            if (Globals.Settings.MapModeSettings.ShowCountryCapitals)
+               MapDrawHelper.DrawCapitals(Bitmap);
             MapDrawHelper.DrawAllProvinceBorders(Bitmap, Color.Black);
             Globals.MapModeManager.PictureBox.Image = Bitmap;
             break;
@@ -57,6 +61,7 @@ public abstract class MapMode
       Globals.MapWindow.MapPictureBox.IsPainting = false;
       Globals.MapModeManager.PictureBox.Invalidate();
       Globals.MapModeManager.PreviousLandOnly = IsLandOnly;
+
       sw.Stop();
       Debug.WriteLine($"RenderMapMode {GetMapModeName()} took {sw.ElapsedMilliseconds}ms");
    }

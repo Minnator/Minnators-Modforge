@@ -306,4 +306,18 @@ public static class MapDrawHelper
          DrawOnMap(province.Bounds, stripePixels, province.GetOccupantColor, bmp);
       }
    }
+
+   public static void DrawCapitals(Bitmap bmp)
+   {
+      using var g = Graphics.FromImage(bmp);
+
+      foreach (var country in Globals.Countries.Values)
+      {
+         if (country.Exists && Globals.Provinces.TryGetValue(country.Capital, out var province))
+         {
+            g.DrawRectangle(new (Color.Black, 1), province.Center.X - 2, province.Center.Y - 2, 4, 4);
+            g.DrawRectangle(Pens.Yellow, province.Center.X - 1, province.Center.Y - 1, 2, 2);
+         }
+      }
+   }
 }
