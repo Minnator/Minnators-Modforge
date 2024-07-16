@@ -32,6 +32,7 @@ namespace Editor
          LoadingManager.LoadGameAndModDataToApplication(Project, this);
          LoadingManager.InitializeComponents(this);
 
+         InitializeEditGui();
          //resume gui updates
          ResumeLayout();
          // Enable the Application
@@ -52,8 +53,15 @@ namespace Editor
 
          TopStripLayoutPanel.Controls.Add(DateControl, 4, 0);
          DateControl.OnDateChanged += OnDateChanged;
+
       }
 
+      private void InitializeEditGui()
+      {
+         var coresControl = new ItemList(ItemTypes.Tag);
+         coresControl.InitializeItems([.. Globals.Countries.Keys]);
+         ProvinceEditingLayout.Controls.Add(coresControl, 1, 3);
+      }
 
 
       #region ToolStrip update methods

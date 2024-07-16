@@ -75,7 +75,7 @@
          helpToolStripButton = new ToolStripButton();
          DataTabPanel = new TabControl();
          ProvincePage = new TabPage();
-         tableLayoutPanel1 = new TableLayoutPanel();
+         ProvinceEditingLayout = new TableLayoutPanel();
          groupBox1 = new GroupBox();
          OwnerControllerLayoutPanel = new TableLayoutPanel();
          label1 = new Label();
@@ -104,6 +104,7 @@
          HasRevoltCheckBox = new CheckBox();
          COuntryPage = new TabPage();
          ProvinceGroupsPage = new TabPage();
+         CoresAndClaimsBox = new GroupBox();
          MapMenuStrip.SuspendLayout();
          toolStrip1.SuspendLayout();
          MainLayoutPanel.SuspendLayout();
@@ -114,7 +115,7 @@
          toolStrip2.SuspendLayout();
          DataTabPanel.SuspendLayout();
          ProvincePage.SuspendLayout();
-         tableLayoutPanel1.SuspendLayout();
+         ProvinceEditingLayout.SuspendLayout();
          groupBox1.SuspendLayout();
          OwnerControllerLayoutPanel.SuspendLayout();
          groupBox2.SuspendLayout();
@@ -219,21 +220,21 @@
          // testToolStripMenuItem
          // 
          testToolStripMenuItem.Name = "testToolStripMenuItem";
-         testToolStripMenuItem.Size = new Size(180, 22);
+         testToolStripMenuItem.Size = new Size(125, 22);
          testToolStripMenuItem.Text = "Test";
          testToolStripMenuItem.Click += testToolStripMenuItem_Click;
          // 
          // telescopeToolStripMenuItem
          // 
          telescopeToolStripMenuItem.Name = "telescopeToolStripMenuItem";
-         telescopeToolStripMenuItem.Size = new Size(180, 22);
+         telescopeToolStripMenuItem.Size = new Size(125, 22);
          telescopeToolStripMenuItem.Text = "Telescope";
          telescopeToolStripMenuItem.Click += telescopeToolStripMenuItem_Click;
          // 
          // refStackToolStripMenuItem
          // 
          refStackToolStripMenuItem.Name = "refStackToolStripMenuItem";
-         refStackToolStripMenuItem.Size = new Size(180, 22);
+         refStackToolStripMenuItem.Size = new Size(125, 22);
          refStackToolStripMenuItem.Click += refStackToolStripMenuItem_Click;
          // 
          // DateSelector
@@ -514,7 +515,7 @@
          // 
          // ProvincePage
          // 
-         ProvincePage.Controls.Add(tableLayoutPanel1);
+         ProvincePage.Controls.Add(ProvinceEditingLayout);
          ProvincePage.Location = new Point(4, 24);
          ProvincePage.Margin = new Padding(0);
          ProvincePage.Name = "ProvincePage";
@@ -523,27 +524,29 @@
          ProvincePage.Text = "Province";
          ProvincePage.UseVisualStyleBackColor = true;
          // 
-         // tableLayoutPanel1
+         // ProvinceEditingLayout
          // 
-         tableLayoutPanel1.ColumnCount = 2;
-         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-         tableLayoutPanel1.Controls.Add(groupBox1, 0, 0);
-         tableLayoutPanel1.Controls.Add(groupBox2, 1, 0);
-         tableLayoutPanel1.Controls.Add(groupBox3, 1, 2);
-         tableLayoutPanel1.Controls.Add(groupBox4, 0, 1);
-         tableLayoutPanel1.Dock = DockStyle.Fill;
-         tableLayoutPanel1.Location = new Point(0, 0);
-         tableLayoutPanel1.Margin = new Padding(0);
-         tableLayoutPanel1.Name = "tableLayoutPanel1";
-         tableLayoutPanel1.RowCount = 4;
-         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 71F));
-         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 90F));
-         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 518F));
-         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-         tableLayoutPanel1.Size = new Size(392, 822);
-         tableLayoutPanel1.TabIndex = 0;
+         ProvinceEditingLayout.ColumnCount = 2;
+         ProvinceEditingLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         ProvinceEditingLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         ProvinceEditingLayout.Controls.Add(groupBox1, 0, 0);
+         ProvinceEditingLayout.Controls.Add(groupBox2, 1, 0);
+         ProvinceEditingLayout.Controls.Add(groupBox3, 1, 2);
+         ProvinceEditingLayout.Controls.Add(groupBox4, 0, 1);
+         ProvinceEditingLayout.Controls.Add(CoresAndClaimsBox, 0, 3);
+         ProvinceEditingLayout.Dock = DockStyle.Fill;
+         ProvinceEditingLayout.Location = new Point(0, 0);
+         ProvinceEditingLayout.Margin = new Padding(0);
+         ProvinceEditingLayout.Name = "ProvinceEditingLayout";
+         ProvinceEditingLayout.RowCount = 5;
+         ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 71F));
+         ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 90F));
+         ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 135F));
+         ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 403F));
+         ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+         ProvinceEditingLayout.Size = new Size(392, 822);
+         ProvinceEditingLayout.TabIndex = 0;
          // 
          // groupBox1
          // 
@@ -603,7 +606,7 @@
          groupBox2.Margin = new Padding(3, 0, 3, 0);
          groupBox2.Name = "groupBox2";
          groupBox2.Padding = new Padding(0);
-         tableLayoutPanel1.SetRowSpan(groupBox2, 2);
+         ProvinceEditingLayout.SetRowSpan(groupBox2, 2);
          groupBox2.Size = new Size(190, 90);
          groupBox2.TabIndex = 1;
          groupBox2.TabStop = false;
@@ -794,7 +797,7 @@
          groupBox4.Margin = new Padding(3, 0, 3, 0);
          groupBox4.Name = "groupBox4";
          groupBox4.Padding = new Padding(0);
-         tableLayoutPanel1.SetRowSpan(groupBox4, 2);
+         ProvinceEditingLayout.SetRowSpan(groupBox4, 2);
          groupBox4.Size = new Size(190, 115);
          groupBox4.TabIndex = 3;
          groupBox4.TabStop = false;
@@ -891,6 +894,19 @@
          ProvinceGroupsPage.Text = "ProvinceGroups";
          ProvinceGroupsPage.UseVisualStyleBackColor = true;
          // 
+         // CoresAndClaimsBox
+         // 
+         ProvinceEditingLayout.SetColumnSpan(CoresAndClaimsBox, 2);
+         CoresAndClaimsBox.Dock = DockStyle.Fill;
+         CoresAndClaimsBox.Location = new Point(3, 186);
+         CoresAndClaimsBox.Margin = new Padding(3, 0, 3, 0);
+         CoresAndClaimsBox.Name = "CoresAndClaimsBox";
+         CoresAndClaimsBox.Padding = new Padding(0);
+         CoresAndClaimsBox.Size = new Size(386, 135);
+         CoresAndClaimsBox.TabIndex = 4;
+         CoresAndClaimsBox.TabStop = false;
+         CoresAndClaimsBox.Text = "Cores and Claims";
+         // 
          // MapWindow
          // 
          AutoScaleDimensions = new SizeF(7F, 15F);
@@ -925,7 +941,7 @@
          toolStrip2.PerformLayout();
          DataTabPanel.ResumeLayout(false);
          ProvincePage.ResumeLayout(false);
-         tableLayoutPanel1.ResumeLayout(false);
+         ProvinceEditingLayout.ResumeLayout(false);
          groupBox1.ResumeLayout(false);
          OwnerControllerLayoutPanel.ResumeLayout(false);
          OwnerControllerLayoutPanel.PerformLayout();
@@ -992,7 +1008,7 @@
       private TabPage ProvincePage;
       private TabPage COuntryPage;
       private TabPage ProvinceGroupsPage;
-      private TableLayoutPanel tableLayoutPanel1;
+      private TableLayoutPanel ProvinceEditingLayout;
       private GroupBox groupBox1;
       private TableLayoutPanel OwnerControllerLayoutPanel;
       private Label label1;
@@ -1019,6 +1035,7 @@
       private CheckBox IsHreCheckBox;
       private CheckBox IsParlimentSeatCheckbox;
       private CheckBox HasRevoltCheckBox;
+      private GroupBox CoresAndClaimsBox;
    }
 }
 
