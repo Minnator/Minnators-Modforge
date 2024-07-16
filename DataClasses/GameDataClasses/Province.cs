@@ -9,6 +9,7 @@ public class ProvinceData()
 {
    // ======================================== IMPORTANT =========================================
    // IF CHANGING ANYTHING HERE ALSO UPDATE InitializeInitial AND ResetHistory
+   // The "//." means that there is a GUI to modify this value
    // ======================================== Properties ========================================
 
    public Tag Controller = Tag.Empty;                       //.
@@ -37,11 +38,11 @@ public class ProvinceData()
    public string Religion = string.Empty;                   //.
    public string Area = string.Empty;
    public string TradeGood = "";
-   public string Continent = string.Empty; //! not in province editing interface
-   public string LatentTradeGood = string.Empty; //+ ProvinceHistoryEntry editing interface
-   public string ReformationCenter = string.Empty; //+ ProvinceHistoryEntry editing interface
-   public List<Tag> Claims = [];
-   public List<Tag> Cores = [];
+   public string Continent = string.Empty;            //! not in province editing interface
+   public string LatentTradeGood = string.Empty;      //+ ProvinceHistoryEntry editing interface
+   public string ReformationCenter = string.Empty;    //+ ProvinceHistoryEntry editing interface
+   public List<Tag> Claims = [];                            //.
+   public List<Tag> Cores = [];                             //.
    public List<string> DiscoveredBy = [];
    public List<string> Buildings = [];
    public List<string> TradeCompanyInvestments = [];

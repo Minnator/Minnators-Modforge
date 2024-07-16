@@ -58,9 +58,10 @@ namespace Editor
 
       private void InitializeEditGui()
       {
-         var coresControl = new ItemList(ItemTypes.Tag);
-         coresControl.InitializeItems([.. Globals.Countries.Keys]);
-         ProvinceEditingLayout.Controls.Add(coresControl, 1, 3);
+         var coresControl = ControlFactory.GetItemList(ItemTypes.Tag, [.. Globals.Countries.Keys], "Cores");
+         var claimsControl = ControlFactory.GetItemList(ItemTypes.Tag, [.. Globals.Countries.Keys], "Claims");
+         CoresAndClaimLayoutPanel.Controls.Add(claimsControl, 0, 0);
+         CoresAndClaimLayoutPanel.Controls.Add(coresControl, 1, 0);
       }
 
 

@@ -32,7 +32,7 @@ public static class ControlFactory
 
    public static SearchResultButton GetSearchResultButton(bool isProvince, int id, Tag tag)
    {
-      return new SearchResultButton()
+      return new ()
       {
          Margin = new (3),
          Width = 194,
@@ -42,5 +42,18 @@ public static class ControlFactory
          ProvinceId = id,
          CountryTag = tag
       };
+   }
+
+   public static TagComboBox GetTagComboBox()
+   {
+      return new ();
+   }
+
+   public static ItemList GetItemList(ItemTypes itemType, List<string> items, string title)
+   {
+      var list = new ItemList(itemType);
+      list.InitializeItems(items);
+      list.SetTitle(title);
+      return list;
    }
 }

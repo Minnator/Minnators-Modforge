@@ -21,6 +21,12 @@ namespace Editor.Controls
          ItemsComboBox.SelectedIndexChanged += ItemsComboBox_SelectedIndexChanged;
       }
 
+      // Create a setter for the Title
+      public void SetTitle(string title)
+      {
+         TitleLabel.Text = title;
+      }
+
       public void InitializeItems(List<string> items)
       {
          items.Sort();

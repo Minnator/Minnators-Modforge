@@ -93,18 +93,19 @@
          label6 = new Label();
          label7 = new Label();
          label8 = new Label();
-         ManpowerDevTextBox = new TextBox();
-         ProductionDevTextBox = new TextBox();
-         TaxDevTextBox = new TextBox();
+         TaxNumericBox = new NumericUpDown();
+         ProdNumericBox = new NumericUpDown();
+         ManpNumericBox = new NumericUpDown();
          groupBox4 = new GroupBox();
          tableLayoutPanel4 = new TableLayoutPanel();
          IsCityCheckBox = new CheckBox();
          IsHreCheckBox = new CheckBox();
          IsParlimentSeatCheckbox = new CheckBox();
          HasRevoltCheckBox = new CheckBox();
+         CoresAndClaimsBox = new GroupBox();
+         CoresAndClaimLayoutPanel = new TableLayoutPanel();
          COuntryPage = new TabPage();
          ProvinceGroupsPage = new TabPage();
-         CoresAndClaimsBox = new GroupBox();
          MapMenuStrip.SuspendLayout();
          toolStrip1.SuspendLayout();
          MainLayoutPanel.SuspendLayout();
@@ -122,8 +123,12 @@
          tableLayoutPanel2.SuspendLayout();
          groupBox3.SuspendLayout();
          tableLayoutPanel3.SuspendLayout();
+         ((System.ComponentModel.ISupportInitialize)TaxNumericBox).BeginInit();
+         ((System.ComponentModel.ISupportInitialize)ProdNumericBox).BeginInit();
+         ((System.ComponentModel.ISupportInitialize)ManpNumericBox).BeginInit();
          groupBox4.SuspendLayout();
          tableLayoutPanel4.SuspendLayout();
+         CoresAndClaimsBox.SuspendLayout();
          SuspendLayout();
          // 
          // MapMenuStrip
@@ -542,9 +547,8 @@
          ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 71F));
          ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
          ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 90F));
-         ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 135F));
+         ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 112F));
          ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 403F));
-         ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
          ProvinceEditingLayout.Size = new Size(392, 822);
          ProvinceEditingLayout.TabIndex = 0;
          // 
@@ -714,9 +718,9 @@
          tableLayoutPanel3.Controls.Add(label6, 0, 2);
          tableLayoutPanel3.Controls.Add(label7, 0, 0);
          tableLayoutPanel3.Controls.Add(label8, 0, 1);
-         tableLayoutPanel3.Controls.Add(ManpowerDevTextBox, 1, 2);
-         tableLayoutPanel3.Controls.Add(ProductionDevTextBox, 1, 1);
-         tableLayoutPanel3.Controls.Add(TaxDevTextBox, 1, 0);
+         tableLayoutPanel3.Controls.Add(TaxNumericBox, 1, 0);
+         tableLayoutPanel3.Controls.Add(ProdNumericBox, 1, 1);
+         tableLayoutPanel3.Controls.Add(ManpNumericBox, 1, 2);
          tableLayoutPanel3.Location = new Point(0, 8);
          tableLayoutPanel3.Margin = new Padding(0, 3, 0, 0);
          tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -762,32 +766,35 @@
          label8.Text = "Production";
          label8.TextAlign = ContentAlignment.MiddleLeft;
          // 
-         // ManpowerDevTextBox
+         // TaxNumericBox
          // 
-         ManpowerDevTextBox.Dock = DockStyle.Fill;
-         ManpowerDevTextBox.Location = new Point(95, 50);
-         ManpowerDevTextBox.Margin = new Padding(0);
-         ManpowerDevTextBox.Name = "ManpowerDevTextBox";
-         ManpowerDevTextBox.Size = new Size(95, 23);
-         ManpowerDevTextBox.TabIndex = 5;
+         TaxNumericBox.Dock = DockStyle.Fill;
+         TaxNumericBox.Location = new Point(98, 1);
+         TaxNumericBox.Margin = new Padding(3, 1, 3, 3);
+         TaxNumericBox.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
+         TaxNumericBox.Name = "TaxNumericBox";
+         TaxNumericBox.Size = new Size(89, 23);
+         TaxNumericBox.TabIndex = 3;
          // 
-         // ProductionDevTextBox
+         // ProdNumericBox
          // 
-         ProductionDevTextBox.Dock = DockStyle.Fill;
-         ProductionDevTextBox.Location = new Point(95, 25);
-         ProductionDevTextBox.Margin = new Padding(0);
-         ProductionDevTextBox.Name = "ProductionDevTextBox";
-         ProductionDevTextBox.Size = new Size(95, 23);
-         ProductionDevTextBox.TabIndex = 6;
+         ProdNumericBox.Dock = DockStyle.Fill;
+         ProdNumericBox.Location = new Point(98, 26);
+         ProdNumericBox.Margin = new Padding(3, 1, 3, 3);
+         ProdNumericBox.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
+         ProdNumericBox.Name = "ProdNumericBox";
+         ProdNumericBox.Size = new Size(89, 23);
+         ProdNumericBox.TabIndex = 4;
          // 
-         // TaxDevTextBox
+         // ManpNumericBox
          // 
-         TaxDevTextBox.Dock = DockStyle.Fill;
-         TaxDevTextBox.Location = new Point(95, 0);
-         TaxDevTextBox.Margin = new Padding(0);
-         TaxDevTextBox.Name = "TaxDevTextBox";
-         TaxDevTextBox.Size = new Size(95, 23);
-         TaxDevTextBox.TabIndex = 7;
+         ManpNumericBox.Dock = DockStyle.Fill;
+         ManpNumericBox.Location = new Point(98, 51);
+         ManpNumericBox.Margin = new Padding(3, 1, 3, 3);
+         ManpNumericBox.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
+         ManpNumericBox.Name = "ManpNumericBox";
+         ManpNumericBox.Size = new Size(89, 23);
+         ManpNumericBox.TabIndex = 5;
          // 
          // groupBox4
          // 
@@ -874,6 +881,34 @@
          HasRevoltCheckBox.Text = "HasRevolt";
          HasRevoltCheckBox.UseVisualStyleBackColor = true;
          // 
+         // CoresAndClaimsBox
+         // 
+         ProvinceEditingLayout.SetColumnSpan(CoresAndClaimsBox, 2);
+         CoresAndClaimsBox.Controls.Add(CoresAndClaimLayoutPanel);
+         CoresAndClaimsBox.Dock = DockStyle.Fill;
+         CoresAndClaimsBox.Location = new Point(3, 186);
+         CoresAndClaimsBox.Margin = new Padding(3, 0, 3, 0);
+         CoresAndClaimsBox.Name = "CoresAndClaimsBox";
+         CoresAndClaimsBox.Padding = new Padding(0);
+         CoresAndClaimsBox.Size = new Size(386, 112);
+         CoresAndClaimsBox.TabIndex = 4;
+         CoresAndClaimsBox.TabStop = false;
+         CoresAndClaimsBox.Text = "Cores and Claims";
+         // 
+         // CoresAndClaimLayoutPanel
+         // 
+         CoresAndClaimLayoutPanel.ColumnCount = 2;
+         CoresAndClaimLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         CoresAndClaimLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         CoresAndClaimLayoutPanel.Dock = DockStyle.Fill;
+         CoresAndClaimLayoutPanel.Location = new Point(0, 16);
+         CoresAndClaimLayoutPanel.Margin = new Padding(0);
+         CoresAndClaimLayoutPanel.Name = "CoresAndClaimLayoutPanel";
+         CoresAndClaimLayoutPanel.RowCount = 1;
+         CoresAndClaimLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+         CoresAndClaimLayoutPanel.Size = new Size(386, 96);
+         CoresAndClaimLayoutPanel.TabIndex = 0;
+         // 
          // COuntryPage
          // 
          COuntryPage.Location = new Point(4, 24);
@@ -893,19 +928,6 @@
          ProvinceGroupsPage.TabIndex = 2;
          ProvinceGroupsPage.Text = "ProvinceGroups";
          ProvinceGroupsPage.UseVisualStyleBackColor = true;
-         // 
-         // CoresAndClaimsBox
-         // 
-         ProvinceEditingLayout.SetColumnSpan(CoresAndClaimsBox, 2);
-         CoresAndClaimsBox.Dock = DockStyle.Fill;
-         CoresAndClaimsBox.Location = new Point(3, 186);
-         CoresAndClaimsBox.Margin = new Padding(3, 0, 3, 0);
-         CoresAndClaimsBox.Name = "CoresAndClaimsBox";
-         CoresAndClaimsBox.Padding = new Padding(0);
-         CoresAndClaimsBox.Size = new Size(386, 135);
-         CoresAndClaimsBox.TabIndex = 4;
-         CoresAndClaimsBox.TabStop = false;
-         CoresAndClaimsBox.Text = "Cores and Claims";
          // 
          // MapWindow
          // 
@@ -951,9 +973,13 @@
          groupBox3.ResumeLayout(false);
          tableLayoutPanel3.ResumeLayout(false);
          tableLayoutPanel3.PerformLayout();
+         ((System.ComponentModel.ISupportInitialize)TaxNumericBox).EndInit();
+         ((System.ComponentModel.ISupportInitialize)ProdNumericBox).EndInit();
+         ((System.ComponentModel.ISupportInitialize)ManpNumericBox).EndInit();
          groupBox4.ResumeLayout(false);
          tableLayoutPanel4.ResumeLayout(false);
          tableLayoutPanel4.PerformLayout();
+         CoresAndClaimsBox.ResumeLayout(false);
          ResumeLayout(false);
          PerformLayout();
       }
@@ -1026,9 +1052,6 @@
       private Label label6;
       private Label label7;
       private Label label8;
-      private TextBox ManpowerDevTextBox;
-      private TextBox ProductionDevTextBox;
-      private TextBox TaxDevTextBox;
       private GroupBox groupBox4;
       private TableLayoutPanel tableLayoutPanel4;
       private CheckBox IsCityCheckBox;
@@ -1036,6 +1059,10 @@
       private CheckBox IsParlimentSeatCheckbox;
       private CheckBox HasRevoltCheckBox;
       private GroupBox CoresAndClaimsBox;
+      private NumericUpDown TaxNumericBox;
+      private NumericUpDown ProdNumericBox;
+      private NumericUpDown ManpNumericBox;
+      private TableLayoutPanel CoresAndClaimLayoutPanel;
    }
 }
 
