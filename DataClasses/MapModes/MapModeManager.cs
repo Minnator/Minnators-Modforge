@@ -36,7 +36,17 @@ public class MapModeManager(PannablePictureBox pictureBox)
       // We set the default map mode to retrieve province colors
 
       IdMapMode = new ();
-      IdMapMode.RenderMapMode(IdMapMode.GetProvinceColor); //TODO can be replaced by coping the bitmap from the modfolder if it exists
+
+      var modPath = Path.Combine(Globals.MapWindow.Project.ModPath, "map", "provinces.bmp");
+      var vanillaPath = Path.Combine(Globals.MapWindow.Project.VanillaPath, "map", "provinces.bmp");
+      if (File.Exists(modPath))
+         IdMapMode.Bitmap = new(modPath);
+      else if (File.Exists(vanillaPath))
+         IdMapMode.Bitmap = new(vanillaPath);
+      else
+         IdMapMode.RenderMapMode(IdMapMode.GetProvinceColor); //TODO can be replaced by coping the bitmap from the modfolder if it exists
+         
+
 
    }
 

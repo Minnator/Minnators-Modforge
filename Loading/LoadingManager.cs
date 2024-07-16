@@ -48,10 +48,6 @@ public static class LoadingManager
       mw.MapModeComboBox.Items.AddRange([.. Globals.MapModeManager.GetMapModeNames()]);
       sw.Stop();
       Globals.LoadingLog.WriteTimeStamp("Initializing MapModes", sw.ElapsedMilliseconds);
-      sw.Restart();
-      Globals.MapModeManager.SetCurrentMapMode("Provinces"); // Default map mode
-      sw.Stop();
-      Globals.LoadingLog.WriteTimeStamp("Setting default map mode", sw.ElapsedMilliseconds);
    }
 
 
