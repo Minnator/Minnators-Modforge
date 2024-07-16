@@ -125,6 +125,19 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
       }
    }
 
+   public bool Exists
+   {
+      get
+      {
+         foreach (var province in Globals.Provinces.Values)
+         {
+            if (province.Owner == Tag)
+               return true;
+         }
+         return false;
+      }
+   }
+
    public string GetLocalisation()
    {
       return Localisation.GetLoc(Tag);

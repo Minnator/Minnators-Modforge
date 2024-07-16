@@ -40,5 +40,30 @@ namespace Editor.DataClasses.MapModes
          }
          return "Country: [Unknown]";
       }
+
+      public override void RenderMapMode(Func<int, Color> method)
+      {
+         base.RenderMapMode(method);
+         if (!Globals.Settings.MapModeSettings.ShowCountryCapitals)
+            return;
+         Graphics g;
+         if (Globals.MapModeRendering == MapModeRendering.Live)
+         {
+            g = Graphics.FromImage(Globals.MapModeManager.ShareLiveBitmap);
+         }
+         else
+         {
+            g = Graphics.FromImage(Bitmap);
+         }
+         
+         foreach (var country in Globals.Countries.Values)
+         {
+            if (country.Exists && Globals.Provinces.TryGetValue(country.Capital, out var province))
+            {
+               g.DrawEllipse(new (Color.Black, 1), province.Center.X - 2, province.Center.Y - 2, 4, 4);
+               g.DrawEllipse(Pens.Yellow, province.Center.X - 1, province.Center.Y - 1, 2, 2);
+            }
+         }
+      }
    }
 }

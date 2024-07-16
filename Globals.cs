@@ -4,6 +4,7 @@ using Editor.Commands;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
+using Editor.DataClasses.Settings;
 using Editor.Forms;
 using Editor.Helper;
 using Region = Editor.DataClasses.GameDataClasses.Region;
@@ -48,6 +49,9 @@ public static class Globals
    public static ConsoleForm? ConsoleForm = null;
    public static Search? SearchForm = null;
    public static MapWindow MapWindow = null!;
+
+   // SETTINGS
+   public static readonly Settings Settings = new();
 
    // Date of history
    public static DateTime Date

@@ -69,4 +69,5 @@ public class ColorProviderRgb(int seed = 1444)
 
       return Color.FromArgb(red, green, 0);
    }
+
 }

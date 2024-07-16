@@ -1,8 +1,6 @@
-﻿using System.Drawing;
-using Editor.DataClasses.MapModes;
-using Editor.Helper;
+﻿using Editor.Helper;
 
-namespace Editor.MapModes;
+namespace Editor.DataClasses.MapModes;
 
 public class AutonomyMapMode : MapMode
 {
