@@ -100,7 +100,16 @@ public static class Globals
    public static Dictionary<int, int[]> AdjacentProvinces = null!;
 
    // Country Groups
-   public static Dictionary<Tag, Country> Countries = null!;
+   private static Dictionary<Tag, Country> _countries = [];
+   public static Dictionary<Tag, Country> Countries
+   {
+      get => _countries;
+      set
+      {
+         _countries = value;
+         GlobalEventHandlers.RaiseCountryListChanged();
+      } 
+   }
 
    // Province Groups
    public static HashSet<int> LandProvinces = null!;

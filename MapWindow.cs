@@ -3,6 +3,7 @@ using System.Drawing.Imaging;
 using System.Text;
 using Editor.Controls;
 using Editor.DataClasses;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Forms;
 using Editor.Helper;
 using Editor.Loading;
@@ -106,6 +107,18 @@ namespace Editor
       private void OnDateChanged(object? sender, EventArgs e)
       {
          ProvinceHistoryManager.LoadDate(Globals.Date);
+      }
+
+      public void UpdateHoveredInfo(Province? province)
+      {
+         if (province == null)
+         {
+            ProvinceNameLabel.Text = "Province: -";
+            OwnerCountryNameLabel.Text = "Owner: -";
+            return;
+         }
+         ProvinceNameLabel.Text = $"Province: {province.GetLocalisation()}";
+         OwnerCountryNameLabel.Text = $"Owner: {Localisation.GetLoc(province.Owner)}";
       }
 
       private void debugToolStripMenuItem_Click(object sender, EventArgs e)

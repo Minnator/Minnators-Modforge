@@ -59,6 +59,8 @@
          toolStripSplitButton1 = new ToolStripSplitButton();
          MainLayoutPanel = new TableLayoutPanel();
          TopStripLayoutPanel = new TableLayoutPanel();
+         OwnerCountryNameLabel = new Label();
+         ProvinceNameLabel = new Label();
          toolStripContainer1 = new ToolStripContainer();
          toolStrip2 = new ToolStrip();
          newToolStripButton = new ToolStripButton();
@@ -71,13 +73,38 @@
          pasteToolStripButton = new ToolStripButton();
          toolStripSeparator3 = new ToolStripSeparator();
          helpToolStripButton = new ToolStripButton();
+         DataTabPanel = new TabControl();
+         ProvincePage = new TabPage();
+         tableLayoutPanel1 = new TableLayoutPanel();
+         groupBox1 = new GroupBox();
+         OwnerControllerLayoutPanel = new TableLayoutPanel();
+         label1 = new Label();
+         label2 = new Label();
+         groupBox2 = new GroupBox();
+         tableLayoutPanel2 = new TableLayoutPanel();
+         CultureComboBox = new ComboBox();
+         label5 = new Label();
+         label3 = new Label();
+         label4 = new Label();
+         ReligionComboBox = new ComboBox();
+         CapitalNameTextBox = new TextBox();
+         COuntryPage = new TabPage();
+         ProvinceGroupsPage = new TabPage();
          MapMenuStrip.SuspendLayout();
          toolStrip1.SuspendLayout();
          MainLayoutPanel.SuspendLayout();
+         TopStripLayoutPanel.SuspendLayout();
          toolStripContainer1.ContentPanel.SuspendLayout();
          toolStripContainer1.RightToolStripPanel.SuspendLayout();
          toolStripContainer1.SuspendLayout();
          toolStrip2.SuspendLayout();
+         DataTabPanel.SuspendLayout();
+         ProvincePage.SuspendLayout();
+         tableLayoutPanel1.SuspendLayout();
+         groupBox1.SuspendLayout();
+         OwnerControllerLayoutPanel.SuspendLayout();
+         groupBox2.SuspendLayout();
+         tableLayoutPanel2.SuspendLayout();
          SuspendLayout();
          // 
          // MapMenuStrip
@@ -289,6 +316,7 @@
          MainLayoutPanel.Controls.Add(toolStrip1, 0, 2);
          MainLayoutPanel.Controls.Add(TopStripLayoutPanel, 1, 0);
          MainLayoutPanel.Controls.Add(toolStripContainer1, 1, 1);
+         MainLayoutPanel.Controls.Add(DataTabPanel, 0, 1);
          MainLayoutPanel.Dock = DockStyle.Fill;
          MainLayoutPanel.Location = new Point(0, 27);
          MainLayoutPanel.Name = "MainLayoutPanel";
@@ -307,6 +335,8 @@
          TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
          TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
          TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+         TopStripLayoutPanel.Controls.Add(OwnerCountryNameLabel, 1, 0);
+         TopStripLayoutPanel.Controls.Add(ProvinceNameLabel, 2, 0);
          TopStripLayoutPanel.Dock = DockStyle.Fill;
          TopStripLayoutPanel.Location = new Point(400, 0);
          TopStripLayoutPanel.Margin = new Padding(0);
@@ -315,6 +345,28 @@
          TopStripLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
          TopStripLayoutPanel.Size = new Size(1111, 26);
          TopStripLayoutPanel.TabIndex = 2;
+         // 
+         // OwnerCountryNameLabel
+         // 
+         OwnerCountryNameLabel.AutoSize = true;
+         OwnerCountryNameLabel.Dock = DockStyle.Fill;
+         OwnerCountryNameLabel.Location = new Point(225, 0);
+         OwnerCountryNameLabel.Name = "OwnerCountryNameLabel";
+         OwnerCountryNameLabel.Size = new Size(216, 26);
+         OwnerCountryNameLabel.TabIndex = 0;
+         OwnerCountryNameLabel.Text = "Owner: -";
+         OwnerCountryNameLabel.TextAlign = ContentAlignment.MiddleCenter;
+         // 
+         // ProvinceNameLabel
+         // 
+         ProvinceNameLabel.AutoSize = true;
+         ProvinceNameLabel.Dock = DockStyle.Fill;
+         ProvinceNameLabel.Location = new Point(447, 0);
+         ProvinceNameLabel.Name = "ProvinceNameLabel";
+         ProvinceNameLabel.Size = new Size(216, 26);
+         ProvinceNameLabel.TabIndex = 1;
+         ProvinceNameLabel.Text = "Province: -";
+         ProvinceNameLabel.TextAlign = ContentAlignment.MiddleCenter;
          // 
          // toolStripContainer1
          // 
@@ -429,6 +481,215 @@
          helpToolStripButton.Size = new Size(22, 20);
          helpToolStripButton.Text = "He&lp";
          // 
+         // DataTabPanel
+         // 
+         DataTabPanel.Controls.Add(ProvincePage);
+         DataTabPanel.Controls.Add(COuntryPage);
+         DataTabPanel.Controls.Add(ProvinceGroupsPage);
+         DataTabPanel.Dock = DockStyle.Fill;
+         DataTabPanel.Location = new Point(0, 26);
+         DataTabPanel.Margin = new Padding(0);
+         DataTabPanel.Name = "DataTabPanel";
+         DataTabPanel.SelectedIndex = 0;
+         DataTabPanel.Size = new Size(400, 850);
+         DataTabPanel.TabIndex = 4;
+         // 
+         // ProvincePage
+         // 
+         ProvincePage.Controls.Add(tableLayoutPanel1);
+         ProvincePage.Location = new Point(4, 24);
+         ProvincePage.Margin = new Padding(0);
+         ProvincePage.Name = "ProvincePage";
+         ProvincePage.Size = new Size(392, 822);
+         ProvincePage.TabIndex = 0;
+         ProvincePage.Text = "Province";
+         ProvincePage.UseVisualStyleBackColor = true;
+         // 
+         // tableLayoutPanel1
+         // 
+         tableLayoutPanel1.ColumnCount = 2;
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         tableLayoutPanel1.Controls.Add(groupBox1, 0, 0);
+         tableLayoutPanel1.Controls.Add(groupBox2, 1, 0);
+         tableLayoutPanel1.Dock = DockStyle.Fill;
+         tableLayoutPanel1.Location = new Point(0, 0);
+         tableLayoutPanel1.Margin = new Padding(0);
+         tableLayoutPanel1.Name = "tableLayoutPanel1";
+         tableLayoutPanel1.RowCount = 4;
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 71F));
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 518F));
+         tableLayoutPanel1.Size = new Size(392, 822);
+         tableLayoutPanel1.TabIndex = 0;
+         // 
+         // groupBox1
+         // 
+         groupBox1.Controls.Add(OwnerControllerLayoutPanel);
+         groupBox1.Dock = DockStyle.Fill;
+         groupBox1.Location = new Point(3, 0);
+         groupBox1.Margin = new Padding(3, 0, 3, 0);
+         groupBox1.Name = "groupBox1";
+         groupBox1.Padding = new Padding(0);
+         groupBox1.Size = new Size(190, 71);
+         groupBox1.TabIndex = 0;
+         groupBox1.TabStop = false;
+         groupBox1.Text = "Country";
+         // 
+         // OwnerControllerLayoutPanel
+         // 
+         OwnerControllerLayoutPanel.ColumnCount = 2;
+         OwnerControllerLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         OwnerControllerLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         OwnerControllerLayoutPanel.Controls.Add(label1, 0, 0);
+         OwnerControllerLayoutPanel.Controls.Add(label2, 0, 1);
+         OwnerControllerLayoutPanel.Location = new Point(0, 16);
+         OwnerControllerLayoutPanel.Margin = new Padding(0, 3, 0, 0);
+         OwnerControllerLayoutPanel.Name = "OwnerControllerLayoutPanel";
+         OwnerControllerLayoutPanel.RowCount = 2;
+         OwnerControllerLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         OwnerControllerLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         OwnerControllerLayoutPanel.Size = new Size(190, 50);
+         OwnerControllerLayoutPanel.TabIndex = 0;
+         // 
+         // label1
+         // 
+         label1.AutoSize = true;
+         label1.Dock = DockStyle.Fill;
+         label1.Location = new Point(3, 0);
+         label1.Name = "label1";
+         label1.Size = new Size(89, 25);
+         label1.TabIndex = 0;
+         label1.Text = "Owner";
+         label1.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // label2
+         // 
+         label2.AutoSize = true;
+         label2.Dock = DockStyle.Fill;
+         label2.Location = new Point(3, 25);
+         label2.Name = "label2";
+         label2.Size = new Size(89, 25);
+         label2.TabIndex = 1;
+         label2.Text = "Controller";
+         label2.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // groupBox2
+         // 
+         groupBox2.Controls.Add(tableLayoutPanel2);
+         groupBox2.Location = new Point(199, 0);
+         groupBox2.Margin = new Padding(3, 0, 3, 0);
+         groupBox2.Name = "groupBox2";
+         groupBox2.Padding = new Padding(0);
+         tableLayoutPanel1.SetRowSpan(groupBox2, 2);
+         groupBox2.Size = new Size(190, 90);
+         groupBox2.TabIndex = 1;
+         groupBox2.TabStop = false;
+         groupBox2.Text = "Religion, Culture, Capital";
+         // 
+         // tableLayoutPanel2
+         // 
+         tableLayoutPanel2.ColumnCount = 2;
+         tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         tableLayoutPanel2.Controls.Add(CultureComboBox, 1, 1);
+         tableLayoutPanel2.Controls.Add(label5, 0, 2);
+         tableLayoutPanel2.Controls.Add(label3, 0, 0);
+         tableLayoutPanel2.Controls.Add(label4, 0, 1);
+         tableLayoutPanel2.Controls.Add(ReligionComboBox, 1, 0);
+         tableLayoutPanel2.Controls.Add(CapitalNameTextBox, 1, 2);
+         tableLayoutPanel2.Location = new Point(0, 15);
+         tableLayoutPanel2.Margin = new Padding(0, 3, 0, 0);
+         tableLayoutPanel2.Name = "tableLayoutPanel2";
+         tableLayoutPanel2.RowCount = 3;
+         tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         tableLayoutPanel2.Size = new Size(190, 75);
+         tableLayoutPanel2.TabIndex = 1;
+         // 
+         // CultureComboBox
+         // 
+         CultureComboBox.FormattingEnabled = true;
+         CultureComboBox.Location = new Point(95, 25);
+         CultureComboBox.Margin = new Padding(0);
+         CultureComboBox.Name = "CultureComboBox";
+         CultureComboBox.Size = new Size(95, 23);
+         CultureComboBox.TabIndex = 4;
+         // 
+         // label5
+         // 
+         label5.AutoSize = true;
+         label5.Dock = DockStyle.Fill;
+         label5.Location = new Point(3, 50);
+         label5.Name = "label5";
+         label5.Size = new Size(89, 25);
+         label5.TabIndex = 2;
+         label5.Text = "Capital";
+         label5.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // label3
+         // 
+         label3.AutoSize = true;
+         label3.Dock = DockStyle.Fill;
+         label3.Location = new Point(3, 0);
+         label3.Name = "label3";
+         label3.Size = new Size(89, 25);
+         label3.TabIndex = 0;
+         label3.Text = "Religion";
+         label3.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // label4
+         // 
+         label4.AutoSize = true;
+         label4.Dock = DockStyle.Fill;
+         label4.Location = new Point(3, 25);
+         label4.Name = "label4";
+         label4.Size = new Size(89, 25);
+         label4.TabIndex = 1;
+         label4.Text = "Culture";
+         label4.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // ReligionComboBox
+         // 
+         ReligionComboBox.Dock = DockStyle.Fill;
+         ReligionComboBox.FormattingEnabled = true;
+         ReligionComboBox.Location = new Point(95, 0);
+         ReligionComboBox.Margin = new Padding(0);
+         ReligionComboBox.Name = "ReligionComboBox";
+         ReligionComboBox.Size = new Size(95, 23);
+         ReligionComboBox.TabIndex = 3;
+         // 
+         // CapitalNameTextBox
+         // 
+         CapitalNameTextBox.Dock = DockStyle.Fill;
+         CapitalNameTextBox.Location = new Point(95, 50);
+         CapitalNameTextBox.Margin = new Padding(0);
+         CapitalNameTextBox.Name = "CapitalNameTextBox";
+         CapitalNameTextBox.Size = new Size(95, 23);
+         CapitalNameTextBox.TabIndex = 5;
+         // 
+         // COuntryPage
+         // 
+         COuntryPage.Location = new Point(4, 24);
+         COuntryPage.Name = "COuntryPage";
+         COuntryPage.Padding = new Padding(3);
+         COuntryPage.Size = new Size(392, 822);
+         COuntryPage.TabIndex = 1;
+         COuntryPage.Text = "Country";
+         COuntryPage.UseVisualStyleBackColor = true;
+         // 
+         // ProvinceGroupsPage
+         // 
+         ProvinceGroupsPage.Location = new Point(4, 24);
+         ProvinceGroupsPage.Name = "ProvinceGroupsPage";
+         ProvinceGroupsPage.Padding = new Padding(3);
+         ProvinceGroupsPage.Size = new Size(392, 822);
+         ProvinceGroupsPage.TabIndex = 2;
+         ProvinceGroupsPage.Text = "ProvinceGroups";
+         ProvinceGroupsPage.UseVisualStyleBackColor = true;
+         // 
          // MapWindow
          // 
          AutoScaleDimensions = new SizeF(7F, 15F);
@@ -452,6 +713,8 @@
          toolStrip1.PerformLayout();
          MainLayoutPanel.ResumeLayout(false);
          MainLayoutPanel.PerformLayout();
+         TopStripLayoutPanel.ResumeLayout(false);
+         TopStripLayoutPanel.PerformLayout();
          toolStripContainer1.ContentPanel.ResumeLayout(false);
          toolStripContainer1.RightToolStripPanel.ResumeLayout(false);
          toolStripContainer1.RightToolStripPanel.PerformLayout();
@@ -459,6 +722,15 @@
          toolStripContainer1.PerformLayout();
          toolStrip2.ResumeLayout(false);
          toolStrip2.PerformLayout();
+         DataTabPanel.ResumeLayout(false);
+         ProvincePage.ResumeLayout(false);
+         tableLayoutPanel1.ResumeLayout(false);
+         groupBox1.ResumeLayout(false);
+         OwnerControllerLayoutPanel.ResumeLayout(false);
+         OwnerControllerLayoutPanel.PerformLayout();
+         groupBox2.ResumeLayout(false);
+         tableLayoutPanel2.ResumeLayout(false);
+         tableLayoutPanel2.PerformLayout();
          ResumeLayout(false);
          PerformLayout();
       }
@@ -507,6 +779,26 @@
       private ToolStripButton helpToolStripButton;
       private ToolStripComboBox DateSelector;
       private ToolStripMenuItem searchToolStripMenuItem;
+      private Label OwnerCountryNameLabel;
+      private Label ProvinceNameLabel;
+      private TabControl DataTabPanel;
+      private TabPage ProvincePage;
+      private TabPage COuntryPage;
+      private TabPage ProvinceGroupsPage;
+      private TableLayoutPanel tableLayoutPanel1;
+      private GroupBox groupBox1;
+      private TableLayoutPanel OwnerControllerLayoutPanel;
+      private Label label1;
+      private Label label2;
+      private GroupBox groupBox2;
+      private TableLayoutPanel tableLayoutPanel2;
+      private ComboBox comboBox2;
+      private Label label5;
+      private Label label3;
+      private Label label4;
+      private ComboBox ReligionComboBox;
+      private ComboBox CultureComboBox;
+      private TextBox CapitalNameTextBox;
    }
 }
 

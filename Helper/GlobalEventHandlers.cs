@@ -5,6 +5,8 @@ namespace Editor.Helper;
 
 public static class GlobalEventHandlers
 {
+   #region ProvinceGroups
+
    // Region
    public static event EventHandler<ProvinceDataChangedEventArgs> OnRegionChanged = delegate { };
    public static void RaiseRegionChanged(int id, object value, object oldValue, string propertyName)
@@ -32,4 +34,14 @@ public static class GlobalEventHandlers
    {
       OnContinentChanged.Invoke(id, new(value, oldValue, propertyName));
    }
+
+   #endregion
+
+   public static event EventHandler<EventArgs> OnCountryListChanged = delegate { };
+   public static void RaiseCountryListChanged()
+   {
+      OnCountryListChanged.Invoke(null, EventArgs.Empty);
+   }
+
 }
+

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Windows.Forms;
+﻿using System.Drawing.Imaging;
 using Editor.Commands;
 using Editor.DataClasses;
 using Editor.Forms;
@@ -211,6 +208,8 @@ public sealed class PannablePictureBox : PictureBox
          // Update the tooltip
          if (ShowToolTip)
             MapToolTip.SetToolTip(this, ToolTipBuilder.BuildToolTip(Globals.ToolTipText, province.Id));
+
+         Globals.MapWindow.UpdateHoveredInfo(province);
       }
 
       // ------------------------------ Panning ------------------------------

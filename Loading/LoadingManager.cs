@@ -10,16 +10,16 @@ public static class LoadingManager
    {
       TradeGoodsLoading.Load(project);
       TradeNodeLoading.Load(project);
-      LoadDefinitionAndMap(project);
+      LoadDefinitionAndMap(project); //TODO SLOW
       DefaultMapLoading.Load(project.VanillaPath);
       AreaLoading.Load(project.VanillaPath, project.ColorProvider);
       RegionLoading.Load(project.VanillaPath, project.ColorProvider);
       SuperRegionLoading.Load(project.VanillaPath, project.ColorProvider);
       ContinentLoading.Load(project.VanillaPath, project.ColorProvider);
       LocalisationLoading.Load(project.ModPath, project.VanillaPath, project.Language);
-      ProvinceParser.ParseAllUniqueProvinces(project.ModPath, project.VanillaPath);
+      ProvinceParser.ParseAllUniqueProvinces(project.ModPath, project.VanillaPath); //TODO SLOW
       CultureLoading.LoadCultures(project);
-      CountryLoading.LoadCountries(project);
+      CountryLoading.LoadCountries(project); //TODO SLOW
 
       DebugPrints.PrintCountriesBasic();
 
