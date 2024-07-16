@@ -4,8 +4,12 @@ using static Editor.Helper.ProvinceEventHandler;
 
 namespace Editor.DataClasses.GameDataClasses;
 
-public class ProvinceInitial()
+public class ProvinceData()
 {
+   // ======================================== IMPORTANT =========================================
+   // IF CHANGING ANYTHING HERE ALSO UPDATE InitializeInitial AND ResetHistory
+   // ======================================== Properties ========================================
+
    public Tag Controller = Tag.Empty;                       //.
    public Tag Owner = Tag.Empty;                            //.
    public Tag TribalOwner = Tag.Empty;
@@ -22,6 +26,7 @@ public class ProvinceInitial()
    public int Nationalism;
    public float LocalAutonomy;
    public float Devastation;
+   public float Prosperity;
    public bool IsHre;                                       //.
    public bool IsCity;                                      //.
    public bool HasRevolt;                                   //.
@@ -42,49 +47,14 @@ public class ProvinceInitial()
    public List<string> ProvinceModifiers = [];
    public List<string> PermanentProvinceModifiers = [];
    public List<string> ProvinceTriggeredModifiers = [];
-   public List<HistoryEntry> History = [];
 }
 
 public class Province : IProvinceCollection
 {
-   private Tag _controller = Tag.Empty;
-   private Tag _owner = Tag.Empty;
-   private Tag _tribalOwner = Tag.Empty;
-   private Tag _tradeCompany = Tag.Empty;
-   private int _baseManpower;
-   private int _baseTax;
-   private int _baseProduction;
-   private int _centerOfTrade;
-   private int _extraCost;
-   private int _nativeFerocity;
-   private int _nativeHostileness;
-   private int _nativeSize;
-   private int _revoltRisk;
-   private int _localAutonomy;
-   private int _nationalism;
-   private bool _isHre;
-   private bool _isCity;
-   private bool _hasRevolt;
-   private bool _isSeatInParliament;
-   private string _capital = string.Empty;
-   private string _culture = string.Empty;
-   private string _religion = string.Empty;
-   private string _area = string.Empty;
-   private string _continent = string.Empty;
-   private string _latentTradeGood = string.Empty;
-   private string _reformationCenter = string.Empty;
-   private List<Tag> _claims = [];
-   private List<Tag> _cores = [];
-   private List<string> _discoveredBy = [];
-   private List<string> _buildings = [];
-   private List<string> _tradeCompanyInvestments = [];
-   private List<string> _provinceModifiers = [];
-   private List<string> _permanentProvinceModifiers = [];
-   private List<string> _provinceTriggeredModifiers = [];
-   private string _tradeGood = string.Empty;
+   private readonly ProvinceData _data = new();
    private List<HistoryEntry> _history = [];
 
-   public ProvinceInitial ProvinceInitial { get; set; } = new();
+   public ProvinceData ProvinceData { get; set; } = new();
 
    #region ManagementData
 
@@ -108,23 +78,23 @@ public class Province : IProvinceCollection
    // Globals from the Game
    public string Area
    {
-      get => _area;
+      get => _data.Area;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceAreaChanged(Id, value, _area, nameof(Area));
-         _area = value;
+            RaiseProvinceAreaChanged(Id, value, _data.Area, nameof(Area));
+         _data.Area = value;
       }
    }
 
    public string Continent
    {
-      get => _continent;
+      get => _data.Continent;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceContinentChanged(Id, value, _continent, nameof(Continent));
-         _continent = value;
+            RaiseProvinceContinentChanged(Id, value, _data.Continent, nameof(Continent));
+         _data.Continent = value;
       }
    }
 
@@ -135,44 +105,44 @@ public class Province : IProvinceCollection
    // Province data
    public List<Tag> Claims
    {
-      get => _claims;
+      get => _data.Claims;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceClaimsChanged(Id, value, _claims, nameof(Claims));
-         _claims = value;
+            RaiseProvinceClaimsChanged(Id, value, _data.Claims, nameof(Claims));
+         _data.Claims = value;
       }
    }
 
    public List<Tag> Cores
    {
-      get => _cores;
+      get => _data.Cores;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceCoresChanged(Id, value, _cores, nameof(Cores));
-         _cores = value;
+            RaiseProvinceCoresChanged(Id, value, _data.Cores, nameof(Cores));
+         _data.Cores = value;
       }
    }
 
    public Tag Controller
    {
-      get => _controller;
+      get => _data.Controller;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceControllerChanged(Id, value, _controller, nameof(Controller));
-         _controller = value;
+            RaiseProvinceControllerChanged(Id, value, _data.Controller, nameof(Controller));
+         _data.Controller = value;
       }
    }
 
    public Tag Owner
    {
-      get => _owner;
+      get => _data.Owner;
       set
       {
-         var old = _owner;
-         _owner = value;
+         var old = _data.Owner;
+         _data.Owner = value;
          if (Globals.State == State.Running)
             RaiseProvinceOwnerChanged(Id, value, old, nameof(Owner));
       }
@@ -180,22 +150,22 @@ public class Province : IProvinceCollection
 
    public Tag TribalOwner
    {
-      get => _tribalOwner;
+      get => _data.TribalOwner;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceTribalOwnerChanged(Id, value, _tribalOwner, nameof(TribalOwner));
-         _tribalOwner = value;
+            RaiseProvinceTribalOwnerChanged(Id, value, _data.TribalOwner, nameof(TribalOwner));
+         _data.TribalOwner = value;
       }
    }
 
    public int BaseManpower
    {
-      get => _baseManpower;
+      get => _data.BaseManpower;
       set
       {
-         var old = _baseManpower;
-         _baseManpower = value;
+         var old = _data.BaseManpower;
+         _data.BaseManpower = value;
          if (Globals.State == State.Running)
             RaiseProvinceBaseManpowerChanged(Id, value, old, nameof(BaseManpower));
       }
@@ -203,11 +173,11 @@ public class Province : IProvinceCollection
 
    public int BaseTax
    {
-      get => _baseTax;
+      get => _data.BaseTax;
       set
       {
-         var old = _baseTax;
-         _baseTax = value;
+         var old = _data.BaseTax;
+         _data.BaseTax = value;
          if (Globals.State == State.Running)
             RaiseProvinceBaseTaxChanged(Id, value, old, nameof(BaseTax));
       }
@@ -215,11 +185,11 @@ public class Province : IProvinceCollection
 
    public int BaseProduction
    {
-      get => _baseProduction;
+      get => _data.BaseProduction;
       set
       {
-         var old = _baseProduction;
-         _baseProduction = value;
+         var old = _data.BaseProduction;
+         _data.BaseProduction = value;
          if (Globals.State == State.Running)
             RaiseProvinceBaseProductionChanged(Id, value, old, nameof(BaseProduction));
       }
@@ -227,11 +197,11 @@ public class Province : IProvinceCollection
 
    public int CenterOfTrade
    {
-      get => _centerOfTrade;
+      get => _data.CenterOfTrade;
       set
       {
-         var old = _centerOfTrade;
-         _centerOfTrade = value;
+         var old = _data.CenterOfTrade;
+         _data.CenterOfTrade = value;
          if (Globals.State == State.Running)
             RaiseProvinceCenterOfTradeLevelChanged(Id, value, old, nameof(CenterOfTrade));
       }
@@ -239,100 +209,122 @@ public class Province : IProvinceCollection
 
    public int ExtraCost
    {
-      get => _extraCost;
+      get => _data.ExtraCost;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceExtraCostChanged(Id, value, _extraCost, nameof(ExtraCost));
-         _extraCost = value;
+            RaiseProvinceExtraCostChanged(Id, value, _data.ExtraCost, nameof(ExtraCost));
+         _data.ExtraCost = value;
       }
    }
 
    public int NativeFerocity
    {
-      get => _nativeFerocity;
+      get => _data.NativeFerocity;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceNativeFerocityChanged(Id, value, _nativeFerocity, nameof(NativeFerocity));
-         _nativeFerocity = value;
+            RaiseProvinceNativeFerocityChanged(Id, value, _data.NativeFerocity, nameof(NativeFerocity));
+         _data.NativeFerocity = value;
       }
    }
 
    public int NativeHostileness
    {
-      get => _nativeHostileness;
+      get => _data.NativeHostileness;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceNativeHostilenessChanged(Id, value, _nativeHostileness, nameof(NativeHostileness));
-         _nativeHostileness = value;
+            RaiseProvinceNativeHostilenessChanged(Id, value, _data.NativeHostileness, nameof(NativeHostileness));
+         _data.NativeHostileness = value;
       }
    }
 
    public int NativeSize
    {
-      get => _nativeSize;
+      get => _data.NativeSize;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceNativeSizeChanged(Id, value, _nativeSize, nameof(NativeSize));
-         _nativeSize = value;
+            RaiseProvinceNativeSizeChanged(Id, value, _data.NativeSize, nameof(NativeSize));
+         _data.NativeSize = value;
       }
    }
 
    public int RevoltRisk
    {
-      get => _revoltRisk;
+      get => _data.RevoltRisk;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceRevoltRiskChanged(Id, value, _revoltRisk, nameof(RevoltRisk));
-         _revoltRisk = value;
+            RaiseProvinceRevoltRiskChanged(Id, value, _data.RevoltRisk, nameof(RevoltRisk));
+         _data.RevoltRisk = value;
       }
    }
 
-   public int LocalAutonomy
+
+   public int Nationalism
    {
-      get => _localAutonomy;
+      get => _data.Nationalism;
       set
       {
-         var old = _localAutonomy;
-         _localAutonomy = value;
+         if (Globals.State == State.Running)
+            RaiseProvinceNationalismChanged(Id, value, _data.Nationalism, nameof(Nationalism));
+         _data.Nationalism = value;
+      }
+   }
+   public float LocalAutonomy
+   {
+      get => _data.LocalAutonomy;
+      set
+      {
+         var old = _data.LocalAutonomy;
+         _data.LocalAutonomy = value;
          if (Globals.State == State.Running)
             RaiseProvinceLocalAutonomyChanged(Id, value, old, nameof(LocalAutonomy));
       }
    }
 
-   public int Nationalism
+   public float Devastation
    {
-      get => _nationalism;
+      get => _data.Devastation;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceNationalismChanged(Id, value, _nationalism, nameof(Nationalism));
-         _nationalism = value;
+            RaiseProvinceDevastationChanged(Id, value, _data.Devastation, nameof(Devastation));
+         _data.Devastation = value;
+      }
+   }
+
+   public float Prosperity
+   {
+      get => _data.Prosperity;
+      set
+      {
+         if (Globals.State == State.Running)
+            RaiseProvinceProsperityChanged(Id, value, _data.Prosperity, nameof(Prosperity));
+         _data.Prosperity = value;
       }
    }
 
    public List<string> DiscoveredBy
    {
-      get => _discoveredBy;
+      get => _data.DiscoveredBy;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceDiscoveredByChanged(Id, value, _discoveredBy, nameof(DiscoveredBy));
-         _discoveredBy = value;
+            RaiseProvinceDiscoveredByChanged(Id, value, _data.DiscoveredBy, nameof(DiscoveredBy));
+         _data.DiscoveredBy = value;
       }
    }
 
    public string Capital
    {
-      get => _capital;
+      get => _data.Capital;
       set
       {
-         var old = _capital;
-         _capital = value;
+         var old = _data.Capital;
+         _data.Capital = value;
          if (Globals.State == State.Running)
             RaiseProvinceCapitalChanged(Id, value, old, nameof(Capital));
       }
@@ -340,33 +332,33 @@ public class Province : IProvinceCollection
 
    public string Culture
    {
-      get => _culture;
+      get => _data.Culture;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceCultureChanged(Id, value, _culture, nameof(Culture));
-         _culture = value;
+            RaiseProvinceCultureChanged(Id, value, _data.Culture, nameof(Culture));
+         _data.Culture = value;
       }
    }
 
    public string Religion
    {
-      get => _religion;
+      get => _data.Religion;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceReligionChanged(Id, value, _religion, nameof(Religion));
-         _religion = value;
+            RaiseProvinceReligionChanged(Id, value, _data.Religion, nameof(Religion));
+         _data.Religion = value;
       }
    }
 
    public List<string> Buildings
    {
-      get => _buildings;
+      get => _data.Buildings;
       set
       {
-         var old = _buildings;
-         _buildings = value;
+         var old = _data.Buildings;
+         _data.Buildings = value;
          if (Globals.State == State.Running)
             RaiseProvinceBuildingsChanged(Id, value, old, nameof(Buildings));
       }
@@ -374,45 +366,45 @@ public class Province : IProvinceCollection
 
    public bool IsHre
    {
-      get => _isHre;
+      get => _data.IsHre;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceIsHreChanged(Id, value, _isHre, nameof(IsHre));
-         _isHre = value;
+            RaiseProvinceIsHreChanged(Id, value, _data.IsHre, nameof(IsHre));
+         _data.IsHre = value;
       }
    }
 
    public bool IsCity
    {
-      get => _isCity;
+      get => _data.IsCity;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceIsCityChanged(Id, value, _isCity, nameof(IsCity));
-         _isCity = value;
+            RaiseProvinceIsCityChanged(Id, value, _data.IsCity, nameof(IsCity));
+         _data.IsCity = value;
       }
    }
 
    public bool IsSeatInParliament
    {
-      get => _isSeatInParliament;
+      get => _data.IsSeatInParliament;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceIsSeatInParliamentChanged(Id, value, _isSeatInParliament, nameof(IsSeatInParliament));
-         _isSeatInParliament = value;
+            RaiseProvinceIsSeatInParliamentChanged(Id, value, _data.IsSeatInParliament, nameof(IsSeatInParliament));
+         _data.IsSeatInParliament = value;
       }
    }
 
    public string TradeGood
    {
-      get => _tradeGood;
+      get => _data.TradeGood;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceTradeGoodChanged(Id, value, _tradeGood, nameof(TradeGood));
-         _tradeGood = value;
+            RaiseProvinceTradeGoodChanged(Id, value, _data.TradeGood, nameof(TradeGood));
+         _data.TradeGood = value;
       }
    }
 
@@ -429,89 +421,89 @@ public class Province : IProvinceCollection
 
    public string LatentTradeGood
    {
-      get => _latentTradeGood;
+      get => _data.LatentTradeGood;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceLatentTradeGoodChanged(Id, value, _latentTradeGood, nameof(LatentTradeGood));
-         _latentTradeGood = value;
+            RaiseProvinceLatentTradeGoodChanged(Id, value, _data.LatentTradeGood, nameof(LatentTradeGood));
+         _data.LatentTradeGood = value;
       }
    }
 
    public bool HasRevolt
    {
-      get => _hasRevolt;
+      get => _data.HasRevolt;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceHasRevoltChanged(Id, value, _hasRevolt, nameof(HasRevolt));
-         _hasRevolt = value;
+            RaiseProvinceHasRevoltChanged(Id, value, _data.HasRevolt, nameof(HasRevolt));
+         _data.HasRevolt = value;
       }
    }
 
    public string ReformationCenter
    {
-      get => _reformationCenter;
+      get => _data.ReformationCenter;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceReformationCenterChanged(Id, value, _reformationCenter, nameof(ReformationCenter));
-         _reformationCenter = value;
+            RaiseProvinceReformationCenterChanged(Id, value, _data.ReformationCenter, nameof(ReformationCenter));
+         _data.ReformationCenter = value;
       }
    }
 
    public Tag TradeCompany
    {
-      get => _tradeCompany;
+      get => _data.TradeCompany;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceTradeCompanyChanged(Id, value, _tradeCompany, nameof(TradeCompany));
-         _tradeCompany = value;
+            RaiseProvinceTradeCompanyChanged(Id, value, _data.TradeCompany, nameof(TradeCompany));
+         _data.TradeCompany = value;
       }
    }
 
    public List<string> TradeCompanyInvestments
    {
-      get => _tradeCompanyInvestments;
+      get => _data.TradeCompanyInvestments;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceTradeCompanyInvestmentChanged(Id, value, _tradeCompanyInvestments, nameof(TradeCompanyInvestments));
-         _tradeCompanyInvestments = value;
+            RaiseProvinceTradeCompanyInvestmentChanged(Id, value, _data.TradeCompanyInvestments, nameof(TradeCompanyInvestments));
+         _data.TradeCompanyInvestments = value;
       }
    }
 
    public List<string> ProvinceModifiers
    {
-      get => _provinceModifiers;
+      get => _data.ProvinceModifiers;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceProvinceModifiersChanged(Id, value, _provinceModifiers, nameof(ProvinceModifiers));
-         _provinceModifiers = value;
+            RaiseProvinceProvinceModifiersChanged(Id, value, _data.ProvinceModifiers, nameof(ProvinceModifiers));
+         _data.ProvinceModifiers = value;
       }
    }
 
    public List<string> PermanentProvinceModifiers
    {
-      get => _permanentProvinceModifiers;
+      get => _data.PermanentProvinceModifiers;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvincePermanentProvinceModifiersChanged(Id, value, _permanentProvinceModifiers, nameof(PermanentProvinceModifiers));
-         _permanentProvinceModifiers = value;
+            RaiseProvincePermanentProvinceModifiersChanged(Id, value, _data.PermanentProvinceModifiers, nameof(PermanentProvinceModifiers));
+         _data.PermanentProvinceModifiers = value;
       }
    }
 
    public List<string> ProvinceTriggeredModifiers
    {
-      get => _provinceTriggeredModifiers;
+      get => _data.ProvinceTriggeredModifiers;
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceProvinceTriggeredModifiersChanged(Id, value, _provinceTriggeredModifiers, nameof(ProvinceTriggeredModifiers));
-         _provinceTriggeredModifiers = value;
+            RaiseProvinceProvinceTriggeredModifiersChanged(Id, value, _data.ProvinceTriggeredModifiers, nameof(ProvinceTriggeredModifiers));
+         _data.ProvinceTriggeredModifiers = value;
       }
    }
 
@@ -520,87 +512,89 @@ public class Province : IProvinceCollection
    // ======================================== Methods ========================================
 
    /// <summary>
-   /// Copies the Province values to the ProvinceInitial values to be able to revert to the original standard when going back in time
+   /// Copies the Province values to the ProvinceData values to be able to revert to the original standard when going back in time
    /// </summary>
    public void InitializeInitial()
    {
-      ProvinceInitial.Area = Area;
-      ProvinceInitial.Continent = Continent;
-      ProvinceInitial.Claims = Claims;
-      ProvinceInitial.Cores = Cores;
-      ProvinceInitial.Controller = Controller;
-      ProvinceInitial.Owner = Owner;
-      ProvinceInitial.TribalOwner = TribalOwner;
-      ProvinceInitial.BaseManpower = BaseManpower;
-      ProvinceInitial.BaseTax = BaseTax;
-      ProvinceInitial.BaseProduction = BaseProduction;
-      ProvinceInitial.CenterOfTrade = CenterOfTrade;
-      ProvinceInitial.ExtraCost = ExtraCost;
-      ProvinceInitial.NativeFerocity = NativeFerocity;
-      ProvinceInitial.NativeHostileness = NativeHostileness;
-      ProvinceInitial.NativeSize = NativeSize;
-      ProvinceInitial.RevoltRisk = RevoltRisk;
-      ProvinceInitial.LocalAutonomy = LocalAutonomy;
-      ProvinceInitial.Nationalism = Nationalism;
-      ProvinceInitial.IsHre = IsHre;
-      ProvinceInitial.IsCity = IsCity;
-      ProvinceInitial.HasRevolt = HasRevolt;
-      ProvinceInitial.IsSeatInParliament = IsSeatInParliament;
-      ProvinceInitial.Capital = Capital;
-      ProvinceInitial.Culture = Culture;
-      ProvinceInitial.Religion = Religion;
-      ProvinceInitial.Buildings = Buildings;
-      ProvinceInitial.TradeGood = TradeGood;
-      ProvinceInitial.History = History;
-      ProvinceInitial.LatentTradeGood = LatentTradeGood;
-      ProvinceInitial.ReformationCenter = ReformationCenter;
-      ProvinceInitial.TradeCompany = TradeCompany;
-      ProvinceInitial.TradeCompanyInvestments = TradeCompanyInvestments;
-      ProvinceInitial.ProvinceModifiers = ProvinceModifiers;
-      ProvinceInitial.PermanentProvinceModifiers = PermanentProvinceModifiers;
-      ProvinceInitial.ProvinceTriggeredModifiers = ProvinceTriggeredModifiers;
+      ProvinceData.Area = Area;
+      ProvinceData.Continent = Continent;
+      ProvinceData.Claims = Claims;
+      ProvinceData.Cores = Cores;
+      ProvinceData.Controller = Controller;
+      ProvinceData.Owner = Owner;
+      ProvinceData.TribalOwner = TribalOwner;
+      ProvinceData.BaseManpower = BaseManpower;
+      ProvinceData.BaseTax = BaseTax;
+      ProvinceData.BaseProduction = BaseProduction;
+      ProvinceData.CenterOfTrade = CenterOfTrade;
+      ProvinceData.ExtraCost = ExtraCost;
+      ProvinceData.NativeFerocity = NativeFerocity;
+      ProvinceData.NativeHostileness = NativeHostileness;
+      ProvinceData.NativeSize = NativeSize;
+      ProvinceData.RevoltRisk = RevoltRisk;
+      ProvinceData.LocalAutonomy = LocalAutonomy;
+      ProvinceData.Devastation = Devastation;
+      ProvinceData.Prosperity = Prosperity;
+      ProvinceData.Nationalism = Nationalism;
+      ProvinceData.IsHre = IsHre;
+      ProvinceData.IsCity = IsCity;
+      ProvinceData.HasRevolt = HasRevolt;
+      ProvinceData.IsSeatInParliament = IsSeatInParliament;
+      ProvinceData.Capital = Capital;
+      ProvinceData.Culture = Culture;
+      ProvinceData.Religion = Religion;
+      ProvinceData.Buildings = Buildings;
+      ProvinceData.TradeGood = TradeGood;
+      ProvinceData.LatentTradeGood = LatentTradeGood;
+      ProvinceData.ReformationCenter = ReformationCenter;
+      ProvinceData.TradeCompany = TradeCompany;
+      ProvinceData.TradeCompanyInvestments = TradeCompanyInvestments;
+      ProvinceData.ProvinceModifiers = ProvinceModifiers;
+      ProvinceData.PermanentProvinceModifiers = PermanentProvinceModifiers;
+      ProvinceData.ProvinceTriggeredModifiers = ProvinceTriggeredModifiers;
    }
 
    /// <summary>
-   /// Loads the Province values from the ProvinceInitial values to revert to the original standard when going back in time
+   /// Loads the Province values from the ProvinceData values to revert to the original standard when going back in time
    /// </summary>
    public void ResetHistory()
    {
-      Area = ProvinceInitial.Area;
-      Continent = ProvinceInitial.Continent;
-      Claims = ProvinceInitial.Claims;
-      Cores = ProvinceInitial.Cores;
-      Controller = ProvinceInitial.Controller;
-      Owner = ProvinceInitial.Owner;
-      TribalOwner = ProvinceInitial.TribalOwner;
-      BaseManpower = ProvinceInitial.BaseManpower;
-      BaseTax = ProvinceInitial.BaseTax;
-      BaseProduction = ProvinceInitial.BaseProduction;
-      CenterOfTrade = ProvinceInitial.CenterOfTrade;
-      ExtraCost = ProvinceInitial.ExtraCost;
-      NativeFerocity = ProvinceInitial.NativeFerocity;
-      NativeHostileness = ProvinceInitial.NativeHostileness;
-      NativeSize = ProvinceInitial.NativeSize;
-      RevoltRisk = ProvinceInitial.RevoltRisk;
-      LocalAutonomy = ProvinceInitial.LocalAutonomy;
-      Nationalism = ProvinceInitial.Nationalism;
-      IsHre = ProvinceInitial.IsHre;
-      IsCity = ProvinceInitial.IsCity;
-      HasRevolt = ProvinceInitial.HasRevolt;
-      IsSeatInParliament = ProvinceInitial.IsSeatInParliament;
-      Capital = ProvinceInitial.Capital;
-      Culture = ProvinceInitial.Culture;
-      Religion = ProvinceInitial.Religion;
-      Buildings = ProvinceInitial.Buildings;
-      TradeGood = ProvinceInitial.TradeGood;
-      History = ProvinceInitial.History;
-      LatentTradeGood = ProvinceInitial.LatentTradeGood;
-      ReformationCenter = ProvinceInitial.ReformationCenter;
-      TradeCompany = ProvinceInitial.TradeCompany;
-      TradeCompanyInvestments = ProvinceInitial.TradeCompanyInvestments;
-      ProvinceModifiers = ProvinceInitial.ProvinceModifiers;
-      PermanentProvinceModifiers = ProvinceInitial.PermanentProvinceModifiers;
-      ProvinceTriggeredModifiers = ProvinceInitial.ProvinceTriggeredModifiers;
+      Area = ProvinceData.Area;
+      Continent = ProvinceData.Continent;
+      Claims = ProvinceData.Claims;
+      Cores = ProvinceData.Cores;
+      Controller = ProvinceData.Controller;
+      Owner = ProvinceData.Owner;
+      TribalOwner = ProvinceData.TribalOwner;
+      BaseManpower = ProvinceData.BaseManpower;
+      BaseTax = ProvinceData.BaseTax;
+      BaseProduction = ProvinceData.BaseProduction;
+      CenterOfTrade = ProvinceData.CenterOfTrade;
+      ExtraCost = ProvinceData.ExtraCost;
+      NativeFerocity = ProvinceData.NativeFerocity;
+      NativeHostileness = ProvinceData.NativeHostileness;
+      NativeSize = ProvinceData.NativeSize;
+      RevoltRisk = ProvinceData.RevoltRisk;
+      LocalAutonomy = ProvinceData.LocalAutonomy;
+      Devastation = ProvinceData.Devastation;
+      Prosperity = ProvinceData.Prosperity;
+      Nationalism = ProvinceData.Nationalism;
+      IsHre = ProvinceData.IsHre;
+      IsCity = ProvinceData.IsCity;
+      HasRevolt = ProvinceData.HasRevolt;
+      IsSeatInParliament = ProvinceData.IsSeatInParliament;
+      Capital = ProvinceData.Capital;
+      Culture = ProvinceData.Culture;
+      Religion = ProvinceData.Religion;
+      Buildings = ProvinceData.Buildings;
+      TradeGood = ProvinceData.TradeGood;
+      LatentTradeGood = ProvinceData.LatentTradeGood;
+      ReformationCenter = ProvinceData.ReformationCenter;
+      TradeCompany = ProvinceData.TradeCompany;
+      TradeCompanyInvestments = ProvinceData.TradeCompanyInvestments;
+      ProvinceModifiers = ProvinceData.ProvinceModifiers;
+      PermanentProvinceModifiers = ProvinceData.PermanentProvinceModifiers;
+      ProvinceTriggeredModifiers = ProvinceData.ProvinceTriggeredModifiers;
    }
 
    public void LoadHistoryForDate(DateTime date)

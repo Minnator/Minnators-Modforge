@@ -307,4 +307,20 @@ public static class ProvinceEventHandler
       OnProvincePermanentProvinceModifiersChanged.Invoke(id, new (value, oldValue, propertyName));
       RaiseProvinceDataChanged(id, value, oldValue, propertyName);
    }
+
+   // Devastation 
+   public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceDevastationChanged = delegate { };
+   public static void RaiseProvinceDevastationChanged(int id, object value, object oldValue, string propertyName)
+   {
+      OnProvinceDevastationChanged.Invoke(id, new (value, oldValue, propertyName));
+      RaiseProvinceDataChanged(id, value, oldValue, propertyName);
+   }
+
+   // Prosperity
+   public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceProsperityChanged = delegate { };
+   public static void RaiseProvinceProsperityChanged(int id, object value, object oldValue, string propertyName)
+   {
+      OnProvinceProsperityChanged.Invoke(id, new (value, oldValue, propertyName));
+      RaiseProvinceDataChanged(id, value, oldValue, propertyName);
+   }
 }

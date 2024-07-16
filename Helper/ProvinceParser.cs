@@ -68,7 +68,7 @@ public static class ProvinceParser
          }
       }
 
-      // Copy the initial attributes to the ProvinceInitial to be able to revert to the initial state
+      // Copy the initial attributes to the ProvinceData to be able to revert to the initial state
       province.InitializeInitial();
    }
 
