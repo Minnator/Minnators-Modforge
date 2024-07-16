@@ -1,11 +1,8 @@
 ﻿using System.Diagnostics;
-using System.Diagnostics.Metrics;
 using System.Text.RegularExpressions;
-using System.Xml.Linq;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
-using static Editor.Helper.TriggersEffectsScopes;
 
 namespace Editor.Loading
 {
@@ -16,6 +13,7 @@ namespace Editor.Loading
       public static void LoadCountries(ModProject project)
       {
          var sw = Stopwatch.StartNew();
+         // Loads the country_tags file
          FilesHelper.GetFilesUniquelyAndCombineToOne(project.ModPath, project.VanillaPath, out var content, "common", "country_tags");
 
          Parsing.RemoveCommentFromMultilineString(ref content, out var removed);
@@ -35,9 +33,9 @@ namespace Editor.Loading
 
          Globals.Countries = countries;
 
-         ParseCountryAttributes(project);
          sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("CountryLoading", sw.ElapsedMilliseconds);
+         Globals.LoadingLog.WriteTimeStamp("Parsing Country Tags", sw.ElapsedMilliseconds);
+         ParseCountryAttributes(project);
 
          // Load country history
          sw.Restart();
@@ -50,22 +48,17 @@ namespace Editor.Loading
       {
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely(project.ModPath, project.VanillaPath, "history", "countries");
 
-         foreach (var file in files)
+         Parallel.ForEach(files, new () { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 },file =>
          {
-            var content = IO.ReadAllInUTF8(file);
-            Parsing.RemoveCommentFromMultilineString(ref content, out var removed);
+            Parsing.RemoveCommentFromMultilineString(IO.ReadAllInUTF8(file), out var removed);
             var elements = Parsing.GetElements(0, removed);
-            Tag tag = new(Path.GetFileName(file)[..3]);
-            var country = Globals.Countries[tag];
 
-            foreach (var element in elements)
-            {
-               AnalyzeCountryStuff(element, ref country);
-            }
-         }
+            foreach (var element in elements) 
+               AnalyzeCountryStuff(element, Globals.Countries[new(Path.GetFileName(file)[..3])]);
+         });
       }
 
-      private static void AnalyzeCountryStuff(IElement element, ref Country country)
+      private static void AnalyzeCountryStuff(IElement element, Country country)
       {
          if (element is Block block)
          {
@@ -261,14 +254,14 @@ namespace Editor.Loading
       {
          var sw = Stopwatch.StartNew();
 
-         foreach (var country in Globals.Countries.Values)
+         Parallel.ForEach(Globals.Countries.Values, new () { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 }, country =>
          {
             FilesHelper.GetFileUniquely(project.ModPath, project.VanillaPath, out var content, "common", country.FileName);
             Parsing.RemoveCommentFromMultilineString(ref content, out var removed);
-            var blocks = Parsing.GetNestedElementsIterative(0, ref removed);
+            var blocks = Parsing.GetElements(0, ref removed);
 
             AssignCountryAttributes(country, ref blocks);
-         }
+         });
 
          sw.Stop();
          Globals.LoadingLog.WriteTimeStamp("CountryAttributes", sw.ElapsedMilliseconds);

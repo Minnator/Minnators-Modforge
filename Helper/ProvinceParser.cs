@@ -26,10 +26,8 @@ public static class ProvinceParser
       // Get all unique province files from mod and vanilla
       var files = FilesHelper.GetFilesFromModAndVanillaUniquely(modFolder, vanillaFolder, "history", "provinces");
       // Get All nested Blocks and Attributes from the files
-      foreach (var file in files)
-      {
-         ProcessProvinceFile(file);
-      }
+      var po =  new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 };
+      Parallel.ForEach(files, po, ProcessProvinceFile);
       sw.Stop();
       Globals.LoadingLog.WriteTimeStamp("Parsing provinces", sw.ElapsedMilliseconds);
       DebugPrints.PrintAllProvinceHistories();
@@ -52,7 +50,7 @@ public static class ProvinceParser
       }
 
       var fileContent = IO.ReadAllInUTF8(path);
-      var blocks = Parsing.GetNestedElementsIterative(0, ref fileContent);
+      var blocks = Parsing.GetElements(0, ref fileContent);
 
       foreach (var block in blocks)
       {

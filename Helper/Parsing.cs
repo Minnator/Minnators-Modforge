@@ -66,7 +66,7 @@ public static partial class Parsing
    /// <returns></returns>
    public static List<IElement> GetElements(int index, string str)
    {
-      return GetNestedElementsIterative(index, ref str);
+      return GetElements(index, ref str);
    }
 
    /// <summary>
@@ -76,7 +76,7 @@ public static partial class Parsing
    /// <param name="str"></param>
    /// <returns></returns>
    /// TODO improve performance by rewrite and rethink the logic
-   public static unsafe List<IElement> GetNestedElementsIterative(int index, ref string str)
+   public static unsafe List<IElement> GetElements(int index, ref string str)
    {
       var openingMatches = OpeningRegex.Matches(str, index);
       var closingMatches = ClosingRegex.Matches(str, index);

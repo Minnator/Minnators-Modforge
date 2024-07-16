@@ -165,7 +165,7 @@ namespace Editor
          //var content = File.ReadAllText("C:\\Users\\david\\Downloads\\NestedBLocks.txt");
          var content = File.ReadAllText("S:\\SteamLibrary\\steamapps\\common\\Europa Universalis IV\\common\\cultures\\00_cultures.txt");
          var sw = Stopwatch.StartNew();
-         var blocks = Parsing.GetNestedElementsIterative(0, ref content);
+         var blocks = Parsing.GetElements(0, ref content);
          sw.Stop();
          Debug.WriteLine("Parsing cultures took: " + sw.ElapsedMilliseconds + "ms");
 

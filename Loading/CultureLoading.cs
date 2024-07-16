@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Xml.Linq;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
@@ -13,9 +14,9 @@ public static class CultureLoading
       var sw = Stopwatch.StartNew();
       FilesHelper.GetFilesUniquelyAndCombineToOne(project.ModPath, project.VanillaPath, out var culturesContent, "common", "cultures");
 
-      var blocks = Parsing.GetNestedElementsIterative(0, ref culturesContent);
+      var blocks = Parsing.GetElements(0, ref culturesContent);
 
-      var (groups, cultures) = GetCultureGroups(ref blocks, ref project.ColorProvider);
+      var (groups, cultures) = GetCultureGroups(ref blocks, project.ColorProvider);
       Globals.CultureGroups = groups;
       Globals.Cultures = cultures;
       sw.Stop();
@@ -26,34 +27,31 @@ public static class CultureLoading
       Globals.LoadingLog.WriteTimeStamp("Analyzing cultures", sw.ElapsedMilliseconds);
    }
 
-   private static (Dictionary<string, CultureGroup>, Dictionary<string, Culture>) GetCultureGroups(ref List<IElement> blocks, ref ColorProviderRgb colorProvider)
+   private static (Dictionary<string, CultureGroup>, Dictionary<string, Culture>) GetCultureGroups(ref List<IElement> blocks, ColorProviderRgb colorProvider)
    {
       Dictionary<string, Culture> cultureDict = [];
       Dictionary<string, CultureGroup> cultureGroupDict = [];
 
-
-      foreach (var element in blocks)
+      Parallel.ForEach(blocks, element =>
       {
-         if (!(element is Block block))
-            continue;
-         var group = new CultureGroup(block.Name);
-         group.Color = colorProvider.GetRandomColor();
+         if (element is not Block block)
+            return;
+         var group = new CultureGroup(block.Name)
+         {
+            Color = colorProvider.GetRandomColor()
+         };
          var contents = block.GetContentElements;
          var cultures = block.GetBlockElements;
 
          foreach (var cult in cultures)
          {
             if (cult.Name.Equals("country") || cult.Name.Equals("province"))
-            {
                continue;
-            }
             if (cult.Name.Equals("male_names") || cult.Name.Equals("female_names") || cult.Name.Equals("dynasty_names"))
-            {
                SetCultureGroupNames(ref group, cult);
-            }
             else
             {
-               Culture culture = new (cult.Name)
+               Culture culture = new(cult.Name)
                {
                   Color = colorProvider.GetRandomColor(),
                   CultureGroup = group.Name
@@ -61,12 +59,18 @@ public static class CultureLoading
                SetCultureAttributes(ref culture, cult.GetBlockElements);
                SetCultureContent(ref culture, cult.GetContentElements);
                group.Cultures.Add(culture);
-               cultureDict.Add(culture.Name, culture);
+               lock (cultureDict)
+               {
+                  cultureDict.Add(culture.Name, culture);
+               }
             }
          }
          SetCultureGroupAttributes(ref group, contents);
-         cultureGroupDict.Add(group.Name, group);
-      }
+         lock (cultureGroupDict)
+         {
+            cultureGroupDict.Add(group.Name, group);
+         }
+      });
 
       return (cultureGroupDict, cultureDict);
    }
