@@ -345,4 +345,50 @@ public static class DebugMaps
       bmp.Save("C:\\Users\\david\\Downloads\\areas.png", ImageFormat.Png);
       bmp.Dispose();
    }
+
+   public static void CentroidPoints()
+   {
+      var sw = Stopwatch.StartNew();
+      var centroids = new Point[Globals.Provinces.Count];
+      var cnt = 0;
+
+      foreach (var province in Globals.Provinces.Values)
+      {
+         centroids[cnt] = Geometry.FindCenterPoint(province);
+         cnt++;
+      }
+
+      using var bmp = BitMapHelper.GenerateBitmapFromProvinces(GetProvinceColor);
+      var g = Graphics.FromImage(bmp);
+      foreach (var point in centroids)
+      {
+         g.FillRectangle (Brushes.Red, point.X - 1, point.Y - 1, 2, 2);
+      }
+
+      bmp.Save("C:\\Users\\david\\Downloads\\centroids.png", ImageFormat.Png);
+      sw.Stop();
+      Debug.WriteLine($"CentroidPoints: {sw.ElapsedMilliseconds} ms");
+
+      foreach (var province in Globals.Provinces.Values)
+      {
+         var points = new Point[province.PixelCnt];
+         Array.Copy(Globals.Pixels, province.PixelPtr, points, 0, province.PixelCnt);
+         if (!Geometry.IsPointInProvince(province.Center, ref points))
+         {
+            Debug.WriteLine($"Province {province.Id} is not in the center");
+         }
+      }
+   }
+
+   public static Color GetProvinceColor(int id)
+   {
+      if (Globals.Provinces.TryGetValue(id, out var prov))
+      {
+         if (Globals.Areas.TryGetValue(prov.Area, out var area))
+         {
+            return area.Color;
+         }
+      }
+      return Color.Black;
+   }
 }

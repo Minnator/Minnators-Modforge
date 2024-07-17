@@ -225,21 +225,21 @@
          // testToolStripMenuItem
          // 
          testToolStripMenuItem.Name = "testToolStripMenuItem";
-         testToolStripMenuItem.Size = new Size(125, 22);
+         testToolStripMenuItem.Size = new Size(180, 22);
          testToolStripMenuItem.Text = "Test";
          testToolStripMenuItem.Click += testToolStripMenuItem_Click;
          // 
          // telescopeToolStripMenuItem
          // 
          telescopeToolStripMenuItem.Name = "telescopeToolStripMenuItem";
-         telescopeToolStripMenuItem.Size = new Size(125, 22);
+         telescopeToolStripMenuItem.Size = new Size(180, 22);
          telescopeToolStripMenuItem.Text = "Telescope";
          telescopeToolStripMenuItem.Click += telescopeToolStripMenuItem_Click;
          // 
          // refStackToolStripMenuItem
          // 
          refStackToolStripMenuItem.Name = "refStackToolStripMenuItem";
-         refStackToolStripMenuItem.Size = new Size(125, 22);
+         refStackToolStripMenuItem.Size = new Size(180, 22);
          refStackToolStripMenuItem.Click += refStackToolStripMenuItem_Click;
          // 
          // DateSelector

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
+﻿using System.Diagnostics;
 using Editor.DataClasses.GameDataClasses;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Editor.Helper;
 
@@ -179,12 +175,6 @@ public static class Geometry
       return [polygon[0], polygon[polygon.Count - 1], polygon[polygon.Count - 2]];
    }
 
-   public static Rectangle GetBounds(List<int> selection)
-   {
-      return GetBounds(selection.Select(id => Globals.Provinces[id].Bounds.Location).ToArray());
-   }
-
-
    public static void GetAllPixelPoints(int[] provinceIds, out Point[] points)
    {
       var cnt = 0;
@@ -308,4 +298,65 @@ public static class Geometry
       }
       return [.. stripeList];
    }
+
+   // Method to find a center point within the area
+   public static Point FindCenterPoint(Province province)
+   {
+      var areaPoints = new Point[province.PixelCnt];
+      Array.Copy(Globals.Pixels, province.PixelPtr, areaPoints, 0, province.PixelCnt);
+
+      // Calculate the centroid of the area points
+      double xSum = 0;
+      double ySum = 0;
+
+      foreach (var point in areaPoints)
+      {
+         xSum += point.X;
+         ySum += point.Y;
+      }
+
+      Point centroid = new Point((int)(xSum / areaPoints.Length), (int)(ySum / areaPoints.Length));
+
+      // If the centroid is within the area, return it
+      if (IsPointInProvince(centroid, ref areaPoints))
+      {
+         if (province.Center != centroid)
+            Debug.WriteLine($"Found a better province center {province.Id}");
+         province.Center = centroid;
+         return centroid;
+      }
+
+      // If not, find the nearest point within the area
+      Point nearestPoint = FindNearestPointWithinArea(centroid, ref areaPoints);
+
+      province.Center = nearestPoint;
+      return nearestPoint;
+   }
+
+
+   public static bool IsPointInProvince(Point point, ref Point[] pixels)
+   {
+      var isInBounds = point.X >= 0 && point.X < Globals.MapWidth && point.Y >= 0 && point.Y < Globals.MapHeight;
+      return isInBounds && pixels.Contains(point);
+   }
+
+   // Method to find the nearest point within the area
+   public static Point FindNearestPointWithinArea(Point point, ref Point[] areaPoints)
+   {
+      Point nearestPoint = areaPoints[0];
+      double minDistance = double.MaxValue;
+
+      foreach (var areaPoint in areaPoints)
+      {
+         double distance = Math.Sqrt(Math.Pow(areaPoint.X - point.X, 2) + Math.Pow(areaPoint.Y - point.Y, 2));
+         if (distance < minDistance)
+         {
+            minDistance = distance;
+            nearestPoint = areaPoint;
+         }
+      }
+
+      return nearestPoint;
+   }
+
 }

@@ -218,7 +218,7 @@ namespace Editor
 
       private void refStackToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         var p149 = Globals.Provinces[149];
+         DebugMaps.CentroidPoints();
       }
 
       private void DateSelector_SelectedIndexChanged(object sender, EventArgs e)
