@@ -30,7 +30,6 @@
       {
          tableLayoutPanel1 = new TableLayoutPanel();
          TitleLabel = new Label();
-         ItemsComboBox = new ComboBox();
          FlowLayout = new FlowLayoutPanel();
          tableLayoutPanel1.SuspendLayout();
          SuspendLayout();
@@ -41,7 +40,6 @@
          tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 44.4444427F));
          tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 55.5555573F));
          tableLayoutPanel1.Controls.Add(TitleLabel, 0, 0);
-         tableLayoutPanel1.Controls.Add(ItemsComboBox, 1, 0);
          tableLayoutPanel1.Controls.Add(FlowLayout, 0, 1);
          tableLayoutPanel1.Dock = DockStyle.Fill;
          tableLayoutPanel1.Location = new Point(0, 0);
@@ -62,18 +60,6 @@
          TitleLabel.TabIndex = 0;
          TitleLabel.Text = "Title";
          TitleLabel.TextAlign = ContentAlignment.MiddleLeft;
-         // 
-         // ItemsComboBox
-         // 
-         ItemsComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-         ItemsComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
-         ItemsComboBox.Dock = DockStyle.Fill;
-         ItemsComboBox.FormattingEnabled = true;
-         ItemsComboBox.Location = new Point(87, 1);
-         ItemsComboBox.Margin = new Padding(3, 1, 3, 3);
-         ItemsComboBox.Name = "ItemsComboBox";
-         ItemsComboBox.Size = new Size(100, 23);
-         ItemsComboBox.TabIndex = 1;
          // 
          // FlowLayout
          // 
@@ -102,7 +88,6 @@
 
       private TableLayoutPanel tableLayoutPanel1;
       private Label TitleLabel;
-      private ComboBox ItemsComboBox;
       private FlowLayoutPanel FlowLayout;
    }
 }

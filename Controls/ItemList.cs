@@ -11,14 +11,18 @@ namespace Editor.Controls
 
    public partial class ItemList : UserControl
    {
+      // This autoupdates when there is a tag added or removed
+      private readonly TagComboBox _itemsComboBox = ControlFactory.GetTagComboBox();
+
       public ItemTypes ItemType { get; set; }
       public ItemList(ItemTypes type)
       {
          InitializeComponent();
          ItemType = type;
 
-         ItemsComboBox.KeyDown += ItemsComboBox_KeyDown;
-         ItemsComboBox.SelectedIndexChanged += ItemsComboBox_SelectedIndexChanged;
+         tableLayoutPanel1.Controls.Add(_itemsComboBox, 1, 0);
+         _itemsComboBox.KeyDown += ItemsComboBox_KeyDown;
+         _itemsComboBox.SelectedIndexChanged += ItemsComboBox_SelectedIndexChanged;
       }
 
       // Create a setter for the Title
@@ -30,9 +34,9 @@ namespace Editor.Controls
       public void InitializeItems(List<string> items)
       {
          items.Sort();
-         ItemsComboBox.Items.Clear();
+         _itemsComboBox.Items.Clear();
          foreach (var item in items) 
-            ItemsComboBox.Items.Add(item);
+            _itemsComboBox.Items.Add(item);
       }
 
       public List<string> GetItems()
@@ -52,9 +56,9 @@ namespace Editor.Controls
       public void AddItem(string item)
       {
          FlowLayout.Controls.Add(new ItemButton(item, ItemType));
-         ItemsComboBox.Text = "";
+         _itemsComboBox.Text = "";
 
-         ItemsComboBox.Focus();
+         _itemsComboBox.Focus();
       }
 
       //EnterPressOnItemsComboBox
@@ -65,7 +69,7 @@ namespace Editor.Controls
       // When an item is autocompleted in the combobox, add it to the list
       private void ItemsComboBox_SelectedIndexChanged(object sender, EventArgs e)
       {
-         var item = ItemsComboBox.SelectedItem?.ToString();
+         var item = _itemsComboBox.SelectedItem?.ToString();
          if (item == null)
             return;
 

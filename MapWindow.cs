@@ -58,6 +58,11 @@ namespace Editor
 
       private void InitializeEditGui()
       {
+         var ownerComboBox = ControlFactory.GetTagComboBox();
+         var controllerComboBox = ControlFactory.GetTagComboBox();
+         OwnerControllerLayoutPanel.Controls.Add(ownerComboBox, 1, 0);
+         OwnerControllerLayoutPanel.Controls.Add(controllerComboBox, 1, 1);
+
          var coresControl = ControlFactory.GetItemList(ItemTypes.Tag, [.. Globals.Countries.Keys], "Cores");
          var claimsControl = ControlFactory.GetItemList(ItemTypes.Tag, [.. Globals.Countries.Keys], "Claims");
          CoresAndClaimLayoutPanel.Controls.Add(claimsControl, 0, 0);

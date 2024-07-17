@@ -46,7 +46,10 @@ public static class ControlFactory
 
    public static TagComboBox GetTagComboBox()
    {
-      return new ();
+      return new ()
+      {
+         Margin = new(3, 1, 3, 3)
+      };
    }
 
    public static ItemList GetItemList(ItemTypes itemType, List<string> items, string title)

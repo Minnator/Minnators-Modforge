@@ -9,6 +9,7 @@ namespace Editor.Controls
          AutoCompleteMode = AutoCompleteMode.SuggestAppend;
          AutoCompleteSource = AutoCompleteSource.ListItems;
          Dock = DockStyle.Fill;
+         Height = 21;
          
          GenerateOptions();
          GlobalEventHandlers.OnCountryListChanged += (sender, args) => GenerateOptions();

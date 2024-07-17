@@ -772,9 +772,11 @@
          TaxNumericBox.Location = new Point(98, 1);
          TaxNumericBox.Margin = new Padding(3, 1, 3, 3);
          TaxNumericBox.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
+         TaxNumericBox.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
          TaxNumericBox.Name = "TaxNumericBox";
          TaxNumericBox.Size = new Size(89, 23);
          TaxNumericBox.TabIndex = 3;
+         TaxNumericBox.Value = new decimal(new int[] { 1, 0, 0, 0 });
          // 
          // ProdNumericBox
          // 
@@ -782,9 +784,11 @@
          ProdNumericBox.Location = new Point(98, 26);
          ProdNumericBox.Margin = new Padding(3, 1, 3, 3);
          ProdNumericBox.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
+         ProdNumericBox.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
          ProdNumericBox.Name = "ProdNumericBox";
          ProdNumericBox.Size = new Size(89, 23);
          ProdNumericBox.TabIndex = 4;
+         ProdNumericBox.Value = new decimal(new int[] { 1, 0, 0, 0 });
          // 
          // ManpNumericBox
          // 
@@ -792,9 +796,11 @@
          ManpNumericBox.Location = new Point(98, 51);
          ManpNumericBox.Margin = new Padding(3, 1, 3, 3);
          ManpNumericBox.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
+         ManpNumericBox.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
          ManpNumericBox.Name = "ManpNumericBox";
          ManpNumericBox.Size = new Size(89, 23);
          ManpNumericBox.TabIndex = 5;
+         ManpNumericBox.Value = new decimal(new int[] { 1, 0, 0, 0 });
          // 
          // groupBox4
          // 
