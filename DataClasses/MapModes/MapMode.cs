@@ -56,7 +56,7 @@ public abstract class MapMode
             Globals.MapModeManager.PictureBox.Image = Bitmap;
             break;
          default:
-            throw new ArgumentOutOfRangeException(nameof(Globals.MapModeRendering), "Unknown Rendering mode for MapModes");
+            throw new ("Unknown Rendering mode for MapModes");
       }
       Globals.MapWindow.MapPictureBox.IsPainting = false;
       Globals.MapModeManager.PictureBox.Invalidate();

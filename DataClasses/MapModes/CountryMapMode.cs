@@ -8,6 +8,7 @@ namespace Editor.DataClasses.MapModes
       public CountryMapMode()
       {
          ProvinceEventHandler.OnProvinceOwnerChanged += UpdateProvince;
+         ProvinceEventHandler.OnProvinceControllerChanged += UpdateProvince;
       }
 
       public override bool IsLandOnly => true;

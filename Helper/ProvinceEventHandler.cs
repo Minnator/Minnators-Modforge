@@ -36,6 +36,7 @@ public static class ProvinceEventHandler
       RaiseProvinceDataChanged(id, value, propertyName);
    }
    // Controller
+   // EVERY MAPMODE SHOWING OCCUPATION SHOULD SUBSCRIBE TO THIS EVENT
    public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceControllerChanged = delegate { };
    public static void RaiseProvinceControllerChanged(int id, object value, string propertyName)
    {
