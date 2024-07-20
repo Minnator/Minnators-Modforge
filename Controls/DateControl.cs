@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-using Editor.Helper;
-using static Editor.Helper.ProvinceEventHandler;
+﻿using Editor.Helper;
 
 namespace Editor.Controls
 {
@@ -28,6 +26,13 @@ namespace Editor.Controls
       private readonly IncreaseButton _yearIncreaseButton = new ();
       private readonly IncreaseButton _monthIncreaseButton = new ();
       private readonly IncreaseButton _dayIncreaseButton = new ();
+
+      public DateControl()
+      {
+         Date = DateTime.MinValue;
+         DateControlLayout = DateControlLayout.Horizontal;
+         InitHorizontal();
+      }
 
       public DateControl(DateTime date, DateControlLayout layout)
       {

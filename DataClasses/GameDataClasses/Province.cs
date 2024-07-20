@@ -14,21 +14,21 @@ public class ProvinceData()
 
    public Tag Controller = Tag.Empty;                       //.
    public Tag Owner = Tag.Empty;                            //.
-   public Tag TribalOwner = Tag.Empty;
-   public Tag TradeCompany = Tag.Empty;
+   public Tag TribalOwner = Tag.Empty;                      // NAT
+   public Tag TradeCompany = Tag.Empty;                     // TC
    public int BaseManpower = 1;                             //.
    public int BaseTax = 1;                                  //.
    public int BaseProduction = 1;                           //.
    public int CenterOfTrade;
    public int ExtraCost;
-   public int NativeFerocity;      //-
-   public int NativeHostileness;   //- Extra sub tab
-   public int NativeSize;          //-
+   public int NativeFerocity;                               // NAT
+   public int NativeHostileness;                            // NAT
+   public int NativeSize;                                   // NAT
    public int RevoltRisk;
    public int Nationalism;
-   public float LocalAutonomy;
-   public float Devastation;
-   public float Prosperity;
+   public float LocalAutonomy;                              //.                           
+   public float Devastation;                                //.
+   public float Prosperity;                                 //.
    public bool IsHre;                                       //.
    public bool IsCity;                                      //.
    public bool HasRevolt;                                   //.
@@ -38,17 +38,17 @@ public class ProvinceData()
    public string Religion = string.Empty;                   //.
    public string Area = string.Empty;
    public string TradeGood = "";
-   public string Continent = string.Empty;            //! not in province editing interface
-   public string LatentTradeGood = string.Empty;      //+ ProvinceHistoryEntry editing interface
-   public string ReformationCenter = string.Empty;    //+ ProvinceHistoryEntry editing interface
+   public string Continent = string.Empty;                  //! not in province editing interface
+   public string LatentTradeGood = string.Empty;            //+ ProvinceHistoryEntry editing interface
+   public string ReformationCenter = string.Empty;          //+ ProvinceHistoryEntry editing interface
    public List<Tag> Claims = [];                            //.
    public List<Tag> Cores = [];                             //.
    public List<string> DiscoveredBy = [];
    public List<string> Buildings = [];
-   public List<string> TradeCompanyInvestments = [];
-   public List<string> ProvinceModifiers = [];
-   public List<string> PermanentProvinceModifiers = [];
-   public List<string> ProvinceTriggeredModifiers = [];
+   public List<string> TradeCompanyInvestments = [];        // TC
+   public List<string> ProvinceModifiers = [];              // MOD
+   public List<string> PermanentProvinceModifiers = [];     // MOD
+   public List<string> ProvinceTriggeredModifiers = [];     // MOD
 }
 
 public class Province : IProvinceCollection

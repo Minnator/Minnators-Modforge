@@ -240,5 +240,20 @@ namespace Editor
       {
 
       }
+
+      private void CoresAndClaimLayoutPanel_Paint(object sender, PaintEventArgs e)
+      {
+
+      }
+
+      private void CoresAndClaimLayoutPanel_Paint_1(object sender, PaintEventArgs e)
+      {
+
+      }
+
+      private void bestPointsToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+          DebugMaps.TestCenterPoints();
+      }
    }
 }

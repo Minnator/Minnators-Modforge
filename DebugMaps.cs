@@ -8,6 +8,147 @@ namespace Editor;
 
 public static class DebugMaps
 {
+   public static Bitmap GenerateBitmapFromProvinces()
+   {
+      var sw = new Stopwatch();
+      sw.Start();
+      var width = Globals.MapWidth;
+      var height = Globals.MapHeight;
+
+      var bmp = new Bitmap(width, height, PixelFormat.Format24bppRgb);
+
+      // Lock the bits in memory
+      var bitmapData = bmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, bmp.PixelFormat);
+
+      // Calculate stride (bytes per row)
+      var stride = bitmapData.Stride;
+      var bytesPerPixel = Image.GetPixelFormatSize(bmp.PixelFormat) / 8;
+
+      unsafe
+      {
+
+         Parallel.ForEach(Globals.Provinces.Values, province => // TODO transfer the collection per method call
+         {
+            var borderPixels = new HashSet<Point>();
+            var temp = new Point[province.BorderCnt];
+            Array.Copy(Globals.BorderPixels, province.BorderPtr, temp, 0, province.BorderCnt);
+
+            foreach (var point in temp) 
+               borderPixels.Add(point);
+
+            var points = new Point[province.PixelCnt];
+            Array.Copy(Globals.Pixels, province.PixelPtr, points, 0, province.PixelCnt);
+
+            int min = int.MaxValue;
+            int max = int.MinValue;
+            var ptr = (byte*)bitmapData.Scan0;
+            var costs = new int[province.PixelCnt];
+
+            for (var index = 0; index < points.Length; index++)
+            {
+               var point = points[index];
+               var dist = Geometry.GetBorderPoints(point, province, ref borderPixels);
+               var cost = Geometry.GetCostPerPixel(dist);
+               costs[index] = cost;
+
+               if (cost < min)
+               {
+                  if (cost != int.MinValue)
+                     min = cost;
+               }
+               else if (cost > max)
+               {
+                  max = cost;
+               }
+            }
+            
+
+            for (var index = 0; index < costs.Length; index++)
+            {
+               var cost = costs[index];
+               if (cost == int.MinValue)
+               {
+                  costs[index] = 0;
+                  continue;
+               }
+               if (min == max)
+                  costs[index] = 0;
+               else
+               {
+                  costs[index] = (int)(255 * ((float)(costs[index] - min)) / (max - min));
+                  if (costs[index] > 255)
+                     costs[index] = 255;
+                  else if (costs[index] < 0)
+                     costs[index] = 0;
+               }
+            }
+
+            var cnt = 0;
+            foreach (var point in points)
+            { 
+               var index = point.Y * stride + point.X * bytesPerPixel;
+
+               ptr[index + 2] = (byte)costs[cnt++];
+               ptr[index + 1] = 0;
+               ptr[index] = 0;
+            }
+         });
+      }
+
+      bmp.UnlockBits(bitmapData);
+      sw.Stop();
+      //Debug.WriteLine($"Generating Bitmap took {sw.ElapsedMilliseconds}ms");
+      return bmp;
+   }
+
+
+
+   public static void TestCenterPoints()
+   {
+      var sw = Stopwatch.StartNew();
+      var bmp1 = GenerateBitmapFromProvinces();
+      MapDrawHelper.DrawAllProvinceBorders(bmp1, Color.LightBlue);
+      bmp1.Save("C:\\Users\\david\\Downloads\\bestPoints.png", ImageFormat.Png);
+
+      sw.Stop();
+      Debug.WriteLine($"TestCenterPoints: {sw.ElapsedMilliseconds} ms");
+      return;
+      var bestPoints = new Point[Globals.LandProvinceIds.Length];
+      var cnt = 0;
+      foreach (var province in Globals.LandProvinceIds)
+      {
+         var prov = Globals.Provinces[province];
+         //if (province == 1473)
+           // Debugger.Break();
+         bestPoints[cnt] = Geometry.GetBfsCenterPoint(prov);
+         if (cnt % 100 == 0)
+            Debug.WriteLine($"Province {cnt} / {Globals.LandProvinceIds.Length} has this center {bestPoints[cnt]} pixels");
+         cnt++;
+      }
+
+      using var bmp = BitMapHelper.GenerateBitmapFromProvinces(GetProvinceMapColor);
+      MapDrawHelper.DrawAllProvinceBorders(bmp, Color.Black);
+      var g = Graphics.FromImage(bmp);
+      foreach (var point in bestPoints)
+      {
+         g.FillRectangle(Brushes.Red, point.X - 1, point.Y - 1, 2, 2);
+      }
+
+      sw.Stop();
+      Debug.WriteLine($"TestCenterPoints: {sw.ElapsedMilliseconds} ms");
+
+      bmp.Save("C:\\Users\\david\\Downloads\\bestPoints.png", ImageFormat.Png);
+   }
+
+   public static Color GetProvinceMapColor(int id)
+   {
+      if (Globals.Provinces.TryGetValue(id, out var prov))
+      {
+         return prov.Color;
+      }
+      return Color.Black;
+   }
+
 
    public static void DrawProvinceGroups(List<KeyValuePair<List<int>, Rectangle>> groups)
    {

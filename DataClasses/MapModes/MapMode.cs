@@ -17,8 +17,6 @@ public abstract class MapMode
       {
          case MapModeRendering.LiveBackground:
          case MapModeRendering.Live:
-            Bitmap?.Dispose();
-
             if (IsLandOnly)
             {
                if (Globals.MapModeManager.PreviousLandOnly)
@@ -46,7 +44,6 @@ public abstract class MapMode
             Globals.MapModeManager.PictureBox.Image = Globals.MapModeManager.ShareLiveBitmap;
             break;
          case MapModeRendering.Cached:
-            Bitmap?.Dispose();
             Bitmap = BitMapHelper.GenerateBitmapFromProvinces(GetProvinceColor);
             if (ShowOccupation)
                MapDrawHelper.DrawOccupations(false, Bitmap);

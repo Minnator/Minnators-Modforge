@@ -264,6 +264,117 @@ public static class Geometry
       return groups;
    }
 
+   public static Point GetBfsCenterPoint(Province prov)
+   {
+      var bestPoint = new Point(-1, -1);
+      var lowestCost = int.MinValue;
+
+      var pixels = new Point[prov.PixelCnt];
+      Array.Copy(Globals.Pixels, prov.PixelPtr, pixels, 0, prov.PixelCnt);
+      var borderPixels = new HashSet<Point>();
+      var temp = new Point[prov.BorderCnt];
+      Array.Copy(Globals.BorderPixels, prov.BorderPtr, temp, 0, prov.BorderCnt);
+
+      foreach (var point in temp)
+      {
+         borderPixels.Add(point);
+      }
+
+      foreach (var point in pixels)
+      {
+         var distances = GetBorderPoints(point, prov, ref borderPixels);
+         var cost = GetCostPerPixel(distances);
+         if (cost > lowestCost)
+         {
+            lowestCost = cost;
+            bestPoint = point;
+         }
+      }
+
+      return bestPoint;
+   }
+
+   public static int GetCostPerPixel(int[] distances)
+   {
+      int sum = 1;
+      int diffs = 0;
+
+      for (int i = 0; i < distances.Length; i++)
+      {
+         if (distances[i] < 0)
+            return int.MinValue;
+         sum *= distances[i];
+         for (int j = i + 1; j < distances.Length; j++)
+         {
+            diffs += Math.Abs(distances[i] - distances[j]);
+         }
+      }
+      return 2 * sum - diffs;
+   }
+
+   //TODO does weird stuff idk
+   public static int[] GetBorderPoints(Point p, Province province, ref HashSet<Point> bps)
+   {
+      // goes west, east, north, south until it finds a border pixel
+      var points = new int[4];
+
+      if (bps.Contains(p))
+         return [-1,-1,-1,-1];
+      
+      var y = p.Y;
+      var x = p.X;
+
+      while (y < province.Bounds.Bottom) // N
+      {
+         if (bps.Contains(new Point(x, y)))
+         {
+            points[0] = y - p.Y;
+            break;
+         }
+         y++;
+      }
+
+      y = p.Y;
+      while (y > 0) // S
+      {
+         if (bps.Contains(new Point(x, y)))
+         {
+            points[1] = p.Y - y;
+            break;
+         }
+
+         y--;
+      }
+
+      y = p.Y;
+
+      while (x < province.Bounds.Right) // E
+      {
+         if (bps.Contains(new Point(x, y)))
+         {
+            points[2] = x - p.X;
+            break;
+         }
+
+         x++;
+      }
+
+      x = p.X;
+      while (x > 0) // W
+      {
+         if (bps.Contains(new Point(x, y)))
+         {
+            points[3] = p.X - x;
+            break;
+         }
+         x--;
+      }
+
+      return points;
+   }
+
+
+
    public static bool GetIfHasStripePixels(Province province, bool onlyRebels, out Point[] stripe)
    {
       if (onlyRebels)

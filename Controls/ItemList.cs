@@ -13,8 +13,13 @@ namespace Editor.Controls
    {
       // This autoupdates when there is a tag added or removed
       private readonly TagComboBox _itemsComboBox = ControlFactory.GetTagComboBox();
-
       public ItemTypes ItemType { get; set; }
+
+      public ItemList()
+      {
+         InitializeComponent();
+      }
+
       public ItemList(ItemTypes type)
       {
          InitializeComponent();
