@@ -20,6 +20,7 @@ public static class LoadingManager
       ProvinceParser.ParseAllUniqueProvinces(project.ModPath, project.VanillaPath); //TODO SLOW
       CultureLoading.LoadCultures(project);
       CountryLoading.LoadCountries(project); //TODO SLOW
+      TechnologyGroupsLoading.Load(project);
 
       DebugPrints.PrintCountriesBasic();
 

@@ -59,25 +59,25 @@ public static class FilesHelper
       return [..fileSet];
    }
    
-   public static bool GetFileUniquely(string modPathIn, string vanillaPathIn,out string path, params string[] internalPath)
+   public static bool GetFileUniquely(string modPathIn, string vanillaPathIn,out string content, params string[] internalPath)
    {
       var folderPath = Path.Combine(internalPath);
       var modPath = Path.Combine(modPathIn, folderPath);
 
       if (File.Exists(modPath))
       {
-         path = IO.ReadAllInUTF8(modPath);
+         content = IO.ReadAllInUTF8(modPath);
          return true;
       }
 
       var vanillaPath = Path.Combine(vanillaPathIn, folderPath);
       if (File.Exists(vanillaPath))
       {
-         path = IO.ReadAllInUTF8(vanillaPath);
+         content = IO.ReadAllInUTF8(vanillaPath);
          return true;
       }
 
-      path = string.Empty;
+      content = string.Empty;
       return false;
    }
 
