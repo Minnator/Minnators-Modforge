@@ -103,6 +103,9 @@ public static class Globals
    public static Dictionary<Color, int> ColorToProvId = null!;
    public static Dictionary<int, int[]> AdjacentProvinces = null!;
 
+   // TechnologyGroups
+   public static HashSet<string> TechnologyGroups = [];
+
    // Country Groups
    private static Dictionary<Tag, Country> _countries = [];
    public static Dictionary<Tag, Country> Countries

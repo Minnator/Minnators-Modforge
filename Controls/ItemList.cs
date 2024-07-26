@@ -60,9 +60,16 @@ namespace Editor.Controls
 
       public void AddItem(string item)
       {
-         FlowLayout.Controls.Add(new ItemButton(item, ItemType));
-         _itemsComboBox.Text = "";
+         if (ItemType == ItemTypes.Tag)
+            FlowLayout.Controls.Add(ControlFactory.GetTagItemButton(item, ItemType));
+         else if (ItemType == ItemTypes.String)
+            FlowLayout.Controls.Add(ControlFactory.GetStringItemButton(item, ItemType));
+         else if (ItemType == ItemTypes.Id)
+            FlowLayout.Controls.Add(ControlFactory.GetTagItemButton(item, ItemType));
+         else
+            throw new ArgumentOutOfRangeException();
 
+         _itemsComboBox.Text = "";
          _itemsComboBox.Focus();
       }
 

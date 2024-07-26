@@ -59,4 +59,14 @@ public static class ControlFactory
       list.SetTitle(title);
       return list;
    }
+
+   public static ItemButton GetTagItemButton(string item, ItemTypes type)
+   {
+      return new (item, type);
+   }
+
+   public static ItemButton GetStringItemButton(string item, ItemTypes type)
+   {
+      return new (item, type){Width = 75};
+   }
 }

@@ -64,9 +64,19 @@ namespace Editor
          OwnerControllerLayoutPanel.Controls.Add(controllerComboBox, 1, 1);
 
          var coresControl = ControlFactory.GetItemList(ItemTypes.Tag, [.. Globals.Countries.Keys], "Cores");
-         var claimsControl = ControlFactory.GetItemList(ItemTypes.Tag, [.. Globals.Countries.Keys], "Claims");
-         CoresAndClaimLayoutPanel.Controls.Add(claimsControl, 0, 0);
-         CoresAndClaimLayoutPanel.Controls.Add(coresControl, 1, 0);
+         var claimsControl = ControlFactory.GetItemList(ItemTypes.Tag, [.. Globals.Countries.Keys], "Regular");
+         var permanentClaimsControl = ControlFactory.GetItemList(ItemTypes.Tag, [.. Globals.Countries.Keys], "Permanent");
+         var buildingsControl = ControlFactory.GetItemList(ItemTypes.String, [.. Globals.Buildings], "Building");
+         var discoveredByControl = ControlFactory.GetItemList(ItemTypes.String, [.. Globals.TechnologyGroups], "TechGroup");
+
+         CoresAndClaimLayoutPanel.Controls.Add(permanentClaimsControl, 0, 0);
+         CoresAndClaimLayoutPanel.Controls.Add(claimsControl, 1, 0);
+         CoresGroupBox.Controls.Add(coresControl);
+         coresControl.Location = new(0, 18);
+         BuildingsGroupBox.Controls.Add(buildingsControl);
+         buildingsControl.Location = new(0, 18);
+         DiscoveredByGroupBox.Controls.Add(discoveredByControl);
+         discoveredByControl.Location = new(0, 18);
       }
 
 

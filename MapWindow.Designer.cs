@@ -75,14 +75,9 @@
          DataTabPanel = new TabControl();
          ProvincePage = new TabPage();
          ProvinceEditingLayout = new TableLayoutPanel();
-         groupBox5 = new GroupBox();
-         tableLayoutPanel1 = new TableLayoutPanel();
-         label9 = new Label();
-         label10 = new Label();
-         DevastationLabel = new Label();
-         AutonomyNumeric = new NumericUpDown();
-         DevastationNumeric = new NumericUpDown();
-         ProsperityNumeric = new NumericUpDown();
+         DiscoveredByGroupBox = new GroupBox();
+         BuildingsGroupBox = new GroupBox();
+         CoresGroupBox = new GroupBox();
          groupBox1 = new GroupBox();
          OwnerControllerLayoutPanel = new TableLayoutPanel();
          label1 = new Label();
@@ -115,7 +110,22 @@
          NativesTab = new TabPage();
          TradeCompanyTab = new TabPage();
          ModifiersTab = new TabPage();
+         groupBox5 = new GroupBox();
+         tableLayoutPanel1 = new TableLayoutPanel();
+         label9 = new Label();
+         label10 = new Label();
+         DevastationLabel = new Label();
+         AutonomyNumeric = new NumericUpDown();
+         DevastationNumeric = new NumericUpDown();
+         ProsperityNumeric = new NumericUpDown();
          groupBox6 = new GroupBox();
+         tableLayoutPanel5 = new TableLayoutPanel();
+         comboBox1 = new ComboBox();
+         label11 = new Label();
+         label12 = new Label();
+         label13 = new Label();
+         comboBox2 = new ComboBox();
+         numericUpDown1 = new NumericUpDown();
          COuntryPage = new TabPage();
          ProvinceGroupsPage = new TabPage();
          MapMenuStrip.SuspendLayout();
@@ -129,11 +139,6 @@
          DataTabPanel.SuspendLayout();
          ProvincePage.SuspendLayout();
          ProvinceEditingLayout.SuspendLayout();
-         groupBox5.SuspendLayout();
-         tableLayoutPanel1.SuspendLayout();
-         ((System.ComponentModel.ISupportInitialize)AutonomyNumeric).BeginInit();
-         ((System.ComponentModel.ISupportInitialize)DevastationNumeric).BeginInit();
-         ((System.ComponentModel.ISupportInitialize)ProsperityNumeric).BeginInit();
          groupBox1.SuspendLayout();
          OwnerControllerLayoutPanel.SuspendLayout();
          groupBox2.SuspendLayout();
@@ -147,6 +152,14 @@
          tableLayoutPanel4.SuspendLayout();
          CoresAndClaimsBox.SuspendLayout();
          OptionalsTabControl.SuspendLayout();
+         groupBox5.SuspendLayout();
+         tableLayoutPanel1.SuspendLayout();
+         ((System.ComponentModel.ISupportInitialize)AutonomyNumeric).BeginInit();
+         ((System.ComponentModel.ISupportInitialize)DevastationNumeric).BeginInit();
+         ((System.ComponentModel.ISupportInitialize)ProsperityNumeric).BeginInit();
+         groupBox6.SuspendLayout();
+         tableLayoutPanel5.SuspendLayout();
+         ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
          SuspendLayout();
          // 
          // MapMenuStrip
@@ -243,27 +256,27 @@
          // testToolStripMenuItem
          // 
          testToolStripMenuItem.Name = "testToolStripMenuItem";
-         testToolStripMenuItem.Size = new Size(180, 22);
+         testToolStripMenuItem.Size = new Size(129, 22);
          testToolStripMenuItem.Text = "Test";
          testToolStripMenuItem.Click += testToolStripMenuItem_Click;
          // 
          // telescopeToolStripMenuItem
          // 
          telescopeToolStripMenuItem.Name = "telescopeToolStripMenuItem";
-         telescopeToolStripMenuItem.Size = new Size(180, 22);
+         telescopeToolStripMenuItem.Size = new Size(129, 22);
          telescopeToolStripMenuItem.Text = "Telescope";
          telescopeToolStripMenuItem.Click += telescopeToolStripMenuItem_Click;
          // 
          // refStackToolStripMenuItem
          // 
          refStackToolStripMenuItem.Name = "refStackToolStripMenuItem";
-         refStackToolStripMenuItem.Size = new Size(180, 22);
+         refStackToolStripMenuItem.Size = new Size(129, 22);
          refStackToolStripMenuItem.Click += refStackToolStripMenuItem_Click;
          // 
          // bestPointsToolStripMenuItem
          // 
          bestPointsToolStripMenuItem.Name = "bestPointsToolStripMenuItem";
-         bestPointsToolStripMenuItem.Size = new Size(180, 22);
+         bestPointsToolStripMenuItem.Size = new Size(129, 22);
          bestPointsToolStripMenuItem.Text = "bestPoints";
          bestPointsToolStripMenuItem.Click += bestPointsToolStripMenuItem_Click;
          // 
@@ -544,124 +557,68 @@
          ProvinceEditingLayout.ColumnCount = 2;
          ProvinceEditingLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
          ProvinceEditingLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-         ProvinceEditingLayout.Controls.Add(groupBox5, 0, 4);
+         ProvinceEditingLayout.Controls.Add(DiscoveredByGroupBox, 0, 6);
+         ProvinceEditingLayout.Controls.Add(BuildingsGroupBox, 1, 4);
+         ProvinceEditingLayout.Controls.Add(CoresGroupBox, 0, 4);
          ProvinceEditingLayout.Controls.Add(groupBox1, 0, 0);
          ProvinceEditingLayout.Controls.Add(groupBox2, 1, 0);
          ProvinceEditingLayout.Controls.Add(groupBox3, 1, 2);
          ProvinceEditingLayout.Controls.Add(groupBox4, 0, 1);
          ProvinceEditingLayout.Controls.Add(CoresAndClaimsBox, 0, 3);
-         ProvinceEditingLayout.Controls.Add(OptionalsTabControl, 0, 6);
-         ProvinceEditingLayout.Controls.Add(groupBox6, 1, 4);
+         ProvinceEditingLayout.Controls.Add(OptionalsTabControl, 0, 7);
+         ProvinceEditingLayout.Controls.Add(groupBox5, 0, 5);
+         ProvinceEditingLayout.Controls.Add(groupBox6, 1, 5);
          ProvinceEditingLayout.Dock = DockStyle.Fill;
          ProvinceEditingLayout.Location = new Point(0, 0);
          ProvinceEditingLayout.Margin = new Padding(0);
          ProvinceEditingLayout.Name = "ProvinceEditingLayout";
-         ProvinceEditingLayout.RowCount = 7;
+         ProvinceEditingLayout.RowCount = 8;
          ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 71F));
          ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
          ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 90F));
          ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 112F));
+         ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 112F));
          ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 90F));
+         ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 112F));
          ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 200F));
-         ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-         ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
          ProvinceEditingLayout.Size = new Size(392, 822);
          ProvinceEditingLayout.TabIndex = 0;
          // 
-         // groupBox5
+         // DiscoveredByGroupBox
          // 
-         groupBox5.Controls.Add(tableLayoutPanel1);
-         groupBox5.Location = new Point(3, 298);
-         groupBox5.Margin = new Padding(3, 0, 3, 0);
-         groupBox5.Name = "groupBox5";
-         groupBox5.Padding = new Padding(0);
-         ProvinceEditingLayout.SetRowSpan(groupBox5, 2);
-         groupBox5.Size = new Size(190, 90);
-         groupBox5.TabIndex = 6;
-         groupBox5.TabStop = false;
-         groupBox5.Text = "Scaling factors";
+         DiscoveredByGroupBox.Dock = DockStyle.Fill;
+         DiscoveredByGroupBox.Location = new Point(3, 500);
+         DiscoveredByGroupBox.Margin = new Padding(3, 0, 3, 0);
+         DiscoveredByGroupBox.Name = "DiscoveredByGroupBox";
+         DiscoveredByGroupBox.Padding = new Padding(0);
+         DiscoveredByGroupBox.Size = new Size(190, 112);
+         DiscoveredByGroupBox.TabIndex = 9;
+         DiscoveredByGroupBox.TabStop = false;
+         DiscoveredByGroupBox.Text = "DiscoveredBy";
          // 
-         // tableLayoutPanel1
+         // BuildingsGroupBox
          // 
-         tableLayoutPanel1.ColumnCount = 2;
-         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-         tableLayoutPanel1.Controls.Add(label9, 0, 2);
-         tableLayoutPanel1.Controls.Add(label10, 0, 0);
-         tableLayoutPanel1.Controls.Add(DevastationLabel, 0, 1);
-         tableLayoutPanel1.Controls.Add(AutonomyNumeric, 1, 0);
-         tableLayoutPanel1.Controls.Add(DevastationNumeric, 1, 1);
-         tableLayoutPanel1.Controls.Add(ProsperityNumeric, 1, 2);
-         tableLayoutPanel1.Location = new Point(0, 15);
-         tableLayoutPanel1.Margin = new Padding(0, 3, 0, 0);
-         tableLayoutPanel1.Name = "tableLayoutPanel1";
-         tableLayoutPanel1.RowCount = 3;
-         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-         tableLayoutPanel1.Size = new Size(190, 75);
-         tableLayoutPanel1.TabIndex = 1;
+         BuildingsGroupBox.Dock = DockStyle.Fill;
+         BuildingsGroupBox.Location = new Point(199, 298);
+         BuildingsGroupBox.Margin = new Padding(3, 0, 3, 0);
+         BuildingsGroupBox.Name = "BuildingsGroupBox";
+         BuildingsGroupBox.Padding = new Padding(0);
+         BuildingsGroupBox.Size = new Size(190, 112);
+         BuildingsGroupBox.TabIndex = 9;
+         BuildingsGroupBox.TabStop = false;
+         BuildingsGroupBox.Text = "Buildings";
          // 
-         // label9
+         // CoresGroupBox
          // 
-         label9.AutoSize = true;
-         label9.Dock = DockStyle.Fill;
-         label9.Location = new Point(3, 50);
-         label9.Name = "label9";
-         label9.Size = new Size(89, 25);
-         label9.TabIndex = 2;
-         label9.Text = "Prosperity";
-         label9.TextAlign = ContentAlignment.MiddleLeft;
-         // 
-         // label10
-         // 
-         label10.AutoSize = true;
-         label10.Dock = DockStyle.Fill;
-         label10.Location = new Point(3, 0);
-         label10.Name = "label10";
-         label10.Size = new Size(89, 25);
-         label10.TabIndex = 0;
-         label10.Text = "Autonomy";
-         label10.TextAlign = ContentAlignment.MiddleLeft;
-         // 
-         // DevastationLabel
-         // 
-         DevastationLabel.AutoSize = true;
-         DevastationLabel.Dock = DockStyle.Fill;
-         DevastationLabel.Location = new Point(3, 25);
-         DevastationLabel.Name = "DevastationLabel";
-         DevastationLabel.Size = new Size(89, 25);
-         DevastationLabel.TabIndex = 1;
-         DevastationLabel.Text = "Devastation";
-         DevastationLabel.TextAlign = ContentAlignment.MiddleLeft;
-         // 
-         // AutonomyNumeric
-         // 
-         AutonomyNumeric.Dock = DockStyle.Fill;
-         AutonomyNumeric.Location = new Point(95, 1);
-         AutonomyNumeric.Margin = new Padding(0, 1, 0, 3);
-         AutonomyNumeric.Name = "AutonomyNumeric";
-         AutonomyNumeric.Size = new Size(95, 23);
-         AutonomyNumeric.TabIndex = 3;
-         // 
-         // DevastationNumeric
-         // 
-         DevastationNumeric.Dock = DockStyle.Fill;
-         DevastationNumeric.Location = new Point(95, 26);
-         DevastationNumeric.Margin = new Padding(0, 1, 0, 3);
-         DevastationNumeric.Name = "DevastationNumeric";
-         DevastationNumeric.Size = new Size(95, 23);
-         DevastationNumeric.TabIndex = 4;
-         // 
-         // ProsperityNumeric
-         // 
-         ProsperityNumeric.Dock = DockStyle.Fill;
-         ProsperityNumeric.Location = new Point(95, 51);
-         ProsperityNumeric.Margin = new Padding(0, 1, 0, 3);
-         ProsperityNumeric.Name = "ProsperityNumeric";
-         ProsperityNumeric.Size = new Size(95, 23);
-         ProsperityNumeric.TabIndex = 5;
+         CoresGroupBox.Dock = DockStyle.Fill;
+         CoresGroupBox.Location = new Point(3, 298);
+         CoresGroupBox.Margin = new Padding(3, 0, 3, 0);
+         CoresGroupBox.Name = "CoresGroupBox";
+         CoresGroupBox.Padding = new Padding(0);
+         CoresGroupBox.Size = new Size(190, 112);
+         CoresGroupBox.TabIndex = 8;
+         CoresGroupBox.TabStop = false;
+         CoresGroupBox.Text = "Cores";
          // 
          // groupBox1
          // 
@@ -832,7 +789,7 @@
          tableLayoutPanel3.Controls.Add(TaxNumericBox, 1, 0);
          tableLayoutPanel3.Controls.Add(ProdNumericBox, 1, 1);
          tableLayoutPanel3.Controls.Add(ManpNumericBox, 1, 2);
-         tableLayoutPanel3.Location = new Point(0, 8);
+         tableLayoutPanel3.Location = new Point(0, 15);
          tableLayoutPanel3.Margin = new Padding(0, 3, 0, 0);
          tableLayoutPanel3.Name = "tableLayoutPanel3";
          tableLayoutPanel3.RowCount = 3;
@@ -1010,7 +967,7 @@
          CoresAndClaimsBox.Size = new Size(386, 112);
          CoresAndClaimsBox.TabIndex = 4;
          CoresAndClaimsBox.TabStop = false;
-         CoresAndClaimsBox.Text = "Cores and Claims";
+         CoresAndClaimsBox.Text = "Claims";
          // 
          // CoresAndClaimLayoutPanel
          // 
@@ -1033,10 +990,10 @@
          OptionalsTabControl.Controls.Add(TradeCompanyTab);
          OptionalsTabControl.Controls.Add(ModifiersTab);
          OptionalsTabControl.Dock = DockStyle.Fill;
-         OptionalsTabControl.Location = new Point(3, 625);
+         OptionalsTabControl.Location = new Point(3, 615);
          OptionalsTabControl.Name = "OptionalsTabControl";
          OptionalsTabControl.SelectedIndex = 0;
-         OptionalsTabControl.Size = new Size(386, 194);
+         OptionalsTabControl.Size = new Size(386, 204);
          OptionalsTabControl.TabIndex = 5;
          // 
          // NativesTab
@@ -1044,7 +1001,7 @@
          NativesTab.Location = new Point(4, 24);
          NativesTab.Name = "NativesTab";
          NativesTab.Padding = new Padding(3);
-         NativesTab.Size = new Size(378, 166);
+         NativesTab.Size = new Size(378, 176);
          NativesTab.TabIndex = 0;
          NativesTab.Text = "Natives";
          NativesTab.UseVisualStyleBackColor = true;
@@ -1054,7 +1011,7 @@
          TradeCompanyTab.Location = new Point(4, 24);
          TradeCompanyTab.Name = "TradeCompanyTab";
          TradeCompanyTab.Padding = new Padding(3);
-         TradeCompanyTab.Size = new Size(378, 166);
+         TradeCompanyTab.Size = new Size(378, 176);
          TradeCompanyTab.TabIndex = 1;
          TradeCompanyTab.Text = "Trade Company";
          TradeCompanyTab.UseVisualStyleBackColor = true;
@@ -1064,19 +1021,197 @@
          ModifiersTab.Location = new Point(4, 24);
          ModifiersTab.Name = "ModifiersTab";
          ModifiersTab.Padding = new Padding(3);
-         ModifiersTab.Size = new Size(378, 166);
+         ModifiersTab.Size = new Size(378, 176);
          ModifiersTab.TabIndex = 2;
          ModifiersTab.Text = "Modifiers";
          ModifiersTab.UseVisualStyleBackColor = true;
          // 
+         // groupBox5
+         // 
+         groupBox5.Controls.Add(tableLayoutPanel1);
+         groupBox5.Location = new Point(3, 410);
+         groupBox5.Margin = new Padding(3, 0, 3, 0);
+         groupBox5.Name = "groupBox5";
+         groupBox5.Padding = new Padding(0);
+         groupBox5.Size = new Size(190, 90);
+         groupBox5.TabIndex = 6;
+         groupBox5.TabStop = false;
+         groupBox5.Text = "Scaling factors";
+         // 
+         // tableLayoutPanel1
+         // 
+         tableLayoutPanel1.ColumnCount = 2;
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         tableLayoutPanel1.Controls.Add(label9, 0, 2);
+         tableLayoutPanel1.Controls.Add(label10, 0, 0);
+         tableLayoutPanel1.Controls.Add(DevastationLabel, 0, 1);
+         tableLayoutPanel1.Controls.Add(AutonomyNumeric, 1, 0);
+         tableLayoutPanel1.Controls.Add(DevastationNumeric, 1, 1);
+         tableLayoutPanel1.Controls.Add(ProsperityNumeric, 1, 2);
+         tableLayoutPanel1.Location = new Point(0, 15);
+         tableLayoutPanel1.Margin = new Padding(0, 3, 0, 0);
+         tableLayoutPanel1.Name = "tableLayoutPanel1";
+         tableLayoutPanel1.RowCount = 3;
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         tableLayoutPanel1.Size = new Size(190, 75);
+         tableLayoutPanel1.TabIndex = 1;
+         // 
+         // label9
+         // 
+         label9.AutoSize = true;
+         label9.Dock = DockStyle.Fill;
+         label9.Location = new Point(3, 50);
+         label9.Name = "label9";
+         label9.Size = new Size(89, 25);
+         label9.TabIndex = 2;
+         label9.Text = "Prosperity";
+         label9.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // label10
+         // 
+         label10.AutoSize = true;
+         label10.Dock = DockStyle.Fill;
+         label10.Location = new Point(3, 0);
+         label10.Name = "label10";
+         label10.Size = new Size(89, 25);
+         label10.TabIndex = 0;
+         label10.Text = "Autonomy";
+         label10.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // DevastationLabel
+         // 
+         DevastationLabel.AutoSize = true;
+         DevastationLabel.Dock = DockStyle.Fill;
+         DevastationLabel.Location = new Point(3, 25);
+         DevastationLabel.Name = "DevastationLabel";
+         DevastationLabel.Size = new Size(89, 25);
+         DevastationLabel.TabIndex = 1;
+         DevastationLabel.Text = "Devastation";
+         DevastationLabel.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // AutonomyNumeric
+         // 
+         AutonomyNumeric.Dock = DockStyle.Fill;
+         AutonomyNumeric.Location = new Point(95, 1);
+         AutonomyNumeric.Margin = new Padding(0, 1, 0, 3);
+         AutonomyNumeric.Name = "AutonomyNumeric";
+         AutonomyNumeric.Size = new Size(95, 23);
+         AutonomyNumeric.TabIndex = 3;
+         // 
+         // DevastationNumeric
+         // 
+         DevastationNumeric.Dock = DockStyle.Fill;
+         DevastationNumeric.Location = new Point(95, 26);
+         DevastationNumeric.Margin = new Padding(0, 1, 0, 3);
+         DevastationNumeric.Name = "DevastationNumeric";
+         DevastationNumeric.Size = new Size(95, 23);
+         DevastationNumeric.TabIndex = 4;
+         // 
+         // ProsperityNumeric
+         // 
+         ProsperityNumeric.Dock = DockStyle.Fill;
+         ProsperityNumeric.Location = new Point(95, 51);
+         ProsperityNumeric.Margin = new Padding(0, 1, 0, 3);
+         ProsperityNumeric.Name = "ProsperityNumeric";
+         ProsperityNumeric.Size = new Size(95, 23);
+         ProsperityNumeric.TabIndex = 5;
+         // 
          // groupBox6
          // 
-         groupBox6.Location = new Point(199, 301);
+         groupBox6.Controls.Add(tableLayoutPanel5);
+         groupBox6.Location = new Point(199, 410);
+         groupBox6.Margin = new Padding(3, 0, 3, 0);
          groupBox6.Name = "groupBox6";
-         groupBox6.Size = new Size(190, 84);
+         groupBox6.Padding = new Padding(0);
+         groupBox6.Size = new Size(190, 90);
          groupBox6.TabIndex = 7;
          groupBox6.TabStop = false;
-         groupBox6.Text = "groupBox6";
+         groupBox6.Text = "Trade";
+         // 
+         // tableLayoutPanel5
+         // 
+         tableLayoutPanel5.ColumnCount = 2;
+         tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         tableLayoutPanel5.Controls.Add(comboBox1, 1, 1);
+         tableLayoutPanel5.Controls.Add(label11, 0, 2);
+         tableLayoutPanel5.Controls.Add(label12, 0, 0);
+         tableLayoutPanel5.Controls.Add(label13, 0, 1);
+         tableLayoutPanel5.Controls.Add(comboBox2, 1, 0);
+         tableLayoutPanel5.Controls.Add(numericUpDown1, 1, 2);
+         tableLayoutPanel5.Location = new Point(0, 15);
+         tableLayoutPanel5.Margin = new Padding(0, 3, 0, 0);
+         tableLayoutPanel5.Name = "tableLayoutPanel5";
+         tableLayoutPanel5.RowCount = 3;
+         tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         tableLayoutPanel5.Size = new Size(190, 75);
+         tableLayoutPanel5.TabIndex = 2;
+         // 
+         // comboBox1
+         // 
+         comboBox1.FormattingEnabled = true;
+         comboBox1.Location = new Point(95, 25);
+         comboBox1.Margin = new Padding(0);
+         comboBox1.Name = "comboBox1";
+         comboBox1.Size = new Size(95, 23);
+         comboBox1.TabIndex = 4;
+         // 
+         // label11
+         // 
+         label11.AutoSize = true;
+         label11.Dock = DockStyle.Fill;
+         label11.Location = new Point(3, 50);
+         label11.Name = "label11";
+         label11.Size = new Size(89, 25);
+         label11.TabIndex = 2;
+         label11.Text = "Extra Cost";
+         label11.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // label12
+         // 
+         label12.AutoSize = true;
+         label12.Dock = DockStyle.Fill;
+         label12.Location = new Point(3, 0);
+         label12.Name = "label12";
+         label12.Size = new Size(89, 25);
+         label12.TabIndex = 0;
+         label12.Text = "Trade Center";
+         label12.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // label13
+         // 
+         label13.AutoSize = true;
+         label13.Dock = DockStyle.Fill;
+         label13.Location = new Point(3, 25);
+         label13.Name = "label13";
+         label13.Size = new Size(89, 25);
+         label13.TabIndex = 1;
+         label13.Text = "Tradegoods";
+         label13.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // comboBox2
+         // 
+         comboBox2.Dock = DockStyle.Fill;
+         comboBox2.FormattingEnabled = true;
+         comboBox2.Location = new Point(95, 0);
+         comboBox2.Margin = new Padding(0);
+         comboBox2.Name = "comboBox2";
+         comboBox2.Size = new Size(95, 23);
+         comboBox2.TabIndex = 3;
+         // 
+         // numericUpDown1
+         // 
+         numericUpDown1.Dock = DockStyle.Fill;
+         numericUpDown1.Location = new Point(95, 51);
+         numericUpDown1.Margin = new Padding(0, 1, 0, 3);
+         numericUpDown1.Name = "numericUpDown1";
+         numericUpDown1.Size = new Size(95, 23);
+         numericUpDown1.TabIndex = 5;
          // 
          // COuntryPage
          // 
@@ -1134,12 +1269,6 @@
          DataTabPanel.ResumeLayout(false);
          ProvincePage.ResumeLayout(false);
          ProvinceEditingLayout.ResumeLayout(false);
-         groupBox5.ResumeLayout(false);
-         tableLayoutPanel1.ResumeLayout(false);
-         tableLayoutPanel1.PerformLayout();
-         ((System.ComponentModel.ISupportInitialize)AutonomyNumeric).EndInit();
-         ((System.ComponentModel.ISupportInitialize)DevastationNumeric).EndInit();
-         ((System.ComponentModel.ISupportInitialize)ProsperityNumeric).EndInit();
          groupBox1.ResumeLayout(false);
          OwnerControllerLayoutPanel.ResumeLayout(false);
          OwnerControllerLayoutPanel.PerformLayout();
@@ -1157,6 +1286,16 @@
          tableLayoutPanel4.PerformLayout();
          CoresAndClaimsBox.ResumeLayout(false);
          OptionalsTabControl.ResumeLayout(false);
+         groupBox5.ResumeLayout(false);
+         tableLayoutPanel1.ResumeLayout(false);
+         tableLayoutPanel1.PerformLayout();
+         ((System.ComponentModel.ISupportInitialize)AutonomyNumeric).EndInit();
+         ((System.ComponentModel.ISupportInitialize)DevastationNumeric).EndInit();
+         ((System.ComponentModel.ISupportInitialize)ProsperityNumeric).EndInit();
+         groupBox6.ResumeLayout(false);
+         tableLayoutPanel5.ResumeLayout(false);
+         tableLayoutPanel5.PerformLayout();
+         ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
          ResumeLayout(false);
          PerformLayout();
       }
@@ -1209,24 +1348,39 @@
       private TabPage ProvincePage;
       private TabPage COuntryPage;
       private TabPage ProvinceGroupsPage;
+      private Controls.TagComboBox OwnerTagBox;
+      private Controls.TagComboBox CountryTagBox;
+      private ToolStripMenuItem bestPointsToolStripMenuItem;
       private TableLayoutPanel ProvinceEditingLayout;
+      private GroupBox CoresGroupBox;
+      private GroupBox groupBox6;
+      private TableLayoutPanel tableLayoutPanel5;
+      private ComboBox comboBox1;
+      private Label label11;
+      private Label label12;
+      private Label label13;
+      private ComboBox comboBox2;
+      private NumericUpDown numericUpDown1;
       private GroupBox groupBox1;
       private TableLayoutPanel OwnerControllerLayoutPanel;
       private Label label1;
       private Label label2;
       private GroupBox groupBox2;
       private TableLayoutPanel tableLayoutPanel2;
+      private ComboBox CultureComboBox;
       private Label label5;
       private Label label3;
       private Label label4;
       private ComboBox ReligionComboBox;
-      private ComboBox CultureComboBox;
       private TextBox CapitalNameTextBox;
       private GroupBox groupBox3;
       private TableLayoutPanel tableLayoutPanel3;
       private Label label6;
       private Label label7;
       private Label label8;
+      private NumericUpDown TaxNumericBox;
+      private NumericUpDown ProdNumericBox;
+      private NumericUpDown ManpNumericBox;
       private GroupBox groupBox4;
       private TableLayoutPanel tableLayoutPanel4;
       private CheckBox IsCityCheckBox;
@@ -1234,12 +1388,7 @@
       private CheckBox IsParlimentSeatCheckbox;
       private CheckBox HasRevoltCheckBox;
       private GroupBox CoresAndClaimsBox;
-      private NumericUpDown TaxNumericBox;
-      private NumericUpDown ProdNumericBox;
-      private NumericUpDown ManpNumericBox;
       private TableLayoutPanel CoresAndClaimLayoutPanel;
-      private Controls.TagComboBox OwnerTagBox;
-      private Controls.TagComboBox CountryTagBox;
       private TabControl OptionalsTabControl;
       private TabPage NativesTab;
       private TabPage TradeCompanyTab;
@@ -1252,8 +1401,8 @@
       private NumericUpDown AutonomyNumeric;
       private NumericUpDown DevastationNumeric;
       private NumericUpDown ProsperityNumeric;
-      private GroupBox groupBox6;
-      private ToolStripMenuItem bestPointsToolStripMenuItem;
+      private GroupBox BuildingsGroupBox;
+      private GroupBox DiscoveredByGroupBox;
    }
 }
 
