@@ -57,6 +57,7 @@ public static class Globals
 
    // SETTINGS
    public static readonly Settings Settings = new();
+   public static ProvinceEditingStatus ProvinceEditingStatus = ProvinceEditingStatus.PreviewUntilSelection;
 
    // Date of history
    public static DateTime Date
@@ -144,7 +145,6 @@ public static class Globals
    public static Dictionary<string, string> Localisation { get; set; } = [];
    public static Dictionary<string, string> LocalisationCollisions { get; set; } = [];
 
-   public static ConcurrentDictionary<Type, PropertyInfo[]> PropertyCache = [];
 
    public static List<Building> Buildings { get; set; }= [];
 

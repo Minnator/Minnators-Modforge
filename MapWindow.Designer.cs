@@ -33,6 +33,8 @@
          filesToolStripMenuItem = new ToolStripMenuItem();
          gCToolStripMenuItem = new ToolStripMenuItem();
          saveCurrentMapModeToolStripMenuItem = new ToolStripMenuItem();
+         toolStripMenuItem1 = new ToolStripMenuItem();
+         ProvincePreviewMode = new ToolStripComboBox();
          historyToolStripMenuItem = new ToolStripMenuItem();
          selectionHistoryToolStripMenuItem = new ToolStripMenuItem();
          DeleteHistoryToolStripMenuItem = new ToolStripMenuItem();
@@ -61,7 +63,8 @@
          TopStripLayoutPanel = new TableLayoutPanel();
          OwnerCountryNameLabel = new Label();
          ProvinceNameLabel = new Label();
-         label14 = new Label();
+         IsAlreadyEditedLabel = new Label();
+         EditingModeLabel = new Label();
          toolStripContainer1 = new ToolStripContainer();
          toolStrip2 = new ToolStrip();
          newToolStripButton = new ToolStripButton();
@@ -176,7 +179,7 @@
          // 
          // filesToolStripMenuItem
          // 
-         filesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { gCToolStripMenuItem, saveCurrentMapModeToolStripMenuItem });
+         filesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { gCToolStripMenuItem, saveCurrentMapModeToolStripMenuItem, toolStripMenuItem1 });
          filesToolStripMenuItem.Name = "filesToolStripMenuItem";
          filesToolStripMenuItem.Size = new Size(42, 23);
          filesToolStripMenuItem.Text = "Files";
@@ -194,6 +197,20 @@
          saveCurrentMapModeToolStripMenuItem.Size = new Size(199, 22);
          saveCurrentMapModeToolStripMenuItem.Text = "Save Current MapMode";
          saveCurrentMapModeToolStripMenuItem.Click += SaveCurrentMapModeToolStripMenuItem_Click;
+         // 
+         // toolStripMenuItem1
+         // 
+         toolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { ProvincePreviewMode });
+         toolStripMenuItem1.Name = "toolStripMenuItem1";
+         toolStripMenuItem1.Size = new Size(199, 22);
+         toolStripMenuItem1.Text = "Province Preview Mode";
+         // 
+         // ProvincePreviewMode
+         // 
+         ProvincePreviewMode.DropDownStyle = ComboBoxStyle.DropDownList;
+         ProvincePreviewMode.Name = "ProvincePreviewMode";
+         ProvincePreviewMode.Size = new Size(121, 23);
+         ProvincePreviewMode.SelectedIndexChanged += ProvincePreviewMode_SelectedIndexChanged;
          // 
          // historyToolStripMenuItem
          // 
@@ -393,7 +410,8 @@
          TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 210F));
          TopStripLayoutPanel.Controls.Add(OwnerCountryNameLabel, 1, 0);
          TopStripLayoutPanel.Controls.Add(ProvinceNameLabel, 2, 0);
-         TopStripLayoutPanel.Controls.Add(label14, 0, 0);
+         TopStripLayoutPanel.Controls.Add(IsAlreadyEditedLabel, 0, 0);
+         TopStripLayoutPanel.Controls.Add(EditingModeLabel, 3, 0);
          TopStripLayoutPanel.Dock = DockStyle.Fill;
          TopStripLayoutPanel.Location = new Point(400, 0);
          TopStripLayoutPanel.Margin = new Padding(0);
@@ -425,16 +443,27 @@
          ProvinceNameLabel.Text = "Province: -";
          ProvinceNameLabel.TextAlign = ContentAlignment.MiddleCenter;
          // 
-         // label14
+         // IsAlreadyEditedLabel
          // 
-         label14.AutoSize = true;
-         label14.Dock = DockStyle.Fill;
-         label14.Location = new Point(3, 0);
-         label14.Name = "label14";
-         label14.Size = new Size(219, 26);
-         label14.TabIndex = 2;
-         label14.Text = "Edited: -";
-         label14.TextAlign = ContentAlignment.MiddleCenter;
+         IsAlreadyEditedLabel.AutoSize = true;
+         IsAlreadyEditedLabel.Dock = DockStyle.Fill;
+         IsAlreadyEditedLabel.Location = new Point(3, 0);
+         IsAlreadyEditedLabel.Name = "IsAlreadyEditedLabel";
+         IsAlreadyEditedLabel.Size = new Size(219, 26);
+         IsAlreadyEditedLabel.TabIndex = 2;
+         IsAlreadyEditedLabel.Text = "Edited: -";
+         IsAlreadyEditedLabel.TextAlign = ContentAlignment.MiddleCenter;
+         // 
+         // EditingModeLabel
+         // 
+         EditingModeLabel.AutoSize = true;
+         EditingModeLabel.Dock = DockStyle.Fill;
+         EditingModeLabel.Location = new Point(678, 0);
+         EditingModeLabel.Name = "EditingModeLabel";
+         EditingModeLabel.Size = new Size(219, 26);
+         EditingModeLabel.TabIndex = 3;
+         EditingModeLabel.Text = "Editing Mode: -";
+         EditingModeLabel.TextAlign = ContentAlignment.MiddleCenter;
          // 
          // toolStripContainer1
          // 
@@ -1425,8 +1454,11 @@
       private NumericUpDown ProsperityNumeric;
       private GroupBox BuildingsGroupBox;
       private GroupBox DiscoveredByGroupBox;
-      private Label label14;
+      private Label IsAlreadyEditedLabel;
       private ToolStripMenuItem provDiffToolStripMenuItem;
+      private ToolStripMenuItem toolStripMenuItem1;
+      private ToolStripComboBox ProvincePreviewMode;
+      private Label EditingModeLabel;
    }
 }
 

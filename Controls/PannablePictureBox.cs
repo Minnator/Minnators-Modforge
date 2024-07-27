@@ -146,7 +146,6 @@ public sealed class PannablePictureBox : PictureBox
       if (Selection.State == SelectionState.Rectangle)
       {
          Selection.ExitRectangleSelection();
-         return;
       }
       
       // ------------------------------ Advanced Selections Menu ------------------------------
@@ -164,6 +163,12 @@ public sealed class PannablePictureBox : PictureBox
 
       _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvinces.Count);
 
+      // ------------------------------ Province Editing Loading ------------------------------
+      if (Globals.ProvinceEditingStatus == ProvinceEditingStatus.Selection
+         || Globals.ProvinceEditingStatus == ProvinceEditingStatus.PreviewUntilSelection && Selection.SelectedProvinces.Count > 1)
+      {
+         Globals.MapWindow.LoadSelectedProvincesToGui();
+      }
 
       // ------------------------------ Panning ------------------------------
       if (AllowPanning)
@@ -203,8 +208,20 @@ public sealed class PannablePictureBox : PictureBox
          if (LastInvalidatedProvince != -1) 
             Invalidate(MapDrawHelper.DrawProvinceBorder(LastInvalidatedProvince, Color.Transparent, Overlay));
          Invalidate(MapDrawHelper.DrawProvinceBorder(province.Id, Color.Aqua, Overlay));
+
+         if (((ModifierKeys & Keys.Control) != 0 && (ModifierKeys & Keys.Alt) != 0) 
+             || Globals.ProvinceEditingStatus == ProvinceEditingStatus.PreviewOnly
+             || Globals.ProvinceEditingStatus == ProvinceEditingStatus.PreviewUntilSelection && Selection.SelectedProvinces.Count <= 1)
+         {
+            if (LastInvalidatedProvince != province.Id)
+               province.LoadToGui();
+         }
+
+         _mapWindow.SetIsEditedLabel();
+         _mapWindow.SetEditingMode();
+
          LastInvalidatedProvince = province.Id;
-         province.LoadToGui();
+
          // Update the tooltip
          if (ShowToolTip)
             MapToolTip.SetToolTip(this, ToolTipBuilder.BuildToolTip(Globals.ToolTipText, province.Id));

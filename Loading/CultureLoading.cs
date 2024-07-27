@@ -205,8 +205,8 @@ public static class CultureLoading
                if (!duplicateNames.Add(dynasty))
                   nonUniqueNames.Add(dynasty);
             }
-            if (nonUniqueNames.Count > 0)
-               Globals.ErrorLog.Write($"Duplicate names in culture {culture.Name}: {DebugPrints.GetListAsString(nonUniqueNames)}");
+            //if (nonUniqueNames.Count > 0)
+            //   Globals.ErrorLog.Write($"Duplicate names in culture {culture.Name}: {DebugPrints.GetListAsString(nonUniqueNames)}");
          }
       }
    }

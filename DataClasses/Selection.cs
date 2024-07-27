@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using Editor.Commands;
+﻿using Editor.Commands;
 using Editor.Controls;
 using Editor.Helper;
 using Editor.Interfaces;
@@ -13,6 +10,16 @@ public enum SelectionState
    Single,
    Rectangle,
    Lasso
+}
+
+// When several provinces are selected only attributes that are the same across all selected provinces are shown.
+// Other attributes e.g. development will be increased per province or set per province: 
+// All province's tax will be increased by 1, all province's manpower will be set to 100.
+public enum ProvinceEditingStatus
+{
+   PreviewOnly, // Province is only previewed to the gui, no editing is allowed
+   PreviewUntilSelection, // Province is previewed until a selection is made then the selected province(s) are previewed and editing is allowed
+   Selection // Province is only previewd when selected and editing is allowed
 }
 public class Selection(PannablePictureBox pannablePictureBox)
 {
@@ -44,6 +51,14 @@ public class Selection(PannablePictureBox pannablePictureBox)
             LassoSelection = [];
          }
          _clearPolygonSelection = value;
+      }
+   }
+
+   public int Count
+   {
+      get
+      {
+         return SelectedProvinces.Count;
       }
    }
 
@@ -201,5 +216,29 @@ public class Selection(PannablePictureBox pannablePictureBox)
       if (!append)
          Clear();
       AddRange(collection.GetProvinceIds());
+   }
+
+   /// <summary>
+   /// Returns true if the attribute is the same across all selected provinces
+   /// </summary>
+   /// <param name="attribute"></param>
+   /// <param name="result"></param>
+   /// <returns></returns>
+   public bool GetSharedAttribute(string attribute, out object? result)
+   {
+      result = null;
+      
+      foreach (var province in SelectedProvinces)
+      {
+         var value = Globals.Provinces[province].GetAttribute(attribute);
+         if (result == null)
+            result = value!;
+         else if (!result.Equals(value))
+         {
+            result = null;
+            return false;
+         }
+      }
+      return result != null;
    }
 }

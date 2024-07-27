@@ -19,7 +19,7 @@ namespace Editor
       private ItemList Cores;
       private ItemList Buildings;
       private ItemList DiscoveredBy;
-      
+
       #endregion
 
       public PannablePictureBox MapPictureBox = null!;
@@ -65,6 +65,9 @@ namespace Editor
          TopStripLayoutPanel.Controls.Add(DateControl, 4, 0);
          DateControl.OnDateChanged += OnDateChanged;
 
+         ProvincePreviewMode.Items.AddRange([.. Enum.GetNames(typeof(ProvinceEditingStatus))]);
+         ProvincePreviewMode.SelectedIndex = 2;
+
       }
 
       private void InitializeEditGui()
@@ -99,9 +102,66 @@ namespace Editor
       }
 
       // ======================== Province GUI Update Methods ========================
+      #region Province Gui
+      /// <summary>
+      /// This will only load the province attributes to the gui which are shared by all provinces
+      /// </summary>
+      public void LoadSelectedProvincesToGui()
+      {
+         SuspendLayout();
+         ClearProvinceGui();
+         if (MapPictureBox.Selection.GetSharedAttribute("claims", out var result) && result is List<string> tags)
+            Claims.AddItemsUnique(tags);
+         if (MapPictureBox.Selection.GetSharedAttribute("permanent_claims", out result) && result is List<string> permanentTags)
+            PermanentClaims.AddItemsUnique(permanentTags);
+         if (MapPictureBox.Selection.GetSharedAttribute("cores", out result) && result is List<string> coreTags)
+            Cores.AddItemsUnique(coreTags);
+         if (MapPictureBox.Selection.GetSharedAttribute("buildings", out result) && result is List<string> buildings)
+            Buildings.AddItemsUnique(buildings);
+         if (MapPictureBox.Selection.GetSharedAttribute("discovered_by", out result) && result is List<string> techGroups)
+            DiscoveredBy.AddItemsUnique(techGroups);
+         if (MapPictureBox.Selection.GetSharedAttribute("owner", out result) && result is string owner)
+            OwnerTagBox.Text = owner;
+         if (MapPictureBox.Selection.GetSharedAttribute("controller", out result) && result is string controller)
+            ControllerTagBox.Text = controller;
+         if (MapPictureBox.Selection.GetSharedAttribute("religion", out result) && result is string religion)
+            ReligionComboBox.Text = religion;
+         if (MapPictureBox.Selection.GetSharedAttribute("culture", out result) && result is string culture)
+            CultureComboBox.Text = culture;
+         if (MapPictureBox.Selection.GetSharedAttribute("capital", out result) && result is string capital)
+            CapitalNameTextBox.Text = capital;
+         if (MapPictureBox.Selection.GetSharedAttribute("is_city", out result) && result is bool isCity)
+            IsCityCheckBox.Checked = isCity;
+         if (MapPictureBox.Selection.GetSharedAttribute("is_hre", out result) && result is bool isHre)
+            IsHreCheckBox.Checked = isHre;
+         if (MapPictureBox.Selection.GetSharedAttribute("is_seat_in_parliament", out result) && result is bool isSeatInParliament)
+            IsParlimentSeatCheckbox.Checked = isSeatInParliament;
+         if (MapPictureBox.Selection.GetSharedAttribute("has_revolt", out result) && result is bool hasRevolt)
+            HasRevoltCheckBox.Checked = hasRevolt;
+         if (MapPictureBox.Selection.GetSharedAttribute("base_tax", out result) && result is int baseTax)
+            TaxNumericBox.Value = baseTax;
+         if (MapPictureBox.Selection.GetSharedAttribute("base_production", out result) && result is int baseProduction)
+            ProdNumericBox.Value = baseProduction;
+         if (MapPictureBox.Selection.GetSharedAttribute("base_manpower", out result) && result is int baseManpower)
+            ManpNumericBox.Value = baseManpower;
+         if (MapPictureBox.Selection.GetSharedAttribute("local_autonomy", out result) && result is float localAutonomy)
+            AutonomyNumeric.Value = (int)localAutonomy;
+         if (MapPictureBox.Selection.GetSharedAttribute("devastation", out result) && result is float devastation)
+            DevastationNumeric.Value = (int)devastation;
+         if (MapPictureBox.Selection.GetSharedAttribute("prosperity", out result) && result is float prosperity)
+            ProsperityNumeric.Value = (int)prosperity;
+         if (MapPictureBox.Selection.GetSharedAttribute("trade_good", out result) && result is string tradeGood)
+            TradeGoodsComboBox.Text = tradeGood;
+         if (MapPictureBox.Selection.GetSharedAttribute("center_of_trade", out result) && result is int centerOfTrade)
+            TradeCenterComboBox.Text = centerOfTrade.ToString();
+         if (MapPictureBox.Selection.GetSharedAttribute("extra_cost", out result) && result is int extraCost)
+            ExtraCostNumeric.Value = extraCost;
+         ResumeLayout();
+      }
 
       public void LoadProvinceToGui(Province province)
       {
+         SuspendLayout();
          ClearProvinceGui();
          OwnerTagBox.Text = province.Owner;
          ControllerTagBox.Text = province.Controller;
@@ -115,9 +175,9 @@ namespace Editor
          TaxNumericBox.Value = province.BaseTax;
          ProdNumericBox.Value = province.BaseProduction;
          ManpNumericBox.Value = province.BaseManpower;
-         Claims.AddItemsUnique([..province.Claims]);
+         Claims.AddItemsUnique([.. province.Claims]);
          PermanentClaims.AddItemsUnique([]); //TODO what is wrong here why no Province.PermanentClaims
-         Cores.AddItemsUnique([..province.Cores]);
+         Cores.AddItemsUnique([.. province.Cores]);
          Buildings.AddItemsUnique(province.Buildings);
          DiscoveredBy.AddItemsUnique(province.DiscoveredBy);
          AutonomyNumeric.Value = (int)province.LocalAutonomy;
@@ -126,6 +186,7 @@ namespace Editor
          TradeGoodsComboBox.Text = province.TradeGood;
          TradeCenterComboBox.Text = province.CenterOfTrade.ToString();
          ExtraCostNumeric.Value = province.ExtraCost;
+         ResumeLayout();
       }
 
       public void ClearProvinceGui()
@@ -154,9 +215,9 @@ namespace Editor
          TradeCenterComboBox.Clear();
          ExtraCostNumeric.Value = 0;
       }
+      #endregion
 
-      // ======================== END Province GUI Update Methods ========================
-
+      
       #region ToolStrip update methods
       public void SetSelectedProvinceSum(int sum)
       {
@@ -183,6 +244,26 @@ namespace Editor
       public void UpdateUndoDepth(object sender, int e) => UndoDepthLabel.Text = $"Undos [{e}]";
       #endregion
       #endregion
+
+      public void SetEditingMode()
+      {
+         EditingModeLabel.Text = MapPictureBox.Selection.Count <= 1 
+            ? "Editing Mode: Single Province" 
+            : $"Editing Mode: Multi Province ({MapPictureBox.Selection.Count})";
+      }
+
+      public void SetIsEditedLabel()
+      {
+         if (MapPictureBox.Selection.SelectedProvinces.Count == 1)
+         {
+            if (!Globals.Provinces.TryGetValue(MapPictureBox.Selection.SelectedProvinces[0], out var prov))
+            {
+               IsAlreadyEditedLabel.Text = "Edited: -";
+               return;
+            }
+            IsAlreadyEditedLabel.Text = $"Edited: {prov.Status}";
+         }
+      }
 
       private void MapWindow_FormClosing(object sender, FormClosingEventArgs e)
       {
@@ -340,5 +421,11 @@ namespace Editor
          Debug.WriteLine(mod);
       }
 
+      private void ProvincePreviewMode_SelectedIndexChanged(object sender, EventArgs e)
+      {
+         Globals.ProvinceEditingStatus = (ProvinceEditingStatus)ProvincePreviewMode.SelectedIndex;
+         // Close the menu strip// Close the menu when an item is selected
+         filesToolStripMenuItem.DropDown.Close();
+      }
    }
 }
