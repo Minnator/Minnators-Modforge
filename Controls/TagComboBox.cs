@@ -1,10 +1,11 @@
-﻿using Editor.Helper;
-using static System.Net.Mime.MediaTypeNames;
+﻿using Editor.DataClasses.GameDataClasses;
+using Editor.Helper;
 
 namespace Editor.Controls
 {
    public sealed class TagComboBox : ComboBox
    {
+      public EventHandler<ProvinceEditedEventArgs>? OnTagChanged = delegate { };
       public TagComboBox()
       {
          AutoCompleteMode = AutoCompleteMode.SuggestAppend;
@@ -29,6 +30,11 @@ namespace Editor.Controls
          InitializeItems([.. Globals.Countries.Keys]);
       }
 
+      protected override void OnSelectedIndexChanged(EventArgs e)
+      {
+         base.OnSelectedIndexChanged(e);
+         OnTagChanged?.Invoke(this, new (Globals.MapWindow.MapPictureBox.Selection.GetSelectedProvinces(), Text));
+      }
    }
 
    public static class ComboBoxExtensions

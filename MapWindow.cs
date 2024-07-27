@@ -73,6 +73,7 @@ namespace Editor
       private void InitializeEditGui()
       {
          OwnerTagBox = ControlFactory.GetTagComboBox();
+         OwnerTagBox.OnTagChanged += ProvinceEditingEvents.OnOwnerChanged;
          ControllerTagBox = ControlFactory.GetTagComboBox();
          OwnerControllerLayoutPanel.Controls.Add(OwnerTagBox, 1, 0);
          OwnerControllerLayoutPanel.Controls.Add(ControllerTagBox, 1, 1);

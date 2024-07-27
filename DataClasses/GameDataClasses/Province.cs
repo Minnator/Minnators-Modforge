@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Text;
+﻿using System.Text;
 using Editor.Helper;
 using Editor.Interfaces;
 using static Editor.Helper.ProvinceEventHandler;
@@ -64,8 +63,12 @@ public class Province : IProvinceCollection
    private readonly ProvinceData _data = new();
    private List<HistoryEntry> _history = [];
    public ProvinceStatus Status { get; set; } = ProvinceStatus.Unchanged;
-
    public ProvinceData ProvinceData { get; set; } = new();
+
+   public Province()
+   {
+      ProvinceEventHandler.OnProvinceDataChanged += ProvinceDataChanged;
+   }
 
    #region ManagementData
 
@@ -649,6 +652,11 @@ public class Province : IProvinceCollection
    private void SortHistoryEntriesByDate()
    {
       _history.Sort((x, y) => x.Date.CompareTo(y.Date));
+   }
+
+   private void ProvinceDataChanged(object? obj, ProvinceDataChangedEventArgs e)
+   {
+      Status = ProvinceStatus.Modified;
    }
 
    /// <summary>

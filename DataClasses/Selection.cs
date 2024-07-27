@@ -1,5 +1,6 @@
 ﻿using Editor.Commands;
 using Editor.Controls;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.Interfaces;
 
@@ -62,6 +63,10 @@ public class Selection(PannablePictureBox pannablePictureBox)
       }
    }
 
+   public List<Province> GetSelectedProvinces()
+   {
+      return SelectedProvinces.Select(id => Globals.Provinces[id]).ToList();
+   }
    public void MarkNext(int provPtr)
    {
       if (SelectedProvinces.Count == 1 && SelectedProvinces.Contains(provPtr))
