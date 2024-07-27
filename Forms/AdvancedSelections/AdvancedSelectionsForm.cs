@@ -44,7 +44,7 @@ namespace Editor.Forms.AdvancedSelections
          }
       }
 
-      private void CancelButton_Click(object sender, System.EventArgs e)
+      private void CancelButton_Click(object sender, EventArgs e)
       {
          Close();
       }

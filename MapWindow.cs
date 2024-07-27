@@ -122,9 +122,9 @@ namespace Editor
             Buildings.AddItemsUnique(buildings);
          if (Globals.Selection.GetSharedAttribute("discovered_by", out result) && result is List<string> techGroups)
             DiscoveredBy.AddItemsUnique(techGroups);
-         if (Globals.Selection.GetSharedAttribute("owner", out result) && result is string owner)
+         if (Globals.Selection.GetSharedAttribute("owner", out result) && result is Tag owner)
             OwnerTagBox.Text = owner;
-         if (Globals.Selection.GetSharedAttribute("controller", out result) && result is string controller)
+         if (Globals.Selection.GetSharedAttribute("controller", out result) && result is Tag controller)
             ControllerTagBox.Text = controller;
          if (Globals.Selection.GetSharedAttribute("religion", out result) && result is string religion)
             ReligionComboBox.Text = religion;
