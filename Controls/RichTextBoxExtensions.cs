@@ -42,4 +42,12 @@
          box.SelectionColor = box.ForeColor;
       }
    }
+
+   public static class TextBoxExtensions
+   {
+      public static void Clear(this TextBox box)
+      {
+         box.Text = "";
+      }
+   }
 }

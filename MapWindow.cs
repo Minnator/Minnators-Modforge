@@ -12,12 +12,22 @@ namespace Editor
 {
    public partial class MapWindow : Form
    {
-      public PannablePictureBox MapPictureBox = null!;
-      public DateControl DateControl = new(DateTime.MinValue, DateControlLayout.Horizontal);
+      #region CustomEditingControls
 
-      public ModProject Project = new()
+      private ItemList Claims;
+      private ItemList PermanentClaims;
+      private ItemList Cores;
+      private ItemList Buildings;
+      private ItemList DiscoveredBy;
+      
+      #endregion
+
+      public PannablePictureBox MapPictureBox = null!;
+      public readonly DateControl DateControl = new(DateTime.MinValue, DateControlLayout.Horizontal);
+
+      public readonly ModProject Project = new()
       {
-         Name = "Vanilla",
+         Name = "DAVID",
          ModPath = Consts.MOD_PATH,
          VanillaPath = Consts.VANILLA_PATH
       };
@@ -32,6 +42,7 @@ namespace Editor
          LoadingManager.LoadGameAndModDataToApplication(Project, this);
          LoadingManager.InitializeComponents(this);
 
+         //Needs to be after loading the game data to populate the gui with it
          InitializeEditGui();
          //resume gui updates
          ResumeLayout();
@@ -58,25 +69,25 @@ namespace Editor
 
       private void InitializeEditGui()
       {
-         var ownerComboBox = ControlFactory.GetTagComboBox();
-         var controllerComboBox = ControlFactory.GetTagComboBox();
-         OwnerControllerLayoutPanel.Controls.Add(ownerComboBox, 1, 0);
-         OwnerControllerLayoutPanel.Controls.Add(controllerComboBox, 1, 1);
+         OwnerTagBox = ControlFactory.GetTagComboBox();
+         ControllerTagBox = ControlFactory.GetTagComboBox();
+         OwnerControllerLayoutPanel.Controls.Add(OwnerTagBox, 1, 0);
+         OwnerControllerLayoutPanel.Controls.Add(ControllerTagBox, 1, 1);
 
-         var coresControl = ControlFactory.GetItemList(ItemTypes.Tag, [.. Globals.Countries.Keys], "Cores");
-         var claimsControl = ControlFactory.GetItemList(ItemTypes.Tag, [.. Globals.Countries.Keys], "Regular");
-         var permanentClaimsControl = ControlFactory.GetItemList(ItemTypes.Tag, [.. Globals.Countries.Keys], "Permanent");
-         var buildingsControl = ControlFactory.GetItemListObjects(ItemTypes.String, [.. Globals.Buildings], "Building");
-         var discoveredByControl = ControlFactory.GetItemList(ItemTypes.String, [.. Globals.TechnologyGroups], "TechGroup");
+         Cores = ControlFactory.GetItemList(ItemTypes.Tag, [.. Globals.Countries.Keys], "Cores");
+         Claims = ControlFactory.GetItemList(ItemTypes.Tag, [.. Globals.Countries.Keys], "Regular");
+         PermanentClaims = ControlFactory.GetItemList(ItemTypes.Tag, [.. Globals.Countries.Keys], "Permanent");
+         Buildings = ControlFactory.GetItemListObjects(ItemTypes.String, [.. Globals.Buildings], "Building");
+         DiscoveredBy = ControlFactory.GetItemList(ItemTypes.String, [.. Globals.TechnologyGroups], "TechGroup");
 
-         CoresAndClaimLayoutPanel.Controls.Add(permanentClaimsControl, 0, 0);
-         CoresAndClaimLayoutPanel.Controls.Add(claimsControl, 1, 0);
-         CoresGroupBox.Controls.Add(coresControl);
-         coresControl.Location = new(0, 18);
-         BuildingsGroupBox.Controls.Add(buildingsControl);
-         buildingsControl.Location = new(0, 18);
-         DiscoveredByGroupBox.Controls.Add(discoveredByControl);
-         discoveredByControl.Location = new(0, 18);
+         CoresAndClaimLayoutPanel.Controls.Add(PermanentClaims, 0, 0);
+         CoresAndClaimLayoutPanel.Controls.Add(Claims, 1, 0);
+         CoresGroupBox.Controls.Add(Cores);
+         Cores.Location = new(0, 18);
+         BuildingsGroupBox.Controls.Add(Buildings);
+         Buildings.Location = new(0, 18);
+         DiscoveredByGroupBox.Controls.Add(DiscoveredBy);
+         DiscoveredBy.Location = new(0, 18);
 
          List<string> culturesString = [.. Globals.Cultures.Keys];
          culturesString.Sort();
@@ -87,6 +98,64 @@ namespace Editor
          ReligionComboBox.Items.AddRange([.. religionsString]);
       }
 
+      // ======================== Province GUI Update Methods ========================
+
+      public void LoadProvinceToGui(Province province)
+      {
+         ClearProvinceGui();
+         OwnerTagBox.Text = province.Owner;
+         ControllerTagBox.Text = province.Controller;
+         ReligionComboBox.Text = province.Religion;
+         CultureComboBox.Text = province.Culture;
+         CapitalNameTextBox.Text = province.Capital;
+         IsCityCheckBox.Checked = province.IsCity;
+         IsHreCheckBox.Checked = province.IsHre;
+         IsParlimentSeatCheckbox.Checked = province.IsSeatInParliament;
+         HasRevoltCheckBox.Checked = province.HasRevolt;
+         TaxNumericBox.Value = province.BaseTax;
+         ProdNumericBox.Value = province.BaseProduction;
+         ManpNumericBox.Value = province.BaseManpower;
+         Claims.AddItemsUnique([..province.Claims]);
+         PermanentClaims.AddItemsUnique([]); //TODO what is wrong here why no Province.PermanentClaims
+         Cores.AddItemsUnique([..province.Cores]);
+         Buildings.AddItemsUnique(province.Buildings);
+         DiscoveredBy.AddItemsUnique(province.DiscoveredBy);
+         AutonomyNumeric.Value = (int)province.LocalAutonomy;
+         DevastationNumeric.Value = (int)province.Devastation;
+         ProsperityNumeric.Value = (int)province.Prosperity;
+         TradeGoodsComboBox.Text = province.TradeGood;
+         TradeCenterComboBox.Text = province.CenterOfTrade.ToString();
+         ExtraCostNumeric.Value = province.ExtraCost;
+      }
+
+      public void ClearProvinceGui()
+      {
+         OwnerTagBox.Clear();
+         ControllerTagBox.Clear();
+         ReligionComboBox.Clear();
+         CultureComboBox.Clear();
+         CapitalNameTextBox.Clear();
+         IsCityCheckBox.Checked = false;
+         IsHreCheckBox.Checked = false;
+         IsParlimentSeatCheckbox.Checked = false;
+         HasRevoltCheckBox.Checked = false;
+         TaxNumericBox.Value = 1;
+         ProdNumericBox.Value = 1;
+         ManpNumericBox.Value = 1;
+         Claims.Clear();
+         PermanentClaims.Clear();
+         Cores.Clear();
+         Buildings.Clear();
+         DiscoveredBy.Clear();
+         AutonomyNumeric.Value = 0;
+         DevastationNumeric.Value = 0;
+         ProsperityNumeric.Value = 0;
+         TradeGoodsComboBox.Clear();
+         TradeCenterComboBox.Clear();
+         ExtraCostNumeric.Value = 0;
+      }
+
+      // ======================== END Province GUI Update Methods ========================
 
       #region ToolStrip update methods
       public void SetSelectedProvinceSum(int sum)
@@ -183,7 +252,6 @@ namespace Editor
       private void openCustomizerToolStripMenuItem_Click(object sender, EventArgs e)
       {
          var toolTipCustomizer = new ToolTipCustomizer();
-         // Show the ToolTipCustomizer as a popup
          toolTipCustomizer.Show();
       }
 
@@ -254,21 +322,6 @@ namespace Editor
          FormHelper.OpenOrBringToFront(Globals.SearchForm);
       }
 
-      private void tableLayoutPanel3_Paint(object sender, PaintEventArgs e)
-      {
-
-      }
-
-      private void CoresAndClaimLayoutPanel_Paint(object sender, PaintEventArgs e)
-      {
-
-      }
-
-      private void CoresAndClaimLayoutPanel_Paint_1(object sender, PaintEventArgs e)
-      {
-
-      }
-
       private void bestPointsToolStripMenuItem_Click(object sender, EventArgs e)
       {
          DebugMaps.TestCenterPoints();
@@ -281,9 +334,11 @@ namespace Editor
          testProv.BaseManpower = 100;
          testProv.BaseTax = 100;
          testProv.BaseProduction = 100;
+         testProv.Claims.Add("TES");
 
          testProv.PrintModifiedProvinceValues(out var mod);
          Debug.WriteLine(mod);
       }
+
    }
 }

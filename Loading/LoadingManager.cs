@@ -10,6 +10,9 @@ public static class LoadingManager
    {
       TradeGoodsLoading.Load(project);
       TradeNodeLoading.Load(project);
+      TechnologyGroupsLoading.Load(project);
+      BuildingsLoading.Load(project);
+      ReligionLoading.Load(project);
       LoadDefinitionAndMap(project); //TODO SLOW
       DefaultMapLoading.Load(project.VanillaPath);
       AreaLoading.Load(project.VanillaPath, project.ColorProvider);
@@ -20,9 +23,6 @@ public static class LoadingManager
       ProvinceParser.ParseAllUniqueProvinces(project.ModPath, project.VanillaPath); //TODO SLOW
       CultureLoading.LoadCultures(project);
       CountryLoading.LoadCountries(project); //TODO SLOW
-      TechnologyGroupsLoading.Load(project);
-      BuildingsLoading.Load(project);
-      ReligionLoading.Load(project);
 
       DebugPrints.PrintCountriesBasic();
 

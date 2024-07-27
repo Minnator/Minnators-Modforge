@@ -122,12 +122,12 @@
          ProsperityNumeric = new NumericUpDown();
          groupBox6 = new GroupBox();
          tableLayoutPanel5 = new TableLayoutPanel();
-         comboBox1 = new ComboBox();
+         TradeGoodsComboBox = new ComboBox();
          label11 = new Label();
          label12 = new Label();
          label13 = new Label();
-         comboBox2 = new ComboBox();
-         numericUpDown1 = new NumericUpDown();
+         TradeCenterComboBox = new ComboBox();
+         ExtraCostNumeric = new NumericUpDown();
          COuntryPage = new TabPage();
          ProvinceGroupsPage = new TabPage();
          MapMenuStrip.SuspendLayout();
@@ -161,7 +161,7 @@
          ((System.ComponentModel.ISupportInitialize)ProsperityNumeric).BeginInit();
          groupBox6.SuspendLayout();
          tableLayoutPanel5.SuspendLayout();
-         ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
+         ((System.ComponentModel.ISupportInitialize)ExtraCostNumeric).BeginInit();
          SuspendLayout();
          // 
          // MapMenuStrip
@@ -258,34 +258,34 @@
          // testToolStripMenuItem
          // 
          testToolStripMenuItem.Name = "testToolStripMenuItem";
-         testToolStripMenuItem.Size = new Size(180, 22);
+         testToolStripMenuItem.Size = new Size(129, 22);
          testToolStripMenuItem.Text = "Test";
          testToolStripMenuItem.Click += testToolStripMenuItem_Click;
          // 
          // telescopeToolStripMenuItem
          // 
          telescopeToolStripMenuItem.Name = "telescopeToolStripMenuItem";
-         telescopeToolStripMenuItem.Size = new Size(180, 22);
+         telescopeToolStripMenuItem.Size = new Size(129, 22);
          telescopeToolStripMenuItem.Text = "Telescope";
          telescopeToolStripMenuItem.Click += telescopeToolStripMenuItem_Click;
          // 
          // refStackToolStripMenuItem
          // 
          refStackToolStripMenuItem.Name = "refStackToolStripMenuItem";
-         refStackToolStripMenuItem.Size = new Size(180, 22);
+         refStackToolStripMenuItem.Size = new Size(129, 22);
          refStackToolStripMenuItem.Click += refStackToolStripMenuItem_Click;
          // 
          // bestPointsToolStripMenuItem
          // 
          bestPointsToolStripMenuItem.Name = "bestPointsToolStripMenuItem";
-         bestPointsToolStripMenuItem.Size = new Size(180, 22);
+         bestPointsToolStripMenuItem.Size = new Size(129, 22);
          bestPointsToolStripMenuItem.Text = "bestPoints";
          bestPointsToolStripMenuItem.Click += bestPointsToolStripMenuItem_Click;
          // 
          // provDiffToolStripMenuItem
          // 
          provDiffToolStripMenuItem.Name = "provDiffToolStripMenuItem";
-         provDiffToolStripMenuItem.Size = new Size(180, 22);
+         provDiffToolStripMenuItem.Size = new Size(129, 22);
          provDiffToolStripMenuItem.Text = "ProvDiff";
          provDiffToolStripMenuItem.Click += provDiffToolStripMenuItem_Click;
          // 
@@ -822,7 +822,6 @@
          tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
          tableLayoutPanel3.Size = new Size(190, 75);
          tableLayoutPanel3.TabIndex = 2;
-         tableLayoutPanel3.Paint += tableLayoutPanel3_Paint;
          // 
          // label6
          // 
@@ -1159,12 +1158,12 @@
          tableLayoutPanel5.ColumnCount = 2;
          tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
          tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-         tableLayoutPanel5.Controls.Add(comboBox1, 1, 1);
+         tableLayoutPanel5.Controls.Add(TradeGoodsComboBox, 1, 1);
          tableLayoutPanel5.Controls.Add(label11, 0, 2);
          tableLayoutPanel5.Controls.Add(label12, 0, 0);
          tableLayoutPanel5.Controls.Add(label13, 0, 1);
-         tableLayoutPanel5.Controls.Add(comboBox2, 1, 0);
-         tableLayoutPanel5.Controls.Add(numericUpDown1, 1, 2);
+         tableLayoutPanel5.Controls.Add(TradeCenterComboBox, 1, 0);
+         tableLayoutPanel5.Controls.Add(ExtraCostNumeric, 1, 2);
          tableLayoutPanel5.Location = new Point(0, 15);
          tableLayoutPanel5.Margin = new Padding(0, 3, 0, 0);
          tableLayoutPanel5.Name = "tableLayoutPanel5";
@@ -1175,14 +1174,14 @@
          tableLayoutPanel5.Size = new Size(190, 75);
          tableLayoutPanel5.TabIndex = 2;
          // 
-         // comboBox1
+         // TradeGoodsComboBox
          // 
-         comboBox1.FormattingEnabled = true;
-         comboBox1.Location = new Point(95, 25);
-         comboBox1.Margin = new Padding(0);
-         comboBox1.Name = "comboBox1";
-         comboBox1.Size = new Size(95, 23);
-         comboBox1.TabIndex = 4;
+         TradeGoodsComboBox.FormattingEnabled = true;
+         TradeGoodsComboBox.Location = new Point(95, 25);
+         TradeGoodsComboBox.Margin = new Padding(0);
+         TradeGoodsComboBox.Name = "TradeGoodsComboBox";
+         TradeGoodsComboBox.Size = new Size(95, 23);
+         TradeGoodsComboBox.TabIndex = 4;
          // 
          // label11
          // 
@@ -1217,24 +1216,24 @@
          label13.Text = "Tradegoods";
          label13.TextAlign = ContentAlignment.MiddleLeft;
          // 
-         // comboBox2
+         // TradeCenterComboBox
          // 
-         comboBox2.Dock = DockStyle.Fill;
-         comboBox2.FormattingEnabled = true;
-         comboBox2.Location = new Point(95, 0);
-         comboBox2.Margin = new Padding(0);
-         comboBox2.Name = "comboBox2";
-         comboBox2.Size = new Size(95, 23);
-         comboBox2.TabIndex = 3;
+         TradeCenterComboBox.Dock = DockStyle.Fill;
+         TradeCenterComboBox.FormattingEnabled = true;
+         TradeCenterComboBox.Location = new Point(95, 0);
+         TradeCenterComboBox.Margin = new Padding(0);
+         TradeCenterComboBox.Name = "TradeCenterComboBox";
+         TradeCenterComboBox.Size = new Size(95, 23);
+         TradeCenterComboBox.TabIndex = 3;
          // 
-         // numericUpDown1
+         // ExtraCostNumeric
          // 
-         numericUpDown1.Dock = DockStyle.Fill;
-         numericUpDown1.Location = new Point(95, 51);
-         numericUpDown1.Margin = new Padding(0, 1, 0, 3);
-         numericUpDown1.Name = "numericUpDown1";
-         numericUpDown1.Size = new Size(95, 23);
-         numericUpDown1.TabIndex = 5;
+         ExtraCostNumeric.Dock = DockStyle.Fill;
+         ExtraCostNumeric.Location = new Point(95, 51);
+         ExtraCostNumeric.Margin = new Padding(0, 1, 0, 3);
+         ExtraCostNumeric.Name = "ExtraCostNumeric";
+         ExtraCostNumeric.Size = new Size(95, 23);
+         ExtraCostNumeric.TabIndex = 5;
          // 
          // COuntryPage
          // 
@@ -1318,7 +1317,7 @@
          groupBox6.ResumeLayout(false);
          tableLayoutPanel5.ResumeLayout(false);
          tableLayoutPanel5.PerformLayout();
-         ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
+         ((System.ComponentModel.ISupportInitialize)ExtraCostNumeric).EndInit();
          ResumeLayout(false);
          PerformLayout();
       }
@@ -1372,18 +1371,18 @@
       private TabPage COuntryPage;
       private TabPage ProvinceGroupsPage;
       private Controls.TagComboBox OwnerTagBox;
-      private Controls.TagComboBox CountryTagBox;
+      private Controls.TagComboBox ControllerTagBox;
       private ToolStripMenuItem bestPointsToolStripMenuItem;
       private TableLayoutPanel ProvinceEditingLayout;
       private GroupBox CoresGroupBox;
       private GroupBox groupBox6;
       private TableLayoutPanel tableLayoutPanel5;
-      private ComboBox comboBox1;
+      private ComboBox TradeGoodsComboBox;
       private Label label11;
       private Label label12;
       private Label label13;
-      private ComboBox comboBox2;
-      private NumericUpDown numericUpDown1;
+      private ComboBox TradeCenterComboBox;
+      private NumericUpDown ExtraCostNumeric;
       private GroupBox groupBox1;
       private TableLayoutPanel OwnerControllerLayoutPanel;
       private Label label1;

@@ -1,4 +1,5 @@
 ﻿using Editor.Helper;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Editor.Controls
 {
@@ -26,6 +27,17 @@ namespace Editor.Controls
       private void GenerateOptions()
       {
          InitializeItems([.. Globals.Countries.Keys]);
+      }
+
+   }
+
+   public static class ComboBoxExtensions
+   {
+
+      public static void Clear(this ComboBox box)
+      {
+         box.Text = "";
+         box.SelectedIndex = -1;
       }
    }
 }

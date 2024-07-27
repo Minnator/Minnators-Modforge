@@ -58,6 +58,18 @@ namespace Editor.Controls
          AddItem(item);
       }
 
+      public void AddItemsUnique(List<string> items)
+      {
+         foreach (var item in items)
+            AddIfUnique(item);
+      }
+
+      public void AddItems(List<string> items)
+      {
+         foreach (var item in items)
+            AddItem(item);
+      }
+
       public void AddItem(string item)
       {
          if (ItemType == ItemTypes.Tag)
@@ -71,6 +83,11 @@ namespace Editor.Controls
 
          _itemsComboBox.Text = "";
          _itemsComboBox.Focus();
+      }
+
+      public void Clear()
+      {
+         FlowLayout.Controls.Clear();
       }
 
       //EnterPressOnItemsComboBox

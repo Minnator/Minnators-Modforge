@@ -204,7 +204,7 @@ public sealed class PannablePictureBox : PictureBox
             Invalidate(MapDrawHelper.DrawProvinceBorder(LastInvalidatedProvince, Color.Transparent, Overlay));
          Invalidate(MapDrawHelper.DrawProvinceBorder(province.Id, Color.Aqua, Overlay));
          LastInvalidatedProvince = province.Id;
-         
+         province.LoadToGui();
          // Update the tooltip
          if (ShowToolTip)
             MapToolTip.SetToolTip(this, ToolTipBuilder.BuildToolTip(Globals.ToolTipText, province.Id));

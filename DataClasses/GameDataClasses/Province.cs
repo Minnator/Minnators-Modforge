@@ -528,6 +528,13 @@ public class Province : IProvinceCollection
          return Color.Empty;
       }
    }
+   // ================================== ToAndFromGuiMethods ==================================
+   public void LoadToGui()
+   {
+      Globals.MapWindow.LoadProvinceToGui(this);
+   }
+
+
    // ======================================== Methods ========================================
 
    /// <summary>
@@ -898,6 +905,7 @@ public class Province : IProvinceCollection
             break;
       }
    }
+
    public int GetTotalDevelopment()
    {
       return BaseManpower + BaseTax + BaseProduction;
