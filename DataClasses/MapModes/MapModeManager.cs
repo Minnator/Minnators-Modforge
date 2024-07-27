@@ -31,9 +31,10 @@ public class MapModeManager(PannablePictureBox pictureBox)
       MapModes.Add(new CountryMapMode());
       MapModes.Add(new TradeGoodsMapMode());
       MapModes.Add(new TradeNodeMapMode());
-      //MapModes.Add(new ReligionMapMode());
+      MapModes.Add(new ReligionMapMode());
       MapModes.Add(new DevastationMapMode());
       MapModes.Add(new ProsperityMapMode());
+
 
 
       // We set the default map mode to retrieve province colors
