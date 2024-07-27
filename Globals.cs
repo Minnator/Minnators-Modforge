@@ -106,6 +106,10 @@ public static class Globals
    // TechnologyGroups
    public static HashSet<string> TechnologyGroups = [];
 
+   // Religion Stuff
+   public static List<ReligiousGroup> ReligionGroups = [];
+   public static Dictionary<string, Religion> Religions = [];
+
    // Country Groups
    private static Dictionary<Tag, Country> _countries = [];
    public static Dictionary<Tag, Country> Countries

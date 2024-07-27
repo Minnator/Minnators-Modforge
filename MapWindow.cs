@@ -81,6 +81,10 @@ namespace Editor
          List<string> culturesString = [.. Globals.Cultures.Keys];
          culturesString.Sort();
          CultureComboBox.Items.AddRange([.. culturesString]);
+
+         List<string> religionsString = [.. Globals.Religions.Keys];
+         religionsString.Sort();
+         ReligionComboBox.Items.AddRange([.. religionsString]);
       }
 
 

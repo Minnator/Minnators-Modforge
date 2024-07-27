@@ -39,7 +39,7 @@
 
       public bool HasOnlyContent => Blocks.TrueForAll(b => !b.IsBlock);
       public string GetContent => string.Join("\n", GetContentElements.Select(c => c.Value));
-
+      
       public Block? GetBlockWithName(string name)
       {
          return GetBlockElements.FirstOrDefault(b => b.Name == name);
