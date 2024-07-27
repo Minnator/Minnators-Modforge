@@ -8,15 +8,13 @@ public class CDeselectCommand :ICommand
    private readonly string _attr;
    private readonly object _value;
    private readonly List<int> _selectionDelta = [];
-   private readonly PannablePictureBox _pb;
    
-   public CDeselectCommand(string attr, object value,  PannablePictureBox pb, bool executeOnInit = true)
+   public CDeselectCommand(string attr, object value, bool executeOnInit = true)
    {
       _attr = attr;
       _value = value;
-      _pb = pb;
 
-      GetSelectionDelta(pb.Selection.SelectedProvinces);
+      GetSelectionDelta(Globals.Selection.SelectedProvinces);
 
       if (executeOnInit)
          Execute();
@@ -28,7 +26,7 @@ public class CDeselectCommand :ICommand
       {
          foreach (var i in selection)
          {
-            if (int.TryParse(Globals.Provinces[i].GetAttribute(_attr).ToString(), out var compareResult))
+            if (int.TryParse(Globals.Provinces[i].GetAttribute(_attr)!.ToString(), out var compareResult))
                if (compareResult <= compareTo)
                   _selectionDelta.Add(i);
          }
@@ -37,7 +35,7 @@ public class CDeselectCommand :ICommand
       {
          foreach (var i in selection)
          {
-            if (Globals.Provinces[i].GetAttribute(_attr).Equals(_value))
+            if (Globals.Provinces[i].GetAttribute(_attr)!.Equals(_value))
                _selectionDelta.Add(i);
          }
       }
@@ -45,12 +43,12 @@ public class CDeselectCommand :ICommand
 
    public void Execute()
    {
-      _pb.Selection.RemoveRange(_selectionDelta);
+      Globals.Selection.RemoveRange(_selectionDelta);
    }
 
    public void Undo()
    {
-      _pb.Selection.AddRange(_selectionDelta);
+      Globals.Selection.AddRange(_selectionDelta);
    }
 
    public void Redo()

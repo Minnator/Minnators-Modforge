@@ -61,6 +61,7 @@ namespace Editor
          InitializeComponent();
          MapPictureBox = ControlFactory.GetPannablePictureBox(ref MapPanel, this);
          MapPanel.Controls.Add(MapPictureBox);
+         Globals.Selection = new (MapPictureBox);
 
          TopStripLayoutPanel.Controls.Add(DateControl, 4, 0);
          DateControl.OnDateChanged += OnDateChanged;
@@ -111,51 +112,51 @@ namespace Editor
       {
          SuspendLayout();
          ClearProvinceGui();
-         if (MapPictureBox.Selection.GetSharedAttribute("claims", out var result) && result is List<string> tags)
+         if (Globals.Selection.GetSharedAttribute("claims", out var result) && result is List<string> tags)
             Claims.AddItemsUnique(tags);
-         if (MapPictureBox.Selection.GetSharedAttribute("permanent_claims", out result) && result is List<string> permanentTags)
+         if (Globals.Selection.GetSharedAttribute("permanent_claims", out result) && result is List<string> permanentTags)
             PermanentClaims.AddItemsUnique(permanentTags);
-         if (MapPictureBox.Selection.GetSharedAttribute("cores", out result) && result is List<string> coreTags)
+         if (Globals.Selection.GetSharedAttribute("cores", out result) && result is List<string> coreTags)
             Cores.AddItemsUnique(coreTags);
-         if (MapPictureBox.Selection.GetSharedAttribute("buildings", out result) && result is List<string> buildings)
+         if (Globals.Selection.GetSharedAttribute("buildings", out result) && result is List<string> buildings)
             Buildings.AddItemsUnique(buildings);
-         if (MapPictureBox.Selection.GetSharedAttribute("discovered_by", out result) && result is List<string> techGroups)
+         if (Globals.Selection.GetSharedAttribute("discovered_by", out result) && result is List<string> techGroups)
             DiscoveredBy.AddItemsUnique(techGroups);
-         if (MapPictureBox.Selection.GetSharedAttribute("owner", out result) && result is string owner)
+         if (Globals.Selection.GetSharedAttribute("owner", out result) && result is string owner)
             OwnerTagBox.Text = owner;
-         if (MapPictureBox.Selection.GetSharedAttribute("controller", out result) && result is string controller)
+         if (Globals.Selection.GetSharedAttribute("controller", out result) && result is string controller)
             ControllerTagBox.Text = controller;
-         if (MapPictureBox.Selection.GetSharedAttribute("religion", out result) && result is string religion)
+         if (Globals.Selection.GetSharedAttribute("religion", out result) && result is string religion)
             ReligionComboBox.Text = religion;
-         if (MapPictureBox.Selection.GetSharedAttribute("culture", out result) && result is string culture)
+         if (Globals.Selection.GetSharedAttribute("culture", out result) && result is string culture)
             CultureComboBox.Text = culture;
-         if (MapPictureBox.Selection.GetSharedAttribute("capital", out result) && result is string capital)
+         if (Globals.Selection.GetSharedAttribute("capital", out result) && result is string capital)
             CapitalNameTextBox.Text = capital;
-         if (MapPictureBox.Selection.GetSharedAttribute("is_city", out result) && result is bool isCity)
+         if (Globals.Selection.GetSharedAttribute("is_city", out result) && result is bool isCity)
             IsCityCheckBox.Checked = isCity;
-         if (MapPictureBox.Selection.GetSharedAttribute("is_hre", out result) && result is bool isHre)
+         if (Globals.Selection.GetSharedAttribute("is_hre", out result) && result is bool isHre)
             IsHreCheckBox.Checked = isHre;
-         if (MapPictureBox.Selection.GetSharedAttribute("is_seat_in_parliament", out result) && result is bool isSeatInParliament)
+         if (Globals.Selection.GetSharedAttribute("is_seat_in_parliament", out result) && result is bool isSeatInParliament)
             IsParlimentSeatCheckbox.Checked = isSeatInParliament;
-         if (MapPictureBox.Selection.GetSharedAttribute("has_revolt", out result) && result is bool hasRevolt)
+         if (Globals.Selection.GetSharedAttribute("has_revolt", out result) && result is bool hasRevolt)
             HasRevoltCheckBox.Checked = hasRevolt;
-         if (MapPictureBox.Selection.GetSharedAttribute("base_tax", out result) && result is int baseTax)
+         if (Globals.Selection.GetSharedAttribute("base_tax", out result) && result is int baseTax)
             TaxNumericBox.Value = baseTax;
-         if (MapPictureBox.Selection.GetSharedAttribute("base_production", out result) && result is int baseProduction)
+         if (Globals.Selection.GetSharedAttribute("base_production", out result) && result is int baseProduction)
             ProdNumericBox.Value = baseProduction;
-         if (MapPictureBox.Selection.GetSharedAttribute("base_manpower", out result) && result is int baseManpower)
+         if (Globals.Selection.GetSharedAttribute("base_manpower", out result) && result is int baseManpower)
             ManpNumericBox.Value = baseManpower;
-         if (MapPictureBox.Selection.GetSharedAttribute("local_autonomy", out result) && result is float localAutonomy)
+         if (Globals.Selection.GetSharedAttribute("local_autonomy", out result) && result is float localAutonomy)
             AutonomyNumeric.Value = (int)localAutonomy;
-         if (MapPictureBox.Selection.GetSharedAttribute("devastation", out result) && result is float devastation)
+         if (Globals.Selection.GetSharedAttribute("devastation", out result) && result is float devastation)
             DevastationNumeric.Value = (int)devastation;
-         if (MapPictureBox.Selection.GetSharedAttribute("prosperity", out result) && result is float prosperity)
+         if (Globals.Selection.GetSharedAttribute("prosperity", out result) && result is float prosperity)
             ProsperityNumeric.Value = (int)prosperity;
-         if (MapPictureBox.Selection.GetSharedAttribute("trade_good", out result) && result is string tradeGood)
+         if (Globals.Selection.GetSharedAttribute("trade_good", out result) && result is string tradeGood)
             TradeGoodsComboBox.Text = tradeGood;
-         if (MapPictureBox.Selection.GetSharedAttribute("center_of_trade", out result) && result is int centerOfTrade)
+         if (Globals.Selection.GetSharedAttribute("center_of_trade", out result) && result is int centerOfTrade)
             TradeCenterComboBox.Text = centerOfTrade.ToString();
-         if (MapPictureBox.Selection.GetSharedAttribute("extra_cost", out result) && result is int extraCost)
+         if (Globals.Selection.GetSharedAttribute("extra_cost", out result) && result is int extraCost)
             ExtraCostNumeric.Value = extraCost;
          ResumeLayout();
       }
@@ -248,16 +249,16 @@ namespace Editor
 
       public void SetEditingMode()
       {
-         EditingModeLabel.Text = MapPictureBox.Selection.Count <= 1 
+         EditingModeLabel.Text = Globals.Selection.Count <= 1 
             ? "Editing Mode: Single Province" 
-            : $"Editing Mode: Multi Province ({MapPictureBox.Selection.Count})";
+            : $"Editing Mode: Multi Province ({Globals.Selection.Count})";
       }
 
       public void SetIsEditedLabel()
       {
-         if (MapPictureBox.Selection.SelectedProvinces.Count == 1)
+         if (Globals.Selection.SelectedProvinces.Count == 1)
          {
-            if (!Globals.Provinces.TryGetValue(MapPictureBox.Selection.SelectedProvinces[0], out var prov))
+            if (!Globals.Provinces.TryGetValue(Globals.Selection.SelectedProvinces[0], out var prov))
             {
                IsAlreadyEditedLabel.Text = "Edited: -";
                return;

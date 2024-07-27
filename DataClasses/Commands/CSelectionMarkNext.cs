@@ -18,19 +18,19 @@ public class CSelectionMarkNext : ICommand
 
    public void Execute()
    {
-      _selectedProvinces = [.. _pb.Selection.SelectedProvinces];
-      _pb.Selection.MarkNext(_provinceId);
+      _selectedProvinces = [.. Globals.Selection.SelectedProvinces];
+      Globals.Selection.MarkNext(_provinceId);
    }
 
    public void Undo()
    {
-      _pb.Selection.Clear();
-      _pb.Selection.AddRange(_selectedProvinces);
+      Globals.Selection.Clear();
+      Globals.Selection.AddRange(_selectedProvinces);
    }
 
    public void Redo()
    {
-      _pb.Selection.MarkNext(_provinceId);
+      Globals.Selection.MarkNext(_provinceId);
    }
 
    public string GetDescription() => $"Mark province [{Globals.Provinces[_provinceId].GetLocalisation()}] as selected";

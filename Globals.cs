@@ -59,6 +59,9 @@ public static class Globals
    public static readonly Settings Settings = new();
    public static ProvinceEditingStatus ProvinceEditingStatus = ProvinceEditingStatus.PreviewUntilSelection;
 
+   // SELECTION
+   public static Selection Selection = null!;
+
    // Date of history
    public static DateTime Date
    {

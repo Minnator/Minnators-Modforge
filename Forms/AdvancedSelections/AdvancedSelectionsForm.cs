@@ -38,7 +38,7 @@ namespace Editor.Forms.AdvancedSelections
          switch (ActionTypeComboBox.Text)
          {
             case "Deselection":
-               return new Deselection(AttributeSelectionComboBox.Text, AttributeValueInput.Text, _pb);
+               return new Deselection(AttributeSelectionComboBox.Text, AttributeValueInput.Text);
             default:
                return null;
          }

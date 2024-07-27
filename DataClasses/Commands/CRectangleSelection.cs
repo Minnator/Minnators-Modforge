@@ -13,7 +13,7 @@ public class CRectangleSelection :ICommand
    public CRectangleSelection(Rectangle rectangle, PannablePictureBox pb, bool executeOnInit = true)
    {
       _pb = pb;
-      _selectionDelta = Geometry.GetProvinceIdsInRectangle(rectangle).Except(_pb.Selection.SelectedProvinces).ToList();
+      _selectionDelta = Geometry.GetProvinceIdsInRectangle(rectangle).Except(Globals.Selection.SelectedProvinces).ToList();
 
       if (executeOnInit)
          Execute();
@@ -22,17 +22,17 @@ public class CRectangleSelection :ICommand
 
    public void Execute()
    {
-      _pb.Selection.AddRange(_selectionDelta, false);
+      Globals.Selection.AddRange(_selectionDelta, false);
    }
 
    public void Undo()
    {
-      _pb.Selection.RemoveRange(_selectionDelta);
+      Globals.Selection.RemoveRange(_selectionDelta);
    }
 
    public void Redo()
    {
-      _pb.Selection.AddRange(_selectionDelta);
+      Globals.Selection.AddRange(_selectionDelta);
    }
 
    public string GetDescription()

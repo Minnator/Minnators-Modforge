@@ -21,7 +21,6 @@ public sealed class PannablePictureBox : PictureBox
 
 
    // ------------------------------ Province Selection ------------------------------
-   public Selection Selection; // Contains the selected provinces public to retrieve the selected provinces
    public int LastInvalidatedProvince = -1; // Contains the invalidated province from the last MouseMove event to clear it
 
    // ------------------------------ Image Layers ------------------------------
@@ -66,7 +65,6 @@ public sealed class PannablePictureBox : PictureBox
       MouseUp += PictureBox1_MouseUp;
       MouseClick += OnMouseClick_Click;
 
-      Selection = new Selection(this); // Initialize the selection class which manages the province selection
       _parentPanel = parentPanel;
       _mapWindow = mapWindow;
 
@@ -98,12 +96,12 @@ public sealed class PannablePictureBox : PictureBox
          return;
       
       //check if ctrl is pressed
-      if (ModifierKeys == Keys.Control && Selection.State == SelectionState.Single) 
-         Globals.HistoryManager.AddCommand(new CAddSingleSelection(province.Id, this), CommandHistoryType.SimpleSelection);
-      else if (ModifierKeys != Keys.Shift && Selection.State == SelectionState.Single && e.Button is not MouseButtons.Right)
+      if (ModifierKeys == Keys.Control && Globals.Selection.State == SelectionState.Single) 
+         Globals.HistoryManager.AddCommand(new CAddSingleSelection(province.Id), CommandHistoryType.SimpleSelection);
+      else if (ModifierKeys != Keys.Shift && Globals.Selection.State == SelectionState.Single && e.Button is not MouseButtons.Right)
          Globals.HistoryManager.AddCommand(new CSelectionMarkNext(province.Id, this), CommandHistoryType.SimpleSelection);
       
-      _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvinces.Count);
+      _mapWindow.SetSelectedProvinceSum(Globals.Selection.SelectedProvinces.Count);
    }
    
    private void PictureBox_MouseDown(object sender, MouseEventArgs e)
@@ -112,14 +110,14 @@ public sealed class PannablePictureBox : PictureBox
       switch (ModifierKeys)
       {
          case Keys.Alt:
-            Selection.State = SelectionState.Lasso;
+            Globals.Selection.State = SelectionState.Lasso;
             return;
          case Keys.Shift:
-            Selection.EnterRectangleSelection(e.Location);
+            Globals.Selection.EnterRectangleSelection(e.Location);
             return;
       }
 
-      _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvinces.Count);
+      _mapWindow.SetSelectedProvinceSum(Globals.Selection.SelectedProvinces.Count);
       
       // ------------------------------ Panning ------------------------------
       if (AllowPanning)
@@ -138,14 +136,14 @@ public sealed class PannablePictureBox : PictureBox
       // ------------------------------ Province Selection ------------------------------
       if (ModifierKeys == Keys.Alt)
       {
-         Selection.ExitLassoSelection();
-         Globals.HistoryManager.AddCommand(new CLassoSelection(this), CommandHistoryType.ComplexSelection);
+         Globals.Selection.ExitLassoSelection();
+         Globals.HistoryManager.AddCommand(new CLassoSelection(), CommandHistoryType.ComplexSelection);
          return;
       }
 
-      if (Selection.State == SelectionState.Rectangle)
+      if (Globals.Selection.State == SelectionState.Rectangle)
       {
-         Selection.ExitRectangleSelection();
+         Globals.Selection.ExitRectangleSelection();
       }
       
       // ------------------------------ Advanced Selections Menu ------------------------------
@@ -161,11 +159,11 @@ public sealed class PannablePictureBox : PictureBox
          _advancedSelectionsForm.Location = new Point(MousePosition.X, MousePosition.Y);
       }
 
-      _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvinces.Count);
+      _mapWindow.SetSelectedProvinceSum(Globals.Selection.SelectedProvinces.Count);
 
       // ------------------------------ Province Editing Loading ------------------------------
       if (Globals.ProvinceEditingStatus == ProvinceEditingStatus.Selection
-         || Globals.ProvinceEditingStatus == ProvinceEditingStatus.PreviewUntilSelection && Selection.SelectedProvinces.Count > 1)
+         || Globals.ProvinceEditingStatus == ProvinceEditingStatus.PreviewUntilSelection && Globals.Selection.SelectedProvinces.Count > 1)
       {
          Globals.MapWindow.LoadSelectedProvincesToGui();
       }
@@ -190,17 +188,17 @@ public sealed class PannablePictureBox : PictureBox
          return;
       
       // ------------------------------ Province Selection ------------------------------
-      if (ModifierKeys == Keys.Alt && Selection.State == SelectionState.Lasso)
+      if (ModifierKeys == Keys.Alt && Globals.Selection.State == SelectionState.Lasso)
       {
-         Selection.LassoSelection.Add(e.Location);
-         Selection.PreviewAllInPolygon();
-         Invalidate(Geometry.GetBounds([.. Selection.LassoSelection]));
+         Globals.Selection.LassoSelection.Add(e.Location);
+         Globals.Selection.PreviewAllInPolygon();
+         Invalidate(Geometry.GetBounds([.. Globals.Selection.LassoSelection]));
       }
 
-      if (ModifierKeys == Keys.Shift && Selection.State == SelectionState.Rectangle)
-         Selection.PreviewAllInRectangle(e.Location);
+      if (ModifierKeys == Keys.Shift && Globals.Selection.State == SelectionState.Rectangle)
+         Globals.Selection.PreviewAllInRectangle(e.Location);
 
-      _mapWindow.SetSelectedProvinceSum(Selection.SelectedProvinces.Count);
+      _mapWindow.SetSelectedProvinceSum(Globals.Selection.SelectedProvinces.Count);
 
       // ------------------------------ Province Highlighting ------------------------------
       if (Globals.MapModeManager.GetProvince(e.Location, out var province) && province.Id != LastInvalidatedProvince)
@@ -211,7 +209,7 @@ public sealed class PannablePictureBox : PictureBox
 
          if (((ModifierKeys & Keys.Control) != 0 && (ModifierKeys & Keys.Alt) != 0) 
              || Globals.ProvinceEditingStatus == ProvinceEditingStatus.PreviewOnly
-             || Globals.ProvinceEditingStatus == ProvinceEditingStatus.PreviewUntilSelection && Selection.SelectedProvinces.Count <= 1)
+             || Globals.ProvinceEditingStatus == ProvinceEditingStatus.PreviewUntilSelection && Globals.Selection.SelectedProvinces.Count <= 1)
          {
             if (LastInvalidatedProvince != province.Id)
                province.LoadToGui();
@@ -254,14 +252,14 @@ public sealed class PannablePictureBox : PictureBox
       pe.Graphics.DrawImage(Overlay, 0, 0, Overlay.Width, Overlay.Height);
 
       // Draw the selection lasso
-      if (Selection is { State: SelectionState.Lasso, LassoSelection.Count: > 2 })
+      if (Globals.Selection is { State: SelectionState.Lasso, LassoSelection.Count: > 2 })
       {
-         pe.Graphics.DrawPolygon(new(Selection.SelectionOutlineColor, 1), Selection.LassoSelection.ToArray());
+         pe.Graphics.DrawPolygon(new(Globals.Selection.SelectionOutlineColor, 1), Globals.Selection.LassoSelection.ToArray());
       }
-      if (Selection is { ClearPolygonSelection: true, LassoSelection.Count: > 2 })
+      if (Globals.Selection is { ClearPolygonSelection: true, LassoSelection.Count: > 2 })
       {
-         Invalidate(Geometry.GetBounds([.. Selection.LassoSelection]));
-         Selection.ClearPolygonSelection = false;
+         Invalidate(Geometry.GetBounds([.. Globals.Selection.LassoSelection]));
+         Globals.Selection.ClearPolygonSelection = false;
       }
       IsPainting = false;
    }

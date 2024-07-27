@@ -5,33 +5,30 @@ namespace Editor.Commands
 {
    public class CCollectionSelection : ICommand
    {
-      private readonly PannablePictureBox _pb;
       private readonly List<int> _selectionDelta;
 
       public CCollectionSelection(PannablePictureBox pb, List<int> toSelect, bool executeOnInit = true)
       {
-         _pb = pb;
-         _selectionDelta = toSelect.Except(pb.Selection.SelectionPreview).ToList();
+         _selectionDelta = toSelect.Except(Globals.Selection.SelectionPreview).ToList();
          if (executeOnInit)
             Execute();
       }
 
       public CCollectionSelection(PannablePictureBox pb, IProvinceCollection collection, bool executeOnInit = true)
       {
-         _pb = pb;
-         _selectionDelta = collection.GetProvinceIds().Except(pb.Selection.SelectionPreview).ToList();
+         _selectionDelta = collection.GetProvinceIds().Except(Globals.Selection.SelectionPreview).ToList();
          if (executeOnInit)
             Execute();
       }
 
       public void Execute()
       {
-         _pb.Selection.AddRange(_selectionDelta, false);
+         Globals.Selection.AddRange(_selectionDelta, false);
       }
 
       public void Undo()
       {
-         _pb.Selection.RemoveRange(_selectionDelta);
+         Globals.Selection.RemoveRange(_selectionDelta);
       }
 
       public void Redo()
