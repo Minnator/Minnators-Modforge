@@ -60,6 +60,22 @@ public static class ControlFactory
       return list;
    }
 
+   public static ItemList GetItemListObjects(ItemTypes itemType, List<object> items, string title)
+   {
+      List<string> strings = [];
+
+      foreach (var item in items)
+      {
+         var str = item.ToString();
+         if (str != null)
+            strings.Add(str);
+      }
+
+      if (strings.Count > 1)
+         return GetItemList(itemType, strings, title);
+      return new (itemType);
+   }
+
    public static ItemButton GetTagItemButton(string item, ItemTypes type)
    {
       return new (item, type);

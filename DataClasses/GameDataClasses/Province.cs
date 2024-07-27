@@ -688,7 +688,7 @@ public class Province : IProvinceCollection
    /// <param name="value"></param>
    public void SetAttribute(string name, string value)
    {
-      if (Globals.Buildings.Contains(name))
+      if (Globals.Buildings.Contains(new (name)))
       {
          if (Parsing.YesNo(value))
             Buildings.Add(name);

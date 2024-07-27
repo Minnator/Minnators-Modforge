@@ -707,6 +707,8 @@
          // 
          // CultureComboBox
          // 
+         CultureComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+         CultureComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
          CultureComboBox.FormattingEnabled = true;
          CultureComboBox.Location = new Point(95, 25);
          CultureComboBox.Margin = new Padding(0);

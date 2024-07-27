@@ -38,7 +38,7 @@ namespace Editor.DataClasses.GameDataClasses
 
       public virtual bool ExecuteProvince(Province province)
       {
-         if (Globals.UniqueAttributeKeys.Contains(name) || Globals.Effects.Contains(name) || Globals.Buildings.Contains(name))
+         if (Globals.UniqueAttributeKeys.Contains(name) || Globals.Effects.Contains(name) || Globals.Buildings.Contains(new (name)))
          {
             province.SetAttribute(Name, Value);
             return true;

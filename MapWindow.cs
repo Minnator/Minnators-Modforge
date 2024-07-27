@@ -66,7 +66,7 @@ namespace Editor
          var coresControl = ControlFactory.GetItemList(ItemTypes.Tag, [.. Globals.Countries.Keys], "Cores");
          var claimsControl = ControlFactory.GetItemList(ItemTypes.Tag, [.. Globals.Countries.Keys], "Regular");
          var permanentClaimsControl = ControlFactory.GetItemList(ItemTypes.Tag, [.. Globals.Countries.Keys], "Permanent");
-         var buildingsControl = ControlFactory.GetItemList(ItemTypes.String, [.. Globals.Buildings], "Building");
+         var buildingsControl = ControlFactory.GetItemListObjects(ItemTypes.String, [.. Globals.Buildings], "Building");
          var discoveredByControl = ControlFactory.GetItemList(ItemTypes.String, [.. Globals.TechnologyGroups], "TechGroup");
 
          CoresAndClaimLayoutPanel.Controls.Add(permanentClaimsControl, 0, 0);
@@ -77,6 +77,10 @@ namespace Editor
          buildingsControl.Location = new(0, 18);
          DiscoveredByGroupBox.Controls.Add(discoveredByControl);
          discoveredByControl.Location = new(0, 18);
+
+         List<string> culturesString = [.. Globals.Cultures.Keys];
+         culturesString.Sort();
+         CultureComboBox.Items.AddRange([.. culturesString]);
       }
 
 

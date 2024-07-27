@@ -21,6 +21,7 @@ public static class LoadingManager
       CultureLoading.LoadCultures(project);
       CountryLoading.LoadCountries(project); //TODO SLOW
       TechnologyGroupsLoading.Load(project);
+      BuildingsLoading.Load(project);
 
       DebugPrints.PrintCountriesBasic();
 
