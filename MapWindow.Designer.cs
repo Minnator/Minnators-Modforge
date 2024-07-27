@@ -45,6 +45,7 @@
          telescopeToolStripMenuItem = new ToolStripMenuItem();
          refStackToolStripMenuItem = new ToolStripMenuItem();
          bestPointsToolStripMenuItem = new ToolStripMenuItem();
+         provDiffToolStripMenuItem = new ToolStripMenuItem();
          DateSelector = new ToolStripComboBox();
          searchToolStripMenuItem = new ToolStripMenuItem();
          MapPanel = new Panel();
@@ -60,6 +61,7 @@
          TopStripLayoutPanel = new TableLayoutPanel();
          OwnerCountryNameLabel = new Label();
          ProvinceNameLabel = new Label();
+         label14 = new Label();
          toolStripContainer1 = new ToolStripContainer();
          toolStrip2 = new ToolStrip();
          newToolStripButton = new ToolStripButton();
@@ -247,7 +249,7 @@
          // 
          // debugToolStripMenuItem
          // 
-         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem });
+         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem });
          debugToolStripMenuItem.Name = "debugToolStripMenuItem";
          debugToolStripMenuItem.Size = new Size(54, 23);
          debugToolStripMenuItem.Text = "Debug";
@@ -256,29 +258,36 @@
          // testToolStripMenuItem
          // 
          testToolStripMenuItem.Name = "testToolStripMenuItem";
-         testToolStripMenuItem.Size = new Size(129, 22);
+         testToolStripMenuItem.Size = new Size(180, 22);
          testToolStripMenuItem.Text = "Test";
          testToolStripMenuItem.Click += testToolStripMenuItem_Click;
          // 
          // telescopeToolStripMenuItem
          // 
          telescopeToolStripMenuItem.Name = "telescopeToolStripMenuItem";
-         telescopeToolStripMenuItem.Size = new Size(129, 22);
+         telescopeToolStripMenuItem.Size = new Size(180, 22);
          telescopeToolStripMenuItem.Text = "Telescope";
          telescopeToolStripMenuItem.Click += telescopeToolStripMenuItem_Click;
          // 
          // refStackToolStripMenuItem
          // 
          refStackToolStripMenuItem.Name = "refStackToolStripMenuItem";
-         refStackToolStripMenuItem.Size = new Size(129, 22);
+         refStackToolStripMenuItem.Size = new Size(180, 22);
          refStackToolStripMenuItem.Click += refStackToolStripMenuItem_Click;
          // 
          // bestPointsToolStripMenuItem
          // 
          bestPointsToolStripMenuItem.Name = "bestPointsToolStripMenuItem";
-         bestPointsToolStripMenuItem.Size = new Size(129, 22);
+         bestPointsToolStripMenuItem.Size = new Size(180, 22);
          bestPointsToolStripMenuItem.Text = "bestPoints";
          bestPointsToolStripMenuItem.Click += bestPointsToolStripMenuItem_Click;
+         // 
+         // provDiffToolStripMenuItem
+         // 
+         provDiffToolStripMenuItem.Name = "provDiffToolStripMenuItem";
+         provDiffToolStripMenuItem.Size = new Size(180, 22);
+         provDiffToolStripMenuItem.Text = "ProvDiff";
+         provDiffToolStripMenuItem.Click += provDiffToolStripMenuItem_Click;
          // 
          // DateSelector
          // 
@@ -384,6 +393,7 @@
          TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 210F));
          TopStripLayoutPanel.Controls.Add(OwnerCountryNameLabel, 1, 0);
          TopStripLayoutPanel.Controls.Add(ProvinceNameLabel, 2, 0);
+         TopStripLayoutPanel.Controls.Add(label14, 0, 0);
          TopStripLayoutPanel.Dock = DockStyle.Fill;
          TopStripLayoutPanel.Location = new Point(400, 0);
          TopStripLayoutPanel.Margin = new Padding(0);
@@ -414,6 +424,17 @@
          ProvinceNameLabel.TabIndex = 1;
          ProvinceNameLabel.Text = "Province: -";
          ProvinceNameLabel.TextAlign = ContentAlignment.MiddleCenter;
+         // 
+         // label14
+         // 
+         label14.AutoSize = true;
+         label14.Dock = DockStyle.Fill;
+         label14.Location = new Point(3, 0);
+         label14.Name = "label14";
+         label14.Size = new Size(219, 26);
+         label14.TabIndex = 2;
+         label14.Text = "Edited: -";
+         label14.TextAlign = ContentAlignment.MiddleCenter;
          // 
          // toolStripContainer1
          // 
@@ -1405,6 +1426,8 @@
       private NumericUpDown ProsperityNumeric;
       private GroupBox BuildingsGroupBox;
       private GroupBox DiscoveredByGroupBox;
+      private Label label14;
+      private ToolStripMenuItem provDiffToolStripMenuItem;
    }
 }
 

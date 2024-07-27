@@ -5,6 +5,13 @@ using static Editor.Helper.ProvinceEventHandler;
 
 namespace Editor.DataClasses.GameDataClasses;
 
+public enum ProvinceStatus
+{
+   Unchanged,
+   Modified,
+   Added
+}
+
 public class ProvinceData()
 {
    // ======================================== IMPORTANT =========================================
@@ -55,6 +62,7 @@ public class Province : IProvinceCollection
 {
    private readonly ProvinceData _data = new();
    private List<HistoryEntry> _history = [];
+   public ProvinceStatus Status { get; set; } = ProvinceStatus.Unchanged;
 
    public ProvinceData ProvinceData { get; set; } = new();
 
@@ -110,9 +118,9 @@ public class Province : IProvinceCollection
       get => _data.Claims;
       set
       {
+         _data.Claims = value;
          if (Globals.State == State.Running)
             RaiseProvinceClaimsChanged(Id, value, nameof(Claims));
-         _data.Claims = value;
       }
    }
 
@@ -121,9 +129,9 @@ public class Province : IProvinceCollection
       get => _data.Cores;
       set
       {
+         _data.Cores = value;
          if (Globals.State == State.Running)
             RaiseProvinceCoresChanged(Id, value, nameof(Cores));
-         _data.Cores = value;
       }
    }
 
@@ -154,9 +162,9 @@ public class Province : IProvinceCollection
       get => _data.TribalOwner;
       set
       {
+         _data.TribalOwner = value;
          if (Globals.State == State.Running)
             RaiseProvinceTribalOwnerChanged(Id, value, nameof(TribalOwner));
-         _data.TribalOwner = value;
       }
    }
 
@@ -681,6 +689,15 @@ public class Province : IProvinceCollection
       };
    }
 
+   public static List<KeyValuePair<string, object>> GetNonDefaultValues()
+   {
+      List<KeyValuePair<string, object>> nonDefaults = [];
+
+
+
+      return nonDefaults;
+   }
+
    /// <summary>
    /// Sets the attribute for the province if it exists
    /// </summary>
@@ -881,7 +898,6 @@ public class Province : IProvinceCollection
             break;
       }
    }
-
    public int GetTotalDevelopment()
    {
       return BaseManpower + BaseTax + BaseProduction;
@@ -890,23 +906,18 @@ public class Province : IProvinceCollection
    {
       return Globals.Localisation.TryGetValue($"PROV{Id}", out var loc) ? loc : Id.ToString();
    }
-
-
    public int[] GetProvinceIds()
    {
       return [Id];
    }
-
    public IProvinceCollection ScopeOut()
    {
       return Globals.Areas[Area];
    }
-
    public List<IProvinceCollection> ScopeIn()
    {
       return [this];
    }
-
    public List<int> GetProvincesWithSameCulture()
    {
       List<int> provinces = [];
@@ -917,7 +928,6 @@ public class Province : IProvinceCollection
       }
       return provinces;
    }
-
    public List<int> GetProvincesWithSameCultureGroup()
    {
       List<int> provinces = [];
@@ -931,7 +941,6 @@ public class Province : IProvinceCollection
       }
       return provinces;
    }
-
    public void DumpHistory(string path)
    {
       var sb = new StringBuilder();
@@ -940,19 +949,16 @@ public class Province : IProvinceCollection
 
       File.WriteAllText(Path.Combine(path, $"{Id.ToString()}_dump.txt"), sb.ToString());
    }
-
    public override bool Equals(object? obj)
    {
       if (obj is Province other)
          return Id == other.Id;
       return false;
    }
-
    public override int GetHashCode()
    {
       return Id.GetHashCode();
    }
-
    public override string ToString()
    {
       return $"{Id} ({GetLocalisation()}";

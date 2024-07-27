@@ -271,7 +271,19 @@ namespace Editor
 
       private void bestPointsToolStripMenuItem_Click(object sender, EventArgs e)
       {
-          DebugMaps.TestCenterPoints();
+         DebugMaps.TestCenterPoints();
+      }
+
+      private void provDiffToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         var testProv = new Province();
+
+         testProv.BaseManpower = 100;
+         testProv.BaseTax = 100;
+         testProv.BaseProduction = 100;
+
+         testProv.PrintModifiedProvinceValues(out var mod);
+         Debug.WriteLine(mod);
       }
    }
 }

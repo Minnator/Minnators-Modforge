@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System.Collections.Concurrent;
+using System.Globalization;
+using System.Reflection;
 using System.Security.Policy;
 using Editor.Commands;
 using Editor.DataClasses;
@@ -11,6 +13,7 @@ using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor;
 
+#region enums
 public enum CommandHistoryType
 {
    SimpleSelection,
@@ -42,6 +45,8 @@ public enum MapModeRendering
    LiveBackground,
    Cached,
 }
+
+#endregion
 
 //contains all required and used data across the application and instances of forms.
 public static class Globals
@@ -138,6 +143,8 @@ public static class Globals
    // Localisation
    public static Dictionary<string, string> Localisation { get; set; } = [];
    public static Dictionary<string, string> LocalisationCollisions { get; set; } = [];
+
+   public static ConcurrentDictionary<Type, PropertyInfo[]> PropertyCache = [];
 
    public static List<Building> Buildings { get; set; }= [];
 
