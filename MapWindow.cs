@@ -76,6 +76,7 @@ namespace Editor
          OwnerTagBox = ControlFactory.GetTagComboBox();
          OwnerTagBox.OnTagChanged += ProvinceEditingEvents.OnOwnerChanged;
          ControllerTagBox = ControlFactory.GetTagComboBox();
+         ControllerTagBox.OnTagChanged += ProvinceEditingEvents.OnControllerChanged;
          OwnerControllerLayoutPanel.Controls.Add(OwnerTagBox, 1, 0);
          OwnerControllerLayoutPanel.Controls.Add(ControllerTagBox, 1, 1);
 
@@ -110,6 +111,7 @@ namespace Editor
       /// </summary>
       public void LoadSelectedProvincesToGui()
       {
+         Globals.EditingStatus = EditingStatus.LoadingInterface;
          SuspendLayout();
          ClearProvinceGui();
          if (Globals.Selection.GetSharedAttribute("claims", out var result) && result is List<string> tags)
@@ -159,10 +161,12 @@ namespace Editor
          if (Globals.Selection.GetSharedAttribute("extra_cost", out result) && result is int extraCost)
             ExtraCostNumeric.Value = extraCost;
          ResumeLayout();
+         Globals.EditingStatus = EditingStatus.Idle;
       }
 
       public void LoadProvinceToGui(Province province)
       {
+         Globals.EditingStatus = EditingStatus.LoadingInterface;
          SuspendLayout();
          ClearProvinceGui();
          OwnerTagBox.Text = province.Owner;
@@ -189,6 +193,7 @@ namespace Editor
          TradeCenterComboBox.Text = province.CenterOfTrade.ToString();
          ExtraCostNumeric.Value = province.ExtraCost;
          ResumeLayout();
+         Globals.EditingStatus = EditingStatus.Idle;
       }
 
       public void ClearProvinceGui()
@@ -250,8 +255,8 @@ namespace Editor
       public void SetEditingMode()
       {
          EditingModeLabel.Text = Globals.Selection.Count <= 1 
-            ? "Editing Mode: Single Province" 
-            : $"Editing Mode: Multi Province ({Globals.Selection.Count})";
+            ? "Idle Mode: Single Province" 
+            : $"Idle Mode: Multi Province ({Globals.Selection.Count})";
       }
 
       public void SetIsEditedLabel()
@@ -373,6 +378,12 @@ namespace Editor
             {
                case Keys.F:
                   Globals.SearchForm = FormHelper.OpenOrBringToFront(Globals.SearchForm);
+                  break;
+               case Keys.Z:
+                  Globals.HistoryManager.Undo();
+                  break;
+               case Keys.Y:
+                  Globals.HistoryManager.Redo();
                   break;
             }
          }

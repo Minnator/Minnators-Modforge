@@ -161,7 +161,7 @@ public sealed class PannablePictureBox : PictureBox
 
       _mapWindow.SetSelectedProvinceSum(Globals.Selection.SelectedProvinces.Count);
 
-      // ------------------------------ Province Editing Loading ------------------------------
+      // ------------------------------ Province Idle Loading ------------------------------
       if (Globals.ProvinceEditingStatus == ProvinceEditingStatus.Selection
          || Globals.ProvinceEditingStatus == ProvinceEditingStatus.PreviewUntilSelection && Globals.Selection.SelectedProvinces.Count > 1)
       {

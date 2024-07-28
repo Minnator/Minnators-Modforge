@@ -39,7 +39,6 @@ namespace Editor.Controls
 
    public static class ComboBoxExtensions
    {
-
       public static void Clear(this ComboBox box)
       {
          box.Text = "";

@@ -46,6 +46,14 @@ public enum MapModeRendering
    Cached,
 }
 
+public enum EditingStatus
+{
+   LoadingInterface,
+   Idle,
+   Saving,
+   Interrupted
+}
+
 #endregion
 
 //contains all required and used data across the application and instances of forms.
@@ -76,6 +84,7 @@ public static class Globals
 
    // Contains the current state of the application
    public static State State = State.Loading;
+   public static EditingStatus EditingStatus = EditingStatus.Idle;
    public static MapModeRendering MapModeRendering { get; set; } = MapModeRendering.Live;
 
    // History Manager

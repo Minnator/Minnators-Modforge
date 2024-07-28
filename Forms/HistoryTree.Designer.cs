@@ -28,93 +28,97 @@
       /// </summary>
       private void InitializeComponent()
       {
-         this.HistoryTreeView = new System.Windows.Forms.TreeView();
-         this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-         this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-         this.RestoreButton = new System.Windows.Forms.Button();
-         this.ShowAllSelections = new System.Windows.Forms.CheckBox();
-         this.tableLayoutPanel1.SuspendLayout();
-         this.tableLayoutPanel2.SuspendLayout();
-         this.SuspendLayout();
+         HistoryTreeView = new TreeView();
+         tableLayoutPanel1 = new TableLayoutPanel();
+         tableLayoutPanel2 = new TableLayoutPanel();
+         RestoreButton = new Button();
+         ShowAllSelections = new CheckBox();
+         tableLayoutPanel1.SuspendLayout();
+         tableLayoutPanel2.SuspendLayout();
+         SuspendLayout();
          // 
          // HistoryTreeView
          // 
-         this.HistoryTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
-         this.HistoryTreeView.Location = new System.Drawing.Point(3, 3);
-         this.HistoryTreeView.Name = "HistoryTreeView";
-         this.HistoryTreeView.Size = new System.Drawing.Size(773, 481);
-         this.HistoryTreeView.TabIndex = 0;
+         HistoryTreeView.Dock = DockStyle.Fill;
+         HistoryTreeView.Location = new Point(4, 3);
+         HistoryTreeView.Margin = new Padding(4, 3, 4, 3);
+         HistoryTreeView.Name = "HistoryTreeView";
+         HistoryTreeView.Size = new Size(901, 556);
+         HistoryTreeView.TabIndex = 0;
          // 
          // tableLayoutPanel1
          // 
-         this.tableLayoutPanel1.ColumnCount = 1;
-         this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-         this.tableLayoutPanel1.Controls.Add(this.HistoryTreeView, 0, 0);
-         this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 1);
-         this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-         this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-         this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-         this.tableLayoutPanel1.RowCount = 2;
-         this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 80F));
-         this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33F));
-         this.tableLayoutPanel1.Size = new System.Drawing.Size(779, 520);
-         this.tableLayoutPanel1.TabIndex = 1;
+         tableLayoutPanel1.ColumnCount = 1;
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         tableLayoutPanel1.Controls.Add(HistoryTreeView, 0, 0);
+         tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 1);
+         tableLayoutPanel1.Dock = DockStyle.Fill;
+         tableLayoutPanel1.Location = new Point(0, 0);
+         tableLayoutPanel1.Margin = new Padding(4, 3, 4, 3);
+         tableLayoutPanel1.Name = "tableLayoutPanel1";
+         tableLayoutPanel1.RowCount = 2;
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 80F));
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 38F));
+         tableLayoutPanel1.Size = new Size(909, 600);
+         tableLayoutPanel1.TabIndex = 1;
          // 
          // tableLayoutPanel2
          // 
-         this.tableLayoutPanel2.ColumnCount = 2;
-         this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-         this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-         this.tableLayoutPanel2.Controls.Add(this.RestoreButton, 1, 0);
-         this.tableLayoutPanel2.Controls.Add(this.ShowAllSelections, 0, 0);
-         this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-         this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 487);
-         this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
-         this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-         this.tableLayoutPanel2.RowCount = 1;
-         this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-         this.tableLayoutPanel2.Size = new System.Drawing.Size(779, 33);
-         this.tableLayoutPanel2.TabIndex = 1;
+         tableLayoutPanel2.ColumnCount = 2;
+         tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         tableLayoutPanel2.Controls.Add(RestoreButton, 1, 0);
+         tableLayoutPanel2.Controls.Add(ShowAllSelections, 0, 0);
+         tableLayoutPanel2.Dock = DockStyle.Fill;
+         tableLayoutPanel2.Location = new Point(0, 562);
+         tableLayoutPanel2.Margin = new Padding(0);
+         tableLayoutPanel2.Name = "tableLayoutPanel2";
+         tableLayoutPanel2.RowCount = 1;
+         tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+         tableLayoutPanel2.Size = new Size(909, 38);
+         tableLayoutPanel2.TabIndex = 1;
          // 
          // RestoreButton
          // 
-         this.RestoreButton.Dock = System.Windows.Forms.DockStyle.Fill;
-         this.RestoreButton.Location = new System.Drawing.Point(392, 3);
-         this.RestoreButton.Name = "RestoreButton";
-         this.RestoreButton.Size = new System.Drawing.Size(384, 27);
-         this.RestoreButton.TabIndex = 1;
-         this.RestoreButton.Text = "Restore to selected state";
-         this.RestoreButton.UseVisualStyleBackColor = true;
-         this.RestoreButton.Click += new System.EventHandler(this.RestoreButton_Click);
+         RestoreButton.Dock = DockStyle.Fill;
+         RestoreButton.Location = new Point(458, 3);
+         RestoreButton.Margin = new Padding(4, 3, 4, 3);
+         RestoreButton.Name = "RestoreButton";
+         RestoreButton.Size = new Size(447, 32);
+         RestoreButton.TabIndex = 1;
+         RestoreButton.Text = "Restore to selected state";
+         RestoreButton.UseVisualStyleBackColor = true;
+         RestoreButton.Click += RestoreButton_Click;
          // 
          // ShowAllSelections
          // 
-         this.ShowAllSelections.AutoSize = true;
-         this.ShowAllSelections.Checked = true;
-         this.ShowAllSelections.CheckState = System.Windows.Forms.CheckState.Checked;
-         this.ShowAllSelections.Dock = System.Windows.Forms.DockStyle.Fill;
-         this.ShowAllSelections.Location = new System.Drawing.Point(3, 3);
-         this.ShowAllSelections.Name = "ShowAllSelections";
-         this.ShowAllSelections.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-         this.ShowAllSelections.Size = new System.Drawing.Size(383, 27);
-         this.ShowAllSelections.TabIndex = 2;
-         this.ShowAllSelections.Text = "Schow all selection";
-         this.ShowAllSelections.UseVisualStyleBackColor = true;
-         this.ShowAllSelections.CheckedChanged += new System.EventHandler(this.ShowAllSelections_CheckedChanged);
+         ShowAllSelections.AutoSize = true;
+         ShowAllSelections.Checked = true;
+         ShowAllSelections.CheckState = CheckState.Checked;
+         ShowAllSelections.Dock = DockStyle.Fill;
+         ShowAllSelections.Location = new Point(4, 3);
+         ShowAllSelections.Margin = new Padding(4, 3, 4, 3);
+         ShowAllSelections.Name = "ShowAllSelections";
+         ShowAllSelections.Padding = new Padding(12, 0, 0, 0);
+         ShowAllSelections.Size = new Size(446, 32);
+         ShowAllSelections.TabIndex = 2;
+         ShowAllSelections.Text = "Schow all selection";
+         ShowAllSelections.UseVisualStyleBackColor = true;
+         ShowAllSelections.CheckedChanged += ShowAllSelections_CheckedChanged;
          // 
          // HistoryTree
          // 
-         this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-         this.ClientSize = new System.Drawing.Size(779, 520);
-         this.Controls.Add(this.tableLayoutPanel1);
-         this.Name = "HistoryTree";
-         this.Text = "HistoryTree";
-         this.tableLayoutPanel1.ResumeLayout(false);
-         this.tableLayoutPanel2.ResumeLayout(false);
-         this.tableLayoutPanel2.PerformLayout();
-         this.ResumeLayout(false);
-
+         AutoScaleDimensions = new SizeF(7F, 15F);
+         AutoScaleMode = AutoScaleMode.Font;
+         ClientSize = new Size(909, 600);
+         Controls.Add(tableLayoutPanel1);
+         Margin = new Padding(4, 3, 4, 3);
+         Name = "HistoryTree";
+         Text = "HistoryTree";
+         tableLayoutPanel1.ResumeLayout(false);
+         tableLayoutPanel2.ResumeLayout(false);
+         tableLayoutPanel2.PerformLayout();
+         ResumeLayout(false);
       }
 
       #endregion

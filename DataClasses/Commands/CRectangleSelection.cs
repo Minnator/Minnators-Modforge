@@ -8,11 +8,9 @@ namespace Editor.Commands;
 
 public class CRectangleSelection :ICommand
 {
-   private readonly PannablePictureBox _pb;
    private readonly List<int> _selectionDelta;
-   public CRectangleSelection(Rectangle rectangle, PannablePictureBox pb, bool executeOnInit = true)
+   public CRectangleSelection(Rectangle rectangle, bool executeOnInit = true)
    {
-      _pb = pb;
       _selectionDelta = Geometry.GetProvinceIdsInRectangle(rectangle).Except(Globals.Selection.SelectedProvinces).ToList();
 
       if (executeOnInit)
@@ -32,7 +30,7 @@ public class CRectangleSelection :ICommand
 
    public void Redo()
    {
-      Globals.Selection.AddRange(_selectionDelta);
+      Globals.Selection.AddRange(_selectionDelta, false);
    }
 
    public string GetDescription()

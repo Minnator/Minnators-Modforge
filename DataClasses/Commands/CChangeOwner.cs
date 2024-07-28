@@ -21,8 +21,12 @@ namespace Editor.Commands
 
       public void Execute()
       {
-         foreach (var province in _provinces) 
+         foreach (var province in _provinces)
+         {
+            if (province.Owner == _value)
+               continue;
             province.Owner = _value;
+         }
       }
 
       public void Undo()

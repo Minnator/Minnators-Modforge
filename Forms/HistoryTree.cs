@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows.Forms;
-using Editor.Commands;
+﻿using Editor.Commands;
 using Editor.Controls;
 
 namespace Editor.Forms
@@ -12,16 +10,50 @@ namespace Editor.Forms
       {
          InitializeComponent();
          _callback = callback;
+
+         ScrollToBottom(); //TODO fix
+      }
+
+      private void ScrollToBottom()
+      {
+         if (HistoryTreeView.Nodes.Count > 0)
+         {
+            // Get the last node at the deepest level
+            TreeNode lastNode = GetLastNode(HistoryTreeView.Nodes[0]);
+            // Ensure the last node is visible
+            lastNode.EnsureVisible();
+         }
+      }
+
+      private TreeNode GetLastNode(TreeNode node)
+      {
+         while (node.Nodes.Count > 0)
+         {
+            node = node.Nodes[node.Nodes.Count - 1];
+         }
+         return node;
       }
 
       public void Visualize(HistoryNode rootNode)
       {
          HistoryTreeView.Nodes.Clear();
          var root = new HistoryTreeNode("Root", CommandHistoryType.Action);
-         HistoryTreeView.Nodes.Add(root);
          AddToNode(rootNode, root);
-         HistoryTreeView.Nodes.RemoveAt(0);
+         foreach (TreeNode child in root.Nodes)
+            HistoryTreeView.Nodes.Add(child);
          HistoryTreeView.ExpandAll();
+      }
+
+      public int CoutChildNodes(TreeNode node)
+      {
+         var count = 0;
+         foreach (TreeNode child in node.Nodes)
+         {
+            count++;
+            count += CoutChildNodes(child);
+         }
+
+         return count;
       }
       
       public void VisualizeFull(HistoryNode rootNode)
@@ -46,8 +78,8 @@ namespace Editor.Forms
 
       private static void AddToNode(HistoryNode history, HistoryTreeNode parent)
       {
-         // only add nodes if they are a ComplexSelection or an Action
-         if (history.Type is CommandHistoryType.ComplexSelection or CommandHistoryType.Action)
+         // only add nodes if they are an Action
+         if (history.Type is CommandHistoryType.Action)
          {
             var node = new HistoryTreeNode(history.Command.GetDescription(), history.Type)
             {

@@ -462,7 +462,7 @@
          EditingModeLabel.Name = "EditingModeLabel";
          EditingModeLabel.Size = new Size(219, 26);
          EditingModeLabel.TabIndex = 3;
-         EditingModeLabel.Text = "Editing Mode: -";
+         EditingModeLabel.Text = "Idle Mode: -";
          EditingModeLabel.TextAlign = ContentAlignment.MiddleCenter;
          // 
          // toolStripContainer1

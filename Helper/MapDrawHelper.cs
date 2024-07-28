@@ -293,8 +293,9 @@ public static class MapDrawHelper
 
    public static void DrawOccupations(bool rebelsOnly, Bitmap bmp)
    {
-      foreach (var province in Globals.Provinces.Values)
+      foreach (var id in Globals.LandProvinces)
       {
+         var province = Globals.Provinces[id];
          if (rebelsOnly && !province.HasRevolt) // Has no rebels but we only want to show rebels
             continue;
          if (!rebelsOnly && province is { IsNonRebelOccupied: false, HasRevolt: false }) // has neither rebels nor occupation, but we want to show some

@@ -26,8 +26,8 @@ public class ProvinceData()
    public int BaseManpower = 1;                             //.
    public int BaseTax = 1;                                  //.
    public int BaseProduction = 1;                           //.
-   public int CenterOfTrade;
-   public int ExtraCost;
+   public int CenterOfTrade;                                //.
+   public int ExtraCost;                                    //.
    public int NativeFerocity;                               // NAT
    public int NativeHostileness;                            // NAT
    public int NativeSize;                                   // NAT
@@ -44,14 +44,14 @@ public class ProvinceData()
    public string Culture = string.Empty;                    //.
    public string Religion = string.Empty;                   //.
    public string Area = string.Empty;
-   public string TradeGood = "";
+   public string TradeGood = "";                            //.
    public string Continent = string.Empty;                  //! not in province editing interface
    public string LatentTradeGood = string.Empty;            //+ ProvinceHistoryEntry editing interface
    public string ReformationCenter = string.Empty;          //+ ProvinceHistoryEntry editing interface
    public List<Tag> Claims = [];                            //.
    public List<Tag> Cores = [];                             //.
-   public List<string> DiscoveredBy = [];
-   public List<string> Buildings = [];
+   public List<string> DiscoveredBy = [];                   //.
+   public List<string> Buildings = [];                      //.
    public List<string> TradeCompanyInvestments = [];        // TC
    public List<string> ProvinceModifiers = [];              // MOD
    public List<string> PermanentProvinceModifiers = [];     // MOD
@@ -526,8 +526,8 @@ public class Province : IProvinceCollection
             return Color.Black;
          if (IsNonRebelOccupied)
          {
-            if (Globals.Countries.TryGetValue(Owner, out var owner))
-               return owner.Color;
+            if (Globals.Countries.TryGetValue(Controller, out var controller))
+               return controller.Color;
          }
          return Color.Empty;
       }
