@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using Editor.DataClasses;
+using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.Helper;
 
@@ -18,8 +19,11 @@ public class DevelopmentMapMode : MapMode
    {
       // Subscribe to events to update the min and max values when a province's development changes
       ProvinceEventHandler.OnProvinceBaseManpowerChanged += UpdateMinMax;
+      ProvinceEventHandler.OnProvinceBaseManpowerChanged += UpdateProvince;
       ProvinceEventHandler.OnProvinceBaseTaxChanged += UpdateMinMax;
+      ProvinceEventHandler.OnProvinceBaseTaxChanged += UpdateProvince;
       ProvinceEventHandler.OnProvinceBaseProductionChanged += UpdateMinMax;
+      ProvinceEventHandler.OnProvinceBaseProductionChanged += UpdateProvince;
    }
 
    private void UpdateMinMax(object sender, ProvinceEventHandler.ProvinceDataChangedEventArgs e)

@@ -20,6 +20,13 @@ namespace Editor
       private ItemList Buildings;
       private ItemList DiscoveredBy;
 
+      private ExtendedComboBox ReligionComboBox;
+      private ExtendedComboBox CultureComboBox;
+
+      private ExtendedNumeric TaxNumeric;
+      private ExtendedNumeric ProdNumeric;
+      private ExtendedNumeric ManpNumeric;
+
       #endregion
 
       public PannablePictureBox MapPictureBox = null!;
@@ -61,7 +68,7 @@ namespace Editor
          InitializeComponent();
          MapPictureBox = ControlFactory.GetPannablePictureBox(ref MapPanel, this);
          MapPanel.Controls.Add(MapPictureBox);
-         Globals.Selection = new (MapPictureBox);
+         Globals.Selection = new(MapPictureBox);
 
          TopStripLayoutPanel.Controls.Add(DateControl, 4, 0);
          DateControl.OnDateChanged += OnDateChanged;
@@ -97,11 +104,36 @@ namespace Editor
 
          List<string> culturesString = [.. Globals.Cultures.Keys];
          culturesString.Sort();
+         CultureComboBox = ControlFactory.GetExtendedComboBox();
+         RCCLayoutPanel.Controls.Add(CultureComboBox, 1, 1);
          CultureComboBox.Items.AddRange([.. culturesString]);
+         CultureComboBox.OnDataChanged += ProvinceEditingEvents.OnCultureChanged;
 
          List<string> religionsString = [.. Globals.Religions.Keys];
          religionsString.Sort();
+         ReligionComboBox = ControlFactory.GetExtendedComboBox();
+         RCCLayoutPanel.Controls.Add(ReligionComboBox, 1, 0);
          ReligionComboBox.Items.AddRange([.. religionsString]);
+         ReligionComboBox.OnDataChanged += ProvinceEditingEvents.OnReligionChanged;
+
+         TaxNumeric = ControlFactory.GetExtendedNumeric();
+         TaxNumeric.Minimum = 1;
+         TaxNumeric.Maximum = 1000;
+         TaxNumeric.OnValueChanged += ProvinceEditingEvents.OnBaseTaxChanged;
+         DevelopmentLayoutPanel.Controls.Add(TaxNumeric, 1, 0);
+
+         ProdNumeric = ControlFactory.GetExtendedNumeric();
+         ProdNumeric.Minimum = 1;
+         ProdNumeric.Maximum = 1000;
+         ProdNumeric.OnValueChanged += ProvinceEditingEvents.OnBaseProductionChanged;
+         DevelopmentLayoutPanel.Controls.Add(ProdNumeric, 1, 1);
+
+         ManpNumeric = ControlFactory.GetExtendedNumeric();
+         ManpNumeric.Minimum = 1;
+         ManpNumeric.Maximum = 1000;
+         DevelopmentLayoutPanel.Controls.Add(ManpNumeric, 1, 2);
+
+         CapitalNameTextBox.Leave += ProvinceEditingEvents.OnCapitalNameChanged;
       }
 
       // ======================== Province GUI Update Methods ========================
@@ -143,11 +175,11 @@ namespace Editor
          if (Globals.Selection.GetSharedAttribute("has_revolt", out result) && result is bool hasRevolt)
             HasRevoltCheckBox.Checked = hasRevolt;
          if (Globals.Selection.GetSharedAttribute("base_tax", out result) && result is int baseTax)
-            TaxNumericBox.Value = baseTax;
+            TaxNumeric.Value = baseTax;
          if (Globals.Selection.GetSharedAttribute("base_production", out result) && result is int baseProduction)
-            ProdNumericBox.Value = baseProduction;
+            ProdNumeric.Value = baseProduction;
          if (Globals.Selection.GetSharedAttribute("base_manpower", out result) && result is int baseManpower)
-            ManpNumericBox.Value = baseManpower;
+            ManpNumeric.Value = baseManpower;
          if (Globals.Selection.GetSharedAttribute("local_autonomy", out result) && result is float localAutonomy)
             AutonomyNumeric.Value = (int)localAutonomy;
          if (Globals.Selection.GetSharedAttribute("devastation", out result) && result is float devastation)
@@ -178,9 +210,9 @@ namespace Editor
          IsHreCheckBox.Checked = province.IsHre;
          IsParlimentSeatCheckbox.Checked = province.IsSeatInParliament;
          HasRevoltCheckBox.Checked = province.HasRevolt;
-         TaxNumericBox.Value = province.BaseTax;
-         ProdNumericBox.Value = province.BaseProduction;
-         ManpNumericBox.Value = province.BaseManpower;
+         TaxNumeric.Value = province.BaseTax;
+         ProdNumeric.Value = province.BaseProduction;
+         ManpNumeric.Value = province.BaseManpower;
          Claims.AddItemsUnique([.. province.Claims]);
          PermanentClaims.AddItemsUnique([]); //TODO what is wrong here why no Province.PermanentClaims
          Cores.AddItemsUnique([.. province.Cores]);
@@ -207,9 +239,9 @@ namespace Editor
          IsHreCheckBox.Checked = false;
          IsParlimentSeatCheckbox.Checked = false;
          HasRevoltCheckBox.Checked = false;
-         TaxNumericBox.Value = 1;
-         ProdNumericBox.Value = 1;
-         ManpNumericBox.Value = 1;
+         TaxNumeric.Value = 1;
+         ProdNumeric.Value = 1;
+         ManpNumeric.Value = 1;
          Claims.Clear();
          PermanentClaims.Clear();
          Cores.Clear();
@@ -224,7 +256,7 @@ namespace Editor
       }
       #endregion
 
-      
+
       #region ToolStrip update methods
       public void SetSelectedProvinceSum(int sum)
       {
@@ -254,8 +286,8 @@ namespace Editor
 
       public void SetEditingMode()
       {
-         EditingModeLabel.Text = Globals.Selection.Count <= 1 
-            ? "Idle Mode: Single Province" 
+         EditingModeLabel.Text = Globals.Selection.Count <= 1
+            ? "Idle Mode: Single Province"
             : $"Idle Mode: Multi Province ({Globals.Selection.Count})";
       }
 
@@ -440,5 +472,6 @@ namespace Editor
          // Close the menu strip// Close the menu when an item is selected
          filesToolStripMenuItem.DropDown.Close();
       }
+
    }
 }

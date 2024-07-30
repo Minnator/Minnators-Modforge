@@ -33,7 +33,7 @@ namespace Editor.Controls
       protected override void OnSelectedIndexChanged(EventArgs e)
       {
          base.OnSelectedIndexChanged(e);
-         OnTagChanged?.Invoke(this, new (Globals.Selection.GetSelectedProvinces(), Text));
+         OnTagChanged?.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Text));
       }
    }
 

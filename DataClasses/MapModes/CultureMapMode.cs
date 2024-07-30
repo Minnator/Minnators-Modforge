@@ -12,7 +12,7 @@ public class CultureMapMode : MapMode
 
    public override bool IsLandOnly => true;
 
-   public override System.Drawing.Color GetProvinceColor(int id)
+   public override Color GetProvinceColor(int id)
    {
       if (Globals.Cultures.TryGetValue(Globals.Provinces[id].Culture, out var culture))
          return culture.Color;

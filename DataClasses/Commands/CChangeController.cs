@@ -1,6 +1,7 @@
-﻿using Editor.DataClasses.GameDataClasses;
+﻿using Editor.Commands;
+using Editor.DataClasses.GameDataClasses;
 
-namespace Editor.Commands
+namespace Editor.DataClasses.Commands
 {
    public class CChangeController : ICommand
    {

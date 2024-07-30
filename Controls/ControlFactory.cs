@@ -85,4 +85,20 @@ public static class ControlFactory
    {
       return new (item, type){Width = 75};
    }
+
+   public static ExtendedComboBox GetExtendedComboBox()
+   {
+      return new ()
+      {
+         Margin = new(3, 1, 3, 3)
+      };
+   }
+
+   public static ExtendedNumeric GetExtendedNumeric()
+   {
+      return new ()
+      {
+         Margin = new(3,1,3,3)
+      };
+   }
 }

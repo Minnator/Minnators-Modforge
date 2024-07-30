@@ -11,7 +11,7 @@ namespace Editor.DataClasses.MapModes
 
       public override bool IsLandOnly => true;
 
-      public override System.Drawing.Color GetProvinceColor(int id)
+      public override Color GetProvinceColor(int id)
       {
          if (Globals.Religions.TryGetValue(Globals.Provinces[id].Religion, out var religion))
             return religion.Color;

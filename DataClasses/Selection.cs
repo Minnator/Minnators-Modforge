@@ -63,9 +63,12 @@ public class Selection(PannablePictureBox pannablePictureBox)
       }
    }
 
-   public List<Province> GetSelectedProvinces()
+   public List<Province> GetSelectedProvinces
    {
-      return SelectedProvinces.Select(id => Globals.Provinces[id]).ToList();
+      get
+      {
+         return SelectedProvinces.Select(id => Globals.Provinces[id]).ToList();
+      }
    }
    public void MarkNext(int provPtr)
    {

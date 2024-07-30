@@ -88,21 +88,16 @@
          label1 = new Label();
          label2 = new Label();
          groupBox2 = new GroupBox();
-         tableLayoutPanel2 = new TableLayoutPanel();
-         CultureComboBox = new ComboBox();
+         RCCLayoutPanel = new TableLayoutPanel();
          label5 = new Label();
          label3 = new Label();
          label4 = new Label();
-         ReligionComboBox = new ComboBox();
          CapitalNameTextBox = new TextBox();
          groupBox3 = new GroupBox();
-         tableLayoutPanel3 = new TableLayoutPanel();
+         DevelopmentLayoutPanel = new TableLayoutPanel();
          label6 = new Label();
          label7 = new Label();
          label8 = new Label();
-         TaxNumericBox = new NumericUpDown();
-         ProdNumericBox = new NumericUpDown();
-         ManpNumericBox = new NumericUpDown();
          groupBox4 = new GroupBox();
          tableLayoutPanel4 = new TableLayoutPanel();
          IsCityCheckBox = new CheckBox();
@@ -147,12 +142,9 @@
          groupBox1.SuspendLayout();
          OwnerControllerLayoutPanel.SuspendLayout();
          groupBox2.SuspendLayout();
-         tableLayoutPanel2.SuspendLayout();
+         RCCLayoutPanel.SuspendLayout();
          groupBox3.SuspendLayout();
-         tableLayoutPanel3.SuspendLayout();
-         ((System.ComponentModel.ISupportInitialize)TaxNumericBox).BeginInit();
-         ((System.ComponentModel.ISupportInitialize)ProdNumericBox).BeginInit();
-         ((System.ComponentModel.ISupportInitialize)ManpNumericBox).BeginInit();
+         DevelopmentLayoutPanel.SuspendLayout();
          groupBox4.SuspendLayout();
          tableLayoutPanel4.SuspendLayout();
          CoresAndClaimsBox.SuspendLayout();
@@ -723,7 +715,7 @@
          // 
          // groupBox2
          // 
-         groupBox2.Controls.Add(tableLayoutPanel2);
+         groupBox2.Controls.Add(RCCLayoutPanel);
          groupBox2.Location = new Point(199, 0);
          groupBox2.Margin = new Padding(3, 0, 3, 0);
          groupBox2.Name = "groupBox2";
@@ -734,37 +726,24 @@
          groupBox2.TabStop = false;
          groupBox2.Text = "Religion, Culture, Capital";
          // 
-         // tableLayoutPanel2
+         // RCCLayoutPanel
          // 
-         tableLayoutPanel2.ColumnCount = 2;
-         tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-         tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-         tableLayoutPanel2.Controls.Add(CultureComboBox, 1, 1);
-         tableLayoutPanel2.Controls.Add(label5, 0, 2);
-         tableLayoutPanel2.Controls.Add(label3, 0, 0);
-         tableLayoutPanel2.Controls.Add(label4, 0, 1);
-         tableLayoutPanel2.Controls.Add(ReligionComboBox, 1, 0);
-         tableLayoutPanel2.Controls.Add(CapitalNameTextBox, 1, 2);
-         tableLayoutPanel2.Location = new Point(0, 15);
-         tableLayoutPanel2.Margin = new Padding(0, 3, 0, 0);
-         tableLayoutPanel2.Name = "tableLayoutPanel2";
-         tableLayoutPanel2.RowCount = 3;
-         tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-         tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-         tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-         tableLayoutPanel2.Size = new Size(190, 75);
-         tableLayoutPanel2.TabIndex = 1;
-         // 
-         // CultureComboBox
-         // 
-         CultureComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-         CultureComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
-         CultureComboBox.FormattingEnabled = true;
-         CultureComboBox.Location = new Point(95, 25);
-         CultureComboBox.Margin = new Padding(0);
-         CultureComboBox.Name = "CultureComboBox";
-         CultureComboBox.Size = new Size(95, 23);
-         CultureComboBox.TabIndex = 4;
+         RCCLayoutPanel.ColumnCount = 2;
+         RCCLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         RCCLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         RCCLayoutPanel.Controls.Add(label5, 0, 2);
+         RCCLayoutPanel.Controls.Add(label3, 0, 0);
+         RCCLayoutPanel.Controls.Add(label4, 0, 1);
+         RCCLayoutPanel.Controls.Add(CapitalNameTextBox, 1, 2);
+         RCCLayoutPanel.Location = new Point(0, 15);
+         RCCLayoutPanel.Margin = new Padding(0, 3, 0, 0);
+         RCCLayoutPanel.Name = "RCCLayoutPanel";
+         RCCLayoutPanel.RowCount = 3;
+         RCCLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         RCCLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         RCCLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         RCCLayoutPanel.Size = new Size(190, 75);
+         RCCLayoutPanel.TabIndex = 1;
          // 
          // label5
          // 
@@ -799,16 +778,6 @@
          label4.Text = "Culture";
          label4.TextAlign = ContentAlignment.MiddleLeft;
          // 
-         // ReligionComboBox
-         // 
-         ReligionComboBox.Dock = DockStyle.Fill;
-         ReligionComboBox.FormattingEnabled = true;
-         ReligionComboBox.Location = new Point(95, 0);
-         ReligionComboBox.Margin = new Padding(0);
-         ReligionComboBox.Name = "ReligionComboBox";
-         ReligionComboBox.Size = new Size(95, 23);
-         ReligionComboBox.TabIndex = 3;
-         // 
          // CapitalNameTextBox
          // 
          CapitalNameTextBox.Dock = DockStyle.Fill;
@@ -820,7 +789,7 @@
          // 
          // groupBox3
          // 
-         groupBox3.Controls.Add(tableLayoutPanel3);
+         groupBox3.Controls.Add(DevelopmentLayoutPanel);
          groupBox3.Location = new Point(199, 96);
          groupBox3.Margin = new Padding(3, 0, 3, 0);
          groupBox3.Name = "groupBox3";
@@ -830,27 +799,24 @@
          groupBox3.TabStop = false;
          groupBox3.Text = "Development";
          // 
-         // tableLayoutPanel3
+         // DevelopmentLayoutPanel
          // 
-         tableLayoutPanel3.ColumnCount = 2;
-         tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-         tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-         tableLayoutPanel3.Controls.Add(label6, 0, 2);
-         tableLayoutPanel3.Controls.Add(label7, 0, 0);
-         tableLayoutPanel3.Controls.Add(label8, 0, 1);
-         tableLayoutPanel3.Controls.Add(TaxNumericBox, 1, 0);
-         tableLayoutPanel3.Controls.Add(ProdNumericBox, 1, 1);
-         tableLayoutPanel3.Controls.Add(ManpNumericBox, 1, 2);
-         tableLayoutPanel3.Location = new Point(0, 15);
-         tableLayoutPanel3.Margin = new Padding(0, 3, 0, 0);
-         tableLayoutPanel3.Name = "tableLayoutPanel3";
-         tableLayoutPanel3.RowCount = 3;
-         tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-         tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-         tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-         tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-         tableLayoutPanel3.Size = new Size(190, 75);
-         tableLayoutPanel3.TabIndex = 2;
+         DevelopmentLayoutPanel.ColumnCount = 2;
+         DevelopmentLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         DevelopmentLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         DevelopmentLayoutPanel.Controls.Add(label6, 0, 2);
+         DevelopmentLayoutPanel.Controls.Add(label7, 0, 0);
+         DevelopmentLayoutPanel.Controls.Add(label8, 0, 1);
+         DevelopmentLayoutPanel.Location = new Point(0, 15);
+         DevelopmentLayoutPanel.Margin = new Padding(0, 3, 0, 0);
+         DevelopmentLayoutPanel.Name = "DevelopmentLayoutPanel";
+         DevelopmentLayoutPanel.RowCount = 3;
+         DevelopmentLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         DevelopmentLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         DevelopmentLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         DevelopmentLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+         DevelopmentLayoutPanel.Size = new Size(190, 75);
+         DevelopmentLayoutPanel.TabIndex = 2;
          // 
          // label6
          // 
@@ -884,42 +850,6 @@
          label8.TabIndex = 1;
          label8.Text = "Production";
          label8.TextAlign = ContentAlignment.MiddleLeft;
-         // 
-         // TaxNumericBox
-         // 
-         TaxNumericBox.Dock = DockStyle.Fill;
-         TaxNumericBox.Location = new Point(98, 1);
-         TaxNumericBox.Margin = new Padding(3, 1, 3, 3);
-         TaxNumericBox.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
-         TaxNumericBox.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-         TaxNumericBox.Name = "TaxNumericBox";
-         TaxNumericBox.Size = new Size(89, 23);
-         TaxNumericBox.TabIndex = 3;
-         TaxNumericBox.Value = new decimal(new int[] { 1, 0, 0, 0 });
-         // 
-         // ProdNumericBox
-         // 
-         ProdNumericBox.Dock = DockStyle.Fill;
-         ProdNumericBox.Location = new Point(98, 26);
-         ProdNumericBox.Margin = new Padding(3, 1, 3, 3);
-         ProdNumericBox.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
-         ProdNumericBox.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-         ProdNumericBox.Name = "ProdNumericBox";
-         ProdNumericBox.Size = new Size(89, 23);
-         ProdNumericBox.TabIndex = 4;
-         ProdNumericBox.Value = new decimal(new int[] { 1, 0, 0, 0 });
-         // 
-         // ManpNumericBox
-         // 
-         ManpNumericBox.Dock = DockStyle.Fill;
-         ManpNumericBox.Location = new Point(98, 51);
-         ManpNumericBox.Margin = new Padding(3, 1, 3, 3);
-         ManpNumericBox.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
-         ManpNumericBox.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-         ManpNumericBox.Name = "ManpNumericBox";
-         ManpNumericBox.Size = new Size(89, 23);
-         ManpNumericBox.TabIndex = 5;
-         ManpNumericBox.Value = new decimal(new int[] { 1, 0, 0, 0 });
          // 
          // groupBox4
          // 
@@ -1324,14 +1254,11 @@
          OwnerControllerLayoutPanel.ResumeLayout(false);
          OwnerControllerLayoutPanel.PerformLayout();
          groupBox2.ResumeLayout(false);
-         tableLayoutPanel2.ResumeLayout(false);
-         tableLayoutPanel2.PerformLayout();
+         RCCLayoutPanel.ResumeLayout(false);
+         RCCLayoutPanel.PerformLayout();
          groupBox3.ResumeLayout(false);
-         tableLayoutPanel3.ResumeLayout(false);
-         tableLayoutPanel3.PerformLayout();
-         ((System.ComponentModel.ISupportInitialize)TaxNumericBox).EndInit();
-         ((System.ComponentModel.ISupportInitialize)ProdNumericBox).EndInit();
-         ((System.ComponentModel.ISupportInitialize)ManpNumericBox).EndInit();
+         DevelopmentLayoutPanel.ResumeLayout(false);
+         DevelopmentLayoutPanel.PerformLayout();
          groupBox4.ResumeLayout(false);
          tableLayoutPanel4.ResumeLayout(false);
          tableLayoutPanel4.PerformLayout();
@@ -1417,21 +1344,16 @@
       private Label label1;
       private Label label2;
       private GroupBox groupBox2;
-      private TableLayoutPanel tableLayoutPanel2;
-      private ComboBox CultureComboBox;
+      private TableLayoutPanel RCCLayoutPanel;
       private Label label5;
       private Label label3;
       private Label label4;
-      private ComboBox ReligionComboBox;
       private TextBox CapitalNameTextBox;
       private GroupBox groupBox3;
-      private TableLayoutPanel tableLayoutPanel3;
+      private TableLayoutPanel DevelopmentLayoutPanel;
       private Label label6;
       private Label label7;
       private Label label8;
-      private NumericUpDown TaxNumericBox;
-      private NumericUpDown ProdNumericBox;
-      private NumericUpDown ManpNumericBox;
       private GroupBox groupBox4;
       private TableLayoutPanel tableLayoutPanel4;
       private CheckBox IsCityCheckBox;
