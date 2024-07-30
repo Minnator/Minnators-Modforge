@@ -1,10 +1,7 @@
-﻿using Editor.DataClasses.GameDataClasses;
-
-namespace Editor.Helper
+﻿namespace Editor.Helper
 {
    public static class ProvinceCollectionHelper
    {
-
       public static List<int> GetProvincesWithAttribute(string attribute, object value, bool onlyLandProvinces = true)
       {
          if (onlyLandProvinces)

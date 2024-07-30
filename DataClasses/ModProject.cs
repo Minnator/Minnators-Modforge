@@ -20,7 +20,7 @@ public class ModProject
       Path.Combine(project.ModPath, "map", filename);
 
    public static string GetLocalisationsFile(ModProject project, string filename) =>
-      Path.Combine(project.ModPath, "localisation", filename);
+      Path.Combine(project.ModPath, "name", filename);
 
 
 }

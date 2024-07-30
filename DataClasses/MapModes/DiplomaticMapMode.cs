@@ -21,10 +21,10 @@ namespace Editor.DataClasses.MapModes
       public override string GetSpecificToolTip(int provinceId)
       {
          var tooltip = string.Empty;
-         if (Globals.Provinces.TryGetValue(provinceId, out var province))
-         {
-            if ()
-         }
+
+
+
+         return tooltip;
       }
    }
 }
