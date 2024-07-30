@@ -1,4 +1,5 @@
-﻿using Editor.Helper;
+﻿using System.Security.Cryptography.X509Certificates;
+using Editor.Helper;
 
 namespace Editor.Controls
 {
@@ -13,6 +14,8 @@ namespace Editor.Controls
    {
       // This autoupdates when there is a tag added or removed
       private readonly TagComboBox _itemsComboBox = ControlFactory.GetTagComboBox();
+      public event EventHandler<ProvinceEditedEventArgs> OnItemAdded = delegate { };
+      public event EventHandler<ProvinceEditedEventArgs> OnItemRemoved = delegate { };
       public ItemTypes ItemType { get; set; }
 
       public ItemList()
@@ -26,8 +29,8 @@ namespace Editor.Controls
          ItemType = type;
 
          tableLayoutPanel1.Controls.Add(_itemsComboBox, 1, 0);
-         _itemsComboBox.KeyDown += ItemsComboBox_KeyDown;
-         _itemsComboBox.SelectedIndexChanged += ItemsComboBox_SelectedIndexChanged;
+         _itemsComboBox.KeyDown += ItemsComboBox_KeyDown!;
+         _itemsComboBox.SelectedIndexChanged += ItemsComboBox_SelectedIndexChanged!;
       }
 
       // Create a setter for the Title
@@ -81,8 +84,15 @@ namespace Editor.Controls
          else
             throw new ArgumentOutOfRangeException();
 
+         OnItemAdded?.Invoke(this, new(Globals.Selection.GetSelectedProvinces, item));
+
          _itemsComboBox.Text = "";
          _itemsComboBox.Focus();
+      }
+      
+      public void RemoveItem(string item)
+      {
+         OnItemRemoved?.Invoke(this, new(Globals.Selection.GetSelectedProvinces, item));
       }
 
       public void Clear()
@@ -124,10 +134,11 @@ namespace Editor.Controls
 
       protected override void OnMouseClick(MouseEventArgs e)
       {
-         // remove this from the partents list
          _toolTip?.RemoveAll();
          _toolTip?.Dispose();
-         Parent?.Controls.Remove(this);
+         var parent = Parent?.Parent?.Parent as ItemList;
+         parent?.RemoveItem(Item);
+         parent?.Controls.Remove(this);
          Dispose();
       }
 

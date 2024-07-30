@@ -88,10 +88,20 @@ namespace Editor
          OwnerControllerLayoutPanel.Controls.Add(ControllerTagBox, 1, 1);
 
          Cores = ControlFactory.GetItemList(ItemTypes.Tag, [.. Globals.Countries.Keys], "Cores");
+         Cores.OnItemAdded += ProvinceEditingEvents.OnCoreAdded;
+         Cores.OnItemRemoved += ProvinceEditingEvents.OnCoreRemoved;
          Claims = ControlFactory.GetItemList(ItemTypes.Tag, [.. Globals.Countries.Keys], "Regular");
+         Claims.OnItemAdded += ProvinceEditingEvents.OnClaimAdded;
+         Claims.OnItemRemoved += ProvinceEditingEvents.OnClaimRemoved;
          PermanentClaims = ControlFactory.GetItemList(ItemTypes.Tag, [.. Globals.Countries.Keys], "Permanent");
+         //TODO: Implement PermanentClaims.OnItemAdded += ProvinceEditingEvents.OnPermanentClaimAdded;
+
          Buildings = ControlFactory.GetItemListObjects(ItemTypes.String, [.. Globals.Buildings], "Building");
+         Buildings.OnItemAdded += ProvinceEditingEvents.OnBuildingAdded;
+         Buildings.OnItemRemoved += ProvinceEditingEvents.OnBuildingRemoved;
          DiscoveredBy = ControlFactory.GetItemList(ItemTypes.String, [.. Globals.TechnologyGroups], "TechGroup");
+         DiscoveredBy.OnItemAdded += ProvinceEditingEvents.OnDiscoveredByAdded;
+         DiscoveredBy.OnItemRemoved += ProvinceEditingEvents.OnDiscoveredByRemoved;
 
          CoresAndClaimLayoutPanel.Controls.Add(PermanentClaims, 0, 0);
          CoresAndClaimLayoutPanel.Controls.Add(Claims, 1, 0);
@@ -135,6 +145,11 @@ namespace Editor
          DevelopmentLayoutPanel.Controls.Add(ManpNumeric, 1, 2);
 
          CapitalNameTextBox.Leave += ProvinceEditingEvents.OnCapitalNameChanged;
+
+         IsCityCheckBox.CheckedChanged += ProvinceEditingEvents.OnIsCityChanged;
+         IsHreCheckBox.CheckedChanged += ProvinceEditingEvents.OnIsHreChanged;
+         IsParlimentSeatCheckbox.CheckedChanged += ProvinceEditingEvents.OnIsSeatInParliamentChanged;
+         HasRevoltCheckBox.CheckedChanged += ProvinceEditingEvents.OnHasRevoltChanged;
       }
 
       // ======================== Province GUI Update Methods ========================
@@ -171,9 +186,9 @@ namespace Editor
             IsCityCheckBox.Checked = isCity;
          if (Globals.Selection.GetSharedAttribute("is_hre", out result) && result is bool isHre)
             IsHreCheckBox.Checked = isHre;
-         if (Globals.Selection.GetSharedAttribute("is_seat_in_parliament", out result) && result is bool isSeatInParliament)
+         if (Globals.Selection.GetSharedAttribute("seat_in_parliament", out result) && result is bool isSeatInParliament)
             IsParlimentSeatCheckbox.Checked = isSeatInParliament;
-         if (Globals.Selection.GetSharedAttribute("has_revolt", out result) && result is bool hasRevolt)
+         if (Globals.Selection.GetSharedAttribute("revolt", out result) && result is bool hasRevolt)
             HasRevoltCheckBox.Checked = hasRevolt;
          if (Globals.Selection.GetSharedAttribute("base_tax", out result) && result is int baseTax)
             TaxNumeric.Value = baseTax;

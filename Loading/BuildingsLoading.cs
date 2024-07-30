@@ -18,6 +18,11 @@ namespace Editor.Loading
          }
 
          Globals.Buildings = buildings;
+
+         foreach (var building in buildings)
+         {
+            Globals.BuildingKeys.Add(building.Name);
+         }
       }
 
       private static void ParseBuildingsFile(string file, ref List<Building> buildings)

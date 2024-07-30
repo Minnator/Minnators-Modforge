@@ -666,6 +666,9 @@ public class Province : IProvinceCollection
    /// <returns></returns>
    public object? GetAttribute(string key)
    {
+      if (Globals.BuildingKeys.Contains(key))
+         return Buildings.Contains(key) ? "yes" : "no";
+
       return key.ToLower() switch
       {
          "base_manpower" => BaseManpower,
@@ -694,12 +697,12 @@ public class Province : IProvinceCollection
          "buildings" => Buildings,
          "is_hre" => IsHre,
          "is_city" => IsCity,
-         "is_seat_in_parliament" => IsSeatInParliament,
+         "seat_in_parliament" => IsSeatInParliament,
          "trade_good" => TradeGood,
          "history" => History,
          "id" => Id,
          "name" => GetLocalisation(),
-         "has_revolt" => HasRevolt,
+         "revolt" => HasRevolt, // Was changed from has_revolt to revolt no idea if this breaks stuff
          "is_occupied" => IsNonRebelOccupied,      
          _ => null
       };
@@ -802,6 +805,9 @@ public class Province : IProvinceCollection
          case "discovered_by":
             DiscoveredBy.Add(value);
             break;
+         case "remove_discovered_by":
+            DiscoveredBy.Remove(value);
+            break;
          case "extra_cost":
             if (int.TryParse(value, out var cost))
                ExtraCost = cost;
@@ -858,8 +864,7 @@ public class Province : IProvinceCollection
             // TODO parse shipyard
             break;
          case "revolt":
-            if (string.IsNullOrWhiteSpace(value))
-               HasRevolt = false;
+            HasRevolt = !string.IsNullOrWhiteSpace(value);
             break;
          case "revolt_risk":
             if (int.TryParse(value, out var risk))

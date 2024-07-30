@@ -75,5 +75,98 @@ namespace Editor.Controls
             return;
          Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Globals.Selection.GetSelectedProvinces, ((int)nup.Value).ToString(), "base_manpower"));
       }
+
+      public static void OnIsCityChanged(object? sender, EventArgs e)
+      {
+         if (!AllowEditing || sender is not CheckBox cb)
+            return;
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Globals.Selection.GetSelectedProvinces, cb.Checked ? "yes" : "no", "is_city"));
+      }
+
+      public static void OnIsHreChanged(object? sender, EventArgs e)
+      {
+         if (!AllowEditing || sender is not CheckBox cb)
+            return;
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Globals.Selection.GetSelectedProvinces, cb.Checked ? "yes" : "no", "hre"));
+      }
+
+      public static void OnIsSeatInParliamentChanged (object? sender, EventArgs e)
+      {
+         if (!AllowEditing || sender is not CheckBox cb)
+            return;
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Globals.Selection.GetSelectedProvinces, cb.Checked ? "yes" : "no", "seat_in_parliament"));
+      }
+
+      public static void OnHasRevoltChanged(object? sender, EventArgs e)
+      {
+         if (!AllowEditing || sender is not CheckBox cb)
+            return;
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Globals.Selection.GetSelectedProvinces, cb.Checked ? "yes" : string.Empty, "revolt"));
+      }
+
+      public static void OnTradeGoodsChanged(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, e.Value.ToString()!, "trade_goods"));
+      }
+
+
+      public static void OnCoreAdded(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, e.Value.ToString()!, "add_core"));
+      }
+
+      public static void OnCoreRemoved(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, e.Value.ToString()!, "remove_core"));
+      }
+
+      public static void OnClaimAdded(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, e.Value.ToString()!, "add_claim"));
+      }
+
+      public static void OnClaimRemoved(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, e.Value.ToString()!, "remove_claim"));
+      }
+
+
+      public static void OnBuildingAdded(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, "yes", e.Value.ToString()!));
+      }
+
+      public static void OnBuildingRemoved(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, "no", e.Value.ToString()!));
+      }
+
+      public static void OnDiscoveredByAdded(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, e.Value.ToString()!, "discovered_by"));
+      }
+
+      public static void OnDiscoveredByRemoved(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, e.Value.ToString()!, "remove_discovered_by"));
+      }
    }
 }

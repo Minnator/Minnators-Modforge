@@ -1,4 +1,5 @@
-﻿using Editor.Commands;
+﻿using System.Diagnostics;
+using Editor.Commands;
 using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.DataClasses.Commands
@@ -17,7 +18,14 @@ namespace Editor.DataClasses.Commands
          _attribute = attribute;
 
          foreach (var p in _provinces)
-            _oldValues.Add(p.GetAttribute(_attribute)!.ToString()!);
+         {
+            // TODO special treatment for buildings
+            var attr = p.GetAttribute(_attribute);
+            if (attr == null)
+               Debugger.Break();
+            else
+               _oldValues.Add(attr.ToString()!);
+         }
 
          if (executeOnInit)
             Execute();

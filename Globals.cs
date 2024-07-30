@@ -102,7 +102,7 @@ public static class Globals
    public static string MapPath = null!;
 
    // ToolTip
-   public static string ToolTipText = $"$MAPMODE_SPECIFIC$\n------------------\nId:   $id$\nName: $name$\nArea: $area$ ($area%L$)\nRevolt: $has_revolt$\nIsOccupied: $is_occupied$";
+   public static string ToolTipText = $"$MAPMODE_SPECIFIC$\n------------------\nId:   $id$\nName: $name$\nArea: $area$ ($area%L$)\nRevolt: $revolt$\nIsOccupied: $is_occupied$";
 
    // Contains the border pixels of the provinces
    public static Point[] BorderPixels = null!;
@@ -159,6 +159,7 @@ public static class Globals
 
 
    public static List<Building> Buildings { get; set; }= [];
+   public static HashSet<string> BuildingKeys { get; set; }= [];
 
    public static readonly HashSet<string> UniqueAttributeKeys = [
       "add_claim", "add_core", "add_local_autonomy", "add_nationalism", "base_manpower", "base_production", "base_tax", "capital", "center_of_trade", "controller", "culture", "discovered_by", "extra_cost", "fort_15th", "hre", "is_city", "native_ferocity", "native_hostileness", "native_size", "owner", "religion", "seat_in_parliament", "trade_goods", "tribal_owner", "unrest", "shipyard", "revolt_risk"
