@@ -695,7 +695,7 @@ public class Province : IProvinceCollection
          "culture" => Culture,
          "religion" => Religion,
          "buildings" => Buildings,
-         "is_hre" => IsHre,
+         "hre" => IsHre,
          "is_city" => IsCity,
          "seat_in_parliament" => IsSeatInParliament,
          "trade_good" => TradeGood,

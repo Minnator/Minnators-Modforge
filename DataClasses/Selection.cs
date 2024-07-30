@@ -36,10 +36,23 @@ public class Selection(PannablePictureBox pannablePictureBox)
    // ------------------- Draw Selection -------------------
    public List<Point> LassoSelection = []; // List of points which define the selection polygon
    private bool _clearPolygonSelection;
+   private Country _selectedCountry;
 
    // List of selected provinces
    public List<int> SelectedProvinces { get; set; } = [];
    public HashSet<int> SelectionPreview { get; set; } = [];
+
+   // Selected County Handling
+   public Country SelectedCountry
+   {
+      get => _selectedCountry;
+      set
+      {
+         _selectedCountry = value;
+         if (value != Country.Empty)
+            Globals.MapModeManager.CurrentMapMode.RenderDiplomacy(SelectedCountry);
+      }
+   }
 
    // Setting the clearPolygonSelection to false will clear the polygon selection
    public bool ClearPolygonSelection
@@ -80,6 +93,14 @@ public class Selection(PannablePictureBox pannablePictureBox)
       {
          Clear();
          Add(provPtr);
+         if (!Globals.MapModeManager.CurrentMapMode.IsProvinceMapMode &&
+             Globals.Provinces.TryGetValue(provPtr, out var province))
+         {
+            if (province.Owner == Tag.Empty)
+               return;
+            if (Globals.Countries.TryGetValue(province.Owner, out var country))
+               SelectedCountry = country;
+         }
       }
    }
 
@@ -125,7 +146,11 @@ public class Selection(PannablePictureBox pannablePictureBox)
          Remove(provIds[i], isPreview);
    }
 
-   public void Clear() => RemoveRange(SelectedProvinces);
+   public void Clear()
+   {
+      RemoveRange(SelectedProvinces);
+      SelectedCountry = Country.Empty;
+   }
 
    public bool Contains(int provPtr) => SelectedProvinces.Contains(provPtr);
 

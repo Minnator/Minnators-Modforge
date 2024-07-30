@@ -9,6 +9,7 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
    public Tag Tag { get; } = tag;
    public Tag ColonialParent { get; set; } = Tag.Empty;
    public string FileName { get; } = fileName;
+   public static Country Empty => new(Tag.Empty, string.Empty);
 
    public int[] GetProvinceIds()
    {
@@ -20,6 +21,16 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
       }
       return [.. provinces];
    }
+
+   public Province[] GetProvinces()
+   {
+      var ids = GetProvinceIds();
+      var provinces = new Province[ids.Length];
+      for (var i = 0; i < ids.Length; i++) 
+         provinces[i] = Globals.Provinces[ids[i]];
+      return provinces;
+   }
+   
 
    public IProvinceCollection? ScopeOut()
    {

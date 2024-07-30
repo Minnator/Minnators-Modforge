@@ -184,7 +184,7 @@ namespace Editor
             CapitalNameTextBox.Text = capital;
          if (Globals.Selection.GetSharedAttribute("is_city", out result) && result is bool isCity)
             IsCityCheckBox.Checked = isCity;
-         if (Globals.Selection.GetSharedAttribute("is_hre", out result) && result is bool isHre)
+         if (Globals.Selection.GetSharedAttribute("hre", out result) && result is bool isHre)
             IsHreCheckBox.Checked = isHre;
          if (Globals.Selection.GetSharedAttribute("seat_in_parliament", out result) && result is bool isSeatInParliament)
             IsParlimentSeatCheckbox.Checked = isSeatInParliament;

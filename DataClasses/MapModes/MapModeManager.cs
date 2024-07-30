@@ -34,6 +34,10 @@ public class MapModeManager(PannablePictureBox pictureBox)
       MapModes.Add(new ReligionMapMode());
       MapModes.Add(new DevastationMapMode());
       MapModes.Add(new ProsperityMapMode());
+      MapModes.Add(new HreMapMode());
+      MapModes.Add(new ParliamentSeatMapMode());
+      MapModes.Add(new CityMapMode());
+      MapModes.Add(new HasCapitalMapMode());
 
 
 

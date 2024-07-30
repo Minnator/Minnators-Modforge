@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 
 namespace Editor.DataClasses.MapModes;
@@ -8,6 +9,7 @@ public abstract class MapMode
    public Bitmap Bitmap { get; set; } = null!;
    public virtual bool IsLandOnly => false;
    public virtual bool ShowOccupation => false;
+   public virtual bool IsProvinceMapMode => true;
 
    public virtual void RenderMapMode(Func<int, Color> method)
    {
@@ -128,5 +130,25 @@ public abstract class MapMode
       var str = string.Empty;
       str = GetMapModeName();
       return str;
+   }
+
+   public virtual void RenderDiplomacy(Country selectedCountry)
+   {
+      Globals.MapWindow.MapPictureBox.IsPainting = true;
+
+      switch (Globals.MapModeRendering)
+      {
+         case MapModeRendering.Cached:
+            Globals.MapModeManager.PictureBox.Image = Bitmap;
+
+            break;
+         case MapModeRendering.Live:
+         case MapModeRendering.LiveBackground:
+            Globals.MapModeManager.PictureBox.Image = Globals.MapModeManager.ShareLiveBitmap;
+
+            break;
+      }
+
+      Globals.MapWindow.MapPictureBox.IsPainting = false;
    }
 }

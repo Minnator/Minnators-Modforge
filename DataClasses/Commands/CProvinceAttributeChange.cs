@@ -19,7 +19,6 @@ namespace Editor.DataClasses.Commands
 
          foreach (var p in _provinces)
          {
-            // TODO special treatment for buildings
             var attr = p.GetAttribute(_attribute);
             if (attr == null)
                Debugger.Break();
