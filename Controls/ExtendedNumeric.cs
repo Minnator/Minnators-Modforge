@@ -7,7 +7,7 @@ namespace Editor.Controls
       // Event to handle the up button press
       public event EventHandler<ProvinceEditedEventArgs> UpButtonPressed = delegate { };
       public event EventHandler<ProvinceEditedEventArgs> DownButtonPressed = delegate { };
-      public event EventHandler<ProvinceEditedEventArgs> OnValueChanged = delegate { };
+      public event EventHandler<ProvinceEditedEventArgs> OnTextValueChanged = delegate { };
 
       private TextBox _textBox;
 
@@ -28,9 +28,9 @@ namespace Editor.Controls
          if (!char.IsDigit(e.KeyChar) && e.KeyChar != '\b' && e.KeyChar != (char)Keys.Enter) 
             e.Handled = true;
 
-         // Raise the OnValueChanged event when the Enter key is pressed == the value has been changed
+         // Raise the OnTextValueChanged event when the Enter key is pressed == the value has been changed
          if (e.KeyChar == (char)Keys.Enter)
-            OnValueChanged?.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Value));
+            OnTextValueChanged?.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Value));
       }
 
       public override void UpButton()

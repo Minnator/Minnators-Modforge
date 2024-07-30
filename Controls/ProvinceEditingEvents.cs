@@ -24,56 +24,56 @@ namespace Editor.Controls
       {
          if (!AllowEditing || e?.Value == null)
             return;
-         Globals.HistoryManager.AddCommand(new CChangeOwner(e.Provinces, e.Value.ToString()!));
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, e.Value.ToString()!, "owner"));
       }
 
       public static void OnControllerChanged(object? sender, ProvinceEditedEventArgs e)
       {
          if (!AllowEditing || e?.Value == null)
             return;
-         Globals.HistoryManager.AddCommand(new CChangeController(e.Provinces, e.Value.ToString()!));
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, e.Value.ToString()!, "controller"));
       }
 
       public static void OnReligionChanged(object? sender, ProvinceEditedEventArgs e)
       {
          if (!AllowEditing || e?.Value == null)
             return;
-         Globals.HistoryManager.AddCommand(new CChangeReligion(e.Provinces, e.Value.ToString()!));
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, e.Value.ToString()!, "religion"));
       }
 
       public static void OnCultureChanged(object? sender, ProvinceEditedEventArgs e)
       {
          if (!AllowEditing || e?.Value == null)
             return;
-         Globals.HistoryManager.AddCommand(new CChangeCulture(e.Provinces, e.Value.ToString()!));
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, e.Value.ToString()!, "culture"));
       }
 
       public static void OnCapitalNameChanged(object? sender, EventArgs e)
       {
          if (!AllowEditing || sender is not TextBox tb)
             return;
-         Globals.HistoryManager.AddCommand(new CChangeCapitalName(Globals.Selection.GetSelectedProvinces, tb.Text));
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Globals.Selection.GetSelectedProvinces, tb.Text, "capital"));
       }
 
-      public static void OnBaseTaxChanged(object? sender, EventArgs e)
+      public static void OnTextBaseTaxChanged(object? sender, EventArgs e)
       {
          if (!AllowEditing || sender is not NumericUpDown nup)
             return;
-         Globals.HistoryManager.AddCommand(new CSetDevelopment(Globals.Selection.GetSelectedProvinces, (int)nup.Value, 0));
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Globals.Selection.GetSelectedProvinces, ((int)nup.Value).ToString(), "base_tax"));
       }
 
-      public static void OnBaseProductionChanged(object? sender, EventArgs e)
+      public static void OnTextBaseProductionChanged(object? sender, EventArgs e)
       {
          if (!AllowEditing || sender is not NumericUpDown nup)
             return;
-         Globals.HistoryManager.AddCommand(new CSetDevelopment(Globals.Selection.GetSelectedProvinces, (int)nup.Value, 1));
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Globals.Selection.GetSelectedProvinces, ((int)nup.Value).ToString(), "base_production"));
       }
 
-      public static void OnBaseManpowerChanged(object? sender, EventArgs e)
+      public static void OnTextBaseManpowerChanged(object? sender, EventArgs e)
       {
          if (!AllowEditing || sender is not NumericUpDown nup)
             return;
-         Globals.HistoryManager.AddCommand(new CSetDevelopment(Globals.Selection.GetSelectedProvinces, (int)nup.Value, 2));
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Globals.Selection.GetSelectedProvinces, ((int)nup.Value).ToString(), "base_manpower"));
       }
    }
 }

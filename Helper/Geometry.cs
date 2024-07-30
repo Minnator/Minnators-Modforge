@@ -407,6 +407,7 @@ public static class Geometry
          if (((pixel.X + pixel.Y) % 8) > 2)
             stripeList.Add(pixel);
       }
+
       return [.. stripeList];
    }
 

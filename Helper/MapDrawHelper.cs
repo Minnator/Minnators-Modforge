@@ -79,7 +79,7 @@ public static class MapDrawHelper
 
    public static void DrawAllProvinceBorders(Bitmap bmp, Color color)
    {
-      DrawOnMap(new Rectangle(0, 0, bmp.Width, bmp.Height), Globals.BorderPixels, color, bmp);
+      DrawOnMap(new (0, 0, bmp.Width, bmp.Height), Globals.BorderPixels, color, bmp);
    }
 
    public static Rectangle DrawProvinceCollection (int[] provinceIds, Color color, Bitmap bmp, bool forceSingleDraw)

@@ -112,9 +112,12 @@ public abstract class MapMode
          case MapModeRendering.Live:
          case MapModeRendering.LiveBackground:
             MapDrawHelper.DrawProvince(id, GetProvinceColor(id), Globals.MapModeManager.ShareLiveBitmap);
-            Globals.MapModeManager.PictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(id, Color.Black, Globals.MapModeManager.ShareLiveBitmap));
             if (ShowOccupation)
                MapDrawHelper.DrawOccupations(false, Globals.MapModeManager.ShareLiveBitmap);
+            if (Globals.Settings.MapModeSettings.ShowCountryCapitals)
+               MapDrawHelper.DrawCapitals(Globals.MapModeManager.ShareLiveBitmap);
+            Globals.MapModeManager.PictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(id, Color.Black, Globals.MapModeManager.ShareLiveBitmap));
+            //TODO fix false border drawing
             break;
       }
       Globals.MapWindow.MapPictureBox.IsPainting = false;

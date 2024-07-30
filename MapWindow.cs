@@ -119,18 +119,19 @@ namespace Editor
          TaxNumeric = ControlFactory.GetExtendedNumeric();
          TaxNumeric.Minimum = 1;
          TaxNumeric.Maximum = 1000;
-         TaxNumeric.OnValueChanged += ProvinceEditingEvents.OnBaseTaxChanged;
+         TaxNumeric.OnTextValueChanged += ProvinceEditingEvents.OnTextBaseTaxChanged;
          DevelopmentLayoutPanel.Controls.Add(TaxNumeric, 1, 0);
 
          ProdNumeric = ControlFactory.GetExtendedNumeric();
          ProdNumeric.Minimum = 1;
          ProdNumeric.Maximum = 1000;
-         ProdNumeric.OnValueChanged += ProvinceEditingEvents.OnBaseProductionChanged;
+         ProdNumeric.OnTextValueChanged += ProvinceEditingEvents.OnTextBaseProductionChanged;
          DevelopmentLayoutPanel.Controls.Add(ProdNumeric, 1, 1);
 
          ManpNumeric = ControlFactory.GetExtendedNumeric();
          ManpNumeric.Minimum = 1;
          ManpNumeric.Maximum = 1000;
+         ManpNumeric.OnTextValueChanged += ProvinceEditingEvents.OnTextBaseManpowerChanged;
          DevelopmentLayoutPanel.Controls.Add(ManpNumeric, 1, 2);
 
          CapitalNameTextBox.Leave += ProvinceEditingEvents.OnCapitalNameChanged;

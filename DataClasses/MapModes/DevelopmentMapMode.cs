@@ -11,7 +11,6 @@ namespace Editor.MapModes;
 public class DevelopmentMapMode : MapMode
 {
    private int _max = int.MinValue;
-   private int _min = int.MaxValue;
 
    public override bool IsLandOnly => true;
 
@@ -30,28 +29,18 @@ public class DevelopmentMapMode : MapMode
    {
       if (e.Value is not int newDev)
          return;
-      var modifiedMinMax = false;
 
-      if (newDev > _max)
-      {
-         _max = newDev;
-         modifiedMinMax = true;
-      }
-      if (newDev < _min)
-      {
-         _min = newDev;
-         modifiedMinMax = true;
-      }
 
-      if (Globals.MapModeManager.CurrentMapMode != this)
-         return;
-
-      if (modifiedMinMax)
+      if (CalculateMinMax())
       {
+         if (Globals.MapModeManager.CurrentMapMode != this)
+            return;
          RenderMapMode(GetProvinceColor);
       }
       else
       {
+         if (Globals.MapModeManager.CurrentMapMode != this)
+            return;
          if (sender is not int id)
             return;
 
@@ -59,15 +48,35 @@ public class DevelopmentMapMode : MapMode
       }
    }
 
-   public void CalculateMinMax()
+   /// <summary>
+   /// Returns if a new max was found
+   /// </summary>
+   /// <returns></returns>
+   public bool CalculateMinMax() //TODO this is calculated twice
    {
+      var newMaxFound = false;
+      var newMax = int.MinValue;
       foreach (var province in Globals.Provinces.Values)
       {
-         if (province.GetTotalDevelopment() > _max)
-            _max = province.GetTotalDevelopment();
-         if (province.GetTotalDevelopment() < _min)
-            _min = province.GetTotalDevelopment();
+         var totalDev = province.GetTotalDevelopment();
+         if (totalDev > newMax)
+         {
+            newMax = totalDev;
+            if (newMax > _max)
+            {
+               _max = newMax;
+               newMaxFound = true;
+            }
+         }
       }
+
+      // If the new max is smaller than the current max, update the max
+      if (newMax < _max)
+      {
+         _max = newMax;
+         newMaxFound = true;
+      }
+      return newMaxFound;
    }
 
    public override void RenderMapMode(Func<int, Color> method)
@@ -82,7 +91,7 @@ public class DevelopmentMapMode : MapMode
          return Globals.Provinces[id].Color;
 
       var totalDev = Globals.Provinces[id].GetTotalDevelopment();
-      return Globals.ColorProvider.GetColorOnGreenRedShade(_min, _max, totalDev);
+      return Globals.ColorProvider.GetColorOnGreenRedShade(0, _max, totalDev);
    }
 
 
