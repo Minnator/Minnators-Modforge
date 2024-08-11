@@ -1,12 +1,10 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace Editor.DataClasses.GameDataClasses;
-#nullable enable
 
 public readonly struct Tag(string tag)
 {
-   public string GetTag => _getTag.ToUpper();
+   public string GetTag => tag.ToUpper();
 
    public override string ToString()
    {
@@ -54,6 +52,5 @@ public readonly struct Tag(string tag)
    }
 
    // Add an empty state to the Tag struct
-   public static readonly Tag Empty = new("");
-   private readonly string _getTag = tag;
+   public static readonly Tag Empty = new("###");
 }

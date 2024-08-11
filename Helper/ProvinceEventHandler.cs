@@ -28,6 +28,13 @@ public static class ProvinceEventHandler
       RaiseProvinceDataChanged(id, value, propertyName);
    }
 
+   public static event EventHandler<ProvinceDataChangedEventArgs> OnProvincePermanentClaimsChanged = delegate { };
+   public static void RaiseProvincePermanentClaimsChanged(int id, object value, string propertyName)
+   {
+      OnProvincePermanentClaimsChanged.Invoke(id, new (value, propertyName));
+      RaiseProvinceDataChanged(id, value, propertyName);
+   }
+
    // Cores
    public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceCoresChanged = delegate { };
    public static void RaiseProvinceCoresChanged(int id, object value, string propertyName)

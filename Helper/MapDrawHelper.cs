@@ -1,7 +1,9 @@
 ﻿using System.Data;
 using System.Diagnostics;
 using System.Drawing.Imaging;
+using ABI.Windows.Foundation;
 using Editor.DataClasses.GameDataClasses;
+using Point = System.Drawing.Point;
 
 namespace Editor.Helper;
 
@@ -290,6 +292,18 @@ public static class MapDrawHelper
    }
    #endregion
 
+   public static Rectangle DrawStripes(Color color, List<int> ids, Bitmap bmp)
+   {
+      var rects = new Rectangle[ids.Count];
+      for (var index = 0; index < ids.Count; index++)
+      {
+         var province = Globals.Provinces[ids[index]];
+         Geometry.GetStripeArray(province, out var stripePixels);
+         rects[index] = DrawOnMap(province.Bounds, stripePixels, color, bmp);
+      }
+
+      return Geometry.GetBounds([..rects]);
+   }
 
    public static void DrawOccupations(bool rebelsOnly, Bitmap bmp)
    {
@@ -307,18 +321,36 @@ public static class MapDrawHelper
          DrawOnMap(province.Bounds, stripePixels, province.GetOccupantColor, bmp);
       }
    }
-
-   public static void DrawCapitals(Bitmap bmp)
+   
+   public static void DrawAllCapitals(Bitmap bmp)
    {
-      using var g = Graphics.FromImage(bmp);
+      List<Point> capitals = [];
+      foreach (var id in Globals.Capitals)
+         capitals.Add(Globals.Provinces[id].Center);
+      DrawCapitals(bmp, capitals);
+   }
 
-      foreach (var country in Globals.Countries.Values)
-      {
-         if (country.Exists && Globals.Provinces.TryGetValue(country.Capital, out var province))
-         {
-            g.DrawRectangle(new (Color.Black, 1), province.Center.X - 2, province.Center.Y - 2, 4, 4);
-            g.DrawRectangle(Pens.Yellow, province.Center.X - 1, province.Center.Y - 1, 2, 2);
-         }
-      }
+   private static void DrawCapitals(Bitmap bmp, List<Point> capitals)
+   {
+      var g = Graphics.FromImage(bmp);
+      foreach (var capital in capitals)
+         DrawCapital(ref g, capital);
+      g.Dispose();
+   }
+
+   private static void DrawCapital(ref Graphics g, Point provinceCenter)
+   {
+      g.DrawRectangle(new(Color.Black, 1), provinceCenter.X - 2, provinceCenter.Y - 2, 4, 4);
+      g.DrawRectangle(Pens.Yellow, provinceCenter.X - 1, provinceCenter.Y - 1, 2, 2);
+   }
+
+   public static void RedrawCapitals(Bitmap bmp, List<int> provinceIds)
+   {
+      List<Point> redrawList = [];
+      foreach (var id in provinceIds)
+         if (Globals.Capitals.TryGetValue(id, out var prov))
+            redrawList.Add(Globals.Provinces[prov].Center);
+      if (redrawList.Count > 0)
+         DrawCapitals(bmp, redrawList);
    }
 }

@@ -1,6 +1,8 @@
-﻿using Editor.Commands;
+﻿using System.Diagnostics;
+using Editor.Commands;
 using Editor.Controls;
 using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.MapModes;
 using Editor.Helper;
 using Editor.Interfaces;
 
@@ -22,7 +24,13 @@ public enum ProvinceEditingStatus
    PreviewUntilSelection, // Province is previewed until a selection is made then the selected province(s) are previewed and editing is allowed
    Selection // Province is only previewd when selected and editing is allowed
 }
-public class Selection(PannablePictureBox pannablePictureBox)
+
+public class CountrySelectionEventArgs(Tag country) : EventArgs
+{
+   public Tag Country { get; set; } = country;
+}
+
+public class Selection
 {
    // Settable color of the selection
    public Color SelectionColor = Color.Orange;
@@ -37,22 +45,47 @@ public class Selection(PannablePictureBox pannablePictureBox)
    public List<Point> LassoSelection = []; // List of points which define the selection polygon
    private bool _clearPolygonSelection;
    private Country _selectedCountry;
+   private readonly PannablePictureBox _pannablePictureBox;
 
    // List of selected provinces
    public List<int> SelectedProvinces { get; set; } = [];
    public HashSet<int> SelectionPreview { get; set; } = [];
 
    // Selected County Handling
+   public EventHandler<CountrySelectionEventArgs> OnSelectedCountryChanged = delegate { };
    public Country SelectedCountry
    {
       get => _selectedCountry;
       set
       {
+         var sw3 = Stopwatch.StartNew();
+         var sw = Stopwatch.StartNew();
+         if (value != _selectedCountry && Globals.MapModeManager.CurrentMapMode is DiplomaticMapMode mapMode)
+         {
+            Debug.WriteLine("------------");
+            // Set flag to remove the old claims and cores
+            mapMode.ClearPreviousCoresClaims = true;
+            mapMode.Update([..SelectionCoresAndClaims]);
+            mapMode.ClearPreviousCoresClaims = false;
+         }
+         sw.Stop();
+         Debug.WriteLine($"Removing claims and cores: {sw.ElapsedMilliseconds}ms");
+         sw.Restart();
          _selectedCountry = value;
-         if (value != Country.Empty)
-            Globals.MapModeManager.CurrentMapMode.RenderDiplomacy(SelectedCountry);
+         if (_selectedCountry != Country.Empty && SelectedProvinces.Count == 1)
+         {
+            if (Globals.MapModeManager.CurrentMapMode is DiplomaticMapMode)
+               Globals.MapModeManager.CurrentMapMode.Update(SelectedProvinces[0]);
+            OnSelectedCountryChanged?.Invoke(this, new (value.Tag));
+         }
+         sw.Stop();
+         Debug.WriteLine($"Country selection and Highlighting: {sw.ElapsedMilliseconds}ms");
+         sw3.Stop();
+         Debug.WriteLine($"Country selection and updates: {sw3.ElapsedMilliseconds}ms");
       }
-   }
+   } 
+   public List<int> SelectionCoresAndClaims { get; set; } = [];
+
 
    // Setting the clearPolygonSelection to false will clear the polygon selection
    public bool ClearPolygonSelection
@@ -83,6 +116,20 @@ public class Selection(PannablePictureBox pannablePictureBox)
          return SelectedProvinces.Select(id => Globals.Provinces[id]).ToList();
       }
    }
+
+   public Selection(PannablePictureBox pb)
+   {
+      _pannablePictureBox = pb;
+      _selectedCountry = Country.Empty;
+
+      OnSelectedCountryChanged += OnSelectedCountryChange_MapUpdate!;
+   }
+
+   public void OnSelectedCountryChange_MapUpdate(object sender, CountrySelectionEventArgs e)
+   {
+
+   }
+
    public void MarkNext(int provPtr)
    {
       if (SelectedProvinces.Count == 1 && SelectedProvinces.Contains(provPtr))
@@ -93,7 +140,7 @@ public class Selection(PannablePictureBox pannablePictureBox)
       {
          Clear();
          Add(provPtr);
-         if (!Globals.MapModeManager.CurrentMapMode.IsProvinceMapMode &&
+         if (Globals.MapModeManager.CurrentMapMode.GetMapModeName() == "Diplomatic" &&
              Globals.Provinces.TryGetValue(provPtr, out var province))
          {
             if (province.Owner == Tag.Empty)
@@ -122,7 +169,7 @@ public class Selection(PannablePictureBox pannablePictureBox)
          SelectedProvinces.Add(provId);
       }
       
-      pannablePictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(provId, SelectionColor, pannablePictureBox.SelectionOverlay));
+      _pannablePictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(provId, SelectionColor, _pannablePictureBox.SelectionOverlay));
    }
 
    public void AddRange(IEnumerable<int> provIds, bool allowDeselect = true, bool isPreview = false)
@@ -137,7 +184,7 @@ public class Selection(PannablePictureBox pannablePictureBox)
          SelectionPreview.Remove(provId);
       else
          SelectedProvinces.Remove(provId);
-      pannablePictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(provId, Color.Transparent, pannablePictureBox.SelectionOverlay));
+      _pannablePictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(provId, Color.Transparent, _pannablePictureBox.SelectionOverlay));
    }
 
    public void RemoveRange(List<int> provIds, bool isPreview = false)
@@ -183,7 +230,7 @@ public class Selection(PannablePictureBox pannablePictureBox)
       if (_rectanglePoint == Point.Empty)
          return;
       // Remove the last selection rectangle
-      DrawRectangle(_lastRectPoint, Color.Transparent, pannablePictureBox.Overlay);
+      DrawRectangle(_lastRectPoint, Color.Transparent, _pannablePictureBox.Overlay);
 
       // Precompute the bounds
       var currentRectBounds = Geometry.GetBounds([_rectanglePoint, point]);
@@ -205,17 +252,17 @@ public class Selection(PannablePictureBox pannablePictureBox)
       RemoveRange(provPtrRemove, true);
 
       // Draw the new selection rectangle
-      DrawRectangle(point, SelectionOutlineColor, pannablePictureBox.Overlay);
+      DrawRectangle(point, SelectionOutlineColor, _pannablePictureBox.Overlay);
    }
 
 
    // Draws a rectangle on the map in reference to the RectanglePoint
    private void DrawRectangle(Point refPoint, Color rectColor, Bitmap bmp)
    {
-      pannablePictureBox.IsPainting = true;
+      _pannablePictureBox.IsPainting = true;
       var rect = Geometry.GetBounds([_rectanglePoint, refPoint]);
-      pannablePictureBox.Invalidate(MapDrawHelper.DrawOnMap(rect, Geometry.GetRectanglePoints(rect), rectColor, bmp));
-      pannablePictureBox.IsPainting = false;
+      _pannablePictureBox.Invalidate(MapDrawHelper.DrawOnMap(rect, Geometry.GetRectanglePoints(rect), rectColor, bmp));
+      _pannablePictureBox.IsPainting = false;
    }
 
    // Enters the rectangle selection and sets the starting point
@@ -230,7 +277,7 @@ public class Selection(PannablePictureBox pannablePictureBox)
    {
       var rect = Geometry.GetBounds([_rectanglePoint, _lastRectPoint]);
       Globals.HistoryManager.AddCommand(new CRectangleSelection(rect), CommandHistoryType.ComplexSelection);
-      DrawRectangle(_lastRectPoint, Color.Transparent, pannablePictureBox.Overlay);
+      DrawRectangle(_lastRectPoint, Color.Transparent, _pannablePictureBox.Overlay);
       _rectanglePoint = Point.Empty;
       SelectionPreview = [];
       State = SelectionState.Single;
@@ -274,4 +321,5 @@ public class Selection(PannablePictureBox pannablePictureBox)
       }
       return result != null;
    }
+
 }

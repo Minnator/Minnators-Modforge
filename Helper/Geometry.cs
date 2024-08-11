@@ -93,6 +93,14 @@ public static class Geometry
       return new Rectangle(minX, minY, maxX - minX, maxY - minY);
    }
 
+   public static Rectangle GetBounds(List<int> ids)
+   {
+      List<Rectangle> rects = [];
+      foreach (var id in ids) 
+         rects.Add(Globals.Provinces[id].Bounds);
+      return GetBounds(rects);
+   }
+
    // Clamps the given value between the given min and max
    public static T Clamp<T> (T value, T min, T max) where T : IComparable<T>
    {
@@ -384,7 +392,7 @@ public static class Geometry
             stripe = [];
             return false;
          }
-         stripe = GetStripeArray(province);
+         GetStripeArray(province, out stripe);
          return true;
       }
 
@@ -393,11 +401,11 @@ public static class Geometry
          stripe = [];
          return false;
       }
-      stripe = GetStripeArray(province);
+      GetStripeArray(province, out stripe);
       return true;
    }
 
-   private static Point[] GetStripeArray(Province province)
+   public static void GetStripeArray(Province province, out Point[] stripes)
    {
       List<Point> stripeList = [];
       var ptr = province.PixelPtr;
@@ -408,7 +416,7 @@ public static class Geometry
             stripeList.Add(pixel);
       }
 
-      return [.. stripeList];
+      stripes = [.. stripeList];
    }
 
    // Method to find a center point within the area

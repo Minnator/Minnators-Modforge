@@ -10,6 +10,8 @@ public abstract class MapMode
    public virtual bool IsLandOnly => false;
    public virtual bool ShowOccupation => false;
    public virtual bool IsProvinceMapMode => true;
+   public virtual bool ShowCapitals => false;
+   public virtual bool BlockDrawingOfCapitals { get; set; } = false;
 
    public virtual void RenderMapMode(Func<int, Color> method)
    {
@@ -40,8 +42,8 @@ public abstract class MapMode
             // draw borders on top of the provinces is always needed
             if (ShowOccupation)
                MapDrawHelper.DrawOccupations(false, Globals.MapModeManager.ShareLiveBitmap);
-            if (Globals.Settings.MapModeSettings.ShowCountryCapitals)
-               MapDrawHelper.DrawCapitals(Globals.MapModeManager.ShareLiveBitmap);
+            if (Globals.Settings.MapModeSettings.ShowCountryCapitals || ShowCapitals)
+               MapDrawHelper.DrawAllCapitals(Globals.MapModeManager.ShareLiveBitmap);
             MapDrawHelper.DrawAllProvinceBorders(Globals.MapModeManager.ShareLiveBitmap, Color.Black);
             Globals.MapModeManager.PictureBox.Image = Globals.MapModeManager.ShareLiveBitmap;
             break;
@@ -50,7 +52,7 @@ public abstract class MapMode
             if (ShowOccupation)
                MapDrawHelper.DrawOccupations(false, Bitmap);
             if (Globals.Settings.MapModeSettings.ShowCountryCapitals)
-               MapDrawHelper.DrawCapitals(Bitmap);
+               MapDrawHelper.DrawAllCapitals(Bitmap);
             MapDrawHelper.DrawAllProvinceBorders(Bitmap, Color.Black);
             Globals.MapModeManager.PictureBox.Image = Bitmap;
             break;
@@ -87,8 +89,40 @@ public abstract class MapMode
 
    public virtual void Update(List<int> ids)
    {
+      if (ids.Count == 0)
+         return;
+      List<Rectangle> rects = [];
+      BlockDrawingOfCapitals = true; // Don't draw the capitals per province, they are more optimized to draw all at once
+
       foreach (var id in ids)
-         Update(id);
+      {
+         Update(id, false);
+         switch (Globals.MapModeRendering)
+         {
+            case MapModeRendering.Live:
+            case MapModeRendering.LiveBackground:
+               rects.Add(MapDrawHelper.DrawProvinceBorder(id, Color.Black, Globals.MapModeManager.ShareLiveBitmap));
+               break;
+            case MapModeRendering.Cached:
+               rects.Add(MapDrawHelper.DrawProvinceBorder(id, Color.Black, Bitmap));
+               break;
+         }
+      }
+      BlockDrawingOfCapitals = false;
+
+      // Drawing all capitals at once is more optimized
+      switch (Globals.MapModeRendering)
+      {
+         case MapModeRendering.Live:
+         case MapModeRendering.LiveBackground:
+            if (Globals.Settings.MapModeSettings.ShowCountryCapitals || ShowCapitals)
+               MapDrawHelper.RedrawCapitals(Globals.MapModeManager.ShareLiveBitmap, ids);
+            break;
+         case MapModeRendering.Cached:
+            break;
+      }
+      var totalRect = Geometry.GetBounds(rects);
+      Globals.MapModeManager.PictureBox.Invalidate(totalRect);
    }
 
    public virtual void UpdateProvince(object sender, ProvinceEventHandler.ProvinceDataChangedEventArgs e)
@@ -100,7 +134,7 @@ public abstract class MapMode
       Update(id);
    }
 
-   public virtual void Update(int id)
+   public virtual void Update(int id, bool invalidate = true)
    {
       Globals.MapWindow.MapPictureBox.IsPainting = true;
       switch (Globals.MapModeRendering)
@@ -109,16 +143,19 @@ public abstract class MapMode
             MapDrawHelper.DrawProvince(id, GetProvinceColor(id), Bitmap);
             if (ShowOccupation)
                MapDrawHelper.DrawOccupations(false, Bitmap);
-            Globals.MapModeManager.PictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(id, Color.Black, Bitmap));
+            if (invalidate)
+               Globals.MapModeManager.PictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(id, Color.Black, Bitmap));
             break;
          case MapModeRendering.Live:
          case MapModeRendering.LiveBackground:
             MapDrawHelper.DrawProvince(id, GetProvinceColor(id), Globals.MapModeManager.ShareLiveBitmap);
             if (ShowOccupation)
                MapDrawHelper.DrawOccupations(false, Globals.MapModeManager.ShareLiveBitmap);
-            if (Globals.Settings.MapModeSettings.ShowCountryCapitals)
-               MapDrawHelper.DrawCapitals(Globals.MapModeManager.ShareLiveBitmap);
-            Globals.MapModeManager.PictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(id, Color.Black, Globals.MapModeManager.ShareLiveBitmap));
+            if (!BlockDrawingOfCapitals)
+               if (Globals.Settings.MapModeSettings.ShowCountryCapitals || ShowCapitals)
+                  MapDrawHelper.RedrawCapitals(Globals.MapModeManager.ShareLiveBitmap, [id]);
+            if (invalidate)
+               Globals.MapModeManager.PictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(id, Color.Black, Globals.MapModeManager.ShareLiveBitmap));
             //TODO fix false border drawing
             break;
       }
@@ -127,28 +164,6 @@ public abstract class MapMode
 
    public virtual string GetSpecificToolTip(int provinceId)
    {
-      var str = string.Empty;
-      str = GetMapModeName();
-      return str;
-   }
-
-   public virtual void RenderDiplomacy(Country selectedCountry)
-   {
-      Globals.MapWindow.MapPictureBox.IsPainting = true;
-
-      switch (Globals.MapModeRendering)
-      {
-         case MapModeRendering.Cached:
-            Globals.MapModeManager.PictureBox.Image = Bitmap;
-
-            break;
-         case MapModeRendering.Live:
-         case MapModeRendering.LiveBackground:
-            Globals.MapModeManager.PictureBox.Image = Globals.MapModeManager.ShareLiveBitmap;
-
-            break;
-      }
-
-      Globals.MapWindow.MapPictureBox.IsPainting = false;
+      return GetMapModeName();
    }
 }

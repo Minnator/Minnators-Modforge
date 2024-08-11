@@ -59,6 +59,8 @@ namespace Editor
          Globals.State = State.Running;
          DateControl.Date = new(1444, 11, 11);
          MapModeComboBox.SelectedIndex = 11;
+
+         Debug.WriteLine($"Number of Capitals: {Globals.Capitals.Count}");
       }
 
 

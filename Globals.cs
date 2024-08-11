@@ -105,21 +105,22 @@ public static class Globals
    public static string ToolTipText = $"$MAPMODE_SPECIFIC$\n------------------\nId:   $id$\nName: $name$\nArea: $area$ ($area%L$)\nRevolt: $revolt$\nIsOccupied: $is_occupied$";
 
    // Contains the border pixels of the provinces
-   public static Point[] BorderPixels = null!;
-   public static Point[] Pixels = null!;
+   public static Point[] BorderPixels = [];
+   public static Point[] Pixels = [];
 
    // Maps the name of TradeGoods to the TradeGood object
    public static Dictionary<string, TradeGood> TradeGoods = [];
    public static Dictionary<string, TradeNode> TradeNodes = [];
 
    // Culture Groups and Cultures
-   public static Dictionary<string, CultureGroup> CultureGroups = null!;
-   public static Dictionary<string, Culture> Cultures = null!;
+   public static Dictionary<string, CultureGroup> CultureGroups = [];
+   public static Dictionary<string, Culture> Cultures = [];
 
    // Contains the provinces and options to access them
-   public static Dictionary<int, Province> Provinces = null!;
-   public static Dictionary<Color, int> ColorToProvId = null!;
-   public static Dictionary<int, int[]> AdjacentProvinces = null!;
+   public static Dictionary<int, Province> Provinces = [];
+   public static Dictionary<Color, int> ColorToProvId = [];
+   public static Dictionary<int, int[]> AdjacentProvinces = [];
+   public static HashSet<int> Capitals = [];
 
    // TechnologyGroups
    public static HashSet<string> TechnologyGroups = [];

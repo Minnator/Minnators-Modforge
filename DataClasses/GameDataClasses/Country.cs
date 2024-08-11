@@ -77,7 +77,21 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
    public List<Tag> HistoricalRivals { get; set; } = [];
    public List<Tag> HistoricalFriends { get; set; } = [];
    public int GovernmentRank { get; set; } = 0;
-   public int Capital { get; set; } = -1;
+   private int _capital = -1;
+   public int Capital
+   {
+      get => _capital;
+      set
+      {
+         // Keeping the capitals list up to date to have a list of all capitals of nations which are currently on the map
+         if (Globals.Capitals.Contains(value) && value != -1 && Exists)
+            Globals.Capitals.Remove(value);
+         _capital = value;
+         if (value != -1 && Exists)
+            Globals.Capitals.Add(value);
+      }
+   }
+
    public int FixedCapital { get; set; } = -1;
    public int Mercantilism { get; set; } = 0;
    public int ArmyTradition { get; set; } = 0;
@@ -152,6 +166,43 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
    public string GetLocalisation()
    {
       return Localisation.GetLoc(Tag);
+   }
+
+   public override string ToString()
+   {
+      return $"{Tag.ToString()} ({GetLocalisation()})";
+   }
+
+   public override bool Equals(object? obj)
+   {
+      if (obj is Country other)
+         return Tag == other.Tag;
+      return false;
+   }
+
+   public override int GetHashCode()
+   {
+      return Tag.GetHashCode();
+   }
+
+   public static bool operator ==(Country a, Country b)
+   {
+      return a.Tag == b.Tag;
+   }
+
+   public static bool operator !=(Country a, Country b)
+   {
+      return a.Tag != b.Tag;
+   }
+
+   public static implicit operator Country(Tag tag)
+   {
+      return Globals.Countries[tag];
+   }
+
+   public static implicit operator Tag(Country country)
+   {
+      return country.Tag;
    }
 }
 

@@ -51,6 +51,7 @@ public class ProvinceData()
    public string LatentTradeGood = string.Empty;            //+ ProvinceHistoryEntry editing interface
    public string ReformationCenter = string.Empty;          //+ ProvinceHistoryEntry editing interface
    public List<Tag> Claims = [];                            //.
+   public List<Tag> PermanentClaims = [];                   //.
    public List<Tag> Cores = [];                             //.
    public List<string> DiscoveredBy = [];                   //.
    public List<string> Buildings = [];                      //.
@@ -218,6 +219,18 @@ public class Province : IProvinceCollection
       }
    }
 
+   public List<Tag> PermanentClaims
+   {
+      get => _data.PermanentClaims;
+      set
+      {
+         _data.PermanentClaims = value;
+         if (Globals.State == State.Running)
+            RaiseProvincePermanentClaimsChanged(Id, value, nameof(PermanentClaims));
+      }
+   }
+
+
    public List<Tag> Cores
    {
       get => _data.Cores;
@@ -248,6 +261,10 @@ public class Province : IProvinceCollection
          _data.Owner = value;
          if (Globals.State == State.Running)
             RaiseProvinceOwnerChanged(Id, value, nameof(Owner));
+         // Trigger an update of the countries capital which will add the capital to the list of capitals if it is not already there 
+         // as a nation could be spawned on the map by setting it as a province owner, and thus it could require to have its capital drawn
+         if (Globals.State != State.Loading)
+            ((Country)_data.Owner).Capital = ((Country)_data.Owner).Capital;
       }
    }
 
@@ -637,6 +654,7 @@ public class Province : IProvinceCollection
       ProvinceData.Area = Area;
       ProvinceData.Continent = Continent;
       ProvinceData.Claims = Claims;
+      ProvinceData.PermanentClaims = PermanentClaims;
       ProvinceData.Cores = Cores;
       ProvinceData.Controller = Controller;
       ProvinceData.Owner = Owner;
@@ -680,6 +698,7 @@ public class Province : IProvinceCollection
       Area = ProvinceData.Area;
       Continent = ProvinceData.Continent;
       Claims = ProvinceData.Claims;
+      PermanentClaims = ProvinceData.PermanentClaims;
       Cores = ProvinceData.Cores;
       Controller = ProvinceData.Controller;
       Owner = ProvinceData.Owner;
@@ -772,7 +791,7 @@ public class Province : IProvinceCollection
          ProvinceAttribute.area => Area, 
          ProvinceAttribute.continent => Continent,
          ProvinceAttribute.claims => Claims,
-         //ProvinceAttribute.permanent_claims => PermanentClaims,
+         ProvinceAttribute.permanent_claims => PermanentClaims,
          ProvinceAttribute.cores => Cores,
          ProvinceAttribute.controller => Controller,
          ProvinceAttribute.owner => Owner,

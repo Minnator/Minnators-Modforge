@@ -38,6 +38,7 @@ public class MapModeManager(PannablePictureBox pictureBox)
       MapModes.Add(new ParliamentSeatMapMode());
       MapModes.Add(new CityMapMode());
       MapModes.Add(new HasCapitalMapMode());
+      MapModes.Add(new DiplomaticMapMode());
 
 
 

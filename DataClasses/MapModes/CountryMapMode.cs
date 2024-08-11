@@ -47,9 +47,9 @@ namespace Editor.DataClasses.MapModes
       {
          base.RenderMapMode(method);
          if (Globals.MapModeRendering == MapModeRendering.Cached)
-            MapDrawHelper.DrawCapitals(Bitmap);
+            MapDrawHelper.DrawAllCapitals(Bitmap);
          else
-            MapDrawHelper.DrawCapitals(Globals.MapModeManager.ShareLiveBitmap);
+            MapDrawHelper.DrawAllCapitals(Globals.MapModeManager.ShareLiveBitmap);
       }
    }
 }
