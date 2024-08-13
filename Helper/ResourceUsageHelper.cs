@@ -25,8 +25,15 @@ namespace Editor.Helper
 
          _mapWindow = mapWindow;
          Updater = new Timer(OnTimerTick, null, 0, 1000);
-         cpuUsage = new PerformanceCounter("Process", "% Processor Time", _appName, true);
-         memoryUsage = new PerformanceCounter("Process", "Private Bytes", _appName, true);
+         //var sw = Stopwatch.StartNew();
+         var initThread = new Thread(() =>
+         {
+            cpuUsage = new ("Process", "% Processor Time", _appName, true);
+            memoryUsage = new ("Process", "Private Bytes", _appName, true);
+         });
+         initThread.Start();
+         //sw.Stop();
+         //Debug.WriteLine("ResourceUsageHelper took: " + sw.ElapsedMilliseconds + "ms");
       }
 
       // Update the CPU and memory usage

@@ -57,19 +57,23 @@ namespace Editor
 
          // MUST BE LAST in the loading sequence
          LoadingManager.InitMapModes(this);
+         Globals.LoadingStage++;
          LoadingManager.InitializeComponents(this);
+         Globals.LoadingStage++;
+
 
          //Needs to be after loading the game data to populate the gui with it
          InitializeEditGui();
+         Globals.LoadingStage++;
          //resume gui updates
-         ResumeLayout();
          // Enable the Application
          Globals.LoadingLog.Close();
-         //ResourceUsageHelper.Initialize(this);
+         ResourceUsageHelper.Initialize(this);
          Globals.State = State.Running;
          DateControl.Date = new(1444, 11, 11);
          MapModeComboBox.SelectedIndex = 11;
-
+         ResumeLayout();
+         Globals.LoadingStage++;
          Show();
          MapPictureBox.FocusOn(new(3100, 600));
       }

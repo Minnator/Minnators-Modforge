@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using Editor.Controls;
 using Editor.Helper;
 using Editor.Loading;
@@ -16,7 +17,7 @@ namespace Editor.Forms.Loadingscreen
          InitializeComponent();
          ContinueButton.Enabled = false;
 
-         //Globals.LoadingStageChanged += LoadingScreen_LoadingStageChanged;
+         Globals.LoadingStageChanged += LoadingScreen_LoadingStageChanged;
 
          ProgressBar = new();
          ProgressBar.Dock = DockStyle.Fill;
@@ -25,6 +26,14 @@ namespace Editor.Forms.Loadingscreen
          StartLoadingAnimation();
 
          StartPosition = FormStartPosition.CenterScreen;
+
+         LoadButton_Click(null, null);
+      }
+      
+      private void LoadingScreen_LoadingStageChanged(object? sender, int e)
+      {
+         ProgressBar.Value = Math.Min(100, (int)((float)e / Globals.LoadingStages * 100));
+         ProgressBar.Invalidate();
       }
 
       private void StartLoadingAnimation()
@@ -43,7 +52,8 @@ namespace Editor.Forms.Loadingscreen
          bw.RunWorkerCompleted += (s, e) => LoadingCompleted();
          bw.ProgressChanged += (s, e) =>
          {
-            ProgressBar.Value = (int)((float)e.ProgressPercentage / Globals.LoadingStages * 100);
+            ProgressBar.Value = Math.Min(100, (int)((float)e.ProgressPercentage / Globals.LoadingStages * 100));
+            ProgressBar.Invalidate();
          };
          bw.RunWorkerAsync();
       }
@@ -88,6 +98,7 @@ namespace Editor.Forms.Loadingscreen
          DebugPrints.PrintCountriesBasic();
 
          GC.Collect();
+         Globals.LoadingStage = progress;
       }
 
       private void LoadingCompleted()
@@ -99,7 +110,6 @@ namespace Editor.Forms.Loadingscreen
 
       private void ContinueButton_Click(object sender, EventArgs e)
       {
-         Globals.MapWindow.Visible = true;
          Globals.MapWindow.Initialize();
          Close();
       }

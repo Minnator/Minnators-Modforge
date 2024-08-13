@@ -70,13 +70,12 @@ public static class Globals {
       get => _loadingStage;
       set
       {
-         Debug.WriteLine(value);
          _loadingStage = value;
          LoadingStageChanged?.Invoke(null, _loadingStage);
       }
    }
    private static int _loadingStage = 0;
-   public static int LoadingStages = 17;
+   public static int LoadingStages = 19;
    public static string LoadingAnimationGif = "C:\\Users\\david\\Downloads\\test.gif";
    #endregion
    
