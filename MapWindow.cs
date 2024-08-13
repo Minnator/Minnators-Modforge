@@ -5,6 +5,7 @@ using Editor.Controls;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Forms;
+using Editor.Forms.Loadingscreen;
 using Editor.Helper;
 using Editor.Loading;
 
@@ -31,6 +32,7 @@ namespace Editor
 
       public PannablePictureBox MapPictureBox = null!;
       public readonly DateControl DateControl = new(DateTime.MinValue, DateControlLayout.Horizontal);
+      private LoadingScreen ls;
 
       public readonly ModProject Project = new()
       {
@@ -40,6 +42,11 @@ namespace Editor
       };
 
       public MapWindow()
+      {
+         RunLoadingScreen();
+      }
+
+      public void Initialize()
       {
          Globals.MapWindow = this;
          //pause gui updates
@@ -59,10 +66,13 @@ namespace Editor
          Globals.State = State.Running;
          DateControl.Date = new(1444, 11, 11);
          MapModeComboBox.SelectedIndex = 11;
-
-         Debug.WriteLine($"Number of Capitals: {Globals.Capitals.Count}");
       }
 
+      private void RunLoadingScreen()
+      {
+         ls = new(this);
+         ls.ShowDialog();
+      }
 
       // Loads the map into the created PannablePictureBox
       private void InitGui()

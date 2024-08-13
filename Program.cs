@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Editor.Forms.Loadingscreen;
 
 namespace Editor
 {
@@ -12,6 +13,7 @@ namespace Editor
       {
          Application.EnableVisualStyles();
          Application.SetCompatibleTextRenderingDefault(false);
+
          Application.Run(new MapWindow());
       }
    }

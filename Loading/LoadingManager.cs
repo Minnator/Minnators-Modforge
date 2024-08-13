@@ -9,25 +9,41 @@ public static class LoadingManager
    public static void LoadGameAndModDataToApplication(ModProject project, MapWindow mw)
    {
       TradeGoodsLoading.Load(project);
+      Globals.LoadingStage += 1;
       TradeNodeLoading.Load(project);
+      Globals.LoadingStage += 1;
       TechnologyGroupsLoading.Load(project);
+      Globals.LoadingStage += 1;
       BuildingsLoading.Load(project);
+      Globals.LoadingStage += 1;
       ReligionLoading.Load(project);
+      Globals.LoadingStage += 1;
       LoadDefinitionAndMap(project); //TODO SLOW
+      Globals.LoadingStage += 1;
       DefaultMapLoading.Load(project.VanillaPath);
+      Globals.LoadingStage += 1;
       AreaLoading.Load(project.VanillaPath, project.ColorProvider);
+      Globals.LoadingStage += 1;
       RegionLoading.Load(project.VanillaPath, project.ColorProvider);
+      Globals.LoadingStage += 1;
       SuperRegionLoading.Load(project.VanillaPath, project.ColorProvider);
+      Globals.LoadingStage += 1;
       ContinentLoading.Load(project.VanillaPath, project.ColorProvider);
+      Globals.LoadingStage += 1;
       LocalisationLoading.Load(project.ModPath, project.VanillaPath, project.Language);
+      Globals.LoadingStage += 1;
       ProvinceParser.ParseAllUniqueProvinces(project.ModPath, project.VanillaPath); //TODO SLOW
+      Globals.LoadingStage += 1;
       CultureLoading.LoadCultures(project);
+      Globals.LoadingStage += 1;
       CountryLoading.LoadCountries(project); //TODO SLOW
-
+      Globals.LoadingStage += 1;
       DebugPrints.PrintCountriesBasic();
+
 
       // MUST BE LAST in the loading sequence
       InitMapModes(mw);
+      Globals.LoadingStage += 1;
       
       GC.Collect();
    }

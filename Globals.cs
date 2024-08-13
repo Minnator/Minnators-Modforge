@@ -9,9 +9,12 @@ using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Settings;
 using Editor.Forms;
 using Editor.Helper;
+using static Editor.Helper.ProvinceEventHandler;
 using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor;
+
+
 
 #region enums
 public enum CommandHistoryType
@@ -57,8 +60,21 @@ public enum EditingStatus
 #endregion
 
 //contains all required and used data across the application and instances of forms.
-public static class Globals
-{
+public static class Globals {
+   public static event EventHandler<int> LoadingStageChanged = delegate { };
+
+   public static int LoadingStage
+   {
+      get => _loadingStage;
+      set
+      {
+         _loadingStage = value;
+         LoadingStageChanged?.Invoke(null, _loadingStage);
+      }
+   }
+   private static int _loadingStage = 0;
+   public static int LoadingStages = 16;
+
    public static ConsoleForm? ConsoleForm = null;
    public static Search? SearchForm = null;
    public static MapWindow MapWindow = null!;
