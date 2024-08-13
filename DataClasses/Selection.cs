@@ -56,11 +56,11 @@ public class Selection
    public Country SelectedCountry
    {
       get => _selectedCountry;
-      set
+      private set
       {
-         var sw3 = Stopwatch.StartNew();
-         var sw = Stopwatch.StartNew();
-         if (value != _selectedCountry && Globals.MapModeManager.CurrentMapMode is DiplomaticMapMode mapMode)
+         if (_selectedCountry == value)
+            return;
+         if (Globals.MapModeManager.CurrentMapMode is DiplomaticMapMode mapMode)
          {
             Debug.WriteLine("------------");
             // Set flag to remove the old claims and cores
@@ -68,9 +68,6 @@ public class Selection
             mapMode.Update([..SelectionCoresAndClaims]);
             mapMode.ClearPreviousCoresClaims = false;
          }
-         sw.Stop();
-         Debug.WriteLine($"Removing claims and cores: {sw.ElapsedMilliseconds}ms");
-         sw.Restart();
          _selectedCountry = value;
          if (_selectedCountry != Country.Empty && SelectedProvinces.Count == 1)
          {
@@ -78,10 +75,6 @@ public class Selection
                Globals.MapModeManager.CurrentMapMode.Update(SelectedProvinces[0]);
             OnSelectedCountryChanged?.Invoke(this, new (value.Tag));
          }
-         sw.Stop();
-         Debug.WriteLine($"Country selection and Highlighting: {sw.ElapsedMilliseconds}ms");
-         sw3.Stop();
-         Debug.WriteLine($"Country selection and updates: {sw3.ElapsedMilliseconds}ms");
       }
    } 
    public List<int> SelectionCoresAndClaims { get; set; } = [];
@@ -196,7 +189,7 @@ public class Selection
    public void Clear()
    {
       RemoveRange(SelectedProvinces);
-      SelectedCountry = Country.Empty;
+      //SelectedCountry = Country.Empty; TODO
    }
 
    public bool Contains(int provPtr) => SelectedProvinces.Contains(provPtr);

@@ -126,6 +126,7 @@ namespace Editor.DataClasses.MapModes
             default:
                throw new ArgumentOutOfRangeException();
          }
+
       }
    }
 }

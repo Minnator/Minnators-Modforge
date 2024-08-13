@@ -1,4 +1,6 @@
-﻿namespace Editor
+﻿using System.Diagnostics;
+
+namespace Editor
 {
    internal static class Program
    {
