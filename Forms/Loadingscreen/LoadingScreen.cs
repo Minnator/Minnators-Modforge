@@ -1,36 +1,97 @@
-﻿using Editor.Controls;
+﻿using System.ComponentModel;
+using System.Diagnostics;
+using Editor.Controls;
+using Editor.Helper;
+using Editor.Loading;
 
 namespace Editor.Forms.Loadingscreen
 {
    public partial class LoadingScreen : Form
    {
-      private const bool SKIP_LOADING = false;
+      private const bool SKIP_LOADING = true;
       private readonly CustomProgressBar ProgressBar;
-      private MapWindow _mw;
 
-      public LoadingScreen(MapWindow mw)
+      public LoadingScreen()
       {
          InitializeComponent();
          ContinueButton.Enabled = false;
 
-         Globals.LoadingStageChanged += LoadingScreen_LoadingStageChanged;
+         //Globals.LoadingStageChanged += LoadingScreen_LoadingStageChanged;
 
          ProgressBar = new();
          ProgressBar.Dock = DockStyle.Fill;
          tableLayoutPanel1.Controls.Add(ProgressBar, 0, 2);
+         
+         StartLoadingAnimation();
 
-         _mw = mw;
+         StartPosition = FormStartPosition.CenterScreen;
       }
 
-      private void LoadingScreen_LoadingStageChanged(object? sender, int e)
+      private void StartLoadingAnimation()
       {
-         ProgressBar.Value = (int)((float)e / Globals.LoadingStages * 100);
+         LoadingAnimation.Image = Image.FromFile(Globals.LoadingAnimationGif);
+         LoadingAnimation.SizeMode = PictureBoxSizeMode.Zoom;
       }
       
       private void LoadButton_Click(object sender, EventArgs e)
       {
          LoadButton.Enabled = false;
-         _mw.Initialize();
+         //create a background worker to load the data
+         var bw = new BackgroundWorker();
+         bw.WorkerReportsProgress = true;
+         bw.DoWork += OnBwOnDoWork;
+         bw.RunWorkerCompleted += (s, e) => LoadingCompleted();
+         bw.ProgressChanged += (s, e) =>
+         {
+            ProgressBar.Value = (int)((float)e.ProgressPercentage / Globals.LoadingStages * 100);
+         };
+         bw.RunWorkerAsync();
+      }
+
+      private void OnBwOnDoWork(object? s, DoWorkEventArgs e)
+      {
+         if (s is not BackgroundWorker bw)
+            return;
+         var project = Globals.MapWindow.Project;
+         var progress = 0;
+         
+         TradeGoodsLoading.Load(project);
+         bw.ReportProgress(++progress);
+         TradeNodeLoading.Load(project);
+         bw.ReportProgress(++progress);
+         TechnologyGroupsLoading.Load(project);
+         bw.ReportProgress(++progress);
+         BuildingsLoading.Load(project);
+         bw.ReportProgress(++progress);
+         ReligionLoading.Load(project);
+         bw.ReportProgress(++progress);
+         LoadingManager.LoadDefinitionAndMap(project); //TODO SLOW
+         bw.ReportProgress(++progress);
+         DefaultMapLoading.Load(project.VanillaPath);
+         bw.ReportProgress(++progress);
+         AreaLoading.Load(project.VanillaPath, project.ColorProvider);
+         bw.ReportProgress(++progress);
+         RegionLoading.Load(project.VanillaPath, project.ColorProvider);
+         bw.ReportProgress(++progress);
+         SuperRegionLoading.Load(project.VanillaPath, project.ColorProvider);
+         bw.ReportProgress(++progress);
+         ContinentLoading.Load(project.VanillaPath, project.ColorProvider);
+         bw.ReportProgress(++progress);
+         LocalisationLoading.Load(project.ModPath, project.VanillaPath, project.Language);
+         bw.ReportProgress(++progress);
+         ProvinceParser.ParseAllUniqueProvinces(project.ModPath, project.VanillaPath); //TODO SLOW
+         bw.ReportProgress(++progress);
+         CultureLoading.LoadCultures(project);
+         bw.ReportProgress(++progress);
+         CountryLoading.LoadCountries(project); //TODO SLOW
+         bw.ReportProgress(++progress);
+         DebugPrints.PrintCountriesBasic();
+
+         GC.Collect();
+      }
+
+      private void LoadingCompleted()
+      {
          ContinueButton.Enabled = true;
          if (SKIP_LOADING)
             ContinueButton.PerformClick();
@@ -38,7 +99,8 @@ namespace Editor.Forms.Loadingscreen
 
       private void ContinueButton_Click(object sender, EventArgs e)
       {
-         _mw.Visible = true;
+         Globals.MapWindow.Visible = true;
+         Globals.MapWindow.Initialize();
          Close();
       }
    }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Security.Policy;
@@ -61,6 +62,7 @@ public enum EditingStatus
 
 //contains all required and used data across the application and instances of forms.
 public static class Globals {
+   #region LoadingScreen
    public static event EventHandler<int> LoadingStageChanged = delegate { };
 
    public static int LoadingStage
@@ -68,13 +70,16 @@ public static class Globals {
       get => _loadingStage;
       set
       {
+         Debug.WriteLine(value);
          _loadingStage = value;
          LoadingStageChanged?.Invoke(null, _loadingStage);
       }
    }
    private static int _loadingStage = 0;
-   public static int LoadingStages = 16;
-
+   public static int LoadingStages = 17;
+   public static string LoadingAnimationGif = "C:\\Users\\david\\Downloads\\test.gif";
+   #endregion
+   
    public static ConsoleForm? ConsoleForm = null;
    public static Search? SearchForm = null;
    public static MapWindow MapWindow = null!;

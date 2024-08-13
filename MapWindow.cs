@@ -43,17 +43,20 @@ namespace Editor
 
       public MapWindow()
       {
+         Globals.MapWindow = this;
          RunLoadingScreen();
       }
 
       public void Initialize()
       {
-         Globals.MapWindow = this;
+         Hide();
          //pause gui updates
          SuspendLayout();
          InitGui();
+         
 
-         LoadingManager.LoadGameAndModDataToApplication(Project, this);
+         // MUST BE LAST in the loading sequence
+         LoadingManager.InitMapModes(this);
          LoadingManager.InitializeComponents(this);
 
          //Needs to be after loading the game data to populate the gui with it
@@ -66,11 +69,14 @@ namespace Editor
          Globals.State = State.Running;
          DateControl.Date = new(1444, 11, 11);
          MapModeComboBox.SelectedIndex = 11;
+
+         Show();
+         MapPictureBox.FocusOn(new(3100, 600));
       }
 
       private void RunLoadingScreen()
       {
-         ls = new(this);
+         ls = new();
          ls.ShowDialog();
       }
 
@@ -468,7 +474,6 @@ namespace Editor
 
       private void MapWindow_Load(object sender, EventArgs e)
       {
-         MapPictureBox.FocusOn(new(3100, 600));
       }
 
       private void searchToolStripMenuItem_Click(object sender, EventArgs e)

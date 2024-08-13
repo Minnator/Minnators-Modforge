@@ -6,7 +6,7 @@ namespace Editor.Loading;
 
 public static class LoadingManager
 {
-   public static void LoadGameAndModDataToApplication(ModProject project, MapWindow mw)
+   public static void LoadGameAndModDataToApplication(ModProject project)
    {
       TradeGoodsLoading.Load(project);
       Globals.LoadingStage += 1;
@@ -40,11 +40,6 @@ public static class LoadingManager
       Globals.LoadingStage += 1;
       DebugPrints.PrintCountriesBasic();
 
-
-      // MUST BE LAST in the loading sequence
-      InitMapModes(mw);
-      Globals.LoadingStage += 1;
-      
       GC.Collect();
    }
 
@@ -56,7 +51,7 @@ public static class LoadingManager
    }
 
 
-   private static void InitMapModes(MapWindow mw)
+   public static void InitMapModes(MapWindow mw)
    {
       var sw = Stopwatch.StartNew();
       Globals.MapModeManager = new(mw.MapPictureBox); // Initialize the MapModeManager
@@ -68,7 +63,7 @@ public static class LoadingManager
    }
 
 
-   private static void LoadDefinitionAndMap(ModProject project)
+   internal static void LoadDefinitionAndMap(ModProject project)
    {
       var provinces = DefinitionLoading.LoadDefinition([.. File.ReadAllLines(Path.Combine(project.VanillaPath, "map", "definition.csv"))]);
       Globals.MapPath = Path.Combine(project.VanillaPath, "map", "provinces.bmp");
