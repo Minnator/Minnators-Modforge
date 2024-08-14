@@ -85,6 +85,7 @@ namespace Editor
 
       private void AfterLoad()
       {
+         GifToBytes.Test();
       }
 
       private void RunLoadingScreen()

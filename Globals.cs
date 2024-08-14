@@ -1,16 +1,10 @@
-﻿using System.Collections.Concurrent;
-using System.Diagnostics;
-using System.Globalization;
-using System.Reflection;
-using System.Security.Policy;
-using Editor.Commands;
+﻿using Editor.Commands;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Settings;
 using Editor.Forms;
 using Editor.Helper;
-using static Editor.Helper.ProvinceEventHandler;
 using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor;
@@ -92,7 +86,7 @@ public static class Globals {
 
    // Date of history
    public static DateTime Date
-   {
+   { 
       get
       {
          return MapWindow.DateControl.Date;

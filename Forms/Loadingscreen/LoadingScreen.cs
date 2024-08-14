@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using Editor.Controls;
 using Editor.Helper;
 using Editor.Loading;
+using Editor.Resources;
 
 namespace Editor.Forms.Loadingscreen
 {
@@ -11,6 +12,7 @@ namespace Editor.Forms.Loadingscreen
    {
       private const bool SKIP_LOADING = true;
       private readonly CustomProgressBar ProgressBar;
+      private MemoryStream ms;
 
       public LoadingScreen()
       {
@@ -29,6 +31,11 @@ namespace Editor.Forms.Loadingscreen
 
          LoadButton_Click(null, null);
       }
+
+      ~LoadingScreen()
+      {
+         ms.Dispose();
+      }
       
       private void LoadingScreen_LoadingStageChanged(object? sender, int e)
       {
@@ -38,7 +45,10 @@ namespace Editor.Forms.Loadingscreen
 
       private void StartLoadingAnimation()
       {
-         LoadingAnimation.Image = Image.FromFile(Globals.LoadingAnimationGif);
+         if (!GifToBytes.ConvertFormattedHexToBytes(StaticByteResources.LoadingGif, out var bytes))
+            throw new ArgumentException("Can not convert loading animation");
+         ms = new (bytes);
+         LoadingAnimation.Image = Image.FromStream(ms);
          LoadingAnimation.SizeMode = PictureBoxSizeMode.Zoom;
       }
       
