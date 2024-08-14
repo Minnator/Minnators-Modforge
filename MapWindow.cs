@@ -69,6 +69,9 @@ namespace Editor
          // Enable the Application
          Globals.LoadingLog.Close();
          ResourceUsageHelper.Initialize(this);
+
+         // ALL LOADING COMPLETE - Set the application to running
+
          Globals.State = State.Running;
          DateControl.Date = new(1444, 11, 11);
          MapModeComboBox.SelectedIndex = 11;
@@ -76,6 +79,12 @@ namespace Editor
          Globals.LoadingStage++;
          Show();
          MapPictureBox.FocusOn(new(3100, 600));
+
+         AfterLoad();
+      }
+
+      private void AfterLoad()
+      {
       }
 
       private void RunLoadingScreen()

@@ -83,12 +83,17 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
       get => _capital;
       set
       {
+         if (value == -1)
+            return;
          // Keeping the capitals list up to date to have a list of all capitals of nations which are currently on the map
-         if (Globals.Capitals.Contains(value) && value != -1 && Exists)
-            Globals.Capitals.Remove(value);
-         _capital = value;
-         if (value != -1 && Exists)
+         if (Exists)
+         {
             Globals.Capitals.Add(value);
+            Globals.Capitals.Remove(_capital);
+         }
+         else
+            Globals.Capitals.Remove(_capital);
+         _capital = value;
       }
    }
 
@@ -113,10 +118,10 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
       get
       {
          List<int> provinces = [];
-         foreach (var prv in Globals.Provinces.Values)
+         foreach (var id in Globals.LandProvinces)
          {
-            if (prv.Owner == Tag)
-               provinces.Add(prv.Id);
+            if (Globals.Provinces[id].Owner == Tag)
+               provinces.Add(id);
          }
          return provinces;
       }
@@ -127,10 +132,10 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
       get
       {
          List<int> provinces = [];
-         foreach (var prv in Globals.Provinces.Values)
+         foreach (var id in Globals.LandProvinces)
          {
-            if (prv.Cores.Contains(Tag))
-               provinces.Add(prv.Id);
+            if (Globals.Provinces[id].Cores.Contains(Tag))
+               provinces.Add(id);
          }
          return provinces;
       }
@@ -141,10 +146,10 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
       get
       {
          List<int> provinces = [];
-         foreach (var prv in Globals.Provinces.Values)
+         foreach (var id in Globals.LandProvinces)
          {
-            if (prv.Claims.Contains(Tag))
-               provinces.Add(prv.Id);
+            if (Globals.Provinces[id].Claims.Contains(Tag))
+               provinces.Add(id);
          }
          return provinces;
       }
@@ -154,9 +159,9 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
    {
       get
       {
-         foreach (var province in Globals.Provinces.Values)
+         foreach (var id in Globals.LandProvinces)
          {
-            if (province.Owner == Tag)
+            if (Globals.Provinces[id].Owner == Tag)
                return true;
          }
          return false;

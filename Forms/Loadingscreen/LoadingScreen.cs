@@ -95,7 +95,6 @@ namespace Editor.Forms.Loadingscreen
          bw.ReportProgress(++progress);
          CountryLoading.LoadCountries(project); //TODO SLOW
          bw.ReportProgress(++progress);
-         DebugPrints.PrintCountriesBasic();
 
          GC.Collect();
          Globals.LoadingStage = progress;

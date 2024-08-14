@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text;
 using System.Windows.Forms;
 using Editor.Helper;
@@ -258,12 +259,14 @@ public class Province : IProvinceCollection
       get => _data.Owner;
       set
       {
+         if (_data.Owner == value)
+            return;
          _data.Owner = value;
          if (Globals.State == State.Running)
             RaiseProvinceOwnerChanged(Id, value, nameof(Owner));
          // Trigger an update of the countries capital which will add the capital to the list of capitals if it is not already there 
          // as a nation could be spawned on the map by setting it as a province owner, and thus it could require to have its capital drawn
-         if (Globals.State != State.Loading)
+         if (Globals.State == State.Running)
             ((Country)_data.Owner).Capital = ((Country)_data.Owner).Capital;
       }
    }
