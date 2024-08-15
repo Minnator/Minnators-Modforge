@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using Editor.Controls;
 using Editor.Helper;
 using Editor.Loading;
@@ -29,7 +27,7 @@ namespace Editor.Forms.Loadingscreen
 
          StartPosition = FormStartPosition.CenterScreen;
 
-         LoadButton_Click(null, null);
+         //LoadButton_Click(null, null);
       }
 
       ~LoadingScreen()

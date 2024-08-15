@@ -5,8 +5,12 @@ namespace Editor.Controls
    public sealed class ExtendedNumeric : NumericUpDown
    {
       // Event to handle the up button press
-      public event EventHandler<ProvinceEditedEventArgs> UpButtonPressed = delegate { };
-      public event EventHandler<ProvinceEditedEventArgs> DownButtonPressed = delegate { };
+      public event EventHandler<ProvinceEditedEventArgs> UpButtonPressedSmall = delegate { };
+      public event EventHandler<ProvinceEditedEventArgs> DownButtonPressedSmall = delegate { };
+      public event EventHandler<ProvinceEditedEventArgs> UpButtonPressedMedium = delegate { };
+      public event EventHandler<ProvinceEditedEventArgs> DownButtonPressedMedium = delegate { };
+      public event EventHandler<ProvinceEditedEventArgs> UpButtonPressedLarge = delegate { };
+      public event EventHandler<ProvinceEditedEventArgs> DownButtonPressedLarge = delegate { };
       public event EventHandler<ProvinceEditedEventArgs> OnTextValueChanged = delegate { };
 
       private TextBox _textBox;
@@ -36,23 +40,23 @@ namespace Editor.Controls
       public override void UpButton()
       {
          base.UpButton();
-         RaiseUpButtonEvent(this, new (Globals.Selection.GetSelectedProvinces, Value));
+         if ((ModifierKeys & Keys.ControlKey) == Keys.ControlKey)
+            DownButtonPressedLarge.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Value));
+         else if ((ModifierKeys & Keys.Shift) == Keys.Shift)
+            DownButtonPressedMedium.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Value));
+         else 
+            UpButtonPressedSmall.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Value));
       }
 
       public override void DownButton()
       {
          base.DownButton();
-         RaiseDownButtonEvent(this, new (Globals.Selection.GetSelectedProvinces, Value));
-      }
-
-      private void RaiseDownButtonEvent(object? sender, ProvinceEditedEventArgs e)
-      {
-         DownButtonPressed?.Invoke(sender, e);
-      }
-
-      private void RaiseUpButtonEvent(object sender, ProvinceEditedEventArgs e)
-      {
-         UpButtonPressed?.Invoke(sender, e);
+         if ((ModifierKeys & Keys.ControlKey) == Keys.ControlKey)
+            DownButtonPressedLarge.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Value));
+         else if ((ModifierKeys & Keys.Shift) == Keys.Shift)
+            DownButtonPressedMedium.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Value));
+         else 
+            DownButtonPressedSmall.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Value));
       }
    }
 }

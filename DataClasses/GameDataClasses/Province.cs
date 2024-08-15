@@ -62,7 +62,7 @@ public class ProvinceData()
    public List<string> ProvinceTriggeredModifiers = [];     // MOD
 }
 
-public enum ProvinceAttribute
+public enum ProvAttr
 {
    base_manpower,
    base_tax,
@@ -103,7 +103,7 @@ public enum ProvinceAttribute
    latent_trade_good
 }
 
-public enum ProvinceAttributeSetter
+public enum ProvAttrSetr
 {
    add_claim,
    remove_claim,
@@ -769,6 +769,11 @@ public class Province : IProvinceCollection
       Status = ProvinceStatus.Modified;
    }
 
+   public object? GetAttribute(ProvAttr key)
+   {
+      return GetAttribute(key.ToString());
+   }
+
    /// <summary>
    /// Returns the value of the given key for the province attribute
    /// </summary>
@@ -779,7 +784,7 @@ public class Province : IProvinceCollection
       if (Globals.BuildingKeys.Contains(key))
          return Buildings.Contains(key) ? "yes" : "no";
 
-      if (!Enum.TryParse<ProvinceAttribute>(key, true, out var getter))
+      if (!Enum.TryParse<ProvAttr>(key, true, out var getter))
       {
          Globals.ErrorLog.Write($"Could not parse {key} attribute for province id {Id}");
          return null;
@@ -787,43 +792,43 @@ public class Province : IProvinceCollection
 
       return getter switch
       {
-         ProvinceAttribute.base_manpower => BaseManpower,
-         ProvinceAttribute.base_tax => BaseTax,
-         ProvinceAttribute.base_production => BaseProduction,
-         ProvinceAttribute.total_development => GetTotalDevelopment(),
-         ProvinceAttribute.area => Area, 
-         ProvinceAttribute.continent => Continent,
-         ProvinceAttribute.claims => Claims,
-         ProvinceAttribute.permanent_claims => PermanentClaims,
-         ProvinceAttribute.cores => Cores,
-         ProvinceAttribute.controller => Controller,
-         ProvinceAttribute.owner => Owner,
-         ProvinceAttribute.tribal_owner => TribalOwner,
-         ProvinceAttribute.center_of_trade => CenterOfTrade,
-         ProvinceAttribute.extra_cost => ExtraCost,
-         ProvinceAttribute.native_ferocity => NativeFerocity,
-         ProvinceAttribute.native_hostileness => NativeHostileness,
-         ProvinceAttribute.native_size => NativeSize,
-         ProvinceAttribute.revolt_risk => RevoltRisk,
-         ProvinceAttribute.local_autonomy => LocalAutonomy,
-         ProvinceAttribute.nationalism => Nationalism,
-         ProvinceAttribute.discovered_by => DiscoveredBy,
-         ProvinceAttribute.capital => Capital,
-         ProvinceAttribute.culture => Culture,
-         ProvinceAttribute.religion => Religion,
-         ProvinceAttribute.buildings => Buildings,
-         ProvinceAttribute.hre => IsHre,
-         ProvinceAttribute.is_city => IsCity,
-         ProvinceAttribute.seat_in_parliament => IsSeatInParliament,
-         ProvinceAttribute.trade_good => TradeGood,
-         ProvinceAttribute.history => History,
-         ProvinceAttribute.id => Id,
-         ProvinceAttribute.name => GetLocalisation(),
-         ProvinceAttribute.revolt => HasRevolt, // Was changed from has_revolt to revolt no idea if this breaks stuff
-         ProvinceAttribute.is_occupied => IsNonRebelOccupied,      
-         ProvinceAttribute.devastation => Devastation,
-         ProvinceAttribute.prosperity => Prosperity,
-         ProvinceAttribute.latent_trade_good => LatentTradeGood,
+         ProvAttr.base_manpower => BaseManpower,
+         ProvAttr.base_tax => BaseTax,
+         ProvAttr.base_production => BaseProduction,
+         ProvAttr.total_development => GetTotalDevelopment(),
+         ProvAttr.area => Area, 
+         ProvAttr.continent => Continent,
+         ProvAttr.claims => Claims,
+         ProvAttr.permanent_claims => PermanentClaims,
+         ProvAttr.cores => Cores,
+         ProvAttr.controller => Controller,
+         ProvAttr.owner => Owner,
+         ProvAttr.tribal_owner => TribalOwner,
+         ProvAttr.center_of_trade => CenterOfTrade,
+         ProvAttr.extra_cost => ExtraCost,
+         ProvAttr.native_ferocity => NativeFerocity,
+         ProvAttr.native_hostileness => NativeHostileness,
+         ProvAttr.native_size => NativeSize,
+         ProvAttr.revolt_risk => RevoltRisk,
+         ProvAttr.local_autonomy => LocalAutonomy,
+         ProvAttr.nationalism => Nationalism,
+         ProvAttr.discovered_by => DiscoveredBy,
+         ProvAttr.capital => Capital,
+         ProvAttr.culture => Culture,
+         ProvAttr.religion => Religion,
+         ProvAttr.buildings => Buildings,
+         ProvAttr.hre => IsHre,
+         ProvAttr.is_city => IsCity,
+         ProvAttr.seat_in_parliament => IsSeatInParliament,
+         ProvAttr.trade_good => TradeGood,
+         ProvAttr.history => History,
+         ProvAttr.id => Id,
+         ProvAttr.name => GetLocalisation(),
+         ProvAttr.revolt => HasRevolt, // Was changed from has_revolt to revolt no idea if this breaks stuff
+         ProvAttr.is_occupied => IsNonRebelOccupied,      
+         ProvAttr.devastation => Devastation,
+         ProvAttr.prosperity => Prosperity,
+         ProvAttr.latent_trade_good => LatentTradeGood,
          _ => null
       };
    }
@@ -835,6 +840,11 @@ public class Province : IProvinceCollection
 
 
       return nonDefaults;
+   }
+
+   public void SetAttribute(ProvAttrSetr key, string value)
+   {
+      SetAttribute(key.ToString(), value);
    }
 
    /// <summary>
@@ -853,7 +863,7 @@ public class Province : IProvinceCollection
          return;
       }
 
-      if (!Enum.TryParse<ProvinceAttributeSetter>(name, true, out var setter))
+      if (!Enum.TryParse<ProvAttrSetr>(name, true, out var setter))
       {
          Globals.ErrorLog.Write($"Could not parse {name} attribute for province id {Id}");
          return;
@@ -861,58 +871,58 @@ public class Province : IProvinceCollection
 
       switch (setter)
       {
-         case ProvinceAttributeSetter.add_claim:
+         case ProvAttrSetr.add_claim:
             Claims.Add(Tag.FromString(value));
             break;
-         case ProvinceAttributeSetter.remove_claim:
+         case ProvAttrSetr.remove_claim:
             Claims.Remove(Tag.FromString(value));
             break;
-         case ProvinceAttributeSetter.add_core:
+         case ProvAttrSetr.add_core:
             Cores.Add(Tag.FromString(value));
             break;
-         case ProvinceAttributeSetter.remove_core:
+         case ProvAttrSetr.remove_core:
             Cores.Remove(Tag.FromString(value));
             break;
-         case ProvinceAttributeSetter.base_manpower:
+         case ProvAttrSetr.base_manpower:
             if (int.TryParse(value, out var manpower))
                BaseManpower = manpower;
             else
                Globals.ErrorLog.Write($"Could not parse base_manpower: {value} for province id {Id}");
             break;
-         case ProvinceAttributeSetter.add_base_manpower:
+         case ProvAttrSetr.add_base_manpower:
             if (int.TryParse(value, out var manpow))
                BaseManpower += manpow;
             else
                Globals.ErrorLog.Write($"Could not parse add_base_manpower: {value} for province id {Id}");
             break;
-         case ProvinceAttributeSetter.base_production:
+         case ProvAttrSetr.base_production:
             if (int.TryParse(value, out var production))
                BaseProduction = production;
             else
                Globals.ErrorLog.Write($"Could not parse base_production: {value} for province id {Id}");
             break;
-         case ProvinceAttributeSetter.add_base_production:
+         case ProvAttrSetr.add_base_production:
             if (int.TryParse(value, out var prod))
                BaseProduction += prod;
             else
                Globals.ErrorLog.Write($"Could not parse add_base_production: {value} for province id {Id}");
             break;
-         case ProvinceAttributeSetter.base_tax:
+         case ProvAttrSetr.base_tax:
             if (int.TryParse(value, out var tax))
                BaseTax = tax;
             else
                Globals.ErrorLog.Write($"Could not parse base_tax: {value} for province id {Id}");
             break;
-         case ProvinceAttributeSetter.add_base_tax:
+         case ProvAttrSetr.add_base_tax:
             if (int.TryParse(value, out var btax))
                BaseTax += btax;
             else
                Globals.ErrorLog.Write($"Could not parse add_base_tax: {value} for province id {Id}");
             break;
-         case ProvinceAttributeSetter.capital:
+         case ProvAttrSetr.capital:
             Capital = value;
             break;
-         case ProvinceAttributeSetter.center_of_trade:
+         case ProvAttrSetr.center_of_trade:
             if (int.TryParse(value, out var cot))
                CenterOfTrade = cot;
             else
@@ -921,122 +931,122 @@ public class Province : IProvinceCollection
                CenterOfTrade = 0;
             }
             break;
-         case ProvinceAttributeSetter.controller:
+         case ProvAttrSetr.controller:
             Controller = Tag.FromString(value);
             break;
-         case ProvinceAttributeSetter.culture:
+         case ProvAttrSetr.culture:
             Culture = value;
             break;
-         case ProvinceAttributeSetter.discovered_by:
+         case ProvAttrSetr.discovered_by:
             DiscoveredBy.Add(value);
             break;
-         case ProvinceAttributeSetter.remove_discovered_by:
+         case ProvAttrSetr.remove_discovered_by:
             DiscoveredBy.Remove(value);
             break;
-         case ProvinceAttributeSetter.extra_cost:
+         case ProvAttrSetr.extra_cost:
             if (int.TryParse(value, out var cost))
                ExtraCost = cost;
             else
                Globals.ErrorLog.Write($"Could not parse extra_cost: {value} for province id {Id}");
             break;
-         case ProvinceAttributeSetter.hre:
+         case ProvAttrSetr.hre:
             IsHre = Parsing.YesNo(value);
             break;
-         case ProvinceAttributeSetter.is_city:
+         case ProvAttrSetr.is_city:
             IsCity = Parsing.YesNo(value);
             break;
-         case ProvinceAttributeSetter.native_ferocity:
+         case ProvAttrSetr.native_ferocity:
             if (int.TryParse(value, out var ferocity))
                NativeFerocity = ferocity;
             else
                Globals.ErrorLog.Write($"Could not parse native_ferocity: {value} for province id {Id}");
             break;
-         case ProvinceAttributeSetter.native_hostileness:
+         case ProvAttrSetr.native_hostileness:
             if (int.TryParse(value, out var hostileness))
                NativeHostileness = hostileness;
             else
                Globals.ErrorLog.Write($"Could not parse native_hostileness: {value} for province id {Id}");
             break;
-         case ProvinceAttributeSetter.native_size:
+         case ProvAttrSetr.native_size:
             if (int.TryParse(value, out var size))
                NativeSize = size;
             else
                Globals.ErrorLog.Write($"Could not parse native_size: {value} for province id {Id}");
             break;
-         case ProvinceAttributeSetter.owner:
+         case ProvAttrSetr.owner:
             Owner = Tag.FromString(value);
             break;
-         case ProvinceAttributeSetter.religion:
+         case ProvAttrSetr.religion:
             Religion = value;
             break;
-         case ProvinceAttributeSetter.seat_in_parliament:
+         case ProvAttrSetr.seat_in_parliament:
             IsSeatInParliament = Parsing.YesNo(value);
             break;
-         case ProvinceAttributeSetter.trade_goods:
+         case ProvAttrSetr.trade_goods:
             if (TradeGoodHelper.IsTradeGood(value))
                TradeGood = value;
             break;
-         case ProvinceAttributeSetter.tribal_owner:
+         case ProvAttrSetr.tribal_owner:
             TribalOwner = Tag.FromString(value);
             break;
-         case ProvinceAttributeSetter.unrest:
+         case ProvAttrSetr.unrest:
             if (int.TryParse(value, out var unrest))
                RevoltRisk = unrest;
             else
                Globals.ErrorLog.Write($"Could not parse unrest: {value} for province id {Id}");
             break;
-         case ProvinceAttributeSetter.shipyard:
+         case ProvAttrSetr.shipyard:
             // TODO parse shipyard
             break;
-         case ProvinceAttributeSetter.revolt:
+         case ProvAttrSetr.revolt:
             HasRevolt = !string.IsNullOrWhiteSpace(value);
             break;
-         case ProvinceAttributeSetter.revolt_risk:
+         case ProvAttrSetr.revolt_risk:
             if (int.TryParse(value, out var risk))
                RevoltRisk = risk;
             else
                Globals.ErrorLog.Write($"Could not parse revolt_risk: {value} for province id {Id}");
             break;
-         case ProvinceAttributeSetter.add_local_autonomy:
+         case ProvAttrSetr.add_local_autonomy:
             if (int.TryParse(value, out var autonomy))
                LocalAutonomy = autonomy;
             else
                Globals.ErrorLog.Write($"Could not parse add_local_autonomy: {value} for province id {Id}");
             break;
-         case ProvinceAttributeSetter.add_nationalism:
+         case ProvAttrSetr.add_nationalism:
             if (int.TryParse(value, out var nationalism))
                Nationalism = nationalism;
             else
                Globals.ErrorLog.Write($"Could not parse add_nationalism: {value} for province id {Id}");
             break;
-         case ProvinceAttributeSetter.add_trade_company_investment:
+         case ProvAttrSetr.add_trade_company_investment:
             TradeCompanyInvestments.Add(value);
             break;
-         case ProvinceAttributeSetter.add_to_trade_company:
+         case ProvAttrSetr.add_to_trade_company:
             TradeCompany = Tag.FromString(value);
             break;
-         case ProvinceAttributeSetter.reformation_center:
+         case ProvAttrSetr.reformation_center:
             ReformationCenter = value;
             break;
-         case ProvinceAttributeSetter.add_province_modifier:
+         case ProvAttrSetr.add_province_modifier:
             ProvinceModifiers.Add(value);
             break;
-         case ProvinceAttributeSetter.remove_province_modifier:
+         case ProvAttrSetr.remove_province_modifier:
             ProvinceModifiers.Remove(value);
             break;
-         case ProvinceAttributeSetter.add_permanent_province_modifier:
+         case ProvAttrSetr.add_permanent_province_modifier:
             PermanentProvinceModifiers.Add(value);
             break;
-         case ProvinceAttributeSetter.remove_permanent_province_modifier:
+         case ProvAttrSetr.remove_permanent_province_modifier:
             PermanentProvinceModifiers.Remove(value);
             break;
-         case ProvinceAttributeSetter.add_province_triggered_modifier:
+         case ProvAttrSetr.add_province_triggered_modifier:
             ProvinceTriggeredModifiers.Add(value);
             break;
-         case ProvinceAttributeSetter.remove_province_triggered_modifier:
+         case ProvAttrSetr.remove_province_triggered_modifier:
             ProvinceTriggeredModifiers.Remove(value);
             break;
-         case ProvinceAttributeSetter.set_global_flag:
+         case ProvAttrSetr.set_global_flag:
             // Case to ignore stuff
             break;
       }

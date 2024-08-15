@@ -297,7 +297,7 @@ public class Selection
    /// <param name="attribute"></param>
    /// <param name="result"></param>
    /// <returns></returns>
-   public bool GetSharedAttribute(string attribute, out object? result)
+   public bool GetSharedAttribute(ProvAttr attribute, out object? result)
    {
       result = null;
       

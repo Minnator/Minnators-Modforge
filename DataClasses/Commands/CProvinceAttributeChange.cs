@@ -9,13 +9,15 @@ namespace Editor.DataClasses.Commands
       private readonly List<Province> _provinces;
       private readonly List<string> _oldValues = [];
       private readonly string _value;
-      private readonly string _attribute;
+      private readonly ProvAttr _attribute;
+      private readonly ProvAttrSetr _setter;
 
-      public CProvinceAttributeChange(List<Province> provinces, string value, string attribute, bool executeOnInit = true)
+      public CProvinceAttributeChange(List<Province> provinces, string value, ProvAttr pa, ProvAttrSetr ps, bool executeOnInit = true)
       {
          _provinces = provinces;
          _value = value;
-         _attribute = attribute;
+         _attribute = pa;
+         _setter = ps;
 
          foreach (var p in _provinces)
          {
@@ -37,14 +39,14 @@ namespace Editor.DataClasses.Commands
          {
             if (province.GetAttribute(_attribute)!.ToString()! == _value)
                continue;
-            province.SetAttribute(_attribute, _value);
+            province.SetAttribute(_setter, _value);
          }
       }
 
       public void Undo()
       {
          for (var i = 0; i < _provinces.Count; i++)
-            _provinces[i].SetAttribute(_attribute, _oldValues[i]);
+            _provinces[i].SetAttribute(_setter, _oldValues[i]);
       }
 
       public void Redo()

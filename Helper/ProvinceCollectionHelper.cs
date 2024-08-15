@@ -14,7 +14,7 @@ namespace Editor.Helper
          return provinces;
       }
 
-      public static List<int> GetProvincesWithAttribute(ProvinceAttribute attribute, object value, bool onlyLandProvinces = true)
+      public static List<int> GetProvincesWithAttribute(ProvAttr attribute, object value, bool onlyLandProvinces = true)
       {
          return GetProvincesWithAttribute(attribute.ToString(), value, onlyLandProvinces);
       }
