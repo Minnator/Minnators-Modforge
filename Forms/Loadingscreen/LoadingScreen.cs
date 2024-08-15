@@ -27,7 +27,7 @@ namespace Editor.Forms.Loadingscreen
 
          StartPosition = FormStartPosition.CenterScreen;
 
-         //LoadButton_Click(null, null);
+         LoadButton_Click(null, null);
       }
 
       ~LoadingScreen()

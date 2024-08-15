@@ -40,23 +40,39 @@ namespace Editor.Controls
       public override void UpButton()
       {
          base.UpButton();
-         if ((ModifierKeys & Keys.ControlKey) == Keys.ControlKey)
-            DownButtonPressedLarge.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Value));
-         else if ((ModifierKeys & Keys.Shift) == Keys.Shift)
-            DownButtonPressedMedium.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Value));
-         else 
+         if (ModifierKeys.HasFlag(Keys.Control))
+         {
+            Value = Math.Min(Value + 9, Maximum);
+            UpButtonPressedLarge.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Value));
+         }
+         else if (ModifierKeys.HasFlag(Keys.Shift))
+         {
+            Value = Math.Min(Value + 4, Maximum);
+            UpButtonPressedMedium.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Value));
+         }
+         else
+         { 
             UpButtonPressedSmall.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Value));
+         }
       }
 
       public override void DownButton()
       {
          base.DownButton();
-         if ((ModifierKeys & Keys.ControlKey) == Keys.ControlKey)
+         if (ModifierKeys.HasFlag(Keys.Control))
+         {
+            Value = Math.Max(Value - 9, Minimum);
             DownButtonPressedLarge.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Value));
-         else if ((ModifierKeys & Keys.Shift) == Keys.Shift)
+         }
+         else if (ModifierKeys.HasFlag(Keys.Shift))
+         {
+            Value = Math.Max(Value - 4, Minimum);
             DownButtonPressedMedium.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Value));
-         else 
+         }
+         else
+         {
             DownButtonPressedSmall.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Value));
+         }
       }
    }
 }

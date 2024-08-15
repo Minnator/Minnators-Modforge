@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Editor.Helper;
 using Editor.Interfaces;
@@ -287,7 +288,7 @@ public class Province : IProvinceCollection
       get => _data.BaseManpower;
       set
       {
-         _data.BaseManpower = value;
+         _data.BaseManpower = Math.Max(0, value);
          if (Globals.State == State.Running)
             RaiseProvinceBaseManpowerChanged(Id, value, nameof(BaseManpower));
       }
@@ -298,7 +299,7 @@ public class Province : IProvinceCollection
       get => _data.BaseTax;
       set
       {
-         _data.BaseTax = value;
+         _data.BaseTax = Math.Max(0, value);
          if (Globals.State == State.Running)
             RaiseProvinceBaseTaxChanged(Id, value, nameof(BaseTax));
       }
@@ -309,7 +310,7 @@ public class Province : IProvinceCollection
       get => _data.BaseProduction;
       set
       {
-         _data.BaseProduction = value;
+         _data.BaseProduction = Math.Max(0, value);
          if (Globals.State == State.Running)
             RaiseProvinceBaseProductionChanged(Id, value, nameof(BaseProduction));
       }
@@ -320,7 +321,7 @@ public class Province : IProvinceCollection
       get => _data.CenterOfTrade;
       set
       {
-         _data.CenterOfTrade = value;
+         _data.CenterOfTrade = Math.Max(0, value);
          if (Globals.State == State.Running)
             RaiseProvinceCenterOfTradeLevelChanged(Id, value, nameof(CenterOfTrade));
       }
@@ -331,7 +332,7 @@ public class Province : IProvinceCollection
       get => _data.ExtraCost;
       set
       {
-         _data.ExtraCost = value;
+         _data.ExtraCost = Math.Max(0, value);
          if (Globals.State == State.Running)
             RaiseProvinceExtraCostChanged(Id, value, nameof(ExtraCost));
       }

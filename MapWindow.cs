@@ -159,21 +159,39 @@ namespace Editor
          ReligionComboBox.OnDataChanged += ProvinceEditingEvents.OnReligionChanged;
 
          TaxNumeric = ControlFactory.GetExtendedNumeric();
-         TaxNumeric.Minimum = 1;
+         TaxNumeric.Minimum = 0;
          TaxNumeric.Maximum = 1000;
          TaxNumeric.OnTextValueChanged += ProvinceEditingEvents.OnTextBaseTaxChanged;
+         TaxNumeric.UpButtonPressedSmall += ProvinceEditingEvents.OnUpBaseTaxChanged;
+         TaxNumeric.UpButtonPressedMedium += ProvinceEditingEvents.OnUpTaxButtonButtonPressedMedium;
+         TaxNumeric.UpButtonPressedLarge += ProvinceEditingEvents.OnUpBaseTaxButtonPressedLarge;
+         TaxNumeric.DownButtonPressedSmall += ProvinceEditingEvents.OnDownBaseTaxChanged;
+         TaxNumeric.DownButtonPressedMedium += ProvinceEditingEvents.OnDownBaseTaxButtonPressedMedium;
+         TaxNumeric.DownButtonPressedLarge += ProvinceEditingEvents.OnDownBaseTaxButtonPressedLarge;
          DevelopmentLayoutPanel.Controls.Add(TaxNumeric, 1, 0);
 
          ProdNumeric = ControlFactory.GetExtendedNumeric();
-         ProdNumeric.Minimum = 1;
+         ProdNumeric.Minimum = 0;
          ProdNumeric.Maximum = 1000;
          ProdNumeric.OnTextValueChanged += ProvinceEditingEvents.OnTextBaseProductionChanged;
+         ProdNumeric.UpButtonPressedSmall += ProvinceEditingEvents.OnUpBaseProductionChanged;
+         ProdNumeric.UpButtonPressedMedium += ProvinceEditingEvents.OnUpButtonPressedMediumProduction;
+         ProdNumeric.UpButtonPressedLarge += ProvinceEditingEvents.OnUpButtonPressedLargeProduction;
+         ProdNumeric.DownButtonPressedSmall += ProvinceEditingEvents.OnDownBaseProductionChanged;
+         ProdNumeric.DownButtonPressedMedium += ProvinceEditingEvents.OnDownButtonPressedMediumProduction;
+         ProdNumeric.DownButtonPressedLarge += ProvinceEditingEvents.OnDownButtonPressedLargeProduction;
          DevelopmentLayoutPanel.Controls.Add(ProdNumeric, 1, 1);
 
          ManpNumeric = ControlFactory.GetExtendedNumeric();
-         ManpNumeric.Minimum = 1;
+         ManpNumeric.Minimum = 0;
          ManpNumeric.Maximum = 1000;
          ManpNumeric.OnTextValueChanged += ProvinceEditingEvents.OnTextBaseManpowerChanged;
+         ManpNumeric.UpButtonPressedSmall += ProvinceEditingEvents.OnUpBaseManpowerChanged;
+         ManpNumeric.UpButtonPressedMedium += ProvinceEditingEvents.OnUpButtonPressedMediumManpower;
+         ManpNumeric.UpButtonPressedLarge += ProvinceEditingEvents.OnUpButtonPressedLargeManpower;
+         ManpNumeric.DownButtonPressedSmall += ProvinceEditingEvents.OnDownBaseManpowerChanged;
+         ManpNumeric.DownButtonPressedMedium += ProvinceEditingEvents.OnDownButtonPressedMediumManpower;
+         ManpNumeric.DownButtonPressedLarge += ProvinceEditingEvents.OnDownButtonPressedLargeManpower;
          DevelopmentLayoutPanel.Controls.Add(ManpNumeric, 1, 2);
 
          CapitalNameTextBox.Leave += ProvinceEditingEvents.OnCapitalNameChanged;

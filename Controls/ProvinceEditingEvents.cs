@@ -167,5 +167,132 @@ namespace Editor.Controls
             return;
          Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, "no", ProvAttr.discovered_by, ProvAttrSetr.remove_discovered_by));
       }
+
+      public static void OnUpBaseTaxChanged(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.base_tax, ProvAttrSetr.base_tax, 1, true));
+      }
+
+      public static void OnUpTaxButtonButtonPressedMedium(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.base_tax, ProvAttrSetr.base_tax, 5, true));
+      }
+
+      public static void OnUpBaseTaxButtonPressedLarge(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.base_tax, ProvAttrSetr.base_tax, 10, true));
+      }
+
+      public static void OnDownBaseTaxChanged(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.base_tax, ProvAttrSetr.base_tax, 1, false));
+      }
+
+      public static void OnDownBaseTaxButtonPressedMedium(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.base_tax, ProvAttrSetr.base_tax, 5, false));
+      }
+
+      public static void OnDownBaseTaxButtonPressedLarge(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.base_tax, ProvAttrSetr.base_tax, 10, false));
+      }
+
+      public static void OnUpBaseProductionChanged(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.base_production, ProvAttrSetr.base_production, 1, true));
+      }
+
+      public static void OnUpButtonPressedMediumProduction(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.base_production, ProvAttrSetr.base_production, 5, true));
+      }
+
+      public static void OnUpButtonPressedLargeProduction(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.base_production, ProvAttrSetr.base_production, 10, true));
+      }
+
+      public static void OnDownBaseProductionChanged(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.base_production, ProvAttrSetr.base_production, 1, false));
+      }
+
+      public static void OnDownButtonPressedMediumProduction(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.base_production, ProvAttrSetr.base_production, 5, false));
+      }
+
+      public static void OnDownButtonPressedLargeProduction(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.base_production, ProvAttrSetr.base_production, 10, false));
+      }
+
+      public static void OnUpBaseManpowerChanged(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.base_manpower, ProvAttrSetr.base_manpower, 1, true));
+      }
+
+      public static void OnUpButtonPressedMediumManpower(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.base_manpower, ProvAttrSetr.base_manpower, 5, true));
+      }
+
+      public static void OnUpButtonPressedLargeManpower(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.base_manpower, ProvAttrSetr.base_manpower, 10, true));
+      }
+
+      public static void OnDownBaseManpowerChanged(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.base_manpower, ProvAttrSetr.base_manpower, 1, false));
+      }
+
+      public static void OnDownButtonPressedMediumManpower(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.base_manpower, ProvAttrSetr.base_manpower, 5, false));
+      }
+
+      public static void OnDownButtonPressedLargeManpower(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.base_manpower, ProvAttrSetr.base_manpower, 10, false));
+      }
+
    }
 }
