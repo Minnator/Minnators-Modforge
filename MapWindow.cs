@@ -74,6 +74,7 @@ namespace Editor
 
          Globals.State = State.Running;
          DateControl.Date = new(1444, 11, 11);
+         Globals.LoadingStage++;
          MapModeComboBox.SelectedIndex = 11;
          ResumeLayout();
          Globals.LoadingStage++;

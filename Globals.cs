@@ -69,8 +69,7 @@ public static class Globals {
       }
    }
    private static int _loadingStage = 0;
-   public static int LoadingStages = 19;
-   public static string LoadingAnimationGif = "C:\\Users\\david\\Downloads\\test.gif";
+   public static int LOADING_STAGES = 20;
    #endregion
    
    public static ConsoleForm? ConsoleForm = null;

@@ -37,13 +37,13 @@ namespace Editor.Forms.Loadingscreen
       
       private void LoadingScreen_LoadingStageChanged(object? sender, int e)
       {
-         ProgressBar.Value = Math.Min(100, (int)((float)e / Globals.LoadingStages * 100));
+         ProgressBar.Value = Math.Min(100, (int)((float)e / Globals.LOADING_STAGES * 100));
          ProgressBar.Invalidate();
       }
 
       private void StartLoadingAnimation()
       {
-         if (!GifToBytes.ConvertFormattedHexToBytes(StaticByteResources.LoadingGif, out var bytes))
+         if (!GifToBytes.ConvertFormattedHexToBytes(StaticByteResources.LOADING_GIF, out var bytes))
             throw new ArgumentException("Can not convert loading animation");
          ms = new (bytes);
          LoadingAnimation.Image = Image.FromStream(ms);
@@ -60,7 +60,7 @@ namespace Editor.Forms.Loadingscreen
          bw.RunWorkerCompleted += (s, e) => LoadingCompleted();
          bw.ProgressChanged += (s, e) =>
          {
-            ProgressBar.Value = Math.Min(100, (int)((float)e.ProgressPercentage / Globals.LoadingStages * 100));
+            ProgressBar.Value = Math.Min(100, (int)((float)e.ProgressPercentage / Globals.LOADING_STAGES * 100));
             ProgressBar.Invalidate();
          };
          bw.RunWorkerAsync();
