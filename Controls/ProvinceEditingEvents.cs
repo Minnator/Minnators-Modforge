@@ -294,5 +294,152 @@ namespace Editor.Controls
          Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.base_manpower, ProvAttrSetr.base_manpower, 10, false));
       }
 
+      public static void OnTextLocalAutonomyChanged(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, e.Value.ToString()!, ProvAttr.local_autonomy, ProvAttrSetr.add_local_autonomy));
+      }
+
+
+      public static void OnUpLocalAutonomyChanged(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.local_autonomy, ProvAttrSetr.add_local_autonomy, 1, true));
+      }
+
+      public static void OnUpButtonPressedMediumLocalAutonomy(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.local_autonomy, ProvAttrSetr.add_local_autonomy, 5, true));
+      }
+
+      public static void OnUpButtonPressedLargeLocalAutonomy(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.local_autonomy, ProvAttrSetr.add_local_autonomy, 10, true));
+      }
+
+      public static void OnDownLocalAutonomyChanged(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.local_autonomy, ProvAttrSetr.add_local_autonomy, 1, false));
+      }
+
+      public static void OnDownButtonPressedMediumLocalAutonomy(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.local_autonomy, ProvAttrSetr.add_local_autonomy, 5, false));
+      }
+
+      public static void OnDownButtonPressedLargeLocalAutonomy(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.local_autonomy, ProvAttrSetr.add_local_autonomy, 10, false));
+      }
+
+      public static void OnTextDevastationChanged(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, e.Value.ToString()!, ProvAttr.devastation, ProvAttrSetr.devastation));
+      }
+
+      public static void OnUpDevastationChanged(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.devastation, ProvAttrSetr.devastation, 1, true));
+      }
+
+      public static void OnUpButtonPressedMediumDevastation(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.devastation, ProvAttrSetr.devastation, 5, true));
+      }
+
+      public static void OnUpButtonPressedLargeDevastation(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.devastation, ProvAttrSetr.devastation, 10, true));
+      }
+
+      public static void OnDownDevastationChanged(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.devastation, ProvAttrSetr.devastation, 1, false));
+      }
+
+      public static void OnDownButtonPressedMediumDevastation(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.devastation, ProvAttrSetr.devastation, 5, false));
+      }
+
+      public static void OnDownButtonPressedLargeDevastation(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.devastation, ProvAttrSetr.devastation, 10, false));
+      }
+
+      public static void OnTextProsperityChanged(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, e.Value.ToString()!, ProvAttr.prosperity, ProvAttrSetr.prosperity));
+      }
+      
+      public static void OnUpProsperityChanged(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.prosperity, ProvAttrSetr.prosperity, 1, true));
+      }
+
+      public static void OnUpButtonPressedMediumProsperity(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.prosperity, ProvAttrSetr.prosperity, 5, true));
+      }
+
+      public static void OnUpButtonPressedLargeProsperity(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.prosperity, ProvAttrSetr.prosperity, 10, true));
+      }
+
+      public static void OnDownProsperityChanged(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.prosperity, ProvAttrSetr.prosperity, 1, false));
+      }
+
+      public static void OnDownButtonPressedMediumProsperity(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.prosperity, ProvAttrSetr.prosperity, 5, false));
+      }
+
+      public static void OnDownButtonPressedLargeProsperity(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.prosperity, ProvAttrSetr.prosperity, 10, false));
+      }
    }
 }

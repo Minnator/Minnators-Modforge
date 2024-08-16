@@ -14,6 +14,8 @@ namespace Editor.DataClasses.Commands
 
       public CModifyValue(List<Province> provinces, ProvAttr attribute, ProvAttrSetr ps, int value, bool increase, bool executeOnInit = true)
       {
+         if (provinces.Count == 0)
+            return;
          _provinces = provinces;
          _attribute = attribute;
          _setter = ps;
@@ -28,11 +30,20 @@ namespace Editor.DataClasses.Commands
       {
          foreach (var province in _provinces)
          {
-            var attr = (int)province.GetAttribute(_attribute)!;
+            var attributeValue = province.GetAttribute(_attribute);
+
+            var attr = attributeValue switch
+            {
+               int intValue => intValue,
+               float floatValue => (int)floatValue,
+               _ => throw new InvalidOperationException($"Cannot convert attribute {_attribute} to int or float.")
+            };
+
             if (_increase)
                attr += _value;
             else
                attr -= _value;
+
             province.SetAttribute(_setter, attr.ToString());
          }
       }
@@ -41,11 +52,27 @@ namespace Editor.DataClasses.Commands
       {
          foreach (var province in _provinces)
          {
-            var attr = (int)province.GetAttribute(_attribute)!;
+            object? attributeValue = province.GetAttribute(_attribute);
+            int attr;
+
+            if (attributeValue is int intValue)
+            {
+               attr = intValue;
+            }
+            else if (attributeValue is float floatValue)
+            {
+               attr = (int)floatValue;
+            }
+            else
+            {
+               throw new InvalidOperationException($"Cannot convert attribute {_attribute} to int or float.");
+            }
+
             if (_increase)
                attr -= _value;
             else
                attr += _value;
+
             province.SetAttribute(_setter, attr.ToString());
          }
       }

@@ -63,11 +63,15 @@
          TopStripLayoutPanel = new TableLayoutPanel();
          OwnerCountryNameLabel = new Label();
          ProvinceNameLabel = new Label();
-         IsAlreadyEditedLabel = new Label();
          EditingModeLabel = new Label();
+         tableLayoutPanel1 = new TableLayoutPanel();
+         label14 = new Label();
+         label15 = new Label();
+         AttirbuteCombobox = new ComboBox();
+         numericUpDown1 = new NumericUpDown();
          toolStripContainer1 = new ToolStripContainer();
          toolStrip2 = new ToolStrip();
-         newToolStripButton = new ToolStripButton();
+         MagicWandToolButton = new ToolStripButton();
          openToolStripButton = new ToolStripButton();
          saveToolStripButton = new ToolStripButton();
          printToolStripButton = new ToolStripButton();
@@ -111,13 +115,10 @@
          TradeCompanyTab = new TabPage();
          ModifiersTab = new TabPage();
          groupBox5 = new GroupBox();
-         tableLayoutPanel1 = new TableLayoutPanel();
+         FloatLayoutPanel = new TableLayoutPanel();
          label9 = new Label();
          label10 = new Label();
          DevastationLabel = new Label();
-         AutonomyNumeric = new NumericUpDown();
-         DevastationNumeric = new NumericUpDown();
-         ProsperityNumeric = new NumericUpDown();
          groupBox6 = new GroupBox();
          tableLayoutPanel5 = new TableLayoutPanel();
          TradeGoodsComboBox = new ComboBox();
@@ -132,6 +133,8 @@
          toolStrip1.SuspendLayout();
          MainLayoutPanel.SuspendLayout();
          TopStripLayoutPanel.SuspendLayout();
+         tableLayoutPanel1.SuspendLayout();
+         ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
          toolStripContainer1.ContentPanel.SuspendLayout();
          toolStripContainer1.RightToolStripPanel.SuspendLayout();
          toolStripContainer1.SuspendLayout();
@@ -150,10 +153,7 @@
          CoresAndClaimsBox.SuspendLayout();
          OptionalsTabControl.SuspendLayout();
          groupBox5.SuspendLayout();
-         tableLayoutPanel1.SuspendLayout();
-         ((System.ComponentModel.ISupportInitialize)AutonomyNumeric).BeginInit();
-         ((System.ComponentModel.ISupportInitialize)DevastationNumeric).BeginInit();
-         ((System.ComponentModel.ISupportInitialize)ProsperityNumeric).BeginInit();
+         FloatLayoutPanel.SuspendLayout();
          groupBox6.SuspendLayout();
          tableLayoutPanel5.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)ExtraCostNumeric).BeginInit();
@@ -395,15 +395,15 @@
          // TopStripLayoutPanel
          // 
          TopStripLayoutPanel.ColumnCount = 5;
-         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 270F));
+         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
          TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 210F));
          TopStripLayoutPanel.Controls.Add(OwnerCountryNameLabel, 1, 0);
          TopStripLayoutPanel.Controls.Add(ProvinceNameLabel, 2, 0);
-         TopStripLayoutPanel.Controls.Add(IsAlreadyEditedLabel, 0, 0);
          TopStripLayoutPanel.Controls.Add(EditingModeLabel, 3, 0);
+         TopStripLayoutPanel.Controls.Add(tableLayoutPanel1, 0, 0);
          TopStripLayoutPanel.Dock = DockStyle.Fill;
          TopStripLayoutPanel.Location = new Point(400, 0);
          TopStripLayoutPanel.Margin = new Padding(0);
@@ -417,9 +417,9 @@
          // 
          OwnerCountryNameLabel.AutoSize = true;
          OwnerCountryNameLabel.Dock = DockStyle.Fill;
-         OwnerCountryNameLabel.Location = new Point(228, 0);
+         OwnerCountryNameLabel.Location = new Point(273, 0);
          OwnerCountryNameLabel.Name = "OwnerCountryNameLabel";
-         OwnerCountryNameLabel.Size = new Size(219, 26);
+         OwnerCountryNameLabel.Size = new Size(204, 26);
          OwnerCountryNameLabel.TabIndex = 0;
          OwnerCountryNameLabel.Text = "Owner: -";
          OwnerCountryNameLabel.TextAlign = ContentAlignment.MiddleCenter;
@@ -428,34 +428,84 @@
          // 
          ProvinceNameLabel.AutoSize = true;
          ProvinceNameLabel.Dock = DockStyle.Fill;
-         ProvinceNameLabel.Location = new Point(453, 0);
+         ProvinceNameLabel.Location = new Point(483, 0);
          ProvinceNameLabel.Name = "ProvinceNameLabel";
-         ProvinceNameLabel.Size = new Size(219, 26);
+         ProvinceNameLabel.Size = new Size(204, 26);
          ProvinceNameLabel.TabIndex = 1;
          ProvinceNameLabel.Text = "Province: -";
          ProvinceNameLabel.TextAlign = ContentAlignment.MiddleCenter;
-         // 
-         // IsAlreadyEditedLabel
-         // 
-         IsAlreadyEditedLabel.AutoSize = true;
-         IsAlreadyEditedLabel.Dock = DockStyle.Fill;
-         IsAlreadyEditedLabel.Location = new Point(3, 0);
-         IsAlreadyEditedLabel.Name = "IsAlreadyEditedLabel";
-         IsAlreadyEditedLabel.Size = new Size(219, 26);
-         IsAlreadyEditedLabel.TabIndex = 2;
-         IsAlreadyEditedLabel.Text = "Edited: -";
-         IsAlreadyEditedLabel.TextAlign = ContentAlignment.MiddleCenter;
          // 
          // EditingModeLabel
          // 
          EditingModeLabel.AutoSize = true;
          EditingModeLabel.Dock = DockStyle.Fill;
-         EditingModeLabel.Location = new Point(678, 0);
+         EditingModeLabel.Location = new Point(693, 0);
          EditingModeLabel.Name = "EditingModeLabel";
-         EditingModeLabel.Size = new Size(219, 26);
+         EditingModeLabel.Size = new Size(204, 26);
          EditingModeLabel.TabIndex = 3;
          EditingModeLabel.Text = "Idle Mode: -";
          EditingModeLabel.TextAlign = ContentAlignment.MiddleCenter;
+         // 
+         // tableLayoutPanel1
+         // 
+         tableLayoutPanel1.ColumnCount = 4;
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 61F));
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 58.6666679F));
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 41.3333321F));
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 45F));
+         tableLayoutPanel1.Controls.Add(label14, 0, 0);
+         tableLayoutPanel1.Controls.Add(label15, 2, 0);
+         tableLayoutPanel1.Controls.Add(AttirbuteCombobox, 1, 0);
+         tableLayoutPanel1.Controls.Add(numericUpDown1, 3, 0);
+         tableLayoutPanel1.Dock = DockStyle.Fill;
+         tableLayoutPanel1.Location = new Point(0, 0);
+         tableLayoutPanel1.Margin = new Padding(0);
+         tableLayoutPanel1.Name = "tableLayoutPanel1";
+         tableLayoutPanel1.RowCount = 1;
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         tableLayoutPanel1.Size = new Size(270, 26);
+         tableLayoutPanel1.TabIndex = 4;
+         // 
+         // label14
+         // 
+         label14.AutoSize = true;
+         label14.Dock = DockStyle.Fill;
+         label14.Location = new Point(3, 0);
+         label14.Name = "label14";
+         label14.Size = new Size(55, 26);
+         label14.TabIndex = 0;
+         label14.Text = "attribute";
+         label14.TextAlign = ContentAlignment.MiddleCenter;
+         // 
+         // label15
+         // 
+         label15.AutoSize = true;
+         label15.Dock = DockStyle.Fill;
+         label15.Location = new Point(160, 0);
+         label15.Name = "label15";
+         label15.Size = new Size(61, 26);
+         label15.TabIndex = 1;
+         label15.Text = "tolerance";
+         label15.TextAlign = ContentAlignment.MiddleCenter;
+         // 
+         // AttirbuteCombobox
+         // 
+         AttirbuteCombobox.Dock = DockStyle.Fill;
+         AttirbuteCombobox.FormattingEnabled = true;
+         AttirbuteCombobox.Location = new Point(61, 0);
+         AttirbuteCombobox.Margin = new Padding(0);
+         AttirbuteCombobox.Name = "AttirbuteCombobox";
+         AttirbuteCombobox.Size = new Size(96, 23);
+         AttirbuteCombobox.TabIndex = 2;
+         // 
+         // numericUpDown1
+         // 
+         numericUpDown1.Dock = DockStyle.Fill;
+         numericUpDown1.Location = new Point(224, 0);
+         numericUpDown1.Margin = new Padding(0);
+         numericUpDown1.Name = "numericUpDown1";
+         numericUpDown1.Size = new Size(46, 23);
+         numericUpDown1.TabIndex = 3;
          // 
          // toolStripContainer1
          // 
@@ -482,20 +532,21 @@
          // toolStrip2
          // 
          toolStrip2.Dock = DockStyle.None;
-         toolStrip2.Items.AddRange(new ToolStripItem[] { newToolStripButton, openToolStripButton, saveToolStripButton, printToolStripButton, toolStripSeparator, cutToolStripButton, copyToolStripButton, pasteToolStripButton, toolStripSeparator3, helpToolStripButton });
+         toolStrip2.Items.AddRange(new ToolStripItem[] { MagicWandToolButton, openToolStripButton, saveToolStripButton, printToolStripButton, toolStripSeparator, cutToolStripButton, copyToolStripButton, pasteToolStripButton, toolStripSeparator3, helpToolStripButton });
          toolStrip2.Location = new Point(0, 3);
          toolStrip2.Name = "toolStrip2";
          toolStrip2.Size = new Size(24, 207);
          toolStrip2.TabIndex = 0;
          // 
-         // newToolStripButton
+         // MagicWandToolButton
          // 
-         newToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
-         newToolStripButton.Image = (Image)resources.GetObject("newToolStripButton.Image");
-         newToolStripButton.ImageTransparentColor = Color.Magenta;
-         newToolStripButton.Name = "newToolStripButton";
-         newToolStripButton.Size = new Size(22, 20);
-         newToolStripButton.Text = "&New";
+         MagicWandToolButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
+         MagicWandToolButton.Image = (Image)resources.GetObject("MagicWandToolButton.Image");
+         MagicWandToolButton.ImageTransparentColor = Color.Magenta;
+         MagicWandToolButton.Name = "MagicWandToolButton";
+         MagicWandToolButton.Size = new Size(22, 20);
+         MagicWandToolButton.Text = "&New";
+         MagicWandToolButton.Click += MagicWandToolButton_Click;
          // 
          // openToolStripButton
          // 
@@ -1009,7 +1060,7 @@
          // 
          // groupBox5
          // 
-         groupBox5.Controls.Add(tableLayoutPanel1);
+         groupBox5.Controls.Add(FloatLayoutPanel);
          groupBox5.Location = new Point(3, 410);
          groupBox5.Margin = new Padding(3, 0, 3, 0);
          groupBox5.Name = "groupBox5";
@@ -1019,26 +1070,23 @@
          groupBox5.TabStop = false;
          groupBox5.Text = "Scaling factors";
          // 
-         // tableLayoutPanel1
+         // FloatLayoutPanel
          // 
-         tableLayoutPanel1.ColumnCount = 2;
-         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-         tableLayoutPanel1.Controls.Add(label9, 0, 2);
-         tableLayoutPanel1.Controls.Add(label10, 0, 0);
-         tableLayoutPanel1.Controls.Add(DevastationLabel, 0, 1);
-         tableLayoutPanel1.Controls.Add(AutonomyNumeric, 1, 0);
-         tableLayoutPanel1.Controls.Add(DevastationNumeric, 1, 1);
-         tableLayoutPanel1.Controls.Add(ProsperityNumeric, 1, 2);
-         tableLayoutPanel1.Location = new Point(0, 15);
-         tableLayoutPanel1.Margin = new Padding(0, 3, 0, 0);
-         tableLayoutPanel1.Name = "tableLayoutPanel1";
-         tableLayoutPanel1.RowCount = 3;
-         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-         tableLayoutPanel1.Size = new Size(190, 75);
-         tableLayoutPanel1.TabIndex = 1;
+         FloatLayoutPanel.ColumnCount = 2;
+         FloatLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         FloatLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         FloatLayoutPanel.Controls.Add(label9, 0, 2);
+         FloatLayoutPanel.Controls.Add(label10, 0, 0);
+         FloatLayoutPanel.Controls.Add(DevastationLabel, 0, 1);
+         FloatLayoutPanel.Location = new Point(0, 15);
+         FloatLayoutPanel.Margin = new Padding(0, 3, 0, 0);
+         FloatLayoutPanel.Name = "FloatLayoutPanel";
+         FloatLayoutPanel.RowCount = 3;
+         FloatLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         FloatLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         FloatLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         FloatLayoutPanel.Size = new Size(190, 75);
+         FloatLayoutPanel.TabIndex = 1;
          // 
          // label9
          // 
@@ -1072,33 +1120,6 @@
          DevastationLabel.TabIndex = 1;
          DevastationLabel.Text = "Devastation";
          DevastationLabel.TextAlign = ContentAlignment.MiddleLeft;
-         // 
-         // AutonomyNumeric
-         // 
-         AutonomyNumeric.Dock = DockStyle.Fill;
-         AutonomyNumeric.Location = new Point(95, 1);
-         AutonomyNumeric.Margin = new Padding(0, 1, 0, 3);
-         AutonomyNumeric.Name = "AutonomyNumeric";
-         AutonomyNumeric.Size = new Size(95, 23);
-         AutonomyNumeric.TabIndex = 3;
-         // 
-         // DevastationNumeric
-         // 
-         DevastationNumeric.Dock = DockStyle.Fill;
-         DevastationNumeric.Location = new Point(95, 26);
-         DevastationNumeric.Margin = new Padding(0, 1, 0, 3);
-         DevastationNumeric.Name = "DevastationNumeric";
-         DevastationNumeric.Size = new Size(95, 23);
-         DevastationNumeric.TabIndex = 4;
-         // 
-         // ProsperityNumeric
-         // 
-         ProsperityNumeric.Dock = DockStyle.Fill;
-         ProsperityNumeric.Location = new Point(95, 51);
-         ProsperityNumeric.Margin = new Padding(0, 1, 0, 3);
-         ProsperityNumeric.Name = "ProsperityNumeric";
-         ProsperityNumeric.Size = new Size(95, 23);
-         ProsperityNumeric.TabIndex = 5;
          // 
          // groupBox6
          // 
@@ -1240,6 +1261,9 @@
          MainLayoutPanel.PerformLayout();
          TopStripLayoutPanel.ResumeLayout(false);
          TopStripLayoutPanel.PerformLayout();
+         tableLayoutPanel1.ResumeLayout(false);
+         tableLayoutPanel1.PerformLayout();
+         ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
          toolStripContainer1.ContentPanel.ResumeLayout(false);
          toolStripContainer1.RightToolStripPanel.ResumeLayout(false);
          toolStripContainer1.RightToolStripPanel.PerformLayout();
@@ -1265,11 +1289,8 @@
          CoresAndClaimsBox.ResumeLayout(false);
          OptionalsTabControl.ResumeLayout(false);
          groupBox5.ResumeLayout(false);
-         tableLayoutPanel1.ResumeLayout(false);
-         tableLayoutPanel1.PerformLayout();
-         ((System.ComponentModel.ISupportInitialize)AutonomyNumeric).EndInit();
-         ((System.ComponentModel.ISupportInitialize)DevastationNumeric).EndInit();
-         ((System.ComponentModel.ISupportInitialize)ProsperityNumeric).EndInit();
+         FloatLayoutPanel.ResumeLayout(false);
+         FloatLayoutPanel.PerformLayout();
          groupBox6.ResumeLayout(false);
          tableLayoutPanel5.ResumeLayout(false);
          tableLayoutPanel5.PerformLayout();
@@ -1308,7 +1329,7 @@
       private TableLayoutPanel TopStripLayoutPanel;
       private ToolStripContainer toolStripContainer1;
       private ToolStrip toolStrip2;
-      private ToolStripButton newToolStripButton;
+      private ToolStripButton MagicWandToolButton;
       private ToolStripButton openToolStripButton;
       private ToolStripButton saveToolStripButton;
       private ToolStripButton printToolStripButton;
@@ -1367,20 +1388,21 @@
       private TabPage TradeCompanyTab;
       private TabPage ModifiersTab;
       private GroupBox groupBox5;
-      private TableLayoutPanel tableLayoutPanel1;
+      private TableLayoutPanel FloatLayoutPanel;
       private Label label9;
       private Label label10;
       private Label DevastationLabel;
-      private NumericUpDown AutonomyNumeric;
-      private NumericUpDown DevastationNumeric;
-      private NumericUpDown ProsperityNumeric;
       private GroupBox BuildingsGroupBox;
       private GroupBox DiscoveredByGroupBox;
-      private Label IsAlreadyEditedLabel;
       private ToolStripMenuItem provDiffToolStripMenuItem;
       private ToolStripMenuItem toolStripMenuItem1;
       private ToolStripComboBox ProvincePreviewMode;
       private Label EditingModeLabel;
+      private TableLayoutPanel tableLayoutPanel1;
+      private Label label14;
+      private Label label15;
+      private ComboBox AttirbuteCombobox;
+      private NumericUpDown numericUpDown1;
    }
 }
 

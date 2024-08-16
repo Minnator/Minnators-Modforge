@@ -60,10 +60,10 @@ public sealed class PannablePictureBox : PictureBox
 
    public PannablePictureBox(ref Panel parentPanel, MapWindow mapWindow)
    {
-      MouseDown += PictureBox_MouseDown;
-      MouseMove += PictureBox1_MouseMove;
-      MouseUp += PictureBox1_MouseUp;
-      MouseClick += OnMouseClick_Click;
+      MouseDown += PictureBox_MouseDown!;
+      MouseMove += PictureBox1_MouseMove!;
+      MouseUp += PictureBox1_MouseUp!;
+      MouseClick += OnMouseClick_Click!;
 
       _parentPanel = parentPanel;
       _mapWindow = mapWindow;
@@ -100,7 +100,13 @@ public sealed class PannablePictureBox : PictureBox
          Globals.HistoryManager.AddCommand(new CAddSingleSelection(province.Id), CommandHistoryType.SimpleSelection);
       else if (ModifierKeys != Keys.Shift && Globals.Selection.State == SelectionState.Single && e.Button is not MouseButtons.Right)
          Globals.HistoryManager.AddCommand(new CSelectionMarkNext(province.Id, this), CommandHistoryType.SimpleSelection);
-      
+
+      if (Globals.Selection.State == SelectionState.MagicWand)
+      {
+         // TODO create command for magic wand and add it to the history manager HERE
+      }
+
+
       _mapWindow.SetSelectedProvinceSum(Globals.Selection.SelectedProvinces.Count);
    }
    
@@ -134,6 +140,7 @@ public sealed class PannablePictureBox : PictureBox
    private void PictureBox1_MouseUp(object sender, MouseEventArgs e)
    { 
       // ------------------------------ Province Selection ------------------------------
+      
       if (ModifierKeys == Keys.Alt)
       {
          Globals.Selection.ExitLassoSelection();
@@ -215,7 +222,6 @@ public sealed class PannablePictureBox : PictureBox
                province.LoadToGui();
          }
 
-         _mapWindow.SetIsEditedLabel();
          _mapWindow.SetEditingMode();
 
          LastInvalidatedProvince = province.Id;

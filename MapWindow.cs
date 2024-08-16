@@ -28,6 +28,10 @@ namespace Editor
       private ExtendedNumeric ProdNumeric;
       private ExtendedNumeric ManpNumeric;
 
+      private ExtendedNumeric AutonomyNumeric;
+      private ExtendedNumeric DevastationNumeric;
+      private ExtendedNumeric ProsperityNumeric;
+
       #endregion
 
       public PannablePictureBox MapPictureBox = null!;
@@ -53,7 +57,7 @@ namespace Editor
          //pause gui updates
          SuspendLayout();
          InitGui();
-         
+
 
          // MUST BE LAST in the loading sequence
          LoadingManager.InitMapModes(this);
@@ -194,12 +198,50 @@ namespace Editor
          ManpNumeric.DownButtonPressedLarge += ProvinceEditingEvents.OnDownButtonPressedLargeManpower;
          DevelopmentLayoutPanel.Controls.Add(ManpNumeric, 1, 2);
 
+         AutonomyNumeric = ControlFactory.GetExtendedNumeric();
+         AutonomyNumeric.Minimum = 0;
+         AutonomyNumeric.Maximum = 100;
+         AutonomyNumeric.OnTextValueChanged += ProvinceEditingEvents.OnTextLocalAutonomyChanged;
+         AutonomyNumeric.UpButtonPressedSmall += ProvinceEditingEvents.OnUpLocalAutonomyChanged;
+         AutonomyNumeric.UpButtonPressedMedium += ProvinceEditingEvents.OnUpButtonPressedMediumLocalAutonomy;
+         AutonomyNumeric.UpButtonPressedLarge += ProvinceEditingEvents.OnUpButtonPressedLargeLocalAutonomy;
+         AutonomyNumeric.DownButtonPressedSmall += ProvinceEditingEvents.OnDownLocalAutonomyChanged;
+         AutonomyNumeric.DownButtonPressedMedium += ProvinceEditingEvents.OnDownButtonPressedMediumLocalAutonomy;
+         AutonomyNumeric.DownButtonPressedLarge += ProvinceEditingEvents.OnDownButtonPressedLargeLocalAutonomy;
+         FloatLayoutPanel.Controls.Add(AutonomyNumeric, 1, 0);
+
+         DevastationNumeric = ControlFactory.GetExtendedNumeric();
+         DevastationNumeric.Minimum = 0;
+         DevastationNumeric.Maximum = 100;
+         DevastationNumeric.OnTextValueChanged += ProvinceEditingEvents.OnTextDevastationChanged;
+         DevastationNumeric.UpButtonPressedSmall += ProvinceEditingEvents.OnUpDevastationChanged;
+         DevastationNumeric.UpButtonPressedMedium += ProvinceEditingEvents.OnUpButtonPressedMediumDevastation;
+         DevastationNumeric.UpButtonPressedLarge += ProvinceEditingEvents.OnUpButtonPressedLargeDevastation;
+         DevastationNumeric.DownButtonPressedSmall += ProvinceEditingEvents.OnDownDevastationChanged;
+         DevastationNumeric.DownButtonPressedMedium += ProvinceEditingEvents.OnDownButtonPressedMediumDevastation;
+         DevastationNumeric.DownButtonPressedLarge += ProvinceEditingEvents.OnDownButtonPressedLargeDevastation;
+         FloatLayoutPanel.Controls.Add(DevastationNumeric, 1, 1);
+
+         ProsperityNumeric = ControlFactory.GetExtendedNumeric();
+         ProsperityNumeric.Minimum = 0;
+         ProsperityNumeric.Maximum = 100;
+         ProsperityNumeric.OnTextValueChanged += ProvinceEditingEvents.OnTextProsperityChanged;
+         ProsperityNumeric.UpButtonPressedSmall += ProvinceEditingEvents.OnUpProsperityChanged;
+         ProsperityNumeric.UpButtonPressedMedium += ProvinceEditingEvents.OnUpButtonPressedMediumProsperity;
+         ProsperityNumeric.UpButtonPressedLarge += ProvinceEditingEvents.OnUpButtonPressedLargeProsperity;
+         ProsperityNumeric.DownButtonPressedSmall += ProvinceEditingEvents.OnDownProsperityChanged;
+         ProsperityNumeric.DownButtonPressedMedium += ProvinceEditingEvents.OnDownButtonPressedMediumProsperity;
+         ProsperityNumeric.DownButtonPressedLarge += ProvinceEditingEvents.OnDownButtonPressedLargeProsperity;
+         FloatLayoutPanel.Controls.Add(ProsperityNumeric, 1, 2);
+
          CapitalNameTextBox.Leave += ProvinceEditingEvents.OnCapitalNameChanged;
 
          IsCityCheckBox.CheckedChanged += ProvinceEditingEvents.OnIsCityChanged;
          IsHreCheckBox.CheckedChanged += ProvinceEditingEvents.OnIsHreChanged;
          IsParlimentSeatCheckbox.CheckedChanged += ProvinceEditingEvents.OnIsSeatInParliamentChanged;
          HasRevoltCheckBox.CheckedChanged += ProvinceEditingEvents.OnHasRevoltChanged;
+
+         AttirbuteCombobox.Items.AddRange([.. Enum.GetNames(typeof(ProvAttr))]);
       }
 
       // ======================== Province GUI Update Methods ========================
@@ -355,19 +397,6 @@ namespace Editor
          EditingModeLabel.Text = Globals.Selection.Count <= 1
             ? "Idle Mode: Single Province"
             : $"Idle Mode: Multi Province ({Globals.Selection.Count})";
-      }
-
-      public void SetIsEditedLabel()
-      {
-         if (Globals.Selection.SelectedProvinces.Count == 1)
-         {
-            if (!Globals.Provinces.TryGetValue(Globals.Selection.SelectedProvinces[0], out var prov))
-            {
-               IsAlreadyEditedLabel.Text = "Edited: -";
-               return;
-            }
-            IsAlreadyEditedLabel.Text = $"Edited: {prov.Status}";
-         }
       }
 
       private void MapWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -538,5 +567,9 @@ namespace Editor
          filesToolStripMenuItem.DropDown.Close();
       }
 
+      private void MagicWandToolButton_Click(object sender, EventArgs e)
+      {
+         Globals.Selection.State = Globals.Selection.State != SelectionState.MagicWand ? SelectionState.MagicWand : SelectionState.Single;
+      }
    }
 }

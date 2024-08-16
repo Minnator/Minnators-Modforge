@@ -12,7 +12,8 @@ public enum SelectionState
 {
    Single,
    Rectangle,
-   Lasso
+   Lasso,
+   MagicWand
 }
 
 // When several provinces are selected only attributes that are the same across all selected provinces are shown.
@@ -46,6 +47,7 @@ public class Selection
    private bool _clearPolygonSelection;
    private Country _selectedCountry;
    private readonly PannablePictureBox _pannablePictureBox;
+
 
    // List of selected provinces
    public List<int> SelectedProvinces { get; set; } = [];
@@ -192,13 +194,34 @@ public class Selection
       //SelectedCountry = Country.Empty; TODO
    }
 
-   public bool Contains(int provPtr) => SelectedProvinces.Contains(provPtr);
-
-   public void LassoSelect(int[] ids)
+   public void MagicWandSelection(MagicWandConfig mwc)
    {
-      if (LassoSelection.Count < 2)
+      var clickedProvince = SelectedProvinces[^1]; // Get the last selected province
+
+      List<int> provsToSelect = [];
+      MagicWandSelectionRecursive(clickedProvince, mwc, provsToSelect);
+      Clear();
+      AddRange(provsToSelect, false);
+   }
+
+   private void MagicWandSelectionRecursive(int provId, MagicWandConfig mwc, List<int> provsToSelect)
+   {
+      if (provsToSelect.Contains(provId) || !Globals.LandProvinces.Contains(provId))
          return;
-      AddRange(ids, false);
+
+      var province = Globals.Provinces[provId];
+      if (province.GetAttribute(mwc.GetAttribute) is float floatValue && (int)floatValue <= mwc.GetValue)
+      {
+         provsToSelect.Add(provId);
+         foreach (var adjProv in Globals.AdjacentProvinces[provId])
+            MagicWandSelectionRecursive(adjProv, mwc, provsToSelect);
+      }
+      else if (province.GetAttribute(mwc.GetAttribute) is int intValue && intValue <= mwc.GetValue)
+      {
+         provsToSelect.Add(provId);
+         foreach (var adjProv in Globals.AdjacentProvinces[provId])
+            MagicWandSelectionRecursive(adjProv, mwc, provsToSelect);
+      }
    }
 
    public void PreviewAllInPolygon()
@@ -315,4 +338,10 @@ public class Selection
       return result != null;
    }
 
+}
+
+public class MagicWandConfig(ProvAttr attr, int value)
+{
+   public ProvAttr GetAttribute => attr;
+   public int GetValue => value;
 }

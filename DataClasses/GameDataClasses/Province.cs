@@ -148,7 +148,10 @@ public enum ProvAttrSetr
    remove_permanent_province_modifier,
    add_province_triggered_modifier,
    remove_province_triggered_modifier,
-   set_global_flag
+   set_global_flag,
+   devastation,
+   prosperity,
+
 }
 
 public class Province : IProvinceCollection
@@ -1049,6 +1052,18 @@ public class Province : IProvinceCollection
             break;
          case ProvAttrSetr.set_global_flag:
             // Case to ignore stuff
+            break;
+         case ProvAttrSetr.devastation:
+            if (float.TryParse(value, out var dev))
+               Devastation = dev;
+            else
+               Globals.ErrorLog.Write($"Could not parse devastation: {value} for province id {Id}");
+            break;
+         case ProvAttrSetr.prosperity:
+            if (float.TryParse(value, out var prosp))
+               Prosperity = prosp;
+            else
+               Globals.ErrorLog.Write($"Could not parse prosperity: {value} for province id {Id}");
             break;
       }
    }
