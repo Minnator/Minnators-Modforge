@@ -16,20 +16,6 @@ public static class ControlFactory
       return new(text, image, onClick);
    }
 
-   public static ToolStripMenuItem GetToolStripMenuItem(string text, EventHandler onClick, Keys shortcut, Image image = null!)
-   {
-      var item = new ToolStripMenuItem(text, image, onClick);
-      item.ShortcutKeys = shortcut;
-      return item;
-   }
-
-   public static ToolStripMenuItem GetDisabledToolStripMenuItem (string text, Image image = null!)
-   {
-      var item = new ToolStripMenuItem(text, image);
-      item.Enabled = false;
-      return item;
-   }
-
    public static SearchResultButton GetSearchResultButton(bool isProvince, int id, Tag tag)
    {
       return new ()
@@ -57,6 +43,7 @@ public static class ControlFactory
       var list = new ItemList(itemType);
       list.InitializeItems(items);
       list.SetTitle(title);
+      list.Margin = new(3, 1, 3, 3);
       return list;
    }
 

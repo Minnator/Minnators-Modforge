@@ -1,15 +1,12 @@
-﻿using Editor.DataClasses.GameDataClasses;
+﻿using System.Text;
+using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.Formatters
 {
-   public enum BraceStyle
-   {
-      Base,
-      NewLine,
-   }
-
    public interface IFormatter
    {
-      public string Format(Province input);
+      void Format(StringBuilder sb, object obj);
+
+      public void Format(StringBuilder sb, List<KeyValuePair<string, object>> toFormat);
    }
 }

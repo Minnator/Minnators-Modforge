@@ -29,9 +29,8 @@
       private void InitializeComponent()
       {
          tableLayoutPanel1 = new TableLayoutPanel();
-         ContinueButton = new Button();
-         LoadButton = new Button();
          LoadingAnimation = new PictureBox();
+         LoadButton = new Button();
          tableLayoutPanel1.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)LoadingAnimation).BeginInit();
          SuspendLayout();
@@ -40,7 +39,6 @@
          // 
          tableLayoutPanel1.ColumnCount = 1;
          tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-         tableLayoutPanel1.Controls.Add(ContinueButton, 0, 3);
          tableLayoutPanel1.Controls.Add(LoadingAnimation, 0, 0);
          tableLayoutPanel1.Controls.Add(LoadButton, 0, 1);
          tableLayoutPanel1.Dock = DockStyle.Fill;
@@ -55,16 +53,14 @@
          tableLayoutPanel1.Size = new Size(512, 615);
          tableLayoutPanel1.TabIndex = 0;
          // 
-         // ContinueButton
+         // LoadingAnimation
          // 
-         ContinueButton.Dock = DockStyle.Fill;
-         ContinueButton.Location = new Point(3, 588);
-         ContinueButton.Name = "ContinueButton";
-         ContinueButton.Size = new Size(506, 24);
-         ContinueButton.TabIndex = 1;
-         ContinueButton.Text = "Continue";
-         ContinueButton.UseVisualStyleBackColor = true;
-         ContinueButton.Click += ContinueButton_Click;
+         LoadingAnimation.Dock = DockStyle.Fill;
+         LoadingAnimation.Location = new Point(3, 3);
+         LoadingAnimation.Name = "LoadingAnimation";
+         LoadingAnimation.Size = new Size(506, 519);
+         LoadingAnimation.TabIndex = 3;
+         LoadingAnimation.TabStop = false;
          // 
          // LoadButton
          // 
@@ -76,15 +72,6 @@
          LoadButton.Text = "Load";
          LoadButton.UseVisualStyleBackColor = true;
          LoadButton.Click += LoadButton_Click;
-         // 
-         // LoadingAnimation
-         // 
-         LoadingAnimation.Dock = DockStyle.Fill;
-         LoadingAnimation.Location = new Point(3, 3);
-         LoadingAnimation.Name = "LoadingAnimation";
-         LoadingAnimation.Size = new Size(506, 519);
-         LoadingAnimation.TabIndex = 3;
-         LoadingAnimation.TabStop = false;
          // 
          // LoadingScreen
          // 
@@ -103,7 +90,6 @@
       #endregion
 
       private TableLayoutPanel tableLayoutPanel1;
-      public Button ContinueButton;
       private Button LoadButton;
       private PictureBox LoadingAnimation;
    }

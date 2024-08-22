@@ -159,13 +159,9 @@ public class Province : IProvinceCollection
    private readonly ProvinceData _data = new();
    private List<HistoryEntry> _history = [];
    public ProvinceStatus Status { get; set; } = ProvinceStatus.Unchanged;
+   public DateTime LastModified { get; set; } = DateTime.MinValue;
    public ProvinceData ProvinceData { get; set; } = new();
-
-   public Province()
-   {
-      ProvinceEventHandler.OnProvinceDataChanged += ProvinceDataChanged;
-   }
-
+   
    #region ManagementData
 
    // Management data
@@ -768,9 +764,13 @@ public class Province : IProvinceCollection
       _history.Sort((x, y) => x.Date.CompareTo(y.Date));
    }
 
-   private void ProvinceDataChanged(object? obj, ProvinceDataChangedEventArgs e)
+   public void ProvinceDataChanged(object? obj, ProvinceDataChangedEventArgs e)
    {
-      Status = ProvinceStatus.Modified;
+      if (Globals.State == State.Running)
+      {
+         Status = ProvinceStatus.Modified;
+         LastModified = DateTime.Now;
+      }
    }
 
    public object? GetAttribute(ProvAttr key)
@@ -835,15 +835,6 @@ public class Province : IProvinceCollection
          ProvAttr.latent_trade_good => LatentTradeGood,
          _ => null
       };
-   }
-
-   public static List<KeyValuePair<string, object>> GetNonDefaultValues()
-   {
-      List<KeyValuePair<string, object>> nonDefaults = [];
-
-
-
-      return nonDefaults;
    }
 
    public void SetAttribute(ProvAttrSetr key, string value)

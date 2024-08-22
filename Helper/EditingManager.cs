@@ -39,6 +39,17 @@ namespace Editor.Helper
          return nonDefaultValues;
       }
 
+      public static List<Province> GetModifiedProvinces()
+      {
+         List<Province> modifiedProvinces = [];
+         foreach (var province in Globals.Provinces.Values)
+         {
+            if (province.Status == ProvinceStatus.Modified)
+               modifiedProvinces.Add(province);
+         }
+         return modifiedProvinces;
+      }
+
       public static List<Province> GetProvincesWithStatus(ProvinceStatus status)
       {
          List<Province> provinces = [];

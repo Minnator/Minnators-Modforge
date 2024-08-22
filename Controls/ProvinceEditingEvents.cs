@@ -441,5 +441,57 @@ namespace Editor.Controls
             return;
          Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.prosperity, ProvAttrSetr.prosperity, 10, false));
       }
+
+
+      public static void OnTextExtraCostChanged(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, e.Value.ToString()!, ProvAttr.extra_cost, ProvAttrSetr.extra_cost));
+      }
+
+      public static void OnUpExtraCostChanged(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.extra_cost, ProvAttrSetr.extra_cost, 1, true));
+      }
+
+      public static void OnUpButtonPressedMediumExtraCost(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.extra_cost, ProvAttrSetr.extra_cost, 5, true));
+      }
+
+      public static void OnUpButtonPressedLargeExtraCost(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.extra_cost, ProvAttrSetr.extra_cost, 10, true));
+      }
+
+      public static void OnDownExtraCostChanged(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.extra_cost, ProvAttrSetr.extra_cost, 1, false));
+      }
+
+      public static void OnDownButtonPressedMediumExtraCost(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.extra_cost, ProvAttrSetr.extra_cost, 5, false));
+      }
+
+      public static void OnDownButtonPressedLargeExtraCost(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CModifyValue(e.Provinces,ProvAttr.extra_cost, ProvAttrSetr.extra_cost, 10, false));
+      }
+
+
    }
 }

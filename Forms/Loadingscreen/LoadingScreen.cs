@@ -15,7 +15,6 @@ namespace Editor.Forms.Loadingscreen
       public LoadingScreen()
       {
          InitializeComponent();
-         ContinueButton.Enabled = false;
 
          Globals.LoadingStageChanged += LoadingScreen_LoadingStageChanged;
 
@@ -110,15 +109,13 @@ namespace Editor.Forms.Loadingscreen
 
       private void LoadingCompleted()
       {
-         ContinueButton.Enabled = true;
-         if (SKIP_LOADING)
-            ContinueButton.PerformClick();
+         Globals.MapWindow.Initialize();
+         Close();
       }
 
       private void ContinueButton_Click(object sender, EventArgs e)
       {
-         Globals.MapWindow.Initialize();
-         Close();
+         
       }
    }
 }

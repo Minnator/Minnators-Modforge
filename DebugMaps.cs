@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Drawing.Imaging;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.Interfaces;
 
@@ -531,5 +532,52 @@ public static class DebugMaps
          }
       }
       return Color.Black;
+   }
+
+   public static void GridMap()
+   {
+      var bmp = new Bitmap(Globals.MapWidth, Globals.MapHeight, PixelFormat.Format24bppRgb);
+      //var sw = Stopwatch.StartNew();
+      var width = bmp.Width;
+      var height = bmp.Height;
+
+      // Lock the bits in memory
+      var bitmapData = bmp.LockBits(new(0, 0, width, height), ImageLockMode.WriteOnly, bmp.PixelFormat);
+
+      // Calculate stride (bytes per row)
+      var stride = bitmapData.Stride;
+      var bytesPerPixel = Image.GetPixelFormatSize(bmp.PixelFormat) / 8;
+
+      var parallelOptions = new ParallelOptions
+      {
+         MaxDegreeOfParallelism = Environment.ProcessorCount
+      };
+
+      unsafe
+      {
+         Parallel.For(0, height, parallelOptions, y =>
+         {
+            var ptr = (byte*)bitmapData.Scan0;
+            for (int x = 0; x < width; x++)
+            {
+               Color color = Color.DarkGray;
+               if (y % 100 == 0)
+                  color = Color.Black;
+               else if (x % 100 == 0)
+                  color = Color.Black;
+
+               var index = y * stride + x * bytesPerPixel;
+               
+               ptr[index + 2] = color.R;
+               ptr[index + 1] = color.G;
+               ptr[index] = color.B;
+            }
+         });
+      }
+
+      bmp.UnlockBits(bitmapData);
+      bmp.Save("C:\\Users\\david\\Downloads\\gridMap.png", ImageFormat.Png);
+      //sw.Stop();
+      //Debug.WriteLine($"Modifying Bitmap took {sw.ElapsedMilliseconds} ms");
    }
 }

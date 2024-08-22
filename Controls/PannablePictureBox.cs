@@ -105,8 +105,7 @@ public sealed class PannablePictureBox : PictureBox
       {
          // TODO create command for magic wand and add it to the history manager HERE
       }
-
-
+      
       _mapWindow.SetSelectedProvinceSum(Globals.Selection.SelectedProvinces.Count);
    }
    

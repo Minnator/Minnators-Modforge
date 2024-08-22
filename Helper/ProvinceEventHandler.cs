@@ -1,4 +1,5 @@
 ﻿using System;
+using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.Helper;
 
@@ -11,12 +12,18 @@ public static class ProvinceEventHandler
    {
       public object Value = value;
       public string PropertyName = propertyName;
+
+      public override string ToString()
+      {
+         return $"{PropertyName}: {Value}";
+      }
    }
 
    // Will notify of any changes in the province data
    public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceDataChanged = delegate { };
    public static void RaiseProvinceDataChanged(int id, object value, string propertyName)
    {
+      Globals.Provinces[id].ProvinceDataChanged(null, new (value, propertyName)); // Update the province status
       OnProvinceDataChanged.Invoke(id, new (value, propertyName));
    }
 
