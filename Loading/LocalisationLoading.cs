@@ -17,8 +17,8 @@ public class LocalisationLoading
    public static void Load(string modFolder, string vanillaFolder, Language language)
    {
       var sw = Stopwatch.StartNew();
-      var modLocPath = Path.Combine(modFolder, "name");
-      var vanillaLocPath = Path.Combine(vanillaFolder, "name");
+      var modLocPath = Path.Combine(modFolder, "localisation");
+      var vanillaLocPath = Path.Combine(vanillaFolder, "localisation");
       var files = FilesHelper.GetAllFilesInFolder(vanillaLocPath, $"*_l_{language.ToString().ToLower()}.yml");
       files.AddRange(FilesHelper.GetAllFilesInFolder(modLocPath, $"*_l_{language}.yml"));
 

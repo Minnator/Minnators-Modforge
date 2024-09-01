@@ -48,6 +48,7 @@
          refStackToolStripMenuItem = new ToolStripMenuItem();
          bestPointsToolStripMenuItem = new ToolStripMenuItem();
          provDiffToolStripMenuItem = new ToolStripMenuItem();
+         yoloToolStripMenuItem = new ToolStripMenuItem();
          DateSelector = new ToolStripComboBox();
          searchToolStripMenuItem = new ToolStripMenuItem();
          MapPanel = new Panel();
@@ -256,7 +257,7 @@
          // 
          // debugToolStripMenuItem
          // 
-         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem });
+         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem });
          debugToolStripMenuItem.Name = "debugToolStripMenuItem";
          debugToolStripMenuItem.Size = new Size(54, 23);
          debugToolStripMenuItem.Text = "Debug";
@@ -295,6 +296,13 @@
          provDiffToolStripMenuItem.Size = new Size(180, 22);
          provDiffToolStripMenuItem.Text = "ProvDiff";
          provDiffToolStripMenuItem.Click += provDiffToolStripMenuItem_Click;
+         // 
+         // yoloToolStripMenuItem
+         // 
+         yoloToolStripMenuItem.Name = "yoloToolStripMenuItem";
+         yoloToolStripMenuItem.Size = new Size(180, 22);
+         yoloToolStripMenuItem.Text = "yolo";
+         yoloToolStripMenuItem.Click += yoloToolStripMenuItem_Click;
          // 
          // DateSelector
          // 
@@ -1389,6 +1397,7 @@
       private Label label15;
       private ComboBox AttirbuteCombobox;
       private NumericUpDown numericUpDown1;
+      private ToolStripMenuItem yoloToolStripMenuItem;
    }
 }
 

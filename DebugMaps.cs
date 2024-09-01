@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Drawing.Imaging;
+using System.Text;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.Interfaces;
@@ -9,6 +10,41 @@ namespace Editor;
 
 public static class DebugMaps
 {
+   public static void YoloDefinition()
+   {
+      List<Province> europeanProvinces = [];
+
+      foreach (var province in Globals.Provinces.Values)
+      {
+         if (province.Continent == "europe")
+            europeanProvinces.Add(province);
+      }
+
+      Debug.WriteLine($"Found {europeanProvinces.Count} provinces in Europe");
+
+      var sb = new StringBuilder();
+      var cnt = 1;
+      foreach (var province in europeanProvinces)
+      {
+         sb.Append(cnt);
+         sb.Append(";");
+         sb.Append(province.Color.R);
+         sb.Append(";");
+         sb.Append(province.Color.G);
+         sb.Append(";");
+         sb.Append(province.Color.B);
+         sb.Append(";");
+         sb.Append(province.GetLocalisation());
+         sb.Append(";");
+         sb.Append("x");
+         sb.Append(";\n");
+
+         cnt ++;
+      }
+
+      File.WriteAllText("C:\\Users\\david\\Downloads\\europeanProvinces.csv", sb.ToString());
+   }
+
    public static Bitmap GenerateBitmapFromProvinces()
    {
       var sw = new Stopwatch();

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Editor.DataClasses;
 using Editor.Helper;
+using Path = System.IO.Path;
 
 namespace Editor.Loading;
 
@@ -65,8 +66,23 @@ public static class LoadingManager
 
    internal static void LoadDefinitionAndMap(ModProject project)
    {
-      var provinces = DefinitionLoading.LoadDefinition([.. File.ReadAllLines(Path.Combine(project.VanillaPath, "map", "definition.csv"))]);
-      Globals.MapPath = Path.Combine(project.VanillaPath, "map", "provinces.bmp");
+      var definition = Path.Combine(project.ModPath, "map", "definition.csv");
+      if (!File.Exists(definition))
+      {
+         definition = Path.Combine(project.VanillaPath, "map", "definition.csv");
+         if (!File.Exists(definition))
+            throw new FileNotFoundException("Could not find definition.csv in mod or vanilla folder");
+      }
+
+      var provinces = DefinitionLoading.LoadDefinition([.. File.ReadAllLines(definition)]);
+      var modMap = Path.Combine(project.ModPath, "map", "provinces.bmp");
+      var vanillaMap = Path.Combine(project.VanillaPath, "map", "provinces.bmp");
+      if (File.Exists(modMap))
+         Globals.MapPath = modMap;
+      else if (File.Exists(vanillaMap))
+         Globals.MapPath = vanillaMap;
+      else
+         throw new FileNotFoundException("Could not find provinces.bmp in mod or vanilla folder");
       var (colorToProvId, colorToBorder, adjacency) = MapLoading.LoadMap(Globals.MapPath);
 
       Optimizer.OptimizeProvinces(provinces, colorToProvId, colorToBorder, project.MapSize.Width * project.MapSize.Height);

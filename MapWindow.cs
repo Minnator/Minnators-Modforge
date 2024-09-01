@@ -579,5 +579,10 @@ namespace Editor
       {
          Globals.Selection.State = Globals.Selection.State != SelectionState.MagicWand ? SelectionState.MagicWand : SelectionState.Single;
       }
+
+      private void yoloToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         DebugMaps.YoloDefinition();
+      }
    }
 }
