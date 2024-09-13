@@ -1,8 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Windows.Forms;
+﻿using System.Text;
 using Editor.Helper;
 using Editor.Interfaces;
 using static Editor.Helper.ProvinceEventHandler;
@@ -165,7 +161,7 @@ public class Province : IProvinceCollection
    #region ManagementData
 
    // Management data
-   public int Id { get; set; }
+   public int Id { get; init; }
    public Color Color { get; set; }
    public int BorderPtr { get; set; }
    public int BorderCnt { get; set; }
@@ -773,7 +769,7 @@ public class Province : IProvinceCollection
       }
    }
 
-   public object? GetAttribute(ProvAttr key)
+   public object GetAttribute(ProvAttr key)
    {
       return GetAttribute(key.ToString());
    }
@@ -783,7 +779,7 @@ public class Province : IProvinceCollection
    /// </summary>
    /// <param name="key"></param>
    /// <returns></returns>
-   public object? GetAttribute(string key)
+   public object GetAttribute(string key)
    {
       if (Globals.BuildingKeys.Contains(key))
          return Buildings.Contains(key) ? "yes" : "no";
@@ -791,7 +787,7 @@ public class Province : IProvinceCollection
       if (!Enum.TryParse<ProvAttr>(key, true, out var getter))
       {
          Globals.ErrorLog.Write($"Could not parse {key} attribute for province id {Id}");
-         return null;
+         return "";
       }
 
       return getter switch
@@ -833,7 +829,7 @@ public class Province : IProvinceCollection
          ProvAttr.devastation => Devastation,
          ProvAttr.prosperity => Prosperity,
          ProvAttr.latent_trade_good => LatentTradeGood,
-         _ => null
+         _ => ""
       };
    }
 
@@ -1108,8 +1104,16 @@ public class Province : IProvinceCollection
       foreach (var historyEntry in History)
          sb.AppendLine(historyEntry.ToString());
 
-      File.WriteAllText(Path.Combine(path, $"{Id.ToString()}_dump.txt"), sb.ToString());
+      File.WriteAllText(Path.Combine(path, $"{Id}_dump.txt"), sb.ToString());
    }
+
+
+   public string GetHistoryFilePath()
+   {
+      var fileName = $"{Id}-{GetLocalisation()}.txt";
+      return Path.Combine(Globals.MapWindow.Project.ModPath, "history", "provinces", fileName);
+   }
+
    public override bool Equals(object? obj)
    {
       if (obj is Province other)
@@ -1124,4 +1128,5 @@ public class Province : IProvinceCollection
    {
       return $"{Id} ({GetLocalisation()}";
    }
+
 }

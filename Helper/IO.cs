@@ -83,14 +83,28 @@ internal static class IO
 
    public static bool WriteAllInANSI(string path, string data, bool append)
    {
-      if (!File.Exists(path))
-         return false;
       try
       {
          if (append)
             File.AppendAllText(path, data, encoding);
          else
             File.WriteAllText(path, data, encoding);
+         return true;
+      }
+      catch (IOException)
+      {
+         return false;
+      }
+   }
+
+   public static bool WriteToFile(string path, string data, bool append)
+   {
+      try
+      {
+         if (append)
+            File.AppendAllText(path, data);
+         else
+            File.WriteAllText(path, data);
          return true;
       }
       catch (IOException)

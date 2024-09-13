@@ -49,6 +49,9 @@
          bestPointsToolStripMenuItem = new ToolStripMenuItem();
          provDiffToolStripMenuItem = new ToolStripMenuItem();
          yoloToolStripMenuItem = new ToolStripMenuItem();
+         saveAllProvincesToolStripMenuItem = new ToolStripMenuItem();
+         save1ToolStripMenuItem = new ToolStripMenuItem();
+         saveEuropeToolStripMenuItem = new ToolStripMenuItem();
          DateSelector = new ToolStripComboBox();
          searchToolStripMenuItem = new ToolStripMenuItem();
          MapPanel = new Panel();
@@ -257,7 +260,7 @@
          // 
          // debugToolStripMenuItem
          // 
-         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem });
+         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem });
          debugToolStripMenuItem.Name = "debugToolStripMenuItem";
          debugToolStripMenuItem.Size = new Size(54, 23);
          debugToolStripMenuItem.Text = "Debug";
@@ -303,6 +306,27 @@
          yoloToolStripMenuItem.Size = new Size(180, 22);
          yoloToolStripMenuItem.Text = "yolo";
          yoloToolStripMenuItem.Click += yoloToolStripMenuItem_Click;
+         // 
+         // saveAllProvincesToolStripMenuItem
+         // 
+         saveAllProvincesToolStripMenuItem.Name = "saveAllProvincesToolStripMenuItem";
+         saveAllProvincesToolStripMenuItem.Size = new Size(180, 22);
+         saveAllProvincesToolStripMenuItem.Text = "Save all provinces";
+         saveAllProvincesToolStripMenuItem.Click += saveAllProvincesToolStripMenuItem_Click;
+         // 
+         // save1ToolStripMenuItem
+         // 
+         save1ToolStripMenuItem.Name = "save1ToolStripMenuItem";
+         save1ToolStripMenuItem.Size = new Size(180, 22);
+         save1ToolStripMenuItem.Text = "Save 1";
+         save1ToolStripMenuItem.Click += save1ToolStripMenuItem_Click;
+         // 
+         // saveEuropeToolStripMenuItem
+         // 
+         saveEuropeToolStripMenuItem.Name = "saveEuropeToolStripMenuItem";
+         saveEuropeToolStripMenuItem.Size = new Size(180, 22);
+         saveEuropeToolStripMenuItem.Text = "Save europe";
+         saveEuropeToolStripMenuItem.Click += saveEuropeToolStripMenuItem_Click;
          // 
          // DateSelector
          // 
@@ -1398,6 +1422,9 @@
       private ComboBox AttirbuteCombobox;
       private NumericUpDown numericUpDown1;
       private ToolStripMenuItem yoloToolStripMenuItem;
+      private ToolStripMenuItem saveAllProvincesToolStripMenuItem;
+      private ToolStripMenuItem save1ToolStripMenuItem;
+      private ToolStripMenuItem saveEuropeToolStripMenuItem;
    }
 }
 

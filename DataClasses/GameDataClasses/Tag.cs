@@ -53,4 +53,9 @@ public readonly struct Tag(string tag)
 
    // Add an empty state to the Tag struct
    public static readonly Tag Empty = new("###");
+
+   public bool IsEmpty()
+   {
+      return this == Empty;
+   }
 }

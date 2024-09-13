@@ -8,6 +8,7 @@ using Editor.Forms;
 using Editor.Forms.Loadingscreen;
 using Editor.Helper;
 using Editor.Loading;
+using Editor.Savers;
 
 namespace Editor
 {
@@ -583,6 +584,24 @@ namespace Editor
       private void yoloToolStripMenuItem_Click(object sender, EventArgs e)
       {
          DebugMaps.YoloDefinition();
+      }
+
+      private void saveAllProvincesToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         ProvinceSaver.SaveAllLandProvinces();
+      }
+
+      private void save1ToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         Globals.Provinces[1].SaveToHistoryFile();
+      }
+
+      private void saveEuropeToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         foreach (var id in Globals.Continents["europe"].Provinces)
+         {
+            Globals.Provinces[id].SaveToHistoryFile();
+         }
       }
    }
 }

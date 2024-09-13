@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Text;
+using Windows.ApplicationModel.Store.Preview.InstallControl;
 
 namespace Editor.DataClasses.GameDataClasses
 {
@@ -36,6 +38,14 @@ namespace Editor.DataClasses.GameDataClasses
       public EffectValueType ValueType { get; set; } = type;
       public virtual bool IsComplex => false;
 
+      public virtual string GetEffectString(int tabs)
+      {
+         var str = string.Empty;
+         for (var i = 0; i < tabs; i++) 
+            str += "\t";
+         return $"{str}{Name} = {Value}";
+      }
+
       public virtual bool ExecuteProvince(Province province)
       {
          if (Globals.UniqueAttributeKeys.Contains(name) || Globals.Effects.Contains(name) || Globals.Buildings.Contains(new (name)))
@@ -64,6 +74,19 @@ namespace Editor.DataClasses.GameDataClasses
    public abstract class ComplexEffect(string name, string value, EffectValueType type) : Effect(name, value, type)
    {
       public List<Effect> Effects { get; set; } = [];
+      public override bool IsComplex => true;
+
+      public override string GetEffectString(int tabs)
+      {
+         var sb = new StringBuilder();
+         sb.AppendLine($"\t{Name} = {{");
+         foreach (var effect in Effects)
+         {
+            sb.AppendLine($"\t{effect.GetEffectString(1)}");
+         }
+         sb.AppendLine("\t}");
+         return sb.ToString();
+      }
       //TODO trigger?
    }
 
