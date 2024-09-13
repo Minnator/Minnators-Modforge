@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Text;
 using Editor.DataClasses.GameDataClasses;
+using Editor.Forms;
 using Editor.Helper;
 
 namespace Editor.Savers
@@ -10,27 +11,10 @@ namespace Editor.Savers
    {
       //---------------------------------------- Accessible Methods ----------------------------------------
 
-      /// <summary>
-      /// Writes a file for all provinces with all its values which are not default.
-      /// </summary>
-      /// <returns></returns>
-      public static bool SaveAllProvinces()
-      {
-         var worked = true;
-
-         foreach (var province in Globals.Provinces.Values)
-         {
-            if (!SaveToHistoryFile(province))
-               worked = false;
-         }
-
-         return worked;
-      }
-
+      
       public static bool SaveAllLandProvinces()
       {
          var worked = true;
-
          foreach (var province in Globals.LandProvinces)
          {
             if (!SaveToHistoryFile(Globals.Provinces[province]))
