@@ -1,5 +1,9 @@
-﻿namespace Editor
+﻿using System.Diagnostics;
+
+namespace Editor
 {
+   [DebuggerDisplay("Count = {Count}")]
+   [Serializable]
    public class ObservableList<T>
    {
       private readonly List<T> _list = [];
