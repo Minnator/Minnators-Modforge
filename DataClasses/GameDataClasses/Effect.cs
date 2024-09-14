@@ -71,6 +71,7 @@ namespace Editor.DataClasses.GameDataClasses
    public class SimpleEffect(string name, string value, EffectValueType type) : Effect(name, value, type);
    public class DummyComplexEffect(string name, string value, EffectValueType type) : ComplexEffect(name, value, type);
 
+
    public abstract class ComplexEffect(string name, string value, EffectValueType type) : Effect(name, value, type)
    {
       public List<Effect> Effects { get; set; } = [];
@@ -88,6 +89,21 @@ namespace Editor.DataClasses.GameDataClasses
          return sb.ToString();
       }
       //TODO trigger?
+   }
+
+   public class ScriptedEffect(string name, string value, EffectValueType type) : ComplexEffect(name, value, type)
+   {
+      public List<KeyValuePair<string, string>> AttributesList { get; set; } = [];
+      public override bool ExecuteProvince(Province province)
+      {
+         //TODO implement this
+         return true;
+      }
+
+      public override string ToString()
+      {
+         return $"{Name} : {Value} : {Effects.Count}";
+      }
    }
 
    public class RevoltEffect(string name, string value, EffectValueType type) : ComplexEffect(name, value, type)

@@ -493,5 +493,18 @@ namespace Editor.Controls
       }
 
 
+      public static void OnPermanentClaimAdded(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CAddRemoveProvinceAttribute(e.Provinces, e.Value.ToString()!, ProvAttr.permanent_claims, ProvAttrSetr.add_permanent_claim, ProvAttrSetr.remove_permanent_claim, true));
+      }
+
+      public static void OnPermanentClaimRemoved(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CAddRemoveProvinceAttribute(e.Provinces, e.Value.ToString()!, ProvAttr.permanent_claims, ProvAttrSetr.remove_permanent_claim, ProvAttrSetr.add_permanent_claim, false));
+      }
    }
 }

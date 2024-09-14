@@ -269,62 +269,62 @@
          // testToolStripMenuItem
          // 
          testToolStripMenuItem.Name = "testToolStripMenuItem";
-         testToolStripMenuItem.Size = new Size(180, 22);
+         testToolStripMenuItem.Size = new Size(167, 22);
          testToolStripMenuItem.Text = "Test";
          testToolStripMenuItem.Click += testToolStripMenuItem_Click;
          // 
          // telescopeToolStripMenuItem
          // 
          telescopeToolStripMenuItem.Name = "telescopeToolStripMenuItem";
-         telescopeToolStripMenuItem.Size = new Size(180, 22);
+         telescopeToolStripMenuItem.Size = new Size(167, 22);
          telescopeToolStripMenuItem.Text = "Telescope";
          telescopeToolStripMenuItem.Click += telescopeToolStripMenuItem_Click;
          // 
          // refStackToolStripMenuItem
          // 
          refStackToolStripMenuItem.Name = "refStackToolStripMenuItem";
-         refStackToolStripMenuItem.Size = new Size(180, 22);
+         refStackToolStripMenuItem.Size = new Size(167, 22);
          refStackToolStripMenuItem.Click += refStackToolStripMenuItem_Click;
          // 
          // bestPointsToolStripMenuItem
          // 
          bestPointsToolStripMenuItem.Name = "bestPointsToolStripMenuItem";
-         bestPointsToolStripMenuItem.Size = new Size(180, 22);
+         bestPointsToolStripMenuItem.Size = new Size(167, 22);
          bestPointsToolStripMenuItem.Text = "bestPoints";
          bestPointsToolStripMenuItem.Click += bestPointsToolStripMenuItem_Click;
          // 
          // provDiffToolStripMenuItem
          // 
          provDiffToolStripMenuItem.Name = "provDiffToolStripMenuItem";
-         provDiffToolStripMenuItem.Size = new Size(180, 22);
+         provDiffToolStripMenuItem.Size = new Size(167, 22);
          provDiffToolStripMenuItem.Text = "ProvDiff";
          provDiffToolStripMenuItem.Click += provDiffToolStripMenuItem_Click;
          // 
          // yoloToolStripMenuItem
          // 
          yoloToolStripMenuItem.Name = "yoloToolStripMenuItem";
-         yoloToolStripMenuItem.Size = new Size(180, 22);
+         yoloToolStripMenuItem.Size = new Size(167, 22);
          yoloToolStripMenuItem.Text = "yolo";
          yoloToolStripMenuItem.Click += yoloToolStripMenuItem_Click;
          // 
          // saveAllProvincesToolStripMenuItem
          // 
          saveAllProvincesToolStripMenuItem.Name = "saveAllProvincesToolStripMenuItem";
-         saveAllProvincesToolStripMenuItem.Size = new Size(180, 22);
+         saveAllProvincesToolStripMenuItem.Size = new Size(167, 22);
          saveAllProvincesToolStripMenuItem.Text = "Save all provinces";
          saveAllProvincesToolStripMenuItem.Click += saveAllProvincesToolStripMenuItem_Click;
          // 
          // save1ToolStripMenuItem
          // 
          save1ToolStripMenuItem.Name = "save1ToolStripMenuItem";
-         save1ToolStripMenuItem.Size = new Size(180, 22);
+         save1ToolStripMenuItem.Size = new Size(167, 22);
          save1ToolStripMenuItem.Text = "Save 1";
          save1ToolStripMenuItem.Click += save1ToolStripMenuItem_Click;
          // 
          // saveEuropeToolStripMenuItem
          // 
          saveEuropeToolStripMenuItem.Name = "saveEuropeToolStripMenuItem";
-         saveEuropeToolStripMenuItem.Size = new Size(180, 22);
+         saveEuropeToolStripMenuItem.Size = new Size(167, 22);
          saveEuropeToolStripMenuItem.Text = "Save europe";
          saveEuropeToolStripMenuItem.Click += saveEuropeToolStripMenuItem_Click;
          // 

@@ -127,6 +127,8 @@ namespace Editor.Savers
          AddItem("native_hostileness", p.GetAttribute(ProvAttr.native_hostileness), ref sb);
          AddItem("tribal_owner", p.GetAttribute(ProvAttr.tribal_owner), ref sb);
          sb.AppendLine();
+         AddCollection("add_building", p.Buildings, ref sb);
+         sb.AppendLine();
          AddCollection("discovered_by", p.GetAttribute(ProvAttr.discovered_by), ref sb);
          sb.AppendLine();
       }
@@ -144,6 +146,30 @@ namespace Editor.Savers
          {
             sb.AppendLine("latent_trade_goods = {")
                .AppendLine($"   {latentTradeGoods}")
+               .AppendLine("}");
+         }
+
+         // province modifiers
+         foreach (var mod in province.PermanentProvinceModifiers)
+         {
+            sb.AppendLine("add_permanent_province_modifier = {")
+               .AppendLine($"\tname = {mod.Name}\n\tduration = {mod.Duration}")
+               .AppendLine("}");
+         }
+
+         // province modifiers
+         foreach (var mod in province.ProvinceModifiers)
+         {
+            sb.AppendLine("add_province_modifier = {")
+               .AppendLine($"\tname = {mod.Name}\n\tduration = {mod.Duration}")
+               .AppendLine("}");
+         }
+
+         // trade modifiers
+         foreach (var mod in province.TradeModifiers)
+         {
+            sb.AppendLine("add_trade_modifier = {")
+               .AppendLine($"\twho = {mod.Who}\n\tpower = {mod.Power}\n\tkey = {mod.Key}\n\tduration = {mod.Duration}")
                .AppendLine("}");
          }
       }
@@ -181,6 +207,8 @@ namespace Editor.Savers
          switch (value)
          {
             case bool b:
+               if (!b)
+                  break;
                sb.AppendLine($"{name} = {GetYesNo(b)}");
                return;
             case float f:

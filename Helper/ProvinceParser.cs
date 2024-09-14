@@ -77,14 +77,26 @@ public static class ProvinceParser
    {
       if (!DateTime.TryParse(block.Name, out var date))
       {
-         if (block.Name.ToLower().Equals("latent_trade_goods"))
+         switch (block.Name.ToLower())
          {
-            if (Parsing.IsValidTradeGood(block.GetContent))
-               province.LatentTradeGood = TradeGoodHelper.StringToTradeGood(block.GetContent).Name;
-            return;
+            case "latent_trade_goods":
+            {
+               if (Parsing.IsValidTradeGood(block.GetContent))
+                  province.LatentTradeGood = TradeGoodHelper.StringToTradeGood(block.GetContent).Name;
+               return;
+            }
+            case "add_permanent_province_modifier":
+               if (ModifierParser.ParseProvinceModifier(block.GetContent, out var mod))
+                  province.PermanentProvinceModifiers.Add(mod);
+               return;
+            case "add_trade_modifier":
+               if (ModifierParser.ParseTradeModifier(block.GetContent, out var tradeMod))
+                  province.TradeModifiers.Add(tradeMod);
+               return;
+            default:
+               Globals.ErrorLog.Write($"Could not parse date: {block.Name}");
+               return;
          }
-         Globals.ErrorLog.Write($"Could not parse date: {block.Name}");
-         return;
       }
 
       var che = new HistoryEntry(date);

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Editor.Commands;
+﻿using Editor.Commands;
 using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.DataClasses.Commands

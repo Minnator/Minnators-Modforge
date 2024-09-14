@@ -20,14 +20,7 @@ public class CSelectionMarkNext : ICommand
    public void Execute()
    {
       _selectedProvinces = [.. Globals.Selection.SelectedProvinces];
-
-      var sw3 = Stopwatch.StartNew();
-      var sw = Stopwatch.StartNew();
       Globals.Selection.MarkNext(_provinceId);
-      sw.Stop();
-      Debug.WriteLine($"MarkNext: {sw.ElapsedMilliseconds}ms");
-      sw3.Stop();
-      Debug.WriteLine($"MarkNext: {sw3.ElapsedMilliseconds}ms {sw.ElapsedMilliseconds}");
    }
 
    public void Undo()

@@ -54,9 +54,11 @@ public class ProvinceData()
    public List<string> DiscoveredBy = [];                   //.
    public List<string> Buildings = [];                      //.
    public List<string> TradeCompanyInvestments = [];        // TC
-   public List<string> ProvinceModifiers = [];              // MOD
-   public List<string> PermanentProvinceModifiers = [];     // MOD
+   public List<Modifier> ProvinceModifiers = [];            // MOD
+   public List<Modifier> PermanentProvinceModifiers = [];   // MOD
    public List<string> ProvinceTriggeredModifiers = [];     // MOD
+   public List<Effect> ScriptedEffects = [];           
+   public List<TradeModifier> TradeModifiers = [];          
 }
 
 public enum ProvAttr
@@ -147,7 +149,8 @@ public enum ProvAttrSetr
    set_global_flag,
    devastation,
    prosperity,
-
+   remove_permanent_claim,
+   add_permanent_claim
 }
 
 public class Province : IProvinceCollection
@@ -586,7 +589,7 @@ public class Province : IProvinceCollection
       }
    }
 
-   public List<string> ProvinceModifiers
+   public List<Modifier> ProvinceModifiers
    {
       get => _data.ProvinceModifiers;
       set
@@ -597,7 +600,7 @@ public class Province : IProvinceCollection
       }
    }
 
-   public List<string> PermanentProvinceModifiers
+   public List<Modifier> PermanentProvinceModifiers
    {
       get => _data.PermanentProvinceModifiers;
       set
@@ -619,6 +622,27 @@ public class Province : IProvinceCollection
       }
    }
 
+   public List<Effect> ScriptedEffects
+   {
+      get => _data.ScriptedEffects;
+      set
+      {
+         _data.ScriptedEffects = value;
+         if (Globals.State == State.Running)
+            RaiseProvinceScriptedEffectsChanged(Id, value, nameof(ScriptedEffects));
+      }
+   }
+
+   public List<TradeModifier> TradeModifiers
+   {
+      get => _data.TradeModifiers;
+      set
+      {
+         _data.TradeModifiers = value;
+         if (Globals.State == State.Running)
+            RaiseProvinceTradeModifiersChanged(Id, value, nameof(TradeModifiers));
+      }
+   }
 
    #endregion
    public bool IsNonRebelOccupied => Owner != Controller && Controller != "REB";
@@ -687,6 +711,8 @@ public class Province : IProvinceCollection
       ProvinceData.ProvinceModifiers = ProvinceModifiers;
       ProvinceData.PermanentProvinceModifiers = PermanentProvinceModifiers;
       ProvinceData.ProvinceTriggeredModifiers = ProvinceTriggeredModifiers;
+      ProvinceData.ScriptedEffects = ScriptedEffects;
+      ProvinceData.TradeModifiers = TradeModifiers;
    }
 
    /// <summary>
@@ -731,6 +757,8 @@ public class Province : IProvinceCollection
       ProvinceModifiers = ProvinceData.ProvinceModifiers;
       PermanentProvinceModifiers = ProvinceData.PermanentProvinceModifiers;
       ProvinceTriggeredModifiers = ProvinceData.ProvinceTriggeredModifiers;
+      ScriptedEffects = ProvinceData.ScriptedEffects;
+      TradeModifiers = ProvinceData.TradeModifiers;
    }
 
    /// <summary>
@@ -786,7 +814,7 @@ public class Province : IProvinceCollection
 
       if (!Enum.TryParse<ProvAttr>(key, true, out var getter))
       {
-         Globals.ErrorLog.Write($"Could not parse {key} attribute for province id {Id}");
+         Globals.ErrorLog.Write($"Could not parse {key} attribute to get for province id {Id}");
          return "";
       }
 
@@ -856,7 +884,12 @@ public class Province : IProvinceCollection
 
       if (!Enum.TryParse<ProvAttrSetr>(name, true, out var setter))
       {
-         Globals.ErrorLog.Write($"Could not parse {name} attribute for province id {Id}");
+         if (EffectParser.ParseScriptedEffect(name, value, out var effect))
+         {
+            ScriptedEffects.Add(effect);
+            return;
+         }
+         Globals.ErrorLog.Write($"Could not parse {name} to set attribute for province id {Id}");
          return;
       }
 
@@ -1019,18 +1052,6 @@ public class Province : IProvinceCollection
          case ProvAttrSetr.reformation_center:
             ReformationCenter = value;
             break;
-         case ProvAttrSetr.add_province_modifier:
-            ProvinceModifiers.Add(value);
-            break;
-         case ProvAttrSetr.remove_province_modifier:
-            ProvinceModifiers.Remove(value);
-            break;
-         case ProvAttrSetr.add_permanent_province_modifier:
-            PermanentProvinceModifiers.Add(value);
-            break;
-         case ProvAttrSetr.remove_permanent_province_modifier:
-            PermanentProvinceModifiers.Remove(value);
-            break;
          case ProvAttrSetr.add_province_triggered_modifier:
             ProvinceTriggeredModifiers.Add(value);
             break;
@@ -1052,6 +1073,65 @@ public class Province : IProvinceCollection
             else
                Globals.ErrorLog.Write($"Could not parse prosperity: {value} for province id {Id}");
             break;
+         case ProvAttrSetr.add_province_modifier:
+            if (ModifierParser.ParseProvinceModifier(value, out var mod))
+               AddModifier(ModifierType.ProvinceModifier, mod, true);
+            else 
+               Globals.ErrorLog.Write($"Could not parse add_province_modifier: {value} for province id {Id}");
+            break;
+         case ProvAttrSetr.remove_province_modifier:
+            ProvinceModifiers.RemoveAll(x => x.Name == value);
+            break;
+         case ProvAttrSetr.add_permanent_province_modifier:
+            if (ModifierParser.ParseProvinceModifier(value, out var permaMod))
+               AddModifier(ModifierType.PermanentProvinceModifier, permaMod, true);
+            else
+               Globals.ErrorLog.Write($"Could not parse add_permanent_province_modifier: {value} for province id {Id}");
+            break;
+         case ProvAttrSetr.remove_permanent_province_modifier:
+            PermanentProvinceModifiers.RemoveAll(x => x.Name == value);
+            break;
+         case ProvAttrSetr.add_permanent_claim:
+            PermanentClaims.Add(Tag.FromString(value));
+            break;
+         case ProvAttrSetr.remove_permanent_claim:
+            PermanentClaims.Remove(Tag.FromString(value));
+            break;
+         default:
+            Globals.ErrorLog.Write($"Could not parse {name} attribute for province id {Id} to set value {value}");
+            break;
+      }
+   }
+
+   public void AddModifier(ModifierType type, ModifierAbstract mod, bool add)
+   {
+      switch (type)
+      {
+         case ModifierType.ProvinceModifier:
+            if (add)
+               ProvinceModifiers.Add((Modifier)mod);
+            else
+               ProvinceModifiers.Remove((Modifier)mod);
+            break;
+         case ModifierType.ProvinceTriggeredModifier:
+            if (add)
+               ProvinceTriggeredModifiers.Add(mod.Name);
+            else
+               ProvinceTriggeredModifiers.Remove(mod.Name);
+            break;
+         case ModifierType.PermanentProvinceModifier:
+            if (add)
+               PermanentProvinceModifiers.Add((Modifier)mod);
+            else
+               PermanentProvinceModifiers.Remove((Modifier)mod);
+            break;
+         case ModifierType.CountryModifier:
+            Globals.ErrorLog.Write($"Country modifier {mod.Name} cannot be added to province {Id}");
+            break;
+         case ModifierType.TriggeredModifier:
+            break;
+         default:
+            throw new ArgumentOutOfRangeException(nameof(type), type, null);
       }
    }
 

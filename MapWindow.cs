@@ -133,6 +133,8 @@ namespace Editor
          _claims.OnItemAdded += ProvinceEditingEvents.OnClaimAdded;
          _claims.OnItemRemoved += ProvinceEditingEvents.OnClaimRemoved;
          _permanentClaims = ControlFactory.GetItemList(ItemTypes.Tag, [.. Globals.Countries.Keys], "Permanent");
+         _permanentClaims.OnItemAdded += ProvinceEditingEvents.OnPermanentClaimAdded;
+         _permanentClaims.OnItemRemoved += ProvinceEditingEvents.OnPermanentClaimRemoved;
          //TODO: Implement PermanentClaims.OnItemAdded += ProvinceEditingEvents.OnPermanentClaimAdded;
 
          _buildings = ControlFactory.GetItemListObjects(ItemTypes.String, [.. Globals.Buildings], "Building");

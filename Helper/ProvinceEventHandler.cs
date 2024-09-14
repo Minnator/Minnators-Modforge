@@ -306,6 +306,22 @@ public static class ProvinceEventHandler
       RaiseProvinceDataChanged(id, value, propertyName);
    }
 
+   // ProvinceTradeModifiers
+   public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceProvinceTradeModifiersChanged = delegate { };
+   public static void RaiseProvinceTradeModifiersChanged(int id, object value, string propertyName)
+   {
+      OnProvinceProvinceTradeModifiersChanged.Invoke(id, new (value, propertyName));
+      RaiseProvinceDataChanged(id, value, propertyName);
+   }
+
+   // ScriptedEffects
+   public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceScriptedEffectsChanged = delegate { };
+   public static void RaiseProvinceScriptedEffectsChanged(int id, object value, string propertyName)
+   {
+      OnProvinceScriptedEffectsChanged.Invoke(id, new (value, propertyName));
+      RaiseProvinceDataChanged(id, value, propertyName);
+   }
+
    // ReformationCenter
    public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceReformationCenterChanged = delegate { };
    public static void RaiseProvinceReformationCenterChanged(int id, object value, string propertyName)
