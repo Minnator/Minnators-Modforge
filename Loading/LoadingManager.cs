@@ -35,7 +35,7 @@ public static class LoadingManager
       Globals.LoadingStage += 1;
       LocalisationLoading.Load(project.ModPath, project.VanillaPath, project.Language);
       Globals.LoadingStage += 1;
-      ProvinceParser.ParseAllUniqueProvinces(project.ModPath, project.VanillaPath); //TODO SLOW
+      ProvinceParser.ParseAllUniqueProvinces(); //TODO SLOW
       Globals.LoadingStage += 1;
       CultureLoading.LoadCultures(project);
       Globals.LoadingStage += 1;

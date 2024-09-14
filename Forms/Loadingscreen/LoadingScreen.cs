@@ -101,7 +101,7 @@ namespace Editor.Forms.Loadingscreen
             bw.ReportProgress(++progress);
             LocalisationLoading.Load(project.ModPath, project.VanillaPath, project.Language);
             bw.ReportProgress(++progress);
-            ProvinceParser.ParseAllUniqueProvinces(project.ModPath, project.VanillaPath); //TODO SLOW
+            ProvinceParser.ParseAllUniqueProvinces(); //TODO SLOW
             bw.ReportProgress(++progress);
             CultureLoading.LoadCultures(project);
             bw.ReportProgress(++progress);

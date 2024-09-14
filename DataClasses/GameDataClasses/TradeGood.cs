@@ -41,6 +41,8 @@ public static class TradeGoodHelper
    {
       if (Globals.TradeGoods.TryGetValue(str, out var tradeGood))
          return tradeGood;
+      if (str == string.Empty)
+         return TradeGood.Empty;
       Globals.ErrorLog.Write($"Can not find tradegood {str}");
       return TradeGood.Empty;
    }

@@ -25,33 +25,32 @@ public class LocalisationLoading
       var regex = new Regex(@"\s*(?<key>.*):\d*\s+""(?<value>.*)""", RegexOptions.Compiled);
       var loc = new Dictionary<string, string>();
       var collisions = new Dictionary<string, string>();
-
+      
       Parallel.ForEach(files, fileName =>
       {
          IO.ReadAllLinesANSI(fileName, out var lines);
          var threadDict = new Dictionary<string, string>();
-
+         
          foreach (var line in lines)
          {
             var match = regex.Match(line);
             if (!match.Success)
                continue;
-
+         
             var key = match.Groups["key"].Value;
             var value = match.Groups["value"].Value;
-
+         
             if (loc.TryGetValue(key, out var existingValue))
             {
                if (existingValue == value)
                   continue;
-
-               if (!collisions.ContainsKey(key))
-                  collisions.Add(key, existingValue);
-               collisions[key] = value;
+         
+               if (!collisions.TryAdd(key, existingValue))
+                  collisions[key] = value;   
             }
             else
             {
-               threadDict.Add(key, value);
+               threadDict.TryAdd(key, value);
             }
          }
          foreach (var kvp in threadDict)

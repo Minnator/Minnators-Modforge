@@ -21,11 +21,11 @@ public static class ProvinceParser
    private static readonly Regex MultilineAttributeRegex = new(MULTILINE_ATTRIBUTE_PATTERN, RegexOptions.Compiled);
 
 
-   public static void ParseAllUniqueProvinces(string modFolder, string vanillaFolder)
+   public static void ParseAllUniqueProvinces()
    {
       var sw = Stopwatch.StartNew();
       // Get all unique province files from mod and vanilla
-      var files = FilesHelper.GetFilesFromModAndVanillaUniquely(modFolder, vanillaFolder, "history", "provinces");
+      var files = FilesHelper.GetFilesFromModAndVanillaUniquely(Globals.MapWindow.Project.ModPath, Globals.MapWindow.Project.VanillaPath, "history", "provinces");
       // Get All nested Blocks and Attributes from the files
       var po = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 };
       Parallel.ForEach(files, po, ProcessProvinceFile);
