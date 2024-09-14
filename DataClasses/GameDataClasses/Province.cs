@@ -876,9 +876,15 @@ public class Province : IProvinceCollection
       if (Globals.Buildings.Contains(new (name)))
       {
          if (Parsing.YesNo(value))
-            Buildings.Add(name);
+         {
+            Buildings = [..Buildings, name];
+         }
          else
-            Buildings.Remove(name);
+         {
+            var oldBuildings = new List<string>(Buildings);
+            oldBuildings.Remove(name);
+            Buildings = oldBuildings;
+         }
          return;
       }
 

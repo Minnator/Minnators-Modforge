@@ -1,4 +1,5 @@
-﻿using Editor.DataClasses.MapModes;
+﻿using System.Diagnostics;
+using Editor.DataClasses.MapModes;
 using Editor.Helper;
 
 namespace Editor.MapModes;
@@ -28,16 +29,40 @@ public class FortMapMode : MapMode
             return Color.FromArgb(0, 255, 0);
          case 2:
             return Color.BurlyWood;
+         case 3:
+            return Color.FromArgb(255, 255, 0);
+         case 4:
+            return Color.FromArgb(255, 165, 0);
+         case 5:
+            return Color.FromArgb(255, 0, 0);
+         case 6:
+            return Color.FromArgb(139, 0, 0);
+         case 7:
+            return Color.FromArgb(128, 0, 128);
+         case 8:
+            return Color.FromArgb(120, 0, 230);
+         case 9:
+            return Color.FromArgb(0, 0, 0);
          default:
-            return Color.DimGray;
+            return Color.FloralWhite;
       }
    }
 
    private int GetFortLevel(int id)
    {
+      var level = 0;
       if (Globals.Provinces[id].Buildings.Contains("fort_15th"))
-         return 2;
-      return 0;
+         level += 2;
+      if (Globals.Provinces[id].Buildings.Contains("fort_16th"))
+         level += 4;
+      if (Globals.Provinces[id].Buildings.Contains("fort_17th"))
+         level += 6;
+      if (Globals.Provinces[id].Buildings.Contains("fort_18th"))
+         level += 8;
+
+      if (Globals.Capitals.Contains(id))
+         level += 1;
+      return level;
    }
 
    public override string GetMapModeName()
