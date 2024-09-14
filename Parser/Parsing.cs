@@ -293,12 +293,22 @@ public static partial class Parsing
    public static List<KeyValuePair<string, string>> GetKeyValueList(ref string value)
    {
       List<KeyValuePair<string, string>>  keyValueList = [];
-      RemoveCommentFromMultilineString(value, out var removed);
-      var matches = KeyValueRegex.Matches(removed);
+      RemoveCommentFromMultilineString(value, out var commentFreeStr);
+      /*var matches = KeyValueRegex.Matches(removed);
       foreach (Match match in matches)
       {
          keyValueList.Add(new(match.Groups["key"].Value, match.Groups["value"].Value));
       }
+      */
+      var lines = commentFreeStr.Split('\n');
+      foreach (var line in lines)
+      {
+         var keyValue = line.Split('=');
+         if (keyValue.Length != 2)
+            continue;
+         keyValueList.Add(new(keyValue[0].Trim(), keyValue[1].Trim()));
+      }
+
       return keyValueList;
    }
 
@@ -306,19 +316,19 @@ public static partial class Parsing
    /// Iterates of all lines in a multiline string and removes comments from each line.
    /// </summary>
    /// <param name="value"></param>
-   /// <param name="removed"></param>
-   public static void RemoveCommentFromMultilineString(string value, out string removed)
+   /// <param name="commentFreeStr"></param>
+   public static void RemoveCommentFromMultilineString(string value, out string commentFreeStr)
    {
-      RemoveCommentFromMultilineString(ref value, out removed);
+      RemoveCommentFromMultilineString(ref value, out commentFreeStr);
    }
 
-   public static void RemoveCommentFromMultilineString(ref string str, out string removed)
+   public static void RemoveCommentFromMultilineString(ref string str, out string commentFreeStr)
    {
       var sb = new StringBuilder();
       var lines = str.Split('\n');
       foreach (var line in lines) 
          sb.AppendLine(RemoveCommentFromLine(line));
-      removed = sb.ToString();
+      commentFreeStr = sb.ToString();
    }
 
    /// <summary>

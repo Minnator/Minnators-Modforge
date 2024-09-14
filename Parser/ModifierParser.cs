@@ -1,12 +1,12 @@
 ﻿using System.Text.RegularExpressions;
 using Editor.DataClasses.GameDataClasses;
 
-namespace Editor.Helper
+namespace Editor.Parser
 {
    public static class ModifierParser
    {
       private const string PROVINCE_MODIFIER_REGEX = "name\\s*=\\s*(.*)\\s*duration\\s*=\\s*(.*)";
-      private static readonly Regex ProvinceModifierRegex = new (PROVINCE_MODIFIER_REGEX, RegexOptions.Compiled);
+      private static readonly Regex ProvinceModifierRegex = new(PROVINCE_MODIFIER_REGEX, RegexOptions.Compiled);
 
       public static bool ParseProvinceModifier(string str, out Modifier mod)
       {
@@ -21,7 +21,7 @@ namespace Editor.Helper
          var name = match.Groups[1].Value;
          var duration = int.Parse(match.Groups[2].Value);
 
-         mod = new (name, duration);
+         mod = new(name, duration);
          return true;
       }
 
@@ -36,7 +36,7 @@ namespace Editor.Helper
             return false;
          }
 
-         tradeModifier = new ();
+         tradeModifier = new();
 
          for (var i = 0; i < kvps.Length; i += 2)
          {

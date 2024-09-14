@@ -111,7 +111,11 @@ namespace Editor.Savers
          sb.AppendLine();
          AddItem("culture", p.GetAttribute(ProvAttr.culture), ref sb);
          AddItem("religion", p.GetAttribute(ProvAttr.religion), ref sb);
-         sb.AppendLine($"capital = \"{p.GetAttribute(ProvAttr.capital)}\"");
+         var capital = p.GetAttribute(ProvAttr.capital) as string;
+         if (capital!.StartsWith('\"'))
+            sb.AppendLine($"capital = {capital}");
+         else
+            sb.AppendLine($"capital = \"{capital}\"");
          sb.AppendLine();
          AddItem("hre", p.GetAttribute(ProvAttr.hre), ref sb);
          AddItem("is_city", p.GetAttribute(ProvAttr.is_city), ref sb);

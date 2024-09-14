@@ -1,6 +1,6 @@
 ﻿using Editor.DataClasses.GameDataClasses;
 
-namespace Editor.Helper
+namespace Editor.Parser
 {
    public static class EffectParser
    {

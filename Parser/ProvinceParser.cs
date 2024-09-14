@@ -2,8 +2,9 @@
 using System.Text.RegularExpressions;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
+using Editor.Helper;
 
-namespace Editor.Helper;
+namespace Editor.Parser;
 
 public static class ProvinceParser
 {
@@ -14,11 +15,11 @@ public static class ProvinceParser
    private const string MULTILINE_ATTRIBUTE_PATTERN =
       "(?<name>[A-Za-z_.0-9]+)\\s*=\\s*\\{\\s*(?<pairs>(?:\\s*[A-Za-z_.0-9]+\\s*=\\s*[^}\\s]+(?:\\s*\\n?)*)*)\\s*\\}\\s*(?<comment>#.*)?";
 
-   private static readonly Regex DateRegex = new (DATE_PATTERN, RegexOptions.Compiled);
-   private static readonly Regex IdRegex = new (ID_FROM_FILE_NAME_PATTERN, RegexOptions.Compiled);
-   private static readonly Regex AttributeRegex = new (ATTRIBUTE_PATTERN, RegexOptions.Compiled);
-   private static readonly Regex MultilineAttributeRegex = new (MULTILINE_ATTRIBUTE_PATTERN, RegexOptions.Compiled);
-   
+   private static readonly Regex DateRegex = new(DATE_PATTERN, RegexOptions.Compiled);
+   private static readonly Regex IdRegex = new(ID_FROM_FILE_NAME_PATTERN, RegexOptions.Compiled);
+   private static readonly Regex AttributeRegex = new(ATTRIBUTE_PATTERN, RegexOptions.Compiled);
+   private static readonly Regex MultilineAttributeRegex = new(MULTILINE_ATTRIBUTE_PATTERN, RegexOptions.Compiled);
+
 
    public static void ParseAllUniqueProvinces(string modFolder, string vanillaFolder)
    {
@@ -26,9 +27,9 @@ public static class ProvinceParser
       // Get all unique province files from mod and vanilla
       var files = FilesHelper.GetFilesFromModAndVanillaUniquely(modFolder, vanillaFolder, "history", "provinces");
       // Get All nested Blocks and Attributes from the files
-      var po =  new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 };
+      var po = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 };
       Parallel.ForEach(files, po, ProcessProvinceFile);
-      
+
       sw.Stop();
       Globals.LoadingLog.WriteTimeStamp("Parsing provinces", sw.ElapsedMilliseconds);
       DebugPrints.PrintAllProvinceHistories();
@@ -50,7 +51,8 @@ public static class ProvinceParser
          return;
       }
 
-      Parsing.RemoveCommentFromMultilineString(IO.ReadAllInUTF8(path), out var fileContent);
+      IO.ReadAllInANSI(path, out var rawContent);
+      Parsing.RemoveCommentFromMultilineString(rawContent, out var fileContent);
       var blocks = Parsing.GetElements(0, ref fileContent);
 
       foreach (var block in blocks)
@@ -59,8 +61,11 @@ public static class ProvinceParser
          if (block is Content content)
          {
             // Parse the content, aka the attributes
-            foreach (var att in Parsing.GetKeyValueList(content.Value)) 
+            foreach (var att in Parsing.GetKeyValueList(content.Value))
+            {
                province.SetAttribute(att.Key, att.Value);
+            }
+
          }
          else
          {
@@ -80,11 +85,11 @@ public static class ProvinceParser
          switch (block.Name.ToLower())
          {
             case "latent_trade_goods":
-            {
-               if (Parsing.IsValidTradeGood(block.GetContent))
-                  province.LatentTradeGood = TradeGoodHelper.StringToTradeGood(block.GetContent).Name;
-               return;
-            }
+               {
+                  if (Parsing.IsValidTradeGood(block.GetContent))
+                     province.LatentTradeGood = TradeGoodHelper.StringToTradeGood(block.GetContent).Name;
+                  return;
+               }
             case "add_permanent_province_modifier":
                if (ModifierParser.ParseProvinceModifier(block.GetContent, out var mod))
                   province.PermanentProvinceModifiers.Add(mod);

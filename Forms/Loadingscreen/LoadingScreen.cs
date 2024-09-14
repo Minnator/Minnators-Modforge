@@ -2,6 +2,7 @@
 using Editor.Controls;
 using Editor.Helper;
 using Editor.Loading;
+using Editor.Parser;
 using Editor.Resources;
 
 namespace Editor.Forms.Loadingscreen

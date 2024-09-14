@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using Editor.DataClasses;
-using Editor.Helper;
+using Editor.Parser;
 using Path = System.IO.Path;
 
 namespace Editor.Loading;
