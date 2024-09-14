@@ -155,6 +155,11 @@ namespace Editor
          DiscoveredByGroupBox.Controls.Add(_discoveredBy);
          _discoveredBy.Location = new(0, 18);
 
+         List<string> tradeGoodsString = [.. Globals.TradeGoods.Keys];
+         tradeGoodsString.Sort();
+         TradeGoodsComboBox.Items.AddRange([.. tradeGoodsString]);
+         TradeGoodsComboBox.SelectedIndexChanged += ProvinceEditingEvents.OnTradeGoodChanged;
+
          List<string> culturesString = [.. Globals.Cultures.Keys];
          culturesString.Sort();
          _cultureComboBox = ControlFactory.GetExtendedComboBox();

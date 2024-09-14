@@ -513,5 +513,12 @@ namespace Editor.Controls
             return;
          Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Globals.Selection.GetSelectedProvinces, cb.SelectedItem.ToString(), ProvAttr.center_of_trade, ProvAttrSetr.center_of_trade));
       }
+
+      public static void OnTradeGoodChanged(object? sender, EventArgs e)
+      {
+         if (!AllowEditing || sender is not ComboBox cb)
+            return;
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Globals.Selection.GetSelectedProvinces, cb.SelectedItem.ToString(), ProvAttr.trade_good, ProvAttrSetr.trade_goods));
+      }
    }
 }

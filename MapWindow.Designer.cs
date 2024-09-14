@@ -1185,6 +1185,7 @@
          // 
          // TradeGoodsComboBox
          // 
+         TradeGoodsComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
          TradeGoodsComboBox.FormattingEnabled = true;
          TradeGoodsComboBox.Location = new Point(98, 26);
          TradeGoodsComboBox.Margin = new Padding(3, 1, 3, 3);
@@ -1228,6 +1229,7 @@
          // TradeCenterComboBox
          // 
          TradeCenterComboBox.Dock = DockStyle.Fill;
+         TradeCenterComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
          TradeCenterComboBox.FormattingEnabled = true;
          TradeCenterComboBox.Items.AddRange(new object[] { "0", "1", "2", "3" });
          TradeCenterComboBox.Location = new Point(98, 1);
