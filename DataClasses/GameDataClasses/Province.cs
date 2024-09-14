@@ -623,14 +623,14 @@ public class Province : IProvinceCollection
       }
    }
 
-   public List<Effect> ScriptedEffects
+   public List<Effect> Effects
    {
       get => _data.ScriptedEffects;
       set
       {
          _data.ScriptedEffects = value;
          if (Globals.State == State.Running)
-            RaiseProvinceScriptedEffectsChanged(Id, value, nameof(ScriptedEffects));
+            RaiseProvinceScriptedEffectsChanged(Id, value, nameof(Effects));
       }
    }
 
@@ -712,7 +712,7 @@ public class Province : IProvinceCollection
       ProvinceData.ProvinceModifiers = ProvinceModifiers;
       ProvinceData.PermanentProvinceModifiers = PermanentProvinceModifiers;
       ProvinceData.ProvinceTriggeredModifiers = ProvinceTriggeredModifiers;
-      ProvinceData.ScriptedEffects = ScriptedEffects;
+      ProvinceData.ScriptedEffects = Effects;
       ProvinceData.TradeModifiers = TradeModifiers;
    }
 
@@ -758,7 +758,7 @@ public class Province : IProvinceCollection
       ProvinceModifiers = ProvinceData.ProvinceModifiers;
       PermanentProvinceModifiers = ProvinceData.PermanentProvinceModifiers;
       ProvinceTriggeredModifiers = ProvinceData.ProvinceTriggeredModifiers;
-      ScriptedEffects = ProvinceData.ScriptedEffects;
+      Effects = ProvinceData.ScriptedEffects;
       TradeModifiers = ProvinceData.TradeModifiers;
    }
 
@@ -893,7 +893,13 @@ public class Province : IProvinceCollection
       {
          if (EffectParser.ParseScriptedEffect(name, value, out var effect))
          {
-            ScriptedEffects.Add(effect);
+            Effects.Add(effect);
+            return;
+         }
+
+         if (EffectParser.ParseSimpleEffect(name, value, out var eff))
+         {
+            Effects.Add(eff);
             return;
          }
          Globals.ErrorLog.Write($"Could not parse {name} to set attribute for province id {Id}");

@@ -11,10 +11,10 @@ public static class SuperRegionLoading
    private const string MAIN_PATTER = @"(?<name>[a-zA-Z_]*)\s*=\s*{\s*(?<regions>[\w\s]+)\s*\s*}";
 
 
-   public static void Load(string folder, ColorProviderRgb colorProvider)
+   public static void Load(ColorProviderRgb colorProvider)
    {
       var sw = Stopwatch.StartNew();
-      var path = Path.Combine(folder, "map", "superregion.txt");
+      var path = FilesHelper.GetModOrVanillaPath("map", "superregion.txt");
       var newContent = IO.ReadAllLinesInUTF8(path);
       var superRegionDictionary = new Dictionary<string, SuperRegion>();
       var sb = new StringBuilder();

@@ -443,10 +443,14 @@ public static partial class Parsing
                person.Religion = val;
                break;
             case "birth_date":
-               person.BirthDate = DateTime.Parse(val);
+               if (!DateTime.TryParse(val, out var birthDate))
+                  Globals.ErrorLog.Write("Could not parse birth date: " + val);
+               person.BirthDate = birthDate;
                break;
             case "death_date":
-               person.DeathDate = DateTime.Parse(val);
+               if (!DateTime.TryParse(val, out var deathDate))
+                  Globals.ErrorLog.Write("Could not parse death date: " + val);
+               person.DeathDate = deathDate;
                break;
             case "claim":
                if (int.TryParse(val, out var claimStrength))
@@ -555,7 +559,12 @@ public static partial class Parsing
                leader.IsFemale = YesNo(kv.Value);
                break;
             case "death_date":
-               leader.DeathDate = DateTime.Parse(kv.Value);
+               if (!DateTime.TryParse(kv.Value, out var deathDate))
+               {
+                  Globals.ErrorLog.Write("Could not parse death date: " + kv.Value + $" in leader {leader.Name}");
+                  return false;
+               }
+               leader.DeathDate = deathDate;
                break;
             case "personality":
                leader.Personalities.Add(kv.Value);

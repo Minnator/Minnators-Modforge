@@ -137,7 +137,7 @@ public static class ProvinceParser
             type = EffectValueType.Int;
          else if (float.TryParse(element.Value, out _))
             type = EffectValueType.Float;
-         ce.Effects.Add(EffectFactory.CreateSimpleEffect(element.Key, element.Value, type));
+         ce.Effects.Add(EffectFactory.CreateSimpleEffect(element.Key, element.Value, type, Scope.Country));//TODO check if it is country scope
       }
    }
 
@@ -151,7 +151,7 @@ public static class ProvinceParser
             type = EffectValueType.Int;
          else if (float.TryParse(element.Value, out _))
             type = EffectValueType.Float;
-         che.Effects.Add(EffectFactory.CreateSimpleEffect(element.Key, element.Value, type));
+         che.Effects.Add(EffectFactory.CreateSimpleEffect(element.Key, element.Value, type, Scope.Country));//TODO check if it is country scope
       }
    }
 

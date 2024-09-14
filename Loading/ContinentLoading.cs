@@ -10,10 +10,10 @@ public static class ContinentLoading
 {
    private static readonly string _pattern = @"(?<name>[A-Za-z_]*)\s*=\s*{(?<ids>(?:\s*[0-9]+\s*)*)}";
 
-   public static void Load(string folder, ColorProviderRgb colorProvider)
+   public static void Load(ColorProviderRgb colorProvider)
    {
       var sw = Stopwatch.StartNew();
-      var path = Path.Combine(folder, "map", "continent.txt");
+      var path = FilesHelper.GetModOrVanillaPath("map", "continent.txt");
       var newContent = IO.ReadAllLinesInUTF8(path);
 
       var continentDictionary = new Dictionary<string, Continent>();

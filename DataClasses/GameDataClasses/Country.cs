@@ -1,5 +1,4 @@
 ﻿using Editor.Helper;
-using System.Diagnostics.Metrics;
 using Editor.Interfaces;
 
 namespace Editor.DataClasses.GameDataClasses;
@@ -59,6 +58,8 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
    public List<string> ArmyNames { get; set; } = [];
    public List<string> LeaderNames { get; set; } = [];
 
+   // Effects on initialization
+   public List<Effect> InitialEffects { get; set; } = [];
 
    // HISTORY
    public List<string> GovernmentReforms { get; set; } = [];

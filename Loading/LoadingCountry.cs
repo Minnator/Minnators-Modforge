@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
+using Editor.Parser;
 
 namespace Editor.Loading
 {
@@ -48,6 +49,7 @@ namespace Editor.Loading
       {
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely(project.ModPath, project.VanillaPath, "history", "countries");
 
+         /*
          Parallel.ForEach(files, new () { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 },file =>
          {
             Parsing.RemoveCommentFromMultilineString(IO.ReadAllInUTF8(file), out var removed);
@@ -56,6 +58,22 @@ namespace Editor.Loading
             foreach (var element in elements) 
                AnalyzeCountryStuff(element, Globals.Countries[new(Path.GetFileName(file)[..3])]);
          });
+         */
+
+         foreach (var file in files)
+         {
+            Parsing.RemoveCommentFromMultilineString(IO.ReadAllInUTF8(file), out var removed);
+            var elements = Parsing.GetElements(0, removed);
+
+            foreach (var element in elements)
+            {
+               Tag tag = new(Path.GetFileName(file)[..3]);
+               if (Globals.Countries.TryGetValue(tag, out var country))
+                  AnalyzeCountryStuff(element, country);
+               else
+                  Globals.ErrorLog.Write($"Found country file with no no tag reference in 'country_tag' folder: {tag}");
+            }
+         }
       }
 
       private static void AnalyzeCountryStuff(IElement element, Country country)
@@ -76,6 +94,13 @@ namespace Editor.Loading
          foreach (var kvp in Parsing.GetKeyValueList(content.Value))
          {
             var val = Parsing.RemoveCommentFromLine(kvp.Value);
+
+            if (EffectParser.ParseSimpleEffect(kvp.Key, val, out var effect))
+            {
+               country.InitialEffects.Add(effect);
+               continue;
+            }
+            
             switch (kvp.Key)
             {
                case "government":
@@ -176,6 +201,7 @@ namespace Editor.Loading
                case "add_piety":
                   //TODO
                   break;
+
                default:
                   Globals.ErrorLog.Write($"Unknown key in toppers {country.Tag}: {kvp.Key}");
                   break;

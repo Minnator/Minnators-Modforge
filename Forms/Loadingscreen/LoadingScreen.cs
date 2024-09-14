@@ -74,7 +74,6 @@ namespace Editor.Forms.Loadingscreen
          var project = Globals.MapWindow.Project;
          var progress = 0;
          
-         
          try
          {
             TradeGoodsLoading.Load(project);
@@ -89,17 +88,17 @@ namespace Editor.Forms.Loadingscreen
             bw.ReportProgress(++progress);
             LoadingManager.LoadDefinitionAndMap(project); //TODO SLOW
             bw.ReportProgress(++progress);
-            DefaultMapLoading.CreateProvinceGroups(project.VanillaPath);
+            DefaultMapLoading.CreateProvinceGroups();
             bw.ReportProgress(++progress);
-            AreaLoading.Load(project.VanillaPath, project.ColorProvider);
+            AreaLoading.Load(project.ColorProvider);
             bw.ReportProgress(++progress);
-            RegionLoading.Load(project.VanillaPath, project.ColorProvider);
+            RegionLoading.Load(project.ColorProvider);
             bw.ReportProgress(++progress);
-            SuperRegionLoading.Load(project.VanillaPath, project.ColorProvider);
+            SuperRegionLoading.Load(project.ColorProvider);
             bw.ReportProgress(++progress);
-            ContinentLoading.Load(project.VanillaPath, project.ColorProvider);
+            ContinentLoading.Load(project.ColorProvider);
             bw.ReportProgress(++progress);
-            LocalisationLoading.Load(project.ModPath, project.VanillaPath, project.Language);
+            LocalisationLoading.Load(project.Language);
             bw.ReportProgress(++progress);
             ProvinceParser.ParseAllUniqueProvinces(); //TODO SLOW
             bw.ReportProgress(++progress);
@@ -110,6 +109,8 @@ namespace Editor.Forms.Loadingscreen
          }
          catch (Exception exception)
          {
+            // Create a message box to inform the user that an error occurred
+            MessageBox.Show(exception.Message + "\n\nTry restarting the application. There ia a run condition error in the code I could not find yet. Restarting resolves it.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             Debug.WriteLine(exception);
             throw;
          }

@@ -1,6 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Runtime.CompilerServices;
 using System.Text;
-using Windows.ApplicationModel.Store.Preview.InstallControl;
 
 namespace Editor.DataClasses.GameDataClasses
 {
@@ -13,30 +12,38 @@ namespace Editor.DataClasses.GameDataClasses
       Complex
    }
 
+   public enum Scope
+   {
+      Country,
+      Province,
+      Ruler
+   }
+
    public static class EffectFactory
    {
-      public static Effect CreateSimpleEffect(string name, string value, EffectValueType type)
+      public static Effect CreateSimpleEffect(string name, string value, EffectValueType type, Scope scope)
       {
-         return new SimpleEffect(name, value, type);
+         return new SimpleEffect(name, value, type, scope);
       }
 
       public static ComplexEffect CreateComplexEffect(string name, string value, EffectValueType type)
       {
          return name.ToLower() switch
          {
-            "revolt" => new RevoltEffect(name, value, type),
-            "dummy" => new DummyComplexEffect(name, value, type),
-            _ => new DummyComplexEffect(name, value, type)
+            "revolt" => new RevoltEffect(name, value, type, Scope.Province),
+            "dummy" => new DummyComplexEffect(name, value, type, Scope.Country),
+            _ => new DummyComplexEffect(name, value, type, Scope.Country)
          };
       }
    }
 
-   public abstract class Effect(string name, string value, EffectValueType type)
+   public abstract class Effect(string name, string value, EffectValueType type, Scope scope)
    {
       public string Name { get; set; } = name.ToLower();
       public string Value { get; set; } = value;
       public EffectValueType ValueType { get; set; } = type;
       public virtual bool IsComplex => false;
+      public Scope Scope { get; set; } = scope;
 
       public virtual string GetEffectString(int tabs)
       {
@@ -66,13 +73,21 @@ namespace Editor.DataClasses.GameDataClasses
       {
          return $"{Name} : {Value}";
       }
+
+      //create an effect.Empty
+      public static Effect Empty => new SimpleEffect(string.Empty, string.Empty, EffectValueType.String, Scope.Country);
+
+      public bool IsEmpty()
+      {
+         return this == Empty;
+      }
    }
 
-   public class SimpleEffect(string name, string value, EffectValueType type) : Effect(name, value, type);
-   public class DummyComplexEffect(string name, string value, EffectValueType type) : ComplexEffect(name, value, type);
+   public class SimpleEffect(string name, string value, EffectValueType type, Scope scope) : Effect(name, value, type, scope);
+   public class DummyComplexEffect(string name, string value, EffectValueType type, Scope scope) : ComplexEffect(name, value, type, scope);
 
 
-   public abstract class ComplexEffect(string name, string value, EffectValueType type) : Effect(name, value, type)
+   public abstract class ComplexEffect(string name, string value, EffectValueType type, Scope scope) : Effect(name, value, type, scope)
    {
       public List<Effect> Effects { get; set; } = [];
       public override bool IsComplex => true;
@@ -91,7 +106,7 @@ namespace Editor.DataClasses.GameDataClasses
       //TODO trigger?
    }
 
-   public class ScriptedEffect(string name, string value, EffectValueType type) : ComplexEffect(name, value, type)
+   public class ScriptedEffect(string name, string value, EffectValueType type, Scope scope) : ComplexEffect(name, value, type, scope)
    {
       public List<KeyValuePair<string, string>> AttributesList { get; set; } = [];
       public override bool ExecuteProvince(Province province)
@@ -106,7 +121,7 @@ namespace Editor.DataClasses.GameDataClasses
       }
    }
 
-   public class RevoltEffect(string name, string value, EffectValueType type) : ComplexEffect(name, value, type)
+   public class RevoltEffect(string name, string value, EffectValueType type, Scope scope) : ComplexEffect(name, value, type, scope)
    {
       public bool RemovesRevolt => string.IsNullOrWhiteSpace(value);
       // TODO parse remaingin parameters

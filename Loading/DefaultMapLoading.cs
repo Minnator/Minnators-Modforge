@@ -6,7 +6,7 @@ namespace Editor.Loading;
 
 public static class DefaultMapLoading
 {
-   public static void CreateProvinceGroups(string folder)
+   public static void CreateProvinceGroups()
    {
       var sw = new Stopwatch();
       sw.Start();

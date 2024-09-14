@@ -47,14 +47,26 @@ public static class FilesHelper
       var folderPath = Path.Combine(internalPath);
       var modPath = Path.Combine(modPathIn, folderPath);
       var vanillaPath = Path.Combine(vanillaPathIn, folderPath);
-      HashSet<string> fileSet = [];
+      List<string> fileSet = [];
+      HashSet<string> fineNames = [];
 
-      if (Directory.Exists(modPath)) 
-         fileSet.UnionWith(Directory.GetFiles(modPath, "*.txt", SearchOption.TopDirectoryOnly));
+      if (Directory.Exists(modPath))
+      {
+         foreach (var file in Directory.GetFiles(modPath, "*.txt", SearchOption.TopDirectoryOnly))
+         {
+            if (fineNames.Add(Path.GetFileName(file)))
+               fileSet.Add(file);
+         }
+      }
 
       if (Directory.Exists(vanillaPath))
-         foreach (var file in Directory.GetFiles(vanillaPath, "*.txt", SearchOption.TopDirectoryOnly)) 
-            fileSet.Add(file);
+      {
+         foreach (var file in Directory.GetFiles(vanillaPath, "*.txt", SearchOption.TopDirectoryOnly))
+         {
+            if (fineNames.Add(Path.GetFileName(file)))
+               fileSet.Add(file);
+         }
+      }
 
       return [..fileSet];
    }

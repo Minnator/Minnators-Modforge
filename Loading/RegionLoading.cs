@@ -14,13 +14,12 @@ public static class RegionLoading
    private static string _pattern =
       @"(?<regionName>[A-Za-z_]+)\s*=\s*{\s*areas\s*=\s*{\s*(?<areas>(?:\s*[A-Za-z_]+\s*)+)\s*}\s*(?<monsoons>(?:monsoon\s*=\s*{\s*(?:\s*[0-9.]+\s*)+\s*}\s*)*)}";
 
-   public static void Load(string folder, ColorProviderRgb colorProvider)
+   public static void Load(ColorProviderRgb colorProvider)
    {
       var sw = new Stopwatch();
       sw.Start();
-      var path = Path.Combine(folder, "map", "region.txt");
+      var path = FilesHelper.GetModOrVanillaPath("map", "region.txt");
       var newContent = IO.ReadAllLinesInUTF8(path);
-      List<string> regionContent = [];
       Dictionary<string, Region> regionDictionary = [];
 
       // Filtering Comments and optional that are not important to the regions themselves

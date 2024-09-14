@@ -1,24 +1,18 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using Editor.Helper;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Editor.DataClasses;
+using Editor.Helper;
 
 namespace Editor.Loading;
 
 public class LocalisationLoading
 {
-   public static void Load(string modFolder, string vanillaFolder, Language language)
+   public static void Load(Language language)
    {
       var sw = Stopwatch.StartNew();
-      var modLocPath = Path.Combine(modFolder, "localisation");
-      var vanillaLocPath = Path.Combine(vanillaFolder, "localisation");
+      var modLocPath = Path.Combine(Globals.MapWindow.Project.ModPath, "localisation");
+      var vanillaLocPath = Path.Combine(Globals.MapWindow.Project.VanillaPath, "localisation");
       var files = FilesHelper.GetAllFilesInFolder(vanillaLocPath, $"*_l_{language.ToString().ToLower()}.yml");
       files.AddRange(FilesHelper.GetAllFilesInFolder(modLocPath, $"*_l_{language}.yml"));
 

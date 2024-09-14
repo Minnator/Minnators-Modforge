@@ -49,7 +49,8 @@ namespace Editor.Loading
             }
 
             var tradeGood = new TradeGood(block.Name, Parsing.ParseColorPercental(color.GetContent));
-            Globals.TradeGoods.Add(tradeGood.Name, tradeGood);
+            if (!Globals.TradeGoods.TryAdd(tradeGood.Name, tradeGood))
+               Globals.ErrorLog.Write($"TradeGood already exists: {tradeGood.Name}");
          }
       }
 

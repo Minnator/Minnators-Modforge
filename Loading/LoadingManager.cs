@@ -9,43 +9,6 @@ namespace Editor.Loading;
 public static class LoadingManager
 {
 
-   public static void LoadGameAndModDataToApplication(ModProject project)
-   {
-      TradeGoodsLoading.Load(project);
-      Globals.LoadingStage += 1;
-      TradeNodeLoading.Load(project);
-      Globals.LoadingStage += 1;
-      TechnologyGroupsLoading.Load(project);
-      Globals.LoadingStage += 1;
-      BuildingsLoading.Load(project);
-      Globals.LoadingStage += 1;
-      ReligionLoading.Load(project);
-      Globals.LoadingStage += 1;
-      LoadDefinitionAndMap(project); //TODO SLOW
-      Globals.LoadingStage += 1;
-      DefaultMapLoading.CreateProvinceGroups(project.VanillaPath);
-      Globals.LoadingStage += 1;
-      AreaLoading.Load(project.VanillaPath, project.ColorProvider);
-      Globals.LoadingStage += 1;
-      RegionLoading.Load(project.VanillaPath, project.ColorProvider);
-      Globals.LoadingStage += 1;
-      SuperRegionLoading.Load(project.VanillaPath, project.ColorProvider);
-      Globals.LoadingStage += 1;
-      ContinentLoading.Load(project.VanillaPath, project.ColorProvider);
-      Globals.LoadingStage += 1;
-      LocalisationLoading.Load(project.ModPath, project.VanillaPath, project.Language);
-      Globals.LoadingStage += 1;
-      ProvinceParser.ParseAllUniqueProvinces(); //TODO SLOW
-      Globals.LoadingStage += 1;
-      CultureLoading.LoadCultures(project);
-      Globals.LoadingStage += 1;
-      CountryLoading.LoadCountries(project); //TODO SLOW
-      Globals.LoadingStage += 1;
-      DebugPrints.PrintCountriesBasic();
-
-      GC.Collect();
-   }
-
    public static void InitializeComponents(MapWindow mw)
    {
       Globals.HistoryManager.UndoDepthChanged += mw.UpdateUndoDepth;

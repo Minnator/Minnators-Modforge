@@ -7,10 +7,10 @@ namespace Editor.Loading;
 
 public static class AreaLoading
 {
-   public static void Load(string folder, ColorProviderRgb provider)
+   public static void Load(ColorProviderRgb provider)
    {
       var sw = Stopwatch.StartNew();
-      var path = Path.Combine(folder, "map", "area.txt");
+      var path = FilesHelper.GetModOrVanillaPath("map", "area.txt");
       var newContent = IO.ReadAllLinesInUTF8(path);
 
       var areaDictionary = new Dictionary<string, Area>();

@@ -10,13 +10,8 @@ namespace Editor.Loading
    {
       public static void Load(ModProject project)
       {
-
-         var files = FilesHelper.GetFilesFromModAndVanillaUniquely(project.ModPath, project.VanillaPath, "common", "tradenodes");
-         foreach (var file in files)
-         {
-            ParseTradeNodesFromString(IO.ReadAllInUTF8(file));
-         }
-
+         var file = FilesHelper.GetModOrVanillaPath("common", "tradenodes", "00_tradenodes.txt");
+         ParseTradeNodesFromString(IO.ReadAllInUTF8(file));
          SetIncoming();
       }
 

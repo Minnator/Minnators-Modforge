@@ -97,13 +97,9 @@ namespace Editor.Savers
          AddCollection("add_core", p.GetAttribute(ProvAttr.cores), ref sb);
          AddItem("owner", p.GetAttribute(ProvAttr.owner), ref sb);
          AddItem("controller", p.GetAttribute(ProvAttr.controller), ref sb);
-         sb.AppendLine();
          AddItem("base_tax", p.GetAttribute(ProvAttr.base_tax), ref sb);
          AddItem("base_production", p.GetAttribute(ProvAttr.base_production), ref sb);
          AddItem("base_manpower", p.GetAttribute(ProvAttr.base_manpower), ref sb);
-         sb.AppendLine();
-         AddCollection("add_claim", p.GetAttribute(ProvAttr.claims), ref sb);
-         AddCollection("add_permanent_claim", p.GetAttribute(ProvAttr.permanent_claims), ref sb);
          sb.AppendLine();
          AddItem("center_of_trade", p.GetAttribute(ProvAttr.center_of_trade), ref sb);
          AddItem("trade_goods", p.GetAttribute(ProvAttr.trade_good), ref sb);
@@ -120,21 +116,35 @@ namespace Editor.Savers
          AddItem("hre", p.GetAttribute(ProvAttr.hre), ref sb);
          AddItem("is_city", p.GetAttribute(ProvAttr.is_city), ref sb);
          AddItem("seat_in_parliament", p.GetAttribute(ProvAttr.seat_in_parliament), ref sb);
-         sb.AppendLine();
          AddItem("add_local_autonomy", p.GetAttribute(ProvAttr.local_autonomy), ref sb);
          AddItem("add_devastation", p.GetAttribute(ProvAttr.devastation), ref sb);
          AddItem("add_prosperity", p.GetAttribute(ProvAttr.prosperity), ref sb);
          AddItem("add_nationalism", p.GetAttribute(ProvAttr.nationalism), ref sb);
-         sb.AppendLine();
          AddItem("native_size", p.GetAttribute(ProvAttr.native_size), ref sb);
          AddItem("native_ferocity", p.GetAttribute(ProvAttr.native_ferocity), ref sb);
          AddItem("native_hostileness", p.GetAttribute(ProvAttr.native_hostileness), ref sb);
          AddItem("tribal_owner", p.GetAttribute(ProvAttr.tribal_owner), ref sb);
-         sb.AppendLine();
          AddCollection("add_building", p.Buildings, ref sb);
+         AddCollection("add_claim", p.GetAttribute(ProvAttr.claims), ref sb);
+         AddCollection("add_permanent_claim", p.GetAttribute(ProvAttr.permanent_claims), ref sb);
          sb.AppendLine();
          AddCollection("discovered_by", p.GetAttribute(ProvAttr.discovered_by), ref sb);
          sb.AppendLine();
+         AddCollection("add_province_triggered_modifier", p.ProvinceTriggeredModifiers, ref sb);
+         AddCollection("add_province_modifier", p.ProvinceModifiers, ref sb);
+         AddCollection("add_permanent_province_modifier", p.PermanentProvinceModifiers, ref sb);
+         AddCollection("add_trade_modifier", p.TradeModifiers, ref sb);
+         sb.AppendLine();
+         AddEffects(ref sb);
+      }
+
+      /// <summary>
+      /// Writes all effects to the string builder.
+      /// </summary>
+      private static void AddEffects(ref StringBuilder sb)
+      {
+         foreach (var effect in Globals.Provinces[1].Effects)
+            sb.AppendLine(effect.GetEffectString(0));
       }
 
       /// <summary>

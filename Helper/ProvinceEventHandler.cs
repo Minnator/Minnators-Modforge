@@ -314,7 +314,7 @@ public static class ProvinceEventHandler
       RaiseProvinceDataChanged(id, value, propertyName);
    }
 
-   // ScriptedEffects
+   // Effects
    public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceScriptedEffectsChanged = delegate { };
    public static void RaiseProvinceScriptedEffectsChanged(int id, object value, string propertyName)
    {
