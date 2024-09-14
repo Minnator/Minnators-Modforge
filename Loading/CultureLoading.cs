@@ -67,7 +67,11 @@ public static class CultureLoading
          SetCultureGroupAttributes(ref group, contents);
          lock (cultureGroupDict)
          {
-            cultureGroupDict.Add(group.Name, group);
+            if (!cultureGroupDict.TryAdd(group.Name, group))
+            {
+               Globals.ErrorLog.Write($"Duplicate culture group name: {group.Name}");
+               cultureGroupDict[group.Name] = group;
+            }
          }
       });
 
