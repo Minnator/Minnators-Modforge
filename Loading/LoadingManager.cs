@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Windows.Foundation.Metadata;
 using Editor.DataClasses;
 using Editor.Parser;
 using Path = System.IO.Path;
@@ -7,6 +8,7 @@ namespace Editor.Loading;
 
 public static class LoadingManager
 {
+
    public static void LoadGameAndModDataToApplication(ModProject project)
    {
       TradeGoodsLoading.Load(project);
@@ -21,7 +23,7 @@ public static class LoadingManager
       Globals.LoadingStage += 1;
       LoadDefinitionAndMap(project); //TODO SLOW
       Globals.LoadingStage += 1;
-      DefaultMapLoading.Load(project.VanillaPath);
+      DefaultMapLoading.CreateProvinceGroups(project.VanillaPath);
       Globals.LoadingStage += 1;
       AreaLoading.Load(project.VanillaPath, project.ColorProvider);
       Globals.LoadingStage += 1;

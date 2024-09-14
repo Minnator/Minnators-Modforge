@@ -69,7 +69,7 @@
          LoadButton.Name = "LoadButton";
          LoadButton.Size = new Size(506, 24);
          LoadButton.TabIndex = 2;
-         LoadButton.Text = "Load";
+         LoadButton.Text = "CreateProvinceGroups";
          LoadButton.UseVisualStyleBackColor = true;
          LoadButton.Click += LoadButton_Click;
          // 

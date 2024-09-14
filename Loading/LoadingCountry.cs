@@ -37,7 +37,7 @@ namespace Editor.Loading
          Globals.LoadingLog.WriteTimeStamp("Parsing Country Tags", sw.ElapsedMilliseconds);
          ParseCountryAttributes(project);
 
-         // Load country history
+         // CreateProvinceGroups country history
          sw.Restart();
          LoadCountryHistories(project);
          sw.Stop();

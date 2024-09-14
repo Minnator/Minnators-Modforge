@@ -91,4 +91,13 @@ public static class FilesHelper
       }
       output = sb.ToString();
    }
+
+   public static string GetModOrVanillaPath(params string[] internalPath)
+   {
+      var innerPath = Path.Combine(internalPath);
+      var path = Path.Combine(Globals.MapWindow.Project.ModPath, innerPath);
+      if (File.Exists(path))
+         return path;
+      return Path.Combine(Globals.MapWindow.Project.VanillaPath, innerPath);
+   }
 }

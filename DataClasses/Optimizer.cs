@@ -73,8 +73,31 @@ public static class Optimizer
       sw.Start();
       var adjacencyList = new Dictionary<int, int[]>(Globals.Provinces.Count);
 
-      foreach (var kvp in colorToAdj) 
-         adjacencyList.Add(Globals.ColorToProvId[kvp.Key], kvp.Value.Select(color => Globals.ColorToProvId[color]).ToArray());
+      /*foreach (var kvp in colorToAdj) 
+      {
+         adjacencyList.Add(Globals.ColorToProvId[kvp.Key], kvp.Value.Select(color =>
+         {
+            return Globals.ColorToProvId[color];
+         }).ToArray());
+      }*/
+
+      foreach (var adjacent in colorToAdj)
+      {
+         var adjIds = new int[adjacent.Value.Count];
+         var cnt = 0;
+         foreach (var color in adjacent.Value)
+         {
+            if (Globals.ColorToProvId.TryGetValue(color, out var value))
+               adjIds[cnt++] = value;
+            else
+               Globals.ErrorLog.Write($"Could not find definition for color {color}!");
+         }
+
+         if (Globals.ColorToProvId.TryGetValue(adjacent.Key, out var key))
+            adjacencyList[key] = adjIds;
+         else
+            Globals.ErrorLog.Write($"Could not find province with color {adjacent.Key}");
+      }
 
       sw.Stop();
       //Debug.WriteLine($"Adjacency calculation took {sw.ElapsedMilliseconds}ms");

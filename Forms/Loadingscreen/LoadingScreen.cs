@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using Editor.Controls;
 using Editor.Helper;
 using Editor.Loading;
@@ -73,36 +74,46 @@ namespace Editor.Forms.Loadingscreen
          var project = Globals.MapWindow.Project;
          var progress = 0;
          
-         TradeGoodsLoading.Load(project);
-         bw.ReportProgress(++progress);
-         TradeNodeLoading.Load(project);
-         bw.ReportProgress(++progress);
-         TechnologyGroupsLoading.Load(project);
-         bw.ReportProgress(++progress);
-         BuildingsLoading.Load(project);
-         bw.ReportProgress(++progress);
-         ReligionLoading.Load(project);
-         bw.ReportProgress(++progress);
-         LoadingManager.LoadDefinitionAndMap(project); //TODO SLOW
-         bw.ReportProgress(++progress);
-         DefaultMapLoading.Load(project.VanillaPath);
-         bw.ReportProgress(++progress);
-         AreaLoading.Load(project.VanillaPath, project.ColorProvider);
-         bw.ReportProgress(++progress);
-         RegionLoading.Load(project.VanillaPath, project.ColorProvider);
-         bw.ReportProgress(++progress);
-         SuperRegionLoading.Load(project.VanillaPath, project.ColorProvider);
-         bw.ReportProgress(++progress);
-         ContinentLoading.Load(project.VanillaPath, project.ColorProvider);
-         bw.ReportProgress(++progress);
-         LocalisationLoading.Load(project.ModPath, project.VanillaPath, project.Language);
-         bw.ReportProgress(++progress);
-         ProvinceParser.ParseAllUniqueProvinces(project.ModPath, project.VanillaPath); //TODO SLOW
-         bw.ReportProgress(++progress);
-         CultureLoading.LoadCultures(project);
-         bw.ReportProgress(++progress);
-         CountryLoading.LoadCountries(project); //TODO SLOW
-         bw.ReportProgress(++progress);
+         
+         try
+         {
+            TradeGoodsLoading.Load(project);
+            bw.ReportProgress(++progress);
+            TradeNodeLoading.Load(project);
+            bw.ReportProgress(++progress);
+            TechnologyGroupsLoading.Load(project);
+            bw.ReportProgress(++progress);
+            BuildingsLoading.Load(project);
+            bw.ReportProgress(++progress);
+            ReligionLoading.Load(project);
+            bw.ReportProgress(++progress);
+            LoadingManager.LoadDefinitionAndMap(project); //TODO SLOW
+            bw.ReportProgress(++progress);
+            DefaultMapLoading.CreateProvinceGroups(project.VanillaPath);
+            bw.ReportProgress(++progress);
+            AreaLoading.Load(project.VanillaPath, project.ColorProvider);
+            bw.ReportProgress(++progress);
+            RegionLoading.Load(project.VanillaPath, project.ColorProvider);
+            bw.ReportProgress(++progress);
+            SuperRegionLoading.Load(project.VanillaPath, project.ColorProvider);
+            bw.ReportProgress(++progress);
+            ContinentLoading.Load(project.VanillaPath, project.ColorProvider);
+            bw.ReportProgress(++progress);
+            LocalisationLoading.Load(project.ModPath, project.VanillaPath, project.Language);
+            bw.ReportProgress(++progress);
+            ProvinceParser.ParseAllUniqueProvinces(project.ModPath, project.VanillaPath); //TODO SLOW
+            bw.ReportProgress(++progress);
+            CultureLoading.LoadCultures(project);
+            bw.ReportProgress(++progress);
+            CountryLoading.LoadCountries(project); //TODO SLOW
+            bw.ReportProgress(++progress);
+         }
+         catch (Exception exception)
+         {
+            Debug.WriteLine(exception);
+            throw;
+         }
+         
 
          GC.Collect();
          Globals.LoadingStage = progress;
