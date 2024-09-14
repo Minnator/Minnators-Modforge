@@ -144,6 +144,8 @@ namespace Editor
          _discoveredBy.OnItemAdded += ProvinceEditingEvents.OnDiscoveredByAdded;
          _discoveredBy.OnItemRemoved += ProvinceEditingEvents.OnDiscoveredByRemoved;
 
+         TradeCenterComboBox.SelectedIndexChanged += ProvinceEditingEvents.OnTradeCenterChanged;
+
          CoresAndClaimLayoutPanel.Controls.Add(_permanentClaims, 0, 0);
          CoresAndClaimLayoutPanel.Controls.Add(_claims, 1, 0);
          CoresGroupBox.Controls.Add(_cores);

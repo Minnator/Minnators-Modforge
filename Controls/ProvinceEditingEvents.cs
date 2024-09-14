@@ -506,5 +506,12 @@ namespace Editor.Controls
             return;
          Globals.HistoryManager.AddCommand(new CAddRemoveProvinceAttribute(e.Provinces, e.Value.ToString()!, ProvAttr.permanent_claims, ProvAttrSetr.remove_permanent_claim, ProvAttrSetr.add_permanent_claim, false));
       }
+
+      public static void OnTradeCenterChanged(object? sender, EventArgs e)
+      {
+         if (!AllowEditing || sender is not ComboBox cb)
+            return;
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Globals.Selection.GetSelectedProvinces, cb.SelectedItem.ToString(), ProvAttr.center_of_trade, ProvAttrSetr.center_of_trade));
+      }
    }
 }

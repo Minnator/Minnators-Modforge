@@ -1229,6 +1229,7 @@
          // 
          TradeCenterComboBox.Dock = DockStyle.Fill;
          TradeCenterComboBox.FormattingEnabled = true;
+         TradeCenterComboBox.Items.AddRange(new object[] { "0", "1", "2", "3" });
          TradeCenterComboBox.Location = new Point(98, 1);
          TradeCenterComboBox.Margin = new Padding(3, 1, 3, 3);
          TradeCenterComboBox.Name = "TradeCenterComboBox";
