@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Xml.Linq;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
@@ -13,7 +14,9 @@ public static class CultureLoading
       var sw = Stopwatch.StartNew();
       FilesHelper.GetFilesUniquelyAndCombineToOne(project.ModPath, project.VanillaPath, out var culturesContent, "common", "cultures");
 
-      var blocks = Parsing.GetElements(0, ref culturesContent);
+      Parsing.RemoveCommentFromMultilineString(ref culturesContent, out var commentLessContent);
+
+      var blocks = Parsing.GetElements(0, ref commentLessContent);
 
       var (groups, cultures) = GetCultureGroups(ref blocks, project.ColorProvider);
       Globals.CultureGroups = groups;
@@ -30,7 +33,6 @@ public static class CultureLoading
    {
       Dictionary<string, Culture> cultureDict = [];
       Dictionary<string, CultureGroup> cultureGroupDict = [];
-
       Parallel.ForEach(blocks, element =>
       {
          if (element is not Block block)
@@ -60,7 +62,11 @@ public static class CultureLoading
                group.Cultures.Add(culture);
                lock (cultureDict)
                {
-                  cultureDict.Add(culture.Name, culture);
+                  if (!cultureDict.TryAdd(culture.Name, culture))
+                  {
+                     Globals.ErrorLog.Write($"Duplicate culture name: {culture.Name}, used later appearance");
+                     cultureDict[culture.Name] = culture;
+                  }
                }
             }
          }

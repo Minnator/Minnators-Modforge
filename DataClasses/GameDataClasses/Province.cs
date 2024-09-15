@@ -1219,7 +1219,7 @@ public class Province : IProvinceCollection
    }
    public override string ToString()
    {
-      return $"{Id} ({GetLocalisation()}";
+      return $"{Id} ({GetLocalisation()} ";
    }
 
 }

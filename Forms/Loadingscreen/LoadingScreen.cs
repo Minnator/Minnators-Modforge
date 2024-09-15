@@ -12,7 +12,7 @@ namespace Editor.Forms.Loadingscreen
    {
       private const bool SKIP_LOADING = true;
       private readonly CustomProgressBar ProgressBar;
-      private MemoryStream ms;
+      private MemoryStream _ms = null!;
 
       public LoadingScreen()
       {
@@ -28,12 +28,12 @@ namespace Editor.Forms.Loadingscreen
 
          StartPosition = FormStartPosition.CenterScreen;
 
-         LoadButton_Click(null, null);
+         LoadButton_Click(null!, null!);
       }
 
       ~LoadingScreen()
       {
-         ms.Dispose();
+         _ms.Dispose();
       }
       
       private void LoadingScreen_LoadingStageChanged(object? sender, int e)
@@ -46,8 +46,8 @@ namespace Editor.Forms.Loadingscreen
       {
          if (!GifToBytes.ConvertFormattedHexToBytes(StaticByteResources.LOADING_GIF, out var bytes))
             throw new ArgumentException("Can not convert loading animation");
-         ms = new (bytes);
-         LoadingAnimation.Image = Image.FromStream(ms);
+         _ms = new (bytes);
+         LoadingAnimation.Image = Image.FromStream(_ms);
          LoadingAnimation.SizeMode = PictureBoxSizeMode.Zoom;
       }
       

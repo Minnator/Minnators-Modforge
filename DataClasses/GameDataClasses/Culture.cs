@@ -20,6 +20,11 @@ public class Culture(string name)
    public int FemaleNamesCount => FemaleNames.Length;
    public int DynastyNamesCount => DynastyNames.Length;
    public int TotalNameCount => MaleNamesCount + FemaleNamesCount + DynastyNamesCount;
+
+   public override string ToString()
+   {
+      return Name;
+   }
 }
 
 public class CultureGroup(string name)
@@ -39,4 +44,8 @@ public class CultureGroup(string name)
    public int FemaleNamesCount => FemaleNames.Length;
    public int DynastyNamesCount => DynastyNames.Length;
    public int TotalNameCount => MaleNamesCount + FemaleNamesCount + DynastyNamesCount;
+   public override string ToString()
+   {
+      return Name;
+   }
 }

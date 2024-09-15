@@ -1,7 +1,7 @@
-﻿using Editor.DataClasses.MapModes;
+﻿using System.Diagnostics;
 using Editor.Helper;
 
-namespace Editor.MapModes;
+namespace Editor.DataClasses.MapModes;
 
 public class CultureMapMode : MapMode
 {

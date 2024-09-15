@@ -54,13 +54,7 @@ public static class ProvinceParser
       {
          Globals.ErrorLog.Write($"Could not find province with id {id}");
          return;
-      }
-
-      if (id == 199)
-      {
-         Debugger.Break();
-      }
-
+      } 
       IO.ReadAllInANSI(path, out var rawContent);
       Parsing.RemoveCommentFromMultilineString(rawContent, out var fileContent);
       var blocks = Parsing.GetElements(0, ref fileContent);
