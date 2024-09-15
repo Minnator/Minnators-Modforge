@@ -106,6 +106,8 @@ namespace Editor.Forms.Loadingscreen
             bw.ReportProgress(++progress);
             CountryLoading.LoadCountries(project); //TODO SLOW
             bw.ReportProgress(++progress);
+            ScopeParser.GenerateRuntimeScopes();
+            bw.ReportProgress(++progress);
          }
          catch (Exception exception)
          {

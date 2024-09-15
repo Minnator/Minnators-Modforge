@@ -89,9 +89,7 @@ namespace Editor.Parser
 
       public static bool IsValidModifier(string name)
       {
-         if (CountryModifiers.Contains(name) || ProvinceModifiers.Contains(name))
-            return true;
-         return false;
+         return CountryModifiers.Contains(name) || ProvinceModifiers.Contains(name);
       }
 
       public static bool IsRemovedModifier(string name)

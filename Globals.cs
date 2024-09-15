@@ -69,7 +69,7 @@ public static class Globals {
       }
    }
    private static int _loadingStage = 0;
-   public static int LOADING_STAGES = 20;
+   public static int LOADING_STAGES = 21;
    #endregion
    
    public static ConsoleForm? ConsoleForm = null;
@@ -161,6 +161,8 @@ public static class Globals {
    public static HashSet<int> CoastalProvinces = null!;
    public static int[] NonLandProvinceIds = null!;
    public static int[] LandProvinceIds = null!;
+
+   public static Dictionary<string, int[]> ProvinceGroups = []; // TODO: read in
    // In Game Groups
    public static Dictionary<string, Area> Areas = null!;
    public static Dictionary<string, Region> Regions { get; set; } = [];

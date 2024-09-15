@@ -264,8 +264,6 @@ namespace Editor.Loading
             return;
          foreach (var content in element)
          {
-            if (content.Value.Equals("decision = act_of_uniformity decision = blasphemy_act"))
-               Debugger.Break();
             var kvp = Parsing.GetKeyValueList(content.Value);
             if (kvp.Count < 1)
             {
