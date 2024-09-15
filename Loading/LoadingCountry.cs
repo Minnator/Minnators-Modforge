@@ -363,6 +363,12 @@ namespace Editor.Loading
       {
          foreach (var kvp in Parsing.GetKeyValueList(element.Value))
          {
+            if (Globals.CountryAttributes.Contains(kvp.Key))
+            {
+               country.CustomAttributes.Add(kvp.Key);
+               continue;
+            }
+
             switch (kvp.Key)
             {
                case "historical_council":

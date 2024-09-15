@@ -1,4 +1,5 @@
-﻿using Editor.Commands;
+﻿using System.Security.Policy;
+using Editor.Commands;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
@@ -192,6 +193,11 @@ public static class Globals {
 
    public static List<string> SelectionModifiers = [
       "Deselection"
+   ];
+
+   public static readonly HashSet<string> CountryAttributes = 
+   [
+      "cannot_form_from_collapse_nation", "right_to_bear_arms", "all_your_core_are_belong_to_us",    
    ];
 
 }

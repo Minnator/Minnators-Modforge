@@ -52,6 +52,7 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
 
    public List<string> HistoricalIdeas { get; set; } = [];
    public List<string> HistoricalUnits { get; set; } = [];
+   public List<string> CustomAttributes { get; set; } = [];
    public List<MonarchName> MonarchNames { get; set; } = [];
    public List<string> ShipNames { get; set; } = [];
    public List<string> FleeTNames { get; set; } = [];
