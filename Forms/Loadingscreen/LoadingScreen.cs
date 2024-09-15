@@ -76,6 +76,8 @@ namespace Editor.Forms.Loadingscreen
          
          try
          {
+            LocalisationLoading.Load(project.Language);
+            bw.ReportProgress(++progress);
             TradeGoodsLoading.Load(project);
             bw.ReportProgress(++progress);
             TradeNodeLoading.Load(project);
@@ -97,8 +99,6 @@ namespace Editor.Forms.Loadingscreen
             SuperRegionLoading.Load(project.ColorProvider);
             bw.ReportProgress(++progress);
             ContinentLoading.Load(project.ColorProvider);
-            bw.ReportProgress(++progress);
-            LocalisationLoading.Load(project.Language);
             bw.ReportProgress(++progress);
             ProvinceParser.ParseAllUniqueProvinces(); //TODO SLOW
             bw.ReportProgress(++progress);

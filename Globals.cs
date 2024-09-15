@@ -177,29 +177,14 @@ public static class Globals {
    public static List<Building> Buildings { get; set; }= [];
    public static HashSet<string> BuildingKeys { get; set; }= [];
 
+   // Is used in parsing province files as some keys differ from standard effect keys
    public static readonly HashSet<string> UniqueAttributeKeys = [
-      "add_claim", "add_core", "add_local_autonomy", "add_nationalism", "base_manpower", "base_production", "base_tax", "capital", "center_of_trade", "controller", "culture", "discovered_by", "extra_cost", "fort_15th", "hre", "is_city", "native_ferocity", "native_hostileness", "native_size", "owner", "religion", "seat_in_parliament", "trade_goods", "tribal_owner", "unrest", "shipyard", "revolt_risk"
-   ];
-
-   public static readonly HashSet<string> Scopes = [
-      "every_province", "every_owned_province"
-   ];
-
-   public static readonly HashSet<string> Effects = [
-      "change_price", "add_opinion", "add_estate_loyalty", "change_estate_land_share", "add_ruler_modifier", "add_country_modifier", "add_base_tax", "add_base_production", "add_base_manpower", "add_local_autonomy", "remove_core", "revolt", "remove_claim", "reformation_center", "add_province_modifier", "remove_province_modifier", "add_to_trade_company", "add_trade_company_investment", "add_permanent_province_modifier", "remove_permanent_province_modifier", "add_province_triggered_modifier", "remove_province_triggered_modifier", "textile", "set_global_flag"
+      "add_claim", "add_core", "add_local_autonomy", "add_nationalism", "base_manpower", "base_production", "base_tax", "capital", "center_of_trade", "controller", "culture", "discovered_by", "extra_cost", "hre", "city", "native_ferocity", "native_hostileness", "native_size", "owner", "religion", "seat_in_parliament", "trade_goods", "tribal_owner", "unrest", "shipyard", "revolt_risk"
    ];
 
    public static readonly HashSet<string> ScriptedEffects = [
       "change_jains_or_burghers_land_share_effect", "change_rajputs_or_marathas_or_nobles_land_share_effect", "change_brahmins_or_church_land_share_effect", "change_rajputs_or_marathas_or_nobles_land_share_effect", 
    ];// TODo read in from file
-
-   public static readonly HashSet<string> Triggers = [
-      
-   ];
-
-   public static readonly HashSet<string> Conditions = [
-      "if", "else", "else_if", "limit"
-   ];
 
    public static List<string> ToolTippableAttributes = [ 
       "base_manpower", "base_tax", "base_production",  "total_development", "area", "continent", "claims", "cores", "controller", "owner", "tribal_owner", "center_of_trade", "extra_cost", "native_ferocity", "native_hostileness", "native_size", "revolt_risk", ">local_autonomy", "nationalism", "discovered_by", "capital", "culture", "religion", "has_fort_15th", "is_hre", "is_city", "is_seat_in_parliament", "trade_good", "history", "multiline_attributes", "id", "name", "has_revolt", "is_occupied"

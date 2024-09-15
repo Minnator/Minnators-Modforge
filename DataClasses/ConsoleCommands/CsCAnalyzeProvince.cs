@@ -2,6 +2,7 @@
 using Editor.Analyzers;
 using Editor.Controls;
 using Editor.DataClasses.GameDataClasses;
+using Editor.Parser;
 
 namespace Editor.DataClasses.ConsoleCommands
 {
@@ -29,7 +30,7 @@ namespace Editor.DataClasses.ConsoleCommands
             return;
          }
 
-         if (!Globals.UniqueAttributeKeys.Contains(args[2]) || !AnalyzerFacotry.HasAnalyzer(args[2]))
+         if (!EffectParser.IsAnyEffect(args[2]) || !AnalyzerFacotry.HasAnalyzer(args[2]))
          {
             Output.WriteError($"Invalid attribute [{args[2]}]; can not analyze!");
             return;

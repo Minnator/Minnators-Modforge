@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Text;
 using ABI.Windows.Media.Playback;
+using Editor.Parser;
 
 namespace Editor.DataClasses.GameDataClasses
 {
@@ -56,11 +57,18 @@ namespace Editor.DataClasses.GameDataClasses
 
       public virtual bool ExecuteProvince(Province province)
       {
-         if (Globals.UniqueAttributeKeys.Contains(name) || Globals.Effects.Contains(name) || Globals.Buildings.Contains(new (name)))
+         if (EffectParser.IsAnyEffect(name) || Globals.Buildings.Contains(new (name)) || Globals.UniqueAttributeKeys.Contains(name))
          {
+            // TODO: This is a weird fix and should be removed in the future
+            if (name.Equals("city"))
+            {
+               province.SetAttribute(ProvAttrSetr.is_city, Value);
+               return true;
+            }
             province.SetAttribute(Name, Value);
             return true;
          }
+         Globals.ErrorLog.Write($"Could not execute effect: {Name}");
          return false;
       }
 

@@ -108,6 +108,15 @@ namespace Editor.Parser
          return false;
       }
 
+      public static bool IsLogicScope(string scope)
+      {
+         return LogicScopes.Contains(scope);
+      }
+
+      public static bool IsAnyTriggerScope(string scope)
+      {
+         return TriggerScopes.Contains(scope) || ProvinceTriggerScopes.Contains(scope) || TradeNodeTriggerScopes.Contains(scope) || MissionTriggerScopes.Contains(scope) || RemovedTriggerScopes.Contains(scope);
+      }
 
 
 

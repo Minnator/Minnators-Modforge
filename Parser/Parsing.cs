@@ -3,7 +3,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
-using static Editor.Helper.TriggersEffectsScopes;
+using Editor.Parser;
 
 namespace Editor.Helper;
 
@@ -631,22 +631,22 @@ public static partial class Parsing
    internal static bool ParseDynamicContent(Block block, out object output)
    {
       output = default!;
-      if (IsScope(block.Name))
+      if (ScopeParser.IsAnyScope(block.Name))
       {
          //TODO parse Scope
          return true;
       }
-      if (IsEffect(block.Name))
+      if (EffectParser.IsAnyEffect(block.Name))
       {
          //TODO parse Effect
          return true;
       }
-      if (IsTrigger(block.Name))
+      if (ScopeParser.IsAnyTriggerScope(block.Name))
       {
          //TODO parse Trigger
          return true;
       }
-      if (IsConditionStatement(block.Name))
+      if (ScopeParser.IsLogicScope(block.Name))
       {
          //TODO parse Condition
          return true;
