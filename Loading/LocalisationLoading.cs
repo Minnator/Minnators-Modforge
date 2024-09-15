@@ -38,9 +38,11 @@ public class LocalisationLoading
             {
                if (existingValue == value)
                   continue;
-         
-               if (!collisions.TryAdd(key, existingValue))
-                  collisions[key] = value;   
+               lock (collisions)
+               {
+                  if (!collisions.TryAdd(key, existingValue))
+                     collisions[key] = value;   
+               }
             }
             else
             {
@@ -55,9 +57,12 @@ public class LocalisationLoading
                   loc.Add(kvp.Key, kvp.Value);
                else
                {
-                  if (!collisions.ContainsKey(kvp.Key))
-                     collisions.Add(kvp.Key, kvp.Value);
-                  collisions[kvp.Key] = kvp.Value;
+                  lock (collisions)
+                  {
+                     if (!collisions.ContainsKey(kvp.Key))
+                        collisions.Add(kvp.Key, kvp.Value);
+                     collisions[kvp.Key] = kvp.Value;
+                  }
                }
             }
          }
