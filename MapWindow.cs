@@ -602,7 +602,7 @@ namespace Editor
 
       private void save1ToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         Globals.Provinces[1].SaveToHistoryFile();
+         Globals.Provinces[269].SaveToHistoryFile();
       }
 
       private void saveEuropeToolStripMenuItem_Click(object sender, EventArgs e)

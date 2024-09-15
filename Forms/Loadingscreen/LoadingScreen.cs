@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 using Editor.Controls;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.Loading;
 using Editor.Parser;
@@ -100,13 +101,15 @@ namespace Editor.Forms.Loadingscreen
             bw.ReportProgress(++progress);
             ContinentLoading.Load(project.ColorProvider);
             bw.ReportProgress(++progress);
+            ScopeParser.GenerateRuntimeScopes();
+            bw.ReportProgress(++progress);
             ProvinceParser.ParseAllUniqueProvinces(); //TODO SLOW
             bw.ReportProgress(++progress);
             CultureLoading.LoadCultures(project);
             bw.ReportProgress(++progress);
             CountryLoading.LoadCountries(project); //TODO SLOW
             bw.ReportProgress(++progress);
-            ScopeParser.GenerateRuntimeScopes();
+            ScopeParser.GenerateCountryScope();
             bw.ReportProgress(++progress);
          }
          catch (Exception exception)

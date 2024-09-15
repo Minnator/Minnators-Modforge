@@ -69,7 +69,7 @@ public static class Globals {
       }
    }
    private static int _loadingStage = 0;
-   public static int LOADING_STAGES = 21;
+   public static int LOADING_STAGES = 22;
    #endregion
    
    public static ConsoleForm? ConsoleForm = null;

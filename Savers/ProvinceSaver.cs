@@ -186,6 +186,10 @@ namespace Editor.Savers
                .AppendLine($"\twho = {mod.Who}\n\tpower = {mod.Power}\n\tkey = {mod.Key}\n\tduration = {mod.Duration}")
                .AppendLine("}");
          }
+
+         // Effects
+         foreach (var effect in province.Effects)
+            sb.AppendLine(effect.GetEffectString(0));
       }
 
       /// <summary>

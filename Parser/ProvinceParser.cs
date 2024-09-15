@@ -86,6 +86,13 @@ public static class ProvinceParser
    {
       if (!DateTime.TryParse(block.Name, out var date))
       {
+         // Take any scope with its effects save them as a complex effect and thus put it back into the province on saving
+         if (ScopeParser.IsAnyScope(block.Name))
+         {
+            EffectFactory.CreateComplexEffect(block.Name, block.GetContent, EffectValueType.Complex);
+            return;
+         }
+
          switch (block.Name.ToLower())
          {
             case "latent_trade_goods":
