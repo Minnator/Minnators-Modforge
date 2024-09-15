@@ -9,7 +9,7 @@ namespace Editor.Loading
 {
    public static class CountryLoading
    {
-      private static readonly Regex CountryRegex = new(@"(?<tag>[A-Z]{3})\s*=\s*""(?<path>[^""]+)""", RegexOptions.Compiled);
+      private static readonly Regex CountryRegex = new(@"(?<tag>[A-Z0-9]{3})\s*=\s*""(?<path>[^""]+)""", RegexOptions.Compiled);
 
       public static void LoadCountries(ModProject project)
       {
