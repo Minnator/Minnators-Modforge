@@ -13,6 +13,7 @@ public static partial class Parsing
 {
    #region Regexes
 
+   private static readonly Regex SameLineValuesRegex = SameLineValuesRegexGenerate();
    private static readonly Regex OpeningRegex = OpeningRegexGenerate();
    private static readonly Regex ClosingRegex = ClosingRegexGenerate();
    private static readonly Regex StringListRegex = StringListRegexGenerate();
@@ -22,6 +23,9 @@ public static partial class Parsing
    private static readonly Regex FullDateParseRegex = FullDateParseRegexGenerate();
 
    // Generate Regexes during compile time
+   [GeneratedRegex(@"[\""""].+?[\""""]|\S+", RegexOptions.Compiled)]
+   private static partial Regex SameLineValuesRegexGenerate();
+
    [GeneratedRegex(@"(?<year>\d{1,4})-(?<month>\d{1,2})-(?<day>\d{1,2})", RegexOptions.Compiled)]
    private static partial Regex FullDateParseRegexGenerate();
    [GeneratedRegex(@"(?<name>[A-Za-z0-9_.]+)\s*=\s*{", RegexOptions.Compiled)]
@@ -312,10 +316,25 @@ public static partial class Parsing
       var lines = commentFreeStr.Split('\n');
       foreach (var line in lines)
       {
+         // split at all = and remove leading and trailing whitespaces
          var keyValue = line.Split('=');
-         if (keyValue.Length != 2)
-            continue;
-         keyValueList.Add(new(keyValue[0].Trim(), keyValue[1].Trim()));
+
+         List<string> allKvps = [];
+         // Trim all values and get same line values
+         for (var i = 0; i < keyValue.Length; i++)
+         {
+            keyValue[i] = keyValue[i].Trim();
+            var sameLineValues = SameLineValuesRegex.Matches(keyValue[i]);
+            for (var j = 0; j < sameLineValues.Count; j++) 
+               allKvps.Add(sameLineValues[j].Value);
+         }
+
+         for (var i = 0; i < allKvps.Count; i += 2)
+         {
+            if (i + 1 >= allKvps.Count)
+               break;
+            keyValueList.Add(new(allKvps[i], allKvps[i + 1]));
+         }
       }
 
       return keyValueList;
