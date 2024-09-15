@@ -1181,14 +1181,19 @@ public class Province : IProvinceCollection
    public List<int> GetProvincesWithSameCultureGroup()
    {
       List<int> provinces = [];
-      foreach (var province in Globals.Provinces.Values)
+      if (!Globals.Cultures.TryGetValue(Culture, out var cult) ||
+          !Globals.CultureGroups.TryGetValue(cult.CultureGroup, out var groupsName))
+         return provinces;
+
+      foreach (var id in Globals.LandProvinces)
       {
-         if (Globals.Cultures.TryGetValue(province.Culture, out var culture))
+         var prov = Globals.Provinces[id];
+         if (Globals.Cultures.TryGetValue(prov.Culture, out var culture))
             if (Globals.CultureGroups.TryGetValue(culture.CultureGroup, out var cultureGroup))
-               if (Globals.Cultures.TryGetValue(Culture, out var cultureToCompare))
-                  if (cultureGroup.Name == cultureToCompare.Name)
-                     provinces.Add(province.Id);
+               if (cultureGroup.Name == groupsName.Name)
+                  provinces.Add(prov.Id);
       }
+
       return provinces;
    }
    public void DumpHistory(string path)
