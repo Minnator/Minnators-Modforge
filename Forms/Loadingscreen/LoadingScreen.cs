@@ -77,6 +77,8 @@ namespace Editor.Forms.Loadingscreen
          
          try
          {
+            ScriptedEffectLoading.LoadScriptedEffects();
+            bw.ReportProgress(++progress);
             LocalisationLoading.Load(project.Language);
             bw.ReportProgress(++progress);
             TradeGoodsLoading.Load(project);

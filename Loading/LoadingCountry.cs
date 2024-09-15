@@ -49,17 +49,22 @@ namespace Editor.Loading
       {
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely(project.ModPath, project.VanillaPath, "history", "countries");
 
-         /*
          Parallel.ForEach(files, new () { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 },file =>
          {
             Parsing.RemoveCommentFromMultilineString(IO.ReadAllInUTF8(file), out var removed);
             var elements = Parsing.GetElements(0, removed);
-
-            foreach (var element in elements) 
-               AnalyzeCountryStuff(element, Globals.Countries[new(Path.GetFileName(file)[..3])]);
+            
+            foreach (var element in elements)
+            {
+               Tag tag = new(Path.GetFileName(file)[..3]);
+               if (Globals.Countries.TryGetValue(tag, out var country))
+                  AnalyzeCountryStuff(element, country);
+               else
+                  Globals.ErrorLog.Write($"Found country file with no no tag reference in 'country_tag' folder: {tag}");
+            }
          });
-         */
 
+         /*
          foreach (var file in files)
          {
             Parsing.RemoveCommentFromMultilineString(IO.ReadAllInUTF8(file), out var removed);
@@ -74,6 +79,7 @@ namespace Editor.Loading
                   Globals.ErrorLog.Write($"Found country file with no no tag reference in 'country_tag' folder: {tag}");
             }
          }
+         */
       }
 
       private static void AnalyzeCountryStuff(IElement element, Country country)
@@ -233,6 +239,12 @@ namespace Editor.Loading
          {
             if (element is not Block block)
             {
+               continue;
+            }
+
+            if (Globals.ScriptedEffectNames.Contains(block.Name))
+            {
+               che.Effects.Add(new (block.Name, block.GetContent));
                continue;
             }
 

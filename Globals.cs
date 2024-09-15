@@ -70,7 +70,7 @@ public static class Globals {
       }
    }
    private static int _loadingStage = 0;
-   public static int LOADING_STAGES = 22;
+   public static int LOADING_STAGES = 23;
    #endregion
    
    public static ConsoleForm? ConsoleForm = null;
@@ -173,8 +173,8 @@ public static class Globals {
    // Localisation
    public static Dictionary<string, string> Localisation { get; set; } = [];
    public static Dictionary<string, string> LocalisationCollisions { get; set; } = [];
-
-
+   
+   public static HashSet<string> ScriptedEffectNames {get; set; } = [];
    public static List<Building> Buildings { get; set; }= [];
    public static HashSet<string> BuildingKeys { get; set; }= [];
 

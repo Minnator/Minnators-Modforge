@@ -28,7 +28,7 @@ public static partial class Parsing
 
    [GeneratedRegex(@"(?<year>\d{1,4})-(?<month>\d{1,2})-(?<day>\d{1,2})", RegexOptions.Compiled)]
    private static partial Regex FullDateParseRegexGenerate();
-   [GeneratedRegex(@"(?<name>[A-Za-z0-9_.]+)\s*=\s*{", RegexOptions.Compiled)]
+   [GeneratedRegex(@"(?<name>[A-Za-z0-9_.$]+)\s*=\s*{", RegexOptions.Compiled)]
    private static partial Regex OpeningRegexGenerate();
    [GeneratedRegex(@"}", RegexOptions.Compiled)]
    private static partial Regex ClosingRegexGenerate();

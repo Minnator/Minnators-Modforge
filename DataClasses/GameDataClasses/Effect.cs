@@ -130,6 +130,25 @@ namespace Editor.DataClasses.GameDataClasses
       }
    }
 
+   /// <summary>
+   /// This is used to represent all effects that are parsed from common/scripted_effects/*.txt files but only their names are truly relevant
+   /// </summary>
+   /// <param name="name"></param>
+   /// <param name="value"></param>
+   /// <param name="type"></param>
+   public class DummyScriptedEffect(string name, string value, EffectValueType type) : Effect(name, value, type, Scope.Country)
+   {
+      public override string GetEffectString(int tabs)
+      {
+         return $"{name} = {{\n\t{value}\n}}";
+      }
+
+      public override string ToString()
+      {
+         return $"{Name} : {Value}";
+      }
+   }
+
    public class RevoltEffect(string name, string value, EffectValueType type, Scope scope) : ComplexEffect(name, value, type, scope)
    {
       public bool RemovesRevolt => string.IsNullOrWhiteSpace(value);
