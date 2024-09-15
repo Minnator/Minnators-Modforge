@@ -1,5 +1,6 @@
 ﻿using System.Xml;
 using Editor.DataClasses.GameDataClasses;
+using Editor.Helper;
 
 namespace Editor.Parser
 {
@@ -44,6 +45,113 @@ namespace Editor.Parser
          effect = new SimpleEffect(name, value, EffectValueType.String, Scope.Province);
          return true;
       }
+
+
+      public static bool ParseSpawnRebels(string input, out SpawnRebelsEffect rebels)
+      {
+         rebels = default!;
+
+         var attr = input.Split('=', '\n');
+         if (attr.Length % 2 != 0)
+            return false;
+
+         // type and size are required for constructing the effect so they are checked first
+         var type = string.Empty;
+         var size = -1;
+         for (var i = 0; i < attr.Length; i += 2)
+         {
+            attr[i] = attr[i].Trim();
+            attr[i + 1] = attr[i + 1].Trim();
+            if (attr[i].Equals("type"))
+               type = attr[i + 1];
+            else if (attr[i].Equals("size"))
+               if (!int.TryParse(attr[i + 1], out size))
+                  return false;
+         }
+
+         if (string.IsNullOrEmpty(type) || size == -1)
+         {
+            Globals.ErrorLog.Write($"Could not parse 'spawn_rebels' effect: {input}");
+            return false;
+         }
+
+         rebels = new("rebels", string.Empty, EffectValueType.Complex, Scope.Province) { RebelType = type, RebelSize = size};
+
+         for (var i = 0; i < attr.Length; i += 2)
+         {
+            switch (attr[i])
+            {
+               case "type":
+               case "size":
+               break;
+               case "culture":
+                  rebels.Culture = attr[i + 1];
+                  break;
+               case "religion":
+                  rebels.Religion = attr[i + 1];
+                  break;
+               case "leader":
+                  rebels.Leader = attr[i + 1];
+                  break;
+               case "leader_dynasty":
+                  rebels.LeaderDynasty = attr[i + 1];
+                  break;
+               case "estate":
+                  rebels.Estate = attr[i + 1];
+                  break;
+               case "unrest":
+                  if (!int.TryParse(attr[i + 1], out var unrest))
+                     return false;
+                  rebels.Unrest = unrest;
+                  break;
+               case "win":
+                  if (Parsing.YesNo(attr[i + 1]))
+                     rebels.Win = true;
+                  break;
+               case "female":
+                  if (Parsing.YesNo(attr[i + 1]))
+                     rebels.Female = false;
+                  break;
+               case "use_heir_as_leader":
+                  if (Parsing.YesNo(attr[i + 1]))
+                     rebels.UseHeirAsLeader = true;
+                  break;
+               case "use_consort_as_leader":
+                  if (Parsing.YesNo(attr[i + 1]))
+                     rebels.UseConsortAsLeader = true;
+                  break;
+               case "as_if_faction":
+                  if (Parsing.YesNo(attr[i + 1]))
+                     rebels.AsIfFaction = true;
+                  break;
+               case "should_take_capital":
+                  if (Parsing.YesNo(attr[i + 1]))
+                     rebels.ShouldTakeCapital = true;
+                  break;
+               case "separatist_target":
+                  if (Tag.TryParse(attr[i + 1], out var tag))
+                     rebels.SeparatistTarget = tag;
+                  break;
+               case "friend":
+                  if (Tag.TryParse(attr[i + 1], out var tag2))
+                     rebels.Friend = tag2;
+                  break;
+               default:
+                  Globals.ErrorLog.Write($"Unknown attribute in 'spawn_rebels' effect: '{attr[i]}'");
+                  break;
+            }
+         }
+
+         return true;
+      }
+
+
+
+
+
+
+
+
 
 
 

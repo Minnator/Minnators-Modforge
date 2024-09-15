@@ -58,4 +58,15 @@ public readonly struct Tag(string tag)
    {
       return this == Empty;
    }
+
+   public static bool TryParse(string str, out Tag outTag)
+   {
+      if (str.Length == 3)
+      {
+         outTag = new (str);
+         return true;
+      }
+      outTag = Empty;
+      return false;
+   }
 }

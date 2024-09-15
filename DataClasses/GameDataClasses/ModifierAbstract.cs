@@ -36,9 +36,9 @@
       }
    }
 
-   public partial class Modifier : ModifierAbstract
+   public partial class ApplicableModifier : ModifierAbstract
    {
-      public Modifier(string name, int duration)
+      public ApplicableModifier(string name, int duration)
       {
          Name = name;
          Duration = duration;
@@ -46,7 +46,7 @@
       
       public override bool Equals(object? obj)
       {
-         if (obj is Modifier modifier)
+         if (obj is ApplicableModifier modifier)
             return Name == modifier.Name && Duration == modifier.Duration ;
          return false;
       }
@@ -98,5 +98,42 @@
       }
    }
 
+   public class Modifier(string name, string value)
+   {
+      public readonly string Name = name;
+      public readonly string Value = value;
+      public readonly Scope Scope = Scope.Country;
 
+      public Modifier(string name, string value, Scope scope) : this(name, value)
+      {
+         Scope = scope;
+      }
+
+      public override string ToString()
+      {
+         return $"{Name} : {Value}";
+      }
+
+      public override bool Equals(object? obj)
+      {
+         if (obj is Modifier other)
+            return Name == other.Name && Value == other.Value;
+         return false;
+      }
+
+      public override int GetHashCode()
+      {
+         return Name.GetHashCode();
+      }
+
+      public static bool operator ==(Modifier a, Modifier b)
+      {
+         return a.Name == b.Name && a.Value == b.Value;
+      }
+
+      public static bool operator !=(Modifier a, Modifier b)
+      {
+         return a.Name != b.Name || a.Value != b.Value;
+      }
+   }
 }

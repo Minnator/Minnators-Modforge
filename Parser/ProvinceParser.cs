@@ -28,7 +28,12 @@ public static class ProvinceParser
       var files = FilesHelper.GetFilesFromModAndVanillaUniquely(Globals.MapWindow.Project.ModPath, Globals.MapWindow.Project.VanillaPath, "history", "provinces");
       // Get All nested Blocks and Attributes from the files
       var po = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 };
-      Parallel.ForEach(files, po, ProcessProvinceFile);
+      //Parallel.ForEach(files, po, ProcessProvinceFile);
+
+      foreach (var file in files)
+      {
+         ProcessProvinceFile(file);
+      }
 
       sw.Stop();
       Globals.LoadingLog.WriteTimeStamp("Parsing provinces", sw.ElapsedMilliseconds);
@@ -97,6 +102,10 @@ public static class ProvinceParser
             case "add_trade_modifier":
                if (ModifierParser.ParseTradeModifier(block.GetContent, out var tradeMod))
                   province.TradeModifiers.Add(tradeMod);
+               return;
+            case "spawn_rebels":
+               if (EffectParser.ParseSpawnRebels(block.GetContent, out var rebelsEffect))
+                  province.Effects.Add(rebelsEffect);
                return;
             default:
                Globals.ErrorLog.Write($"Could not parse date: {block.Name}");

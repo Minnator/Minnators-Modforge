@@ -55,8 +55,8 @@ public class ProvinceData()
    public List<string> DiscoveredBy = [];                   //.
    public List<string> Buildings = [];                      //.
    public List<string> TradeCompanyInvestments = [];        // TC
-   public List<Modifier> ProvinceModifiers = [];            // MOD
-   public List<Modifier> PermanentProvinceModifiers = [];   // MOD
+   public List<ApplicableModifier> ProvinceModifiers = [];            // MOD
+   public List<ApplicableModifier> PermanentProvinceModifiers = [];   // MOD
    public List<string> ProvinceTriggeredModifiers = [];     // MOD
    public List<Effect> ScriptedEffects = [];           
    public List<TradeModifier> TradeModifiers = [];          
@@ -590,7 +590,7 @@ public class Province : IProvinceCollection
       }
    }
 
-   public List<Modifier> ProvinceModifiers
+   public List<ApplicableModifier> ProvinceModifiers
    {
       get => _data.ProvinceModifiers;
       set
@@ -601,7 +601,7 @@ public class Province : IProvinceCollection
       }
    }
 
-   public List<Modifier> PermanentProvinceModifiers
+   public List<ApplicableModifier> PermanentProvinceModifiers
    {
       get => _data.PermanentProvinceModifiers;
       set
@@ -1122,9 +1122,9 @@ public class Province : IProvinceCollection
       {
          case ModifierType.ProvinceModifier:
             if (add)
-               ProvinceModifiers.Add((Modifier)mod);
+               ProvinceModifiers.Add((ApplicableModifier)mod);
             else
-               ProvinceModifiers.Remove((Modifier)mod);
+               ProvinceModifiers.Remove((ApplicableModifier)mod);
             break;
          case ModifierType.ProvinceTriggeredModifier:
             if (add)
@@ -1134,9 +1134,9 @@ public class Province : IProvinceCollection
             break;
          case ModifierType.PermanentProvinceModifier:
             if (add)
-               PermanentProvinceModifiers.Add((Modifier)mod);
+               PermanentProvinceModifiers.Add((ApplicableModifier)mod);
             else
-               PermanentProvinceModifiers.Remove((Modifier)mod);
+               PermanentProvinceModifiers.Remove((ApplicableModifier)mod);
             break;
          case ModifierType.CountryModifier:
             Globals.ErrorLog.Write($"Country modifier {mod.Name} cannot be added to province {Id}");

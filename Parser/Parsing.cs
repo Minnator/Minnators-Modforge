@@ -336,7 +336,7 @@ public static partial class Parsing
    /// </summary>
    /// <param name="value"></param>
    /// <returns></returns>
-   public static bool YesNo (string value)
+   public static bool YesNo (string value) // TODO change to return bool if successfull and out bool for value
    {
       return value.ToLower().Equals("yes");
    }
@@ -444,12 +444,12 @@ public static partial class Parsing
                break;
             case "birth_date":
                if (!DateTime.TryParse(val, out var birthDate))
-                  Globals.ErrorLog.Write("Could not parse birth date: " + val);
+                  Globals.ErrorLog.Write($"Could not parse birth date: \"{val}\" in person: \"{person.Name}\"");
                person.BirthDate = birthDate;
                break;
             case "death_date":
                if (!DateTime.TryParse(val, out var deathDate))
-                  Globals.ErrorLog.Write("Could not parse death date: " + val);
+                  Globals.ErrorLog.Write($"Could not parse death date: \"{val}\" in person: \"{person.Name}\"");
                person.DeathDate = deathDate;
                break;
             case "claim":
