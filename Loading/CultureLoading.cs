@@ -33,6 +33,8 @@ public static class CultureLoading
    {
       Dictionary<string, Culture> cultureDict = [];
       Dictionary<string, CultureGroup> cultureGroupDict = [];
+      
+      /*
       Parallel.ForEach(blocks, element =>
       {
          if (element is not Block block)
@@ -80,6 +82,54 @@ public static class CultureLoading
             }
          }
       });
+      */
+      foreach (var element in blocks)
+      {
+         if (element is not Block block)
+            continue;
+         var group = new CultureGroup(block.Name)
+         {
+            Color = colorProvider.GetRandomColor()
+         };
+         var contents = block.GetContentElements;
+         var cultures = block.GetBlockElements;
+
+         foreach (var cult in cultures)
+         {
+            if (cult.Name.Equals("country") || cult.Name.Equals("province"))
+               continue;
+            if (cult.Name.Equals("male_names") || cult.Name.Equals("female_names") || cult.Name.Equals("dynasty_names"))
+               SetCultureGroupNames(ref group, cult);
+            else
+            {
+               Culture culture = new(cult.Name)
+               {
+                  Color = colorProvider.GetRandomColor(),
+                  CultureGroup = group.Name
+               };
+               SetCultureAttributes(ref culture, cult.GetBlockElements);
+               SetCultureContent(ref culture, cult.GetContentElements);
+               group.Cultures.Add(culture);
+               lock (cultureDict)
+               {
+                  if (!cultureDict.TryAdd(culture.Name, culture))
+                  {
+                     Globals.ErrorLog.Write($"Duplicate culture name: {culture.Name}, used later appearance");
+                     cultureDict[culture.Name] = culture;
+                  }
+               }
+            }
+         }
+         SetCultureGroupAttributes(ref group, contents);
+         lock (cultureGroupDict)
+         {
+            if (!cultureGroupDict.TryAdd(group.Name, group))
+            {
+               Globals.ErrorLog.Write($"Duplicate culture group name: {group.Name}");
+               cultureGroupDict[group.Name] = group;
+            }
+         }
+      }
 
       return (cultureGroupDict, cultureDict);
    }

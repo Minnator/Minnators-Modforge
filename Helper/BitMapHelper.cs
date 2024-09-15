@@ -38,6 +38,8 @@ public static class BitMapHelper
 
    public static void ModifyByProvinceCollection(Bitmap bmp, ICollection<int> ids, Func<int, Color> method)
    {
+      if (ids == null)
+         Debugger.Break();
       //var sw = Stopwatch.StartNew();
       var provinces = new Province[ids.Count];
       var cnt = 0;

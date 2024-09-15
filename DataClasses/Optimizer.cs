@@ -31,13 +31,26 @@ public static class Optimizer
          //copy the pixels of the province to the pixel array
          if (!colorToProvId.ContainsKey(color))
             continue;
-         colorToProvId[color].CopyTo(pixels, pixelPtr);
+         try
+         {
+            colorToProvId[color].CopyTo(pixels, pixelPtr);
+         }
+         catch (Exception e)
+         {
+            //Debug.WriteLine($"{province.Id}");
+         }
          province.PixelPtr = pixelPtr;
          province.PixelCnt = colorToProvId[color].Count;
          pixelPtr += province.PixelCnt;
 
-         //copy the borders of the province to the border array
-         colorToBorder[color].CopyTo(borders, borderPtr);
+         try
+         {
+            colorToBorder[color].CopyTo(borders, borderPtr);
+         }
+         catch (Exception e)
+         {
+            //Debug.WriteLine($"{province.Id}");
+         }
          province.BorderPtr = borderPtr;
          province.BorderCnt = colorToBorder[color].Count;
          borderPtr += province.BorderCnt;
@@ -48,6 +61,8 @@ public static class Optimizer
 
          // add the province to the dictionary
          provs.Add(province.Id, province);
+
+         //copy the borders of the province to the border array
       }
 
       sw.Stop();

@@ -95,7 +95,7 @@ namespace Editor.Forms.Loadingscreen
             bw.ReportProgress(++progress);
             DefaultMapLoading.CreateProvinceGroups();
             bw.ReportProgress(++progress);
-            AreaLoading.Load(project.ColorProvider);
+            AreaLoading.LoadNew(project.ColorProvider);
             bw.ReportProgress(++progress);
             RegionLoading.Load(project.ColorProvider);
             bw.ReportProgress(++progress);
@@ -131,11 +131,6 @@ namespace Editor.Forms.Loadingscreen
       {
          Globals.MapWindow.Initialize();
          Close();
-      }
-
-      private void ContinueButton_Click(object sender, EventArgs e)
-      {
-         
       }
    }
 }

@@ -14,7 +14,7 @@ public class ModProject
    public string VanillaPath { get; set; } = null!;
    public Language Language { get; set; } = Language.English;
 
-   public Size MapSize { get; set; } = new (5632, 2048);
+   public Size MapSize { get; set; }
 
    public static string GetMapPath(ModProject project, string filename) => 
       Path.Combine(project.ModPath, "map", filename);

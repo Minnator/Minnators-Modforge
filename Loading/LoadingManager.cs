@@ -48,6 +48,12 @@ public static class LoadingManager
          Globals.MapPath = vanillaMap;
       else
          throw new FileNotFoundException("Could not find provinces.bmp in mod or vanilla folder");
+
+      //Get the size of the image at Globals.MapPath
+      using var stream = new FileStream(Globals.MapPath, FileMode.Open, FileAccess.Read);
+      using var image = Image.FromStream(stream, useEmbeddedColorManagement: false, validateImageData: false);
+      project.MapSize = image.Size;
+
       var (colorToProvId, colorToBorder, adjacency) = MapLoading.LoadMap(Globals.MapPath);
 
       Optimizer.OptimizeProvinces(provinces, colorToProvId, colorToBorder, project.MapSize.Width * project.MapSize.Height);
