@@ -1,5 +1,4 @@
-﻿using System.Xml;
-using Editor.DataClasses.GameDataClasses;
+﻿using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 
 namespace Editor.Parser

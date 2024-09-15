@@ -178,8 +178,17 @@ public static partial class Parsing
                }
             }
 
+            // Get any content after the last closing bracket and the EOF.
             if (endCnt >= closingCount)
+            {
+               var content = str[(end + 1)..].Trim();
+               if (!string.IsNullOrWhiteSpace(content))
+               {
+                  elements.Add(new Content(content));
+               }
                break;
+            }
+
             end = nextEnd;
          }
 
