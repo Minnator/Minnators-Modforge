@@ -9,7 +9,7 @@ namespace Editor.Loading
    {
       private static readonly HashSet<string> ForbiddenWords = ["flag_emblem_index_range", "religious_schools"];
 
-      public static void Load(ModProject project)
+      public static void Load()
       {
          var sw = Stopwatch.StartNew();
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely("common", "religions");

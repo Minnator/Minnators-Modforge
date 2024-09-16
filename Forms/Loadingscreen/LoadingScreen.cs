@@ -88,7 +88,7 @@ namespace Editor.Forms.Loadingscreen
             bw.ReportProgress(++progress);
             BuildingsLoading.Load();
             bw.ReportProgress(++progress);
-            ReligionLoading.Load(project);
+            ReligionLoading.Load();
             bw.ReportProgress(++progress);
             MapLoading.LoadDefinitionAndMap(); //TODO SLOW
             bw.ReportProgress(++progress);

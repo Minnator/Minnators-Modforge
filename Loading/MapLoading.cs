@@ -45,7 +45,12 @@ public static class MapLoading
       ConcurrentDictionary<Color, List<Point>> colorToBorder = new();
       ConcurrentDictionary<Color, HashSet<Color>> colorToAdj = new();
 
+      var widthMinusOne = width - 1;
+      var heightMinusOne = height - 1;
+
       sw.Start();
+      // could further be optimized by writing 4 loops for the special cases on the edges: top, bottom, left, right and
+      // one that does not need to check for the edges would save ~14.000.000 if checks but code would be less readable not to say horrible
       Parallel.For(0, width, x =>
       {
          unsafe
@@ -54,12 +59,15 @@ public static class MapLoading
             var localColorToProvId = new Dictionary<Color, List<Point>>();
             var localColorToBorder = new Dictionary<Color, List<Point>>();
             var localColorToAdj = new Dictionary<Color, HashSet<Color>>();
+            var xTimesThree = x * 3;
+            var westOffset = (x - 1) * 3;
+            var eastOffset = (x + 1) * 3;
 
             for (var y = 0; y < height; y++)
             {
                var row = (byte*)scan0 + y * stride;
                var currentPoint = new Point(x, y);
-               var currentColor = Color.FromArgb(row[x * 3 + 2], row[x * 3 + 1], row[x * 3]);
+               var currentColor = Color.FromArgb(row[xTimesThree + 2], row[xTimesThree + 1], row[xTimesThree]);
 
                if (!localColorToProvId.TryGetValue(currentColor, out var provPoints))
                {
@@ -70,30 +78,30 @@ public static class MapLoading
 
                if (y > 0)
                {
-                  var nRow = (byte*)scan0 + ((y - 1) * stride);
-                  var colN = Color.FromArgb(nRow[x * 3 + 2], nRow[x * 3 + 1], nRow[x * 3]);
+                  var nRow = (byte*)scan0 + (y - 1) * stride;
+                  var colN = Color.FromArgb(nRow[xTimesThree + 2], nRow[xTimesThree + 1], nRow[xTimesThree]);
                   if (colN != currentColor) 
                      AddBorderAndAdj(colN);
                }
 
-               if (x < width - 1)
+               if (x < widthMinusOne)
                {
-                  var colN = Color.FromArgb(row[(x + 1) * 3 + 2], row[(x + 1) * 3 + 1], row[(x + 1) * 3]);
+                  var colN = Color.FromArgb(row[eastOffset + 2], row[eastOffset + 1], row[eastOffset]);
                   if (colN != currentColor) 
                      AddBorderAndAdj(colN);
                }
 
-               if (y < height - 1)
+               if (y < heightMinusOne)
                {
-                  var sRow = (byte*)scan0 + ((y + 1) * stride);
-                  var colN = Color.FromArgb(sRow[x * 3 + 2], sRow[x * 3 + 1], sRow[x * 3]);
+                  var sRow = (byte*)scan0 + (y + 1) * stride;
+                  var colN = Color.FromArgb(sRow[xTimesThree + 2], sRow[xTimesThree + 1], sRow[xTimesThree]);
                   if (colN != currentColor) 
                      AddBorderAndAdj(colN);
                }
 
                if (x > 0)
                {
-                  var colN = Color.FromArgb(row[(x - 1) * 3 + 2], row[(x - 1) * 3 + 1], row[(x - 1) * 3]);
+                  var colN = Color.FromArgb(row[westOffset + 2], row[westOffset + 1], row[westOffset]);
                   if (colN != currentColor) 
                      AddBorderAndAdj(colN);
                }
@@ -162,7 +170,6 @@ public static class MapLoading
 
 
       sw.Stop();
-      Debug.WriteLine($"Map Loading took {sw.ElapsedMilliseconds}ms");
       Globals.LoadingLog.WriteTimeStamp("Pixel Initialisation", sw.ElapsedMilliseconds);
 
       Globals.MapWidth = width;
