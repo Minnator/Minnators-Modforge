@@ -575,7 +575,7 @@
          MagicWandToolButton.ImageTransparentColor = Color.Magenta;
          MagicWandToolButton.Name = "MagicWandToolButton";
          MagicWandToolButton.Size = new Size(22, 20);
-         MagicWandToolButton.Text = "&New";
+         MagicWandToolButton.Text = "&Magic Wand tool";
          MagicWandToolButton.Click += MagicWandToolButton_Click;
          // 
          // openToolStripButton

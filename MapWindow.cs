@@ -116,6 +116,9 @@ namespace Editor
          ProvincePreviewMode.Items.AddRange([.. Enum.GetNames(typeof(ProvinceEditingStatus))]);
          ProvincePreviewMode.SelectedIndex = 2;
 
+         // TODO figure out how to make this work
+         toolStripContainer1.ContentPanel.MouseEnter += OnMouseEnter!;
+         toolStripContainer1.ContentPanel.MouseLeave += OnMouseLeave!;
       }
 
       private void InitializeEditGui()
@@ -462,6 +465,20 @@ namespace Editor
          OwnerCountryNameLabel.Text = $"Owner: {Localisation.GetLoc(province.Owner)}";
       }
 
+      private void OnMouseEnter(object sender, EventArgs e)
+      {
+         Cursor = Globals.Selection.State switch
+         {
+            SelectionState.MagicWand => Cursors.Cross,
+            _ => Cursors.Default
+         };
+      }
+
+      private void OnMouseLeave(object sender, EventArgs e)
+      {
+         Cursor = Cursors.Default;
+      }
+
       private void debugToolStripMenuItem_Click(object sender, EventArgs e)
       {
       }
@@ -588,7 +605,19 @@ namespace Editor
 
       private void MagicWandToolButton_Click(object sender, EventArgs e)
       {
-         Globals.Selection.State = Globals.Selection.State != SelectionState.MagicWand ? SelectionState.MagicWand : SelectionState.Single;
+         if (Globals.Selection.State == SelectionState.Single)
+         {
+            Globals.Selection.State = SelectionState.MagicWand;
+            // change the cursor to the magic wand
+            Cursor = Cursors.Cross;
+         }
+         else if (Globals.Selection.State == SelectionState.MagicWand)
+         {
+            Globals.Selection.State = SelectionState.Single;
+            // change the cursor to the normal cursor
+            Cursor = Cursors.Default;
+         }
+
       }
 
       private void yoloToolStripMenuItem_Click(object sender, EventArgs e)
