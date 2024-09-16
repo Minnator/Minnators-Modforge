@@ -13,11 +13,10 @@ namespace Editor.Loading
    public static class TradeGoodsLoading
    {
 
-      public static void Load(ModProject project)
+      public static void Load()
       {
          var sw = Stopwatch.StartNew();
-         var files = FilesHelper.GetFilesFromModAndVanillaUniquely(
-            project.ModPath, project.VanillaPath, "common", "tradegoods");
+         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("common", "tradegoods");
 
          foreach (var file in files)
          {

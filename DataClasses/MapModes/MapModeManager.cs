@@ -1,4 +1,5 @@
-﻿using System.Drawing.Imaging;
+﻿using System.Diagnostics;
+using System.Drawing.Imaging;
 using Editor.Controls;
 using Editor.DataClasses.GameDataClasses;
 using Editor.MapModes;
@@ -58,6 +59,7 @@ public class MapModeManager(PannablePictureBox pictureBox)
 
 
    }
+   
 
    public void RenderCurrent()
    {

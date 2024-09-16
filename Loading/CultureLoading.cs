@@ -12,7 +12,7 @@ public static class CultureLoading
    public static void LoadCultures(ModProject project)
    {
       var sw = Stopwatch.StartNew();
-      FilesHelper.GetFilesUniquelyAndCombineToOne(project.ModPath, project.VanillaPath, out var culturesContent, "common", "cultures");
+      FilesHelper.GetFilesUniquelyAndCombineToOne(out var culturesContent, "common", "cultures");
 
       Parsing.RemoveCommentFromMultilineString(ref culturesContent, out var commentLessContent);
 

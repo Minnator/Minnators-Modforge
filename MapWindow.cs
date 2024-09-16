@@ -72,9 +72,10 @@ namespace Editor
 
 
          // MUST BE LAST in the loading sequence
-         LoadingManager.InitMapModes(this);
+         InitMapModes();
          Globals.LoadingStage++;
-         LoadingManager.InitializeComponents(this);
+         Globals.HistoryManager.UndoDepthChanged += UpdateUndoDepth!;
+         Globals.HistoryManager.RedoDepthChanged += UpdateRedoDepth!;
          Globals.LoadingStage++;
 
 
@@ -104,6 +105,17 @@ namespace Editor
 
       private void AfterLoad()
       {
+      }
+
+      public void InitMapModes()
+      {
+         var sw = Stopwatch.StartNew();
+         Globals.MapModeManager = new(MapPictureBox); // Initialize the MapModeManager
+         Globals.MapModeManager.InitializeAllMapModes(); // Initialize all map modes
+         MapModeComboBox.Items.Clear();
+         MapModeComboBox.Items.AddRange([.. Globals.MapModeManager.GetMapModeNames()]);
+         sw.Stop();
+         Globals.LoadingLog.WriteTimeStamp("Initializing MapModes", sw.ElapsedMilliseconds);
       }
 
       private void RunEnterPathForm()

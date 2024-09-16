@@ -38,15 +38,13 @@ public static class FilesHelper
    /// <summary>
    /// Gets all file paths in a folder with a <c>.txt</c> file ending in the folder but only in TopDirectoryOnly
    /// </summary>
-   /// <param name="modPathIn"></param>
-   /// <param name="vanillaPathIn"></param>
    /// <param name="internalPath"></param>
    /// <returns></returns>
-   public static List<string> GetFilesFromModAndVanillaUniquely(string modPathIn, string vanillaPathIn, params string[] internalPath)
+   public static List<string> GetFilesFromModAndVanillaUniquely(params string[] internalPath)
    {
       var folderPath = Path.Combine(internalPath);
-      var modPath = Path.Combine(modPathIn, folderPath);
-      var vanillaPath = Path.Combine(vanillaPathIn, folderPath);
+      var modPath = Path.Combine(Globals.MapWindow.Project.ModPath, folderPath);
+      var vanillaPath = Path.Combine(Globals.MapWindow.Project.VanillaPath, folderPath);
       List<string> fileSet = [];
       HashSet<string> fineNames = [];
 
@@ -71,10 +69,10 @@ public static class FilesHelper
       return [..fileSet];
    }
    
-   public static bool GetFileUniquely(string modPathIn, string vanillaPathIn,out string content, params string[] internalPath)
+   public static bool GetFileUniquely(out string content, params string[] internalPath)
    {
       var folderPath = Path.Combine(internalPath);
-      var modPath = Path.Combine(modPathIn, folderPath);
+      var modPath = Path.Combine(Globals.MapWindow.Project.ModPath, folderPath);
 
       if (File.Exists(modPath))
       {
@@ -82,7 +80,7 @@ public static class FilesHelper
          return true;
       }
 
-      var vanillaPath = Path.Combine(vanillaPathIn, folderPath);
+      var vanillaPath = Path.Combine(Globals.MapWindow.Project.VanillaPath, folderPath);
       if (File.Exists(vanillaPath))
       {
          content = IO.ReadAllInUTF8(vanillaPath);
@@ -93,10 +91,32 @@ public static class FilesHelper
       return false;
    }
 
-   public static void GetFilesUniquelyAndCombineToOne(string modPathIn, string vanillaPathIn, out string output, params string[] internalPath)
+   public static bool GetFilePathUniquely(out string path, params string[] internalPath)
+   {
+      var intPath = Path.Combine(internalPath);
+      var modPath = Path.Combine(Globals.MapWindow.Project.ModPath, intPath);
+
+      if (File.Exists(modPath))
+      {
+         path = modPath;
+         return true;
+      }
+
+      var vanillaPath = Path.Combine(Globals.MapWindow.Project.VanillaPath, intPath);
+      if (File.Exists(vanillaPath))
+      {
+         path = vanillaPath;
+         return true;
+      }
+
+      path = string.Empty;
+      return false;
+   }
+
+   public static void GetFilesUniquelyAndCombineToOne(out string output, params string[] internalPath)
    {
       var sb = new StringBuilder();
-      var files = GetFilesFromModAndVanillaUniquely(modPathIn, vanillaPathIn, internalPath);
+      var files = GetFilesFromModAndVanillaUniquely(internalPath);
       foreach (var file in files)
       {
          sb.Append(File.ReadAllText(file)).Append("\n");

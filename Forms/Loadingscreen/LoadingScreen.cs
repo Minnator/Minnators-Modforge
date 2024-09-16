@@ -78,19 +78,19 @@ namespace Editor.Forms.Loadingscreen
          {
             ScriptedEffectLoading.LoadScriptedEffects();
             bw.ReportProgress(++progress);
-            LocalisationLoading.Load(project.Language);
+            LocalisationLoading.Load();
             bw.ReportProgress(++progress);
-            TradeGoodsLoading.Load(project);
+            TradeGoodsLoading.Load();
             bw.ReportProgress(++progress);
-            TradeNodeLoading.Load(project);
+            TradeNodeLoading.Load();
             bw.ReportProgress(++progress);
-            TechnologyGroupsLoading.Load(project);
+            TechnologyGroupsLoading.Load();
             bw.ReportProgress(++progress);
-            BuildingsLoading.Load(project);
+            BuildingsLoading.Load();
             bw.ReportProgress(++progress);
             ReligionLoading.Load(project);
             bw.ReportProgress(++progress);
-            LoadingManager.LoadDefinitionAndMap(project); //TODO SLOW
+            MapLoading.LoadDefinitionAndMap(); //TODO SLOW
             bw.ReportProgress(++progress);
             DefaultMapLoading.CreateProvinceGroups();
             bw.ReportProgress(++progress);

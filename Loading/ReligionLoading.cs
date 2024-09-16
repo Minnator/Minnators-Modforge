@@ -12,8 +12,7 @@ namespace Editor.Loading
       public static void Load(ModProject project)
       {
          var sw = Stopwatch.StartNew();
-         var files = FilesHelper.GetFilesFromModAndVanillaUniquely(project.ModPath, project.VanillaPath, "common",
-            "religions");
+         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("common", "religions");
 
          List<ReligiousGroup> religionGroups = [];
 

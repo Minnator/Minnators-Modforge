@@ -15,7 +15,7 @@ namespace Editor.Loading
       {
          var sw = Stopwatch.StartNew();
          // Loads the country_tags file
-         FilesHelper.GetFilesUniquelyAndCombineToOne(project.ModPath, project.VanillaPath, out var content, "common", "country_tags");
+         FilesHelper.GetFilesUniquelyAndCombineToOne(out var content, "common", "country_tags");
 
          Parsing.RemoveCommentFromMultilineString(ref content, out var removed);
          var matches = CountryRegex.Matches(removed);
@@ -47,7 +47,7 @@ namespace Editor.Loading
 
       private static void LoadCountryHistories(ModProject project)
       {
-         var files = FilesHelper.GetFilesFromModAndVanillaUniquely(project.ModPath, project.VanillaPath, "history", "countries");
+         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("history", "countries");
 
          Parallel.ForEach(files, new () { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 },file =>
          {
@@ -324,7 +324,7 @@ namespace Editor.Loading
 
          Parallel.ForEach(Globals.Countries.Values, new () { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 }, country =>
          {
-            FilesHelper.GetFileUniquely(project.ModPath, project.VanillaPath, out var content, "common", country.FileName);
+            FilesHelper.GetFileUniquely(out var content, "common", country.FileName);
             Parsing.RemoveCommentFromMultilineString(ref content, out var removed);
             var blocks = Parsing.GetElements(0, ref removed);
 

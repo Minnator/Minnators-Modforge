@@ -9,7 +9,7 @@ namespace Editor.Loading
 {
    public static class TradeNodeLoading
    {
-      public static void Load(ModProject project)
+      public static void Load()
       {
          var sw = Stopwatch.StartNew();
          var file = FilesHelper.GetModOrVanillaPath("common", "tradenodes", "00_tradenodes.txt");
@@ -56,10 +56,8 @@ namespace Editor.Loading
                   node.IsInland = Parsing.YesNo(value.Value);
             }
 
-            foreach (var subBlock in block.GetBlockElements)
-            {
+            foreach (var subBlock in block.GetBlockElements) 
                ParseTradeNodeBlocks(ref node, subBlock);
-            }
 
             if (node.Color == Color.Empty)
                node.Color = Globals.ColorProvider.GetRandomColor();
@@ -112,21 +110,17 @@ public static class TradeNodeHelper
       var node = Globals.TradeNodes[nodeName];
       var countries = new List<Tag>();
       foreach (var member in node.Members)
-      {
          if (Globals.Provinces.TryGetValue(member, out var province))
             if (province.Owner != Tag.Empty)
                countries.Add(province.Owner);
-      }
       return countries;
    }
 
    public static TradeNode GetTradeNodeByProvince(int provinceId)
    {
       foreach (var node in Globals.TradeNodes.Values)
-      {
          if (node.Members.Contains(provinceId))
             return node;
-      }
       return TradeNode.Empty;
    }
 

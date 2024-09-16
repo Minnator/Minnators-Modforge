@@ -25,7 +25,7 @@ public static class ProvinceParser
    {
       var sw = Stopwatch.StartNew();
       // Get all unique province files from mod and vanilla
-      var files = FilesHelper.GetFilesFromModAndVanillaUniquely(Globals.MapWindow.Project.ModPath, Globals.MapWindow.Project.VanillaPath, "history", "provinces");
+      var files = FilesHelper.GetFilesFromModAndVanillaUniquely("history", "provinces");
       // Get All nested Blocks and Attributes from the files
       var po = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 };
       //Parallel.ForEach(files, po, ProcessProvinceFile);

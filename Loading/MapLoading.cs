@@ -1,15 +1,36 @@
 ﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
 using System.Drawing.Imaging;
-using System.Threading.Tasks;
+using Editor.DataClasses;
+using Editor.Helper;
 
 namespace Editor.Loading;
 
 public static class MapLoading
 {
+   internal static void LoadDefinitionAndMap()
+   {
+      if (!FilesHelper.GetFilePathUniquely(out var definitionPath, "map", "definition.csv"))
+         throw new FileNotFoundException("Could not find definition.csv in mod or vanilla folder");
+
+      if (!FilesHelper.GetFilePathUniquely(out var mapPath, "map", "provinces.bmp"))
+         throw new FileNotFoundException("Could not find \"provinces.bmp\" in mod or vanilla folder");
+
+      Globals.MapPath = mapPath;
+      var provinces = DefinitionLoading.LoadDefinition([.. File.ReadAllLines(definitionPath)]);
+
+      //Get the size of the image at Globals.MapPath
+      using var stream = new FileStream(Globals.MapPath, FileMode.Open, FileAccess.Read);
+      using var image = Image.FromStream(stream, useEmbeddedColorManagement: false, validateImageData: false);
+      Globals.MapWindow.Project.MapSize = image.Size;
+
+      var (colorToProvId, colorToBorder, adjacency) = MapLoading.LoadMap(Globals.MapPath);
+
+      Optimizer.OptimizeProvinces(provinces, colorToProvId, colorToBorder, image.Width * image.Height);
+
+      Optimizer.OptimizeAdjacencies(adjacency);
+   }
+
    public static (ConcurrentDictionary<Color, List<Point>>, ConcurrentDictionary<Color, List<Point>>, ConcurrentDictionary<Color, HashSet<Color>>) LoadMap(string path)
    {
       using var bmp = new Bitmap(path);

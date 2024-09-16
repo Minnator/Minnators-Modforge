@@ -13,8 +13,7 @@ namespace Editor.Loading
       public static void LoadScriptedEffects()
       {
          var sw = Stopwatch.StartNew();
-         var files = FilesHelper.GetFilesFromModAndVanillaUniquely(Globals.MapWindow.Project.ModPath,
-            Globals.MapWindow.Project.VanillaPath, "common", "scripted_effects");
+         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("common", "scripted_effects");
          HashSet<string> scriptedEffects = [];
 
          // TODO could be sped up by not using GetElements but instead just writing a simple parser for the scripted_effects files which only detects openings,

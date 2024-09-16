@@ -6,13 +6,17 @@
       {
          InitializeComponent();
          StartPosition = FormStartPosition.CenterScreen;
+
+         Load += (sender, args) =>
+         {
+            ContinueButton.PerformClick();
+         };
       }
 
 
       private static void OpenFileDialog(string startPath, string filterText, out string folder)
       {
          folder = string.Empty;
-         // create a file dialog that opens with the start path and only allows folders to be selected
          if (!Path.Exists(startPath))
             return;
 
