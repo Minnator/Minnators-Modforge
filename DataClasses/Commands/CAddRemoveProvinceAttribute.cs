@@ -7,12 +7,12 @@ namespace Editor.DataClasses.Commands
    {
       private readonly List<Province> _provinces;
       private readonly bool _add;
-      private readonly ProvAttr _attribute;
-      private readonly ProvAttrSetr _setter;
-      private readonly ProvAttrSetr _remover;
+      private readonly ProvAttrGet _attribute;
+      private readonly ProvAttrSet _setter;
+      private readonly ProvAttrSet _remover;
       private readonly string _value;
 
-      public CAddRemoveProvinceAttribute(List<Province> provinces, string value, ProvAttr pa, ProvAttrSetr ps, ProvAttrSetr pr, bool add, bool executeOnInit = true)
+      public CAddRemoveProvinceAttribute(List<Province> provinces, string value, ProvAttrGet pa, ProvAttrSet ps, ProvAttrSet pr, bool add, bool executeOnInit = true)
       {
          _provinces = provinces;
          _value = value;

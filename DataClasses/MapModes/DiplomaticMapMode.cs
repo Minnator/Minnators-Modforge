@@ -83,9 +83,9 @@ namespace Editor.DataClasses.MapModes
          if (Globals.Selection.SelectedCountry.Equals(Country.Empty))
             return;
 
-         var claims = ProvinceCollectionHelper.GetProvincesWithAttribute(ProvAttr.claims, Globals.Selection.SelectedCountry.Tag);
-         claims.AddRange(ProvinceCollectionHelper.GetProvincesWithAttribute(ProvAttr.permanent_claims, Globals.Selection.SelectedCountry.Tag));
-         var cores = ProvinceCollectionHelper.GetProvincesWithAttribute(ProvAttr.cores, Globals.Selection.SelectedCountry.Tag);
+         var claims = ProvinceCollectionHelper.GetProvincesWithAttribute(ProvAttrGet.claims, Globals.Selection.SelectedCountry.Tag);
+         claims.AddRange(ProvinceCollectionHelper.GetProvincesWithAttribute(ProvAttrGet.permanent_claims, Globals.Selection.SelectedCountry.Tag));
+         var cores = ProvinceCollectionHelper.GetProvincesWithAttribute(ProvAttrGet.cores, Globals.Selection.SelectedCountry.Tag);
 
          CoresAndClaims.AddRange(claims);
          CoresAndClaims.AddRange(cores);

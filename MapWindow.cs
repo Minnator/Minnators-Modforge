@@ -266,7 +266,7 @@ namespace Editor
          IsParlimentSeatCheckbox.CheckedChanged += ProvinceEditingEvents.OnIsSeatInParliamentChanged;
          HasRevoltCheckBox.CheckedChanged += ProvinceEditingEvents.OnHasRevoltChanged;
 
-         AttirbuteCombobox.Items.AddRange([.. Enum.GetNames(typeof(ProvAttr))]);
+         AttirbuteCombobox.Items.AddRange([.. Enum.GetNames(typeof(ProvAttrGet))]);
       }
 
       // ======================== Province GUI Update Methods ========================
@@ -279,51 +279,51 @@ namespace Editor
          Globals.EditingStatus = EditingStatus.LoadingInterface;
          SuspendLayout();
          ClearProvinceGui();
-         if (Globals.Selection.GetSharedAttribute(ProvAttr.claims, out var result) && result is List<Tag> tags)
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.claims, out var result) && result is List<Tag> tags)
             _claims.AddItemsUnique([.. tags]);
-         if (Globals.Selection.GetSharedAttribute(ProvAttr.permanent_claims, out result) && result is List<Tag> permanentTags)
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.permanent_claims, out result) && result is List<Tag> permanentTags)
             _permanentClaims.AddItemsUnique([.. permanentTags]);
-         if (Globals.Selection.GetSharedAttribute(ProvAttr.cores, out result) && result is List<Tag> coreTags)
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.cores, out result) && result is List<Tag> coreTags)
             _cores.AddItemsUnique([.. coreTags]);
-         if (Globals.Selection.GetSharedAttribute(ProvAttr.buildings, out result) && result is List<string> buildings)
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.buildings, out result) && result is List<string> buildings)
             _buildings.AddItemsUnique(buildings);
-         if (Globals.Selection.GetSharedAttribute(ProvAttr.discovered_by, out result) && result is List<string> techGroups)
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.discovered_by, out result) && result is List<string> techGroups)
             _discoveredBy.AddItemsUnique(techGroups);
-         if (Globals.Selection.GetSharedAttribute(ProvAttr.owner, out result) && result is Tag owner)
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.owner, out result) && result is Tag owner)
             OwnerTagBox.Text = owner;
-         if (Globals.Selection.GetSharedAttribute(ProvAttr.controller, out result) && result is Tag controller)
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.controller, out result) && result is Tag controller)
             ControllerTagBox.Text = controller;
-         if (Globals.Selection.GetSharedAttribute(ProvAttr.religion, out result) && result is string religion)
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.religion, out result) && result is string religion)
             _religionComboBox.Text = religion;
-         if (Globals.Selection.GetSharedAttribute(ProvAttr.culture, out result) && result is string culture)
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.culture, out result) && result is string culture)
             _cultureComboBox.Text = culture;
-         if (Globals.Selection.GetSharedAttribute(ProvAttr.capital, out result) && result is string capital)
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.capital, out result) && result is string capital)
             CapitalNameTextBox.Text = capital;
-         if (Globals.Selection.GetSharedAttribute(ProvAttr.is_city, out result) && result is bool isCity)
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.is_city, out result) && result is bool isCity)
             IsCityCheckBox.Checked = isCity;
-         if (Globals.Selection.GetSharedAttribute(ProvAttr.hre, out result) && result is bool isHre)
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.hre, out result) && result is bool isHre)
             IsHreCheckBox.Checked = isHre;
-         if (Globals.Selection.GetSharedAttribute(ProvAttr.seat_in_parliament, out result) && result is bool isSeatInParliament)
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.seat_in_parliament, out result) && result is bool isSeatInParliament)
             IsParlimentSeatCheckbox.Checked = isSeatInParliament;
-         if (Globals.Selection.GetSharedAttribute(ProvAttr.revolt, out result) && result is bool hasRevolt)
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.revolt, out result) && result is bool hasRevolt)
             HasRevoltCheckBox.Checked = hasRevolt;
-         if (Globals.Selection.GetSharedAttribute(ProvAttr.base_tax, out result) && result is int baseTax)
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.base_tax, out result) && result is int baseTax)
             _taxNumeric.Value = baseTax;
-         if (Globals.Selection.GetSharedAttribute(ProvAttr.base_production, out result) && result is int baseProduction)
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.base_production, out result) && result is int baseProduction)
             _prodNumeric.Value = baseProduction;
-         if (Globals.Selection.GetSharedAttribute(ProvAttr.base_manpower, out result) && result is int baseManpower)
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.base_manpower, out result) && result is int baseManpower)
             _manpNumeric.Value = baseManpower;
-         if (Globals.Selection.GetSharedAttribute(ProvAttr.local_autonomy, out result) && result is float localAutonomy)
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.local_autonomy, out result) && result is float localAutonomy)
             _autonomyNumeric.Value = (int)localAutonomy;
-         if (Globals.Selection.GetSharedAttribute(ProvAttr.devastation, out result) && result is float devastation)
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.devastation, out result) && result is float devastation)
             _devastationNumeric.Value = (int)devastation;
-         if (Globals.Selection.GetSharedAttribute(ProvAttr.prosperity, out result) && result is float prosperity)
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.prosperity, out result) && result is float prosperity)
             _prosperityNumeric.Value = (int)prosperity;
-         if (Globals.Selection.GetSharedAttribute(ProvAttr.trade_good, out result) && result is string tradeGood)
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.trade_good, out result) && result is string tradeGood)
             TradeGoodsComboBox.Text = tradeGood;
-         if (Globals.Selection.GetSharedAttribute(ProvAttr.center_of_trade, out result) && result is int centerOfTrade)
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.center_of_trade, out result) && result is int centerOfTrade)
             TradeCenterComboBox.Text = centerOfTrade.ToString();
-         if (Globals.Selection.GetSharedAttribute(ProvAttr.extra_cost, out result) && result is int extraCost)
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.extra_cost, out result) && result is int extraCost)
             _extraCostNumeric.Value = extraCost;
          ResumeLayout();
          Globals.EditingStatus = EditingStatus.Idle;

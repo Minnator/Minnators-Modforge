@@ -62,7 +62,7 @@ namespace Editor.DataClasses.GameDataClasses
             // TODO: This is a weird fix and should be removed in the future
             if (name.Equals("city"))
             {
-               province.SetAttribute(ProvAttrSetr.is_city, Value);
+               province.SetAttribute(ProvAttrSet.is_city, Value);
                return true;
             }
             province.SetAttribute(Name, Value);

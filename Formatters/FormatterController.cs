@@ -5,10 +5,10 @@ namespace Editor.Formatters
 {
    public static class FormatterController
    {
-      public static Dictionary<ProvAttr, IFormatter> SubFormatters { get; set; } = new()
+      public static Dictionary<ProvAttrGet, IFormatter> SubFormatters { get; set; } = new()
       {
-         { ProvAttr.latent_trade_good, new LatentTradeGoodFormatter() },
-         { ProvAttr.history, new HistoryFormatter() }
+         { ProvAttrGet.latent_trade_good, new LatentTradeGoodFormatter() },
+         { ProvAttrGet.history, new HistoryFormatter() }
       };
 
       /// <summary>
@@ -20,7 +20,7 @@ namespace Editor.Formatters
       {
          foreach (var kvp in toFormat)
          {
-            if (SubFormatters.TryGetValue((ProvAttr)Enum.Parse(typeof(ProvAttr), kvp.Key), out var formatter))
+            if (SubFormatters.TryGetValue((ProvAttrGet)Enum.Parse(typeof(ProvAttrGet), kvp.Key), out var formatter))
                formatter.Format(sb, kvp.Value);
             else
                Globals.ErrorLog.Write($"Can not find formatter for: [{kvp.Key}] in [{nameof(FormatterController)}]");

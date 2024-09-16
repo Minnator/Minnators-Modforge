@@ -63,7 +63,7 @@ public class ProvinceData()
    public List<TradeModifier> TradeModifiers = [];          
 }
 
-public enum ProvAttr
+public enum ProvAttrGet
 {
    base_manpower,
    base_tax,
@@ -105,7 +105,7 @@ public enum ProvAttr
    citysize
 }
 
-public enum ProvAttrSetr
+public enum ProvAttrSet
 {
    add_claim,
    remove_claim,
@@ -813,7 +813,7 @@ public class Province : IProvinceCollection
       }
    }
 
-   public object GetAttribute(ProvAttr key)
+   public object GetAttribute(ProvAttrGet key)
    {
       return GetAttribute(key.ToString());
    }
@@ -828,7 +828,7 @@ public class Province : IProvinceCollection
       if (Globals.BuildingKeys.Contains(key))
          return Buildings.Contains(key) ? "yes" : "no";
 
-      if (!Enum.TryParse<ProvAttr>(key, true, out var getter))
+      if (!Enum.TryParse<ProvAttrGet>(key, true, out var getter))
       {
          Globals.ErrorLog.Write($"Could not parse {key} attribute to get for province id {Id}");
          return "";
@@ -836,49 +836,49 @@ public class Province : IProvinceCollection
 
       return getter switch
       {
-         ProvAttr.base_manpower => BaseManpower,
-         ProvAttr.base_tax => BaseTax,
-         ProvAttr.base_production => BaseProduction,
-         ProvAttr.total_development => GetTotalDevelopment(),
-         ProvAttr.area => Area, 
-         ProvAttr.continent => Continent,
-         ProvAttr.claims => Claims,
-         ProvAttr.permanent_claims => PermanentClaims,
-         ProvAttr.cores => Cores,
-         ProvAttr.controller => Controller,
-         ProvAttr.owner => Owner,
-         ProvAttr.tribal_owner => TribalOwner,
-         ProvAttr.center_of_trade => CenterOfTrade,
-         ProvAttr.extra_cost => ExtraCost,
-         ProvAttr.native_ferocity => NativeFerocity,
-         ProvAttr.native_hostileness => NativeHostileness,
-         ProvAttr.native_size => NativeSize,
-         ProvAttr.revolt_risk => RevoltRisk,
-         ProvAttr.local_autonomy => LocalAutonomy,
-         ProvAttr.nationalism => Nationalism,
-         ProvAttr.discovered_by => DiscoveredBy,
-         ProvAttr.capital => Capital,
-         ProvAttr.culture => Culture,
-         ProvAttr.religion => Religion,
-         ProvAttr.buildings => Buildings,
-         ProvAttr.hre => IsHre,
-         ProvAttr.is_city => IsCity,
-         ProvAttr.seat_in_parliament => IsSeatInParliament,
-         ProvAttr.trade_good => TradeGood,
-         ProvAttr.history => History,
-         ProvAttr.id => Id,
-         ProvAttr.name => GetLocalisation(),
-         ProvAttr.revolt => HasRevolt, // Was changed from has_revolt to revolt no idea if this breaks stuff
-         ProvAttr.is_occupied => IsNonRebelOccupied,      
-         ProvAttr.devastation => Devastation,
-         ProvAttr.prosperity => Prosperity,
-         ProvAttr.latent_trade_good => LatentTradeGood,
-         ProvAttr.citysize => CitySize,
+         ProvAttrGet.base_manpower => BaseManpower,
+         ProvAttrGet.base_tax => BaseTax,
+         ProvAttrGet.base_production => BaseProduction,
+         ProvAttrGet.total_development => GetTotalDevelopment(),
+         ProvAttrGet.area => Area, 
+         ProvAttrGet.continent => Continent,
+         ProvAttrGet.claims => Claims,
+         ProvAttrGet.permanent_claims => PermanentClaims,
+         ProvAttrGet.cores => Cores,
+         ProvAttrGet.controller => Controller,
+         ProvAttrGet.owner => Owner,
+         ProvAttrGet.tribal_owner => TribalOwner,
+         ProvAttrGet.center_of_trade => CenterOfTrade,
+         ProvAttrGet.extra_cost => ExtraCost,
+         ProvAttrGet.native_ferocity => NativeFerocity,
+         ProvAttrGet.native_hostileness => NativeHostileness,
+         ProvAttrGet.native_size => NativeSize,
+         ProvAttrGet.revolt_risk => RevoltRisk,
+         ProvAttrGet.local_autonomy => LocalAutonomy,
+         ProvAttrGet.nationalism => Nationalism,
+         ProvAttrGet.discovered_by => DiscoveredBy,
+         ProvAttrGet.capital => Capital,
+         ProvAttrGet.culture => Culture,
+         ProvAttrGet.religion => Religion,
+         ProvAttrGet.buildings => Buildings,
+         ProvAttrGet.hre => IsHre,
+         ProvAttrGet.is_city => IsCity,
+         ProvAttrGet.seat_in_parliament => IsSeatInParliament,
+         ProvAttrGet.trade_good => TradeGood,
+         ProvAttrGet.history => History,
+         ProvAttrGet.id => Id,
+         ProvAttrGet.name => GetLocalisation(),
+         ProvAttrGet.revolt => HasRevolt, // Was changed from has_revolt to revolt no idea if this breaks stuff
+         ProvAttrGet.is_occupied => IsNonRebelOccupied,      
+         ProvAttrGet.devastation => Devastation,
+         ProvAttrGet.prosperity => Prosperity,
+         ProvAttrGet.latent_trade_good => LatentTradeGood,
+         ProvAttrGet.citysize => CitySize,
          _ => ""
       };
    }
 
-   public void SetAttribute(ProvAttrSetr key, string value)
+   public void SetAttribute(ProvAttrSet key, string value)
    {
       SetAttribute(key.ToString(), value);
    }
@@ -905,7 +905,7 @@ public class Province : IProvinceCollection
          return;
       }
 
-      if (!Enum.TryParse<ProvAttrSetr>(name, true, out var setter))
+      if (!Enum.TryParse<ProvAttrSet>(name, true, out var setter))
       {
          if (EffectParser.ParseScriptedEffect(name, value, out var effect))
          {
@@ -924,58 +924,58 @@ public class Province : IProvinceCollection
 
       switch (setter)
       {
-         case ProvAttrSetr.add_claim:
+         case ProvAttrSet.add_claim:
             Claims.Add(Tag.FromString(value));
             break;
-         case ProvAttrSetr.remove_claim:
+         case ProvAttrSet.remove_claim:
             Claims.Remove(Tag.FromString(value));
             break;
-         case ProvAttrSetr.add_core:
+         case ProvAttrSet.add_core:
             Cores.Add(Tag.FromString(value));
             break;
-         case ProvAttrSetr.remove_core:
+         case ProvAttrSet.remove_core:
             Cores.Remove(Tag.FromString(value));
             break;
-         case ProvAttrSetr.base_manpower:
+         case ProvAttrSet.base_manpower:
             if (int.TryParse(value, out var manpower))
                BaseManpower = manpower;
             else
                Globals.ErrorLog.Write($"Could not parse base_manpower: {value} for province id {Id}");
             break;
-         case ProvAttrSetr.add_base_manpower:
+         case ProvAttrSet.add_base_manpower:
             if (int.TryParse(value, out var manpow))
                BaseManpower += manpow;
             else
                Globals.ErrorLog.Write($"Could not parse add_base_manpower: {value} for province id {Id}");
             break;
-         case ProvAttrSetr.base_production:
+         case ProvAttrSet.base_production:
             if (int.TryParse(value, out var production))
                BaseProduction = production;
             else
                Globals.ErrorLog.Write($"Could not parse base_production: {value} for province id {Id}");
             break;
-         case ProvAttrSetr.add_base_production:
+         case ProvAttrSet.add_base_production:
             if (int.TryParse(value, out var prod))
                BaseProduction += prod;
             else
                Globals.ErrorLog.Write($"Could not parse add_base_production: {value} for province id {Id}");
             break;
-         case ProvAttrSetr.base_tax:
+         case ProvAttrSet.base_tax:
             if (int.TryParse(value, out var tax))
                BaseTax = tax;
             else
                Globals.ErrorLog.Write($"Could not parse base_tax: {value} for province id {Id}");
             break;
-         case ProvAttrSetr.add_base_tax:
+         case ProvAttrSet.add_base_tax:
             if (int.TryParse(value, out var btax))
                BaseTax += btax;
             else
                Globals.ErrorLog.Write($"Could not parse add_base_tax: {value} for province id {Id}");
             break;
-         case ProvAttrSetr.capital:
+         case ProvAttrSet.capital:
             Capital = value;
             break;
-         case ProvAttrSetr.center_of_trade:
+         case ProvAttrSet.center_of_trade:
             if (int.TryParse(value, out var cot))
                CenterOfTrade = cot;
             else
@@ -984,149 +984,149 @@ public class Province : IProvinceCollection
                CenterOfTrade = 0;
             }
             break;
-         case ProvAttrSetr.controller:
+         case ProvAttrSet.controller:
             Controller = Tag.FromString(value);
             break;
-         case ProvAttrSetr.culture:
+         case ProvAttrSet.culture:
             Culture = value;
             break;
-         case ProvAttrSetr.discovered_by:
+         case ProvAttrSet.discovered_by:
             DiscoveredBy.Add(value);
             break;
-         case ProvAttrSetr.remove_discovered_by:
+         case ProvAttrSet.remove_discovered_by:
             DiscoveredBy.Remove(value);
             break;
-         case ProvAttrSetr.extra_cost:
+         case ProvAttrSet.extra_cost:
             if (int.TryParse(value, out var cost))
                ExtraCost = cost;
             else
                Globals.ErrorLog.Write($"Could not parse extra_cost: {value} for province id {Id}");
             break;
-         case ProvAttrSetr.hre:
+         case ProvAttrSet.hre:
             IsHre = Parsing.YesNo(value);
             break;
-         case ProvAttrSetr.is_city:
+         case ProvAttrSet.is_city:
             IsCity = Parsing.YesNo(value);
             break;
-         case ProvAttrSetr.native_ferocity:
+         case ProvAttrSet.native_ferocity:
             if (float.TryParse(value, out var ferocity))
                NativeFerocity = ferocity;
             else
                Globals.ErrorLog.Write($"Could not parse native_ferocity: {value} for province id {Id}");
             break;
-         case ProvAttrSetr.native_hostileness:
+         case ProvAttrSet.native_hostileness:
             if (int.TryParse(value, out var hostileness))
                NativeHostileness = hostileness;
             else
                Globals.ErrorLog.Write($"Could not parse native_hostileness: {value} for province id {Id}");
             break;
-         case ProvAttrSetr.native_size:
+         case ProvAttrSet.native_size:
             if (int.TryParse(value, out var size))
                NativeSize = size;
             else
                Globals.ErrorLog.Write($"Could not parse native_size: {value} for province id {Id}");
             break;
-         case ProvAttrSetr.owner:
+         case ProvAttrSet.owner:
             Owner = Tag.FromString(value);
             break;
-         case ProvAttrSetr.religion:
+         case ProvAttrSet.religion:
             Religion = value;
             break;
-         case ProvAttrSetr.seat_in_parliament:
+         case ProvAttrSet.seat_in_parliament:
             IsSeatInParliament = Parsing.YesNo(value);
             break;
-         case ProvAttrSetr.trade_goods:
+         case ProvAttrSet.trade_goods:
             if (TradeGoodHelper.IsTradeGood(value))
                TradeGood = value;
             break;
-         case ProvAttrSetr.tribal_owner:
+         case ProvAttrSet.tribal_owner:
             TribalOwner = Tag.FromString(value);
             break;
-         case ProvAttrSetr.unrest:
+         case ProvAttrSet.unrest:
             if (int.TryParse(value, out var unrest))
                RevoltRisk = unrest;
             else
                Globals.ErrorLog.Write($"Could not parse unrest: {value} for province id {Id}");
             break;
-         case ProvAttrSetr.shipyard:
+         case ProvAttrSet.shipyard:
             // TODO parse shipyard
             break;
-         case ProvAttrSetr.revolt:
+         case ProvAttrSet.revolt:
             HasRevolt = !string.IsNullOrWhiteSpace(value);
             break;
-         case ProvAttrSetr.revolt_risk:
+         case ProvAttrSet.revolt_risk:
             if (int.TryParse(value, out var risk))
                RevoltRisk = risk;
             else
                Globals.ErrorLog.Write($"Could not parse revolt_risk: {value} for province id {Id}");
             break;
-         case ProvAttrSetr.add_local_autonomy:
+         case ProvAttrSet.add_local_autonomy:
             if (int.TryParse(value, out var autonomy))
                LocalAutonomy = autonomy;
             else
                Globals.ErrorLog.Write($"Could not parse add_local_autonomy: {value} for province id {Id}");
             break;
-         case ProvAttrSetr.add_nationalism:
+         case ProvAttrSet.add_nationalism:
             if (int.TryParse(value, out var nationalism))
                Nationalism = nationalism;
             else
                Globals.ErrorLog.Write($"Could not parse add_nationalism: {value} for province id {Id}");
             break;
-         case ProvAttrSetr.add_trade_company_investment:
+         case ProvAttrSet.add_trade_company_investment:
             TradeCompanyInvestments.Add(value);
             break;
-         case ProvAttrSetr.add_to_trade_company:
+         case ProvAttrSet.add_to_trade_company:
             TradeCompany = Tag.FromString(value);
             break;
-         case ProvAttrSetr.reformation_center:
+         case ProvAttrSet.reformation_center:
             ReformationCenter = value;
             break;
-         case ProvAttrSetr.add_province_triggered_modifier:
+         case ProvAttrSet.add_province_triggered_modifier:
             ProvinceTriggeredModifiers.Add(value);
             break;
-         case ProvAttrSetr.remove_province_triggered_modifier:
+         case ProvAttrSet.remove_province_triggered_modifier:
             ProvinceTriggeredModifiers.Remove(value);
             break;
-         case ProvAttrSetr.set_global_flag:
+         case ProvAttrSet.set_global_flag:
             // Case to ignore stuff
             break;
-         case ProvAttrSetr.devastation:
+         case ProvAttrSet.devastation:
             if (float.TryParse(value, out var dev))
                Devastation = dev;
             else
                Globals.ErrorLog.Write($"Could not parse devastation: {value} for province id {Id}");
             break;
-         case ProvAttrSetr.prosperity:
+         case ProvAttrSet.prosperity:
             if (float.TryParse(value, out var prosp))
                Prosperity = prosp;
             else
                Globals.ErrorLog.Write($"Could not parse prosperity: {value} for province id {Id}");
             break;
-         case ProvAttrSetr.add_province_modifier:
+         case ProvAttrSet.add_province_modifier:
             if (ModifierParser.ParseProvinceModifier(value, out var mod))
                AddModifier(ModifierType.ProvinceModifier, mod, true);
             else 
                Globals.ErrorLog.Write($"Could not parse add_province_modifier: {value} for province id {Id}");
             break;
-         case ProvAttrSetr.remove_province_modifier:
+         case ProvAttrSet.remove_province_modifier:
             ProvinceModifiers.RemoveAll(x => x.Name == value);
             break;
-         case ProvAttrSetr.add_permanent_province_modifier:
+         case ProvAttrSet.add_permanent_province_modifier:
             if (ModifierParser.ParseProvinceModifier(value, out var permaMod))
                AddModifier(ModifierType.PermanentProvinceModifier, permaMod, true);
             else
                Globals.ErrorLog.Write($"Could not parse add_permanent_province_modifier: {value} for province id {Id}");
             break;
-         case ProvAttrSetr.remove_permanent_province_modifier:
+         case ProvAttrSet.remove_permanent_province_modifier:
             PermanentProvinceModifiers.RemoveAll(x => x.Name == value);
             break;
-         case ProvAttrSetr.add_permanent_claim:
+         case ProvAttrSet.add_permanent_claim:
             PermanentClaims.Add(Tag.FromString(value));
             break;
-         case ProvAttrSetr.remove_permanent_claim:
+         case ProvAttrSet.remove_permanent_claim:
             PermanentClaims.Remove(Tag.FromString(value));
             break;
-         case ProvAttrSetr.citysize:
+         case ProvAttrSet.citysize:
             if (int.TryParse(value, out var size2))
                CitySize = size2;
             else

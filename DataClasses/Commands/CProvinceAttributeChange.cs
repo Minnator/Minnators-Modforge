@@ -9,10 +9,10 @@ namespace Editor.DataClasses.Commands
       private readonly List<Province> _provinces;
       private readonly List<string> _oldValues = [];
       private readonly string _value;
-      private readonly ProvAttr _attribute;
-      private readonly ProvAttrSetr _setter;
+      private readonly ProvAttrGet _attribute;
+      private readonly ProvAttrSet _setter;
 
-      public CProvinceAttributeChange(List<Province> provinces, string value, ProvAttr pa, ProvAttrSetr ps, bool executeOnInit = true)
+      public CProvinceAttributeChange(List<Province> provinces, string value, ProvAttrGet pa, ProvAttrSet ps, bool executeOnInit = true)
       {
          _provinces = provinces;
          _value = value;

@@ -320,7 +320,7 @@ public class Selection
    /// <param name="attribute"></param>
    /// <param name="result"></param>
    /// <returns></returns>
-   public bool GetSharedAttribute(ProvAttr attribute, out object? result)
+   public bool GetSharedAttribute(ProvAttrGet attribute, out object? result)
    {
       result = null;
       
@@ -340,8 +340,8 @@ public class Selection
 
 }
 
-public class MagicWandConfig(ProvAttr attr, int value)
+public class MagicWandConfig(ProvAttrGet attrGet, int value)
 {
-   public ProvAttr GetAttribute => attr;
+   public ProvAttrGet GetAttribute => attrGet;
    public int GetValue => value;
 }

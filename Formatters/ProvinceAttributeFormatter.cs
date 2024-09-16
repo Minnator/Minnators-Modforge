@@ -7,37 +7,37 @@ namespace Editor.Formatters
 {
    public class ProvinceAttributeFormatter : IFormatter
    {
-      private Dictionary<ProvAttr, string> Template { get; set; } = new()
+      private Dictionary<ProvAttrGet, string> Template { get; set; } = new()
       {
-         { ProvAttr.base_manpower, "base_manpower" },
-         { ProvAttr.base_tax, "base_tax" },
-         { ProvAttr.base_production, "base_production" },
-         { ProvAttr.capital, "capital" },
-         { ProvAttr.culture, "culture" },
-         { ProvAttr.owner, "owner" },
-         { ProvAttr.religion, "religion" },
-         { ProvAttr.trade_good, "trade_goods" },
-         { ProvAttr.is_city, "is_city" },
-         { ProvAttr.capital, "capital"},
-         { ProvAttr.owner, "owner" },
-         { ProvAttr.cores, "add_core"},
-         { ProvAttr.controller, "controller"},
-         { ProvAttr.hre, "hre"},
-         { ProvAttr.discovered_by, "discovered_by"},
-         { ProvAttr.extra_cost, "extra_cost"},
-         { ProvAttr.center_of_trade, "center_of_trade"},
-         { ProvAttr.claims, "add_claim"},
-         { ProvAttr.permanent_claims, "add_permanent_claim"},
-         { ProvAttr.native_ferocity, "native_ferocity"},
-         { ProvAttr.native_hostileness, "native_hostileness"},
-         { ProvAttr.native_size, "native_size"},
-         { ProvAttr.local_autonomy, "add_local_autonomy"},
-         { ProvAttr.devastation, "add_devastation"},
+         { ProvAttrGet.base_manpower, "base_manpower" },
+         { ProvAttrGet.base_tax, "base_tax" },
+         { ProvAttrGet.base_production, "base_production" },
+         { ProvAttrGet.capital, "capital" },
+         { ProvAttrGet.culture, "culture" },
+         { ProvAttrGet.owner, "owner" },
+         { ProvAttrGet.religion, "religion" },
+         { ProvAttrGet.trade_good, "trade_goods" },
+         { ProvAttrGet.is_city, "is_city" },
+         { ProvAttrGet.capital, "capital"},
+         { ProvAttrGet.owner, "owner" },
+         { ProvAttrGet.cores, "add_core"},
+         { ProvAttrGet.controller, "controller"},
+         { ProvAttrGet.hre, "hre"},
+         { ProvAttrGet.discovered_by, "discovered_by"},
+         { ProvAttrGet.extra_cost, "extra_cost"},
+         { ProvAttrGet.center_of_trade, "center_of_trade"},
+         { ProvAttrGet.claims, "add_claim"},
+         { ProvAttrGet.permanent_claims, "add_permanent_claim"},
+         { ProvAttrGet.native_ferocity, "native_ferocity"},
+         { ProvAttrGet.native_hostileness, "native_hostileness"},
+         { ProvAttrGet.native_size, "native_size"},
+         { ProvAttrGet.local_autonomy, "add_local_autonomy"},
+         { ProvAttrGet.devastation, "add_devastation"},
       };
       
       public bool DoesFormatValue(string attr)
       {
-         return Template.ContainsKey((ProvAttr)Enum.Parse(typeof(ProvAttr), attr));
+         return Template.ContainsKey((ProvAttrGet)Enum.Parse(typeof(ProvAttrGet), attr));
       }
 
       // This method is used to start the formatting process of a province
@@ -95,7 +95,7 @@ namespace Editor.Formatters
 
       public bool FormatAttribute(string attr, out string name)
       {
-         var provAttr = (ProvAttr)Enum.Parse(typeof(ProvAttr), attr);
+         var provAttr = (ProvAttrGet)Enum.Parse(typeof(ProvAttrGet), attr);
          if (Template.TryGetValue(provAttr, out name!))
             return true;
          name = string.Empty;

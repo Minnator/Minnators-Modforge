@@ -8,10 +8,10 @@ namespace Editor.DataClasses.Commands
       private readonly bool _increase;
       private readonly int _value;
       private readonly List<Province> _provinces;
-      private readonly ProvAttr _attribute;
-      private readonly ProvAttrSetr _setter;
+      private readonly ProvAttrGet _attribute;
+      private readonly ProvAttrSet _setter;
 
-      public CModifyValue(List<Province> provinces, ProvAttr attribute, ProvAttrSetr ps, int value, bool increase, bool executeOnInit = true)
+      public CModifyValue(List<Province> provinces, ProvAttrGet attribute, ProvAttrSet ps, int value, bool increase, bool executeOnInit = true)
       {
          if (provinces.Count == 0)
             return;
