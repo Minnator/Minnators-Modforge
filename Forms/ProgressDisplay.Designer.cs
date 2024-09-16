@@ -28,6 +28,7 @@
       /// </summary>
       private void InitializeComponent()
       {
+         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProgressDisplay));
          tableLayoutPanel1 = new TableLayoutPanel();
          ProgressBar = new ProgressBar();
          Description = new Label();
@@ -76,6 +77,7 @@
          ClientSize = new Size(395, 71);
          Controls.Add(tableLayoutPanel1);
          FormBorderStyle = FormBorderStyle.None;
+         Icon = (Icon)resources.GetObject("$this.Icon");
          Name = "ProgressDisplay";
          Text = "ProgressDisplay";
          tableLayoutPanel1.ResumeLayout(false);

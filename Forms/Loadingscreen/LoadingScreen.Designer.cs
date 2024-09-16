@@ -28,6 +28,7 @@
       /// </summary>
       private void InitializeComponent()
       {
+         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoadingScreen));
          tableLayoutPanel1 = new TableLayoutPanel();
          LoadingAnimation = new PictureBox();
          LoadButton = new Button();
@@ -80,6 +81,7 @@
          ClientSize = new Size(512, 615);
          Controls.Add(tableLayoutPanel1);
          FormBorderStyle = FormBorderStyle.None;
+         Icon = (Icon)resources.GetObject("$this.Icon");
          Name = "LoadingScreen";
          Text = "LoadingScreen";
          tableLayoutPanel1.ResumeLayout(false);

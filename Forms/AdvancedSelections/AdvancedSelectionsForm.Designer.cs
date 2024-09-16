@@ -28,104 +28,112 @@
       /// </summary>
       private void InitializeComponent()
       {
-         this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-         this.ConfirmButton = new System.Windows.Forms.Button();
-         this.CancelButton = new System.Windows.Forms.Button();
-         this.AttributeSelectionComboBox = new System.Windows.Forms.ComboBox();
-         this.AttributeValueInput = new System.Windows.Forms.TextBox();
-         this.ActionTypeComboBox = new System.Windows.Forms.ComboBox();
-         this.tableLayoutPanel1.SuspendLayout();
-         this.SuspendLayout();
+         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdvancedSelectionsForm));
+         tableLayoutPanel1 = new TableLayoutPanel();
+         ConfirmButton = new Button();
+         CancelButton = new Button();
+         AttributeSelectionComboBox = new ComboBox();
+         AttributeValueInput = new TextBox();
+         ActionTypeComboBox = new ComboBox();
+         tableLayoutPanel1.SuspendLayout();
+         SuspendLayout();
          // 
          // tableLayoutPanel1
          // 
-         this.tableLayoutPanel1.ColumnCount = 2;
-         this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-         this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-         this.tableLayoutPanel1.Controls.Add(this.ConfirmButton, 1, 3);
-         this.tableLayoutPanel1.Controls.Add(this.CancelButton, 0, 3);
-         this.tableLayoutPanel1.Controls.Add(this.AttributeSelectionComboBox, 0, 1);
-         this.tableLayoutPanel1.Controls.Add(this.AttributeValueInput, 0, 2);
-         this.tableLayoutPanel1.Controls.Add(this.ActionTypeComboBox, 0, 0);
-         this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-         this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-         this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-         this.tableLayoutPanel1.RowCount = 4;
-         this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-         this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-         this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-         this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-         this.tableLayoutPanel1.Size = new System.Drawing.Size(242, 104);
-         this.tableLayoutPanel1.TabIndex = 0;
+         tableLayoutPanel1.ColumnCount = 2;
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         tableLayoutPanel1.Controls.Add(ConfirmButton, 1, 3);
+         tableLayoutPanel1.Controls.Add(CancelButton, 0, 3);
+         tableLayoutPanel1.Controls.Add(AttributeSelectionComboBox, 0, 1);
+         tableLayoutPanel1.Controls.Add(AttributeValueInput, 0, 2);
+         tableLayoutPanel1.Controls.Add(ActionTypeComboBox, 0, 0);
+         tableLayoutPanel1.Dock = DockStyle.Fill;
+         tableLayoutPanel1.Location = new Point(0, 0);
+         tableLayoutPanel1.Margin = new Padding(4, 3, 4, 3);
+         tableLayoutPanel1.Name = "tableLayoutPanel1";
+         tableLayoutPanel1.RowCount = 4;
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
+         tableLayoutPanel1.Size = new Size(282, 120);
+         tableLayoutPanel1.TabIndex = 0;
          // 
          // ConfirmButton
          // 
-         this.ConfirmButton.Dock = System.Windows.Forms.DockStyle.Fill;
-         this.ConfirmButton.Location = new System.Drawing.Point(124, 78);
-         this.ConfirmButton.Name = "ConfirmButton";
-         this.ConfirmButton.Size = new System.Drawing.Size(115, 23);
-         this.ConfirmButton.TabIndex = 0;
-         this.ConfirmButton.Text = "Confirm";
-         this.ConfirmButton.UseVisualStyleBackColor = true;
-         this.ConfirmButton.Click += new System.EventHandler(this.ConfirmButton_Click);
+         ConfirmButton.Dock = DockStyle.Fill;
+         ConfirmButton.Location = new Point(145, 90);
+         ConfirmButton.Margin = new Padding(4, 3, 4, 3);
+         ConfirmButton.Name = "ConfirmButton";
+         ConfirmButton.Size = new Size(133, 27);
+         ConfirmButton.TabIndex = 0;
+         ConfirmButton.Text = "Confirm";
+         ConfirmButton.UseVisualStyleBackColor = true;
+         ConfirmButton.Click += ConfirmButton_Click;
          // 
          // CancelButton
          // 
-         this.CancelButton.Dock = System.Windows.Forms.DockStyle.Fill;
-         this.CancelButton.Location = new System.Drawing.Point(3, 78);
-         this.CancelButton.Name = "CancelButton";
-         this.CancelButton.Size = new System.Drawing.Size(115, 23);
-         this.CancelButton.TabIndex = 1;
-         this.CancelButton.Text = "Cancel";
-         this.CancelButton.UseVisualStyleBackColor = true;
-         this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
+         CancelButton.Dock = DockStyle.Fill;
+         CancelButton.Location = new Point(4, 90);
+         CancelButton.Margin = new Padding(4, 3, 4, 3);
+         CancelButton.Name = "CancelButton";
+         CancelButton.Size = new Size(133, 27);
+         CancelButton.TabIndex = 1;
+         CancelButton.Text = "Cancel";
+         CancelButton.UseVisualStyleBackColor = true;
+         CancelButton.Click += CancelButton_Click;
          // 
          // AttributeSelectionComboBox
          // 
-         this.tableLayoutPanel1.SetColumnSpan(this.AttributeSelectionComboBox, 2);
-         this.AttributeSelectionComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
-         this.AttributeSelectionComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-         this.AttributeSelectionComboBox.FormattingEnabled = true;
-         this.AttributeSelectionComboBox.Location = new System.Drawing.Point(3, 28);
-         this.AttributeSelectionComboBox.Name = "AttributeSelectionComboBox";
-         this.AttributeSelectionComboBox.Size = new System.Drawing.Size(236, 21);
-         this.AttributeSelectionComboBox.TabIndex = 2;
+         tableLayoutPanel1.SetColumnSpan(AttributeSelectionComboBox, 2);
+         AttributeSelectionComboBox.Dock = DockStyle.Fill;
+         AttributeSelectionComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+         AttributeSelectionComboBox.FormattingEnabled = true;
+         AttributeSelectionComboBox.Location = new Point(4, 32);
+         AttributeSelectionComboBox.Margin = new Padding(4, 3, 4, 3);
+         AttributeSelectionComboBox.Name = "AttributeSelectionComboBox";
+         AttributeSelectionComboBox.Size = new Size(274, 23);
+         AttributeSelectionComboBox.TabIndex = 2;
          // 
          // AttributeValueInput
          // 
-         this.tableLayoutPanel1.SetColumnSpan(this.AttributeValueInput, 2);
-         this.AttributeValueInput.Dock = System.Windows.Forms.DockStyle.Fill;
-         this.AttributeValueInput.Location = new System.Drawing.Point(3, 53);
-         this.AttributeValueInput.Name = "AttributeValueInput";
-         this.AttributeValueInput.Size = new System.Drawing.Size(236, 20);
-         this.AttributeValueInput.TabIndex = 3;
+         tableLayoutPanel1.SetColumnSpan(AttributeValueInput, 2);
+         AttributeValueInput.Dock = DockStyle.Fill;
+         AttributeValueInput.Location = new Point(4, 61);
+         AttributeValueInput.Margin = new Padding(4, 3, 4, 3);
+         AttributeValueInput.Name = "AttributeValueInput";
+         AttributeValueInput.Size = new Size(274, 23);
+         AttributeValueInput.TabIndex = 3;
          // 
          // ActionTypeComboBox
          // 
-         this.tableLayoutPanel1.SetColumnSpan(this.ActionTypeComboBox, 2);
-         this.ActionTypeComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
-         this.ActionTypeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-         this.ActionTypeComboBox.FormattingEnabled = true;
-         this.ActionTypeComboBox.Location = new System.Drawing.Point(3, 3);
-         this.ActionTypeComboBox.Name = "ActionTypeComboBox";
-         this.ActionTypeComboBox.Size = new System.Drawing.Size(236, 21);
-         this.ActionTypeComboBox.TabIndex = 4;
+         tableLayoutPanel1.SetColumnSpan(ActionTypeComboBox, 2);
+         ActionTypeComboBox.Dock = DockStyle.Fill;
+         ActionTypeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+         ActionTypeComboBox.FormattingEnabled = true;
+         ActionTypeComboBox.Location = new Point(4, 3);
+         ActionTypeComboBox.Margin = new Padding(4, 3, 4, 3);
+         ActionTypeComboBox.Name = "ActionTypeComboBox";
+         ActionTypeComboBox.Size = new Size(274, 23);
+         ActionTypeComboBox.TabIndex = 4;
          // 
          // AdvancedSelectionsForm
          // 
-         this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-         this.ClientSize = new System.Drawing.Size(242, 104);
-         this.Controls.Add(this.tableLayoutPanel1);
-         this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-         this.MaximizeBox = false;
-         this.MinimizeBox = false;
-         this.Name = "AdvancedSelectionsForm";
-         this.Text = "AdvancedSelection";
-         this.tableLayoutPanel1.ResumeLayout(false);
-         this.tableLayoutPanel1.PerformLayout();
-         this.ResumeLayout(false);
-
+         AutoScaleDimensions = new SizeF(7F, 15F);
+         AutoScaleMode = AutoScaleMode.Font;
+         ClientSize = new Size(282, 120);
+         Controls.Add(tableLayoutPanel1);
+         FormBorderStyle = FormBorderStyle.FixedSingle;
+         Icon = (Icon)resources.GetObject("$this.Icon");
+         Margin = new Padding(4, 3, 4, 3);
+         MaximizeBox = false;
+         MinimizeBox = false;
+         Name = "AdvancedSelectionsForm";
+         Text = "AdvancedSelection";
+         tableLayoutPanel1.ResumeLayout(false);
+         tableLayoutPanel1.PerformLayout();
+         ResumeLayout(false);
       }
 
       #endregion

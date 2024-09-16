@@ -28,6 +28,7 @@
       /// </summary>
       private void InitializeComponent()
       {
+         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConsoleForm));
          tableLayoutPanel1 = new TableLayoutPanel();
          Output = new RichTextBox();
          Input = new TextBox();
@@ -85,6 +86,7 @@
          AutoScaleMode = AutoScaleMode.Font;
          ClientSize = new Size(830, 241);
          Controls.Add(tableLayoutPanel1);
+         Icon = (Icon)resources.GetObject("$this.Icon");
          Margin = new Padding(4, 3, 4, 3);
          Name = "ConsoleForm";
          Text = "Editor Console";

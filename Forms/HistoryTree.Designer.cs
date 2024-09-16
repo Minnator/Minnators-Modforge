@@ -28,6 +28,7 @@
       /// </summary>
       private void InitializeComponent()
       {
+         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HistoryTree));
          HistoryTreeView = new TreeView();
          tableLayoutPanel1 = new TableLayoutPanel();
          tableLayoutPanel2 = new TableLayoutPanel();
@@ -112,6 +113,7 @@
          AutoScaleMode = AutoScaleMode.Font;
          ClientSize = new Size(909, 600);
          Controls.Add(tableLayoutPanel1);
+         Icon = (Icon)resources.GetObject("$this.Icon");
          Margin = new Padding(4, 3, 4, 3);
          Name = "HistoryTree";
          Text = "HistoryTree";

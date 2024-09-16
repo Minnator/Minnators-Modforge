@@ -40,10 +40,11 @@ namespace Editor
       public PannablePictureBox MapPictureBox = null!;
       public readonly DateControl DateControl = new(DateTime.MinValue, DateControlLayout.Horizontal);
       private LoadingScreen ls;
+      private EnterPathForm epf;
+      public bool SHUT_DOWN = false;
 
-      public readonly ModProject Project = new()
+      public ModProject Project = new()
       {
-         Name = "DAVID",
          ModPath = Consts.MOD_PATH,
          VanillaPath = Consts.VANILLA_PATH
       };
@@ -52,6 +53,13 @@ namespace Editor
       {
          Globals.State = State.Loading;
          Globals.MapWindow = this;
+
+         RunEnterPathForm();
+
+         if (SHUT_DOWN)
+         {
+            return;
+         }
          RunLoadingScreen();
       }
 
@@ -94,6 +102,12 @@ namespace Editor
 
       private void AfterLoad()
       {
+      }
+
+      private void RunEnterPathForm()
+      {
+         epf = new();
+         epf.ShowDialog();
       }
 
       private void RunLoadingScreen()
@@ -573,6 +587,10 @@ namespace Editor
 
       private void MapWindow_Load(object sender, EventArgs e)
       {
+         if (SHUT_DOWN)
+         {
+            Close();
+         }
       }
 
       private void searchToolStripMenuItem_Click(object sender, EventArgs e)

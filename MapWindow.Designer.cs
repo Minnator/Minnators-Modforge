@@ -1265,6 +1265,7 @@
          ClientSize = new Size(1511, 927);
          Controls.Add(MainLayoutPanel);
          Controls.Add(MapMenuStrip);
+         Icon = (Icon)resources.GetObject("$this.Icon");
          KeyPreview = true;
          MainMenuStrip = MapMenuStrip;
          Margin = new Padding(4, 3, 4, 3);
@@ -1272,7 +1273,7 @@
          Name = "MapWindow";
          SizeGripStyle = SizeGripStyle.Show;
          StartPosition = FormStartPosition.CenterParent;
-         Text = "Minnator's Modforge";
+         Text = "Minnator's Modforge (Alpha 1.0.0)";
          FormClosing += MapWindow_FormClosing;
          Load += MapWindow_Load;
          KeyDown += MapWindow_KeyDown;

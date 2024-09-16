@@ -28,6 +28,7 @@
       /// </summary>
       private void InitializeComponent()
       {
+         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Search));
          tableLayoutPanel1 = new TableLayoutPanel();
          SearchInput = new TextBox();
          SearchResultsPanel = new FlowLayoutPanel();
@@ -74,6 +75,7 @@
          ClientSize = new Size(200, 330);
          Controls.Add(tableLayoutPanel1);
          FormBorderStyle = FormBorderStyle.FixedToolWindow;
+         Icon = (Icon)resources.GetObject("$this.Icon");
          Name = "Search";
          Text = "Search";
          tableLayoutPanel1.ResumeLayout(false);
