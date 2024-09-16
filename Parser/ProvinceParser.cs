@@ -37,7 +37,7 @@ public static class ProvinceParser
 
       sw.Stop();
       Globals.LoadingLog.WriteTimeStamp("Parsing provinces", sw.ElapsedMilliseconds);
-      DebugPrints.PrintAllProvinceHistories();
+      //DebugPrints.PrintAllProvinceHistories();
    }
 
    private static void ProcessProvinceFile(string path)

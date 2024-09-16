@@ -94,6 +94,8 @@ namespace Editor
          MapModeComboBox.SelectedIndex = 11;
          ResumeLayout();
          Globals.LoadingStage++;
+
+         StartPosition = FormStartPosition.CenterScreen;
          Show();
          MapPictureBox.FocusOn(new(3100, 600));
 
@@ -131,8 +133,8 @@ namespace Editor
          ProvincePreviewMode.SelectedIndex = 2;
 
          // TODO figure out how to make this work
-         toolStripContainer1.ContentPanel.MouseEnter += OnMouseEnter!;
-         toolStripContainer1.ContentPanel.MouseLeave += OnMouseLeave!;
+         //toolStripContainer1.ContentPanel.MouseEnter += OnMouseEnter!;
+         //toolStripContainer1.ContentPanel.MouseLeave += OnMouseLeave!;
       }
 
       private void InitializeEditGui()
@@ -481,16 +483,16 @@ namespace Editor
 
       private void OnMouseEnter(object sender, EventArgs e)
       {
+         Cursor = Cursors.Default; 
+      }
+
+      private void OnMouseLeave(object sender, EventArgs e)
+      {
          Cursor = Globals.Selection.State switch
          {
             SelectionState.MagicWand => Cursors.Cross,
             _ => Cursors.Default
          };
-      }
-
-      private void OnMouseLeave(object sender, EventArgs e)
-      {
-         Cursor = Cursors.Default;
       }
 
       private void debugToolStripMenuItem_Click(object sender, EventArgs e)
@@ -539,14 +541,14 @@ namespace Editor
          var sb = new StringBuilder();
          foreach (var block in blocks)
          {
-            DebugPrints.BuildBlockString(0, block, ref sb);
+            //DebugPrints.BuildBlockString(0, block, ref sb);
          }
          File.WriteAllText("C:\\Users\\david\\Downloads\\NestedBLocksOutput2.txt", sb.ToString());
       }
 
       private void telescopeToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         DebugMaps.TelescopeImageBenchmark();
+         //DebugMaps.TelescopeImageBenchmark();
       }
 
       private void MapWindow_KeyDown(object sender, KeyEventArgs e)
@@ -577,7 +579,7 @@ namespace Editor
 
       private void refStackToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         DebugMaps.GridMap();
+         //DebugMaps.GridMap();
       }
 
       private void DateSelector_SelectedIndexChanged(object sender, EventArgs e)
@@ -600,7 +602,7 @@ namespace Editor
 
       private void bestPointsToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         DebugMaps.TestCenterPoints();
+         //DebugMaps.TestCenterPoints();
       }
 
       private void provDiffToolStripMenuItem_Click(object sender, EventArgs e)

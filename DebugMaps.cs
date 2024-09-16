@@ -10,6 +10,7 @@ namespace Editor;
 
 public static class DebugMaps
 {
+   /*
    public static void YoloDefinition()
    {
       List<Province> europeanProvinces = [];
@@ -616,4 +617,5 @@ public static class DebugMaps
       //sw.Stop();
       //Debug.WriteLine($"Modifying Bitmap took {sw.ElapsedMilliseconds} ms");
    }
+   */
 }

@@ -180,7 +180,11 @@ public sealed class PannablePictureBox : PictureBox
          if (e.Button == MouseButtons.Middle)
          {
             _panning = false;
-            Cursor = Cursors.Default; // Optional: revert cursor back to default
+            Cursor = Globals.Selection.State switch
+            {
+               SelectionState.MagicWand => Cursors.Cross,
+               _ => Cursors.Default
+            };
          }
       }
    }

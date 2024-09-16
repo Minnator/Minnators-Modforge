@@ -5,6 +5,7 @@
       public EnterPathForm()
       {
          InitializeComponent();
+         StartPosition = FormStartPosition.CenterScreen;
       }
 
 

@@ -9,7 +9,7 @@ namespace Editor;
 
 public static class DebugPrints
 {
-
+   /*
    public static void PrintAllProvinceHistories()
    {
       var sb = new StringBuilder();
@@ -232,4 +232,5 @@ public static class DebugPrints
 
       File.WriteAllText(@"C:\Users\david\Downloads\topLevelBlocksDEBUG.txt", sb.ToString());
    }
+   */
 }
