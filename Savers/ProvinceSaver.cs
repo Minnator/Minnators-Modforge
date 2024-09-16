@@ -228,7 +228,7 @@ namespace Editor.Savers
             case bool b:
                if (!b)
                   break;
-               sb.AppendLine($"{name} = {GetYesNo(b)}");
+               sb.AppendLine($"{name} = {SavingUtil.GetYesNo(b)}");
                return;
             case float f:
                if (f == 0)
@@ -250,11 +250,5 @@ namespace Editor.Savers
                break;
          }
       }
-
-      private static string GetYesNo(bool value)
-      {
-         return value ? "yes" : "no";
-      }
-
    }
 }

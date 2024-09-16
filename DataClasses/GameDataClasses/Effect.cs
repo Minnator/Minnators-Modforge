@@ -37,6 +37,11 @@ namespace Editor.DataClasses.GameDataClasses
             _ => new DummyComplexEffect(name, value, type, Scope.Country)
          };
       }
+
+      public static ScriptedEffect CreateScriptedEffect(string name, string value, EffectValueType type)
+      {
+         return new (name, value, type, Scope.Country);
+      }
    }
 
    public abstract class Effect(string name, string value, EffectValueType type, Scope scope)
@@ -146,6 +151,51 @@ namespace Editor.DataClasses.GameDataClasses
       public override string ToString()
       {
          return $"{Name} : {Value}";
+      }
+   }
+
+   public class OpinionEffect(string name, string value, EffectValueType type, Scope scope)
+      : ComplexEffect(name, value, type, scope)
+   {
+      public Tag Who { get; set; } = Tag.Empty;
+      public string Modifier { get; set; } = string.Empty;
+      public string WhatOpinionModifier { get; set; } = string.Empty;
+
+      public override string ToString()
+      {
+         return $"{WhatOpinionModifier} : {Who} : {Modifier}";
+      }
+
+      public override string GetEffectString(int tabs)
+      {
+         var sb = new StringBuilder();
+         sb.AppendLine($"{WhatOpinionModifier} = {{");
+         sb.AppendLine($"\twho = {Who}");
+         sb.AppendLine($"\tmodifier = {Modifier}");
+         sb.AppendLine("}");
+         return sb.ToString();
+      }
+   }
+
+   public class AddEstateLoyaltyEffect(string name, string value, EffectValueType type, Scope scope)
+      : ComplexEffect(name, value, type, scope)
+   {
+      public string Estate { get; set; } = string.Empty;
+      public int Loyalty { get; set; }
+
+      public override string ToString()
+      {
+         return $"{Estate} : {Loyalty}";
+      }
+
+      public override string GetEffectString(int tabs)
+      {
+         var sb = new StringBuilder();
+         sb.AppendLine($"add_estate_loyalty = {{");
+         sb.AppendLine($"\testate = {Estate}");
+         sb.AppendLine($"\tloyalty = {Loyalty}");
+         sb.AppendLine("}");
+         return sb.ToString();
       }
    }
 

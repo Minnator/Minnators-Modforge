@@ -197,7 +197,7 @@ public static class Globals {
 
    public static readonly HashSet<string> CountryAttributes = 
    [
-      "cannot_form_from_collapse_nation", "right_to_bear_arms", "all_your_core_are_belong_to_us",    
+      "cannot_form_from_collapse_nation", "right_to_bear_arms", "all_your_core_are_belong_to_us", "random_nation_extra_size", 
    ];
 
 }

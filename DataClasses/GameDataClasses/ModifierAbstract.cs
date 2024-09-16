@@ -1,4 +1,7 @@
-﻿namespace Editor.DataClasses.GameDataClasses
+﻿using System.Text;
+using Editor.Savers;
+
+namespace Editor.DataClasses.GameDataClasses
 {
 
    public enum ModifierType
@@ -11,12 +14,17 @@
    }
 
 
-   public abstract class ModifierAbstract()
+   public abstract class ModifierAbstract : ISaveModifier
    {
       public string Name { get; protected init; }
       public int Duration { get; set; }
       public string Icon { get; set; } = string.Empty;
       public List<KeyValuePair<string, string>> Effects { get; set; } = [];
+
+      public string GetModifierString()
+      {
+         return ToString();
+      }
 
       public override bool Equals(object? obj)
       {
@@ -98,7 +106,41 @@
       }
    }
 
-   public class Modifier(string name, string value)
+   public class RulerModifier : ISaveModifier
+   {
+      public string Name { get; set; } = string.Empty;
+      public bool IsHidden = false;
+
+      public override string ToString()
+      {
+         return $"{Name}";
+      }
+
+      public string GetModifierString()
+      {
+         var sb = new StringBuilder();
+         sb.AppendLine("add_ruler_modifier = {");
+         sb.AppendLine($"\tname = {Name}");
+         sb.AppendLine($"\thidden = {SavingUtil.GetYesNo(IsHidden)}");
+         sb.AppendLine($"}}");
+         return sb.ToString();
+      }
+
+      public override bool Equals(object? obj)
+      {
+         if (obj is RulerModifier modifier)
+            return Name == modifier.Name;
+         return false;
+      }
+
+      public override int GetHashCode()
+      {
+         return Name.GetHashCode();
+      }
+   }
+
+
+   public class Modifier(string name, string value) 
    {
       public readonly string Name = name;
       public readonly string Value = value;
@@ -135,5 +177,10 @@
       {
          return a.Name != b.Name || a.Value != b.Value;
       }
+   }
+
+   public interface ISaveModifier
+   {
+      public string GetModifierString();
    }
 }

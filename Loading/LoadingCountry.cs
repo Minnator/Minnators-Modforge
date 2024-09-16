@@ -63,31 +63,44 @@ namespace Editor.Loading
                   Globals.ErrorLog.Write($"Found country file with no no tag reference in 'country_tag' folder: {tag}");
             }
          });
-
-         /*
-         foreach (var file in files)
-         {
-            Parsing.RemoveCommentFromMultilineString(IO.ReadAllInUTF8(file), out var removed);
-            var elements = Parsing.GetElements(0, removed);
-
-            foreach (var element in elements)
-            {
-               Tag tag = new(Path.GetFileName(file)[..3]);
-               if (Globals.Countries.TryGetValue(tag, out var country))
-                  AnalyzeCountryStuff(element, country);
-               else
-                  Globals.ErrorLog.Write($"Found country file with no no tag reference in 'country_tag' folder: {tag}");
-            }
-         }
-         */
       }
 
       private static void AnalyzeCountryStuff(IElement element, Country country)
       {
          if (element is Block block)
          {
-            ParseHistoryBlock(block, out var che);
-            country.History.Add(che);
+            switch (block.Name)
+            {
+               case "add_country_modifier":
+                  if (ModifierParser.ParseApplicableModifier(block.GetContent, out var mod)) 
+                     country.Modifiers.Add(mod);
+                  else
+                     Globals.ErrorLog.Write($"Invalid modifier in {country.Tag}: {block.GetContent}");
+                  break;
+               case "add_ruler_modifier":
+                  if (ModifierParser.ParseRulerModifier(block.GetContent, out var rulerMod))
+                     country.RulerModifiers.Add(rulerMod);
+                  else
+                     Globals.ErrorLog.Write($"Invalid ruler modifier in {country.Tag}: {block.GetContent}");
+                  break;
+               case "add_opinion":
+                  if (EffectParser.ParseOpinionEffects("add_opinion", block.GetContent, out var effect))
+                     country.InitialEffects.Add(effect);
+                  else
+                     Globals.ErrorLog.Write($"Invalid opinion effect in {country.Tag}: {block.GetContent}");
+                  break;
+               case "add_estate_loyalty":
+                  if (EffectParser.ParseAddEstateLoyaltyEffect(block.GetContent, out var loyaltyEffect))
+                     country.InitialEffects.Add(loyaltyEffect);
+                  else
+                     Globals.ErrorLog.Write($"Invalid estate loyalty effect in {country.Tag}: {block.GetContent}");
+                  break;
+               default:
+                  ParseHistoryBlock(block, out var che);
+                  country.History.Add(che);
+                  break;
+            }
+
          }
          else
          {
@@ -172,7 +185,7 @@ namespace Editor.Loading
                      Globals.ErrorLog.Write($"Invalid fixed capital in {country.Tag}: {val}");
                   break;
                case "mercantilism":
-                  if (int.TryParse(val, out var mercantilism))
+                  if (float.TryParse(val, out var mercantilism))
                      country.Mercantilism = mercantilism;
                   else
                      Globals.ErrorLog.Write($"Invalid mercantilism in {country.Tag}: {val}");
@@ -244,7 +257,8 @@ namespace Editor.Loading
 
             if (Globals.ScriptedEffectNames.Contains(block.Name))
             {
-               che.Effects.Add(new (block.Name, block.GetContent));
+               var effect = EffectFactory.CreateScriptedEffect(block.Name, block.GetContent, EffectValueType.Complex);
+               che.Effects.Add(effect);
                continue;
             }
 
@@ -261,6 +275,10 @@ namespace Editor.Loading
                   Parsing.ParseLeaderFromString(block.GetContentElements[0].Value, out var leader);
                   che.Leaders.Add(leader);
                   break;
+               case "federation":
+                  var effect = EffectFactory.CreateComplexEffect(block.Name, block.GetContent, EffectValueType.Complex);
+
+                  break;
                default:
                   if (Parsing.ParseDynamicContent(block, out _))
                      break;
@@ -276,13 +294,25 @@ namespace Editor.Loading
             return;
          foreach (var content in element)
          {
-            var kvp = Parsing.GetKeyValueList(content.Value);
-            if (kvp.Count < 1)
+            var kvps= Parsing.GetKeyValueList(content.Value);
+            if (kvps.Count < 1)
             {
-               Globals.ErrorLog.Write($"Invalid key value pair in history entry: {content.Value}");
+               Globals.ErrorLog.Write($"Invalid key value pair in history entry effects: {content.Value}");
                continue;
             }
-            che.Effects.AddRange(kvp);
+
+            foreach (var kvp in kvps)
+            {
+               if (EffectParser.IsAnyEffectCountryHistory(kvp.Key))
+               {
+                  var eff = EffectFactory.CreateSimpleEffect(kvp.Key, kvp.Value, EffectValueType.String, Scope.Country);
+                  che.Effects.Add(eff);
+               }
+               else
+               {
+                  Globals.ErrorLog.Write($"Unknown key in history entry effects: {kvp.Key} in {content}");
+               }
+            }
          }
       }
 

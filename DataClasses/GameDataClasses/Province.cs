@@ -1103,7 +1103,7 @@ public class Province : IProvinceCollection
                Globals.ErrorLog.Write($"Could not parse prosperity: {value} for province id {Id}");
             break;
          case ProvAttrSet.add_province_modifier:
-            if (ModifierParser.ParseProvinceModifier(value, out var mod))
+            if (ModifierParser.ParseApplicableModifier(value, out var mod))
                AddModifier(ModifierType.ProvinceModifier, mod, true);
             else 
                Globals.ErrorLog.Write($"Could not parse add_province_modifier: {value} for province id {Id}");
@@ -1112,7 +1112,7 @@ public class Province : IProvinceCollection
             ProvinceModifiers.RemoveAll(x => x.Name == value);
             break;
          case ProvAttrSet.add_permanent_province_modifier:
-            if (ModifierParser.ParseProvinceModifier(value, out var permaMod))
+            if (ModifierParser.ParseApplicableModifier(value, out var permaMod))
                AddModifier(ModifierType.PermanentProvinceModifier, permaMod, true);
             else
                Globals.ErrorLog.Write($"Could not parse add_permanent_province_modifier: {value} for province id {Id}");

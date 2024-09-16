@@ -102,7 +102,7 @@ public static class ProvinceParser
                   return;
                }
             case "add_permanent_province_modifier":
-               if (ModifierParser.ParseProvinceModifier(block.GetContent, out var mod))
+               if (ModifierParser.ParseApplicableModifier(block.GetContent, out var mod))
                   province.PermanentProvinceModifiers.Add(mod);
                return;
             case "add_trade_modifier":

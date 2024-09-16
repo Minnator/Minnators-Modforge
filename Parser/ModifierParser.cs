@@ -1,6 +1,7 @@
 ﻿using System.Security.Policy;
 using System.Text.RegularExpressions;
 using Editor.DataClasses.GameDataClasses;
+using Editor.Helper;
 
 namespace Editor.Parser
 {
@@ -9,7 +10,7 @@ namespace Editor.Parser
       private const string PROVINCE_MODIFIER_REGEX = "name\\s*=\\s*(.*)\\s*duration\\s*=\\s*(.*)";
       private static readonly Regex ProvinceModifierRegex = new(PROVINCE_MODIFIER_REGEX, RegexOptions.Compiled);
 
-      public static bool ParseProvinceModifier(string str, out ApplicableModifier mod)
+      public static bool ParseApplicableModifier(string str, out ApplicableModifier mod)
       {
          mod = default!;
 
@@ -25,6 +26,36 @@ namespace Editor.Parser
          mod = new(name, duration);
          return true;
       }
+
+      public static bool ParseRulerModifier(string str, out RulerModifier rulerMod)
+      {
+         var kvps = str.Split('=', '\n');
+         if (kvps.Length % 2 != 0)
+         {
+            Globals.ErrorLog.Write($"Could not parse ruler modifier from string: {str}");
+            rulerMod = default!;
+            return false;
+         }
+
+         rulerMod = new();
+         for (var i = 0; i < kvps.Length; i += 2)
+         {
+            if (kvps[i].Trim().Equals("name"))
+            {
+               rulerMod.Name = kvps[i + 1].Trim();
+               break;
+            }
+
+            if (kvps[i].Trim().ToLower().Equals("hidden"))
+            {
+               rulerMod.IsHidden = Parsing.YesNo(kvps[i + 1].Trim());
+               break;
+            }
+         }
+
+         return true;
+      }
+
 
       public static bool ParseTradeModifier(string str, out TradeModifier tradeModifier)
       {

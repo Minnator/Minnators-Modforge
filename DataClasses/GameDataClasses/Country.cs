@@ -49,6 +49,8 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
    public string SpecialUnitCulture { get; set; } = string.Empty;
    public int HistoricalScore { get; set; } = 0;
    public bool CanBeRandomNation { get; set; } = true;
+   public List<ModifierAbstract> Modifiers { get; set; } = [];
+   public List<RulerModifier> RulerModifiers { get; set; } = [];
 
    public List<string> HistoricalIdeas { get; set; } = [];
    public List<string> HistoricalUnits { get; set; } = [];
@@ -100,8 +102,8 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
    }
 
    public int FixedCapital { get; set; } = -1;
-   public int Mercantilism { get; set; } = 0;
    public int ArmyTradition { get; set; } = 0;
+   public float Mercantilism { get; set; } = 0;
    public float ArmyProfessionalism { get; set; } = 0;
    public float Prestige { get; set; } = 0;
    public bool IsElector { get; set; } = false;
@@ -218,7 +220,7 @@ public class CountryHistoryEntry(DateTime date)
    public DateTime Date { get; } = date;
    public List<Person> Persons { get; set; } = [];
    public List<Leader> Leaders { get; set; } = [];
-   public List<KeyValuePair<string, string>> Effects { get; set; } = [];
+   public List<Effect> Effects { get; set; } = [];
 
    public bool HasPerson => Persons.Any();
    public bool HasEffect => Effects.Any();
@@ -278,6 +280,7 @@ public struct Leader
    public LeaderType Type { get; set; } = LeaderType.General;
    public DateTime DeathDate { get; set; } = DateTime.MinValue;
    public List<string> Personalities { get; set; } = []; //TODO replace with dynamic enum
+   public List<string> Traits { get; set; } = []; //TODO replace with dynamic enum
 
    public bool IsAlive => DeathDate == DateTime.MinValue;
 

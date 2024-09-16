@@ -618,6 +618,9 @@ public static partial class Parsing
             case "personality":
                leader.Personalities.Add(kv.Value);
                break;
+            case "trait":
+               leader.Traits.Add(kv.Value);
+               break;
             default:
                Globals.ErrorLog.Write("Unknown key in Leader: " + kv.Key);
                return false;
@@ -649,7 +652,7 @@ public static partial class Parsing
    /// <param name="block"></param>
    /// <param name="output"></param>
    /// <returns></returns>
-   internal static bool ParseDynamicContent(Block block, out object output)
+   internal static bool ParseDynamicContent(Block block, out string output)
    {
       output = default!;
       if (ScopeParser.IsAnyScope(block.Name))
@@ -709,5 +712,10 @@ public static partial class Parsing
       return true;
    }
 
+   public static bool GetSimpleKvpArray(string input, out string[] kvps)
+   {
+      kvps = input.Split('\n', '=');
+      return kvps.Length % 2 == 0;
+   }
 }
 
