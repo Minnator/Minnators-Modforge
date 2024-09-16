@@ -34,7 +34,6 @@ public static class CultureLoading
       Dictionary<string, Culture> cultureDict = [];
       Dictionary<string, CultureGroup> cultureGroupDict = [];
       
-      /*
       Parallel.ForEach(blocks, element =>
       {
          if (element is not Block block)
@@ -82,7 +81,7 @@ public static class CultureLoading
             }
          }
       });
-      */
+      /*
       foreach (var element in blocks)
       {
          if (element is not Block block)
@@ -130,6 +129,7 @@ public static class CultureLoading
             }
          }
       }
+      */
 
       return (cultureGroupDict, cultureDict);
    }

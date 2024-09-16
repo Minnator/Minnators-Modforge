@@ -8,9 +8,12 @@ public class ColorProviderRgb(int seed = 1444)
    public Color GetRandomColor()
    {
       var color = Color.FromArgb(_rand.Next(256), _rand.Next(256), _rand.Next(256));
-      while (_usedColors.Contains(color))
-         color = Color.FromArgb(_rand.Next(256), _rand.Next(256), _rand.Next(256));
-      _usedColors.Add(color);
+      lock (_usedColors)
+      {
+         while (_usedColors.Contains(color))
+            color = Color.FromArgb(_rand.Next(256), _rand.Next(256), _rand.Next(256));
+         _usedColors.Add(color);
+      }
       return color;
    }
 
