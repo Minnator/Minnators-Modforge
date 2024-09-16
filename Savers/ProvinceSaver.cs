@@ -115,6 +115,7 @@ namespace Editor.Savers
          sb.AppendLine();
          AddItem("hre", p.GetAttribute(ProvAttr.hre), ref sb);
          AddItem("is_city", p.GetAttribute(ProvAttr.is_city), ref sb);
+         AddItem("citysize", p.GetAttribute(ProvAttr.citysize), ref sb);
          AddItem("seat_in_parliament", p.GetAttribute(ProvAttr.seat_in_parliament), ref sb);
          AddItem("add_local_autonomy", p.GetAttribute(ProvAttr.local_autonomy), ref sb);
          AddItem("add_devastation", p.GetAttribute(ProvAttr.devastation), ref sb);

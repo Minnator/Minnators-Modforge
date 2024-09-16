@@ -146,6 +146,14 @@ public static class ProvinceEventHandler
       RaiseProvinceDataChanged(id, value, propertyName);
    }
 
+   // CitySize
+   public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceCitySizeChanged = delegate { };
+   public static void RaiseProvinceCitySizeChanged(int id, object value, string propertyName)
+   {
+      OnProvinceCitySizeChanged.Invoke(id, new (value, propertyName));
+      RaiseProvinceDataChanged(id, value, propertyName);
+   }
+
    // LocalAutonomy
    public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceLocalAutonomyChanged = delegate { };
    public static void RaiseProvinceLocalAutonomyChanged(int id, object value, string propertyName)

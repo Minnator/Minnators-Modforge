@@ -33,6 +33,7 @@ public class ProvinceData()
    public int NativeSize;                                   // NAT
    public int RevoltRisk;
    public int Nationalism;
+   public int CitySize;
    public float NativeFerocity;                             // NAT
    public float LocalAutonomy;                              //.                           
    public float Devastation;                                //.
@@ -100,7 +101,8 @@ public enum ProvAttr
    name,
    revolt,
    is_occupied,
-   latent_trade_good
+   latent_trade_good,
+   citysize
 }
 
 public enum ProvAttrSetr
@@ -151,7 +153,8 @@ public enum ProvAttrSetr
    devastation,
    prosperity,
    remove_permanent_claim,
-   add_permanent_claim
+   add_permanent_claim,
+   citysize
 }
 
 public class Province : IProvinceCollection
@@ -381,6 +384,16 @@ public class Province : IProvinceCollection
       }
    }
 
+   public int CitySize
+   {
+      get => _data.CitySize;
+      set
+      {
+         _data.CitySize = value;
+         if (Globals.State == State.Running)
+            RaiseProvinceCitySizeChanged(Id, value, nameof(CitySize));
+      }
+   }
 
    public int Nationalism
    {
@@ -714,6 +727,7 @@ public class Province : IProvinceCollection
       ProvinceData.ProvinceTriggeredModifiers = ProvinceTriggeredModifiers;
       ProvinceData.ScriptedEffects = Effects;
       ProvinceData.TradeModifiers = TradeModifiers;
+      ProvinceData.CitySize = CitySize;
    }
 
    /// <summary>
@@ -760,6 +774,7 @@ public class Province : IProvinceCollection
       ProvinceTriggeredModifiers = ProvinceData.ProvinceTriggeredModifiers;
       Effects = ProvinceData.ScriptedEffects;
       TradeModifiers = ProvinceData.TradeModifiers;
+      CitySize = ProvinceData.CitySize;
    }
 
    /// <summary>
@@ -858,6 +873,7 @@ public class Province : IProvinceCollection
          ProvAttr.devastation => Devastation,
          ProvAttr.prosperity => Prosperity,
          ProvAttr.latent_trade_good => LatentTradeGood,
+         ProvAttr.citysize => CitySize,
          _ => ""
       };
    }
@@ -1109,6 +1125,12 @@ public class Province : IProvinceCollection
             break;
          case ProvAttrSetr.remove_permanent_claim:
             PermanentClaims.Remove(Tag.FromString(value));
+            break;
+         case ProvAttrSetr.citysize:
+            if (int.TryParse(value, out var size2))
+               CitySize = size2;
+            else
+               Globals.ErrorLog.Write($"Could not parse citisize: {value} for province id {Id}");
             break;
          default:
             Globals.ErrorLog.Write($"Could not parse {name} attribute for province id {Id} to set value {value}");
