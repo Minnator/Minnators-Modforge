@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 using Editor;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
@@ -10,23 +11,20 @@ namespace Editor.Loading
    {
       public static void Load(ModProject project)
       {
+         var sw = Stopwatch.StartNew();
          var file = FilesHelper.GetModOrVanillaPath("common", "tradenodes", "00_tradenodes.txt");
          ParseTradeNodesFromString(IO.ReadAllInUTF8(file));
          SetIncoming();
+         sw.Stop();
+         Globals.LoadingLog.WriteTimeStamp("Loading TradeNodes", sw.ElapsedMilliseconds);
       }
 
       private static void SetIncoming()
       {
          foreach (var node in Globals.TradeNodes.Values)
-         {
             foreach (var outgoing in node.Outgoing)
-            {
-               if (Globals.TradeNodes.TryGetValue(outgoing, out var outgoingNode))
-               {
+               if (Globals.TradeNodes.TryGetValue(outgoing, out var outgoingNode)) 
                   outgoingNode.Incoming.Add(node.Name);
-               }
-            }
-         }
       }
 
       private static void ParseTradeNodesFromString(string fileContent)
@@ -93,7 +91,10 @@ namespace Editor.Loading
                for (var index = 0; index < kvp2.Count; index++)
                {
                   if (kvp2[index].Key.Equals("name"))
-                     node.Outgoing.Add(kvp2[index].Value);
+                  {
+                     var name = kvp2[index].Value;
+                     node.Outgoing.Add(name[1..^1]);
+                  }
                }
                break;
             default:

@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 using Editor.Controls;
-using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.Loading;
 using Editor.Parser;
@@ -20,7 +19,7 @@ namespace Editor.Forms.Loadingscreen
          InitializeComponent();
 
          Globals.LoadingStageChanged += LoadingScreen_LoadingStageChanged;
-
+          
          ProgressBar = new();
          ProgressBar.Dock = DockStyle.Fill;
          tableLayoutPanel1.Controls.Add(ProgressBar, 0, 2);
