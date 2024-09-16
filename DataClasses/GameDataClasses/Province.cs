@@ -29,11 +29,11 @@ public class ProvinceData()
    public int BaseProduction = 1;                           //.
    public int CenterOfTrade;                                //.
    public int ExtraCost;                                    //.
-   public int NativeFerocity;                               // NAT
    public int NativeHostileness;                            // NAT
    public int NativeSize;                                   // NAT
    public int RevoltRisk;
    public int Nationalism;
+   public float NativeFerocity;                             // NAT
    public float LocalAutonomy;                              //.                           
    public float Devastation;                                //.
    public float Prosperity;                                 //.
@@ -337,7 +337,7 @@ public class Province : IProvinceCollection
       }
    }
 
-   public int NativeFerocity
+   public float NativeFerocity
    {
       get => _data.NativeFerocity;
       set
@@ -993,7 +993,7 @@ public class Province : IProvinceCollection
             IsCity = Parsing.YesNo(value);
             break;
          case ProvAttrSetr.native_ferocity:
-            if (int.TryParse(value, out var ferocity))
+            if (float.TryParse(value, out var ferocity))
                NativeFerocity = ferocity;
             else
                Globals.ErrorLog.Write($"Could not parse native_ferocity: {value} for province id {Id}");

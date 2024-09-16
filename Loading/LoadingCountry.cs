@@ -219,7 +219,7 @@ namespace Editor.Loading
       {
          che = null!;
 
-         if (!DateTime.TryParse(block.Name, out var date))
+         if (!Parsing.TryParseDate(block.Name, out var date))
          {
             if (!Parsing.ParseDynamicContent(block, out _))
                return;

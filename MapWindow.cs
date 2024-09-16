@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.Text;
 using Editor.Controls;
 using Editor.DataClasses;
@@ -592,8 +593,21 @@ namespace Editor
 
       private void yoloToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         DebugMaps.YoloDefinition();
+         string[] dateStrings = { "1.1.1", "9999.11.11", "2024.09.16" };
+
+         foreach (string dateString in dateStrings)
+         {
+            if (Parsing.TryParseDate(dateString, out var dateValue))
+            {
+               Debug.WriteLine($"Parsed date: {dateValue:yyyy-MM-dd}");
+            }
+            else
+            {
+               Debug.WriteLine($"Failed to parse the date: {dateString}");
+            }
+         }
       }
+
 
       private void saveAllProvincesToolStripMenuItem_Click(object sender, EventArgs e)
       {

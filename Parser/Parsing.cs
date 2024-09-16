@@ -45,6 +45,27 @@ public static partial class Parsing
    #endregion
 
    /// <summary>
+   /// Parses a date in any given format that can occur in the game files, which is valid
+   /// </summary>
+   /// <param name="dateString"></param>
+   /// <param name="dateValue"></param>
+   /// <returns></returns>
+   public static bool TryParseDate(string dateString, out DateTime dateValue)
+   {
+      // Define possible formats
+      string[] formats = ["yyyy.MM.dd", "yyyy.M.d","yyy.mm.dd", "yyy.M.d", "y.M.d", "yy.M.d", ];
+
+      // Attempt to parse the date string using the defined formats
+      return DateTime.TryParseExact(
+         dateString,
+         formats,
+         CultureInfo.InvariantCulture,
+         DateTimeStyles.None,
+         out dateValue
+      );
+   }
+
+   /// <summary>
    /// Returns a list of <c>int</c> from a string which are separated by <c>n</c> whitespace chars.
    /// </summary>
    /// <param name="str"></param>
@@ -471,12 +492,12 @@ public static partial class Parsing
                person.Religion = val;
                break;
             case "birth_date":
-               if (!DateTime.TryParse(val, out var birthDate))
+               if (!TryParseDate(val, out var birthDate))
                   Globals.ErrorLog.Write($"Could not parse birth date: \"{val}\" in person: \"{person.Name}\"");
                person.BirthDate = birthDate;
                break;
             case "death_date":
-               if (!DateTime.TryParse(val, out var deathDate))
+               if (!TryParseDate(val, out var deathDate))
                   Globals.ErrorLog.Write($"Could not parse death date: \"{val}\" in person: \"{person.Name}\"");
                person.DeathDate = deathDate;
                break;
@@ -587,7 +608,7 @@ public static partial class Parsing
                leader.IsFemale = YesNo(kv.Value);
                break;
             case "death_date":
-               if (!DateTime.TryParse(kv.Value, out var deathDate))
+               if (!TryParseDate(kv.Value, out var deathDate))
                {
                   Globals.ErrorLog.Write("Could not parse death date: " + kv.Value + $" in leader {leader.Name}");
                   return false;

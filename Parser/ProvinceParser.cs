@@ -84,7 +84,7 @@ public static class ProvinceParser
 
    private static void ParseProvinceBlockBlock(ref Province province, Block block)
    {
-      if (!DateTime.TryParse(block.Name, out var date))
+      if (!Parsing.TryParseDate(block.Name, out var date))
       {
          // Take any scope with its effects save them as a complex effect and thus put it back into the province on saving
          if (ScopeParser.IsAnyScope(block.Name))
