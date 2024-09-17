@@ -90,25 +90,25 @@ namespace Editor.Forms.Loadingscreen
             bw.ReportProgress(++progress);
             ReligionLoading.Load();
             bw.ReportProgress(++progress);
-            MapLoading.LoadDefinitionAndMap(); //TODO SLOW
+            MapLoading.LoadDefinitionAndMap();
             bw.ReportProgress(++progress);
             DefaultMapLoading.CreateProvinceGroups();
             bw.ReportProgress(++progress);
-            AreaLoading.LoadNew(project.ColorProvider);
+            AreaLoading.LoadNew();
             bw.ReportProgress(++progress);
-            RegionLoading.Load(project.ColorProvider);
+            RegionLoading.Load();
             bw.ReportProgress(++progress);
-            SuperRegionLoading.Load(project.ColorProvider);
+            SuperRegionLoading.Load();
             bw.ReportProgress(++progress);
-            ContinentLoading.Load(project.ColorProvider);
+            ContinentLoading.Load();
             bw.ReportProgress(++progress);
             ScopeParser.GenerateRuntimeScopes();
             bw.ReportProgress(++progress);
-            ProvinceParser.ParseAllUniqueProvinces(); //TODO SLOW
+            ProvinceParser.ParseAllUniqueProvinces();
             bw.ReportProgress(++progress);
-            CultureLoading.LoadCultures(project);
+            CultureLoading.LoadCultures();
             bw.ReportProgress(++progress);
-            CountryLoading.LoadCountries(project); //TODO SLOW
+            CountryLoading.LoadCountries(); //TODO SLOW
             bw.ReportProgress(++progress);
             ScopeParser.GenerateCountryScope();
             bw.ReportProgress(++progress);

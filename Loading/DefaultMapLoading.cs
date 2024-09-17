@@ -12,8 +12,9 @@ public static class DefaultMapLoading
       sw.Start();
 
       var path = FilesHelper.GetModOrVanillaPath("map", "default.map");
-      //var path = Path.Combine(folder, "map", "default.map");
       var content = IO.ReadAllInUTF8(path);
+      
+      // Regex could be replaced by Parsing.GetElements(0, content) but this is faster
       const string pattern = @"\bmax_provinces\b\s+=\s+(?<maxProv>\d*)\s*\bsea_starts\b\s+=\s+{(?<seaProvs>[^\}]*)}[.\s\S]*\bonly_used_for_random\b\s+=\s+{(?<RnvProvs>[^\}]*)}[.\s\S]*\blakes\b\s+=\s+{(?<LakeProvs>[^\}]*)}[.\s\S]*\bforce_coastal\b\s+=\s+{(?<CostalProvs>[^\}]*)";
 
       HashSet<int> land = [];

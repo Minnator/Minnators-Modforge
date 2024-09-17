@@ -24,16 +24,10 @@ public static class ProvinceParser
    public static void ParseAllUniqueProvinces()
    {
       var sw = Stopwatch.StartNew();
-      // Get all unique province files from mod and vanilla
       var files = FilesHelper.GetFilesFromModAndVanillaUniquely("history", "provinces");
       // Get All nested Blocks and Attributes from the files
       var po = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 };
-      //Parallel.ForEach(files, po, ProcessProvinceFile);
-
-      foreach (var file in files)
-      {
-         ProcessProvinceFile(file);
-      }
+      Parallel.ForEach(files, po, ProcessProvinceFile);
 
       sw.Stop();
       Globals.LoadingLog.WriteTimeStamp("Parsing provinces", sw.ElapsedMilliseconds);
@@ -60,23 +54,12 @@ public static class ProvinceParser
       var blocks = Parsing.GetElements(0, ref fileContent);
 
       foreach (var block in blocks)
-      {
-         // Check if the block is a Content or a Block
          if (block is Content content)
-         {
-            // Parse the content, aka the attributes
             foreach (var att in Parsing.GetKeyValueList(content.Value))
-            {
                province.SetAttribute(att.Key, att.Value);
-            }
-
-         }
          else
-         {
             // Parse the block, aka the history entries and some special cases
             ParseProvinceBlockBlock(ref province, (Block)block);
-         }
-      }
 
       // Copy the initial attributes to the ProvinceData to be able to revert to the initial state
       province.InitializeInitial();

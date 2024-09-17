@@ -11,7 +11,7 @@ namespace Editor.Loading
    {
       private static readonly Regex CountryRegex = new(@"(?<tag>[A-Z0-9]{3})\s*=\s*""(?<path>[^""]+)""", RegexOptions.Compiled);
 
-      public static void LoadCountries(ModProject project)
+      public static void LoadCountries()
       {
          var sw = Stopwatch.StartNew();
          // Loads the country_tags file
@@ -36,16 +36,16 @@ namespace Editor.Loading
 
          sw.Stop();
          Globals.LoadingLog.WriteTimeStamp("Parsing Country Tags", sw.ElapsedMilliseconds);
-         ParseCountryAttributes(project);
+         ParseCountryAttributes();
 
          // CreateProvinceGroups country history
          sw.Restart();
-         LoadCountryHistories(project);
+         LoadCountryHistories();
          sw.Stop();
          Globals.LoadingLog.WriteTimeStamp("Loading CountryHistories", sw.ElapsedMilliseconds);
       }
 
-      private static void LoadCountryHistories(ModProject project)
+      private static void LoadCountryHistories()
       {
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely("history", "countries");
 
@@ -318,7 +318,7 @@ namespace Editor.Loading
 
       #region CountryTags and non history data
 
-      private static void ParseCountryAttributes(ModProject project)
+      private static void ParseCountryAttributes()
       {
          var sw = Stopwatch.StartNew();
 

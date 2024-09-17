@@ -31,7 +31,7 @@ public static class MapLoading
       Optimizer.OptimizeAdjacencies(adjacency);
    }
 
-   public static (ConcurrentDictionary<Color, List<Point>>, ConcurrentDictionary<Color, List<Point>>, ConcurrentDictionary<Color, HashSet<Color>>) LoadMap(string path)
+   private static (ConcurrentDictionary<Color, List<Point>>, ConcurrentDictionary<Color, List<Point>>, ConcurrentDictionary<Color, HashSet<Color>>) LoadMap(string path)
    {
       using var bmp = new Bitmap(path);
       var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
@@ -45,8 +45,8 @@ public static class MapLoading
       ConcurrentDictionary<Color, List<Point>> colorToBorder = new();
       ConcurrentDictionary<Color, HashSet<Color>> colorToAdj = new();
 
-      var widthMinusOne = width - 1;
-      var heightMinusOne = height - 1;
+      var widthMinusOne = width - 1; // to avoid calculating height times width - 1
+      var heightMinusOne = height - 1; // to avoid calculating width times height - 1
 
       sw.Start();
       // could further be optimized by writing 4 loops for the special cases on the edges: top, bottom, left, right and
@@ -76,6 +76,10 @@ public static class MapLoading
                }
                provPoints.Add(currentPoint);
 
+               // The following ifs could be removed if it was just for visuals but if some madlad would decide to put a 1 pixel wide province on 
+               // the edge of the map it would break the adjacency calculation and would not be initialized correctly
+
+               // Check if the current pixel is on the edge of the map and if so skip the checks for the neighbors
                if (y > 0)
                {
                   var nRow = (byte*)scan0 + (y - 1) * stride;
@@ -108,6 +112,8 @@ public static class MapLoading
 
                continue;
 
+               // Helper function to avoid duplicate code 
+               // Adds the current point to the border of the current color and adds the neighbor color to the adjacency list
                void AddBorderAndAdj(Color neighborColor)
                {
                   if (!localColorToBorder.TryGetValue(currentColor, out var borderPoints))

@@ -10,7 +10,7 @@ public static class ContinentLoading
 {
    private static readonly string _pattern = @"(?<name>[A-Za-z_]*)\s*=\s*{(?<ids>(?:\s*[0-9]+\s*)*)}";
 
-   public static void Load(ColorProviderRgb colorProvider)
+   public static void Load()
    {
       var sw = Stopwatch.StartNew();
       var path = FilesHelper.GetModOrVanillaPath("map", "continent.txt");
@@ -27,7 +27,7 @@ public static class ContinentLoading
       {
          var name = match.Groups["name"].Value;
          var provinces = Parsing.GetIntListFromString(match.ToString());
-         continentDictionary.Add(name, new (name, provinces){Color = colorProvider.GetRandomColor()});
+         continentDictionary.Add(name, new (name, provinces){Color = Globals.MapWindow.Project.ColorProvider.GetRandomColor()});
 
          foreach (var provinceId in continentDictionary[name].Provinces)
             if (Globals.Provinces.TryGetValue(provinceId, out var province))

@@ -9,7 +9,7 @@ namespace Editor.Loading;
 public static class CultureLoading
 {
 
-   public static void LoadCultures(ModProject project)
+   public static void LoadCultures()
    {
       var sw = Stopwatch.StartNew();
       FilesHelper.GetFilesUniquelyAndCombineToOne(out var culturesContent, "common", "cultures");
@@ -18,7 +18,7 @@ public static class CultureLoading
 
       var blocks = Parsing.GetElements(0, ref commentLessContent);
 
-      var (groups, cultures) = GetCultureGroups(ref blocks, project.ColorProvider);
+      var (groups, cultures) = GetCultureGroups(ref blocks, Globals.MapWindow.Project.ColorProvider);
       Globals.CultureGroups = groups;
       Globals.Cultures = cultures;
       sw.Stop();
@@ -81,56 +81,7 @@ public static class CultureLoading
             }
          }
       });
-      /*
-      foreach (var element in blocks)
-      {
-         if (element is not Block block)
-            continue;
-         var group = new CultureGroup(block.Name)
-         {
-            Color = colorProvider.GetRandomColor()
-         };
-         var contents = block.GetContentElements;
-         var cultures = block.GetBlockElements;
-
-         foreach (var cult in cultures)
-         {
-            if (cult.Name.Equals("country") || cult.Name.Equals("province"))
-               continue;
-            if (cult.Name.Equals("male_names") || cult.Name.Equals("female_names") || cult.Name.Equals("dynasty_names"))
-               SetCultureGroupNames(ref group, cult);
-            else
-            {
-               Culture culture = new(cult.Name)
-               {
-                  Color = colorProvider.GetRandomColor(),
-                  CultureGroup = group.Name
-               };
-               SetCultureAttributes(ref culture, cult.GetBlockElements);
-               SetCultureContent(ref culture, cult.GetContentElements);
-               group.Cultures.Add(culture);
-               lock (cultureDict)
-               {
-                  if (!cultureDict.TryAdd(culture.Name, culture))
-                  {
-                     Globals.ErrorLog.Write($"Duplicate culture name: {culture.Name}, used later appearance");
-                     cultureDict[culture.Name] = culture;
-                  }
-               }
-            }
-         }
-         SetCultureGroupAttributes(ref group, contents);
-         lock (cultureGroupDict)
-         {
-            if (!cultureGroupDict.TryAdd(group.Name, group))
-            {
-               Globals.ErrorLog.Write($"Duplicate culture group name: {group.Name}");
-               cultureGroupDict[group.Name] = group;
-            }
-         }
-      }
-      */
-
+      
       return (cultureGroupDict, cultureDict);
    }
 
@@ -140,15 +91,9 @@ public static class CultureLoading
          return;
 
       foreach (var content in cultGetContentElements)
-      {
-         var kvp = Parsing.GetKeyValueList(content.Value);
-
-         foreach (var item in kvp)
-         {
+         foreach (var item in Parsing.GetKeyValueList(content.Value))
             if (item.Key.Equals("primary"))
                culture.Primaries.Add(item.Value);
-         }
-      }
    }
 
    private static void SetCultureGroupNames(ref CultureGroup group, Block block)
@@ -244,30 +189,8 @@ public static class CultureLoading
             Globals.ErrorLog.Write($"Duplicate culture group name: {group.Name}");
 
          foreach (var culture in group.Cultures)
-         {
             if (!cultureNames.Add(culture.Name))
                Globals.ErrorLog.Write($"Duplicate culture name: {culture.Name}");
-
-            HashSet<string> duplicateNames = [];
-            List<string> nonUniqueNames = [];
-            foreach (var male in culture.MaleNames)
-            {
-               if (!duplicateNames.Add(male))
-                  nonUniqueNames.Add(male);
-            }
-            foreach (var female in culture.FemaleNames)
-            {
-               if (!duplicateNames.Add(female))
-                  nonUniqueNames.Add(female);
-            }
-            foreach (var dynasty in culture.DynastyNames)
-            {
-               if (!duplicateNames.Add(dynasty))
-                  nonUniqueNames.Add(dynasty);
-            }
-            //if (nonUniqueNames.Count > 0)
-            //   Globals.ErrorLog.Write($"Duplicate names in culture {culture.Name}: {DebugPrints.GetListAsString(nonUniqueNames)}");
-         }
       }
    }
 }

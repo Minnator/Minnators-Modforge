@@ -14,7 +14,7 @@ public static class RegionLoading
    private static string _pattern =
       @"(?<regionName>[A-Za-z_]+)\s*=\s*{\s*areas\s*=\s*{\s*(?<areas>(?:\s*[A-Za-z_]+\s*)+)\s*}\s*(?<monsoons>(?:monsoon\s*=\s*{\s*(?:\s*[0-9.]+\s*)+\s*}\s*)*)}";
 
-   public static void Load(ColorProviderRgb colorProvider)
+   public static void Load()
    {
       var sw = new Stopwatch();
       sw.Start();
@@ -27,7 +27,7 @@ public static class RegionLoading
 
       foreach (var line in newContent)
       {
-         if (string.IsNullOrEmpty(line) || line.StartsWith("#"))
+         if (string.IsNullOrEmpty(line) || line.StartsWith('#'))
             continue;
          sb.AppendLine(Parsing.RemoveCommentFromLine(line));
       }
@@ -51,7 +51,7 @@ public static class RegionLoading
          }
          var region = new Region(regionName, areas, monsoons)
          {
-            Color = colorProvider.GetRandomColor()
+            Color = Globals.MapWindow.Project.ColorProvider.GetRandomColor()
          };
          regionDictionary.Add(regionName, region);
 
