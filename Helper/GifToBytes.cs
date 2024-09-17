@@ -7,18 +7,6 @@ namespace Editor.Helper
 {
    public static class GifToBytes
    {
-      public static void Test()
-      {
-         var path = @"C:\Users\David\Downloads\test.gif";
-
-         if (ConvertGifToBytes(path, out var bytes))
-         {
-            Debug.WriteLine("Converted GIF to bytes");
-            File.WriteAllBytes(@"C:\Users\David\Downloads\test1.bytes", bytes);
-         }
-
-      }
-
       public static bool GetBytesAsString(byte[] bytes, out string str)
       {
          str = null;

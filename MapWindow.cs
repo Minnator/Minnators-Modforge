@@ -543,19 +543,6 @@ namespace Editor
 
       private void testToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         //var content = File.ReadAllText("C:\\Users\\david\\Downloads\\NestedBLocks.txt");
-         var content = File.ReadAllText("S:\\SteamLibrary\\steamapps\\common\\Europa Universalis IV\\common\\cultures\\00_cultures.txt");
-         var sw = Stopwatch.StartNew();
-         var blocks = Parsing.GetElements(0, ref content);
-         sw.Stop();
-         Debug.WriteLine("Parsing cultures took: " + sw.ElapsedMilliseconds + "ms");
-
-         var sb = new StringBuilder();
-         foreach (var block in blocks)
-         {
-            //DebugPrints.BuildBlockString(0, block, ref sb);
-         }
-         File.WriteAllText("C:\\Users\\david\\Downloads\\NestedBLocksOutput2.txt", sb.ToString());
       }
 
       private void telescopeToolStripMenuItem_Click(object sender, EventArgs e)
