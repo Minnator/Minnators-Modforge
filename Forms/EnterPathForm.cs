@@ -1,4 +1,6 @@
-﻿namespace Editor.Forms
+﻿using Editor.Helper;
+
+namespace Editor.Forms
 {
    public partial class EnterPathForm : Form
    {
@@ -13,27 +15,10 @@
          };
       }
 
-
-      private static void OpenFileDialog(string startPath, string filterText, out string folder)
-      {
-         folder = string.Empty;
-         if (!Path.Exists(startPath))
-            return;
-
-         using var dialog = new OpenFileDialog();
-         dialog.InitialDirectory = startPath;
-         dialog.CheckFileExists = false;
-         dialog.CheckPathExists = true;
-         dialog.FileName = filterText;
-
-         if (dialog.ShowDialog() == DialogResult.OK)
-            folder = Path.GetDirectoryName(dialog.FileName) ?? Environment.SpecialFolder.MyDocuments.ToString();
-      }
-
       private void SelectVanillaPathButton_Click(object sender, EventArgs e)
       {
          var documentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-         OpenFileDialog(documentsFolder, "vanilla base game", out var folder);
+         IO.OpenFileDialog(documentsFolder, "vanilla base game", out var folder);
 
          VanillaPathTextBox.Text = folder;
       }
@@ -44,7 +29,7 @@
          var path = Path.Combine(documentsFolder, "Paradox Interactive", "Europa Universalis IV", "mod");
          if (Path.Exists(path))
             documentsFolder = path;
-         OpenFileDialog(documentsFolder, "mod folder", out var folder);
+         IO.OpenFileDialog(documentsFolder, "mod folder", out var folder);
 
          ModPathTextBox.Text = folder;
       }

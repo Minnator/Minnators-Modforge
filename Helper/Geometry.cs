@@ -92,13 +92,49 @@ public static class Geometry
       }
       return new Rectangle(minX, minY, maxX - minX, maxY - minY);
    }
-
+   
    public static Rectangle GetBounds(List<int> ids)
    {
       List<Rectangle> rects = [];
       foreach (var id in ids) 
          rects.Add(Globals.Provinces[id].Bounds);
       return GetBounds(rects);
+   }
+
+   public static Province GetProvinceClosestToPoint(Point point)
+   {
+      var closestProvince = Globals.Provinces.Values.First();
+      var minDistance = double.MaxValue;
+
+      foreach (var province in Globals.Provinces.Values)
+      {
+         var distance = Math.Sqrt(Math.Pow(province.Center.X - point.X, 2) + Math.Pow(province.Center.Y - point.Y, 2));
+         if (distance < minDistance)
+         {
+            minDistance = distance;
+            closestProvince = province;
+         }
+      }
+      return closestProvince;
+   }
+
+   public static Province GetProvinceClosestToPoint(Point point, List<Province> provinces)
+   {
+      if (provinces.Count == 0)
+         return null!;
+      var closestProvince = provinces.First();
+      var minDistance = double.MaxValue;
+
+      foreach (var province in provinces)
+      {
+         var distance = Math.Sqrt(Math.Pow(province.Center.X - point.X, 2) + Math.Pow(province.Center.Y - point.Y, 2));
+         if (distance < minDistance)
+         {
+            minDistance = distance;
+            closestProvince = province;
+         }
+      }
+      return closestProvince;
    }
 
    // Clamps the given value between the given min and max
@@ -479,4 +515,47 @@ public static class Geometry
       return nearestPoint;
    }
 
+
+   public static List<int> GetAllNeighboringProvinces(List<Province> provinces)
+   {
+      var neighboringProvinces = new HashSet<int>();
+      var provinceGroup = new HashSet<int>();
+
+      foreach (var province in provinces) 
+         provinceGroup.Add(province.Id);
+
+      foreach (var province in provinces)
+      {
+         foreach (var neighborId in Globals.AdjacentProvinces[province.Id])
+         {
+            if (provinceGroup.Contains(neighborId))
+               continue;
+            neighboringProvinces.Add(neighborId);
+         }
+      }
+
+      return neighboringProvinces.ToList();
+   }
+
+   public static List<Tag> GetAllNeighboringCountries(List<Province> provinces)
+   {
+      var neighboringCountries = new HashSet<Tag>();
+      var provinceGroup = new HashSet<int>();
+
+      foreach (var province in provinces) 
+         provinceGroup.Add(province.Id);
+
+      foreach (var province in provinces)
+      {
+         foreach (var neighborId in Globals.AdjacentProvinces[province.Id])
+         {
+            if (provinceGroup.Contains(neighborId))
+               continue;
+            if (Globals.Countries.TryGetValue(Globals.Provinces[neighborId].Controller, out var country))
+               neighboringCountries.Add(country.Tag);
+         }
+      }
+
+      return neighboringCountries.ToList();
+   }
 }

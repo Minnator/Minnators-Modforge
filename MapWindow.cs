@@ -167,7 +167,6 @@ namespace Editor
          _permanentClaims = ControlFactory.GetItemList(ItemTypes.Tag, [.. Globals.Countries.Keys], "Permanent");
          _permanentClaims.OnItemAdded += ProvinceEditingEvents.OnPermanentClaimAdded;
          _permanentClaims.OnItemRemoved += ProvinceEditingEvents.OnPermanentClaimRemoved;
-         //TODO: Implement PermanentClaims.OnItemAdded += ProvinceEditingEvents.OnPermanentClaimAdded;
 
          _buildings = ControlFactory.GetItemListObjects(ItemTypes.String, [.. Globals.Buildings], "Building");
          _buildings.OnItemAdded += ProvinceEditingEvents.OnBuildingAdded;
@@ -378,7 +377,7 @@ namespace Editor
          _prodNumeric.Value = province.BaseProduction;
          _manpNumeric.Value = province.BaseManpower;
          _claims.AddItemsUnique([.. province.Claims]);
-         _permanentClaims.AddItemsUnique([]); //TODO what is wrong here why no Province.PermanentClaims
+         _permanentClaims.AddItemsUnique([]);
          _cores.AddItemsUnique([.. province.Cores]);
          _buildings.AddItemsUnique(province.Buildings);
          _discoveredBy.AddItemsUnique(province.DiscoveredBy);
@@ -495,7 +494,7 @@ namespace Editor
 
       private void OnMouseEnter(object sender, EventArgs e)
       {
-         Cursor = Cursors.Default; 
+         Cursor = Cursors.Default;
       }
 
       private void OnMouseLeave(object sender, EventArgs e)
@@ -673,6 +672,12 @@ namespace Editor
          {
             Globals.Provinces[id].SaveToHistoryFile();
          }
+      }
+
+      private void saveSelectionToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         var selectionDrawer = new SelectionDrawerForm();
+         selectionDrawer.Show();
       }
    }
 }

@@ -6,13 +6,30 @@ namespace Editor.Helper;
 internal static class IO
 {
    private static readonly Encoding encoding;
-
    // Get the ANSI encoding
    static IO()
    {
       Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
       encoding = Encoding.GetEncoding("windows-1250");
    }
+
+
+   public static void OpenFileDialog(string startPath, string filterText, out string folder)
+   {
+      folder = string.Empty;
+      if (!Path.Exists(startPath))
+         return;
+
+      using var dialog = new OpenFileDialog();
+      dialog.InitialDirectory = startPath;
+      dialog.CheckFileExists = false;
+      dialog.CheckPathExists = true;
+      dialog.FileName = filterText;
+
+      if (dialog.ShowDialog() == DialogResult.OK)
+         folder = Path.GetDirectoryName(dialog.FileName) ?? Environment.SpecialFolder.MyDocuments.ToString();
+   }
+
 
    /// <summary>
    /// Reads the entire content of a file in ANSI encoding if the file exists

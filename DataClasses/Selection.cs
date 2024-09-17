@@ -112,6 +112,25 @@ public class Selection
       }
    }
 
+   public int[] GetSelectedProvincesIds
+   {
+      get
+      {
+         return SelectedProvinces.ToArray();
+      }
+   }
+
+   public Rectangle GetSelectionRectangle
+   {
+      get
+      {
+         List<Rectangle> rects = [];
+         foreach (var province in SelectedProvinces) 
+            rects.Add(Globals.Provinces[province].Bounds);
+         return Geometry.GetBounds(rects);
+      }
+   }
+
    public Selection(PannablePictureBox pb)
    {
       _pannablePictureBox = pb;

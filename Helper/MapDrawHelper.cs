@@ -63,9 +63,9 @@ public static class MapDrawHelper
    }
 
    // Draws the border of the given province on the given Bitmap with the given Color
-   public static Rectangle DrawProvinceBorder(int provincePtr, Color color, Bitmap bmp)
+   public static Rectangle DrawProvinceBorder(int provinceIde, Color color, Bitmap bmp)
    {
-      var province = Globals.Provinces[provincePtr];
+      var province = Globals.Provinces[provinceIde];
       var points = new Point[province.BorderCnt];
       Array.Copy(Globals.BorderPixels, province.BorderPtr, points, 0, province.BorderCnt);
       return DrawOnMap(province.Bounds, points, color, bmp);

@@ -108,7 +108,7 @@ namespace Editor.Forms.Loadingscreen
             bw.ReportProgress(++progress);
             CultureLoading.LoadCultures();
             bw.ReportProgress(++progress);
-            CountryLoading.LoadCountries(); //TODO SLOW
+            CountryLoading.LoadCountries();
             bw.ReportProgress(++progress);
             ScopeParser.GenerateCountryScope();
             bw.ReportProgress(++progress);

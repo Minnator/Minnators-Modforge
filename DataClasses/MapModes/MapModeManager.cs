@@ -2,6 +2,7 @@
 using System.Drawing.Imaging;
 using Editor.Controls;
 using Editor.DataClasses.GameDataClasses;
+using Editor.Helper;
 using Editor.MapModes;
 
 namespace Editor.DataClasses.MapModes;
@@ -45,19 +46,10 @@ public class MapModeManager(PannablePictureBox pictureBox)
 
       // We set the default map mode to retrieve province colors
 
-      IdMapMode = new ();
-
-      var modPath = Path.Combine(Globals.MapWindow.Project.ModPath, "map", "provinces.bmp");
-      var vanillaPath = Path.Combine(Globals.MapWindow.Project.VanillaPath, "map", "provinces.bmp");
-      if (File.Exists(modPath))
-         IdMapMode.Bitmap = new(modPath);
-      else if (File.Exists(vanillaPath))
-         IdMapMode.Bitmap = new(vanillaPath);
-      else
-         IdMapMode.RenderMapMode(IdMapMode.GetProvinceColor); //TODO can be replaced by coping the bitmap from the modfolder if it exists
-         
-
-
+      IdMapMode = new ()
+      {
+         Bitmap = new(Globals.MapPath)
+      };
    }
    
 
@@ -86,6 +78,7 @@ public class MapModeManager(PannablePictureBox pictureBox)
 
    public void SetCurrentMapMode(string name)
    {
+      // CAN be null
       if (CurrentMapMode?.GetMapModeName() == name) 
          return; // no need to change map mode if it is already the same
       CurrentMapMode = GetMapMode(name); 
@@ -103,4 +96,9 @@ public class MapModeManager(PannablePictureBox pictureBox)
       return false;
    }
 
+   public void DrawProvinceCollectionFromCurrentMapMode(Bitmap bmp, params int[] ids)
+   {
+      foreach (var id in ids)
+         MapDrawHelper.DrawProvince(id, CurrentMapMode.GetProvinceColor(id), bmp);
+   }
 }
