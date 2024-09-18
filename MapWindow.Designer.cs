@@ -117,6 +117,11 @@
          CoresAndClaimLayoutPanel = new TableLayoutPanel();
          OptionalsTabControl = new TabControl();
          NativesTab = new TabPage();
+         NativesLayoutPanel = new TableLayoutPanel();
+         label16 = new Label();
+         label17 = new Label();
+         label18 = new Label();
+         label19 = new Label();
          TradeCompanyTab = new TabPage();
          ModifiersTab = new TabPage();
          groupBox5 = new GroupBox();
@@ -156,6 +161,8 @@
          tableLayoutPanel4.SuspendLayout();
          CoresAndClaimsBox.SuspendLayout();
          OptionalsTabControl.SuspendLayout();
+         NativesTab.SuspendLayout();
+         NativesLayoutPanel.SuspendLayout();
          groupBox5.SuspendLayout();
          FloatLayoutPanel.SuspendLayout();
          groupBox6.SuspendLayout();
@@ -1068,6 +1075,7 @@
          // 
          // NativesTab
          // 
+         NativesTab.Controls.Add(NativesLayoutPanel);
          NativesTab.Location = new Point(4, 24);
          NativesTab.Name = "NativesTab";
          NativesTab.Padding = new Padding(3);
@@ -1075,6 +1083,73 @@
          NativesTab.TabIndex = 0;
          NativesTab.Text = "Natives";
          NativesTab.UseVisualStyleBackColor = true;
+         // 
+         // NativesLayoutPanel
+         // 
+         NativesLayoutPanel.ColumnCount = 3;
+         NativesLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+         NativesLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333359F));
+         NativesLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333359F));
+         NativesLayoutPanel.Controls.Add(label16, 0, 0);
+         NativesLayoutPanel.Controls.Add(label17, 0, 1);
+         NativesLayoutPanel.Controls.Add(label18, 0, 2);
+         NativesLayoutPanel.Controls.Add(label19, 0, 3);
+         NativesLayoutPanel.Dock = DockStyle.Fill;
+         NativesLayoutPanel.Location = new Point(3, 3);
+         NativesLayoutPanel.Margin = new Padding(0);
+         NativesLayoutPanel.Name = "NativesLayoutPanel";
+         NativesLayoutPanel.RowCount = 5;
+         NativesLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         NativesLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         NativesLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         NativesLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         NativesLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         NativesLayoutPanel.Size = new Size(372, 170);
+         NativesLayoutPanel.TabIndex = 0;
+         // 
+         // label16
+         // 
+         label16.AutoSize = true;
+         label16.Dock = DockStyle.Fill;
+         label16.Location = new Point(3, 0);
+         label16.Name = "label16";
+         label16.Size = new Size(117, 25);
+         label16.TabIndex = 0;
+         label16.Text = "Tribal owner";
+         label16.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // label17
+         // 
+         label17.AutoSize = true;
+         label17.Dock = DockStyle.Fill;
+         label17.Location = new Point(3, 25);
+         label17.Name = "label17";
+         label17.Size = new Size(117, 25);
+         label17.TabIndex = 1;
+         label17.Text = "Natie Size";
+         label17.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // label18
+         // 
+         label18.AutoSize = true;
+         label18.Dock = DockStyle.Fill;
+         label18.Location = new Point(3, 50);
+         label18.Name = "label18";
+         label18.Size = new Size(117, 25);
+         label18.TabIndex = 2;
+         label18.Text = "Native Hostileness";
+         label18.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // label19
+         // 
+         label19.AutoSize = true;
+         label19.Dock = DockStyle.Fill;
+         label19.Location = new Point(3, 75);
+         label19.Name = "label19";
+         label19.Size = new Size(117, 25);
+         label19.TabIndex = 3;
+         label19.Text = "Native Ferocity";
+         label19.TextAlign = ContentAlignment.MiddleLeft;
          // 
          // TradeCompanyTab
          // 
@@ -1320,6 +1395,9 @@
          tableLayoutPanel4.PerformLayout();
          CoresAndClaimsBox.ResumeLayout(false);
          OptionalsTabControl.ResumeLayout(false);
+         NativesTab.ResumeLayout(false);
+         NativesLayoutPanel.ResumeLayout(false);
+         NativesLayoutPanel.PerformLayout();
          groupBox5.ResumeLayout(false);
          FloatLayoutPanel.ResumeLayout(false);
          FloatLayoutPanel.PerformLayout();
@@ -1438,6 +1516,11 @@
       private ToolStripMenuItem save1ToolStripMenuItem;
       private ToolStripMenuItem saveEuropeToolStripMenuItem;
       private ToolStripMenuItem saveSelectionToolStripMenuItem;
+      private TableLayoutPanel NativesLayoutPanel;
+      private Label label16;
+      private Label label17;
+      private Label label18;
+      private Label label19;
    }
 }
 

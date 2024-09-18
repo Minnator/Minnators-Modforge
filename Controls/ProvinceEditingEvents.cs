@@ -511,14 +511,43 @@ namespace Editor.Controls
       {
          if (!AllowEditing || sender is not ComboBox cb)
             return;
-         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Globals.Selection.GetSelectedProvinces, cb.SelectedItem.ToString(), ProvAttrGet.center_of_trade, ProvAttrSet.center_of_trade));
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Globals.Selection.GetSelectedProvinces, cb.SelectedItem?.ToString()!, ProvAttrGet.center_of_trade, ProvAttrSet.center_of_trade));
       }
 
       public static void OnTradeGoodChanged(object? sender, EventArgs e)
       {
          if (!AllowEditing || sender is not ComboBox cb)
             return;
-         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Globals.Selection.GetSelectedProvinces, cb.SelectedItem.ToString(), ProvAttrGet.trade_good, ProvAttrSet.trade_goods));
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Globals.Selection.GetSelectedProvinces, cb.SelectedItem?.ToString()!, ProvAttrGet.trade_good, ProvAttrSet.trade_goods));
       }
+
+      public static void OnTribalOwnerChanged(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, e.Value.ToString()!, ProvAttrGet.tribal_owner, ProvAttrSet.tribal_owner));
+      }
+
+      public static void OnNativeFerocityChanged(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, e.Value.ToString()!, ProvAttrGet.native_ferocity, ProvAttrSet.native_ferocity));
+      }
+
+      public static void OnNativeHostilityChanged(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, e.Value.ToString()!, ProvAttrGet.native_hostileness, ProvAttrSet.native_hostileness));
+      }
+
+      public static void OnNativeSizeChanged(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, e.Value.ToString()!, ProvAttrGet.native_size, ProvAttrSet.native_size));
+      }
+
    }
 }

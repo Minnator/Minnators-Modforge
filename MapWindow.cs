@@ -35,6 +35,12 @@ namespace Editor
       private ExtendedNumeric _prosperityNumeric;
       private ExtendedNumeric _extraCostNumeric;
 
+      private TagComboBox _tribalOwner;
+
+      private NumberTextBox _nativesSizeTextBox;
+      private NumberTextBox _nativeFerocityTextBox;
+      private NumberTextBox _nativeHostilityTextBox;
+
       #endregion
 
       public PannablePictureBox MapPictureBox = null!;
@@ -297,6 +303,23 @@ namespace Editor
          HasRevoltCheckBox.CheckedChanged += ProvinceEditingEvents.OnHasRevoltChanged;
 
          AttirbuteCombobox.Items.AddRange([.. Enum.GetNames(typeof(ProvAttrGet))]);
+
+         // NATIVES TAB
+         _tribalOwner = ControlFactory.GetTagComboBox();
+         _tribalOwner.OnTagChanged += ProvinceEditingEvents.OnTribalOwnerChanged;
+         NativesLayoutPanel.Controls.Add(_tribalOwner, 1, 0);
+         
+         _nativesSizeTextBox = ControlFactory.GetNumberTextBox();
+         _nativesSizeTextBox.OnDataChanged += ProvinceEditingEvents.OnNativeSizeChanged;
+         NativesLayoutPanel.Controls.Add(_nativesSizeTextBox, 1, 1);
+
+         _nativeFerocityTextBox = ControlFactory.GetNumberTextBox();
+         _nativeFerocityTextBox.OnDataChanged += ProvinceEditingEvents.OnNativeFerocityChanged;
+         NativesLayoutPanel.Controls.Add(_nativeFerocityTextBox, 1, 2);
+
+         _nativeHostilityTextBox = ControlFactory.GetNumberTextBox();
+         _nativeHostilityTextBox.OnDataChanged += ProvinceEditingEvents.OnNativeHostilityChanged;
+         NativesLayoutPanel.Controls.Add(_nativeHostilityTextBox, 1, 3);
       }
 
       // ======================== Province GUI Update Methods ========================
@@ -355,6 +378,14 @@ namespace Editor
             TradeCenterComboBox.Text = centerOfTrade.ToString();
          if (Globals.Selection.GetSharedAttribute(ProvAttrGet.extra_cost, out result) && result is int extraCost)
             _extraCostNumeric.Value = extraCost;
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.tribal_owner, out result) && result is Tag tribalOwner)
+            _tribalOwner.Text = tribalOwner;
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.native_size, out result) && result is int nativeSize)
+            _nativesSizeTextBox.Text = nativeSize.ToString();
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.native_ferocity, out result) && result is float nativeFerocity)
+            _nativeFerocityTextBox.Text = nativeFerocity.ToString(CultureInfo.InvariantCulture);
+         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.native_hostileness, out result) && result is float nativeHostileness)
+            _nativeHostilityTextBox.Text = nativeHostileness.ToString(CultureInfo.InvariantCulture);
          ResumeLayout();
          Globals.EditingStatus = EditingStatus.Idle;
       }
@@ -387,6 +418,10 @@ namespace Editor
          TradeGoodsComboBox.Text = province.TradeGood;
          TradeCenterComboBox.Text = province.CenterOfTrade.ToString();
          _extraCostNumeric.Value = province.ExtraCost;
+         _tribalOwner.Text = province.TribalOwner;
+         _nativesSizeTextBox.Text = province.NativeSize.ToString();
+         _nativeFerocityTextBox.Text = province.NativeFerocity.ToString(CultureInfo.InvariantCulture);
+         _nativeHostilityTextBox.Text = province.NativeHostileness.ToString(CultureInfo.InvariantCulture);
          ResumeLayout();
          Globals.EditingStatus = EditingStatus.Idle;
       }
@@ -416,6 +451,10 @@ namespace Editor
          TradeGoodsComboBox.Clear();
          TradeCenterComboBox.Clear();
          _extraCostNumeric.Value = 0;
+         _tribalOwner.Clear();
+         _nativesSizeTextBox.Text = "0";
+         _nativeFerocityTextBox.Text = "0";
+         _nativeHostilityTextBox.Text = "0";
       }
       #endregion
 

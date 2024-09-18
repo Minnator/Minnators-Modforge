@@ -1,14 +1,17 @@
-﻿using System.Windows.Forms;
-using Editor.DataClasses.GameDataClasses;
+﻿using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.Controls;
 
 public static class ControlFactory
 {
+   public static NumberTextBox GetNumberTextBox()
+   {
+      return new ();
+   }
 
    public static PannablePictureBox GetPannablePictureBox(ref Panel panel, MapWindow mapWindow)
    {
-      return new PannablePictureBox(ref panel, mapWindow);
+      return new (ref panel, mapWindow);
    }
 
    public static ToolStripMenuItem GetToolStripMenuItem(string text, EventHandler onClick, Image image = null!)
