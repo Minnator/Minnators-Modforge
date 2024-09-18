@@ -138,6 +138,10 @@
          TradeCenterComboBox = new ComboBox();
          COuntryPage = new TabPage();
          ProvinceGroupsPage = new TabPage();
+         tableLayoutPanel2 = new TableLayoutPanel();
+         SaveAllProvincesButton = new Button();
+         SaveAllModifiedButton = new Button();
+         SaveCurrentSelectionButton = new Button();
          MapMenuStrip.SuspendLayout();
          toolStrip1.SuspendLayout();
          MainLayoutPanel.SuspendLayout();
@@ -167,6 +171,7 @@
          FloatLayoutPanel.SuspendLayout();
          groupBox6.SuspendLayout();
          TradePanel.SuspendLayout();
+         tableLayoutPanel2.SuspendLayout();
          SuspendLayout();
          // 
          // MapMenuStrip
@@ -706,11 +711,12 @@
          ProvinceEditingLayout.Controls.Add(OptionalsTabControl, 0, 7);
          ProvinceEditingLayout.Controls.Add(groupBox5, 0, 5);
          ProvinceEditingLayout.Controls.Add(groupBox6, 1, 5);
+         ProvinceEditingLayout.Controls.Add(tableLayoutPanel2, 0, 8);
          ProvinceEditingLayout.Dock = DockStyle.Fill;
          ProvinceEditingLayout.Location = new Point(0, 0);
          ProvinceEditingLayout.Margin = new Padding(0);
          ProvinceEditingLayout.Name = "ProvinceEditingLayout";
-         ProvinceEditingLayout.RowCount = 8;
+         ProvinceEditingLayout.RowCount = 9;
          ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 71F));
          ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
          ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 90F));
@@ -719,6 +725,7 @@
          ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 90F));
          ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 112F));
          ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
          ProvinceEditingLayout.Size = new Size(392, 822);
          ProvinceEditingLayout.TabIndex = 0;
          // 
@@ -1070,7 +1077,7 @@
          OptionalsTabControl.Location = new Point(3, 615);
          OptionalsTabControl.Name = "OptionalsTabControl";
          OptionalsTabControl.SelectedIndex = 0;
-         OptionalsTabControl.Size = new Size(386, 204);
+         OptionalsTabControl.Size = new Size(386, 179);
          OptionalsTabControl.TabIndex = 5;
          // 
          // NativesTab
@@ -1079,7 +1086,7 @@
          NativesTab.Location = new Point(4, 24);
          NativesTab.Name = "NativesTab";
          NativesTab.Padding = new Padding(3);
-         NativesTab.Size = new Size(378, 176);
+         NativesTab.Size = new Size(378, 151);
          NativesTab.TabIndex = 0;
          NativesTab.Text = "Natives";
          NativesTab.UseVisualStyleBackColor = true;
@@ -1104,7 +1111,7 @@
          NativesLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
          NativesLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
          NativesLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         NativesLayoutPanel.Size = new Size(372, 170);
+         NativesLayoutPanel.Size = new Size(372, 145);
          NativesLayoutPanel.TabIndex = 0;
          // 
          // label16
@@ -1341,6 +1348,61 @@
          ProvinceGroupsPage.Text = "ProvinceGroups";
          ProvinceGroupsPage.UseVisualStyleBackColor = true;
          // 
+         // tableLayoutPanel2
+         // 
+         tableLayoutPanel2.ColumnCount = 3;
+         ProvinceEditingLayout.SetColumnSpan(tableLayoutPanel2, 2);
+         tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+         tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+         tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+         tableLayoutPanel2.Controls.Add(SaveAllProvincesButton, 0, 0);
+         tableLayoutPanel2.Controls.Add(SaveAllModifiedButton, 1, 0);
+         tableLayoutPanel2.Controls.Add(SaveCurrentSelectionButton, 2, 0);
+         tableLayoutPanel2.Dock = DockStyle.Fill;
+         tableLayoutPanel2.Location = new Point(0, 797);
+         tableLayoutPanel2.Margin = new Padding(0);
+         tableLayoutPanel2.Name = "tableLayoutPanel2";
+         tableLayoutPanel2.RowCount = 1;
+         tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         tableLayoutPanel2.Size = new Size(392, 25);
+         tableLayoutPanel2.TabIndex = 10;
+         // 
+         // SaveAllProvincesButton
+         // 
+         SaveAllProvincesButton.Dock = DockStyle.Fill;
+         SaveAllProvincesButton.Location = new Point(2, 0);
+         SaveAllProvincesButton.Margin = new Padding(2, 0, 2, 0);
+         SaveAllProvincesButton.Name = "SaveAllProvincesButton";
+         SaveAllProvincesButton.Size = new Size(126, 25);
+         SaveAllProvincesButton.TabIndex = 0;
+         SaveAllProvincesButton.Text = "Save all";
+         SaveAllProvincesButton.UseVisualStyleBackColor = true;
+         SaveAllProvincesButton.Click += SaveAllProvincesButton_Click;
+         // 
+         // SaveAllModifiedButton
+         // 
+         SaveAllModifiedButton.Dock = DockStyle.Fill;
+         SaveAllModifiedButton.Location = new Point(132, 0);
+         SaveAllModifiedButton.Margin = new Padding(2, 0, 2, 0);
+         SaveAllModifiedButton.Name = "SaveAllModifiedButton";
+         SaveAllModifiedButton.Size = new Size(126, 25);
+         SaveAllModifiedButton.TabIndex = 1;
+         SaveAllModifiedButton.Text = "Save all modified";
+         SaveAllModifiedButton.UseVisualStyleBackColor = true;
+         SaveAllModifiedButton.Click += SaveAllModifiedButton_Click;
+         // 
+         // SaveCurrentSelectionButton
+         // 
+         SaveCurrentSelectionButton.Dock = DockStyle.Fill;
+         SaveCurrentSelectionButton.Location = new Point(262, 0);
+         SaveCurrentSelectionButton.Margin = new Padding(2, 0, 2, 0);
+         SaveCurrentSelectionButton.Name = "SaveCurrentSelectionButton";
+         SaveCurrentSelectionButton.Size = new Size(128, 25);
+         SaveCurrentSelectionButton.TabIndex = 2;
+         SaveCurrentSelectionButton.Text = "Save cur. selection";
+         SaveCurrentSelectionButton.UseVisualStyleBackColor = true;
+         SaveCurrentSelectionButton.Click += SaveCurrentSelectionButton_Click;
+         // 
          // MapWindow
          // 
          AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1404,6 +1466,7 @@
          groupBox6.ResumeLayout(false);
          TradePanel.ResumeLayout(false);
          TradePanel.PerformLayout();
+         tableLayoutPanel2.ResumeLayout(false);
          ResumeLayout(false);
          PerformLayout();
       }
@@ -1521,6 +1584,10 @@
       private Label label17;
       private Label label18;
       private Label label19;
+      private TableLayoutPanel tableLayoutPanel2;
+      private Button SaveAllProvincesButton;
+      private Button SaveAllModifiedButton;
+      private Button SaveCurrentSelectionButton;
    }
 }
 

@@ -10,8 +10,6 @@ using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor;
 
-
-
 #region enums
 public enum CommandHistoryType
 {
@@ -19,7 +17,6 @@ public enum CommandHistoryType
    ComplexSelection,
    Action
 }
-
 public enum State
 {
    Loading,
@@ -28,7 +25,6 @@ public enum State
    LoadingHistory,
    Waiting
 }
-
 public enum Mana
 {
    ADM,
@@ -36,15 +32,12 @@ public enum Mana
    MIL,
    NONE
 }
-
-
 public enum MapModeRendering
 {
    Live,
    LiveBackground,
    Cached,
 }
-
 public enum EditingStatus
 {
    LoadingInterface,
@@ -52,7 +45,6 @@ public enum EditingStatus
    Saving,
    Interrupted
 }
-
 #endregion
 
 //contains all required and used data across the application and instances of forms.
@@ -70,7 +62,7 @@ public static class Globals {
       }
    }
    private static int _loadingStage = 0;
-   public static int LOADING_STAGES = 23;
+   public const int LOADING_STAGES = 23; // Needs to be increased when adding new loading stages
    #endregion
    
    public static ConsoleForm? ConsoleForm = null;
@@ -117,15 +109,15 @@ public static class Globals {
    public static string MapPath = null!;
 
    // ToolTip
-   public static string ToolTipText = $"$MAPMODE_SPECIFIC$\n------------------\nId:   $id$\nName: $name$\nArea: $area$ ($area%L$)\nRevolt: $revolt$\nIsOccupied: $is_occupied$";
+   public static string ToolTipText = $"$MAPMODE_SPECIFIC$\n------------------\nId:   $id$\nName: $name$\nOwner: $owner$ ($owner%L$)\nArea: $area$ ($area%L$)";
 
    // Contains the border pixels of the provinces
    public static Point[] BorderPixels = [];
    public static Point[] Pixels = [];
 
    // Maps the name of TradeGoods to the TradeGood object
-   public static Dictionary<string, TradeGood> TradeGoods = [];
-   public static Dictionary<string, TradeNode> TradeNodes = [];
+   public static readonly Dictionary<string, TradeGood> TradeGoods = [];
+   public static readonly Dictionary<string, TradeNode> TradeNodes = [];
 
    // Culture Groups and Cultures
    public static Dictionary<string, CultureGroup> CultureGroups = [];
@@ -138,11 +130,11 @@ public static class Globals {
    public static HashSet<int> Capitals = [];
 
    // TechnologyGroups
-   public static HashSet<string> TechnologyGroups = [];
+   public static readonly HashSet<string> TechnologyGroups = [];
 
    // Religion Stuff
    public static List<ReligiousGroup> ReligionGroups = [];
-   public static Dictionary<string, Religion> Religions = [];
+   public static readonly Dictionary<string, Religion> Religions = [];
 
    // Country Groups
    private static Dictionary<Tag, Country> _countries = [];
@@ -164,7 +156,7 @@ public static class Globals {
    public static int[] NonLandProvinceIds = null!;
    public static int[] LandProvinceIds = null!;
 
-   public static Dictionary<string, int[]> ProvinceGroups = []; // TODO: read in
+   public static readonly Dictionary<string, int[]> ProvinceGroups = []; // TODO: read in
    // In Game Groups
    public static Dictionary<string, Area> Areas = null!;
    public static Dictionary<string, Region> Regions { get; set; } = [];

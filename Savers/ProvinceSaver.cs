@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Text;
 using Editor.DataClasses.GameDataClasses;
-using Editor.Forms;
 using Editor.Helper;
 
 namespace Editor.Savers
@@ -22,6 +21,16 @@ namespace Editor.Savers
          }
 
          return worked;
+      }
+
+      /// <summary>
+      /// Save all provinces which are currently selected.
+      /// </summary>
+      /// <exception cref="NotImplementedException"></exception>
+      public static void SaveSelectedProvinces()
+      {
+         foreach (var province in Globals.Selection.GetSelectedProvinces) 
+            province.SaveToHistoryFile();
       }
 
       /// <summary>
@@ -250,5 +259,6 @@ namespace Editor.Savers
                break;
          }
       }
+
    }
 }

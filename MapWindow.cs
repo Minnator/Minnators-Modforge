@@ -308,7 +308,7 @@ namespace Editor
          _tribalOwner = ControlFactory.GetTagComboBox();
          _tribalOwner.OnTagChanged += ProvinceEditingEvents.OnTribalOwnerChanged;
          NativesLayoutPanel.Controls.Add(_tribalOwner, 1, 0);
-         
+
          _nativesSizeTextBox = ControlFactory.GetNumberTextBox();
          _nativesSizeTextBox.OnDataChanged += ProvinceEditingEvents.OnNativeSizeChanged;
          NativesLayoutPanel.Controls.Add(_nativesSizeTextBox, 1, 1);
@@ -717,6 +717,21 @@ namespace Editor
       {
          var selectionDrawer = new SelectionDrawerForm();
          selectionDrawer.Show();
+      }
+
+      private void SaveCurrentSelectionButton_Click(object sender, EventArgs e)
+      {
+         ProvinceSaver.SaveSelectedProvinces();
+      }
+
+      private void SaveAllModifiedButton_Click(object sender, EventArgs e)
+      {
+         ProvinceSaver.SaveAllModifiedProvinces();
+      }
+
+      private void SaveAllProvincesButton_Click(object sender, EventArgs e)
+      {
+         ProvinceSaver.SaveAllLandProvinces();
       }
    }
 }
