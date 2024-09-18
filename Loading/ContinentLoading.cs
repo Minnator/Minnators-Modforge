@@ -8,12 +8,16 @@ namespace Editor.Loading;
 
 public static class ContinentLoading
 {
-   private static readonly string _pattern = @"(?<name>[A-Za-z_]*)\s*=\s*{(?<ids>(?:\s*[0-9]+\s*)*)}";
+   private static readonly string Pattern = @"(?<name>[A-Za-z_]*)\s*=\s*{(?<ids>(?:\s*[0-9]+\s*)*)}";
 
    public static void Load()
    {
       var sw = Stopwatch.StartNew();
-      var path = FilesHelper.GetModOrVanillaPath("map", "continent.txt");
+      if (!FilesHelper.GetModOrVanillaPath(out var path, "map", "continent.txt"))
+      {
+         Globals.ErrorLog.Write("Error: continent.txt not found!");
+         return;
+      }
       var newContent = IO.ReadAllLinesInUTF8(path);
 
       var continentDictionary = new Dictionary<string, Continent>();
@@ -22,7 +26,7 @@ public static class ContinentLoading
       foreach (var line in newContent)
          sb.Append(Parsing.RemoveCommentFromLine(line));
 
-      var matches = Regex.Matches(sb.ToString(), _pattern, RegexOptions.Multiline);
+      var matches = Regex.Matches(sb.ToString(), Pattern, RegexOptions.Multiline);
       foreach (Match match in matches)
       {
          var name = match.Groups["name"].Value;

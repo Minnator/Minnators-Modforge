@@ -14,7 +14,11 @@ public static class SuperRegionLoading
    public static void Load()
    {
       var sw = Stopwatch.StartNew();
-      var path = FilesHelper.GetModOrVanillaPath("map", "superregion.txt");
+      if (!FilesHelper.GetModOrVanillaPath(out var path, "map", "superregion.txt"))
+      {
+         Globals.ErrorLog.Write("Error: superregion.txt not found!");
+         return;
+      }
       var newContent = IO.ReadAllLinesInUTF8(path);
       var superRegionDictionary = new Dictionary<string, SuperRegion>();
       var sb = new StringBuilder();

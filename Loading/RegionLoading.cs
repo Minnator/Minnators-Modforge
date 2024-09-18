@@ -18,7 +18,11 @@ public static class RegionLoading
    {
       var sw = new Stopwatch();
       sw.Start();
-      var path = FilesHelper.GetModOrVanillaPath("map", "region.txt");
+      if (!FilesHelper.GetModOrVanillaPath(out var path, "map", "region.txt"))
+      {
+         Globals.ErrorLog.Write("Error: region.txt not found!");
+         return;
+      }
       var newContent = IO.ReadAllLinesInUTF8(path);
       Dictionary<string, Region> regionDictionary = [];
 

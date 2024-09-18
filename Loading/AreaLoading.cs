@@ -11,7 +11,11 @@ public static class AreaLoading
    public static void LoadNew()
    {
       var sw = Stopwatch.StartNew();
-      var path = FilesHelper.GetModOrVanillaPath("map", "area.txt");
+      if (!FilesHelper.GetModOrVanillaPath(out var path, "map", "area.txt"))
+      {
+         Globals.ErrorLog.Write("Error: area.txt not found!");
+         return;
+      }
       IO.ReadAllInANSI(path, out var newContent);
 
       var areaDictionary = new Dictionary<string, Area>();

@@ -12,7 +12,11 @@ namespace Editor.Loading
       public static void Load()
       {
          var sw = Stopwatch.StartNew();
-         var file = FilesHelper.GetModOrVanillaPath("common", "tradenodes", "00_tradenodes.txt");
+         if (!FilesHelper.GetModOrVanillaPath(out var file, "common", "tradenodes", "00_tradenodes.txt"))
+         {
+            Globals.ErrorLog.Write("Error: 00_tradenodes.txt not found!");
+            return;
+         }
          ParseTradeNodesFromString(IO.ReadAllInUTF8(file));
          SetIncoming();
          sw.Stop();

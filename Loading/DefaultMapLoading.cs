@@ -11,7 +11,11 @@ public static class DefaultMapLoading
       var sw = new Stopwatch();
       sw.Start();
 
-      var path = FilesHelper.GetModOrVanillaPath("map", "default.map");
+      if (!FilesHelper.GetModOrVanillaPath(out var path, "map", "default.map"))
+      {
+         Globals.ErrorLog.Write("Error: default.map not found!");
+         return;
+      }
       var content = IO.ReadAllInUTF8(path);
       
       // Regex could be replaced by Parsing.GetElements(0, content) but this is faster
