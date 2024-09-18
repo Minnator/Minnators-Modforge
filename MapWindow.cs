@@ -41,6 +41,7 @@ namespace Editor
       private NumberTextBox _nativeFerocityTextBox;
       private NumberTextBox _nativeHostilityTextBox;
 
+      private ToolTip _savingButtonsToolTip;
       #endregion
 
       public PannablePictureBox MapPictureBox = null!;
@@ -157,6 +158,16 @@ namespace Editor
 
       private void InitializeEditGui()
       {
+         // Tooltips for saving Buttons
+         _savingButtonsToolTip = new();
+         _savingButtonsToolTip.AutoPopDelay = 10000;
+         _savingButtonsToolTip.InitialDelay = 100;
+         _savingButtonsToolTip.ShowAlways = true;
+
+         SaveAllModifiedButton.MouseEnter += OnSavingModifiedEnter;
+         SaveAllProvincesButton.MouseEnter += OnSavingAllEnter;
+         SaveCurrentSelectionButton.MouseEnter += OnSavingSelectionEnter;
+
          OwnerTagBox = ControlFactory.GetTagComboBox();
          OwnerTagBox.OnTagChanged += ProvinceEditingEvents.OnOwnerChanged;
          ControllerTagBox = ControlFactory.GetTagComboBox();
@@ -513,6 +524,21 @@ namespace Editor
       }
 
       #endregion
+
+      private void OnSavingAllEnter(object? sender, EventArgs e)
+      {
+         _savingButtonsToolTip.SetToolTip(SaveAllProvincesButton, $"Save all provinces ({Globals.LandProvinceIds.Length})");
+      }
+
+      private void OnSavingModifiedEnter(object? sender, EventArgs e)
+      {
+         _savingButtonsToolTip.SetToolTip(SaveAllModifiedButton, $"Save modified provinces ({EditingManager.GetModifiedProvinces().Count})");
+      }
+
+      private void OnSavingSelectionEnter(object? sender, EventArgs e)
+      {
+         _savingButtonsToolTip.SetToolTip(SaveCurrentSelectionButton, $"Save selection ({Globals.Selection.Count})");
+      }
 
       private void OnDateChanged(object? sender, EventArgs e)
       {

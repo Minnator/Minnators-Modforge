@@ -136,12 +136,12 @@
          label12 = new Label();
          label13 = new Label();
          TradeCenterComboBox = new ComboBox();
-         COuntryPage = new TabPage();
-         ProvinceGroupsPage = new TabPage();
          tableLayoutPanel2 = new TableLayoutPanel();
          SaveAllProvincesButton = new Button();
          SaveAllModifiedButton = new Button();
          SaveCurrentSelectionButton = new Button();
+         COuntryPage = new TabPage();
+         ProvinceGroupsPage = new TabPage();
          MapMenuStrip.SuspendLayout();
          toolStrip1.SuspendLayout();
          MainLayoutPanel.SuspendLayout();
@@ -1163,7 +1163,7 @@
          TradeCompanyTab.Location = new Point(4, 24);
          TradeCompanyTab.Name = "TradeCompanyTab";
          TradeCompanyTab.Padding = new Padding(3);
-         TradeCompanyTab.Size = new Size(378, 176);
+         TradeCompanyTab.Size = new Size(378, 151);
          TradeCompanyTab.TabIndex = 1;
          TradeCompanyTab.Text = "Trade Company";
          TradeCompanyTab.UseVisualStyleBackColor = true;
@@ -1173,7 +1173,7 @@
          ModifiersTab.Location = new Point(4, 24);
          ModifiersTab.Name = "ModifiersTab";
          ModifiersTab.Padding = new Padding(3);
-         ModifiersTab.Size = new Size(378, 176);
+         ModifiersTab.Size = new Size(378, 151);
          ModifiersTab.TabIndex = 2;
          ModifiersTab.Text = "Modifiers";
          ModifiersTab.UseVisualStyleBackColor = true;
@@ -1328,26 +1328,6 @@
          TradeCenterComboBox.Size = new Size(89, 23);
          TradeCenterComboBox.TabIndex = 3;
          // 
-         // COuntryPage
-         // 
-         COuntryPage.Location = new Point(4, 24);
-         COuntryPage.Name = "COuntryPage";
-         COuntryPage.Padding = new Padding(3);
-         COuntryPage.Size = new Size(392, 822);
-         COuntryPage.TabIndex = 1;
-         COuntryPage.Text = "Country";
-         COuntryPage.UseVisualStyleBackColor = true;
-         // 
-         // ProvinceGroupsPage
-         // 
-         ProvinceGroupsPage.Location = new Point(4, 24);
-         ProvinceGroupsPage.Name = "ProvinceGroupsPage";
-         ProvinceGroupsPage.Padding = new Padding(3);
-         ProvinceGroupsPage.Size = new Size(392, 822);
-         ProvinceGroupsPage.TabIndex = 2;
-         ProvinceGroupsPage.Text = "ProvinceGroups";
-         ProvinceGroupsPage.UseVisualStyleBackColor = true;
-         // 
          // tableLayoutPanel2
          // 
          tableLayoutPanel2.ColumnCount = 3;
@@ -1402,6 +1382,26 @@
          SaveCurrentSelectionButton.Text = "Save cur. selection";
          SaveCurrentSelectionButton.UseVisualStyleBackColor = true;
          SaveCurrentSelectionButton.Click += SaveCurrentSelectionButton_Click;
+         // 
+         // COuntryPage
+         // 
+         COuntryPage.Location = new Point(4, 24);
+         COuntryPage.Name = "COuntryPage";
+         COuntryPage.Padding = new Padding(3);
+         COuntryPage.Size = new Size(392, 822);
+         COuntryPage.TabIndex = 1;
+         COuntryPage.Text = "Country";
+         COuntryPage.UseVisualStyleBackColor = true;
+         // 
+         // ProvinceGroupsPage
+         // 
+         ProvinceGroupsPage.Location = new Point(4, 24);
+         ProvinceGroupsPage.Name = "ProvinceGroupsPage";
+         ProvinceGroupsPage.Padding = new Padding(3);
+         ProvinceGroupsPage.Size = new Size(392, 822);
+         ProvinceGroupsPage.TabIndex = 2;
+         ProvinceGroupsPage.Text = "ProvinceGroups";
+         ProvinceGroupsPage.UseVisualStyleBackColor = true;
          // 
          // MapWindow
          // 
