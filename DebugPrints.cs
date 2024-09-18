@@ -35,7 +35,7 @@ public static class DebugPrints
 
       foreach (var effect in effects)
       {
-         effectNames.Add(effect.Name);
+         effectNames.Add(effect.GenericName);
          if (effect.ExecuteProvince(provDummy))
          {
             validEffects ++;
@@ -71,7 +71,7 @@ public static class DebugPrints
       {
          var block = (Block)element;
          sb.Append(GetTabs(tabs));
-         sb.Append(block.Name);
+         sb.Append(block.GenericName);
          sb.Append(" : \n");
          foreach (var subBlock in block.Blocks)
          {
@@ -158,7 +158,7 @@ public static class DebugPrints
       var sb = new StringBuilder();
       foreach (var region in Globals.Regions.Values)
       {
-         sb.AppendLine($"Region: {region.Name} = {{");
+         sb.AppendLine($"Region: {region.GenericName} = {{");
          foreach (var regionArea in region.Areas)
          {
             sb.AppendLine($"\t{regionArea}");
@@ -180,10 +180,10 @@ public static class DebugPrints
       var sb = new StringBuilder();
       foreach (var group in groups)
       {
-         sb.AppendLine($"Group: {group.Name} with [{group.Cultures.Count}] and names [{group.TotalNameCount}]");
+         sb.AppendLine($"Group: {group.GenericName} with [{group.Cultures.Count}] and names [{group.TotalNameCount}]");
          foreach (var culture in group.Cultures)
          {
-            sb.AppendLine($"\tName: {culture.Name} with Names: [{culture.TotalNameCount}] and Primaries: [{culture.Primaries.Count}]");
+            sb.AppendLine($"\tName: {culture.GenericName} with Names: [{culture.TotalNameCount}] and Primaries: [{culture.Primaries.Count}]");
          }
       }
 

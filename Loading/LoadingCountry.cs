@@ -353,7 +353,13 @@ namespace Editor.Loading
                      Globals.ErrorLog.Write($"Invalid color block in {country.Tag} at [color]");
                      break;
                   }
-                  country.Color = Parsing.ParseColor(((Content)block.Blocks[0]).Value);
+
+                  if (!Parsing.ParseColor(((Content)block.Blocks[0]).Value, out var countryColor))
+                  {
+                     Globals.ErrorLog.Write($"Invalid color in {country.Tag}: {((Content)block.Blocks[0]).Value}");
+                     break;
+                  }
+                  country.Color = countryColor;
                   break;
                case "revolutionary_colors":
                   if (block.Blocks.Count != 1)
@@ -361,7 +367,12 @@ namespace Editor.Loading
                      Globals.ErrorLog.Write($"Invalid revolutionary_colors block in {country.Tag} at [revolutionary_colors]");
                      break;
                   }
-                  country.RevolutionaryColor = Parsing.ParseColor(((Content)block.Blocks[0]).Value);
+                  if (!Parsing.ParseColor(((Content)block.Blocks[0]).Value, out var revolutionaryColor))
+                  {
+                     Globals.ErrorLog.Write($"Invalid revolutionary color in {country.Tag}: {((Content)block.Blocks[0]).Value}");
+                     break;
+                  }
+                  country.RevolutionaryColor = revolutionaryColor;
                   break;
                case "historical_idea_groups":
                   foreach (var idea in block.GetContentElements)

@@ -75,7 +75,12 @@ namespace Editor.Loading
          switch (block.Name)
          {
             case "color":
-               node.Color = Parsing.ParseColor(block.GetContent);
+               if (!Parsing.ParseColor(block.GetContent, out var nodeColor))
+               {
+                  Globals.ErrorLog.Write($"Color not found for {node.Name}");
+                  break;
+               }
+               node.Color = nodeColor;
                break;
             case "members":
                node.Members = [..Parsing.GetIntListFromString(block.GetContent)];

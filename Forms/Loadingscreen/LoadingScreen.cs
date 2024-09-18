@@ -106,6 +106,8 @@ namespace Editor.Forms.Loadingscreen
             bw.ReportProgress(++progress);
             ProvinceParser.ParseAllUniqueProvinces();
             bw.ReportProgress(++progress);
+            TradeCompanyLoading.Load();
+            bw.ReportProgress(++progress);
             CultureLoading.LoadCultures();
             bw.ReportProgress(++progress);
             CountryLoading.LoadCountries();

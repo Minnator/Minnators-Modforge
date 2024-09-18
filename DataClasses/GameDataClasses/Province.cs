@@ -674,6 +674,18 @@ public class Province : IProvinceCollection
          return Color.Empty;
       }
    }
+
+   public string GetTradeCompany
+   {
+      get
+      {
+         foreach (var tradeCompany in Globals.TradeCompanies.Values)
+            if (tradeCompany.Provinces.Contains(Id))
+               return tradeCompany.CodeName;
+         return string.Empty;
+      }
+   }
+
    // ================================== ToAndFromGuiMethods ==================================
    public void LoadToGui()
    {

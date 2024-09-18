@@ -249,4 +249,15 @@ namespace Editor.Parser
          { RemovedTriggerScopes, TriggerScopeType.Removed }
       };
    }
+
+   public class IllegalScopeException : Exception
+   {
+      public IllegalScopeException(string scope) : base($"Illegal scope: {scope}")
+      {
+      }
+
+      public IllegalScopeException(string scope, string message) : base($"Illegal scope: {scope} - {message}")
+      {
+      }
+   }
 }

@@ -61,9 +61,12 @@ namespace Editor.Loading
       private static void ParseReligion(Block religionBlock, ref List<Religion> religions)
       {
          var colorBlock = religionBlock.GetBlockWithName("color");
-         Color color = Color.Empty;
-         if (colorBlock != null) 
-            color = Parsing.ParseColor(colorBlock.GetContent);
+         var color = Color.Empty;
+         if (colorBlock == null || !Parsing.ParseColor(colorBlock.GetContent, out color))
+         {
+            Globals.ErrorLog.Write($"Color not found for {religionBlock.Name}");
+            return;
+         }
          religions.Add(new (religionBlock.Name) {Color = color});
       }
    }

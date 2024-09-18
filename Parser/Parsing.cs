@@ -396,17 +396,19 @@ public static partial class Parsing
    /// <param name="str"></param>
    /// <returns></returns>
    /// <exception cref="ParsingException"></exception>
-   public static Color ParseColor(string str)
+   public static bool ParseColor(string str, out Color color)
    {
+      color = Color.Empty;
       var match = ColorRegex.Match(str);
       if (!match.Success)
-         throw new ParsingException("Could not parse color: " + str);
+         return false;
 
       var r = int.Parse(match.Groups["r"].Value);
       var g = int.Parse(match.Groups["g"].Value);
       var b = int.Parse(match.Groups["b"].Value);
 
-      return Color.FromArgb(r, g, b);
+      color = Color.FromArgb(r, g, b);
+      return true;
    }
 
    /// <summary>

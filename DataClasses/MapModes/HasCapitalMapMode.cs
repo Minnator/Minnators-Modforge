@@ -20,7 +20,7 @@ namespace Editor.DataClasses.MapModes
 
       public override string GetMapModeName()
       {
-         return "Has Capital Name";
+         return "Has Capital GenericName";
       }
 
       public override string GetSpecificToolTip(int provinceId)

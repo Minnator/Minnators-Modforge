@@ -509,14 +509,14 @@ public static class DebugMaps
       var rand = new Random();
       
       foreach (var area in Globals.Areas.Values)
-         color.Add(area.Name, Color.FromArgb(rand.Next(256), rand.Next(256), rand.Next(256)));
+         color.Add(area.GenericName, Color.FromArgb(rand.Next(256), rand.Next(256), rand.Next(256)));
 
       var bmp = BitMapHelper.GenerateBitmapFromProvinces(id =>
       {
          if (Globals.Provinces.TryGetValue(id, out var prov))
          {
             if (Globals.Areas.TryGetValue(prov.Area, out var area))
-               return color[area.Name];
+               return color[area.GenericName];
          }
          return Color.Black;
       });

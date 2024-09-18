@@ -33,6 +33,7 @@ public class MapModeManager(PannablePictureBox pictureBox)
       MapModes.Add(new CountryMapMode());
       MapModes.Add(new TradeGoodsMapMode());
       MapModes.Add(new TradeNodeMapMode());
+      MapModes.Add(new TradeCompanyMapMode());
       MapModes.Add(new ReligionMapMode());
       MapModes.Add(new DevastationMapMode());
       MapModes.Add(new ProsperityMapMode());
