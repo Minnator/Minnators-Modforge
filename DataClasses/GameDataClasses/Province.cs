@@ -2,7 +2,7 @@
 using Editor.Helper;
 using Editor.Interfaces;
 using Editor.Parser;
-using static Editor.Helper.ProvinceEventHandler;
+using static Editor.Events.ProvinceEventHandler;
 
 namespace Editor.DataClasses.GameDataClasses;
 
@@ -60,7 +60,7 @@ public class ProvinceData()
    public List<ApplicableModifier> PermanentProvinceModifiers = [];   // MOD
    public List<string> ProvinceTriggeredModifiers = [];     // MOD
    public List<Effect> ScriptedEffects = [];           
-   public List<TradeModifier> TradeModifiers = [];          
+   public List<TradeModifier> TradeModifiers = [];  
 }
 
 public enum ProvAttrGet

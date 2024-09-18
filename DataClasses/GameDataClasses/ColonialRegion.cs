@@ -36,8 +36,6 @@ namespace Editor.DataClasses.GameDataClasses
 
       public string GetLocalisation()
       {
-         if (Names.Count > 1)
-            return Localisation.GetLoc(Names[^1].Name);
          return Localisation.GetLoc(Name);
       }
 

@@ -1,4 +1,6 @@
-﻿namespace Editor.Controls
+﻿using Editor.Events;
+
+namespace Editor.Controls
 {
    public sealed class NumberTextBox : TextBox
    {

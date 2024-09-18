@@ -1,4 +1,4 @@
-﻿using static Editor.Helper.ProvinceEventHandler;
+﻿using static Editor.Events.ProvinceEventHandler;
 using System;
 
 namespace Editor.Helper;

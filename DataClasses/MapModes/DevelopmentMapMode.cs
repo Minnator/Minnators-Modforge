@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
-using Editor.Helper;
+using Editor.Events;
 
 namespace Editor.MapModes;
 

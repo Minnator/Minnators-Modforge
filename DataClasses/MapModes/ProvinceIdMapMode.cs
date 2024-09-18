@@ -16,7 +16,7 @@ public sealed class ProvinceIdMapMode : MapMode
 
    public override string GetMapModeName()
    {
-      return "Province Id";
+      return "Province Ids";
    }
 
    public override Color GetProvinceColor(int id)

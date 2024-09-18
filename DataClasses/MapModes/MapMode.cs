@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Editor.DataClasses.GameDataClasses;
+using Editor.Events;
 using Editor.Helper;
 
 namespace Editor.DataClasses.MapModes;
@@ -132,6 +133,18 @@ public abstract class MapMode
       if (sender is not int id || (IsLandOnly && !Globals.LandProvinces.Contains(id)))
          return;
       Update(id);
+   }
+
+   public virtual void UpdateProvinceCollection(object? sender, ProvinceCollectionEvents.ProvinceGroupEventArgs e)
+   {
+      if (Globals.MapModeManager.CurrentMapMode != this)
+         return;
+      foreach (var id in e.Ids)
+      {
+         if (IsLandOnly && !Globals.LandProvinces.Contains(id))
+            continue;
+         Update(id);
+      }
    }
 
    public virtual void Update(int id, bool invalidate = true)

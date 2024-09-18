@@ -37,7 +37,7 @@ public static class Optimizer
          }
          catch (Exception e)
          {
-            //Debug.WriteLine($"{province.Id}");
+            //Debug.WriteLine($"{province.Ids}");
          }
          province.PixelPtr = pixelPtr;
          province.PixelCnt = colorToProvId[color].Count;
@@ -49,7 +49,7 @@ public static class Optimizer
          }
          catch (Exception e)
          {
-            //Debug.WriteLine($"{province.Id}");
+            //Debug.WriteLine($"{province.Ids}");
          }
          province.BorderPtr = borderPtr;
          province.BorderCnt = colorToBorder[color].Count;

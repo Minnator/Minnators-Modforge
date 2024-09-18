@@ -123,6 +123,8 @@
          label18 = new Label();
          label19 = new Label();
          TradeCompanyTab = new TabPage();
+         TradeCompaniesLayoutPanel = new TableLayoutPanel();
+         label20 = new Label();
          ModifiersTab = new TabPage();
          groupBox5 = new GroupBox();
          FloatLayoutPanel = new TableLayoutPanel();
@@ -167,6 +169,8 @@
          OptionalsTabControl.SuspendLayout();
          NativesTab.SuspendLayout();
          NativesLayoutPanel.SuspendLayout();
+         TradeCompanyTab.SuspendLayout();
+         TradeCompaniesLayoutPanel.SuspendLayout();
          groupBox5.SuspendLayout();
          FloatLayoutPanel.SuspendLayout();
          groupBox6.SuspendLayout();
@@ -1160,6 +1164,7 @@
          // 
          // TradeCompanyTab
          // 
+         TradeCompanyTab.Controls.Add(TradeCompaniesLayoutPanel);
          TradeCompanyTab.Location = new Point(4, 24);
          TradeCompanyTab.Name = "TradeCompanyTab";
          TradeCompanyTab.Padding = new Padding(3);
@@ -1167,6 +1172,37 @@
          TradeCompanyTab.TabIndex = 1;
          TradeCompanyTab.Text = "Trade Company";
          TradeCompanyTab.UseVisualStyleBackColor = true;
+         // 
+         // TradeCompaniesLayoutPanel
+         // 
+         TradeCompaniesLayoutPanel.ColumnCount = 3;
+         TradeCompaniesLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+         TradeCompaniesLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333359F));
+         TradeCompaniesLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333359F));
+         TradeCompaniesLayoutPanel.Controls.Add(label20, 0, 0);
+         TradeCompaniesLayoutPanel.Dock = DockStyle.Fill;
+         TradeCompaniesLayoutPanel.Location = new Point(3, 3);
+         TradeCompaniesLayoutPanel.Margin = new Padding(0);
+         TradeCompaniesLayoutPanel.Name = "TradeCompaniesLayoutPanel";
+         TradeCompaniesLayoutPanel.RowCount = 5;
+         TradeCompaniesLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         TradeCompaniesLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         TradeCompaniesLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         TradeCompaniesLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         TradeCompaniesLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         TradeCompaniesLayoutPanel.Size = new Size(372, 145);
+         TradeCompaniesLayoutPanel.TabIndex = 1;
+         // 
+         // label20
+         // 
+         label20.AutoSize = true;
+         label20.Dock = DockStyle.Fill;
+         label20.Location = new Point(3, 0);
+         label20.Name = "label20";
+         label20.Size = new Size(117, 25);
+         label20.TabIndex = 0;
+         label20.Text = "TradeCompany ";
+         label20.TextAlign = ContentAlignment.MiddleLeft;
          // 
          // ModifiersTab
          // 
@@ -1460,6 +1496,9 @@
          NativesTab.ResumeLayout(false);
          NativesLayoutPanel.ResumeLayout(false);
          NativesLayoutPanel.PerformLayout();
+         TradeCompanyTab.ResumeLayout(false);
+         TradeCompaniesLayoutPanel.ResumeLayout(false);
+         TradeCompaniesLayoutPanel.PerformLayout();
          groupBox5.ResumeLayout(false);
          FloatLayoutPanel.ResumeLayout(false);
          FloatLayoutPanel.PerformLayout();
@@ -1588,6 +1627,8 @@
       private Button SaveAllProvincesButton;
       private Button SaveAllModifiedButton;
       private Button SaveCurrentSelectionButton;
+      private TableLayoutPanel TradeCompaniesLayoutPanel;
+      private Label label20;
    }
 }
 

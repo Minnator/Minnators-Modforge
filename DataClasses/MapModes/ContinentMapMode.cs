@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using Editor.DataClasses.MapModes;
+using Editor.Events;
 using Editor.Helper;
 using Editor.Loading;
 

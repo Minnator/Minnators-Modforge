@@ -5,6 +5,7 @@ using System.Text;
 using Editor.Controls;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
+using Editor.Events;
 using Editor.Forms;
 using Editor.Forms.Loadingscreen;
 using Editor.Helper;
@@ -36,6 +37,7 @@ namespace Editor
       private ExtendedNumeric _extraCostNumeric;
 
       private TagComboBox _tribalOwner;
+      private TagComboBox _tradeCompanyOwner;
 
       private NumberTextBox _nativesSizeTextBox;
       private NumberTextBox _nativeFerocityTextBox;
@@ -331,6 +333,9 @@ namespace Editor
          _nativeHostilityTextBox = ControlFactory.GetNumberTextBox();
          _nativeHostilityTextBox.OnDataChanged += ProvinceEditingEvents.OnNativeHostilityChanged;
          NativesLayoutPanel.Controls.Add(_nativeHostilityTextBox, 1, 3);
+
+         // TRADE_COMPANIES TAB
+         _tradeCompanyOwner = ControlFactory.GetTagComboBox();
       }
 
       // ======================== Province GUI Update Methods ========================

@@ -1,4 +1,5 @@
 ﻿using Editor.DataClasses.GameDataClasses;
+using Editor.Events;
 
 namespace Editor.DataClasses.MapModes
 {
@@ -6,6 +7,11 @@ namespace Editor.DataClasses.MapModes
    {
       public override bool IsLandOnly => true;
       public override bool ShowOccupation => false;
+
+      public TradeCompanyMapMode()
+      {
+         ProvinceCollectionEvents.OnTradeCompanyChanged += UpdateProvinceCollection;
+      }
 
       public override Color GetProvinceColor(int id)
       {
@@ -17,6 +23,7 @@ namespace Editor.DataClasses.MapModes
          }
          return Color.DimGray;
       }
+
       public override string GetMapModeName()
       {
          return "Trade Companies";

@@ -93,6 +93,7 @@ public static class Globals {
    public static State State = State.Loading;
    public static EditingStatus EditingStatus = EditingStatus.Idle;
    public static MapModeRendering MapModeRendering { get; set; } = MapModeRendering.Live;
+   public static bool AllowEditing => EditingStatus == EditingStatus.Idle;
 
    // History Manager
    public static readonly HistoryManager HistoryManager = new(new CInitial());

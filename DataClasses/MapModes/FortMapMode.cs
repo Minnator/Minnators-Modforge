@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using Editor.DataClasses.MapModes;
-using Editor.Helper;
+using Editor.Events;
 
 namespace Editor.MapModes;
 

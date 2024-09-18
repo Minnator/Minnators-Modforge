@@ -1,4 +1,4 @@
-﻿using Editor.Helper;
+﻿using Editor.Events;
 
 namespace Editor.DataClasses.MapModes
 {
