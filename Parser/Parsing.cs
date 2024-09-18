@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
+using ABI.Windows.Storage.Provider;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Parser;
@@ -361,6 +362,22 @@ public static partial class Parsing
       return keyValueList;
    }
 
+   public static bool GetChancesListFromKeyValuePairs(List<KeyValuePair<string, string>> kvps, out List<KeyValuePair<string, int>> chances)
+   {
+      chances = [];
+      foreach (var kvp in kvps)
+      {
+         if (int.TryParse(kvp.Value, out var chance))
+            chances.Add(new(kvp.Key, chance));
+         else
+         {
+            Globals.ErrorLog.Write($"Could not parse chance: {kvp.Value} in {kvp.Key} = {kvp.Value}");
+            return false;
+         }
+      }
+      return true;
+   }
+
    /// <summary>
    /// Iterates of all lines in a multiline string and removes comments from each line.
    /// </summary>
@@ -396,7 +413,7 @@ public static partial class Parsing
    /// <param name="str"></param>
    /// <returns></returns>
    /// <exception cref="ParsingException"></exception>
-   public static bool ParseColor(string str, out Color color)
+   public static bool TryParseColor(string str, out Color color)
    {
       color = Color.Empty;
       var match = ColorRegex.Match(str);
@@ -718,6 +735,49 @@ public static partial class Parsing
    {
       kvps = input.Split('\n', '=');
       return kvps.Length % 2 == 0;
+   }
+
+   public static bool ParseTriggeredName(Block block, out TriggeredName tn)
+   {
+      tn = TriggeredName.Empty;
+      var name = string.Empty;
+      var trigger = string.Empty;
+
+      foreach (var element in block.Blocks)
+      {
+         if (element is not Block b)
+         {
+            var elementContent = ((Content)element).Value.Split('=');
+            if (elementContent.Length != 2)
+            {
+               Globals.ErrorLog.Write($"Error: Illegal Content found in {((Content)element).Value}");
+               return false;
+            }
+            elementContent[1].Trim().TrimQuotes(out name);
+            continue;
+         }
+         if (b.Name == "trigger") 
+            trigger = b.GetContent;
+      }
+      tn = new(name, trigger);
+      return true;
+   }
+
+   public static bool TrimQuotes(this string str, out string trimmed)
+   {
+      trimmed = string.Empty;
+      if (str.Length < 2)
+      {
+         trimmed = str;
+         return false;
+      }
+      if (str[0] == '"' && str[^1] == '"')
+      {
+         trimmed = str[1..^1];
+         return true;
+      }
+      trimmed = str;
+      return false;
    }
 }
 

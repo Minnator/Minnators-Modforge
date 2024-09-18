@@ -11,13 +11,13 @@ namespace Editor.Loading
       public static void Load()
       {
          var sw = Stopwatch.StartNew();
-         if(!FilesHelper.GetModOrVanillaPath(out var path, "common", "trade_companies", "00_trade_companies.txt"))
+         if(!FilesHelper.GetFilesUniquelyAndCombineToOne(out var rawContent, "common", "trade_companies"))
          {
-            Globals.ErrorLog.Write("Error: 00_trade_companies.txt not found!");
+            Globals.ErrorLog.Write("Error: No file for trade_companies was found");
             return;
          }
 
-         Parsing.RemoveCommentFromMultilineString(IO.ReadAllInUTF8(path), out var content);
+         Parsing.RemoveCommentFromMultilineString(rawContent, out var content);
          var elements = Parsing.GetElements(0, content);
          Dictionary<string, TradeCompany> tradeCompanies = [];
 
@@ -44,7 +44,7 @@ namespace Editor.Loading
                switch (suBlock.Name)
                {
                   case "color":
-                     if (!Parsing.ParseColor(suBlock.GetContent, out color))
+                     if (!Parsing.TryParseColor(suBlock.GetContent, out color))
                      {
                         Globals.ErrorLog.Write($"Color not found for {suBlock.Name}");
                         return;

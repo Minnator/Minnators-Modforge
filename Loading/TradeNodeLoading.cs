@@ -75,7 +75,7 @@ namespace Editor.Loading
          switch (block.Name)
          {
             case "color":
-               if (!Parsing.ParseColor(block.GetContent, out var nodeColor))
+               if (!Parsing.TryParseColor(block.GetContent, out var nodeColor))
                {
                   Globals.ErrorLog.Write($"Color not found for {node.Name}");
                   break;

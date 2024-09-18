@@ -354,7 +354,7 @@ namespace Editor.Loading
                      break;
                   }
 
-                  if (!Parsing.ParseColor(((Content)block.Blocks[0]).Value, out var countryColor))
+                  if (!Parsing.TryParseColor(((Content)block.Blocks[0]).Value, out var countryColor))
                   {
                      Globals.ErrorLog.Write($"Invalid color in {country.Tag}: {((Content)block.Blocks[0]).Value}");
                      break;
@@ -367,7 +367,7 @@ namespace Editor.Loading
                      Globals.ErrorLog.Write($"Invalid revolutionary_colors block in {country.Tag} at [revolutionary_colors]");
                      break;
                   }
-                  if (!Parsing.ParseColor(((Content)block.Blocks[0]).Value, out var revolutionaryColor))
+                  if (!Parsing.TryParseColor(((Content)block.Blocks[0]).Value, out var revolutionaryColor))
                   {
                      Globals.ErrorLog.Write($"Invalid revolutionary color in {country.Tag}: {((Content)block.Blocks[0]).Value}");
                      break;

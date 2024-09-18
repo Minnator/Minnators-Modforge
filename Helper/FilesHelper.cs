@@ -113,15 +113,16 @@ public static class FilesHelper
       return false;
    }
 
-   public static void GetFilesUniquelyAndCombineToOne(out string output, params string[] internalPath)
+   public static bool GetFilesUniquelyAndCombineToOne(out string output, params string[] internalPath)
    {
       var sb = new StringBuilder();
       var files = GetFilesFromModAndVanillaUniquely(internalPath);
       foreach (var file in files)
       {
-         sb.Append(File.ReadAllText(file)).Append("\n");
+         sb.Append(File.ReadAllText(file)).Append('\n');
       }
       output = sb.ToString();
+      return files.Count > 0;
    }
 
    public static bool GetModOrVanillaPath(out string filePath, params string[] internalPath)

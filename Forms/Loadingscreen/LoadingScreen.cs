@@ -108,6 +108,8 @@ namespace Editor.Forms.Loadingscreen
             bw.ReportProgress(++progress);
             TradeCompanyLoading.Load();
             bw.ReportProgress(++progress);
+            ColonialRegionsLoading.Load();
+            bw.ReportProgress(++progress);
             CultureLoading.LoadCultures();
             bw.ReportProgress(++progress);
             CountryLoading.LoadCountries();

@@ -62,7 +62,7 @@ namespace Editor.Loading
       {
          var colorBlock = religionBlock.GetBlockWithName("color");
          var color = Color.Empty;
-         if (colorBlock == null || !Parsing.ParseColor(colorBlock.GetContent, out color))
+         if (colorBlock == null || !Parsing.TryParseColor(colorBlock.GetContent, out color))
          {
             Globals.ErrorLog.Write($"Color not found for {religionBlock.Name}");
             return;
