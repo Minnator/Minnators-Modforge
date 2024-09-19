@@ -56,8 +56,8 @@ public class ProvinceData()
    public List<string> DiscoveredBy = [];                   //.
    public List<string> Buildings = [];                      //.
    public List<string> TradeCompanyInvestments = [];        // TC
-   public List<ApplicableModifier> ProvinceModifiers = [];            // MOD
    public List<ApplicableModifier> PermanentProvinceModifiers = [];   // MOD
+   public List<ApplicableModifier> ProvinceModifiers = [];            // MOD
    public List<string> ProvinceTriggeredModifiers = [];     // MOD
    public List<Effect> ScriptedEffects = [];           
    public List<TradeModifier> TradeModifiers = [];  
@@ -102,7 +102,8 @@ public enum ProvAttrGet
    revolt,
    is_occupied,
    latent_trade_good,
-   citysize
+   citysize,
+   trade_company_investment
 }
 
 public enum ProvAttrSet
@@ -154,7 +155,7 @@ public enum ProvAttrSet
    prosperity,
    remove_permanent_claim,
    add_permanent_claim,
-   citysize
+   citysize,
 }
 
 public class Province : IProvinceCollection

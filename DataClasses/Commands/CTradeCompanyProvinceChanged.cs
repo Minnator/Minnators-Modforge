@@ -5,11 +5,11 @@ namespace Editor.DataClasses.Commands
 {
    public class CTradeCompanyProvinceChanged : ICommand
    {
-      private List<int> _deltaProvinces;
+      private int[] _deltaProvinces;
       private string _tradeCompanyKey;
       private bool _add;
 
-      public CTradeCompanyProvinceChanged(List<int> deltaProvinces, string tradeCompanyKey, bool add, bool executeOnInit)
+      public CTradeCompanyProvinceChanged(string tradeCompanyKey, bool add, bool executeOnInit, params int[] deltaProvinces)
       {
          _deltaProvinces = deltaProvinces;
          _tradeCompanyKey = tradeCompanyKey;
@@ -21,12 +21,12 @@ namespace Editor.DataClasses.Commands
 
       public void Execute()
       {
-         ProvinceCollectionEditor.ModifyTradeCompany(_tradeCompanyKey, _deltaProvinces, _add);
+         ProvinceCollectionEditor.ModifyTradeCompany(_tradeCompanyKey, _add, _deltaProvinces);
       }
 
       public void Undo()
       {
-         ProvinceCollectionEditor.ModifyTradeCompany(_tradeCompanyKey, _deltaProvinces, !_add);
+         ProvinceCollectionEditor.ModifyTradeCompany(_tradeCompanyKey, !_add, _deltaProvinces);
       }
 
       public void Redo()
@@ -36,7 +36,7 @@ namespace Editor.DataClasses.Commands
 
       public string GetDescription()
       {
-         return $"{(_add ? "Added" : "Removed")} ({_deltaProvinces.Count}) provinces to trade company {_tradeCompanyKey}";
+         return $"{(_add ? "Added" : "Removed")} ({_deltaProvinces.Length}) provinces to trade company {_tradeCompanyKey}";
       }
    }
 }

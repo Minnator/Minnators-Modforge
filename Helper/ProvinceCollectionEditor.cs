@@ -1,18 +1,17 @@
-﻿using Editor.DataClasses.Commands;
-using Editor.Events;
+﻿using Editor.Events;
 
 namespace Editor.Helper
 {
    public static class ProvinceCollectionEditor
    {
-      public static void ModifyTradeCompany(string companyKey, List<int> deltaProvinces, bool add)
+      public static void ModifyTradeCompany(string companyKey, bool add, params int[] deltaProvinces)
       {
          if (add)
             Globals.TradeCompanies[companyKey].Provinces.UnionWith(deltaProvinces);
          else
             Globals.TradeCompanies[companyKey].Provinces.ExceptWith(deltaProvinces);
 
-         ProvinceCollectionEvents.RaiseOnTradeCompanyChanged(null, new (companyKey, [..deltaProvinces]));
+         ProvinceCollectionEventHandler.RaiseOnTradeCompanyChanged(null, new (companyKey, deltaProvinces));
       }
    }
 }

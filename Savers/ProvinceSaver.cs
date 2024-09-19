@@ -141,6 +141,8 @@ namespace Editor.Savers
          AddCollection("add_trade_modifier", p.TradeModifiers, ref sb);
          sb.AppendLine();
          AddEffects(ref sb);
+         // TODO complete complexer saving
+         // TradeCompanyInvestments
       }
 
       /// <summary>

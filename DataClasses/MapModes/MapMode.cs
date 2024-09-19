@@ -135,7 +135,7 @@ public abstract class MapMode
       Update(id);
    }
 
-   public virtual void UpdateProvinceCollection(object? sender, ProvinceCollectionEvents.ProvinceGroupEventArgs e)
+   public virtual void UpdateProvinceCollection(object? sender, ProvinceCollectionEventArgs e)
    {
       if (Globals.MapModeManager.CurrentMapMode != this)
          return;

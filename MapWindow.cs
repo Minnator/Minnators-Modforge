@@ -37,7 +37,7 @@ namespace Editor
       private ExtendedNumeric _extraCostNumeric;
 
       private TagComboBox _tribalOwner;
-      private TagComboBox _tradeCompanyOwner;
+      private ExtendedComboBox _tradeCompanyInvestments;
 
       private NumberTextBox _nativesSizeTextBox;
       private NumberTextBox _nativeFerocityTextBox;
@@ -335,7 +335,12 @@ namespace Editor
          NativesLayoutPanel.Controls.Add(_nativeHostilityTextBox, 1, 3);
 
          // TRADE_COMPANIES TAB
-         _tradeCompanyOwner = ControlFactory.GetTagComboBox();
+         _tradeCompanyInvestments = ControlFactory.GetExtendedComboBox();
+         _tradeCompanyInvestments.Items.AddRange([..Globals.TradeCompanyInvestments.Keys]);
+         _tradeCompanyInvestments.OnDataChanged += ProvinceEditingEvents.OnTradeCompanyInvestmentChanged;
+         TradeCompaniesLayoutPanel.Controls.Add(_tradeCompanyInvestments, 1, 0);
+
+
       }
 
       // ======================== Province GUI Update Methods ========================

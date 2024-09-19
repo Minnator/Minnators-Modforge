@@ -1,4 +1,5 @@
-﻿using Editor.DataClasses;
+﻿using System.Diagnostics;
+using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 
@@ -8,6 +9,7 @@ namespace Editor.Loading
    {
       public static void Load()
       {
+         var sw = Stopwatch.StartNew();
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely("common", "buildings");
          List<Building> buildings = [];
 
@@ -19,6 +21,8 @@ namespace Editor.Loading
             Globals.BuildingKeys.Add(building.Name);
          
          Globals.Buildings = buildings;
+         sw.Stop();
+         Globals.LoadingLog.WriteTimeStamp("Buildings", sw.ElapsedMilliseconds);
       }
 
       private static void ParseBuildingsFile(string file, ref List<Building> buildings)

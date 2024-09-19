@@ -542,5 +542,11 @@ namespace Editor.Events
          Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, e.Value.ToString()!, ProvAttrGet.native_size, ProvAttrSet.native_size));
       }
 
+      public static void OnTradeCompanyInvestmentChanged(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!Globals.AllowEditing || e?.Value == null)
+            return;
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, e.Value.ToString()!, ProvAttrGet.trade_company_investment, ProvAttrSet.add_trade_company_investment));
+      }
    }
 }
