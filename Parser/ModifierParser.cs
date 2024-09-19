@@ -10,6 +10,12 @@ namespace Editor.Parser
       private const string PROVINCE_MODIFIER_REGEX = "name\\s*=\\s*(.*)\\s*duration\\s*=\\s*(.*)";
       private static readonly Regex ProvinceModifierRegex = new(PROVINCE_MODIFIER_REGEX, RegexOptions.Compiled);
 
+      /// <summary>
+      /// Parses the application of a modifier to a target following mod_name = { name = x duration = y }
+      /// </summary>
+      /// <param name="str"></param>
+      /// <param name="mod"></param>
+      /// <returns></returns>
       public static bool ParseApplicableModifier(string str, out ApplicableModifier mod)
       {
          mod = default!;
@@ -56,7 +62,6 @@ namespace Editor.Parser
          return true;
       }
 
-
       public static bool ParseTradeModifier(string str, out TradeModifier tradeModifier)
       {
          tradeModifier = default!;
@@ -100,6 +105,25 @@ namespace Editor.Parser
          }
 
          return true;
+      }
+
+      public static bool ParseModifiers(string input, out List<Modifier> modifiers)
+      {
+         var kvps = Parsing.GetKeyValueList(ref input);
+         modifiers = [];
+         var flawness = true;
+
+         foreach (var kvp in kvps)
+         {
+            if (!ParseModifierFromName(kvp.Key, kvp.Value, out var modifier))
+            {
+               Globals.ErrorLog.Write($"Could not parse modifier from string: {kvp.Key} = {kvp.Value}");
+               flawness = false;
+               continue;
+            }
+            modifiers.Add(modifier);
+         }
+         return flawness;
       }
 
       public static bool ParseModifierFromName(string name, string value, out Modifier modifier)

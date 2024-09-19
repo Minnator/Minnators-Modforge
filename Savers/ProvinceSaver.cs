@@ -41,12 +41,7 @@ namespace Editor.Savers
       public static bool SaveToHistoryFile(this Province province)
       {
          GetProvinceFileString(province, out var content);
-         //return IO.WriteToFile(province.GetHistoryFilePath(), content, false);
-
-         // Debug stuff
-         var fileName = $"{province.Id}-{province.GetLocalisation()}.txt";
-         var downloadsFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Downloads";
-         return IO.WriteAllInANSI(Path.Combine(downloadsFolder, "FileSavingTest", fileName), content, false);
+         return IO.WriteToFile(province.GetHistoryFilePath(), content, false);
       }
 
       /// <summary>

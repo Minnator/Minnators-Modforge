@@ -88,6 +88,8 @@ namespace Editor.Forms.Loadingscreen
             bw.ReportProgress(++progress);
             BuildingsLoading.Load();
             bw.ReportProgress(++progress);
+            TradeCompanyInvestmentsLoading.Load();
+            bw.ReportProgress(++progress);
             ReligionLoading.Load();
             bw.ReportProgress(++progress);
             MapLoading.LoadDefinitionAndMap();
