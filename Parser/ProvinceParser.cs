@@ -88,6 +88,10 @@ public static class ProvinceParser
                if (ModifierParser.ParseApplicableModifier(block.GetContent, out var mod))
                   province.PermanentProvinceModifiers.Add(mod);
                return;
+            case "add_province_modifier":
+               if (ModifierParser.ParseApplicableModifier(block.GetContent, out var mod2))
+                  province.ProvinceModifiers.Add(mod2);
+               return;
             case "add_trade_modifier":
                if (ModifierParser.ParseTradeModifier(block.GetContent, out var tradeMod))
                   province.TradeModifiers.Add(tradeMod);

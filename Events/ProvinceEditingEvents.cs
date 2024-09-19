@@ -1,4 +1,5 @@
-﻿using Editor.Commands;
+﻿using System.Security.Cryptography.X509Certificates;
+using Editor.Commands;
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
 
@@ -547,6 +548,15 @@ namespace Editor.Events
          if (!Globals.AllowEditing || e?.Value == null)
             return;
          Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, e.Value.ToString()!, ProvAttrGet.trade_company_investment, ProvAttrSet.add_trade_company_investment));
+      }
+
+
+      // Add Modifier to Province 
+      public static void OnModifierAdded(string scope, ModifierAbstract modifier, ModifierType type)
+      {
+         if (!Globals.AllowEditing)
+            return;
+         Globals.HistoryManager.AddCommand(new CAddModifier(Globals.Selection.GetSelectedProvinces, scope, modifier ,type));
       }
 
    }

@@ -1174,9 +1174,11 @@ public class Province : IProvinceCollection
                PermanentProvinceModifiers.Remove((ApplicableModifier)mod);
             break;
          case ModifierType.CountryModifier:
+            
             Globals.ErrorLog.Write($"Country modifier {mod.Name} cannot be added to province {Id}");
             break;
          case ModifierType.TriggeredModifier:
+            
             break;
          default:
             throw new ArgumentOutOfRangeException(nameof(type), type, null);

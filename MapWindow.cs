@@ -338,7 +338,7 @@ namespace Editor
 
          // TRADE_COMPANIES TAB
          _tradeCompanyInvestments = ControlFactory.GetExtendedComboBox();
-         _tradeCompanyInvestments.Items.AddRange([..Globals.TradeCompanyInvestments.Keys]);
+         _tradeCompanyInvestments.Items.AddRange([.. Globals.TradeCompanyInvestments.Keys]);
          _tradeCompanyInvestments.OnDataChanged += ProvinceEditingEvents.OnTradeCompanyInvestmentChanged;
          TradeCompaniesLayoutPanel.Controls.Add(_tradeCompanyInvestments, 1, 0);
 
@@ -352,11 +352,18 @@ namespace Editor
          // No data changed here as they are added via the "Add" button
          ModifiersLayoutPanel.Controls.Add(_modifierComboBox, 1, 1);
 
-         
-         _modifierTypeComboBox = ControlFactory.GetExtendedComboBox([..Enum.GetNames(typeof(ModifierType))]);
+         _modifierTypeComboBox = ControlFactory.GetExtendedComboBox([.. Enum.GetNames(typeof(ModifierType))]);
+         _modifierTypeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
          _modifierTypeComboBox.OnDataChanged += OnModifierTypeChanged;
          ModifiersLayoutPanel.Controls.Add(_modifierTypeComboBox, 1, 0);
 
+         ModifiersListView.View = View.Details;
+         ModifiersListView.Columns.Add("Name");
+         ModifiersListView.Columns.Add("Duration");
+         ModifiersListView.Columns.Add("Type");
+         // Space the columns out
+         ModifiersListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+         ModifiersListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
       }
 
 
@@ -424,6 +431,11 @@ namespace Editor
             _nativeFerocityTextBox.Text = nativeFerocity.ToString(CultureInfo.InvariantCulture);
          if (Globals.Selection.GetSharedAttribute(ProvAttrGet.native_hostileness, out result) && result is float nativeHostileness)
             _nativeHostilityTextBox.Text = nativeHostileness.ToString(CultureInfo.InvariantCulture);
+         // TODO The Gui needs to be able to represent several trade company investments
+         //if (Globals.Selection.GetSharedAttribute(ProvAttrGet.trade_company_investment, out result) && result is string tradeCompanyInvestments)
+         //   _tradeCompanyInvestments.Text = tradeCompanyInvestments;
+         if (Globals.Selection.GetSelectedProvinces.Count == 1)
+            AddAllModifiersToListView(Globals.Selection.GetSelectedProvinces[0]);
          ResumeLayout();
          Globals.EditingStatus = EditingStatus.Idle;
       }
@@ -460,6 +472,8 @@ namespace Editor
          _nativesSizeTextBox.Text = province.NativeSize.ToString();
          _nativeFerocityTextBox.Text = province.NativeFerocity.ToString(CultureInfo.InvariantCulture);
          _nativeHostilityTextBox.Text = province.NativeHostileness.ToString(CultureInfo.InvariantCulture);
+         // _tradeCompanyInvestments.Text = province.TradeCompanyInvestments;
+         AddAllModifiersToListView(province);
          ResumeLayout();
          Globals.EditingStatus = EditingStatus.Idle;
       }
@@ -493,6 +507,11 @@ namespace Editor
          _nativesSizeTextBox.Text = "0";
          _nativeFerocityTextBox.Text = "0";
          _nativeHostilityTextBox.Text = "0";
+         _modifierComboBox.Text = string.Empty;
+         ModifiersListView.Items.Clear();
+         ModifierScopeTextBox.Text = string.Empty;
+         DurationTextBox.Text = string.Empty;
+         _tradeCompanyInvestments.Text = string.Empty;
       }
       #endregion
 
@@ -583,7 +602,36 @@ namespace Editor
          ProvinceNameLabel.Text = $"Province: {province.GetLocalisation()}";
          OwnerCountryNameLabel.Text = $"Owner: {Localisation.GetLoc(province.Owner)}";
       }
-      
+
+      private void AddModifiersToList(ModifierAbstract modifier, ModifierType type)
+      {
+         var item = new ListViewItem(modifier.Name);
+         item.SubItems.Add(modifier.Duration.ToString());
+         item.SubItems.Add(type.ToString());
+         ModifiersListView.Items.Add(item);
+      }
+
+      private void AddModifiersToList(string name, ModifierType type)
+      {
+         var item = new ListViewItem(name);
+         item.SubItems.Add("");
+         item.SubItems.Add(type.ToString());
+         ModifiersListView.Items.Add(item);
+      }
+
+      private void AddAllModifiersToListView(Province province)
+      {
+         ModifiersListView.Items.Clear();
+         foreach (var modifier in province.ProvinceTriggeredModifiers) 
+            AddModifiersToList(modifier, ModifierType.ProvinceTriggeredModifier);
+
+         foreach (var modifier in province.ProvinceModifiers)
+            AddModifiersToList(modifier, ModifierType.ProvinceModifier);
+
+         foreach (var modifier in province.PermanentProvinceModifiers)
+            AddModifiersToList(modifier, ModifierType.PermanentProvinceModifier);
+      }
+
       private void OnModifierTypeChanged(object? sender, ProvinceEditedEventArgs e)
       {
          if (!Enum.TryParse(e.Value.ToString(), out ModifierType type))
@@ -811,5 +859,31 @@ namespace Editor
          ProvinceSaver.SaveAllLandProvinces();
       }
 
+      private void AddModifierButton_Click(object sender, EventArgs e)
+      {
+         var error = string.Empty;
+         if (!int.TryParse(DurationTextBox.Text, out var duration))
+            error += "Duration must be a number\n";
+         if (_modifierComboBox.Text == string.Empty)
+            error += "Modifier must be selected\n";
+         if (_modifierTypeComboBox.Text == string.Empty)
+            error += "ModifierType must be selected\n";
+
+         if (error != string.Empty)
+         {
+            MessageBox.Show(error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+         }
+
+         var mod = new ApplicableModifier(_modifierComboBox.Text, duration);
+         var type = Enum.Parse<ModifierType>(_modifierTypeComboBox.Text);
+         ProvinceEditingEvents.OnModifierAdded(ModifierScopeTextBox.Text, mod, type);
+         AddModifiersToList(mod, type);
+      }
+
+      private void DeleteModifierButton_Click(object sender, EventArgs e)
+      {
+
+      }
    }
 }

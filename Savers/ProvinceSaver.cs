@@ -136,9 +136,6 @@ namespace Editor.Savers
          AddCollection("discovered_by", p.GetAttribute(ProvAttrGet.discovered_by), ref sb);
          sb.AppendLine();
          AddCollection("add_province_triggered_modifier", p.ProvinceTriggeredModifiers, ref sb);
-         AddCollection("add_province_modifier", p.ProvinceModifiers, ref sb);
-         AddCollection("add_permanent_province_modifier", p.PermanentProvinceModifiers, ref sb);
-         AddCollection("add_trade_modifier", p.TradeModifiers, ref sb);
          sb.AppendLine();
          AddEffects(ref sb);
          // TODO complete complexer saving
