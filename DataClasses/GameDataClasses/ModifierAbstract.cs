@@ -139,6 +139,42 @@ namespace Editor.DataClasses.GameDataClasses
       }
    }
 
+   public class EventModifier(string name)
+   {
+      public string Name { get; } = name;
+      public string Trigger { get; set; } = string.Empty;
+      public List<Modifier> Modifiers { get; set; } = [];
+
+      public string GetFormattedString()
+      {
+         var sb = new StringBuilder();
+         sb.AppendLine($"{Name} = {{");
+         if (Trigger != string.Empty)
+            sb.AppendLine($"\ttrigger = {Trigger}");
+         foreach (var mod in Modifiers)
+            sb.AppendLine($"\t{mod.Name} = {mod.Value}");
+         sb.AppendLine("}");
+         return sb.ToString();
+      }
+
+      public override bool Equals(object? obj)
+      {
+         if (obj is EventModifier modifier)
+            return Name == modifier.Name;
+         return false;
+      }
+
+      public override int GetHashCode()
+      {
+         return Name.GetHashCode();
+      }
+
+      public override string ToString()
+      {
+         return $"\"{Name}\" ({Modifiers.Count})";
+      }
+   }
+
 
    public class Modifier(string name, string value) 
    {

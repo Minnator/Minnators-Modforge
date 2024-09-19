@@ -78,6 +78,8 @@ namespace Editor.Forms.Loadingscreen
          {
             ScriptedEffectLoading.LoadScriptedEffects();
             bw.ReportProgress(++progress);
+            ModifierLoading.Load();
+            bw.ReportProgress(++progress);
             LocalisationLoading.Load();
             bw.ReportProgress(++progress);
             TradeGoodsLoading.Load();

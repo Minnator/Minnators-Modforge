@@ -126,6 +126,9 @@
          TradeCompaniesLayoutPanel = new TableLayoutPanel();
          label20 = new Label();
          ModifiersTab = new TabPage();
+         ModifiersLayoutPanel = new TableLayoutPanel();
+         label21 = new Label();
+         label22 = new Label();
          groupBox5 = new GroupBox();
          FloatLayoutPanel = new TableLayoutPanel();
          label9 = new Label();
@@ -171,6 +174,8 @@
          NativesLayoutPanel.SuspendLayout();
          TradeCompanyTab.SuspendLayout();
          TradeCompaniesLayoutPanel.SuspendLayout();
+         ModifiersTab.SuspendLayout();
+         ModifiersLayoutPanel.SuspendLayout();
          groupBox5.SuspendLayout();
          FloatLayoutPanel.SuspendLayout();
          groupBox6.SuspendLayout();
@@ -1206,6 +1211,7 @@
          // 
          // ModifiersTab
          // 
+         ModifiersTab.Controls.Add(ModifiersLayoutPanel);
          ModifiersTab.Location = new Point(4, 24);
          ModifiersTab.Name = "ModifiersTab";
          ModifiersTab.Padding = new Padding(3);
@@ -1213,6 +1219,48 @@
          ModifiersTab.TabIndex = 2;
          ModifiersTab.Text = "Modifiers";
          ModifiersTab.UseVisualStyleBackColor = true;
+         // 
+         // ModifiersLayoutPanel
+         // 
+         ModifiersLayoutPanel.ColumnCount = 2;
+         ModifiersLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.44593F));
+         ModifiersLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 66.55407F));
+         ModifiersLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+         ModifiersLayoutPanel.Controls.Add(label21, 0, 0);
+         ModifiersLayoutPanel.Controls.Add(label22, 0, 1);
+         ModifiersLayoutPanel.Dock = DockStyle.Fill;
+         ModifiersLayoutPanel.Location = new Point(3, 3);
+         ModifiersLayoutPanel.Margin = new Padding(0);
+         ModifiersLayoutPanel.Name = "ModifiersLayoutPanel";
+         ModifiersLayoutPanel.RowCount = 5;
+         ModifiersLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         ModifiersLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         ModifiersLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         ModifiersLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         ModifiersLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         ModifiersLayoutPanel.Size = new Size(372, 145);
+         ModifiersLayoutPanel.TabIndex = 2;
+         // 
+         // label21
+         // 
+         label21.AutoSize = true;
+         label21.Dock = DockStyle.Fill;
+         label21.Location = new Point(3, 0);
+         label21.Name = "label21";
+         label21.Size = new Size(118, 25);
+         label21.TabIndex = 0;
+         label21.Text = "Modifier Type";
+         label21.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // label22
+         // 
+         label22.AutoSize = true;
+         label22.Location = new Point(3, 25);
+         label22.Name = "label22";
+         label22.Size = new Size(52, 15);
+         label22.TabIndex = 1;
+         label22.Text = "Modifier";
+         label22.TextAlign = ContentAlignment.MiddleLeft;
          // 
          // groupBox5
          // 
@@ -1499,6 +1547,9 @@
          TradeCompanyTab.ResumeLayout(false);
          TradeCompaniesLayoutPanel.ResumeLayout(false);
          TradeCompaniesLayoutPanel.PerformLayout();
+         ModifiersTab.ResumeLayout(false);
+         ModifiersLayoutPanel.ResumeLayout(false);
+         ModifiersLayoutPanel.PerformLayout();
          groupBox5.ResumeLayout(false);
          FloatLayoutPanel.ResumeLayout(false);
          FloatLayoutPanel.PerformLayout();
@@ -1629,6 +1680,9 @@
       private Button SaveCurrentSelectionButton;
       private TableLayoutPanel TradeCompaniesLayoutPanel;
       private Label label20;
+      private TableLayoutPanel ModifiersLayoutPanel;
+      private Label label21;
+      private Label label22;
    }
 }
 

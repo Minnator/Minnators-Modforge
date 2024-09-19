@@ -14,6 +14,17 @@ public static class ControlFactory
       return new (ref panel, mapWindow);
    }
 
+   public static ExtendedComboBox GetExtendedComboBox(List<string> content, int selectedIndex = -1)
+   {
+      var ec = new ExtendedComboBox();
+      if (content.Count == 0)
+         return ec;
+      ec.Items.AddRange([..content]);
+      if (selectedIndex >= 0 && selectedIndex < ec.Items.Count)
+         ec.SelectedIndex = selectedIndex;
+      return ec;
+   }
+
    public static ToolStripMenuItem GetToolStripMenuItem(string text, EventHandler onClick, Image image = null!)
    {
       return new(text, image, onClick);

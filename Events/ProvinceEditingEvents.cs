@@ -548,5 +548,6 @@ namespace Editor.Events
             return;
          Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, e.Value.ToString()!, ProvAttrGet.trade_company_investment, ProvAttrSet.add_trade_company_investment));
       }
+
    }
 }

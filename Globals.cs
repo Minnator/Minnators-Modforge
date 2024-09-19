@@ -62,7 +62,7 @@ public static class Globals {
       }
    }
    private static int _loadingStage = 0;
-   public const int LOADING_STAGES = 26; // Needs to be increased when adding new loading stages
+   public const int LOADING_STAGES = 27; // Needs to be increased when adding new loading stages
    #endregion
    
    public static ConsoleForm? ConsoleForm = null;
@@ -157,6 +157,11 @@ public static class Globals {
    public static int[] NonLandProvinceIds = null!;
    public static int[] LandProvinceIds = null!;
    public static Dictionary<string, ColonialRegion> ColonialRegions = [];
+
+   // Modifiers
+   public static Dictionary<string, EventModifier> Modifiers = [];
+   public static Dictionary<string, Modifier> ProvinceTriggeredModifiers = [];
+   public static Dictionary<string, Modifier> TriggeredModifiers = [];
 
    // Trade
    public static Dictionary<string, TradeCompanyInvestment> TradeCompanyInvestments = [];

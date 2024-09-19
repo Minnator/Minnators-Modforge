@@ -26,6 +26,8 @@ namespace Editor
 
       private ExtendedComboBox _religionComboBox;
       private ExtendedComboBox _cultureComboBox;
+      private ExtendedComboBox _modifierComboBox;
+      private ExtendedComboBox _modifierTypeComboBox;
 
       private ExtendedNumeric _taxNumeric;
       private ExtendedNumeric _prodNumeric;
@@ -340,8 +342,23 @@ namespace Editor
          _tradeCompanyInvestments.OnDataChanged += ProvinceEditingEvents.OnTradeCompanyInvestmentChanged;
          TradeCompaniesLayoutPanel.Controls.Add(_tradeCompanyInvestments, 1, 0);
 
+         // MODIFIERS TAB
+         InitializeModifierTab();
+      }
+
+      private void InitializeModifierTab()
+      {
+         _modifierComboBox = ControlFactory.GetExtendedComboBox();
+         // No data changed here as they are added via the "Add" button
+         ModifiersLayoutPanel.Controls.Add(_modifierComboBox, 1, 1);
+
+         
+         _modifierTypeComboBox = ControlFactory.GetExtendedComboBox([..Enum.GetNames(typeof(ModifierType))]);
+         _modifierTypeComboBox.OnDataChanged += OnModifierTypeChanged;
+         ModifiersLayoutPanel.Controls.Add(_modifierTypeComboBox, 1, 0);
 
       }
+
 
       // ======================== Province GUI Update Methods ========================
       #region Province Gui
@@ -565,6 +582,30 @@ namespace Editor
          }
          ProvinceNameLabel.Text = $"Province: {province.GetLocalisation()}";
          OwnerCountryNameLabel.Text = $"Owner: {Localisation.GetLoc(province.Owner)}";
+      }
+      
+      private void OnModifierTypeChanged(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!Enum.TryParse(e.Value.ToString(), out ModifierType type))
+            return;
+
+         switch (type)
+         {
+            case ModifierType.ProvinceModifier:
+            case ModifierType.PermanentProvinceModifier:
+            case ModifierType.CountryModifier:
+               _modifierComboBox.ReplaceItems(Globals.Modifiers.Keys.ToList());
+               break;
+            case ModifierType.ProvinceTriggeredModifier:
+               _modifierComboBox.ReplaceItems(Globals.ProvinceTriggeredModifiers.Keys.ToList());
+               break;
+            case ModifierType.TriggeredModifier:
+               _modifierComboBox.ReplaceItems(Globals.TriggeredModifiers.Keys.ToList());
+               break;
+            default:
+               Globals.ErrorLog.Write($"Invalid ModifierType {type}");
+               break;
+         }
       }
 
       private void OnMouseEnter(object sender, EventArgs e)

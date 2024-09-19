@@ -21,5 +21,13 @@ namespace Editor.Controls
          OnDataChanged?.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Text));
          OnDataChangedC?.Invoke(this, new (Text, Globals.Selection.GetSelectedProvincesIds));
       }
+
+      public void ReplaceItems(List<string> items)
+      {
+         Items.Clear();
+         if (items.Count == 0)
+            return;
+         Items.AddRange([..items]);
+      }
    }
 }
