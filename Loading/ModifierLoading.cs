@@ -27,12 +27,12 @@ namespace Editor.Loading
          foreach (Match element in matches)
          {
             var content = element.Groups["content"].Value;
-            var modifier = new EventModifier(element.Groups["name"].Value);
+            var modifier = new EventModifier(element.Groups["name"].Value.Trim());
             var kvps = Parsing.GetKeyValueList(content);
 
             for (var i = 0; i < kvps.Count; i++)
             {
-               if (!ModifierParser.ParseModifierFromName(kvps[i].Key, kvps[i].Value, out var mod))
+               if (!ModifierParser.ParseModifierFromName(kvps[i].Key.Trim(), kvps[i].Value.Trim(), out var mod))
                {
                   //TODO check if it is a trigger if so add to trigger attr and move on
                   Globals.ErrorLog.Write($"Unknown Modifier in modifiers file: {kvps[i].Key}");

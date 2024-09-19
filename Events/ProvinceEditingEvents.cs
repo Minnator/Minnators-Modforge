@@ -552,11 +552,19 @@ namespace Editor.Events
 
 
       // Add Modifier to Province 
-      public static void OnModifierAdded(string scope, ModifierAbstract modifier, ModifierType type)
+      public static void OnModifierAdded(ModifierAbstract modifier, ModifierType type)
       {
          if (!Globals.AllowEditing)
             return;
-         Globals.HistoryManager.AddCommand(new CAddModifier(Globals.Selection.GetSelectedProvinces, scope, modifier ,type));
+         Globals.HistoryManager.AddCommand(new CAddRmvModifier(Globals.Selection.GetSelectedProvinces,modifier ,type));
+      }
+
+      public static void OnModifierRemoved( ModifierAbstract modifier, ModifierType type)
+      {
+         if (!Globals.AllowEditing)
+            return;
+         Globals.HistoryManager.AddCommand(new CAddRmvModifier(Globals.Selection.GetSelectedProvinces, modifier,
+            type, false));
       }
 
    }

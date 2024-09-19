@@ -1117,7 +1117,7 @@ public class Province : IProvinceCollection
             break;
          case ProvAttrSet.add_province_modifier:
             if (ModifierParser.ParseApplicableModifier(value, out var mod))
-               AddModifier(ModifierType.ProvinceModifier, mod, true);
+               AddModifier(ModifierType.ProvinceModifier, mod);
             else 
                Globals.ErrorLog.Write($"Could not parse add_province_modifier: {value} for province id {Id}");
             break;
@@ -1126,7 +1126,7 @@ public class Province : IProvinceCollection
             break;
          case ProvAttrSet.add_permanent_province_modifier:
             if (ModifierParser.ParseApplicableModifier(value, out var permaMod))
-               AddModifier(ModifierType.PermanentProvinceModifier, permaMod, true);
+               AddModifier(ModifierType.PermanentProvinceModifier, permaMod);
             else
                Globals.ErrorLog.Write($"Could not parse add_permanent_province_modifier: {value} for province id {Id}");
             break;
@@ -1151,34 +1151,50 @@ public class Province : IProvinceCollection
       }
    }
 
-   public void AddModifier(ModifierType type, ModifierAbstract mod, bool add)
+   public void AddModifier(ModifierType type, ModifierAbstract mod)
    {
       switch (type)
       {
          case ModifierType.ProvinceModifier:
-            if (add)
-               ProvinceModifiers.Add((ApplicableModifier)mod);
-            else
-               ProvinceModifiers.Remove((ApplicableModifier)mod);
+            ProvinceModifiers.Add((ApplicableModifier)mod);
             break;
          case ModifierType.ProvinceTriggeredModifier:
-            if (add)
-               ProvinceTriggeredModifiers.Add(mod.Name);
-            else
-               ProvinceTriggeredModifiers.Remove(mod.Name);
+            ProvinceTriggeredModifiers.Add(mod.Name);
             break;
          case ModifierType.PermanentProvinceModifier:
-            if (add)
-               PermanentProvinceModifiers.Add((ApplicableModifier)mod);
-            else
-               PermanentProvinceModifiers.Remove((ApplicableModifier)mod);
+            PermanentProvinceModifiers.Add((ApplicableModifier)mod);;
             break;
          case ModifierType.CountryModifier:
-            
             Globals.ErrorLog.Write($"Country modifier {mod.Name} cannot be added to province {Id}");
             break;
          case ModifierType.TriggeredModifier:
-            
+            break;
+         default:
+            throw new ArgumentOutOfRangeException(nameof(type), type, null);
+      }
+   }
+
+   public void RemoveModifier(string name, ModifierType type)
+   {
+      switch (type)
+      {
+         case ModifierType.ProvinceModifier:
+            foreach (var mod in ProvinceModifiers)
+               if (mod.Name.Equals(name))
+               {
+                  ProvinceModifiers.Remove(mod);
+                  break;
+               }
+            break;
+         case ModifierType.ProvinceTriggeredModifier:
+            ProvinceTriggeredModifiers.Remove(name);
+            break;
+         case ModifierType.PermanentProvinceModifier:
+            PermanentProvinceModifiers.RemoveAll(x => x.Name == name);
+            break;
+         case ModifierType.CountryModifier:
+            break;
+         case ModifierType.TriggeredModifier:
             break;
          default:
             throw new ArgumentOutOfRangeException(nameof(type), type, null);

@@ -26,7 +26,7 @@ namespace Editor.Parser
             Globals.ErrorLog.Write($"Could not parse province modifier from string: {str}");
          }
 
-         var name = match.Groups[1].Value;
+         var name = match.Groups[1].Value.Trim();
          var duration = int.Parse(match.Groups[2].Value);
 
          mod = new(name, duration);

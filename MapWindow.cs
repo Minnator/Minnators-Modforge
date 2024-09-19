@@ -349,15 +349,16 @@ namespace Editor
       private void InitializeModifierTab()
       {
          _modifierComboBox = ControlFactory.GetExtendedComboBox();
+         _modifierComboBox.Items.AddRange([.. Globals.Modifiers.Keys]);
          // No data changed here as they are added via the "Add" button
          ModifiersLayoutPanel.Controls.Add(_modifierComboBox, 1, 1);
 
-         _modifierTypeComboBox = ControlFactory.GetExtendedComboBox([.. Enum.GetNames(typeof(ModifierType))]);
+         _modifierTypeComboBox = ControlFactory.GetExtendedComboBox(["CountryModifier", "ProvinceModifier"]);
          _modifierTypeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-         _modifierTypeComboBox.OnDataChanged += OnModifierTypeChanged;
          ModifiersLayoutPanel.Controls.Add(_modifierTypeComboBox, 1, 0);
 
          ModifiersListView.View = View.Details;
+         ModifiersListView.FullRowSelect = true;
          ModifiersListView.Columns.Add("Name");
          ModifiersListView.Columns.Add("Duration");
          ModifiersListView.Columns.Add("Type");
@@ -509,7 +510,6 @@ namespace Editor
          _nativeHostilityTextBox.Text = "0";
          _modifierComboBox.Text = string.Empty;
          ModifiersListView.Items.Clear();
-         ModifierScopeTextBox.Text = string.Empty;
          DurationTextBox.Text = string.Empty;
          _tradeCompanyInvestments.Text = string.Empty;
       }
@@ -609,51 +609,20 @@ namespace Editor
          item.SubItems.Add(modifier.Duration.ToString());
          item.SubItems.Add(type.ToString());
          ModifiersListView.Items.Add(item);
-      }
 
-      private void AddModifiersToList(string name, ModifierType type)
-      {
-         var item = new ListViewItem(name);
-         item.SubItems.Add("");
-         item.SubItems.Add(type.ToString());
-         ModifiersListView.Items.Add(item);
+         ModifiersListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+         ModifiersListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
       }
-
+      
       private void AddAllModifiersToListView(Province province)
       {
          ModifiersListView.Items.Clear();
-         foreach (var modifier in province.ProvinceTriggeredModifiers) 
-            AddModifiersToList(modifier, ModifierType.ProvinceTriggeredModifier);
 
          foreach (var modifier in province.ProvinceModifiers)
             AddModifiersToList(modifier, ModifierType.ProvinceModifier);
 
          foreach (var modifier in province.PermanentProvinceModifiers)
             AddModifiersToList(modifier, ModifierType.PermanentProvinceModifier);
-      }
-
-      private void OnModifierTypeChanged(object? sender, ProvinceEditedEventArgs e)
-      {
-         if (!Enum.TryParse(e.Value.ToString(), out ModifierType type))
-            return;
-
-         switch (type)
-         {
-            case ModifierType.ProvinceModifier:
-            case ModifierType.PermanentProvinceModifier:
-            case ModifierType.CountryModifier:
-               _modifierComboBox.ReplaceItems(Globals.Modifiers.Keys.ToList());
-               break;
-            case ModifierType.ProvinceTriggeredModifier:
-               _modifierComboBox.ReplaceItems(Globals.ProvinceTriggeredModifiers.Keys.ToList());
-               break;
-            case ModifierType.TriggeredModifier:
-               _modifierComboBox.ReplaceItems(Globals.TriggeredModifiers.Keys.ToList());
-               break;
-            default:
-               Globals.ErrorLog.Write($"Invalid ModifierType {type}");
-               break;
-         }
       }
 
       private void OnMouseEnter(object sender, EventArgs e)
@@ -877,13 +846,25 @@ namespace Editor
 
          var mod = new ApplicableModifier(_modifierComboBox.Text, duration);
          var type = Enum.Parse<ModifierType>(_modifierTypeComboBox.Text);
-         ProvinceEditingEvents.OnModifierAdded(ModifierScopeTextBox.Text, mod, type);
+         ProvinceEditingEvents.OnModifierAdded(mod, type);
          AddModifiersToList(mod, type);
       }
 
       private void DeleteModifierButton_Click(object sender, EventArgs e)
       {
+         if (ModifiersListView.SelectedItems.Count == 0)
+            return;
+         var item = ModifiersListView.SelectedItems[0];
+         var modifierName = item.SubItems[0].Text.Trim();
 
+         if (!int.TryParse(item.SubItems[1].Text, out var duration) || !Enum.TryParse(item.SubItems[2].Text, out ModifierType type))
+               return;
+
+         if (!Globals.Modifiers.TryGetValue(modifierName, out _))
+            return;
+
+         ProvinceEditingEvents.OnModifierRemoved(new ApplicableModifier(modifierName, duration), type);
+         ModifiersListView.Items.Remove(item);
       }
    }
 }

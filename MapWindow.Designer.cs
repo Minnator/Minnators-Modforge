@@ -127,17 +127,14 @@
          label20 = new Label();
          ModifiersTab = new TabPage();
          ModifiersLayoutPanel = new TableLayoutPanel();
+         ModifiersListView = new ListView();
          label21 = new Label();
          label22 = new Label();
          label23 = new Label();
          tableLayoutPanel3 = new TableLayoutPanel();
-         label25 = new Label();
          DurationTextBox = new TextBox();
-         ModifierScopeTextBox = new TextBox();
-         tableLayoutPanel5 = new TableLayoutPanel();
-         ModifiersListView = new ListView();
-         AddModifierButton = new Button();
          DeleteModifierButton = new Button();
+         AddModifierButton = new Button();
          groupBox5 = new GroupBox();
          FloatLayoutPanel = new TableLayoutPanel();
          label9 = new Label();
@@ -186,7 +183,6 @@
          ModifiersTab.SuspendLayout();
          ModifiersLayoutPanel.SuspendLayout();
          tableLayoutPanel3.SuspendLayout();
-         tableLayoutPanel5.SuspendLayout();
          groupBox5.SuspendLayout();
          FloatLayoutPanel.SuspendLayout();
          groupBox6.SuspendLayout();
@@ -1236,11 +1232,11 @@
          ModifiersLayoutPanel.ColumnCount = 2;
          ModifiersLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
          ModifiersLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 75F));
+         ModifiersLayoutPanel.Controls.Add(ModifiersListView, 0, 3);
          ModifiersLayoutPanel.Controls.Add(label21, 0, 0);
          ModifiersLayoutPanel.Controls.Add(label22, 0, 1);
          ModifiersLayoutPanel.Controls.Add(label23, 0, 2);
          ModifiersLayoutPanel.Controls.Add(tableLayoutPanel3, 1, 2);
-         ModifiersLayoutPanel.Controls.Add(tableLayoutPanel5, 0, 3);
          ModifiersLayoutPanel.Dock = DockStyle.Fill;
          ModifiersLayoutPanel.Location = new Point(3, 3);
          ModifiersLayoutPanel.Margin = new Padding(0);
@@ -1251,8 +1247,21 @@
          ModifiersLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
          ModifiersLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
          ModifiersLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         ModifiersLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
          ModifiersLayoutPanel.Size = new Size(372, 145);
          ModifiersLayoutPanel.TabIndex = 2;
+         // 
+         // ModifiersListView
+         // 
+         ModifiersLayoutPanel.SetColumnSpan(ModifiersListView, 2);
+         ModifiersListView.Dock = DockStyle.Fill;
+         ModifiersListView.Location = new Point(0, 77);
+         ModifiersListView.Margin = new Padding(0, 2, 0, 0);
+         ModifiersListView.Name = "ModifiersListView";
+         ModifiersLayoutPanel.SetRowSpan(ModifiersListView, 2);
+         ModifiersListView.Size = new Size(372, 68);
+         ModifiersListView.TabIndex = 5;
+         ModifiersListView.UseCompatibleStateImageBehavior = false;
          // 
          // label21
          // 
@@ -1293,9 +1302,9 @@
          tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
          tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
          tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-         tableLayoutPanel3.Controls.Add(label25, 1, 0);
          tableLayoutPanel3.Controls.Add(DurationTextBox, 0, 0);
-         tableLayoutPanel3.Controls.Add(ModifierScopeTextBox, 2, 0);
+         tableLayoutPanel3.Controls.Add(DeleteModifierButton, 1, 0);
+         tableLayoutPanel3.Controls.Add(AddModifierButton, 2, 0);
          tableLayoutPanel3.Dock = DockStyle.Fill;
          tableLayoutPanel3.Location = new Point(93, 50);
          tableLayoutPanel3.Margin = new Padding(0);
@@ -1304,17 +1313,6 @@
          tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
          tableLayoutPanel3.Size = new Size(279, 25);
          tableLayoutPanel3.TabIndex = 4;
-         // 
-         // label25
-         // 
-         label25.AutoSize = true;
-         label25.Dock = DockStyle.Fill;
-         label25.Location = new Point(96, 0);
-         label25.Name = "label25";
-         label25.Size = new Size(87, 25);
-         label25.TabIndex = 3;
-         label25.Text = "Scope";
-         label25.TextAlign = ContentAlignment.MiddleLeft;
          // 
          // DurationTextBox
          // 
@@ -1325,66 +1323,11 @@
          DurationTextBox.Size = new Size(87, 23);
          DurationTextBox.TabIndex = 4;
          // 
-         // ModifierScopeTextBox
-         // 
-         ModifierScopeTextBox.Dock = DockStyle.Fill;
-         ModifierScopeTextBox.Enabled = false;
-         ModifierScopeTextBox.Location = new Point(189, 1);
-         ModifierScopeTextBox.Margin = new Padding(3, 1, 3, 1);
-         ModifierScopeTextBox.Name = "ModifierScopeTextBox";
-         ModifierScopeTextBox.Size = new Size(87, 23);
-         ModifierScopeTextBox.TabIndex = 5;
-         // 
-         // tableLayoutPanel5
-         // 
-         tableLayoutPanel5.ColumnCount = 2;
-         ModifiersLayoutPanel.SetColumnSpan(tableLayoutPanel5, 2);
-         tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 75F));
-         tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-         tableLayoutPanel5.Controls.Add(ModifiersListView, 0, 0);
-         tableLayoutPanel5.Controls.Add(AddModifierButton, 1, 0);
-         tableLayoutPanel5.Controls.Add(DeleteModifierButton, 1, 2);
-         tableLayoutPanel5.Dock = DockStyle.Fill;
-         tableLayoutPanel5.Location = new Point(0, 75);
-         tableLayoutPanel5.Margin = new Padding(0);
-         tableLayoutPanel5.Name = "tableLayoutPanel5";
-         tableLayoutPanel5.RowCount = 3;
-         ModifiersLayoutPanel.SetRowSpan(tableLayoutPanel5, 2);
-         tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-         tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-         tableLayoutPanel5.Size = new Size(372, 70);
-         tableLayoutPanel5.TabIndex = 5;
-         // 
-         // ModifiersListView
-         // 
-         ModifiersListView.Dock = DockStyle.Fill;
-         ModifiersListView.Location = new Point(0, 2);
-         ModifiersListView.Margin = new Padding(0, 2, 0, 0);
-         ModifiersListView.Name = "ModifiersListView";
-         tableLayoutPanel5.SetRowSpan(ModifiersListView, 3);
-         ModifiersListView.Size = new Size(279, 68);
-         ModifiersListView.TabIndex = 5;
-         ModifiersListView.UseCompatibleStateImageBehavior = false;
-         // 
-         // AddModifierButton
-         // 
-         AddModifierButton.Dock = DockStyle.Fill;
-         AddModifierButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-         AddModifierButton.Location = new Point(281, 0);
-         AddModifierButton.Margin = new Padding(2, 0, 2, 0);
-         AddModifierButton.Name = "AddModifierButton";
-         AddModifierButton.Size = new Size(89, 25);
-         AddModifierButton.TabIndex = 6;
-         AddModifierButton.Text = "Add Modifier";
-         AddModifierButton.UseVisualStyleBackColor = true;
-         AddModifierButton.Click += AddModifierButton_Click;
-         // 
          // DeleteModifierButton
          // 
          DeleteModifierButton.Dock = DockStyle.Fill;
          DeleteModifierButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-         DeleteModifierButton.Location = new Point(281, 45);
+         DeleteModifierButton.Location = new Point(95, 0);
          DeleteModifierButton.Margin = new Padding(2, 0, 2, 0);
          DeleteModifierButton.Name = "DeleteModifierButton";
          DeleteModifierButton.Size = new Size(89, 25);
@@ -1392,6 +1335,19 @@
          DeleteModifierButton.Text = "Del Selected";
          DeleteModifierButton.UseVisualStyleBackColor = true;
          DeleteModifierButton.Click += DeleteModifierButton_Click;
+         // 
+         // AddModifierButton
+         // 
+         AddModifierButton.Dock = DockStyle.Fill;
+         AddModifierButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+         AddModifierButton.Location = new Point(188, 0);
+         AddModifierButton.Margin = new Padding(2, 0, 2, 0);
+         AddModifierButton.Name = "AddModifierButton";
+         AddModifierButton.Size = new Size(89, 25);
+         AddModifierButton.TabIndex = 6;
+         AddModifierButton.Text = "Add Modifier";
+         AddModifierButton.UseVisualStyleBackColor = true;
+         AddModifierButton.Click += AddModifierButton_Click;
          // 
          // groupBox5
          // 
@@ -1683,7 +1639,6 @@
          ModifiersLayoutPanel.PerformLayout();
          tableLayoutPanel3.ResumeLayout(false);
          tableLayoutPanel3.PerformLayout();
-         tableLayoutPanel5.ResumeLayout(false);
          groupBox5.ResumeLayout(false);
          FloatLayoutPanel.ResumeLayout(false);
          FloatLayoutPanel.PerformLayout();
@@ -1819,11 +1774,8 @@
       private Label label22;
       private Label label23;
       private TableLayoutPanel tableLayoutPanel3;
-      private Label label25;
       private TextBox DurationTextBox;
-      private TextBox ModifierScopeTextBox;
       private ListView ModifiersListView;
-      private TableLayoutPanel tableLayoutPanel5;
       private Button AddModifierButton;
       private Button DeleteModifierButton;
    }
