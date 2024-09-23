@@ -1,6 +1,9 @@
 ﻿using System.Text;
 using Editor.Helper;
 using Editor.Interfaces;
+using Editor.ParadoxLanguage.Effect;
+using Editor.ParadoxLanguage.Scope;
+using Editor.ParadoxLanguage.Trigger;
 using Editor.Parser;
 using static Editor.Events.ProvinceEventHandler;
 
@@ -158,7 +161,7 @@ public enum ProvAttrSet
    citysize,
 }
 
-public class Province : IProvinceCollection
+public class Province : IProvinceCollection, IScope
 {
    private readonly ProvinceData _data = new();
    private List<HistoryEntry> _history = [];
@@ -180,6 +183,9 @@ public class Province : IProvinceCollection
 
 
    #endregion
+
+   public Province(int id) => Id = id;
+   public Province(){ }
 
    // Events for the ProvinceValues will only be raised if the State is Running otherwise they will be suppressed to improve performance when loading
 
@@ -1280,4 +1286,20 @@ public class Province : IProvinceCollection
       return $"{Id} ({GetLocalisation()} ";
    }
 
+   // ======================================== ISCOPE IMPL ========================================
+
+   public bool EvaluateTrigger(ParadoxLanguage.Trigger.Trigger trigger)
+   {
+      return trigger.Evaluate(this);
+   }
+
+   public void ApplyEffect(ParadoxLanguage.Effect.Effect effect)
+   {
+      effect.Apply(this);
+   }
+
+   public IScope Rescope(ScopeEffector effector, string scopeType)
+   {
+      throw new NotImplementedException();
+   }
 }
