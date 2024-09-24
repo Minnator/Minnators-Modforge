@@ -171,7 +171,7 @@ public sealed class PannablePictureBox : PictureBox
       if (Globals.ProvinceEditingStatus == ProvinceEditingStatus.Selection
          || Globals.ProvinceEditingStatus == ProvinceEditingStatus.PreviewUntilSelection && Globals.Selection.SelectedProvinces.Count > 1)
       {
-         Globals.MapWindow.LoadSelectedProvincesToGui();
+         Globals.MapWindow.ProvinceClick();
       }
 
       // ------------------------------ Panning ------------------------------

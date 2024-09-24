@@ -1,9 +1,38 @@
 ﻿using Editor.DataClasses.GameDataClasses;
+using Button = System.Windows.Forms.Button;
 
 namespace Editor.Controls;
 
 public static class ControlFactory
 {
+   #region enums
+
+   public enum ImageButtonType
+   {
+      GreenPlus,
+      RedMinus,
+      YellowPlus,
+      RedX
+   }
+
+   #endregion
+
+   public static Button GetImageButton(ImageButtonType ibType)
+   {
+      return new()
+      {
+         Text = string.Empty,
+         Image = ibType switch
+         {
+            ImageButtonType.GreenPlus => Properties.Resources.Up,
+            ImageButtonType.RedMinus => Resources.redMinus,
+            ImageButtonType.YellowPlus => Resources.yellowPlus,
+            ImageButtonType.RedX => Resources.redX,
+            _ => null
+         },
+      };
+   }
+
    public static NumberTextBox GetNumberTextBox()
    {
       return new ();

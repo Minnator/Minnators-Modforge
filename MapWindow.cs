@@ -160,7 +160,27 @@ namespace Editor
          //toolStripContainer1.ContentPanel.MouseLeave += OnMouseLeave!;
       }
 
+
+      #region EditGui
+      /// <summary>
+      /// Initializes all Tabs of the EditGui
+      /// </summary>
       private void InitializeEditGui()
+      {
+         InitializeProvinceEditGui();
+      }
+
+      private void InitializeProvinceCollectionEditGui()
+      {
+
+      }
+
+      private void InitializeCountryEditGui()
+      {
+
+      }
+
+      private void InitializeProvinceEditGui()
       {
          // Tooltips for saving Buttons
          _savingButtonsToolTip = new();
@@ -346,6 +366,10 @@ namespace Editor
          InitializeModifierTab();
       }
 
+      #endregion
+
+
+
       private void InitializeModifierTab()
       {
          _modifierComboBox = ControlFactory.GetExtendedComboBox();
@@ -370,6 +394,15 @@ namespace Editor
 
       // ======================== Province GUI Update Methods ========================
       #region Province Gui
+
+      /// <summary>
+      /// Is executed once a province is selected
+      /// </summary>
+      public void ProvinceClick()
+      {
+         LoadSelectedProvincesToGui();
+      }
+
       /// <summary>
       /// This will only load the province attributes to the gui which are shared by all provinces
       /// </summary>
