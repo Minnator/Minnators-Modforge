@@ -1,4 +1,5 @@
 ﻿using Editor.DataClasses.MapModes;
+using Editor.Events;
 using Editor.Helper;
 
 namespace Editor.MapModes;
@@ -7,7 +8,7 @@ public sealed class AreaMapMode : MapMode
 {
    public AreaMapMode()
    {
-
+      // TODO listen to the provinces areas
    }
 
    public override string GetMapModeName()

@@ -1,4 +1,5 @@
-﻿using Editor.DataClasses.GameDataClasses;
+﻿using System.Collections.Generic;
+using Editor.DataClasses.GameDataClasses;
 using Button = System.Windows.Forms.Button;
 
 namespace Editor.Controls;
@@ -11,26 +12,47 @@ public static class ControlFactory
    {
       GreenPlus,
       RedMinus,
-      YellowPlus,
+      OrangePlus,
       RedX
    }
 
    #endregion
 
-   public static Button GetImageButton(ImageButtonType ibType)
+
+   public static CollectionEditor GetCollectionEditor(string name, ItemTypes itemTypes, List<string> comboBoxItems, Func<string, List<string>> onIndexSelectedFunc, Func<string, bool, List<string>> onAddedOrRemovedFunc, Func<string, List<string>> onNewCreated, Action<string> onDeleted)
    {
-      return new()
+      CollectionEditor ce = new (name, itemTypes, onIndexSelectedFunc, onAddedOrRemovedFunc, onNewCreated, onDeleted)
+      {
+         Margin = new(1),
+         Dock = DockStyle.Fill
+      };
+
+      ce.SetComboBoxItems(comboBoxItems);
+
+      return ce;
+   }
+
+   public static Button GetImageButton(ImageButtonType ibType, string toolTip)
+   {
+      Button button = new()
       {
          Text = string.Empty,
          Image = ibType switch
          {
-            ImageButtonType.GreenPlus => Properties.Resources.Up,
-            ImageButtonType.RedMinus => Resources.redMinus,
-            ImageButtonType.YellowPlus => Resources.yellowPlus,
-            ImageButtonType.RedX => Resources.redX,
+            ImageButtonType.GreenPlus => Properties.Resources.GreenPlusBg,
+            ImageButtonType.RedMinus => Properties.Resources.RedMinus,
+            ImageButtonType.OrangePlus => Properties.Resources.OrangePlus,
+            ImageButtonType.RedX => Properties.Resources.RedX,
             _ => null
          },
+         Size = new(30, 30),
+         Dock = DockStyle.Fill,
+         Margin = new(1),
       };
+      
+      Globals.MapWindow.GeneralToolTip.SetToolTip(button, toolTip);
+
+      return button;
    }
 
    public static NumberTextBox GetNumberTextBox()
@@ -83,7 +105,7 @@ public static class ControlFactory
 
    public static ItemList GetItemList(ItemTypes itemType, List<string> items, string title)
    {
-      var list = new ItemList(itemType);
+      var list = new ItemList(itemType, GetTagComboBox());
       list.InitializeItems(items);
       list.SetTitle(title);
       list.Margin = new(3, 1, 3, 3);
@@ -103,7 +125,12 @@ public static class ControlFactory
 
       if (strings.Count > 1)
          return GetItemList(itemType, strings, title);
-      return new (itemType);
+      return new (itemType, GetTagComboBox());
+   }
+
+   public static ItemButton GetItemButton(string item, ItemTypes type)
+   {
+      return new (item, type) { Width = 40 };
    }
 
    public static ItemButton GetTagItemButton(string item, ItemTypes type)
@@ -116,13 +143,17 @@ public static class ControlFactory
       return new (item, type){Width = 75};
    }
 
-   public static ExtendedComboBox GetExtendedComboBox()
+   public static ExtendedComboBox GetExtendedComboBox(bool def = true)
    {
-      return new ()
-      {
-         Margin = new(3, 1, 3, 3)
-      };
+      if (def)
+         return new ()
+         {
+            Margin = new(3, 1, 3, 3)
+         };
+      return new ();
    }
+
+
 
    public static ExtendedNumeric GetExtendedNumeric()
    {

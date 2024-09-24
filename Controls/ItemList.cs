@@ -14,7 +14,7 @@ namespace Editor.Controls
    public partial class ItemList : UserControl
    {
       // This autoupdates when there is a tag added or removed
-      private readonly TagComboBox _itemsComboBox = ControlFactory.GetTagComboBox();
+      private ComboBox _itemsComboBox;
       public event EventHandler<ProvinceEditedEventArgs> OnItemAdded = delegate { };
       public event EventHandler<ProvinceEditedEventArgs> OnItemRemoved = delegate { };
       public ItemTypes ItemType { get; set; }
@@ -24,8 +24,9 @@ namespace Editor.Controls
          InitializeComponent();
       }
 
-      public ItemList(ItemTypes type)
+      public ItemList(ItemTypes type, ComboBox box)
       {
+         _itemsComboBox = box;
          InitializeComponent();
          ItemType = type;
 
@@ -81,7 +82,7 @@ namespace Editor.Controls
          else if (ItemType == ItemTypes.String)
             FlowLayout.Controls.Add(ControlFactory.GetStringItemButton(item, ItemType));
          else if (ItemType == ItemTypes.Id)
-            FlowLayout.Controls.Add(ControlFactory.GetTagItemButton(item, ItemType));
+            FlowLayout.Controls.Add(ControlFactory.GetItemButton(item, ItemType));
          else
             throw new ArgumentOutOfRangeException();
 

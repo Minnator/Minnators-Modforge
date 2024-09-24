@@ -154,13 +154,7 @@
          SaveCurrentSelectionButton = new Button();
          COuntryPage = new TabPage();
          ProvinceGroupsPage = new TabPage();
-         tableLayoutPanel5 = new TableLayoutPanel();
-         tableLayoutPanel6 = new TableLayoutPanel();
-         button1 = new Button();
-         tableLayoutPanel7 = new TableLayoutPanel();
-         button3 = new Button();
-         button2 = new Button();
-         button4 = new Button();
+         ProvinceCollectionsMainLayoutPanel = new TableLayoutPanel();
          GeneralToolTip = new ToolTip(components);
          MapMenuStrip.SuspendLayout();
          toolStrip1.SuspendLayout();
@@ -198,9 +192,6 @@
          TradePanel.SuspendLayout();
          tableLayoutPanel2.SuspendLayout();
          ProvinceGroupsPage.SuspendLayout();
-         tableLayoutPanel5.SuspendLayout();
-         tableLayoutPanel6.SuspendLayout();
-         tableLayoutPanel7.SuspendLayout();
          SuspendLayout();
          // 
          // MapMenuStrip
@@ -1579,7 +1570,7 @@
          // 
          // ProvinceGroupsPage
          // 
-         ProvinceGroupsPage.Controls.Add(tableLayoutPanel5);
+         ProvinceGroupsPage.Controls.Add(ProvinceCollectionsMainLayoutPanel);
          ProvinceGroupsPage.Location = new Point(4, 24);
          ProvinceGroupsPage.Name = "ProvinceGroupsPage";
          ProvinceGroupsPage.Padding = new Padding(3);
@@ -1588,106 +1579,21 @@
          ProvinceGroupsPage.Text = "ProvinceGroups";
          ProvinceGroupsPage.UseVisualStyleBackColor = true;
          // 
-         // tableLayoutPanel5
+         // ProvinceCollectionsMainLayoutPanel
          // 
-         tableLayoutPanel5.ColumnCount = 1;
-         tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-         tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-         tableLayoutPanel5.Controls.Add(tableLayoutPanel6, 0, 0);
-         tableLayoutPanel5.Dock = DockStyle.Fill;
-         tableLayoutPanel5.Location = new Point(3, 3);
-         tableLayoutPanel5.Margin = new Padding(0);
-         tableLayoutPanel5.Name = "tableLayoutPanel5";
-         tableLayoutPanel5.RowCount = 3;
-         tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 200F));
-         tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 357F));
-         tableLayoutPanel5.Size = new Size(386, 816);
-         tableLayoutPanel5.TabIndex = 0;
-         // 
-         // tableLayoutPanel6
-         // 
-         tableLayoutPanel6.ColumnCount = 2;
-         tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-         tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 30F));
-         tableLayoutPanel6.Controls.Add(button1, 1, 0);
-         tableLayoutPanel6.Controls.Add(tableLayoutPanel7, 1, 2);
-         tableLayoutPanel6.Controls.Add(button4, 1, 1);
-         tableLayoutPanel6.Dock = DockStyle.Fill;
-         tableLayoutPanel6.Location = new Point(0, 0);
-         tableLayoutPanel6.Margin = new Padding(0);
-         tableLayoutPanel6.Name = "tableLayoutPanel6";
-         tableLayoutPanel6.RowCount = 3;
-         tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-         tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-         tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         tableLayoutPanel6.Size = new Size(386, 200);
-         tableLayoutPanel6.TabIndex = 0;
-         // 
-         // button1
-         // 
-         button1.Dock = DockStyle.Fill;
-         button1.Image = (Image)resources.GetObject("button1.Image");
-         button1.Location = new Point(357, 1);
-         button1.Margin = new Padding(1);
-         button1.Name = "button1";
-         button1.Size = new Size(28, 28);
-         button1.TabIndex = 0;
-         GeneralToolTip.SetToolTip(button1, "Add to current area");
-         button1.UseVisualStyleBackColor = true;
-         // 
-         // tableLayoutPanel7
-         // 
-         tableLayoutPanel7.ColumnCount = 1;
-         tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-         tableLayoutPanel7.Controls.Add(button3, 0, 0);
-         tableLayoutPanel7.Controls.Add(button2, 0, 1);
-         tableLayoutPanel7.Dock = DockStyle.Fill;
-         tableLayoutPanel7.Location = new Point(356, 60);
-         tableLayoutPanel7.Margin = new Padding(0);
-         tableLayoutPanel7.Name = "tableLayoutPanel7";
-         tableLayoutPanel7.RowCount = 3;
-         tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-         tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-         tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         tableLayoutPanel7.Size = new Size(30, 140);
-         tableLayoutPanel7.TabIndex = 2;
-         // 
-         // button3
-         // 
-         button3.Dock = DockStyle.Fill;
-         button3.Image = (Image)resources.GetObject("button3.Image");
-         button3.Location = new Point(1, 1);
-         button3.Margin = new Padding(1);
-         button3.Name = "button3";
-         button3.Size = new Size(28, 28);
-         button3.TabIndex = 0;
-         GeneralToolTip.SetToolTip(button3, "Create new area with the current name");
-         button3.UseVisualStyleBackColor = true;
-         // 
-         // button2
-         // 
-         button2.Dock = DockStyle.Fill;
-         button2.Image = (Image)resources.GetObject("button2.Image");
-         button2.Location = new Point(1, 31);
-         button2.Margin = new Padding(1);
-         button2.Name = "button2";
-         button2.Size = new Size(28, 28);
-         button2.TabIndex = 1;
-         GeneralToolTip.SetToolTip(button2, "Delete current area");
-         button2.UseVisualStyleBackColor = true;
-         // 
-         // button4
-         // 
-         button4.Dock = DockStyle.Fill;
-         button4.Image = (Image)resources.GetObject("button4.Image");
-         button4.Location = new Point(357, 31);
-         button4.Margin = new Padding(1);
-         button4.Name = "button4";
-         button4.Size = new Size(28, 28);
-         button4.TabIndex = 1;
-         GeneralToolTip.SetToolTip(button4, "Remove from current area");
-         button4.UseVisualStyleBackColor = true;
+         ProvinceCollectionsMainLayoutPanel.ColumnCount = 1;
+         ProvinceCollectionsMainLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         ProvinceCollectionsMainLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+         ProvinceCollectionsMainLayoutPanel.Dock = DockStyle.Fill;
+         ProvinceCollectionsMainLayoutPanel.Location = new Point(3, 3);
+         ProvinceCollectionsMainLayoutPanel.Margin = new Padding(0);
+         ProvinceCollectionsMainLayoutPanel.Name = "ProvinceCollectionsMainLayoutPanel";
+         ProvinceCollectionsMainLayoutPanel.RowCount = 3;
+         ProvinceCollectionsMainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 200F));
+         ProvinceCollectionsMainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         ProvinceCollectionsMainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 357F));
+         ProvinceCollectionsMainLayoutPanel.Size = new Size(386, 816);
+         ProvinceCollectionsMainLayoutPanel.TabIndex = 0;
          // 
          // MapWindow
          // 
@@ -1762,9 +1668,6 @@
          TradePanel.PerformLayout();
          tableLayoutPanel2.ResumeLayout(false);
          ProvinceGroupsPage.ResumeLayout(false);
-         tableLayoutPanel5.ResumeLayout(false);
-         tableLayoutPanel6.ResumeLayout(false);
-         tableLayoutPanel7.ResumeLayout(false);
          ResumeLayout(false);
          PerformLayout();
       }
@@ -1897,14 +1800,8 @@
       private ListView ModifiersListView;
       private Button AddModifierButton;
       private Button DeleteModifierButton;
-      private TableLayoutPanel tableLayoutPanel5;
-      private TableLayoutPanel tableLayoutPanel6;
-      private Button button1;
-      private Button button2;
-      private TableLayoutPanel tableLayoutPanel7;
-      private Button button3;
-      private Button button4;
-      private ToolTip GeneralToolTip;
+      private TableLayoutPanel ProvinceCollectionsMainLayoutPanel;
+      public ToolTip GeneralToolTip;
    }
 }
 

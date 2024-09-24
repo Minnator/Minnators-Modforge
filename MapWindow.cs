@@ -46,6 +46,8 @@ namespace Editor
       private NumberTextBox _nativeHostilityTextBox;
 
       private ToolTip _savingButtonsToolTip;
+
+      private CollectionEditor _areaEditingGui;
       #endregion
 
       public PannablePictureBox MapPictureBox = null!;
@@ -168,11 +170,81 @@ namespace Editor
       private void InitializeEditGui()
       {
          InitializeProvinceEditGui();
+         InitializeProvinceCollectionEditGui();
+         InitializeCountryEditGui();
       }
 
       private void InitializeProvinceCollectionEditGui()
       {
+         _areaEditingGui = ControlFactory.GetCollectionEditor("Area", ItemTypes.Id, [..Globals.Areas.Keys], 
+            s => // An Area is selected
+            {
+               List<string> provName = [];
+               Globals.Selection.Clear();
+               if (Globals.Areas.TryGetValue(s, out var area))
+               {
+                  for (var i = 0; i < area.Provinces.Length; i++)
+                     provName.Add(area.Provinces[i].ToString());
+                  Globals.Selection.AddRange(area.Provinces);
+               }
+               return provName;
+            },
+            (s, b) =>
+            {
+               if (!Globals.Areas.TryGetValue(s, out var area))
+                  return [];
 
+               if (b) // Add to area provinces
+               {
+                  var newProvIds = new int[Globals.Selection.Count + area.Provinces.Length];
+                  area.Provinces.CopyTo(newProvIds, 0);
+                  Globals.Selection.GetSelectedProvincesIds.CopyTo(newProvIds, area.Provinces.Length);
+                  area.Provinces = newProvIds;
+                  foreach (var prov in Globals.Selection.GetSelectedProvinces)
+                     prov.Area = s;
+               }
+               else // Remove from area provinces
+               {
+                  foreach (var prov in Globals.Selection.GetSelectedProvinces)
+                     prov.Area = string.Empty;
+
+                  area.Provinces = area.Provinces.Except(Globals.Selection.GetSelectedProvincesIds).ToArray();
+               }
+               List<string> provName = [];
+               for (var i = 0; i < area.Provinces.Length; i++)
+                  provName.Add(area.Provinces[i].ToString());
+               return provName;
+            },
+            s => // A new Area is created
+            {
+               if (Globals.Areas.ContainsKey(s))
+               {
+                  MessageBox.Show("Area already exists", "Error", MessageBoxButtons.OK);
+                  return [];
+               }
+
+               Globals.Areas.Add(s, new (s, Globals.Selection.GetSelectedProvincesIds, Globals.ColorProvider.GetRandomColor()));
+               foreach (var prov in Globals.Selection.GetSelectedProvinces)
+                  prov.Area = s;
+
+               List<string> provName = [];
+               for (var i = 0; i < Globals.Selection.GetSelectedProvinces.Count; i++)
+                  provName.Add(Globals.Selection.GetSelectedProvinces[i].ToString());
+               return provName;
+            },
+            s => // An Area is deleted
+            {
+               if (!Globals.Areas.TryGetValue(s, out var area))
+                  return;
+
+               foreach (var prov in Globals.Selection.GetSelectedProvinces)
+                  prov.Area = string.Empty;
+
+               Globals.Areas.Remove(s);
+            }
+         );
+
+         ProvinceCollectionsMainLayoutPanel.Controls.Add(_areaEditingGui, 0, 0);
       }
 
       private void InitializeCountryEditGui()
