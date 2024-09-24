@@ -241,6 +241,19 @@ namespace Editor
                   prov.Area = string.Empty;
 
                Globals.Areas.Remove(s);
+            },
+            (s, idStr) => // A single province is removed from an area
+            {
+               if (!Globals.Areas.TryGetValue(s, out var area) || !int.TryParse(idStr, out var id))
+                  return;
+
+               if (!Globals.Provinces.TryGetValue(id, out var prov))
+                  return;
+
+               prov.Area = string.Empty;
+               area.Provinces = area.Provinces.Except([id]).ToArray();
+
+               Globals.Selection.Remove(id);
             }
          );
 

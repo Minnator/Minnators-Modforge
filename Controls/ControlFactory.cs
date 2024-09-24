@@ -19,9 +19,9 @@ public static class ControlFactory
    #endregion
 
 
-   public static CollectionEditor GetCollectionEditor(string name, ItemTypes itemTypes, List<string> comboBoxItems, Func<string, List<string>> onIndexSelectedFunc, Func<string, bool, List<string>> onAddedOrRemovedFunc, Func<string, List<string>> onNewCreated, Action<string> onDeleted)
+   public static CollectionEditor GetCollectionEditor(string name, ItemTypes itemTypes, List<string> comboBoxItems, Func<string, List<string>> onIndexSelectedFunc, Func<string, bool, List<string>> onAddedOrRemovedFunc, Func<string, List<string>> onNewCreated, Action<string> onDeleted, Action<string, string> onSingleRemoved)
    {
-      CollectionEditor ce = new (name, itemTypes, onIndexSelectedFunc, onAddedOrRemovedFunc, onNewCreated, onDeleted)
+      CollectionEditor ce = new (name, itemTypes, onIndexSelectedFunc, onAddedOrRemovedFunc, onNewCreated, onDeleted, onSingleRemoved)
       {
          Margin = new(1),
          Dock = DockStyle.Fill
@@ -130,7 +130,7 @@ public static class ControlFactory
 
    public static ItemButton GetItemButton(string item, ItemTypes type)
    {
-      return new (item, type) { Width = 40 };
+      return new (item, type) { Width = 43 };
    }
 
    public static ItemButton GetTagItemButton(string item, ItemTypes type)

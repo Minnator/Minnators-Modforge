@@ -125,6 +125,8 @@ namespace Editor.Controls
       public string Item { get; set; }
       private ToolTip _toolTip = null!;
 
+      public EventHandler<string>? OnButtonClicked = delegate { };
+
       public ItemButton(string item, ItemTypes itemType)
       {
          Item = item;
@@ -136,6 +138,7 @@ namespace Editor.Controls
 
       protected override void OnMouseClick(MouseEventArgs e)
       {
+         OnButtonClicked?.Invoke(this, Item);
          _toolTip?.RemoveAll();
          _toolTip?.Dispose();
          var parent = Parent?.Parent?.Parent as ItemList;

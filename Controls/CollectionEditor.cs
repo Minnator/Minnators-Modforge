@@ -1,4 +1,5 @@
-﻿using Editor.Events;
+﻿using System.Diagnostics;
+using Editor.Events;
 
 namespace Editor.Controls
 {
@@ -18,10 +19,11 @@ namespace Editor.Controls
       private Func<string, bool, List<string>> _onAddedOrRemovedFunc; // Item name, add or remove, returns list of items to add as buttons
       private Func<string, List<string>> _onNewCreated; // Item name, returns list of items to add as buttons
       private Action<string> _onDeleted; // Item name
+      private Action<string, string> _onSingleRemoved;
 
       private ItemTypes _itemTypes;
 
-      public CollectionEditor(string name, ItemTypes itemTypes, Func<string, List<string>> onSelectionAction, Func<string, bool, List<string>> onAddedOrRemovedFunc, Func<string, List<string>> onNewCreated, Action<string> onDeleted)
+      public CollectionEditor(string name, ItemTypes itemTypes, Func<string, List<string>> onSelectionAction, Func<string, bool, List<string>> onAddedOrRemovedFunc, Func<string, List<string>> onNewCreated, Action<string> onDeleted, Action<string, string> onSingleRemoved)
       {
          _itemTypes = itemTypes;
          InitializeComponents(name);
@@ -29,6 +31,7 @@ namespace Editor.Controls
          _onAddedOrRemovedFunc = onAddedOrRemovedFunc;
          _onNewCreated = onNewCreated;
          _onDeleted = onDeleted;
+         _onSingleRemoved = onSingleRemoved;
       }
 
       private void InitializeComponents(string name)
@@ -55,7 +58,7 @@ namespace Editor.Controls
             ColumnCount = 1,
             Dock = DockStyle.Fill,
             Margin = new(0),
-            RowStyles = { new(SizeType.Absolute, 30) },
+            RowStyles = { new(SizeType.Absolute, 30), new (SizeType.Percent, Width = 100) },
          };
 
          _nameTlp = new()
@@ -91,9 +94,10 @@ namespace Editor.Controls
          _flowLayout = new()
          {
             Dock = DockStyle.Fill,
-            AutoScroll = true,
             WrapContents = true,
             Margin = new(3, 1, 3, 3),
+            BorderStyle = BorderStyle.FixedSingle,
+            AutoScroll = true,
          };
 
          _nameTlp.Controls.Add(_titleLabel, 0, 0);
@@ -116,14 +120,19 @@ namespace Editor.Controls
             return;
 
          if (e.Button == MouseButtons.Left)
+         {
             AddItemsUnique(_onAddedOrRemovedFunc.Invoke(item, true));
+         }
          else if (e.Button == MouseButtons.Right)
          {
             Clear();
             AddItemsUnique(_onNewCreated.Invoke(item));
             _extendedComboBox.Items.Add(item);
-            _extendedComboBox.SelectedItem = item;
+            _extendedComboBox.AutoCompleteCustomSource.Add(item);
          }
+         _extendedComboBox.Text = item;
+         _extendedComboBox.SelectionStart = 0;
+         _extendedComboBox.SelectionLength = item.Length;
       }
 
       private void OnRemoveButtonClick(object? sender, MouseEventArgs e)
@@ -133,12 +142,22 @@ namespace Editor.Controls
             return;
 
          if (e.Button == MouseButtons.Left)
+         {
+            Clear();
             AddItemsUnique(_onAddedOrRemovedFunc.Invoke(item, false));
+            _extendedComboBox.Text = item;
+            _extendedComboBox.SelectionStart = 0;
+            _extendedComboBox.SelectionLength = item.Length;
+         }
          else if (e.Button == MouseButtons.Right)
          {
             Clear();
             _onDeleted.Invoke(item);
             _extendedComboBox.Items.Remove(item);
+            // Needs to be set to None to delete the item from the cashed? autocomplete list
+            _extendedComboBox.AutoCompleteMode = AutoCompleteMode.None;
+            _extendedComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            _extendedComboBox.AutoCompleteCustomSource.Remove(item);
          }
       }
 
@@ -154,6 +173,16 @@ namespace Editor.Controls
          _extendedComboBox.Text = item;
       }
 
+      private void OnSingleRemoved(object? sender, string item)
+      {
+         var text = _extendedComboBox.Text;
+         if (string.IsNullOrWhiteSpace(text))
+         {
+            AddItem(item);
+            return;
+         }
+         _onSingleRemoved.Invoke(text, item);
+      }
 
       public void SetComboBoxItems(List<string> items)
       {
@@ -161,17 +190,6 @@ namespace Editor.Controls
          _extendedComboBox.Items.Clear();
          foreach (var item in items)
             _extendedComboBox.Items.Add(item);
-      }
-
-      public void AddToComboBoxItems(string newItem)
-      {
-         _extendedComboBox.Items.Add(newItem);
-         _extendedComboBox.SelectedItem = newItem;
-      }
-
-      public void RemoveItemFromComboBox(string item)
-      {
-         _extendedComboBox.Items.Remove(item);
       }
 
       public void InitializeItems(List<string> items)
@@ -210,7 +228,9 @@ namespace Editor.Controls
 
       public void AddItem(string item)
       {
-         _flowLayout.Controls.Add(ControlFactory.GetItemButton(item, _itemTypes));
+         var button = ControlFactory.GetItemButton(item, _itemTypes);
+         button.OnButtonClicked += OnSingleRemoved;
+         _flowLayout.Controls.Add(button);
 
          OnItemAdded?.Invoke(this, new(Globals.Selection.GetSelectedProvinces, item));
 

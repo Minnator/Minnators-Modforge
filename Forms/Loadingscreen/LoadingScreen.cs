@@ -44,10 +44,13 @@ namespace Editor.Forms.Loadingscreen
 
       private void StartLoadingAnimation()
       {
+         /*
          if (!GifToBytes.ConvertFormattedHexToBytes(StaticByteResources.LOADING_GIF, out var bytes))
             throw new ArgumentException("Can not convert loading animation");
          _ms = new (bytes);
          LoadingAnimation.Image = Image.FromStream(_ms);
+         */
+         LoadingAnimation.Image = Properties.Resources.LoadingGif;
          LoadingAnimation.SizeMode = PictureBoxSizeMode.Zoom;
       }
       
