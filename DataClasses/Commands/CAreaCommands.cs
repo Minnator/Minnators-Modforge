@@ -26,15 +26,15 @@ namespace Editor.DataClasses.Commands
             return;
          if (_add) // Add to area provinces
          {
-            var newProvIds = new int[_deltaProvinces.Count + area.Provinces.Length];
-            area.Provinces.CopyTo(newProvIds, 0);
-            _deltaProvinces.CopyTo(newProvIds, area.Provinces.Length);
+            var newProvIds = area.Provinces.Union(_deltaProvinces).ToArray();
             area.Provinces = newProvIds;
             foreach (var prov in _deltaProvinces)
             {
                if (!Globals.Provinces.TryGetValue(prov, out var province))
                   continue;
                _oldAreasPerId.Add(new (prov, province.Area));
+               if (Globals.Areas.TryGetValue(province.Area, out var oldArea)) 
+                  oldArea.Provinces = oldArea.Provinces.Except([prov]).ToArray();
                province.Area = _areaName;
             }
          }
@@ -45,7 +45,10 @@ namespace Editor.DataClasses.Commands
                if (!Globals.Provinces.TryGetValue(prov, out var province))
                   continue;
                _oldAreasPerId.Add(new (prov, province.Area));
+               if (Globals.Areas.TryGetValue(province.Area, out var oldArea))
+                  oldArea.Provinces = oldArea.Provinces.Except([prov]).ToArray();
                province.Area = string.Empty;
+
             }
             area.Provinces = area.Provinces.Except(_deltaProvinces).ToArray();
          }
@@ -53,7 +56,7 @@ namespace Editor.DataClasses.Commands
 
       public void Undo()
       {
-         if (!Globals.Areas.TryGetValue(_areaName, out var area))
+         if (!Globals.Areas.TryGetValue(_areaName, out _))
             return;
 
          foreach (var kvp in _oldAreasPerId)
@@ -61,6 +64,8 @@ namespace Editor.DataClasses.Commands
             if (!Globals.Provinces.TryGetValue(kvp.Key, out var province))
                continue;
             province.Area = kvp.Value;
+            if (Globals.Areas.TryGetValue(kvp.Value, out var oldArea))
+               oldArea.Provinces = oldArea.Provinces.Union([kvp.Key]).ToArray();
          }
       }
 
@@ -103,6 +108,8 @@ namespace Editor.DataClasses.Commands
             if (!Globals.Provinces.TryGetValue(prov, out var province))
                continue;
             _oldAreasPerId.Add(new (prov, province.Area));
+            if (Globals.Areas.TryGetValue(province.Area, out var oldArea))
+               oldArea.Provinces = oldArea.Provinces.Except([prov]).ToArray();
             province.Area = _areaName;
          }
       }
@@ -117,6 +124,8 @@ namespace Editor.DataClasses.Commands
             if (!Globals.Provinces.TryGetValue(kvp.Key, out var province))
                continue;
             province.Area = kvp.Value;
+            if (Globals.Areas.TryGetValue(kvp.Value, out var oldArea))
+               oldArea.Provinces = oldArea.Provinces.Union([kvp.Key]).ToArray();
          }
       }
 

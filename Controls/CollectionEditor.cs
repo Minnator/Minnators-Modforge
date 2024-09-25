@@ -21,10 +21,13 @@ namespace Editor.Controls
       private Action<string> _onDeleted; // Item name
       private Action<string, string> _onSingleRemoved;
 
+      private string _name;
+
       private ItemTypes _itemTypes;
 
       public CollectionEditor(string name, ItemTypes itemTypes, Func<string, List<string>> onSelectionAction, Func<string, bool, List<string>> onAddedOrRemovedFunc, Func<string, List<string>> onNewCreated, Action<string> onDeleted, Action<string, string> onSingleRemoved)
       {
+         _name = name;
          _itemTypes = itemTypes;
          InitializeComponents(name);
          _onSelectionAction = onSelectionAction;
@@ -125,10 +128,18 @@ namespace Editor.Controls
          }
          else if (e.Button == MouseButtons.Right)
          {
+            if (Globals.Areas.ContainsKey(item))
+            {
+               MessageBox.Show($"{_name} already exists", "Error", MessageBoxButtons.OK);
+               return;
+            }
             Clear();
             AddItemsUnique(_onNewCreated.Invoke(item));
             _extendedComboBox.Items.Add(item);
             _extendedComboBox.AutoCompleteCustomSource.Add(item);
+            // Needs to be set to None to delete the item from the cashed? autocomplete list
+            _extendedComboBox.AutoCompleteMode = AutoCompleteMode.None;
+            _extendedComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
          }
          _extendedComboBox.Text = item;
          _extendedComboBox.SelectionStart = 0;

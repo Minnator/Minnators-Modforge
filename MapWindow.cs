@@ -6,6 +6,7 @@ using System.Text.Json;
 using ABI.Windows.UI.Core;
 using Editor.Controls;
 using Editor.DataClasses;
+using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Events;
 using Editor.Forms;
@@ -201,22 +202,8 @@ namespace Editor
                if (!Globals.Areas.TryGetValue(s, out var area))
                   return [];
 
-               if (b) // Add to area provinces
-               {
-                  var newProvIds = new int[Globals.Selection.Count + area.Provinces.Length];
-                  area.Provinces.CopyTo(newProvIds, 0);
-                  Globals.Selection.GetSelectedProvincesIds.CopyTo(newProvIds, area.Provinces.Length);
-                  area.Provinces = newProvIds;
-                  foreach (var prov in Globals.Selection.GetSelectedProvinces)
-                     prov.Area = s;
-               }
-               else // Remove from area provinces
-               {
-                  foreach (var prov in Globals.Selection.GetSelectedProvinces)
-                     prov.Area = string.Empty;
+               Globals.HistoryManager.AddCommand(new CModifyExitingArea(s, Globals.Selection.SelectedProvinces, b));
 
-                  area.Provinces = area.Provinces.Except(Globals.Selection.GetSelectedProvincesIds).ToArray();
-               }
                List<string> provName = [];
                for (var i = 0; i < area.Provinces.Length; i++)
                   provName.Add(area.Provinces[i].ToString());
@@ -224,15 +211,7 @@ namespace Editor
             },
             s => // A new Area is created
             {
-               if (Globals.Areas.ContainsKey(s))
-               {
-                  MessageBox.Show("Area already exists", "Error", MessageBoxButtons.OK);
-                  return [];
-               }
-
-               Globals.Areas.Add(s, new(s, Globals.Selection.GetSelectedProvincesIds, Globals.ColorProvider.GetRandomColor()));
-               foreach (var prov in Globals.Selection.GetSelectedProvinces)
-                  prov.Area = s;
+               Globals.HistoryManager.AddCommand(new CCreateNewArea(s, Globals.Selection.SelectedProvinces));
 
                List<string> provName = [];
                for (var i = 0; i < Globals.Selection.GetSelectedProvinces.Count; i++)
@@ -241,13 +220,10 @@ namespace Editor
             },
             s => // An Area is deleted
             {
-               if (!Globals.Areas.TryGetValue(s, out var area))
+               if (!Globals.Areas.TryGetValue(s, out _))
                   return;
 
-               foreach (var prov in Globals.Selection.GetSelectedProvinces)
-                  prov.Area = string.Empty;
-
-               Globals.Areas.Remove(s);
+               Globals.HistoryManager.AddCommand(new CRemoveArea(s));
             },
             (s, idStr) => // A single province is removed from an area
             {
@@ -257,10 +233,7 @@ namespace Editor
                if (!Globals.Provinces.TryGetValue(id, out var prov))
                   return;
 
-               prov.Area = string.Empty;
-               area.Provinces = area.Provinces.Except([id]).ToArray();
-
-               Globals.Selection.Remove(id);
+               Globals.HistoryManager.AddCommand(new CModifyExitingArea(s, [id], false));
             }
          );
 
