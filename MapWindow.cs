@@ -129,12 +129,6 @@ namespace Editor
          Globals.LoadingLog.WriteTimeStamp("Initializing MapModes", sw.ElapsedMilliseconds);
       }
 
-      private void RunEnterPathForm()
-      {
-         epf = new();
-         epf.ShowDialog();
-      }
-
       private void RunLoadingScreen()
       {
          ls = new();
@@ -174,7 +168,7 @@ namespace Editor
 
       private void InitializeProvinceCollectionEditGui()
       {
-         _areaEditingGui = ControlFactory.GetCollectionEditor("Area", ItemTypes.Id, [.. Globals.Areas.Keys],
+         _areaEditingGui = ControlFactory.GetCollectionEditor("Area", "Areas", ItemTypes.Id, [.. Globals.Areas.Keys],
             s => // An Area is selected
             {
                List<string> provName = [];
@@ -226,9 +220,47 @@ namespace Editor
                Globals.HistoryManager.AddCommand(new CModifyExitingArea(s, [id], false));
             }
          );
-
          ProvinceCollectionsMainLayoutPanel.Controls.Add(_areaEditingGui, 0, 0);
 
+         _regionEditingGui = ControlFactory.GetCollectionEditor("Region", "Regions", ItemTypes.String, [.. Globals.Regions.Keys],
+            s =>
+            {
+               Globals.Selection.Clear();
+               if (Globals.Regions.TryGetValue(s, out var region))
+               {
+                  Globals.Selection.AddRange(region.GetProvinceIds());
+                  return region.Areas;
+               }
+               return [];
+            }, // A Region is selected
+            (s, b) =>
+            {
+               if (!Globals.Regions.TryGetValue(s, out var region))
+                  return [];
+
+               List<string> uniqueAreaNames = [];
+               for (var i = 0; i < Globals.Selection.GetSelectedProvinces.Count; i++)
+                  if (!uniqueAreaNames.Contains(Globals.Selection.GetSelectedProvinces[i].Area))
+                     uniqueAreaNames.Add(Globals.Selection.GetSelectedProvinces[i].Area);
+
+               Globals.HistoryManager.AddCommand(new CModifyExistingRegion(s, uniqueAreaNames, b));
+
+               return region.Areas;
+            }, // A Region is modified
+            s =>
+            {
+               if (!Globals.Regions.TryGetValue(s, out var region))
+                  return [];
+
+               // Globals.HistoryManager.AddCommand(new CCreateNewRegion(s, Globals.Selection.SelectedProvinces));
+               if (Globals.Regions.TryGetValue(s, out var newRegion))
+                  return newRegion.Areas;
+               return [];
+            }, // A new Region is created
+            s => {}, // A Region is deleted
+            (s, idStr) => {} // A single area is removed from a region
+         );
+         ProvinceCollectionsMainLayoutPanel.Controls.Add(_regionEditingGui, 0, 1);
 
       }
 

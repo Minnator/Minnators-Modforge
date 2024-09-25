@@ -1,13 +1,27 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using Editor.Events;
 using Editor.Interfaces;
 
 namespace Editor.DataClasses.GameDataClasses;
 #nullable enable
 public class Region(string name) : IProvinceCollection
 {
+   private List<string> _areas = [];
    public string Name { get; } = name;
-   public List<string> Areas { get; set; } = [];
+
+   public List<string> Areas
+   {
+      get => _areas;
+      init
+      {
+         foreach (var area in value)
+         {
+            ModifyAreaCollection(area, true);
+         }
+      }
+   }
+
    public List<Monsoon> Monsoon { get; set; } = [];
    public string SuperRegion { get; set; } = string.Empty;
    public Color Color { get; set; }
@@ -20,6 +34,35 @@ public class Region(string name) : IProvinceCollection
    public Region(string name, List<string> areas, List<Monsoon> monsoon) : this(name, areas)
    {
       Monsoon = monsoon;
+   }
+
+   public void AddArea(string areaName)
+   {
+      ModifyAreaCollection(areaName, true);
+   }
+
+   public void RemoveArea(string areaName)
+   {
+      ModifyAreaCollection(areaName, false);
+   }
+
+   private void ModifyAreaCollection(string areaName, bool add)
+   {
+
+      if (add)
+      {
+         if (!_areas.Contains(areaName))
+            _areas.Add(areaName);
+      }
+      else
+      {
+         if (_areas.Contains(areaName))
+            _areas.Remove(areaName);
+      }
+      if (Globals.State == State.Running)
+         if (Globals.Areas.TryGetValue(areaName, out var area))
+            foreach (var id in area.GetProvinceIds())
+               ProvinceEventHandler.RaiseProvinceRegionAreasChanged(id, _areas, nameof(Areas));
    }
 
    public override bool Equals(object? obj)

@@ -1596,8 +1596,8 @@
          ProvinceCollectionsMainLayoutPanel.Margin = new Padding(0);
          ProvinceCollectionsMainLayoutPanel.Name = "ProvinceCollectionsMainLayoutPanel";
          ProvinceCollectionsMainLayoutPanel.RowCount = 4;
-         ProvinceCollectionsMainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 113F));
-         ProvinceCollectionsMainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 113F));
+         ProvinceCollectionsMainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 123F));
+         ProvinceCollectionsMainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
          ProvinceCollectionsMainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
          ProvinceCollectionsMainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 357F));
          ProvinceCollectionsMainLayoutPanel.Size = new Size(386, 816);

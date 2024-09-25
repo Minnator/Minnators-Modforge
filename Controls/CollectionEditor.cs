@@ -22,13 +22,15 @@ namespace Editor.Controls
       private Action<string, string> _onSingleRemoved;
 
       private string _name;
+      private string _mapModeName;
 
       private ItemTypes _itemTypes;
 
       // TODO add a small button to flip to the according MapMode
-      public CollectionEditor(string name, ItemTypes itemTypes, Func<string, List<string>> onSelectionAction, Func<string, bool, List<string>> onAddedOrRemovedFunc, Func<string, List<string>> onNewCreated, Action<string> onDeleted, Action<string, string> onSingleRemoved)
+      public CollectionEditor(string name, string mapModeName, ItemTypes itemTypes, Func<string, List<string>> onSelectionAction, Func<string, bool, List<string>> onAddedOrRemovedFunc, Func<string, List<string>> onNewCreated, Action<string> onDeleted, Action<string, string> onSingleRemoved)
       {
          _name = name;
+         _mapModeName = mapModeName;
          _itemTypes = itemTypes;
          InitializeComponents(name);
          _onSelectionAction = onSelectionAction;
@@ -68,13 +70,14 @@ namespace Editor.Controls
          _nameTlp = new()
          {
             RowCount = 1,
-            ColumnCount = 4,
+            ColumnCount = 5,
             Dock = DockStyle.Fill,
             Margin = new(0),
             ColumnStyles =
             {
-               new(SizeType.Percent, 40),
-               new(SizeType.Percent, 60),
+               new(SizeType.Percent, 30),
+               new(SizeType.Absolute, 30),
+               new(SizeType.Percent, 70),
                new(SizeType.Absolute, 30),
                new(SizeType.Absolute, 30),
             },
@@ -83,8 +86,11 @@ namespace Editor.Controls
          var addButton = ControlFactory.GetImageButton(ControlFactory.ImageButtonType.GreenPlus, "Add selection to current collection\n'right click' to create new collection from selection");
          addButton.MouseUp += OnAddButtonClick;
 
-         var removeButton = ControlFactory.GetImageButton(ControlFactory.ImageButtonType.RedMinus, "Remove selection from current collection");
+         var removeButton = ControlFactory.GetImageButton(ControlFactory.ImageButtonType.RedMinus, "Remove selection from current collection\n'right click' to delete the entire area");
          removeButton.MouseUp += OnRemoveButtonClick;
+
+         var mapModeButton = ControlFactory.GetImageButton(ControlFactory.ImageButtonType.Map, "Switch to the according map mode");
+         mapModeButton.MouseUp += SwitchToMapMode;
 
          _extendedComboBox = new()
          {
@@ -105,9 +111,10 @@ namespace Editor.Controls
          };
 
          _nameTlp.Controls.Add(_titleLabel, 0, 0);
-         _nameTlp.Controls.Add(_extendedComboBox, 1, 0);
-         _nameTlp.Controls.Add(addButton, 2, 0);
-         _nameTlp.Controls.Add(removeButton, 3, 0);
+         _nameTlp.Controls.Add(mapModeButton, 1, 0);
+         _nameTlp.Controls.Add(_extendedComboBox, 2, 0);
+         _nameTlp.Controls.Add(addButton, 3, 0);
+         _nameTlp.Controls.Add(removeButton, 4, 0);
 
          _tlp.Controls.Add(_nameTlp, 0, 0);
          _tlp.Controls.Add(_flowLayout, 0, 1);
@@ -115,6 +122,11 @@ namespace Editor.Controls
          _groupBox.Controls.Add(_tlp);
 
          Controls.Add(_groupBox);
+      }
+
+      private void SwitchToMapMode(object? sender, MouseEventArgs e)
+      {
+         Globals.MapModeManager.SetCurrentMapMode(_mapModeName);
       }
 
       private void OnAddButtonClick(object? sender, MouseEventArgs e)
@@ -240,7 +252,12 @@ namespace Editor.Controls
 
       public void AddItem(string item)
       {
-         var button = ControlFactory.GetItemButton(item, _itemTypes);
+         ItemButton button = null!;
+         if (_itemTypes == ItemTypes.Id)
+            button = ControlFactory.GetItemButton(item, _itemTypes);
+         else if (_itemTypes ==ItemTypes.String)
+            button = ControlFactory.GetItemButtonLong(item, _itemTypes);
+
          button.OnButtonClicked += OnSingleRemoved;
          _flowLayout.Controls.Add(button);
 

@@ -361,4 +361,12 @@ public static class ProvinceEventHandler
       OnProvinceProsperityChanged.Invoke(id, new(value, propertyName));
       RaiseProvinceDataChanged(id, value, propertyName);
    }
+
+   // Region Areas set
+   public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceRegionAreasChanged = delegate { };
+   public static void RaiseProvinceRegionAreasChanged(int id, object value, string propertyName)
+   {
+      OnProvinceRegionAreasChanged.Invoke(id, new(value, propertyName));
+      RaiseProvinceDataChanged(id, value, propertyName);
+   }
 }

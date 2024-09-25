@@ -13,15 +13,16 @@ public static class ControlFactory
       GreenPlus,
       RedMinus,
       OrangePlus,
-      RedX
+      RedX,
+      Map
    }
 
    #endregion
 
 
-   public static CollectionEditor GetCollectionEditor(string name, ItemTypes itemTypes, List<string> comboBoxItems, Func<string, List<string>> onIndexSelectedFunc, Func<string, bool, List<string>> onAddedOrRemovedFunc, Func<string, List<string>> onNewCreated, Action<string> onDeleted, Action<string, string> onSingleRemoved)
+   public static CollectionEditor GetCollectionEditor(string name, string mapModeName, ItemTypes itemTypes, List<string> comboBoxItems, Func<string, List<string>> onIndexSelectedFunc, Func<string, bool, List<string>> onAddedOrRemovedFunc, Func<string, List<string>> onNewCreated, Action<string> onDeleted, Action<string, string> onSingleRemoved)
    {
-      CollectionEditor ce = new (name, itemTypes, onIndexSelectedFunc, onAddedOrRemovedFunc, onNewCreated, onDeleted, onSingleRemoved)
+      CollectionEditor ce = new (name, mapModeName, itemTypes, onIndexSelectedFunc, onAddedOrRemovedFunc, onNewCreated, onDeleted, onSingleRemoved)
       {
          Margin = new(1),
          Dock = DockStyle.Fill
@@ -43,11 +44,12 @@ public static class ControlFactory
             ImageButtonType.RedMinus => Properties.Resources.RedMinus,
             ImageButtonType.OrangePlus => Properties.Resources.OrangePlus,
             ImageButtonType.RedX => Properties.Resources.RedX,
+            ImageButtonType.Map => Properties.Resources.map,
             _ => null
          },
-         Size = new(30, 30),
+         Size = new(26, 26),
          Dock = DockStyle.Fill,
-         Margin = new(1),
+         Margin = new(1, 3, 1, 3),
       };
       
       Globals.MapWindow.GeneralToolTip.SetToolTip(button, toolTip);
@@ -130,7 +132,12 @@ public static class ControlFactory
 
    public static ItemButton GetItemButton(string item, ItemTypes type)
    {
-      return new (item, type) { Width = 43 };
+      return new (item, type) { Width = 43, Height = 25 };
+   }
+
+   public static ItemButton GetItemButtonLong(string item, ItemTypes type)
+   {
+      return new(item, type) { Width = 110, Height = 25 };
    }
 
    public static ItemButton GetTagItemButton(string item, ItemTypes type)
@@ -140,7 +147,7 @@ public static class ControlFactory
 
    public static ItemButton GetStringItemButton(string item, ItemTypes type)
    {
-      return new (item, type){Width = 75};
+      return new (item, type){Width = 75, Height = 25};
    }
 
    public static ExtendedComboBox GetExtendedComboBox(bool def = true)
