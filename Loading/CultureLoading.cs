@@ -18,7 +18,7 @@ public static class CultureLoading
 
       var blocks = Parsing.GetElements(0, ref commentLessContent);
 
-      var (groups, cultures) = GetCultureGroups(ref blocks, Globals.MapWindow.Project.ColorProvider);
+      var (groups, cultures) = GetCultureGroups(ref blocks, Globals.ColorProvider);
       Globals.CultureGroups = groups;
       Globals.Cultures = cultures;
       sw.Stop();

@@ -43,8 +43,8 @@ public static class FilesHelper
    public static List<string> GetFilesFromModAndVanillaUniquely(params string[] internalPath)
    {
       var folderPath = Path.Combine(internalPath);
-      var modPath = Path.Combine(Globals.MapWindow.Project.ModPath, folderPath);
-      var vanillaPath = Path.Combine(Globals.MapWindow.Project.VanillaPath, folderPath);
+      var modPath = Path.Combine(Globals.ModPath, folderPath);
+      var vanillaPath = Path.Combine(Globals.VanillaPath, folderPath);
       List<string> fileSet = [];
       HashSet<string> fineNames = [];
 
@@ -72,7 +72,7 @@ public static class FilesHelper
    public static bool GetFileUniquely(out string content, params string[] internalPath)
    {
       var folderPath = Path.Combine(internalPath);
-      var modPath = Path.Combine(Globals.MapWindow.Project.ModPath, folderPath);
+      var modPath = Path.Combine(Globals.ModPath, folderPath);
 
       if (File.Exists(modPath))
       {
@@ -80,7 +80,7 @@ public static class FilesHelper
          return true;
       }
 
-      var vanillaPath = Path.Combine(Globals.MapWindow.Project.VanillaPath, folderPath);
+      var vanillaPath = Path.Combine(Globals.VanillaPath, folderPath);
       if (File.Exists(vanillaPath))
       {
          content = IO.ReadAllInUTF8(vanillaPath);
@@ -94,7 +94,7 @@ public static class FilesHelper
    public static bool GetFilePathUniquely(out string path, params string[] internalPath)
    {
       var intPath = Path.Combine(internalPath);
-      var modPath = Path.Combine(Globals.MapWindow.Project.ModPath, intPath);
+      var modPath = Path.Combine(Globals.ModPath, intPath);
 
       if (File.Exists(modPath))
       {
@@ -102,7 +102,7 @@ public static class FilesHelper
          return true;
       }
 
-      var vanillaPath = Path.Combine(Globals.MapWindow.Project.VanillaPath, intPath);
+      var vanillaPath = Path.Combine(Globals.VanillaPath, intPath);
       if (File.Exists(vanillaPath))
       {
          path = vanillaPath;
@@ -128,13 +128,13 @@ public static class FilesHelper
    public static bool GetModOrVanillaPath(out string filePath, params string[] internalPath)
    {
       var innerPath = Path.Combine(internalPath);
-      var path = Path.Combine(Globals.MapWindow.Project.ModPath, innerPath);
+      var path = Path.Combine(Globals.ModPath, innerPath);
       if (File.Exists(path))
       {
          filePath = path;
          return true;
       }
-      filePath = Path.Combine(Globals.MapWindow.Project.VanillaPath, innerPath);
+      filePath = Path.Combine(Globals.VanillaPath, innerPath);
       return File.Exists(filePath);
    }
 }

@@ -22,7 +22,8 @@ public static class MapLoading
       //Get the size of the image at Globals.MapPath
       using var stream = new FileStream(Globals.MapPath, FileMode.Open, FileAccess.Read);
       using var image = Image.FromStream(stream, useEmbeddedColorManagement: false, validateImageData: false);
-      Globals.MapWindow.Project.MapSize = image.Size;
+      Globals.MapHeight = image.Size.Height;
+      Globals.MapWidth = image.Size.Width;
 
       var (colorToProvId, colorToBorder, adjacency) = MapLoading.LoadMap(Globals.MapPath);
 

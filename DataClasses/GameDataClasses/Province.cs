@@ -1268,7 +1268,7 @@ public class Province : IProvinceCollection, IScope
    public string GetHistoryFilePath()
    {
       var fileName = $"{Id}-{GetLocalisation()}.txt";
-      return Path.Combine(Globals.MapWindow.Project.ModPath, "history", "provinces", fileName);
+      return Path.Combine(Globals.ModPath, "history", "provinces", fileName);
    }
 
    public override bool Equals(object? obj)

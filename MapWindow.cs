@@ -59,17 +59,8 @@ namespace Editor
       private EnterPathForm epf = null!;
       public bool SHUT_DOWN = false;
 
-      public ModProject Project = new()
-      {
-         ModPath = Consts.MOD_PATH,
-         VanillaPath = Consts.VANILLA_PATH
-      };
-
       public MapWindow()
       {
-         Project.ModPath = Globals.modPath;
-         Project.VanillaPath = Globals.vanillaPath;
-
          Globals.State = State.Loading;
          Globals.MapWindow = this;
 

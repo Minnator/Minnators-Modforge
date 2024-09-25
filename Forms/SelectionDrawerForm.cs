@@ -23,7 +23,7 @@ namespace Editor.Forms
 
       private void SelectFolderButton(object sender, EventArgs e)
       {
-         IO.OpenFileDialog(Globals.MapWindow.Project.ModPath, "select a folder where to save the image", out var path);
+         IO.OpenFileDialog(Globals.ModPath, "select a folder where to save the image", out var path);
          PathTextBox.Text = path;
       }
 

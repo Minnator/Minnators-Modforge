@@ -50,8 +50,9 @@ public enum EditingStatus
 //contains all required and used data across the application and instances of forms.
 public static class Globals
 {
-   public static string vanillaPath = string.Empty;
-   public static string modPath = string.Empty;
+   public static string VanillaPath = string.Empty;
+   public static string ModPath = string.Empty;
+   public static string Language = "english";
 
 
 

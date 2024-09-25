@@ -72,7 +72,6 @@ namespace Editor.Forms.Loadingscreen
       {
          if (s is not BackgroundWorker bw)
             return;
-         var project = Globals.MapWindow.Project;
          var progress = 0;
          
          try

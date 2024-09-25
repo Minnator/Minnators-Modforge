@@ -55,7 +55,7 @@ public static class RegionLoading
          }
          var region = new Region(regionName, areas, monsoons)
          {
-            Color = Globals.MapWindow.Project.ColorProvider.GetRandomColor()
+            Color = Globals.ColorProvider.GetRandomColor()
          };
          regionDictionary.Add(regionName, region);
 

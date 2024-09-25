@@ -11,10 +11,10 @@ public class LocalisationLoading
    public static void Load()
    {
       var sw = Stopwatch.StartNew();
-      var modLocPath = Path.Combine(Globals.MapWindow.Project.ModPath, "localisation");
-      var vanillaLocPath = Path.Combine(Globals.MapWindow.Project.VanillaPath, "localisation");
-      var files = FilesHelper.GetAllFilesInFolder(vanillaLocPath, $"*_l_{Globals.MapWindow.Project.Language.ToString().ToLower()}.yml");
-      files.AddRange(FilesHelper.GetAllFilesInFolder(modLocPath, $"*_l_{Globals.MapWindow.Project.Language.ToString().ToLower()}.yml"));
+      var modLocPath = Path.Combine(Globals.ModPath, "localisation");
+      var vanillaLocPath = Path.Combine(Globals.VanillaPath, "localisation");
+      var files = FilesHelper.GetAllFilesInFolder(vanillaLocPath, $"*_l_{Globals.Language.ToString().ToLower()}.yml");
+      files.AddRange(FilesHelper.GetAllFilesInFolder(modLocPath, $"*_l_{Globals.Language.ToString().ToLower()}.yml"));
 
       var regex = new Regex(@"\s*(?<key>.*):\d*\s+""(?<value>.*)""", RegexOptions.Compiled);
       var loc = new Dictionary<string, string>();

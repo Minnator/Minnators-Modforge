@@ -35,7 +35,7 @@ public static class SuperRegionLoading
 
          var sRegion = new SuperRegion(superRegionName, regions)
          {
-            Color = Globals.MapWindow.Project.ColorProvider.GetRandomColor()
+            Color = Globals.ColorProvider.GetRandomColor()
          };
          superRegionDictionary.Add(superRegionName, sRegion);
 

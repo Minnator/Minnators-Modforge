@@ -31,7 +31,7 @@ public static class ContinentLoading
       {
          var name = match.Groups["name"].Value;
          var provinces = Parsing.GetIntListFromString(match.ToString());
-         continentDictionary.Add(name, new (name, provinces){Color = Globals.MapWindow.Project.ColorProvider.GetRandomColor()});
+         continentDictionary.Add(name, new (name, provinces){Color = Globals.ColorProvider.GetRandomColor()});
 
          foreach (var provinceId in continentDictionary[name].Provinces)
             if (Globals.Provinces.TryGetValue(provinceId, out var province))

@@ -16,7 +16,7 @@ namespace Editor
          Application.SetCompatibleTextRenderingDefault(false);
 
          Application.Run(new EnterPathForm());
-         if (Globals.vanillaPath != string.Empty && Globals.modPath != string.Empty)
+         if (Globals.VanillaPath != string.Empty && Globals.ModPath != string.Empty)
             Application.Run(new MapWindow());
       }
    }

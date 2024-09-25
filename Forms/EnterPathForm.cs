@@ -55,8 +55,8 @@ namespace Editor.Forms
             return;
          }
 
-         Globals.vanillaPath = VanillaPathTextBox.Text;
-         Globals.modPath = ModPathTextBox.Text;
+         Globals.VanillaPath = VanillaPathTextBox.Text;
+         Globals.ModPath = ModPathTextBox.Text;
 
          Close();
       }
