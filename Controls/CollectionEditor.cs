@@ -25,6 +25,7 @@ namespace Editor.Controls
 
       private ItemTypes _itemTypes;
 
+      // TODO add a small button to flip to the according MapMode
       public CollectionEditor(string name, ItemTypes itemTypes, Func<string, List<string>> onSelectionAction, Func<string, bool, List<string>> onAddedOrRemovedFunc, Func<string, List<string>> onNewCreated, Action<string> onDeleted, Action<string, string> onSingleRemoved)
       {
          _name = name;

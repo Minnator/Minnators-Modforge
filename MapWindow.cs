@@ -1,9 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Globalization;
-using System.Text;
 using System.Text.Json;
-using ABI.Windows.UI.Core;
 using Editor.Controls;
 using Editor.DataClasses;
 using Editor.DataClasses.Commands;
@@ -12,7 +10,6 @@ using Editor.Events;
 using Editor.Forms;
 using Editor.Forms.Loadingscreen;
 using Editor.Helper;
-using Editor.Loading;
 using Editor.Savers;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 
@@ -22,42 +19,44 @@ namespace Editor
    {
       #region CustomEditingControls
 
-      private ItemList _claims;
-      private ItemList _permanentClaims;
-      private ItemList _cores;
-      private ItemList _buildings;
-      private ItemList _discoveredBy;
+      private ItemList _claims = null!;
+      private ItemList _permanentClaims = null!;
+      private ItemList _cores = null!;
+      private ItemList _buildings = null!;
+      private ItemList _discoveredBy = null!;
 
-      private ExtendedComboBox _religionComboBox;
-      private ExtendedComboBox _cultureComboBox;
-      private ExtendedComboBox _modifierComboBox;
-      private ExtendedComboBox _modifierTypeComboBox;
+      private ExtendedComboBox _religionComboBox = null!;
+      private ExtendedComboBox _cultureComboBox = null!;
+      private ExtendedComboBox _modifierComboBox = null!;
+      private ExtendedComboBox _modifierTypeComboBox = null!;
 
-      private ExtendedNumeric _taxNumeric;
-      private ExtendedNumeric _prodNumeric;
-      private ExtendedNumeric _manpNumeric;
+      private ExtendedNumeric _taxNumeric = null!;
+      private ExtendedNumeric _prodNumeric = null!;
+      private ExtendedNumeric _manpNumeric = null!;
 
-      private ExtendedNumeric _autonomyNumeric;
-      private ExtendedNumeric _devastationNumeric;
-      private ExtendedNumeric _prosperityNumeric;
-      private ExtendedNumeric _extraCostNumeric;
+      private ExtendedNumeric _autonomyNumeric = null!;
+      private ExtendedNumeric _devastationNumeric = null!;
+      private ExtendedNumeric _prosperityNumeric = null!;
+      private ExtendedNumeric _extraCostNumeric = null!;
 
-      private TagComboBox _tribalOwner;
-      private ExtendedComboBox _tradeCompanyInvestments;
+      private TagComboBox _tribalOwner = null!;
+      private ExtendedComboBox _tradeCompanyInvestments = null!;
 
-      private NumberTextBox _nativesSizeTextBox;
-      private NumberTextBox _nativeFerocityTextBox;
-      private NumberTextBox _nativeHostilityTextBox;
+      private NumberTextBox _nativesSizeTextBox = null!;
+      private NumberTextBox _nativeFerocityTextBox = null!;
+      private NumberTextBox _nativeHostilityTextBox = null!;
 
-      private ToolTip _savingButtonsToolTip;
+      private ToolTip _savingButtonsToolTip = null!;
 
-      private CollectionEditor _areaEditingGui;
+      private CollectionEditor _areaEditingGui = null!;
+      private CollectionEditor _regionEditingGui = null!;
+
       #endregion
 
       public PannablePictureBox MapPictureBox = null!;
       public readonly DateControl DateControl = new(DateTime.MinValue, DateControlLayout.Horizontal);
-      private LoadingScreen ls;
-      private EnterPathForm epf;
+      private LoadingScreen ls = null!;
+      private EnterPathForm epf = null!;
       public bool SHUT_DOWN = false;
 
       public ModProject Project = new()
@@ -238,6 +237,8 @@ namespace Editor
          );
 
          ProvinceCollectionsMainLayoutPanel.Controls.Add(_areaEditingGui, 0, 0);
+
+
       }
 
       private void InitializeCountryEditGui()
