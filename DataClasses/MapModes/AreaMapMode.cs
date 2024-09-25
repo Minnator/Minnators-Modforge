@@ -9,6 +9,7 @@ public sealed class AreaMapMode : MapMode
    public AreaMapMode()
    {
       // TODO listen to the provinces areas
+      ProvinceEventHandler.OnProvinceAreaChanged += UpdateProvince!;
    }
 
    public override string GetMapModeName()

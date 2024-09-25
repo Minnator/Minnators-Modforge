@@ -197,9 +197,9 @@ public class Province : IProvinceCollection, IScope
       get => _data.Area;
       set
       {
+         _data.Area = value;
          if (Globals.State == State.Running)
             RaiseProvinceAreaChanged(Id, value, nameof(Area));
-         _data.Area = value;
       }
    }
 
