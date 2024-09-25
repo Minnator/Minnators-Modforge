@@ -48,7 +48,13 @@ public enum EditingStatus
 #endregion
 
 //contains all required and used data across the application and instances of forms.
-public static class Globals {
+public static class Globals
+{
+   public static string vanillaPath = string.Empty;
+   public static string modPath = string.Empty;
+
+
+
    #region LoadingScreen
    public static event EventHandler<int> LoadingStageChanged = delegate { };
 

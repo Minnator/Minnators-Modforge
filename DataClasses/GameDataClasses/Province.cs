@@ -276,8 +276,8 @@ public class Province : IProvinceCollection, IScope
             RaiseProvinceOwnerChanged(Id, value, nameof(Owner));
          // Trigger an update of the countries capital which will add the capital to the list of capitals if it is not already there 
          // as a nation could be spawned on the map by setting it as a province owner, and thus it could require to have its capital drawn
-         if (Globals.State == State.Running)
-            ((Country)_data.Owner).Capital = ((Country)_data.Owner).Capital;
+         if (Globals.State == State.Running && Globals.Countries.TryGetValue(_data.Owner, out var country))
+            country.Capital = country.Capital;
       }
    }
 

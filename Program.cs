@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Editor.Forms;
 using Editor.Forms.Loadingscreen;
 
 namespace Editor
@@ -14,7 +15,9 @@ namespace Editor
          Application.EnableVisualStyles();
          Application.SetCompatibleTextRenderingDefault(false);
 
-         Application.Run(new MapWindow());
+         Application.Run(new EnterPathForm());
+         if (Globals.vanillaPath != string.Empty && Globals.modPath != string.Empty)
+            Application.Run(new MapWindow());
       }
    }
 }

@@ -54,6 +54,7 @@
          saveAllProvincesToolStripMenuItem = new ToolStripMenuItem();
          save1ToolStripMenuItem = new ToolStripMenuItem();
          saveEuropeToolStripMenuItem = new ToolStripMenuItem();
+         jsonToolStripMenuItem = new ToolStripMenuItem();
          DateSelector = new ToolStripComboBox();
          searchToolStripMenuItem = new ToolStripMenuItem();
          MapPanel = new Panel();
@@ -300,7 +301,7 @@
          // 
          // debugToolStripMenuItem
          // 
-         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem });
+         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem, jsonToolStripMenuItem });
          debugToolStripMenuItem.Name = "debugToolStripMenuItem";
          debugToolStripMenuItem.Size = new Size(54, 23);
          debugToolStripMenuItem.Text = "Debug";
@@ -367,6 +368,13 @@
          saveEuropeToolStripMenuItem.Size = new Size(167, 22);
          saveEuropeToolStripMenuItem.Text = "Save europe";
          saveEuropeToolStripMenuItem.Click += saveEuropeToolStripMenuItem_Click;
+         // 
+         // jsonToolStripMenuItem
+         // 
+         jsonToolStripMenuItem.Name = "jsonToolStripMenuItem";
+         jsonToolStripMenuItem.Size = new Size(167, 22);
+         jsonToolStripMenuItem.Text = "json";
+         jsonToolStripMenuItem.Click += jsonToolStripMenuItem_Click;
          // 
          // DateSelector
          // 
@@ -1801,6 +1809,7 @@
       private Button DeleteModifierButton;
       private TableLayoutPanel ProvinceCollectionsMainLayoutPanel;
       public ToolTip GeneralToolTip;
+      private ToolStripMenuItem jsonToolStripMenuItem;
    }
 }
 

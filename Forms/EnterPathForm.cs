@@ -9,10 +9,12 @@ namespace Editor.Forms
          InitializeComponent();
          StartPosition = FormStartPosition.CenterScreen;
 
+         // TODO remove on release
          Load += (sender, args) =>
          {
             ContinueButton.PerformClick();
          };
+         
       }
 
       private void SelectVanillaPathButton_Click(object sender, EventArgs e)
@@ -37,7 +39,7 @@ namespace Editor.Forms
       private void ContinueButton_Click(object sender, EventArgs e)
       {
 
-         // TODO uncomment on release
+         // TODO comment on release
          ModPathTextBox.Text = Consts.MOD_PATH;
          VanillaPathTextBox.Text = Consts.VANILLA_PATH;
          
@@ -53,15 +55,14 @@ namespace Editor.Forms
             return;
          }
 
-         Globals.MapWindow.Project.ModPath = ModPathTextBox.Text;
-         Globals.MapWindow.Project.VanillaPath = VanillaPathTextBox.Text;
+         Globals.vanillaPath = VanillaPathTextBox.Text;
+         Globals.modPath = ModPathTextBox.Text;
 
          Close();
       }
 
       private void CancelButton_Click(object sender, EventArgs e)
       {
-         Globals.MapWindow.SHUT_DOWN = true;
          Close();
       }
    }

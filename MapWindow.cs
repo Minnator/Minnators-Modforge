@@ -2,6 +2,8 @@
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.Text;
+using System.Text.Json;
+using ABI.Windows.UI.Core;
 using Editor.Controls;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
@@ -11,6 +13,7 @@ using Editor.Forms.Loadingscreen;
 using Editor.Helper;
 using Editor.Loading;
 using Editor.Savers;
+using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 
 namespace Editor
 {
@@ -64,13 +67,17 @@ namespace Editor
 
       public MapWindow()
       {
+         Project.ModPath = Globals.modPath;
+         Project.VanillaPath = Globals.vanillaPath;
+
          Globals.State = State.Loading;
          Globals.MapWindow = this;
 
-         RunEnterPathForm();
+         //RunEnterPathForm();
 
          if (SHUT_DOWN)
          {
+            Dispose();
             return;
          }
          RunLoadingScreen();
@@ -176,7 +183,7 @@ namespace Editor
 
       private void InitializeProvinceCollectionEditGui()
       {
-         _areaEditingGui = ControlFactory.GetCollectionEditor("Area", ItemTypes.Id, [..Globals.Areas.Keys], 
+         _areaEditingGui = ControlFactory.GetCollectionEditor("Area", ItemTypes.Id, [.. Globals.Areas.Keys],
             s => // An Area is selected
             {
                List<string> provName = [];
@@ -223,7 +230,7 @@ namespace Editor
                   return [];
                }
 
-               Globals.Areas.Add(s, new (s, Globals.Selection.GetSelectedProvincesIds, Globals.ColorProvider.GetRandomColor()));
+               Globals.Areas.Add(s, new(s, Globals.Selection.GetSelectedProvincesIds, Globals.ColorProvider.GetRandomColor()));
                foreach (var prov in Globals.Selection.GetSelectedProvinces)
                   prov.Area = s;
 
@@ -731,7 +738,7 @@ namespace Editor
          ModifiersListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
          ModifiersListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
       }
-      
+
       private void AddAllModifiersToListView(Province province)
       {
          ModifiersListView.Items.Clear();
@@ -889,24 +896,6 @@ namespace Editor
 
       }
 
-      private void yoloToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-         string[] dateStrings = { "1.1.1", "9999.11.11", "2024.09.16" };
-
-         foreach (string dateString in dateStrings)
-         {
-            if (Parsing.TryParseDate(dateString, out var dateValue))
-            {
-               Debug.WriteLine($"Parsed date: {dateValue:yyyy-MM-dd}");
-            }
-            else
-            {
-               Debug.WriteLine($"Failed to parse the date: {dateString}");
-            }
-         }
-      }
-
-
       private void saveAllProvincesToolStripMenuItem_Click(object sender, EventArgs e)
       {
          ProvinceSaver.SaveAllLandProvinces();
@@ -976,7 +965,7 @@ namespace Editor
          var modifierName = item.SubItems[0].Text.Trim();
 
          if (!int.TryParse(item.SubItems[1].Text, out var duration) || !Enum.TryParse(item.SubItems[2].Text, out ModifierType type))
-               return;
+            return;
 
          if (!Globals.Modifiers.TryGetValue(modifierName, out _))
             return;
@@ -984,5 +973,28 @@ namespace Editor
          ProvinceEditingEvents.OnModifierRemoved(new ApplicableModifier(modifierName, duration), type);
          ModifiersListView.Items.Remove(item);
       }
+
+      private void jsonToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         Province province = new(123);
+         province.Owner = "ENG";
+         province.Controller = "ENG";
+         province.Religion = "catholic";
+
+         var jsonSettings = new JsonSerializerOptions { WriteIndented = true };
+         string jsonString = JsonSerializer.Serialize(province, jsonSettings);
+
+
+         IO.WriteToFile(Path.Combine(Globals.DownloadsFolder, "jsonTest.json"), jsonString, false);
+      }
+      private void yoloToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+
+         SettingsManager.CurrentSettings.Setting1 = "Custom Value";
+         SettingsManager.SaveSettings();
+         SettingsManager.LoadSettings();
+      }
+
+
    }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Text;
-using Editor.Resources;
 
 namespace Editor.Helper
 {
