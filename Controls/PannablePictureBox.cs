@@ -1,6 +1,7 @@
 ﻿using System.Drawing.Imaging;
 using Editor.Commands;
 using Editor.DataClasses;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Forms;
 using Editor.Forms.AdvancedSelections;
 using Editor.Helper;
@@ -81,6 +82,25 @@ public sealed class PannablePictureBox : PictureBox
    public void FocusOn(Point point)
    {
       _parentPanel.AutoScrollPosition = new (point.X - _parentPanel.Width / 2, point.Y - _parentPanel.Height / 2);
+   }
+
+   public void FocusOn(List<int> ids)
+   {
+      List<Province> provinces = [];
+      foreach (var id in ids)
+         if (Globals.Provinces.TryGetValue(id, out var province))
+            provinces.Add(province);
+      FocusOn(provinces);
+   }
+
+   public void FocusOn(List<Province> provinces)
+   {
+      List<Point> centers = [];
+      foreach (var province in provinces)
+         centers.Add(province.Center);
+
+      var bounds = Geometry.GetBounds([..centers]);
+      FocusOn(new Point(bounds.X + bounds.Width / 2, bounds.Y + bounds.Height / 2));
    }
 
    private void OnMouseClick_Click (object sender, MouseEventArgs e)

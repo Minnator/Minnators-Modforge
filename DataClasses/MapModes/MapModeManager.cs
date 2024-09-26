@@ -67,7 +67,7 @@ public class MapModeManager(PannablePictureBox pictureBox)
 
    public MapMode GetMapMode(string name)
    {
-      return MapModes.Find(mode => mode.GetMapModeName() == name) ?? throw new InvalidOperationException($"Can not find mapmode {name}");
+      return MapModes.Find(mode => mode.GetMapModeName() == name) ?? IdMapMode;
    }
 
    public List<string> GetMapModeNames()
@@ -91,12 +91,12 @@ public class MapModeManager(PannablePictureBox pictureBox)
 
    public bool GetProvince(Point point, out Province province)
    {
+      province = null!;
       if (Globals.ColorToProvId.TryGetValue (IdMapMode.Bitmap.GetPixel(point.X, point.Y), out var provinceId))
       {
-         province = Globals.Provinces[provinceId];
-         return true;
+         if (Globals.Provinces.TryGetValue(provinceId, out province))
+            return true;
       }
-      province = null!;
       return false;
    }
 

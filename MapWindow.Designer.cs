@@ -155,6 +155,7 @@
          SaveCurrentSelectionButton = new Button();
          COuntryPage = new TabPage();
          ProvinceGroupsPage = new TabPage();
+         ProvinceCollectionsPanel = new Panel();
          ProvinceCollectionsMainLayoutPanel = new TableLayoutPanel();
          GeneralToolTip = new ToolTip(components);
          MapMenuStrip.SuspendLayout();
@@ -193,6 +194,7 @@
          TradePanel.SuspendLayout();
          tableLayoutPanel2.SuspendLayout();
          ProvinceGroupsPage.SuspendLayout();
+         ProvinceCollectionsPanel.SuspendLayout();
          SuspendLayout();
          // 
          // MapMenuStrip
@@ -1578,7 +1580,7 @@
          // 
          // ProvinceGroupsPage
          // 
-         ProvinceGroupsPage.Controls.Add(ProvinceCollectionsMainLayoutPanel);
+         ProvinceGroupsPage.Controls.Add(ProvinceCollectionsPanel);
          ProvinceGroupsPage.Location = new Point(4, 24);
          ProvinceGroupsPage.Name = "ProvinceGroupsPage";
          ProvinceGroupsPage.Padding = new Padding(3);
@@ -1587,12 +1589,23 @@
          ProvinceGroupsPage.Text = "ProvinceGroups";
          ProvinceGroupsPage.UseVisualStyleBackColor = true;
          // 
+         // ProvinceCollectionsPanel
+         // 
+         ProvinceCollectionsPanel.AutoScroll = true;
+         ProvinceCollectionsPanel.Controls.Add(ProvinceCollectionsMainLayoutPanel);
+         ProvinceCollectionsPanel.Dock = DockStyle.Fill;
+         ProvinceCollectionsPanel.Location = new Point(3, 3);
+         ProvinceCollectionsPanel.Margin = new Padding(0);
+         ProvinceCollectionsPanel.Name = "ProvinceCollectionsPanel";
+         ProvinceCollectionsPanel.Size = new Size(386, 816);
+         ProvinceCollectionsPanel.TabIndex = 0;
+         // 
          // ProvinceCollectionsMainLayoutPanel
          // 
          ProvinceCollectionsMainLayoutPanel.ColumnCount = 1;
          ProvinceCollectionsMainLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
          ProvinceCollectionsMainLayoutPanel.Dock = DockStyle.Fill;
-         ProvinceCollectionsMainLayoutPanel.Location = new Point(3, 3);
+         ProvinceCollectionsMainLayoutPanel.Location = new Point(0, 0);
          ProvinceCollectionsMainLayoutPanel.Margin = new Padding(0);
          ProvinceCollectionsMainLayoutPanel.Name = "ProvinceCollectionsMainLayoutPanel";
          ProvinceCollectionsMainLayoutPanel.RowCount = 5;
@@ -1677,6 +1690,7 @@
          TradePanel.PerformLayout();
          tableLayoutPanel2.ResumeLayout(false);
          ProvinceGroupsPage.ResumeLayout(false);
+         ProvinceCollectionsPanel.ResumeLayout(false);
          ResumeLayout(false);
          PerformLayout();
       }
@@ -1812,6 +1826,7 @@
       private TableLayoutPanel ProvinceCollectionsMainLayoutPanel;
       public ToolTip GeneralToolTip;
       private ToolStripMenuItem jsonToolStripMenuItem;
+      private Panel ProvinceCollectionsPanel;
    }
 }
 

@@ -139,6 +139,10 @@ public class Selection
       OnSelectedCountryChanged += OnSelectedCountryChange_MapUpdate!;
    }
 
+   public void FocusSelection()
+   {
+      Globals.MapWindow.MapPictureBox.FocusOn(SelectedProvinces);
+   }
 
    public void RePaintSelection()
    {
