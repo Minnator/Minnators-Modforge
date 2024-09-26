@@ -52,7 +52,7 @@ namespace Editor
       private CollectionEditor _regionEditingGui = null!;
       private CollectionEditor _superRegionEditingGui = null!;
       private CollectionEditor _tradeCompanyEditingGui = null!;
-      private CollectionEditor _tradeNodeEditingGui = null!;
+      private CollectionEditor _countryEditingGuid = null!;
 
       #endregion
 
@@ -60,20 +60,12 @@ namespace Editor
       public readonly DateControl DateControl = new(DateTime.MinValue, DateControlLayout.Horizontal);
       private LoadingScreen ls = null!;
       private EnterPathForm epf = null!;
-      public bool SHUT_DOWN = false;
 
       public MapWindow()
       {
          Globals.State = State.Loading;
          Globals.MapWindow = this;
 
-         //RunEnterPathForm();
-
-         if (SHUT_DOWN)
-         {
-            Dispose();
-            return;
-         }
          RunLoadingScreen();
       }
 
@@ -181,7 +173,8 @@ namespace Editor
                   for (var i = 0; i < area.Provinces.Length; i++)
                      provName.Add(area.Provinces[i].ToString());
                   Globals.Selection.AddRange(area.Provinces);
-                  Globals.Selection.FocusSelection();
+                  if (FocusSelectionCheckBox.Checked)
+                     Globals.Selection.FocusSelection();
                }
                return provName;
             },
@@ -233,6 +226,8 @@ namespace Editor
                if (Globals.Regions.TryGetValue(s, out var region))
                {
                   Globals.Selection.AddRange(region.GetProvinceIds());
+                  if (FocusSelectionCheckBox.Checked)
+                     Globals.Selection.FocusSelection();
                   return region.Areas;
                }
                return [];
@@ -278,19 +273,20 @@ namespace Editor
             s =>
             {
                Globals.Selection.Clear();
-               if (Globals.SuperRegions.TryGetValue(s, out var superRegion))
-               {
-                  Globals.Selection.AddRange(superRegion.GetProvinceIds());
-                  return superRegion.Regions;
-               }
-               return [];
+               if (!Globals.SuperRegions.TryGetValue(s, out var superRegion))
+                  return [];
+
+               Globals.Selection.AddRange(superRegion.GetProvinceIds());
+               if (FocusSelectionCheckBox.Checked)
+                  Globals.Selection.FocusSelection();
+               return superRegion.Regions;
             }, // A SuperRegion is selected
             (s, b) =>
             {
                if (!Globals.SuperRegions.TryGetValue(s, out var superRegion))
                   return [];
                
-               //Globals.HistoryManager.AddCommand(new CModifyExistingSuperRegion(s, ProvinceCollectionHelper.GetRegionNamesFromProvinces(Globals.Selection.GetSelectedProvinces), b));
+               Globals.HistoryManager.AddCommand(new CModifyExistingSuperRegion(s, ProvinceCollectionHelper.GetRegionNamesFromProvinces(Globals.Selection.GetSelectedProvinces), b));
 
                return superRegion.Regions;
             }, // A SuperRegion is modified
@@ -299,7 +295,7 @@ namespace Editor
                if (Globals.SuperRegions.TryGetValue(s, out _))
                   return [];
                
-               //Globals.HistoryManager.AddCommand(new CAddNewSuperRegion(s, ProvinceCollectionHelper.GetRegionNamesFromProvinces(Globals.Selection.GetSelectedProvinces)));
+               Globals.HistoryManager.AddCommand(new CAddNewSuperRegion(s, ProvinceCollectionHelper.GetRegionNamesFromProvinces(Globals.Selection.GetSelectedProvinces)));
                
                if (Globals.SuperRegions.TryGetValue(s, out var newSuperRegion))
                   return newSuperRegion.Regions;
@@ -310,26 +306,31 @@ namespace Editor
                if (!Globals.SuperRegions.TryGetValue(s, out _))
                   return;
 
-               //Globals.HistoryManager.AddCommand(new CDeleteSuperRegion(s));
+               Globals.HistoryManager.AddCommand(new CDeleteSuperRegion(s));
             }, // A SuperRegion is deleted
             (s, str) =>
             {
                if (!Globals.SuperRegions.TryGetValue(s, out _) || !Globals.Regions.ContainsKey(str))
                   return;
 
-               //Globals.HistoryManager.AddCommand(new CModifyExistingSuperRegion(s, [str], false));
+               Globals.HistoryManager.AddCommand(new CModifyExistingSuperRegion(s, [str], false));
             } // A single region is removed from a super region
          );
          ProvinceCollectionsMainLayoutPanel.Controls.Add(_superRegionEditingGui, 0, 2);
 
-         _tradeCompanyEditingGui = ControlFactory.GetCollectionEditor("TradeCompany", "Trade Companies", ItemTypes.String, [.. Globals.TradeCompanies.Keys],
+         _tradeCompanyEditingGui = ControlFactory.GetCollectionEditor("TradeCompany", "Trade Companies", ItemTypes.Id, [.. Globals.TradeCompanies.Keys],
             s =>
             {
                Globals.Selection.Clear();
                if (Globals.TradeCompanies.TryGetValue(s, out var tradeCompany))
                {
                   Globals.Selection.AddRange(tradeCompany.GetProvinceIds());
-                  return [];
+                  if (FocusSelectionCheckBox.Checked)
+                     Globals.Selection.FocusSelection();
+                  List<string> provNames = [];
+                  foreach (var prov in tradeCompany.GetProvinceIds())
+                     provNames.Add(prov.ToString());
+                  return provNames;
                }
                return [];
             }, // A TradeCompany is selected
@@ -373,6 +374,61 @@ namespace Editor
          );
          ProvinceCollectionsMainLayoutPanel.Controls.Add(_tradeCompanyEditingGui, 0, 3);
 
+         _countryEditingGuid = ControlFactory.GetCollectionEditor("Country", "Countries", ItemTypes.Id, [.. Globals.Countries.Keys],
+            s =>
+            {
+               Globals.Selection.Clear();
+               if (Globals.Countries.TryGetValue(s, out var country))
+               {
+                  Globals.Selection.AddRange(country.GetProvinceIds());
+                  List<string> provNames = [];
+                  foreach (var prov in country.GetProvinceIds())
+                     provNames.Add(prov.ToString());
+                  if (FocusSelectionCheckBox.Checked)
+                     Globals.Selection.FocusSelection();
+                  return provNames;
+               }
+               return [];
+            }, // A Country is selected
+            (s, b) =>
+            {
+               if (!Globals.Countries.TryGetValue(s, out var country))
+                  return [];
+
+               //Globals.HistoryManager.AddCommand(new CModifyExistingCountry(s, Globals.Selection.SelectedProvinces, b));
+
+               return [];
+            }, // A Country is modified
+            s => // A new Country is created
+            {
+               if (Globals.Countries.TryGetValue(s, out _))
+                  return [];
+
+               //Globals.HistoryManager.AddCommand(new CCreateNewCountry(s, Globals.Selection.SelectedProvinces));
+
+               if (Globals.Countries.TryGetValue(s, out var newCountry))
+                  return [];
+               return [];
+            },
+            s => // A Country is deleted
+            {
+               if (!Globals.Countries.TryGetValue(s, out _))
+                  return;
+
+               //Globals.HistoryManager.AddCommand(new CRemoveCountry(s));
+            },
+            (s, idStr) => // A single province is removed from a Country
+            {
+               if (!Globals.Countries.TryGetValue(s, out var country) || !int.TryParse(idStr, out var id))
+                  return;
+
+               if (!Globals.Provinces.TryGetValue(id, out var prov))
+                  return;
+
+               //Globals.HistoryManager.AddCommand(new CModifyExistingCountry(s, [id], false));
+            }
+         );
+         ProvinceCollectionsMainLayoutPanel.Controls.Add(_countryEditingGuid, 0, 4);
       }
 
       private void InitializeCountryEditGui()
@@ -953,10 +1009,6 @@ namespace Editor
 
       private void MapWindow_Load(object sender, EventArgs e)
       {
-         if (SHUT_DOWN)
-         {
-            Close();
-         }
       }
 
       private void searchToolStripMenuItem_Click(object sender, EventArgs e)

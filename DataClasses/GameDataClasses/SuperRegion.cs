@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using Editor.Events;
 using Editor.Interfaces;
 
 namespace Editor.DataClasses.GameDataClasses;
@@ -7,12 +8,41 @@ namespace Editor.DataClasses.GameDataClasses;
 public class SuperRegion(string name) : IProvinceCollection
 {
    public string Name { get; } = name;
-   public List<string> Regions { get; set; } = [];
+   private List<string> _regions { get; set; } = [];
    public Color Color { get; set; }
+
+   public List<string> Regions => _regions;
 
    public SuperRegion(string name, List<string> regions) : this(name)
    {
-      Regions = regions;
+      foreach (var region in regions)
+         AddRmvRegion(region, true);
+   }
+
+   public void AddRegion(string region)
+   {
+      AddRmvRegion(region, true);
+   }
+
+   public void RemoveRegion(string region)
+   {
+      AddRmvRegion(region, false);
+   }
+
+   private void AddRmvRegion(string regionName, bool add)
+   {
+      if (add)
+      {
+         if (!Regions.Contains(regionName))
+            _regions.Add(regionName);
+      }
+      else
+         _regions.Remove(regionName);
+
+      if (Globals.State == State.Running)
+         if (Globals.Regions.TryGetValue(regionName, out var region))
+            foreach (var id in region.GetProvinceIds())
+               ProvinceEventHandler.RaiseSuperRegionRegionChanged(id, region, nameof(Regions));
    }
 
    public override bool Equals(object? obj)

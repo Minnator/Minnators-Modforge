@@ -75,9 +75,9 @@ namespace Editor.Controls
             Margin = new(0),
             ColumnStyles =
             {
-               new(SizeType.Percent, 30),
+               new(SizeType.Percent, 40),
                new(SizeType.Absolute, 30),
-               new(SizeType.Percent, 70),
+               new(SizeType.Percent, 60),
                new(SizeType.Absolute, 30),
                new(SizeType.Absolute, 30),
             },
@@ -240,8 +240,10 @@ namespace Editor.Controls
 
       public void AddItemsUnique(List<string> items)
       {
-         foreach (var item in items)
+         _flowLayout.SuspendLayout();
+         foreach (var item in items)   
             AddIfUnique(item);
+         _flowLayout.ResumeLayout(true);
       }
 
       public void AddItems(List<string> items)

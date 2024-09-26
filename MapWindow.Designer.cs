@@ -157,6 +157,8 @@
          ProvinceGroupsPage = new TabPage();
          ProvinceCollectionsPanel = new Panel();
          ProvinceCollectionsMainLayoutPanel = new TableLayoutPanel();
+         GroupCollectionOptions = new TableLayoutPanel();
+         FocusSelectionCheckBox = new CheckBox();
          GeneralToolTip = new ToolTip(components);
          MapMenuStrip.SuspendLayout();
          toolStrip1.SuspendLayout();
@@ -195,6 +197,8 @@
          tableLayoutPanel2.SuspendLayout();
          ProvinceGroupsPage.SuspendLayout();
          ProvinceCollectionsPanel.SuspendLayout();
+         ProvinceCollectionsMainLayoutPanel.SuspendLayout();
+         GroupCollectionOptions.SuspendLayout();
          SuspendLayout();
          // 
          // MapMenuStrip
@@ -1604,18 +1608,48 @@
          // 
          ProvinceCollectionsMainLayoutPanel.ColumnCount = 1;
          ProvinceCollectionsMainLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         ProvinceCollectionsMainLayoutPanel.Controls.Add(GroupCollectionOptions, 0, 5);
          ProvinceCollectionsMainLayoutPanel.Dock = DockStyle.Fill;
          ProvinceCollectionsMainLayoutPanel.Location = new Point(0, 0);
          ProvinceCollectionsMainLayoutPanel.Margin = new Padding(0);
          ProvinceCollectionsMainLayoutPanel.Name = "ProvinceCollectionsMainLayoutPanel";
-         ProvinceCollectionsMainLayoutPanel.RowCount = 5;
+         ProvinceCollectionsMainLayoutPanel.RowCount = 7;
          ProvinceCollectionsMainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 123F));
          ProvinceCollectionsMainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
          ProvinceCollectionsMainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
+         ProvinceCollectionsMainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 182F));
+         ProvinceCollectionsMainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
+         ProvinceCollectionsMainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
          ProvinceCollectionsMainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         ProvinceCollectionsMainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 121F));
          ProvinceCollectionsMainLayoutPanel.Size = new Size(386, 816);
          ProvinceCollectionsMainLayoutPanel.TabIndex = 0;
+         // 
+         // GroupCollectionOptions
+         // 
+         GroupCollectionOptions.ColumnCount = 3;
+         GroupCollectionOptions.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+         GroupCollectionOptions.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+         GroupCollectionOptions.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+         GroupCollectionOptions.Controls.Add(FocusSelectionCheckBox, 2, 0);
+         GroupCollectionOptions.Dock = DockStyle.Fill;
+         GroupCollectionOptions.Location = new Point(0, 764);
+         GroupCollectionOptions.Margin = new Padding(0);
+         GroupCollectionOptions.Name = "GroupCollectionOptions";
+         GroupCollectionOptions.RowCount = 1;
+         GroupCollectionOptions.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         GroupCollectionOptions.Size = new Size(386, 25);
+         GroupCollectionOptions.TabIndex = 0;
+         // 
+         // FocusSelectionCheckBox
+         // 
+         FocusSelectionCheckBox.AutoSize = true;
+         FocusSelectionCheckBox.Dock = DockStyle.Fill;
+         FocusSelectionCheckBox.Location = new Point(259, 3);
+         FocusSelectionCheckBox.Name = "FocusSelectionCheckBox";
+         FocusSelectionCheckBox.Size = new Size(124, 19);
+         FocusSelectionCheckBox.TabIndex = 0;
+         FocusSelectionCheckBox.Text = "Focus Selection";
+         FocusSelectionCheckBox.UseVisualStyleBackColor = true;
          // 
          // MapWindow
          // 
@@ -1691,6 +1725,9 @@
          tableLayoutPanel2.ResumeLayout(false);
          ProvinceGroupsPage.ResumeLayout(false);
          ProvinceCollectionsPanel.ResumeLayout(false);
+         ProvinceCollectionsMainLayoutPanel.ResumeLayout(false);
+         GroupCollectionOptions.ResumeLayout(false);
+         GroupCollectionOptions.PerformLayout();
          ResumeLayout(false);
          PerformLayout();
       }
@@ -1827,6 +1864,8 @@
       public ToolTip GeneralToolTip;
       private ToolStripMenuItem jsonToolStripMenuItem;
       private Panel ProvinceCollectionsPanel;
+      private TableLayoutPanel GroupCollectionOptions;
+      private CheckBox FocusSelectionCheckBox;
    }
 }
 

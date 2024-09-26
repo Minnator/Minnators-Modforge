@@ -1,11 +1,15 @@
-﻿using System.Drawing;
-using Editor.DataClasses.MapModes;
+﻿using Editor.Events;
 using Editor.Helper;
 
-namespace Editor.MapModes;
+namespace Editor.DataClasses.MapModes;
 
 public sealed class SuperRegionMapMode : MapMode
 {
+   public SuperRegionMapMode()
+   {
+      ProvinceEventHandler.OnSuperRegionRegionChanged += UpdateProvince!;
+   }
+
    public override string GetMapModeName()
    {
       return "Super Regions";
