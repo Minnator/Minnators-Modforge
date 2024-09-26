@@ -139,6 +139,13 @@ public class Selection
       OnSelectedCountryChanged += OnSelectedCountryChange_MapUpdate!;
    }
 
+
+   public void RePaintSelection()
+   {
+      foreach (var province in SelectedProvinces)
+         _pannablePictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(province, SelectionColor, _pannablePictureBox.SelectionOverlay));
+   }
+
    public void OnSelectedCountryChange_MapUpdate(object sender, CountrySelectionEventArgs e)
    {
 

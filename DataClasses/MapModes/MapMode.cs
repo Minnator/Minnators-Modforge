@@ -61,6 +61,7 @@ public abstract class MapMode
             throw new ("Unknown Rendering mode for MapModes");
       }
       Globals.MapWindow.MapPictureBox.IsPainting = false;
+      Globals.Selection.RePaintSelection();
       Globals.MapModeManager.PictureBox.Invalidate();
       Globals.MapModeManager.PreviousLandOnly = IsLandOnly;
 

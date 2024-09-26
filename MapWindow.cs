@@ -237,28 +237,36 @@ namespace Editor
             {
                if (!Globals.Regions.TryGetValue(s, out var region))
                   return [];
-
-               List<string> uniqueAreaNames = [];
-               for (var i = 0; i < Globals.Selection.GetSelectedProvinces.Count; i++)
-                  if (!uniqueAreaNames.Contains(Globals.Selection.GetSelectedProvinces[i].Area))
-                     uniqueAreaNames.Add(Globals.Selection.GetSelectedProvinces[i].Area);
-
-               Globals.HistoryManager.AddCommand(new CModifyExistingRegion(s, uniqueAreaNames, b));
+               
+               Globals.HistoryManager.AddCommand(new CModifyExistingRegion(s, ProvinceCollectionHelper.GetAreaNamesFromProvinces(Globals.Selection.GetSelectedProvinces), b));
 
                return region.Areas;
             }, // A Region is modified
             s =>
             {
-               if (!Globals.Regions.TryGetValue(s, out var region))
+               if (Globals.Regions.TryGetValue(s, out _))
                   return [];
-
-               // Globals.HistoryManager.AddCommand(new CCreateNewRegion(s, Globals.Selection.SelectedProvinces));
+               
+               Globals.HistoryManager.AddCommand(new CAddNewRegion(s, ProvinceCollectionHelper.GetAreaNamesFromProvinces(Globals.Selection.GetSelectedProvinces)));
+               
                if (Globals.Regions.TryGetValue(s, out var newRegion))
                   return newRegion.Areas;
                return [];
             }, // A new Region is created
-            s => {}, // A Region is deleted
-            (s, idStr) => {} // A single area is removed from a region
+            s =>
+            {
+               if (!Globals.Regions.TryGetValue(s, out _))
+                  return;
+
+               Globals.HistoryManager.AddCommand(new CDeleteRegion(s));
+            }, // A Region is deleted
+            (s, str) =>
+            {
+               if (!Globals.Regions.TryGetValue(s, out _) || !Globals.Areas.ContainsKey(str))
+                  return;
+
+               Globals.HistoryManager.AddCommand(new CModifyExistingRegion(s, [str], false));
+            } // A single area is removed from a region
          );
          ProvinceCollectionsMainLayoutPanel.Controls.Add(_regionEditingGui, 0, 1);
 

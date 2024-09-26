@@ -5,6 +5,16 @@ namespace Editor.Helper
 {
    public static class ProvinceCollectionHelper
    {
+      public static List<string> GetAreaNamesFromProvinces(List<Province> provinces)
+      {
+
+         List<string> uniqueAreaNames = [];
+         for (var i = 0; i < Globals.Selection.GetSelectedProvinces.Count; i++)
+            if (!uniqueAreaNames.Contains(Globals.Selection.GetSelectedProvinces[i].Area))
+               uniqueAreaNames.Add(Globals.Selection.GetSelectedProvinces[i].Area);
+         return uniqueAreaNames;
+      }
+
       public static List<int> GetProvincesWithAttribute(string attribute, object value, bool onlyLandProvinces = true)
       {
          if (onlyLandProvinces)

@@ -15,10 +15,8 @@ public class Region(string name) : IProvinceCollection
       get => _areas;
       init
       {
-         foreach (var area in value)
-         {
-            ModifyAreaCollection(area, true);
-         }
+         foreach (var area in value) 
+            AddRmvArea(area, true);
       }
    }
 
@@ -38,15 +36,15 @@ public class Region(string name) : IProvinceCollection
 
    public void AddArea(string areaName)
    {
-      ModifyAreaCollection(areaName, true);
+      AddRmvArea(areaName, true);
    }
 
    public void RemoveArea(string areaName)
    {
-      ModifyAreaCollection(areaName, false);
+      AddRmvArea(areaName, false);
    }
 
-   private void ModifyAreaCollection(string areaName, bool add)
+   private void AddRmvArea(string areaName, bool add)
    {
 
       if (add)
