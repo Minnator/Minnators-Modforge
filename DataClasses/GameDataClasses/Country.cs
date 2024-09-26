@@ -92,13 +92,16 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
          if (value == -1)
             return;
          // Keeping the capitals list up to date to have a list of all capitals of nations which are currently on the map
-         if (Exists)
+         lock (Globals.Capitals)
          {
-            Globals.Capitals.Add(value);
-            Globals.Capitals.Remove(_capital);
+            if (Exists)
+            {
+               Globals.Capitals.Add(value);
+               Globals.Capitals.Remove(_capital);
+            }
+            else
+               Globals.Capitals.Remove(_capital);
          }
-         else
-            Globals.Capitals.Remove(_capital);
          _capital = value;
       }
    }
