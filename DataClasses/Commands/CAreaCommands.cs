@@ -1,4 +1,5 @@
 ﻿using Editor.Commands;
+using Editor.Controls;
 using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.DataClasses.Commands
@@ -9,6 +10,7 @@ namespace Editor.DataClasses.Commands
       private readonly List<int> _deltaProvinces;
       private readonly bool _add;
       private readonly List<KeyValuePair<int, string>> _oldAreasPerId = [];
+
 
       public CModifyExitingArea(string areaName, List<int> deltaProvinces, bool add, bool executeOnInit = true)
       {
@@ -85,11 +87,13 @@ namespace Editor.DataClasses.Commands
       private readonly string _areaName;
       private readonly List<int> _provinces;
       private readonly List<KeyValuePair<int, string>> _oldAreasPerId = [];
+      private ComboBox _comboBox;
 
-      public CCreateNewArea(string areaName, List<int> provinces, bool executeOnInit = true)
+      public CCreateNewArea(string areaName, List<int> provinces, ComboBox comboBox, bool executeOnInit = true)
       {
          _areaName = areaName;
          _provinces = provinces;
+         _comboBox = comboBox;
 
          if (executeOnInit)
             Execute();
@@ -112,11 +116,13 @@ namespace Editor.DataClasses.Commands
                oldArea.Provinces = oldArea.Provinces.Except([prov]).ToArray();
             province.Area = _areaName;
          }
+
+         _comboBox.Items.Add(_areaName);
       }
 
       public void Undo()
       {
-         if (!Globals.Areas.Remove(_areaName, out var _))
+         if (!Globals.Areas.Remove(_areaName, out _))
             return;
 
          foreach (var kvp in _oldAreasPerId)
@@ -127,11 +133,20 @@ namespace Editor.DataClasses.Commands
             if (Globals.Areas.TryGetValue(kvp.Value, out var oldArea))
                oldArea.Provinces = oldArea.Provinces.Union([kvp.Key]).ToArray();
          }
+
+         _comboBox.AutoCompleteCustomSource.Remove(_areaName);
+         _comboBox.Items.Remove(_areaName);
+         _comboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+         _comboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
       }
 
       public void Redo()
       {
          Execute();
+         // Do it down here as it is covered in the add_button event of the CollectionEditor
+         _comboBox.AutoCompleteCustomSource.Add(_areaName);
+         _comboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+         _comboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
       }
 
       public string GetDescription()
@@ -144,11 +159,12 @@ namespace Editor.DataClasses.Commands
    {
       private readonly string _areaName;
       private Area _area = null!;
-      private readonly List<KeyValuePair<int, string>> _oldAreasPerId = [];
+      private readonly ComboBox _comboBox;
 
-      public CRemoveArea(string area, bool executeOnInit = true)
+      public CRemoveArea(string area, ComboBox comboBox, bool executeOnInit = true)
       {
          _areaName = area;
+         _comboBox = comboBox;
 
          if (executeOnInit)
             Execute();
@@ -158,12 +174,13 @@ namespace Editor.DataClasses.Commands
       {
          if (!Globals.Areas.TryGetValue(_areaName, out _area!))
             return;
-
+         
          foreach (var prov in _area.Provinces)
             if (Globals.Provinces.TryGetValue(prov, out var province))
                province.Area = string.Empty;
 
          Globals.Areas.Remove(_areaName);
+         _comboBox.Items.Remove(_areaName);
       }
 
       public void Undo()
@@ -173,11 +190,19 @@ namespace Editor.DataClasses.Commands
          foreach (var prov in _area.Provinces)
             if (Globals.Provinces.TryGetValue(prov, out var province))
                province.Area = _areaName;
+
+         _comboBox.Items.Add(_areaName);
+         _comboBox.AutoCompleteCustomSource.Add(_areaName);
+         _comboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+         _comboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
       }
 
       public void Redo()
       {
          Execute();
+         _comboBox.AutoCompleteCustomSource.Remove(_areaName);
+         _comboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+         _comboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
       }
 
       public string GetDescription()

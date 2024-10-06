@@ -9,22 +9,22 @@ namespace Editor.Controls
       private Label _titleLabel = null!;
       private TableLayoutPanel _nameTlp = null!;
       private TableLayoutPanel _tlp = null!;
-      private ExtendedComboBox _extendedComboBox = null!;
+      public ExtendedComboBox ExtendedComboBox = null!;
       private FlowLayoutPanel _flowLayout = null!;
 
       public event EventHandler<ProvinceEditedEventArgs> OnItemAdded = delegate { };
       public event EventHandler<ProvinceEditedEventArgs> OnItemRemoved = delegate { };
 
-      private Func<string, List<string>> _onSelectionAction; // Item name, return list of items to add as buttons
-      private Func<string, bool, List<string>> _onAddedOrRemovedFunc; // Item name, add or remove, returns list of items to add as buttons
-      private Func<string, List<string>> _onNewCreated; // Item name, returns list of items to add as buttons
-      private Action<string> _onDeleted; // Item name
-      private Action<string, string> _onSingleRemoved;
+      private readonly Func<string, List<string>> _onSelectionAction; // Item name, return list of items to add as buttons
+      private readonly Func<string, bool, List<string>> _onAddedOrRemovedFunc; // Item name, add or remove, returns list of items to add as buttons
+      private readonly Func<string, List<string>> _onNewCreated; // Item name, returns list of items to add as buttons
+      private readonly Action<string> _onDeleted; // Item name
+      private readonly Action<string, string> _onSingleRemoved; // Item name, item to remove
 
-      private string _name;
-      private string _mapModeName;
+      private readonly string _name;
+      private readonly string _mapModeName;
 
-      private ItemTypes _itemTypes;
+      private readonly ItemTypes _itemTypes;
 
       // TODO add a small button to flip to the according MapMode
       public CollectionEditor(string name, string mapModeName, ItemTypes itemTypes, Func<string, List<string>> onSelectionAction, Func<string, bool, List<string>> onAddedOrRemovedFunc, Func<string, List<string>> onNewCreated, Action<string> onDeleted, Action<string, string> onSingleRemoved)
@@ -92,14 +92,14 @@ namespace Editor.Controls
          var mapModeButton = ControlFactory.GetImageButton(ControlFactory.ImageButtonType.Map, "Switch to the according map mode");
          mapModeButton.MouseUp += SwitchToMapMode;
 
-         _extendedComboBox = new()
+         ExtendedComboBox = new()
          {
             Margin = new(1, 5, 1, 1),
             Dock = DockStyle.Fill,
             AutoCompleteMode = AutoCompleteMode.SuggestAppend,
             AutoCompleteSource = AutoCompleteSource.ListItems,
          };
-         _extendedComboBox.SelectedIndexChanged += ComboBoxIndexChanged;
+         ExtendedComboBox.SelectedIndexChanged += ComboBoxIndexChanged;
 
          _flowLayout = new()
          {
@@ -112,7 +112,7 @@ namespace Editor.Controls
 
          _nameTlp.Controls.Add(_titleLabel, 0, 0);
          _nameTlp.Controls.Add(mapModeButton, 1, 0);
-         _nameTlp.Controls.Add(_extendedComboBox, 2, 0);
+         _nameTlp.Controls.Add(ExtendedComboBox, 2, 0);
          _nameTlp.Controls.Add(addButton, 3, 0);
          _nameTlp.Controls.Add(removeButton, 4, 0);
 
@@ -131,7 +131,7 @@ namespace Editor.Controls
 
       private void OnAddButtonClick(object? sender, MouseEventArgs e)
       {
-         var item = _extendedComboBox.Text;
+         var item = ExtendedComboBox.Text;
          if (string.IsNullOrWhiteSpace(item))
             return;
 
@@ -148,20 +148,20 @@ namespace Editor.Controls
             }
             Clear();
             AddItemsUnique(_onNewCreated.Invoke(item));
-            _extendedComboBox.Items.Add(item);
-            _extendedComboBox.AutoCompleteCustomSource.Add(item);
+            ExtendedComboBox.Items.Add(item);
+            ExtendedComboBox.AutoCompleteCustomSource.Add(item);
             // Needs to be set to None to delete the item from the cashed? autocomplete list
-            _extendedComboBox.AutoCompleteMode = AutoCompleteMode.None;
-            _extendedComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.None;
+            ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
          }
-         _extendedComboBox.Text = item;
-         _extendedComboBox.SelectionStart = 0;
-         _extendedComboBox.SelectionLength = item.Length;
+         ExtendedComboBox.Text = item;
+         ExtendedComboBox.SelectionStart = 0;
+         ExtendedComboBox.SelectionLength = item.Length;
       }
 
       private void OnRemoveButtonClick(object? sender, MouseEventArgs e)
       {
-         var item = _extendedComboBox.Text;
+         var item = ExtendedComboBox.Text;
          if (string.IsNullOrWhiteSpace(item))
             return;
 
@@ -169,37 +169,37 @@ namespace Editor.Controls
          {
             Clear();
             AddItemsUnique(_onAddedOrRemovedFunc.Invoke(item, false));
-            _extendedComboBox.Text = item;
-            _extendedComboBox.SelectionStart = 0;
-            _extendedComboBox.SelectionLength = item.Length;
+            ExtendedComboBox.Text = item;
+            ExtendedComboBox.SelectionStart = 0;
+            ExtendedComboBox.SelectionLength = item.Length;
          }
          else if (e.Button == MouseButtons.Right)
          {
             Clear();
             _onDeleted.Invoke(item);
-            _extendedComboBox.Items.Remove(item);
+            ExtendedComboBox.Items.Remove(item);
             // Needs to be set to None to delete the item from the cashed? autocomplete list
-            _extendedComboBox.AutoCompleteMode = AutoCompleteMode.None;
-            _extendedComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            _extendedComboBox.AutoCompleteCustomSource.Remove(item);
+            ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.None;
+            ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            ExtendedComboBox.AutoCompleteCustomSource.Remove(item);
          }
       }
 
       // When an item is autocompleted in the combobox, add it to the list
       private void ComboBoxIndexChanged(object? sender, EventArgs e)
       {
-         var item = _extendedComboBox.SelectedItem?.ToString();
+         var item = ExtendedComboBox.SelectedItem?.ToString();
          if (item == null)
             return;
 
          Clear();
          AddItemsUnique(_onSelectionAction.Invoke(item));
-         _extendedComboBox.Text = item;
+         ExtendedComboBox.Text = item;
       }
 
       private void OnSingleRemoved(object? sender, string item)
       {
-         var text = _extendedComboBox.Text;
+         var text = ExtendedComboBox.Text;
          if (string.IsNullOrWhiteSpace(text))
          {
             AddItem(item);
@@ -211,17 +211,17 @@ namespace Editor.Controls
       public void SetComboBoxItems(List<string> items)
       {
          items.Sort();
-         _extendedComboBox.Items.Clear();
+         ExtendedComboBox.Items.Clear();
          foreach (var item in items)
-            _extendedComboBox.Items.Add(item);
+            ExtendedComboBox.Items.Add(item);
       }
 
       public void InitializeItems(List<string> items)
       {
          items.Sort();
-         _extendedComboBox.Items.Clear();
+         ExtendedComboBox.Items.Clear();
          foreach (var item in items)
-            _extendedComboBox.Items.Add(item);
+            ExtendedComboBox.Items.Add(item);
       }
 
       public List<string> GetItems()
@@ -265,8 +265,8 @@ namespace Editor.Controls
 
          OnItemAdded?.Invoke(this, new(Globals.Selection.GetSelectedProvinces, item));
 
-         _extendedComboBox.Text = "";
-         _extendedComboBox.Focus();
+         ExtendedComboBox.Text = "";
+         ExtendedComboBox.Focus();
       }
 
       public void RemoveItem(string item)

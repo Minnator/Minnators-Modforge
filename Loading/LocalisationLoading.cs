@@ -69,10 +69,13 @@ public class LocalisationLoading
          threadDict.Clear();
       });
 
+      Globals.Localisation.Clear();
       Globals.Localisation = loc;
+      Globals.LocalisationCollisions.Clear();
       Globals.LocalisationCollisions = collisions;
       sw.Stop();
-      Globals.LoadingLog.WriteTimeStamp($"Localisation loaded [{collisions.Count}] collisions", sw.ElapsedMilliseconds);
+      if (Globals.State == State.Loading)
+         Globals.LoadingLog.WriteTimeStamp($"Localisation loaded [{collisions.Count}] collisions", sw.ElapsedMilliseconds);
    }
    
 }

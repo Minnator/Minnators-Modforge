@@ -80,12 +80,14 @@ namespace Editor.DataClasses.Commands
    {
       private readonly string _regionName;
       private readonly List<string> _areas;
-      private List<KeyValuePair<string, string>> _oldAreasPerRegion = [];
+      private readonly List<KeyValuePair<string, string>> _oldAreasPerRegion = [];
+      private readonly ComboBox _comboBox;
 
-      public CAddNewRegion(string regionName, List<string> areas, bool executeOnInit = true)
+      public CAddNewRegion(string regionName, List<string> areas, ComboBox comboBox, bool executeOnInit = true)
       {
          _regionName = regionName;
          _areas = areas;
+         _comboBox = comboBox;
 
          if (executeOnInit)
             Execute();
@@ -104,6 +106,8 @@ namespace Editor.DataClasses.Commands
 
          foreach (var area in _areas)
             Globals.Regions[_regionName].AddArea(area);
+
+         _comboBox.Items.Add(_regionName);
       }
 
       public void Undo()
@@ -126,6 +130,8 @@ namespace Editor.DataClasses.Commands
             if (Globals.Regions.TryGetValue(oldRegion, out var value))
                value.AddArea(areaName);
          }
+
+         _comboBox.Items.Remove(_regionName);
       }
 
       public void Redo()
@@ -142,7 +148,8 @@ namespace Editor.DataClasses.Commands
    public class CDeleteRegion : ICommand
    {
       private readonly string _regionName;
-      private List<KeyValuePair<string, string>> _oldAreasPerRegion = [];
+      private Region _region = null!;
+      private List<string> _areas = [];
 
       public CDeleteRegion(string regionName, bool executeOnInit = true)
       {
@@ -154,40 +161,39 @@ namespace Editor.DataClasses.Commands
 
       public void Execute()
       {
-         if (!Globals.Regions.TryGetValue(_regionName, out var region))
+         if (!Globals.Regions.TryGetValue(_regionName, out _region!))
             return;
          
-         foreach (var area in region.Areas)
-         {
-            if (!Globals.Areas.TryGetValue(area, out var value))
-               continue;
-            _oldAreasPerRegion.Add(new(area, value.Region));
-            value.Region = string.Empty;
-         }
-
          // Trigger the MapUpdate via this
-         for (var i = region.Areas.Count - 1; i >= 0; i--)
-            region.RemoveArea(region.Areas[i]);
+         for (var i = _region.Areas.Count - 1; i >= 0; i--)
+         {
+            _areas.Add(_region.Areas[i]);
+            if (!Globals.Areas.TryGetValue(_region.Areas[i], out var area))
+               continue;
+            area.Region = string.Empty;
+            _region.RemoveArea(_region.Areas[i]);
+         }
          
          Globals.Regions.Remove(_regionName);
+         Globals.MapWindow.RegionEditingGui.ExtendedComboBox.Items.Remove(_regionName);
       }
 
       public void Undo()
       {
-         foreach (var (areaName, oldRegion) in _oldAreasPerRegion)
+         if (!Globals.Regions.TryAdd(_regionName, _region))
+            return;
+         foreach (var areaName in _areas)
          {
             if (!Globals.Areas.TryGetValue(areaName, out var area))
                continue;
-            area.Region = oldRegion;
-            if (Globals.Regions.TryGetValue(oldRegion, out var value))
-               value.AddArea(areaName);
-         }
-
-         Globals.Regions.Add(_regionName, new (_regionName, []));
-
-         // Trigger the MapUpdate via this
-         foreach (var (areaName, _) in _oldAreasPerRegion)
+            area.Region = _regionName;
             Globals.Regions[_regionName].AddArea(areaName);
+         }
+         
+         Globals.MapWindow.RegionEditingGui.ExtendedComboBox.Items.Add(_regionName);
+         Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteCustomSource.Add(_regionName);
+         Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+         Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
       }
 
       public void Redo()

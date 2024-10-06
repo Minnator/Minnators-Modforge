@@ -80,14 +80,16 @@ namespace Editor.DataClasses.Commands
 
    public class CAddNewSuperRegion : ICommand
    {
-      private string _superRegionName;
-      private List<string> _deltaRegions;
+      private readonly string _superRegionName;
+      private readonly List<string> _deltaRegions;
       private readonly List<KeyValuePair<string, string>> _regionsPerSuperRegion = [];
+      private readonly ComboBox _comboBox;
 
-      public CAddNewSuperRegion(string superRegionName, List<string> deltaRegions, bool executeOnInit = true)
+      public CAddNewSuperRegion(string superRegionName, List<string> deltaRegions, ComboBox comboBox, bool executeOnInit = true)
       {
          _superRegionName = superRegionName;
          _deltaRegions = deltaRegions;
+         _comboBox = comboBox;
 
          if (executeOnInit) 
             Execute();
@@ -116,6 +118,7 @@ namespace Editor.DataClasses.Commands
          }
 
          Globals.SuperRegions.Add(_superRegionName, sRegion);
+         _comboBox.Items.Add(_superRegionName);
       }
 
       public void Undo()
@@ -132,6 +135,7 @@ namespace Editor.DataClasses.Commands
          }
 
          Globals.SuperRegions.Remove(_superRegionName);
+         _comboBox.Items.Remove(_superRegionName);
       }
 
       public void Redo()
@@ -149,11 +153,16 @@ namespace Editor.DataClasses.Commands
    {
       private readonly string _superRegionName;
       private readonly List<KeyValuePair<string, string>> _regionsPerSuperRegion = [];
-      private SuperRegion _sRegion = null!;
+      private readonly Color _regionColor;
+      private readonly ComboBox _comboBox;
 
-      public CDeleteSuperRegion(string superRegionName, bool executeOnInit = true)
+      public CDeleteSuperRegion(string superRegionName, ComboBox comboBox, bool executeOnInit = true)
       {
          _superRegionName = superRegionName;
+         _comboBox = comboBox;
+
+         if (Globals.SuperRegions.TryGetValue(_superRegionName, out var sRegion))
+            _regionColor = sRegion.Color;
 
          if (executeOnInit) 
             Execute();
@@ -161,38 +170,42 @@ namespace Editor.DataClasses.Commands
 
       public void Execute()
       {
-         if (!Globals.SuperRegions.TryGetValue(_superRegionName, out _sRegion!))
+         if (!Globals.SuperRegions.TryGetValue(_superRegionName, out var sRegion))
             return;
 
-         foreach (var regionName in _sRegion.Regions)
+         for (var i = sRegion.Regions.Count - 1; i >= 0; i--)
          {
+            var regionName = sRegion.Regions[i];
             if (!Globals.Regions.TryGetValue(regionName, out var region))
                continue;
             _regionsPerSuperRegion.Add(new(regionName, region.SuperRegion));
             region.SuperRegion = string.Empty;
-            _sRegion.RemoveRegion(regionName);
+            sRegion.RemoveRegion(regionName);
          }
 
          Globals.SuperRegions.Remove(_superRegionName);
+         _comboBox.Items.Remove(_superRegionName);
       }
 
       public void Undo()
       {
-         if (Globals.SuperRegions.ContainsKey(_superRegionName))
+         if (Globals.SuperRegions.TryGetValue(_superRegionName, out _))
          {
             MessageBox.Show($"Super Region {_superRegionName} already exists! \nUnable to reverse Deleting", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
          }
+
+         Globals.SuperRegions.Add(_superRegionName, new(_superRegionName, []) { Color = _regionColor });
 
          foreach (var kvp in _regionsPerSuperRegion)
          {
             if (!Globals.Regions.TryGetValue(kvp.Key, out var region))
                continue;
             region.SuperRegion = kvp.Value;
-            _sRegion.AddRegion(kvp.Key);
+            Globals.SuperRegions[_superRegionName].AddRegion(kvp.Key);
          }
 
-         Globals.SuperRegions.Add(_superRegionName, _sRegion);
+         _comboBox.Items.Add(_superRegionName);
       }
 
       public void Redo()

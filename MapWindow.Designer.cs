@@ -37,6 +37,9 @@
          saveSelectionToolStripMenuItem = new ToolStripMenuItem();
          toolStripMenuItem1 = new ToolStripMenuItem();
          ProvincePreviewMode = new ToolStripComboBox();
+         quickSettingsToolStripMenuItem = new ToolStripMenuItem();
+         languageToolStripMenuItem = new ToolStripMenuItem();
+         LanguageSelectionToolStrip = new ToolStripComboBox();
          historyToolStripMenuItem = new ToolStripMenuItem();
          selectionHistoryToolStripMenuItem = new ToolStripMenuItem();
          DeleteHistoryToolStripMenuItem = new ToolStripMenuItem();
@@ -213,7 +216,7 @@
          // 
          // filesToolStripMenuItem
          // 
-         filesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { gCToolStripMenuItem, saveCurrentMapModeToolStripMenuItem, saveSelectionToolStripMenuItem, toolStripMenuItem1 });
+         filesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { gCToolStripMenuItem, saveCurrentMapModeToolStripMenuItem, saveSelectionToolStripMenuItem, toolStripMenuItem1, quickSettingsToolStripMenuItem });
          filesToolStripMenuItem.Name = "filesToolStripMenuItem";
          filesToolStripMenuItem.Size = new Size(42, 23);
          filesToolStripMenuItem.Text = "Files";
@@ -252,6 +255,28 @@
          ProvincePreviewMode.Name = "ProvincePreviewMode";
          ProvincePreviewMode.Size = new Size(121, 23);
          ProvincePreviewMode.SelectedIndexChanged += ProvincePreviewMode_SelectedIndexChanged;
+         // 
+         // quickSettingsToolStripMenuItem
+         // 
+         quickSettingsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { languageToolStripMenuItem, LanguageSelectionToolStrip });
+         quickSettingsToolStripMenuItem.Name = "quickSettingsToolStripMenuItem";
+         quickSettingsToolStripMenuItem.Size = new Size(249, 22);
+         quickSettingsToolStripMenuItem.Text = "Quick Settings";
+         // 
+         // languageToolStripMenuItem
+         // 
+         languageToolStripMenuItem.Enabled = false;
+         languageToolStripMenuItem.Name = "languageToolStripMenuItem";
+         languageToolStripMenuItem.Size = new Size(181, 22);
+         languageToolStripMenuItem.Text = "Language";
+         // 
+         // LanguageSelectionToolStrip
+         // 
+         LanguageSelectionToolStrip.DropDownStyle = ComboBoxStyle.DropDownList;
+         LanguageSelectionToolStrip.Items.AddRange(new object[] { "english", "spanish", "french", "german" });
+         LanguageSelectionToolStrip.Name = "LanguageSelectionToolStrip";
+         LanguageSelectionToolStrip.Size = new Size(121, 23);
+         LanguageSelectionToolStrip.SelectedIndexChanged += LanguageSelectionToolStrip_SelectedIndexChanged;
          // 
          // historyToolStripMenuItem
          // 
@@ -1866,6 +1891,9 @@
       private Panel ProvinceCollectionsPanel;
       private TableLayoutPanel GroupCollectionOptions;
       private CheckBox FocusSelectionCheckBox;
+      private ToolStripMenuItem quickSettingsToolStripMenuItem;
+      private ToolStripComboBox LanguageSelectionToolStrip;
+      private ToolStripMenuItem languageToolStripMenuItem;
    }
 }
 

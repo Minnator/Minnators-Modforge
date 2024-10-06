@@ -74,7 +74,7 @@ public class HistoryManager
       foreach (var node in redo)
          node.Command.Redo(); // Cant use Redo() because it would change the current node
       
-      _current = redo[redo.Count - 1];
+      _current = redo[^1];
 
       UndoDepthChanged?.Invoke(this, GetUndoDepth());
       RedoDepthChanged?.Invoke(this, GetRedoDepth());
@@ -110,6 +110,7 @@ public class HistoryManager
 
    public (List<HistoryNode>, List<HistoryNode>) GetPathBetweenNodes(int from, int to)
    {
+      // Cant handle edgecase if from == to
       List<HistoryNode> p1 = [];
       List<HistoryNode> p2 = [];
 

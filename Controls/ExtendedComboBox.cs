@@ -5,7 +5,7 @@ namespace Editor.Controls
    public sealed class ExtendedComboBox : ComboBox
    {
       public EventHandler<ProvinceEditedEventArgs>? OnDataChanged = delegate { };
-      public EventHandler<ProvinceCollectionEventArgs>? OnDataChangedC = delegate { };
+      public EventHandler<ProvinceCollectionEventArgs>? OnCollectionDataChanged = delegate { };
 
       public ExtendedComboBox()
       {
@@ -19,7 +19,7 @@ namespace Editor.Controls
       {
          base.OnSelectedIndexChanged(e);
          OnDataChanged?.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Text));
-         OnDataChangedC?.Invoke(this, new (Text, Globals.Selection.GetSelectedProvincesIds));
+         OnCollectionDataChanged?.Invoke(this, new (Text, Globals.Selection.GetSelectedProvincesIds));
       }
 
       public void ReplaceItems(List<string> items)

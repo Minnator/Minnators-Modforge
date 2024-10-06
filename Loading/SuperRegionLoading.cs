@@ -20,9 +20,7 @@ public static class SuperRegionLoading
          return;
       }
       var newContent = IO.ReadAllLinesInUTF8(path);
-      var superRegionDictionary = new Dictionary<string, SuperRegion>();
       var sb = new StringBuilder();
-      var sb1 = new StringBuilder();
 
       foreach (var line in newContent)
          sb.Append(Parsing.RemoveCommentFromLine(line));
@@ -37,22 +35,13 @@ public static class SuperRegionLoading
          {
             Color = Globals.ColorProvider.GetRandomColor()
          };
-         superRegionDictionary.Add(superRegionName, sRegion);
+         Globals.AddSuperRegion(sRegion);
 
          foreach (var region in regions)
             if (Globals.Regions.TryGetValue(region, out var reg)) 
                reg.SuperRegion = superRegionName;
          
-         sb1.AppendLine($"Super Region: {sRegion.Name} | {sRegion.Color}");
-         foreach (var region in sRegion.Regions)
-            sb1.AppendLine($"\t - {region}");
       }
-
-      sb1.Clear();
-      foreach (var region in Globals.Regions)
-         sb1.AppendLine($"Region: {region.Value.Name} | {region.Value.SuperRegion} | {region.Value.Color}");
-
-      Globals.SuperRegions = superRegionDictionary;
 
       sw.Stop();
       Globals.LoadingLog.WriteTimeStamp("Parsing Super Regions", sw.ElapsedMilliseconds);

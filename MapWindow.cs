@@ -48,11 +48,11 @@ namespace Editor
 
       private ToolTip _savingButtonsToolTip = null!;
 
-      private CollectionEditor _areaEditingGui = null!;
-      private CollectionEditor _regionEditingGui = null!;
-      private CollectionEditor _superRegionEditingGui = null!;
-      private CollectionEditor _tradeCompanyEditingGui = null!;
-      private CollectionEditor _countryEditingGuid = null!;
+      public CollectionEditor AreaEditingGui = null!;
+      public CollectionEditor RegionEditingGui = null!;
+      public CollectionEditor SuperRegionEditingGui = null!;
+      public CollectionEditor TradeCompanyEditingGui = null!;
+      public CollectionEditor CountryEditingGuid = null!;
 
       #endregion
 
@@ -105,7 +105,10 @@ namespace Editor
          StartPosition = FormStartPosition.CenterScreen;
          Show();
          MapPictureBox.FocusOn(new Point(3100, 600));
-
+         
+         // Activate this window
+         Activate();
+         
          AfterLoad();
       }
 
@@ -163,7 +166,7 @@ namespace Editor
 
       private void InitializeProvinceCollectionEditGui()
       {
-         _areaEditingGui = ControlFactory.GetCollectionEditor("Area", "Areas", ItemTypes.Id, [.. Globals.Areas.Keys],
+         AreaEditingGui = ControlFactory.GetCollectionEditor("Area", "Areas", ItemTypes.Id, [.. Globals.Areas.Keys],
             s => // An Area is selected
             {
                List<string> provName = [];
@@ -192,7 +195,7 @@ namespace Editor
             },
             s => // A new Area is created
             {
-               Globals.HistoryManager.AddCommand(new CCreateNewArea(s, Globals.Selection.SelectedProvinces));
+               Globals.HistoryManager.AddCommand(new CCreateNewArea(s, Globals.Selection.SelectedProvinces, AreaEditingGui.ExtendedComboBox));
 
                List<string> provName = [];
                for (var i = 0; i < Globals.Selection.GetSelectedProvinces.Count; i++)
@@ -204,7 +207,7 @@ namespace Editor
                if (!Globals.Areas.TryGetValue(s, out _))
                   return;
 
-               Globals.HistoryManager.AddCommand(new CRemoveArea(s));
+               Globals.HistoryManager.AddCommand(new CRemoveArea(s, AreaEditingGui.ExtendedComboBox));
             },
             (s, idStr) => // A single province is removed from an area
             {
@@ -217,9 +220,9 @@ namespace Editor
                Globals.HistoryManager.AddCommand(new CModifyExitingArea(s, [id], false));
             }
          );
-         ProvinceCollectionsMainLayoutPanel.Controls.Add(_areaEditingGui, 0, 0);
+         ProvinceCollectionsMainLayoutPanel.Controls.Add(AreaEditingGui, 0, 0);
 
-         _regionEditingGui = ControlFactory.GetCollectionEditor("Region", "Regions", ItemTypes.String, [.. Globals.Regions.Keys],
+         RegionEditingGui = ControlFactory.GetCollectionEditor("Region", "Regions", ItemTypes.String, [.. Globals.Regions.Keys],
             s =>
             {
                Globals.Selection.Clear();
@@ -236,7 +239,7 @@ namespace Editor
             {
                if (!Globals.Regions.TryGetValue(s, out var region))
                   return [];
-               
+
                Globals.HistoryManager.AddCommand(new CModifyExistingRegion(s, ProvinceCollectionHelper.GetAreaNamesFromProvinces(Globals.Selection.GetSelectedProvinces), b));
 
                return region.Areas;
@@ -245,9 +248,9 @@ namespace Editor
             {
                if (Globals.Regions.TryGetValue(s, out _))
                   return [];
-               
-               Globals.HistoryManager.AddCommand(new CAddNewRegion(s, ProvinceCollectionHelper.GetAreaNamesFromProvinces(Globals.Selection.GetSelectedProvinces)));
-               
+
+               Globals.HistoryManager.AddCommand(new CAddNewRegion(s, ProvinceCollectionHelper.GetAreaNamesFromProvinces(Globals.Selection.GetSelectedProvinces), AreaEditingGui.ExtendedComboBox));
+
                if (Globals.Regions.TryGetValue(s, out var newRegion))
                   return newRegion.Areas;
                return [];
@@ -267,9 +270,9 @@ namespace Editor
                Globals.HistoryManager.AddCommand(new CModifyExistingRegion(s, [str], false));
             } // A single area is removed from a region
          );
-         ProvinceCollectionsMainLayoutPanel.Controls.Add(_regionEditingGui, 0, 1);
+         ProvinceCollectionsMainLayoutPanel.Controls.Add(RegionEditingGui, 0, 1);
 
-         _superRegionEditingGui = ControlFactory.GetCollectionEditor("SuperRegion", "Super Regions", ItemTypes.String, [.. Globals.SuperRegions.Keys],
+         SuperRegionEditingGui = ControlFactory.GetCollectionEditor("SuperRegion", "Super Regions", ItemTypes.String, [.. Globals.SuperRegions.Keys],
             s =>
             {
                Globals.Selection.Clear();
@@ -285,7 +288,7 @@ namespace Editor
             {
                if (!Globals.SuperRegions.TryGetValue(s, out var superRegion))
                   return [];
-               
+
                Globals.HistoryManager.AddCommand(new CModifyExistingSuperRegion(s, ProvinceCollectionHelper.GetRegionNamesFromProvinces(Globals.Selection.GetSelectedProvinces), b));
 
                return superRegion.Regions;
@@ -294,9 +297,9 @@ namespace Editor
             {
                if (Globals.SuperRegions.TryGetValue(s, out _))
                   return [];
-               
-               Globals.HistoryManager.AddCommand(new CAddNewSuperRegion(s, ProvinceCollectionHelper.GetRegionNamesFromProvinces(Globals.Selection.GetSelectedProvinces)));
-               
+
+               Globals.HistoryManager.AddCommand(new CAddNewSuperRegion(s, ProvinceCollectionHelper.GetRegionNamesFromProvinces(Globals.Selection.GetSelectedProvinces), AreaEditingGui.ExtendedComboBox));
+
                if (Globals.SuperRegions.TryGetValue(s, out var newSuperRegion))
                   return newSuperRegion.Regions;
                return [];
@@ -306,7 +309,7 @@ namespace Editor
                if (!Globals.SuperRegions.TryGetValue(s, out _))
                   return;
 
-               Globals.HistoryManager.AddCommand(new CDeleteSuperRegion(s));
+               Globals.HistoryManager.AddCommand(new CDeleteSuperRegion(s, AreaEditingGui.ExtendedComboBox));
             }, // A SuperRegion is deleted
             (s, str) =>
             {
@@ -316,9 +319,9 @@ namespace Editor
                Globals.HistoryManager.AddCommand(new CModifyExistingSuperRegion(s, [str], false));
             } // A single region is removed from a super region
          );
-         ProvinceCollectionsMainLayoutPanel.Controls.Add(_superRegionEditingGui, 0, 2);
+         ProvinceCollectionsMainLayoutPanel.Controls.Add(SuperRegionEditingGui, 0, 2);
 
-         _tradeCompanyEditingGui = ControlFactory.GetCollectionEditor("TradeCompany", "Trade Companies", ItemTypes.Id, [.. Globals.TradeCompanies.Keys],
+         TradeCompanyEditingGui = ControlFactory.GetCollectionEditor("TradeCompany", "Trade Companies", ItemTypes.Id, [.. Globals.TradeCompanies.Keys],
             s =>
             {
                Globals.Selection.Clear();
@@ -372,9 +375,9 @@ namespace Editor
                //Globals.HistoryManager.AddCommand(new CModifyExistingTradeCompany(s, [id], false));
             }
          );
-         ProvinceCollectionsMainLayoutPanel.Controls.Add(_tradeCompanyEditingGui, 0, 3);
+         ProvinceCollectionsMainLayoutPanel.Controls.Add(TradeCompanyEditingGui, 0, 3);
 
-         _countryEditingGuid = ControlFactory.GetCollectionEditor("Country", "Countries", ItemTypes.Id, [.. Globals.Countries.Keys],
+         CountryEditingGuid = ControlFactory.GetCollectionEditor("Country", "Countries", ItemTypes.Id, [.. Globals.Countries.Keys],
             s =>
             {
                Globals.Selection.Clear();
@@ -428,7 +431,7 @@ namespace Editor
                //Globals.HistoryManager.AddCommand(new CModifyExistingCountry(s, [id], false));
             }
          );
-         ProvinceCollectionsMainLayoutPanel.Controls.Add(_countryEditingGuid, 0, 4);
+         ProvinceCollectionsMainLayoutPanel.Controls.Add(CountryEditingGuid, 0, 4);
       }
 
       private void InitializeCountryEditGui()
@@ -1155,6 +1158,11 @@ namespace Editor
          SettingsManager.LoadSettings();
       }
 
-
+      private void LanguageSelectionToolStrip_SelectedIndexChanged(object sender, EventArgs e)
+      {
+         Globals.Language = Enum.Parse<Language>(LanguageSelectionToolStrip.SelectedItem?.ToString() ?? "english");
+         // close the menu when an item is selected
+         filesToolStripMenuItem.DropDown.Close();
+      }
    }
 }

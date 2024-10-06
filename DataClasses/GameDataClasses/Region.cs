@@ -54,8 +54,7 @@ public class Region(string name) : IProvinceCollection
       }
       else
       {
-         if (_areas.Contains(areaName))
-            _areas.Remove(areaName);
+         _areas.Remove(areaName);
       }
       if (Globals.State == State.Running)
          if (Globals.Areas.TryGetValue(areaName, out var area))

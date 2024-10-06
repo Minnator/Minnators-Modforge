@@ -6,6 +6,7 @@ using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Settings;
 using Editor.Forms;
 using Editor.Helper;
+using Editor.Loading;
 using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor;
@@ -45,6 +46,15 @@ public enum EditingStatus
    Saving,
    Interrupted
 }
+public enum Language
+{
+   english,
+   french,
+   german,
+   spanish,
+}
+
+
 #endregion
 
 //contains all required and used data across the application and instances of forms.
@@ -52,8 +62,16 @@ public static class Globals
 {
    public static string VanillaPath = string.Empty;
    public static string ModPath = string.Empty;
-   public static string Language = "english";
 
+   public static Language Language
+   {
+      get => _language;
+      set
+      {
+         _language = value;
+         LocalisationLoading.Load();
+      }
+   }
 
 
    #region LoadingScreen
@@ -176,9 +194,22 @@ public static class Globals
 
    public static readonly Dictionary<string, int[]> ProvinceGroups = []; // TODO: read in
    // In Game Groups
-   public static Dictionary<string, Area> Areas = null!;
+   public static Dictionary<string, Area> Areas = [];
    public static Dictionary<string, Region> Regions { get; set; } = [];
-   public static Dictionary<string, SuperRegion> SuperRegions { get; set; } = [];
+
+   private static Dictionary<string, SuperRegion> _superRegions = [];
+   public static Dictionary<string, SuperRegion> SuperRegions => _superRegions;
+   public static void AddSuperRegion(SuperRegion sr)
+   {
+      if (_superRegions.TryAdd(sr.Name, sr)) 
+         GlobalEventHandlers.RaiseSuperRegionListChanged(sr.Name, true);
+   }
+   public static void RemoveSuperRegion(string name)
+   {
+      if (_superRegions.Remove(name))
+         GlobalEventHandlers.RaiseSuperRegionListChanged(name, false);
+   }
+
    public static Dictionary<string, Continent> Continents { get; set; } = [];
 
    // Localisation
@@ -207,4 +238,5 @@ public static class Globals
       "cannot_form_from_collapse_nation", "right_to_bear_arms", "all_your_core_are_belong_to_us", "random_nation_extra_size", 
    ];
 
+   private static Language _language = Language.english;
 }
