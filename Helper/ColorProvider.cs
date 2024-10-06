@@ -52,6 +52,7 @@ public class ColorProviderRgb(int seed = 1444)
 
       return Color.FromArgb(red, green, 0);
    }
+
    public Color GetColorOnGreenRedShade(int min, int max, float current)
    {
       // Normalize the current value to a range between 0 and 1

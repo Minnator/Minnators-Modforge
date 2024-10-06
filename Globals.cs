@@ -54,6 +54,16 @@ public enum Language
    spanish,
 }
 
+public enum StripesDirection
+{
+   Horizontal,
+   Vertical,
+   DiagonalLbRt,
+   DiagonalLtRb,
+   Dotted,
+   Pluses
+}
+
 
 #endregion
 
@@ -119,6 +129,7 @@ public static class Globals
    public static EditingStatus EditingStatus = EditingStatus.Idle;
    public static MapModeRendering MapModeRendering { get; set; } = MapModeRendering.Live;
    public static bool AllowEditing => EditingStatus == EditingStatus.Idle;
+   public static StripesDirection StripesDirection { get; set; } = StripesDirection.DiagonalLbRt;
 
    // History Manager
    public static readonly HistoryManager HistoryManager = new(new CInitial());

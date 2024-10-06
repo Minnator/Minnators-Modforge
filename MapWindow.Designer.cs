@@ -40,6 +40,8 @@
          quickSettingsToolStripMenuItem = new ToolStripMenuItem();
          languageToolStripMenuItem = new ToolStripMenuItem();
          LanguageSelectionToolStrip = new ToolStripComboBox();
+         stripesDirectionToolStripMenuItem = new ToolStripMenuItem();
+         StripeDirectionComboBox = new ToolStripComboBox();
          historyToolStripMenuItem = new ToolStripMenuItem();
          selectionHistoryToolStripMenuItem = new ToolStripMenuItem();
          DeleteHistoryToolStripMenuItem = new ToolStripMenuItem();
@@ -258,7 +260,7 @@
          // 
          // quickSettingsToolStripMenuItem
          // 
-         quickSettingsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { languageToolStripMenuItem, LanguageSelectionToolStrip });
+         quickSettingsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { languageToolStripMenuItem, LanguageSelectionToolStrip, stripesDirectionToolStripMenuItem, StripeDirectionComboBox });
          quickSettingsToolStripMenuItem.Name = "quickSettingsToolStripMenuItem";
          quickSettingsToolStripMenuItem.Size = new Size(249, 22);
          quickSettingsToolStripMenuItem.Text = "Quick Settings";
@@ -277,6 +279,19 @@
          LanguageSelectionToolStrip.Name = "LanguageSelectionToolStrip";
          LanguageSelectionToolStrip.Size = new Size(121, 23);
          LanguageSelectionToolStrip.SelectedIndexChanged += LanguageSelectionToolStrip_SelectedIndexChanged;
+         // 
+         // stripesDirectionToolStripMenuItem
+         // 
+         stripesDirectionToolStripMenuItem.Enabled = false;
+         stripesDirectionToolStripMenuItem.Name = "stripesDirectionToolStripMenuItem";
+         stripesDirectionToolStripMenuItem.Size = new Size(181, 22);
+         stripesDirectionToolStripMenuItem.Text = "Stripes Direction";
+         // 
+         // StripeDirectionComboBox
+         // 
+         StripeDirectionComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+         StripeDirectionComboBox.Name = "StripeDirectionComboBox";
+         StripeDirectionComboBox.Size = new Size(121, 23);
          // 
          // historyToolStripMenuItem
          // 
@@ -1894,6 +1909,8 @@
       private ToolStripMenuItem quickSettingsToolStripMenuItem;
       private ToolStripComboBox LanguageSelectionToolStrip;
       private ToolStripMenuItem languageToolStripMenuItem;
+      private ToolStripMenuItem stripesDirectionToolStripMenuItem;
+      private ToolStripComboBox StripeDirectionComboBox;
    }
 }
 

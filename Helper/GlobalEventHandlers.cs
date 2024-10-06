@@ -48,6 +48,8 @@ public static class GlobalEventHandlers
    {
       OnSuperRegionListChanged.Invoke(null, new (name, add));
    }
+
+
 }
 
 public class ProvinceCollectionEventArgs(string name, bool add) : EventArgs;

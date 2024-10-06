@@ -441,6 +441,11 @@ namespace Editor
 
       private void InitializeProvinceEditGui()
       {
+         // Quick Settings
+         StripeDirectionComboBox.Items.AddRange([.. Enum.GetNames(typeof(StripesDirection))]);
+         StripeDirectionComboBox.Text = StripesDirection.DiagonalLbRt.ToString();
+         StripeDirectionComboBox.SelectedIndexChanged += OnStripeDirectionChanged;
+
          // Tooltips for saving Buttons
          _savingButtonsToolTip = new();
          _savingButtonsToolTip.AutoPopDelay = 10000;
@@ -1033,6 +1038,13 @@ namespace Editor
          {
             Debug.WriteLine(province.Id);
          }
+      }
+      
+      public void OnStripeDirectionChanged(object? sender, EventArgs e)
+      {
+         Globals.StripesDirection = Enum.Parse<StripesDirection>(StripeDirectionComboBox.SelectedItem?.ToString() ?? StripesDirection.DiagonalLbRt.ToString());
+         // Close the menu when an item is selected
+         filesToolStripMenuItem.DropDown.Close();
       }
 
       private void ProvincePreviewMode_SelectedIndexChanged(object sender, EventArgs e)

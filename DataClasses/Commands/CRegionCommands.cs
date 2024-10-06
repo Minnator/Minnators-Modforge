@@ -199,6 +199,9 @@ namespace Editor.DataClasses.Commands
       public void Redo()
       {
          Execute();
+         Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteCustomSource.Remove(_regionName);
+         Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+         Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
       }
 
       public string GetDescription()

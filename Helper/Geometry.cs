@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Windows.Forms.VisualStyles;
 using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.Helper;
@@ -428,7 +429,7 @@ public static class Geometry
             stripe = [];
             return false;
          }
-         GetStripeArray(province, out stripe);
+         GetStripesArray(province, out stripe);
          return true;
       }
 
@@ -437,18 +438,128 @@ public static class Geometry
          stripe = [];
          return false;
       }
-      GetStripeArray(province, out stripe);
+      GetStripesArray(province, out stripe);
       return true;
    }
 
-   public static void GetStripeArray(Province province, out Point[] stripes)
+   public static void GetStripesArray(Province province, out Point[] stripes)
+   {
+      switch (Globals.StripesDirection)
+      {
+         case StripesDirection.Horizontal:
+            GetStripeArrayHorizontal(province, out stripes);
+            break;
+         case StripesDirection.Vertical:
+            GetStripeArrayVertical(province, out stripes);
+            break;
+         case StripesDirection.DiagonalLbRt:
+            GetStripeArrayLbRt(province, out stripes);
+            break;
+         case StripesDirection.DiagonalLtRb:
+            GetStripeArrayRbLt(province, out stripes);
+            break;
+         case StripesDirection.Dotted:
+            GetStripesArrayDotted(province, out stripes);
+            break;
+         case StripesDirection.Pluses:
+            GetStripesArrayPluses(province, out stripes);
+            break;
+         default:
+            throw new ();
+      }
+   }
+
+   private static void GetStripesArrayPluses(Province province, out Point[] stripes)
    {
       List<Point> stripeList = [];
       var ptr = province.PixelPtr;
       for (var i = 0; i < province.PixelCnt; i++)
       {
          var pixel = Globals.Pixels[ptr + i];
-         if (((pixel.X + pixel.Y) % 8) > 2)
+         var moduloX = pixel.X % 8;
+         var moduloY = pixel.Y % 8;
+
+         if (moduloX is 7 or 0 || moduloY is 7 or 0 // boundary row
+             || moduloX < 3 && moduloY < 3 // bottom left
+             || moduloX < 3 && moduloY > 4 // top left
+             || moduloX > 4 && moduloY < 3 // bottom right
+             || moduloX > 4 && moduloY > 4) // top right
+            continue;
+         stripeList.Add(pixel);
+      }
+
+      stripes = [.. stripeList];
+   }
+
+   private static void GetStripesArrayDotted(Province province, out Point[] stripes)
+   {
+      List<Point> stripeList = [];
+      var ptr = province.PixelPtr;
+      for (var i = 0; i < province.PixelCnt; i++)
+      {
+         var pixel = Globals.Pixels[ptr + i];
+         if ((pixel.X % 8) < 2 && (pixel.Y % 8) < 2)
+            stripeList.Add(pixel);
+      }
+
+      stripes = [.. stripeList];
+   }
+
+   /// <summary>
+   /// Returns an array of points that are in the left bottom to right top direction lines
+   /// </summary>
+   /// <param name="province"></param>
+   /// <param name="stripes"></param>
+   private static void GetStripeArrayLbRt(Province province, out Point[] stripes)
+   {
+      List<Point> stripeList = [];
+      var ptr = province.PixelPtr;
+      for (var i = 0; i < province.PixelCnt; i++)
+      {
+         var pixel = Globals.Pixels[ptr + i];
+         if (((pixel.X + pixel.Y) % 8) < 2)
+            stripeList.Add(pixel);
+      }
+
+      stripes = [.. stripeList];
+   }
+
+   private static void GetStripeArrayRbLt(Province province, out Point[] stripes)
+   {
+      List<Point> stripeList = [];
+      var ptr = province.PixelPtr;
+      for (var i = 0; i < province.PixelCnt; i++)
+      {
+         var pixel = Globals.Pixels[ptr + i];
+         if (((pixel.X - pixel.Y) % 8) < 2)
+            stripeList.Add(pixel);
+      }
+
+      stripes = [.. stripeList];
+   }
+
+   private static void GetStripeArrayHorizontal(Province province, out Point[] stripes)
+   {
+      List<Point> stripeList = [];
+      var ptr = province.PixelPtr;
+      for (var i = 0; i < province.PixelCnt; i++)
+      {
+         var pixel = Globals.Pixels[ptr + i];
+         if ((pixel.Y % 8) < 2)
+            stripeList.Add(pixel);
+      }
+
+      stripes = [.. stripeList];
+   }
+
+   private static void GetStripeArrayVertical(Province province, out Point[] stripes)
+   {
+      List<Point> stripeList = [];
+      var ptr = province.PixelPtr;
+      for (var i = 0; i < province.PixelCnt; i++)
+      {
+         var pixel = Globals.Pixels[ptr + i];
+         if ((pixel.X % 8) < 2)
             stripeList.Add(pixel);
       }
 

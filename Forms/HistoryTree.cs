@@ -12,6 +12,7 @@ namespace Editor.Forms
          _callback = callback;
 
          ScrollToBottom(); //TODO fix
+
       }
 
       private void ScrollToBottom()
@@ -38,7 +39,7 @@ namespace Editor.Forms
       {
          HistoryTreeView.Nodes.Clear();
          var root = new HistoryTreeNode("Root", CommandHistoryType.Action);
-         AddToNode(rootNode, root);
+         AddToNode(rootNode, root, root);
          foreach (TreeNode child in root.Nodes)
             HistoryTreeView.Nodes.Add(child);
          HistoryTreeView.ExpandAll();
@@ -70,13 +71,18 @@ namespace Editor.Forms
             Tag = history.Id
          };
 
+         if (Globals.HistoryManager.Current.Id == history.Id) 
+            node.BackColor = Color.LightGreen;
+
          foreach (var child in history.Children)
+         {
             node.Nodes.Add(AddToNodeFull(child));
+         }
 
          return node;
       }
 
-      private static void AddToNode(HistoryNode history, HistoryTreeNode parent)
+      private static void AddToNode(HistoryNode history, HistoryTreeNode parent, HistoryTreeNode lastAction)
       {
          // only add nodes if they are an Action
          if (history.Type is CommandHistoryType.Action)
@@ -87,10 +93,17 @@ namespace Editor.Forms
             };
             parent.Nodes.Add(node);
             parent = node;
+
+            lastAction = node;
+
+            if (Globals.HistoryManager.Current.Id == history.Id)
+               lastAction.BackColor = Color.LightGreen;
          }
+         else if (Globals.HistoryManager.Current.Id == history.Id)
+            lastAction.BackColor = Color.Orange;
 
          foreach (var child in history.Children)
-            AddToNode(child, parent);
+            AddToNode(child, parent, lastAction);
       }
 
       private void RestoreButton_Click(object sender, EventArgs e)

@@ -298,7 +298,7 @@ public static class MapDrawHelper
       for (var index = 0; index < ids.Count; index++)
       {
          var province = Globals.Provinces[ids[index]];
-         Geometry.GetStripeArray(province, out var stripePixels);
+         Geometry.GetStripesArray(province, out var stripePixels);
          rects[index] = DrawOnMap(province.Bounds, stripePixels, color, bmp);
       }
 

@@ -36,21 +36,24 @@ public class HistoryManager
 
    // Check if there are any commands to redo
    public bool CanRedo => _current.Children.Count > 0;
+   public HistoryNode Current => _current;
 
    // Undo the last command
    public void Undo()
    {
       if (CanUndo)
       {
-         _current = _current.Parent;
          _current.Command.Undo();
+         _current = _current.Parent;
       }
 
       UndoDepthChanged?.Invoke(this, GetUndoDepth());
    }
 
-   public void Redo(int childIndex = 0)
+   public void Redo(int childIndex = -1)
    {
+      if (childIndex == -1)
+         childIndex += _current.Children.Count;
       if (CanRedo && childIndex < _current.Children.Count)
       {
          _current = _current.Children[childIndex];
@@ -62,6 +65,8 @@ public class HistoryManager
 
    public void RevertTo(int id)
    {
+      if (id == _current.Id)
+         return;
       var (undo, redo) = GetPathBetweenNodes(_current.Id, id);
       RestoreState(undo, redo);
    }
@@ -110,7 +115,6 @@ public class HistoryManager
 
    public (List<HistoryNode>, List<HistoryNode>) GetPathBetweenNodes(int from, int to)
    {
-      // Cant handle edgecase if from == to
       List<HistoryNode> p1 = [];
       List<HistoryNode> p2 = [];
 
