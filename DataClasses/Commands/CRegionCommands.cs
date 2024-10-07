@@ -1,4 +1,5 @@
 ﻿using Editor.Commands;
+using Editor.Controls;
 using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor.DataClasses.Commands
@@ -150,10 +151,12 @@ namespace Editor.DataClasses.Commands
       private readonly string _regionName;
       private Region _region = null!;
       private List<string> _areas = [];
+      private readonly CollectionEditor _collectionEditor;
 
-      public CDeleteRegion(string regionName, bool executeOnInit = true)
+      public CDeleteRegion(string regionName, CollectionEditor collectionEditor, bool executeOnInit = true)
       {
          _regionName = regionName;
+         _collectionEditor = collectionEditor;
 
          if (executeOnInit)
             Execute();
@@ -191,6 +194,9 @@ namespace Editor.DataClasses.Commands
          }
          
          Globals.MapWindow.RegionEditingGui.ExtendedComboBox.Items.Add(_regionName);
+         _collectionEditor.ExtendedComboBox.Items.Add(_regionName);
+         _collectionEditor.ExtendedComboBox.SelectedIndex = _collectionEditor.ExtendedComboBox.Items.IndexOf(_regionName);
+         _collectionEditor.ExtendedComboBox.SelectionStart = _collectionEditor.Text.Length;
          Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteCustomSource.Add(_regionName);
          Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
          Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
@@ -202,6 +208,7 @@ namespace Editor.DataClasses.Commands
          Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteCustomSource.Remove(_regionName);
          Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
          Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+         _collectionEditor.Clear();
       }
 
       public string GetDescription()

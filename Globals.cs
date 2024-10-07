@@ -53,7 +53,6 @@ public enum Language
    german,
    spanish,
 }
-
 public enum StripesDirection
 {
    Horizontal,
@@ -251,3 +250,31 @@ public static class Globals
 
    private static Language _language = Language.english;
 }
+
+// TODO LIST Until Alpha 1.0
+// - [x] Add a way to change the language of the application
+// - [ ] Rework the Rendering of the map to be more efficient and using GDIP32
+// - [ ] Add zooming to the map 0.5x - 16.0x
+// - [ ] Add a way to change the map mode via customizable Hotkeys
+// - [ ] Fix the Province Collection Editing gui so that all types work the same and edge cases are handled
+// - [ ] Fix Lasso Selection Preview sometimes being incorrect
+// - [ ] Fix Magic wand tool
+// - [ ] Add a modifier creation and selection menu to apply to different scopes
+// - [ ] Add saving for all Province Collections
+// - [ ] Add descriptions on how to customize tooltips, map modes, and other things
+// - [ ] Add basic country editing
+// - [ ] Fix province center calculation
+// - [ ] Find last concurrency bugs
+// - [ ] Pre load and layout the Province Collection Editing GUI to prevent LagSpike on first opening said tab
+// - [ ] MelonCoaster easter Egg in Loading Screen
+// - [ ] Add a help page that leads to the official Discord
+// - [ ] Improve selection modifiers and its GUI by adding more and only listing in context valid options
+// - [ ] Straits editing and creation
+// - [ ] Redo on create area does not work 
+// - [ ] Redo on DeleteRegion still shows the region_name afterwards
+// - [ ] Region creation is completely broken
+
+
+// TODO LIST Until Alpha 1.1
+// - [ ] Add a way to create custom map modes
+// - [ ] Add a tradegoods creation and editing menu

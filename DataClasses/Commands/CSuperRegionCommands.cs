@@ -1,4 +1,5 @@
 ﻿using Editor.Commands;
+using Editor.Controls;
 using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.DataClasses.Commands
@@ -83,17 +84,27 @@ namespace Editor.DataClasses.Commands
       private readonly string _superRegionName;
       private readonly List<string> _deltaRegions;
       private readonly List<KeyValuePair<string, string>> _regionsPerSuperRegion = [];
-      private readonly ComboBox _comboBox;
+      private readonly CollectionEditor _collectionEditor;
+      private readonly Color _color;
 
-      public CAddNewSuperRegion(string superRegionName, List<string> deltaRegions, ComboBox comboBox, bool executeOnInit = true)
+      /// <summary>
+      /// Adds a new super region by specifying the name and the regions it should contain.
+      /// </summary>
+      /// <param name="superRegionName">The name of the new super region to be created.</param>
+      /// <param name="deltaRegions">The list of regions to be included in the new super region.</param>
+      /// <param name="collectionEditor">The editor responsible for modifying collections of regions and super regions.</param>
+      /// <param name="executeOnInit">Determines if the execution should occur immediately upon initialization (default is true).</param>
+      public CAddNewSuperRegion(string superRegionName, List<string> deltaRegions, CollectionEditor collectionEditor, bool executeOnInit = true)
       {
          _superRegionName = superRegionName;
          _deltaRegions = deltaRegions;
-         _comboBox = comboBox;
+         _collectionEditor = collectionEditor;
+         _color = Globals.ColorProvider.GetRandomColor();
 
-         if (executeOnInit) 
+         if (executeOnInit)
             Execute();
       }
+
 
       public void Execute()
       {
@@ -103,10 +114,12 @@ namespace Editor.DataClasses.Commands
             return;
          }
 
-         var sRegion = new SuperRegion(_superRegionName, [])
+         SuperRegion sRegion = new (_superRegionName, [])
          {
-            Color = Globals.ColorProvider.GetRandomColor()
+            Color = _color
          };
+
+         Globals.SuperRegions.Add(_superRegionName, sRegion);
 
          foreach (var regionName in _deltaRegions)
          {
@@ -117,30 +130,46 @@ namespace Editor.DataClasses.Commands
             sRegion.AddRegion(regionName);
          }
 
-         Globals.SuperRegions.Add(_superRegionName, sRegion);
-         _comboBox.Items.Add(_superRegionName);
+         _collectionEditor.ExtendedComboBox.Items.Add(_superRegionName);
+         Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteCustomSource.Add(_superRegionName);
+         Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+         Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+         _collectionEditor.ExtendedComboBox.SelectedIndex = _collectionEditor.ExtendedComboBox.Items.IndexOf(_superRegionName);
       }
 
       public void Undo()
       {
          if (!Globals.SuperRegions.TryGetValue(_superRegionName, out _))
+         {
+            MessageBox.Show($"Super Region {_superRegionName} already exists! \nUnable to reverse Adding", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
+         }
 
          foreach (var (regionName, oldSuperRegion) in _regionsPerSuperRegion)
          {
-            if (!Globals.Regions.TryGetValue(regionName, out var region) || !Globals.SuperRegions.TryGetValue(oldSuperRegion, out var value))
+            if (!Globals.Regions.TryGetValue(regionName, out var region))
                continue;
             region.SuperRegion = oldSuperRegion;
-            value.AddRegion(regionName);
+            Globals.SuperRegions[_superRegionName].AddRegion(regionName);
          }
 
          Globals.SuperRegions.Remove(_superRegionName);
-         _comboBox.Items.Remove(_superRegionName);
+         _collectionEditor.ExtendedComboBox.Items.Remove(_superRegionName);
+         _collectionEditor.ExtendedComboBox.Text = string.Empty;
+         Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+         Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+         Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteCustomSource.Remove(_superRegionName);
+         _collectionEditor.Clear();
       }
 
       public void Redo()
       {
          Execute();
+         _collectionEditor.ExtendedComboBox.Items.Add(_superRegionName);
+         Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteCustomSource.Add(_superRegionName);
+         Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+         Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+         _collectionEditor.ExtendedComboBox.SelectedIndex = _collectionEditor.ExtendedComboBox.Items.IndexOf(_superRegionName);
       }
 
       public string GetDescription()
@@ -149,20 +178,18 @@ namespace Editor.DataClasses.Commands
       }
    }
 
+   // Finished
    public class CDeleteSuperRegion : ICommand
    {
       private readonly string _superRegionName;
-      private readonly List<KeyValuePair<string, string>> _regionsPerSuperRegion = [];
-      private readonly Color _regionColor;
-      private readonly ComboBox _comboBox;
+      private SuperRegion _superRegion = null!;
+      private readonly List<string> _oldRegions = [];
+      private readonly CollectionEditor _collectionEditor;
 
-      public CDeleteSuperRegion(string superRegionName, ComboBox comboBox, bool executeOnInit = true)
+      public CDeleteSuperRegion(string superRegionName, CollectionEditor collectionEditor, bool executeOnInit = true)
       {
          _superRegionName = superRegionName;
-         _comboBox = comboBox;
-
-         if (Globals.SuperRegions.TryGetValue(_superRegionName, out var sRegion))
-            _regionColor = sRegion.Color;
+         _collectionEditor = collectionEditor;
 
          if (executeOnInit) 
             Execute();
@@ -170,21 +197,26 @@ namespace Editor.DataClasses.Commands
 
       public void Execute()
       {
-         if (!Globals.SuperRegions.TryGetValue(_superRegionName, out var sRegion))
+         if (!Globals.SuperRegions.TryGetValue(_superRegionName, out _superRegion!))
             return;
 
-         for (var i = sRegion.Regions.Count - 1; i >= 0; i--)
+         for (var i = _superRegion.Regions.Count - 1; i >= 0; i--)
          {
-            var regionName = sRegion.Regions[i];
+            var regionName = _superRegion.Regions[i];
             if (!Globals.Regions.TryGetValue(regionName, out var region))
                continue;
-            _regionsPerSuperRegion.Add(new(regionName, region.SuperRegion));
+            _oldRegions.Add(regionName);
             region.SuperRegion = string.Empty;
-            sRegion.RemoveRegion(regionName);
+            _superRegion.RemoveRegion(regionName);
          }
 
          Globals.SuperRegions.Remove(_superRegionName);
-         _comboBox.Items.Remove(_superRegionName);
+         _collectionEditor.ExtendedComboBox.Items.Remove(_superRegionName);
+         _collectionEditor.ExtendedComboBox.Text = string.Empty;
+         Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteCustomSource.Remove(_superRegionName);
+         Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+         Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+         _collectionEditor.Clear();
       }
 
       public void Undo()
@@ -195,22 +227,33 @@ namespace Editor.DataClasses.Commands
             return;
          }
 
-         Globals.SuperRegions.Add(_superRegionName, new(_superRegionName, []) { Color = _regionColor });
+         Globals.SuperRegions.Add(_superRegionName, _superRegion);
 
-         foreach (var kvp in _regionsPerSuperRegion)
+         foreach (var regionName in _oldRegions)
          {
-            if (!Globals.Regions.TryGetValue(kvp.Key, out var region))
+            if (!Globals.Regions.TryGetValue(regionName, out var region))
                continue;
-            region.SuperRegion = kvp.Value;
-            Globals.SuperRegions[_superRegionName].AddRegion(kvp.Key);
+            region.SuperRegion = _superRegionName;
+            Globals.SuperRegions[_superRegionName].AddRegion(regionName);
          }
 
-         _comboBox.Items.Add(_superRegionName);
+         _collectionEditor.ExtendedComboBox.Items.Add(_superRegionName);
+         _collectionEditor.ExtendedComboBox.SelectedIndex = _collectionEditor.ExtendedComboBox.Items.IndexOf(_superRegionName);
+         _collectionEditor.ExtendedComboBox.SelectionStart = _superRegionName.Length;
+         Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteCustomSource.Add(_superRegionName);
+         Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+         Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
       }
 
       public void Redo()
       {
          Execute();
+         _collectionEditor.ExtendedComboBox.Items.Remove(_superRegionName);
+         _collectionEditor.ExtendedComboBox.Text = string.Empty;
+         Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteCustomSource.Remove(_superRegionName);
+         Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+         Globals.MapWindow.RegionEditingGui.ExtendedComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+         _collectionEditor.Clear();
       }
 
       public string GetDescription()

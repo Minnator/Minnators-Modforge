@@ -3,6 +3,7 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.Text.Json;
 using Editor.Controls;
+using Editor.Controls.Initialisation.ProvinceCollectionEditors;
 using Editor.DataClasses;
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
@@ -52,7 +53,9 @@ namespace Editor
       public CollectionEditor RegionEditingGui = null!;
       public CollectionEditor SuperRegionEditingGui = null!;
       public CollectionEditor TradeCompanyEditingGui = null!;
-      public CollectionEditor CountryEditingGuid = null!;
+      public CollectionEditor CountryEditingGui = null!;
+      public CollectionEditor TradeNodeEditingGui = null!;
+      public CollectionEditor ProvinceGroupsEditingGui = null!;
 
       #endregion
 
@@ -167,271 +170,68 @@ namespace Editor
       private void InitializeProvinceCollectionEditGui()
       {
          AreaEditingGui = ControlFactory.GetCollectionEditor("Area", "Areas", ItemTypes.Id, [.. Globals.Areas.Keys],
-            s => // An Area is selected
-            {
-               List<string> provName = [];
-               Globals.Selection.Clear();
-               if (Globals.Areas.TryGetValue(s, out var area))
-               {
-                  for (var i = 0; i < area.Provinces.Length; i++)
-                     provName.Add(area.Provinces[i].ToString());
-                  Globals.Selection.AddRange(area.Provinces);
-                  if (FocusSelectionCheckBox.Checked)
-                     Globals.Selection.FocusSelection();
-               }
-               return provName;
-            },
-            (s, b) =>
-            {
-               if (!Globals.Areas.TryGetValue(s, out var area))
-                  return [];
-
-               Globals.HistoryManager.AddCommand(new CModifyExitingArea(s, Globals.Selection.SelectedProvinces, b));
-
-               List<string> provName = [];
-               for (var i = 0; i < area.Provinces.Length; i++)
-                  provName.Add(area.Provinces[i].ToString());
-               return provName;
-            },
-            s => // A new Area is created
-            {
-               Globals.HistoryManager.AddCommand(new CCreateNewArea(s, Globals.Selection.SelectedProvinces, AreaEditingGui.ExtendedComboBox));
-
-               List<string> provName = [];
-               for (var i = 0; i < Globals.Selection.GetSelectedProvinces.Count; i++)
-                  provName.Add(Globals.Selection.GetSelectedProvinces[i].ToString());
-               return provName;
-            },
-            s => // An Area is deleted
-            {
-               if (!Globals.Areas.TryGetValue(s, out _))
-                  return;
-
-               Globals.HistoryManager.AddCommand(new CRemoveArea(s, AreaEditingGui.ExtendedComboBox));
-            },
-            (s, idStr) => // A single province is removed from an area
-            {
-               if (!Globals.Areas.TryGetValue(s, out var area) || !int.TryParse(idStr, out var id))
-                  return;
-
-               if (!Globals.Provinces.TryGetValue(id, out var prov))
-                  return;
-
-               Globals.HistoryManager.AddCommand(new CModifyExitingArea(s, [id], false));
-            }
+            CollectionEditorArea.AreaSelected,
+            CollectionEditorArea.ModifyExitingArea,
+            CollectionEditorArea.CreateNewArea,
+            CollectionEditorArea.RemoveArea,
+            CollectionEditorArea.SingleItemModified
          );
-         ProvinceCollectionsMainLayoutPanel.Controls.Add(AreaEditingGui, 0, 0);
 
          RegionEditingGui = ControlFactory.GetCollectionEditor("Region", "Regions", ItemTypes.String, [.. Globals.Regions.Keys],
-            s =>
-            {
-               Globals.Selection.Clear();
-               if (Globals.Regions.TryGetValue(s, out var region))
-               {
-                  Globals.Selection.AddRange(region.GetProvinceIds());
-                  if (FocusSelectionCheckBox.Checked)
-                     Globals.Selection.FocusSelection();
-                  return region.Areas;
-               }
-               return [];
-            }, // A Region is selected
-            (s, b) =>
-            {
-               if (!Globals.Regions.TryGetValue(s, out var region))
-                  return [];
-
-               Globals.HistoryManager.AddCommand(new CModifyExistingRegion(s, ProvinceCollectionHelper.GetAreaNamesFromProvinces(Globals.Selection.GetSelectedProvinces), b));
-
-               return region.Areas;
-            }, // A Region is modified
-            s =>
-            {
-               if (Globals.Regions.TryGetValue(s, out _))
-                  return [];
-
-               Globals.HistoryManager.AddCommand(new CAddNewRegion(s, ProvinceCollectionHelper.GetAreaNamesFromProvinces(Globals.Selection.GetSelectedProvinces), AreaEditingGui.ExtendedComboBox));
-
-               if (Globals.Regions.TryGetValue(s, out var newRegion))
-                  return newRegion.Areas;
-               return [];
-            }, // A new Region is created
-            s =>
-            {
-               if (!Globals.Regions.TryGetValue(s, out _))
-                  return;
-
-               Globals.HistoryManager.AddCommand(new CDeleteRegion(s));
-            }, // A Region is deleted
-            (s, str) =>
-            {
-               if (!Globals.Regions.TryGetValue(s, out _) || !Globals.Areas.ContainsKey(str))
-                  return;
-
-               Globals.HistoryManager.AddCommand(new CModifyExistingRegion(s, [str], false));
-            } // A single area is removed from a region
+            CollectionEditorRegion.RegionSelected,
+            CollectionEditorRegion.ModifyExitingRegion,
+            CollectionEditorRegion.CreateNewRegion,
+            CollectionEditorRegion.DeleteRegion,
+            CollectionEditorRegion.SingleItemModified
          );
-         ProvinceCollectionsMainLayoutPanel.Controls.Add(RegionEditingGui, 0, 1);
 
          SuperRegionEditingGui = ControlFactory.GetCollectionEditor("SuperRegion", "Super Regions", ItemTypes.String, [.. Globals.SuperRegions.Keys],
-            s =>
-            {
-               Globals.Selection.Clear();
-               if (!Globals.SuperRegions.TryGetValue(s, out var superRegion))
-                  return [];
-
-               Globals.Selection.AddRange(superRegion.GetProvinceIds());
-               if (FocusSelectionCheckBox.Checked)
-                  Globals.Selection.FocusSelection();
-               return superRegion.Regions;
-            }, // A SuperRegion is selected
-            (s, b) =>
-            {
-               if (!Globals.SuperRegions.TryGetValue(s, out var superRegion))
-                  return [];
-
-               Globals.HistoryManager.AddCommand(new CModifyExistingSuperRegion(s, ProvinceCollectionHelper.GetRegionNamesFromProvinces(Globals.Selection.GetSelectedProvinces), b));
-
-               return superRegion.Regions;
-            }, // A SuperRegion is modified
-            s =>
-            {
-               if (Globals.SuperRegions.TryGetValue(s, out _))
-                  return [];
-
-               Globals.HistoryManager.AddCommand(new CAddNewSuperRegion(s, ProvinceCollectionHelper.GetRegionNamesFromProvinces(Globals.Selection.GetSelectedProvinces), AreaEditingGui.ExtendedComboBox));
-
-               if (Globals.SuperRegions.TryGetValue(s, out var newSuperRegion))
-                  return newSuperRegion.Regions;
-               return [];
-            }, // A new SuperRegion is created
-            s =>
-            {
-               if (!Globals.SuperRegions.TryGetValue(s, out _))
-                  return;
-
-               Globals.HistoryManager.AddCommand(new CDeleteSuperRegion(s, AreaEditingGui.ExtendedComboBox));
-            }, // A SuperRegion is deleted
-            (s, str) =>
-            {
-               if (!Globals.SuperRegions.TryGetValue(s, out _) || !Globals.Regions.ContainsKey(str))
-                  return;
-
-               Globals.HistoryManager.AddCommand(new CModifyExistingSuperRegion(s, [str], false));
-            } // A single region is removed from a super region
+            CollectionEditorSuperRegion.SuperRegionSelected,
+            CollectionEditorSuperRegion.ModifyExitingSuperRegion,
+            CollectionEditorSuperRegion.CreateNewSuperRegion,
+            CollectionEditorSuperRegion.DeleteSuperRegion,
+            CollectionEditorSuperRegion.SingleItemModified
          );
-         ProvinceCollectionsMainLayoutPanel.Controls.Add(SuperRegionEditingGui, 0, 2);
 
          TradeCompanyEditingGui = ControlFactory.GetCollectionEditor("TradeCompany", "Trade Companies", ItemTypes.Id, [.. Globals.TradeCompanies.Keys],
-            s =>
-            {
-               Globals.Selection.Clear();
-               if (Globals.TradeCompanies.TryGetValue(s, out var tradeCompany))
-               {
-                  Globals.Selection.AddRange(tradeCompany.GetProvinceIds());
-                  if (FocusSelectionCheckBox.Checked)
-                     Globals.Selection.FocusSelection();
-                  List<string> provNames = [];
-                  foreach (var prov in tradeCompany.GetProvinceIds())
-                     provNames.Add(prov.ToString());
-                  return provNames;
-               }
-               return [];
-            }, // A TradeCompany is selected
-            (s, b) =>
-            {
-               if (!Globals.TradeCompanies.TryGetValue(s, out var tradeCompany))
-                  return [];
-
-               //Globals.HistoryManager.AddCommand(new CModifyExistingTradeCompany(s, Globals.Selection.SelectedProvinces, b));
-
-               return [];
-            }, // A TradeCompany is modified
-            s => // A new TradeCompany is created
-            {
-               if (Globals.TradeCompanies.TryGetValue(s, out _))
-                  return [];
-
-               //Globals.HistoryManager.AddCommand(new CCreateNewTradeCompany(s, Globals.Selection.SelectedProvinces));
-
-               if (Globals.TradeCompanies.TryGetValue(s, out var newTradeCompany))
-                  return [];
-               return [];
-            },
-            s => // A TradeCompany is deleted
-            {
-               if (!Globals.TradeCompanies.TryGetValue(s, out _))
-                  return;
-
-               //Globals.HistoryManager.AddCommand(new CRemoveTradeCompany(s));
-            },
-            (s, idStr) => // A single province is removed from a TradeCompany
-            {
-               if (!Globals.TradeCompanies.TryGetValue(s, out var tradeCompany) || !int.TryParse(idStr, out var id))
-                  return;
-
-               if (!Globals.Provinces.TryGetValue(id, out var prov))
-                  return;
-
-               //Globals.HistoryManager.AddCommand(new CModifyExistingTradeCompany(s, [id], false));
-            }
+            CollectionEditorTradeCompany.TradeCompanySelected,
+            CollectionEditorTradeCompany.ModifyExitingTradeCompany,
+            CollectionEditorTradeCompany.CreateNewTradeCompany,
+            CollectionEditorTradeCompany.DeleteTradeCompany,
+            CollectionEditorTradeCompany.SingleItemModified
          );
-         ProvinceCollectionsMainLayoutPanel.Controls.Add(TradeCompanyEditingGui, 0, 3);
 
-         CountryEditingGuid = ControlFactory.GetCollectionEditor("Country", "Countries", ItemTypes.Id, [.. Globals.Countries.Keys],
-            s =>
-            {
-               Globals.Selection.Clear();
-               if (Globals.Countries.TryGetValue(s, out var country))
-               {
-                  Globals.Selection.AddRange(country.GetProvinceIds());
-                  List<string> provNames = [];
-                  foreach (var prov in country.GetProvinceIds())
-                     provNames.Add(prov.ToString());
-                  if (FocusSelectionCheckBox.Checked)
-                     Globals.Selection.FocusSelection();
-                  return provNames;
-               }
-               return [];
-            }, // A Country is selected
-            (s, b) =>
-            {
-               if (!Globals.Countries.TryGetValue(s, out var country))
-                  return [];
-
-               //Globals.HistoryManager.AddCommand(new CModifyExistingCountry(s, Globals.Selection.SelectedProvinces, b));
-
-               return [];
-            }, // A Country is modified
-            s => // A new Country is created
-            {
-               if (Globals.Countries.TryGetValue(s, out _))
-                  return [];
-
-               //Globals.HistoryManager.AddCommand(new CCreateNewCountry(s, Globals.Selection.SelectedProvinces));
-
-               if (Globals.Countries.TryGetValue(s, out var newCountry))
-                  return [];
-               return [];
-            },
-            s => // A Country is deleted
-            {
-               if (!Globals.Countries.TryGetValue(s, out _))
-                  return;
-
-               //Globals.HistoryManager.AddCommand(new CRemoveCountry(s));
-            },
-            (s, idStr) => // A single province is removed from a Country
-            {
-               if (!Globals.Countries.TryGetValue(s, out var country) || !int.TryParse(idStr, out var id))
-                  return;
-
-               if (!Globals.Provinces.TryGetValue(id, out var prov))
-                  return;
-
-               //Globals.HistoryManager.AddCommand(new CModifyExistingCountry(s, [id], false));
-            }
+         CountryEditingGui = ControlFactory.GetCollectionEditor("Country", "Country", ItemTypes.Id, [.. Globals.Countries.Keys],
+            CollectionEditorCountry.CountrySelected,
+            CollectionEditorCountry.ModifyExitingCountry,
+            CollectionEditorCountry.CreateNewCountry,
+            CollectionEditorCountry.DeleteCountry,
+            CollectionEditorCountry.SingleItemModified
          );
-         ProvinceCollectionsMainLayoutPanel.Controls.Add(CountryEditingGuid, 0, 4);
+
+         TradeNodeEditingGui = ControlFactory.GetCollectionEditor("TradeNode", "Trade Nodes", ItemTypes.String, [.. Globals.TradeNodes.Keys],
+            CollectionEditorTradeNodes.TradeNodeSelected,
+            CollectionEditorTradeNodes.ModifyExitingTradeNode,
+            CollectionEditorTradeNodes.CreateNewTradeNode,
+            CollectionEditorTradeNodes.DeleteTradeNode,
+            CollectionEditorTradeNodes.SingleItemModified
+         );
+
+         ProvinceGroupsEditingGui = ControlFactory.GetCollectionEditor("ProvinceGroup", "Province Groups", ItemTypes.String, [.. Globals.ProvinceGroups.Keys],
+            CollectionEditorProvinceGroup.ProvinceGroupSelected,
+            CollectionEditorProvinceGroup.ModifyExitingProvinceGroup,
+            CollectionEditorProvinceGroup.CreateNewProvinceGroup,
+            CollectionEditorProvinceGroup.DeleteProvinceGroup,
+            CollectionEditorProvinceGroup.SingleItemModified
+         );
+         
+         ProvinceCollectionsLayoutPanel.Controls.Add(AreaEditingGui, 0, 0);
+         ProvinceCollectionsLayoutPanel.Controls.Add(RegionEditingGui, 0, 1);
+         ProvinceCollectionsLayoutPanel.Controls.Add(SuperRegionEditingGui, 0, 2);
+         ProvinceCollectionsLayoutPanel.Controls.Add(CountryEditingGui, 0, 3);
+         ProvinceCollectionsLayoutPanel.Controls.Add(TradeNodeEditingGui, 0, 4);
+         ProvinceCollectionsLayoutPanel.Controls.Add(TradeCompanyEditingGui, 0, 5);
+         ProvinceCollectionsLayoutPanel.Controls.Add(ProvinceGroupsEditingGui, 0, 6);
       }
 
       private void InitializeCountryEditGui()
