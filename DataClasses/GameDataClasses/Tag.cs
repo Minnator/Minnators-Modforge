@@ -69,4 +69,9 @@ public readonly struct Tag(string tag)
       outTag = Empty;
       return false;
    }
+
+   public bool IsValid()
+   {
+      return Globals.Countries.ContainsKey(this);
+   }
 }

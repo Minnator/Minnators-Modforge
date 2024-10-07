@@ -23,8 +23,15 @@ namespace Editor.Controls
 
       private readonly string _name;
       private readonly string _mapModeName;
+      public bool AllowAddingNew = true;
+      public bool AllowRemoving = true;
 
       private readonly ItemTypes _itemTypes;
+
+      public EventHandler<ProvinceCollectionEventArgs> OnItemAddedEvent = delegate { };
+      public EventHandler<ProvinceCollectionEventArgs> OnItemRemovedEvent = delegate { };
+      public EventHandler<ProvinceCollectionEventArgs> OnNewItemCreated = delegate { };
+      public EventHandler<ProvinceCollectionEventArgs> OnItemDeleted = delegate { };
 
       // TODO add a small button to flip to the according MapMode
       public CollectionEditor(string name, string mapModeName, ItemTypes itemTypes, Func<string, List<string>> onSelectionAction, Func<string, bool, List<string>> onAddedOrRemovedFunc, Func<string, List<string>> onNewCreated, Action<string> onDeleted, Action<string, string> onSingleRemoved)
@@ -138,21 +145,29 @@ namespace Editor.Controls
          if (e.Button == MouseButtons.Left)
          {
             AddItemsUnique(_onAddedOrRemovedFunc.Invoke(item, true));
+            OnItemAddedEvent.Invoke(this, new (_name, Globals.Selection.GetSelectedProvincesIds));
          }
          else if (e.Button == MouseButtons.Right)
          {
+            if (!AllowAddingNew) // Still fire the event even tho we don't add the item
+            {
+               OnNewItemCreated.Invoke(this, new(_name, Globals.Selection.GetSelectedProvincesIds));
+               return;
+            }
+
             if (Globals.Areas.ContainsKey(item))
             {
                MessageBox.Show($"{_name} already exists", "Error", MessageBoxButtons.OK);
                return;
             }
-            Clear();
-            AddItemsUnique(_onNewCreated.Invoke(item));
+            ClearAndAddUniquely(_onNewCreated.Invoke(item));
             ExtendedComboBox.Items.Add(item);
             ExtendedComboBox.AutoCompleteCustomSource.Add(item);
             // Needs to be set to None to delete the item from the cashed? autocomplete list
             ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.None;
             ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+
+            OnNewItemCreated.Invoke(this, new (_name, Globals.Selection.GetSelectedProvincesIds));
          }
          ExtendedComboBox.Text = item;
          ExtendedComboBox.SelectionStart = 0;
@@ -167,14 +182,20 @@ namespace Editor.Controls
 
          if (e.Button == MouseButtons.Left)
          {
-            Clear();
-            AddItemsUnique(_onAddedOrRemovedFunc.Invoke(item, false));
+            ClearAndAddUniquely(_onAddedOrRemovedFunc.Invoke(item, false));
             ExtendedComboBox.Text = item;
             ExtendedComboBox.SelectionStart = 0;
             ExtendedComboBox.SelectionLength = item.Length;
+            OnItemRemovedEvent.Invoke(this, new (_name, Globals.Selection.GetSelectedProvincesIds));
          }
          else if (e.Button == MouseButtons.Right)
          {
+            if (!AllowRemoving) // Still fire the event even tho we don't remove the item
+            {
+               OnItemDeleted.Invoke(this, new (_name, Globals.Selection.GetSelectedProvincesIds));
+               return;
+            }
+
             Clear();
             _onDeleted.Invoke(item);
             ExtendedComboBox.Items.Remove(item);
@@ -182,6 +203,8 @@ namespace Editor.Controls
             ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.None;
             ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             ExtendedComboBox.AutoCompleteCustomSource.Remove(item);
+
+            OnItemDeleted.Invoke(this, new (_name, Globals.Selection.GetSelectedProvincesIds));
          }
       }
 
@@ -206,6 +229,8 @@ namespace Editor.Controls
             return;
          }
          _onSingleRemoved.Invoke(text, item);
+
+         OnItemRemovedEvent.Invoke(this, new (_name, Globals.Selection.GetSelectedProvincesIds));
       }
 
       public void SetComboBoxItems(List<string> items)
@@ -227,6 +252,14 @@ namespace Editor.Controls
       public List<string> GetItems()
       {
          return _flowLayout.Controls.Cast<ItemButton>().Select(button => button.Item).ToList();
+      }
+
+      public void ClearAndAddUniquely(List<string> items)
+      {
+         _flowLayout.SuspendLayout();
+         Clear();
+         AddItemsUnique(items);
+         _flowLayout.ResumeLayout(true);
       }
 
       public void AddIfUnique(string item)
@@ -267,6 +300,28 @@ namespace Editor.Controls
 
          ExtendedComboBox.Text = "";
          ExtendedComboBox.Focus();
+      }
+
+      public void RemoveItems(List<string> items)
+      {
+         var buttonsToRemove = new List<ItemButton>();
+
+         foreach (var item in items)
+         {
+            foreach (var button in _flowLayout.Controls)
+            {
+               if (button is ItemButton itemButton && Equals(itemButton.Item, item))
+               {
+                  buttonsToRemove.Add(itemButton);
+                  break;
+               }
+            }
+         }
+
+         _flowLayout.SuspendLayout();
+         foreach (var buttonToRemove in buttonsToRemove) 
+            _flowLayout.Controls.Remove(buttonToRemove);
+         _flowLayout.ResumeLayout(true);
       }
 
       public void RemoveItem(string item)

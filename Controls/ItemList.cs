@@ -134,6 +134,7 @@ namespace Editor.Controls
          Text = item;
          Width = 48;
          Height = 21;
+
       }
 
       protected override void OnMouseClick(MouseEventArgs e)
@@ -151,7 +152,11 @@ namespace Editor.Controls
       protected override void OnMouseHover(EventArgs e)
       {
          base.OnMouseHover(e);
-         _toolTip = new();
+         _toolTip = new()
+         {
+            InitialDelay = 0 // TODO why is this no work
+         };
+         // Set the tooltip text and show it immediately
          _toolTip.SetToolTip(this, GetToolTip());
       }
 

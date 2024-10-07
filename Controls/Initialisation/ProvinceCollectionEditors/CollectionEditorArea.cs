@@ -26,10 +26,10 @@ namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
 
          Globals.HistoryManager.AddCommand(new CModifyExitingArea(s, Globals.Selection.SelectedProvinces, b));
 
-         List<string> provName = [];
+         List<string> provNames = [];
          for (var i = 0; i < area.Provinces.Length; i++)
-            provName.Add(area.Provinces[i].ToString());
-         return provName;
+            provNames.Add(area.Provinces[i].ToString());
+         return provNames;
       }
 
       public static List<string> CreateNewArea(string s)

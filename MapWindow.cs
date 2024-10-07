@@ -208,6 +208,8 @@ namespace Editor
             CollectionEditorCountry.DeleteCountry,
             CollectionEditorCountry.SingleItemModified
          );
+         CountryEditingGui.AllowAddingNew = false;
+         CountryEditingGui.AllowRemoving = false;
 
          TradeNodeEditingGui = ControlFactory.GetCollectionEditor("TradeNode", "Trade Nodes", ItemTypes.String, [.. Globals.TradeNodes.Keys],
             CollectionEditorTradeNodes.TradeNodeSelected,

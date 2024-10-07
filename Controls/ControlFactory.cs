@@ -132,7 +132,7 @@ public static class ControlFactory
 
    public static ItemButton GetItemButton(string item, ItemTypes type)
    {
-      return new (item, type) { Width = 43, Height = 25 };
+      return new (item, type) { Width = 41, Height = 25 };
    }
 
    public static ItemButton GetItemButtonLong(string item, ItemTypes type)

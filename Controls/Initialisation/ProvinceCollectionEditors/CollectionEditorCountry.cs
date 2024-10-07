@@ -1,4 +1,6 @@
-﻿namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
+﻿using Editor.DataClasses.Commands;
+
+namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
 {
    public static class CollectionEditorCountry
    {
@@ -24,9 +26,20 @@
          if (!Globals.Countries.TryGetValue(s, out var country))
             return [];
 
-         //Globals.HistoryManager.AddCommand(new CModifyExistingCountry(s, Globals.Selection.SelectedProvinces, b));
+         Globals.HistoryManager.AddCommand(new CModifyExistingCountry(s, Globals.Selection.SelectedProvinces, b, Globals.MapWindow.CountryEditingGui));
+         
+         if (!b) // If we remove we only want to remove the province from the list which we removed and dont want to add it again
+         {
+            List<string> newProvNames = [];
+            foreach (var prov in country.GetProvinceIds()) 
+               newProvNames.Add(prov.ToString());
+            return newProvNames;
+         }
 
-         return [];
+         List<string> provNames = [];
+         foreach (var prov in Globals.Selection.GetSelectedProvincesIds)
+            provNames.Add(prov.ToString());
+         return provNames;
       }
 
       public static List<string> CreateNewCountry(string s)
