@@ -17,12 +17,12 @@ public sealed class AreaMapMode : MapMode
       return "Areas";
    }
 
-   public override Color GetProvinceColor(int id)
+   public override int GetProvinceColor(int id)
    {
       if (Globals.Provinces.TryGetValue(id, out var province))
          if (Globals.Areas.TryGetValue(province.Area, out var area))
-            return area.Color;
-      return Color.DarkGray;
+            return area.Color.ToArgb();
+      return Color.DarkGray.ToArgb();
    }
 
    public override string GetSpecificToolTip(int provinceId)

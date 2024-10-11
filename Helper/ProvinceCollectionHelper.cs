@@ -21,9 +21,9 @@ namespace Editor.Helper
       {
 
          List<string> uniqueAreaNames = [];
-         for (var i = 0; i < Globals.Selection.GetSelectedProvinces.Count; i++)
-            if (!uniqueAreaNames.Contains(Globals.Selection.GetSelectedProvinces[i].Area))
-               uniqueAreaNames.Add(Globals.Selection.GetSelectedProvinces[i].Area);
+         for (var i = 0; i < Selection.Count; i++)
+            if (!uniqueAreaNames.Contains(Selection.GetSelectedProvinces[i].Area))
+               uniqueAreaNames.Add(Selection.GetSelectedProvinces[i].Area);
          return uniqueAreaNames;
       }
 

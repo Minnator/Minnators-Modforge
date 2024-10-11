@@ -13,15 +13,15 @@ namespace Editor.DataClasses.MapModes
          ProvinceCollectionEventHandler.OnTradeCompanyChanged += UpdateProvinceCollection;
       }
 
-      public override Color GetProvinceColor(int id)
+      public override int GetProvinceColor(int id)
       {
          if (Globals.Provinces.TryGetValue(id, out var province))
          {
             var company = province.GetTradeCompany;
             if (company != string.Empty)
-               return Globals.TradeCompanies[company].Color;
+               return Globals.TradeCompanies[company].Color.ToArgb();
          }
-         return Color.DimGray;
+         return Color.DimGray.ToArgb();
       }
 
       public override string GetMapModeName()

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Editor.Controls;
+using Editor.Helper;
 
 namespace Editor.Commands;
 
@@ -14,7 +15,7 @@ public class CDeselectCommand :ICommand
       _attr = attr;
       _value = value;
 
-      GetSelectionDelta(Globals.Selection.SelectedProvinces);
+      GetSelectionDelta(Selection.GetSelectedProvincesIds.ToList());
 
       if (executeOnInit)
          Execute();
@@ -43,12 +44,12 @@ public class CDeselectCommand :ICommand
 
    public void Execute()
    {
-      Globals.Selection.RemoveRange(_selectionDelta);
+      Selection.RemoveProvincesFromSelection(_selectionDelta);
    }
 
    public void Undo()
    {
-      Globals.Selection.AddRange(_selectionDelta);
+      Selection.AddProvincesToSelection(_selectionDelta);
    }
 
    public void Redo()

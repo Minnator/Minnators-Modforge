@@ -15,36 +15,36 @@ public class FortMapMode : MapMode
       ProvinceEventHandler.OnProvinceBuildingsChanged += UpdateProvince;
    }
 
-   public override Color GetProvinceColor(int id)
+   public override int GetProvinceColor(int id)
    {
       if (Globals.SeaProvinces.Contains(id))
-         return Globals.Provinces[id].Color;
+         return Globals.Provinces[id].Color.ToArgb();
 
       // TODO: Expand to better forts
       switch (GetFortLevel(id))
       {
          case 0:
-            return Color.DimGray;
+            return Color.DimGray.ToArgb();
          case 1:
-            return Color.FromArgb(0, 255, 0);
+            return Color.FromArgb(0, 255, 0).ToArgb();
          case 2:
-            return Color.BurlyWood;
+            return Color.BurlyWood.ToArgb();
          case 3:
-            return Color.FromArgb(255, 255, 0);
+            return Color.FromArgb(255, 255, 0).ToArgb();
          case 4:
-            return Color.FromArgb(255, 165, 0);
+            return Color.FromArgb(255, 165, 0).ToArgb();
          case 5:
-            return Color.FromArgb(255, 0, 0);
+            return Color.FromArgb(255, 0, 0).ToArgb();
          case 6:
-            return Color.FromArgb(139, 0, 0);
+            return Color.FromArgb(139, 0, 0).ToArgb();
          case 7:
-            return Color.FromArgb(128, 0, 128);
+            return Color.FromArgb(128, 0, 128).ToArgb();
          case 8:
-            return Color.FromArgb(120, 0, 230);
+            return Color.FromArgb(120, 0, 230).ToArgb();
          case 9:
-            return Color.FromArgb(0, 0, 0);
+            return Color.FromArgb(0, 0, 0).ToArgb();
          default:
-            return Color.FloralWhite;
+            return Color.FloralWhite.ToArgb();
       }
    }
 

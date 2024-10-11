@@ -62,11 +62,6 @@ public static class ControlFactory
       return new ();
    }
 
-   public static PannablePictureBox GetPannablePictureBox(ref Panel panel, MapWindow mapWindow)
-   {
-      return new (ref panel, mapWindow);
-   }
-
    public static ExtendedComboBox GetExtendedComboBox(List<string> content, int selectedIndex = -1)
    {
       var ec = new ExtendedComboBox();

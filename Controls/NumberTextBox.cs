@@ -1,4 +1,5 @@
 ﻿using Editor.Events;
+using Editor.Helper;
 
 namespace Editor.Controls
 {
@@ -38,7 +39,7 @@ namespace Editor.Controls
          if (e.KeyChar == (char)Keys.Enter)
          {
             // Custom Data changed event
-            ProvinceEditedEventArgs args = new (Globals.Selection.GetSelectedProvinces, Text);
+            ProvinceEditedEventArgs args = new (Selection.GetSelectedProvinces, Text);
             OnTextChanged(args);
             e.Handled= true;
             return;
@@ -60,7 +61,7 @@ namespace Editor.Controls
       protected override void OnLostFocus(EventArgs e)
       {
          // Custom Data changed event
-         ProvinceEditedEventArgs args = new (Globals.Selection.GetSelectedProvinces, Text);
+         ProvinceEditedEventArgs args = new (Selection.GetSelectedProvinces, Text);
          OnTextChanged(args);
          base.OnLostFocus(e);
       }

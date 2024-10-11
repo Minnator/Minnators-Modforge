@@ -11,18 +11,18 @@ namespace Editor.DataClasses.MapModes
          return "Trade Nodes";
       }
 
-      public override Color GetProvinceColor(int id)
+      public override int GetProvinceColor(int id)
       {
          var node = TradeNodeHelper.GetTradeNodeByProvince(id);
          if (Equals(node, TradeNode.Empty))
-            return Color.DimGray;
-         return node.Color;
+            return Color.DimGray.ToArgb();
+         return node.Color.ToArgb();
       }
 
-      public override void RenderMapMode(Func<int, Color> method)
+      public override void RenderMapMode(Func<int, int> method)
       {
          base.RenderMapMode(method);
-         BitMapHelper.WriteOnProvince(GetCoTLevel, Globals.MapModeManager.ShareLiveBitmap);
+         MapDrawing.WriteOnProvince(GetCoTLevel);
       }
 
       private string GetCoTLevel(int provinceId)

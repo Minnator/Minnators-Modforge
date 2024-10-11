@@ -12,6 +12,7 @@ public enum PixelsOrBorders
    Borders
 }
 
+
 public class MapDrawing
 {
    public static void DrawOnMap(Point[] points, int color)
@@ -176,5 +177,34 @@ public class MapDrawing
             *pixelAddress = color;
          });
       }
+   }
+
+   public static void DrawCapitals(List<int> ids)
+   {
+
+   }
+   public static void DrawAllCapitals()
+   {
+
+   }
+
+   public static void DrawAllCapitals(int color)
+   {
+      //TODO: Implement
+   }
+
+   public static void DrawStripes(int color, List<int> ids) //Point[] stripes
+   {
+      //TODO: Implement
+   }
+
+   public static void DrawOccupations(bool rebelsOnly)
+   {
+
+   }
+
+   public static void WriteOnProvince(Func<int, string> method)
+   {
+
    }
 }

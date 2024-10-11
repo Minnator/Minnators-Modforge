@@ -1,4 +1,5 @@
 ﻿using Editor.DataClasses.Commands;
+using Editor.Helper;
 
 namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
 {
@@ -7,14 +8,14 @@ namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
       public static List<string> AreaSelected(string s)
       {
          List<string> provName = [];
-         Globals.Selection.Clear();
+         Selection.ClearSelection();
          if (Globals.Areas.TryGetValue(s, out var area))
          {
             for (var i = 0; i < area.Provinces.Length; i++)
                provName.Add(area.Provinces[i].ToString());
-            Globals.Selection.AddRange(area.Provinces);
+            Selection.AddProvincesToSelection(area.Provinces);
             if (Globals.MapWindow.FocusSelectionCheckBox.Checked)
-               Globals.Selection.FocusSelection();
+               Selection.FocusSelection();
          }
          return provName;
       }
@@ -24,7 +25,7 @@ namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
          if (!Globals.Areas.TryGetValue(s, out var area))
             return [];
 
-         Globals.HistoryManager.AddCommand(new CModifyExitingArea(s, Globals.Selection.SelectedProvinces, b));
+         Globals.HistoryManager.AddCommand(new CModifyExitingArea(s, Selection.GetSelectedProvincesIds.ToList(), b));
 
          List<string> provNames = [];
          for (var i = 0; i < area.Provinces.Length; i++)
@@ -34,11 +35,11 @@ namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
 
       public static List<string> CreateNewArea(string s)
       {
-         Globals.HistoryManager.AddCommand(new CCreateNewArea(s, Globals.Selection.SelectedProvinces, Globals.MapWindow.AreaEditingGui.ExtendedComboBox));
+         Globals.HistoryManager.AddCommand(new CCreateNewArea(s, Selection.GetSelectedProvincesIds.ToList(), Globals.MapWindow.AreaEditingGui.ExtendedComboBox));
 
          List<string> provName = [];
-         for (var i = 0; i < Globals.Selection.GetSelectedProvinces.Count; i++)
-            provName.Add(Globals.Selection.GetSelectedProvinces[i].ToString());
+         for (var i = 0; i < Selection.GetSelectedProvinces.Count; i++)
+            provName.Add(Selection.GetSelectedProvinces[i].ToString());
          return provName;
       }
 

@@ -46,7 +46,7 @@ namespace Editor.Forms
             case PrimaryProvinceDrawing.None:
                break;
             case PrimaryProvinceDrawing.Selection:
-               Globals.MapModeManager.DrawProvinceCollectionFromCurrentMapMode(bitmap, Globals.Selection.GetSelectedProvincesIds);
+               Globals.MapModeManager.DrawProvinceCollectionFromCurrentMapMode(bitmap, Selection.GetSelectedProvincesIds);
                break;
             case PrimaryProvinceDrawing.Land:
                Globals.MapModeManager.DrawProvinceCollectionFromCurrentMapMode(bitmap, Globals.LandProvinceIds);
@@ -65,7 +65,7 @@ namespace Editor.Forms
             case BorderDrawing.None:
                break;
             case BorderDrawing.Selection:
-               foreach (var prov in Globals.Selection.GetSelectedProvinces)
+               foreach (var prov in Selection.GetSelectedProvinces)
                   MapDrawHelper.DrawProvinceBorder(prov.Id, Color.Black, bitmap);
                break;
             case BorderDrawing.All:
@@ -77,11 +77,11 @@ namespace Editor.Forms
          PreviewPictureBox.Size = bitmap.Size;
          PreviewPictureBox.Image = bitmap;
 
-         if (Globals.Selection.SelectedProvinces.Count == 0)
+         if (Selection.Count == 0)
             return;
 
-         var rect = Geometry.GetBounds(Globals.Selection.SelectedProvinces);
-         var centerProvince = Geometry.GetProvinceClosestToPoint(new(rect.X + rect.Width / 2,rect.Y + rect.Height / 2), Globals.Selection.GetSelectedProvinces);
+         var rect = Geometry.GetBounds(Selection.GetSelectedProvincesIds.ToList());
+         var centerProvince = Geometry.GetProvinceClosestToPoint(new(rect.X + rect.Width / 2,rect.Y + rect.Height / 2), Selection.GetSelectedProvinces);
          FocusOn(centerProvince.Center);
       }
 
@@ -92,11 +92,11 @@ namespace Editor.Forms
             case SecondaryProvinceDrawing.None:
                break;
             case SecondaryProvinceDrawing.NeighboringProvinces:
-               var neighboringProvinces = Geometry.GetAllNeighboringProvinces(Globals.Selection.GetSelectedProvinces);
+               var neighboringProvinces = Geometry.GetAllNeighboringProvinces(Selection.GetSelectedProvinces);
                Globals.MapModeManager.DrawProvinceCollectionFromCurrentMapMode(bitmap, [.. neighboringProvinces]);
                break;
             case SecondaryProvinceDrawing.NeighboringCountries:
-               var neighboringCountries = Geometry.GetAllNeighboringCountries(Globals.Selection.GetSelectedProvinces);
+               var neighboringCountries = Geometry.GetAllNeighboringCountries(Selection.GetSelectedProvinces);
                List<int> allCountryProvinces = [];
                foreach (var country in neighboringCountries)
                {
@@ -126,7 +126,7 @@ namespace Editor.Forms
                PreviewPictureBox.Image.Save(Path.Combine(PathTextBox.Text, $"{Globals.MapModeManager.CurrentMapMode.GetMapModeName()}.png"), ImageFormat.Png);
                break;
             case ImageSize.Selection:
-               var rect = Geometry.GetBounds(Globals.Selection.SelectedProvinces);
+               var rect = Geometry.GetBounds(Selection.GetSelectedProvincesIds.ToList());
                var bitmap = new Bitmap(rect.Width, rect.Height, PixelFormat.Format24bppRgb);
                // copy the selected area to the new bitmap
                using (var g = Graphics.FromImage(bitmap))

@@ -7,13 +7,13 @@ namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
    {
       public static List<string> SuperRegionSelected(string s)
       {
-         Globals.Selection.Clear();
+         Selection.ClearSelection();
          if (!Globals.SuperRegions.TryGetValue(s, out var superRegion))
             return [];
 
-         Globals.Selection.AddRange(superRegion.GetProvinceIds());
+         Selection.AddProvincesToSelection(superRegion.GetProvinceIds());
          if (Globals.MapWindow.FocusSelectionCheckBox.Checked)
-            Globals.Selection.FocusSelection();
+            Selection.FocusSelection();
          return superRegion.Regions;
       }
       
@@ -22,7 +22,7 @@ namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
          if (!Globals.SuperRegions.TryGetValue(s, out var superRegion))
             return [];
 
-         Globals.HistoryManager.AddCommand(new CModifyExistingSuperRegion(s, ProvinceCollectionHelper.GetRegionNamesFromProvinces(Globals.Selection.GetSelectedProvinces), b));
+         Globals.HistoryManager.AddCommand(new CModifyExistingSuperRegion(s, ProvinceCollectionHelper.GetRegionNamesFromProvinces(Selection.GetSelectedProvinces), b));
 
          return superRegion.Regions;
       }
@@ -32,7 +32,7 @@ namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
          if (Globals.SuperRegions.TryGetValue(s, out _))
             return [];
 
-         Globals.HistoryManager.AddCommand(new CAddNewSuperRegion(s, ProvinceCollectionHelper.GetRegionNamesFromProvinces(Globals.Selection.GetSelectedProvinces), Globals.MapWindow.SuperRegionEditingGui));
+         Globals.HistoryManager.AddCommand(new CAddNewSuperRegion(s, ProvinceCollectionHelper.GetRegionNamesFromProvinces(Selection.GetSelectedProvinces), Globals.MapWindow.SuperRegionEditingGui));
 
          if (Globals.SuperRegions.TryGetValue(s, out var newSuperRegion))
             return newSuperRegion.Regions;

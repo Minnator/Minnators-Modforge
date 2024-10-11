@@ -79,19 +79,19 @@ public class DevelopmentMapMode : MapMode
       return newMaxFound;
    }
 
-   public override void RenderMapMode(Func<int, Color> method)
+   public override void RenderMapMode(Func<int, int> method)
    {
       CalculateMinMax();
       base.RenderMapMode(method);
    }
 
-   public override Color GetProvinceColor(int id)
+   public override int GetProvinceColor(int id)
    {
       if (!Globals.LandProvinces.Contains(id))
-         return Globals.Provinces[id].Color;
+         return Globals.Provinces[id].Color.ToArgb();
 
       var totalDev = Globals.Provinces[id].GetTotalDevelopment();
-      return Globals.ColorProvider.GetColorOnGreenRedShade(0, _max, totalDev);
+      return Globals.ColorProvider.GetColorOnGreenRedShade(0, _max, totalDev).ToArgb();
    }
 
 

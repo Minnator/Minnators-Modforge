@@ -1,4 +1,6 @@
 ﻿using Editor.Events;
+using Editor.Helper;
+using ProvinceCollectionEventArgs = Editor.Events.ProvinceCollectionEventArgs;
 
 namespace Editor.Controls
 {
@@ -18,8 +20,8 @@ namespace Editor.Controls
       protected override void OnSelectedIndexChanged(EventArgs e)
       {
          base.OnSelectedIndexChanged(e);
-         OnDataChanged?.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Text));
-         OnCollectionDataChanged?.Invoke(this, new (Text, Globals.Selection.GetSelectedProvincesIds));
+         OnDataChanged?.Invoke(this, new (Selection.GetSelectedProvinces, Text));
+         OnCollectionDataChanged?.Invoke(this, new (Text, Selection.GetSelectedProvincesIds));
       }
 
       public void ReplaceItems(List<string> items)

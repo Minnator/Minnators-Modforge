@@ -86,7 +86,7 @@ namespace Editor.Controls
          else
             throw new ArgumentOutOfRangeException();
 
-         OnItemAdded?.Invoke(this, new(Globals.Selection.GetSelectedProvinces, item));
+         OnItemAdded?.Invoke(this, new(Selection.GetSelectedProvinces, item));
 
          _itemsComboBox.Text = "";
          _itemsComboBox.Focus();
@@ -94,7 +94,7 @@ namespace Editor.Controls
       
       public void RemoveItem(string item)
       {
-         OnItemRemoved?.Invoke(this, new(Globals.Selection.GetSelectedProvinces, item));
+         OnItemRemoved?.Invoke(this, new(Selection.GetSelectedProvinces, item));
       }
 
       public void Clear()

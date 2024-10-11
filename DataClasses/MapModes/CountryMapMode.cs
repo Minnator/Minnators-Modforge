@@ -15,16 +15,16 @@ namespace Editor.DataClasses.MapModes
       public override bool IsLandOnly => true;
       public override bool ShowOccupation => true;
 
-      public override Color GetProvinceColor(int id)
+      public override int GetProvinceColor(int id)
       {
          if (Globals.Provinces.TryGetValue(id, out var province))
          {
             if (province.Owner == Tag.Empty)
-               return Color.DimGray;
+               return Color.DimGray.ToArgb();
             if (Globals.Countries.TryGetValue(province.Owner, out var country))
-               return country.Color;
+               return country.Color.ToArgb();
          }
-         return Color.DimGray;
+         return Color.DimGray.ToArgb();
       }
 
       public override string GetMapModeName()
@@ -44,13 +44,10 @@ namespace Editor.DataClasses.MapModes
          return "Country: [Unknown]";
       }
 
-      public override void RenderMapMode(Func<int, Color> method)
+      public override void RenderMapMode(Func<int, int> method)
       {
          base.RenderMapMode(method);
-         if (Globals.MapModeRendering == MapModeRendering.Cached)
-            MapDrawHelper.DrawAllCapitals(Bitmap);
-         else
-            MapDrawHelper.DrawAllCapitals(Globals.MapModeManager.ShareLiveBitmap);
+         MapDrawing.DrawAllCapitals(Color.Yellow.ToArgb());
       }
    }
 }

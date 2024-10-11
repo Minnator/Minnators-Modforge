@@ -7,7 +7,7 @@ using Rectangle = System.Drawing.Rectangle;
 
 public sealed class ZoomControl : Control
 {
-   private Bitmap map;
+   internal Bitmap map;
    private Graphics _bmpGfx;
    public IntPtr HBitmap;
 

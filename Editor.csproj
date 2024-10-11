@@ -27,9 +27,7 @@
     <Content Include="ProvinceFileCreator.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Controls\PannablePictureBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Update="Controls\PannablePictureBox.cs" />
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

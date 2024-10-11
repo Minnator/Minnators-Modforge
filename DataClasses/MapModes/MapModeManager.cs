@@ -7,15 +7,13 @@ using Editor.MapModes;
 
 namespace Editor.DataClasses.MapModes;
 
-public class MapModeManager(PannablePictureBox pictureBox)
+public class MapModeManager()
 {
    private List<MapMode> MapModes { get; } = [];
    public MapMode CurrentMapMode { get; set; } = null!;
    private ProvinceIdMapMode IdMapMode { get; set; } = null!;
-   public PannablePictureBox PictureBox { get; set; } = pictureBox;
    public bool PreviousLandOnly { get; set; }
    public bool RequireFullRedraw { get; set; } = true;
-   public Bitmap ShareLiveBitmap { get; set; } = new(Globals.MapWidth, Globals.MapHeight, PixelFormat.Format24bppRgb);
 
    public void InitializeAllMapModes()
    {
@@ -103,6 +101,6 @@ public class MapModeManager(PannablePictureBox pictureBox)
    public void DrawProvinceCollectionFromCurrentMapMode(Bitmap bmp, params int[] ids)
    {
       foreach (var id in ids)
-         MapDrawHelper.DrawProvince(id, CurrentMapMode.GetProvinceColor(id), bmp);
+         MapDrawHelper.DrawProvince(id, Color.FromArgb(CurrentMapMode.GetProvinceColor(id)), bmp);
    }
 }

@@ -20,12 +20,12 @@ public sealed class ContinentMapMode : MapMode
       return "Continents";
    }
 
-   public override Color GetProvinceColor(int id)
+   public override int GetProvinceColor(int id)
    {
       if (Globals.Provinces.TryGetValue(id, out var province))
          if (Globals.Continents.TryGetValue(province.Continent, out var continent))
-            return continent.Color;
-      return Color.DarkGray;
+            return continent.Color.ToArgb();
+      return Color.DarkGray.ToArgb();
    }
 
    public override string GetSpecificToolTip(int provinceId)

@@ -11,6 +11,7 @@ using Editor.Forms;
 using Editor.Forms.Loadingscreen;
 using Editor.Helper;
 using Editor.Savers;
+using Windows.ApplicationModel.Contacts;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 
 namespace Editor
@@ -58,7 +59,6 @@ namespace Editor
 
       #endregion
 
-      public PannablePictureBox MapPictureBox = null!;
       public readonly DateControl DateControl = new(DateTime.MinValue, DateControlLayout.Horizontal);
       private LoadingScreen ls = null!;
       private EnterPathForm epf = null!;
@@ -106,11 +106,11 @@ namespace Editor
 
          StartPosition = FormStartPosition.CenterScreen;
          Show();
-         MapPictureBox.FocusOn(new Point(3100, 600));
+         Globals.ZoomControl.FocusOn(new Point(3100, 600));
          
          // Activate this window
          Activate();
-         
+         Globals.ZoomControl.Invalidate();
          AfterLoad();
       }
 
@@ -121,7 +121,7 @@ namespace Editor
       public void InitMapModes()
       {
          var sw = Stopwatch.StartNew();
-         Globals.MapModeManager = new(MapPictureBox); // Initialize the MapModeManager
+         Globals.MapModeManager = new(); // Initialize the MapModeManager
          Globals.MapModeManager.InitializeAllMapModes(); // Initialize all map modes
          MapModeComboBox.Items.Clear();
          MapModeComboBox.Items.AddRange([.. Globals.MapModeManager.GetMapModeNames()]);
@@ -139,9 +139,10 @@ namespace Editor
       private void InitGui()
       {
          InitializeComponent();
-         MapPictureBox = ControlFactory.GetPannablePictureBox(ref MapPanel, this);
-         MapPanel.Controls.Add(MapPictureBox);
-         Globals.Selection = new(MapPictureBox);
+         Globals.ZoomControl = new(new (@"C:\Users\david\Downloads\BorderUpdate.bmp"));
+         Globals.ZoomControl.Dock = DockStyle.Fill;
+         MainToolstripContainer.ContentPanel.Controls.Add(Globals.ZoomControl);
+         Selection.Initialize();
 
          TopStripLayoutPanel.Controls.Add(DateControl, 4, 0);
          DateControl.OnDateChanged += OnDateChanged;
@@ -476,65 +477,65 @@ namespace Editor
          Globals.EditingStatus = EditingStatus.LoadingInterface;
          SuspendLayout();
          ClearProvinceGui();
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.claims, out var result) && result is List<Tag> tags)
+         if (Selection.GetSharedAttribute(ProvAttrGet.claims, out var result) && result is List<Tag> tags)
             _claims.AddItemsUnique([.. tags]);
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.permanent_claims, out result) && result is List<Tag> permanentTags)
+         if (Selection.GetSharedAttribute(ProvAttrGet.permanent_claims, out result) && result is List<Tag> permanentTags)
             _permanentClaims.AddItemsUnique([.. permanentTags]);
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.cores, out result) && result is List<Tag> coreTags)
+         if (Selection.GetSharedAttribute(ProvAttrGet.cores, out result) && result is List<Tag> coreTags)
             _cores.AddItemsUnique([.. coreTags]);
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.buildings, out result) && result is List<string> buildings)
+         if (Selection.GetSharedAttribute(ProvAttrGet.buildings, out result) && result is List<string> buildings)
             _buildings.AddItemsUnique(buildings);
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.discovered_by, out result) && result is List<string> techGroups)
+         if (Selection.GetSharedAttribute(ProvAttrGet.discovered_by, out result) && result is List<string> techGroups)
             _discoveredBy.AddItemsUnique(techGroups);
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.owner, out result) && result is Tag owner)
+         if (Selection.GetSharedAttribute(ProvAttrGet.owner, out result) && result is Tag owner)
             OwnerTagBox.Text = owner;
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.controller, out result) && result is Tag controller)
+         if (Selection.GetSharedAttribute(ProvAttrGet.controller, out result) && result is Tag controller)
             ControllerTagBox.Text = controller;
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.religion, out result) && result is string religion)
+         if (Selection.GetSharedAttribute(ProvAttrGet.religion, out result) && result is string religion)
             _religionComboBox.Text = religion;
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.culture, out result) && result is string culture)
+         if (Selection.GetSharedAttribute(ProvAttrGet.culture, out result) && result is string culture)
             _cultureComboBox.Text = culture;
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.capital, out result) && result is string capital)
+         if (Selection.GetSharedAttribute(ProvAttrGet.capital, out result) && result is string capital)
             CapitalNameTextBox.Text = capital;
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.is_city, out result) && result is bool isCity)
+         if (Selection.GetSharedAttribute(ProvAttrGet.is_city, out result) && result is bool isCity)
             IsCityCheckBox.Checked = isCity;
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.hre, out result) && result is bool isHre)
+         if (Selection.GetSharedAttribute(ProvAttrGet.hre, out result) && result is bool isHre)
             IsHreCheckBox.Checked = isHre;
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.seat_in_parliament, out result) && result is bool isSeatInParliament)
+         if (Selection.GetSharedAttribute(ProvAttrGet.seat_in_parliament, out result) && result is bool isSeatInParliament)
             IsParlimentSeatCheckbox.Checked = isSeatInParliament;
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.revolt, out result) && result is bool hasRevolt)
+         if (Selection.GetSharedAttribute(ProvAttrGet.revolt, out result) && result is bool hasRevolt)
             HasRevoltCheckBox.Checked = hasRevolt;
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.base_tax, out result) && result is int baseTax)
+         if (Selection.GetSharedAttribute(ProvAttrGet.base_tax, out result) && result is int baseTax)
             _taxNumeric.Value = baseTax;
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.base_production, out result) && result is int baseProduction)
+         if (Selection.GetSharedAttribute(ProvAttrGet.base_production, out result) && result is int baseProduction)
             _prodNumeric.Value = baseProduction;
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.base_manpower, out result) && result is int baseManpower)
+         if (Selection.GetSharedAttribute(ProvAttrGet.base_manpower, out result) && result is int baseManpower)
             _manpNumeric.Value = baseManpower;
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.local_autonomy, out result) && result is float localAutonomy)
+         if (Selection.GetSharedAttribute(ProvAttrGet.local_autonomy, out result) && result is float localAutonomy)
             _autonomyNumeric.Value = (int)localAutonomy;
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.devastation, out result) && result is float devastation)
+         if (Selection.GetSharedAttribute(ProvAttrGet.devastation, out result) && result is float devastation)
             _devastationNumeric.Value = (int)devastation;
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.prosperity, out result) && result is float prosperity)
+         if (Selection.GetSharedAttribute(ProvAttrGet.prosperity, out result) && result is float prosperity)
             _prosperityNumeric.Value = (int)prosperity;
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.trade_good, out result) && result is string tradeGood)
+         if (Selection.GetSharedAttribute(ProvAttrGet.trade_good, out result) && result is string tradeGood)
             TradeGoodsComboBox.Text = tradeGood;
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.center_of_trade, out result) && result is int centerOfTrade)
+         if (Selection.GetSharedAttribute(ProvAttrGet.center_of_trade, out result) && result is int centerOfTrade)
             TradeCenterComboBox.Text = centerOfTrade.ToString();
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.extra_cost, out result) && result is int extraCost)
+         if (Selection.GetSharedAttribute(ProvAttrGet.extra_cost, out result) && result is int extraCost)
             _extraCostNumeric.Value = extraCost;
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.tribal_owner, out result) && result is Tag tribalOwner)
+         if (Selection.GetSharedAttribute(ProvAttrGet.tribal_owner, out result) && result is Tag tribalOwner)
             _tribalOwner.Text = tribalOwner;
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.native_size, out result) && result is int nativeSize)
+         if (Selection.GetSharedAttribute(ProvAttrGet.native_size, out result) && result is int nativeSize)
             _nativesSizeTextBox.Text = nativeSize.ToString();
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.native_ferocity, out result) && result is float nativeFerocity)
+         if (Selection.GetSharedAttribute(ProvAttrGet.native_ferocity, out result) && result is float nativeFerocity)
             _nativeFerocityTextBox.Text = nativeFerocity.ToString(CultureInfo.InvariantCulture);
-         if (Globals.Selection.GetSharedAttribute(ProvAttrGet.native_hostileness, out result) && result is float nativeHostileness)
+         if (Selection.GetSharedAttribute(ProvAttrGet.native_hostileness, out result) && result is float nativeHostileness)
             _nativeHostilityTextBox.Text = nativeHostileness.ToString(CultureInfo.InvariantCulture);
          // TODO The Gui needs to be able to represent several trade company investments
-         //if (Globals.Selection.GetSharedAttribute(ProvAttrGet.trade_company_investment, out result) && result is string tradeCompanyInvestments)
+         //if (Selection.GetSharedAttribute(ProvAttrGet.trade_company_investment, out result) && result is string tradeCompanyInvestments)
          //   _tradeCompanyInvestments.Text = tradeCompanyInvestments;
-         if (Globals.Selection.GetSelectedProvinces.Count == 1)
-            AddAllModifiersToListView(Globals.Selection.GetSelectedProvinces[0]);
+         if (Selection.GetSelectedProvinces.Count == 1)
+            AddAllModifiersToListView(Selection.GetSelectedProvinces[0]);
          ResumeLayout();
          Globals.EditingStatus = EditingStatus.Idle;
       }
@@ -643,9 +644,9 @@ namespace Editor
 
       public void SetEditingMode()
       {
-         EditingModeLabel.Text = Globals.Selection.Count <= 1
+         EditingModeLabel.Text = Selection.Count <= 1
             ? "Idle Mode: Single Province"
-            : $"Idle Mode: Multi Province ({Globals.Selection.Count})";
+            : $"Idle Mode: Multi Province ({Selection.Count})";
       }
 
       private void MapWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -681,7 +682,7 @@ namespace Editor
 
       private void OnSavingSelectionEnter(object? sender, EventArgs e)
       {
-         _savingButtonsToolTip.SetToolTip(SaveCurrentSelectionButton, $"Save selection ({Globals.Selection.Count})");
+         _savingButtonsToolTip.SetToolTip(SaveCurrentSelectionButton, $"Save selection ({Selection.Count})");
       }
 
       private void OnDateChanged(object? sender, EventArgs e)
@@ -730,11 +731,6 @@ namespace Editor
 
       private void OnMouseLeave(object sender, EventArgs e)
       {
-         Cursor = Globals.Selection.State switch
-         {
-            SelectionState.MagicWand => Cursors.Cross,
-            _ => Cursors.Default
-         };
       }
 
       private void debugToolStripMenuItem_Click(object sender, EventArgs e)
@@ -743,8 +739,6 @@ namespace Editor
 
       private void MapModeComboBox_SelectedIndexChanged(object sender, EventArgs e)
       {
-         if (MapPictureBox.IsPainting)
-            return;
          Globals.MapModeManager.SetCurrentMapMode(MapModeComboBox.SelectedItem.ToString());
          GC.Collect(); // We force the garbage collector to collect the old bitmap
       }
@@ -757,7 +751,7 @@ namespace Editor
       private void SaveCurrentMapModeToolStripMenuItem_Click(object sender, EventArgs e)
       {
          var downloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\";
-         MapPictureBox.Image.Save($@"{downloadFolder}{MapModeComboBox.SelectedItem}.png", ImageFormat.Png);
+         Globals.ZoomControl.map.Save($@"{downloadFolder}{MapModeComboBox.SelectedItem}.png", ImageFormat.Png);
       }
 
       private void openCustomizerToolStripMenuItem_Click(object sender, EventArgs e)
@@ -768,7 +762,7 @@ namespace Editor
 
       private void ShowToolTipMenuItem_Click(object sender, EventArgs e)
       {
-         MapPictureBox.ShowToolTip = ShowToolTipMenuItem.Checked;
+         Selection.ShowToolTip = ShowToolTipMenuItem.Checked;
       }
 
       private void testToolStripMenuItem_Click(object sender, EventArgs e)
@@ -857,19 +851,6 @@ namespace Editor
 
       private void MagicWandToolButton_Click(object sender, EventArgs e)
       {
-         if (Globals.Selection.State == SelectionState.Single)
-         {
-            Globals.Selection.State = SelectionState.MagicWand;
-            // change the cursor to the magic wand
-            Cursor = Cursors.Cross;
-         }
-         else if (Globals.Selection.State == SelectionState.MagicWand)
-         {
-            Globals.Selection.State = SelectionState.Single;
-            // change the cursor to the normal cursor
-            Cursor = Cursors.Default;
-         }
-
       }
 
       private void saveAllProvincesToolStripMenuItem_Click(object sender, EventArgs e)

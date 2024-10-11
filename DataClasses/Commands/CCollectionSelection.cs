@@ -1,4 +1,5 @@
 ﻿using Editor.Controls;
+using Editor.Helper;
 using Editor.Interfaces;
 
 namespace Editor.Commands
@@ -7,28 +8,28 @@ namespace Editor.Commands
    {
       private readonly List<int> _selectionDelta;
 
-      public CCollectionSelection(PannablePictureBox pb, List<int> toSelect, bool executeOnInit = true)
+      public CCollectionSelection(List<int> toSelect, bool executeOnInit = true)
       {
-         _selectionDelta = toSelect.Except(Globals.Selection.SelectionPreview).ToList();
+         _selectionDelta = toSelect.Except(Selection.SelectionPreview).ToList();
          if (executeOnInit)
             Execute();
       }
 
-      public CCollectionSelection(PannablePictureBox pb, IProvinceCollection collection, bool executeOnInit = true)
+      public CCollectionSelection(IProvinceCollection collection, bool executeOnInit = true)
       {
-         _selectionDelta = collection.GetProvinceIds().Except(Globals.Selection.SelectionPreview).ToList();
+         _selectionDelta = collection.GetProvinceIds().Except(Selection.SelectionPreview).ToList();
          if (executeOnInit)
             Execute();
       }
 
       public void Execute()
       {
-         Globals.Selection.AddRange(_selectionDelta, false);
+         Selection.AddProvincesToSelection(_selectionDelta, false);
       }
 
       public void Undo()
       {
-         Globals.Selection.RemoveRange(_selectionDelta);
+         Selection.RemoveProvincesFromSelection(_selectionDelta);
       }
 
       public void Redo()

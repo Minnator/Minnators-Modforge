@@ -5,12 +5,12 @@
       public override bool IsLandOnly => true;
       public override bool ShowOccupation => false;
 
-      public override Color GetProvinceColor(int id)
+      public override int GetProvinceColor(int id)
       {
          foreach (var cr in Globals.ColonialRegions.Values)
             if (cr.Provinces.Contains(id))
-               return cr.Color;
-         return Color.DimGray;
+               return cr.Color.ToArgb();
+         return Color.DimGray.ToArgb();
       }
 
       public override string GetMapModeName()

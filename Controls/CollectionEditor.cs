@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
 using Editor.Events;
+using Editor.Helper;
+using ProvinceCollectionEventArgs = Editor.Events.ProvinceCollectionEventArgs;
 
 namespace Editor.Controls
 {
@@ -145,13 +147,13 @@ namespace Editor.Controls
          if (e.Button == MouseButtons.Left)
          {
             AddItemsUnique(_onAddedOrRemovedFunc.Invoke(item, true));
-            OnItemAddedEvent.Invoke(this, new (_name, Globals.Selection.GetSelectedProvincesIds));
+            OnItemAddedEvent.Invoke(this, new (_name, Selection.GetSelectedProvincesIds));
          }
          else if (e.Button == MouseButtons.Right)
          {
             if (!AllowAddingNew) // Still fire the event even tho we don't add the item
             {
-               OnNewItemCreated.Invoke(this, new(_name, Globals.Selection.GetSelectedProvincesIds));
+               OnNewItemCreated.Invoke(this, new(_name, Selection.GetSelectedProvincesIds));
                return;
             }
 
@@ -167,7 +169,7 @@ namespace Editor.Controls
             ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.None;
             ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
 
-            OnNewItemCreated.Invoke(this, new (_name, Globals.Selection.GetSelectedProvincesIds));
+            OnNewItemCreated.Invoke(this, new (_name, Selection.GetSelectedProvincesIds));
          }
          ExtendedComboBox.Text = item;
          ExtendedComboBox.SelectionStart = 0;
@@ -186,13 +188,13 @@ namespace Editor.Controls
             ExtendedComboBox.Text = item;
             ExtendedComboBox.SelectionStart = 0;
             ExtendedComboBox.SelectionLength = item.Length;
-            OnItemRemovedEvent.Invoke(this, new (_name, Globals.Selection.GetSelectedProvincesIds));
+            OnItemRemovedEvent.Invoke(this, new (_name, Selection.GetSelectedProvincesIds));
          }
          else if (e.Button == MouseButtons.Right)
          {
             if (!AllowRemoving) // Still fire the event even tho we don't remove the item
             {
-               OnItemDeleted.Invoke(this, new (_name, Globals.Selection.GetSelectedProvincesIds));
+               OnItemDeleted.Invoke(this, new (_name, Selection.GetSelectedProvincesIds));
                return;
             }
 
@@ -204,7 +206,7 @@ namespace Editor.Controls
             ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             ExtendedComboBox.AutoCompleteCustomSource.Remove(item);
 
-            OnItemDeleted.Invoke(this, new (_name, Globals.Selection.GetSelectedProvincesIds));
+            OnItemDeleted.Invoke(this, new (_name, Selection.GetSelectedProvincesIds));
          }
       }
 
@@ -230,7 +232,7 @@ namespace Editor.Controls
          }
          _onSingleRemoved.Invoke(text, item);
 
-         OnItemRemovedEvent.Invoke(this, new (_name, Globals.Selection.GetSelectedProvincesIds));
+         OnItemRemovedEvent.Invoke(this, new (_name, Selection.GetSelectedProvincesIds));
       }
 
       public void SetComboBoxItems(List<string> items)
@@ -296,7 +298,7 @@ namespace Editor.Controls
          button.OnButtonClicked += OnSingleRemoved;
          _flowLayout.Controls.Add(button);
 
-         OnItemAdded?.Invoke(this, new(Globals.Selection.GetSelectedProvinces, item));
+         OnItemAdded?.Invoke(this, new(Selection.GetSelectedProvinces, item));
 
          ExtendedComboBox.Text = "";
          ExtendedComboBox.Focus();
@@ -326,7 +328,7 @@ namespace Editor.Controls
 
       public void RemoveItem(string item)
       {
-         OnItemRemoved?.Invoke(this, new(Globals.Selection.GetSelectedProvinces, item));
+         OnItemRemoved?.Invoke(this, new(Selection.GetSelectedProvinces, item));
       }
 
       public void Clear()

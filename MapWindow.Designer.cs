@@ -62,7 +62,6 @@
          jsonToolStripMenuItem = new ToolStripMenuItem();
          DateSelector = new ToolStripComboBox();
          searchToolStripMenuItem = new ToolStripMenuItem();
-         MapPanel = new Panel();
          ProvinceCollectionsLayoutPanel = new TableLayoutPanel();
          FocusSelectionCheckBox = new CheckBox();
          toolStrip1 = new ToolStrip();
@@ -83,7 +82,7 @@
          label15 = new Label();
          AttirbuteCombobox = new ComboBox();
          numericUpDown1 = new NumericUpDown();
-         toolStripContainer1 = new ToolStripContainer();
+         MainToolstripContainer = new ToolStripContainer();
          toolStrip2 = new ToolStrip();
          MagicWandToolButton = new ToolStripButton();
          openToolStripButton = new ToolStripButton();
@@ -173,9 +172,8 @@
          TopStripLayoutPanel.SuspendLayout();
          tableLayoutPanel1.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
-         toolStripContainer1.ContentPanel.SuspendLayout();
-         toolStripContainer1.RightToolStripPanel.SuspendLayout();
-         toolStripContainer1.SuspendLayout();
+         MainToolstripContainer.RightToolStripPanel.SuspendLayout();
+         MainToolstripContainer.SuspendLayout();
          toolStrip2.SuspendLayout();
          DataTabPanel.SuspendLayout();
          ProvincePage.SuspendLayout();
@@ -439,17 +437,6 @@
          searchToolStripMenuItem.Text = "Search";
          searchToolStripMenuItem.Click += searchToolStripMenuItem_Click;
          // 
-         // MapPanel
-         // 
-         MapPanel.AutoScroll = true;
-         MapPanel.BorderStyle = BorderStyle.FixedSingle;
-         MapPanel.Dock = DockStyle.Fill;
-         MapPanel.Location = new Point(0, 0);
-         MapPanel.Margin = new Padding(4, 3, 4, 3);
-         MapPanel.Name = "MapPanel";
-         MapPanel.Size = new Size(1081, 844);
-         MapPanel.TabIndex = 1;
-         // 
          // ProvinceCollectionsLayoutPanel
          // 
          ProvinceCollectionsLayoutPanel.ColumnCount = 1;
@@ -535,7 +522,7 @@
          MainLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
          MainLayoutPanel.Controls.Add(toolStrip1, 0, 2);
          MainLayoutPanel.Controls.Add(TopStripLayoutPanel, 1, 0);
-         MainLayoutPanel.Controls.Add(toolStripContainer1, 1, 1);
+         MainLayoutPanel.Controls.Add(MainToolstripContainer, 1, 1);
          MainLayoutPanel.Controls.Add(DataTabPanel, 0, 1);
          MainLayoutPanel.Dock = DockStyle.Fill;
          MainLayoutPanel.Location = new Point(0, 27);
@@ -662,27 +649,26 @@
          numericUpDown1.Size = new Size(46, 23);
          numericUpDown1.TabIndex = 3;
          // 
-         // toolStripContainer1
+         // MainToolstripContainer
          // 
-         toolStripContainer1.BottomToolStripPanelVisible = false;
+         MainToolstripContainer.BottomToolStripPanelVisible = false;
          // 
-         // toolStripContainer1.ContentPanel
+         // MainToolstripContainer.ContentPanel
          // 
-         toolStripContainer1.ContentPanel.Controls.Add(MapPanel);
-         toolStripContainer1.ContentPanel.Margin = new Padding(0);
-         toolStripContainer1.ContentPanel.Size = new Size(1081, 844);
-         toolStripContainer1.Dock = DockStyle.Fill;
-         toolStripContainer1.LeftToolStripPanelVisible = false;
-         toolStripContainer1.Location = new Point(403, 29);
-         toolStripContainer1.Name = "toolStripContainer1";
+         MainToolstripContainer.ContentPanel.Margin = new Padding(0);
+         MainToolstripContainer.ContentPanel.Size = new Size(1081, 844);
+         MainToolstripContainer.Dock = DockStyle.Fill;
+         MainToolstripContainer.LeftToolStripPanelVisible = false;
+         MainToolstripContainer.Location = new Point(403, 29);
+         MainToolstripContainer.Name = "MainToolstripContainer";
          // 
-         // toolStripContainer1.RightToolStripPanel
+         // MainToolstripContainer.RightToolStripPanel
          // 
-         toolStripContainer1.RightToolStripPanel.Controls.Add(toolStrip2);
-         toolStripContainer1.Size = new Size(1105, 844);
-         toolStripContainer1.TabIndex = 3;
-         toolStripContainer1.Text = "toolStripContainer1";
-         toolStripContainer1.TopToolStripPanelVisible = false;
+         MainToolstripContainer.RightToolStripPanel.Controls.Add(toolStrip2);
+         MainToolstripContainer.Size = new Size(1105, 844);
+         MainToolstripContainer.TabIndex = 3;
+         MainToolstripContainer.Text = "toolStripContainer1";
+         MainToolstripContainer.TopToolStripPanelVisible = false;
          // 
          // toolStrip2
          // 
@@ -1748,11 +1734,10 @@
          tableLayoutPanel1.ResumeLayout(false);
          tableLayoutPanel1.PerformLayout();
          ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
-         toolStripContainer1.ContentPanel.ResumeLayout(false);
-         toolStripContainer1.RightToolStripPanel.ResumeLayout(false);
-         toolStripContainer1.RightToolStripPanel.PerformLayout();
-         toolStripContainer1.ResumeLayout(false);
-         toolStripContainer1.PerformLayout();
+         MainToolstripContainer.RightToolStripPanel.ResumeLayout(false);
+         MainToolstripContainer.RightToolStripPanel.PerformLayout();
+         MainToolstripContainer.ResumeLayout(false);
+         MainToolstripContainer.PerformLayout();
          toolStrip2.ResumeLayout(false);
          toolStrip2.PerformLayout();
          DataTabPanel.ResumeLayout(false);
@@ -1804,7 +1789,6 @@
 
       private System.Windows.Forms.MenuStrip MapMenuStrip;
       private System.Windows.Forms.ToolStripMenuItem filesToolStripMenuItem;
-      private System.Windows.Forms.Panel MapPanel;
       private System.Windows.Forms.ToolStrip toolStrip1;
       private System.Windows.Forms.ToolStripLabel SelectedProvinceSum;
       private System.Windows.Forms.ToolStripLabel RamUsageStrip;
@@ -1828,7 +1812,7 @@
       private System.Windows.Forms.ToolStripMenuItem refStackToolStripMenuItem;
       private TableLayoutPanel MainLayoutPanel;
       private TableLayoutPanel TopStripLayoutPanel;
-      private ToolStripContainer toolStripContainer1;
+      private ToolStripContainer MainToolstripContainer;
       private ToolStrip toolStrip2;
       private ToolStripButton MagicWandToolButton;
       private ToolStripButton openToolStripButton;

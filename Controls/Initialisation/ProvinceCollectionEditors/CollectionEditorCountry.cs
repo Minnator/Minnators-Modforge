@@ -1,4 +1,5 @@
 ﻿using Editor.DataClasses.Commands;
+using Editor.Helper;
 
 namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
 {
@@ -7,15 +8,15 @@ namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
       
       public static List<string> CountrySelected(string s)
       {
-         Globals.Selection.Clear();
+         Selection.ClearSelection();
          if (Globals.Countries.TryGetValue(s, out var country))
          {
-            Globals.Selection.AddRange(country.GetProvinceIds());
+            Selection.AddProvincesToSelection(country.GetProvinceIds());
             List<string> provNames = [];
             foreach (var prov in country.GetProvinceIds())
                provNames.Add(prov.ToString());
             if (Globals.MapWindow.FocusSelectionCheckBox.Checked)
-               Globals.Selection.FocusSelection();
+               Selection.FocusSelection();
             return provNames;
          }
          return [];
@@ -26,7 +27,7 @@ namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
          if (!Globals.Countries.TryGetValue(s, out var country))
             return [];
 
-         Globals.HistoryManager.AddCommand(new CModifyExistingCountry(s, Globals.Selection.SelectedProvinces, b, Globals.MapWindow.CountryEditingGui));
+         Globals.HistoryManager.AddCommand(new CModifyExistingCountry(s, Selection.GetSelectedProvincesIds.ToList(), b, Globals.MapWindow.CountryEditingGui));
          
          if (!b) // If we remove we only want to remove the province from the list which we removed and dont want to add it again
          {
@@ -37,7 +38,7 @@ namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
          }
 
          List<string> provNames = [];
-         foreach (var prov in Globals.Selection.GetSelectedProvincesIds)
+         foreach (var prov in Selection.GetSelectedProvincesIds)
             provNames.Add(prov.ToString());
          return provNames;
       }
@@ -47,7 +48,7 @@ namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
          if (Globals.Countries.TryGetValue(s, out _))
             return [];
 
-         //Globals.HistoryManager.AddCommand(new CCreateNewCountry(s, Globals.Selection.SelectedProvinces));
+         //Globals.HistoryManager.AddCommand(new CCreateNewCountry(s, Selection.SelectedProvinces));
 
          if (Globals.Countries.TryGetValue(s, out var newCountry))
             return [];

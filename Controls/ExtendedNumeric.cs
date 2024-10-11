@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Editor.Events;
+using Editor.Helper;
 
 namespace Editor.Controls
 {
@@ -35,7 +36,7 @@ namespace Editor.Controls
 
          // Raise the OnTextValueChanged event when the Enter key is pressed == the value has been changed
          if (e.KeyChar == (char)Keys.Enter)
-            OnTextValueChanged?.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Value));
+            OnTextValueChanged?.Invoke(this, new (Selection.GetSelectedProvinces, Value));
       }
 
       public override void UpButton()
@@ -44,16 +45,16 @@ namespace Editor.Controls
          if (ModifierKeys.HasFlag(Keys.Control))
          {
             Value = Math.Min(Value + 9, Maximum);
-            UpButtonPressedLarge.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Value));
+            UpButtonPressedLarge.Invoke(this, new (Selection.GetSelectedProvinces, Value));
          }
          else if (ModifierKeys.HasFlag(Keys.Shift))
          {
             Value = Math.Min(Value + 4, Maximum);
-            UpButtonPressedMedium.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Value));
+            UpButtonPressedMedium.Invoke(this, new (Selection.GetSelectedProvinces, Value));
          }
          else
          { 
-            UpButtonPressedSmall.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Value));
+            UpButtonPressedSmall.Invoke(this, new (Selection.GetSelectedProvinces, Value));
          }
       }
 
@@ -63,16 +64,16 @@ namespace Editor.Controls
          if (ModifierKeys.HasFlag(Keys.Control))
          {
             Value = Math.Max(Value - 9, Minimum);
-            DownButtonPressedLarge.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Value));
+            DownButtonPressedLarge.Invoke(this, new (Selection.GetSelectedProvinces, Value));
          }
          else if (ModifierKeys.HasFlag(Keys.Shift))
          {
             Value = Math.Max(Value - 4, Minimum);
-            DownButtonPressedMedium.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Value));
+            DownButtonPressedMedium.Invoke(this, new (Selection.GetSelectedProvinces, Value));
          }
          else
          {
-            DownButtonPressedSmall.Invoke(this, new (Globals.Selection.GetSelectedProvinces, Value));
+            DownButtonPressedSmall.Invoke(this, new (Selection.GetSelectedProvinces, Value));
          }
       }
    }

@@ -11,11 +11,11 @@ namespace Editor.DataClasses.MapModes
          ProvinceEventHandler.OnProvinceIsHreChanged += UpdateProvince!;
       }
 
-      public override Color GetProvinceColor(int id)
+      public override int GetProvinceColor(int id)
       {
          if (Globals.Provinces.TryGetValue(id, out var province))
-            return province.IsHre ? Color.Green : Color.DimGray;
-         return Color.DimGray;
+            return province.IsHre ? Color.Green.ToArgb() : Color.DimGray.ToArgb();
+         return Color.DimGray.ToArgb();
       }
 
       public override string GetMapModeName()

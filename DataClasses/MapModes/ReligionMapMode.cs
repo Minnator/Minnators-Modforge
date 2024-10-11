@@ -12,11 +12,11 @@ namespace Editor.DataClasses.MapModes
 
       public override bool IsLandOnly => true;
 
-      public override Color GetProvinceColor(int id)
+      public override int GetProvinceColor(int id)
       {
          if (Globals.Religions.TryGetValue(Globals.Provinces[id].Religion, out var religion))
-            return religion.Color;
-         return Color.DimGray;
+            return religion.Color.ToArgb();
+         return Color.DimGray.ToArgb();
       }
 
       public override string GetMapModeName()

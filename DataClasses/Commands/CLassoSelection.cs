@@ -11,20 +11,21 @@ public class CLassoSelection : ICommand
 
    public CLassoSelection(bool executeOnInit = true)
    {
-      var selection = Geometry.GetProvincesInPolygon(Globals.Selection.LassoSelection);
-      _selectionDelta = selection.Except(Globals.Selection.SelectedProvinces).ToList();
+      // TODO rework selection commands
+      //var selection = Geometry.GetProvincesInPolygon(Selection.LassoSelection);
+      //_selectionDelta = selection.Except(Selection.SelectionPreview).ToList();
       if (executeOnInit)
          Execute();
    }
 
    public void Execute()
    {
-      Globals.Selection.AddRange(_selectionDelta, false);
+      Selection.AddProvincesToSelection(_selectionDelta, false);
    }
 
    public void Undo()
    {
-      Globals.Selection.RemoveRange(_selectionDelta);
+      Selection.RemoveProvincesFromSelection(_selectionDelta);
    }
 
    public void Redo()

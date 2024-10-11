@@ -2,6 +2,7 @@
 using Editor.Commands;
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
+using Editor.Helper;
 
 namespace Editor.Events
 {
@@ -46,56 +47,56 @@ namespace Editor.Events
       {
          if (!Globals.AllowEditing || sender is not TextBox tb)
             return;
-         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Globals.Selection.GetSelectedProvinces, tb.Text, ProvAttrGet.capital, ProvAttrSet.capital));
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Selection.GetSelectedProvinces, tb.Text, ProvAttrGet.capital, ProvAttrSet.capital));
       }
 
       public static void OnTextBaseTaxChanged(object? sender, EventArgs e)
       {
          if (!Globals.AllowEditing || sender is not NumericUpDown nup)
             return;
-         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Globals.Selection.GetSelectedProvinces, ((int)nup.Value).ToString(), ProvAttrGet.base_tax, ProvAttrSet.base_tax));
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Selection.GetSelectedProvinces, ((int)nup.Value).ToString(), ProvAttrGet.base_tax, ProvAttrSet.base_tax));
       }
 
       public static void OnTextBaseProductionChanged(object? sender, EventArgs e)
       {
          if (!Globals.AllowEditing || sender is not NumericUpDown nup)
             return;
-         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Globals.Selection.GetSelectedProvinces, ((int)nup.Value).ToString(), ProvAttrGet.base_production, ProvAttrSet.base_production));
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Selection.GetSelectedProvinces, ((int)nup.Value).ToString(), ProvAttrGet.base_production, ProvAttrSet.base_production));
       }
 
       public static void OnTextBaseManpowerChanged(object? sender, EventArgs e)
       {
          if (!Globals.AllowEditing || sender is not NumericUpDown nup)
             return;
-         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Globals.Selection.GetSelectedProvinces, ((int)nup.Value).ToString(), ProvAttrGet.base_manpower, ProvAttrSet.base_manpower));
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Selection.GetSelectedProvinces, ((int)nup.Value).ToString(), ProvAttrGet.base_manpower, ProvAttrSet.base_manpower));
       }
 
       public static void OnIsCityChanged(object? sender, EventArgs e)
       {
          if (!Globals.AllowEditing || sender is not CheckBox cb)
             return;
-         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Globals.Selection.GetSelectedProvinces, cb.Checked ? "yes" : "no", ProvAttrGet.is_city, ProvAttrSet.is_city));
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Selection.GetSelectedProvinces, cb.Checked ? "yes" : "no", ProvAttrGet.is_city, ProvAttrSet.is_city));
       }
 
       public static void OnIsHreChanged(object? sender, EventArgs e)
       {
          if (!Globals.AllowEditing || sender is not CheckBox cb)
             return;
-         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Globals.Selection.GetSelectedProvinces, cb.Checked ? "yes" : "no", ProvAttrGet.hre, ProvAttrSet.hre));
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Selection.GetSelectedProvinces, cb.Checked ? "yes" : "no", ProvAttrGet.hre, ProvAttrSet.hre));
       }
 
       public static void OnIsSeatInParliamentChanged(object? sender, EventArgs e)
       {
          if (!Globals.AllowEditing || sender is not CheckBox cb)
             return;
-         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Globals.Selection.GetSelectedProvinces, cb.Checked ? "yes" : "no", ProvAttrGet.seat_in_parliament, ProvAttrSet.seat_in_parliament));
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Selection.GetSelectedProvinces, cb.Checked ? "yes" : "no", ProvAttrGet.seat_in_parliament, ProvAttrSet.seat_in_parliament));
       }
 
       public static void OnHasRevoltChanged(object? sender, EventArgs e)
       {
          if (!Globals.AllowEditing || sender is not CheckBox cb)
             return;
-         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Globals.Selection.GetSelectedProvinces, cb.Checked ? "yes" : "no", ProvAttrGet.revolt, ProvAttrSet.revolt));
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Selection.GetSelectedProvinces, cb.Checked ? "yes" : "no", ProvAttrGet.revolt, ProvAttrSet.revolt));
       }
 
       public static void OnTradeGoodsChanged(object? sender, ProvinceEditedEventArgs e)
@@ -505,14 +506,14 @@ namespace Editor.Events
       {
          if (!Globals.AllowEditing || sender is not ComboBox cb)
             return;
-         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Globals.Selection.GetSelectedProvinces, cb.SelectedItem?.ToString()!, ProvAttrGet.center_of_trade, ProvAttrSet.center_of_trade));
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Selection.GetSelectedProvinces, cb.SelectedItem?.ToString()!, ProvAttrGet.center_of_trade, ProvAttrSet.center_of_trade));
       }
 
       public static void OnTradeGoodChanged(object? sender, EventArgs e)
       {
          if (!Globals.AllowEditing || sender is not ComboBox cb)
             return;
-         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Globals.Selection.GetSelectedProvinces, cb.SelectedItem?.ToString()!, ProvAttrGet.trade_good, ProvAttrSet.trade_goods));
+         Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Selection.GetSelectedProvinces, cb.SelectedItem?.ToString()!, ProvAttrGet.trade_good, ProvAttrSet.trade_goods));
       }
 
       public static void OnTribalOwnerChanged(object? sender, ProvinceEditedEventArgs e)
@@ -556,14 +557,14 @@ namespace Editor.Events
       {
          if (!Globals.AllowEditing)
             return;
-         Globals.HistoryManager.AddCommand(new CAddRmvModifier(Globals.Selection.GetSelectedProvinces,modifier ,type));
+         Globals.HistoryManager.AddCommand(new CAddRmvModifier(Selection.GetSelectedProvinces,modifier ,type));
       }
 
       public static void OnModifierRemoved( ModifierAbstract modifier, ModifierType type)
       {
          if (!Globals.AllowEditing)
             return;
-         Globals.HistoryManager.AddCommand(new CAddRmvModifier(Globals.Selection.GetSelectedProvinces, modifier,
+         Globals.HistoryManager.AddCommand(new CAddRmvModifier(Selection.GetSelectedProvinces, modifier,
             type, false));
       }
 

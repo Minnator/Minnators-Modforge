@@ -34,12 +34,7 @@ public enum Mana
    MIL,
    NONE
 }
-public enum MapModeRendering
-{
-   Live,
-   LiveBackground,
-   Cached,
-}
+
 public enum EditingStatus
 {
    LoadingInterface,
@@ -109,8 +104,6 @@ public static class Globals
    public static readonly Settings Settings = new();
    public static ProvinceEditingStatus ProvinceEditingStatus = ProvinceEditingStatus.PreviewUntilSelection;
 
-   // SELECTION
-   public static Selection Selection = null!;
 
    // Date of history
    public static DateTime Date
@@ -128,7 +121,6 @@ public static class Globals
    // Contains the current state of the application
    public static State State = State.Loading;
    public static EditingStatus EditingStatus = EditingStatus.Idle;
-   public static MapModeRendering MapModeRendering { get; set; } = MapModeRendering.Live;
    public static bool AllowEditing => EditingStatus == EditingStatus.Idle;
    public static StripesDirection StripesDirection { get; set; } = StripesDirection.DiagonalLbRt;
 

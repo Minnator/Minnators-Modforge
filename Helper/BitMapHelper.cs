@@ -98,7 +98,7 @@ public static class BitMapHelper
    /// <param name="method"></param>
    /// <returns></returns>
    /// <exception cref="ArgumentNullException"></exception>
-   public static Bitmap GenerateBitmapFromProvinces(Func<int, Color> method)
+   public static Bitmap GenerateBitmapFromProvinces(Func<int, int> method)
    {
       var sw = new Stopwatch();
       sw.Start();
@@ -122,7 +122,7 @@ public static class BitMapHelper
             var points = new Point[province.PixelCnt];
             Array.Copy(Globals.Pixels, province.PixelPtr, points, 0, province.PixelCnt);
 
-            var color = method(province.Id);
+            var color = Color.FromArgb(method(province.Id));
 
             var ptr = (byte*)bitmapData.Scan0;
             foreach (var point in points)

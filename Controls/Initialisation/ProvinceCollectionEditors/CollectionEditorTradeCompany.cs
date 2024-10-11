@@ -1,16 +1,18 @@
-﻿namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
+﻿using Editor.Helper;
+
+namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
 {
    public static class CollectionEditorTradeCompany
    {
       
       public static List<string> TradeCompanySelected(string s)
       {
-         Globals.Selection.Clear();
+         Selection.ClearSelection();
          if (Globals.TradeCompanies.TryGetValue(s, out var tradeCompany))
          {
-            Globals.Selection.AddRange(tradeCompany.GetProvinceIds());
+            Selection.AddProvincesToSelection(tradeCompany.GetProvinceIds());
             if (Globals.MapWindow.FocusSelectionCheckBox.Checked)
-               Globals.Selection.FocusSelection();
+               Selection.FocusSelection();
             List<string> provNames = [];
             foreach (var prov in tradeCompany.GetProvinceIds())
                provNames.Add(prov.ToString());
@@ -24,7 +26,7 @@
          if (!Globals.TradeCompanies.TryGetValue(s, out var tradeCompany))
             return [];
 
-         //Globals.HistoryManager.AddCommand(new CModifyExistingTradeCompany(s, Globals.Selection.SelectedProvinces, b));
+         //Globals.HistoryManager.AddCommand(new CModifyExistingTradeCompany(s, Selection.SelectedProvinces, b));
 
          return [];
       }
@@ -34,7 +36,7 @@
          if (Globals.TradeCompanies.TryGetValue(s, out _))
             return [];
 
-         //Globals.HistoryManager.AddCommand(new CCreateNewTradeCompany(s, Globals.Selection.SelectedProvinces));
+         //Globals.HistoryManager.AddCommand(new CCreateNewTradeCompany(s, Selection.SelectedProvinces));
 
          if (Globals.TradeCompanies.TryGetValue(s, out var newTradeCompany))
             return [];

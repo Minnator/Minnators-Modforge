@@ -1,4 +1,5 @@
 ﻿using Editor.DataClasses.GameDataClasses;
+using Editor.Forms;
 using System.Diagnostics;
 using System.Linq;
 
@@ -14,7 +15,7 @@ public enum SelectionType
    Collection // Collection of provinces
 }
 
-public static class NewSelection
+public static class Selection
 {
    // TODO MustHaves
    // [ ] Must have a way to draw between provinces for e.g. Straits
@@ -73,8 +74,8 @@ public static class NewSelection
    private static HashSet<Province> _selectionPreview = [];
    private static HashSet<Province> _highlightedProvinces = [];
 
-   private static Province _lastHoveredProvince = Province.Empty;
-   private static Province _lastSelectedProvince = Province.Empty;
+   public static Province LastHoveredProvince = Province.Empty;
+   public static Province _lastSelectedProvince = Province.Empty;
 
    // Rectangle Selection Variables
    private static Point _rectangleStartPoint = Point.Empty;
@@ -89,9 +90,16 @@ public static class NewSelection
 
    // Magic Wand Selection Variables
 
+   // Tooltips
+   public static bool ShowToolTip = true;
+   private static ToolTip MapToolTip = new();
+
    // Country Selection Variables
+   // Selected Country TODO ADD THIS FEATURE
+   public static Country SelectedCountry => _lastSelectedCountry;
    private static HashSet<Country> _selectedCountries = []; // Use later when multiple countries can be selected and edited at once
    private static Country _lastSelectedCountry = Country.Empty;
+   public static List<int> SelectionCoresAndClaims { get; set; } = [];
 
    // Events
    public static event EventHandler<List<Province>> OnProvinceGroupSelected = delegate { };
@@ -111,9 +119,10 @@ public static class NewSelection
    private static SelectionType _selectionType = SelectionType.Single;
 
    // ------------ Getters ------------ \\
-   public static HashSet<Province> GetSelectedProvinces() => _selectedProvinces;
-   public static HashSet<int> GetSelectedProvinceIds() => _selectedProvinces.Select(p => p.Id).ToHashSet();
-   public static int GetSelectionCount() => _selectedProvinces.Count;
+   public static List<Province> GetSelectedProvinces => _selectedProvinces.ToList();
+   public static int[] GetSelectedProvincesIds => _selectedProvinces.Select(p => p.Id).ToArray();
+   public static List<int> SelectionPreview => _selectionPreview.Select(p => p.Id).ToList();
+   public static int Count => _selectedProvinces.Count;
    public static SelectionType GetSelectionType() => _selectionType;
 
    public static void Initialize()
@@ -135,6 +144,12 @@ public static class NewSelection
       AddProvincesToSelection(toAdd);
    }
 
+   public static void RePaintSelection()
+   {
+      foreach (var province in _selectedProvinces)
+         RedrawSelection(province);
+   }
+
    public static void RedrawSelection(Province province)
    {
       MapDrawing.DrawOnMap(province, _selectedColor, PixelsOrBorders.Borders);
@@ -154,7 +169,32 @@ public static class NewSelection
       OnProvinceGroupDeselected(Globals.ZoomControl, provinces);
    }
 
-   public static void AddProvincesToSelection(List<Province> provinces, bool deselectSelected = false)
+   // TODO remove this id stuff
+   public static void RemoveProvincesFromSelection(List<int> provinces)
+   {
+      foreach (var id in provinces)
+      {
+         if (!Globals.Provinces.TryGetValue(id, out var province))
+            continue;
+         RemoveProvinceFromSelection(province, false);
+      }
+
+      OnProvinceGroupDeselected(Globals.ZoomControl, provinces.Select(id => Globals.Provinces[id]).ToList());
+   }
+
+   public static void AddProvincesToSelection(ICollection<int> provinces, bool deselectSelected = false)
+   {
+      foreach (var id in provinces)
+      {
+         if (!Globals.Provinces.TryGetValue(id, out var province))
+            continue;
+         AddProvinceToSelection(province, deselectSelected, false);
+      }
+
+      OnProvinceGroupSelected(Globals.ZoomControl, provinces.Select(id => Globals.Provinces[id]).ToList());
+   }
+
+   public static void AddProvincesToSelection(ICollection<Province> provinces, bool deselectSelected = false)
    {
       if (deselectSelected)
       {
@@ -198,6 +238,13 @@ public static class NewSelection
       if (fireEvent)
          OnProvinceGroupSelected(Globals.ZoomControl, [province]);
    }
+
+   public static void FocusSelection()
+   {
+      var bounds = Geometry.GetBounds(GetSelectedProvincesIds.ToList()); // TODO no more ids
+      Globals.ZoomControl.FocusOn(bounds);
+   }
+
 
    #endregion
 
@@ -284,20 +331,20 @@ public static class NewSelection
    public static void HoverProvince(Province province)
    {
       MapDrawing.DrawOnMap(province, _hoverColor, PixelsOrBorders.Borders);
-      _lastHoveredProvince = province;
+      LastHoveredProvince = province;
    }
 
    public static void ClearHover()
    {
-      if (_lastHoveredProvince == Province.Empty)
+      if (LastHoveredProvince == Province.Empty)
          return;
       // If the province is already selected, mark it as such again
-      if (_selectedProvinces.Contains(_lastHoveredProvince))
-         RedrawSelection(_lastHoveredProvince);
+      if (_selectedProvinces.Contains(LastHoveredProvince))
+         RedrawSelection(LastHoveredProvince);
       else
-         MapDrawing.DrawOnMap(_lastHoveredProvince, _borderColor, PixelsOrBorders.Borders);
+         MapDrawing.DrawOnMap(LastHoveredProvince, _borderColor, PixelsOrBorders.Borders);
 
-      _lastHoveredProvince = Province.Empty;
+      LastHoveredProvince = Province.Empty;
    }
 
    #endregion
@@ -426,6 +473,9 @@ public static class NewSelection
             HoverProvinceMove(e.Location);
             break;
       }
+
+      if (ShowToolTip && LastHoveredProvince != Province.Empty)
+         MapToolTip.SetToolTip(Globals.ZoomControl, ToolTipBuilder.BuildToolTip(Globals.ToolTipText, LastHoveredProvince.Id));
    }
 
 
@@ -516,7 +566,7 @@ public static class NewSelection
    private static void HoverProvinceMove(Point point)
    {
       var valid = GetProvinceFromMap(point, out var province);
-      if (valid && _lastHoveredProvince == province)
+      if (valid && LastHoveredProvince == province)
          return;
       ClearHover();
       if (!valid)
@@ -650,5 +700,31 @@ public static class NewSelection
       {
          UnPreviewProvince(province);
       }
+   }
+
+
+   // ----------- TODO OVERWORK ------------ \\
+   /// <summary>
+   /// Returns true if the attribute is the same across all selected provinces
+   /// </summary>
+   /// <param name="attribute"></param>
+   /// <param name="result"></param>
+   /// <returns></returns>
+   public static bool GetSharedAttribute(ProvAttrGet attribute, out object? result)
+   {
+      result = null;
+
+      foreach (var province in _selectedProvinces)
+      {
+         var value = province.GetAttribute(attribute);
+         if (result == null)
+            result = value!;
+         else if (!result.Equals(value))
+         {
+            result = null;
+            return false;
+         }
+      }
+      return result != null;
    }
 }

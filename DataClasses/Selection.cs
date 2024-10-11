@@ -31,7 +31,7 @@ public class CountrySelectionEventArgs(Tag country) : EventArgs
    public Tag Country { get; set; } = country;
 }
 
-public class Selection
+public class OldSelection
 {
    // Settable color of the selection
    public Color SelectionColor = Color.Orange;
@@ -46,7 +46,6 @@ public class Selection
    public List<Point> LassoSelection = []; // List of points which define the selection polygon
    private bool _clearPolygonSelection;
    private Country _selectedCountry;
-   private readonly PannablePictureBox _pannablePictureBox;
 
 
    // List of selected provinces
@@ -131,29 +130,12 @@ public class Selection
       }
    }
 
-   public Selection(PannablePictureBox pb)
-   {
-      _pannablePictureBox = pb;
-      _selectedCountry = Country.Empty;
-
-      OnSelectedCountryChanged += OnSelectedCountryChange_MapUpdate!;
-   }
 
    public void FocusSelection()
    {
-      Globals.MapWindow.MapPictureBox.FocusOn(SelectedProvinces);
+      Globals.ZoomControl.FocusOn(Geometry.GetBounds(SelectedProvinces));
    }
 
-   public void RePaintSelection()
-   {
-      foreach (var province in SelectedProvinces)
-         _pannablePictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(province, SelectionColor, _pannablePictureBox.SelectionOverlay));
-   }
-
-   public void OnSelectedCountryChange_MapUpdate(object sender, CountrySelectionEventArgs e)
-   {
-
-   }
 
    public void MarkNext(int provPtr)
    {
@@ -194,7 +176,7 @@ public class Selection
          SelectedProvinces.Add(provId);
       }
       
-      _pannablePictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(provId, SelectionColor, _pannablePictureBox.SelectionOverlay));
+      //_pannablePictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(provId, SelectionColor, _pannablePictureBox.SelectionOverlay));
    }
 
    public void AddRange(IEnumerable<int> provIds, bool allowDeselect = true, bool isPreview = false)
@@ -209,7 +191,7 @@ public class Selection
          SelectionPreview.Remove(provId);
       else
          SelectedProvinces.Remove(provId);
-      _pannablePictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(provId, Color.Transparent, _pannablePictureBox.SelectionOverlay));
+      //_pannablePictureBox.Invalidate(MapDrawHelper.DrawProvinceBorder(provId, Color.Transparent, _pannablePictureBox.SelectionOverlay));
    }
 
    public void RemoveRange(List<int> provIds, bool isPreview = false)
@@ -277,7 +259,7 @@ public class Selection
       if (_rectanglePoint == Point.Empty)
          return;
       // Remove the last selection rectangle
-      DrawRectangle(_lastRectPoint, Color.Transparent, _pannablePictureBox.Overlay);
+      //DrawRectangle(_lastRectPoint, Color.Transparent, _pannablePictureBox.Overlay);
 
       // Precompute the bounds
       var currentRectBounds = Geometry.GetBounds([_rectanglePoint, point]);
@@ -299,17 +281,17 @@ public class Selection
       RemoveRange(provPtrRemove, true);
 
       // Draw the new selection rectangle
-      DrawRectangle(point, SelectionOutlineColor, _pannablePictureBox.Overlay);
+      //DrawRectangle(point, SelectionOutlineColor, _pannablePictureBox.Overlay);
    }
 
 
    // Draws a rectangle on the map in reference to the RectanglePoint
    private void DrawRectangle(Point refPoint, Color rectColor, Bitmap bmp)
    {
-      _pannablePictureBox.IsPainting = true;
+      //_pannablePictureBox.IsPainting = true;
       var rect = Geometry.GetBounds([_rectanglePoint, refPoint]);
-      _pannablePictureBox.Invalidate(MapDrawHelper.DrawOnMap(rect, Geometry.GetRectanglePoints(rect), rectColor, bmp));
-      _pannablePictureBox.IsPainting = false;
+      //_pannablePictureBox.Invalidate(MapDrawHelper.DrawOnMap(rect, Geometry.GetRectanglePoints(rect), rectColor, bmp));
+      //_pannablePictureBox.IsPainting = false;
    }
 
    // Enters the rectangle selection and sets the starting point
@@ -324,7 +306,7 @@ public class Selection
    {
       var rect = Geometry.GetBounds([_rectanglePoint, _lastRectPoint]);
       Globals.HistoryManager.AddCommand(new CRectangleSelection(rect), CommandHistoryType.ComplexSelection);
-      DrawRectangle(_lastRectPoint, Color.Transparent, _pannablePictureBox.Overlay);
+      //DrawRectangle(_lastRectPoint, Color.Transparent, _pannablePictureBox.Overlay);
       _rectanglePoint = Point.Empty;
       SelectionPreview = [];
       State = SelectionState.Single;

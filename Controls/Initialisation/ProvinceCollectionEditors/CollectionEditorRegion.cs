@@ -7,13 +7,13 @@ namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
    {
       public static List<string> RegionSelected(string s)
       {
-         Globals.Selection.Clear();
+         Selection.ClearSelection();
          if (!Globals.Regions.TryGetValue(s, out var region))
             return [];
 
-         Globals.Selection.AddRange(region.GetProvinceIds());
+         Selection.AddProvincesToSelection(region.GetProvinceIds());
          if (Globals.MapWindow.FocusSelectionCheckBox.Checked)
-            Globals.Selection.FocusSelection();
+            Selection.FocusSelection();
          return region.Areas;
       }
 
@@ -22,7 +22,7 @@ namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
          if (!Globals.Regions.TryGetValue(s, out var region))
             return [];
 
-         Globals.HistoryManager.AddCommand(new CModifyExistingRegion(s, ProvinceCollectionHelper.GetAreaNamesFromProvinces(Globals.Selection.GetSelectedProvinces), b));
+         Globals.HistoryManager.AddCommand(new CModifyExistingRegion(s, ProvinceCollectionHelper.GetAreaNamesFromProvinces(Selection.GetSelectedProvinces), b));
          return region.Areas;
       }
 
@@ -32,7 +32,7 @@ namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
             return [];
 
          Globals.HistoryManager.AddCommand(new CAddNewRegion(s, 
-            ProvinceCollectionHelper.GetAreaNamesFromProvinces(Globals.Selection.GetSelectedProvinces), Globals.MapWindow.RegionEditingGui.ExtendedComboBox));
+            ProvinceCollectionHelper.GetAreaNamesFromProvinces(Selection.GetSelectedProvinces), Globals.MapWindow.RegionEditingGui.ExtendedComboBox));
 
          return Globals.Regions.TryGetValue(s, out var newRegion) ? newRegion.Areas : [];
       }

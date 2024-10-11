@@ -1,4 +1,5 @@
 ﻿using Editor.Controls;
+using Editor.Helper;
 
 namespace Editor.Commands;
 
@@ -13,15 +14,15 @@ public class CAddSingleSelection : ICommand
          Execute();
    
    }
-
+   //TODO fix ids
    public void Execute()
    {
-      Globals.Selection.Add(_provinceId);
+      Selection.AddProvinceToSelection(Globals.Provinces[_provinceId]);
    }
 
    public void Undo()
    {
-     Globals.Selection.Remove(_provinceId);
+     Selection.RemoveProvinceFromSelection(Globals.Provinces[_provinceId]);
    }
 
    public void Redo()

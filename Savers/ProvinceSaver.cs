@@ -29,7 +29,7 @@ namespace Editor.Savers
       /// <exception cref="NotImplementedException"></exception>
       public static void SaveSelectedProvinces()
       {
-         foreach (var province in Globals.Selection.GetSelectedProvinces) 
+         foreach (var province in Selection.GetSelectedProvinces) 
             province.SaveToHistoryFile();
       }
 

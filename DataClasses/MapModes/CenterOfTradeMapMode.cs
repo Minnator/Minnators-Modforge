@@ -16,18 +16,18 @@ public class CenterOfTradeMapMode : MapMode
       ProvinceEventHandler.OnProvinceCenterOfTradeLevelChanged += UpdateProvince;
    }
 
-   public override Color GetProvinceColor(int id)
+   public override int GetProvinceColor(int id)
    {
       if (Globals.SeaProvinces.Contains(id) || Globals.LakeProvinces.Contains(id))
-         return Globals.Provinces[id].Color;
+         return Globals.Provinces[id].Color.ToArgb();
 
       return Globals.Provinces[id].CenterOfTrade switch
       {
-         0 => Color.DimGray,
-         1 => Color.FromArgb(0, 0, 255),
-         2 => Color.FromArgb(0, 255, 0),
-         3 => Color.FromArgb(255, 0, 0),
-         _ => Color.FromArgb(255, 255, 255)
+         0 => Color.DimGray.ToArgb(),
+         1 => Color.FromArgb(0, 0, 255).ToArgb(),
+         2 => Color.FromArgb(0, 255, 0).ToArgb(),
+         3 => Color.FromArgb(255, 0, 0).ToArgb(),
+         _ => Color.FromArgb(255, 255, 255).ToArgb()
       };
    }
 

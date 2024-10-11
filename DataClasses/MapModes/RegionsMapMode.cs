@@ -16,13 +16,13 @@ public sealed class RegionsMapMode : MapMode
       return "Regions";
    }
 
-   public override Color GetProvinceColor(int id)
+   public override int GetProvinceColor(int id)
    {
       if (Globals.Provinces.TryGetValue(id, out var province))
          if (Globals.Areas.TryGetValue(province.Area, out var areas))
             if (Globals.Regions.TryGetValue(areas.Region, out var region))
-               return region.Color;
-      return Color.DarkGray;
+               return region.Color.ToArgb();
+      return Color.DarkGray.ToArgb();
    }
 
    public override string GetSpecificToolTip(int provinceId)

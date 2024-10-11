@@ -24,11 +24,11 @@ namespace Editor.DataClasses.MapModes
          return "Devastation: -";
       }
 
-      public override Color GetProvinceColor(int id)
+      public override int GetProvinceColor(int id)
       {
          if (Globals.SeaProvinces.Contains(id))
-            return Globals.Provinces[id].Color;
-         return Globals.ColorProvider.GetColorOnGreenRedShade(100, 0, Globals.Provinces[id].Devastation);
+            return Globals.Provinces[id].Color.ToArgb();
+         return Globals.ColorProvider.GetColorOnGreenRedShade(100, 0, Globals.Provinces[id].Devastation).ToArgb();
       }
    }
 }

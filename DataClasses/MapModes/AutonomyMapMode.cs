@@ -12,11 +12,11 @@ public class AutonomyMapMode : MapMode
       ProvinceEventHandler.OnProvinceLocalAutonomyChanged += UpdateProvince;
    }
 
-   public override Color GetProvinceColor(int id)
+   public override int GetProvinceColor(int id)
    {
       if (Globals.SeaProvinces.Contains(id))
-         return Globals.Provinces[id].Color;
-      return Globals.ColorProvider.GetColorOnGreenRedShade(100, 0, Globals.Provinces[id].LocalAutonomy);
+         return Globals.Provinces[id].Color.ToArgb();
+      return Globals.ColorProvider.GetColorOnGreenRedShade(100, 0, Globals.Provinces[id].LocalAutonomy).ToArgb();
    }
 
    public override string GetMapModeName()

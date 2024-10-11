@@ -6,10 +6,8 @@ namespace Editor.Forms.AdvancedSelections
 {
    public partial class AdvancedSelectionsForm : Form
    {
-      private readonly Controls.PannablePictureBox _pb;
-      public AdvancedSelectionsForm(Controls.PannablePictureBox pb)
+      public AdvancedSelectionsForm()
       {
-         _pb = pb;
          InitializeComponent();
 
          InitComboBoxes();

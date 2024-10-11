@@ -44,16 +44,16 @@ namespace Editor.DataClasses.MapModes
          return tooltip;
       }
 
-      public override Color GetProvinceColor(int id)
+      public override int GetProvinceColor(int id)
       {
          if (Globals.Provinces.TryGetValue(id, out var province))
             if (province.Owner != Tag.Empty)
                if (Globals.Countries.TryGetValue(province.Owner, out var country))
-                  return country.Color;
-         return Color.DimGray;
+                  return country.Color.ToArgb();
+         return Color.DimGray.ToArgb();
       }
 
-      public override void RenderMapMode(Func<int, Color> method)
+      public override void RenderMapMode(Func<int, int> method)
       {
          base.RenderMapMode(method);
          if (ClearPreviousCoresClaims)
@@ -81,12 +81,12 @@ namespace Editor.DataClasses.MapModes
       private void RenderClaimsAndCores()
       {
          //Draw claims and cores of selected country if any
-         if (Globals.Selection.SelectedCountry.Equals(Country.Empty))
+         if (Selection.SelectedCountry.Equals(Country.Empty))
             return;
 
-         var claims = ProvinceCollectionHelper.GetProvincesWithAttribute(ProvAttrGet.claims, Globals.Selection.SelectedCountry.Tag);
-         claims.AddRange(ProvinceCollectionHelper.GetProvincesWithAttribute(ProvAttrGet.permanent_claims, Globals.Selection.SelectedCountry.Tag));
-         var cores = ProvinceCollectionHelper.GetProvincesWithAttribute(ProvAttrGet.cores, Globals.Selection.SelectedCountry.Tag);
+         var claims = ProvinceCollectionHelper.GetProvincesWithAttribute(ProvAttrGet.claims, Selection.SelectedCountry.Tag);
+         claims.AddRange(ProvinceCollectionHelper.GetProvincesWithAttribute(ProvAttrGet.permanent_claims, Selection.SelectedCountry.Tag));
+         var cores = ProvinceCollectionHelper.GetProvincesWithAttribute(ProvAttrGet.cores, Selection.SelectedCountry.Tag);
 
          CoresAndClaims.AddRange(claims);
          CoresAndClaims.AddRange(cores);
@@ -94,39 +94,25 @@ namespace Editor.DataClasses.MapModes
          for (var i = claims.Count - 1; i >= 0; i--)
          {
             var province = Globals.Provinces[claims[i]];
-            if (province.Owner == Globals.Selection.SelectedCountry.Tag)
+            if (province.Owner == Selection.SelectedCountry.Tag)
                claims.RemoveAt(i);
          }
 
          for (var i = cores.Count - 1; i >= 0; i--)
          {
             var province = Globals.Provinces[cores[i]];
-            if (province.Owner == Globals.Selection.SelectedCountry.Tag)
+            if (province.Owner == Selection.SelectedCountry.Tag)
                cores.RemoveAt(i);
          }
 
-         Globals.Selection.SelectionCoresAndClaims.Clear();
-         Globals.Selection.SelectionCoresAndClaims.AddRange(claims);
-         Globals.Selection.SelectionCoresAndClaims.AddRange(cores);
+         Selection.SelectionCoresAndClaims.Clear();
+         Selection.SelectionCoresAndClaims.AddRange(claims);
+         Selection.SelectionCoresAndClaims.AddRange(cores);
 
-         switch (Globals.MapModeRendering)
-         {
-            case MapModeRendering.Live:
-            case MapModeRendering.LiveBackground:
-               var rect1 = MapDrawHelper.DrawStripes(Color.DarkGoldenrod, claims, Globals.MapModeManager.ShareLiveBitmap);
-               var rect2 = MapDrawHelper.DrawStripes(Color.LawnGreen, cores, Globals.MapModeManager.ShareLiveBitmap);
-               Globals.MapWindow.MapPictureBox.Invalidate(rect1);
-               Globals.MapWindow.MapPictureBox.Invalidate(rect2);
-               break;
-            case MapModeRendering.Cached:
-               var rect3 = MapDrawHelper.DrawStripes(Color.DarkGoldenrod, claims, Bitmap);
-               var rect4 = MapDrawHelper.DrawStripes(Color.LawnGreen, cores, Bitmap);
-               Globals.MapModeManager.PictureBox.Invalidate(rect3);
-               Globals.MapModeManager.PictureBox.Invalidate(rect4);
-               break;
-            default:
-               throw new ArgumentOutOfRangeException();
-         }
+         MapDrawing.DrawStripes(Color.DarkGoldenrod.ToArgb(), claims);
+         MapDrawing.DrawStripes(Color.LawnGreen.ToArgb(), cores);
+
+         Globals.ZoomControl.Invalidate();
 
       }
    }

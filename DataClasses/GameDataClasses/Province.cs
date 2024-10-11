@@ -173,6 +173,7 @@ public class Province : IProvinceCollection, IScope
 
    // Management data
    public int Id { get; init; }
+   // TODO to int
    public Color Color { get; set; }
    public int BorderPtr { get; set; }
    public int BorderCnt { get; set; }
@@ -1286,6 +1287,18 @@ public class Province : IProvinceCollection, IScope
    {
       return Id;
    }
+
+   // == and != operators
+   public static bool operator ==(Province left, Province right)
+   {
+      return left.Equals(right);
+   }
+
+   public static bool operator !=(Province left, Province right)
+   {
+      return !left.Equals(right);
+   }
+
    public override string ToString()
    {
       return $"{Id} ({GetLocalisation()} ";

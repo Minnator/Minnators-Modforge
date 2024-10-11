@@ -15,7 +15,7 @@ namespace Editor.Controls
 
       private void SearchResultButton_Click(object? sender, EventArgs e)
       {
-         Globals.MapWindow.MapPictureBox.FocusOn(IsProvince
+         Globals.ZoomControl.FocusOn(IsProvince
             ? Globals.Provinces[ProvinceId].Center
             : Globals.Provinces[Globals.Countries[CountryTag].Capital].Center);
       }

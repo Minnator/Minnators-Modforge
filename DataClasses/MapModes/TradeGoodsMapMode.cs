@@ -13,14 +13,14 @@ namespace Editor.DataClasses.MapModes
          ProvinceEventHandler.OnProvinceTradeGoodChanged += UpdateProvince;
       }
 
-      public override Color GetProvinceColor(int id)
+      public override int GetProvinceColor(int id)
       {
          if (Globals.Provinces.TryGetValue(id, out var province))
          {
             var tradeGood = TradeGoodHelper.StringToTradeGood(province.TradeGood);
-            return tradeGood.Color;
+            return tradeGood.Color.ToArgb();
          }
-         return Color.DimGray;
+         return Color.DimGray.ToArgb();
       }
 
       public override string GetMapModeName()

@@ -15,14 +15,14 @@ public sealed class SuperRegionMapMode : MapMode
       return "Super Regions";
    }
 
-   public override Color GetProvinceColor(int id)
+   public override int GetProvinceColor(int id)
    {
       if (Globals.Provinces.TryGetValue(id, out var province))
          if (Globals.Areas.TryGetValue(province.Area, out var areas))
             if (Globals.Regions.TryGetValue(areas.Region, out var region))
                if (Globals.SuperRegions.TryGetValue(region.SuperRegion, out var superRegion))
-                  return superRegion.Color;
-      return Color.DarkGray;
+                  return superRegion.Color.ToArgb();
+      return Color.DarkGray.ToArgb();
    }
 
    public override string GetSpecificToolTip(int id)

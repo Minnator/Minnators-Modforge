@@ -19,9 +19,9 @@ public sealed class ProvinceMapMode : MapMode
       return "Provinces";
    }
 
-   public override Color GetProvinceColor(int provinceId)
+   public override int GetProvinceColor(int provinceId)
    {
-      return Globals.Provinces[provinceId].Color;
+      return Globals.Provinces[provinceId].Color.ToArgb();
    }
 
    public override string GetSpecificToolTip(int provinceId)

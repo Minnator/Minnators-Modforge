@@ -1,5 +1,6 @@
 ﻿using Editor.Commands;
 using Editor.Controls;
+using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.Helper
 {
@@ -32,9 +33,11 @@ namespace Editor.Helper
       {
          return ControlFactory.GetToolStripMenuItem("Select Area", (sender, e) =>
          {
-            if (Globals.Provinces.TryGetValue(Globals.MapWindow.MapPictureBox.LastInvalidatedProvince, out var province))
-               if (Globals.Areas.TryGetValue(province.Area, out var area))
-                  Globals.HistoryManager.AddCommand(new CCollectionSelection(Globals.MapWindow.MapPictureBox, area), CommandHistoryType.ComplexSelection);
+            if (Selection.LastHoveredProvince == Province.Empty)
+               return;
+
+            if (Globals.Areas.TryGetValue(Selection.LastHoveredProvince.Area, out var area))
+                  Globals.HistoryManager.AddCommand(new CCollectionSelection(area), CommandHistoryType.ComplexSelection);
          });
       }
 
@@ -42,10 +45,12 @@ namespace Editor.Helper
       {
          return ControlFactory.GetToolStripMenuItem("Select Region", (sender, args) =>
          {
-            if (Globals.Provinces.TryGetValue(Globals.MapWindow.MapPictureBox.LastInvalidatedProvince, out var province))
-               if (Globals.Areas.TryGetValue(province.Area, out var area))
-                  if (Globals.Regions.TryGetValue(area.Region, out var region))
-                     Globals.HistoryManager.AddCommand(new CCollectionSelection(Globals.MapWindow.MapPictureBox, region), CommandHistoryType.ComplexSelection);
+            if (Selection.LastHoveredProvince == Province.Empty)
+               return;
+
+            if (Globals.Areas.TryGetValue(Selection.LastHoveredProvince.Area, out var area))
+               if (Globals.Regions.TryGetValue(area.Region, out var region))
+                  Globals.HistoryManager.AddCommand(new CCollectionSelection(region), CommandHistoryType.ComplexSelection);
          });
       }
 
@@ -53,11 +58,13 @@ namespace Editor.Helper
       {
          return ControlFactory.GetToolStripMenuItem("Select Super Region", (sender, args) =>
          {
-            if (Globals.Provinces.TryGetValue(Globals.MapWindow.MapPictureBox.LastInvalidatedProvince, out var province))
-               if (Globals.Areas.TryGetValue(province.Area, out var area))
-                  if (Globals.Regions.TryGetValue(area.Region, out var region))
+            if (Selection.LastHoveredProvince == Province.Empty)
+               return;
+
+            if (Globals.Areas.TryGetValue(Selection.LastHoveredProvince.Area, out var area))
+               if (Globals.Regions.TryGetValue(area.Region, out var region))
                      if (Globals.SuperRegions.TryGetValue(region.SuperRegion, out var superRegion))
-                        Globals.HistoryManager.AddCommand(new CCollectionSelection(Globals.MapWindow.MapPictureBox, superRegion), CommandHistoryType.ComplexSelection);
+                        Globals.HistoryManager.AddCommand(new CCollectionSelection(superRegion), CommandHistoryType.ComplexSelection);
          });
       }
 
@@ -65,9 +72,11 @@ namespace Editor.Helper
       {
          return ControlFactory.GetToolStripMenuItem("Select Continent", (sender, args) =>
          {
-            if (Globals.Provinces.TryGetValue(Globals.MapWindow.MapPictureBox.LastInvalidatedProvince, out var province))
-               if (Globals.Continents.TryGetValue(province.Continent, out var continent))
-                  Globals.HistoryManager.AddCommand(new CCollectionSelection(Globals.MapWindow.MapPictureBox, continent), CommandHistoryType.ComplexSelection);
+            if (Selection.LastHoveredProvince == Province.Empty)
+               return;
+
+            if (Globals.Continents.TryGetValue(Selection.LastHoveredProvince.Continent, out var continent))
+                  Globals.HistoryManager.AddCommand(new CCollectionSelection(continent), CommandHistoryType.ComplexSelection);
          });
       }
 
@@ -75,9 +84,11 @@ namespace Editor.Helper
       {
          return ControlFactory.GetToolStripMenuItem("Select Country", (sender, args) =>
          {
-            if (Globals.Provinces.TryGetValue(Globals.MapWindow.MapPictureBox.LastInvalidatedProvince, out var province))
-               if (Globals.Countries.TryGetValue (province.Owner, out var country))
-                  Globals.HistoryManager.AddCommand(new CCollectionSelection(Globals.MapWindow.MapPictureBox, country), CommandHistoryType.ComplexSelection);
+            if (Selection.LastHoveredProvince == Province.Empty)
+               return;
+
+            if (Globals.Countries.TryGetValue (Selection.LastHoveredProvince.Owner, out var country))
+                  Globals.HistoryManager.AddCommand(new CCollectionSelection(country), CommandHistoryType.ComplexSelection);
          });
       }
 
@@ -85,8 +96,10 @@ namespace Editor.Helper
       {
          return ControlFactory.GetToolStripMenuItem("Select Culture Group", (sender, args) =>
          {
-            if (Globals.Provinces.TryGetValue(Globals.MapWindow.MapPictureBox.LastInvalidatedProvince, out var province))
-               Globals.HistoryManager.AddCommand(new CCollectionSelection(Globals.MapWindow.MapPictureBox, province.GetProvincesWithSameCultureGroup()), CommandHistoryType.ComplexSelection);
+            if (Selection.LastHoveredProvince == Province.Empty)
+               return;
+
+            Globals.HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.GetProvincesWithSameCultureGroup()), CommandHistoryType.ComplexSelection);
          });
       }
 
@@ -94,8 +107,10 @@ namespace Editor.Helper
       {
          return ControlFactory.GetToolStripMenuItem("Select Culture", (sender, args) =>
          {
-            if (Globals.Provinces.TryGetValue(Globals.MapWindow.MapPictureBox.LastInvalidatedProvince, out var province))
-               Globals.HistoryManager.AddCommand(new CCollectionSelection(Globals.MapWindow.MapPictureBox, province.GetProvincesWithSameCulture()), CommandHistoryType.ComplexSelection);
+            if (Selection.LastHoveredProvince == Province.Empty)
+               return;
+
+            Globals.HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.GetProvincesWithSameCulture()), CommandHistoryType.ComplexSelection);
          });
       }
 
@@ -103,12 +118,12 @@ namespace Editor.Helper
       {
          return ControlFactory.GetToolStripMenuItem("Select Trade Node", (sender, args) =>
          {
-            if (Globals.Provinces.TryGetValue(Globals.MapWindow.MapPictureBox.LastInvalidatedProvince,
-                   out var province))
-            {
-               var node = TradeNodeHelper.GetTradeNodeByProvince(province.Id);
-               Globals.HistoryManager.AddCommand(new CCollectionSelection(Globals.MapWindow.MapPictureBox, [.. node.Members]), CommandHistoryType.ComplexSelection);
-            }
+
+            if (Selection.LastHoveredProvince == Province.Empty)
+               return;
+
+            var node = TradeNodeHelper.GetTradeNodeByProvince(Selection.LastHoveredProvince.Id);
+            Globals.HistoryManager.AddCommand(new CCollectionSelection([.. node.Members]), CommandHistoryType.ComplexSelection);
          });
       }
    }
