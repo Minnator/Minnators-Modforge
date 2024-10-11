@@ -2,11 +2,19 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
+using Editor.Parser;
 
 namespace Editor.Helper;
 
-public static class FilesHelper
+public static partial class FilesHelper
 {
+   private const string ID_FROM_FILE_NAME_PATTERN = @"^\d+";
+
+   private static readonly Regex IdRegex = IdFromString();
+
+   [GeneratedRegex(ID_FROM_FILE_NAME_PATTERN, RegexOptions.Compiled)]
+   private static partial Regex IdFromString();
    // Gets all files in a folder with a specific file ending in all subfolders of the folder
    public static List<string> GetAllFilesInFolder(string folderPath, string searchPattern)
    {
@@ -63,6 +71,42 @@ public static class FilesHelper
          {
             if (fineNames.Add(Path.GetFileName(file)))
                fileSet.Add(file);
+         }
+      }
+
+      return [..fileSet];
+   }
+
+   public static List<string> GetProvinceFilesUniquely()
+   {
+      var modPath = Path.Combine(Globals.ModPath, "history", "provinces");
+      var vanillaPath = Path.Combine(Globals.VanillaPath, "history", "provinces");
+      List<string> fileSet = [];
+      HashSet<int> provinceIds = [];
+
+      if (Directory.Exists(modPath))
+      {
+         foreach (var file in Directory.GetFiles(modPath, "*.txt", SearchOption.TopDirectoryOnly))
+         {
+            var match = ProvinceParser.IdRegex.Match(Path.GetFileName(file));
+            if (match.Success)
+            {
+               if (provinceIds.Add(int.Parse(match.Groups[1].Value)))
+                  fileSet.Add(file);
+            }
+         }
+      }
+
+      if (Directory.Exists(vanillaPath))
+      {
+         foreach (var file in Directory.GetFiles(vanillaPath, "*.txt", SearchOption.TopDirectoryOnly))
+         {
+            var match = ProvinceParser.IdRegex.Match(Path.GetFileName(file));
+            if (match.Success)
+            {
+               if (provinceIds.Add(int.Parse(match.Groups[1].Value)))
+                  fileSet.Add(file);
+            }
          }
       }
 
@@ -137,4 +181,5 @@ public static class FilesHelper
       filePath = Path.Combine(Globals.VanillaPath, innerPath);
       return File.Exists(filePath);
    }
+
 }

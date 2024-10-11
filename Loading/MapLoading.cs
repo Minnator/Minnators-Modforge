@@ -80,20 +80,21 @@ public static class MapLoading
                // The following ifs could be removed if it was just for visuals but if some madlad would decide to put a 1 pixel wide province on 
                // the edge of the map it would break the adjacency calculation and would not be initialized correctly
 
+               var found = false;
                // Check if the current pixel is on the edge of the map and if so skip the checks for the neighbors
                if (y > 0)
                {
                   var nRow = (byte*)scan0 + (y - 1) * stride;
                   var colN = Color.FromArgb(nRow[xTimesThree + 2], nRow[xTimesThree + 1], nRow[xTimesThree]);
                   if (colN != currentColor) 
-                     AddBorderAndAdj(colN);
+                     AddBorderAndAdj(colN, ref found);
                }
 
                if (x < widthMinusOne)
                {
                   var colN = Color.FromArgb(row[eastOffset + 2], row[eastOffset + 1], row[eastOffset]);
                   if (colN != currentColor) 
-                     AddBorderAndAdj(colN);
+                     AddBorderAndAdj(colN, ref found);
                }
 
                if (y < heightMinusOne)
@@ -101,28 +102,32 @@ public static class MapLoading
                   var sRow = (byte*)scan0 + (y + 1) * stride;
                   var colN = Color.FromArgb(sRow[xTimesThree + 2], sRow[xTimesThree + 1], sRow[xTimesThree]);
                   if (colN != currentColor) 
-                     AddBorderAndAdj(colN);
+                     AddBorderAndAdj(colN, ref found);
                }
 
                if (x > 0)
                {
                   var colN = Color.FromArgb(row[westOffset + 2], row[westOffset + 1], row[westOffset]);
                   if (colN != currentColor) 
-                     AddBorderAndAdj(colN);
+                     AddBorderAndAdj(colN, ref found);
                }
 
                continue;
 
                // Helper function to avoid duplicate code 
                // Adds the current point to the border of the current color and adds the neighbor color to the adjacency list
-               void AddBorderAndAdj(Color neighborColor)
+               void AddBorderAndAdj(Color neighborColor, ref bool found)
                {
-                  if (!localColorToBorder.TryGetValue(currentColor, out var borderPoints))
+                  if (!found)
                   {
-                     borderPoints = [];
-                     localColorToBorder[currentColor] = borderPoints;
+                     if (!localColorToBorder.TryGetValue(currentColor, out var borderPoints))
+                     {
+                        borderPoints = [];
+                        localColorToBorder[currentColor] = borderPoints;
+                     }
+                     borderPoints.Add(currentPoint);
+                     found = true;
                   }
-                  borderPoints.Add(currentPoint);
 
                   if (!localColorToAdj.TryGetValue(currentColor, out var adjColors))
                   {

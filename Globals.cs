@@ -273,6 +273,8 @@ public static class Globals
 // - [ ] Redo on create area does not work 
 // - [ ] Redo on DeleteRegion still shows the region_name afterwards
 // - [ ] Region creation is completely broken
+// - [ ] Localisation editing for provinces and modifiers
+// - [ ] Check if province is selected by color of the pixels instead of bounds or center
 
 
 // TODO LIST Until Alpha 1.1

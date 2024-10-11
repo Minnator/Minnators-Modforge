@@ -1255,6 +1255,9 @@ public class Province : IProvinceCollection, IScope
 
       return provinces;
    }
+
+
+
    public void DumpHistory(string path)
    {
       var sb = new StringBuilder();
@@ -1301,5 +1304,59 @@ public class Province : IProvinceCollection, IScope
    public IScope Rescope(ScopeEffector effector, string scopeType)
    {
       throw new NotImplementedException();
+   }
+
+   public static Type GetAttributeType(ProvAttrGet attr)
+   {
+      switch (attr)
+      {
+         case ProvAttrGet.base_manpower:
+         case ProvAttrGet.base_tax:
+         case ProvAttrGet.base_production:
+         case ProvAttrGet.total_development:
+         case ProvAttrGet.center_of_trade:
+         case ProvAttrGet.extra_cost:
+         case ProvAttrGet.native_size:
+         case ProvAttrGet.revolt_risk:
+         case ProvAttrGet.id:
+         case ProvAttrGet.citysize:
+            return typeof(int);
+         case ProvAttrGet.area:
+         case ProvAttrGet.continent:
+            return typeof(string);
+         case ProvAttrGet.claims:
+         case ProvAttrGet.permanent_claims:
+         case ProvAttrGet.cores:
+         case ProvAttrGet.discovered_by:
+         case ProvAttrGet.capital:
+         case ProvAttrGet.culture:
+         case ProvAttrGet.religion:
+         case ProvAttrGet.trade_good:
+         case ProvAttrGet.name: 
+         case ProvAttrGet.latent_trade_good:
+            return typeof(ICollection<>);
+         case ProvAttrGet.controller:
+         case ProvAttrGet.owner:
+         case ProvAttrGet.tribal_owner:
+         case ProvAttrGet.buildings:
+         case ProvAttrGet.history:
+         case ProvAttrGet.trade_company_investment:
+            return typeof(Tag);
+         case ProvAttrGet.native_ferocity:
+         case ProvAttrGet.native_hostileness:
+         case ProvAttrGet.local_autonomy:
+         case ProvAttrGet.devastation:
+         case ProvAttrGet.prosperity:
+         case ProvAttrGet.nationalism:
+            return typeof(float);
+         case ProvAttrGet.hre:
+         case ProvAttrGet.is_city:
+         case ProvAttrGet.seat_in_parliament:
+         case ProvAttrGet.revolt:
+         case ProvAttrGet.is_occupied:
+            return typeof(bool);
+         default:
+            throw new ArgumentOutOfRangeException(nameof(attr), attr, null);
+      }
    }
 }

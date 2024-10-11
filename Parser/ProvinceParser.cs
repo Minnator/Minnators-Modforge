@@ -16,7 +16,7 @@ public static class ProvinceParser
       "(?<name>[A-Za-z_.0-9]+)\\s*=\\s*\\{\\s*(?<pairs>(?:\\s*[A-Za-z_.0-9]+\\s*=\\s*[^}\\s]+(?:\\s*\\n?)*)*)\\s*\\}\\s*(?<comment>#.*)?";
 
    private static readonly Regex DateRegex = new(DATE_PATTERN, RegexOptions.Compiled);
-   private static readonly Regex IdRegex = new(ID_FROM_FILE_NAME_PATTERN, RegexOptions.Compiled);
+   internal static readonly Regex IdRegex = new(ID_FROM_FILE_NAME_PATTERN, RegexOptions.Compiled);
    private static readonly Regex AttributeRegex = new(ATTRIBUTE_PATTERN, RegexOptions.Compiled);
    private static readonly Regex MultilineAttributeRegex = new(MULTILINE_ATTRIBUTE_PATTERN, RegexOptions.Compiled);
 
@@ -24,7 +24,7 @@ public static class ProvinceParser
    public static void ParseAllUniqueProvinces()
    {
       var sw = Stopwatch.StartNew();
-      var files = FilesHelper.GetFilesFromModAndVanillaUniquely("history", "provinces");
+      var files = FilesHelper.GetProvinceFilesUniquely();
       // Get All nested Blocks and Attributes from the files
       var po = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 };
       Parallel.ForEach(files, po, ProcessProvinceFile);

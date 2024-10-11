@@ -1,4 +1,5 @@
-﻿using System.Drawing.Imaging;
+﻿using System.Diagnostics;
+using System.Drawing.Imaging;
 using Editor.Commands;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
@@ -231,11 +232,14 @@ public sealed class PannablePictureBox : PictureBox
       _mapWindow.SetSelectedProvinceSum(Globals.Selection.SelectedProvinces.Count);
 
       // ------------------------------ Province Highlighting ------------------------------
+         var sw = Stopwatch.StartNew();
       if (Globals.MapModeManager.GetProvince(e.Location, out var province) && province.Id != LastInvalidatedProvince)
       {
          if (LastInvalidatedProvince != -1) 
             Invalidate(MapDrawHelper.DrawProvinceBorder(LastInvalidatedProvince, Color.Transparent, Overlay));
          Invalidate(MapDrawHelper.DrawProvinceBorder(province.Id, Color.Aqua, Overlay));
+
+         Debug.WriteLine($"Highlighting took {sw.ElapsedTicks}ticks");
 
          if (((ModifierKeys & Keys.Control) != 0 && (ModifierKeys & Keys.Alt) != 0) 
              || Globals.ProvinceEditingStatus == ProvinceEditingStatus.PreviewOnly

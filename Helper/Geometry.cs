@@ -217,7 +217,7 @@ public static class Geometry
 
    public static List<Point> GetPolygonDiffLastPoint(List<Point> polygon)
    {
-      return [polygon[0], polygon[polygon.Count - 1], polygon[polygon.Count - 2]];
+      return [polygon[0], polygon[^1], polygon[^2]];
    }
 
    public static void GetAllPixelPoints(int[] provinceIds, out Point[] points)

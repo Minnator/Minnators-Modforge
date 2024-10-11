@@ -265,10 +265,11 @@ public class Selection
       if (provDiff.Count == 0)
          return;
 
-      if (SelectionPreview.Contains(provDiff[0]))
-         RemoveRange(provDiff, true);
-      else
-         AddRange(provDiff, false, true);
+      foreach (var id in provDiff)
+         if (SelectionPreview.Contains(id))
+            Remove(id, true);
+         else
+            Add(id, false, true);
    }
 
    public void PreviewAllInRectangle(Point point)
