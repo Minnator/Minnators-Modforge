@@ -669,4 +669,453 @@ public static class Geometry
 
       return neighboringCountries.ToList();
    }
+
+   public static List<Province> GetProvinceIdsInRectangles(ICollection<Rectangle> rects)
+   {
+      var provinces = new HashSet<Province>();
+      foreach (var province in Globals.Provinces.Values)
+      {
+         foreach (var rect in rects)
+         {
+            if (Geometry.RectanglesIntercept(province.Bounds, rect))
+               provinces.Add(province);
+         }
+      }
+      return provinces.ToList();
+   }
+
+   public static List<Province> GetProvincesInRectanglesWithPixelCheck(ICollection<Rectangle> rects)
+   {
+      HashSet<Province> provinces = [];
+      foreach (var province in Globals.Provinces.Values)
+      {
+         foreach (var rect in rects)
+         {
+            if (Geometry.RectanglesIntercept(province.Bounds, rect) && CheckIfHasPixelInRectangle(province, rect))
+               provinces.Add(province);
+         }
+      }
+      return provinces.ToList();
+   }
+
+   public static List<Province> GetProvincesInRectangleWithPixelCheck(Rectangle rect, List<Province> provinces)
+   {
+      List<Province> result = [];
+      foreach (var province in provinces)
+      {
+         if (Geometry.RectanglesIntercept(province.Bounds, rect) && CheckIfHasPixelInRectangle(province, rect))
+            result.Add(province);
+      }
+      return result;
+   }
+
+   /// <summary>
+   /// Returns a list of provinces that are fully contained in the triangle and a list of provinces that intersect with the triangle.
+   /// </summary>
+   /// <param name="triangle"></param>
+   /// <param name="provinces"></param>
+   /// <returns></returns>
+   public static (List<Province>, List<Province>) GetProvincesInTriangleWithPixelCheck(ref Triangle triangle, List<Province> provinces)
+   {
+      // 15 ms
+      List<Province> fullyContains = [];
+      List<Province> intersects = [];
+      foreach (var province in provinces)
+      {
+         if (triangle.IntersectsRectangle(province.Bounds))
+         {
+            if (CheckIfHasPixelInTriangle(province, ref triangle))
+               intersects.Add(province);
+         }
+         else if (triangle.FullyContains(province.Bounds))
+            fullyContains.Add(province);
+      }
+      return (fullyContains, intersects);
+   }
+
+   public static List<int> GetProvinceIdsInRectanglesByCenter(ICollection<Rectangle> rects)
+   {
+      var provinces = new HashSet<int>();
+      foreach (var province in Globals.Provinces.Values)
+      {
+         foreach (var rect in rects)
+         {
+            if (rect.Contains(province.Center))
+               provinces.Add(province.Id);
+         }
+      }
+      return provinces.ToList();
+   }
+
+   public static (Rectangle, ICollection<Rectangle>, ICollection<Rectangle>) GetDeltaSelectionRectangle(Rectangle previous, Rectangle newRect)
+   {
+      var intersectionWidth = Math.Min(previous.Width, newRect.Width);
+      var intersectionHeight = Math.Min(previous.Height, newRect.Height);
+
+      var toAdd = new List<Rectangle>();
+      var toRemove = new List<Rectangle>();
+      Rectangle intersect;
+
+      var previousLarger = previous.Width > newRect.Width;
+      var newLarger = previous.Width < newRect.Width;
+
+      if (previous.Location == newRect.Location)
+      {
+         intersect = new(previous.X, previous.Y, intersectionWidth, intersectionHeight);
+         SetRectanglesTopLeftFixed(previous, newRect, previousLarger, toAdd, intersectionWidth);
+         SetRectanglesTopLeftFixed(newRect, previous, newLarger, toRemove, intersectionWidth);
+      }
+      else if (previous.Bottom == newRect.Bottom && previous.Right == newRect.Right)
+      {
+         intersect = new(previous.X + previous.Width - intersectionWidth, previous.Y + previous.Height - intersectionHeight, intersectionWidth, intersectionHeight);
+         SetRectanglesBottomRightFixed(previous, newRect, previousLarger, toAdd, intersectionWidth);
+         SetRectanglesBottomRightFixed(newRect, previous, newLarger, toRemove, intersectionWidth);
+      }
+      else if (previous.Top == newRect.Top && previous.Right == newRect.Right)
+      {
+         intersect = new(previous.X + previous.Width - intersectionWidth, previous.Y, intersectionWidth, intersectionHeight);
+         SetRectanglesTopRightFixed(previous, newRect, previousLarger, toAdd, intersectionWidth);
+         SetRectanglesTopRightFixed(newRect, previous, newLarger, toRemove, intersectionWidth);
+      }
+      else if (previous.Bottom == newRect.Bottom && previous.Left == newRect.Left)
+      {
+         intersect = new(previous.X, previous.Y + previous.Height - intersectionHeight, intersectionWidth, intersectionHeight);
+         SetRectanglesBottomLeftFixed(previous, newRect, previousLarger, toAdd, intersectionWidth);
+         SetRectanglesBottomLeftFixed(newRect, previous, newLarger, toRemove, intersectionWidth);
+      }
+      else
+      {
+         return (Rectangle.Empty, [previous], [newRect]);
+      }
+      return (intersect, toAdd, toRemove);
+   }
+
+   private static void SetRectanglesTopLeftFixed(Rectangle rect1, Rectangle rect2, bool larger, List<Rectangle> list, int intersection_width)
+   {
+      if (larger)
+         list.Add(new(rect1.X + rect2.Width, rect1.Y, rect1.Width - rect2.Width, rect1.Height));
+      if (rect1.Height > rect2.Height)
+      {
+         var rect = new Rectangle(rect1.X, rect1.Y + rect2.Height, rect1.Width, rect1.Height - rect2.Height);
+         if (larger)
+            rect = rect with { Width = intersection_width };
+         list.Add(rect);
+      }
+   }
+
+   private static void SetRectanglesBottomRightFixed(Rectangle rect1, Rectangle rect2, bool larger, List<Rectangle> list, int intersection_width)
+   {
+      if (larger)
+         list.Add(new(rect1.X, rect1.Y, rect1.Width - rect2.Width, rect1.Height));
+      if (rect1.Height > rect2.Height)
+      {
+         var rect = new Rectangle(rect1.X, rect1.Y, rect1.Width, rect1.Height - rect2.Height);
+         if (larger)
+            rect = rect with { X = rect1.X + rect1.Width - intersection_width, Width = intersection_width };
+         list.Add(rect);
+      }
+   }
+
+   private static void SetRectanglesTopRightFixed(Rectangle rect1, Rectangle rect2, bool larger, List<Rectangle> list, int intersection_width)
+   {
+      if (larger)
+         list.Add(new(rect1.X, rect1.Y, rect1.Width - rect2.Width, rect1.Height));
+      if (rect1.Height > rect2.Height)
+      {
+         list.Add(new Rectangle(rect1.X + rect1.Width - intersection_width, rect1.Y + rect2.Height, intersection_width, rect1.Height - rect2.Height));
+      }
+   }
+
+   private static void SetRectanglesBottomLeftFixed(Rectangle rect1, Rectangle rect2, bool larger, List<Rectangle> list,
+      int intersection_width)
+   {
+      if (larger)
+         list.Add(new(rect1.X + rect2.Width, rect1.Y, rect1.Width - rect2.Width, rect1.Height));
+      if (rect1.Height > rect2.Height)
+      {
+         var rect = new Rectangle(rect1.X, rect1.Y, rect1.Width, rect1.Height - rect2.Height);
+         if (larger)
+            rect = rect with { Width = intersection_width };
+         list.Add(rect);
+      }
+
+
+   }
+
+   public static bool CheckIfHasPixelInTriangle(Province province, ref Triangle tri)
+   {
+      foreach (var pixel in province.Borders)
+      {
+         if (tri.Contains(pixel))
+            return true;
+      }
+      return false;
+   }
+
+   public static bool CheckIfHasPixelInRectangle(Province province, Rectangle rect)
+   {
+      foreach (var pixel in province.Borders)
+      {
+         if (rect.Contains(pixel))
+            return true;
+      }
+      return false;
+   }
+
+
+
+   /// <summary>
+   /// 0 = on the line -1 = left side 1 = right side
+   /// </summary>
+   /// <param name="startPoint"></param>
+   /// <param name="connectionVector"></param>
+   /// <param name="checkPoint"></param>
+   /// <returns></returns>
+   public static int OnWhichSideOfLine(ref Point startPoint, ref Point connectionVector, ref Point checkPoint)
+   {
+      return (checkPoint.X - startPoint.X) * connectionVector.Y - (checkPoint.Y - startPoint.Y) * connectionVector.X;
+   }
+
+   public static int ComplexLineCalc(ref Point startPoint, ref Point connectionVector, ref Point checkPoint, int connectionMagSqrt, out bool inside)
+   {
+      ;
+      var testVector = checkPoint.Subtract(ref startPoint);
+      var res = testVector.Dot(ref connectionVector);
+      inside = res >= 0 && res <= connectionMagSqrt;
+      return testVector.X * connectionVector.Y - testVector.Y * connectionVector.X;
+   }
+
+   public static List<Province> testLineWithPixel(Point a, Point b, ICollection<Province> provinces)
+   {
+      List<Province> provs = [];
+      foreach (var prov in provinces)
+      {
+         if (Test(prov, ref a, ref b))
+            provs.Add(prov);
+
+      }
+
+      return provs;
+   }
+
+   public static bool Test(Province prov, ref Point a, ref Point b)
+   {
+      var connectionVector = new Point(b.X - a.X, b.Y - a.Y);
+      var connectionMagSqrt = connectionVector.Dot(ref connectionVector);
+      if (connectionMagSqrt < 1)
+         return false;
+
+
+      var rectA = prov.Bounds.Location;
+      var rectB = new Point(prov.Bounds.Right, prov.Bounds.Bottom);
+      var rectC = new Point(prov.Bounds.Right, prov.Bounds.Y);
+      var rectD = new Point(prov.Bounds.X, prov.Bounds.Bottom);
+
+      if (!prov.Bounds.Contains(a) && !prov.Bounds.Contains(b) && !DoLinesIntersect(rectA, rectB, a, b) && !DoLinesIntersect(rectB, rectC, a, b)
+         && !DoLinesIntersect(rectC, rectD, a, b) && !DoLinesIntersect(rectD, rectA, a, b))
+         return false;
+
+      var i = 0;
+
+      var side = false;
+
+      for (; i < prov.Borders.Length; i++)
+      {
+         var res = ComplexLineCalc(ref a, ref connectionVector, ref prov.Borders[i], connectionMagSqrt, out var inside);
+         if (inside)
+         {
+            if (res == 0)
+               return true;
+            side = res > 0;
+            i++;
+            break;
+         }
+      }
+      if (i == prov.Borders.Length)
+         return false;
+
+
+      for (; i < prov.Borders.Length; i++)
+      {
+         var newside = ComplexLineCalc(ref a, ref connectionVector, ref prov.Borders[i], connectionMagSqrt, out var inside);
+         if (inside && (newside == 0 || side != newside > 0))
+            return true;
+      }
+      return false;
+   }
+
+   public static bool DoLinesIntersect(Point a, Point b, Point c, Point d)
+   {
+      // Get the direction of the two lines
+      var abx = b.X - a.X;
+      var aby = b.Y - a.Y;
+      var cdx = d.X - c.X;
+      var cdy = d.Y - c.Y;
+
+      // Compute the determinant
+      var det = (-cdx * aby + abx * cdy);
+      if (det == 0)
+         return false; // Parallel lines
+
+      // Calculate the position of the intersection on each segment
+      var s = (-aby * (a.X - c.X) + abx * (a.Y - c.Y)) * Math.Sign(det);
+      var t = (cdx * (a.Y - c.Y) - cdy * (a.X - c.X)) * Math.Sign(det);
+
+      // Check if intersection happens within the line segments
+      return (s >= 0 && s <= Math.Abs(det) && t >= 0 && t <= Math.Abs(det));
+   }
+
+   public static bool IsRectangleInPolygon(List<Point> polygon, Rectangle rect)
+   {
+      var rectA = rect.Location;
+      var rectB = new Point(rect.Right, rect.Bottom);
+      var rectC = new Point(rect.Right, rect.Y);
+      var rectD = new Point(rect.X, rect.Bottom);
+
+      return Geometry.IsPointInPolygon(rectA, polygon) && Geometry.IsPointInPolygon(rectB, polygon) && Geometry.IsPointInPolygon(rectC, polygon) && Geometry.IsPointInPolygon(rectD, polygon);
+   }
+
+   public static bool IsPointInPolygon(List<Point> polygon, ICollection<Point> points)
+   {
+      foreach (var p in points)
+      {
+         if (!Geometry.IsPointInPolygon(p, polygon))
+            return false;
+      }
+      return true;
+   }
+
+   public static List<Province> GetFullyContainedProvinces(ref Triangle triangle, ICollection<Province> provinces)
+   {
+      List<Province> provs = [];
+      foreach (var prov in provinces)
+      {
+         if (triangle.FullyContains(prov.Bounds))
+            provs.Add(prov);
+
+      }
+
+      return provs;
+   }
+
+}
+
+public struct Triangle
+{
+   public Point A = Point.Empty;
+   public Point B = Point.Empty;
+   public Point C = Point.Empty;
+
+   public Triangle(Point a, Point b, Point c)
+   {
+      A = a;
+      B = b;
+      C = c;
+   }
+
+   public void RollPoints(Point c)
+   {
+      B = C;
+      C = c;
+   }
+
+   public bool Contains(Point p)
+   {
+      var s = A.Y * C.X - A.X * C.Y + (C.Y - A.Y) * p.X + (A.X - C.X) * p.Y;
+      var t = A.X * B.Y - A.Y * B.X + (A.Y - B.Y) * p.X + (B.X - A.X) * p.Y;
+
+      if ((s < 0) != (t < 0))
+         return false;
+
+      var a = -B.Y * C.X + A.Y * (C.X - B.X) + A.X * (B.Y - C.Y) + B.X * C.Y;
+      return a < 0 ? (s <= 0 && s + t >= a) : (s >= 0 && s + t <= a);
+   }
+
+   public bool FullyContains(Rectangle rect)
+   {
+      var rectA = rect.Location;
+      var rectB = new Point(rect.Right, rect.Bottom);
+      var rectC = new Point(rect.Right, rect.Y);
+      var rectD = new Point(rect.X, rect.Bottom);
+
+      return Contains(rectA) && Contains(rectB) && Contains(rectC) && Contains(rectD);
+   }
+
+   public bool RectangleFullyContainsTriangle(Rectangle rect)
+   {
+      return rect.Contains(A) || rect.Contains(B) || rect.Contains(C);
+   }
+
+   public bool IntersectsRectangle(Rectangle rect)
+   {
+      var rectA = rect.Location;
+      var rectB = new Point(rect.Right, rect.Bottom);
+      var rectC = new Point(rect.Right, rect.Y);
+      var rectD = new Point(rect.X, rect.Bottom);
+
+      return IntersectsLine(rectA, rectB) || IntersectsLine(rectB, rectC) || IntersectsLine(rectC, rectD) || IntersectsLine(rectD, rectA);
+   }
+
+   public bool IntersectsLine(Point a, Point b)
+   {
+      return Geometry.DoLinesIntersect(A, B, a, b) || Geometry.DoLinesIntersect(A, C, a, b) || Geometry.DoLinesIntersect(B, C, a, b);
+   }
+
+   public static Triangle Empty = new(Point.Empty, Point.Empty, Point.Empty);
+
+   // == operator for two triangles
+
+}
+public static class PointExtensions
+{
+   public static Point Add(this Point point, int x, int y)
+   {
+      return new Point(point.X + x, point.Y + y);
+   }
+
+   public static Point Subtract(this Point point, int x, int y)
+   {
+      return new Point(point.X - x, point.Y - y);
+   }
+
+   public static Point Multiply(this Point point, int x, int y)
+   {
+      return new Point(point.X * x, point.Y * y);
+   }
+
+   public static Point Divide(this Point point, int x, int y)
+   {
+      return new Point(point.X / x, point.Y / y);
+   }
+
+   public static Point Add(this Point point, ref Point other)
+   {
+      return new Point(point.X + other.X, point.Y + other.Y);
+   }
+
+   public static Point Subtract(this Point point, ref Point other)
+   {
+      return new Point(point.X - other.X, point.Y - other.Y);
+   }
+
+   public static Point Subtract(this Point point, Point other)
+   {
+      return new Point(point.X - other.X, point.Y - other.Y);
+   }
+
+   public static Point Multiply(this Point point, ref Point other)
+   {
+      return new Point(point.X * other.X, point.Y * other.Y);
+   }
+
+   public static Point Divide(this Point point, ref Point other)
+   {
+      return new Point(point.X / other.X, point.Y / other.Y);
+   }
+
+   public static int Dot(this Point point, ref Point other)
+   {
+      return point.X * other.X + point.Y * other.Y;
+   }
+
 }

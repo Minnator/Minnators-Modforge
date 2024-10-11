@@ -1,5 +1,6 @@
 ﻿using System.Security.Policy;
 using Editor.Commands;
+using Editor.Controls;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
@@ -102,6 +103,7 @@ public static class Globals
    public static ConsoleForm? ConsoleForm = null;
    public static Search? SearchForm = null;
    public static MapWindow MapWindow = null!;
+   public static ZoomControl ZoomControl = null!;
 
    // SETTINGS
    public static readonly Settings Settings = new();

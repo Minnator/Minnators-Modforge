@@ -181,6 +181,8 @@ public class Province : IProvinceCollection, IScope
    public Rectangle Bounds { get; set; }
    public Point Center { get; set; }
 
+   public Point[] Pixels { get; set; }
+   public Point[] Borders { get; set; }
 
    #endregion
 

@@ -59,6 +59,12 @@ public static class Optimizer
          province.Bounds = Geometry.GetBounds([.. colorToBorder[color]]);
          province.Center = new Point(province.Bounds.X + province.Bounds.Width / 2, province.Bounds.Y + province.Bounds.Height / 2);
 
+         province.Pixels = new Point[province.PixelCnt];
+         Array.Copy(pixels, province.PixelPtr, province.Pixels, 0, province.PixelCnt);
+
+         province.Borders = new Point[province.BorderCnt];
+         Array.Copy(borders, province.BorderPtr, province.Borders, 0, province.BorderCnt);
+         // add the province to the dictionary
          // add the province to the dictionary
          provs.Add(province.Id, province);
 
@@ -80,6 +86,22 @@ public static class Optimizer
       // Free up memory from the ConcurrentDictionaries
       colorToBorder.Clear();
       colorToProvId.Clear();
+   }
+
+   public static void RemoveBorderPixelsFromPixels(Province province)
+   {
+      var pixels = province.Pixels;
+
+      var newPixels = new Point[pixels.Length - province.BorderCnt];
+      var cnt = 0;
+      for (var i = 0; i < pixels.Length; i++)
+      {
+         if (province.Borders.Contains(pixels[i]))
+            continue;
+         newPixels[cnt++] = pixels[i];
+      }
+
+      province.Pixels = newPixels;
    }
 
    public static void OptimizeAdjacencies(ConcurrentDictionary<Color, HashSet<Color>> colorToAdj)
