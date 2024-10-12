@@ -164,7 +164,7 @@ public static class Globals
    //public static Dictionary<int, Province> Provinces = [];
    public static HashSet<Province> Provinces = [];
    public static Dictionary<int, Province> ProvinceIdToProvince = [];
-   public static Dictionary<Color, int> ColorToProvId = [];
+   public static Dictionary<int, Province> ColorToProvId = [];
    public static Dictionary<Province, Province[]> AdjacentProvinces = [];
    public static HashSet<Province> Capitals = [];
 

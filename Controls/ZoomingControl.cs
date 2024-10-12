@@ -69,6 +69,17 @@ public sealed class ZoomControl : Control
 
    // ---------- Pixel Frame Conversions ----------
 
+   public PointF ConvertCoordinatesFloat(Point inPoint, out bool inBounds)
+   {
+      PointF outPoint = new((inPoint.X / zoomFactor + panOffset.X), (inPoint.Y / zoomFactor + panOffset.Y));
+
+      if (outPoint.X < 0 || outPoint.Y < 0 || outPoint.X >= map.Width || outPoint.Y >= map.Height)
+         inBounds = false;
+      else
+         inBounds = true;
+      return outPoint;
+   }
+
    public Point ConvertCoordinates(Point inPoint, out bool inBounds)
    {
       Point outPoint = new((int)(inPoint.X / zoomFactor + panOffset.X), (int)(inPoint.Y / zoomFactor + panOffset.Y));
@@ -160,7 +171,7 @@ public sealed class ZoomControl : Control
       var point = ConvertCoordinates(inPoint, out bool inBounds);
       if (!inBounds)
          return Color.Empty;
-      return map.GetPixel(point.X, point.Y); // TODO maybe find faster way using Hmap?
+      return map.GetPixel(point.X, point.Y); // TODO maybe find faster way using Hmap? calculate pointer using stride and height
    }
 
 
@@ -251,7 +262,7 @@ public sealed class ZoomControl : Control
    {
       _zoomLimitUpper = Math.Min((float)Width / map.Width, (float)Height / map.Height) / 1.1f;
       _zoomLimitLower = Math.Min((float)Width / 80, (float)Height / 80);
-      
+
       LimitZoom();
       Invalidate();
    }
@@ -260,14 +271,20 @@ public sealed class ZoomControl : Control
    {
       if (!CanZoom)
          return;
+
+      var converted = ConvertCoordinates(e.Location, out _);
+
       // Adjust the zoom factor based on the mouse wheel direction
-      var oldZoom = zoomFactor;
       if (e.Delta > 0)
          zoomFactor *= 1.1f; // Zoom in
       else if (e.Delta < 0)
          zoomFactor /= 1.1f; // Zoom out
-
-      SetZoom(e.Location, oldZoom);
+      LimitZoom();
+      var converted2 = ConvertCoordinates(e.Location, out _);
+      panOffset.X -= converted2.X - converted.X;
+      panOffset.Y -= converted2.Y - converted.Y;
+      LimitPan();
+      Invalidate();
    }
 
    private void ZoomOnPaint(object? sender, PaintEventArgs? e)

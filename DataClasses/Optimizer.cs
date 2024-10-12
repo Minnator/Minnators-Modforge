@@ -11,13 +11,13 @@ public static class Optimizer
    // Optimizes the provinces by copying the pixels and borders to one large array each and only saving pointers in the provinces
    // to where their points start and end. Also calculates the bounds of the provinces.
    // This allows for duplicate points in the BorderPixels array but increases performance.
-   public static void OptimizeProvinces(ref Province[] provinces, ConcurrentDictionary<Color, List<Point>> colorToProvId, ConcurrentDictionary<Color, List<Point>> colorToBorder, int pixelCount)
+   public static void OptimizeProvinces(ref Province[] provinces, ConcurrentDictionary<int, List<Point>> colorToProvId, ConcurrentDictionary<int, List<Point>> colorToBorder, int pixelCount)
    {
       var sw = new Stopwatch();
       sw.Start();
       var pixels = new Point[pixelCount];
       var borders = new Point[colorToBorder.Values.Sum(list => list.Count)];
-      var dic = new Dictionary<Color, int>(provinces.Length);
+      var dic = new Dictionary<int, Province>(provinces.Length);
       var dictionary = new Dictionary<int, Province>(provinces.Length);
       var provs = new HashSet<Province>(provinces.Length);
 
@@ -26,8 +26,8 @@ public static class Optimizer
       
       foreach (var province in provinces)
       {
-         var color = Color.FromArgb(province.Color.R, province.Color.G, province.Color.B);
-         dic[color] = province.Id;
+         var color = Color.FromArgb(province.Color.R, province.Color.G, province.Color.B).ToArgb();
+         dic[color] = province;
 
          dictionary.Add(province.Id, province);
 
@@ -109,7 +109,7 @@ public static class Optimizer
       province.Pixels = newPixels;
    }
 
-   public static void OptimizeAdjacencies(ConcurrentDictionary<Color, HashSet<Color>> colorToAdj)
+   public static void OptimizeAdjacencies(ConcurrentDictionary<int, HashSet<int>> colorToAdj)
    {
       var sw = new Stopwatch();
       sw.Start();

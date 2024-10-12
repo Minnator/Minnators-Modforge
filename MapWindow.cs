@@ -1,17 +1,16 @@
 ﻿using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Globalization;
+using System.Text;
 using System.Text.Json;
 using Editor.Controls;
 using Editor.Controls.Initialisation.ProvinceCollectionEditors;
-using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Events;
 using Editor.Forms;
 using Editor.Forms.Loadingscreen;
 using Editor.Helper;
 using Editor.Savers;
-using Windows.ApplicationModel.Contacts;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 
 namespace Editor
@@ -106,12 +105,13 @@ namespace Editor
 
          StartPosition = FormStartPosition.CenterScreen;
          Show();
-         Globals.ZoomControl.FocusOn(new Point(3100, 600));
+         Globals.ZoomControl.FocusOn(new Point(3100, 600), 1f);
          
          // Activate this window
          Activate();
          Globals.ZoomControl.Invalidate();
          AfterLoad();
+
       }
 
       private void AfterLoad()
@@ -725,17 +725,16 @@ namespace Editor
             AddModifiersToList(modifier, ModifierType.PermanentProvinceModifier);
       }
 
-      private void OnMouseEnter(object sender, EventArgs e)
-      {
-         Cursor = Cursors.Default;
-      }
-
-      private void OnMouseLeave(object sender, EventArgs e)
-      {
-      }
-
       private void debugToolStripMenuItem_Click(object sender, EventArgs e)
       {
+         var sb = new StringBuilder();
+         foreach (var culture in Globals.Religions.Keys)
+         {
+            sb.AppendLine(culture);
+         }
+         // download folder
+         var downloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\";
+         File.WriteAllText(Path.Combine(downloadFolder, "religions.txt"), sb.ToString());
       }
 
       private void MapModeComboBox_SelectedIndexChanged(object sender, EventArgs e)

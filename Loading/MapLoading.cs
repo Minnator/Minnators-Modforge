@@ -29,10 +29,10 @@ public static class MapLoading
 
       Optimizer.OptimizeProvinces(ref provinces, colorToProvId, colorToBorder, image.Width * image.Height);
 
-      Optimizer.OptimizeAdjacencies(adjacency);
+      Optimizer.OptimizeAdjacencies(adjacency); 
    }
 
-   private static (ConcurrentDictionary<Color, List<Point>>, ConcurrentDictionary<Color, List<Point>>, ConcurrentDictionary<Color, HashSet<Color>>) LoadMap(string path)
+   private static (ConcurrentDictionary<int, List<Point>>, ConcurrentDictionary<int, List<Point>>, ConcurrentDictionary<int, HashSet<int>>) LoadMap(string path)
    {
       using var bmp = new Bitmap(path);
       var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
@@ -42,9 +42,9 @@ public static class MapLoading
       var scan0 = bmpData.Scan0;
       var sw = new Stopwatch();
 
-      ConcurrentDictionary<Color, List<Point>> colorToProvId = new();
-      ConcurrentDictionary<Color, List<Point>> colorToBorder = new();
-      ConcurrentDictionary<Color, HashSet<Color>> colorToAdj = new();
+      ConcurrentDictionary<int, List<Point>> colorToProvId = new();
+      ConcurrentDictionary<int, List<Point>> colorToBorder = new();
+      ConcurrentDictionary<int, HashSet<int>> colorToAdj = new();
 
       var widthMinusOne = width - 1; // to avoid calculating height times width - 1
       var heightMinusOne = height - 1; // to avoid calculating width times height - 1
@@ -57,9 +57,9 @@ public static class MapLoading
          unsafe
          {
             // Create local dictionaries for each thread to avoid locks and merge them at the end
-            var localColorToProvId = new Dictionary<Color, List<Point>>();
-            var localColorToBorder = new Dictionary<Color, List<Point>>();
-            var localColorToAdj = new Dictionary<Color, HashSet<Color>>();
+            var localColorToProvId = new Dictionary<int, List<Point>>();
+            var localColorToBorder = new Dictionary<int, List<Point>>();
+            var localColorToAdj = new Dictionary<int, HashSet<int>>();
             var xTimesThree = x * 3;
             var westOffset = (x - 1) * 3;
             var eastOffset = (x + 1) * 3;
@@ -68,7 +68,7 @@ public static class MapLoading
             {
                var row = (byte*)scan0 + y * stride;
                var currentPoint = new Point(x, y);
-               var currentColor = Color.FromArgb(row[xTimesThree + 2], row[xTimesThree + 1], row[xTimesThree]);
+               var currentColor = Color.FromArgb(row[xTimesThree + 2], row[xTimesThree + 1], row[xTimesThree]).ToArgb();
 
                if (!localColorToProvId.TryGetValue(currentColor, out var provPoints))
                {
@@ -85,14 +85,14 @@ public static class MapLoading
                if (y > 0)
                {
                   var nRow = (byte*)scan0 + (y - 1) * stride;
-                  var colN = Color.FromArgb(nRow[xTimesThree + 2], nRow[xTimesThree + 1], nRow[xTimesThree]);
+                  var colN = Color.FromArgb(nRow[xTimesThree + 2], nRow[xTimesThree + 1], nRow[xTimesThree]).ToArgb();
                   if (colN != currentColor) 
                      AddBorderAndAdj(colN, ref found);
                }
 
                if (x < widthMinusOne)
                {
-                  var colN = Color.FromArgb(row[eastOffset + 2], row[eastOffset + 1], row[eastOffset]);
+                  var colN = Color.FromArgb(row[eastOffset + 2], row[eastOffset + 1], row[eastOffset]).ToArgb();
                   if (colN != currentColor) 
                      AddBorderAndAdj(colN, ref found);
                }
@@ -100,14 +100,14 @@ public static class MapLoading
                if (y < heightMinusOne)
                {
                   var sRow = (byte*)scan0 + (y + 1) * stride;
-                  var colN = Color.FromArgb(sRow[xTimesThree + 2], sRow[xTimesThree + 1], sRow[xTimesThree]);
+                  var colN = Color.FromArgb(sRow[xTimesThree + 2], sRow[xTimesThree + 1], sRow[xTimesThree]).ToArgb();
                   if (colN != currentColor) 
                      AddBorderAndAdj(colN, ref found);
                }
 
                if (x > 0)
                {
-                  var colN = Color.FromArgb(row[westOffset + 2], row[westOffset + 1], row[westOffset]);
+                  var colN = Color.FromArgb(row[westOffset + 2], row[westOffset + 1], row[westOffset]).ToArgb();
                   if (colN != currentColor) 
                      AddBorderAndAdj(colN, ref found);
                }
@@ -116,7 +116,7 @@ public static class MapLoading
 
                // Helper function to avoid duplicate code 
                // Adds the current point to the border of the current color and adds the neighbor color to the adjacency list
-               void AddBorderAndAdj(Color neighborColor, ref bool found)
+               void AddBorderAndAdj(int neighborColor, ref bool found)
                {
                   if (!found)
                   {

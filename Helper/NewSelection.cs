@@ -332,12 +332,13 @@ public static class Selection
 
    public static bool GetProvinceFromMap(Point point, out Province province)
    {
+      // TODO improve Performance
       province = default!;
       var coords = Globals.ZoomControl.ConvertCoordinates(point, out var isValid);
       if (!isValid)
          return false;
 
-      if (!(!Globals.ColorToProvId.TryGetValue(Globals.MapModeManager.IdMapMode.Bitmap.GetPixel(coords.X, coords.Y), out var id) 
+      if (!(!Globals.ColorToProvId.TryGetValue(Globals.MapModeManager.IdMapMode.Bitmap.GetPixel(coords.X, coords.Y).ToArgb(), out var id) 
             || !Globals.ProvinceIdToProvince.TryGetValue(id, out province!)))
       {
          return true;

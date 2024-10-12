@@ -78,8 +78,6 @@
          ProvinceNameLabel = new Label();
          EditingModeLabel = new Label();
          tableLayoutPanel1 = new TableLayoutPanel();
-         label14 = new Label();
-         label15 = new Label();
          AttirbuteCombobox = new ComboBox();
          numericUpDown1 = new NumericUpDown();
          MainToolstripContainer = new ToolStripContainer();
@@ -165,6 +163,9 @@
          ProvinceCollectionsTab = new TableLayoutPanel();
          GroupCollectionOptions = new TableLayoutPanel();
          CollectionEditorsPanel = new Panel();
+         tableLayoutPanel5 = new TableLayoutPanel();
+         label15 = new Label();
+         label14 = new Label();
          GeneralToolTip = new ToolTip(components);
          MapMenuStrip.SuspendLayout();
          toolStrip1.SuspendLayout();
@@ -205,6 +206,7 @@
          ProvinceCollectionsTab.SuspendLayout();
          GroupCollectionOptions.SuspendLayout();
          CollectionEditorsPanel.SuspendLayout();
+         tableLayoutPanel5.SuspendLayout();
          SuspendLayout();
          // 
          // MapMenuStrip
@@ -524,6 +526,7 @@
          MainLayoutPanel.Controls.Add(TopStripLayoutPanel, 1, 0);
          MainLayoutPanel.Controls.Add(MainToolstripContainer, 1, 1);
          MainLayoutPanel.Controls.Add(DataTabPanel, 0, 1);
+         MainLayoutPanel.Controls.Add(tableLayoutPanel5, 0, 0);
          MainLayoutPanel.Dock = DockStyle.Fill;
          MainLayoutPanel.Location = new Point(0, 27);
          MainLayoutPanel.Name = "MainLayoutPanel";
@@ -595,8 +598,6 @@
          tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 58.6666679F));
          tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 41.3333321F));
          tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 45F));
-         tableLayoutPanel1.Controls.Add(label14, 0, 0);
-         tableLayoutPanel1.Controls.Add(label15, 2, 0);
          tableLayoutPanel1.Controls.Add(AttirbuteCombobox, 1, 0);
          tableLayoutPanel1.Controls.Add(numericUpDown1, 3, 0);
          tableLayoutPanel1.Dock = DockStyle.Fill;
@@ -607,28 +608,6 @@
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
          tableLayoutPanel1.Size = new Size(270, 26);
          tableLayoutPanel1.TabIndex = 4;
-         // 
-         // label14
-         // 
-         label14.AutoSize = true;
-         label14.Dock = DockStyle.Fill;
-         label14.Location = new Point(3, 0);
-         label14.Name = "label14";
-         label14.Size = new Size(55, 26);
-         label14.TabIndex = 0;
-         label14.Text = "attribute";
-         label14.TextAlign = ContentAlignment.MiddleCenter;
-         // 
-         // label15
-         // 
-         label15.AutoSize = true;
-         label15.Dock = DockStyle.Fill;
-         label15.Location = new Point(160, 0);
-         label15.Name = "label15";
-         label15.Size = new Size(61, 26);
-         label15.TabIndex = 1;
-         label15.Text = "tolerance";
-         label15.TextAlign = ContentAlignment.MiddleCenter;
          // 
          // AttirbuteCombobox
          // 
@@ -1704,6 +1683,46 @@
          CollectionEditorsPanel.Size = new Size(386, 791);
          CollectionEditorsPanel.TabIndex = 0;
          // 
+         // tableLayoutPanel5
+         // 
+         tableLayoutPanel5.ColumnCount = 4;
+         tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15F));
+         tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
+         tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15F));
+         tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
+         tableLayoutPanel5.Controls.Add(label15, 2, 0);
+         tableLayoutPanel5.Controls.Add(label14, 0, 0);
+         tableLayoutPanel5.Dock = DockStyle.Fill;
+         tableLayoutPanel5.Location = new Point(0, 0);
+         tableLayoutPanel5.Margin = new Padding(0);
+         tableLayoutPanel5.Name = "tableLayoutPanel5";
+         tableLayoutPanel5.RowCount = 1;
+         tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         tableLayoutPanel5.Size = new Size(400, 26);
+         tableLayoutPanel5.TabIndex = 5;
+         // 
+         // label15
+         // 
+         label15.AutoSize = true;
+         label15.Dock = DockStyle.Fill;
+         label15.Location = new Point(203, 0);
+         label15.Name = "label15";
+         label15.Size = new Size(54, 26);
+         label15.TabIndex = 1;
+         label15.Text = "tolerance";
+         label15.TextAlign = ContentAlignment.MiddleCenter;
+         // 
+         // label14
+         // 
+         label14.AutoSize = true;
+         label14.Dock = DockStyle.Fill;
+         label14.Location = new Point(3, 0);
+         label14.Name = "label14";
+         label14.Size = new Size(54, 26);
+         label14.TabIndex = 0;
+         label14.Text = "attribute";
+         label14.TextAlign = ContentAlignment.MiddleCenter;
+         // 
          // MapWindow
          // 
          AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1732,7 +1751,6 @@
          TopStripLayoutPanel.ResumeLayout(false);
          TopStripLayoutPanel.PerformLayout();
          tableLayoutPanel1.ResumeLayout(false);
-         tableLayoutPanel1.PerformLayout();
          ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
          MainToolstripContainer.RightToolStripPanel.ResumeLayout(false);
          MainToolstripContainer.RightToolStripPanel.PerformLayout();
@@ -1781,6 +1799,8 @@
          GroupCollectionOptions.ResumeLayout(false);
          GroupCollectionOptions.PerformLayout();
          CollectionEditorsPanel.ResumeLayout(false);
+         tableLayoutPanel5.ResumeLayout(false);
+         tableLayoutPanel5.PerformLayout();
          ResumeLayout(false);
          PerformLayout();
       }
@@ -1925,6 +1945,7 @@
       private TableLayoutPanel ProvinceCollectionsTab;
       private TableLayoutPanel GroupCollectionOptions;
       private Panel CollectionEditorsPanel;
+      private TableLayoutPanel tableLayoutPanel5;
    }
 }
 
