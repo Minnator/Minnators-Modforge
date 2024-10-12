@@ -11,7 +11,7 @@ public class MapModeManager()
 {
    private List<MapMode> MapModes { get; } = [];
    public MapMode CurrentMapMode { get; set; } = null!;
-   private ProvinceIdMapMode IdMapMode { get; set; } = null!;
+   public ProvinceIdMapMode IdMapMode { get; set; } = null!;
    public bool PreviousLandOnly { get; set; }
    public bool RequireFullRedraw { get; set; } = true;
 

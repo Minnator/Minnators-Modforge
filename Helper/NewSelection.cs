@@ -2,6 +2,7 @@
 using Editor.Forms;
 using System.Diagnostics;
 using System.Linq;
+using Editor.DataClasses;
 
 namespace Editor.Helper;
 
@@ -131,6 +132,7 @@ public static class Selection
       Globals.ZoomControl.MouseMove += ZoomControl_MouseMove;
       Globals.ZoomControl.MouseUp += ZoomControl_MouseUp;
       Globals.ZoomControl.Paint += ZoomControlPaint;
+      Globals.ZoomControl.Click += ZoomControlClick;
    }
 
    // ------------ Province Selection Methods ------------ \\
@@ -356,7 +358,11 @@ public static class Selection
    public static bool GetProvinceFromMap(Point point, out Province province)
    {
       province = default!;
-      return !(!Globals.ColorToProvId.TryGetValue(Globals.ZoomControl.GetColor(point), out var id) ||
+      var coords = Globals.ZoomControl.ConvertCoordinates(point, out var isValid);
+      if (!isValid)
+         return false;
+      
+      return !(!Globals.ColorToProvId.TryGetValue(Globals.MapModeManager.IdMapMode.Bitmap.GetPixel(coords.X, coords.Y), out var id) ||
              !Globals.Provinces.TryGetValue(id, out province!));
 
    }
@@ -444,6 +450,13 @@ public static class Selection
                break;
          }
       }
+      Globals.MapWindow.SetSelectedProvinceSum(Count);
+      // ------------------------------ Province Idle Loading ------------------------------
+      if (Globals.ProvinceEditingStatus == ProvinceEditingStatus.Selection
+          || Globals.ProvinceEditingStatus == ProvinceEditingStatus.PreviewUntilSelection && Count > 1)
+      {
+         Globals.MapWindow.ProvinceClick();
+      }
    }
 
    private static void ZoomControl_MouseMove(object? sender, MouseEventArgs e)
@@ -474,8 +487,6 @@ public static class Selection
             break;
       }
 
-      if (ShowToolTip && LastHoveredProvince != Province.Empty)
-         MapToolTip.SetToolTip(Globals.ZoomControl, ToolTipBuilder.BuildToolTip(Globals.ToolTipText, LastHoveredProvince.Id));
    }
 
 
@@ -562,6 +573,11 @@ public static class Selection
 
       Globals.ZoomControl.Invalidate();
    }
+   
+   private static void ZoomControlClick(object? sender, EventArgs e)
+   {
+   }
+
 
    private static void HoverProvinceMove(Point point)
    {
@@ -578,6 +594,10 @@ public static class Selection
       // Update the hovered province and redraw with the new selection.
       HoverProvince(province);
 
+      if (ShowToolTip)
+         MapToolTip.SetToolTip(Globals.ZoomControl, ToolTipBuilder.BuildToolTip(Globals.ToolTipText, LastHoveredProvince.Id));
+      Globals.MapWindow.UpdateHoveredInfo(province);
+      Globals.MapWindow.SetEditingMode();
       Globals.ZoomControl.Invalidate();
    }
    private static void LassoSelectionMove(Point point)

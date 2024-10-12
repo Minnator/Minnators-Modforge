@@ -139,8 +139,9 @@ namespace Editor
       private void InitGui()
       {
          InitializeComponent();
-         Globals.ZoomControl = new(new (@"C:\Users\david\Downloads\BorderUpdate.bmp"));
+         Globals.ZoomControl = new(new (Globals.MapWidth, Globals.MapHeight));
          Globals.ZoomControl.Dock = DockStyle.Fill;
+         Globals.ZoomControl.MinimumSize = new(10, 10);
          MainToolstripContainer.ContentPanel.Controls.Add(Globals.ZoomControl);
          Selection.Initialize();
 

@@ -247,11 +247,11 @@ public static class Globals
 
 // TODO LIST Until Alpha 1.0
 // - [x] Add a way to change the language of the application
-// - [ ] Rework the Rendering of the map to be more efficient and using GDIP32
-// - [ ] Add zooming to the map 0.5x - 16.0x
+// - [x] Rework the Rendering of the map to be more efficient and using GDIP32
+// - [x] Add zooming to the map 0.5x - 16.0x
 // - [ ] Add a way to change the map mode via customizable Hotkeys
 // - [ ] Fix the Province Collection Editing gui so that all types work the same and edge cases are handled
-// - [ ] Fix Lasso Selection Preview sometimes being incorrect
+// - [x] Fix Lasso Selection Preview sometimes being incorrect
 // - [ ] Fix Magic wand tool
 // - [ ] Add a modifier creation and selection menu to apply to different scopes
 // - [ ] Add saving for all Province Collections

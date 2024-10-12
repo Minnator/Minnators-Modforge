@@ -1,4 +1,6 @@
-﻿namespace Editor.Controls;
+﻿using System.Diagnostics;
+
+namespace Editor.Controls;
 
 using System.ComponentModel;
 using System.Runtime.InteropServices;
@@ -165,7 +167,6 @@ public sealed class ZoomControl : Control
    private void LimitZoom()
    {
       zoomFactor = Math.Max(Math.Min(zoomFactor, _zoomLimitLower), _zoomLimitUpper);
-
       var logzoom = (int)MathF.Round(MathF.Log(zoomFactor) / MathF.Log(1.1f));
 
       zoomFactor = MathF.Pow(1.1f, logzoom);
@@ -250,7 +251,7 @@ public sealed class ZoomControl : Control
    {
       _zoomLimitUpper = Math.Min((float)Width / map.Width, (float)Height / map.Height) / 1.1f;
       _zoomLimitLower = Math.Min((float)Width / 80, (float)Height / 80);
-
+      
       LimitZoom();
       Invalidate();
    }
