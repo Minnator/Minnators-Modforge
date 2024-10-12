@@ -259,22 +259,6 @@ public static class MapDrawHelper
       return Geometry.GetBounds([..rects]);
    }
 
-   public static void DrawOccupations(bool rebelsOnly, Bitmap bmp)
-   {
-      foreach (var province in Globals.LandProvinces)
-      {
-         if (rebelsOnly && !province.HasRevolt) // Has no rebels but we only want to show rebels
-            continue;
-         if (!rebelsOnly && province is { IsNonRebelOccupied: false, HasRevolt: false }) // has neither rebels nor occupation, but we want to show some
-            continue;
-
-         if (!Geometry.GetIfHasStripePixels(province, rebelsOnly, out var stripePixels))
-            continue;
-
-         DrawOnMap(province.Bounds, stripePixels, province.GetOccupantColor, bmp);
-      }
-   }
-   
    public static void DrawAllCapitals(Bitmap bmp)
    {
       List<Point> capitals = [];

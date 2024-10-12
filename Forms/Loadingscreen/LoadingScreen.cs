@@ -84,8 +84,6 @@ namespace Editor.Forms.Loadingscreen
             bw.ReportProgress(++progress);
             TradeGoodsLoading.Load();
             bw.ReportProgress(++progress);
-            TradeNodeLoading.Load();
-            bw.ReportProgress(++progress);
             TechnologyGroupsLoading.Load();
             bw.ReportProgress(++progress);
             BuildingsLoading.Load();
@@ -99,6 +97,8 @@ namespace Editor.Forms.Loadingscreen
             DefaultMapLoading.CreateProvinceGroups();
             bw.ReportProgress(++progress);
             AreaLoading.LoadNew();
+            bw.ReportProgress(++progress);
+            TradeNodeLoading.Load();
             bw.ReportProgress(++progress);
             RegionLoading.Load();
             bw.ReportProgress(++progress);

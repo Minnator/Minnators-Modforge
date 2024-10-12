@@ -417,9 +417,7 @@ public static class Geometry
 
       return points;
    }
-
-
-
+   
    public static bool GetIfHasStripePixels(Province province, bool onlyRebels, out Point[] stripe)
    {
       if (onlyRebels)

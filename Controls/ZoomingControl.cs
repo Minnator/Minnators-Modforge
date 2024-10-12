@@ -30,6 +30,8 @@ public sealed class ZoomControl : Control
 
    public bool CanZoom = true;
 
+   public EventHandler<EventArgs> OnImagePositionChange = delegate { }; 
+
    public ZoomControl(Bitmap bmp)
    {
       Map = bmp;
@@ -203,6 +205,8 @@ public sealed class ZoomControl : Control
          panOffset.X = -(int)((Width / zoomFactor - map.Width) / 2);
       else
          panOffset.X = (int)Math.Max(_limitX, Math.Min(_limitXWidth, panOffset.X));
+
+      OnImagePositionChange.Invoke(this, EventArgs.Empty);
    }
    public static void DrawStretch(IntPtr hBitmap, Graphics srcGfx, Graphics destGfx, Rectangle srcRect, Rectangle destRect)
    {
@@ -296,6 +300,7 @@ public sealed class ZoomControl : Control
 
       DrawStretch(HBitmap, _bmpGfx, e.Graphics, mapRect, thisRect);
    }
+
 }
 
 public static class GDIHelper

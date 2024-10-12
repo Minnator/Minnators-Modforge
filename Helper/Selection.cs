@@ -1,8 +1,8 @@
-﻿using Editor.DataClasses.GameDataClasses;
+﻿using System.Diagnostics;
+using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.MapModes;
 using Editor.Forms;
-using System.Diagnostics;
-using System.Linq;
-using Editor.DataClasses;
+using Newtonsoft.Json.Linq;
 
 namespace Editor.Helper;
 
@@ -97,17 +97,21 @@ public static class Selection
 
    // Country Selection Variables
    // Selected Country TODO ADD THIS FEATURE
-   public static Country SelectedCountry => _lastSelectedCountry;
    private static HashSet<Country> _selectedCountries = []; // Use later when multiple countries can be selected and edited at once
-   private static Country _lastSelectedCountry = Country.Empty;
+   private static Country _selectedCountry = Country.Empty; 
+   public static Country SelectedCountry
+   {
+      get => _selectedCountry;
+      private set => _selectedCountry = value;
+   }
    public static List<Province> SelectionCoresAndClaims { get; set; } = [];
 
    // Events
    public static event EventHandler<List<Province>> OnProvinceGroupSelected = delegate { };
    public static event EventHandler<List<Province>> OnProvinceGroupDeselected = delegate { };
 
-   public static event EventHandler<List<Country>> OnCountryGroupSelected = delegate { };
-   public static event EventHandler<List<Country>> OnCountryGroupDeselected = delegate { };
+   public static event EventHandler<Country> OnCountrySelected = delegate { };
+   public static event EventHandler<Country> OnCountryDeselected = delegate { };
 
    // Colors
    private static int _hoverColor = Color.FromArgb(255, 0, 255, 255).ToArgb();
@@ -133,6 +137,7 @@ public static class Selection
       Globals.ZoomControl.MouseUp += ZoomControl_MouseUp;
       Globals.ZoomControl.Paint += ZoomControlPaint;
       Globals.ZoomControl.Click += ZoomControlClick;
+
    }
 
    // ------------ Province Selection Methods ------------ \\
@@ -218,10 +223,35 @@ public static class Selection
 
    public static void FocusSelection()
    {
-      var bounds = Geometry.GetBounds(GetSelectedProvinces.ToList()); // TODO no more ids
-      Globals.ZoomControl.FocusOn(bounds);
+      Globals.ZoomControl.FocusOn(Geometry.GetBounds(_selectedProvinces.ToList()));
    }
 
+   private static void SelectCountry(Province province)
+   {
+      if (province == Province.Empty || !Globals.Countries.TryGetValue(province.Owner, out var country) || SelectedCountry == country)
+         return;
+
+      if (Globals.MapModeManager.CurrentMapMode is DiplomaticMapMode mapMode)
+      {
+         // Set flag to remove the old claims and cores
+         mapMode.ClearPreviousCoresClaims = true;
+         mapMode.Update([.. SelectionCoresAndClaims]);
+         mapMode.ClearPreviousCoresClaims = false;
+      }
+      SelectedCountry = country;
+      if (SelectedCountry != Country.Empty && Count == 1)
+      {
+         if (Globals.MapModeManager.CurrentMapMode is DiplomaticMapMode)
+            Globals.MapModeManager.CurrentMapMode.Update(province);
+         OnCountrySelected?.Invoke(Globals.ZoomControl, SelectedCountry);
+      }
+   }
+
+   private static void RemoveCountrySelection()
+   {
+      SelectedCountry = Country.Empty;
+      OnCountryDeselected?.Invoke(Globals.ZoomControl, SelectedCountry);
+   }
 
    #endregion
 
@@ -489,11 +519,15 @@ public static class Selection
          return;
 
       if (_selectedProvinces.Contains(prov) && _selectedProvinces.Count == 1)
+      {
          RemoveProvinceFromSelection(prov);
+         RemoveCountrySelection();
+      }
       else
       {
          ClearSelection();
          AddProvinceToSelection(prov);
+         SelectCountry(prov);
       }
       Globals.ZoomControl.Invalidate();
    }

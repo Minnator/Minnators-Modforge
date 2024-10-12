@@ -670,18 +670,18 @@ public class Province : IProvinceCollection, IScope
 
    #endregion
    public bool IsNonRebelOccupied => Owner != Controller && Controller != "REB";
-   public Color GetOccupantColor
+   public int GetOccupantColor
    {
       get
       {
          if (HasRevolt)
-            return Color.Black;
+            return Color.Black.ToArgb();
          if (IsNonRebelOccupied)
          {
             if (Globals.Countries.TryGetValue(Controller, out var controller))
-               return controller.Color;
+               return controller.Color.ToArgb();
          }
-         return Color.Empty;
+         return Color.Transparent.ToArgb();
       }
    }
 

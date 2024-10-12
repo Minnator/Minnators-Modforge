@@ -278,7 +278,8 @@ public static class Globals
 // - [ ] Region creation is completely broken
 // - [ ] Localisation editing for provinces and modifiers
 // - [ ] Check if province is selected by color of the pixels instead of bounds or center
-
+// - [ ] Fix tooltip preventing MouseWheel event
+// - [ ] Item scaling on Graphics (Trade arrows, straits, capitals, text)
 
 // TODO LIST Until Alpha 1.1
 // - [ ] Add a way to create custom map modes

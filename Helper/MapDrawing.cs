@@ -153,31 +153,51 @@ public class MapDrawing
       }
    }
 
+   // --------------- Additional methods --------------- \\
+
    public static void DrawCapitals(List<Province> ids)
    {
-
    }
    public static void DrawAllCapitals()
    {
-
    }
 
    public static void DrawAllCapitals(int color)
    {
-      //TODO: Implement
    }
 
    public static void DrawStripes(int color, List<Province> provinces) //Point[] stripes
    {
-      //TODO: Implement
+      foreach (var province in provinces)
+      {
+         Geometry.GetStripesArray(province, out var points);
+         DrawOnMap(points, color);
+      }
+   }
+
+   private static void DrawCapital(ref Graphics g, Point provinceCenter)
+   {
+      g.DrawRectangle(new(Color.Black, 1), provinceCenter.X - 2, provinceCenter.Y - 2, 4, 4);
+      g.DrawRectangle(Pens.Yellow, provinceCenter.X - 1, provinceCenter.Y - 1, 2, 2);
    }
 
    public static void DrawOccupations(bool rebelsOnly)
    {
+      foreach (var province in Globals.LandProvinces)
+      {
+         if (rebelsOnly && !province.HasRevolt) // Has no rebels but we only want to show rebels
+            continue;
+         if (!rebelsOnly && province is { IsNonRebelOccupied: false, HasRevolt: false }) // has neither rebels nor occupation, but we want to show some
+            continue;
 
+         if (!Geometry.GetIfHasStripePixels(province, rebelsOnly, out var stripePixels))
+            continue;
+
+         DrawOnMap(stripePixels, province.GetOccupantColor);
+      }
    }
 
-   public static void WriteOnProvince(Func<Province, string> method)
+   public static void WriteOnProvince(Func<Province, string> textProvider)
    {
 
    }

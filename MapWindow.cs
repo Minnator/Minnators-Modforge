@@ -150,10 +150,7 @@ namespace Editor
 
          ProvincePreviewMode.Items.AddRange([.. Enum.GetNames(typeof(ProvinceEditingStatus))]);
          ProvincePreviewMode.SelectedIndex = 2;
-
-         // TODO figure out how to make this work
-         //toolStripContainer1.ContentPanel.MouseEnter += OnMouseEnter!;
-         //toolStripContainer1.ContentPanel.MouseLeave += OnMouseLeave!;
+         
       }
 
 

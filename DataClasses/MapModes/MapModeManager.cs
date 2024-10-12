@@ -85,6 +85,7 @@ public class MapModeManager()
       CurrentMapMode.RenderMapMode(CurrentMapMode.GetProvinceColor);
       GC.Collect(); // We need to collect the garbage to free up memory but this is not ideal
       Globals.MapWindow.MapModeComboBox.SelectedItem = name;
+
    }
    
    public void DrawProvinceCollectionFromCurrentMapMode(Bitmap bmp, params Province[] ids)
