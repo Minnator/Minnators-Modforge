@@ -159,12 +159,12 @@ public static class Selection
 
    public static void RedrawSelection(Province province)
    {
-      MapDrawing.DrawOnMap(province, _selectedColor, PixelsOrBorders.Borders);
+      MapDrawing.DrawOnMap(province, _selectedColor, Globals.ZoomControl, PixelsOrBorders.Borders);
    }
 
    public static void ClearSelection()
    {
-      MapDrawing.DrawOnMap(_selectedProvinces, _borderColor, PixelsOrBorders.Borders);
+      MapDrawing.DrawOnMap(_selectedProvinces, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
       OnProvinceGroupDeselected(Globals.ZoomControl, [.. _selectedProvinces]);
       _selectedProvinces.Clear();
    }
@@ -172,7 +172,7 @@ public static class Selection
    public static void RemoveProvincesFromSelection(List<Province> provinces)
    {
       _selectedProvinces.ExceptWith(provinces);
-      MapDrawing.DrawOnMap(provinces, _borderColor, PixelsOrBorders.Borders);
+      MapDrawing.DrawOnMap(provinces, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
       OnProvinceGroupDeselected(Globals.ZoomControl, provinces);
    }
    
@@ -186,7 +186,7 @@ public static class Selection
       else
       {
          _selectedProvinces.UnionWith(provinces);
-         MapDrawing.DrawOnMap(provinces, _selectedColor, PixelsOrBorders.Borders);
+         MapDrawing.DrawOnMap(provinces, _selectedColor, Globals.ZoomControl, PixelsOrBorders.Borders);
       }
 
       OnProvinceGroupSelected(Globals.ZoomControl, provinces.ToList());
@@ -208,7 +208,7 @@ public static class Selection
    private static void InternalAddProvinceToSelection(Province province, bool fireEvent)
    {
       _selectedProvinces.Add(province);
-      MapDrawing.DrawOnMap(province.Borders, _selectedColor);
+      MapDrawing.DrawOnMap(province.Borders, _selectedColor, Globals.ZoomControl);
       if (fireEvent)
          OnProvinceGroupSelected(Globals.ZoomControl, [province]);
    }
@@ -216,7 +216,7 @@ public static class Selection
    private static void InternalRemoveProvinceFromSelection(Province province, bool fireEvent)
    {
       _selectedProvinces.Remove(province);
-      MapDrawing.DrawOnMap(province.Borders, _borderColor);
+      MapDrawing.DrawOnMap(province.Borders, _borderColor, Globals.ZoomControl);
       if (fireEvent)
          OnProvinceGroupSelected(Globals.ZoomControl, [province]);
    }
@@ -261,31 +261,31 @@ public static class Selection
 
    public static void HighlightProvinces(List<Province> provinces)
    {
-      MapDrawing.DrawOnMap(provinces, _highlightColor, PixelsOrBorders.Borders);
+      MapDrawing.DrawOnMap(provinces, _highlightColor, Globals.ZoomControl, PixelsOrBorders.Borders);
       _highlightedProvinces.UnionWith(provinces);
    }
 
    public static void UnhighlightProvinces(List<Province> provinces)
    {
-      MapDrawing.DrawOnMap(provinces, _borderColor, PixelsOrBorders.Borders);
+      MapDrawing.DrawOnMap(provinces, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
       _highlightedProvinces.ExceptWith(provinces);
    }
 
    public static void HighlightProvince(Province province)
    {
-      MapDrawing.DrawOnMap(province, _highlightColor, PixelsOrBorders.Borders);
+      MapDrawing.DrawOnMap(province, _highlightColor, Globals.ZoomControl, PixelsOrBorders.Borders);
       _highlightedProvinces.Add(province);
    }
 
    public static void UnhighlightProvince(Province province)
    {
-      MapDrawing.DrawOnMap(province, _borderColor, PixelsOrBorders.Borders);
+      MapDrawing.DrawOnMap(province, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
       _highlightedProvinces.Remove(province);
    }
 
    public static void ClearHighlightedProvinces()
    {
-      MapDrawing.DrawOnMap(_highlightedProvinces, _borderColor, PixelsOrBorders.Borders);
+      MapDrawing.DrawOnMap(_highlightedProvinces, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
       _highlightedProvinces.Clear();
    }
 
@@ -297,31 +297,31 @@ public static class Selection
 
    public static void PreviewProvinces(List<Province> provinces)
    {
-      MapDrawing.DrawOnMap(provinces, _previewSelectionColor, PixelsOrBorders.Borders);
+      MapDrawing.DrawOnMap(provinces, _previewSelectionColor, Globals.ZoomControl, PixelsOrBorders.Borders);
       _selectionPreview.UnionWith(provinces);
    }
 
    public static void UnPreviewProvinces(List<Province> provinces)
    {
-      MapDrawing.DrawOnMap(provinces, _borderColor, PixelsOrBorders.Borders);
+      MapDrawing.DrawOnMap(provinces, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
       _selectionPreview.ExceptWith(provinces);
    }
 
    public static void PreviewProvince(Province province)
    {
-      MapDrawing.DrawOnMap(province, _previewSelectionColor, PixelsOrBorders.Borders);
+      MapDrawing.DrawOnMap(province, _previewSelectionColor, Globals.ZoomControl, PixelsOrBorders.Borders);
       _selectionPreview.Add(province);
    }
 
    public static void UnPreviewProvince(Province province)
    {
-      MapDrawing.DrawOnMap(province, _borderColor, PixelsOrBorders.Borders);
+      MapDrawing.DrawOnMap(province, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
       _selectionPreview.Remove(province);
    }
 
    public static void ClearPreview()
    {
-      MapDrawing.DrawOnMap(_selectionPreview, _borderColor, PixelsOrBorders.Borders);
+      MapDrawing.DrawOnMap(_selectionPreview, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
       _selectionPreview.Clear();
    }
 
@@ -337,7 +337,7 @@ public static class Selection
    /// <param name="province"></param>
    public static void HoverProvince(Province province)
    {
-      MapDrawing.DrawOnMap(province, _hoverColor, PixelsOrBorders.Borders);
+      MapDrawing.DrawOnMap(province, _hoverColor, Globals.ZoomControl, PixelsOrBorders.Borders);
       LastHoveredProvince = province;
    }
 
@@ -349,7 +349,7 @@ public static class Selection
       if (_selectedProvinces.Contains(LastHoveredProvince))
          RedrawSelection(LastHoveredProvince);
       else
-         MapDrawing.DrawOnMap(LastHoveredProvince, _borderColor, PixelsOrBorders.Borders);
+         MapDrawing.DrawOnMap(LastHoveredProvince, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
 
       LastHoveredProvince = Province.Empty;
    }

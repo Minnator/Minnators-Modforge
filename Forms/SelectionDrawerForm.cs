@@ -1,4 +1,5 @@
 ﻿using System.Drawing.Imaging;
+using Editor.Controls;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 
@@ -7,13 +8,24 @@ namespace Editor.Forms
    public partial class SelectionDrawerForm : Form
    {
       private SelectionExportSettings ExportSettings { get; set; } = new();
+      private ZoomControl ZoomControl { get; set; } = new(new(Globals.MapWidth, Globals.MapHeight, PixelFormat.Format32bppArgb));
 
       public SelectionDrawerForm()
       {
          InitializeComponent();
 
+         MainLayoutPanel.Controls.Add(ZoomControl, 1, 0);
+         ZoomControl.FocusOn(new Rectangle(0, 0, Globals.MapWidth, Globals.MapHeight));
+
          ExportSettingsPropertyGrid.PropertyValueChanged += ExportSettingsPropertyChanged;
          ExportSettingsPropertyGrid.SelectedObject = ExportSettings;
+
+         Globals.MapModeManager.MapModeChanged += (s, e) => RenderImage();
+         Selection.OnProvinceGroupDeselected += (s, e) =>
+         {
+            RenderImage();
+         };
+         Selection.OnProvinceGroupSelected += (s, e) => RenderImage();
       }
 
       private void ExportSettingsPropertyChanged(object? s, PropertyValueChangedEventArgs e)
@@ -28,65 +40,48 @@ namespace Editor.Forms
          PathTextBox.Text = path;
       }
 
-      private void FocusOn(Point point)
-      {
-         PreviewMapPanel.AutoScrollPosition = new(point.X - PreviewMapPanel.Width / 2, point.Y - PreviewMapPanel.Height / 2);
-      }
-
       private void RenderImage()
       {
-         var bitmap = new Bitmap(Globals.MapWidth, Globals.MapHeight, PixelFormat.Format24bppRgb);
-
-         using (var g = Graphics.FromImage(bitmap))
-         {
-            g.Clear(ExportSettings.BackColor);
-         }
-
+         MapDrawing.Clear(ZoomControl, Color.DimGray);
          switch (ExportSettings.PrimaryProvinceDrawing)
          {
             case PrimaryProvinceDrawing.None:
                break;
             case PrimaryProvinceDrawing.Selection:
-               Globals.MapModeManager.DrawProvinceCollectionFromCurrentMapMode(bitmap, [..Selection.GetSelectedProvinces]);
+               MapDrawing.DrawOnMap(Selection.GetSelectedProvinces, Globals.MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
                break;
             case PrimaryProvinceDrawing.Land:
-               Globals.MapModeManager.DrawProvinceCollectionFromCurrentMapMode(bitmap, Globals.LandProvinceIds);
+               MapDrawing.DrawOnMap(Globals.LandProvinces, Globals.MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
                break;
             case PrimaryProvinceDrawing.All:
-               Globals.MapModeManager.DrawProvinceCollectionFromCurrentMapMode(bitmap, Globals.Provinces.ToArray());
+               MapDrawing.DrawOnMap(Globals.Provinces, Globals.MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
                break;
          }
 
-         DrawSecondary(bitmap, ExportSettings.SecondaryProvinceDrawing);
+         DrawSecondary(ExportSettings.SecondaryProvinceDrawing);
 
-         DrawSecondary(bitmap, ExportSettings.TertiaryProvinceDrawing);
+         DrawSecondary(ExportSettings.TertiaryProvinceDrawing);
 
          switch (ExportSettings.BorderDrawing)
          {
             case BorderDrawing.None:
                break;
             case BorderDrawing.Selection:
-               foreach (var prov in Selection.GetSelectedProvinces)
-                  MapDrawHelper.DrawProvinceBorder(prov, Color.Black, bitmap);
+               MapDrawing.DrawOnMap(Selection.GetSelectedProvinces, Color.Black.ToArgb(), ZoomControl, PixelsOrBorders.Borders);
                break;
             case BorderDrawing.All:
-               MapDrawHelper.DrawAllProvinceBorders(bitmap, Color.Black);
+               MapDrawing.DrawAllBorders(Color.Black.ToArgb(), ZoomControl);
                break;
          }
-
-         PreviewPictureBox.Image?.Dispose();
-         PreviewPictureBox.Size = bitmap.Size;
-         PreviewPictureBox.Image = bitmap;
 
          if (Selection.Count == 0)
             return;
 
-         var rect = Geometry.GetBounds(Selection.GetSelectedProvinces);
-         var centerProvince = Geometry.GetProvinceClosestToPoint(new(rect.X + rect.Width / 2,rect.Y + rect.Height / 2), Selection.GetSelectedProvinces);
-         FocusOn(centerProvince.Center);
+         ZoomControl.FocusOn(Geometry.GetBounds(Selection.GetSelectedProvinces));
+         ZoomControl.Invalidate();
       }
 
-      private void DrawSecondary(Bitmap bitmap, SecondaryProvinceDrawing secondary)
+      private void DrawSecondary(SecondaryProvinceDrawing secondary)
       {
          switch (secondary)
          {
@@ -94,7 +89,7 @@ namespace Editor.Forms
                break;
             case SecondaryProvinceDrawing.NeighboringProvinces:
                var neighboringProvinces = Geometry.GetAllNeighboringProvinces(Selection.GetSelectedProvinces);
-               Globals.MapModeManager.DrawProvinceCollectionFromCurrentMapMode(bitmap, [.. neighboringProvinces]);
+               MapDrawing.DrawOnMap(neighboringProvinces, Globals.MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
                break;
             case SecondaryProvinceDrawing.NeighboringCountries:
                var neighboringCountries = Geometry.GetAllNeighboringCountries(Selection.GetSelectedProvinces);
@@ -105,26 +100,26 @@ namespace Editor.Forms
                   foreach (var province in provinces)
                      allCountryProvinces.Add(province);
                }
-               Globals.MapModeManager.DrawProvinceCollectionFromCurrentMapMode(bitmap, [.. allCountryProvinces]);
+               MapDrawing.DrawOnMap(allCountryProvinces, Globals.MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
                break;
             case SecondaryProvinceDrawing.CoastalOutline:
-               Globals.MapModeManager.DrawProvinceCollectionFromCurrentMapMode(bitmap, Globals.SeaProvinces.ToArray());
-               break;
+            // TODO calculate coastlines
             case SecondaryProvinceDrawing.SeaProvinces:
-               BitMapHelper.ModifyByProvinceCollection(bitmap, Globals.NonLandProvinces, i => i.Color);
+               MapDrawing.DrawOnMap(Globals.SeaProvinces, Globals.MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
                break;
             case SecondaryProvinceDrawing.All:
-               Globals.MapModeManager.DrawProvinceCollectionFromCurrentMapMode(bitmap, Globals.Provinces.ToArray());
+               MapDrawing.DrawOnMap(Globals.Provinces, Globals.MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
                break;
          }
       }
 
       private void SaveButton_Click(object sender, EventArgs e)
       {
+         using var bmp = ZoomControl.Map;
          switch (ExportSettings.ImageSize)
          {
             case ImageSize.Original:
-               PreviewPictureBox.Image.Save(Path.Combine(PathTextBox.Text, $"{Globals.MapModeManager.CurrentMapMode.GetMapModeName()}.png"), ImageFormat.Png);
+               bmp.Save(Path.Combine(PathTextBox.Text, $"{Globals.MapModeManager.CurrentMapMode.GetMapModeName()}.png"), ImageFormat.Png);
                break;
             case ImageSize.Selection:
                var rect = Geometry.GetBounds(Selection.GetSelectedProvinces);
@@ -132,12 +127,17 @@ namespace Editor.Forms
                // copy the selected area to the new bitmap
                using (var g = Graphics.FromImage(bitmap))
                {
-                  g.DrawImage(PreviewPictureBox.Image, rect with { X = 0, Y = 0 }, rect, GraphicsUnit.Pixel);
+                  g.DrawImage(bmp, rect with { X = 0, Y = 0 }, rect, GraphicsUnit.Pixel);
                }
                bitmap.Save(Path.Combine(PathTextBox.Text, $"{Globals.MapModeManager.CurrentMapMode.GetMapModeName()}.png"), ImageFormat.Png);
                bitmap?.Dispose();
                break;
          }
+      }
+
+      private void SelectionDrawerForm_FormClosing(object sender, FormClosingEventArgs e)
+      {
+         ZoomControl.Dispose();
       }
    }
 

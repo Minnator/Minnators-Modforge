@@ -9,56 +9,84 @@ using static GDIHelper;
 public enum PixelsOrBorders
 {
    Pixels,
-   Borders
+   Borders,
+   Both
 }
 
 
 public class MapDrawing
 {
-   public static void DrawOnMap(Point[] points, int color)
+   public static void DrawOnMap(Point[] points, int color, ZoomControl zoomControl)
    {
       if (points.Length > 4000)
-         DrawPixelsParallel(points, color);
+         DrawPixelsParallel(points, color, zoomControl);
       else
-         DrawPixels(points, color);
+         DrawPixels(points, color, zoomControl);
    }
 
-   public static void DrawOnMap(ICollection<Province> provinces, Func<Province, int> func, PixelsOrBorders pixelOrBorders)
+   public static void DrawOnMap(ICollection<Province> provinces, Func<Province, int> func, ZoomControl zoomControl, PixelsOrBorders pixelOrBorders)
    {
       if (provinces.Count == 0)
          return;
 
       if (provinces.Count > Environment.ProcessorCount)
-         DrawProvincesParallel(provinces, func, pixelOrBorders);
+         DrawProvincesParallel(provinces, func, zoomControl, pixelOrBorders);
       else
          foreach (var province in provinces)
-            if (pixelOrBorders == PixelsOrBorders.Pixels)
-               DrawPixels(province.Pixels, func(province));
-            else
-               DrawPixels(province.Borders, func(province));
+            switch (pixelOrBorders)
+            {
+               case PixelsOrBorders.Pixels:
+                  DrawPixels(province.Pixels, func(province), zoomControl);
+                  break;
+               case PixelsOrBorders.Borders:
+                  DrawPixels(province.Borders, func(province), zoomControl);
+                  break;
+               case PixelsOrBorders.Both:
+                  DrawPixels(province.Pixels, func(province), zoomControl);
+                  DrawPixels(province.Borders, func(province), zoomControl);
+                  break;
+            }
    }
 
-   public static void DrawOnMap(ICollection<Province> provinces, int color, PixelsOrBorders pixelOrBorders)
+   public static void DrawOnMap(ICollection<Province> provinces, int color, ZoomControl zoomControl, PixelsOrBorders pixelOrBorders)
    {
       if (provinces.Count == 0)
          return;
 
       if (provinces.Count > Environment.ProcessorCount)
-         DrawProvincesParallel(provinces, color, pixelOrBorders);
+         DrawProvincesParallel(provinces, color, zoomControl, pixelOrBorders);
       else
          foreach (var province in provinces)
-            if (pixelOrBorders == PixelsOrBorders.Pixels)
-               DrawPixels(province.Pixels, color);
-            else
-               DrawPixels(province.Borders, color);
+            switch (pixelOrBorders)
+            {
+               case PixelsOrBorders.Pixels:
+                  DrawPixels(province.Pixels, color, zoomControl);
+                  break;
+               case PixelsOrBorders.Borders:
+                  DrawPixels(province.Borders, color, zoomControl);
+                  break;
+               case PixelsOrBorders.Both:
+                  DrawPixels(province.Pixels, color, zoomControl);
+                  DrawPixels(province.Borders, color, zoomControl);
+                  break;
+            }
    }
 
-   public static void DrawOnMap(Province province, int color, PixelsOrBorders pixelOrBorders)
+   public static void DrawOnMap(Province province, int color, ZoomControl zoomControl, PixelsOrBorders pixelOrBorders)
    {
-      if (pixelOrBorders == PixelsOrBorders.Pixels)
-         DrawPixels(province.Pixels, color);
-      else
-         DrawPixels(province.Borders, color);
+      switch (pixelOrBorders)
+      {
+         case PixelsOrBorders.Pixels:
+            DrawPixels(province.Pixels, color, zoomControl);
+            break;
+         case PixelsOrBorders.Borders:
+            DrawPixels(province.Borders, color, zoomControl);
+            break;
+         case PixelsOrBorders.Both:
+            DrawPixels(province.Pixels, color, zoomControl);
+            DrawPixels(province.Borders, color, zoomControl);
+            break;
+      }
    }
 
 
@@ -66,45 +94,65 @@ public class MapDrawing
    /// BGRA fromat
    /// </summary>
    /// <param name="color"></param>
-   public static void DrawAllBorders(int color)
+   /// <param name="zoomControl"></param>
+   public static void DrawAllBorders(int color, ZoomControl zoomControl)
    {
-      DrawPixelsParallel(Globals.BorderPixels, color);
+      DrawPixelsParallel(Globals.BorderPixels, color, zoomControl);
    }
 
    // Invalidation rects needs to bet taken care of
-   private static void DrawProvincesParallel(ICollection<Province> provinces, Func<Province, int> func, PixelsOrBorders pixelsOrBorders)
+   private static void DrawProvincesParallel(ICollection<Province> provinces, Func<Province, int> func, ZoomControl zoomControl, PixelsOrBorders pixelsOrBorders)
    {
       Parallel.ForEach(provinces, province => // Cpu core affinity?
       {
-         if (pixelsOrBorders == PixelsOrBorders.Pixels)
-            DrawPixels(province.Pixels, func.Invoke(province));
-         else
-            DrawPixels(province.Borders, func.Invoke(province));
+         switch (pixelsOrBorders)
+         {
+            case PixelsOrBorders.Pixels:
+               DrawPixels(province.Pixels, func.Invoke(province), zoomControl);
+               break;
+            case PixelsOrBorders.Borders:
+               DrawPixels(province.Borders, func.Invoke(province), zoomControl);
+               break;
+            case PixelsOrBorders.Both:
+               DrawPixels(province.Pixels, func.Invoke(province), zoomControl);
+               DrawPixels(province.Borders, func.Invoke(province), zoomControl);
+               break;
+         }
       });
    }
    // Invalidation rects needs to bet taken care of
-   private static void DrawProvincesParallel(ICollection<Province> provinces, int color, PixelsOrBorders pixelsOrBorders)
+   private static void DrawProvincesParallel(ICollection<Province> provinces, int color, ZoomControl zoomControl, PixelsOrBorders pixelsOrBorders)
    {
       Parallel.ForEach(provinces, province => // Cpu core affinity?
       {
-         if (pixelsOrBorders == PixelsOrBorders.Pixels)
-            DrawPixels(province.Pixels, color);
-         else
-            DrawPixels(province.Borders, color);
+         switch (pixelsOrBorders)
+         {
+            case PixelsOrBorders.Pixels:
+               DrawPixels(province.Pixels, color, zoomControl);
+               break;
+            case PixelsOrBorders.Borders:
+               DrawPixels(province.Borders, color, zoomControl);
+               break;
+            case PixelsOrBorders.Both:
+               DrawPixels(province.Pixels, color, zoomControl);
+               DrawPixels(province.Borders, color, zoomControl);
+               break;
+         }
       });
    }
 
-   
+
    /// <summary>
    /// 32 bpp
    /// </summary>
    /// <param name="points"></param>
    /// <param name="color"></param>
-   private static void DrawPixels(Point[] points, int color)
+   /// <param name="zoomControl"></param>
+   private static void DrawPixels(Point[] points, int color, ZoomControl zoomControl)
    {
       // Check if the bitmap is still in RAM at the same location. Can maybe be removed?
       BITMAP bmp = new();
-      GetObject(Globals.ZoomControl.HBitmap, Marshal.SizeOf(bmp), ref bmp);
+      GetObject(zoomControl.HBitmap, Marshal.SizeOf(bmp), ref bmp);
 
       // Calculate necessary values
       var stride = bmp.bmWidthBytes / 4;
@@ -129,11 +177,12 @@ public class MapDrawing
    /// </summary>
    /// <param name="points"></param>
    /// <param name="color"></param>
-   private static void DrawPixelsParallel(Point[] points, int color)
+   /// <param name="zoomControl"></param>
+   private static void DrawPixelsParallel(Point[] points, int color, ZoomControl zoomControl)
    {
       // Check if the bitmap is still in RAM at the same location. Can maybe be removed?
       BITMAP bmp = new();
-      GetObject(Globals.ZoomControl.HBitmap, Marshal.SizeOf(bmp), ref bmp);
+      GetObject(zoomControl.HBitmap, Marshal.SizeOf(bmp), ref bmp);
 
       // Calculate necessary values
       var stride = bmp.bmWidthBytes / 4;
@@ -153,6 +202,11 @@ public class MapDrawing
       }
    }
 
+   public static void Clear(ZoomControl zoomControl, Color color)
+   {
+      DrawOnMap(Globals.Provinces, color.ToArgb(), zoomControl, PixelsOrBorders.Both);
+   }
+
    // --------------- Additional methods --------------- \\
 
    public static void DrawCapitals(List<Province> ids)
@@ -166,12 +220,12 @@ public class MapDrawing
    {
    }
 
-   public static void DrawStripes(int color, List<Province> provinces) //Point[] stripes
+   public static void DrawStripes(int color, List<Province> provinces, ZoomControl zoomControl) //Point[] stripes
    {
       foreach (var province in provinces)
       {
          Geometry.GetStripesArray(province, out var points);
-         DrawOnMap(points, color);
+         DrawOnMap(points, color, zoomControl);
       }
    }
 
@@ -181,7 +235,7 @@ public class MapDrawing
       g.DrawRectangle(Pens.Yellow, provinceCenter.X - 1, provinceCenter.Y - 1, 2, 2);
    }
 
-   public static void DrawOccupations(bool rebelsOnly)
+   public static void DrawOccupations(bool rebelsOnly, ZoomControl zoomControl)
    {
       foreach (var province in Globals.LandProvinces)
       {
@@ -193,7 +247,7 @@ public class MapDrawing
          if (!Geometry.GetIfHasStripePixels(province, rebelsOnly, out var stripePixels))
             continue;
 
-         DrawOnMap(stripePixels, province.GetOccupantColor);
+         DrawOnMap(stripePixels, province.GetOccupantColor, zoomControl);
       }
    }
 

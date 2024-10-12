@@ -29,7 +29,7 @@
       private void InitializeComponent()
       {
          System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectionDrawerForm));
-         tableLayoutPanel1 = new TableLayoutPanel();
+         MainLayoutPanel = new TableLayoutPanel();
          ExportSettingsPropertyGrid = new PropertyGrid();
          tableLayoutPanel2 = new TableLayoutPanel();
          button1 = new Button();
@@ -37,32 +37,27 @@
          tableLayoutPanel3 = new TableLayoutPanel();
          CancelButton = new Button();
          SaveButton = new Button();
-         PreviewMapPanel = new Panel();
-         PreviewPictureBox = new PictureBox();
-         tableLayoutPanel1.SuspendLayout();
+         MainLayoutPanel.SuspendLayout();
          tableLayoutPanel2.SuspendLayout();
          tableLayoutPanel3.SuspendLayout();
-         PreviewMapPanel.SuspendLayout();
-         ((System.ComponentModel.ISupportInitialize)PreviewPictureBox).BeginInit();
          SuspendLayout();
          // 
-         // tableLayoutPanel1
+         // MainLayoutPanel
          // 
-         tableLayoutPanel1.ColumnCount = 2;
-         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 250F));
-         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-         tableLayoutPanel1.Controls.Add(ExportSettingsPropertyGrid, 0, 0);
-         tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 1, 1);
-         tableLayoutPanel1.Controls.Add(tableLayoutPanel3, 0, 1);
-         tableLayoutPanel1.Controls.Add(PreviewMapPanel, 1, 0);
-         tableLayoutPanel1.Dock = DockStyle.Fill;
-         tableLayoutPanel1.Location = new Point(0, 0);
-         tableLayoutPanel1.Name = "tableLayoutPanel1";
-         tableLayoutPanel1.RowCount = 2;
-         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-         tableLayoutPanel1.Size = new Size(889, 447);
-         tableLayoutPanel1.TabIndex = 0;
+         MainLayoutPanel.ColumnCount = 2;
+         MainLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 250F));
+         MainLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         MainLayoutPanel.Controls.Add(ExportSettingsPropertyGrid, 0, 0);
+         MainLayoutPanel.Controls.Add(tableLayoutPanel2, 1, 1);
+         MainLayoutPanel.Controls.Add(tableLayoutPanel3, 0, 1);
+         MainLayoutPanel.Dock = DockStyle.Fill;
+         MainLayoutPanel.Location = new Point(0, 0);
+         MainLayoutPanel.Name = "MainLayoutPanel";
+         MainLayoutPanel.RowCount = 2;
+         MainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         MainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         MainLayoutPanel.Size = new Size(889, 447);
+         MainLayoutPanel.TabIndex = 0;
          // 
          // ExportSettingsPropertyGrid
          // 
@@ -149,46 +144,26 @@
          SaveButton.UseVisualStyleBackColor = true;
          SaveButton.Click += SaveButton_Click;
          // 
-         // PreviewMapPanel
-         // 
-         PreviewMapPanel.AutoScroll = true;
-         PreviewMapPanel.Controls.Add(PreviewPictureBox);
-         PreviewMapPanel.Dock = DockStyle.Fill;
-         PreviewMapPanel.Location = new Point(251, 1);
-         PreviewMapPanel.Margin = new Padding(1);
-         PreviewMapPanel.Name = "PreviewMapPanel";
-         PreviewMapPanel.Size = new Size(637, 415);
-         PreviewMapPanel.TabIndex = 4;
-         // 
-         // PreviewPictureBox
-         // 
-         PreviewPictureBox.Location = new Point(0, 0);
-         PreviewPictureBox.Name = "PreviewPictureBox";
-         PreviewPictureBox.Size = new Size(599, 415);
-         PreviewPictureBox.TabIndex = 1;
-         PreviewPictureBox.TabStop = false;
-         // 
          // SelectionDrawerForm
          // 
          AutoScaleDimensions = new SizeF(7F, 15F);
          AutoScaleMode = AutoScaleMode.Font;
          ClientSize = new Size(889, 447);
-         Controls.Add(tableLayoutPanel1);
+         Controls.Add(MainLayoutPanel);
          Icon = (Icon)resources.GetObject("$this.Icon");
          Name = "SelectionDrawerForm";
          Text = "SelectionDrawerForm";
-         tableLayoutPanel1.ResumeLayout(false);
+         FormClosing += SelectionDrawerForm_FormClosing;
+         MainLayoutPanel.ResumeLayout(false);
          tableLayoutPanel2.ResumeLayout(false);
          tableLayoutPanel2.PerformLayout();
          tableLayoutPanel3.ResumeLayout(false);
-         PreviewMapPanel.ResumeLayout(false);
-         ((System.ComponentModel.ISupportInitialize)PreviewPictureBox).EndInit();
          ResumeLayout(false);
       }
 
       #endregion
 
-      private TableLayoutPanel tableLayoutPanel1;
+      private TableLayoutPanel MainLayoutPanel;
       private PropertyGrid ExportSettingsPropertyGrid;
       private TableLayoutPanel tableLayoutPanel2;
       private Button button1;
@@ -196,7 +171,5 @@
       private TableLayoutPanel tableLayoutPanel3;
       private Button SaveButton;
       private Button CancelButton;
-      private Panel PreviewMapPanel;
-      private PictureBox PreviewPictureBox;
    }
 }

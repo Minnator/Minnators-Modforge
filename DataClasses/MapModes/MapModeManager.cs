@@ -15,6 +15,8 @@ public class MapModeManager()
    public bool PreviousLandOnly { get; set; }
    public bool RequireFullRedraw { get; set; } = true;
 
+   public EventHandler<MapMode> MapModeChanged = delegate { };
+
    public void InitializeAllMapModes()
    {
       MapModes.Add(new ProvinceMapMode());
@@ -85,9 +87,14 @@ public class MapModeManager()
       CurrentMapMode.RenderMapMode(CurrentMapMode.GetProvinceColor);
       GC.Collect(); // We need to collect the garbage to free up memory but this is not ideal
       Globals.MapWindow.MapModeComboBox.SelectedItem = name;
-
+      MapModeChanged(this, CurrentMapMode);
    }
-   
+
+   public int GetMapModeColor(Province p)
+   {
+      return CurrentMapMode.GetProvinceColor(p);
+   }
+
    public void DrawProvinceCollectionFromCurrentMapMode(Bitmap bmp, params Province[] ids)
    {
       foreach (var id in ids)

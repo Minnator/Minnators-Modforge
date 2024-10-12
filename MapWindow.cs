@@ -140,8 +140,6 @@ namespace Editor
       {
          InitializeComponent();
          Globals.ZoomControl = new(new (Globals.MapWidth, Globals.MapHeight));
-         Globals.ZoomControl.Dock = DockStyle.Fill;
-         Globals.ZoomControl.MinimumSize = new(10, 10);
          MainToolstripContainer.ContentPanel.Controls.Add(Globals.ZoomControl);
          Selection.Initialize();
 
@@ -748,7 +746,8 @@ namespace Editor
       private void SaveCurrentMapModeToolStripMenuItem_Click(object sender, EventArgs e)
       {
          var downloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\";
-         Globals.ZoomControl.map.Save($@"{downloadFolder}{MapModeComboBox.SelectedItem}.png", ImageFormat.Png);
+         using var bmp = Globals.ZoomControl.Map;
+         bmp.Save($@"{downloadFolder}{MapModeComboBox.SelectedItem}.png", ImageFormat.Png);
       }
 
       private void openCustomizerToolStripMenuItem_Click(object sender, EventArgs e)

@@ -23,24 +23,24 @@ public abstract class MapMode
          if (Globals.MapModeManager.PreviousLandOnly)
          {
             // only update the land provinces
-            MapDrawing.DrawOnMap(Globals.LandProvinces, GetProvinceColor, PixelsOrBorders.Pixels);
+            MapDrawing.DrawOnMap(Globals.LandProvinces, GetProvinceColor, Globals.ZoomControl, PixelsOrBorders.Pixels);
          }
          else
          {
-            MapDrawing.DrawOnMap(Globals.LandProvinces, GetProvinceColor, PixelsOrBorders.Pixels);
-            MapDrawing.DrawOnMap(Globals.NonLandProvinces, GetSeaProvinceColor, PixelsOrBorders.Pixels);
+            MapDrawing.DrawOnMap(Globals.LandProvinces, GetProvinceColor, Globals.ZoomControl, PixelsOrBorders.Pixels);
+            MapDrawing.DrawOnMap(Globals.NonLandProvinces, GetSeaProvinceColor, Globals.ZoomControl, PixelsOrBorders.Pixels);
          }
       }
       else
       {
-         MapDrawing.DrawOnMap(Globals.Provinces, method, PixelsOrBorders.Pixels);
+         MapDrawing.DrawOnMap(Globals.Provinces, method, Globals.ZoomControl, PixelsOrBorders.Pixels);
       }
       // draw borders on top of the provinces is always needed
       if (ShowOccupation)
-         MapDrawing.DrawOccupations(false);
+         MapDrawing.DrawOccupations(false, Globals.ZoomControl);
       if (Globals.Settings.MapModeSettings.ShowCountryCapitals || ShowCapitals)
          MapDrawing.DrawAllCapitals();
-      MapDrawing.DrawAllBorders(Color.Black.ToArgb());
+      MapDrawing.DrawAllBorders(Color.Black.ToArgb(), Globals.ZoomControl);
       Selection.RePaintSelection();
       Globals.ZoomControl.Invalidate();
       Globals.MapModeManager.PreviousLandOnly = IsLandOnly;
@@ -78,7 +78,7 @@ public abstract class MapMode
       foreach (var id in ids)
       {
          Update(id, false);
-         MapDrawing.DrawOnMap(id, Selection._borderColor, PixelsOrBorders.Borders);
+         MapDrawing.DrawOnMap(id, Selection._borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
       }
       BlockDrawingOfCapitals = false;
 
@@ -111,14 +111,14 @@ public abstract class MapMode
 
    public virtual void Update(Province province, bool invalidate = true)
    {
-      MapDrawing.DrawOnMap(province, GetProvinceColor(province), PixelsOrBorders.Pixels);
+      MapDrawing.DrawOnMap(province, GetProvinceColor(province), Globals.ZoomControl, PixelsOrBorders.Pixels);
       if (ShowOccupation)
-         MapDrawing.DrawOccupations(false);
+         MapDrawing.DrawOccupations(false, Globals.ZoomControl);
       if (Globals.Settings.MapModeSettings.ShowCountryCapitals || ShowCapitals)
          MapDrawing.DrawAllCapitals();
       if (invalidate)
       {
-         MapDrawing.DrawOnMap(province, Selection._borderColor, PixelsOrBorders.Borders);
+         MapDrawing.DrawOnMap(province, Selection._borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
          Globals.ZoomControl.Invalidate();
       }
       //TODO fix false border drawing

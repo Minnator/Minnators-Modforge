@@ -7,10 +7,10 @@ using System.Runtime.InteropServices;
 using static Editor.Controls.GDIHelper;
 using Rectangle = System.Drawing.Rectangle;
 
-public sealed class ZoomControl : Control
+public sealed class ZoomControl : Control, IDisposable
 {
-   internal Bitmap map;
-   private Graphics _bmpGfx;
+   private Bitmap map;
+   public Graphics BmpGfx;
    public IntPtr HBitmap;
 
    private float zoomFactor = 1.0f;
@@ -45,29 +45,46 @@ public sealed class ZoomControl : Control
       Paint += ZoomOnPaint!;
 
       BackColor = Color.DimGray;
+      MinimumSize = new (10, 10);
+      Dock = DockStyle.Fill;
    }
 
+   public void Dispose()
+   {
+      if (HBitmap != null)
+         DeleteObject(HBitmap);
+      if (BmpGfx != null)
+         BmpGfx.Dispose();
+      if (map != null)
+         map.Dispose();
+   }
+   
    // ---------- Properties ----------
 
    public Bitmap Map
    {
-      get => map;
+      get
+      {
+         return Image.FromHbitmap(HBitmap);
+      }
       set
       {
          map = value;
          //dispose/delete any previous caches
-         if (_bmpGfx != null)
-            _bmpGfx.Dispose();
+         if (BmpGfx != null)
+            BmpGfx.Dispose();
          if (HBitmap != null)
             DeleteObject(HBitmap);
          if (value == null)
             return;
          //cache the new HBitmap and Graphics.
-         _bmpGfx = Graphics.FromImage(map);
+         BmpGfx = Graphics.FromImage(map);
          HBitmap = map.GetHbitmap();
          panOffset = new((int)(map.Width / 2), (int)(map.Height / 2));
       }
    }
+
+   
 
    // ---------- Pixel Frame Conversions ----------
 
@@ -166,7 +183,6 @@ public sealed class ZoomControl : Control
       // Redraw the image with the updated zoom
       Invalidate();
    }
-
 
    public Color GetColor(Point inPoint)
    {
@@ -268,6 +284,7 @@ public sealed class ZoomControl : Control
       _zoomLimitLower = Math.Min((float)Width / 80, (float)Height / 80);
 
       LimitZoom();
+      LimitPan();
       Invalidate();
    }
 
@@ -294,11 +311,11 @@ public sealed class ZoomControl : Control
    private void ZoomOnPaint(object? sender, PaintEventArgs? e)
    {
       if (map == null || e == null) return;
-
+      
       Rectangle mapRect = new(panOffset.X, panOffset.Y, (int)_widthCorrected, (int)_heightCorrected);
       Rectangle thisRect = new(0, 0, Width, Height);
 
-      DrawStretch(HBitmap, _bmpGfx, e.Graphics, mapRect, thisRect);
+      DrawStretch(HBitmap, BmpGfx, e.Graphics, mapRect, thisRect);
    }
 
 }

@@ -106,8 +106,8 @@ namespace Editor.DataClasses.MapModes
          Selection.SelectionCoresAndClaims.AddRange(claims);
          Selection.SelectionCoresAndClaims.AddRange(cores);
 
-         MapDrawing.DrawStripes(Color.DarkGoldenrod.ToArgb(), claims);
-         MapDrawing.DrawStripes(Color.LawnGreen.ToArgb(), cores);
+         MapDrawing.DrawStripes(Color.DarkGoldenrod.ToArgb(), claims, Globals.ZoomControl);
+         MapDrawing.DrawStripes(Color.LawnGreen.ToArgb(), cores, Globals.ZoomControl);
 
          Globals.ZoomControl.Invalidate();
 
