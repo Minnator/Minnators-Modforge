@@ -148,10 +148,6 @@ public static class Globals
    // ToolTip
    public static string ToolTipText = $"$MAPMODE_SPECIFIC$\n------------------\nId:   $id$\nName: $name$\nOwner: $owner$ ($owner%L$)\nArea: $area$ ($area%L$)";
 
-   // Contains the border pixels of the provinces
-   public static Point[] BorderPixels = [];
-   public static Point[] Pixels = [];
-
    // Maps the name of TradeGoods to the TradeGood object
    public static readonly Dictionary<string, TradeGood> TradeGoods = [];
    public static readonly Dictionary<string, TradeNode> TradeNodes = [];

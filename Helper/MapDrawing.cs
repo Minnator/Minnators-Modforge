@@ -97,7 +97,7 @@ public class MapDrawing
    /// <param name="zoomControl"></param>
    public static void DrawAllBorders(int color, ZoomControl zoomControl)
    {
-      DrawPixelsParallel(Globals.BorderPixels, color, zoomControl);
+      DrawOnMap(Globals.Provinces, color, zoomControl, PixelsOrBorders.Borders);
    }
 
    // Invalidation rects needs to bet taken care of

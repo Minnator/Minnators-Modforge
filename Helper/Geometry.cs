@@ -220,48 +220,6 @@ public static class Geometry
       return [polygon[0], polygon[^1], polygon[^2]];
    }
 
-   public static void GetAllPixelPoints(Province[] provinceIds, out Point[] points)
-   {
-      var cnt = 0;
-      foreach (var p in provinceIds)
-      {
-         cnt += p.PixelCnt;
-      }
-      points = new Point[cnt];
-      var index = 0;
-      foreach (var p in provinceIds)
-      {
-         Array.Copy(Globals.Pixels, p.PixelPtr, points, index, p.PixelCnt);
-         index += p.PixelCnt;
-      }
-   }
-
-   public static void GetAllPixelPtrs(Province[] ids, out int[,] ptrs)
-   {
-      ptrs = new int[ids.Length, 2];
-      for (var i = 0; i < ids.Length; i++)
-      {
-         ptrs[i, 0] = ids[i].PixelPtr;
-         ptrs[i, 1] = ids[i].PixelCnt;
-      }
-   }
-
-   public static Point[] GetAllBorderPoints(Province[] provinceIds)
-   {
-      var cnt = 0;
-      foreach (var p in provinceIds)
-      {
-         cnt += p.BorderCnt;
-      }
-      var points = new Point[cnt];
-      var index = 0;
-      foreach (var p in provinceIds)
-      {
-         Array.Copy(Globals.BorderPixels, p.BorderPtr, points, index, p.BorderCnt);
-         index += p.BorderCnt;
-      }
-      return points;
-   }
 
 
    public static List<KeyValuePair<List<int>, Rectangle>> GetProvinceConnectedGroups(List<int> ids)
@@ -311,6 +269,7 @@ public static class Geometry
 
    public static Point GetBfsCenterPoint(Province prov)
    {
+      /*
       var bestPoint = new Point(-1, -1);
       var lowestCost = int.MinValue;
 
@@ -337,6 +296,8 @@ public static class Geometry
       }
 
       return bestPoint;
+      */
+      return new Point();
    }
 
    public static int GetCostPerPixel(int[] distances)
@@ -470,18 +431,16 @@ public static class Geometry
    private static void GetStripesArrayPluses(Province province, out Point[] stripes)
    {
       List<Point> stripeList = [];
-      var ptr = province.PixelPtr;
-      for (var i = 0; i < province.PixelCnt; i++)
+      foreach (var pixel in province.Pixels)
       {
-         var pixel = Globals.Pixels[ptr + i];
          var moduloX = pixel.X % 8;
          var moduloY = pixel.Y % 8;
 
          if (moduloX is 7 or 0 || moduloY is 7 or 0 // boundary row
-             || moduloX < 3 && moduloY < 3 // bottom left
-             || moduloX < 3 && moduloY > 4 // top left
-             || moduloX > 4 && moduloY < 3 // bottom right
-             || moduloX > 4 && moduloY > 4) // top right
+                               || moduloX < 3 && moduloY < 3 // bottom left
+                               || moduloX < 3 && moduloY > 4 // top left
+                               || moduloX > 4 && moduloY < 3 // bottom right
+                               || moduloX > 4 && moduloY > 4) // top right
             continue;
          stripeList.Add(pixel);
       }
@@ -492,10 +451,9 @@ public static class Geometry
    private static void GetStripesArrayDotted(Province province, out Point[] stripes)
    {
       List<Point> stripeList = [];
-      var ptr = province.PixelPtr;
-      for (var i = 0; i < province.PixelCnt; i++)
+
+      foreach (var pixel in province.Pixels)
       {
-         var pixel = Globals.Pixels[ptr + i];
          if ((pixel.X % 8) < 2 && (pixel.Y % 8) < 2)
             stripeList.Add(pixel);
       }
@@ -511,10 +469,9 @@ public static class Geometry
    private static void GetStripeArrayLbRt(Province province, out Point[] stripes)
    {
       List<Point> stripeList = [];
-      var ptr = province.PixelPtr;
-      for (var i = 0; i < province.PixelCnt; i++)
+
+      foreach (var pixel in province.Pixels)
       {
-         var pixel = Globals.Pixels[ptr + i];
          if (((pixel.X + pixel.Y) % 8) < 2)
             stripeList.Add(pixel);
       }
@@ -525,10 +482,9 @@ public static class Geometry
    private static void GetStripeArrayRbLt(Province province, out Point[] stripes)
    {
       List<Point> stripeList = [];
-      var ptr = province.PixelPtr;
-      for (var i = 0; i < province.PixelCnt; i++)
+
+      foreach (var pixel in province.Pixels)
       {
-         var pixel = Globals.Pixels[ptr + i];
          if (((pixel.X - pixel.Y) % 8) < 2)
             stripeList.Add(pixel);
       }
@@ -539,10 +495,9 @@ public static class Geometry
    private static void GetStripeArrayHorizontal(Province province, out Point[] stripes)
    {
       List<Point> stripeList = [];
-      var ptr = province.PixelPtr;
-      for (var i = 0; i < province.PixelCnt; i++)
+
+      foreach (var pixel in province.Pixels)
       {
-         var pixel = Globals.Pixels[ptr + i];
          if ((pixel.Y % 8) < 2)
             stripeList.Add(pixel);
       }
@@ -553,51 +508,15 @@ public static class Geometry
    private static void GetStripeArrayVertical(Province province, out Point[] stripes)
    {
       List<Point> stripeList = [];
-      var ptr = province.PixelPtr;
-      for (var i = 0; i < province.PixelCnt; i++)
+      
+      foreach (var pixel in province.Pixels)
       {
-         var pixel = Globals.Pixels[ptr + i];
          if ((pixel.X % 8) < 2)
             stripeList.Add(pixel);
       }
 
       stripes = [.. stripeList];
    }
-
-   // Method to find a center point within the area
-   public static Point FindCenterPoint(Province province)
-   {
-      var areaPoints = new Point[province.PixelCnt];
-      Array.Copy(Globals.Pixels, province.PixelPtr, areaPoints, 0, province.PixelCnt);
-
-      // Calculate the centroid of the area points
-      double xSum = 0;
-      double ySum = 0;
-
-      foreach (var point in areaPoints)
-      {
-         xSum += point.X;
-         ySum += point.Y;
-      }
-
-      Point centroid = new Point((int)(xSum / areaPoints.Length), (int)(ySum / areaPoints.Length));
-
-      // If the centroid is within the area, return it
-      if (IsPointInProvince(centroid, ref areaPoints))
-      {
-         if (province.Center != centroid)
-            Debug.WriteLine($"Found a better province center {province.Id}");
-         province.Center = centroid;
-         return centroid;
-      }
-
-      // If not, find the nearest point within the area
-      Point nearestPoint = FindNearestPointWithinArea(centroid, ref areaPoints);
-
-      province.Center = nearestPoint;
-      return nearestPoint;
-   }
-
 
    public static bool IsPointInProvince(Point point, ref Point[] pixels)
    {

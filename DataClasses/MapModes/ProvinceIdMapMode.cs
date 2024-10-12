@@ -8,13 +8,7 @@ namespace Editor.MapModes;
 
 public sealed class ProvinceIdMapMode : MapMode
 {
-   public override void RenderMapMode(Func<Province, int> method)
-   {
-      Bitmap?.Dispose();
-      Bitmap = BitMapHelper.GenerateBitmapFromProvinces(GetProvinceColor);
-      MapDrawHelper.DrawAllProvinceBorders(Bitmap, Color.Black);
-   }
-
+   
    public override string GetMapModeName()
    {
       return "Province Ids";

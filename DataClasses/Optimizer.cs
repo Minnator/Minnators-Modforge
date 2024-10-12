@@ -82,8 +82,6 @@ public static class Optimizer
       //Debug.WriteLine($"Per Province Cost: {elapsed / (float)provinces.Length * 1000} µs");
 
       // Set the optimized data to the Globals class
-      Globals.BorderPixels = borders;
-      Globals.Pixels = pixels;
       Globals.Provinces = provs;
       Globals.ProvinceIdToProvince = dictionary;
       Globals.ColorToProvId = dic;

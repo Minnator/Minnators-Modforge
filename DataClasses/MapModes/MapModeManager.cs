@@ -95,9 +95,4 @@ public class MapModeManager()
       return CurrentMapMode.GetProvinceColor(p);
    }
 
-   public void DrawProvinceCollectionFromCurrentMapMode(Bitmap bmp, params Province[] ids)
-   {
-      foreach (var id in ids)
-         MapDrawHelper.DrawProvince(id, Color.FromArgb(CurrentMapMode.GetProvinceColor(id)), bmp);
-   }
 }

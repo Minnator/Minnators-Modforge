@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Globalization;
+using System.Runtime;
 using System.Text;
 using System.Text.Json;
 using Editor.Controls;
@@ -116,6 +117,10 @@ namespace Editor
 
       private void AfterLoad()
       {
+         GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+         GC.Collect();
+         GC.WaitForPendingFinalizers();
+
       }
 
       public void InitMapModes()
