@@ -2,11 +2,11 @@
 
 namespace Editor.DataClasses.GameDataClasses;
 #nullable enable
-public class Area(string name, int[] provinces, Color color) : IProvinceCollection
+public class Area(string name, Province[] provinces, Color color) : IProvinceCollection
 {
    public string Name { get; } = name;
    // Contains the provinces in the area will be editable as the array is only a few elements long
-   public int[] Provinces { get; set; } = provinces;
+   public Province[] Provinces { get; set; } = provinces;
    public string Edict { get; set; } = string.Empty;
    public float Prosperity { get; set; } = 0;
    public bool IsStated { get; set; } = false;
@@ -27,6 +27,14 @@ public class Area(string name, int[] provinces, Color color) : IProvinceCollecti
 
    public int[] GetProvinceIds()
    {
+      var ids = new int[Provinces.Length];
+      for (var i = 0; i < Provinces.Length; i++)
+         ids[i] = Provinces[i].Id;
+      return ids;
+   }
+
+   public ICollection<Province> GetProvinces()
+   {
       return Provinces;
    }
 
@@ -39,7 +47,7 @@ public class Area(string name, int[] provinces, Color color) : IProvinceCollecti
    {
       var provs = new List<IProvinceCollection>();
       foreach (var province in Provinces)
-         provs.Add(Globals.Provinces[province]);
+         provs.Add(province);
       return provs;
    }
 }

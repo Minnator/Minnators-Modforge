@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.Events;
 
@@ -15,10 +16,10 @@ public class FortMapMode : MapMode
       ProvinceEventHandler.OnProvinceBuildingsChanged += UpdateProvince;
    }
 
-   public override int GetProvinceColor(int id)
+   public override int GetProvinceColor(Province id)
    {
       if (Globals.SeaProvinces.Contains(id))
-         return Globals.Provinces[id].Color.ToArgb();
+         return id.Color.ToArgb();
 
       // TODO: Expand to better forts
       switch (GetFortLevel(id))
@@ -48,16 +49,16 @@ public class FortMapMode : MapMode
       }
    }
 
-   private int GetFortLevel(int id)
+   private int GetFortLevel(Province id)
    {
       var level = 0;
-      if (Globals.Provinces[id].Buildings.Contains("fort_15th"))
+      if (id.Buildings.Contains("fort_15th"))
          level += 2;
-      if (Globals.Provinces[id].Buildings.Contains("fort_16th"))
+      if (id.Buildings.Contains("fort_16th"))
          level += 4;
-      if (Globals.Provinces[id].Buildings.Contains("fort_17th"))
+      if (id.Buildings.Contains("fort_17th"))
          level += 6;
-      if (Globals.Provinces[id].Buildings.Contains("fort_18th"))
+      if (id.Buildings.Contains("fort_18th"))
          level += 8;
 
       if (Globals.Capitals.Contains(id))
@@ -70,11 +71,11 @@ public class FortMapMode : MapMode
       return "Fort Level";
    }
 
-   public override string GetSpecificToolTip(int provinceId)
+   public override string GetSpecificToolTip(Province provinceId)
    {
       if (Globals.Provinces.TryGetValue(provinceId, out var province))
          return $"Fort Level: {GetFortLevel(provinceId)}";
-      return $"No fort in {Globals.Provinces[provinceId].GetLocalisation()}";
+      return $"No fort in {provinceId.GetLocalisation()}";
    }
 
 }

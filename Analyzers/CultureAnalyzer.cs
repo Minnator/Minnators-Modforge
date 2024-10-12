@@ -1,4 +1,6 @@
-﻿namespace Editor.Analyzers
+﻿using Editor.DataClasses.GameDataClasses;
+
+namespace Editor.Analyzers
 {
    public class CultureAnalyzer : IAnalyzer
    {
@@ -12,12 +14,12 @@
          throw new NotImplementedException();
       }
 
-      public void AnalyzeCountry(int id, out AnalyzerFeeback feedback)
+      public void AnalyzeCountry(Province id, out AnalyzerFeeback feedback)
       {
          throw new NotImplementedException();
       }
 
-      public void AnalyzeProvince(int id, out AnalyzerFeeback feedback)
+      public void AnalyzeProvince(Province id, out AnalyzerFeeback feedback)
       {         
          AnalyzeCulture(id, out feedback);
       }
@@ -27,10 +29,10 @@
          return "Culture Analyzer";
       }
 
-      private void AnalyzeCulture(int id, out AnalyzerFeeback feeback)
+      private void AnalyzeCulture(Province id, out AnalyzerFeeback feeback)
       {
          feeback = new BaseAnalyzerFeedback();
-         var culture = Globals.Cultures[Globals.Provinces[id].Culture];
+         var culture = Globals.Cultures[id.Culture];
          var provincesWithCulture = GetProvincesWithCulture(culture.Name);
          feeback.KeyValuePairs.Add($"[{provincesWithCulture.Count}] Provinces with Culture", provincesWithCulture);
          feeback.KeyValuePairs.Add("maleNames", [GetNameStats(culture.MaleNames, "maleNames")]);
@@ -54,7 +56,7 @@
       private List<string> GetProvincesWithCulture(string culture){
          List<string> provinces = [];
 
-         foreach (var province in Globals.Provinces.Values)
+         foreach (var province in Globals.Provinces)
          {
             if (province.Culture.Equals(culture))
             {

@@ -13,7 +13,7 @@ namespace Editor.DataClasses.MapModes
          ProvinceCollectionEventHandler.OnTradeCompanyChanged += UpdateProvinceCollection;
       }
 
-      public override int GetProvinceColor(int id)
+      public override int GetProvinceColor(Province id)
       {
          if (Globals.Provinces.TryGetValue(id, out var province))
          {
@@ -29,7 +29,7 @@ namespace Editor.DataClasses.MapModes
          return "Trade Companies";
       }
 
-      public override string GetSpecificToolTip(int provinceId)
+      public override string GetSpecificToolTip(Province provinceId)
       {
          if (Globals.Provinces.TryGetValue(provinceId, out var province))
          {

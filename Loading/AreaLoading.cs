@@ -40,7 +40,14 @@ public static class AreaLoading
             for (var i = 0; i < contentElements.Count; i++) 
                ids.AddRange(Parsing.GetIntListFromString(contentElements[i].Value));
 
-         areaDictionary.Add(areaName, new (areaName, [.. ids], Globals.ColorProvider.GetRandomColor()));
+         List<Province> provinces = [];
+         foreach (var id in ids)
+         {
+            if (Globals.ProvinceIdToProvince.TryGetValue(id, out var province))
+               provinces.Add(province);
+         }
+
+         areaDictionary.Add(areaName, new (areaName, [..provinces], Globals.ColorProvider.GetRandomColor()));
 
          foreach (var provinceId in areaDictionary[areaName].Provinces)
             if (Globals.Provinces.TryGetValue(provinceId, out var province)) province.Area = areaName;

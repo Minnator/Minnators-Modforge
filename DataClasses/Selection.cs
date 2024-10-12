@@ -7,7 +7,7 @@ using Editor.Helper;
 using Editor.Interfaces;
 
 namespace Editor.DataClasses;
-
+/*
 public enum SelectionState
 {
    Single,
@@ -358,3 +358,4 @@ public class MagicWandConfig(ProvAttrGet attrGet, int value)
    public ProvAttrGet GetAttribute => attrGet;
    public int GetValue => value;
 }
+*/

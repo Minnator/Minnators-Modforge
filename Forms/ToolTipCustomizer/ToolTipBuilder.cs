@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 
 namespace Editor.Forms;
@@ -10,7 +11,7 @@ public static class ToolTipBuilder
 
    private static readonly Regex TooltipAttributeRegex = new(TOOLTIP_ATTRIBUTE_REGEX, RegexOptions.Compiled);
 
-   public static string BuildToolTip(string rawToolTip, int provinceId)
+   public static string BuildToolTip(string rawToolTip, Province provinceId)
    {
       var lastMatch = 0;
       while (true)
@@ -26,7 +27,7 @@ public static class ToolTipBuilder
             else
             {
                bool useLoc = match.Groups["useLoc"].Value.Contains("%L");
-               var value = Globals.Provinces[provinceId].GetAttribute(match.Groups["attrName"].Value);
+               var value = provinceId.GetAttribute(match.Groups["attrName"].Value);
                if (string.IsNullOrEmpty(value.ToString()))
                {
                   lastMatch = match.Index + match.Length;

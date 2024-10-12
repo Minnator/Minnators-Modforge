@@ -12,20 +12,20 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
    public static Country Empty => new(Tag.Empty, string.Empty);
 
 
-   public Province[] GetProvinces()
+   public ICollection<Province> GetProvinces()
    {
-      var ids = GetProvinceIds();
-      var provinces = new Province[ids.Length];
-      for (var i = 0; i < ids.Length; i++) 
-         provinces[i] = Globals.Provinces[ids[i]];
-      return provinces;
+      List<Province> provinces = [];
+      foreach (var prv in Globals.Provinces)
+         if (prv.Owner == Tag)
+            provinces.Add(prv);
+      return [.. provinces];
    }
 
 
    public int[] GetProvinceIds()
    {
       List<int> provinces = [];
-      foreach (var prv in Globals.Provinces.Values)
+      foreach (var prv in Globals.Provinces)
       {
          if (prv.Owner == Tag)
             provinces.Add(prv.Id);
@@ -83,13 +83,13 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
    public List<Tag> HistoricalRivals { get; set; } = [];
    public List<Tag> HistoricalFriends { get; set; } = [];
    public int GovernmentRank { get; set; } = 0;
-   private int _capital = -1;
-   public int Capital
+   private Province _capital = Province.Empty;
+   public Province Capital
    {
       get => _capital;
       set
       {
-         if (value == -1)
+         if (value == Province.Empty)
             return;
          // Keeping the capitals list up to date to have a list of all capitals of nations which are currently on the map
          lock (Globals.Capitals)
@@ -97,10 +97,8 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
             if (Exists)
             {
                Globals.Capitals.Add(value);
-               Globals.Capitals.Remove(_capital);
             }
-            else
-               Globals.Capitals.Remove(_capital);
+            Globals.Capitals.Remove(_capital);
          }
          _capital = value;
       }
@@ -122,14 +120,14 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
       return History.OrderBy(h => h.Date).FirstOrDefault(h => h.Date > date);
    }
 
-   public List<int> GetOwnedProvinces
+   public List<Province> GetOwnedProvinces
    {
       get
       {
-         List<int> provinces = [];
+         List<Province> provinces = [];
          foreach (var id in Globals.LandProvinces)
          {
-            if (Globals.Provinces[id].Owner == Tag)
+            if (id.Owner == Tag)
                provinces.Add(id);
          }
          return provinces;
@@ -143,7 +141,7 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
          List<int> provinces = [];
          foreach (var id in Globals.LandProvinces)
          {
-            if (Globals.Provinces[id].Cores.Contains(Tag))
+            if (id.Cores.Contains(Tag))
                provinces.Add(id);
          }
          return provinces;
@@ -157,7 +155,7 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
          List<int> provinces = [];
          foreach (var id in Globals.LandProvinces)
          {
-            if (Globals.Provinces[id].Claims.Contains(Tag))
+            if (id.Claims.Contains(Tag))
                provinces.Add(id);
          }
          return provinces;
@@ -170,7 +168,7 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
       {
          foreach (var id in Globals.LandProvinces)
          {
-            if (Globals.Provinces[id].Owner == Tag)
+            if (id.Owner == Tag)
                return true;
          }
          return false;

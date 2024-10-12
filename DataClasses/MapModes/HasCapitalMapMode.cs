@@ -1,4 +1,5 @@
-﻿using Editor.Events;
+﻿using Editor.DataClasses.GameDataClasses;
+using Editor.Events;
 
 namespace Editor.DataClasses.MapModes
 {
@@ -11,7 +12,7 @@ namespace Editor.DataClasses.MapModes
          ProvinceEventHandler.OnProvinceCapitalChanged += UpdateProvince!;
       }
 
-      public override int GetProvinceColor(int id)
+      public override int GetProvinceColor(Province id)
       {
          if (Globals.Provinces.TryGetValue(id, out var province))
             return province.Capital != string.Empty ? Color.Green.ToArgb() : Color.DimGray.ToArgb();
@@ -23,7 +24,7 @@ namespace Editor.DataClasses.MapModes
          return "Has Capital GenericName";
       }
 
-      public override string GetSpecificToolTip(int provinceId)
+      public override string GetSpecificToolTip(Province provinceId)
       {
          if (Globals.Provinces.TryGetValue(provinceId, out var province))
             return province.Capital != string.Empty ? province.Capital : "No Capital name";

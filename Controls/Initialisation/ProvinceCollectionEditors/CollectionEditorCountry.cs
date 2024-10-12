@@ -11,7 +11,7 @@ namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
          Selection.ClearSelection();
          if (Globals.Countries.TryGetValue(s, out var country))
          {
-            Selection.AddProvincesToSelection(country.GetProvinceIds());
+            Selection.AddProvincesToSelection(country.GetProvinces());
             List<string> provNames = [];
             foreach (var prov in country.GetProvinceIds())
                provNames.Add(prov.ToString());
@@ -27,7 +27,7 @@ namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
          if (!Globals.Countries.TryGetValue(s, out var country))
             return [];
 
-         Globals.HistoryManager.AddCommand(new CModifyExistingCountry(s, Selection.GetSelectedProvincesIds.ToList(), b, Globals.MapWindow.CountryEditingGui));
+         Globals.HistoryManager.AddCommand(new CModifyExistingCountry(s, Selection.GetSelectedProvinces, b, Globals.MapWindow.CountryEditingGui));
          
          if (!b) // If we remove we only want to remove the province from the list which we removed and dont want to add it again
          {
@@ -68,7 +68,7 @@ namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
          if (!Globals.Countries.TryGetValue(s, out var country) || !int.TryParse(idStr, out var id))
             return;
 
-         if (!Globals.Provinces.TryGetValue(id, out var prov))
+         if (!Globals.ProvinceIdToProvince.TryGetValue(id, out var prov))
             return;
 
          //Globals.HistoryManager.AddCommand(new CModifyExistingCountry(s, [id], false));

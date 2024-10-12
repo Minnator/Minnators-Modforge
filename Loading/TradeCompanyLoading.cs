@@ -30,7 +30,7 @@ namespace Editor.Loading
             }
 
             var color = Color.Empty;
-            int[] provinces = [];
+            List<Province> provinces = [];
             var genericName = string.Empty;
             var specificName = string.Empty;
 
@@ -51,16 +51,7 @@ namespace Editor.Loading
                      }
                      break;
                   case "provinces":
-                     var ids = Parsing.GetIntListFromString(suBlock.GetContent);
-                     for (var i = ids.Count - 1; i >= 0; i--)
-                     {
-                        if (!Globals.Provinces.ContainsKey(ids[i]))
-                        {
-                           Globals.ErrorLog.Write($"Illegal province Id {ids[i]} in trade company ({suBlock.Name})");
-                           ids.RemoveAt(i);
-                        }
-                     }
-                     provinces = ids.ToArray();
+                     provinces = Parsing.GetProvincesFromString(suBlock.GetContent);
                      break;
                   case "names":
                      if (suBlock.GetContent.Contains("Root_Culture"))

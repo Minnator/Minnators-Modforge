@@ -16,12 +16,20 @@ namespace Editor.DataClasses.GameDataClasses
       public List<KeyValuePair<string, int>> Cultures { get; set; } = [];
       public List<KeyValuePair<string, int>> Religions { get; set; } = [];
       public List<KeyValuePair<string, int>> TradeGoods { get; set; } = [];
-      public HashSet<int> Provinces { get; set; } = [];
+      public HashSet<Province> Provinces { get; set; } = [];
       public List<TriggeredName> Names { get; set; } = [];
 
       public int[] GetProvinceIds()
       {
-         return Provinces.ToArray();
+         List<int> provinces = [];
+         foreach (var prv in Provinces)
+            provinces.Add(prv.Id);
+         return [.. provinces];
+      }
+
+      public ICollection<Province> GetProvinces()
+      {
+         return Provinces;
       }
 
       public IProvinceCollection? ScopeOut()

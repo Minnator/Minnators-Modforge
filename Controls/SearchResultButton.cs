@@ -5,7 +5,7 @@ namespace Editor.Controls
    public class SearchResultButton : Button
    {
       public bool IsProvince { get; set; }
-      public int ProvinceId { get; set; }
+      public Province Province { get; set; } = Province.Empty;
       public Tag CountryTag { get; set; }
 
       public SearchResultButton()
@@ -16,8 +16,8 @@ namespace Editor.Controls
       private void SearchResultButton_Click(object? sender, EventArgs e)
       {
          Globals.ZoomControl.FocusOn(IsProvince
-            ? Globals.Provinces[ProvinceId].Center
-            : Globals.Provinces[Globals.Countries[CountryTag].Capital].Center);
+            ? Province.Center
+            : Globals.Countries[CountryTag].Capital.Center);
       }
    }
 }

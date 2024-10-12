@@ -1,33 +1,19 @@
 ﻿using Editor.DataClasses.Commands;
+using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.Events
 {
    public class ProvinceCollectionEventArgs : EventArgs
    {
-      public string GroupKey { get; } = string.Empty;
-      public int[] Ids { get; }
+      public string GroupKey { get; }
+      public List<Province> Ids { get; }
 
-      public ProvinceCollectionEventArgs(string groupKey, params int[] ids)
+      public ProvinceCollectionEventArgs(string groupKey, List<Province> ids)
       {
          GroupKey = groupKey;
          Ids = ids;
       }
 
-      public ProvinceCollectionEventArgs(ProvinceEditedEventArgs e)
-      {
-         if (e == null!)
-         {
-            GroupKey = string.Empty;
-            Ids = [];
-            return;
-         }
-
-         var ids = new List<int>();
-         foreach (var province in e.Provinces)
-            ids.Add(province.Id);
-
-         Ids = [..ids];
-      }
    }
 
 

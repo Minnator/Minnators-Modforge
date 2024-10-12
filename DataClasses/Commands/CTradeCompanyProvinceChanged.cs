@@ -1,15 +1,16 @@
 ﻿using Editor.Commands;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 
 namespace Editor.DataClasses.Commands
 {
    public class CTradeCompanyProvinceChanged : ICommand
    {
-      private int[] _deltaProvinces;
+      private List<Province> _deltaProvinces;
       private string _tradeCompanyKey;
       private bool _add;
 
-      public CTradeCompanyProvinceChanged(string tradeCompanyKey, bool add, bool executeOnInit, params int[] deltaProvinces)
+      public CTradeCompanyProvinceChanged(string tradeCompanyKey, bool add, bool executeOnInit, List<Province> deltaProvinces)
       {
          _deltaProvinces = deltaProvinces;
          _tradeCompanyKey = tradeCompanyKey;
@@ -36,7 +37,7 @@ namespace Editor.DataClasses.Commands
 
       public string GetDescription()
       {
-         return $"{(_add ? "Added" : "Removed")} ({_deltaProvinces.Length}) provinces to trade company {_tradeCompanyKey}";
+         return $"{(_add ? "Added" : "Removed")} ({_deltaProvinces.Count}) provinces to trade company {_tradeCompanyKey}";
       }
    }
 }

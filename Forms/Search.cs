@@ -19,7 +19,7 @@ namespace Editor.Forms
          DisplayResults(provinceMatches, countryMatches);
       }
 
-      private void DisplayResults(List<int> provinceMatches, List<Tag> countryMatches)
+      private void DisplayResults(List<Province> provinceMatches, List<Tag> countryMatches)
       {
          SearchResultsPanel.Controls.Clear();
 
@@ -32,7 +32,7 @@ namespace Editor.Forms
 
          foreach (var tag in countryMatches)
          {
-            var button = ControlFactory.GetSearchResultButton(false, 0, tag);
+            var button = ControlFactory.GetSearchResultButton(false, Province.Empty, tag);
             SearchResultsPanel.Controls.Add(button);
          }
          SearchResultsPanel.ResumeLayout();

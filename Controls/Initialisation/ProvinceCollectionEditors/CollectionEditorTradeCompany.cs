@@ -10,7 +10,7 @@ namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
          Selection.ClearSelection();
          if (Globals.TradeCompanies.TryGetValue(s, out var tradeCompany))
          {
-            Selection.AddProvincesToSelection(tradeCompany.GetProvinceIds());
+            Selection.AddProvincesToSelection(tradeCompany.GetProvinces());
             if (Globals.MapWindow.FocusSelectionCheckBox.Checked)
                Selection.FocusSelection();
             List<string> provNames = [];
@@ -56,7 +56,7 @@ namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
          if (!Globals.TradeCompanies.TryGetValue(s, out var tradeCompany) || !int.TryParse(idStr, out var id))
             return;
 
-         if (!Globals.Provinces.TryGetValue(id, out var prov))
+         if (!Globals.ProvinceIdToProvince.TryGetValue(id, out var prov))
             return;
 
          //Globals.HistoryManager.AddCommand(new CModifyExistingTradeCompany(s, [id], false));

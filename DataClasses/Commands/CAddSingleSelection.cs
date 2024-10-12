@@ -1,12 +1,13 @@
 ﻿using Editor.Controls;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 
 namespace Editor.Commands;
 
 public class CAddSingleSelection : ICommand
 {
-   private readonly int _provinceId;
-   public CAddSingleSelection (int provinceId, bool executeOnInit = true)
+   private readonly Province _provinceId;
+   public CAddSingleSelection (Province provinceId, bool executeOnInit = true)
    {
       _provinceId = provinceId;
 
@@ -17,12 +18,12 @@ public class CAddSingleSelection : ICommand
    //TODO fix ids
    public void Execute()
    {
-      Selection.AddProvinceToSelection(Globals.Provinces[_provinceId]);
+      Selection.AddProvinceToSelection(_provinceId);
    }
 
    public void Undo()
    {
-     Selection.RemoveProvinceFromSelection(Globals.Provinces[_provinceId]);
+     Selection.RemoveProvinceFromSelection(_provinceId);
    }
 
    public void Redo()
@@ -30,5 +31,5 @@ public class CAddSingleSelection : ICommand
       Execute();
    }
 
-   public string GetDescription() => $"Add province [{Globals.Provinces[_provinceId].GetLocalisation()}] to selection";
+   public string GetDescription() => $"Add province [{_provinceId.GetLocalisation()}] to selection";
 }

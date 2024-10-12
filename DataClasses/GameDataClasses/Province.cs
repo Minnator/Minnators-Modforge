@@ -202,7 +202,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.Area = value;
          if (Globals.State == State.Running)
-            RaiseProvinceAreaChanged(Id, value, nameof(Area));
+            RaiseProvinceAreaChanged(this, value, nameof(Area));
       }
    }
 
@@ -212,7 +212,7 @@ public class Province : IProvinceCollection, IScope
       set
       {
          if (Globals.State == State.Running)
-            RaiseProvinceContinentChanged(Id, value, nameof(Continent));
+            RaiseProvinceContinentChanged(this, value, nameof(Continent));
          _data.Continent = value;
       }
    }
@@ -229,7 +229,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.Claims = value;
          if (Globals.State == State.Running)
-            RaiseProvinceClaimsChanged(Id, value, nameof(Claims));
+            RaiseProvinceClaimsChanged(this, value, nameof(Claims));
       }
    }
 
@@ -240,7 +240,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.PermanentClaims = value;
          if (Globals.State == State.Running)
-            RaiseProvincePermanentClaimsChanged(Id, value, nameof(PermanentClaims));
+            RaiseProvincePermanentClaimsChanged(this, value, nameof(PermanentClaims));
       }
    }
 
@@ -252,7 +252,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.Cores = value;
          if (Globals.State == State.Running)
-            RaiseProvinceCoresChanged(Id, value, nameof(Cores));
+            RaiseProvinceCoresChanged(this, value, nameof(Cores));
       }
    }
 
@@ -263,7 +263,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.Controller = value;
          if (Globals.State == State.Running)
-            RaiseProvinceControllerChanged(Id, value, nameof(Controller));
+            RaiseProvinceControllerChanged(this, value, nameof(Controller));
       }
    }
 
@@ -276,7 +276,7 @@ public class Province : IProvinceCollection, IScope
             return;
          _data.Owner = value;
          if (Globals.State == State.Running)
-            RaiseProvinceOwnerChanged(Id, value, nameof(Owner));
+            RaiseProvinceOwnerChanged(this, value, nameof(Owner));
          // Trigger an update of the countries capital which will add the capital to the list of capitals if it is not already there 
          // as a nation could be spawned on the map by setting it as a province owner, and thus it could require to have its capital drawn
          if (Globals.State == State.Running && Globals.Countries.TryGetValue(_data.Owner, out var country))
@@ -291,7 +291,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.TribalOwner = value;
          if (Globals.State == State.Running)
-            RaiseProvinceTribalOwnerChanged(Id, value, nameof(TribalOwner));
+            RaiseProvinceTribalOwnerChanged(this, value, nameof(TribalOwner));
       }
    }
 
@@ -302,7 +302,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.BaseManpower = Math.Max(0, value);
          if (Globals.State == State.Running)
-            RaiseProvinceBaseManpowerChanged(Id, value, nameof(BaseManpower));
+            RaiseProvinceBaseManpowerChanged(this, value, nameof(BaseManpower));
       }
    }
 
@@ -313,7 +313,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.BaseTax = Math.Max(0, value);
          if (Globals.State == State.Running)
-            RaiseProvinceBaseTaxChanged(Id, value, nameof(BaseTax));
+            RaiseProvinceBaseTaxChanged(this, value, nameof(BaseTax));
       }
    }
 
@@ -324,7 +324,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.BaseProduction = Math.Max(0, value);
          if (Globals.State == State.Running)
-            RaiseProvinceBaseProductionChanged(Id, value, nameof(BaseProduction));
+            RaiseProvinceBaseProductionChanged(this, value, nameof(BaseProduction));
       }
    }
 
@@ -335,7 +335,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.CenterOfTrade = Math.Max(0, value);
          if (Globals.State == State.Running)
-            RaiseProvinceCenterOfTradeLevelChanged(Id, value, nameof(CenterOfTrade));
+            RaiseProvinceCenterOfTradeLevelChanged(this, value, nameof(CenterOfTrade));
       }
    }
 
@@ -346,7 +346,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.ExtraCost = Math.Max(0, value);
          if (Globals.State == State.Running)
-            RaiseProvinceExtraCostChanged(Id, value, nameof(ExtraCost));
+            RaiseProvinceExtraCostChanged(this, value, nameof(ExtraCost));
       }
    }
 
@@ -357,7 +357,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.NativeFerocity = value;
          if (Globals.State == State.Running)
-            RaiseProvinceNativeFerocityChanged(Id, value, nameof(NativeFerocity));
+            RaiseProvinceNativeFerocityChanged(this, value, nameof(NativeFerocity));
       }
    }
 
@@ -368,7 +368,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.NativeHostileness = value;
          if (Globals.State == State.Running)
-            RaiseProvinceNativeHostilenessChanged(Id, value, nameof(NativeHostileness));
+            RaiseProvinceNativeHostilenessChanged(this, value, nameof(NativeHostileness));
       }
    }
 
@@ -379,7 +379,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.NativeSize = value;
          if (Globals.State == State.Running)
-            RaiseProvinceNativeSizeChanged(Id, value, nameof(NativeSize));
+            RaiseProvinceNativeSizeChanged(this, value, nameof(NativeSize));
       }
    }
 
@@ -390,7 +390,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.RevoltRisk = value;
          if (Globals.State == State.Running)
-            RaiseProvinceRevoltRiskChanged(Id, value, nameof(RevoltRisk));
+            RaiseProvinceRevoltRiskChanged(this, value, nameof(RevoltRisk));
       }
    }
 
@@ -401,7 +401,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.CitySize = value;
          if (Globals.State == State.Running)
-            RaiseProvinceCitySizeChanged(Id, value, nameof(CitySize));
+            RaiseProvinceCitySizeChanged(this, value, nameof(CitySize));
       }
    }
 
@@ -412,7 +412,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.Nationalism = value;
          if (Globals.State == State.Running)
-            RaiseProvinceNationalismChanged(Id, value, nameof(Nationalism));
+            RaiseProvinceNationalismChanged(this, value, nameof(Nationalism));
       }
    }
    public float LocalAutonomy
@@ -422,7 +422,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.LocalAutonomy = value;
          if (Globals.State == State.Running)
-            RaiseProvinceLocalAutonomyChanged(Id, value, nameof(LocalAutonomy));
+            RaiseProvinceLocalAutonomyChanged(this, value, nameof(LocalAutonomy));
       }
    }
 
@@ -433,7 +433,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.Devastation = value;
          if (Globals.State == State.Running)
-            RaiseProvinceDevastationChanged(Id, value, nameof(Devastation));
+            RaiseProvinceDevastationChanged(this, value, nameof(Devastation));
       }
    }
 
@@ -444,7 +444,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.Prosperity = value;
          if (Globals.State == State.Running)
-            RaiseProvinceProsperityChanged(Id, value, nameof(Prosperity));
+            RaiseProvinceProsperityChanged(this, value, nameof(Prosperity));
       }
    }
 
@@ -455,7 +455,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.DiscoveredBy = value;
          if (Globals.State == State.Running)
-            RaiseProvinceDiscoveredByChanged(Id, value, nameof(DiscoveredBy));
+            RaiseProvinceDiscoveredByChanged(this, value, nameof(DiscoveredBy));
       }
    }
 
@@ -466,7 +466,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.Capital = value;
          if (Globals.State == State.Running)
-            RaiseProvinceCapitalChanged(Id, value, nameof(Capital));
+            RaiseProvinceCapitalChanged(this, value, nameof(Capital));
       }
    }
 
@@ -477,7 +477,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.Culture = value;
          if (Globals.State == State.Running)
-            RaiseProvinceCultureChanged(Id, value, nameof(Culture));
+            RaiseProvinceCultureChanged(this, value, nameof(Culture));
       }
    }
 
@@ -488,7 +488,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.Religion = value;
          if (Globals.State == State.Running)
-            RaiseProvinceReligionChanged(Id, value, nameof(Religion));
+            RaiseProvinceReligionChanged(this, value, nameof(Religion));
       }
    }
 
@@ -499,7 +499,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.Buildings = value;
          if (Globals.State == State.Running)
-            RaiseProvinceBuildingsChanged(Id, value, nameof(Buildings));
+            RaiseProvinceBuildingsChanged(this, value, nameof(Buildings));
       }
    } // TODO parse to check other buildings
 
@@ -510,7 +510,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.IsHre = value;
          if (Globals.State == State.Running)
-            RaiseProvinceIsHreChanged(Id, value, nameof(IsHre));
+            RaiseProvinceIsHreChanged(this, value, nameof(IsHre));
       }
    }
 
@@ -521,7 +521,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.IsCity = value;
          if (Globals.State == State.Running)
-            RaiseProvinceIsCityChanged(Id, value, nameof(IsCity));
+            RaiseProvinceIsCityChanged(this, value, nameof(IsCity));
       }
    }
 
@@ -532,7 +532,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.IsSeatInParliament = value;
          if (Globals.State == State.Running)
-            RaiseProvinceIsSeatInParliamentChanged(Id, value, nameof(IsSeatInParliament));
+            RaiseProvinceIsSeatInParliamentChanged(this, value, nameof(IsSeatInParliament));
       }
    }
 
@@ -543,7 +543,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.TradeGood = value;
          if (Globals.State == State.Running)
-            RaiseProvinceTradeGoodChanged(Id, value, nameof(TradeGood));
+            RaiseProvinceTradeGoodChanged(this, value, nameof(TradeGood));
       }
    }
 
@@ -554,7 +554,7 @@ public class Province : IProvinceCollection, IScope
       {
          _history = value;
          if (Globals.State == State.Running)
-            RaiseProvinceHistoryChanged(Id, value, nameof(History));
+            RaiseProvinceHistoryChanged(this, value, nameof(History));
       }
    }
 
@@ -565,7 +565,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.LatentTradeGood = value;
          if (Globals.State == State.Running)
-            RaiseProvinceLatentTradeGoodChanged(Id, value, nameof(LatentTradeGood));
+            RaiseProvinceLatentTradeGoodChanged(this, value, nameof(LatentTradeGood));
       }
    }
 
@@ -576,7 +576,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.HasRevolt = value;
          if (Globals.State == State.Running)
-            RaiseProvinceHasRevoltChanged(Id, value, nameof(HasRevolt));
+            RaiseProvinceHasRevoltChanged(this, value, nameof(HasRevolt));
       }
    }
 
@@ -587,7 +587,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.ReformationCenter = value;
          if (Globals.State == State.Running)
-            RaiseProvinceReformationCenterChanged(Id, value, nameof(ReformationCenter));
+            RaiseProvinceReformationCenterChanged(this, value, nameof(ReformationCenter));
       }
    }
 
@@ -598,7 +598,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.TradeCompany = value;
          if (Globals.State == State.Running)
-            RaiseProvinceTradeCompanyChanged(Id, value, nameof(TradeCompany));
+            RaiseProvinceTradeCompanyChanged(this, value, nameof(TradeCompany));
       }
    }
 
@@ -609,7 +609,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.TradeCompanyInvestments = value;
          if (Globals.State == State.Running)
-            RaiseProvinceTradeCompanyInvestmentChanged(Id, value, nameof(TradeCompanyInvestments));
+            RaiseProvinceTradeCompanyInvestmentChanged(this, value, nameof(TradeCompanyInvestments));
       }
    }
 
@@ -620,7 +620,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.ProvinceModifiers = value;
          if (Globals.State == State.Running)
-            RaiseProvinceProvinceModifiersChanged(Id, value, nameof(ProvinceModifiers));
+            RaiseProvinceProvinceModifiersChanged(this, value, nameof(ProvinceModifiers));
       }
    }
 
@@ -631,7 +631,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.PermanentProvinceModifiers = value;
          if (Globals.State == State.Running)
-            RaiseProvincePermanentProvinceModifiersChanged(Id, value, nameof(PermanentProvinceModifiers));
+            RaiseProvincePermanentProvinceModifiersChanged(this, value, nameof(PermanentProvinceModifiers));
       }
    }
 
@@ -642,7 +642,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.ProvinceTriggeredModifiers = value;
          if (Globals.State == State.Running)
-            RaiseProvinceProvinceTriggeredModifiersChanged(Id, value, nameof(ProvinceTriggeredModifiers));
+            RaiseProvinceProvinceTriggeredModifiersChanged(this, value, nameof(ProvinceTriggeredModifiers));
       }
    }
 
@@ -653,7 +653,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.ScriptedEffects = value;
          if (Globals.State == State.Running)
-            RaiseProvinceScriptedEffectsChanged(Id, value, nameof(Effects));
+            RaiseProvinceScriptedEffectsChanged(this, value, nameof(Effects));
       }
    }
 
@@ -664,7 +664,7 @@ public class Province : IProvinceCollection, IScope
       {
          _data.TradeModifiers = value;
          if (Globals.State == State.Running)
-            RaiseProvinceTradeModifiersChanged(Id, value, nameof(TradeModifiers));
+            RaiseProvinceTradeModifiersChanged(this, value, nameof(TradeModifiers));
       }
    }
 
@@ -690,7 +690,7 @@ public class Province : IProvinceCollection, IScope
       get
       {
          foreach (var tradeCompany in Globals.TradeCompanies.Values)
-            if (tradeCompany.Provinces.Contains(Id))
+            if (tradeCompany.Provinces.Contains(this))
                return tradeCompany.CodeName;
          return string.Empty;
       }
@@ -1222,6 +1222,12 @@ public class Province : IProvinceCollection, IScope
    {
       return [Id];
    }
+
+   public ICollection<Province> GetProvinces()
+   {
+      return [this];
+   }
+
    public IProvinceCollection ScopeOut()
    {
       return Globals.Areas[Area];
@@ -1230,30 +1236,29 @@ public class Province : IProvinceCollection, IScope
    {
       return [this];
    }
-   public List<int> GetProvincesWithSameCulture()
+   public List<Province> GetProvincesWithSameCulture()
    {
-      List<int> provinces = [];
-      foreach (var province in Globals.Provinces.Values)
+      List<Province> provinces = [];
+      foreach (var province in Globals.Provinces)
       {
          if (province.Culture == Culture)
-            provinces.Add(province.Id);
+            provinces.Add(province);
       }
       return provinces;
    }
-   public List<int> GetProvincesWithSameCultureGroup()
+   public List<Province> GetProvincesWithSameCultureGroup()
    {
-      List<int> provinces = [];
+      List<Province> provinces = [];
       if (!Globals.Cultures.TryGetValue(Culture, out var cult) ||
           !Globals.CultureGroups.TryGetValue(cult.CultureGroup, out var groupsName))
          return provinces;
 
-      foreach (var id in Globals.LandProvinces)
+      foreach (var prov in Globals.LandProvinces)
       {
-         var prov = Globals.Provinces[id];
          if (Globals.Cultures.TryGetValue(prov.Culture, out var culture))
             if (Globals.CultureGroups.TryGetValue(culture.CultureGroup, out var cultureGroup))
                if (cultureGroup.Name == groupsName.Name)
-                  provinces.Add(prov.Id);
+                  provinces.Add(prov);
       }
 
       return provinces;
@@ -1297,6 +1302,11 @@ public class Province : IProvinceCollection, IScope
    public static bool operator !=(Province left, Province right)
    {
       return !left.Equals(right);
+   }
+
+   public static implicit operator int(Province province)
+   {
+      return province.Id;
    }
 
    public override string ToString()

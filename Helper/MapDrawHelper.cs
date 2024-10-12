@@ -35,7 +35,7 @@ public static class MapDrawHelper
       return rect;
    }
 
-   public static Rectangle DrawOnMap(ICollection<int> ids, Func<int, Color> func, Bitmap bmp)
+   public static Rectangle DrawOnMap(ICollection<Province> ids, Func<Province, Color> func, Bitmap bmp)
    {
       if (ids.Count == 0)
          return Rectangle.Empty;
@@ -63,17 +63,15 @@ public static class MapDrawHelper
    }
 
    // Draws the border of the given province on the given Bitmap with the given Color
-   public static Rectangle DrawProvinceBorder(int provinceIde, Color color, Bitmap bmp)
+   public static Rectangle DrawProvinceBorder(Province province, Color color, Bitmap bmp)
    {
-      var province = Globals.Provinces[provinceIde];
       var points = new Point[province.BorderCnt];
       Array.Copy(Globals.BorderPixels, province.BorderPtr, points, 0, province.BorderCnt);
       return DrawOnMap(province.Bounds, points, color, bmp);
    }
 
-   public static Rectangle DrawProvince(int provincePtr, Color color, Bitmap bmp)
+   public static Rectangle DrawProvince(Province province, Color color, Bitmap bmp)
    {
-      var province = Globals.Provinces[provincePtr];
       var points = new Point[province.PixelCnt];
       Array.Copy(Globals.Pixels, province.PixelPtr, points, 0, province.PixelCnt);
       return DrawOnMap(province.Bounds, points, color, bmp);
@@ -84,72 +82,31 @@ public static class MapDrawHelper
       DrawOnMap(new (0, 0, bmp.Width, bmp.Height), Globals.BorderPixels, color, bmp);
    }
 
-   public static Rectangle DrawProvinceCollection (int[] provinceIds, Color color, Bitmap bmp, bool forceSingleDraw)
-   {
-      if (forceSingleDraw || provinceIds.Length > 20)
-         return DrawProvinceCollection(provinceIds, color, bmp);
-      List<Rectangle> rects = [];
-      foreach (var provinceId in provinceIds)
-      {
-         DrawProvince(provinceId, Globals.Provinces[provinceId].Color, bmp);
-         rects.Add(Globals.Provinces[provinceId].Bounds);
-      }
-      return Geometry.GetBounds(rects);
-   }
-   
-   public static Rectangle DrawBorderCollection (int[] provinceIds, Color color, Bitmap bmp, bool forceSingleDraw)
-   {
-      if (forceSingleDraw || provinceIds.Length > 20)
-         return DrawBorderCollection(provinceIds, color, bmp);
-      List<Rectangle> rects = [];
-      foreach (var provinceId in provinceIds)
-      {
-         DrawProvinceBorder(provinceId, color, bmp);
-         rects.Add(Globals.Provinces[provinceId].Bounds);
-      }
-      return Geometry.GetBounds(rects);
-   }
-
-   private static Rectangle DrawBorderCollection (int[] provinceIds, Color color, Bitmap bmp)
-   {
-     var rects = provinceIds.Select(ptr => Globals.Provinces[ptr].Bounds).ToList();
-      return DrawOnMap(Geometry.GetBounds(rects), Geometry.GetAllBorderPoints(provinceIds), color, bmp);
-   }
-
-   private static Rectangle DrawProvinceCollection (int[] provinceIds, Color color, Bitmap bmp)
-   {
-      var rects = provinceIds.Select(ptr => Globals.Provinces[ptr].Bounds).ToList();
-      Geometry.GetAllPixelPoints(provinceIds, out var points);
-      return DrawOnMap(Geometry.GetBounds(rects), points, color, bmp);
-   }
-
    // ------------------------------ 24bpp ------------------------------
    #region 24bpp Drawing
    // !!24bpp!! Draws the given Array of Points on the given Bitmap with the given Color in parallel
 
-   private static void DrawPixels24BppParallel(ICollection<int> ids, Func<int, Color> func, Bitmap bmp, out List<Rectangle> rects)
+   private static void DrawPixels24BppParallel(ICollection<Province> ids, Func<Province, Color> func, Bitmap bmp, out List<Rectangle> rects)
    {
       rects = [];
       foreach (var id in ids)
       {
-         var province = Globals.Provinces[id];
-         var points = new Point[province.PixelCnt];
-         Array.Copy(Globals.Pixels, province.PixelPtr, points, 0, province.PixelCnt);
-         DrawPixels24BppParallel(province.Bounds, points, func(id), bmp);
-         rects.Add(province.Bounds);
+         var points = new Point[id.PixelCnt];
+         Array.Copy(Globals.Pixels, id.PixelPtr, points, 0, id.PixelCnt);
+         DrawPixels24BppParallel(id.Bounds, points, func(id), bmp);
+         rects.Add(id.Bounds);
       }
    }
 
-   private static void DrawPixels24Bpp (ICollection<int> ids, Func<int, Color> func, Bitmap bmp, out List<Rectangle> rects)
+   private static void DrawPixels24Bpp (ICollection<Province> ids, Func<Province, Color> func, Bitmap bmp, out List<Rectangle> rects)
    {
       rects = [];
       foreach (var id in ids)
       {
-         var province = Globals.Provinces[id];
-         var points = new Point[province.PixelCnt];
-         Array.Copy(Globals.Pixels, province.PixelPtr, points, 0, province.PixelCnt);
-         DrawPixels24Bpp(province.Bounds, points, func(id), bmp);
-         rects.Add(province.Bounds);
+         var points = new Point[id.PixelCnt];
+         Array.Copy(Globals.Pixels, id.PixelPtr, points, 0, id.PixelCnt);
+         DrawPixels24Bpp(id.Bounds, points, func(id), bmp);
+         rects.Add(id.Bounds);
       }
    }
    
@@ -208,29 +165,27 @@ public static class MapDrawHelper
    #region 32bpp Drawing
    // !!32bpp!! Draws the given Array of Points on the given Bitmap with the given Color
    
-   private static void DrawPixels32Bpp(ICollection<int> ids, Func<int, Color> func, Bitmap bmp, out List<Rectangle> rects)
+   private static void DrawPixels32Bpp(ICollection<Province> ids, Func<Province, Color> func, Bitmap bmp, out List<Rectangle> rects)
    {
       rects = [];
-      foreach (var id in ids)
+      foreach (var province in ids)
       {
-         var province = Globals.Provinces[id];
          var points = new Point[province.PixelCnt];
          Array.Copy(Globals.Pixels, province.PixelPtr, points, 0, province.PixelCnt);
-         DrawPixels32Bpp(province.Bounds, points, func(id), bmp);
+         DrawPixels32Bpp(province.Bounds, points, func(province), bmp);
          rects.Add(province.Bounds);
       }
    }
 
-   private static void DrawPixels32BppParallel(ICollection<int> ids, Func<int, Color> func, Bitmap bmp, out List<Rectangle> rects)
+   private static void DrawPixels32BppParallel(ICollection<Province> ids, Func<Province, Color> func, Bitmap bmp, out List<Rectangle> rects)
    {
       rects = [];
       foreach (var id in ids)
       {
-         var province = Globals.Provinces[id];
-         var points = new Point[province.PixelCnt];
-         Array.Copy(Globals.Pixels, province.PixelPtr, points, 0, province.PixelCnt);
-         DrawPixels32BppParallel(province.Bounds, points, func(id), bmp);
-         rects.Add(province.Bounds);
+         var points = new Point[id.PixelCnt];
+         Array.Copy(Globals.Pixels, id.PixelPtr, points, 0, id.PixelCnt);
+         DrawPixels32BppParallel(id.Bounds, points, func(id), bmp);
+         rects.Add(id.Bounds);
       }
    }
 
@@ -292,14 +247,13 @@ public static class MapDrawHelper
    }
    #endregion
 
-   public static Rectangle DrawStripes(Color color, List<int> ids, Bitmap bmp)
+   public static Rectangle DrawStripes(Color color, List<Province> ids, Bitmap bmp)
    {
       var rects = new Rectangle[ids.Count];
       for (var index = 0; index < ids.Count; index++)
       {
-         var province = Globals.Provinces[ids[index]];
-         Geometry.GetStripesArray(province, out var stripePixels);
-         rects[index] = DrawOnMap(province.Bounds, stripePixels, color, bmp);
+         Geometry.GetStripesArray(ids[index], out var stripePixels);
+         rects[index] = DrawOnMap(ids[index].Bounds, stripePixels, color, bmp);
       }
 
       return Geometry.GetBounds([..rects]);
@@ -307,9 +261,8 @@ public static class MapDrawHelper
 
    public static void DrawOccupations(bool rebelsOnly, Bitmap bmp)
    {
-      foreach (var id in Globals.LandProvinces)
+      foreach (var province in Globals.LandProvinces)
       {
-         var province = Globals.Provinces[id];
          if (rebelsOnly && !province.HasRevolt) // Has no rebels but we only want to show rebels
             continue;
          if (!rebelsOnly && province is { IsNonRebelOccupied: false, HasRevolt: false }) // has neither rebels nor occupation, but we want to show some
@@ -326,7 +279,7 @@ public static class MapDrawHelper
    {
       List<Point> capitals = [];
       foreach (var id in Globals.Capitals)
-         capitals.Add(Globals.Provinces[id].Center);
+         capitals.Add(id.Center);
       DrawCapitals(bmp, capitals);
    }
 
@@ -344,12 +297,12 @@ public static class MapDrawHelper
       g.DrawRectangle(Pens.Yellow, provinceCenter.X - 1, provinceCenter.Y - 1, 2, 2);
    }
 
-   public static void RedrawCapitals(Bitmap bmp, List<int> provinceIds)
+   public static void RedrawCapitals(Bitmap bmp, List<Province> provinceIds)
    {
       List<Point> redrawList = [];
       foreach (var id in provinceIds)
          if (Globals.Capitals.TryGetValue(id, out var prov))
-            redrawList.Add(Globals.Provinces[prov].Center);
+            redrawList.Add(prov.Center);
       if (redrawList.Count > 0)
          DrawCapitals(bmp, redrawList);
    }

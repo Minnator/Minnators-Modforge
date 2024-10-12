@@ -1,4 +1,5 @@
 ﻿using Editor.Controls;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.Interfaces;
 
@@ -6,9 +7,9 @@ namespace Editor.Commands
 {
    public class CCollectionSelection : ICommand
    {
-      private readonly List<int> _selectionDelta;
+      private readonly List<Province> _selectionDelta;
 
-      public CCollectionSelection(List<int> toSelect, bool executeOnInit = true)
+      public CCollectionSelection(List<Province> toSelect, bool executeOnInit = true)
       {
          _selectionDelta = toSelect.Except(Selection.SelectionPreview).ToList();
          if (executeOnInit)
@@ -17,7 +18,7 @@ namespace Editor.Commands
 
       public CCollectionSelection(IProvinceCollection collection, bool executeOnInit = true)
       {
-         _selectionDelta = collection.GetProvinceIds().Except(Selection.SelectionPreview).ToList();
+         _selectionDelta = collection.GetProvinces().Except(Selection.SelectionPreview).ToList();
          if (executeOnInit)
             Execute();
       }

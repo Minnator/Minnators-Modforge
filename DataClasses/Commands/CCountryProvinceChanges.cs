@@ -8,12 +8,12 @@ namespace Editor.DataClasses.Commands
    public class CModifyExistingCountry : ICommand
    {
       private readonly Tag _tag;
-      private readonly List<int> _deltaIds = [];
-      private readonly List<KeyValuePair<int, Tag>> _oldOwner = []; // Tag = the old owner, controller and core as it is only set if all 3 match up
+      private readonly List<Province> _deltaIds = [];
+      private readonly List<KeyValuePair<Province, Tag>> _oldOwner = []; // Tag = the old owner, controller and core as it is only set if all 3 match up
       private readonly bool _add;
       private CollectionEditor _collectionEditor = null!;
 
-      public CModifyExistingCountry(string s, List<int> ids, bool add, CollectionEditor collectionEditor, bool executeOnInit = true)
+      public CModifyExistingCountry(string s, List<Province> ids, bool add, CollectionEditor collectionEditor, bool executeOnInit = true)
       {
          if (Tag.TryParse(s, out var tag))
             _tag = tag;
@@ -39,7 +39,7 @@ namespace Editor.DataClasses.Commands
          {
             foreach (var id in _deltaIds)
             {
-               if (!Globals.Provinces.TryGetValue(id, out var province))
+               if (!Globals.ProvinceIdToProvince.TryGetValue(id, out var province))
                   continue;
                if (province.Owner == _tag) // Already the owner
                   continue;
@@ -48,7 +48,7 @@ namespace Editor.DataClasses.Commands
                if (province.Controller != oldOwner || !province.Cores.Contains(oldOwner) && oldOwner != Tag.Empty) // Owner, Controller and Core must match
                   continue;
                      
-               _oldOwner.Add(new (id, oldOwner)); // Save the old owner, controller and core
+               _oldOwner.Add(new (province, oldOwner)); // Save the old owner, controller and core
 
                province.Cores.Remove(oldOwner); // Remove the old owner from the core list
                province.Cores.Add(_tag);

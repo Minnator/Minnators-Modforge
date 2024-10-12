@@ -23,7 +23,7 @@ public static class BitMapHelper
       var brush = new SolidBrush(Color.Black);
       var graphics = Graphics.FromImage(bmp);
 
-      foreach (var province in Globals.Provinces.Values)
+      foreach (var province in Globals.Provinces)
       {
          var text = method(province.Id);
          if (string.IsNullOrEmpty(text))
@@ -36,19 +36,8 @@ public static class BitMapHelper
 
    }
 
-   public static void ModifyByProvinceCollection(Bitmap bmp, ICollection<int> ids, Func<int, Color> method)
-   {
-      var provinces = new Province[ids.Count];
-      var cnt = 0;
-      foreach (var id in ids)
-      {
-         provinces[cnt] = Globals.Provinces[id];
-         cnt++;
-      }
-      ModifyByProvinceCollection(bmp, provinces, method);
-   }
 
-   public static void ModifyByProvinceCollection(Bitmap bmp, ICollection<Province> provinces, Func<int, Color> method)
+   public static void ModifyByProvinceCollection(Bitmap bmp, ICollection<Province> provinces, Func<Province, Color> method)
    {
       //var sw = Stopwatch.StartNew();
       var width = bmp.Width;
@@ -73,7 +62,7 @@ public static class BitMapHelper
             var points = new Point[province.PixelCnt];
             Array.Copy(Globals.Pixels, province.PixelPtr, points, 0, province.PixelCnt);
 
-            var color = method(province.Id);
+            var color = method(province);
 
             var ptr = (byte*)bitmapData.Scan0;
             foreach (var point in points)
@@ -98,7 +87,7 @@ public static class BitMapHelper
    /// <param name="method"></param>
    /// <returns></returns>
    /// <exception cref="ArgumentNullException"></exception>
-   public static Bitmap GenerateBitmapFromProvinces(Func<int, int> method)
+   public static Bitmap GenerateBitmapFromProvinces(Func<Province, int> method)
    {
       var sw = new Stopwatch();
       sw.Start();
@@ -117,12 +106,12 @@ public static class BitMapHelper
       unsafe
       {
 
-         Parallel.ForEach(Globals.Provinces.Values, province => 
+         Parallel.ForEach(Globals.Provinces, province => 
          {
             var points = new Point[province.PixelCnt];
             Array.Copy(Globals.Pixels, province.PixelPtr, points, 0, province.PixelCnt);
 
-            var color = Color.FromArgb(method(province.Id));
+            var color = Color.FromArgb(method(province));
 
             var ptr = (byte*)bitmapData.Scan0;
             foreach (var point in points)
@@ -142,63 +131,4 @@ public static class BitMapHelper
       return bmp;
    }
 
-   /// <summary>
-   /// The Bitmap needs to be Disposed after use
-   /// </summary>
-   /// <param name="collection"></param>
-   /// <returns></returns>
-   /// <exception cref="ArgumentNullException"></exception>
-   public static Bitmap GenerateBitmapFromProvinceCollection(List<IProvinceCollection> collection)
-   {
-      var sw = new Stopwatch();
-      sw.Start();
-      var width = Globals.MapWidth;
-      var height = Globals.MapHeight;
-
-      var bmp = new Bitmap(width, height, PixelFormat.Format24bppRgb);
-
-      // Lock the bits in memory
-      var bitmapData = bmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, bmp.PixelFormat);
-
-      // Calculate stride (bytes per row)
-      var stride = bitmapData.Stride;
-      var bytesPerPixel = Image.GetPixelFormatSize(bmp.PixelFormat) / 8;
-
-      var options = new ParallelOptions
-      {
-         MaxDegreeOfParallelism = 1
-      };
-
-      var pixels = new Point[Globals.Pixels.Length];
-
-      unsafe
-      {
-         Parallel.ForEach(collection, options, collect =>
-         {
-            //MapDrawHelper.GetAllPixelPoints(collect.GetProvinceIds(), out var points);
-            Geometry.GetAllPixelPtrs(collect.GetProvinceIds(), out var id);
-            var color = collect.Color;
-
-            var ptr = (byte*)bitmapData.Scan0;
-
-            for (var i = 0; i < id.GetLength(0); i++)
-            {
-               for (var j = id[i, 0]; j < id[i, 1] + id[i, 0]; j++)
-               {
-                  var point = pixels[j];
-                  var index = pixels[j].Y * stride + point.X * bytesPerPixel;
-
-                  ptr[index + 2] = color.R;
-                  ptr[index + 1] = color.G;
-                  ptr[index] = color.B;
-               }
-            }
-         });
-      }
-
-      bmp.UnlockBits(bitmapData);
-      sw.Stop();
-      //Debug.WriteLine($"Generating Bitmap took {sw.ElapsedMilliseconds}ms");
-      return bmp;
-   }
 }

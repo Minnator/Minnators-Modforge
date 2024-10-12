@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Editor.Controls;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 
 namespace Editor.Commands;
 
 public class CLassoSelection : ICommand
 {
-   private readonly List<int> _selectionDelta;
+   private readonly List<Province> _selectionDelta;
 
    public CLassoSelection(bool executeOnInit = true)
    {

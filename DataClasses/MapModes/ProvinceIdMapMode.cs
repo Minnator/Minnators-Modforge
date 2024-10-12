@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.Helper;
 
@@ -7,7 +8,7 @@ namespace Editor.MapModes;
 
 public sealed class ProvinceIdMapMode : MapMode
 {
-   public override void RenderMapMode(Func<int, int> method)
+   public override void RenderMapMode(Func<Province, int> method)
    {
       Bitmap?.Dispose();
       Bitmap = BitMapHelper.GenerateBitmapFromProvinces(GetProvinceColor);
@@ -19,9 +20,9 @@ public sealed class ProvinceIdMapMode : MapMode
       return "Province Ids";
    }
 
-   public override int GetProvinceColor(int id)
+   public override int GetProvinceColor(Province id)
    {
-      return Globals.Provinces[id].Color.ToArgb();
+      return id.Color.ToArgb();
    }
    
 }

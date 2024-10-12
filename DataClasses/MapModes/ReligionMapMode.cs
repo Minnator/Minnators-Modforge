@@ -1,4 +1,5 @@
-﻿using Editor.Events;
+﻿using Editor.DataClasses.GameDataClasses;
+using Editor.Events;
 using Editor.Helper;
 
 namespace Editor.DataClasses.MapModes
@@ -12,9 +13,9 @@ namespace Editor.DataClasses.MapModes
 
       public override bool IsLandOnly => true;
 
-      public override int GetProvinceColor(int id)
+      public override int GetProvinceColor(Province id)
       {
-         if (Globals.Religions.TryGetValue(Globals.Provinces[id].Religion, out var religion))
+         if (Globals.Religions.TryGetValue(id.Religion, out var religion))
             return religion.Color.ToArgb();
          return Color.DimGray.ToArgb();
       }
@@ -24,9 +25,9 @@ namespace Editor.DataClasses.MapModes
          return "Religion";
       }
 
-      public override string GetSpecificToolTip(int provinceId)
+      public override string GetSpecificToolTip(Province provinceId)
       {
-         if (Globals.Religions.TryGetValue(Globals.Provinces[provinceId].Religion, out var religion))
+         if (Globals.Religions.TryGetValue(provinceId.Religion, out var religion))
             return $"Religion: {religion.Name} ({Localisation.GetLoc(religion.Name)})";
          return "Religion: [Unknown]";
       }

@@ -4,21 +4,21 @@ namespace Editor.Helper
 {
    public static class SearchHelper
    {
-      public static List<int> SearchForProvinces(string input)
+      public static List<Province> SearchForProvinces(string input)
       {
          input = input.ToLower();
-         List<int> result = [];
+         List<Province> result = [];
 
          // search for all province names which contain the input
          if (input.Length > 3)
-            foreach (var province in Globals.Provinces.Values)
+            foreach (var province in Globals.Provinces)
             {
                if (province.GetLocalisation().Contains(input, StringComparison.CurrentCultureIgnoreCase))
-                  result.Add(province.Id);
+                  result.Add(province);
             }
          if (int.TryParse(input, out var id))
-            if (Globals.Provinces.ContainsKey(id))
-               result.Add(id);
+            if (Globals.ProvinceIdToProvince.TryGetValue(id, out var prov))
+               result.Add(prov);
 
          return result;
       }

@@ -86,19 +86,8 @@ public class MapModeManager()
       GC.Collect(); // We need to collect the garbage to free up memory but this is not ideal
       Globals.MapWindow.MapModeComboBox.SelectedItem = name;
    }
-
-   public bool GetProvince(Point point, out Province province)
-   {
-      province = null!;
-      if (Globals.ColorToProvId.TryGetValue (IdMapMode.Bitmap.GetPixel(point.X, point.Y), out var provinceId))
-      {
-         if (Globals.Provinces.TryGetValue(provinceId, out province))
-            return true;
-      }
-      return false;
-   }
-
-   public void DrawProvinceCollectionFromCurrentMapMode(Bitmap bmp, params int[] ids)
+   
+   public void DrawProvinceCollectionFromCurrentMapMode(Bitmap bmp, params Province[] ids)
    {
       foreach (var id in ids)
          MapDrawHelper.DrawProvince(id, Color.FromArgb(CurrentMapMode.GetProvinceColor(id)), bmp);

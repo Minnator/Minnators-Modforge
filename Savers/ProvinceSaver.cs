@@ -16,7 +16,7 @@ namespace Editor.Savers
          var worked = true;
          foreach (var province in Globals.LandProvinces)
          {
-            if (!SaveToHistoryFile(Globals.Provinces[province]))
+            if (!SaveToHistoryFile(province))
                worked = false;
          }
 
@@ -147,8 +147,7 @@ namespace Editor.Savers
       /// </summary>
       private static void AddEffects(ref StringBuilder sb)
       {
-         foreach (var effect in Globals.Provinces[1].Effects)
-            sb.AppendLine(effect.GetEffectString(0));
+         // TODO EFFECT SAVING
       }
 
       /// <summary>

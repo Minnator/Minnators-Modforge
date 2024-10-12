@@ -11,7 +11,7 @@ namespace Editor.DataClasses.MapModes
          return "Trade Nodes";
       }
 
-      public override int GetProvinceColor(int id)
+      public override int GetProvinceColor(Province id)
       {
          var node = TradeNodeHelper.GetTradeNodeByProvince(id);
          if (Equals(node, TradeNode.Empty))
@@ -19,20 +19,20 @@ namespace Editor.DataClasses.MapModes
          return node.Color.ToArgb();
       }
 
-      public override void RenderMapMode(Func<int, int> method)
+      public override void RenderMapMode(Func<Province, int> method)
       {
          base.RenderMapMode(method);
          MapDrawing.WriteOnProvince(GetCoTLevel);
       }
 
-      private string GetCoTLevel(int provinceId)
+      private string GetCoTLevel(Province provinceId)
       {
          if (Globals.Provinces.TryGetValue(provinceId, out var prov) && prov.CenterOfTrade > 0)
             return prov.CenterOfTrade.ToString();
          return string.Empty;
       }
 
-      public override string GetSpecificToolTip(int provinceId)
+      public override string GetSpecificToolTip(Province provinceId)
       {
          var node = TradeNodeHelper.GetTradeNodeByProvince(provinceId);
          if (Equals(node, TradeNode.Empty))

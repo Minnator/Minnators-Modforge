@@ -27,10 +27,6 @@ public class DevelopmentMapMode : MapMode
 
    private void UpdateMinMax(object sender, ProvinceEventHandler.ProvinceDataChangedEventArgs e)
    {
-      if (e.Value is not int newDev)
-         return;
-
-
       if (CalculateMinMax())
       {
          if (Globals.MapModeManager.CurrentMapMode != this)
@@ -44,7 +40,8 @@ public class DevelopmentMapMode : MapMode
          if (sender is not int id)
             return;
 
-         Update(id);
+         //TODO WTF DID THIS DO
+         //Update(id);
       }
    }
 
@@ -56,7 +53,7 @@ public class DevelopmentMapMode : MapMode
    {
       var newMaxFound = false;
       var newMax = int.MinValue;
-      foreach (var province in Globals.Provinces.Values)
+      foreach (var province in Globals.Provinces)
       {
          var totalDev = province.GetTotalDevelopment();
          if (totalDev > newMax)
@@ -79,18 +76,18 @@ public class DevelopmentMapMode : MapMode
       return newMaxFound;
    }
 
-   public override void RenderMapMode(Func<int, int> method)
+   public override void RenderMapMode(Func<Province, int> method)
    {
       CalculateMinMax();
       base.RenderMapMode(method);
    }
 
-   public override int GetProvinceColor(int id)
+   public override int GetProvinceColor(Province id)
    {
       if (!Globals.LandProvinces.Contains(id))
-         return Globals.Provinces[id].Color.ToArgb();
+         return id.Color.ToArgb();
 
-      var totalDev = Globals.Provinces[id].GetTotalDevelopment();
+      var totalDev = id.GetTotalDevelopment();
       return Globals.ColorProvider.GetColorOnGreenRedShade(0, _max, totalDev).ToArgb();
    }
 
@@ -100,7 +97,7 @@ public class DevelopmentMapMode : MapMode
       return "Total Development";
    }
 
-   public override string GetSpecificToolTip(int provinceId)
+   public override string GetSpecificToolTip(Province provinceId)
    {
       if (Globals.Provinces.TryGetValue(provinceId, out var province))
          return $"Total Development: {province.GetTotalDevelopment()}\nBaseTax: {province.BaseTax}\nBaseProduction: {province.BaseProduction}\nBaseManpower: {province.BaseManpower}";

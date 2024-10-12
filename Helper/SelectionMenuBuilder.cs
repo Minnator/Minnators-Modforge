@@ -122,7 +122,7 @@ namespace Editor.Helper
             if (Selection.LastHoveredProvince == Province.Empty)
                return;
 
-            var node = TradeNodeHelper.GetTradeNodeByProvince(Selection.LastHoveredProvince.Id);
+            var node = TradeNodeHelper.GetTradeNodeByProvince(Selection.LastHoveredProvince);
             Globals.HistoryManager.AddCommand(new CCollectionSelection([.. node.Members]), CommandHistoryType.ComplexSelection);
          });
       }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.Events;
 using Editor.Helper;
@@ -20,7 +21,7 @@ public sealed class ContinentMapMode : MapMode
       return "Continents";
    }
 
-   public override int GetProvinceColor(int id)
+   public override int GetProvinceColor(Province id)
    {
       if (Globals.Provinces.TryGetValue(id, out var province))
          if (Globals.Continents.TryGetValue(province.Continent, out var continent))
@@ -28,7 +29,7 @@ public sealed class ContinentMapMode : MapMode
       return Color.DarkGray.ToArgb();
    }
 
-   public override string GetSpecificToolTip(int provinceId)
+   public override string GetSpecificToolTip(Province provinceId)
    {
       if (Globals.Provinces.TryGetValue(provinceId, out var province))
          if (Globals.Continents.TryGetValue(province.Continent, out var continent))

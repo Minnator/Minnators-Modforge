@@ -59,7 +59,15 @@ public enum StripesDirection
    Pluses
 }
 
-
+// When several provinces are selected only attributes that are the same across all selected provinces are shown.
+// Other attributes e.g. development will be increased per province or set per province: 
+// All province's tax will be increased by 1, all province's manpower will be set to 100.
+public enum ProvinceEditingStatus
+{
+   PreviewOnly, // Province is only previewed to the gui, no editing is allowed
+   PreviewUntilSelection, // Province is previewed until a selection is made then the selected province(s) are previewed and editing is allowed
+   Selection // Province is only previewd when selected and editing is allowed
+}
 #endregion
 
 //contains all required and used data across the application and instances of forms.
@@ -102,8 +110,7 @@ public static class Globals
 
    // SETTINGS
    public static readonly Settings Settings = new();
-   public static ProvinceEditingStatus ProvinceEditingStatus = ProvinceEditingStatus.PreviewUntilSelection;
-
+   public static ProvinceEditingStatus ProvinceEditingStatus = ProvinceEditingStatus.Selection;
 
    // Date of history
    public static DateTime Date
@@ -154,10 +161,12 @@ public static class Globals
    public static Dictionary<string, Culture> Cultures = [];
 
    // Contains the provinces and options to access them
-   public static Dictionary<int, Province> Provinces = [];
+   //public static Dictionary<int, Province> Provinces = [];
+   public static HashSet<Province> Provinces = [];
+   public static Dictionary<int, Province> ProvinceIdToProvince = [];
    public static Dictionary<Color, int> ColorToProvId = [];
-   public static Dictionary<int, int[]> AdjacentProvinces = [];
-   public static HashSet<int> Capitals = [];
+   public static Dictionary<Province, Province[]> AdjacentProvinces = [];
+   public static HashSet<Province> Capitals = [];
 
    // TechnologyGroups
    public static readonly HashSet<string> TechnologyGroups = [];
@@ -179,12 +188,12 @@ public static class Globals
    }
 
    // Province Groups
-   public static HashSet<int> LandProvinces = null!;
-   public static HashSet<int> SeaProvinces = null!;
-   public static HashSet<int> LakeProvinces = null!;
-   public static HashSet<int> CoastalProvinces = null!;
-   public static int[] NonLandProvinceIds = null!;
-   public static int[] LandProvinceIds = null!;
+   public static HashSet<Province> LandProvinces = [];
+   public static HashSet<Province> SeaProvinces = [];
+   public static HashSet<Province> LakeProvinces = [];
+   public static HashSet<Province> CoastalProvinces = [];
+   public static Province[] NonLandProvinces = [];
+   public static Province[] LandProvinceIds = [];
    public static Dictionary<string, ColonialRegion> ColonialRegions = [];
 
    // Modifiers
@@ -274,3 +283,7 @@ public static class Globals
 // TODO LIST Until Alpha 1.1
 // - [ ] Add a way to create custom map modes
 // - [ ] Add a tradegoods creation and editing menu
+// - [ ] Ideas making via drag and drop
+
+// TODO LIST Until Alpha 1.2
+// - [ ] Province Creation and editing

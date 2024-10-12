@@ -1,4 +1,5 @@
-﻿using Editor.Events;
+﻿using Editor.DataClasses.GameDataClasses;
+using Editor.Events;
 
 namespace Editor.DataClasses.MapModes
 {
@@ -11,7 +12,7 @@ namespace Editor.DataClasses.MapModes
          ProvinceEventHandler.OnProvinceIsSeatInParliamentChanged += UpdateProvince!;
       }
 
-      public override int GetProvinceColor(int id)
+      public override int GetProvinceColor(Province id)
       {
          if (Globals.Provinces.TryGetValue(id, out var province))
             return province.IsSeatInParliament ? Color.Green.ToArgb() : Color.DimGray.ToArgb();
@@ -23,7 +24,7 @@ namespace Editor.DataClasses.MapModes
          return "Parliament Seats";
       }
 
-      public override string GetSpecificToolTip(int provinceId)
+      public override string GetSpecificToolTip(Province provinceId)
       {
          if (Globals.Provinces.TryGetValue(provinceId, out var province))
             return province.IsSeatInParliament ? "Seat in Parliament" : "No Seat in Parliament";

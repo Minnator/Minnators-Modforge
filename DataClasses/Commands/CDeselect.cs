@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Editor.Controls;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 
 namespace Editor.Commands;
@@ -8,26 +9,26 @@ public class CDeselectCommand :ICommand
 {
    private readonly string _attr;
    private readonly object _value;
-   private readonly List<int> _selectionDelta = [];
+   private readonly List<Province> _selectionDelta = [];
    
    public CDeselectCommand(string attr, object value, bool executeOnInit = true)
    {
       _attr = attr;
       _value = value;
 
-      GetSelectionDelta(Selection.GetSelectedProvincesIds.ToList());
+      GetSelectionDelta(Selection.GetSelectedProvinces);
 
       if (executeOnInit)
          Execute();
    }
 
-   private void GetSelectionDelta(List<int> selection)
+   private void GetSelectionDelta(List<Province> selection)
    {
       if (int.TryParse(_value.ToString(), out var compareTo))
       {
          foreach (var i in selection)
          {
-            if (int.TryParse(Globals.Provinces[i].GetAttribute(_attr)!.ToString(), out var compareResult))
+            if (int.TryParse(i.GetAttribute(_attr)!.ToString(), out var compareResult))
                if (compareResult <= compareTo)
                   _selectionDelta.Add(i);
          }
@@ -36,7 +37,7 @@ public class CDeselectCommand :ICommand
       {
          foreach (var i in selection)
          {
-            if (Globals.Provinces[i].GetAttribute(_attr)!.Equals(_value))
+            if (i.GetAttribute(_attr)!.Equals(_value))
                _selectionDelta.Add(i);
          }
       }

@@ -1,4 +1,5 @@
 ﻿using System.Drawing.Imaging;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 
 namespace Editor.Forms
@@ -46,13 +47,13 @@ namespace Editor.Forms
             case PrimaryProvinceDrawing.None:
                break;
             case PrimaryProvinceDrawing.Selection:
-               Globals.MapModeManager.DrawProvinceCollectionFromCurrentMapMode(bitmap, Selection.GetSelectedProvincesIds);
+               Globals.MapModeManager.DrawProvinceCollectionFromCurrentMapMode(bitmap, [..Selection.GetSelectedProvinces]);
                break;
             case PrimaryProvinceDrawing.Land:
                Globals.MapModeManager.DrawProvinceCollectionFromCurrentMapMode(bitmap, Globals.LandProvinceIds);
                break;
             case PrimaryProvinceDrawing.All:
-               Globals.MapModeManager.DrawProvinceCollectionFromCurrentMapMode(bitmap, Globals.Provinces.Keys.ToArray());
+               Globals.MapModeManager.DrawProvinceCollectionFromCurrentMapMode(bitmap, Globals.Provinces.ToArray());
                break;
          }
 
@@ -66,7 +67,7 @@ namespace Editor.Forms
                break;
             case BorderDrawing.Selection:
                foreach (var prov in Selection.GetSelectedProvinces)
-                  MapDrawHelper.DrawProvinceBorder(prov.Id, Color.Black, bitmap);
+                  MapDrawHelper.DrawProvinceBorder(prov, Color.Black, bitmap);
                break;
             case BorderDrawing.All:
                MapDrawHelper.DrawAllProvinceBorders(bitmap, Color.Black);
@@ -80,7 +81,7 @@ namespace Editor.Forms
          if (Selection.Count == 0)
             return;
 
-         var rect = Geometry.GetBounds(Selection.GetSelectedProvincesIds.ToList());
+         var rect = Geometry.GetBounds(Selection.GetSelectedProvinces);
          var centerProvince = Geometry.GetProvinceClosestToPoint(new(rect.X + rect.Width / 2,rect.Y + rect.Height / 2), Selection.GetSelectedProvinces);
          FocusOn(centerProvince.Center);
       }
@@ -97,12 +98,12 @@ namespace Editor.Forms
                break;
             case SecondaryProvinceDrawing.NeighboringCountries:
                var neighboringCountries = Geometry.GetAllNeighboringCountries(Selection.GetSelectedProvinces);
-               List<int> allCountryProvinces = [];
+               List<Province> allCountryProvinces = [];
                foreach (var country in neighboringCountries)
                {
                   var provinces = Globals.Countries[country].GetProvinces().ToList();
                   foreach (var province in provinces)
-                     allCountryProvinces.Add(province.Id);
+                     allCountryProvinces.Add(province);
                }
                Globals.MapModeManager.DrawProvinceCollectionFromCurrentMapMode(bitmap, [.. allCountryProvinces]);
                break;
@@ -110,10 +111,10 @@ namespace Editor.Forms
                Globals.MapModeManager.DrawProvinceCollectionFromCurrentMapMode(bitmap, Globals.SeaProvinces.ToArray());
                break;
             case SecondaryProvinceDrawing.SeaProvinces:
-               BitMapHelper.ModifyByProvinceCollection(bitmap, Globals.NonLandProvinceIds, i => Globals.Provinces[i].Color);
+               BitMapHelper.ModifyByProvinceCollection(bitmap, Globals.NonLandProvinces, i => i.Color);
                break;
             case SecondaryProvinceDrawing.All:
-               Globals.MapModeManager.DrawProvinceCollectionFromCurrentMapMode(bitmap, Globals.Provinces.Keys.ToArray());
+               Globals.MapModeManager.DrawProvinceCollectionFromCurrentMapMode(bitmap, Globals.Provinces.ToArray());
                break;
          }
       }
@@ -126,7 +127,7 @@ namespace Editor.Forms
                PreviewPictureBox.Image.Save(Path.Combine(PathTextBox.Text, $"{Globals.MapModeManager.CurrentMapMode.GetMapModeName()}.png"), ImageFormat.Png);
                break;
             case ImageSize.Selection:
-               var rect = Geometry.GetBounds(Selection.GetSelectedProvincesIds.ToList());
+               var rect = Geometry.GetBounds(Selection.GetSelectedProvinces);
                var bitmap = new Bitmap(rect.Width, rect.Height, PixelFormat.Format24bppRgb);
                // copy the selected area to the new bitmap
                using (var g = Graphics.FromImage(bitmap))

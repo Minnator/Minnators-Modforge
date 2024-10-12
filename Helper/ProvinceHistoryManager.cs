@@ -9,12 +9,12 @@
             return;
          if (date < _lastDate)
          {
-            foreach (var province in Globals.Provinces.Values)
+            foreach (var province in Globals.Provinces)
             {
                province.ResetHistory();
             }
          }
-         foreach (var province in Globals.Provinces.Values)
+         foreach (var province in Globals.Provinces)
          {
             province.LoadHistoryForDate(date);
          }

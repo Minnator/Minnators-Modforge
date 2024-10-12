@@ -41,7 +41,7 @@ public class SuperRegion(string name) : IProvinceCollection
 
       if (Globals.State == State.Running)
          if (Globals.Regions.TryGetValue(regionName, out var region))
-            foreach (var id in region.GetProvinceIds())
+            foreach (var id in region.GetProvinces())
                ProvinceEventHandler.RaiseSuperRegionRegionChanged(id, region, nameof(Regions));
    }
 
@@ -64,6 +64,15 @@ public class SuperRegion(string name) : IProvinceCollection
          if (Globals.Regions.TryGetValue(region, out Region? value))
             provinces.AddRange(value.GetProvinceIds());
       return [.. provinces];
+   }
+
+   public ICollection<Province> GetProvinces()
+   {
+      var provinces = new List<Province>();
+      foreach (var region in Regions)
+         if (Globals.Regions.TryGetValue(region, out Region? value))
+            provinces.AddRange(value.GetProvinces());
+      return provinces;
    }
 
    public IProvinceCollection? ScopeOut()

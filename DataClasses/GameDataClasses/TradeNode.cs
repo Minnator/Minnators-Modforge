@@ -6,7 +6,7 @@
       public int Location { get; set; } = location;
       public Color Color { get; set; } = Color.Empty;
       public bool IsInland { get; set; } = false;
-      public HashSet<int> Members { get; set; } = [];
+      public HashSet<Province> Members { get; set; } = [];
       public List<string> Incoming { get; set; } = [];
       public List<string> Outgoing { get; set; } = [];
       public static TradeNode Empty => new ("", 0);

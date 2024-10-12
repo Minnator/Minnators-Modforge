@@ -78,16 +78,16 @@ public static class ControlFactory
       return new(text, image, onClick);
    }
 
-   public static SearchResultButton GetSearchResultButton(bool isProvince, int id, Tag tag)
+   public static SearchResultButton GetSearchResultButton(bool isProvince, Province id, Tag tag)
    {
       return new ()
       {
          Margin = new (3),
          Width = 194,
-         Text = isProvince ? Globals.Provinces[id].GetLocalisation() : Globals.Countries[tag].GetLocalisation(),
+         Text = isProvince ? id.GetLocalisation() : Globals.Countries[tag].GetLocalisation(),
          Visible = true,
          IsProvince = isProvince,
-         ProvinceId = id,
+         Province = id,
          CountryTag = tag
       };
    }

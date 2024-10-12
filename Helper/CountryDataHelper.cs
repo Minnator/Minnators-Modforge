@@ -6,20 +6,11 @@ namespace Editor.Helper
    public static class CountryDataHelper
    {
 
-      public static List<int> GetAllVisibleCapitals()
+      public static List<Province> GetAllVisibleCapitals()
       {
-         var capitals = new List<int>();
+         var capitals = new List<Province>();
          foreach (var country in Globals.Countries.Values)
          {
-            if (country.Capital == 2297)
-            {
-               foreach (var id in Globals.LandProvinces)
-               {
-                  if (Globals.Provinces[id].Owner == country.Tag)
-                     Debug.WriteLine($"{country.Tag} owns {id}");
-               }
-            }
-
             if (country.Exists)
                capitals.Add(country.Capital);
          }

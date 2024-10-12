@@ -61,20 +61,6 @@ public class MapDrawing
          DrawPixels(province.Borders, color);
    }
 
-   public static void DrawOnMap(ICollection<int> ids, Func<int, int> func, PixelsOrBorders pixelOrBorders)
-   {
-      if (ids.Count == 0)
-         return;
-
-      if (ids.Count > Environment.ProcessorCount)
-         DrawProvincesParallel(ids, func, pixelOrBorders);
-      else
-         foreach (var id in ids)
-            if (pixelOrBorders == PixelsOrBorders.Pixels)
-               DrawPixels(Globals.Provinces[id].Pixels, func(id));
-            else
-               DrawPixels(Globals.Provinces[id].Borders, func(id));
-   }
 
    /// <summary>
    /// BGRA fromat
@@ -108,19 +94,7 @@ public class MapDrawing
       });
    }
 
-
-   // Invalidation rects needs to bet taken care of
-   private static void DrawProvincesParallel(ICollection<int> ids, Func<int, int> func, PixelsOrBorders pixelsOrBorders)
-   {
-      Parallel.ForEach(ids, id => // Cpu core affinity?
-      {
-         if (pixelsOrBorders == PixelsOrBorders.Pixels)
-            DrawPixels(Globals.Provinces[id].Pixels, func.Invoke(id));
-         else
-            DrawPixels(Globals.Provinces[id].Borders, func.Invoke(id));
-      });
-   }
-
+   
    /// <summary>
    /// 32 bpp
    /// </summary>
@@ -179,7 +153,7 @@ public class MapDrawing
       }
    }
 
-   public static void DrawCapitals(List<int> ids)
+   public static void DrawCapitals(List<Province> ids)
    {
 
    }
@@ -193,7 +167,7 @@ public class MapDrawing
       //TODO: Implement
    }
 
-   public static void DrawStripes(int color, List<int> ids) //Point[] stripes
+   public static void DrawStripes(int color, List<Province> provinces) //Point[] stripes
    {
       //TODO: Implement
    }
@@ -203,7 +177,7 @@ public class MapDrawing
 
    }
 
-   public static void WriteOnProvince(Func<int, string> method)
+   public static void WriteOnProvince(Func<Province, string> method)
    {
 
    }

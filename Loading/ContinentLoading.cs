@@ -30,7 +30,7 @@ public static class ContinentLoading
       foreach (Match match in matches)
       {
          var name = match.Groups["name"].Value;
-         var provinces = Parsing.GetIntListFromString(match.ToString());
+         var provinces = Parsing.GetProvincesFromString(match.ToString());
          continentDictionary.Add(name, new (name, provinces){Color = Globals.ColorProvider.GetRandomColor()});
 
          foreach (var provinceId in continentDictionary[name].Provinces)

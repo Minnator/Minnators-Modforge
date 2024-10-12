@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.Helper;
 using Editor.Loading;
@@ -19,14 +20,13 @@ public sealed class ProvinceMapMode : MapMode
       return "Provinces";
    }
 
-   public override int GetProvinceColor(int provinceId)
+   public override int GetProvinceColor(Province provinceId)
    {
-      return Globals.Provinces[provinceId].Color.ToArgb();
+      return provinceId.Color.ToArgb();
    }
 
-   public override string GetSpecificToolTip(int provinceId)
+   public override string GetSpecificToolTip(Province provinceId)
    {
-      var province = Globals.Provinces[provinceId];
-      return $"Province: {province.Id} ({province.GetLocalisation()})";
+      return $"Province: {provinceId.Id} ({provinceId.GetLocalisation()})";
    }
 }

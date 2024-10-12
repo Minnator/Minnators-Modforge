@@ -1,11 +1,13 @@
-﻿namespace Editor.DataClasses.MapModes
+﻿using Editor.DataClasses.GameDataClasses;
+
+namespace Editor.DataClasses.MapModes
 {
    public class ColonialRegionsMapMode : MapMode
    {
       public override bool IsLandOnly => true;
       public override bool ShowOccupation => false;
 
-      public override int GetProvinceColor(int id)
+      public override int GetProvinceColor(Province id)
       {
          foreach (var cr in Globals.ColonialRegions.Values)
             if (cr.Provinces.Contains(id))
@@ -18,7 +20,7 @@
          return "Colonial Regions";
       }
 
-      public override string GetSpecificToolTip(int provinceId)
+      public override string GetSpecificToolTip(Province provinceId)
       {
          foreach (var cr in Globals.ColonialRegions.Values)
             if (cr.Provinces.Contains(provinceId))

@@ -24,7 +24,7 @@ namespace Editor.DataClasses.ConsoleCommands
             return;
          }
 
-         if (!int.TryParse(args[1], out var id) ||! Globals.Provinces.TryGetValue(id, out var province))
+         if (!int.TryParse(args[1], out var id) ||! Globals.ProvinceIdToProvince.TryGetValue(id, out var province))
          {
             Output.WriteError($"Invalid province ID [{args[1]}]; can not analyze!");
             return;
@@ -43,7 +43,7 @@ namespace Editor.DataClasses.ConsoleCommands
       private static void AnalyzeProvince(Province province, string attribute, out AnalyzerFeeback feedback)
       {
          var analyzer = AnalyzerFacotry.GetAnalyzer(attribute);
-         analyzer.AnalyzeProvince(province.Id, out feedback);
+         analyzer.AnalyzeProvince(province, out feedback);
       }
    }
 }

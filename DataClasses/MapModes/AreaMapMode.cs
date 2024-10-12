@@ -1,4 +1,5 @@
-﻿using Editor.DataClasses.MapModes;
+﻿using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.MapModes;
 using Editor.Events;
 using Editor.Helper;
 
@@ -17,7 +18,7 @@ public sealed class AreaMapMode : MapMode
       return "Areas";
    }
 
-   public override int GetProvinceColor(int id)
+   public override int GetProvinceColor(Province id)
    {
       if (Globals.Provinces.TryGetValue(id, out var province))
          if (Globals.Areas.TryGetValue(province.Area, out var area))
@@ -25,7 +26,7 @@ public sealed class AreaMapMode : MapMode
       return Color.DarkGray.ToArgb();
    }
 
-   public override string GetSpecificToolTip(int provinceId)
+   public override string GetSpecificToolTip(Province provinceId)
    {
       if (Globals.Provinces.TryGetValue(provinceId, out var province))
          if (Globals.Areas.TryGetValue(province.Area, out var area))

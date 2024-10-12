@@ -21,7 +21,7 @@ namespace Editor.Controls
       {
          base.OnSelectedIndexChanged(e);
          OnDataChanged?.Invoke(this, new (Selection.GetSelectedProvinces, Text));
-         OnCollectionDataChanged?.Invoke(this, new (Text, Selection.GetSelectedProvincesIds));
+         OnCollectionDataChanged?.Invoke(this, new (Text, Selection.GetSelectedProvinces));
       }
 
       public void ReplaceItems(List<string> items)

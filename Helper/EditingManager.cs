@@ -40,7 +40,7 @@ namespace Editor.Helper
       public static List<Province> GetModifiedProvinces()
       {
          List<Province> modifiedProvinces = [];
-         foreach (var province in Globals.Provinces.Values)
+         foreach (var province in Globals.Provinces)
          {
             if (province.Status == ProvinceStatus.Modified)
                modifiedProvinces.Add(province);
@@ -51,7 +51,7 @@ namespace Editor.Helper
       public static List<Province> GetProvincesWithStatus(ProvinceStatus status)
       {
          List<Province> provinces = [];
-         foreach (var province in Globals.Provinces.Values)
+         foreach (var province in Globals.Provinces)
             if (province.Status == status) 
                provinces.Add(province);
          return provinces;
@@ -60,7 +60,7 @@ namespace Editor.Helper
       public static List<Province> GetProvincesWithoutStatus(ProvinceStatus status)
       {
          List<Province> provinces = [];
-         foreach (var province in Globals.Provinces.Values)
+         foreach (var province in Globals.Provinces)
             if (province.Status != status) 
                provinces.Add(province);
          return provinces;

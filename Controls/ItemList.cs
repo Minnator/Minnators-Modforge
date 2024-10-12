@@ -170,8 +170,8 @@ namespace Editor.Controls
                return $"{Item} ({Localisation.GetLoc(Item)})";
             case ItemTypes.Id:
                if (int.TryParse(Item, out var id))
-                  if (Globals.Provinces.ContainsKey(id))
-                     return $"{Item} ({Globals.Provinces[id].GetLocalisation()})";
+                  if (Globals.ProvinceIdToProvince.TryGetValue(id, out var prov))
+                     return $"{Item} ({prov.GetLocalisation()})";
                return Item;
             default:
                throw new ArgumentOutOfRangeException();

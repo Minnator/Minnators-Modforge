@@ -159,7 +159,7 @@ namespace Editor.Loading
                   break;
                case "capital":
                   if (int.TryParse(val, out var value))
-                     country.Capital = value;
+                     country.Capital = Globals.ProvinceIdToProvince[value];
                   else
                      Globals.ErrorLog.Write($"Invalid capital in {country.Tag}: {val}");
                   break;

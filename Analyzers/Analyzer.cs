@@ -1,11 +1,12 @@
 ﻿using System.Text;
+using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.Analyzers
 {
    internal interface IAnalyzer
    {
-      public void AnalyzeProvince(int id, out AnalyzerFeeback feedback);
-      public void AnalyzeCountry(int id, out AnalyzerFeeback feedback);
+      public void AnalyzeProvince(Province id, out AnalyzerFeeback feedback);
+      public void AnalyzeCountry(Province id, out AnalyzerFeeback feedback);
       public void AnalyzeAllProvinces(out AnalyzerFeeback feedback);
       public void AnalyzeAllCountries(out AnalyzerFeeback feedback);
       public string GetAnalyzerName();

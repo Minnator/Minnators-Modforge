@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 
 namespace Editor.Loading;
@@ -21,14 +22,14 @@ public static class DefaultMapLoading
       // Regex could be replaced by Parsing.GetElements(0, content) but this is faster
       const string pattern = @"\bmax_provinces\b\s+=\s+(?<maxProv>\d*)\s*\bsea_starts\b\s+=\s+{(?<seaProvs>[^\}]*)}[.\s\S]*\bonly_used_for_random\b\s+=\s+{(?<RnvProvs>[^\}]*)}[.\s\S]*\blakes\b\s+=\s+{(?<LakeProvs>[^\}]*)}[.\s\S]*\bforce_coastal\b\s+=\s+{(?<CostalProvs>[^\}]*)";
 
-      HashSet<int> land = [];
-      HashSet<int> sea = [];
-      HashSet<int> rnv = [];
-      HashSet<int> lake = [];
-      HashSet<int> coastal = [];
+      HashSet<Province> land = [];
+      HashSet<Province> sea = [];
+      HashSet<Province> rnv = [];
+      HashSet<Province> lake = [];
+      HashSet<Province> coastal = [];
 
-      List<int> nonLandProvinces = [];
-      List<int> landProvinces = [];
+      List<Province> nonLandProvinces = [];
+      List<Province> landProvinces = [];
 
       var match = Regex.Match(content, pattern);
 
@@ -37,17 +38,17 @@ public static class DefaultMapLoading
       AddProvincesToDictionary(match.Groups["LakeProvs"].Value, lake);
       AddProvincesToDictionary(match.Groups["CostalProvs"].Value, land);
 
-      foreach (var p in Globals.Provinces.Values)
+      foreach (var p in Globals.Provinces)
       {
-         if (sea.Contains(p.Id) || lake.Contains(p.Id))
+         if (sea.Contains(p) || lake.Contains(p))
          {
-            nonLandProvinces.Add(p.Id);
+            nonLandProvinces.Add(p);
             continue;
          }
-         if ( rnv.Contains(p.Id) || coastal.Contains(p.Id))
+         if ( rnv.Contains(p) || coastal.Contains(p))
             continue;
-         land.Add(p.Id);
-         landProvinces.Add(p.Id);
+         land.Add(p);
+         landProvinces.Add(p);
       }
 
       foreach (var p in rnv)
@@ -62,16 +63,18 @@ public static class DefaultMapLoading
       Globals.SeaProvinces = sea;
       Globals.LakeProvinces = lake;
       Globals.CoastalProvinces = coastal;
-      Globals.NonLandProvinceIds = [.. nonLandProvinces];
+      Globals.NonLandProvinces = [.. nonLandProvinces];
       Globals.LandProvinceIds = [.. landProvinces];
 
       sw.Stop();
       Globals.LoadingLog.WriteTimeStamp("Parsing default.map", sw.ElapsedMilliseconds);
    }
 
-   private static void AddProvincesToDictionary(string provinceList, HashSet<int> hashSet)
+   private static void AddProvincesToDictionary(string provinceList, HashSet<Province> hashSet)
    {
       foreach (var item in Parsing.GetIntListFromString(provinceList))
-         hashSet.Add(item);
+      {
+         hashSet.Add(Globals.ProvinceIdToProvince[item]);
+      }
    }
 }

@@ -11,8 +11,8 @@ namespace Editor.ParadoxLanguage.Scope
 
       public void ApplyEffect(Effect.Effect effect)
       {
-         foreach (var id in area.GetProvinceIds()) 
-            Globals.Provinces[id].ApplyEffect(effect);
+         foreach (var id in area.GetProvinces()) 
+            id.ApplyEffect(effect);
       }
 
       public IScope Rescope(ScopeEffector effector, string scopeType)

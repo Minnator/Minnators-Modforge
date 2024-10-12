@@ -10,7 +10,7 @@ namespace Editor.DataClasses.MapModes
       public override bool IsLandOnly => true;
       public override bool ShowCapitals => true;
       public bool ClearPreviousCoresClaims = false;
-      private List<int> CoresAndClaims = [];
+      private List<Province> CoresAndClaims = [];
 
 
       public DiplomaticMapMode()
@@ -25,11 +25,10 @@ namespace Editor.DataClasses.MapModes
          return "Diplomatic";
       }
 
-      public override string GetSpecificToolTip(int provinceId)
+      public override string GetSpecificToolTip(Province province)
       {
          var tooltip = string.Empty;
 
-         var province = Globals.Provinces[provinceId];
          if (province.Owner != Tag.Empty)
          {
             if (!Globals.Countries.TryGetValue(province.Owner, out var country))
@@ -44,7 +43,7 @@ namespace Editor.DataClasses.MapModes
          return tooltip;
       }
 
-      public override int GetProvinceColor(int id)
+      public override int GetProvinceColor(Province id)
       {
          if (Globals.Provinces.TryGetValue(id, out var province))
             if (province.Owner != Tag.Empty)
@@ -53,7 +52,7 @@ namespace Editor.DataClasses.MapModes
          return Color.DimGray.ToArgb();
       }
 
-      public override void RenderMapMode(Func<int, int> method)
+      public override void RenderMapMode(Func<Province, int> method)
       {
          base.RenderMapMode(method);
          if (ClearPreviousCoresClaims)
@@ -61,14 +60,14 @@ namespace Editor.DataClasses.MapModes
          RenderClaimsAndCores();
       }
 
-      public override void Update(int id, bool invalidate = true)
+      public override void Update(Province id, bool invalidate = true)
       {
          base.Update(id, invalidate);
          if (!ClearPreviousCoresClaims) 
             RenderClaimsAndCores();
       }
 
-      public override void Update(List<int> ids)
+      public override void Update(List<Province> ids)
       {
          var sw = Stopwatch.StartNew();
          base.Update(ids);
@@ -93,15 +92,13 @@ namespace Editor.DataClasses.MapModes
 
          for (var i = claims.Count - 1; i >= 0; i--)
          {
-            var province = Globals.Provinces[claims[i]];
-            if (province.Owner == Selection.SelectedCountry.Tag)
+            if (claims[i].Owner == Selection.SelectedCountry.Tag)
                claims.RemoveAt(i);
          }
 
          for (var i = cores.Count - 1; i >= 0; i--)
          {
-            var province = Globals.Provinces[cores[i]];
-            if (province.Owner == Selection.SelectedCountry.Tag)
+            if (cores[i].Owner == Selection.SelectedCountry.Tag)
                cores.RemoveAt(i);
          }
 

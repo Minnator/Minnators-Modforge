@@ -58,7 +58,7 @@ public class Region(string name) : IProvinceCollection
       }
       if (Globals.State == State.Running)
          if (Globals.Areas.TryGetValue(areaName, out var area))
-            foreach (var id in area.GetProvinceIds())
+            foreach (var id in area.Provinces)
                ProvinceEventHandler.RaiseProvinceRegionAreasChanged(id, _areas, nameof(Areas));
    }
 
@@ -80,6 +80,14 @@ public class Region(string name) : IProvinceCollection
       foreach (var area in Areas)
          provinces.AddRange(Globals.Areas[area].GetProvinceIds());
       return provinces.ToArray();
+   }
+
+   public ICollection<Province> GetProvinces()
+   {
+      var provinces = new List<Province>();
+      foreach (var area in Areas)
+         provinces.AddRange(Globals.Areas[area].GetProvinces());
+      return provinces;
    }
 
    public IProvinceCollection ScopeOut()

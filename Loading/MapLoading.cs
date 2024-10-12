@@ -27,7 +27,7 @@ public static class MapLoading
 
       var (colorToProvId, colorToBorder, adjacency) = MapLoading.LoadMap(Globals.MapPath);
 
-      Optimizer.OptimizeProvinces(provinces, colorToProvId, colorToBorder, image.Width * image.Height);
+      Optimizer.OptimizeProvinces(ref provinces, colorToProvId, colorToBorder, image.Width * image.Height);
 
       Optimizer.OptimizeAdjacencies(adjacency);
    }

@@ -15,7 +15,7 @@ namespace Editor.DataClasses.GameDataClasses
          Color = Color.Empty;
       }
 
-      public TradeCompany(string codeName, string genericName, string specificName, int[] provinces, Color color)
+      public TradeCompany(string codeName, string genericName, string specificName, List<Province> provinces, Color color)
       {
          CodeName = codeName;
          GenericName = genericName;
@@ -29,12 +29,20 @@ namespace Editor.DataClasses.GameDataClasses
       public string CodeName { get; init; }
       public string GenericName { get; set; }
       public string SpecificName { get; set; }
-      public HashSet<int> Provinces { get; set; }
+      public HashSet<Province> Provinces { get; set; }
       public Color Color { get; set; }
 
       public int[] GetProvinceIds()
       {
-         return Provinces.ToArray();
+         List<int> provinces = [];
+         foreach (var province in Provinces)
+            provinces.Add(province.Id);
+         return [..provinces];
+      }
+
+      public ICollection<Province> GetProvinces()
+      {
+         throw new NotImplementedException();
       }
 
       public IProvinceCollection? ScopeOut()

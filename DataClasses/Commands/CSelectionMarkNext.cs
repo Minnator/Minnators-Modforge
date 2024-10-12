@@ -1,14 +1,15 @@
 ﻿using System.Diagnostics;
 using Editor.Controls;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 
 namespace Editor.Commands;
 
 public class CSelectionMarkNext : ICommand
 {
-   private readonly int _provinceId;
-   private int[] _selectedProvinces = null!;
-   public CSelectionMarkNext(int provinceId, bool executeOnInit = true)
+   private readonly Province _provinceId;
+   private Province[] _selectedProvinces = null!;
+   public CSelectionMarkNext(Province provinceId, bool executeOnInit = true)
    {
       _provinceId = provinceId;
 
@@ -18,8 +19,8 @@ public class CSelectionMarkNext : ICommand
 
    public void Execute()
    {
-      _selectedProvinces = [.. Selection.GetSelectedProvincesIds];
-      Selection.AddProvinceToSelection(Globals.Provinces[_provinceId], true);
+      _selectedProvinces = [.. Selection.GetSelectedProvinces];
+      Selection.AddProvinceToSelection(_provinceId, true);
    }
 
    public void Undo()
@@ -33,5 +34,5 @@ public class CSelectionMarkNext : ICommand
       Execute();
    }
 
-   public string GetDescription() => $"Mark province [{Globals.Provinces[_provinceId].GetLocalisation()}] as selected";
+   public string GetDescription() => $"Mark province [{_provinceId.GetLocalisation()}] as selected";
 }

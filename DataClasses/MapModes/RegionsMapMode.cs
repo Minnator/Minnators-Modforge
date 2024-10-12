@@ -1,4 +1,5 @@
-﻿using Editor.DataClasses.MapModes;
+﻿using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.MapModes;
 using Editor.Events;
 using Editor.Helper;
 
@@ -16,7 +17,7 @@ public sealed class RegionsMapMode : MapMode
       return "Regions";
    }
 
-   public override int GetProvinceColor(int id)
+   public override int GetProvinceColor(Province id)
    {
       if (Globals.Provinces.TryGetValue(id, out var province))
          if (Globals.Areas.TryGetValue(province.Area, out var areas))
@@ -25,12 +26,11 @@ public sealed class RegionsMapMode : MapMode
       return Color.DarkGray.ToArgb();
    }
 
-   public override string GetSpecificToolTip(int provinceId)
+   public override string GetSpecificToolTip(Province province)
    {
-      if (Globals.Provinces.TryGetValue(provinceId, out var province))
-         if (Globals.Areas.TryGetValue(province.Area, out var areas))
-            if (Globals.Regions.TryGetValue(areas.Region, out var region))
-               return $"Region: {region.Name} ({Localisation.GetLoc(region.Name)})";
+      if (Globals.Areas.TryGetValue(province.Area, out var areas))
+         if (Globals.Regions.TryGetValue(areas.Region, out var region))
+            return $"Region: {region.Name} ({Localisation.GetLoc(region.Name)})";
       return "Region: [Unknown]";
    }
 }

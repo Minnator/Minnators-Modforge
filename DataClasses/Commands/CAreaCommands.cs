@@ -7,12 +7,12 @@ namespace Editor.DataClasses.Commands
    public class CModifyExitingArea : ICommand
    {
       private readonly string _areaName;
-      private readonly List<int> _deltaProvinces;
+      private readonly List<Province> _deltaProvinces;
       private readonly bool _add;
-      private readonly List<KeyValuePair<int, string>> _oldAreasPerId = [];
+      private readonly List<KeyValuePair<Province, string>> _oldAreasPerId = [];
 
 
-      public CModifyExitingArea(string areaName, List<int> deltaProvinces, bool add, bool executeOnInit = true)
+      public CModifyExitingArea(string areaName, List<Province> deltaProvinces, bool add, bool executeOnInit = true)
       {
          _areaName = areaName;
          _deltaProvinces = deltaProvinces;
@@ -63,7 +63,7 @@ namespace Editor.DataClasses.Commands
 
          foreach (var kvp in _oldAreasPerId)
          {
-            if (!Globals.Provinces.TryGetValue(kvp.Key, out var province))
+            if (!Globals.ProvinceIdToProvince.TryGetValue(kvp.Key, out var province))
                continue;
             province.Area = kvp.Value;
             if (Globals.Areas.TryGetValue(kvp.Value, out var oldArea))
@@ -85,11 +85,11 @@ namespace Editor.DataClasses.Commands
    public class CCreateNewArea : ICommand
    {
       private readonly string _areaName;
-      private readonly List<int> _provinces;
-      private readonly List<KeyValuePair<int, string>> _oldAreasPerId = [];
+      private readonly List<Province> _provinces;
+      private readonly List<KeyValuePair<Province, string>> _oldAreasPerId = [];
       private ComboBox _comboBox;
 
-      public CCreateNewArea(string areaName, List<int> provinces, ComboBox comboBox, bool executeOnInit = true)
+      public CCreateNewArea(string areaName, List<Province> provinces, ComboBox comboBox, bool executeOnInit = true)
       {
          _areaName = areaName;
          _provinces = provinces;

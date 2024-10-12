@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Security.Policy;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 
@@ -10,14 +11,15 @@ public static class Optimizer
    // Optimizes the provinces by copying the pixels and borders to one large array each and only saving pointers in the provinces
    // to where their points start and end. Also calculates the bounds of the provinces.
    // This allows for duplicate points in the BorderPixels array but increases performance.
-   public static void OptimizeProvinces(Province[] provinces, ConcurrentDictionary<Color, List<Point>> colorToProvId, ConcurrentDictionary<Color, List<Point>> colorToBorder, int pixelCount)
+   public static void OptimizeProvinces(ref Province[] provinces, ConcurrentDictionary<Color, List<Point>> colorToProvId, ConcurrentDictionary<Color, List<Point>> colorToBorder, int pixelCount)
    {
       var sw = new Stopwatch();
       sw.Start();
       var pixels = new Point[pixelCount];
       var borders = new Point[colorToBorder.Values.Sum(list => list.Count)];
       var dic = new Dictionary<Color, int>(provinces.Length);
-      var provs = new Dictionary<int, Province>(provinces.Length);
+      var dictionary = new Dictionary<int, Province>(provinces.Length);
+      var provs = new HashSet<Province>(provinces.Length);
 
       var pixelPtr = 0;
       var borderPtr = 0;
@@ -27,6 +29,7 @@ public static class Optimizer
          var color = Color.FromArgb(province.Color.R, province.Color.G, province.Color.B);
          dic[color] = province.Id;
 
+         dictionary.Add(province.Id, province);
 
          //copy the pixels of the province to the pixel array
          if (!colorToProvId.ContainsKey(color))
@@ -66,7 +69,8 @@ public static class Optimizer
          Array.Copy(borders, province.BorderPtr, province.Borders, 0, province.BorderCnt);
          // add the province to the dictionary
          // add the province to the dictionary
-         provs.Add(province.Id, province);
+
+         provs.Add(province);
 
          //copy the borders of the province to the border array
       }
@@ -81,6 +85,7 @@ public static class Optimizer
       Globals.BorderPixels = borders;
       Globals.Pixels = pixels;
       Globals.Provinces = provs;
+      Globals.ProvinceIdToProvince = dictionary;
       Globals.ColorToProvId = dic;
 
       // Free up memory from the ConcurrentDictionaries
@@ -108,7 +113,7 @@ public static class Optimizer
    {
       var sw = new Stopwatch();
       sw.Start();
-      var adjacencyList = new Dictionary<int, int[]>(Globals.Provinces.Count);
+      var adjacencyList = new Dictionary<Province, Province[]>(Globals.Provinces.Count);
 
       /*foreach (var kvp in colorToAdj) 
       {
@@ -120,25 +125,26 @@ public static class Optimizer
 
       foreach (var adjacent in colorToAdj)
       {
-         var adjIds = new int[adjacent.Value.Count];
+         var adjIds = new Province[adjacent.Value.Count];
          var cnt = 0;
          foreach (var color in adjacent.Value)
          {
             if (Globals.ColorToProvId.TryGetValue(color, out var value))
-               adjIds[cnt++] = value;
+               adjIds[cnt++] = Globals.ProvinceIdToProvince[value];
             else
                Globals.ErrorLog.Write($"Could not find definition for color {color}!");
          }
 
          if (Globals.ColorToProvId.TryGetValue(adjacent.Key, out var key))
-            adjacencyList[key] = adjIds;
+            adjacencyList[Globals.ProvinceIdToProvince[key]] = adjIds;
          else
             Globals.ErrorLog.Write($"Could not find province with color {adjacent.Key}");
       }
 
       sw.Stop();
       //Debug.WriteLine($"Adjacency calculation took {sw.ElapsedMilliseconds}ms");
-      Globals.LoadingLog.WriteTimeStamp("Adjacency optimization", sw.ElapsedMilliseconds); Globals.AdjacentProvinces = adjacencyList;
+      Globals.LoadingLog.WriteTimeStamp("Adjacency optimization", sw.ElapsedMilliseconds); 
+      Globals.AdjacentProvinces = adjacencyList;
 
       // Free up memory from the ConcurrentDictionary
       colorToAdj.Clear();

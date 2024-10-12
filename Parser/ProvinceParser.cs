@@ -44,7 +44,7 @@ public static class ProvinceParser
          return;
       }
 
-      if (!Globals.Provinces.TryGetValue(id, out var province))
+      if (!Globals.ProvinceIdToProvince.TryGetValue(id, out var province))
       {
          Globals.ErrorLog.Write($"Could not find province with id {id}");
          return;

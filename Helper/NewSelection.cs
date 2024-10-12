@@ -100,7 +100,7 @@ public static class Selection
    public static Country SelectedCountry => _lastSelectedCountry;
    private static HashSet<Country> _selectedCountries = []; // Use later when multiple countries can be selected and edited at once
    private static Country _lastSelectedCountry = Country.Empty;
-   public static List<int> SelectionCoresAndClaims { get; set; } = [];
+   public static List<Province> SelectionCoresAndClaims { get; set; } = [];
 
    // Events
    public static event EventHandler<List<Province>> OnProvinceGroupSelected = delegate { };
@@ -122,7 +122,7 @@ public static class Selection
    // ------------ Getters ------------ \\
    public static List<Province> GetSelectedProvinces => _selectedProvinces.ToList();
    public static int[] GetSelectedProvincesIds => _selectedProvinces.Select(p => p.Id).ToArray();
-   public static List<int> SelectionPreview => _selectionPreview.Select(p => p.Id).ToList();
+   public static List<Province> SelectionPreview => [.._selectionPreview];
    public static int Count => _selectedProvinces.Count;
    public static SelectionType GetSelectionType() => _selectionType;
 
@@ -141,7 +141,7 @@ public static class Selection
 
    public static void InvertSelection()
    {
-      var toAdd = Globals.Provinces.Values.Except(_selectedProvinces).ToList();
+      var toAdd = Globals.Provinces.Except(_selectedProvinces).ToList();
       ClearSelection();
       AddProvincesToSelection(toAdd);
    }
@@ -170,32 +170,7 @@ public static class Selection
       MapDrawing.DrawOnMap(provinces, _borderColor, PixelsOrBorders.Borders);
       OnProvinceGroupDeselected(Globals.ZoomControl, provinces);
    }
-
-   // TODO remove this id stuff
-   public static void RemoveProvincesFromSelection(List<int> provinces)
-   {
-      foreach (var id in provinces)
-      {
-         if (!Globals.Provinces.TryGetValue(id, out var province))
-            continue;
-         RemoveProvinceFromSelection(province, false);
-      }
-
-      OnProvinceGroupDeselected(Globals.ZoomControl, provinces.Select(id => Globals.Provinces[id]).ToList());
-   }
-
-   public static void AddProvincesToSelection(ICollection<int> provinces, bool deselectSelected = false)
-   {
-      foreach (var id in provinces)
-      {
-         if (!Globals.Provinces.TryGetValue(id, out var province))
-            continue;
-         AddProvinceToSelection(province, deselectSelected, false);
-      }
-
-      OnProvinceGroupSelected(Globals.ZoomControl, provinces.Select(id => Globals.Provinces[id]).ToList());
-   }
-
+   
    public static void AddProvincesToSelection(ICollection<Province> provinces, bool deselectSelected = false)
    {
       if (deselectSelected)
@@ -243,7 +218,7 @@ public static class Selection
 
    public static void FocusSelection()
    {
-      var bounds = Geometry.GetBounds(GetSelectedProvincesIds.ToList()); // TODO no more ids
+      var bounds = Geometry.GetBounds(GetSelectedProvinces.ToList()); // TODO no more ids
       Globals.ZoomControl.FocusOn(bounds);
    }
 
@@ -361,9 +336,14 @@ public static class Selection
       var coords = Globals.ZoomControl.ConvertCoordinates(point, out var isValid);
       if (!isValid)
          return false;
-      
-      return !(!Globals.ColorToProvId.TryGetValue(Globals.MapModeManager.IdMapMode.Bitmap.GetPixel(coords.X, coords.Y), out var id) ||
-             !Globals.Provinces.TryGetValue(id, out province!));
+
+      if (!(!Globals.ColorToProvId.TryGetValue(Globals.MapModeManager.IdMapMode.Bitmap.GetPixel(coords.X, coords.Y), out var id) 
+            || !Globals.ProvinceIdToProvince.TryGetValue(id, out province!)))
+      {
+         return true;
+      }
+
+      return false;
 
    }
 
@@ -595,7 +575,7 @@ public static class Selection
       HoverProvince(province);
 
       if (ShowToolTip)
-         MapToolTip.SetToolTip(Globals.ZoomControl, ToolTipBuilder.BuildToolTip(Globals.ToolTipText, LastHoveredProvince.Id));
+         MapToolTip.SetToolTip(Globals.ZoomControl, ToolTipBuilder.BuildToolTip(Globals.ToolTipText, LastHoveredProvince));
       Globals.MapWindow.UpdateHoveredInfo(province);
       Globals.MapWindow.SetEditingMode();
       Globals.ZoomControl.Invalidate();
@@ -702,7 +682,7 @@ public static class Selection
    private static void EnterLassoSelection(Point point)
    {
       Globals.ZoomControl.CanZoom = false;
-      _remainingProvinces = [.. Globals.Provinces.Values];
+      _remainingProvinces = [.. Globals.Provinces];
       _selectionType = SelectionType.Lasso;
       _lassoTruePoints.Add(point);
       _lassoConvertedPoints.Add(Globals.ZoomControl.ConvertCoordinates(point, out _));

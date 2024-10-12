@@ -27,7 +27,7 @@ namespace Editor.Helper
          return uniqueAreaNames;
       }
 
-      public static List<int> GetProvincesWithAttribute(string attribute, object value, bool onlyLandProvinces = true)
+      public static List<Province> GetProvincesWithAttribute(string attribute, object value, bool onlyLandProvinces = true)
       {
          if (onlyLandProvinces)
             return GetLandProvincesWithAttribute(attribute, value);
@@ -36,23 +36,23 @@ namespace Editor.Helper
          return provinces;
       }
 
-      public static List<int> GetProvincesWithAttribute(ProvAttrGet attribute, object value, bool onlyLandProvinces = true)
+      public static List<Province> GetProvincesWithAttribute(ProvAttrGet attribute, object value, bool onlyLandProvinces = true)
       {
          return GetProvincesWithAttribute(attribute.ToString(), value, onlyLandProvinces);
       }
 
-      private static List<int> GetLandProvincesWithAttribute(string attribute, object value)
+      private static List<Province> GetLandProvincesWithAttribute(string attribute, object value)
       {
-         List<int> provinces = [];
-         foreach (var id in Globals.LandProvinceIds)
+         List<Province> provinces = [];
+         foreach (var id in Globals.LandProvinces)
             if (HasAttribute(id, attribute, value)) 
                provinces.Add(id);
          return provinces;
       }
 
-      private static bool HasAttribute(int id, string attribute, object value)
+      private static bool HasAttribute(Province province, string attribute, object value)
       {
-         var attr = Globals.Provinces[id].GetAttribute(attribute)!;
+         var attr = province.GetAttribute(attribute)!;
          var val = value.ToString();
          if (attr is IList list)
          {
@@ -67,9 +67,9 @@ namespace Editor.Helper
          return false;
       }
 
-      private static List<int> GetSeaProvincesWithAttribute(string attribute, object value)
+      private static List<Province> GetSeaProvincesWithAttribute(string attribute, object value)
       {
-         List<int> provinces = [];
+         List<Province> provinces = [];
          foreach (var id in Globals.SeaProvinces)
             if (HasAttribute(id, attribute, value))
                provinces.Add(id);

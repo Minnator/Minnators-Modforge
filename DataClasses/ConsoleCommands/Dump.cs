@@ -62,7 +62,7 @@ namespace Editor.DataClasses.ConsoleCommands
             }
             if (Directory.Exists(args[3]))
             {
-               if (Globals.Provinces.TryGetValue(id, out var province))
+               if (Globals.ProvinceIdToProvince.TryGetValue(id, out var province))
                {
                   province.DumpHistory(args[3]);
                }
@@ -71,7 +71,7 @@ namespace Editor.DataClasses.ConsoleCommands
             else
             {
                Output.WriteError($"Invalid path [{args[3]}]; Dumping to default: {defaultPath}\n");
-               if (Globals.Provinces.TryGetValue(id, out var province))
+               if (Globals.ProvinceIdToProvince.TryGetValue(id, out var province))
                {
                   province.DumpHistory(defaultPath);
                }

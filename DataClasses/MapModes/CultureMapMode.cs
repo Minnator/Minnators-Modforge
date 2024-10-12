@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Events;
 using Editor.Helper;
 
@@ -13,9 +14,9 @@ public class CultureMapMode : MapMode
 
    public override bool IsLandOnly => true;
 
-   public override int GetProvinceColor(int id)
+   public override int GetProvinceColor(Province id)
    {
-      if (Globals.Cultures.TryGetValue(Globals.Provinces[id].Culture, out var culture))
+      if (Globals.Cultures.TryGetValue(id.Culture, out var culture))
          return culture.Color.ToArgb();
       return Color.DimGray.ToArgb();
    }
@@ -25,9 +26,9 @@ public class CultureMapMode : MapMode
       return "Culture";
    }
 
-   public override string GetSpecificToolTip(int provinceId)
+   public override string GetSpecificToolTip(Province id)
    {
-      if (Globals.Cultures.TryGetValue(Globals.Provinces[provinceId].Culture, out var culture))
+      if (Globals.Cultures.TryGetValue(id.Culture, out var culture))
          return $"Culture: {culture.Name} ({Localisation.GetLoc(culture.Name)})";
       return "Culture: [Unknown]";
    }

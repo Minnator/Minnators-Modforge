@@ -1,4 +1,5 @@
-﻿using Editor.Events;
+﻿using Editor.DataClasses.GameDataClasses;
+using Editor.Events;
 
 namespace Editor.DataClasses.MapModes;
 
@@ -12,11 +13,11 @@ public class AutonomyMapMode : MapMode
       ProvinceEventHandler.OnProvinceLocalAutonomyChanged += UpdateProvince;
    }
 
-   public override int GetProvinceColor(int id)
+   public override int GetProvinceColor(Province id)
    {
       if (Globals.SeaProvinces.Contains(id))
-         return Globals.Provinces[id].Color.ToArgb();
-      return Globals.ColorProvider.GetColorOnGreenRedShade(100, 0, Globals.Provinces[id].LocalAutonomy).ToArgb();
+         return id.Color.ToArgb();
+      return Globals.ColorProvider.GetColorOnGreenRedShade(100, 0, id.LocalAutonomy).ToArgb();
    }
 
    public override string GetMapModeName()
@@ -24,7 +25,7 @@ public class AutonomyMapMode : MapMode
       return "Autonomy";
    }
 
-   public override string GetSpecificToolTip(int provinceId)
+   public override string GetSpecificToolTip(Province provinceId)
    {
       if (Globals.Provinces.TryGetValue(provinceId, out var province))
          return $"Autonomy: [{province.LocalAutonomy}%]";

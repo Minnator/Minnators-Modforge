@@ -96,8 +96,6 @@ namespace Editor.Forms
             str += item.Text + "\n";
 
          Globals.HistoryManager.AddCommand(new CChangeToolTipText(Globals.ToolTipText, str));
-
-         Debug.WriteLine(ToolTipBuilder.BuildToolTip(str, 1));
       }
 
       private void CancelButton_Click(object sender, System.EventArgs e)

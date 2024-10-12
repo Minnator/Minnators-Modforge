@@ -1,4 +1,5 @@
-﻿using Editor.Events;
+﻿using Editor.DataClasses.GameDataClasses;
+using Editor.Events;
 
 namespace Editor.DataClasses.MapModes
 {
@@ -17,18 +18,18 @@ namespace Editor.DataClasses.MapModes
          return "Devastation";
       }
 
-      public override string GetSpecificToolTip(int provinceId)
+      public override string GetSpecificToolTip(Province provinceId)
       {
          if (Globals.Provinces.TryGetValue(provinceId, out var province))
             return $"Devastation: {province.Devastation}";
          return "Devastation: -";
       }
 
-      public override int GetProvinceColor(int id)
+      public override int GetProvinceColor(Province id)
       {
          if (Globals.SeaProvinces.Contains(id))
-            return Globals.Provinces[id].Color.ToArgb();
-         return Globals.ColorProvider.GetColorOnGreenRedShade(100, 0, Globals.Provinces[id].Devastation).ToArgb();
+            return id.Color.ToArgb();
+         return Globals.ColorProvider.GetColorOnGreenRedShade(100, 0, id.Devastation).ToArgb();
       }
    }
 }

@@ -84,6 +84,18 @@ public static partial class Parsing
       return idList;
    }
 
+   public static List<Province> GetProvincesFromString(string str)
+   {
+      var ids = GetIntListFromString(str);
+      List<Province> provinces = [];
+      foreach (var id in ids)
+      {
+         if (Globals.ProvinceIdToProvince.TryGetValue(id, out var province))
+            provinces.Add(province);
+      }
+      return provinces;
+   }
+
    /// <summary>
    /// Returns a list of <c>IElement</c> from a string which contains nested blocks can content elements with the format <c>"Block.name = { Block.Content; Block.Blocks }"</c>.
    /// </summary>

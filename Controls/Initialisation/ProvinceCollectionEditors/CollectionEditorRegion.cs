@@ -11,7 +11,7 @@ namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
          if (!Globals.Regions.TryGetValue(s, out var region))
             return [];
 
-         Selection.AddProvincesToSelection(region.GetProvinceIds());
+         Selection.AddProvincesToSelection(region.GetProvinces());
          if (Globals.MapWindow.FocusSelectionCheckBox.Checked)
             Selection.FocusSelection();
          return region.Areas;

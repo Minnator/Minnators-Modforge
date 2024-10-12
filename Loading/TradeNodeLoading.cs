@@ -83,7 +83,7 @@ namespace Editor.Loading
                node.Color = nodeColor;
                break;
             case "members":
-               node.Members = [..Parsing.GetIntListFromString(block.GetContent)];
+               node.Members = [..Parsing.GetProvincesFromString(block.GetContent)];
                break;
             case "incoming":
                var kvp = Parsing.GetKeyValueList(block.GetContent);
@@ -125,7 +125,7 @@ public static class TradeNodeHelper
       return countries;
    }
 
-   public static TradeNode GetTradeNodeByProvince(int provinceId)
+   public static TradeNode GetTradeNodeByProvince(Province provinceId)
    {
       foreach (var node in Globals.TradeNodes.Values)
          if (node.Members.Contains(provinceId))

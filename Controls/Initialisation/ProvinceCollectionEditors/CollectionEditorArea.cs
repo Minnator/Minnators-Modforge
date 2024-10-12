@@ -25,7 +25,7 @@ namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
          if (!Globals.Areas.TryGetValue(s, out var area))
             return [];
 
-         Globals.HistoryManager.AddCommand(new CModifyExitingArea(s, Selection.GetSelectedProvincesIds.ToList(), b));
+         Globals.HistoryManager.AddCommand(new CModifyExitingArea(s, Selection.GetSelectedProvinces, b));
 
          List<string> provNames = [];
          for (var i = 0; i < area.Provinces.Length; i++)
@@ -35,7 +35,7 @@ namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
 
       public static List<string> CreateNewArea(string s)
       {
-         Globals.HistoryManager.AddCommand(new CCreateNewArea(s, Selection.GetSelectedProvincesIds.ToList(), Globals.MapWindow.AreaEditingGui.ExtendedComboBox));
+         Globals.HistoryManager.AddCommand(new CCreateNewArea(s, Selection.GetSelectedProvinces, Globals.MapWindow.AreaEditingGui.ExtendedComboBox));
 
          List<string> provName = [];
          for (var i = 0; i < Selection.GetSelectedProvinces.Count; i++)
@@ -56,10 +56,10 @@ namespace Editor.Controls.Initialisation.ProvinceCollectionEditors
          if (!Globals.Areas.TryGetValue(s, out _) || !int.TryParse(idStr, out var id))
             return;
 
-         if (!Globals.Provinces.TryGetValue(id, out _))
+         if (!Globals.ProvinceIdToProvince.TryGetValue(id, out var province))
             return;
 
-         Globals.HistoryManager.AddCommand(new CModifyExitingArea(s, [id], false));
+         Globals.HistoryManager.AddCommand(new CModifyExitingArea(s, [province], false));
       }
    }
 }

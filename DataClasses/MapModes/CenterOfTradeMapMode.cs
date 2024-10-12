@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.Events;
 
@@ -16,12 +17,12 @@ public class CenterOfTradeMapMode : MapMode
       ProvinceEventHandler.OnProvinceCenterOfTradeLevelChanged += UpdateProvince;
    }
 
-   public override int GetProvinceColor(int id)
+   public override int GetProvinceColor(Province id)
    {
       if (Globals.SeaProvinces.Contains(id) || Globals.LakeProvinces.Contains(id))
-         return Globals.Provinces[id].Color.ToArgb();
+         return id.Color.ToArgb();
 
-      return Globals.Provinces[id].CenterOfTrade switch
+      return id.CenterOfTrade switch
       {
          0 => Color.DimGray.ToArgb(),
          1 => Color.FromArgb(0, 0, 255).ToArgb(),
@@ -36,7 +37,7 @@ public class CenterOfTradeMapMode : MapMode
       return "Center of Trade";
    }
 
-   public override string GetSpecificToolTip(int provinceId)
+   public override string GetSpecificToolTip(Province provinceId)
    {
       if (Globals.Provinces.TryGetValue(provinceId, out var province))
          return province.CenterOfTrade switch

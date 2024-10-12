@@ -4,10 +4,10 @@ using Editor.Interfaces;
 
 namespace Editor.DataClasses.GameDataClasses;
 #nullable enable
-public class Continent(string name, List<int> provinces) : IProvinceCollection
+public class Continent(string name, List<Province> provinces) : IProvinceCollection
 {
    public string Name { get; } = name;
-   public List<int> Provinces { get; set; } = provinces;
+   public List<Province> Provinces { get; set; } = provinces;
    public Color Color { get; set; }
 
    public override bool Equals(object? obj)
@@ -24,7 +24,17 @@ public class Continent(string name, List<int> provinces) : IProvinceCollection
 
    public int[] GetProvinceIds()
    {
-      return Provinces.ToArray();
+      var ids = new int[Provinces.Count];
+      for (var i = 0; i < Provinces.Count; i++)
+      {
+         ids[i] = Provinces[i].Id;
+      }
+      return ids;
+   }
+
+   public ICollection<Province> GetProvinces()
+   {
+      return Provinces;
    }
 
    public List<IProvinceCollection> ScopeIn()
@@ -32,7 +42,7 @@ public class Continent(string name, List<int> provinces) : IProvinceCollection
       var provs = new List<IProvinceCollection>();
       foreach (var province in Provinces)
       {
-         provs.Add(Globals.Provinces[province]);
+         provs.Add(province);
       }
       return provs;
    }

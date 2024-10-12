@@ -15,7 +15,7 @@ namespace Editor.DataClasses.MapModes
       public override bool IsLandOnly => true;
       public override bool ShowOccupation => true;
 
-      public override int GetProvinceColor(int id)
+      public override int GetProvinceColor(Province id)
       {
          if (Globals.Provinces.TryGetValue(id, out var province))
          {
@@ -32,7 +32,7 @@ namespace Editor.DataClasses.MapModes
          return "Country";
       }
 
-      public override string GetSpecificToolTip(int provinceId)
+      public override string GetSpecificToolTip(Province provinceId)
       {
          if (Globals.Provinces.TryGetValue(provinceId, out var province))
          {
@@ -44,7 +44,7 @@ namespace Editor.DataClasses.MapModes
          return "Country: [Unknown]";
       }
 
-      public override void RenderMapMode(Func<int, int> method)
+      public override void RenderMapMode(Func<Province, int> method)
       {
          base.RenderMapMode(method);
          MapDrawing.DrawAllCapitals(Color.Yellow.ToArgb());

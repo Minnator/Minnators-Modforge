@@ -94,20 +94,20 @@ public static class Geometry
       return new Rectangle(minX, minY, maxX - minX, maxY - minY);
    }
    
-   public static Rectangle GetBounds(List<int> ids)
+   public static Rectangle GetBounds(List<Province> provinces)
    {
       List<Rectangle> rects = [];
-      foreach (var id in ids) 
-         rects.Add(Globals.Provinces[id].Bounds);
+      foreach (var province in provinces) 
+         rects.Add(province.Bounds);
       return GetBounds(rects);
    }
 
    public static Province GetProvinceClosestToPoint(Point point)
    {
-      var closestProvince = Globals.Provinces.Values.First();
+      var closestProvince = Globals.Provinces.First();
       var minDistance = double.MaxValue;
 
-      foreach (var province in Globals.Provinces.Values)
+      foreach (var province in Globals.Provinces)
       {
          var distance = Math.Sqrt(Math.Pow(province.Center.X - point.X, 2) + Math.Pow(province.Center.Y - point.Y, 2));
          if (distance < minDistance)
@@ -151,7 +151,7 @@ public static class Geometry
    public static List<int> GetProvinceIdsInRectangle (Rectangle rect)
    {
       var provinces = new List<int>();
-      foreach (var province in Globals.Provinces.Values)
+      foreach (var province in Globals.Provinces)
       {
          if (RectanglesIntercept(province.Bounds, rect))
             provinces.Add(province.Id);
@@ -162,7 +162,7 @@ public static class Geometry
    public static List<Province> GetProvincesInRectangle(Rectangle rect)
    {
       var provinces = new List<Province>();
-      foreach (var province in Globals.Provinces.Values)
+      foreach (var province in Globals.Provinces)
       {
          if (RectanglesIntercept(province.Bounds, rect))
             provinces.Add(province);
@@ -220,56 +220,56 @@ public static class Geometry
       return [polygon[0], polygon[^1], polygon[^2]];
    }
 
-   public static void GetAllPixelPoints(int[] provinceIds, out Point[] points)
+   public static void GetAllPixelPoints(Province[] provinceIds, out Point[] points)
    {
       var cnt = 0;
       foreach (var p in provinceIds)
       {
-         cnt += Globals.Provinces[p].PixelCnt;
+         cnt += p.PixelCnt;
       }
       points = new Point[cnt];
       var index = 0;
       foreach (var p in provinceIds)
       {
-         var prov = Globals.Provinces[p];
-         Array.Copy(Globals.Pixels, prov.PixelPtr, points, index, prov.PixelCnt);
-         index += prov.PixelCnt;
+         Array.Copy(Globals.Pixels, p.PixelPtr, points, index, p.PixelCnt);
+         index += p.PixelCnt;
       }
    }
 
-   public static void GetAllPixelPtrs(int[] ids, out int[,] ptrs)
+   public static void GetAllPixelPtrs(Province[] ids, out int[,] ptrs)
    {
       ptrs = new int[ids.Length, 2];
       for (var i = 0; i < ids.Length; i++)
       {
-         var prov = Globals.Provinces[ids[i]];
-         ptrs[i, 0] = prov.PixelPtr;
-         ptrs[i, 1] = prov.PixelCnt;
+         ptrs[i, 0] = ids[i].PixelPtr;
+         ptrs[i, 1] = ids[i].PixelCnt;
       }
    }
 
-   public static Point[] GetAllBorderPoints(int[] provinceIds)
+   public static Point[] GetAllBorderPoints(Province[] provinceIds)
    {
       var cnt = 0;
       foreach (var p in provinceIds)
       {
-         cnt += Globals.Provinces[p].BorderCnt;
+         cnt += p.BorderCnt;
       }
       var points = new Point[cnt];
       var index = 0;
       foreach (var p in provinceIds)
       {
-         var prov = Globals.Provinces[p];
-         Array.Copy(Globals.BorderPixels, prov.BorderPtr, points, index, prov.BorderCnt);
-         index += prov.BorderCnt;
+         Array.Copy(Globals.BorderPixels, p.BorderPtr, points, index, p.BorderCnt);
+         index += p.BorderCnt;
       }
       return points;
    }
+
 
    public static List<KeyValuePair<List<int>, Rectangle>> GetProvinceConnectedGroups(List<int> ids)
    {
       //Bfs to get all connected provinces
       List<KeyValuePair<List<int>, Rectangle>> groups = [];
+   
+      /*
       var visited = new HashSet<int>();
 
       foreach (var id in ids)
@@ -305,7 +305,7 @@ public static class Geometry
 
          groups.Add(new(group, bounds));
       }
-
+      */
       return groups;
    }
 
@@ -627,17 +627,17 @@ public static class Geometry
    }
 
 
-   public static List<int> GetAllNeighboringProvinces(List<Province> provinces)
+   public static List<Province> GetAllNeighboringProvinces(List<Province> provinces)
    {
-      var neighboringProvinces = new HashSet<int>();
-      var provinceGroup = new HashSet<int>();
+      var neighboringProvinces = new HashSet<Province>();
+      var provinceGroup = new HashSet<Province>();
 
       foreach (var province in provinces) 
-         provinceGroup.Add(province.Id);
+         provinceGroup.Add(province);
 
       foreach (var province in provinces)
       {
-         foreach (var neighborId in Globals.AdjacentProvinces[province.Id])
+         foreach (var neighborId in Globals.AdjacentProvinces[province])
          {
             if (provinceGroup.Contains(neighborId))
                continue;
@@ -651,18 +651,18 @@ public static class Geometry
    public static List<Tag> GetAllNeighboringCountries(List<Province> provinces)
    {
       var neighboringCountries = new HashSet<Tag>();
-      var provinceGroup = new HashSet<int>();
+      var provinceGroup = new HashSet<Province>();
 
       foreach (var province in provinces) 
-         provinceGroup.Add(province.Id);
+         provinceGroup.Add(province);
 
       foreach (var province in provinces)
       {
-         foreach (var neighborId in Globals.AdjacentProvinces[province.Id])
+         foreach (var neighborId in Globals.AdjacentProvinces[province])
          {
             if (provinceGroup.Contains(neighborId))
                continue;
-            if (Globals.Countries.TryGetValue(Globals.Provinces[neighborId].Controller, out var country))
+            if (Globals.Countries.TryGetValue(neighborId.Controller, out var country))
                neighboringCountries.Add(country.Tag);
          }
       }
@@ -673,7 +673,7 @@ public static class Geometry
    public static List<Province> GetProvinceIdsInRectangles(ICollection<Rectangle> rects)
    {
       var provinces = new HashSet<Province>();
-      foreach (var province in Globals.Provinces.Values)
+      foreach (var province in Globals.Provinces)
       {
          foreach (var rect in rects)
          {
@@ -687,7 +687,7 @@ public static class Geometry
    public static List<Province> GetProvincesInRectanglesWithPixelCheck(ICollection<Rectangle> rects)
    {
       HashSet<Province> provinces = [];
-      foreach (var province in Globals.Provinces.Values)
+      foreach (var province in Globals.Provinces)
       {
          foreach (var rect in rects)
          {
@@ -736,7 +736,7 @@ public static class Geometry
    public static List<int> GetProvinceIdsInRectanglesByCenter(ICollection<Rectangle> rects)
    {
       var provinces = new HashSet<int>();
-      foreach (var province in Globals.Provinces.Values)
+      foreach (var province in Globals.Provinces)
       {
          foreach (var rect in rects)
          {

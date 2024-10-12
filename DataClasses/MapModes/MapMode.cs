@@ -14,7 +14,7 @@ public abstract class MapMode
    public virtual bool ShowCapitals => false;
    public virtual bool BlockDrawingOfCapitals { get; set; } = false;
 
-   public virtual void RenderMapMode(Func<int, int> method)
+   public virtual void RenderMapMode(Func<Province, int> method)
    {
       // TODO optimize this method
       var sw = Stopwatch.StartNew();
@@ -23,17 +23,17 @@ public abstract class MapMode
          if (Globals.MapModeManager.PreviousLandOnly)
          {
             // only update the land provinces
-            MapDrawing.DrawOnMap(Globals.LandProvinceIds, GetProvinceColor, PixelsOrBorders.Pixels);
+            MapDrawing.DrawOnMap(Globals.LandProvinces, GetProvinceColor, PixelsOrBorders.Pixels);
          }
          else
          {
-            MapDrawing.DrawOnMap(Globals.LandProvinceIds, GetProvinceColor, PixelsOrBorders.Pixels);
-            MapDrawing.DrawOnMap(Globals.NonLandProvinceIds, GetSeaProvinceColor, PixelsOrBorders.Pixels);
+            MapDrawing.DrawOnMap(Globals.LandProvinces, GetProvinceColor, PixelsOrBorders.Pixels);
+            MapDrawing.DrawOnMap(Globals.NonLandProvinces, GetSeaProvinceColor, PixelsOrBorders.Pixels);
          }
       }
       else
       {
-         MapDrawing.DrawOnMap(Globals.Provinces.Keys.ToList(), method, PixelsOrBorders.Pixels);
+         MapDrawing.DrawOnMap(Globals.Provinces, method, PixelsOrBorders.Pixels);
       }
       // draw borders on top of the provinces is always needed
       if (ShowOccupation)
@@ -54,22 +54,22 @@ public abstract class MapMode
       return "REPLACE_ME";
    }
 
-   public virtual int GetProvinceColor(int id)
+   public virtual int GetProvinceColor(Province id)
    {
-      return Globals.Provinces[id].Color.ToArgb();
+      return id.Color.ToArgb();
    }
 
-   public virtual int GetSeaProvinceColor(int id)
+   public virtual int GetSeaProvinceColor(Province id)
    {
-      return Globals.Provinces[id].Color.ToArgb();
+      return id.Color.ToArgb();
    }
 
    public virtual void Update(Rectangle rect)
    {
-      Update(Geometry.GetProvinceIdsInRectangle(rect));
+      Update(Geometry.GetProvincesInRectangle(rect));
    }
 
-   public virtual void Update(List<int> ids)
+   public virtual void Update(List<Province> ids)
    {
       if (ids.Count == 0)
          return;
@@ -78,7 +78,7 @@ public abstract class MapMode
       foreach (var id in ids)
       {
          Update(id, false);
-         MapDrawing.DrawOnMap(Globals.Provinces[id], Selection._borderColor, PixelsOrBorders.Borders);
+         MapDrawing.DrawOnMap(id, Selection._borderColor, PixelsOrBorders.Borders);
       }
       BlockDrawingOfCapitals = false;
 
@@ -92,7 +92,7 @@ public abstract class MapMode
    {
       if (Globals.MapModeManager.CurrentMapMode != this)
          return;
-      if (sender is not int id || (IsLandOnly && !Globals.LandProvinces.Contains(id)))
+      if (sender is not Province id || (IsLandOnly && !Globals.LandProvinces.Contains(id)))
          return;
       Update(id);
    }
@@ -109,22 +109,22 @@ public abstract class MapMode
       }
    }
 
-   public virtual void Update(int id, bool invalidate = true)
+   public virtual void Update(Province province, bool invalidate = true)
    {
-      MapDrawing.DrawOnMap(Globals.Provinces[id], GetProvinceColor(id), PixelsOrBorders.Pixels);
+      MapDrawing.DrawOnMap(province, GetProvinceColor(province), PixelsOrBorders.Pixels);
       if (ShowOccupation)
          MapDrawing.DrawOccupations(false);
       if (Globals.Settings.MapModeSettings.ShowCountryCapitals || ShowCapitals)
          MapDrawing.DrawAllCapitals();
       if (invalidate)
       {
-         MapDrawing.DrawOnMap(Globals.Provinces[id], Selection._borderColor, PixelsOrBorders.Borders);
+         MapDrawing.DrawOnMap(province, Selection._borderColor, PixelsOrBorders.Borders);
          Globals.ZoomControl.Invalidate();
       }
       //TODO fix false border drawing
    }
 
-   public virtual string GetSpecificToolTip(int provinceId)
+   public virtual string GetSpecificToolTip(Province provinceId)
    {
       return GetMapModeName();
    }
