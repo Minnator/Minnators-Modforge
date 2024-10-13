@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Drawing.Drawing2D;
 using Editor.Controls;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Events;
@@ -7,7 +8,7 @@ namespace Editor.Helper
 {
    public static class GuiDrawing
    {
-
+      private static Pen _straitPen = new(Color.Red, 2) { DashStyle = DashStyle.Dash };
       private static List<Province> _visibleProvinces = [];
 
       private class MapModePaintEventArgs : EventArgs
@@ -82,6 +83,8 @@ namespace Editor.Helper
             _mapModePaint += OnMapModePaintTradeRoutes;
          if (elements.HasFlag(GuiElements.Captitals))
             _mapModePaint += OnMapModePaintCapitals;
+         if (elements.HasFlag(GuiElements.Straits))
+            _mapModePaint += OnMapModePaintStraits;
       }
 
       private static void RemoveEvents(GuiElements elements)
@@ -90,6 +93,8 @@ namespace Editor.Helper
             _mapModePaint -= OnMapModePaintTradeRoutes;
          if (elements.HasFlag(GuiElements.Captitals)) 
             _mapModePaint -= OnMapModePaintCapitals;
+         if (elements.HasFlag(GuiElements.Straits)) 
+            _mapModePaint -= OnMapModePaintStraits;
       }
 
       private static void GuiPaint(object? _, PaintEventArgs e)
@@ -136,5 +141,27 @@ namespace Editor.Helper
          }
       }
 
+      private static void OnMapModePaintStraits(object _, MapModePaintEventArgs e)
+      {
+         foreach (var strait in Globals.Straits)
+         {
+            if (!e.VisibleProvinces.Contains(strait.From) || !e.VisibleProvinces.Contains(strait.To))
+               continue;
+
+            Point start;
+            if (strait.Start.X == -1 || strait.Start.Y == -1) 
+               start = Globals.ZoomControl.ReverseCoordinate(strait.From.Center);
+            else
+               start = Globals.ZoomControl.ReverseCoordinate(strait.Start);
+
+            Point end;
+            if (strait.End.X == -1 || strait.End.Y == -1) 
+               end = Globals.ZoomControl.ReverseCoordinate(strait.To.Center);
+            else
+               end = Globals.ZoomControl.ReverseCoordinate(strait.End);
+
+            e.Graphics.DrawLine(_straitPen, start, end);
+         }
+      }
    }
 }

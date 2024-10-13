@@ -120,6 +120,8 @@ namespace Editor.Forms.Loadingscreen
             bw.ReportProgress(++progress);
             ScopeParser.GenerateCountryScope();
             bw.ReportProgress(++progress);
+            AdjacenciesLoading.Load();
+            bw.ReportProgress(++progress);
          }
          catch (Exception exception)
          {

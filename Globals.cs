@@ -101,7 +101,7 @@ public static class Globals
       }
    }
    private static int _loadingStage = 0;
-   public const int LOADING_STAGES = 27; // Needs to be increased when adding new loading stages
+   public const int LOADING_STAGES = 28; // Needs to be increased when adding new loading stages
    #endregion
    
    public static ConsoleForm? ConsoleForm = null;
@@ -165,6 +165,7 @@ public static class Globals
    public static Dictionary<int, Province> ColorToProvId = [];
    public static Dictionary<Province, Province[]> AdjacentProvinces = [];
    public static HashSet<Province> Capitals = [];
+   public static HashSet<Strait> Straits = [];
 
    // TechnologyGroups
    public static readonly HashSet<string> TechnologyGroups = [];

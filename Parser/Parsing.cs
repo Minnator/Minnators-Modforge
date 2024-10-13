@@ -312,6 +312,17 @@ public static partial class Parsing
       return strList;
    }
 
+   public static List<string> RemoveAllEmptyLines(ICollection<string> lines)
+   {
+      List<string> nonEmptyLines = [];
+      foreach (var line in lines)
+      {
+         if (!string.IsNullOrWhiteSpace(line))
+            nonEmptyLines.Add(line);
+      }
+      return nonEmptyLines;
+   }
+
    /// <summary>
    /// Returns a list of <c>string</c> from a string which are separated by whitespace.
    /// </summary>
