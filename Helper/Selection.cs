@@ -84,7 +84,7 @@ public static class Selection
    private static HashSet<Province> _highlightedProvinces = [];
 
    public static Province LastHoveredProvince = Province.Empty;
-   public static Province _lastSelectedProvince = Province.Empty;
+   private static HashSet<Province> _hoveredCollection = [];
 
    // Rectangle Selection Variables
    private static Point _rectangleStartPoint = Point.Empty;
@@ -369,6 +369,26 @@ public static class Selection
       LastHoveredProvince = province;
    }
 
+   public static void HoverCollection(ICollection<Province> provinces, Province province)
+   {
+      if (provinces.Count == 0)
+         return;
+
+      ClearHoverCollection();
+      MapDrawing.DrawOnMap(provinces, _hoverColor, Globals.ZoomControl, PixelsOrBorders.Borders);
+      _hoveredCollection.UnionWith(provinces);
+      LastHoveredProvince = province;
+   }
+
+   private static void ClearHoverCollection()
+   {
+      if (_hoveredCollection.Count == 0)
+         return;
+
+      MapDrawing.DrawOnMap(_hoveredCollection, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
+      _hoveredCollection.Clear();
+   }
+
    public static void ClearHover()
    {
       if (LastHoveredProvince == Province.Empty)
@@ -380,6 +400,8 @@ public static class Selection
          MapDrawing.DrawOnMap(LastHoveredProvince, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
 
       LastHoveredProvince = Province.Empty;
+      if (_hoveredCollection.Count > 0)
+         ClearHoverCollection();
    }
 
    #endregion
@@ -526,6 +548,8 @@ public static class Selection
             break;
       }
 
+      if ((Control.ModifierKeys & Keys.Control) != 0 && (Control.ModifierKeys & Keys.Alt) != 0)
+         HoverCollection(e.Location);
    }
 
 
@@ -802,6 +826,7 @@ public static class Selection
             }
 
             _selectionType = selectionType;
+            ClearHoverCollection();
          }
       }
    }
@@ -811,27 +836,44 @@ public static class Selection
       if (!GetProvinceFromMap(point, out var province))
          return;
 
-      switch (_selectionType)
+      AddOrRemoveAllFromSelection(GetProvincesFromCollection(province, _selectionType));
+
+      Globals.ZoomControl.Invalidate();
+   }
+
+   public static void HoverCollection(Point point)
+   {
+
+      if (_selectionType == SelectionType.Province || !GetProvinceFromMap(point, out var province))
+         return;
+
+      HoverCollection(GetProvincesFromCollection(province, _selectionType), province);
+      Globals.ZoomControl.Invalidate();
+   }
+
+   private static ICollection<Province> GetProvincesFromCollection(Province province, SelectionType selectionType)
+   {
+      switch (selectionType)
       {
          case SelectionType.Province:
-            return;
+            return [province];
          case SelectionType.Area:
             if (Globals.Areas.TryGetValue(province.Area, out var area))
-               AddOrRemoveAllFromSelection(area.Provinces);
+               return area.Provinces;
             break;
          case SelectionType.Region:
             if (Globals.Areas.TryGetValue(province.Area, out var area2))
                if (Globals.Regions.TryGetValue(area2.Region, out var region))
-                  AddOrRemoveAllFromSelection(region.GetProvinces());
+                  return region.GetProvinces();
             break;
          case SelectionType.Country:
             if (Globals.Countries.TryGetValue(province.Owner, out var country))
-               AddOrRemoveAllFromSelection(country.GetProvinces());
+               return country.GetProvinces();
             break;
          default:
             throw new ArgumentOutOfRangeException();
       }
 
-      Globals.ZoomControl.Invalidate();
+      return [];
    }
 }
