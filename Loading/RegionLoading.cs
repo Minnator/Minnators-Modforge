@@ -57,6 +57,7 @@ public static class RegionLoading
          {
             Color = Globals.ColorProvider.GetRandomColor()
          };
+         region.CalculateBounds();
          regionDictionary.Add(regionName, region);
 
          foreach (var area in areas)

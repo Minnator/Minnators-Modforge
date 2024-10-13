@@ -1,8 +1,4 @@
-﻿using System.Diagnostics;
-using System.Drawing.Imaging;
-using Editor.Controls;
-using Editor.DataClasses.GameDataClasses;
-using Editor.Events;
+﻿using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.MapModes;
 
@@ -17,17 +13,10 @@ public class MapModeManager
    public bool RequireFullRedraw { get; set; } = true;
 
    public EventHandler<MapMode> MapModeChanged = delegate { };
-   public EventHandler<GlobalEventHandlers.MapModePaintEventArgs> MapModePaint = delegate { };
 
    public MapModeManager()
    {
       InitializeAllMapModes();
-      Globals.ZoomControl.Paint += ZoomControl_Paint;
-   }
-
-   private void ZoomControl_Paint(object? sender, PaintEventArgs e)
-   {
-      MapModePaint.Invoke(this, new (e.Graphics, e.ClipRectangle, Geometry.GetProvincesOnScreen()));
    }
 
    public void InitializeAllMapModes()
@@ -97,7 +86,7 @@ public class MapModeManager
       // REMOVE old event handle form GlobalsEventhandler
       if (CurrentMapMode?.GetMapModeName() == name) 
          return; // no need to change map mode if it is already the same
-      CurrentMapMode?.RemovePaintEvent();
+      CurrentMapMode?.SetInactive();
       CurrentMapMode = GetMapMode(name); 
       CurrentMapMode.SetActive();
       CurrentMapMode.RenderMapMode(CurrentMapMode.GetProvinceColor);

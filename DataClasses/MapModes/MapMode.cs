@@ -133,13 +133,8 @@ public abstract class MapMode
    {
 
    }
-
-   public virtual void PaintEvent(object? sender, GlobalEventHandlers.MapModePaintEventArgs e)
-   {
-
-   }
-
-   public virtual void RemovePaintEvent()
+   
+   public virtual void SetInactive()
    {
 
    }

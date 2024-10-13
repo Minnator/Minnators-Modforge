@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using Editor.Events;
+using Editor.Helper;
 using Editor.Interfaces;
 
 namespace Editor.DataClasses.GameDataClasses;
@@ -10,6 +11,7 @@ public class SuperRegion(string name) : IProvinceCollection
    public string Name { get; } = name;
    private List<string> _regions { get; set; } = [];
    public Color Color { get; set; }
+   public Rectangle Bounds { get; set; } = Rectangle.Empty;
 
    public List<string> Regions => _regions;
 
@@ -17,6 +19,17 @@ public class SuperRegion(string name) : IProvinceCollection
    {
       foreach (var region in regions)
          AddRmvRegion(region, true);
+   }
+
+   public void CalculateBounds()
+   {
+      List<Rectangle> regionBounds = [];
+      foreach (var region in Regions)
+      {
+         if (Globals.Regions.TryGetValue(region, out var regionObj))
+            regionBounds.Add(regionObj.Bounds);
+      }
+      Bounds = Geometry.GetBounds(regionBounds);
    }
 
    public void AddRegion(string region)

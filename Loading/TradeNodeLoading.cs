@@ -115,8 +115,11 @@ namespace Editor.Loading
             case "outgoing":
                var kvp2 = Parsing.GetKeyValueList(block.GetContent);
                for (var index = 0; index < kvp2.Count; index++)
-                  if (kvp2[index].Key.Equals("name")) 
-                     ParseOutgoing(ref node, ref block, kvp2[index].Value);
+                  if (kvp2[index].Key.Equals("name"))
+                  {
+                     Parsing.TrimQuotes(kvp2[index].Value, out var name);
+                     ParseOutgoing(ref node, ref block, name);
+                  }
                
                break;
             default:
@@ -137,7 +140,10 @@ namespace Editor.Loading
             }
             if (subBlock.Name.Equals("control"))
             {
-               outgoing.Control = Parsing.GetPointFList(subBlock.GetContent);
+               foreach(var point in Parsing.GetPointFList(subBlock.GetContent))
+               {
+                  outgoing.Control.Add(point with { Y = Globals.MapHeight - point.Y});
+               }
             }
             else if (subBlock.Name.Equals("path"))
             {

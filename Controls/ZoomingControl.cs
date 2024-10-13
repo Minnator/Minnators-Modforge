@@ -4,8 +4,14 @@ namespace Editor.Controls;
 
 using System.ComponentModel;
 using System.Runtime.InteropServices;
-using static Editor.Controls.GDIHelper;
-using Rectangle = System.Drawing.Rectangle;
+using static GDIHelper;
+using Rectangle = Rectangle;
+
+public class ImagePositionEventArgs(Rectangle oldRect, Rectangle newRect) : EventArgs
+{
+   public Rectangle OldRectangle { get; set; } = oldRect;
+   public Rectangle NewRectangle { get; set; } = newRect;
+}
 
 public sealed class ZoomControl : Control, IDisposable
 {
@@ -28,9 +34,11 @@ public sealed class ZoomControl : Control, IDisposable
    private float _widthCorrected;
    private float _heightCorrected;
 
+   private Rectangle _oldRectange = Rectangle.Empty;
+
    public bool CanZoom = true;
 
-   public EventHandler<EventArgs> OnImagePositionChange = delegate { }; 
+   public EventHandler<ImagePositionEventArgs> ImagePositionChange = delegate { }; 
 
    public ZoomControl(Bitmap bmp)
    {
@@ -84,7 +92,7 @@ public sealed class ZoomControl : Control, IDisposable
       }
    }
 
-   
+   public Rectangle MapRectangle => new(panOffset.X, panOffset.Y, (int)_widthCorrected, (int)_heightCorrected);
 
    // ---------- Pixel Frame Conversions ----------
 
@@ -166,21 +174,7 @@ public sealed class ZoomControl : Control, IDisposable
       var tempdelta = zoomFactor - oldZoom;
       var zoomFactorFactor = tempdelta / (oldZoom * zoomFactor);
       var zoomFactorSqr = tempdelta / (zoomFactor * zoomFactor);
-
-      //var zoomfactordiff = zoomFactor / oldZoom;
-
-      //var mouseConverted = ConvertCoordinates(e.Location, out var _);
-      //var middleConverted = ConvertCoordinates(new(halfWidth, halfHeight), out var _);
-
-      //Debug.WriteLine($"Mouse: {mouseConverted}, Middle: {middleConverted}");
-      //Debug.WriteLine($"Diff: {zoomfactordiff}");
-
-      //panOffset.X = (int)((mouseConverted.X - middleConverted.X) * (1 - 1/zoomfactordiff) - Width/(zoomFactor * 2) + Width/(oldZoom * 2));
-      //panOffset.Y = (int)( - Height/(zoomFactor * 2) + Height/(oldZoom * 2));
-
-      //panOffset.X += (int)(Width / (2 * oldZoom)) - (int)(Width / (2 * zoomFactor)) + (int)((mouseConverted.X - middleConverted.X) * (1 - 1/zoomfactordiff));
-      //panOffset.Y += (int)(Height / (2 * oldZoom)) - (int)(Height / (2 * zoomFactor)) + (int)((mouseConverted.Y - middleConverted.Y) * (1 - 1/zoomfactordiff));
-
+      
       panOffset.X += (int)(halfWidth * zoomFactorFactor + zoomFactorSqr * (point.X - halfWidth));
       panOffset.Y += (int)(halfHeight * zoomFactorFactor + zoomFactorSqr * (point.Y - halfHeight));
 
@@ -227,7 +221,9 @@ public sealed class ZoomControl : Control, IDisposable
       else
          panOffset.X = (int)Math.Max(_limitX, Math.Min(_limitXWidth, panOffset.X));
 
-      OnImagePositionChange.Invoke(this, EventArgs.Empty);
+      var newRect = MapRectangle;
+      ImagePositionChange.Invoke(this, new (_oldRectange, newRect));
+      _oldRectange = newRect;
    }
    public static void DrawStretch(IntPtr hBitmap, Graphics srcGfx, Graphics destGfx, Rectangle srcRect, Rectangle destRect)
    {
@@ -315,12 +311,11 @@ public sealed class ZoomControl : Control, IDisposable
 
    private void ZoomOnPaint(object? sender, PaintEventArgs? e)
    {
-      if (map == null || e == null) return;
+      if (map == null! || e == null) return;
       
-      Rectangle mapRect = new(panOffset.X, panOffset.Y, (int)_widthCorrected, (int)_heightCorrected);
       Rectangle thisRect = new(0, 0, Width, Height);
 
-      DrawStretch(HBitmap, BmpGfx, e.Graphics, mapRect, thisRect);
+      DrawStretch(HBitmap, BmpGfx, e.Graphics, MapRectangle, thisRect);
    }
 
 }

@@ -1,4 +1,5 @@
-﻿using Editor.Interfaces;
+﻿using Editor.Helper;
+using Editor.Interfaces;
 
 namespace Editor.DataClasses.GameDataClasses;
 #nullable enable
@@ -12,6 +13,7 @@ public class Area(string name, Province[] provinces, Color color) : IProvinceCol
    public bool IsStated { get; set; } = false;
    public string Region { get; set; } = string.Empty;
    public Color Color { get; set; } = color;
+   public Rectangle Bounds { get; set; } = Rectangle.Empty;
 
    public override bool Equals(object? obj)
    {
@@ -41,6 +43,11 @@ public class Area(string name, Province[] provinces, Color color) : IProvinceCol
    public IProvinceCollection ScopeOut()
    {
       return Globals.Regions[Region];
+   }
+
+   public void CalculateBounds()
+   {
+      Bounds = Geometry.GetBounds(Provinces.ToList());
    }
 
    public List<IProvinceCollection> ScopeIn()

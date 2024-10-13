@@ -47,7 +47,9 @@ public static class AreaLoading
                provinces.Add(province);
          }
 
-         areaDictionary.Add(areaName, new (areaName, [..provinces], Globals.ColorProvider.GetRandomColor()));
+         Area newArea = new(areaName, [.. provinces], Globals.ColorProvider.GetRandomColor());
+         newArea.CalculateBounds();
+         areaDictionary.Add(areaName, newArea);
 
          foreach (var provinceId in areaDictionary[areaName].Provinces)
             if (Globals.Provinces.TryGetValue(provinceId, out var province)) province.Area = areaName;

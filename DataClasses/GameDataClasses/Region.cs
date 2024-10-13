@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using Editor.Events;
+using Editor.Helper;
 using Editor.Interfaces;
 
 namespace Editor.DataClasses.GameDataClasses;
@@ -9,7 +10,7 @@ public class Region(string name) : IProvinceCollection
 {
    private List<string> _areas = [];
    public string Name { get; } = name;
-
+   public Rectangle Bounds { get; set; } = Rectangle.Empty;
    public List<string> Areas
    {
       get => _areas;
@@ -32,6 +33,17 @@ public class Region(string name) : IProvinceCollection
    public Region(string name, List<string> areas, List<Monsoon> monsoon) : this(name, areas)
    {
       Monsoon = monsoon;
+   }
+
+   public void CalculateBounds()
+   {
+      List<Rectangle> areaBounds = [];
+      foreach (var area in Areas)
+      {
+         if (Globals.Areas.TryGetValue(area, out var areaObj))
+            areaBounds.Add(areaObj.Bounds);
+      }
+      Bounds = Geometry.GetBounds(areaBounds);
    }
 
    public void AddArea(string areaName)
@@ -60,6 +72,7 @@ public class Region(string name) : IProvinceCollection
          if (Globals.Areas.TryGetValue(areaName, out var area))
             foreach (var id in area.Provinces)
                ProvinceEventHandler.RaiseProvinceRegionAreasChanged(id, _areas, nameof(Areas));
+      CalculateBounds();
    }
 
    public override bool Equals(object? obj)

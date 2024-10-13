@@ -105,8 +105,8 @@ namespace Editor
          Globals.LoadingStage++;
 
          StartPosition = FormStartPosition.CenterScreen;
+         Globals.ZoomControl.FocusOn(new (3100, 600), 1f);
          Show();
-         Globals.ZoomControl.FocusOn(new Point(3100, 600), 1f);
 
          // Activate this window
          Activate();
@@ -146,6 +146,7 @@ namespace Editor
          Globals.ZoomControl = new(new(Globals.MapWidth, Globals.MapHeight));
          MainToolstripContainer.ContentPanel.Controls.Add(Globals.ZoomControl);
          Selection.Initialize();
+         GuiDrawing.Initialize();
 
          TopStripLayoutPanel.Controls.Add(DateControl, 4, 0);
          DateControl.OnDateChanged += OnDateChanged;
@@ -777,7 +778,14 @@ namespace Editor
       }
       private void fasdfToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         Globals.ZoomControl.Paint += FunnyPaint;
+         if (GuiDrawing.CurrentElements.HasFlag(GuiDrawing.GuiElements.TradeRoutes))
+         {
+            GuiDrawing.CurrentElements = GuiDrawing.GuiElements.None;
+         }
+         else
+         {
+            GuiDrawing.CurrentElements = GuiDrawing.GuiElements.TradeRoutes;
+         }
       }
 
       public void FunnyPaint(object? sender, PaintEventArgs e)

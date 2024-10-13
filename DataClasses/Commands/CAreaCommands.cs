@@ -54,11 +54,13 @@ namespace Editor.DataClasses.Commands
             }
             area.Provinces = area.Provinces.Except(_deltaProvinces).ToArray();
          }
+
+         area.CalculateBounds();
       }
 
       public void Undo()
       {
-         if (!Globals.Areas.TryGetValue(_areaName, out _))
+         if (!Globals.Areas.TryGetValue(_areaName, out var area))
             return;
 
          foreach (var kvp in _oldAreasPerId)
@@ -69,6 +71,7 @@ namespace Editor.DataClasses.Commands
             if (Globals.Areas.TryGetValue(kvp.Value, out var oldArea))
                oldArea.Provinces = oldArea.Provinces.Union([kvp.Key]).ToArray();
          }
+         area.CalculateBounds();
       }
 
       public void Redo()
@@ -118,6 +121,7 @@ namespace Editor.DataClasses.Commands
          }
 
          _comboBox.Items.Add(_areaName);
+         area.CalculateBounds();
       }
 
       public void Undo()
@@ -195,6 +199,8 @@ namespace Editor.DataClasses.Commands
          _comboBox.AutoCompleteCustomSource.Add(_areaName);
          _comboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
          _comboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+
+
       }
 
       public void Redo()

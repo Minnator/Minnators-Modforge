@@ -35,6 +35,7 @@ public static class SuperRegionLoading
          {
             Color = Globals.ColorProvider.GetRandomColor()
          };
+         sRegion.CalculateBounds();
          Globals.AddSuperRegion(sRegion);
 
          foreach (var region in regions)

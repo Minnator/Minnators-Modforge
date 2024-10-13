@@ -48,7 +48,7 @@ namespace Editor.DataClasses.MapModes
          sb.Append("\t");
          if (node.Outgoing.Count > 0)
             foreach (var outgoing in node.Outgoing)
-               sb.Append($" {outgoing},");
+               sb.Append($" {outgoing.Target},");
          sb.Remove(sb.Length - 1, 1);
          sb.AppendLine();
          sb.AppendLine($"Incoming: ");
@@ -62,35 +62,10 @@ namespace Editor.DataClasses.MapModes
 
       public override void SetActive()
       {
-         Globals.MapModeManager.MapModePaint += PaintEvent;
       }
 
-      public override void PaintEvent(object? sender, GlobalEventHandlers.MapModePaintEventArgs e)
+      public override void SetInactive()
       {
-         foreach (var node in Globals.TradeNodes.Values)
-         {
-            // TODO draw an icon at the location
-
-            foreach (var outgoing in node.Outgoing)
-            {
-               if (outgoing.Control.Count < 3)
-                  continue;
-               var points = new PointF[outgoing.Control.Count];
-               for (var i = 0; i < outgoing.Control.Count; i++)
-               {
-                  points[i] = (Globals.ZoomControl.ReverseCoordinateFloat(outgoing.Control[i]));
-                  points[i].Y = Globals.MapHeight - points[i].Y;
-               }
-
-               e.Graphics.DrawCurve(Pens.BlanchedAlmond, points);
-            }
-         }
-      }
-
-      public override void RemovePaintEvent()
-      {
-         Globals.MapModeManager.MapModePaint -= PaintEvent;
-
       }
    }
 }

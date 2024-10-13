@@ -19,23 +19,4 @@ public static class GlobalEventHandlers
    {
       OnSuperRegionListChanged.Invoke(null, new(name, add));
    }
-
-
-   // ----------- MapModePaintEvent ----------------
-
-   public class MapModePaintEventArgs : EventArgs
-   {
-
-      public Graphics Graphics { get; set; }
-      public Rectangle ClipRectangle { get; set; }
-      public ICollection<Province> VisibleProvinces { get; set; }
-      public MapModePaintEventArgs(Graphics graphics, Rectangle clipRectangle, ICollection<Province> visibleProvinces)
-      {
-         Graphics = graphics;
-         ClipRectangle = clipRectangle;
-         VisibleProvinces = visibleProvinces;
-      }
-   }
-
-
 }

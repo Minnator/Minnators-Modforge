@@ -12,6 +12,7 @@ public static class Geometry
       return r1.X < r2.X + r2.Width && r1.X + r1.Width > r2.X && r1.Y < r2.Y + r2.Height && r1.Y + r1.Height > r2.Y;
    }
 
+   // TODO Rectangle optimzation
    public static ICollection<Province> GetProvincesOnScreen()
    {
       ICollection<Province> provinces = [];
@@ -78,7 +79,7 @@ public static class Geometry
       }
       return new Rectangle(minX, minY, maxX - minX + 1, maxY - minY + 1);
    }
-
+   
    public static Rectangle GetBounds(List<Rectangle> rects)
    {
       if (rects.Count == 0)
@@ -167,6 +168,7 @@ public static class Geometry
       return provinces;
    }
 
+   // TODO optimize using superregion bounds
    public static List<Province> GetProvincesInRectangle(Rectangle rect)
    {
       var provinces = new List<Province>();
@@ -177,7 +179,7 @@ public static class Geometry
       }
       return provinces;
    }
-
+   
    public static List<int> GetProvincesInPolygon(List<Point> polygon)
    {
       var provinces = new List<int>();

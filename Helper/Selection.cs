@@ -61,20 +61,19 @@ public static class Selection
    // [x] Highlight Country (Highlights the given country)
    // [x] Unhighlight Country (DeHighlights the given country)
 
-   // LMB down ==> Select only one province or deselect if already selected
-   // STRG + LMB down ==> Add to selection or remove if already added
-   // SHIFT + LMB down ==> Rectangle Selection
-   // ALT + LMB down ==> Lasso Selection
+   // [x] LMB down ==> Select only one province or deselect if already selected
+   // [x] STRG + LMB down ==> Add to selection or remove if already added
+   // [x] SHIFT + LMB down ==> Rectangle Selection
+   // [x] ALT + LMB down ==> Lasso Selection
 
-   // MMB down ==> Pan
-   // MMB scroll ==> Zoom
+   // [x] MMB down ==> Pan
+   // [x] MMB scroll ==> Zoom
 
-   // STRG + RMB down ==> MarcoSelection interface
+   // [x] STRG + RMB down ==> MarcoSelection interface
 
-   // ALT ==> IProvinceCollection Preview
-   // ALT LMB Click ==> IProvinceCollection Selection
-   // ALT + STRG + LMB Click ==> IProvinceCollection add or remove from selection
-   // ALT + RMB ==> Magic Wand Selection
+   // [x] STRG + ALT ==> IProvinceCollection Preview
+   // [x] ALT + STRG + LMB Click ==> IProvinceCollection add or remove from selection
+   // [ ] ALT + RMB ==> Magic Wand Selection
 
    //( ALT + SHIFT ==> LoadProvince to GUI) LEAST PRIORITY
 
@@ -146,7 +145,6 @@ public static class Selection
       Globals.ZoomControl.MouseUp += ZoomControl_MouseUp;
       Globals.ZoomControl.MouseUp += AdditionalFeatures_MouseUp;
       Globals.ZoomControl.Paint += ZoomControlPaint;
-      Globals.ZoomControl.Click += ZoomControlClick;
 
       Globals.ZoomControl.ContextMenuStrip = SelectionMenuBuilder.GetSelectionMenu();
       Globals.MapWindow.SelectionTypeBox.SelectedIndexChanged += SelectionTypeBox_SelectedIndexChanged;
@@ -386,6 +384,7 @@ public static class Selection
          return;
 
       MapDrawing.DrawOnMap(_hoveredCollection, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
+      RePaintSelection();
       _hoveredCollection.Clear();
    }
 
@@ -418,7 +417,7 @@ public static class Selection
       if (!isValid)
          return false;
 
-      if (Globals.ColorToProvId.TryGetValue(Globals.MapModeManager.IdMapMode.Bitmap.GetPixel(coords.X, coords.Y).ToArgb(), out province) 
+      if (Globals.ColorToProvId.TryGetValue(Globals.MapModeManager.IdMapMode.Bitmap.GetPixel(coords.X, coords.Y).ToArgb(), out province!) 
             && province != Province.Empty)
       {
          return true;
@@ -428,19 +427,11 @@ public static class Selection
 
    }
 
-   public static bool GetIProvinceCollection(Province province, out List<Province> provinces)
-   {
-      // TODO Implement
-      throw new NotImplementedException();
-   }
-
    #endregion
-
-
-
+   
    // ------------ Event Handlers for the ZoomControl ------------ \\
 
-
+   #region Event Handlers
    private static void ZoomControlPaint(object? sender, PaintEventArgs e)
    {
       if (_rectangleSelectionRectangle != Rectangle.Empty && _selectionToolType == SelectionToolType.Rectangle)
@@ -552,6 +543,9 @@ public static class Selection
          HoverCollection(e.Location);
    }
 
+   #endregion
+
+   #region SingleSelection
 
    private static void AddRmvProvinceFromSelection(Point point)
    {
@@ -583,6 +577,10 @@ public static class Selection
       }
       Globals.ZoomControl.Invalidate();
    }
+
+   #endregion
+
+   #region Rectangle Selection
 
    private static void EnterRectangleSelection(Point point)
    {
@@ -640,33 +638,13 @@ public static class Selection
 
       Globals.ZoomControl.Invalidate();
    }
-   
-   private static void ZoomControlClick(object? sender, EventArgs e)
-   {
-   }
 
 
-   private static void HoverProvinceMove(Point point)
-   {
-      var valid = GetProvinceFromMap(point, out var province);
-      if (valid && LastHoveredProvince == province)
-         return;
-      ClearHover();
-      if (!valid)
-      {
-         Globals.ZoomControl.Invalidate();
-         return;
-      }
 
-      // Update the hovered province and redraw with the new selection.
-      HoverProvince(province);
+   #endregion
 
-      if (ShowToolTip)
-         MapToolTip.SetToolTip(Globals.ZoomControl, ToolTipBuilder.BuildToolTip(Globals.ToolTipText, LastHoveredProvince));
-      Globals.MapWindow.UpdateHoveredInfo(province);
-      Globals.MapWindow.SetEditingMode();
-      Globals.ZoomControl.Invalidate();
-   }
+   #region Lasso Selection
+
    private static void LassoSelectionMove(Point point)
    {
       var sw = new Stopwatch();
@@ -744,6 +722,99 @@ public static class Selection
       _lassoConvertedPoints.Add(Globals.ZoomControl.ConvertCoordinates(point, out _));
    }
 
+
+   #endregion
+
+   #region Collection Selection
+   public static void SelectCollection(Point point)
+   {
+      if (!GetProvinceFromMap(point, out var province))
+         return;
+
+      AddOrRemoveAllFromSelection(GetProvincesFromCollection(province, _selectionType));
+
+      Globals.ZoomControl.Invalidate();
+   }
+
+   public static void HoverCollection(Point point)
+   {
+
+      if (_selectionType == SelectionType.Province || !GetProvinceFromMap(point, out var province))
+         return;
+
+      HoverCollection(GetProvincesFromCollection(province, _selectionType), province);
+      Globals.ZoomControl.Invalidate();
+   }
+
+   private static ICollection<Province> GetProvincesFromCollection(Province province, SelectionType selectionType)
+   {
+      switch (selectionType)
+      {
+         case SelectionType.Province:
+            return [province];
+         case SelectionType.Area:
+            if (Globals.Areas.TryGetValue(province.Area, out var area))
+               return area.Provinces;
+            break;
+         case SelectionType.Region:
+            if (Globals.Areas.TryGetValue(province.Area, out var area2))
+               if (Globals.Regions.TryGetValue(area2.Region, out var region))
+                  return region.GetProvinces();
+            break;
+         case SelectionType.Country:
+            if (Globals.Countries.TryGetValue(province.Owner, out var country))
+               return country.GetProvinces();
+            break;
+         default:
+            throw new ArgumentOutOfRangeException();
+      }
+
+      return [];
+   }
+
+   #endregion
+
+   #region MagicWand Selection
+
+   private static void EnterMagicWandSelection(Point point)
+   {
+
+   }
+
+   private static void ExitMagicWandSelection()
+   {
+
+   }
+
+   private static void MagicWandSelectionMove(Point point)
+   {
+
+   }
+
+   #endregion
+
+   private static void HoverProvinceMove(Point point)
+   {
+      var valid = GetProvinceFromMap(point, out var province);
+      if (valid && LastHoveredProvince == province)
+         return;
+      ClearHover();
+      if (!valid)
+      {
+         Globals.ZoomControl.Invalidate();
+         return;
+      }
+
+      // Update the hovered province and redraw with the new selection.
+      HoverProvince(province);
+
+      if (ShowToolTip)
+         MapToolTip.SetToolTip(Globals.ZoomControl, ToolTipBuilder.BuildToolTip(Globals.ToolTipText, LastHoveredProvince));
+      Globals.MapWindow.UpdateHoveredInfo(province);
+      Globals.MapWindow.SetEditingMode();
+      Globals.ZoomControl.Invalidate();
+   }
+   
 
    public static void RemoveProvinceFromPreview(Province province)
    {
@@ -831,49 +902,4 @@ public static class Selection
       }
    }
 
-   public static void SelectCollection(Point point)
-   {
-      if (!GetProvinceFromMap(point, out var province))
-         return;
-
-      AddOrRemoveAllFromSelection(GetProvincesFromCollection(province, _selectionType));
-
-      Globals.ZoomControl.Invalidate();
-   }
-
-   public static void HoverCollection(Point point)
-   {
-
-      if (_selectionType == SelectionType.Province || !GetProvinceFromMap(point, out var province))
-         return;
-
-      HoverCollection(GetProvincesFromCollection(province, _selectionType), province);
-      Globals.ZoomControl.Invalidate();
-   }
-
-   private static ICollection<Province> GetProvincesFromCollection(Province province, SelectionType selectionType)
-   {
-      switch (selectionType)
-      {
-         case SelectionType.Province:
-            return [province];
-         case SelectionType.Area:
-            if (Globals.Areas.TryGetValue(province.Area, out var area))
-               return area.Provinces;
-            break;
-         case SelectionType.Region:
-            if (Globals.Areas.TryGetValue(province.Area, out var area2))
-               if (Globals.Regions.TryGetValue(area2.Region, out var region))
-                  return region.GetProvinces();
-            break;
-         case SelectionType.Country:
-            if (Globals.Countries.TryGetValue(province.Owner, out var country))
-               return country.GetProvinces();
-            break;
-         default:
-            throw new ArgumentOutOfRangeException();
-      }
-
-      return [];
-   }
 }
