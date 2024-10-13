@@ -2,12 +2,20 @@
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.Forms;
+using Editor.Forms.AdvancedSelections;
 using Newtonsoft.Json.Linq;
 
 namespace Editor.Helper;
 
-
+// Could be expanded further with more features
 public enum SelectionType
+{
+   Province,
+   Area,
+   Region,
+   Country
+}
+public enum SelectionToolType
 {
    Lasso,     // Using the lasso tool to select provinces
    Rectangle, // Using the rectangle tool to select provinces
@@ -121,23 +129,27 @@ public static class Selection
    private static int _highlightColor = Color.FromArgb(255, 0, 255, 0).ToArgb();
 
    // Selection State
-   private static SelectionType _selectionType = SelectionType.Single;
+   private static SelectionToolType _selectionToolType = SelectionToolType.Single;
+   private static SelectionType _selectionType = SelectionType.Province;
 
    // ------------ Getters ------------ \\
    public static List<Province> GetSelectedProvinces => _selectedProvinces.ToList();
    public static int[] GetSelectedProvincesIds => _selectedProvinces.Select(p => p.Id).ToArray();
    public static List<Province> SelectionPreview => [.._selectionPreview];
    public static int Count => _selectedProvinces.Count;
-   public static SelectionType GetSelectionType() => _selectionType;
+   public static SelectionToolType GetSelectionType() => _selectionToolType;
 
    public static void Initialize()
    {
       Globals.ZoomControl.MouseDown += ZoomControl_MouseDown;
       Globals.ZoomControl.MouseMove += ZoomControl_MouseMove;
       Globals.ZoomControl.MouseUp += ZoomControl_MouseUp;
+      Globals.ZoomControl.MouseUp += AdditionalFeatures_MouseUp;
       Globals.ZoomControl.Paint += ZoomControlPaint;
       Globals.ZoomControl.Click += ZoomControlClick;
 
+      Globals.ZoomControl.ContextMenuStrip = SelectionMenuBuilder.GetSelectionMenu();
+      Globals.MapWindow.SelectionTypeBox.SelectedIndexChanged += SelectionTypeBox_SelectedIndexChanged;
    }
 
    // ------------ Province Selection Methods ------------ \\
@@ -169,11 +181,11 @@ public static class Selection
       _selectedProvinces.Clear();
    }
 
-   public static void RemoveProvincesFromSelection(List<Province> provinces)
+   public static void RemoveProvincesFromSelection(ICollection<Province> provinces)
    {
       _selectedProvinces.ExceptWith(provinces);
       MapDrawing.DrawOnMap(provinces, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
-      OnProvinceGroupDeselected(Globals.ZoomControl, provinces);
+      OnProvinceGroupDeselected(Globals.ZoomControl, provinces.ToList());
    }
    
    public static void AddProvincesToSelection(ICollection<Province> provinces, bool deselectSelected = false)
@@ -190,6 +202,22 @@ public static class Selection
       }
 
       OnProvinceGroupSelected(Globals.ZoomControl, provinces.ToList());
+   }
+
+   public static void AddOrRemoveAllFromSelection(ICollection<Province> provinces)
+   {
+      var containsAny = false;
+      foreach (var province in provinces)
+      {
+         containsAny = _selectedProvinces.Contains(province);
+         if (containsAny)
+            break;
+      }
+
+      if (containsAny)
+         RemoveProvincesFromSelection(provinces);
+      else
+         AddProvincesToSelection(provinces);
    }
 
    public static void RemoveProvinceFromSelection(Province province, bool fireEvent = true)
@@ -393,9 +421,9 @@ public static class Selection
 
    private static void ZoomControlPaint(object? sender, PaintEventArgs e)
    {
-      if (_rectangleSelectionRectangle != Rectangle.Empty && _selectionType == SelectionType.Rectangle)
+      if (_rectangleSelectionRectangle != Rectangle.Empty && _selectionToolType == SelectionToolType.Rectangle)
          e.Graphics.DrawRectangle(new(Color.White), _rectangleSelectionRectangle);
-      else if (_selectionType == SelectionType.Lasso && _lassoTruePoints.Count > 2)
+      else if (_selectionToolType == SelectionToolType.Lasso && _lassoTruePoints.Count > 2)
       {
          e.Graphics.DrawPolygon(new(Color.White), _lassoTruePoints.ToArray());
       }
@@ -410,7 +438,7 @@ public static class Selection
             switch (Control.ModifierKeys)
             {
                case Keys.Control | Keys.Alt:
-                  // IProvinceCollection Add / rmv Selection
+                  SelectCollection(e.Location);
                   break;
                case Keys.Shift:
                   EnterRectangleSelection(e.Location);
@@ -451,12 +479,12 @@ public static class Selection
    {
       if (e.Button == MouseButtons.Left)
       {
-         switch (_selectionType)
+         switch (_selectionToolType)
          {
-            case SelectionType.Rectangle:
+            case SelectionToolType.Rectangle:
                ExitRectangleSelection();
                break;
-            case SelectionType.Lasso:
+            case SelectionToolType.Lasso:
                ExitLassoSelection();
                break;
          }
@@ -472,13 +500,13 @@ public static class Selection
 
    private static void ZoomControl_MouseMove(object? sender, MouseEventArgs e)
    {
-      switch (_selectionType)
+      switch (_selectionToolType)
       {
-         case SelectionType.Rectangle:
+         case SelectionToolType.Rectangle:
             RectangleMouseMove(e.Location);
             ClearHover();
             break;
-         case SelectionType.Lasso:
+         case SelectionToolType.Lasso:
             if (Globals.ZoomControl.isPanning)
             {
                var delta = _lassoTruePoints[^1].Subtract(e.Location);
@@ -537,7 +565,7 @@ public static class Selection
       Globals.ZoomControl.CanZoom = false;
       if (GetProvinceFromMap(point, out var prov))
          PreviewProvince(prov);
-      _selectionType = SelectionType.Rectangle;
+      _selectionToolType = SelectionToolType.Rectangle;
       Globals.ZoomControl.Invalidate();
 
       _rectangleStartPoint = Globals.ZoomControl.ConvertCoordinates(point, out _);
@@ -552,7 +580,7 @@ public static class Selection
       _selectionPreview.Clear();
       _rectangleStartPoint = Point.Empty;
       _rectangleSelectionRectangle = Rectangle.Empty;
-      _selectionType = SelectionType.Single;
+      _selectionToolType = SelectionToolType.Single;
       Globals.ZoomControl.CanZoom = true;
    }
 
@@ -668,37 +696,6 @@ public static class Selection
             RemoveProvinceFromPreview(prov);
       }
 
-      /*
-      var (fully, intersects) = Geometry.GetProvincesInTriangleWithPixelCheck(ref _lastLassoTriangle, [..Globals.Provinces.Values]);
-
-
-      //Debug.WriteLine($"Intersects: {intersects.Count} | Fully: {fully.Count}\n");
-
-      foreach (var prov in fully)
-      {
-         if (_selectionPreview.Contains(prov))
-            RemoveProvinceFromPreview(prov);
-         else
-            PreviewProvince(prov);
-      }
-      foreach (var prov in intersects)
-      {
-         if (_selectionPreview.Contains(prov))
-         {
-            if (Geometry.IsRectangleInPolygon(_lassoConvertedPoints, prov.Bounds) &&
-              Geometry.IsPointInPolygon(_lassoConvertedPoints, prov.Borders))
-            {
-               RemoveProvinceFromPreview(prov);
-            }
-            else
-            {
-               Globals.ZoomControl.Invalidate();
-               return;
-            }
-         }
-         else
-            PreviewProvince(prov);
-      }*/
       Globals.ZoomControl.Invalidate();
       sw.Stop();
       Debug.WriteLine($"CHecks: {sw.ElapsedTicks} nano seconds");
@@ -706,7 +703,7 @@ public static class Selection
    private static void ExitLassoSelection()
    {
       AddProvincesToSelection([.. _selectionPreview]);
-      _selectionType = SelectionType.Single;
+      _selectionToolType = SelectionToolType.Single;
       _selectionPreview.Clear();
       _lassoTruePoints.Clear();
       _lassoConvertedPoints.Clear();
@@ -718,7 +715,7 @@ public static class Selection
    {
       Globals.ZoomControl.CanZoom = false;
       _remainingProvinces = [.. Globals.Provinces];
-      _selectionType = SelectionType.Lasso;
+      _selectionToolType = SelectionToolType.Lasso;
       _lassoTruePoints.Add(point);
       _lassoConvertedPoints.Add(Globals.ZoomControl.ConvertCoordinates(point, out _));
    }
@@ -761,5 +758,80 @@ public static class Selection
          }
       }
       return result != null;
+   }
+
+   // ----------------- Additional Features ----------------- \\
+
+   private static void AdditionalFeatures_MouseUp(object? sender, MouseEventArgs e)
+   {
+      if (e.Button == MouseButtons.Right && Control.ModifierKeys == Keys.Control)
+      {
+         if (Globals.AdvancedSelectionsForm == null || Globals.AdvancedSelectionsForm.IsDisposed)
+         {
+            Globals.AdvancedSelectionsForm = new();
+            Globals.AdvancedSelectionsForm.Show();
+         }
+         else
+            Globals.AdvancedSelectionsForm.BringToFront();
+
+         Globals.AdvancedSelectionsForm.Location = Globals.ZoomControl.PointToScreen(e.Location);
+      }
+   }
+
+   // SelectionTypeBox SelectedIndexChanged
+   public static void SelectionTypeBox_SelectedIndexChanged(object? sender, EventArgs e)
+   {
+      if (sender is ComboBox comboBox)
+      {
+         if (Enum.TryParse(comboBox.SelectedItem?.ToString(), out SelectionType selectionType))
+         {
+            switch (selectionType)
+            {
+               case SelectionType.Province:
+                  _selectionToolType = SelectionToolType.Single;
+                  break;
+               case SelectionType.Area:
+                  _selectionToolType = SelectionToolType.Collection;
+                  break;
+               case SelectionType.Region:
+                  _selectionToolType = SelectionToolType.Collection;
+                  break;
+               case SelectionType.Country:
+                  _selectionToolType = SelectionToolType.Collection;
+                  break;
+            }
+
+            _selectionType = selectionType;
+         }
+      }
+   }
+
+   public static void SelectCollection(Point point)
+   {
+      if (!GetProvinceFromMap(point, out var province))
+         return;
+
+      switch (_selectionType)
+      {
+         case SelectionType.Province:
+            return;
+         case SelectionType.Area:
+            if (Globals.Areas.TryGetValue(province.Area, out var area))
+               AddOrRemoveAllFromSelection(area.Provinces);
+            break;
+         case SelectionType.Region:
+            if (Globals.Areas.TryGetValue(province.Area, out var area2))
+               if (Globals.Regions.TryGetValue(area2.Region, out var region))
+                  AddOrRemoveAllFromSelection(region.GetProvinces());
+            break;
+         case SelectionType.Country:
+            if (Globals.Countries.TryGetValue(province.Owner, out var country))
+               AddOrRemoveAllFromSelection(country.GetProvinces());
+            break;
+         default:
+            throw new ArgumentOutOfRangeException();
+      }
+
+      Globals.ZoomControl.Invalidate();
    }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using Editor.DataClasses.GameDataClasses;
+using Editor.Events;
 using Editor.Helper;
 
 namespace Editor.DataClasses.MapModes
@@ -57,6 +58,39 @@ namespace Editor.DataClasses.MapModes
                sb.Append($" {incoming},");
          sb.Remove(sb.Length - 1, 1);
          return sb.ToString();
+      }
+
+      public override void SetActive()
+      {
+         Globals.MapModeManager.MapModePaint += PaintEvent;
+      }
+
+      public override void PaintEvent(object? sender, GlobalEventHandlers.MapModePaintEventArgs e)
+      {
+         foreach (var node in Globals.TradeNodes.Values)
+         {
+            // TODO draw an icon at the location
+
+            foreach (var outgoing in node.Outgoing)
+            {
+               if (outgoing.Control.Count < 3)
+                  continue;
+               var points = new PointF[outgoing.Control.Count];
+               for (var i = 0; i < outgoing.Control.Count; i++)
+               {
+                  points[i] = (Globals.ZoomControl.ReverseCoordinateFloat(outgoing.Control[i]));
+                  points[i].Y = Globals.MapHeight - points[i].Y;
+               }
+
+               e.Graphics.DrawCurve(Pens.BlanchedAlmond, points);
+            }
+         }
+      }
+
+      public override void RemovePaintEvent()
+      {
+         Globals.MapModeManager.MapModePaint -= PaintEvent;
+
       }
    }
 }

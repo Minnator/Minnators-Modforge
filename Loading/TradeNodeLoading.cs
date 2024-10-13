@@ -19,6 +19,7 @@ namespace Editor.Loading
          }
          ParseTradeNodesFromString(IO.ReadAllInUTF8(file));
          SetIncoming();
+         ConnectControlPaths();
          sw.Stop();
          Globals.LoadingLog.WriteTimeStamp("Loading TradeNodes", sw.ElapsedMilliseconds);
       }
@@ -27,8 +28,25 @@ namespace Editor.Loading
       {
          foreach (var node in Globals.TradeNodes.Values)
             foreach (var outgoing in node.Outgoing)
-               if (Globals.TradeNodes.TryGetValue(outgoing, out var outgoingNode)) 
+               if (Globals.TradeNodes.TryGetValue(outgoing.Target, out var outgoingNode)) 
                   outgoingNode.Incoming.Add(node.Name);
+      }
+
+      private static void ConnectControlPaths()
+      {
+         foreach (var node in Globals.TradeNodes.Values)
+         {
+            foreach (var outgoing in node.Outgoing)
+            {
+               if (outgoing.Control.Count == 0)
+                  continue;
+               if (!Globals.TradeNodes.TryGetValue(outgoing.Target, out var targetNode))
+                  continue;
+
+               outgoing.Control.Insert(0, new (node.Location.Center.X, node.Location.Center.Y));
+               outgoing.Control.Add(new (targetNode.Location.Center.X, targetNode.Location.Center.Y));
+            }
+         }
       }
 
       private static void ParseTradeNodesFromString(string fileContent)
@@ -54,7 +72,7 @@ namespace Editor.Loading
                      Globals.ErrorLog.Write($"Invalid location value in tradenode: {value.Value}");
                      break;
                   }
-                  node = new (block.Name, location);
+                  node = new (block.Name, Globals.ProvinceIdToProvince[location]);
                }
                else if (value.Key.Equals("inland"))
                   node.IsInland = Parsing.YesNo(value.Value);
@@ -97,18 +115,41 @@ namespace Editor.Loading
             case "outgoing":
                var kvp2 = Parsing.GetKeyValueList(block.GetContent);
                for (var index = 0; index < kvp2.Count; index++)
-               {
-                  if (kvp2[index].Key.Equals("name"))
-                  {
-                     var name = kvp2[index].Value;
-                     node.Outgoing.Add(name[1..^1]);
-                  }
-               }
+                  if (kvp2[index].Key.Equals("name")) 
+                     ParseOutgoing(ref node, ref block, kvp2[index].Value);
+               
                break;
             default:
                Globals.ErrorLog.Write($"Forbidden block in tradenode: {block.Name}");
                break;
          }
+      }
+
+      private static void ParseOutgoing(ref TradeNode node, ref Block block, string name)
+      {
+         Outgoing outgoing = new (name);
+
+         foreach (var sBLock in block.Blocks)
+         {
+            if (sBLock is not Block subBlock)
+            {
+               continue;
+            }
+            if (subBlock.Name.Equals("control"))
+            {
+               outgoing.Control = Parsing.GetPointFList(subBlock.GetContent);
+            }
+            else if (subBlock.Name.Equals("path"))
+            {
+               outgoing.Path = Parsing.GetIntListFromString(subBlock.GetContent);
+            }
+            else
+            {
+               Globals.ErrorLog.Write($"Forbidden block in outgoing({name}): {subBlock.Name}");
+            }
+         }
+
+         node.Outgoing.Add(outgoing);
       }
    }
 }

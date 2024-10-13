@@ -12,6 +12,14 @@ public static class Geometry
       return r1.X < r2.X + r2.Width && r1.X + r1.Width > r2.X && r1.Y < r2.Y + r2.Height && r1.Y + r1.Height > r2.Y;
    }
 
+   public static ICollection<Province> GetProvincesOnScreen()
+   {
+      ICollection<Province> provinces = [];
+
+
+      return provinces;
+   }
+
    public static Rectangle GetIntersection (Rectangle r1, Rectangle r2)
    {
       var x = Math.Max(r1.X, r2.X);
@@ -539,7 +547,6 @@ public static class Geometry
             nearestPoint = areaPoint;
          }
       }
-
       return nearestPoint;
    }
 

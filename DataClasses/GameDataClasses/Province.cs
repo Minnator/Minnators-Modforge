@@ -25,19 +25,19 @@ public class ProvinceData()
 
    public Tag Controller = Tag.Empty;                       //.
    public Tag Owner = Tag.Empty;                            //.
-   public Tag TribalOwner = Tag.Empty;                      // NAT
-   public Tag TradeCompany = Tag.Empty;                     // TC
+   public Tag TribalOwner = Tag.Empty;                      //.NAT
+   public Tag TradeCompany = Tag.Empty;                     //.TC
    public int BaseManpower = 1;                             //.
    public int BaseTax = 1;                                  //.
    public int BaseProduction = 1;                           //.
    public int CenterOfTrade;                                //.
    public int ExtraCost;                                    //.
-   public int NativeHostileness;                            // NAT
-   public int NativeSize;                                   // NAT
+   public int NativeHostileness;                            //.NAT
+   public int NativeSize;                                   //.NAT
    public int RevoltRisk;
    public int Nationalism;
    public int CitySize;
-   public float NativeFerocity;                             // NAT
+   public float NativeFerocity;                             //.NAT
    public float LocalAutonomy;                              //.                           
    public float Devastation;                                //.
    public float Prosperity;                                 //.

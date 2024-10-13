@@ -115,6 +115,11 @@ public sealed class ZoomControl : Control, IDisposable
       return new((int)(zoomFactor * (inPoint.X - panOffset.X)), (int)(zoomFactor * (inPoint.Y - panOffset.Y)));
    }
 
+   public PointF ReverseCoordinateFloat(PointF inPoint)
+   {
+      return new((zoomFactor * (inPoint.X - panOffset.X)), (zoomFactor * (inPoint.Y - panOffset.Y)));
+   }
+
    // ---------- Focusing and Zooming on Points ----------
 
    public void FocusOn(Rectangle rect)

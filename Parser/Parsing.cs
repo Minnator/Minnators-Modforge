@@ -22,11 +22,13 @@ public static partial class Parsing
    private static readonly Regex MonarchNameRegex = MonarchNameRegexGenerate();
    private static readonly Regex KeyValueRegex = KeyValueRegexGenerate();
    private static readonly Regex FullDateParseRegex = FullDateParseRegexGenerate();
+   private static readonly Regex PointFRegex = PointFRegexGenerate();
 
    // Generate Regexes during compile time
    [GeneratedRegex(@"[\""""].+?[\""""]|\S+", RegexOptions.Compiled)]
    private static partial Regex SameLineValuesRegexGenerate();
-
+   [GeneratedRegex(@"(?<x>-?\d+\.\d+)\s+(?<y>-?\d+\.\d+)", RegexOptions.Compiled)]
+   private static partial Regex PointFRegexGenerate();
    [GeneratedRegex(@"(?<year>\d{1,4})-(?<month>\d{1,2})-(?<day>\d{1,2})", RegexOptions.Compiled)]
    private static partial Regex FullDateParseRegexGenerate();
    [GeneratedRegex(@"(?<name>[A-Za-z0-9_.$]+)\s*=\s*{", RegexOptions.Compiled)]
@@ -329,6 +331,18 @@ public static partial class Parsing
    public static List<KeyValuePair<string, string>> GetKeyValueList(string value)
    {
       return GetKeyValueList(ref value);
+   }
+
+   public static List<PointF> GetPointFList(string value)
+   {
+      List<PointF> points = [];
+      var matches = PointFRegex.Matches(value);
+      foreach (Match match in matches)
+      {
+         if (float.TryParse(match.Groups["x"].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var x) && float.TryParse(match.Groups["y"].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var y))
+            points.Add(new(x, y));
+      }
+      return points;
    }
 
    /// <summary>

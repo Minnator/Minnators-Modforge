@@ -5,7 +5,9 @@ using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Settings;
+using Editor.Events;
 using Editor.Forms;
+using Editor.Forms.AdvancedSelections;
 using Editor.Helper;
 using Editor.Loading;
 using Region = Editor.DataClasses.GameDataClasses.Region;
@@ -34,7 +36,6 @@ public enum Mana
    MIL,
    NONE
 }
-
 public enum EditingStatus
 {
    LoadingInterface,
@@ -107,6 +108,7 @@ public static class Globals
    public static Search? SearchForm = null;
    public static MapWindow MapWindow = null!;
    public static ZoomControl ZoomControl = null!;
+   public static AdvancedSelectionsForm? AdvancedSelectionsForm = null;
 
    // SETTINGS
    public static readonly Settings Settings = new();
@@ -157,7 +159,6 @@ public static class Globals
    public static Dictionary<string, Culture> Cultures = [];
 
    // Contains the provinces and options to access them
-   //public static Dictionary<int, Province> Provinces = [];
    public static HashSet<Province> Provinces = [];
    public static Dictionary<int, Province> ProvinceIdToProvince = [];
    public static Dictionary<int, Province> ColorToProvId = [];
@@ -257,13 +258,13 @@ public static class Globals
 // - [ ] Add a way to change the map mode via customizable Hotkeys
 // - [ ] Fix the Province Collection Editing gui so that all types work the same and edge cases are handled
 // - [x] Fix Lasso Selection Preview sometimes being incorrect
-// - [ ] Fix Magic wand tool
+// - [ ] Make Magic wand tool
 // - [ ] Add a modifier creation and selection menu to apply to different scopes
 // - [ ] Add saving for all Province Collections
 // - [ ] Add descriptions on how to customize tooltips, map modes, and other things
 // - [ ] Add basic country editing
 // - [ ] Fix province center calculation
-// - [ ] Find last concurrency bugs
+// - [x] Find last concurrency bugs
 // - [ ] Pre load and layout the Province Collection Editing GUI to prevent LagSpike on first opening said tab
 // - [ ] MelonCoaster easter Egg in Loading Screen
 // - [ ] Add a help page that leads to the official Discord
@@ -281,6 +282,6 @@ public static class Globals
 // - [ ] Add a way to create custom map modes
 // - [ ] Add a tradegoods creation and editing menu
 // - [ ] Ideas making via drag and drop
+// - [ ] Province Creation and editing
 
 // TODO LIST Until Alpha 1.2
-// - [ ] Province Creation and editing

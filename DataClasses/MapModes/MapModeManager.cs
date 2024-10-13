@@ -2,12 +2,13 @@
 using System.Drawing.Imaging;
 using Editor.Controls;
 using Editor.DataClasses.GameDataClasses;
+using Editor.Events;
 using Editor.Helper;
 using Editor.MapModes;
 
 namespace Editor.DataClasses.MapModes;
 
-public class MapModeManager()
+public class MapModeManager
 {
    private List<MapMode> MapModes { get; } = [];
    public MapMode CurrentMapMode { get; set; } = null!;
@@ -16,6 +17,18 @@ public class MapModeManager()
    public bool RequireFullRedraw { get; set; } = true;
 
    public EventHandler<MapMode> MapModeChanged = delegate { };
+   public EventHandler<GlobalEventHandlers.MapModePaintEventArgs> MapModePaint = delegate { };
+
+   public MapModeManager()
+   {
+      InitializeAllMapModes();
+      Globals.ZoomControl.Paint += ZoomControl_Paint;
+   }
+
+   private void ZoomControl_Paint(object? sender, PaintEventArgs e)
+   {
+      MapModePaint.Invoke(this, new (e.Graphics, e.ClipRectangle, Geometry.GetProvincesOnScreen()));
+   }
 
    public void InitializeAllMapModes()
    {
@@ -81,9 +94,12 @@ public class MapModeManager()
    public void SetCurrentMapMode(string name)
    {
       // CAN be null
+      // REMOVE old event handle form GlobalsEventhandler
       if (CurrentMapMode?.GetMapModeName() == name) 
          return; // no need to change map mode if it is already the same
+      CurrentMapMode?.RemovePaintEvent();
       CurrentMapMode = GetMapMode(name); 
+      CurrentMapMode.SetActive();
       CurrentMapMode.RenderMapMode(CurrentMapMode.GetProvinceColor);
       GC.Collect(); // We need to collect the garbage to free up memory but this is not ideal
       Globals.MapWindow.MapModeComboBox.SelectedItem = name;
@@ -94,5 +110,6 @@ public class MapModeManager()
    {
       return CurrentMapMode.GetProvinceColor(p);
    }
+
 
 }

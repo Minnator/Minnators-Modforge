@@ -107,7 +107,7 @@ namespace Editor
          StartPosition = FormStartPosition.CenterScreen;
          Show();
          Globals.ZoomControl.FocusOn(new Point(3100, 600), 1f);
-         
+
          // Activate this window
          Activate();
          Globals.ZoomControl.Invalidate();
@@ -127,7 +127,6 @@ namespace Editor
       {
          var sw = Stopwatch.StartNew();
          Globals.MapModeManager = new(); // Initialize the MapModeManager
-         Globals.MapModeManager.InitializeAllMapModes(); // Initialize all map modes
          MapModeComboBox.Items.Clear();
          MapModeComboBox.Items.AddRange([.. Globals.MapModeManager.GetMapModeNames()]);
          sw.Stop();
@@ -144,7 +143,7 @@ namespace Editor
       private void InitGui()
       {
          InitializeComponent();
-         Globals.ZoomControl = new(new (Globals.MapWidth, Globals.MapHeight));
+         Globals.ZoomControl = new(new(Globals.MapWidth, Globals.MapHeight));
          MainToolstripContainer.ContentPanel.Controls.Add(Globals.ZoomControl);
          Selection.Initialize();
 
@@ -153,7 +152,9 @@ namespace Editor
 
          ProvincePreviewMode.Items.AddRange([.. Enum.GetNames(typeof(ProvinceEditingStatus))]);
          ProvincePreviewMode.SelectedIndex = 2;
-         
+
+         SelectionTypeBox.Items.AddRange([.. Enum.GetNames(typeof(SelectionType))]);
+         SelectionTypeBox.SelectedIndex = 0;
       }
 
 
@@ -227,7 +228,7 @@ namespace Editor
             CollectionEditorProvinceGroup.DeleteProvinceGroup,
             CollectionEditorProvinceGroup.SingleItemModified
          );
-         
+
          ProvinceCollectionsLayoutPanel.Controls.Add(AreaEditingGui, 0, 0);
          ProvinceCollectionsLayoutPanel.Controls.Add(RegionEditingGui, 0, 1);
          ProvinceCollectionsLayoutPanel.Controls.Add(SuperRegionEditingGui, 0, 2);
@@ -772,9 +773,39 @@ namespace Editor
 
       private void telescopeToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         //DebugMaps.TelescopeImageBenchmark();
+
+      }
+      private void fasdfToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         Globals.ZoomControl.Paint += FunnyPaint;
       }
 
+      public void FunnyPaint(object? sender, PaintEventArgs e)
+      {
+         //using var g = Globals.ZoomControl.CreateGraphics();
+         float[] data = new float[]
+         {
+            3239.500000f, 1153.500000f,
+            3180.000000f, 1204.000000f,
+            3093.000000f, 1203.000000f,
+            3017.500000f, 1244.500000f,
+            2977.000000f, 1288.000000f,
+            2967.000000f, 1347.000000f,
+            2935.000000f, 1348.000000f
+         };
+
+         PointF[] points = new PointF[data.Length / 2 + 2];
+         for (int i = 0; i < data.Length; i += 2)
+         {
+            points[i / 2 + 1] = Globals.ZoomControl.ReverseCoordinateFloat(new PointF(data[i], Globals.MapHeight - data[i + 1]));
+         }
+
+         points[0] = Globals.ZoomControl.ReverseCoordinateFloat(new PointF((float)Globals.ProvinceIdToProvince[358].Center.X, (float)Globals.ProvinceIdToProvince[358].Center.Y));
+         points[^1] = Globals.ZoomControl.ReverseCoordinateFloat(new PointF((float)Globals.ProvinceIdToProvince[1298].Center.X, (float)Globals.ProvinceIdToProvince[1298].Center.Y));
+
+         e.Graphics.DrawCurve(new Pen(Color.Red, 2), points);
+         //g.DrawRectangle(Pens.BlueViolet, new RectangleF(points[0], new SizeF(400f, 400f)));
+      }
       private void MapWindow_KeyDown(object sender, KeyEventArgs e)
       {
          if (ModifierKeys == Keys.Control)
@@ -835,7 +866,7 @@ namespace Editor
             Debug.WriteLine(province.Id);
          }
       }
-      
+
       public void OnStripeDirectionChanged(object? sender, EventArgs e)
       {
          Globals.StripesDirection = Enum.Parse<StripesDirection>(StripeDirectionComboBox.SelectedItem?.ToString() ?? StripesDirection.DiagonalLbRt.ToString());
@@ -953,6 +984,11 @@ namespace Editor
          Globals.Language = Enum.Parse<Language>(LanguageSelectionToolStrip.SelectedItem?.ToString() ?? "english");
          // close the menu when an item is selected
          filesToolStripMenuItem.DropDown.Close();
+      }
+
+      private void helpToolStripButton_Click(object sender, EventArgs e)
+      {
+         new InformationForm().ShowDialog();
       }
    }
 }

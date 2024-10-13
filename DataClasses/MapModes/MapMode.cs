@@ -128,4 +128,19 @@ public abstract class MapMode
    {
       return GetMapModeName();
    }
+
+   public virtual void SetActive()
+   {
+
+   }
+
+   public virtual void PaintEvent(object? sender, GlobalEventHandlers.MapModePaintEventArgs e)
+   {
+
+   }
+
+   public virtual void RemovePaintEvent()
+   {
+
+   }
 }
