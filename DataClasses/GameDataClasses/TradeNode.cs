@@ -2,7 +2,7 @@
 {
    public class TradeNode(string name, Province location)
    {
-      public string Name { get; set; } = name;
+      public string Name { get; } = name;
       public Province Location { get; set; } = location;
       public Color Color { get; set; } = Color.Empty;
       public bool IsInland { get; set; } = false;

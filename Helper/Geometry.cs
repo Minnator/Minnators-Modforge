@@ -111,40 +111,20 @@ public static class Geometry
       return GetBounds(rects);
    }
 
-   public static Province GetProvinceClosestToPoint(Point point)
+   public static List<Province> GetVisibleCapitals(Rectangle rectangle)
    {
-      var closestProvince = Globals.Provinces.First();
-      var minDistance = double.MaxValue;
-
-      foreach (var province in Globals.Provinces)
+      List<Province> provinces = [];
+      foreach (var province in Globals.Capitals)
       {
-         var distance = Math.Sqrt(Math.Pow(province.Center.X - point.X, 2) + Math.Pow(province.Center.Y - point.Y, 2));
-         if (distance < minDistance)
-         {
-            minDistance = distance;
-            closestProvince = province;
-         }
+         if (IsPointInRectangle(province.Center, ref rectangle))
+            provinces.Add(province);
       }
-      return closestProvince;
+      return provinces;
    }
 
-   public static Province GetProvinceClosestToPoint(Point point, List<Province> provinces)
+   public static bool IsPointInRectangle(Point point, ref Rectangle rect)
    {
-      if (provinces.Count == 0)
-         return null!;
-      var closestProvince = provinces.First();
-      var minDistance = double.MaxValue;
-
-      foreach (var province in provinces)
-      {
-         var distance = Math.Sqrt(Math.Pow(province.Center.X - point.X, 2) + Math.Pow(province.Center.Y - point.Y, 2));
-         if (distance < minDistance)
-         {
-            minDistance = distance;
-            closestProvince = province;
-         }
-      }
-      return closestProvince;
+      return point.X >= rect.X && point.X < rect.X + rect.Width && point.Y >= rect.Y && point.Y < rect.Y + rect.Height;
    }
 
    // Clamps the given value between the given min and max

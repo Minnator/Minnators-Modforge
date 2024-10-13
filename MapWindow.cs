@@ -105,7 +105,7 @@ namespace Editor
          Globals.LoadingStage++;
 
          StartPosition = FormStartPosition.CenterScreen;
-         Globals.ZoomControl.FocusOn(new (3100, 600), 1f);
+         Globals.ZoomControl.FocusOn(new(3100, 600), 1f);
          Show();
 
          // Activate this window
@@ -997,6 +997,13 @@ namespace Editor
       private void helpToolStripButton_Click(object sender, EventArgs e)
       {
          new InformationForm().ShowDialog();
+      }
+
+      private void graphicalElementsManagerToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         if (Globals.GuiDrawings == null || Globals.GuiDrawings.IsDisposed)
+            Globals.GuiDrawings = new ();
+         Globals.GuiDrawings.Show();
       }
    }
 }

@@ -58,6 +58,14 @@ namespace Editor.Helper
          Globals.ZoomControl.ImagePositionChange += OnImagePositionChanged;
       }
 
+      public static void AddOrRemoveGuiElement(GuiElements elements, bool add)
+      {
+         if (add)
+            AddGuiElements(elements);
+         else
+            RemoveGuiElements(elements);
+      }
+
       public static void AddGuiElements(GuiElements elements)
       {
          CurrentElements |= elements;
@@ -70,18 +78,18 @@ namespace Editor.Helper
 
       private static void AddEvents(GuiElements elements)
       {
-         if (elements.HasFlag(GuiElements.TradeRoutes))
-         {
+         if (elements.HasFlag(GuiElements.TradeRoutes)) 
             _mapModePaint += OnMapModePaintTradeRoutes;
-         }
+         if (elements.HasFlag(GuiElements.Captitals))
+            _mapModePaint += OnMapModePaintCapitals;
       }
 
       private static void RemoveEvents(GuiElements elements)
       {
-         if (elements.HasFlag(GuiElements.TradeRoutes))
-         {
+         if (elements.HasFlag(GuiElements.TradeRoutes)) 
             _mapModePaint -= OnMapModePaintTradeRoutes;
-         }
+         if (elements.HasFlag(GuiElements.Captitals)) 
+            _mapModePaint -= OnMapModePaintCapitals;
       }
 
       private static void GuiPaint(object? _, PaintEventArgs e)
@@ -114,6 +122,17 @@ namespace Editor.Helper
 
                e.Graphics.DrawCurve(Pens.BlanchedAlmond, points);
             }
+         }
+      }
+
+      private static void OnMapModePaintCapitals(object _, MapModePaintEventArgs e)
+      {
+         var capitals = Geometry.GetVisibleCapitals(e.ClipRectangle);
+         foreach (var capital in capitals)
+         {
+            var provinceCenter = Globals.ZoomControl.ReverseCoordinate(capital.Center);
+            e.Graphics.DrawRectangle(new(Color.Black, 1), provinceCenter.X - 2, provinceCenter.Y - 2, 4, 4);
+            e.Graphics.DrawRectangle(Pens.Yellow, provinceCenter.X - 1, provinceCenter.Y - 1, 2, 2);
          }
       }
 

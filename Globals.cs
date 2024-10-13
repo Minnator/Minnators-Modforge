@@ -109,6 +109,7 @@ public static class Globals
    public static MapWindow MapWindow = null!;
    public static ZoomControl ZoomControl = null!;
    public static AdvancedSelectionsForm? AdvancedSelectionsForm = null;
+   public static GuiDrawings? GuiDrawings = null;
 
    // SETTINGS
    public static readonly Settings Settings = new();

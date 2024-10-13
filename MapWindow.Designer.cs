@@ -42,6 +42,7 @@
          LanguageSelectionToolStrip = new ToolStripComboBox();
          stripesDirectionToolStripMenuItem = new ToolStripMenuItem();
          StripeDirectionComboBox = new ToolStripComboBox();
+         graphicalElementsManagerToolStripMenuItem = new ToolStripMenuItem();
          historyToolStripMenuItem = new ToolStripMenuItem();
          selectionHistoryToolStripMenuItem = new ToolStripMenuItem();
          DeleteHistoryToolStripMenuItem = new ToolStripMenuItem();
@@ -60,9 +61,7 @@
          save1ToolStripMenuItem = new ToolStripMenuItem();
          saveEuropeToolStripMenuItem = new ToolStripMenuItem();
          jsonToolStripMenuItem = new ToolStripMenuItem();
-         DateSelector = new ToolStripComboBox();
          searchToolStripMenuItem = new ToolStripMenuItem();
-         fasdfToolStripMenuItem = new ToolStripMenuItem();
          ProvinceCollectionsLayoutPanel = new TableLayoutPanel();
          FocusSelectionCheckBox = new CheckBox();
          toolStrip1 = new ToolStrip();
@@ -212,7 +211,7 @@
          // 
          // MapMenuStrip
          // 
-         MapMenuStrip.Items.AddRange(new ToolStripItem[] { filesToolStripMenuItem, historyToolStripMenuItem, toolTipCustomizerToolStripMenuItem, MapModeComboBox, debugToolStripMenuItem, DateSelector, searchToolStripMenuItem, fasdfToolStripMenuItem });
+         MapMenuStrip.Items.AddRange(new ToolStripItem[] { filesToolStripMenuItem, historyToolStripMenuItem, toolTipCustomizerToolStripMenuItem, MapModeComboBox, debugToolStripMenuItem, searchToolStripMenuItem });
          MapMenuStrip.Location = new Point(0, 0);
          MapMenuStrip.Name = "MapMenuStrip";
          MapMenuStrip.Padding = new Padding(7, 2, 0, 2);
@@ -222,7 +221,7 @@
          // 
          // filesToolStripMenuItem
          // 
-         filesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { gCToolStripMenuItem, saveCurrentMapModeToolStripMenuItem, saveSelectionToolStripMenuItem, toolStripMenuItem1, quickSettingsToolStripMenuItem });
+         filesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { gCToolStripMenuItem, saveCurrentMapModeToolStripMenuItem, saveSelectionToolStripMenuItem, toolStripMenuItem1, quickSettingsToolStripMenuItem, graphicalElementsManagerToolStripMenuItem });
          filesToolStripMenuItem.Name = "filesToolStripMenuItem";
          filesToolStripMenuItem.Size = new Size(42, 23);
          filesToolStripMenuItem.Text = "Files";
@@ -244,6 +243,7 @@
          // saveSelectionToolStripMenuItem
          // 
          saveSelectionToolStripMenuItem.Name = "saveSelectionToolStripMenuItem";
+         saveSelectionToolStripMenuItem.ShortcutKeys = Keys.F3;
          saveSelectionToolStripMenuItem.Size = new Size(249, 22);
          saveSelectionToolStripMenuItem.Text = "Save selection to image";
          saveSelectionToolStripMenuItem.Click += saveSelectionToolStripMenuItem_Click;
@@ -297,6 +297,14 @@
          StripeDirectionComboBox.Name = "StripeDirectionComboBox";
          StripeDirectionComboBox.Size = new Size(121, 23);
          // 
+         // graphicalElementsManagerToolStripMenuItem
+         // 
+         graphicalElementsManagerToolStripMenuItem.Name = "graphicalElementsManagerToolStripMenuItem";
+         graphicalElementsManagerToolStripMenuItem.ShortcutKeys = Keys.F2;
+         graphicalElementsManagerToolStripMenuItem.Size = new Size(249, 22);
+         graphicalElementsManagerToolStripMenuItem.Text = "Graphical Elements Manager";
+         graphicalElementsManagerToolStripMenuItem.Click += graphicalElementsManagerToolStripMenuItem_Click;
+         // 
          // historyToolStripMenuItem
          // 
          historyToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { selectionHistoryToolStripMenuItem, DeleteHistoryToolStripMenuItem });
@@ -307,14 +315,15 @@
          // selectionHistoryToolStripMenuItem
          // 
          selectionHistoryToolStripMenuItem.Name = "selectionHistoryToolStripMenuItem";
-         selectionHistoryToolStripMenuItem.Size = new Size(164, 22);
+         selectionHistoryToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.Z;
+         selectionHistoryToolStripMenuItem.Size = new Size(290, 22);
          selectionHistoryToolStripMenuItem.Text = "View History Tree";
          selectionHistoryToolStripMenuItem.Click += RevertInSelectionHistory;
          // 
          // DeleteHistoryToolStripMenuItem
          // 
          DeleteHistoryToolStripMenuItem.Name = "DeleteHistoryToolStripMenuItem";
-         DeleteHistoryToolStripMenuItem.Size = new Size(164, 22);
+         DeleteHistoryToolStripMenuItem.Size = new Size(290, 22);
          DeleteHistoryToolStripMenuItem.Text = "Delete History";
          DeleteHistoryToolStripMenuItem.Click += DeleteHistoryToolStripMenuItem_Click;
          // 
@@ -426,26 +435,13 @@
          jsonToolStripMenuItem.Text = "json";
          jsonToolStripMenuItem.Click += jsonToolStripMenuItem_Click;
          // 
-         // DateSelector
-         // 
-         DateSelector.Items.AddRange(new object[] { "1444.11.11", "1500.1.1", "1600.1.1" });
-         DateSelector.Name = "DateSelector";
-         DateSelector.Size = new Size(121, 23);
-         DateSelector.SelectedIndexChanged += DateSelector_SelectedIndexChanged;
-         // 
          // searchToolStripMenuItem
          // 
          searchToolStripMenuItem.Name = "searchToolStripMenuItem";
+         searchToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.F;
          searchToolStripMenuItem.Size = new Size(54, 23);
          searchToolStripMenuItem.Text = "Search";
          searchToolStripMenuItem.Click += searchToolStripMenuItem_Click;
-         // 
-         // fasdfToolStripMenuItem
-         // 
-         fasdfToolStripMenuItem.Name = "fasdfToolStripMenuItem";
-         fasdfToolStripMenuItem.Size = new Size(45, 23);
-         fasdfToolStripMenuItem.Text = "fasdf";
-         fasdfToolStripMenuItem.Click += fasdfToolStripMenuItem_Click;
          // 
          // ProvinceCollectionsLayoutPanel
          // 
@@ -1703,8 +1699,8 @@
          // numericUpDown1
          // 
          numericUpDown1.Dock = DockStyle.Fill;
-         numericUpDown1.Location = new Point(280, 0);
-         numericUpDown1.Margin = new Padding(0);
+         numericUpDown1.Location = new Point(280, 2);
+         numericUpDown1.Margin = new Padding(0, 2, 0, 0);
          numericUpDown1.Name = "numericUpDown1";
          numericUpDown1.Size = new Size(120, 23);
          numericUpDown1.TabIndex = 3;
@@ -1864,7 +1860,6 @@
       private ToolStripButton pasteToolStripButton;
       private ToolStripSeparator toolStripSeparator3;
       private ToolStripButton helpToolStripButton;
-      private ToolStripComboBox DateSelector;
       private ToolStripMenuItem searchToolStripMenuItem;
       private Label OwnerCountryNameLabel;
       private Label ProvinceNameLabel;
@@ -1965,9 +1960,9 @@
       private TableLayoutPanel GroupCollectionOptions;
       private Panel CollectionEditorsPanel;
       private TableLayoutPanel tableLayoutPanel5;
-      private ToolStripMenuItem fasdfToolStripMenuItem;
       private Label label24;
       public ComboBox SelectionTypeBox;
+      private ToolStripMenuItem graphicalElementsManagerToolStripMenuItem;
    }
 }
 
