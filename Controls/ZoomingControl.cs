@@ -309,6 +309,39 @@ public sealed class ZoomControl : Control, IDisposable
       Invalidate();
    }
 
+   private void ZoomOnPaint2(object? sender, PaintEventArgs? e)
+   {
+      if (map == null! || e == null) return;
+
+      Rectangle thisRect = new(0, 0, Width, Height);
+
+
+      // Get the width of the bitmap and the rectangle
+      int bitmapWidth = map.Width;
+      int rectEnd = MapRectangle.Right;
+
+      // Calculate how much we need to offset the drawing on the X axis
+      int offsetX = rectEnd % bitmapWidth;
+      if (offsetX < 0) offsetX += bitmapWidth; // Handle negative offsets by wrapping
+
+      int truePos = 0;
+
+      // Draw the bitmap multiple times to repeat on the X-axis
+      for (int x = offsetX - map.Width; x < MapRectangle.Right; x += bitmapWidth)
+      {
+         // Create a new rectangle to draw the bitmap in the correct position
+         Rectangle destRect = new Rectangle(offsetX, 0, Width, Height);
+
+         truePos += bitmapWidth;
+
+         // Adjust the source rectangle in case we are drawing only part of the bitmap
+         //Rectangle srcRect = new Rectangle(0, 0, bitmapWidth, map.Height);
+
+         // Stretch the bitmap to the destination rectangle
+         DrawStretch(HBitmap, BmpGfx, e.Graphics, MapRectangle, destRect);
+      }
+   }
+
    private void ZoomOnPaint(object? sender, PaintEventArgs? e)
    {
       if (map == null! || e == null) return;
@@ -316,6 +349,7 @@ public sealed class ZoomControl : Control, IDisposable
       Rectangle thisRect = new(0, 0, Width, Height);
 
       DrawStretch(HBitmap, BmpGfx, e.Graphics, MapRectangle, thisRect);
+
    }
 
 }

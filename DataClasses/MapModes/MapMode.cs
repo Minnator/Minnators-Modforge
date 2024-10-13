@@ -66,7 +66,7 @@ public abstract class MapMode
 
    public virtual void Update(Rectangle rect)
    {
-      Update(Geometry.GetProvincesInRectangle(rect));
+      Update(Geometry.GetProvincesInRectangle(rect).ToList());
    }
 
    public virtual void Update(List<Province> ids)

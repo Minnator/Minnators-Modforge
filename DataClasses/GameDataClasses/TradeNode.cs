@@ -1,4 +1,6 @@
-﻿namespace Editor.DataClasses.GameDataClasses
+﻿using Editor.Helper;
+
+namespace Editor.DataClasses.GameDataClasses
 {
    public class TradeNode(string name, Province location)
    {
@@ -34,5 +36,19 @@
       public string Target { get; set; } = target;
       public List<int> Path { get; set; } = [];
       public List<PointF> Control { get; set; } = [];
+      public int SplitIndex = -1;
+      public Rectangle Bounds { get; set; } = Rectangle.Empty;
+
+      public void CalculateSplitIndex()
+      {
+      
+      }
+
+      public (List<PointF>, List<PointF>) GetSplitRoutes;
+
+      public void CalculateBounds()
+      {
+         Bounds = Geometry.GetBoundsFloat(Control);
+      }
    }
 }

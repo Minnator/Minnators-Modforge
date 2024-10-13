@@ -64,8 +64,8 @@ namespace Editor.Loading
          
          }
 
-         var start = new Point(int.Parse(match.Groups[5].Value), int.Parse(match.Groups[6].Value));
-         var end = new Point(int.Parse(match.Groups[7].Value), int.Parse(match.Groups[8].Value));
+         var start = new Point(int.Parse(match.Groups[5].Value), Globals.MapHeight - int.Parse(match.Groups[6].Value));
+         var end = new Point(int.Parse(match.Groups[7].Value), Globals.MapHeight - int.Parse(match.Groups[8].Value));
 
          strait = new(from, to, through, straitType, start, end, match.Groups[9].Value);
 

@@ -12,6 +12,7 @@ using Editor.Forms;
 using Editor.Forms.Loadingscreen;
 using Editor.Helper;
 using Editor.Savers;
+using static Editor.Helper.ProvinceEnumHelper;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 
 namespace Editor
@@ -154,7 +155,7 @@ namespace Editor
          ProvincePreviewMode.Items.AddRange([.. Enum.GetNames(typeof(ProvinceEditingStatus))]);
          ProvincePreviewMode.SelectedIndex = 2;
 
-         SelectionTypeBox.Items.AddRange([.. Enum.GetNames(typeof(SelectionType))]);
+         SelectionTypeBox.Items.AddRange([.. Enum.GetNames<SelectionType>()]);
          SelectionTypeBox.SelectedIndex = 0;
       }
 
@@ -406,7 +407,7 @@ namespace Editor
          IsParlimentSeatCheckbox.CheckedChanged += ProvinceEditingEvents.OnIsSeatInParliamentChanged;
          HasRevoltCheckBox.CheckedChanged += ProvinceEditingEvents.OnHasRevoltChanged;
 
-         AttirbuteCombobox.Items.AddRange([.. Enum.GetNames(typeof(ProvAttrGet))]);
+         MWAttirbuteCombobox.Items.AddRange([.. Enum.GetNames<ProvAttrGet>()]);
 
          // NATIVES TAB
          _tribalOwner = ControlFactory.GetTagComboBox();

@@ -1,5 +1,6 @@
 ﻿using Editor.DataClasses.GameDataClasses;
 using Editor.ParadoxLanguage.Scope;
+using static Editor.Helper.ProvinceEnumHelper;
 
 namespace Editor.ParadoxLanguage.Trigger
 {

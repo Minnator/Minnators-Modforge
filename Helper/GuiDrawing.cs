@@ -9,15 +9,15 @@ namespace Editor.Helper
    public static class GuiDrawing
    {
       private static Pen _straitPen = new(Color.Red, 2) { DashStyle = DashStyle.Dash };
-      private static List<Province> _visibleProvinces = [];
+      public static HashSet<Province> VisibleProvinces = [];
 
       private class MapModePaintEventArgs : EventArgs
       {
 
          public Graphics Graphics { get; set; }
          public Rectangle ClipRectangle { get; set; }
-         public ICollection<Province> VisibleProvinces { get; set; }
-         public MapModePaintEventArgs(Graphics graphics, Rectangle clipRectangle, ICollection<Province> visibleProvinces)
+         public HashSet<Province> VisibleProvinces { get; set; }
+         public MapModePaintEventArgs(Graphics graphics, Rectangle clipRectangle, HashSet<Province> visibleProvinces)
          {
             Graphics = graphics;
             ClipRectangle = clipRectangle;
@@ -100,13 +100,13 @@ namespace Editor.Helper
       private static void GuiPaint(object? _, PaintEventArgs e)
       {
          // TODO Add Calculation
-         MapModePaintEventArgs eventArgs = new(e.Graphics, Globals.ZoomControl.MapRectangle, _visibleProvinces);
+         MapModePaintEventArgs eventArgs = new(e.Graphics, Globals.ZoomControl.MapRectangle, VisibleProvinces);
          _mapModePaint.Invoke(Globals.ZoomControl, eventArgs);
       }
 
       private static void OnImagePositionChanged(object? sender, ImagePositionEventArgs e)
       {
-         _visibleProvinces = Geometry.GetProvincesInRectangle(e.NewRectangle);
+         VisibleProvinces = Geometry.GetProvincesInRectangle(e.NewRectangle);
       }
 
       private static void OnMapModePaintTradeRoutes(object _, MapModePaintEventArgs e)
@@ -115,7 +115,7 @@ namespace Editor.Helper
          {
             foreach (var outgoing in node.Outgoing)
             {
-               if (outgoing.Control.Count < 3)
+               if (outgoing.Control.Count < 3 || !Geometry.RectanglesIntercept(e.ClipRectangle, outgoing.Bounds))
                   continue;
                var points = new PointF[outgoing.Control.Count];
                for (var i = 0; i < outgoing.Control.Count; i++)
@@ -132,7 +132,7 @@ namespace Editor.Helper
 
       private static void OnMapModePaintCapitals(object _, MapModePaintEventArgs e)
       {
-         var capitals = Geometry.GetVisibleCapitals(e.ClipRectangle);
+         var capitals = Geometry.GetVisibleCapitals(e.VisibleProvinces);
          foreach (var capital in capitals)
          {
             var provinceCenter = Globals.ZoomControl.ReverseCoordinate(capital.Center);

@@ -163,8 +163,8 @@
          GroupCollectionOptions = new TableLayoutPanel();
          CollectionEditorsPanel = new Panel();
          tableLayoutPanel5 = new TableLayoutPanel();
-         numericUpDown1 = new NumericUpDown();
-         AttirbuteCombobox = new ComboBox();
+         MagicWandTolerance = new NumericUpDown();
+         MWAttirbuteCombobox = new ComboBox();
          label15 = new Label();
          label14 = new Label();
          GeneralToolTip = new ToolTip(components);
@@ -206,7 +206,7 @@
          GroupCollectionOptions.SuspendLayout();
          CollectionEditorsPanel.SuspendLayout();
          tableLayoutPanel5.SuspendLayout();
-         ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
+         ((System.ComponentModel.ISupportInitialize)MagicWandTolerance).BeginInit();
          SuspendLayout();
          // 
          // MapMenuStrip
@@ -1683,8 +1683,8 @@
          tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
          tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
          tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
-         tableLayoutPanel5.Controls.Add(numericUpDown1, 3, 0);
-         tableLayoutPanel5.Controls.Add(AttirbuteCombobox, 1, 0);
+         tableLayoutPanel5.Controls.Add(MagicWandTolerance, 3, 0);
+         tableLayoutPanel5.Controls.Add(MWAttirbuteCombobox, 1, 0);
          tableLayoutPanel5.Controls.Add(label15, 2, 0);
          tableLayoutPanel5.Controls.Add(label14, 0, 0);
          tableLayoutPanel5.Dock = DockStyle.Fill;
@@ -1696,27 +1696,27 @@
          tableLayoutPanel5.Size = new Size(400, 26);
          tableLayoutPanel5.TabIndex = 5;
          // 
-         // numericUpDown1
+         // MagicWandTolerance
          // 
-         numericUpDown1.Dock = DockStyle.Fill;
-         numericUpDown1.Location = new Point(280, 2);
-         numericUpDown1.Margin = new Padding(0, 2, 0, 0);
-         numericUpDown1.Name = "numericUpDown1";
-         numericUpDown1.Size = new Size(120, 23);
-         numericUpDown1.TabIndex = 3;
-         GeneralToolTip.SetToolTip(numericUpDown1, "Sets the tolerance for values which it can be applied to");
+         MagicWandTolerance.Dock = DockStyle.Fill;
+         MagicWandTolerance.Location = new Point(280, 2);
+         MagicWandTolerance.Margin = new Padding(0, 2, 0, 0);
+         MagicWandTolerance.Name = "MagicWandTolerance";
+         MagicWandTolerance.Size = new Size(120, 23);
+         MagicWandTolerance.TabIndex = 3;
+         GeneralToolTip.SetToolTip(MagicWandTolerance, "Sets the tolerance for values which it can be applied to");
          // 
-         // AttirbuteCombobox
+         // MWAttirbuteCombobox
          // 
-         AttirbuteCombobox.Dock = DockStyle.Fill;
-         AttirbuteCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
-         AttirbuteCombobox.FormattingEnabled = true;
-         AttirbuteCombobox.Location = new Point(80, 0);
-         AttirbuteCombobox.Margin = new Padding(0);
-         AttirbuteCombobox.Name = "AttirbuteCombobox";
-         AttirbuteCombobox.Size = new Size(120, 23);
-         AttirbuteCombobox.TabIndex = 2;
-         GeneralToolTip.SetToolTip(AttirbuteCombobox, "Sets the attribute the MagicWand tool will use");
+         MWAttirbuteCombobox.Dock = DockStyle.Fill;
+         MWAttirbuteCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
+         MWAttirbuteCombobox.FormattingEnabled = true;
+         MWAttirbuteCombobox.Location = new Point(80, 0);
+         MWAttirbuteCombobox.Margin = new Padding(0);
+         MWAttirbuteCombobox.Name = "MWAttirbuteCombobox";
+         MWAttirbuteCombobox.Size = new Size(120, 23);
+         MWAttirbuteCombobox.TabIndex = 2;
+         GeneralToolTip.SetToolTip(MWAttirbuteCombobox, "Magic Wand: \"LSHIFT + ALT\" \r\nSets the attribute the MagicWand tool will use");
          // 
          // label15
          // 
@@ -1816,7 +1816,7 @@
          CollectionEditorsPanel.ResumeLayout(false);
          tableLayoutPanel5.ResumeLayout(false);
          tableLayoutPanel5.PerformLayout();
-         ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
+         ((System.ComponentModel.ISupportInitialize)MagicWandTolerance).EndInit();
          ResumeLayout(false);
          PerformLayout();
       }
@@ -1919,8 +1919,6 @@
       private Label EditingModeLabel;
       private Label label14;
       private Label label15;
-      private ComboBox AttirbuteCombobox;
-      private NumericUpDown numericUpDown1;
       private ToolStripMenuItem yoloToolStripMenuItem;
       private ToolStripMenuItem saveAllProvincesToolStripMenuItem;
       private ToolStripMenuItem save1ToolStripMenuItem;
@@ -1963,6 +1961,8 @@
       private Label label24;
       public ComboBox SelectionTypeBox;
       private ToolStripMenuItem graphicalElementsManagerToolStripMenuItem;
+      public ComboBox MWAttirbuteCombobox;
+      public NumericUpDown MagicWandTolerance;
    }
 }
 

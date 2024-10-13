@@ -2,6 +2,7 @@
 using System.Text;
 using ABI.Windows.Media.Playback;
 using Editor.Parser;
+using static Editor.Helper.ProvinceEnumHelper;
 
 namespace Editor.DataClasses.GameDataClasses
 {

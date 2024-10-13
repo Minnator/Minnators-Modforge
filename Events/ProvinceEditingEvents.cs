@@ -3,6 +3,7 @@ using Editor.Commands;
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
+using static Editor.Helper.ProvinceEnumHelper;
 
 namespace Editor.Events
 {

@@ -56,6 +56,30 @@ public static class Geometry
       return points;
    }
 
+   public static Rectangle GetBoundsFloat(ICollection<PointF> points)
+   {
+      if (points.Count == 0)
+         return Rectangle.Empty;
+      var minX = float.MaxValue;
+      var minY = float.MaxValue;
+      var maxX = 0f;
+      var maxY = 0f;
+
+      foreach (var point in points)
+      {
+         if (point.X < minX)
+            minX = point.X;
+         if (point.X > maxX)
+            maxX = point.X;
+         if (point.Y < minY)
+            minY = point.Y;
+         if (point.Y > maxY)
+            maxY = point.Y;
+      }
+
+      return new ((int)MathF.Floor(minX), (int)MathF.Floor(minY), (int)MathF.Ceiling(maxX - minX + 1), (int)MathF.Ceiling(maxY - minY + 1));
+   }
+
    // Returns the bounding rectangle of the given points
    public static Rectangle GetBounds (Point[] points)
    {
@@ -111,12 +135,12 @@ public static class Geometry
       return GetBounds(rects);
    }
 
-   public static List<Province> GetVisibleCapitals(Rectangle rectangle)
+   public static List<Province> GetVisibleCapitals(HashSet<Province> provs)
    {
       List<Province> provinces = [];
       foreach (var province in Globals.Capitals)
       {
-         if (IsPointInRectangle(province.Center, ref rectangle))
+         if (provs.Contains(province))
             provinces.Add(province);
       }
       return provinces;
@@ -149,9 +173,9 @@ public static class Geometry
    }
 
    // TODO optimize using superregion bounds
-   public static List<Province> GetProvincesInRectangle(Rectangle rect)
+   public static HashSet<Province> GetProvincesInRectangle(Rectangle rect)
    {
-      var provinces = new List<Province>();
+      var provinces = new HashSet<Province>();
       foreach (var province in Globals.Provinces)
       {
          if (RectanglesIntercept(province.Bounds, rect))

@@ -1,9 +1,11 @@
 ﻿using System.Diagnostics;
+using Windows.UI.ApplicationSettings;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.Forms;
 using Editor.Forms.AdvancedSelections;
 using Newtonsoft.Json.Linq;
+using static Editor.Helper.ProvinceEnumHelper;
 
 namespace Editor.Helper;
 
@@ -73,7 +75,7 @@ public static class Selection
 
    // [x] STRG + ALT ==> IProvinceCollection Preview
    // [x] ALT + STRG + LMB Click ==> IProvinceCollection add or remove from selection
-   // [ ] ALT + RMB ==> Magic Wand Selection
+   // [x] ALT + SHIFT + LMB ==> Magic Wand Selection
 
    //( ALT + SHIFT ==> LoadProvince to GUI) LEAST PRIORITY
 
@@ -130,6 +132,8 @@ public static class Selection
    // Selection State
    private static SelectionToolType _selectionToolType = SelectionToolType.Single;
    private static SelectionType _selectionType = SelectionType.Province;
+   private static ProvAttrGet _mwComparisionAttribute = ProvAttrGet.id;
+   private static ProvAttrType _mwAttributeType = ProvAttrType.String;
 
    // ------------ Getters ------------ \\
    public static List<Province> GetSelectedProvinces => _selectedProvinces.ToList();
@@ -148,6 +152,8 @@ public static class Selection
 
       Globals.ZoomControl.ContextMenuStrip = SelectionMenuBuilder.GetSelectionMenu();
       Globals.MapWindow.SelectionTypeBox.SelectedIndexChanged += SelectionTypeBox_SelectedIndexChanged;
+
+      Globals.MapWindow.MWAttirbuteCombobox.SelectedIndexChanged += OnSelectedAttributeIndexChanged;
    }
 
    // ------------ Province Selection Methods ------------ \\
@@ -403,6 +409,16 @@ public static class Selection
          ClearHoverCollection();
    }
 
+   public static void HoverProvinces(ICollection<Province> provinces)
+   {
+      if (provinces.Count == 0)
+         return;
+
+      ClearHover();
+      MapDrawing.DrawOnMap(provinces, _hoverColor, Globals.ZoomControl, PixelsOrBorders.Borders);
+      _hoveredCollection.UnionWith(provinces);
+   }
+
    #endregion
 
    // ------------ Getting Data from Map Methods ------------ \\
@@ -492,6 +508,11 @@ public static class Selection
    {
       if (e.Button == MouseButtons.Left)
       {
+         if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift && (Control.ModifierKeys & Keys.Alt) != 0)
+         {
+            OnMagicWandSelection(e.Location);
+            goto SetCount;
+         }
          switch (_selectionToolType)
          {
             case SelectionToolType.Rectangle:
@@ -502,6 +523,7 @@ public static class Selection
                break;
          }
       }
+      SetCount:
       Globals.MapWindow.SetSelectedProvinceSum(Count);
       // ------------------------------ Province Idle Loading ------------------------------
       if (Globals.ProvinceEditingStatus == ProvinceEditingStatus.Selection
@@ -513,6 +535,14 @@ public static class Selection
 
    private static void ZoomControl_MouseMove(object? sender, MouseEventArgs e)
    {
+      if ((Control.ModifierKeys & Keys.Control) != 0 && (Control.ModifierKeys & Keys.Alt) != 0)
+         HoverCollection(e.Location);
+      if ((Control.ModifierKeys & Keys.Alt) != 0 && (Control.ModifierKeys & Keys.Shift) != 0)
+      {
+         MagicWandSelectionMove(e.Location);
+         return;
+      }
+
       switch (_selectionToolType)
       {
          case SelectionToolType.Rectangle:
@@ -539,8 +569,6 @@ public static class Selection
             break;
       }
 
-      if ((Control.ModifierKeys & Keys.Control) != 0 && (Control.ModifierKeys & Keys.Alt) != 0)
-         HoverCollection(e.Location);
    }
 
    #endregion
@@ -738,7 +766,6 @@ public static class Selection
 
    public static void HoverCollection(Point point)
    {
-
       if (_selectionType == SelectionType.Province || !GetProvinceFromMap(point, out var province))
          return;
 
@@ -776,19 +803,92 @@ public static class Selection
 
    #region MagicWand Selection
 
-   private static void EnterMagicWandSelection(Point point)
+   private static void OnMagicWandSelection(Point point)
    {
+      if (!GetProvinceFromMap(point, out _))
+         return;
 
-   }
-
-   private static void ExitMagicWandSelection()
-   {
-
+      AddProvincesToSelection(_hoveredCollection);
+      _hoveredCollection.Clear();
+      Globals.ZoomControl.Invalidate();
    }
 
    private static void MagicWandSelectionMove(Point point)
    {
+      if (!GetProvinceFromMap(point, out var province) || LastHoveredProvince == province)
+         return;
 
+      ClearHighlightedProvinces();
+      var provinces = GetProvincesForMagicWand(province);
+      HoverProvinces(provinces);
+      LastHoveredProvince = province;
+
+      Globals.ZoomControl.Invalidate();
+   }
+
+   private static List<Province> GetProvincesForMagicWand(Province province)
+   {
+      
+      var provinces = new List<Province>();
+      var queue = new Queue<Province>();
+      var visited = new HashSet<Province>(); // Track visited provinces
+      queue.Enqueue(province);
+      visited.Add(province);
+      
+      var originalValue = province.GetAttribute(_mwComparisionAttribute);
+      var tolerance = Globals.MapWindow.MagicWandTolerance.Value;
+
+      while (queue.Count > 0)
+      {
+         var current = queue.Dequeue();
+         provinces.Add(current);
+
+         foreach (var neighbour in Globals.AdjacentProvinces[current])
+         {
+            if (visited.Contains(neighbour) || Globals.NonLandProvinces.Contains(neighbour))
+               continue;
+
+            var neighborValue = neighbour.GetAttribute(_mwComparisionAttribute);
+            bool shouldEnqueue = false;
+
+            switch (_mwAttributeType)
+            {
+               case ProvAttrType.Int:
+                  shouldEnqueue = Math.Abs((int)originalValue - (int)neighborValue) <= (int)tolerance;
+                  break;
+               case ProvAttrType.Float:
+                  shouldEnqueue = Math.Abs((float)originalValue - (float)neighborValue) <= (float)tolerance;
+                  break;
+               case ProvAttrType.String:
+               case ProvAttrType.Bool:
+               case ProvAttrType.Tag:
+                  shouldEnqueue = originalValue.Equals(neighborValue);
+                  break;
+               case ProvAttrType.List:
+                  break;
+            }
+
+            if (shouldEnqueue)
+            {
+               queue.Enqueue(neighbour);
+               visited.Add(neighbour);
+            }
+         }
+      }
+
+      return provinces;
+   }
+
+
+
+   private static void OnSelectedAttributeIndexChanged(object? sender, EventArgs e)
+   {
+      if (sender is not ComboBox comboBox || !Enum.TryParse(comboBox.SelectedItem?.ToString(), out _mwComparisionAttribute))
+         return;
+
+      // Enable the tolerance if the type is float or int
+      _mwAttributeType = GetAttributeType(_mwComparisionAttribute);
+      Globals.MapWindow.MagicWandTolerance.Enabled = _mwAttributeType is ProvAttrType.Float or ProvAttrType.Int;
    }
 
    #endregion

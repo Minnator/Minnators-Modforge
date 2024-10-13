@@ -2,6 +2,7 @@
 using Editor.DataClasses.GameDataClasses;
 using Editor.Events;
 using Editor.Helper;
+using static Editor.Helper.ProvinceEnumHelper;
 
 namespace Editor.DataClasses.MapModes
 {

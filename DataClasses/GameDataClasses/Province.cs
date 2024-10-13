@@ -1,11 +1,10 @@
 ﻿using System.Text;
 using Editor.Helper;
 using Editor.Interfaces;
-using Editor.ParadoxLanguage.Effect;
 using Editor.ParadoxLanguage.Scope;
-using Editor.ParadoxLanguage.Trigger;
 using Editor.Parser;
 using static Editor.Events.ProvinceEventHandler;
+using static Editor.Helper.ProvinceEnumHelper;
 
 namespace Editor.DataClasses.GameDataClasses;
 
@@ -64,101 +63,6 @@ public class ProvinceData()
    public List<string> ProvinceTriggeredModifiers = [];     // MOD
    public List<Effect> ScriptedEffects = [];           
    public List<TradeModifier> TradeModifiers = [];  
-}
-
-public enum ProvAttrGet
-{
-   base_manpower,
-   base_tax,
-   base_production,
-   total_development,
-   area,
-   continent,
-   claims,
-   permanent_claims,
-   cores,
-   controller,
-   owner,
-   tribal_owner,
-   center_of_trade,
-   extra_cost,
-   native_ferocity,
-   native_hostileness,
-   native_size,
-   revolt_risk,
-   local_autonomy,
-   devastation,
-   prosperity,
-   nationalism,
-   discovered_by,
-   capital,
-   culture,
-   religion,
-   buildings,
-   hre,
-   is_city,
-   seat_in_parliament,
-   trade_good,
-   history,
-   id,
-   name,
-   revolt,
-   is_occupied,
-   latent_trade_good,
-   citysize,
-   trade_company_investment
-}
-
-public enum ProvAttrSet
-{
-   add_claim,
-   remove_claim,
-   add_core,
-   remove_core,
-   base_manpower,
-   add_base_manpower,
-   base_production,
-   add_base_production,
-   base_tax,
-   add_base_tax,
-   capital,
-   center_of_trade,
-   controller,
-   culture,
-   discovered_by,
-   remove_discovered_by,
-   extra_cost,
-   hre,
-   is_city,
-   native_ferocity,
-   native_hostileness,
-   native_size,
-   owner,
-   religion,
-   seat_in_parliament,
-   trade_goods,
-   tribal_owner,
-   unrest,
-   shipyard,
-   revolt,
-   revolt_risk,
-   add_local_autonomy,
-   add_nationalism,
-   add_trade_company_investment,
-   add_to_trade_company,
-   reformation_center,
-   add_province_modifier,
-   remove_province_modifier,
-   add_permanent_province_modifier,
-   remove_permanent_province_modifier,
-   add_province_triggered_modifier,
-   remove_province_triggered_modifier,
-   set_global_flag,
-   devastation,
-   prosperity,
-   remove_permanent_claim,
-   add_permanent_claim,
-   citysize,
 }
 
 public class Province : IProvinceCollection, IScope

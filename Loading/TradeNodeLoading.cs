@@ -27,9 +27,14 @@ namespace Editor.Loading
       private static void SetIncoming()
       {
          foreach (var node in Globals.TradeNodes.Values)
+         {
             foreach (var outgoing in node.Outgoing)
-               if (Globals.TradeNodes.TryGetValue(outgoing.Target, out var outgoingNode)) 
+            {
+               if (Globals.TradeNodes.TryGetValue(outgoing.Target, out var outgoingNode))
                   outgoingNode.Incoming.Add(node.Name);
+               outgoing.CalculateBounds();
+            }
+         }
       }
 
       private static void ConnectControlPaths()

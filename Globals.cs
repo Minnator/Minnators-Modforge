@@ -191,7 +191,7 @@ public static class Globals
    public static HashSet<Province> SeaProvinces = [];
    public static HashSet<Province> LakeProvinces = [];
    public static HashSet<Province> CoastalProvinces = [];
-   public static Province[] NonLandProvinces = [];
+   public static HashSet<Province> NonLandProvinces = [];
    public static Province[] LandProvinceIds = [];
    public static Dictionary<string, ColonialRegion> ColonialRegions = [];
 
