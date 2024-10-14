@@ -21,7 +21,7 @@ namespace Editor.DataClasses.MapModes
 
       public override string GetMapModeName()
       {
-         return "HRE";
+         return MapModeType.Hre.ToString();
       }
 
       public override string GetSpecificToolTip(Province provinceId)

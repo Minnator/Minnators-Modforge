@@ -26,7 +26,7 @@ public class CultureGroupMapMode : MapMode
 
    public override string GetMapModeName()
    {
-      return "Culture Group";
+      return MapModeType.CultureGroup.ToString();
    }
 
    public override string GetSpecificToolTip(Province provinceId)

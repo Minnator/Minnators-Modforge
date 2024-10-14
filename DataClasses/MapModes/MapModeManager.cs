@@ -4,10 +4,40 @@ using Editor.MapModes;
 
 namespace Editor.DataClasses.MapModes;
 
+public enum MapModeType
+{
+   None,
+   Province,
+   Area,
+   Regions,
+   SuperRegion,
+   Continent,
+   Development,
+   CenterOfTrade,
+   Autonomy,
+   Fort,
+   CultureGroup,
+   Culture,
+   Country,
+   TradeGoods,
+   TradeNode,
+   TradeCompany,
+   ColonialRegions,
+   Religion,
+   Devastation,
+   Prosperity,
+   Hre,
+   ParliamentSeat,
+   City,
+   HasCapital,
+   Diplomatic
+}
+
 public class MapModeManager
 {
    private List<MapMode> MapModes { get; } = [];
    public MapMode CurrentMapMode { get; set; } = null!;
+   public MapModeType CurrentMapModeType { get; set; }
    public ProvinceIdMapMode IdMapMode { get; set; } = null!;
    public bool PreviousLandOnly { get; set; }
    public bool RequireFullRedraw { get; set; } = true;
@@ -71,13 +101,12 @@ public class MapModeManager
    {
       return MapModes.Find(mode => mode.GetMapModeName() == name) ?? IdMapMode;
    }
-
-   public List<string> GetMapModeNames()
+   
+   public void SetCurrentMapMode(MapModeType mode)
    {
-      var names = new List<string>();
-      foreach (var mode in MapModes) 
-         names.Add(mode.GetMapModeName());
-      return names;
+      if (mode == MapModeType.None || CurrentMapModeType == mode)
+         return;
+      SetCurrentMapMode(mode.ToString());
    }
 
    public void SetCurrentMapMode(string name)
@@ -92,6 +121,7 @@ public class MapModeManager
       CurrentMapMode.RenderMapMode(CurrentMapMode.GetProvinceColor);
       GC.Collect(); // We need to collect the garbage to free up memory but this is not ideal
       Globals.MapWindow.MapModeComboBox.SelectedItem = name;
+      CurrentMapModeType = Enum.Parse<MapModeType>(name);
       MapModeChanged(this, CurrentMapMode);
    }
 

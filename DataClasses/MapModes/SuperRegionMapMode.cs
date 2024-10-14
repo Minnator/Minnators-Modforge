@@ -13,7 +13,7 @@ public sealed class SuperRegionMapMode : MapMode
 
    public override string GetMapModeName()
    {
-      return "Super Regions";
+      return MapModeType.SuperRegion.ToString();
    }
 
    public override int GetProvinceColor(Province id)

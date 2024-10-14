@@ -68,7 +68,7 @@ public class FortMapMode : MapMode
 
    public override string GetMapModeName()
    {
-      return "Fort Level";
+      return MapModeType.Fort.ToString();
    }
 
    public override string GetSpecificToolTip(Province provinceId)

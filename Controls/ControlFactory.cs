@@ -19,6 +19,10 @@ public static class ControlFactory
 
    #endregion
 
+   public static MapModeButton GetMapModeButton(char hotkey)
+   {
+      return new (hotkey);
+   }
 
    public static CollectionEditor GetCollectionEditor(string name, string mapModeName, ItemTypes itemTypes, List<string> comboBoxItems, Func<string, List<string>> onIndexSelectedFunc, Func<string, bool, List<string>> onAddedOrRemovedFunc, Func<string, List<string>> onNewCreated, Action<string> onDeleted, Action<string, string> onSingleRemoved)
    {

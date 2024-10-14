@@ -23,7 +23,7 @@ namespace Editor.DataClasses.MapModes
 
       public override string GetMapModeName()
       {
-         return "Diplomatic";
+         return MapModeType.Diplomatic.ToString();
       }
 
       public override string GetSpecificToolTip(Province province)

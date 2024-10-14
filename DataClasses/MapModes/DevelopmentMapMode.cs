@@ -94,7 +94,7 @@ public class DevelopmentMapMode : MapMode
 
    public override string GetMapModeName()
    {
-      return "Total Development";
+      return MapModeType.Development.ToString();
    }
 
    public override string GetSpecificToolTip(Province provinceId)

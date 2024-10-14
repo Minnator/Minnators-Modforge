@@ -23,7 +23,7 @@ public class CultureMapMode : MapMode
 
    public override string GetMapModeName()
    {
-      return "Culture";
+      return MapModeType.Culture.ToString();
    }
 
    public override string GetSpecificToolTip(Province id)

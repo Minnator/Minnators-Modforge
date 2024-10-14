@@ -18,7 +18,7 @@ public sealed class ContinentMapMode : MapMode
 
    public override string GetMapModeName()
    {
-      return "Continents";
+      return MapModeType.Continent.ToString();
    }
 
    public override int GetProvinceColor(Province id)

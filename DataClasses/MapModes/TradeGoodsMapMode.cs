@@ -25,7 +25,7 @@ namespace Editor.DataClasses.MapModes
 
       public override string GetMapModeName()
       {
-         return "Trade Goods";
+         return MapModeType.TradeGoods.ToString();
       }
 
       public override string GetSpecificToolTip(Province provinceId)

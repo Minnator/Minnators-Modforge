@@ -21,7 +21,7 @@ namespace Editor.DataClasses.MapModes
 
       public override string GetMapModeName()
       {
-         return "Parliament Seats";
+         return MapModeType.ParliamentSeat.ToString();
       }
 
       public override string GetSpecificToolTip(Province provinceId)

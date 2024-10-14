@@ -17,7 +17,7 @@ namespace Editor.DataClasses.MapModes
 
       public override string GetMapModeName()
       {
-         return "Colonial Regions";
+         return MapModeType.ColonialRegions.ToString();
       }
 
       public override string GetSpecificToolTip(Province provinceId)

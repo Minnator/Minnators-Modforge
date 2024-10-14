@@ -29,7 +29,7 @@ namespace Editor.DataClasses.MapModes
 
       public override string GetMapModeName()
       {
-         return "Country";
+         return MapModeType.Country.ToString();
       }
 
       public override string GetSpecificToolTip(Province provinceId)

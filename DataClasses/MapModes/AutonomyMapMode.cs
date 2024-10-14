@@ -22,7 +22,7 @@ public class AutonomyMapMode : MapMode
 
    public override string GetMapModeName()
    {
-      return "Autonomy";
+      return MapModeType.Autonomy.ToString();
    }
 
    public override string GetSpecificToolTip(Province provinceId)

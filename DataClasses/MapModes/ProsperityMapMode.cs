@@ -15,7 +15,7 @@ namespace Editor.DataClasses.MapModes
 
       public override string GetMapModeName()
       {
-         return "Prosperity";
+         return MapModeType.Prosperity.ToString();
       }
 
       public override string GetSpecificToolTip(Province provinceId)

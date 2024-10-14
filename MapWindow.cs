@@ -7,6 +7,7 @@ using System.Text.Json;
 using Editor.Controls;
 using Editor.Controls.Initialisation.ProvinceCollectionEditors;
 using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.MapModes;
 using Editor.Events;
 using Editor.Forms;
 using Editor.Forms.Loadingscreen;
@@ -129,7 +130,7 @@ namespace Editor
          var sw = Stopwatch.StartNew();
          Globals.MapModeManager = new(); // Initialize the MapModeManager
          MapModeComboBox.Items.Clear();
-         MapModeComboBox.Items.AddRange([.. Globals.MapModeManager.GetMapModeNames()]);
+         MapModeComboBox.Items.AddRange([.. Enum.GetNames<MapModeType>()]);
          sw.Stop();
          Globals.LoadingLog.WriteTimeStamp("Initializing MapModes", sw.ElapsedMilliseconds);
       }
@@ -145,7 +146,7 @@ namespace Editor
       {
          InitializeComponent();
          Globals.ZoomControl = new(new(Globals.MapWidth, Globals.MapHeight));
-         MainToolstripContainer.ContentPanel.Controls.Add(Globals.ZoomControl);
+         MapLayoutPanel.Controls.Add(Globals.ZoomControl, 0, 0);
          Selection.Initialize();
          GuiDrawing.Initialize();
 
@@ -169,6 +170,42 @@ namespace Editor
          InitializeProvinceEditGui();
          InitializeProvinceCollectionEditGui();
          InitializeCountryEditGui();
+         InitializeMapModeButtons();
+      }
+
+      private void InitializeMapModeButtons()
+      {
+         var button1 = ControlFactory.GetMapModeButton('q');
+         button1.SetMapMode(MapModeType.Province);
+         var button2 = ControlFactory.GetMapModeButton('w');
+         button2.SetMapMode(MapModeType.Country);
+         var button3 = ControlFactory.GetMapModeButton('e');
+         button3.SetMapMode(MapModeType.TradeNode);
+         var button4 = ControlFactory.GetMapModeButton('r');
+         button4.SetMapMode(MapModeType.Area);
+         var button5 = ControlFactory.GetMapModeButton('t');
+         button5.SetMapMode(MapModeType.Regions);
+         var button6 = ControlFactory.GetMapModeButton('y');
+         button6.SetMapMode(MapModeType.SuperRegion);
+         var button7 = ControlFactory.GetMapModeButton('u');
+         button7.SetMapMode(MapModeType.Continent);
+         var button8 = ControlFactory.GetMapModeButton('i');
+         button8.SetMapMode(MapModeType.Development);
+         var button9 = ControlFactory.GetMapModeButton('o');
+         button9.SetMapMode(MapModeType.CenterOfTrade);
+         var button10 = ControlFactory.GetMapModeButton('p');
+         button10.SetMapMode(MapModeType.Autonomy);
+         MMButtonsTLPanel.Controls.Add(button1, 0, 0);
+         MMButtonsTLPanel.Controls.Add(button2, 1, 0);
+         MMButtonsTLPanel.Controls.Add(button3, 2, 0);
+         MMButtonsTLPanel.Controls.Add(button4, 3, 0);
+         MMButtonsTLPanel.Controls.Add(button5, 4, 0);
+         MMButtonsTLPanel.Controls.Add(button6, 5, 0);
+         MMButtonsTLPanel.Controls.Add(button7, 6, 0);
+         MMButtonsTLPanel.Controls.Add(button8, 7, 0);
+         MMButtonsTLPanel.Controls.Add(button9, 8, 0);
+         MMButtonsTLPanel.Controls.Add(button10, 9, 0);
+
       }
 
       private void InitializeProvinceCollectionEditGui()
@@ -1003,8 +1040,13 @@ namespace Editor
       private void graphicalElementsManagerToolStripMenuItem_Click(object sender, EventArgs e)
       {
          if (Globals.GuiDrawings == null || Globals.GuiDrawings.IsDisposed)
-            Globals.GuiDrawings = new ();
+            Globals.GuiDrawings = new();
          Globals.GuiDrawings.Show();
+      }
+
+      private void mapModeHotkeysToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+
       }
    }
 }

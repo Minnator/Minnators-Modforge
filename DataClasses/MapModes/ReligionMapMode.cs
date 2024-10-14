@@ -22,7 +22,7 @@ namespace Editor.DataClasses.MapModes
 
       public override string GetMapModeName()
       {
-         return "Religion";
+         return MapModeType.Religion.ToString();
       }
 
       public override string GetSpecificToolTip(Province provinceId)
