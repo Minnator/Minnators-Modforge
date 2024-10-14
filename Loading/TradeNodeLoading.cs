@@ -18,8 +18,8 @@ namespace Editor.Loading
             return;
          }
          ParseTradeNodesFromString(IO.ReadAllInUTF8(file));
-         SetIncoming();
          ConnectControlPaths();
+         SetIncoming();
          sw.Stop();
          Globals.LoadingLog.WriteTimeStamp("Loading TradeNodes", sw.ElapsedMilliseconds);
       }
@@ -48,8 +48,8 @@ namespace Editor.Loading
                if (!Globals.TradeNodes.TryGetValue(outgoing.Target, out var targetNode))
                   continue;
 
-               outgoing.Control.Insert(0, new (node.Location.Center.X, node.Location.Center.Y));
-               outgoing.Control.Add(new (targetNode.Location.Center.X, targetNode.Location.Center.Y));
+               outgoing.Control.Insert(0, new (node.Location.Positions.TradeNodeModel.X, node.Location.Positions.TradeNodeModel.Y));
+               outgoing.Control.Add(new (targetNode.Location.Positions.TradeNodeModel.X, targetNode.Location.Positions.TradeNodeModel.Y));
             }
          }
       }

@@ -19,7 +19,7 @@ public sealed class ZoomControl : Control, IDisposable
    public Graphics BmpGfx;
    public IntPtr HBitmap;
 
-   private float zoomFactor = 1.0f;
+   public float zoomFactor = 1.0f;
    private Point panOffset;
    private Point lastMousePosition;
    internal bool isPanning;
@@ -109,7 +109,10 @@ public sealed class ZoomControl : Control, IDisposable
 
    public Point ConvertCoordinates(Point inPoint, out bool inBounds)
    {
-      Point outPoint = new((int)(inPoint.X / zoomFactor + panOffset.X), (int)(inPoint.Y / zoomFactor + panOffset.Y));
+      var xCord = (inPoint.X / zoomFactor + panOffset.X) % map.Width;
+      if (xCord < 0)
+         xCord += map.Width;
+      Point outPoint = new((int)xCord, (int)(inPoint.Y / zoomFactor + panOffset.Y));
 
       if (outPoint.X < 0 || outPoint.Y < 0 || outPoint.X >= map.Width || outPoint.Y >= map.Height)
          inBounds = false;
@@ -123,8 +126,16 @@ public sealed class ZoomControl : Control, IDisposable
       return new((int)(zoomFactor * (inPoint.X - panOffset.X)), (int)(zoomFactor * (inPoint.Y - panOffset.Y)));
    }
 
-   public PointF ReverseCoordinateFloat(PointF inPoint)
+   public PointF ReverseCoordinateFloat(PointF inPoint, bool withOverRoll = false)
    {
+      if (withOverRoll)
+      {
+         if (inPoint.X < MapRectangle.Right - map.Width)
+            inPoint.X += map.Width;
+         else if (inPoint.X > map.Width + MapRectangle.Left)
+            inPoint.X -= map.Width;
+      }
+
       return new((zoomFactor * (inPoint.X - panOffset.X)), (zoomFactor * (inPoint.Y - panOffset.Y)));
    }
 
@@ -216,11 +227,18 @@ public sealed class ZoomControl : Control, IDisposable
       else
          panOffset.Y = (int)Math.Max(_limitY, Math.Min(_limitYHeight, panOffset.Y));
 
-      if (_limitXWidth < _limitX)
-         panOffset.X = -(int)((Width / zoomFactor - map.Width) / 2);
-      else
-         panOffset.X = (int)Math.Max(_limitX, Math.Min(_limitXWidth, panOffset.X));
+      //if (_limitXWidth < _limitX)
+      //   panOffset.X = -(int)((Width / zoomFactor - map.Width) / 2);
+      //else
+      //panOffset.X = (int)Math.Max(_limitX, Math.Min(_limitXWidth, panOffset.X));
 
+      var center = MapRectangle.X + MapRectangle.Width / 2;
+
+      if(center > map.Width)
+         panOffset.X -= map.Width;
+      else if(center < 0)
+        panOffset.X += map.Width;
+      
       var newRect = MapRectangle;
       ImagePositionChange.Invoke(this, new (_oldRectange, newRect));
       _oldRectange = newRect;
@@ -317,22 +335,18 @@ public sealed class ZoomControl : Control, IDisposable
 
 
       // Get the width of the bitmap and the rectangle
-      int bitmapWidth = map.Width;
       int rectEnd = MapRectangle.Right;
 
       // Calculate how much we need to offset the drawing on the X axis
-      int offsetX = rectEnd % bitmapWidth;
-      if (offsetX < 0) offsetX += bitmapWidth; // Handle negative offsets by wrapping
+      int offsetX = rectEnd % map.Width - MapRectangle.Width;
 
-      int truePos = 0;
+      if (offsetX < 0) offsetX += map.Width;
 
       // Draw the bitmap multiple times to repeat on the X-axis
-      for (int x = offsetX - map.Width; x < MapRectangle.Right; x += bitmapWidth)
+      for (int x = offsetX; x < MapRectangle.X; x += map.Width)
       {
          // Create a new rectangle to draw the bitmap in the correct position
-         Rectangle destRect = new Rectangle(offsetX, 0, Width, Height);
-
-         truePos += bitmapWidth;
+         Rectangle destRect = new Rectangle(x, 0, Width, Height);
 
          // Adjust the source rectangle in case we are drawing only part of the bitmap
          //Rectangle srcRect = new Rectangle(0, 0, bitmapWidth, map.Height);
@@ -350,6 +364,31 @@ public sealed class ZoomControl : Control, IDisposable
 
       DrawStretch(HBitmap, BmpGfx, e.Graphics, MapRectangle, thisRect);
 
+      Rectangle test = MapRectangle;
+
+      int deltax = MapRectangle.Right - map.Width;
+      if (deltax > 0)
+      {
+         var rightPoint = ReverseCoordinate(new(map.Width, map.Height)).X;
+
+         thisRect = thisRect with { Width = Width - rightPoint, X = rightPoint};
+
+         test = test with { Width = MapRectangle.Right - map.Width, X = 0};
+         DrawStretch(HBitmap, BmpGfx, e.Graphics, test, thisRect);
+      }
+
+      if (MapRectangle.X >= 0)
+         return;
+      //var point = ReverseCoordinate(MapRectangle.Location);
+
+      var zeroPoint = ReverseCoordinateFloat(new(1f,0));
+
+      test = test with { Width = - MapRectangle.X, X = map.Width + MapRectangle.X }; //map.Width + MapRectangle.X
+
+      thisRect.X = 0;
+
+      thisRect = thisRect with { Width = (int)Math.Ceiling(zeroPoint.X)};
+      DrawStretch(HBitmap, BmpGfx, e.Graphics, test, thisRect);
    }
 
 }

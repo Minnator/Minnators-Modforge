@@ -77,6 +77,7 @@ public class Province : IProvinceCollection, IScope
 
    // Management data
    public int Id { get; init; }
+   public Positions Positions { get; set; }
    // TODO to int
    public Color Color { get; set; }
    public int BorderPtr { get; set; }

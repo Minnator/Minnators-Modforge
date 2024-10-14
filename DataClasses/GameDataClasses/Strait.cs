@@ -7,7 +7,8 @@ namespace Editor.DataClasses.GameDataClasses
       Land,
       Sea,
       Canal,
-      Lake
+      Lake,
+      River
    }
 
    public class Strait

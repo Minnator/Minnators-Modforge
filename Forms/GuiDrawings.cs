@@ -35,5 +35,11 @@ namespace Editor.Forms
          GuiDrawing.AddOrRemoveGuiElement(GuiDrawing.GuiElements.Straits, StraitsCheckBox.Checked);
          Globals.ZoomControl.Invalidate();
       }
+
+      private void RiversCheckBox_CheckedChanged(object sender, EventArgs e)
+      {
+         GuiDrawing.AddOrRemoveGuiElement(GuiDrawing.GuiElements.Rivers, RiversCheckBox.Checked);
+         Globals.ZoomControl.Invalidate();
+      }
    }
 }

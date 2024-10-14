@@ -33,7 +33,8 @@ namespace Editor.Helper
          None = 0,
          TradeRoutes = 0b1,
          Captitals = 0b10,
-         Straits = 0b100
+         Straits = 0b100,
+         Rivers = 0b1000,
       }
 
       private static GuiElements _currentElements = GuiElements.None;
@@ -85,6 +86,8 @@ namespace Editor.Helper
             _mapModePaint += OnMapModePaintCapitals;
          if (elements.HasFlag(GuiElements.Straits))
             _mapModePaint += OnMapModePaintStraits;
+         if (elements.HasFlag(GuiElements.Rivers))
+            _mapModePaint += OnMapModePaintRivers;
       }
 
       private static void RemoveEvents(GuiElements elements)
@@ -95,6 +98,8 @@ namespace Editor.Helper
             _mapModePaint -= OnMapModePaintCapitals;
          if (elements.HasFlag(GuiElements.Straits)) 
             _mapModePaint -= OnMapModePaintStraits;
+         if (elements.HasFlag(GuiElements.Rivers)) 
+            _mapModePaint -= OnMapModePaintRivers;
       }
 
       private static void GuiPaint(object? _, PaintEventArgs e)
@@ -109,25 +114,56 @@ namespace Editor.Helper
          VisibleProvinces = Geometry.GetProvincesInRectangle(e.NewRectangle);
       }
 
+      private static void OnMapModePaintRivers(object _, MapModePaintEventArgs e)
+      {
+         var sw = Stopwatch.StartNew();
+         foreach (var kvp in Globals.Rivers)
+         {
+            var color = Color.FromArgb(kvp.Key);
+            SolidBrush brush = new(color);
+            foreach (var river in kvp.Value)
+            {
+               if (!Geometry.IsPointInRectangle(river, e.ClipRectangle))
+                  continue;
+               var convertedPoint = Globals.ZoomControl.ReverseCoordinate(new(river.X, river.Y));
+               var size = (int)Math.Ceiling(Globals.ZoomControl.zoomFactor);
+               convertedPoint.X -= size / 2;
+               convertedPoint.Y -= size / 2;
+               e.Graphics.FillRectangle(brush, new(convertedPoint, new Size(size, size)));
+            }
+         }
+         sw.Stop();
+         Debug.WriteLine($"Drawing rivers took {sw.ElapsedMilliseconds}ms");
+      }
+
       private static void OnMapModePaintTradeRoutes(object _, MapModePaintEventArgs e)
       {
          foreach (var node in Globals.TradeNodes.Values)
          {
             foreach (var outgoing in node.Outgoing)
             {
-               if (outgoing.Control.Count < 3 || !Geometry.RectanglesIntercept(e.ClipRectangle, outgoing.Bounds))
-                  continue;
-               var points = new PointF[outgoing.Control.Count];
-               for (var i = 0; i < outgoing.Control.Count; i++)
-               {
-                  var point = outgoing.Control[i];
-                  //point = point with { Y = Globals.MapHeight - point.Y};
-                  points[i] = (Globals.ZoomControl.ReverseCoordinateFloat(point));
-               }
-
-               e.Graphics.DrawCurve(Pens.BlanchedAlmond, points);
+               DrawTradeRoutes(e, outgoing);
             }
          }
+      }
+
+      private static void DrawTradeRoutes(MapModePaintEventArgs e, Outgoing outgoing)
+      {
+         if (outgoing.Control.Count < 3 || !Geometry.RectanglesIntercept(e.ClipRectangle, outgoing.Bounds))
+            return;
+         var points = new PointF[outgoing.Control.Count];
+         for (var i = 0; i < outgoing.Control.Count; i++)
+         {
+            var point = outgoing.Control[i];
+            //point = point with { Y = Globals.MapHeight - point.Y};
+            points[i] = (Globals.ZoomControl.ReverseCoordinateFloat(point, true));
+            if (points[i].X < 0 || points[i].X > Globals.ZoomControl.Width)
+            {
+               return;
+            }
+         }
+
+         e.Graphics.DrawCurve(Pens.BlanchedAlmond, points);
       }
 
       private static void OnMapModePaintCapitals(object _, MapModePaintEventArgs e)
@@ -135,7 +171,7 @@ namespace Editor.Helper
          var capitals = Geometry.GetVisibleCapitals(e.VisibleProvinces);
          foreach (var capital in capitals)
          {
-            var provinceCenter = Globals.ZoomControl.ReverseCoordinate(capital.Center);
+            var provinceCenter = Globals.ZoomControl.ReverseCoordinate(capital.Positions.City);
             e.Graphics.DrawRectangle(new(Color.Black, 1), provinceCenter.X - 2, provinceCenter.Y - 2, 4, 4);
             e.Graphics.DrawRectangle(Pens.Yellow, provinceCenter.X - 1, provinceCenter.Y - 1, 2, 2);
          }
@@ -150,13 +186,13 @@ namespace Editor.Helper
 
             Point start;
             if (strait.Start.X == -1 || strait.Start.Y == -1) 
-               start = Globals.ZoomControl.ReverseCoordinate(strait.From.Center);
+               start = Globals.ZoomControl.ReverseCoordinate(strait.From.Positions.City);
             else
                start = Globals.ZoomControl.ReverseCoordinate(strait.Start);
 
             Point end;
             if (strait.End.X == -1 || strait.End.Y == -1) 
-               end = Globals.ZoomControl.ReverseCoordinate(strait.To.Center);
+               end = Globals.ZoomControl.ReverseCoordinate(strait.To.Positions.City);
             else
                end = Globals.ZoomControl.ReverseCoordinate(strait.End);
 

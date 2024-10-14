@@ -101,7 +101,7 @@ public static class Globals
       }
    }
    private static int _loadingStage = 0;
-   public const int LOADING_STAGES = 28; // Needs to be increased when adding new loading stages
+   public const int LOADING_STAGES = 30; // Needs to be increased when adding new loading stages
    #endregion
    
    public static ConsoleForm? ConsoleForm = null;
@@ -150,6 +150,9 @@ public static class Globals
 
    // ToolTip
    public static string ToolTipText = $"$MAPMODE_SPECIFIC$\n------------------\nId:   $id$\nName: $name$\nOwner: $owner$ ($owner%L$)\nArea: $area$ ($area%L$)";
+
+   // Rivers
+   public static Dictionary<int, Point[]> Rivers = [];
 
    // Maps the name of TradeGoods to the TradeGood object
    public static readonly Dictionary<string, TradeGood> TradeGoods = [];

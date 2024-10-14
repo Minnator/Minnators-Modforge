@@ -35,7 +35,7 @@
          ShowTradeRoutesCheckBox = new CheckBox();
          StraitsCheckBox = new CheckBox();
          CapitalsCheckBox = new CheckBox();
-         checkBox4 = new CheckBox();
+         RiversCheckBox = new CheckBox();
          checkBox5 = new CheckBox();
          GuiDrawingsToolTip = new ToolTip(components);
          GuiDrawingsLayoutPanel.SuspendLayout();
@@ -49,7 +49,7 @@
          GuiDrawingsLayoutPanel.Controls.Add(ShowTradeRoutesCheckBox, 0, 1);
          GuiDrawingsLayoutPanel.Controls.Add(StraitsCheckBox, 0, 2);
          GuiDrawingsLayoutPanel.Controls.Add(CapitalsCheckBox, 0, 3);
-         GuiDrawingsLayoutPanel.Controls.Add(checkBox4, 0, 4);
+         GuiDrawingsLayoutPanel.Controls.Add(RiversCheckBox, 0, 4);
          GuiDrawingsLayoutPanel.Controls.Add(checkBox5, 0, 5);
          GuiDrawingsLayoutPanel.Dock = DockStyle.Fill;
          GuiDrawingsLayoutPanel.Location = new Point(0, 0);
@@ -118,17 +118,18 @@
          CapitalsCheckBox.UseVisualStyleBackColor = true;
          CapitalsCheckBox.CheckedChanged += CapitalsCheckBox_CheckedChanged;
          // 
-         // checkBox4
+         // RiversCheckBox
          // 
-         checkBox4.AutoSize = true;
-         checkBox4.Dock = DockStyle.Fill;
-         checkBox4.Location = new Point(9, 126);
-         checkBox4.Margin = new Padding(9, 3, 3, 3);
-         checkBox4.Name = "checkBox4";
-         checkBox4.Size = new Size(211, 19);
-         checkBox4.TabIndex = 4;
-         checkBox4.Text = "checkBox4";
-         checkBox4.UseVisualStyleBackColor = true;
+         RiversCheckBox.AutoSize = true;
+         RiversCheckBox.Dock = DockStyle.Fill;
+         RiversCheckBox.Location = new Point(9, 126);
+         RiversCheckBox.Margin = new Padding(9, 3, 3, 3);
+         RiversCheckBox.Name = "RiversCheckBox";
+         RiversCheckBox.Size = new Size(211, 19);
+         RiversCheckBox.TabIndex = 4;
+         RiversCheckBox.Text = "Rivers";
+         RiversCheckBox.UseVisualStyleBackColor = true;
+         RiversCheckBox.CheckedChanged += RiversCheckBox_CheckedChanged;
          // 
          // checkBox5
          // 
@@ -164,7 +165,7 @@
       private ToolTip GuiDrawingsToolTip;
       private CheckBox StraitsCheckBox;
       private CheckBox CapitalsCheckBox;
-      private CheckBox checkBox4;
+      private CheckBox RiversCheckBox;
       private CheckBox checkBox5;
    }
 }

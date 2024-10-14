@@ -146,6 +146,11 @@ public static class Geometry
       return provinces;
    }
 
+   public static bool IsPointInRectangle(Point point, Rectangle rect)
+   {
+      return IsPointInRectangle(point, ref rect);
+   }
+
    public static bool IsPointInRectangle(Point point, ref Rectangle rect)
    {
       return point.X >= rect.X && point.X < rect.X + rect.Width && point.Y >= rect.Y && point.Y < rect.Y + rect.Height;

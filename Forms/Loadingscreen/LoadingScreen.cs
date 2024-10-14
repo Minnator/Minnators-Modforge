@@ -76,6 +76,8 @@ namespace Editor.Forms.Loadingscreen
          
          try
          {
+            RiverLoading.Load();
+            bw.ReportProgress(++progress);
             ScriptedEffectLoading.LoadScriptedEffects();
             bw.ReportProgress(++progress);
             ModifierLoading.Load();
@@ -95,6 +97,8 @@ namespace Editor.Forms.Loadingscreen
             MapLoading.LoadDefinitionAndMap();
             bw.ReportProgress(++progress);
             DefaultMapLoading.CreateProvinceGroups();
+            bw.ReportProgress(++progress);
+            PositionsLoading.Load();
             bw.ReportProgress(++progress);
             AreaLoading.LoadNew();
             bw.ReportProgress(++progress);
