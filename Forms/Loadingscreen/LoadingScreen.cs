@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
+using System.Media;
 using Editor.Controls;
 using Editor.Loading;
 using Editor.Parser;
@@ -21,7 +22,9 @@ namespace Editor.Forms.Loadingscreen
          ProgressBar = new();
          ProgressBar.Dock = DockStyle.Fill;
          tableLayoutPanel1.Controls.Add(ProgressBar, 0, 2);
-         
+
+         LoadingAnimation.Click += TotallyNormalClickEvent;
+
          StartLoadingAnimation();
 
          StartPosition = FormStartPosition.CenterScreen;
@@ -66,6 +69,32 @@ namespace Editor.Forms.Loadingscreen
             ProgressBar.Invalidate();
          };
          bw.RunWorkerAsync();
+      }
+
+      private int count = 0;
+      private DateTime end = DateTime.Today;
+
+      private void TotallyNormalClickEvent(object? s, EventArgs e)
+      {
+         if (count == 0)
+         {
+            end = DateTime.Now.AddSeconds(2);
+            count = 1;
+            return;
+         }
+
+         if (DateTime.Now < end)
+         {
+            if (count < 2)
+            {
+               count += 1;
+               return;
+            }
+
+            using var player = new SoundPlayer(Properties.Resources.BonkSoundEffect);
+            player.Play();
+         }
+         count = 0;
       }
 
       private void OnBwOnDoWork(object? s, DoWorkEventArgs e)

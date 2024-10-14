@@ -102,7 +102,7 @@ namespace Editor
          DateControl.Date = new(1444, 11, 11);
          Globals.State = State.Running;
          Globals.LoadingStage++;
-         MapModeComboBox.SelectedIndex = 11;
+         Globals.MapModeManager.SetCurrentMapMode(MapModeType.Country);
          ResumeLayout();
          Globals.LoadingStage++;
 
@@ -205,7 +205,6 @@ namespace Editor
          MMButtonsTLPanel.Controls.Add(button8, 7, 0);
          MMButtonsTLPanel.Controls.Add(button9, 8, 0);
          MMButtonsTLPanel.Controls.Add(button10, 9, 0);
-
       }
 
       private void InitializeProvinceCollectionEditGui()
@@ -471,6 +470,9 @@ namespace Editor
 
          // MODIFIERS TAB
          InitializeModifierTab();
+
+         // Localisation GroupBox
+
       }
 
       #endregion
@@ -576,7 +578,11 @@ namespace Editor
          //if (Selection.GetSharedAttribute(ProvAttrGet.trade_company_investment, out result) && result is string tradeCompanyInvestments)
          //   _tradeCompanyInvestments.Text = tradeCompanyInvestments;
          if (Selection.GetSelectedProvinces.Count == 1)
+         {
             AddAllModifiersToListView(Selection.GetSelectedProvinces[0]);
+            LocalisationTextBox.Text = Selection.GetSelectedProvinces[0].GetLocalisation();
+            LocalisationLabel.Text = Selection.GetSelectedProvinces[0].GetLocalisationString();
+         }
          ResumeLayout();
          Globals.EditingStatus = EditingStatus.Idle;
       }
@@ -652,6 +658,8 @@ namespace Editor
          ModifiersListView.Items.Clear();
          DurationTextBox.Text = string.Empty;
          _tradeCompanyInvestments.Text = string.Empty;
+         LocalisationTextBox.Text = string.Empty;
+         LocalisationLabel.Text = string.Empty;
       }
       #endregion
 

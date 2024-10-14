@@ -228,7 +228,10 @@ public static class Globals
    public static Dictionary<string, Continent> Continents { get; set; } = [];
 
    // Localisation
-   public static Dictionary<string, string> Localisation { get; set; } = [];
+   public static Dictionary<string, Dictionary<string, string>> VanillaLocalisation { get; set; } = [];
+   public static Dictionary<string, Dictionary<string, string>> ModLocalisation { get; set; } = [];
+   public static Dictionary<string, Dictionary<string, string>> ReplaceLocalisation { get; set; } = [];
+
    public static Dictionary<string, string> LocalisationCollisions { get; set; } = [];
    
    public static HashSet<string> ScriptedEffectNames {get; set; } = [];
@@ -260,26 +263,26 @@ public static class Globals
 // - [x] Add a way to change the language of the application
 // - [x] Rework the Rendering of the map to be more efficient and using GDIP32
 // - [x] Add zooming to the map 0.5x - 16.0x
-// - [ ] Add a way to change the map mode via customizable Hotkeys
-// - [ ] Fix the Province Collection Editing gui so that all types work the same and edge cases are handled
+// - [x] Add a way to change the map mode via customizable Hotkeys
 // - [x] Fix Lasso Selection Preview sometimes being incorrect
-// - [ ] Make Magic wand tool
+// - [X] Make Magic wand tool
 // - [ ] Add a modifier creation and selection menu to apply to different scopes
 // - [ ] Add saving for all Province Collections
-// - [ ] Add descriptions on how to customize tooltips, map modes, and other things
+// - [|] Add descriptions on how to customize tooltips, map modes, and other things
 // - [ ] Add basic country editing
-// - [ ] Fix province center calculation
+// - [x] Fix province center calculation
 // - [x] Find last concurrency bugs
 // - [ ] Pre load and layout the Province Collection Editing GUI to prevent LagSpike on first opening said tab
 // - [ ] MelonCoaster easter Egg in Loading Screen
-// - [ ] Add a help page that leads to the official Discord
+// - [x] Add a help page that leads to the official Discord
 // - [ ] Improve selection modifiers and its GUI by adding more and only listing in context valid options
-// - [ ] Straits editing and creation
+// - [|] Straits editing and creation
+// - [ ] Fix the Province Collection Editing gui so that all types work the same and edge cases are handled
 // - [ ] Redo on create area does not work 
 // - [ ] Redo on DeleteRegion still shows the region_name afterwards
 // - [ ] Region creation is completely broken
 // - [ ] Localisation editing for provinces and modifiers
-// - [ ] Check if province is selected by color of the pixels instead of bounds or center
+// - [x] Check if province is selected by color of the pixels instead of bounds or center
 // - [ ] Fix tooltip preventing MouseWheel event
 // - [ ] Item scaling on Graphics (Trade arrows, straits, capitals, text)
 

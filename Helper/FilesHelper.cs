@@ -48,8 +48,9 @@ public static partial class FilesHelper
    /// </summary>
    /// <param name="internalPath"></param>
    /// <returns></returns>
-   public static List<string> GetFilesFromModAndVanillaUniquely(params string[] internalPath)
+   public static List<string> GetFilesFromModAndVanillaUniquely(string searchPattern = "*.txt", params string[] internalPath)
    {
+
       var folderPath = Path.Combine(internalPath);
       var modPath = Path.Combine(Globals.ModPath, folderPath);
       var vanillaPath = Path.Combine(Globals.VanillaPath, folderPath);
@@ -58,7 +59,7 @@ public static partial class FilesHelper
 
       if (Directory.Exists(modPath))
       {
-         foreach (var file in Directory.GetFiles(modPath, "*.txt", SearchOption.TopDirectoryOnly))
+         foreach (var file in Directory.GetFiles(modPath, searchPattern, SearchOption.TopDirectoryOnly))
          {
             if (fineNames.Add(Path.GetFileName(file)))
                fileSet.Add(file);
@@ -67,14 +68,14 @@ public static partial class FilesHelper
 
       if (Directory.Exists(vanillaPath))
       {
-         foreach (var file in Directory.GetFiles(vanillaPath, "*.txt", SearchOption.TopDirectoryOnly))
+         foreach (var file in Directory.GetFiles(vanillaPath, searchPattern, SearchOption.TopDirectoryOnly))
          {
             if (fineNames.Add(Path.GetFileName(file)))
                fileSet.Add(file);
          }
       }
 
-      return [..fileSet];
+      return [.. fileSet];
    }
 
    public static List<string> GetProvinceFilesUniquely()
@@ -160,7 +161,7 @@ public static partial class FilesHelper
    public static bool GetFilesUniquelyAndCombineToOne(out string output, params string[] internalPath)
    {
       var sb = new StringBuilder();
-      var files = GetFilesFromModAndVanillaUniquely(internalPath);
+      var files = GetFilesFromModAndVanillaUniquely(internalPath: internalPath);
       foreach (var file in files)
       {
          sb.Append(File.ReadAllText(file)).Append('\n');
@@ -180,6 +181,11 @@ public static partial class FilesHelper
       }
       filePath = Path.Combine(Globals.VanillaPath, innerPath);
       return File.Exists(filePath);
+   }
+
+   public static string CreateModPath(params string[] internalPath)
+   {
+      return Path.Combine(Globals.ModPath, Path.Combine(internalPath));
    }
 
 }

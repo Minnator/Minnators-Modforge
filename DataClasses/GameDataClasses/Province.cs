@@ -1121,7 +1121,12 @@ public class Province : IProvinceCollection, IScope
    }
    public string GetLocalisation()
    {
-      return Globals.Localisation.TryGetValue($"PROV{Id}", out var loc) ? loc : Id.ToString();
+      return Localisation.GetLoc(GetLocalisationString());
+   }
+
+   public string GetLocalisationString()
+   {
+      return $"PROV{Id}";
    }
    public int[] GetProvinceIds()
    {

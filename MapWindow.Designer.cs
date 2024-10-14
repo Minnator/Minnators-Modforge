@@ -151,6 +151,12 @@
          SaveAllProvincesButton = new Button();
          SaveAllModifiedButton = new Button();
          SaveCurrentSelectionButton = new Button();
+         LocalisationGroupBox = new GroupBox();
+         LocTableLayoutPanel = new TableLayoutPanel();
+         LocalisationLabel = new Label();
+         LocalisationTextBox = new TextBox();
+         label25 = new Label();
+         label26 = new Label();
          COuntryPage = new TabPage();
          ProvinceGroupsPage = new TabPage();
          ProvinceCollectionsPanel = new Panel();
@@ -197,6 +203,8 @@
          groupBox6.SuspendLayout();
          TradePanel.SuspendLayout();
          tableLayoutPanel2.SuspendLayout();
+         LocalisationGroupBox.SuspendLayout();
+         LocTableLayoutPanel.SuspendLayout();
          ProvinceGroupsPage.SuspendLayout();
          ProvinceCollectionsPanel.SuspendLayout();
          ProvinceCollectionsTab.SuspendLayout();
@@ -747,6 +755,7 @@
          ProvinceEditingLayout.Controls.Add(groupBox5, 0, 5);
          ProvinceEditingLayout.Controls.Add(groupBox6, 1, 5);
          ProvinceEditingLayout.Controls.Add(tableLayoutPanel2, 0, 8);
+         ProvinceEditingLayout.Controls.Add(LocalisationGroupBox, 1, 6);
          ProvinceEditingLayout.Dock = DockStyle.Fill;
          ProvinceEditingLayout.Location = new Point(0, 0);
          ProvinceEditingLayout.Margin = new Padding(0);
@@ -1573,6 +1582,83 @@
          SaveCurrentSelectionButton.UseVisualStyleBackColor = true;
          SaveCurrentSelectionButton.Click += SaveCurrentSelectionButton_Click;
          // 
+         // LocalisationGroupBox
+         // 
+         LocalisationGroupBox.Controls.Add(LocTableLayoutPanel);
+         LocalisationGroupBox.Dock = DockStyle.Fill;
+         LocalisationGroupBox.Location = new Point(199, 500);
+         LocalisationGroupBox.Margin = new Padding(3, 0, 3, 0);
+         LocalisationGroupBox.Name = "LocalisationGroupBox";
+         LocalisationGroupBox.Padding = new Padding(0);
+         LocalisationGroupBox.Size = new Size(190, 112);
+         LocalisationGroupBox.TabIndex = 11;
+         LocalisationGroupBox.TabStop = false;
+         LocalisationGroupBox.Text = "Localisation";
+         // 
+         // LocTableLayoutPanel
+         // 
+         LocTableLayoutPanel.ColumnCount = 2;
+         LocTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
+         LocTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
+         LocTableLayoutPanel.Controls.Add(LocalisationLabel, 1, 0);
+         LocTableLayoutPanel.Controls.Add(LocalisationTextBox, 1, 1);
+         LocTableLayoutPanel.Controls.Add(label25, 0, 0);
+         LocTableLayoutPanel.Controls.Add(label26, 0, 1);
+         LocTableLayoutPanel.Dock = DockStyle.Fill;
+         LocTableLayoutPanel.Location = new Point(0, 16);
+         LocTableLayoutPanel.Margin = new Padding(0);
+         LocTableLayoutPanel.Name = "LocTableLayoutPanel";
+         LocTableLayoutPanel.RowCount = 3;
+         LocTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         LocTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         LocTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         LocTableLayoutPanel.Size = new Size(190, 96);
+         LocTableLayoutPanel.TabIndex = 0;
+         // 
+         // LocalisationLabel
+         // 
+         LocalisationLabel.AutoSize = true;
+         LocalisationLabel.Dock = DockStyle.Fill;
+         LocalisationLabel.Location = new Point(58, 1);
+         LocalisationLabel.Margin = new Padding(1);
+         LocalisationLabel.Name = "LocalisationLabel";
+         LocalisationLabel.Size = new Size(131, 23);
+         LocalisationLabel.TabIndex = 0;
+         LocalisationLabel.Text = "-";
+         LocalisationLabel.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // LocalisationTextBox
+         // 
+         LocalisationTextBox.Dock = DockStyle.Fill;
+         LocalisationTextBox.Location = new Point(58, 26);
+         LocalisationTextBox.Margin = new Padding(1);
+         LocalisationTextBox.Name = "LocalisationTextBox";
+         LocalisationTextBox.Size = new Size(131, 23);
+         LocalisationTextBox.TabIndex = 1;
+         LocalisationTextBox.Text = "-";
+         // 
+         // label25
+         // 
+         label25.AutoSize = true;
+         label25.Dock = DockStyle.Fill;
+         label25.Location = new Point(3, 0);
+         label25.Name = "label25";
+         label25.Size = new Size(51, 25);
+         label25.TabIndex = 2;
+         label25.Text = "Key";
+         label25.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // label26
+         // 
+         label26.AutoSize = true;
+         label26.Dock = DockStyle.Fill;
+         label26.Location = new Point(3, 25);
+         label26.Name = "label26";
+         label26.Size = new Size(51, 25);
+         label26.TabIndex = 3;
+         label26.Text = "Value";
+         label26.TextAlign = ContentAlignment.MiddleLeft;
+         // 
          // COuntryPage
          // 
          COuntryPage.Location = new Point(4, 24);
@@ -1782,6 +1868,9 @@
          TradePanel.ResumeLayout(false);
          TradePanel.PerformLayout();
          tableLayoutPanel2.ResumeLayout(false);
+         LocalisationGroupBox.ResumeLayout(false);
+         LocTableLayoutPanel.ResumeLayout(false);
+         LocTableLayoutPanel.PerformLayout();
          ProvinceGroupsPage.ResumeLayout(false);
          ProvinceCollectionsPanel.ResumeLayout(false);
          ProvinceCollectionsTab.ResumeLayout(false);
@@ -1932,6 +2021,12 @@
       private ToolStripMenuItem mapModeHotkeysToolStripMenuItem;
       private TableLayoutPanel MapLayoutPanel;
       private TableLayoutPanel MMButtonsTLPanel;
+      private GroupBox LocalisationGroupBox;
+      private TableLayoutPanel LocTableLayoutPanel;
+      private Label LocalisationLabel;
+      private TextBox LocalisationTextBox;
+      private Label label25;
+      private Label label26;
    }
 }
 
