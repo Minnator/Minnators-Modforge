@@ -135,6 +135,8 @@
          DurationTextBox = new TextBox();
          DeleteModifierButton = new Button();
          AddModifierButton = new Button();
+         ModTypeSubLayout = new TableLayoutPanel();
+         OpenAddModifierForm = new Button();
          groupBox5 = new GroupBox();
          FloatLayoutPanel = new TableLayoutPanel();
          label9 = new Label();
@@ -198,6 +200,7 @@
          ModifiersTab.SuspendLayout();
          ModifiersLayoutPanel.SuspendLayout();
          tableLayoutPanel3.SuspendLayout();
+         ModTypeSubLayout.SuspendLayout();
          groupBox5.SuspendLayout();
          FloatLayoutPanel.SuspendLayout();
          groupBox6.SuspendLayout();
@@ -1265,6 +1268,7 @@
          ModifiersLayoutPanel.Controls.Add(label22, 0, 1);
          ModifiersLayoutPanel.Controls.Add(label23, 0, 2);
          ModifiersLayoutPanel.Controls.Add(tableLayoutPanel3, 1, 2);
+         ModifiersLayoutPanel.Controls.Add(ModTypeSubLayout, 1, 0);
          ModifiersLayoutPanel.Dock = DockStyle.Fill;
          ModifiersLayoutPanel.Location = new Point(3, 3);
          ModifiersLayoutPanel.Margin = new Padding(0);
@@ -1376,6 +1380,33 @@
          AddModifierButton.Text = "Add Modifier";
          AddModifierButton.UseVisualStyleBackColor = true;
          AddModifierButton.Click += AddModifierButton_Click;
+         // 
+         // ModTypeSubLayout
+         // 
+         ModTypeSubLayout.ColumnCount = 2;
+         ModTypeSubLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         ModTypeSubLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 29F));
+         ModTypeSubLayout.Controls.Add(OpenAddModifierForm, 1, 0);
+         ModTypeSubLayout.Dock = DockStyle.Fill;
+         ModTypeSubLayout.Location = new Point(93, 0);
+         ModTypeSubLayout.Margin = new Padding(0);
+         ModTypeSubLayout.Name = "ModTypeSubLayout";
+         ModTypeSubLayout.RowCount = 1;
+         ModTypeSubLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         ModTypeSubLayout.Size = new Size(279, 25);
+         ModTypeSubLayout.TabIndex = 6;
+         // 
+         // OpenAddModifierForm
+         // 
+         OpenAddModifierForm.Dock = DockStyle.Fill;
+         OpenAddModifierForm.Image = Properties.Resources.GreePlus;
+         OpenAddModifierForm.Location = new Point(252, 0);
+         OpenAddModifierForm.Margin = new Padding(2, 0, 2, 0);
+         OpenAddModifierForm.Name = "OpenAddModifierForm";
+         OpenAddModifierForm.Size = new Size(25, 25);
+         OpenAddModifierForm.TabIndex = 0;
+         OpenAddModifierForm.UseVisualStyleBackColor = true;
+         OpenAddModifierForm.Click += OpenAddModifierForm_Click;
          // 
          // groupBox5
          // 
@@ -1861,6 +1892,7 @@
          ModifiersLayoutPanel.PerformLayout();
          tableLayoutPanel3.ResumeLayout(false);
          tableLayoutPanel3.PerformLayout();
+         ModTypeSubLayout.ResumeLayout(false);
          groupBox5.ResumeLayout(false);
          FloatLayoutPanel.ResumeLayout(false);
          FloatLayoutPanel.PerformLayout();
@@ -1989,7 +2021,7 @@
       private Button SaveCurrentSelectionButton;
       private TableLayoutPanel TradeCompaniesLayoutPanel;
       private Label label20;
-      private TableLayoutPanel ModifiersLayoutPanel;
+      public TableLayoutPanel ModifiersLayoutPanel;
       private Label label21;
       private Label label22;
       private Label label23;
@@ -2027,6 +2059,8 @@
       private TextBox LocalisationTextBox;
       private Label label25;
       private Label label26;
+      private TableLayoutPanel ModTypeSubLayout;
+      private Button OpenAddModifierForm;
    }
 }
 

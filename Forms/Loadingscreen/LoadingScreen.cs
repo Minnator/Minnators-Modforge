@@ -105,6 +105,14 @@ namespace Editor.Forms.Loadingscreen
          
          try
          {
+            FactionsLoading.Load();
+            bw.ReportProgress(++progress);
+            GovernmentMechanicsLoading.Load();
+            bw.ReportProgress(++progress);
+            LoadEstateModifiers.Load();
+            bw.ReportProgress(++progress);
+            ModifierParser.Initialize();
+            bw.ReportProgress(++progress);
             RiverLoading.Load();
             bw.ReportProgress(++progress);
             ScriptedEffectLoading.LoadScriptedEffects();
@@ -154,6 +162,8 @@ namespace Editor.Forms.Loadingscreen
             ScopeParser.GenerateCountryScope();
             bw.ReportProgress(++progress);
             AdjacenciesLoading.Load();
+            bw.ReportProgress(++progress);
+            ModifierParser.Demilitarize();
             bw.ReportProgress(++progress);
          }
          catch (Exception exception)

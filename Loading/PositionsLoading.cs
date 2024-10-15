@@ -15,7 +15,8 @@ namespace Editor.Loading
             return;
          }
 
-         var elements = Parsing.GetElements(0, IO.ReadAllInUTF8(path));
+         Parsing.RemoveCommentFromMultilineString(IO.ReadAllInUTF8(path), out var str);
+         var elements = Parsing.GetElements(0, str);
 
          foreach (var element in elements)
          {

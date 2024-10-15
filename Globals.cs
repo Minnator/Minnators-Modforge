@@ -101,7 +101,7 @@ public static class Globals
       }
    }
    private static int _loadingStage = 0;
-   public const int LOADING_STAGES = 30; // Needs to be increased when adding new loading stages
+   public const int LOADING_STAGES = 35; // Needs to be increased when adding new loading stages
    #endregion
    
    public static ConsoleForm? ConsoleForm = null;
@@ -237,6 +237,9 @@ public static class Globals
    public static HashSet<string> ScriptedEffectNames {get; set; } = [];
    public static List<Building> Buildings { get; set; }= [];
    public static HashSet<string> BuildingKeys { get; set; }= [];
+
+   // Modifiers
+   public static string[] ModifierKeys = new string[1];
 
    // Is used in parsing province files as some keys differ from standard effect keys
    public static readonly HashSet<string> UniqueAttributeKeys = [

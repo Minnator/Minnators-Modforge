@@ -142,15 +142,16 @@ namespace Editor.DataClasses.GameDataClasses
    public class EventModifier(string name)
    {
       public string Name { get; } = name;
-      public string Trigger { get; set; } = string.Empty;
+      public List<string> TriggerAttribute { get; set; } = [];
       public List<Modifier> Modifiers { get; set; } = [];
+      public string Picture { get; set; } = string.Empty;
 
       public string GetFormattedString()
       {
          var sb = new StringBuilder();
          sb.AppendLine($"{Name} = {{");
-         if (Trigger != string.Empty)
-            sb.AppendLine($"\ttrigger = {Trigger}");
+         foreach (var attr in TriggerAttribute)
+            sb.AppendLine($"\t{attr} = yes");
          foreach (var mod in Modifiers)
             sb.AppendLine($"\t{mod.Name} = {mod.Value}");
          sb.AppendLine("}");
@@ -174,15 +175,21 @@ namespace Editor.DataClasses.GameDataClasses
          return $"\"{Name}\" ({Modifiers.Count})";
       }
    }
-
-
-   public class Modifier(string name, string value) 
+   
+   public class Modifier(int nameIndex, object value) 
    {
-      public readonly string Name = name;
-      public readonly string Value = value;
+      public readonly int Name = nameIndex;
+      public object Value = value;
       public readonly Scope Scope = Scope.Country;
 
-      public Modifier(string name, string value, Scope scope) : this(name, value)
+      public enum Type
+      {
+         Bool,
+         Int,
+         Float
+      }
+
+      public Modifier(int nameIndex, object value, Scope scope) : this(nameIndex, value)
       {
          Scope = scope;
       }
@@ -195,7 +202,7 @@ namespace Editor.DataClasses.GameDataClasses
       public override bool Equals(object? obj)
       {
          if (obj is Modifier other)
-            return Name == other.Name && Value == other.Value;
+            return this == other;
          return false;
       }
 
@@ -211,8 +218,20 @@ namespace Editor.DataClasses.GameDataClasses
 
       public static bool operator !=(Modifier a, Modifier b)
       {
-         return a.Name != b.Name || a.Value != b.Value;
+         return !(a == b);
       }
+
+      public bool TryGetValue<T>(out T value)
+      {
+         if (Value is T typedValue)
+         {
+            value = typedValue;
+            return true;
+         }
+         value = default!;
+         return false;
+      }
+
    }
 
    public interface ISaveModifier

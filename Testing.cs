@@ -5,6 +5,34 @@ using Newtonsoft.Json.Serialization;
 
 namespace Editor
 {
+   public class EnumHelpers<TTarget> : IDisposable
+   {
+      public EnumHelpers()
+      {
+         Dict = Enum.GetNames(typeof(TTarget)).ToDictionary(x =>
+         {
+            return x;
+         }, x =>
+         {
+            return (TTarget)Enum.Parse(typeof(TTarget), x);
+         }, StringComparer.OrdinalIgnoreCase);
+
+      }
+
+      private readonly Dictionary<string, TTarget> Dict;
+
+      public bool TryConvert(string value, out TTarget enumValue)
+      {
+         return Dict.TryGetValue(value, out enumValue!);
+      }
+
+      public void Dispose()
+      {
+         Dict.Clear();
+      }
+
+   }
+
 
    public class DefaultValueIgnoringResolver : DefaultContractResolver
    {

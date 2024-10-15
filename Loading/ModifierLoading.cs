@@ -1,8 +1,5 @@
 ﻿using System.Diagnostics;
-using System.Text;
 using System.Text.RegularExpressions;
-using Windows.System;
-using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.Parser;
@@ -34,6 +31,18 @@ namespace Editor.Loading
             {
                if (!ModifierParser.ParseModifierFromName(kvps[i].Key.Trim(), kvps[i].Value.Trim(), out var mod))
                {
+                  if (ModifierParser.IsCustomModifierTrigger(kvps[i].Key))
+                  {
+                     modifier.TriggerAttribute.Add(kvps[i].Key);
+                     continue;
+                  }
+                  if (kvps[i].Key == "picture")
+                  {
+                     kvps[i].Value.TrimQuotes(out var pic);
+                     modifier.Picture = pic;
+                     continue;
+                  }
+
                   //TODO check if it is a trigger if so add to trigger attr and move on
                   Globals.ErrorLog.Write($"Unknown Modifier in modifiers file: {kvps[i].Key}");
                   continue;

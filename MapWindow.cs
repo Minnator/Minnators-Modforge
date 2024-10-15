@@ -12,6 +12,7 @@ using Editor.Events;
 using Editor.Forms;
 using Editor.Forms.Loadingscreen;
 using Editor.Helper;
+using Editor.Parser;
 using Editor.Savers;
 using static Editor.Helper.ProvinceEnumHelper;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
@@ -30,7 +31,7 @@ namespace Editor
 
       private ExtendedComboBox _religionComboBox = null!;
       private ExtendedComboBox _cultureComboBox = null!;
-      private ExtendedComboBox _modifierComboBox = null!;
+      public ExtendedComboBox _modifierComboBox = null!;
       private ExtendedComboBox _modifierTypeComboBox = null!;
 
       private ExtendedNumeric _taxNumeric = null!;
@@ -488,7 +489,8 @@ namespace Editor
 
          _modifierTypeComboBox = ControlFactory.GetExtendedComboBox(["CountryModifier", "ProvinceModifier"]);
          _modifierTypeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-         ModifiersLayoutPanel.Controls.Add(_modifierTypeComboBox, 1, 0);
+         _modifierTypeComboBox.Margin = new(2, 1, 2, 0);
+         ModTypeSubLayout.Controls.Add(_modifierTypeComboBox, 0, 0);
 
          ModifiersListView.View = View.Details;
          ModifiersListView.FullRowSelect = true;
@@ -820,8 +822,24 @@ namespace Editor
 
       private void telescopeToolStripMenuItem_Click(object sender, EventArgs e)
       {
+         var sb = new StringBuilder();
+         HashSet<string> trigger = [];
+         foreach (var mod in Globals.Modifiers.Values)
+         {
+            if (mod.TriggerAttribute.Count == 0)
+               foreach (var attr in mod.TriggerAttribute)
+                  trigger.Add(attr);
+         }
 
+         foreach (var trig in trigger)
+         {
+            sb.AppendLine(trig);
+         }
+
+         var downloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\";
+         File.WriteAllText(Path.Combine(downloadFolder, "triggers.txt"), sb.ToString());
       }
+
       private void fasdfToolStripMenuItem_Click(object sender, EventArgs e)
       {
          if (GuiDrawing.CurrentElements.HasFlag(GuiDrawing.GuiElements.TradeRoutes))
@@ -891,13 +909,10 @@ namespace Editor
          //DebugMaps.GridMap();
       }
 
-      private void DateSelector_SelectedIndexChanged(object sender, EventArgs e)
-      {
-
-      }
 
       private void MapWindow_Load(object sender, EventArgs e)
       {
+
       }
 
       private void searchToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1055,6 +1070,11 @@ namespace Editor
       private void mapModeHotkeysToolStripMenuItem_Click(object sender, EventArgs e)
       {
 
+      }
+
+      private void OpenAddModifierForm_Click(object sender, EventArgs e)
+      {
+         new EventModifierForm().ShowDialog();
       }
    }
 }
