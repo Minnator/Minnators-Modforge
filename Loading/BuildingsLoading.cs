@@ -10,7 +10,7 @@ namespace Editor.Loading
       public static void Load()
       {
          var sw = Stopwatch.StartNew();
-         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("common", "buildings");
+         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "buildings");
          List<Building> buildings = [];
 
          foreach (var file in files)

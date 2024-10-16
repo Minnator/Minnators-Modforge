@@ -74,6 +74,20 @@ namespace Editor.Controls
          Controls.Add(_tableLayoutPanel);
       }
 
+      public enum BoxType
+      {
+         Left,
+         Right
+      }
+
+      public void SetComboBoxItems(List<string> items, BoxType boxType, bool setAsDropDown)
+      {
+         var box = boxType == BoxType.Left ? _leftComboBox : _rightComboBox;
+         box.Items.Clear();
+         box.Items.AddRange(items.ToArray());
+         box.DropDownStyle = setAsDropDown ? ComboBoxStyle.DropDownList : ComboBoxStyle.DropDown;
+      }
+
       public void AddButtonClicked(object? sender, EventArgs e)
       {
          var left = _leftComboBox.Text;

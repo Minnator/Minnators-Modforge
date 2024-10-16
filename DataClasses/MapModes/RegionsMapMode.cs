@@ -12,9 +12,9 @@ public sealed class RegionsMapMode : MapMode
       ProvinceEventHandler.OnProvinceRegionAreasChanged += UpdateProvince!;
    }
 
-   public override string GetMapModeName()
+   public override MapModeType GetMapModeName()
    {
-      return MapModeType.Regions.ToString();
+      return MapModeType.Regions;
    }
 
    public override int GetProvinceColor(Province id)

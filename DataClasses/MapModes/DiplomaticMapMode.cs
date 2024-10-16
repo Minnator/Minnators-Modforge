@@ -21,9 +21,9 @@ namespace Editor.DataClasses.MapModes
          //TODO add permanent claims
       }
 
-      public override string GetMapModeName()
+      public override MapModeType GetMapModeName()
       {
-         return MapModeType.Diplomatic.ToString();
+         return MapModeType.Diplomatic;
       }
 
       public override string GetSpecificToolTip(Province province)

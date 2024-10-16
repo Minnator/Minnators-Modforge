@@ -18,9 +18,6 @@ public class FortMapMode : MapMode
 
    public override int GetProvinceColor(Province id)
    {
-      if (Globals.SeaProvinces.Contains(id))
-         return id.Color.ToArgb();
-
       // TODO: Expand to better forts
       switch (GetFortLevel(id))
       {
@@ -66,9 +63,9 @@ public class FortMapMode : MapMode
       return level;
    }
 
-   public override string GetMapModeName()
+   public override MapModeType GetMapModeName()
    {
-      return MapModeType.Fort.ToString();
+      return MapModeType.Fort;
    }
 
    public override string GetSpecificToolTip(Province provinceId)

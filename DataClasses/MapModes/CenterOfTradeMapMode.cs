@@ -32,9 +32,9 @@ public class CenterOfTradeMapMode : MapMode
       };
    }
 
-   public override string GetMapModeName()
+   public override MapModeType GetMapModeName()
    {
-      return MapModeType.CenterOfTrade.ToString();
+      return MapModeType.CenterOfTrade;
    }
 
    public override string GetSpecificToolTip(Province provinceId)

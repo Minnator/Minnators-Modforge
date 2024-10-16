@@ -101,6 +101,7 @@ namespace Editor
          // ALL LOADING COMPLETE - Set the application to running
 
          DateControl.Date = new(1444, 11, 11);
+         CountryDataHelper.CorrectCapitals();
          Globals.State = State.Running;
          Globals.LoadingStage++;
          Globals.MapModeManager.SetCurrentMapMode(MapModeType.Country);
@@ -116,6 +117,30 @@ namespace Editor
          Globals.ZoomControl.Invalidate();
          AfterLoad();
 
+         RestructureModifierNameDict();
+      }
+
+      public void RestructureModifierNameDict()
+      {
+         /*
+         Dictionary<string, KeyValuePair<int, ModifierValueType>> modPairs = [];
+         foreach (var kvp in ModifierParser.CountryModifiersDict)
+         {
+            modPairs.Add(kvp.Key, new(-1, kvp.Value));
+         }
+
+         var sb = new StringBuilder();
+         sb.AppendLine("public static readonly Dictionary<string, ModifierValueType> CountryModifiersDict = new (){");
+         foreach (var kvp in modPairs)
+         {
+            sb.AppendLine($"\t{{\"{kvp.Key}\", new ({kvp.Value.Key}, ModifierValueType.{kvp.Value.Value})}},");
+         }
+         sb.AppendLine("};");
+         // downloads folder
+         var downloads = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Downloads";
+         var path = Path.Combine(downloads, "CountryModifiersDict.cs");
+         File.WriteAllText(path, sb.ToString());
+         */
       }
 
       private void AfterLoad()
@@ -210,7 +235,7 @@ namespace Editor
 
       private void InitializeProvinceCollectionEditGui()
       {
-         AreaEditingGui = ControlFactory.GetCollectionEditor("Area", "Areas", ItemTypes.Id, [.. Globals.Areas.Keys],
+         AreaEditingGui = ControlFactory.GetCollectionEditor("Area", MapModeType.Area, ItemTypes.Id, [.. Globals.Areas.Keys],
             CollectionEditorArea.AreaSelected,
             CollectionEditorArea.ModifyExitingArea,
             CollectionEditorArea.CreateNewArea,
@@ -218,7 +243,7 @@ namespace Editor
             CollectionEditorArea.SingleItemModified
          );
 
-         RegionEditingGui = ControlFactory.GetCollectionEditor("Region", "Regions", ItemTypes.String, [.. Globals.Regions.Keys],
+         RegionEditingGui = ControlFactory.GetCollectionEditor("Region", MapModeType.Regions, ItemTypes.String, [.. Globals.Regions.Keys],
             CollectionEditorRegion.RegionSelected,
             CollectionEditorRegion.ModifyExitingRegion,
             CollectionEditorRegion.CreateNewRegion,
@@ -226,7 +251,7 @@ namespace Editor
             CollectionEditorRegion.SingleItemModified
          );
 
-         SuperRegionEditingGui = ControlFactory.GetCollectionEditor("SuperRegion", "Super Regions", ItemTypes.String, [.. Globals.SuperRegions.Keys],
+         SuperRegionEditingGui = ControlFactory.GetCollectionEditor("SuperRegion", MapModeType.SuperRegion, ItemTypes.String, [.. Globals.SuperRegions.Keys],
             CollectionEditorSuperRegion.SuperRegionSelected,
             CollectionEditorSuperRegion.ModifyExitingSuperRegion,
             CollectionEditorSuperRegion.CreateNewSuperRegion,
@@ -234,7 +259,7 @@ namespace Editor
             CollectionEditorSuperRegion.SingleItemModified
          );
 
-         TradeCompanyEditingGui = ControlFactory.GetCollectionEditor("TradeCompany", "Trade Companies", ItemTypes.Id, [.. Globals.TradeCompanies.Keys],
+         TradeCompanyEditingGui = ControlFactory.GetCollectionEditor("TradeCompany", MapModeType.TradeCompany, ItemTypes.Id, [.. Globals.TradeCompanies.Keys],
             CollectionEditorTradeCompany.TradeCompanySelected,
             CollectionEditorTradeCompany.ModifyExitingTradeCompany,
             CollectionEditorTradeCompany.CreateNewTradeCompany,
@@ -242,7 +267,7 @@ namespace Editor
             CollectionEditorTradeCompany.SingleItemModified
          );
 
-         CountryEditingGui = ControlFactory.GetCollectionEditor("Country", "Country", ItemTypes.Id, [.. Globals.Countries.Keys],
+         CountryEditingGui = ControlFactory.GetCollectionEditor("Country", MapModeType.Country, ItemTypes.Id, [.. Globals.Countries.Keys],
             CollectionEditorCountry.CountrySelected,
             CollectionEditorCountry.ModifyExitingCountry,
             CollectionEditorCountry.CreateNewCountry,
@@ -252,7 +277,7 @@ namespace Editor
          CountryEditingGui.AllowAddingNew = false;
          CountryEditingGui.AllowRemoving = false;
 
-         TradeNodeEditingGui = ControlFactory.GetCollectionEditor("TradeNode", "Trade Nodes", ItemTypes.String, [.. Globals.TradeNodes.Keys],
+         TradeNodeEditingGui = ControlFactory.GetCollectionEditor("TradeNode", MapModeType.TradeNode, ItemTypes.String, [.. Globals.TradeNodes.Keys],
             CollectionEditorTradeNodes.TradeNodeSelected,
             CollectionEditorTradeNodes.ModifyExitingTradeNode,
             CollectionEditorTradeNodes.CreateNewTradeNode,
@@ -260,7 +285,8 @@ namespace Editor
             CollectionEditorTradeNodes.SingleItemModified
          );
 
-         ProvinceGroupsEditingGui = ControlFactory.GetCollectionEditor("ProvinceGroup", "Province Groups", ItemTypes.String, [.. Globals.ProvinceGroups.Keys],
+         // TODO add province group MapModeType
+         ProvinceGroupsEditingGui = ControlFactory.GetCollectionEditor("ProvinceGroup", MapModeType.Province, ItemTypes.String, [.. Globals.ProvinceGroups.Keys],
             CollectionEditorProvinceGroup.ProvinceGroupSelected,
             CollectionEditorProvinceGroup.ModifyExitingProvinceGroup,
             CollectionEditorProvinceGroup.CreateNewProvinceGroup,
@@ -789,7 +815,7 @@ namespace Editor
 
       private void MapModeComboBox_SelectedIndexChanged(object sender, EventArgs e)
       {
-         Globals.MapModeManager.SetCurrentMapMode(MapModeComboBox.SelectedItem.ToString());
+         Globals.MapModeManager.SetCurrentMapMode(Enum.Parse<MapModeType>(MapModeComboBox.SelectedItem?.ToString() ?? string.Empty));
          GC.Collect(); // We force the garbage collector to collect the old bitmap
       }
 
@@ -818,26 +844,24 @@ namespace Editor
 
       private void testToolStripMenuItem_Click(object sender, EventArgs e)
       {
+
       }
 
       private void telescopeToolStripMenuItem_Click(object sender, EventArgs e)
       {
          var sb = new StringBuilder();
-         HashSet<string> trigger = [];
-         foreach (var mod in Globals.Modifiers.Values)
+         foreach (var province in Globals.Provinces)
          {
-            if (mod.TriggerAttribute.Count == 0)
-               foreach (var attr in mod.TriggerAttribute)
-                  trigger.Add(attr);
+            sb.Append($"{province.GetLocalisation()}: ");
+            foreach (var building in province.Buildings)
+            {
+               sb.Append($"{building}, ");
+            }
+            sb.AppendLine();
          }
-
-         foreach (var trig in trigger)
-         {
-            sb.AppendLine(trig);
-         }
-
+         // download folder
          var downloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\";
-         File.WriteAllText(Path.Combine(downloadFolder, "triggers.txt"), sb.ToString());
+         File.WriteAllText(Path.Combine(downloadFolder, "buildings.txt"), sb.ToString());
       }
 
       private void fasdfToolStripMenuItem_Click(object sender, EventArgs e)
@@ -892,6 +916,10 @@ namespace Editor
                   break;
                case Keys.Y:
                   Globals.HistoryManager.Redo();
+                  break;
+               // Tabs
+               case Keys.D1:
+                  ProvincePreviewMode.SelectedIndex = 0;
                   break;
             }
          }

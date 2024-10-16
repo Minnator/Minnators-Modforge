@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Editor.Controls;
+﻿using Editor.Controls;
 using Editor.Helper;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using Editor.Parser;
 using ComboBox = System.Windows.Forms.ComboBox;
 
 namespace Editor.Forms
@@ -38,12 +29,21 @@ namespace Editor.Forms
 
          // GUI
          _customAttrPanel = new();
+         _customAttrPanel.SuspendLayout();
          _customAttrPanel.Dock = DockStyle.Fill;
+         _customAttrPanel.SetComboBoxItems([..ModifierParser.CustomModifierTrigger], DualSelectionFlowPanel.BoxType.Left, true);
+         _customAttrPanel.SetComboBoxItems(["yes", "no"], DualSelectionFlowPanel.BoxType.Right, true);
          _modifierPanel = new();
          _modifierPanel.Dock = DockStyle.Fill;
+         List<string> modKeywords = [];
+         modKeywords.AddRange(ModifierParser.CountryModifiers);
+         modKeywords.AddRange(ModifierParser.ProvinceModifiers);
+         _modifierPanel.SetComboBoxItems(modKeywords, DualSelectionFlowPanel.BoxType.Left, true);
 
          CustomAttributesLP.Controls.Add(_customAttrPanel, 1, 0);
          ModifiersLP.Controls.Add(_modifierPanel, 1, 0);
+
+         _customAttrPanel.ResumeLayout(true);
       }
 
       private void OnModifierComboBoxOnSelectedIndexChanged(object? sender, EventArgs args)

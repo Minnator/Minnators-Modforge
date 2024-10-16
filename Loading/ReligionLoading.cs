@@ -12,7 +12,7 @@ namespace Editor.Loading
       public static void Load()
       {
          var sw = Stopwatch.StartNew();
-         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("common", "religions");
+         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "religions");
 
          List<ReligiousGroup> religionGroups = [];
 

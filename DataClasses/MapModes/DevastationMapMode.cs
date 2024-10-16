@@ -13,9 +13,9 @@ namespace Editor.DataClasses.MapModes
          ProvinceEventHandler.OnProvinceDevastationChanged += UpdateProvince;
       }
 
-      public override string GetMapModeName()
+      public override MapModeType GetMapModeName()
       {
-         return MapModeType.Devastation.ToString();
+         return MapModeType.Devastation;
       }
 
       public override string GetSpecificToolTip(Province provinceId)

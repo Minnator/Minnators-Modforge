@@ -381,12 +381,6 @@ public static partial class Parsing
    {
       List<KeyValuePair<string, string>>  keyValueList = [];
       RemoveCommentFromMultilineString(value, out var commentFreeStr);
-      /*var matches = KeyValueRegex.Matches(removed);
-      foreach (Match match in matches)
-      {
-         keyValueList.Add(new(match.Groups["key"].Value, match.Groups["value"].Value));
-      }
-      */
       var lines = commentFreeStr.Split('\n');
       foreach (var line in lines)
       {
@@ -463,6 +457,7 @@ public static partial class Parsing
    /// Parses a string to a <c>color</c> if it is in the format <c>"r g b"</c>.
    /// </summary>
    /// <param name="str"></param>
+   /// <param name="color"></param>
    /// <returns></returns>
    /// <exception cref="ParsingException"></exception>
    public static bool TryParseColor(string str, out Color color)
@@ -485,7 +480,7 @@ public static partial class Parsing
    /// </summary>
    /// <param name="str"></param>
    /// <returns></returns>
-   public static Color ParseColorPercental(string str)
+   public static Color ParseColorPercentile(string str)
    {
 
       // Split the string by spaces
@@ -497,17 +492,11 @@ public static partial class Parsing
          return Color.Empty;
       }
 
-      // Convert each component to a float and multiply by 255
       var red = float.Parse(components[0], CultureInfo.InvariantCulture) * 255;
       var green = float.Parse(components[1], CultureInfo.InvariantCulture) * 255;
       var blue = float.Parse(components[2], CultureInfo.InvariantCulture) * 255;
 
-      // Create and return the Color object
-      return Color.FromArgb(
-         (int)red,
-         (int)green,
-         (int)blue
-      );
+      return Color.FromArgb((int)red, (int)green, (int)blue);
    }
 
    /// <summary>

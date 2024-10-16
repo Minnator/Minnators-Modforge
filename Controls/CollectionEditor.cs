@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Editor.DataClasses.MapModes;
 using Editor.Events;
 using Editor.Helper;
 using ProvinceCollectionEventArgs = Editor.Events.ProvinceCollectionEventArgs;
@@ -24,7 +25,7 @@ namespace Editor.Controls
       private readonly Action<string, string> _onSingleRemoved; // Item name, item to remove
 
       private readonly string _name;
-      private readonly string _mapModeName;
+      private readonly MapModeType _mapModeName;
       public bool AllowAddingNew = true;
       public bool AllowRemoving = true;
 
@@ -36,7 +37,7 @@ namespace Editor.Controls
       public EventHandler<ProvinceCollectionEventArgs> OnItemDeleted = delegate { };
 
       // TODO add a small button to flip to the according MapMode
-      public CollectionEditor(string name, string mapModeName, ItemTypes itemTypes, Func<string, List<string>> onSelectionAction, Func<string, bool, List<string>> onAddedOrRemovedFunc, Func<string, List<string>> onNewCreated, Action<string> onDeleted, Action<string, string> onSingleRemoved)
+      public CollectionEditor(string name, MapModeType mapModeName, ItemTypes itemTypes, Func<string, List<string>> onSelectionAction, Func<string, bool, List<string>> onAddedOrRemovedFunc, Func<string, List<string>> onNewCreated, Action<string> onDeleted, Action<string, string> onSingleRemoved)
       {
          _name = name;
          _mapModeName = mapModeName;

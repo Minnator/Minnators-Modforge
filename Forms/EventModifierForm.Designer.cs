@@ -28,6 +28,7 @@
       /// </summary>
       private void InitializeComponent()
       {
+         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EventModifierForm));
          EventModifiersLayoutPanel = new TableLayoutPanel();
          ModifiersLP = new TableLayoutPanel();
          label6 = new Label();
@@ -294,10 +295,13 @@
          AutoScaleDimensions = new SizeF(7F, 15F);
          AutoScaleMode = AutoScaleMode.Font;
          ClientSize = new Size(541, 369);
+         ControlBox = false;
          Controls.Add(EventModifiersLayoutPanel);
          FormBorderStyle = FormBorderStyle.None;
+         Icon = (Icon)resources.GetObject("$this.Icon");
          KeyPreview = true;
          Name = "EventModifierForm";
+         StartPosition = FormStartPosition.CenterScreen;
          Text = "EventModifierForm";
          KeyDown += EventModifierForm_KeyDown;
          PreviewKeyDown += EventModifierForm_PreviewKeyDown;

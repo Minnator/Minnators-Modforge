@@ -20,9 +20,9 @@ namespace Editor.DataClasses.MapModes
          return Color.DimGray.ToArgb();
       }
 
-      public override string GetMapModeName()
+      public override MapModeType GetMapModeName()
       {
-         return MapModeType.Religion.ToString();
+         return MapModeType.Religion;
       }
 
       public override string GetSpecificToolTip(Province provinceId)

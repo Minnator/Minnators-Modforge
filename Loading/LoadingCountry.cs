@@ -47,7 +47,7 @@ namespace Editor.Loading
 
       private static void LoadCountryHistories()
       {
-         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("history", "countries");
+         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "history", "countries");
 
          Parallel.ForEach(files, new () { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 },file =>
          {

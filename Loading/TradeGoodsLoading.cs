@@ -16,7 +16,7 @@ namespace Editor.Loading
       public static void Load()
       {
          var sw = Stopwatch.StartNew();
-         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("common", "tradegoods");
+         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "tradegoods");
 
          foreach (var file in files)
          {
@@ -47,7 +47,7 @@ namespace Editor.Loading
                continue;
             }
 
-            var tradeGood = new TradeGood(block.Name, Parsing.ParseColorPercental(color.GetContent));
+            var tradeGood = new TradeGood(block.Name, Parsing.ParseColorPercentile(color.GetContent));
             if (!Globals.TradeGoods.TryAdd(tradeGood.Name, tradeGood))
                Globals.ErrorLog.Write($"TradeGood already exists: {tradeGood.Name}");
          }

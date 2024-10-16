@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.MapModes;
 using Button = System.Windows.Forms.Button;
 
 namespace Editor.Controls;
@@ -24,7 +25,7 @@ public static class ControlFactory
       return new (hotkey);
    }
 
-   public static CollectionEditor GetCollectionEditor(string name, string mapModeName, ItemTypes itemTypes, List<string> comboBoxItems, Func<string, List<string>> onIndexSelectedFunc, Func<string, bool, List<string>> onAddedOrRemovedFunc, Func<string, List<string>> onNewCreated, Action<string> onDeleted, Action<string, string> onSingleRemoved)
+   public static CollectionEditor GetCollectionEditor(string name, MapModeType mapModeName, ItemTypes itemTypes, List<string> comboBoxItems, Func<string, List<string>> onIndexSelectedFunc, Func<string, bool, List<string>> onAddedOrRemovedFunc, Func<string, List<string>> onNewCreated, Action<string> onDeleted, Action<string, string> onSingleRemoved)
    {
       CollectionEditor ce = new (name, mapModeName, itemTypes, onIndexSelectedFunc, onAddedOrRemovedFunc, onNewCreated, onDeleted, onSingleRemoved)
       {

@@ -97,19 +97,12 @@ public class MapModeManager
       return MapModes;
    }
 
-   public MapMode GetMapMode(string name)
+   public MapMode GetMapMode(MapModeType name)
    {
       return MapModes.Find(mode => mode.GetMapModeName() == name) ?? IdMapMode;
    }
    
-   public void SetCurrentMapMode(MapModeType mode)
-   {
-      if (mode == MapModeType.None || CurrentMapModeType == mode)
-         return;
-      SetCurrentMapMode(mode.ToString());
-   }
-
-   public void SetCurrentMapMode(string name)
+   public void SetCurrentMapMode(MapModeType name)
    {
       // CAN be null
       // REMOVE old event handle form GlobalsEventhandler
@@ -120,8 +113,8 @@ public class MapModeManager
       CurrentMapMode.SetActive();
       CurrentMapMode.RenderMapMode(CurrentMapMode.GetProvinceColor);
       GC.Collect(); // We need to collect the garbage to free up memory but this is not ideal
-      Globals.MapWindow.MapModeComboBox.SelectedItem = name;
-      CurrentMapModeType = Enum.Parse<MapModeType>(name);
+      Globals.MapWindow.MapModeComboBox.SelectedItem = name.ToString();
+      CurrentMapModeType = name;
       MapModeChanged(this, CurrentMapMode);
    }
 

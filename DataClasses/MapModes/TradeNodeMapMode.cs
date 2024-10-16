@@ -7,9 +7,9 @@ namespace Editor.DataClasses.MapModes
 {
    public class TradeNodeMapMode : MapMode
    {
-      public override string GetMapModeName()
+      public override MapModeType GetMapModeName()
       {
-         return MapModeType.TradeNode.ToString();
+         return MapModeType.TradeNode;
       }
 
       public override int GetProvinceColor(Province id)

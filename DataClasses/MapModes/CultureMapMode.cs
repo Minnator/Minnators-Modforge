@@ -21,9 +21,9 @@ public class CultureMapMode : MapMode
       return Color.DimGray.ToArgb();
    }
 
-   public override string GetMapModeName()
+   public override MapModeType GetMapModeName()
    {
-      return MapModeType.Culture.ToString();
+      return MapModeType.Culture;
    }
 
    public override string GetSpecificToolTip(Province id)

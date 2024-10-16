@@ -46,6 +46,7 @@ public static partial class FilesHelper
    /// <summary>
    /// Gets all file paths in a folder with a <c>.txt</c> file ending in the folder but only in TopDirectoryOnly
    /// </summary>
+   /// <param name="searchPattern"></param>
    /// <param name="internalPath"></param>
    /// <returns></returns>
    public static List<string> GetFilesFromModAndVanillaUniquely(string searchPattern = "*.txt", params string[] internalPath)

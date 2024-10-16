@@ -9,9 +9,9 @@ namespace Editor.MapModes;
 public sealed class ProvinceIdMapMode : MapMode
 {
    
-   public override string GetMapModeName()
+   public override MapModeType GetMapModeName()
    {
-      return "Province Ids";
+      return MapModeType.Province;
    }
 
    public override int GetProvinceColor(Province id)

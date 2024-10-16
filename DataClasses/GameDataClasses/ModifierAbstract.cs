@@ -175,19 +175,19 @@ namespace Editor.DataClasses.GameDataClasses
          return $"\"{Name}\" ({Modifiers.Count})";
       }
    }
-   
+
+   public enum ModifierValueType
+   {
+      Bool,
+      Int,
+      Float
+   }
    public class Modifier(int nameIndex, object value) 
    {
       public readonly int Name = nameIndex;
       public object Value = value;
       public readonly Scope Scope = Scope.Country;
 
-      public enum Type
-      {
-         Bool,
-         Int,
-         Float
-      }
 
       public Modifier(int nameIndex, object value, Scope scope) : this(nameIndex, value)
       {

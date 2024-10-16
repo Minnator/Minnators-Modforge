@@ -35,8 +35,20 @@ namespace Editor.Loading
                continue;
             }
 
-            ModifierParser.FactionModifiers.Add($"{block.Name}_influence");
+            try
+            {
 
+               var modName = $"{block.Name}_influence";
+               if (ModifierParser.FactionModifiers.Contains(modName))
+                  continue;
+               ModifierParser.FactionModifiers.Add(modName);
+
+            }
+            catch (Exception e)
+            {
+               Console.WriteLine(e);
+               throw;
+            }
          }
       }
    }

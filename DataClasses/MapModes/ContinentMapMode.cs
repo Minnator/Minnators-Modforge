@@ -16,9 +16,9 @@ public sealed class ContinentMapMode : MapMode
       ProvinceEventHandler.OnProvinceContinentChanged += UpdateProvince;
    }
 
-   public override string GetMapModeName()
+   public override MapModeType GetMapModeName()
    {
-      return MapModeType.Continent.ToString();
+      return MapModeType.Continent;
    }
 
    public override int GetProvinceColor(Province id)

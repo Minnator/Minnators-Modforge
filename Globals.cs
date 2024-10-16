@@ -235,7 +235,7 @@ public static class Globals
    public static Dictionary<string, string> LocalisationCollisions { get; set; } = [];
    
    public static HashSet<string> ScriptedEffectNames {get; set; } = [];
-   public static List<Building> Buildings { get; set; }= [];
+   public static List<Building> Buildings { get; set; } = [];
    public static HashSet<string> BuildingKeys { get; set; }= [];
 
    // Modifiers

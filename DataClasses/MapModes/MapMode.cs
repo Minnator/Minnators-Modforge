@@ -49,9 +49,9 @@ public abstract class MapMode
       Debug.WriteLine($"RenderMapMode {GetMapModeName()} took {sw.ElapsedMilliseconds}ms");
    }
 
-   public virtual string GetMapModeName()
+   public virtual MapModeType GetMapModeName()
    {
-      return "REPLACE_ME";
+      return MapModeType.None;
    }
 
    public virtual int GetProvinceColor(Province id)
@@ -126,7 +126,7 @@ public abstract class MapMode
 
    public virtual string GetSpecificToolTip(Province provinceId)
    {
-      return GetMapModeName();
+      return GetMapModeName().ToString();
    }
 
    public virtual void SetActive()

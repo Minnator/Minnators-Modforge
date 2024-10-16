@@ -15,9 +15,9 @@ public sealed class ProvinceMapMode : MapMode
 
    }
 
-   public override string GetMapModeName()
+   public override MapModeType GetMapModeName()
    {
-      return MapModeType.Province.ToString();
+      return MapModeType.Province;
    }
 
    public override int GetProvinceColor(Province provinceId)

@@ -11,9 +11,9 @@ public sealed class SuperRegionMapMode : MapMode
       ProvinceEventHandler.OnSuperRegionRegionChanged += UpdateProvince!;
    }
 
-   public override string GetMapModeName()
+   public override MapModeType GetMapModeName()
    {
-      return MapModeType.SuperRegion.ToString();
+      return MapModeType.SuperRegion;
    }
 
    public override int GetProvinceColor(Province id)
