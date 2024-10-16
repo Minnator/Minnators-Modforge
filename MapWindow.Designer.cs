@@ -44,13 +44,28 @@
          StripeDirectionComboBox = new ToolStripComboBox();
          graphicalElementsManagerToolStripMenuItem = new ToolStripMenuItem();
          mapModeHotkeysToolStripMenuItem = new ToolStripMenuItem();
+         alpha12ToolStripMenuItem = new ToolStripMenuItem();
+         tradegoodsEditingToolStripMenuItem = new ToolStripMenuItem();
+         cusotmMapmodesToolStripMenuItem = new ToolStripMenuItem();
+         ideasEditingdragAndDropToolStripMenuItem = new ToolStripMenuItem();
+         toolStripMenuItem2 = new ToolStripMenuItem();
+         provinceCreationdirectDrawingonMapToolStripMenuItem = new ToolStripMenuItem();
+         alpha13ToolStripMenuItem = new ToolStripSeparator();
+         alpha13ToolStripMenuItem1 = new ToolStripMenuItem();
+         fullImplementationOfPDXLanguangeToolStripMenuItem = new ToolStripMenuItem();
+         consoleToExecuteEu4CheatsToolStripMenuItem = new ToolStripMenuItem();
+         missionsEditordragAndDropVisualEditingToolStripMenuItem = new ToolStripMenuItem();
+         terrainEditingToolStripMenuItem = new ToolStripMenuItem();
+         positionsEditingToolStripMenuItem = new ToolStripMenuItem();
          historyToolStripMenuItem = new ToolStripMenuItem();
          selectionHistoryToolStripMenuItem = new ToolStripMenuItem();
          DeleteHistoryToolStripMenuItem = new ToolStripMenuItem();
          toolTipCustomizerToolStripMenuItem = new ToolStripMenuItem();
          openCustomizerToolStripMenuItem = new ToolStripMenuItem();
          ShowToolTipMenuItem = new ToolStripMenuItem();
+         toolStripMenuItem3 = new ToolStripMenuItem();
          MapModeComboBox = new ToolStripComboBox();
+         searchToolStripMenuItem = new ToolStripMenuItem();
          debugToolStripMenuItem = new ToolStripMenuItem();
          testToolStripMenuItem = new ToolStripMenuItem();
          telescopeToolStripMenuItem = new ToolStripMenuItem();
@@ -62,7 +77,6 @@
          save1ToolStripMenuItem = new ToolStripMenuItem();
          saveEuropeToolStripMenuItem = new ToolStripMenuItem();
          jsonToolStripMenuItem = new ToolStripMenuItem();
-         searchToolStripMenuItem = new ToolStripMenuItem();
          ProvinceCollectionsLayoutPanel = new TableLayoutPanel();
          FocusSelectionCheckBox = new CheckBox();
          toolStrip1 = new ToolStrip();
@@ -219,7 +233,7 @@
          // 
          // MapMenuStrip
          // 
-         MapMenuStrip.Items.AddRange(new ToolStripItem[] { filesToolStripMenuItem, historyToolStripMenuItem, toolTipCustomizerToolStripMenuItem, MapModeComboBox, debugToolStripMenuItem, searchToolStripMenuItem });
+         MapMenuStrip.Items.AddRange(new ToolStripItem[] { filesToolStripMenuItem, historyToolStripMenuItem, toolTipCustomizerToolStripMenuItem, toolStripMenuItem3, MapModeComboBox, searchToolStripMenuItem, debugToolStripMenuItem });
          MapMenuStrip.Location = new Point(0, 0);
          MapMenuStrip.Name = "MapMenuStrip";
          MapMenuStrip.Padding = new Padding(7, 2, 0, 2);
@@ -315,10 +329,88 @@
          // 
          // mapModeHotkeysToolStripMenuItem
          // 
+         mapModeHotkeysToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { alpha12ToolStripMenuItem, tradegoodsEditingToolStripMenuItem, cusotmMapmodesToolStripMenuItem, ideasEditingdragAndDropToolStripMenuItem, toolStripMenuItem2, provinceCreationdirectDrawingonMapToolStripMenuItem, alpha13ToolStripMenuItem, alpha13ToolStripMenuItem1, fullImplementationOfPDXLanguangeToolStripMenuItem, consoleToExecuteEu4CheatsToolStripMenuItem, missionsEditordragAndDropVisualEditingToolStripMenuItem, terrainEditingToolStripMenuItem, positionsEditingToolStripMenuItem });
          mapModeHotkeysToolStripMenuItem.Name = "mapModeHotkeysToolStripMenuItem";
          mapModeHotkeysToolStripMenuItem.Size = new Size(249, 22);
-         mapModeHotkeysToolStripMenuItem.Text = "MapMode Hotkeys";
+         mapModeHotkeysToolStripMenuItem.Text = "What's to come";
          mapModeHotkeysToolStripMenuItem.Click += mapModeHotkeysToolStripMenuItem_Click;
+         // 
+         // alpha12ToolStripMenuItem
+         // 
+         alpha12ToolStripMenuItem.Name = "alpha12ToolStripMenuItem";
+         alpha12ToolStripMenuItem.Size = new Size(317, 22);
+         alpha12ToolStripMenuItem.Text = "Alpha 1.2";
+         // 
+         // tradegoodsEditingToolStripMenuItem
+         // 
+         tradegoodsEditingToolStripMenuItem.Name = "tradegoodsEditingToolStripMenuItem";
+         tradegoodsEditingToolStripMenuItem.Size = new Size(317, 22);
+         tradegoodsEditingToolStripMenuItem.Text = "Tradegoods editing";
+         // 
+         // cusotmMapmodesToolStripMenuItem
+         // 
+         cusotmMapmodesToolStripMenuItem.Name = "cusotmMapmodesToolStripMenuItem";
+         cusotmMapmodesToolStripMenuItem.Size = new Size(317, 22);
+         cusotmMapmodesToolStripMenuItem.Text = "Cusotm mapmodes";
+         // 
+         // ideasEditingdragAndDropToolStripMenuItem
+         // 
+         ideasEditingdragAndDropToolStripMenuItem.Name = "ideasEditingdragAndDropToolStripMenuItem";
+         ideasEditingdragAndDropToolStripMenuItem.Size = new Size(317, 22);
+         ideasEditingdragAndDropToolStripMenuItem.Text = "Ideas editing (drag and drop)";
+         // 
+         // toolStripMenuItem2
+         // 
+         toolStripMenuItem2.Name = "toolStripMenuItem2";
+         toolStripMenuItem2.Size = new Size(317, 22);
+         toolStripMenuItem2.Text = "Icon rendering on the map";
+         // 
+         // provinceCreationdirectDrawingonMapToolStripMenuItem
+         // 
+         provinceCreationdirectDrawingonMapToolStripMenuItem.Name = "provinceCreationdirectDrawingonMapToolStripMenuItem";
+         provinceCreationdirectDrawingonMapToolStripMenuItem.Size = new Size(317, 22);
+         provinceCreationdirectDrawingonMapToolStripMenuItem.Text = "Province creation (direct drawingon map)";
+         // 
+         // alpha13ToolStripMenuItem
+         // 
+         alpha13ToolStripMenuItem.Name = "alpha13ToolStripMenuItem";
+         alpha13ToolStripMenuItem.Size = new Size(314, 6);
+         // 
+         // alpha13ToolStripMenuItem1
+         // 
+         alpha13ToolStripMenuItem1.Name = "alpha13ToolStripMenuItem1";
+         alpha13ToolStripMenuItem1.Size = new Size(317, 22);
+         alpha13ToolStripMenuItem1.Text = "Alpha 1.3";
+         // 
+         // fullImplementationOfPDXLanguangeToolStripMenuItem
+         // 
+         fullImplementationOfPDXLanguangeToolStripMenuItem.Name = "fullImplementationOfPDXLanguangeToolStripMenuItem";
+         fullImplementationOfPDXLanguangeToolStripMenuItem.Size = new Size(317, 22);
+         fullImplementationOfPDXLanguangeToolStripMenuItem.Text = "Full implementation of PDX languange";
+         // 
+         // consoleToExecuteEu4CheatsToolStripMenuItem
+         // 
+         consoleToExecuteEu4CheatsToolStripMenuItem.Name = "consoleToExecuteEu4CheatsToolStripMenuItem";
+         consoleToExecuteEu4CheatsToolStripMenuItem.Size = new Size(317, 22);
+         consoleToExecuteEu4CheatsToolStripMenuItem.Text = "Console to execute eu4 cheats";
+         // 
+         // missionsEditordragAndDropVisualEditingToolStripMenuItem
+         // 
+         missionsEditordragAndDropVisualEditingToolStripMenuItem.Name = "missionsEditordragAndDropVisualEditingToolStripMenuItem";
+         missionsEditordragAndDropVisualEditingToolStripMenuItem.Size = new Size(317, 22);
+         missionsEditordragAndDropVisualEditingToolStripMenuItem.Text = "Missions editor (drag and drop, Visual editing)";
+         // 
+         // terrainEditingToolStripMenuItem
+         // 
+         terrainEditingToolStripMenuItem.Name = "terrainEditingToolStripMenuItem";
+         terrainEditingToolStripMenuItem.Size = new Size(317, 22);
+         terrainEditingToolStripMenuItem.Text = "Terrain / Climate editing";
+         // 
+         // positionsEditingToolStripMenuItem
+         // 
+         positionsEditingToolStripMenuItem.Name = "positionsEditingToolStripMenuItem";
+         positionsEditingToolStripMenuItem.Size = new Size(317, 22);
+         positionsEditingToolStripMenuItem.Text = "Positions editing";
          // 
          // historyToolStripMenuItem
          // 
@@ -366,12 +458,27 @@
          ShowToolTipMenuItem.Text = "Show ToolTip";
          ShowToolTipMenuItem.Click += ShowToolTipMenuItem_Click;
          // 
+         // toolStripMenuItem3
+         // 
+         toolStripMenuItem3.Enabled = false;
+         toolStripMenuItem3.Name = "toolStripMenuItem3";
+         toolStripMenuItem3.Size = new Size(65, 23);
+         toolStripMenuItem3.Text = "Statistics";
+         // 
          // MapModeComboBox
          // 
          MapModeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
          MapModeComboBox.Name = "MapModeComboBox";
          MapModeComboBox.Size = new Size(140, 23);
          MapModeComboBox.SelectedIndexChanged += MapModeComboBox_SelectedIndexChanged;
+         // 
+         // searchToolStripMenuItem
+         // 
+         searchToolStripMenuItem.Name = "searchToolStripMenuItem";
+         searchToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.F;
+         searchToolStripMenuItem.Size = new Size(54, 23);
+         searchToolStripMenuItem.Text = "Search";
+         searchToolStripMenuItem.Click += searchToolStripMenuItem_Click;
          // 
          // debugToolStripMenuItem
          // 
@@ -449,14 +556,6 @@
          jsonToolStripMenuItem.Size = new Size(167, 22);
          jsonToolStripMenuItem.Text = "json";
          jsonToolStripMenuItem.Click += jsonToolStripMenuItem_Click;
-         // 
-         // searchToolStripMenuItem
-         // 
-         searchToolStripMenuItem.Name = "searchToolStripMenuItem";
-         searchToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.F;
-         searchToolStripMenuItem.Size = new Size(54, 23);
-         searchToolStripMenuItem.Text = "Search";
-         searchToolStripMenuItem.Click += searchToolStripMenuItem_Click;
          // 
          // ProvinceCollectionsLayoutPanel
          // 
@@ -2061,6 +2160,20 @@
       private Label label26;
       private TableLayoutPanel ModTypeSubLayout;
       private Button OpenAddModifierForm;
+      private ToolStripMenuItem alpha12ToolStripMenuItem;
+      private ToolStripMenuItem tradegoodsEditingToolStripMenuItem;
+      private ToolStripMenuItem cusotmMapmodesToolStripMenuItem;
+      private ToolStripMenuItem ideasEditingdragAndDropToolStripMenuItem;
+      private ToolStripMenuItem provinceCreationdirectDrawingonMapToolStripMenuItem;
+      private ToolStripSeparator alpha13ToolStripMenuItem;
+      private ToolStripMenuItem alpha13ToolStripMenuItem1;
+      private ToolStripMenuItem fullImplementationOfPDXLanguangeToolStripMenuItem;
+      private ToolStripMenuItem consoleToExecuteEu4CheatsToolStripMenuItem;
+      private ToolStripMenuItem missionsEditordragAndDropVisualEditingToolStripMenuItem;
+      private ToolStripMenuItem terrainEditingToolStripMenuItem;
+      private ToolStripMenuItem positionsEditingToolStripMenuItem;
+      private ToolStripMenuItem toolStripMenuItem2;
+      private ToolStripMenuItem toolStripMenuItem3;
    }
 }
 

@@ -28,6 +28,7 @@
       /// </summary>
       private void InitializeComponent()
       {
+         components = new System.ComponentModel.Container();
          System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EventModifierForm));
          EventModifiersLayoutPanel = new TableLayoutPanel();
          ModifiersLP = new TableLayoutPanel();
@@ -46,6 +47,7 @@
          tableLayoutPanel7 = new TableLayoutPanel();
          SaveButton = new Button();
          CancelButton = new Button();
+         toolTip1 = new ToolTip(components);
          EventModifiersLayoutPanel.SuspendLayout();
          ModifiersLP.SuspendLayout();
          CustomAttributesLP.SuspendLayout();
@@ -79,7 +81,6 @@
          EventModifiersLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
          EventModifiersLayoutPanel.Size = new Size(541, 369);
          EventModifiersLayoutPanel.TabIndex = 0;
-         EventModifiersLayoutPanel.Paint += EventModifiersLayoutPanel_Paint;
          // 
          // ModifiersLP
          // 
@@ -95,7 +96,6 @@
          ModifiersLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
          ModifiersLP.Size = new Size(541, 125);
          ModifiersLP.TabIndex = 5;
-         ModifiersLP.Paint += tableLayoutPanel5_Paint;
          // 
          // label6
          // 
@@ -108,6 +108,7 @@
          label6.TabIndex = 0;
          label6.Text = "Modifiers";
          label6.TextAlign = ContentAlignment.MiddleLeft;
+         toolTip1.SetToolTip(label6, "The individual modifiers");
          // 
          // CustomAttributesLP
          // 
@@ -135,6 +136,7 @@
          label5.TabIndex = 0;
          label5.Text = "Custom attributes";
          label5.TextAlign = ContentAlignment.MiddleLeft;
+         toolTip1.SetToolTip(label5, "Custom attributes; e.g. religion = yes");
          // 
          // tableLayoutPanel3
          // 
@@ -163,6 +165,7 @@
          label4.TabIndex = 0;
          label4.Text = "Description";
          label4.TextAlign = ContentAlignment.MiddleLeft;
+         toolTip1.SetToolTip(label4, "The Description of the Modifier");
          // 
          // DescriptionTextBox
          // 
@@ -201,6 +204,7 @@
          label2.TabIndex = 0;
          label2.Text = "Title";
          label2.TextAlign = ContentAlignment.MiddleLeft;
+         toolTip1.SetToolTip(label2, "The localisation for the modifier");
          // 
          // LocalisationTextBox
          // 
@@ -237,6 +241,7 @@
          label3.TabIndex = 0;
          label3.Text = "code_name";
          label3.TextAlign = ContentAlignment.MiddleLeft;
+         toolTip1.SetToolTip(label3, "The name of the modifier how it will be called in the mod files.");
          // 
          // label1
          // 
@@ -253,9 +258,9 @@
          // tableLayoutPanel7
          // 
          tableLayoutPanel7.ColumnCount = 3;
-         tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-         tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-         tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+         tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+         tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
+         tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
          tableLayoutPanel7.Controls.Add(SaveButton, 2, 0);
          tableLayoutPanel7.Controls.Add(CancelButton, 0, 0);
          tableLayoutPanel7.Dock = DockStyle.Fill;
@@ -270,13 +275,15 @@
          // SaveButton
          // 
          SaveButton.Dock = DockStyle.Fill;
-         SaveButton.Location = new Point(406, 0);
+         SaveButton.Location = new Point(433, 0);
          SaveButton.Margin = new Padding(1, 0, 1, 0);
          SaveButton.Name = "SaveButton";
-         SaveButton.Size = new Size(134, 26);
+         SaveButton.Size = new Size(107, 26);
          SaveButton.TabIndex = 0;
-         SaveButton.Text = "Save";
+         SaveButton.Text = "Add";
+         toolTip1.SetToolTip(SaveButton, "Adds the new event_modifer");
          SaveButton.UseVisualStyleBackColor = true;
+         SaveButton.Click += SaveButton_Click;
          // 
          // CancelButton
          // 
@@ -284,9 +291,10 @@
          CancelButton.Location = new Point(1, 0);
          CancelButton.Margin = new Padding(1, 0, 1, 0);
          CancelButton.Name = "CancelButton";
-         CancelButton.Size = new Size(133, 26);
+         CancelButton.Size = new Size(106, 26);
          CancelButton.TabIndex = 1;
-         CancelButton.Text = "Cancel";
+         CancelButton.Text = "Close";
+         toolTip1.SetToolTip(CancelButton, "All progress that has not been added or modified will be lost.");
          CancelButton.UseVisualStyleBackColor = true;
          CancelButton.Click += CancelButton_Click;
          // 
@@ -304,7 +312,6 @@
          StartPosition = FormStartPosition.CenterScreen;
          Text = "EventModifierForm";
          KeyDown += EventModifierForm_KeyDown;
-         PreviewKeyDown += EventModifierForm_PreviewKeyDown;
          EventModifiersLayoutPanel.ResumeLayout(false);
          EventModifiersLayoutPanel.PerformLayout();
          ModifiersLP.ResumeLayout(false);
@@ -335,11 +342,12 @@
       private Label label4;
       private TableLayoutPanel ModifiersLP;
       private Label label6;
-      private TextBox DescriptionTextBox;
       private ComboBox comboBox1;
-      private TextBox LocalisationTextBox;
       private TableLayoutPanel tableLayoutPanel7;
       private Button SaveButton;
       private Button CancelButton;
+      public TextBox DescriptionTextBox;
+      public TextBox LocalisationTextBox;
+      private ToolTip toolTip1;
    }
 }

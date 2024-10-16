@@ -4,17 +4,20 @@ namespace Editor.Controls
 {
    public sealed class DualSelectionFlowPanel : Control
    {
-      private readonly FlowLayoutPanel _flowLayoutPanel;
-      public readonly TableLayoutPanel _tableLayoutPanel;
-
-      private readonly ComboBox _leftComboBox;
-      private readonly ComboBox _rightComboBox;
-
+      public readonly FlowLayoutPanel FlowLayoutPanel;
+      public readonly TableLayoutPanel TableLayoutPanel;
+      public readonly ComboBox LeftComboBox;
+      public readonly ComboBox RightComboBox;
       private readonly Button _addButton;
+      public bool UseIndexing;
+      public int MaxIndex;
+      public int MinIndex;
+      public List<KeyValuePair<string, string>> DualContent = [];
+      public IndexingType Indexing = IndexingType.None;
 
       public DualSelectionFlowPanel()
       {
-         _flowLayoutPanel = new()
+         FlowLayoutPanel = new()
          {
             WrapContents = false,
             FlowDirection = FlowDirection.TopDown,
@@ -24,7 +27,7 @@ namespace Editor.Controls
             Dock = DockStyle.Fill,
          };
 
-         _tableLayoutPanel = new()
+         TableLayoutPanel = new()
          {
             Dock = DockStyle.Fill,
             ColumnCount = 3,
@@ -41,16 +44,15 @@ namespace Editor.Controls
                new(SizeType.Absolute, 25f),
                new(SizeType.Percent, 100f)
             }
-
          };
 
-         _leftComboBox = new()
+         LeftComboBox = new()
          {
             Dock = DockStyle.Fill,
             Margin = new(1,1,1,1)
          };
 
-         _rightComboBox = new()
+         RightComboBox = new()
          {
             Dock = DockStyle.Fill,
             Margin = new(1, 1, 1, 1)
@@ -65,24 +67,36 @@ namespace Editor.Controls
          };
          _addButton.Click += AddButtonClicked;
 
-         _tableLayoutPanel.Controls.Add(_leftComboBox, 0, 0);
-         _tableLayoutPanel.Controls.Add(_rightComboBox, 1, 0);
-         _tableLayoutPanel.Controls.Add(_addButton, 2, 0);
+         TableLayoutPanel.Controls.Add(LeftComboBox, 0, 0);
+         TableLayoutPanel.Controls.Add(RightComboBox, 1, 0);
+         TableLayoutPanel.Controls.Add(_addButton, 2, 0);
 
-         _tableLayoutPanel.Controls.Add(_flowLayoutPanel, 0, 1);
-         _tableLayoutPanel.SetColumnSpan(_flowLayoutPanel, 3);
-         Controls.Add(_tableLayoutPanel);
+         TableLayoutPanel.Controls.Add(FlowLayoutPanel, 0, 1);
+         TableLayoutPanel.SetColumnSpan(FlowLayoutPanel, 3);
+         Controls.Add(TableLayoutPanel);
       }
-
       public enum BoxType
       {
          Left,
          Right
       }
 
-      public void SetComboBoxItems(List<string> items, BoxType boxType, bool setAsDropDown)
+      public enum IndexingType
       {
-         var box = boxType == BoxType.Left ? _leftComboBox : _rightComboBox;
+         None,
+         Left, 
+         Right,
+         Both
+      }
+
+      public List<KeyValuePair<string, string>> GetDualContent()
+      {
+         return DualContent;
+      }
+
+      public void SetComboBoxItems(ICollection<string> items, BoxType boxType, bool setAsDropDown)
+      {
+         var box = boxType == BoxType.Left ? LeftComboBox : RightComboBox;
          box.Items.Clear();
          box.Items.AddRange(items.ToArray());
          box.DropDownStyle = setAsDropDown ? ComboBoxStyle.DropDownList : ComboBoxStyle.DropDown;
@@ -90,19 +104,43 @@ namespace Editor.Controls
 
       public void AddButtonClicked(object? sender, EventArgs e)
       {
-         var left = _leftComboBox.Text;
-         var right = _rightComboBox.Text;
+         var left = LeftComboBox.Text;
+         var right = RightComboBox.Text;
 
          if (string.IsNullOrEmpty(left) || string.IsNullOrEmpty(right))
             return;
 
-         _flowLayoutPanel.Controls.Add(GetDualContentPanel(left, right, _flowLayoutPanel.Width - 25));
+         AddToFlowPanel(left, right);
+
+         switch (Indexing)
+         {
+            case IndexingType.None:
+               DualContent.Add(new(left, right));
+               break;
+            case IndexingType.Left:
+               if (LeftComboBox.SelectedIndex >= MinIndex && LeftComboBox.SelectedIndex <= MaxIndex)
+                  DualContent.Add(new(LeftComboBox.SelectedIndex.ToString(), right));
+               break;
+            case IndexingType.Right:
+               if (RightComboBox.SelectedIndex >= MinIndex && RightComboBox.SelectedIndex <= MaxIndex)
+                  DualContent.Add(new(left, RightComboBox.SelectedIndex.ToString()));
+               break;
+            case IndexingType.Both:
+               if (LeftComboBox.SelectedIndex >= MinIndex && LeftComboBox.SelectedIndex <= MaxIndex
+                   && RightComboBox.SelectedIndex >= MinIndex && RightComboBox.SelectedIndex <= MaxIndex)
+                  DualContent.Add(new(LeftComboBox.SelectedIndex.ToString(), RightComboBox.SelectedIndex.ToString()));
+               break;
+         }
       }
 
+      private void AddToFlowPanel(string left, string right)
+      {
+         FlowLayoutPanel.Controls.Add(GetDualContentPanel(left, right, FlowLayoutPanel.Width - 25));
+      }
 
       private TableLayoutPanel GetDualContentPanel(string left, string right, int width)
       {
-         var panel = new TableLayoutPanel()
+         var panel = new TableLayoutPanel
          {
             Width = width,
             Height = 21,
@@ -139,10 +177,17 @@ namespace Editor.Controls
          panel.Controls.Add(labelRight, 1, 0);
 
          // if any of the items are right clicked, remove the panel
-         label.MouseDown += (sender, args) => _flowLayoutPanel.Controls.Remove(panel);
-         labelRight.MouseDown += (sender, args) => _flowLayoutPanel.Controls.Remove(panel);
+         label.MouseDown += (sender, args) => FlowLayoutPanel.Controls.Remove(panel);
+         labelRight.MouseDown += (sender, args) => FlowLayoutPanel.Controls.Remove(panel);
 
          return panel;
+      }
+
+      public void SetDualContent(List<KeyValuePair<string, string>> keyValuePairs)
+      {
+         FlowLayoutPanel.Controls.Clear();
+         foreach (var pair in keyValuePairs)
+            AddToFlowPanel(pair.Key, pair.Value);
       }
    }
 }

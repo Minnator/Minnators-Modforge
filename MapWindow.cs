@@ -509,7 +509,7 @@ namespace Editor
       private void InitializeModifierTab()
       {
          _modifierComboBox = ControlFactory.GetExtendedComboBox();
-         _modifierComboBox.Items.AddRange([.. Globals.Modifiers.Keys]);
+         _modifierComboBox.Items.AddRange([.. Globals.VanillaModifiers.Keys]);
          // No data changed here as they are added via the "Add" button
          ModifiersLayoutPanel.Controls.Add(_modifierComboBox, 1, 1);
 
@@ -1048,7 +1048,7 @@ namespace Editor
          if (!int.TryParse(item.SubItems[1].Text, out var duration) || !Enum.TryParse(item.SubItems[2].Text, out ModifierType type))
             return;
 
-         if (!Globals.Modifiers.TryGetValue(modifierName, out _))
+         if (!Globals.VanillaModifiers.TryGetValue(modifierName, out _))
             return;
 
          ProvinceEditingEvents.OnModifierRemoved(new ApplicableModifier(modifierName, duration), type);

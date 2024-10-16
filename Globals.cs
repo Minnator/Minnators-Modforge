@@ -199,7 +199,8 @@ public static class Globals
    public static Dictionary<string, ColonialRegion> ColonialRegions = [];
 
    // Modifiers
-   public static Dictionary<string, EventModifier> Modifiers = [];
+   public static Dictionary<string, EventModifier> VanillaModifiers = [];
+   public static Dictionary<string, EventModifier> ModModifiers = [];
    public static Dictionary<string, Modifier> ProvinceTriggeredModifiers = [];
    public static Dictionary<string, Modifier> TriggeredModifiers = [];
 
@@ -212,7 +213,7 @@ public static class Globals
    public static Dictionary<string, Area> Areas = [];
    public static Dictionary<string, Region> Regions { get; set; } = [];
 
-   private static Dictionary<string, SuperRegion> _superRegions = [];
+   private static readonly Dictionary<string, SuperRegion> _superRegions = [];
    public static Dictionary<string, SuperRegion> SuperRegions => _superRegions;
    public static void AddSuperRegion(SuperRegion sr)
    {
@@ -231,6 +232,7 @@ public static class Globals
    public static Dictionary<string, Dictionary<string, string>> VanillaLocalisation { get; set; } = [];
    public static Dictionary<string, Dictionary<string, string>> ModLocalisation { get; set; } = [];
    public static Dictionary<string, Dictionary<string, string>> ReplaceLocalisation { get; set; } = [];
+   public static Dictionary<string, string> NewLocalisation { get; set; } = [];
 
    public static Dictionary<string, string> LocalisationCollisions { get; set; } = [];
    
@@ -240,6 +242,7 @@ public static class Globals
 
    // Modifiers
    public static string[] ModifierKeys = new string[1];
+   public static Dictionary<int, ModifierValueType> ModifierValueTypes = [];
 
    // Is used in parsing province files as some keys differ from standard effect keys
    public static readonly HashSet<string> UniqueAttributeKeys = [

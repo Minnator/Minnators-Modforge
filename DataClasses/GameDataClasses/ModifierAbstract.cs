@@ -142,7 +142,7 @@ namespace Editor.DataClasses.GameDataClasses
    public class EventModifier(string name)
    {
       public string Name { get; } = name;
-      public List<string> TriggerAttribute { get; set; } = [];
+      public List<KeyValuePair<string, string>> TriggerAttribute { get; set; } = [];
       public List<Modifier> Modifiers { get; set; } = [];
       public string Picture { get; set; } = string.Empty;
 
@@ -174,13 +174,16 @@ namespace Editor.DataClasses.GameDataClasses
       {
          return $"\"{Name}\" ({Modifiers.Count})";
       }
+
+      public static EventModifier Empty => new("Empty");
    }
 
    public enum ModifierValueType
    {
       Bool,
       Int,
-      Float
+      Float,
+      Percentile
    }
    public class Modifier(int nameIndex, object value) 
    {

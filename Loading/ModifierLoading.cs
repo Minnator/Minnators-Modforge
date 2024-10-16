@@ -33,7 +33,7 @@ namespace Editor.Loading
                {
                   if (ModifierParser.IsCustomModifierTrigger(kvps[i].Key))
                   {
-                     modifier.TriggerAttribute.Add(kvps[i].Key);
+                     modifier.TriggerAttribute.Add(new (kvps[i].Key, "yes"));
                      continue;
                   }
                   if (kvps[i].Key == "picture")
@@ -54,9 +54,11 @@ namespace Editor.Loading
                Globals.ErrorLog.Write($"Duplicate modifier found: {modifier.Name}");
          }
 
-         Globals.Modifiers = modifiers;
+         Globals.VanillaModifiers = modifiers;
          sw.Stop();
          Globals.LoadingLog.WriteTimeStamp("Event Modifiers", sw.ElapsedMilliseconds);
       }
    }
+
+
 }
