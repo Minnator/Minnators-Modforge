@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
+using System.Text.RegularExpressions;
 using Editor.Savers;
 
 namespace Editor.DataClasses.GameDataClasses
@@ -217,12 +219,16 @@ namespace Editor.DataClasses.GameDataClasses
             return ModifiersColorDefinition.Neutral;
          }
 
-         if (value is float f)
+         if (float.TryParse(value.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out var f))
          {
             if ((MarkDown & ValueMarkDown.Positive) == ValueMarkDown.Positive && f > 0)
                return ModifiersColorDefinition.Positive;
-            if ((MarkDown & ValueMarkDown.Negative) == ValueMarkDown.Negative && f < 0)
+            if (f < 0)
                return ModifiersColorDefinition.Negative;
+            if ((MarkDown & ValueMarkDown.Negative) == ValueMarkDown.Negative && f > 0)
+               return ModifiersColorDefinition.Negative;
+            if (f > 0)
+               return ModifiersColorDefinition.Positive;
             return ModifiersColorDefinition.Neutral;
          }
 
@@ -230,8 +236,12 @@ namespace Editor.DataClasses.GameDataClasses
          {
             if ((MarkDown & ValueMarkDown.Positive) == ValueMarkDown.Positive && i > 0)
                return ModifiersColorDefinition.Positive;
-            if ((MarkDown & ValueMarkDown.Negative) == ValueMarkDown.Negative && i < 0)
+            if (i < 0)
                return ModifiersColorDefinition.Negative;
+            if ((MarkDown & ValueMarkDown.Negative) == ValueMarkDown.Negative && i > 0)
+               return ModifiersColorDefinition.Negative;
+            if (i > 0)
+               return ModifiersColorDefinition.Positive;
             return ModifiersColorDefinition.Neutral;
          }
 

@@ -9,7 +9,7 @@ namespace Editor.Forms
    public partial class EventModifierForm : Form
    {
       private DualSelectionFlowPanel _customAttrPanel;
-      private DualSelectionFlowPanel _modifierPanel;
+      private ColoredModifierPanel _modifierPanel;
 
       private readonly ComboBox tempBox;
       public EventModifierForm()
@@ -34,7 +34,7 @@ namespace Editor.Forms
          _customAttrPanel.Dock = DockStyle.Fill;
          _customAttrPanel.SetComboBoxItems([.. ModifierParser.CustomModifierTrigger.Keys], DualSelectionFlowPanel.BoxType.Left, true);
          _customAttrPanel.SetComboBoxItems(["yes", "no"], DualSelectionFlowPanel.BoxType.Right, true);
-         _modifierPanel = new();
+         _modifierPanel = new ();
          _modifierPanel.Dock = DockStyle.Fill;
 
          _modifierPanel.SetComboBoxItems(Globals.ModifierKeys, DualSelectionFlowPanel.BoxType.Left, false);
@@ -42,7 +42,6 @@ namespace Editor.Forms
          _modifierPanel.LeftComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
          _modifierPanel.LeftComboBox.SelectedIndexChanged += SuggestDefaultValues;
          _modifierPanel.Indexing = DualSelectionFlowPanel.IndexingType.Left;
-         _modifierPanel.UseIndexing = true;
          _modifierPanel.MaxIndex = Globals.ModifierKeys.Length - 1;
          _modifierPanel.MinIndex = 0;
 
@@ -72,12 +71,16 @@ namespace Editor.Forms
 
          LocalisationTextBox.Text = Localisation.GetLoc(modifier.Name);
          DescriptionTextBox.Text = Localisation.GetLoc($"desc_{modifier.Name}");
-
          _customAttrPanel.SetDualContent(modifier.TriggerAttribute);
-         List<KeyValuePair<string, string>> modList = [];
+
+         List<ModifierDefinition> definitions = [];
+         List<string> values = [];
          foreach (var mod in modifier.Modifiers)
-            modList.Add(new(Globals.ModifierKeys[mod.Name], mod.Value.ToString()!));
-         _modifierPanel.SetDualContent(modList);
+         {
+            definitions.Add(ModifierParser.ModifierDefinitions[mod.Name]);
+            values.Add(mod.Value.ToString()!);
+         }
+         _modifierPanel.AddModifiers(definitions, values);
       }
 
 
@@ -98,6 +101,21 @@ namespace Editor.Forms
          // Close the form when the escape key is pressed
          //if (e.KeyCode == Keys.Escape)
          //   Close();
+         if (e.Modifiers == Keys.Control)
+         {
+            switch (e.KeyCode)
+            {
+               case Keys.D:
+                  ModifyButton.PerformClick();
+                  break;
+               case Keys.S:
+                  SaveButton.PerformClick();
+                  break;
+               case Keys.X:
+                  CancelButton.PerformClick();
+                  break;
+            }
+         }
       }
 
       private void SaveButton_Click(object sender, EventArgs e)

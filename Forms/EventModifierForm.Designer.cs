@@ -47,6 +47,7 @@
          tableLayoutPanel7 = new TableLayoutPanel();
          SaveButton = new Button();
          CancelButton = new Button();
+         ModifyButton = new Button();
          toolTip1 = new ToolTip(components);
          EventModifiersLayoutPanel.SuspendLayout();
          ModifiersLP.SuspendLayout();
@@ -257,12 +258,15 @@
          // 
          // tableLayoutPanel7
          // 
-         tableLayoutPanel7.ColumnCount = 3;
+         tableLayoutPanel7.ColumnCount = 5;
          tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-         tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
          tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-         tableLayoutPanel7.Controls.Add(SaveButton, 2, 0);
+         tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+         tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+         tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+         tableLayoutPanel7.Controls.Add(SaveButton, 4, 0);
          tableLayoutPanel7.Controls.Add(CancelButton, 0, 0);
+         tableLayoutPanel7.Controls.Add(ModifyButton, 2, 0);
          tableLayoutPanel7.Dock = DockStyle.Fill;
          tableLayoutPanel7.Location = new Point(0, 343);
          tableLayoutPanel7.Margin = new Padding(0);
@@ -281,7 +285,7 @@
          SaveButton.Size = new Size(107, 26);
          SaveButton.TabIndex = 0;
          SaveButton.Text = "Add";
-         toolTip1.SetToolTip(SaveButton, "Adds the new event_modifer");
+         toolTip1.SetToolTip(SaveButton, "Adds the new event_modifer\r\n(Ctrl + S)");
          SaveButton.UseVisualStyleBackColor = true;
          SaveButton.Click += SaveButton_Click;
          // 
@@ -294,9 +298,21 @@
          CancelButton.Size = new Size(106, 26);
          CancelButton.TabIndex = 1;
          CancelButton.Text = "Close";
-         toolTip1.SetToolTip(CancelButton, "All progress that has not been added or modified will be lost.");
+         toolTip1.SetToolTip(CancelButton, "All progress that has not been added or modified will be lost.\r\n(Ctrl + X)");
          CancelButton.UseVisualStyleBackColor = true;
          CancelButton.Click += CancelButton_Click;
+         // 
+         // ModifyButton
+         // 
+         ModifyButton.Dock = DockStyle.Fill;
+         ModifyButton.Location = new Point(217, 0);
+         ModifyButton.Margin = new Padding(1, 0, 1, 0);
+         ModifyButton.Name = "ModifyButton";
+         ModifyButton.Size = new Size(106, 26);
+         ModifyButton.TabIndex = 2;
+         ModifyButton.Text = "Modify";
+         toolTip1.SetToolTip(ModifyButton, "Modifies the selected modifier if it already exists\r\n(Ctrl + D)");
+         ModifyButton.UseVisualStyleBackColor = true;
          // 
          // EventModifierForm
          // 
@@ -349,5 +365,6 @@
       public TextBox DescriptionTextBox;
       public TextBox LocalisationTextBox;
       private ToolTip toolTip1;
+      private Button ModifyButton;
    }
 }

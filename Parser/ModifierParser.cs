@@ -26,8 +26,6 @@ namespace Editor.Parser
       {
          Globals.ModifierKeys = new string[CountryModifiersDict.Count + ProvinceModifiersDict.Count +
                                            EstateModifiers.Count + GovernmentMechanics.Count + FactionModifiers.Count];
-
-
          var cnt = 0;
          foreach (var cmod in CountryModifiersDict.Keys)
          {
@@ -1267,8 +1265,8 @@ namespace Editor.Parser
          { 314, new( "core_decay_on_your_own", 314, ModifierValueType.Float, ValueMarkDown.Positive) },
          { 315, new( "enemy_core_creation", 315, ModifierValueType.Float, ValueMarkDown.Positive) },
          { 316, new( "ignore_coring_distance", 316, ModifierValueType.Bool, ValueMarkDown.Positive) },
-         { 317, new( "technology_cost", 317, ModifierValueType.Float, ValueMarkDown.Positive) },
-         { 318, new( "idea_cost", 318, ModifierValueType.Float, ValueMarkDown.Positive) },
+         { 317, new( "technology_cost", 317, ModifierValueType.Float, ValueMarkDown.Negative) },
+         { 318, new( "idea_cost", 318, ModifierValueType.Float, ValueMarkDown.Negative) },
          { 319, new( "embracement_cost", 319, ModifierValueType.Float, ValueMarkDown.Positive) },
          { 320, new( "global_institution_spread", 320, ModifierValueType.Float, ValueMarkDown.Positive) },
          { 321, new( "institution_spread_from_true_faith", 321, ModifierValueType.Float, ValueMarkDown.Positive) },

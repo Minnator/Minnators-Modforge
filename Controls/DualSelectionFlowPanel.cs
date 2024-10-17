@@ -2,18 +2,20 @@
 
 namespace Editor.Controls
 {
-   public sealed class DualSelectionFlowPanel : Control
+   public class DualSelectionFlowPanel : Control
    {
       public readonly FlowLayoutPanel FlowLayoutPanel;
       public readonly TableLayoutPanel TableLayoutPanel;
       public readonly ComboBox LeftComboBox;
       public readonly ComboBox RightComboBox;
       private readonly Button _addButton;
-      public bool UseIndexing;
       public int MaxIndex;
       public int MinIndex;
       public List<KeyValuePair<string, string>> DualContent = [];
       public IndexingType Indexing = IndexingType.None;
+
+      public EventHandler<TableLayoutPanel> OnAfterAdd = delegate { };
+
 
       public DualSelectionFlowPanel()
       {
@@ -180,14 +182,28 @@ namespace Editor.Controls
          label.MouseDown += (sender, args) => FlowLayoutPanel.Controls.Remove(panel);
          labelRight.MouseDown += (sender, args) => FlowLayoutPanel.Controls.Remove(panel);
 
+         OnAfterAdd.Invoke(this, panel);
+
          return panel;
       }
 
       public void SetDualContent(List<KeyValuePair<string, string>> keyValuePairs)
       {
          FlowLayoutPanel.Controls.Clear();
-         foreach (var pair in keyValuePairs)
-            AddToFlowPanel(pair.Key, pair.Value);
+         foreach (var pair in keyValuePairs) 
+            SetDualContentInternal(pair.Key, pair.Value);
       }
+
+      public void SetDualContent(string left, string right)
+      {
+         FlowLayoutPanel.Controls.Clear();
+         SetDualContentInternal(left, right);
+      }
+
+      public void SetDualContentInternal(string left, string right)
+      {
+         AddToFlowPanel(left, right);
+      }
+
    }
 }
