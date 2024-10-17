@@ -122,7 +122,7 @@ namespace Editor.Loading
                for (var index = 0; index < kvp2.Count; index++)
                   if (kvp2[index].Key.Equals("name"))
                   {
-                     Parsing.TrimQuotes(kvp2[index].Value, out var name);
+                     kvp2[index].Value.TrimQuotes(out var name);
                      ParseOutgoing(ref node, ref block, name);
                   }
                
@@ -162,56 +162,5 @@ namespace Editor.Loading
 
          node.Outgoing.Add(outgoing);
       }
-   }
-}
-
-public static class TradeNodeHelper
-{
-   public static List<Tag> GetAllCountriesInNode(string nodeName)
-   {
-      var node = Globals.TradeNodes[nodeName];
-      var countries = new List<Tag>();
-      foreach (var member in node.Members)
-         if (Globals.Provinces.TryGetValue(member, out var province))
-            if (province.Owner != Tag.Empty)
-               countries.Add(province.Owner);
-      return countries;
-   }
-
-   public static TradeNode GetTradeNodeByProvince(Province province)
-   {
-      foreach (var node in Globals.TradeNodes.Values)
-         if (node.Members.Contains(province))
-            return node;
-      return TradeNode.Empty;
-   }
-
-   public static void DumpTradeNodes(string path)
-   {
-      var sb = new StringBuilder();
-
-      foreach (var node in Globals.TradeNodes.Values)
-      {
-         sb.AppendLine(node.Name);
-         sb.AppendLine($"\tLocation: {node.Location}");
-         sb.AppendLine($"\tColor: {node.Color}");
-         sb.AppendLine($"\tIsInland: {node.IsInland}");
-         sb.Append("\tMembers:\n\t\t");
-         foreach (var member in node.Members)
-         {
-            sb.Append($"{member}, ");
-         }
-         sb.AppendLine();
-         foreach (var incoming in node.Incoming)
-         {
-            sb.AppendLine($"\tIncoming: {incoming}");
-         }
-         foreach (var outgoing in node.Outgoing)
-         {
-            sb.AppendLine($"\tOutgoing: {outgoing}");
-         }
-      }
-
-      File.WriteAllText(Path.Combine(path, "tradenodes_dump.txt"), sb.ToString());
    }
 }

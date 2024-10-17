@@ -221,14 +221,23 @@ namespace Editor.DataClasses.GameDataClasses
 
          if (float.TryParse(value.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out var f))
          {
-            if ((MarkDown & ValueMarkDown.Positive) == ValueMarkDown.Positive && f > 0)
-               return ModifiersColorDefinition.Positive;
-            if (f < 0)
-               return ModifiersColorDefinition.Negative;
-            if ((MarkDown & ValueMarkDown.Negative) == ValueMarkDown.Negative && f > 0)
-               return ModifiersColorDefinition.Negative;
-            if (f > 0)
-               return ModifiersColorDefinition.Positive;
+            if ((MarkDown & ValueMarkDown.Positive) == ValueMarkDown.Positive)
+               switch (f)
+               {
+                  case > 0:
+                     return ModifiersColorDefinition.Positive;
+                  case < 0:
+                     return ModifiersColorDefinition.Negative;
+               }
+
+            if ((MarkDown & ValueMarkDown.Negative) == ValueMarkDown.Negative)
+               switch (f)
+               {
+                  case > 0:
+                     return ModifiersColorDefinition.Negative;
+                  case < 0:
+                     return ModifiersColorDefinition.Positive;
+               }
             return ModifiersColorDefinition.Neutral;
          }
 

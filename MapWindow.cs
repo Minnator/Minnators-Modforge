@@ -955,7 +955,8 @@ namespace Editor
 
       private void bestPointsToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         //DebugMaps.TestCenterPoints();
+         var tnsSortedTopological = TradeNodeHelper.TopologicalSort(Globals.TradeNodes.Values.ToList());
+         DebugPrints.VerifyTopologicalSort(tnsSortedTopological);
       }
 
       private void provDiffToolStripMenuItem_Click(object sender, EventArgs e)
@@ -991,8 +992,7 @@ namespace Editor
 
       private void saveSelectionToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         var selectionDrawer = new SelectionDrawerForm();
-         selectionDrawer.Show();
+         new SelectionDrawerForm().Show();
       }
 
       private void SaveCurrentSelectionButton_Click(object sender, EventArgs e)
@@ -1107,6 +1107,22 @@ namespace Editor
       private void saveManualToolStripMenuItem_Click(object sender, EventArgs e)
       {
          new ManualSaving().ShowDialog();
+      }
+
+      private void checkForCyclesInTradenodesToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         var result = TradeNodeHelper.FindCycle(Globals.TradeNodes.Values.ToList());
+         if (result.Count == 0)
+            MessageBox.Show("TradeNodes does not contain a cycle", "No Cycle Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+         else
+         {
+            var sb = new StringBuilder();
+            foreach (var tradeNode in result)
+            {
+               sb.AppendLine($"-> {tradeNode.Name}");
+            }
+            MessageBox.Show(sb.ToString(), "Cycle Found", MessageBoxButtons.OK, MessageBoxIcon.Information);
+         }
       }
    }
 }

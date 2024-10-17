@@ -44,7 +44,14 @@ namespace Editor.Savers
          SavingUtil.AddTabs(tabs, ref sb);
          sb.AppendLine($"name = \"{outgoing.Target}\"");
          SavingUtil.AddFormattedIntList("path", outgoing.Path, tabs, ref sb);
-         SavingUtil.AddFormattedPointFList("control", outgoing.Control, tabs, ref sb);
+         var control = outgoing.Control;
+         if (control.Count > 2)
+         {
+            control.RemoveAt(0);
+            control.RemoveAt(control.Count - 1);
+         }
+
+         SavingUtil.AddFormattedPointFList("control", control, tabs, true, ref sb);
          SavingUtil.AddTabs(tabs - 1, ref sb);
          sb.AppendLine("}");
       }

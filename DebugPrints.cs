@@ -1,14 +1,46 @@
-﻿using System.Text;
-using Editor.Commands;
-using Editor.DataClasses;
+﻿using System.Diagnostics;
 using Editor.DataClasses.GameDataClasses;
-using Editor.Forms;
-using Editor.Helper;
 
 namespace Editor;
 
 public static class DebugPrints
 {
+   public static bool VerifyTopologicalSort(List<TradeNode> sortedNodes)
+   {
+      var nodeIndex = new Dictionary<TradeNode, int>();
+
+      for (var i = 0; i < sortedNodes.Count; i++) 
+         nodeIndex[sortedNodes[i]] = i;
+
+      // Verify that all nodes have incoming links from earlier nodes
+      foreach (var node in sortedNodes)
+      {
+         foreach (var incomingLink in node.Incoming)
+         {
+            if (nodeIndex[Globals.TradeNodes[incomingLink]] >= nodeIndex[node])
+            {
+               Debug.WriteLine($"Violation: {incomingLink} comes after {node.Name} (Incoming link check failed).");
+               return false;
+            }
+         }
+
+         // Check outgoing links: they should point to nodes later in the sorted list
+         foreach (var outgoingLink in node.Outgoing)
+         {
+            var targetNode = sortedNodes.First(n => n.Name == outgoingLink.Target);
+
+            if (nodeIndex[targetNode] <= nodeIndex[node])
+            {
+               Debug.WriteLine($"Violation: {targetNode.Name} comes before {node.Name} (Outgoing link check failed).");
+               return false;
+            }
+         }
+      }
+
+      Debug.WriteLine("Topological sort is valid.");
+      return true;
+   }
+
    /*
    public static void PrintAllProvinceHistories()
    {

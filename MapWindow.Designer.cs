@@ -68,6 +68,8 @@
          openCustomizerToolStripMenuItem = new ToolStripMenuItem();
          ShowToolTipMenuItem = new ToolStripMenuItem();
          toolStripMenuItem3 = new ToolStripMenuItem();
+         additionalToolsToolStripMenuItem = new ToolStripMenuItem();
+         checkForCyclesInTradenodesToolStripMenuItem = new ToolStripMenuItem();
          MapModeComboBox = new ToolStripComboBox();
          searchToolStripMenuItem = new ToolStripMenuItem();
          debugToolStripMenuItem = new ToolStripMenuItem();
@@ -238,7 +240,7 @@
          // 
          // MapMenuStrip
          // 
-         MapMenuStrip.Items.AddRange(new ToolStripItem[] { filesToolStripMenuItem, historyToolStripMenuItem, toolTipCustomizerToolStripMenuItem, toolStripMenuItem3, MapModeComboBox, searchToolStripMenuItem, debugToolStripMenuItem });
+         MapMenuStrip.Items.AddRange(new ToolStripItem[] { filesToolStripMenuItem, historyToolStripMenuItem, toolTipCustomizerToolStripMenuItem, toolStripMenuItem3, additionalToolsToolStripMenuItem, MapModeComboBox, searchToolStripMenuItem, debugToolStripMenuItem });
          MapMenuStrip.Location = new Point(0, 0);
          MapMenuStrip.Name = "MapMenuStrip";
          MapMenuStrip.Padding = new Padding(7, 2, 0, 2);
@@ -494,6 +496,20 @@
          toolStripMenuItem3.Size = new Size(65, 23);
          toolStripMenuItem3.Text = "Statistics";
          // 
+         // additionalToolsToolStripMenuItem
+         // 
+         additionalToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { checkForCyclesInTradenodesToolStripMenuItem });
+         additionalToolsToolStripMenuItem.Name = "additionalToolsToolStripMenuItem";
+         additionalToolsToolStripMenuItem.Size = new Size(103, 23);
+         additionalToolsToolStripMenuItem.Text = "Additional tools";
+         // 
+         // checkForCyclesInTradenodesToolStripMenuItem
+         // 
+         checkForCyclesInTradenodesToolStripMenuItem.Name = "checkForCyclesInTradenodesToolStripMenuItem";
+         checkForCyclesInTradenodesToolStripMenuItem.Size = new Size(236, 22);
+         checkForCyclesInTradenodesToolStripMenuItem.Text = "Check for cycles in Tradenodes";
+         checkForCyclesInTradenodesToolStripMenuItem.Click += checkForCyclesInTradenodesToolStripMenuItem_Click;
+         // 
          // MapModeComboBox
          // 
          MapModeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -520,69 +536,69 @@
          // testToolStripMenuItem
          // 
          testToolStripMenuItem.Name = "testToolStripMenuItem";
-         testToolStripMenuItem.Size = new Size(167, 22);
+         testToolStripMenuItem.Size = new Size(221, 22);
          testToolStripMenuItem.Text = "Test";
          testToolStripMenuItem.Click += testToolStripMenuItem_Click;
          // 
          // telescopeToolStripMenuItem
          // 
          telescopeToolStripMenuItem.Name = "telescopeToolStripMenuItem";
-         telescopeToolStripMenuItem.Size = new Size(167, 22);
+         telescopeToolStripMenuItem.Size = new Size(221, 22);
          telescopeToolStripMenuItem.Text = "Telescope";
          telescopeToolStripMenuItem.Click += telescopeToolStripMenuItem_Click;
          // 
          // refStackToolStripMenuItem
          // 
          refStackToolStripMenuItem.Name = "refStackToolStripMenuItem";
-         refStackToolStripMenuItem.Size = new Size(167, 22);
+         refStackToolStripMenuItem.Size = new Size(221, 22);
          refStackToolStripMenuItem.Click += refStackToolStripMenuItem_Click;
          // 
          // bestPointsToolStripMenuItem
          // 
          bestPointsToolStripMenuItem.Name = "bestPointsToolStripMenuItem";
-         bestPointsToolStripMenuItem.Size = new Size(167, 22);
-         bestPointsToolStripMenuItem.Text = "bestPoints";
+         bestPointsToolStripMenuItem.Size = new Size(221, 22);
+         bestPointsToolStripMenuItem.Text = "Topological Sort verification";
          bestPointsToolStripMenuItem.Click += bestPointsToolStripMenuItem_Click;
          // 
          // provDiffToolStripMenuItem
          // 
          provDiffToolStripMenuItem.Name = "provDiffToolStripMenuItem";
-         provDiffToolStripMenuItem.Size = new Size(167, 22);
+         provDiffToolStripMenuItem.Size = new Size(221, 22);
          provDiffToolStripMenuItem.Text = "ProvDiff";
          provDiffToolStripMenuItem.Click += provDiffToolStripMenuItem_Click;
          // 
          // yoloToolStripMenuItem
          // 
          yoloToolStripMenuItem.Name = "yoloToolStripMenuItem";
-         yoloToolStripMenuItem.Size = new Size(167, 22);
+         yoloToolStripMenuItem.Size = new Size(221, 22);
          yoloToolStripMenuItem.Text = "yolo";
          yoloToolStripMenuItem.Click += yoloToolStripMenuItem_Click;
          // 
          // saveAllProvincesToolStripMenuItem
          // 
          saveAllProvincesToolStripMenuItem.Name = "saveAllProvincesToolStripMenuItem";
-         saveAllProvincesToolStripMenuItem.Size = new Size(167, 22);
+         saveAllProvincesToolStripMenuItem.Size = new Size(221, 22);
          saveAllProvincesToolStripMenuItem.Text = "Save all provinces";
          saveAllProvincesToolStripMenuItem.Click += saveAllProvincesToolStripMenuItem_Click;
          // 
          // save1ToolStripMenuItem
          // 
          save1ToolStripMenuItem.Name = "save1ToolStripMenuItem";
-         save1ToolStripMenuItem.Size = new Size(167, 22);
+         save1ToolStripMenuItem.Size = new Size(221, 22);
          save1ToolStripMenuItem.Text = "Save 1";
          save1ToolStripMenuItem.Click += save1ToolStripMenuItem_Click;
          // 
          // saveEuropeToolStripMenuItem
          // 
          saveEuropeToolStripMenuItem.Name = "saveEuropeToolStripMenuItem";
-         saveEuropeToolStripMenuItem.Size = new Size(167, 22);
+         saveEuropeToolStripMenuItem.Size = new Size(221, 22);
          saveEuropeToolStripMenuItem.Text = "Save europe";
          saveEuropeToolStripMenuItem.Click += saveEuropeToolStripMenuItem_Click;
          // 
          // jsonToolStripMenuItem
          // 
          jsonToolStripMenuItem.Name = "jsonToolStripMenuItem";
-         jsonToolStripMenuItem.Size = new Size(167, 22);
+         jsonToolStripMenuItem.Size = new Size(221, 22);
          jsonToolStripMenuItem.Text = "json";
          jsonToolStripMenuItem.Click += jsonToolStripMenuItem_Click;
          // 
@@ -2211,6 +2227,8 @@
       private ToolStripSeparator toolStripSeparator6;
       private ToolTip toolTip1;
       private ToolStripMenuItem saveModifiedToolStripMenuItem;
+      private ToolStripMenuItem additionalToolsToolStripMenuItem;
+      private ToolStripMenuItem checkForCyclesInTradenodesToolStripMenuItem;
    }
 }
 

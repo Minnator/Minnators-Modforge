@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Text;
 using Editor.Forms.SavingClasses;
+using Editor.Helper;
 using Editor.Interfaces;
 using Microsoft.VisualBasic;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -35,7 +36,7 @@ namespace Editor.Savers
 
          if (modifiedData.SaveTradeNodes)
          {
-            SaveTradeNodes.SaveAllTradeNodes(Globals.TradeNodes.Values.ToList());
+            SaveTradeNodes.SaveAllTradeNodes(TradeNodeHelper.TopologicalSort(Globals.TradeNodes.Values.ToList()));
          }
 
          if (modifiedData.SuperRegions)
@@ -121,12 +122,15 @@ namespace Editor.Savers
          AddFormattedList(blockName, ints.Select(i => i.ToString()).ToList(), tabCount, true, ref sb);
       }
 
-      public static void AddFormattedPointFList(string blockName, ICollection<PointF> floats, int tabCount, ref StringBuilder sb)
+      public static void AddFormattedPointFList(string blockName, ICollection<PointF> floats, int tabCount, bool adjustHeight, ref StringBuilder sb)
       {
          List<string> strings = [];
-         foreach (var f in floats) //Put the floats to string with 6 decimal places
+         for (var i = 0; i < floats.ToList().Count; i++)
          {
+            var f = floats.ToList()[i];
             strings.Add(f.X.ToString("F6", CultureInfo.InvariantCulture));
+            if (adjustHeight)
+               f.Y = Globals.MapHeight - f.Y;
             strings.Add(f.Y.ToString("F6", CultureInfo.InvariantCulture));
          }
 
