@@ -1,7 +1,9 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 using Editor.Forms.SavingClasses;
 using Editor.Interfaces;
 using Microsoft.VisualBasic;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Editor.Savers
 {
@@ -10,6 +12,7 @@ namespace Editor.Savers
       public static int MaxLineWidth = 125;
       public static bool SortIntLists = true;
       public static bool SameSpacePerInt = true;
+      public static bool OneLinePerString = true;
 
       public static void SaveAllModified(ModifiedData modifiedData)
       {
@@ -28,6 +31,11 @@ namespace Editor.Savers
             foreach (var region in Globals.Regions.Values)
                regions.Add(new(region.Name, region.Areas));
             CollectionSavers.SaveStringCollection(regions, "areas", true, "map", "region.txt");
+         }
+
+         if (modifiedData.SaveTradeNodes)
+         {
+            SaveTradeNodes.SaveAllTradeNodes(Globals.TradeNodes.Values.ToList());
          }
 
          if (modifiedData.SuperRegions)
@@ -81,7 +89,7 @@ namespace Editor.Savers
                sb.Append($"{i,4}").Append(' ');
                lineLength += 5;
             }
-            else if (!isNumber)
+            else if (!isNumber && !OneLinePerString)
             {
                sb.AppendLine($"{i} ");
                AddTabs(tabCount + 1, ref sb);
@@ -94,6 +102,8 @@ namespace Editor.Savers
          }
          if (isNumber)
             sb.Append('\n');
+         else if (!OneLinePerString)
+            sb.Remove(sb.Length - 1, 1);
          else
             sb.Remove(sb.Length - 2, 2);
          AddTabs(tabCount, ref sb);
@@ -111,6 +121,37 @@ namespace Editor.Savers
          AddFormattedList(blockName, ints.Select(i => i.ToString()).ToList(), tabCount, true, ref sb);
       }
 
+      public static void AddFormattedPointFList(string blockName, ICollection<PointF> floats, int tabCount, ref StringBuilder sb)
+      {
+         List<string> strings = [];
+         foreach (var f in floats) //Put the floats to string with 6 decimal places
+         {
+            strings.Add(f.X.ToString("F6", CultureInfo.InvariantCulture));
+            strings.Add(f.Y.ToString("F6", CultureInfo.InvariantCulture));
+         }
+
+         AddTabs(tabCount, ref sb);
+         sb.AppendLine($"{blockName} = {{");
+         var lineLength = 0;
+         AddTabs(tabCount + 1, ref sb);
+         foreach (var s in strings)
+         {
+            if (lineLength > MaxLineWidth)
+            {
+               sb.Append('\n');
+               AddTabs(tabCount + 1, ref sb);
+               lineLength = 0;
+            }
+
+            sb.Append($"{s,11}").Append(' ');
+            lineLength += s.Length + 1;
+         }
+
+         sb.Append('\n');
+         AddTabs(tabCount, ref sb);
+         sb.AppendLine("}");
+      }
+
       public static void AddFormattedStringList(string blockName, ICollection<string> strings, int tabCount, ref StringBuilder sb)
       {
          AddFormattedList(blockName, strings, tabCount, false, ref sb);
@@ -120,6 +161,24 @@ namespace Editor.Savers
       {
          for (var i = 0; i < tabCount; i++) 
             sb.Append('\t');
+      }
+
+      public static void AddColor(int tabs, Color color, ref StringBuilder sb)
+      {
+         AddTabs(tabs, ref sb);
+         sb.AppendLine($"color = {{ {color.R} {color.G} {color.B} }}");
+      }
+
+      public static void AddBool(int tabs, bool b, string boolName, ref StringBuilder sb)
+      {
+         AddTabs(tabs, ref sb);
+         sb.AppendLine($"{boolName} = {GetYesNo(b)}");
+      }
+
+      public static void AddInt(int tabs, int b, string intName, ref StringBuilder sb)
+      {
+         AddTabs(tabs, ref sb);
+         sb.AppendLine($"{intName} = {b}");
       }
    }
 }
