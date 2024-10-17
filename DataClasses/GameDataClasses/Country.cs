@@ -1,8 +1,32 @@
 ﻿using System.Diagnostics.Metrics;
+using Editor.Events;
 using Editor.Helper;
 using Editor.Interfaces;
+using static Editor.Helper.ProvinceEnumHelper;
 
 namespace Editor.DataClasses.GameDataClasses;
+
+public enum CountryAttrType
+{
+   Int,
+   Float,
+   String,
+   Bool,
+   List,
+   Tag,
+   Color
+}
+
+[AttributeUsage(AttributeTargets.Field, Inherited = false, AllowMultiple = false)]
+public sealed class CountryAttrMetadata(CountryAttrType type) : Attribute
+{
+   public CountryAttrType Type { get; } = type;
+}
+
+public enum CountrySetter
+{
+   [CountryAttrMetadata(CountryAttrType.Color)] color,
+}
 
 public class Country(Tag tag, string fileName) : IProvinceCollection
 {
@@ -42,7 +66,17 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
       return null; //TODO if there are vassals return them
    }
 
-   public Color Color { get; set; } = Color.Empty;
+   public Color Color
+   {
+      get => _color;
+      set
+      {
+         _color = value;
+         if (Globals.State == State.Running)
+            CountryEditingEvents.CountryColorChanged.Invoke(null, new (CountrySetter.color, value));
+      }
+   }
+
    public Color RevolutionaryColor { get; set; } = Color.Empty;
    public string Gfx { get; set; } = string.Empty;
    public string HistoricalCouncil { get; set; } = string.Empty;
@@ -83,6 +117,8 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
    public List<Tag> HistoricalFriends { get; set; } = [];
    public int GovernmentRank { get; set; } = 0;
    private Province _capital = Province.Empty;
+   private Color _color = Color.Empty;
+
    public Province Capital
    {
       get => _capital;
@@ -177,6 +213,11 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
    public string GetLocalisation()
    {
       return Localisation.GetLoc(Tag);
+   }
+
+   public string GetAdjectiveLocalisation()
+   {
+      return Localisation.GetLoc($"{Tag}_ADJ");
    }
 
    public override string ToString()

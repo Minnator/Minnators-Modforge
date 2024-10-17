@@ -9,7 +9,7 @@ using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor.Loading;
 
-public static class RegionLoading
+public static partial class RegionLoading
 {
    private static string _pattern =
       @"(?<regionName>[A-Za-z_]+)\s*=\s*{\s*areas\s*=\s*{\s*(?<areas>(?:\s*[A-Za-z_]+\s*)+)\s*}\s*(?<monsoons>(?:monsoon\s*=\s*{\s*(?:\s*[0-9.]+\s*)+\s*}\s*)*)}";
@@ -23,22 +23,17 @@ public static class RegionLoading
          Globals.ErrorLog.Write("Error: region.txt not found!");
          return;
       }
-      var newContent = IO.ReadAllLinesInUTF8(path);
+      
+      Parsing.RemoveCommentFromMultilineString(IO.ReadAllInUTF8(path), out var content);
+      ParseRegion(Regex.Matches(content, _pattern, RegexOptions.Multiline));
+
+      sw.Stop();
+      Globals.LoadingLog.WriteTimeStamp("Parsing regions", sw.ElapsedMilliseconds);
+   }
+
+   private static void ParseRegion(MatchCollection matches)
+   {
       Dictionary<string, Region> regionDictionary = [];
-
-      // Filtering Comments and optional that are not important to the regions themselves
-      var sb = new StringBuilder();
-
-      foreach (var line in newContent)
-      {
-         if (string.IsNullOrEmpty(line) || line.StartsWith('#'))
-            continue;
-         sb.AppendLine(Parsing.RemoveCommentFromLine(line));
-      }
-
-      var content = sb.ToString();
-      var matches = Regex.Matches(content, _pattern, RegexOptions.Multiline);
-
       foreach (Match match in matches)
       {
          var regionName = match.Groups["regionName"].Value;
@@ -47,11 +42,10 @@ public static class RegionLoading
 
          foreach (Capture monsoon in match.Groups["monsoons"].Captures)
          {
-            var monsoonMatches = Regex.Matches(
-               monsoon.Value, @"monsoon\s*=\s*{\s*(?<start>[0-9.]+)\s*(?<end>[0-9.]+)\s*}");
+            var monsoonMatches = MonsoonRegex().Matches(monsoon.Value);
 
             foreach (Match monsoonMatch in monsoonMatches) 
-               monsoons.Add(new Monsoon(monsoonMatch.Groups["start"].Value, monsoonMatch.Groups["end"].Value));
+               monsoons.Add(new (monsoonMatch.Groups["start"].Value, monsoonMatch.Groups["end"].Value));
          }
          var region = new Region(regionName, areas, monsoons)
          {
@@ -65,11 +59,11 @@ public static class RegionLoading
             if (Globals.Areas.TryGetValue(area, out var ar))
                ar.Region = regionName;
          }
-         
-      }
 
+      }
       Globals.Regions = regionDictionary;
-      sw.Stop();
-      Globals.LoadingLog.WriteTimeStamp("Parsing regions", sw.ElapsedMilliseconds);
    }
+
+   [GeneratedRegex(@"monsoon\s*=\s*{\s*(?<start>[0-9.]+)\s*(?<end>[0-9.]+)\s*}")]
+   private static partial Regex MonsoonRegex();
 }

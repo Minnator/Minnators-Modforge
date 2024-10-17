@@ -124,25 +124,6 @@ namespace Editor
 
       public void RestructureModifierNameDict()
       {
-         /*
-         Dictionary<string, KeyValuePair<int, ModifierValueType>> modPairs = [];
-         foreach (var kvp in ModifierParser.CountryModifiersDict)
-         {
-            modPairs.Add(kvp.Key, new(-1, kvp.Value));
-         }
-
-         var sb = new StringBuilder();
-         sb.AppendLine("public static readonly Dictionary<string, ModifierValueType> CountryModifiersDict = new (){");
-         foreach (var kvp in modPairs)
-         {
-            sb.AppendLine($"\t{{\"{kvp.Key}\", new ({kvp.Value.Key}, ModifierValueType.{kvp.Value.Value})}},");
-         }
-         sb.AppendLine("};");
-         // downloads folder
-         var downloads = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Downloads";
-         var path = Path.Combine(downloads, "CountryModifiersDict.cs");
-         File.WriteAllText(path, sb.ToString());
-         */
       }
 
       private void AfterLoad()
@@ -302,10 +283,6 @@ namespace Editor
          ProvinceCollectionsLayoutPanel.Controls.Add(ProvinceGroupsEditingGui, 0, 6);
       }
 
-      private void InitializeCountryEditGui()
-      {
-
-      }
 
       private void InitializeProvinceEditGui()
       {
@@ -741,7 +718,9 @@ namespace Editor
 
       private void DeleteHistoryToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         Globals.HistoryManager.Clear();
+         var result = MessageBox.Show("Are you sure you want to delete the history?", "Delete History", MessageBoxButtons.OKCancel);
+         if (result == DialogResult.OK)
+            Globals.HistoryManager.Clear();
       }
 
       #endregion
@@ -1096,6 +1075,72 @@ namespace Editor
       private void randomModifierToolStripMenuItem_Click(object sender, EventArgs e)
       {
          new ModifierSuggestion().ShowDialog();
+      }
+
+
+      // ------------------- COUNTRY EDITING TAB ------------------- \\
+      private TagComboBox TagSelectionBox;
+      
+      private void InitializeCountryEditGui()
+      {
+         Selection.OnCountrySelected += OnCountrySelected;
+         TagSelectionBox = new()
+         {
+            Margin = new(1),
+            Height = 25,
+         };
+         TagSelectionBox.Items.Add("###");
+         TagAndColorTLP.Controls.Add(TagSelectionBox, 1, 0);
+         TagSelectionBox.OnTagChanged += (_, args) =>
+         {
+            if (!DataClasses.GameDataClasses.Tag.TryParse(args.Value.ToString(), out var tag))
+               return;
+            if (tag == DataClasses.GameDataClasses.Tag.Empty)
+               Selection.SetCountrySelected(Country.Empty);
+            else if (Globals.Countries.TryGetValue(tag, out var country))
+               Selection.SetCountrySelected(country);
+         };
+      }
+
+      public void OnCountrySelected(object? sender, Country country)
+      {
+         LoadCountryToGui(country);
+      }
+
+      private void ClearCountryGui()
+      {
+         CountryNameLabel.Text = "Country: -";
+         CountryColorPickerButton.BackColor = Color.Empty;
+         CountryColorPickerButton.Text = "(//)";
+         CountryADJLoc.Text = "-";
+         CountryLoc.Text = "-";
+      }
+
+      private void LoadCountryToGui(Country country)
+      {
+         if (country == Country.Empty)
+         {
+            ClearCountryGui();
+            return;
+         }
+         CountryNameLabel.Text = $"{country.GetLocalisation()} ({country.Tag})";
+         CountryColorPickerButton.BackColor = country.Color;
+         CountryColorPickerButton.Text = $"({country.Color.R}/{country.Color.G}/{country.Color.B})";
+         CountryLoc.Text = country.GetLocalisation();
+         CountryADJLoc.Text = country.GetAdjectiveLocalisation();
+
+      }
+
+      private void CountryColorPickerButton_Click(object sender, EventArgs e)
+      {
+         var colorDialog = new ColorDialog();
+         colorDialog.Color = CountryColorPickerButton.BackColor;
+         if (colorDialog.ShowDialog() == DialogResult.OK)
+         {
+            CountryColorPickerButton.BackColor = colorDialog.Color;
+            CountryColorPickerButton.Text = $"({colorDialog.Color.R}/{colorDialog.Color.G}/{colorDialog.Color.B})";
+            Selection.SelectedCountry.Color = colorDialog.Color;
+         }
       }
    }
 }

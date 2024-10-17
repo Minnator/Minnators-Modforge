@@ -156,6 +156,13 @@ public static class Selection
       Globals.MapWindow.MWAttirbuteCombobox.SelectedIndexChanged += OnSelectedAttributeIndexChanged;
    }
 
+   // ------------ Country Selection Methods ------------ \\
+   public static void SetCountrySelected(Country country)
+   {
+      _selectedCountry = country;
+      OnCountrySelected?.Invoke(Globals.ZoomControl, country);
+   }
+
    // ------------ Province Selection Methods ------------ \\
 
    #region Selection Methods

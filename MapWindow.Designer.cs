@@ -63,6 +63,7 @@
          positionsEditingToolStripMenuItem = new ToolStripMenuItem();
          historyToolStripMenuItem = new ToolStripMenuItem();
          selectionHistoryToolStripMenuItem = new ToolStripMenuItem();
+         toolStripSeparator3 = new ToolStripSeparator();
          DeleteHistoryToolStripMenuItem = new ToolStripMenuItem();
          toolTipCustomizerToolStripMenuItem = new ToolStripMenuItem();
          openCustomizerToolStripMenuItem = new ToolStripMenuItem();
@@ -182,6 +183,13 @@
          label25 = new Label();
          label26 = new Label();
          CountryPage = new TabPage();
+         CountryMainTLP = new TableLayoutPanel();
+         CountryNameLabel = new Label();
+         groupBox7 = new GroupBox();
+         TagAndColorTLP = new TableLayoutPanel();
+         CountryColorPickerButton = new Button();
+         label27 = new Label();
+         label28 = new Label();
          ProvinceGroupsPage = new TabPage();
          ProvinceCollectionsPanel = new Panel();
          ProvinceCollectionsTab = new TableLayoutPanel();
@@ -191,6 +199,10 @@
          MMButtonsTLPanel = new TableLayoutPanel();
          GeneralToolTip = new ToolTip(components);
          toolTip1 = new ToolTip(components);
+         label29 = new Label();
+         label30 = new Label();
+         CountryLoc = new TextBox();
+         CountryADJLoc = new TextBox();
          MapMenuStrip.SuspendLayout();
          toolStrip1.SuspendLayout();
          MainLayoutPanel.SuspendLayout();
@@ -229,6 +241,10 @@
          tableLayoutPanel2.SuspendLayout();
          LocalisationGroupBox.SuspendLayout();
          LocTableLayoutPanel.SuspendLayout();
+         CountryPage.SuspendLayout();
+         CountryMainTLP.SuspendLayout();
+         groupBox7.SuspendLayout();
+         TagAndColorTLP.SuspendLayout();
          ProvinceGroupsPage.SuspendLayout();
          ProvinceCollectionsPanel.SuspendLayout();
          ProvinceCollectionsTab.SuspendLayout();
@@ -442,7 +458,7 @@
          // 
          // historyToolStripMenuItem
          // 
-         historyToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { selectionHistoryToolStripMenuItem, DeleteHistoryToolStripMenuItem });
+         historyToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { selectionHistoryToolStripMenuItem, toolStripSeparator3, DeleteHistoryToolStripMenuItem });
          historyToolStripMenuItem.Name = "historyToolStripMenuItem";
          historyToolStripMenuItem.Size = new Size(57, 23);
          historyToolStripMenuItem.Text = "History";
@@ -454,6 +470,11 @@
          selectionHistoryToolStripMenuItem.Size = new Size(290, 22);
          selectionHistoryToolStripMenuItem.Text = "View History Tree";
          selectionHistoryToolStripMenuItem.Click += RevertInSelectionHistory;
+         // 
+         // toolStripSeparator3
+         // 
+         toolStripSeparator3.Name = "toolStripSeparator3";
+         toolStripSeparator3.Size = new Size(287, 6);
          // 
          // DeleteHistoryToolStripMenuItem
          // 
@@ -859,10 +880,12 @@
          // MainSplitContainer.Panel1
          // 
          MainSplitContainer.Panel1.Controls.Add(DataTabPanel);
+         MainSplitContainer.Panel1MinSize = 380;
          // 
          // MainSplitContainer.Panel2
          // 
          MainSplitContainer.Panel2.Controls.Add(MapLayoutPanel);
+         MainSplitContainer.Panel2MinSize = 200;
          MainSplitContainer.Size = new Size(1505, 844);
          MainSplitContainer.SplitterDistance = 415;
          MainSplitContainer.TabIndex = 6;
@@ -1854,6 +1877,7 @@
          // 
          // CountryPage
          // 
+         CountryPage.Controls.Add(CountryMainTLP);
          CountryPage.Location = new Point(4, 24);
          CountryPage.Name = "CountryPage";
          CountryPage.Padding = new Padding(3);
@@ -1862,6 +1886,106 @@
          CountryPage.Text = "Country";
          GeneralToolTip.SetToolTip(CountryPage, "Country data editing\r\n(Ctrl + 2)");
          CountryPage.UseVisualStyleBackColor = true;
+         // 
+         // CountryMainTLP
+         // 
+         CountryMainTLP.ColumnCount = 1;
+         CountryMainTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         CountryMainTLP.Controls.Add(CountryNameLabel, 0, 0);
+         CountryMainTLP.Controls.Add(groupBox7, 0, 1);
+         CountryMainTLP.Dock = DockStyle.Fill;
+         CountryMainTLP.Location = new Point(3, 3);
+         CountryMainTLP.Margin = new Padding(0);
+         CountryMainTLP.Name = "CountryMainTLP";
+         CountryMainTLP.RowCount = 4;
+         CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 23F));
+         CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 77F));
+         CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+         CountryMainTLP.Size = new Size(401, 810);
+         CountryMainTLP.TabIndex = 0;
+         // 
+         // CountryNameLabel
+         // 
+         CountryNameLabel.AutoSize = true;
+         CountryNameLabel.Dock = DockStyle.Fill;
+         CountryNameLabel.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+         CountryNameLabel.Location = new Point(3, 0);
+         CountryNameLabel.Name = "CountryNameLabel";
+         CountryNameLabel.Size = new Size(395, 23);
+         CountryNameLabel.TabIndex = 0;
+         CountryNameLabel.Text = "Tag.Empty";
+         CountryNameLabel.TextAlign = ContentAlignment.MiddleCenter;
+         // 
+         // groupBox7
+         // 
+         groupBox7.Controls.Add(TagAndColorTLP);
+         groupBox7.Dock = DockStyle.Fill;
+         groupBox7.Location = new Point(3, 26);
+         groupBox7.Name = "groupBox7";
+         groupBox7.Padding = new Padding(1);
+         groupBox7.Size = new Size(395, 71);
+         groupBox7.TabIndex = 2;
+         groupBox7.TabStop = false;
+         groupBox7.Text = "General data";
+         // 
+         // TagAndColorTLP
+         // 
+         TagAndColorTLP.ColumnCount = 4;
+         TagAndColorTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+         TagAndColorTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+         TagAndColorTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+         TagAndColorTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+         TagAndColorTLP.Controls.Add(label30, 0, 1);
+         TagAndColorTLP.Controls.Add(CountryColorPickerButton, 3, 0);
+         TagAndColorTLP.Controls.Add(label27, 2, 0);
+         TagAndColorTLP.Controls.Add(label28, 0, 0);
+         TagAndColorTLP.Controls.Add(label29, 2, 1);
+         TagAndColorTLP.Controls.Add(CountryLoc, 1, 1);
+         TagAndColorTLP.Controls.Add(CountryADJLoc, 3, 1);
+         TagAndColorTLP.Dock = DockStyle.Fill;
+         TagAndColorTLP.Location = new Point(1, 17);
+         TagAndColorTLP.Margin = new Padding(0);
+         TagAndColorTLP.Name = "TagAndColorTLP";
+         TagAndColorTLP.RowCount = 2;
+         TagAndColorTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+         TagAndColorTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+         TagAndColorTLP.Size = new Size(393, 53);
+         TagAndColorTLP.TabIndex = 1;
+         // 
+         // CountryColorPickerButton
+         // 
+         CountryColorPickerButton.Dock = DockStyle.Fill;
+         CountryColorPickerButton.Location = new Point(295, 1);
+         CountryColorPickerButton.Margin = new Padding(1);
+         CountryColorPickerButton.Name = "CountryColorPickerButton";
+         CountryColorPickerButton.Size = new Size(97, 24);
+         CountryColorPickerButton.TabIndex = 0;
+         CountryColorPickerButton.Text = "(0/0/0)";
+         CountryColorPickerButton.UseVisualStyleBackColor = true;
+         CountryColorPickerButton.Click += CountryColorPickerButton_Click;
+         // 
+         // label27
+         // 
+         label27.AutoSize = true;
+         label27.Dock = DockStyle.Fill;
+         label27.Location = new Point(199, 0);
+         label27.Name = "label27";
+         label27.Size = new Size(92, 26);
+         label27.TabIndex = 1;
+         label27.Text = "Country Color";
+         label27.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // label28
+         // 
+         label28.AutoSize = true;
+         label28.Dock = DockStyle.Fill;
+         label28.Location = new Point(3, 0);
+         label28.Name = "label28";
+         label28.Size = new Size(92, 26);
+         label28.TabIndex = 2;
+         label28.Text = "TAG";
+         label28.TextAlign = ContentAlignment.MiddleLeft;
          // 
          // ProvinceGroupsPage
          // 
@@ -1965,6 +2089,46 @@
          MMButtonsTLPanel.Size = new Size(1086, 26);
          MMButtonsTLPanel.TabIndex = 0;
          // 
+         // label29
+         // 
+         label29.AutoSize = true;
+         label29.Dock = DockStyle.Fill;
+         label29.Location = new Point(199, 26);
+         label29.Name = "label29";
+         label29.Size = new Size(92, 27);
+         label29.TabIndex = 3;
+         label29.Text = "Loc ADJ";
+         label29.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // label30
+         // 
+         label30.AutoSize = true;
+         label30.Dock = DockStyle.Fill;
+         label30.Location = new Point(3, 26);
+         label30.Name = "label30";
+         label30.Size = new Size(92, 27);
+         label30.TabIndex = 4;
+         label30.Text = "Localisation";
+         label30.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // CountryLoc
+         // 
+         CountryLoc.Dock = DockStyle.Fill;
+         CountryLoc.Location = new Point(99, 27);
+         CountryLoc.Margin = new Padding(1);
+         CountryLoc.Name = "CountryLoc";
+         CountryLoc.Size = new Size(96, 23);
+         CountryLoc.TabIndex = 5;
+         // 
+         // CountryADJLoc
+         // 
+         CountryADJLoc.Dock = DockStyle.Fill;
+         CountryADJLoc.Location = new Point(295, 27);
+         CountryADJLoc.Margin = new Padding(1);
+         CountryADJLoc.Name = "CountryADJLoc";
+         CountryADJLoc.Size = new Size(97, 23);
+         CountryADJLoc.TabIndex = 6;
+         // 
          // MapWindow
          // 
          AutoScaleDimensions = new SizeF(7F, 15F);
@@ -2037,6 +2201,12 @@
          LocalisationGroupBox.ResumeLayout(false);
          LocTableLayoutPanel.ResumeLayout(false);
          LocTableLayoutPanel.PerformLayout();
+         CountryPage.ResumeLayout(false);
+         CountryMainTLP.ResumeLayout(false);
+         CountryMainTLP.PerformLayout();
+         groupBox7.ResumeLayout(false);
+         TagAndColorTLP.ResumeLayout(false);
+         TagAndColorTLP.PerformLayout();
          ProvinceGroupsPage.ResumeLayout(false);
          ProvinceCollectionsPanel.ResumeLayout(false);
          ProvinceCollectionsTab.ResumeLayout(false);
@@ -2214,6 +2384,18 @@
       private ToolStripMenuItem saveEuropeToolStripMenuItem;
       private ToolStripMenuItem jsonToolStripMenuItem;
       private ToolStripMenuItem randomModifierToolStripMenuItem;
+      private ToolStripSeparator toolStripSeparator3;
+      private TableLayoutPanel CountryMainTLP;
+      private Label CountryNameLabel;
+      private TableLayoutPanel TagAndColorTLP;
+      private Button CountryColorPickerButton;
+      private Label label27;
+      private Label label28;
+      private GroupBox groupBox7;
+      private Label label30;
+      private Label label29;
+      private TextBox CountryLoc;
+      private TextBox CountryADJLoc;
    }
 }
 
