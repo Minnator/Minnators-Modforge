@@ -77,7 +77,7 @@
          label2.Name = "label2";
          label2.Size = new Size(112, 56);
          label2.TabIndex = 1;
-         label2.Text = "GitHub Repository";
+         label2.Text = "GitHub Repository / Source Code";
          label2.TextAlign = ContentAlignment.MiddleCenter;
          // 
          // label3

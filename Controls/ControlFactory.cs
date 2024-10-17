@@ -101,7 +101,8 @@ public static class ControlFactory
    {
       return new ()
       {
-         Margin = new(3, 1, 3, 3)
+         Margin = new(3, 1, 3, 3),
+         Dock = DockStyle.Fill
       };
    }
 
@@ -111,6 +112,7 @@ public static class ControlFactory
       list.InitializeItems(items);
       list.SetTitle(title);
       list.Margin = new(3, 1, 3, 3);
+      list.Dock = DockStyle.Fill;
       return list;
    }
 

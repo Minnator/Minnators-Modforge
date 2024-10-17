@@ -841,11 +841,6 @@ namespace Editor
          Selection.ShowToolTip = ShowToolTipMenuItem.Checked;
       }
 
-      private void testToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-
-      }
-
       private void telescopeToolStripMenuItem_Click(object sender, EventArgs e)
       {
          var sb = new StringBuilder();
@@ -937,17 +932,6 @@ namespace Editor
          }
       }
 
-      private void refStackToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-         //DebugMaps.GridMap();
-      }
-
-
-      private void MapWindow_Load(object sender, EventArgs e)
-      {
-
-      }
-
       private void searchToolStripMenuItem_Click(object sender, EventArgs e)
       {
          FormHelper.OpenOrBringToFront(Globals.SearchForm);
@@ -982,13 +966,6 @@ namespace Editor
          ProvinceSaver.SaveAllLandProvinces();
       }
 
-      private void save1ToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-      }
-
-      private void saveEuropeToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-      }
 
       private void saveSelectionToolStripMenuItem_Click(object sender, EventArgs e)
       {
@@ -1077,11 +1054,6 @@ namespace Editor
          filesToolStripMenuItem.DropDown.Close();
       }
 
-      private void helpToolStripButton_Click(object sender, EventArgs e)
-      {
-         new InformationForm().ShowDialog();
-      }
-
       private void graphicalElementsManagerToolStripMenuItem_Click(object sender, EventArgs e)
       {
          if (Globals.GuiDrawings == null || Globals.GuiDrawings.IsDisposed)
@@ -1089,20 +1061,11 @@ namespace Editor
          Globals.GuiDrawings.Show();
       }
 
-      private void mapModeHotkeysToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-
-      }
-
       private void OpenAddModifierForm_Click(object sender, EventArgs e)
       {
          new EventModifierForm().ShowDialog();
       }
 
-      private void filesToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-
-      }
 
       private void saveManualToolStripMenuItem_Click(object sender, EventArgs e)
       {
@@ -1123,6 +1086,11 @@ namespace Editor
             }
             MessageBox.Show(sb.ToString(), "Cycle Found", MessageBoxButtons.OK, MessageBoxIcon.Information);
          }
+      }
+
+      private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         new InformationForm().ShowDialog();
       }
    }
 }
