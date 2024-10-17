@@ -11,8 +11,7 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
    public Tag ColonialParent { get; set; } = Tag.Empty;
    public string FileName { get; } = fileName;
    public static Country Empty => new(Tag.Empty, string.Empty);
-
-
+   
    public ICollection<Province> GetProvinces()
    {
       List<Province> provinces = [];
@@ -21,8 +20,7 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
             provinces.Add(prv);
       return [.. provinces];
    }
-
-
+   
    public int[] GetProvinceIds()
    {
       List<int> provinces = [];

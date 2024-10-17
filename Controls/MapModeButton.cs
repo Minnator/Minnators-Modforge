@@ -4,7 +4,7 @@ using Editor.Forms;
 
 namespace Editor.Controls
 {
-   public class MapModeButton : Button
+   public sealed class MapModeButton : Button
    {
       private MapModeType MapModeName = MapModeType.None;
       private char Hotkey;
@@ -48,7 +48,6 @@ namespace Editor.Controls
             form.StartPosition = FormStartPosition.Manual;
             form.Location = new (MousePosition.X, MousePosition.Y);
             form.ShowDialog();
-
          }
       }
    }

@@ -16,6 +16,7 @@ namespace Editor.Forms
          MMSelectionBox.Items.AddRange([.. Enum.GetNames<MapModeType>()]);
          MMSelectionBox.SelectedIndexChanged += MMSelectionBox_SelectedIndexChanged;
          Load += OnLoad;
+
       }
 
       private void OnLoad(object? sender, EventArgs e)
@@ -23,6 +24,16 @@ namespace Editor.Forms
          MMSelectionBox.DroppedDown = true;
       }
 
+      //close on ESC
+      protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+      {
+         if (keyData == Keys.Escape)
+         {
+            Close();
+            return true;
+         }
+         return base.ProcessCmdKey(ref msg, keyData);
+      }
       
       private void MMSelectionBox_SelectedIndexChanged(object sender, EventArgs e)
       {
