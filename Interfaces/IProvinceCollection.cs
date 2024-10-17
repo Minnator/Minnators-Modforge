@@ -6,6 +6,7 @@ namespace Editor.Interfaces;
 #nullable enable
 public interface IProvinceCollection
 {
+   public string Name { get; }
    public int[] GetProvinceIds();
    public ICollection<Province> GetProvinces();
    public IProvinceCollection? ScopeOut();

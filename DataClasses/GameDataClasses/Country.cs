@@ -6,6 +6,7 @@ namespace Editor.DataClasses.GameDataClasses;
 
 public class Country(Tag tag, string fileName) : IProvinceCollection
 {
+   public string Name { get; set; } = tag;
    public Tag Tag { get; } = tag;
    public Tag ColonialParent { get; set; } = Tag.Empty;
    public string FileName { get; } = fileName;

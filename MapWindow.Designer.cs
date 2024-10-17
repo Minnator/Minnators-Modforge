@@ -33,16 +33,20 @@
          MapMenuStrip = new MenuStrip();
          filesToolStripMenuItem = new ToolStripMenuItem();
          gCToolStripMenuItem = new ToolStripMenuItem();
-         saveCurrentMapModeToolStripMenuItem = new ToolStripMenuItem();
-         saveSelectionToolStripMenuItem = new ToolStripMenuItem();
-         toolStripMenuItem1 = new ToolStripMenuItem();
-         ProvincePreviewMode = new ToolStripComboBox();
+         graphicalElementsManagerToolStripMenuItem = new ToolStripMenuItem();
          quickSettingsToolStripMenuItem = new ToolStripMenuItem();
          languageToolStripMenuItem = new ToolStripMenuItem();
          LanguageSelectionToolStrip = new ToolStripComboBox();
          stripesDirectionToolStripMenuItem = new ToolStripMenuItem();
          StripeDirectionComboBox = new ToolStripComboBox();
-         graphicalElementsManagerToolStripMenuItem = new ToolStripMenuItem();
+         toolStripSeparator5 = new ToolStripSeparator();
+         saveCurrentMapModeToolStripMenuItem = new ToolStripMenuItem();
+         saveSelectionToolStripMenuItem = new ToolStripMenuItem();
+         toolStripSeparator4 = new ToolStripSeparator();
+         toolStripMenuItem1 = new ToolStripMenuItem();
+         saveModifiedToolStripMenuItem = new ToolStripMenuItem();
+         saveManualToolStripMenuItem = new ToolStripMenuItem();
+         toolStripSeparator6 = new ToolStripSeparator();
          mapModeHotkeysToolStripMenuItem = new ToolStripMenuItem();
          alpha12ToolStripMenuItem = new ToolStripMenuItem();
          tradegoodsEditingToolStripMenuItem = new ToolStripMenuItem();
@@ -173,7 +177,7 @@
          LocalisationTextBox = new TextBox();
          label25 = new Label();
          label26 = new Label();
-         COuntryPage = new TabPage();
+         CountryPage = new TabPage();
          ProvinceGroupsPage = new TabPage();
          ProvinceCollectionsPanel = new Panel();
          ProvinceCollectionsTab = new TableLayoutPanel();
@@ -185,6 +189,7 @@
          label15 = new Label();
          label14 = new Label();
          GeneralToolTip = new ToolTip(components);
+         toolTip1 = new ToolTip(components);
          MapMenuStrip.SuspendLayout();
          toolStrip1.SuspendLayout();
          MainLayoutPanel.SuspendLayout();
@@ -243,52 +248,32 @@
          // 
          // filesToolStripMenuItem
          // 
-         filesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { gCToolStripMenuItem, saveCurrentMapModeToolStripMenuItem, saveSelectionToolStripMenuItem, toolStripMenuItem1, quickSettingsToolStripMenuItem, graphicalElementsManagerToolStripMenuItem, mapModeHotkeysToolStripMenuItem });
+         filesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { gCToolStripMenuItem, graphicalElementsManagerToolStripMenuItem, quickSettingsToolStripMenuItem, toolStripSeparator5, saveCurrentMapModeToolStripMenuItem, saveSelectionToolStripMenuItem, toolStripSeparator4, toolStripMenuItem1, saveModifiedToolStripMenuItem, saveManualToolStripMenuItem, toolStripSeparator6, mapModeHotkeysToolStripMenuItem });
          filesToolStripMenuItem.Name = "filesToolStripMenuItem";
          filesToolStripMenuItem.Size = new Size(42, 23);
          filesToolStripMenuItem.Text = "Files";
+         filesToolStripMenuItem.Click += filesToolStripMenuItem_Click;
          // 
          // gCToolStripMenuItem
          // 
          gCToolStripMenuItem.Name = "gCToolStripMenuItem";
-         gCToolStripMenuItem.Size = new Size(249, 22);
-         gCToolStripMenuItem.Text = "GC";
+         gCToolStripMenuItem.Size = new Size(268, 22);
+         gCToolStripMenuItem.Text = "Garbage Collection";
          gCToolStripMenuItem.Click += gCToolStripMenuItem_Click;
          // 
-         // saveCurrentMapModeToolStripMenuItem
+         // graphicalElementsManagerToolStripMenuItem
          // 
-         saveCurrentMapModeToolStripMenuItem.Name = "saveCurrentMapModeToolStripMenuItem";
-         saveCurrentMapModeToolStripMenuItem.Size = new Size(249, 22);
-         saveCurrentMapModeToolStripMenuItem.Text = "Save Current MapMode to image";
-         saveCurrentMapModeToolStripMenuItem.Click += SaveCurrentMapModeToolStripMenuItem_Click;
-         // 
-         // saveSelectionToolStripMenuItem
-         // 
-         saveSelectionToolStripMenuItem.Name = "saveSelectionToolStripMenuItem";
-         saveSelectionToolStripMenuItem.ShortcutKeys = Keys.F3;
-         saveSelectionToolStripMenuItem.Size = new Size(249, 22);
-         saveSelectionToolStripMenuItem.Text = "Save selection to image";
-         saveSelectionToolStripMenuItem.Click += saveSelectionToolStripMenuItem_Click;
-         // 
-         // toolStripMenuItem1
-         // 
-         toolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { ProvincePreviewMode });
-         toolStripMenuItem1.Name = "toolStripMenuItem1";
-         toolStripMenuItem1.Size = new Size(249, 22);
-         toolStripMenuItem1.Text = "Province Preview Mode";
-         // 
-         // ProvincePreviewMode
-         // 
-         ProvincePreviewMode.DropDownStyle = ComboBoxStyle.DropDownList;
-         ProvincePreviewMode.Name = "ProvincePreviewMode";
-         ProvincePreviewMode.Size = new Size(121, 23);
-         ProvincePreviewMode.SelectedIndexChanged += ProvincePreviewMode_SelectedIndexChanged;
+         graphicalElementsManagerToolStripMenuItem.Name = "graphicalElementsManagerToolStripMenuItem";
+         graphicalElementsManagerToolStripMenuItem.ShortcutKeys = Keys.F2;
+         graphicalElementsManagerToolStripMenuItem.Size = new Size(268, 22);
+         graphicalElementsManagerToolStripMenuItem.Text = "Graphical Elements Manager";
+         graphicalElementsManagerToolStripMenuItem.Click += graphicalElementsManagerToolStripMenuItem_Click;
          // 
          // quickSettingsToolStripMenuItem
          // 
          quickSettingsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { languageToolStripMenuItem, LanguageSelectionToolStrip, stripesDirectionToolStripMenuItem, StripeDirectionComboBox });
          quickSettingsToolStripMenuItem.Name = "quickSettingsToolStripMenuItem";
-         quickSettingsToolStripMenuItem.Size = new Size(249, 22);
+         quickSettingsToolStripMenuItem.Size = new Size(268, 22);
          quickSettingsToolStripMenuItem.Text = "Quick Settings";
          // 
          // languageToolStripMenuItem
@@ -319,19 +304,63 @@
          StripeDirectionComboBox.Name = "StripeDirectionComboBox";
          StripeDirectionComboBox.Size = new Size(121, 23);
          // 
-         // graphicalElementsManagerToolStripMenuItem
+         // toolStripSeparator5
          // 
-         graphicalElementsManagerToolStripMenuItem.Name = "graphicalElementsManagerToolStripMenuItem";
-         graphicalElementsManagerToolStripMenuItem.ShortcutKeys = Keys.F2;
-         graphicalElementsManagerToolStripMenuItem.Size = new Size(249, 22);
-         graphicalElementsManagerToolStripMenuItem.Text = "Graphical Elements Manager";
-         graphicalElementsManagerToolStripMenuItem.Click += graphicalElementsManagerToolStripMenuItem_Click;
+         toolStripSeparator5.Name = "toolStripSeparator5";
+         toolStripSeparator5.Size = new Size(265, 6);
+         // 
+         // saveCurrentMapModeToolStripMenuItem
+         // 
+         saveCurrentMapModeToolStripMenuItem.Name = "saveCurrentMapModeToolStripMenuItem";
+         saveCurrentMapModeToolStripMenuItem.ShortcutKeys = Keys.F5;
+         saveCurrentMapModeToolStripMenuItem.Size = new Size(268, 22);
+         saveCurrentMapModeToolStripMenuItem.Text = "Save Current MapMode to image";
+         saveCurrentMapModeToolStripMenuItem.Click += SaveCurrentMapModeToolStripMenuItem_Click;
+         // 
+         // saveSelectionToolStripMenuItem
+         // 
+         saveSelectionToolStripMenuItem.Name = "saveSelectionToolStripMenuItem";
+         saveSelectionToolStripMenuItem.ShortcutKeys = Keys.F3;
+         saveSelectionToolStripMenuItem.Size = new Size(268, 22);
+         saveSelectionToolStripMenuItem.Text = "Save selection to image";
+         saveSelectionToolStripMenuItem.Click += saveSelectionToolStripMenuItem_Click;
+         // 
+         // toolStripSeparator4
+         // 
+         toolStripSeparator4.Name = "toolStripSeparator4";
+         toolStripSeparator4.Size = new Size(265, 6);
+         // 
+         // toolStripMenuItem1
+         // 
+         toolStripMenuItem1.Name = "toolStripMenuItem1";
+         toolStripMenuItem1.Size = new Size(268, 22);
+         toolStripMenuItem1.Text = "Save All";
+         // 
+         // saveModifiedToolStripMenuItem
+         // 
+         saveModifiedToolStripMenuItem.Name = "saveModifiedToolStripMenuItem";
+         saveModifiedToolStripMenuItem.Size = new Size(268, 22);
+         saveModifiedToolStripMenuItem.Text = "Save Modified";
+         // 
+         // saveManualToolStripMenuItem
+         // 
+         saveManualToolStripMenuItem.Name = "saveManualToolStripMenuItem";
+         saveManualToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
+         saveManualToolStripMenuItem.Size = new Size(268, 22);
+         saveManualToolStripMenuItem.Text = "Save manual";
+         saveManualToolStripMenuItem.Click += saveManualToolStripMenuItem_Click;
+         // 
+         // toolStripSeparator6
+         // 
+         toolStripSeparator6.Name = "toolStripSeparator6";
+         toolStripSeparator6.Size = new Size(265, 6);
          // 
          // mapModeHotkeysToolStripMenuItem
          // 
          mapModeHotkeysToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { alpha12ToolStripMenuItem, tradegoodsEditingToolStripMenuItem, cusotmMapmodesToolStripMenuItem, ideasEditingdragAndDropToolStripMenuItem, toolStripMenuItem2, provinceCreationdirectDrawingonMapToolStripMenuItem, alpha13ToolStripMenuItem, alpha13ToolStripMenuItem1, fullImplementationOfPDXLanguangeToolStripMenuItem, consoleToExecuteEu4CheatsToolStripMenuItem, missionsEditordragAndDropVisualEditingToolStripMenuItem, terrainEditingToolStripMenuItem, positionsEditingToolStripMenuItem });
          mapModeHotkeysToolStripMenuItem.Name = "mapModeHotkeysToolStripMenuItem";
-         mapModeHotkeysToolStripMenuItem.Size = new Size(249, 22);
+         mapModeHotkeysToolStripMenuItem.ShortcutKeys = Keys.F12;
+         mapModeHotkeysToolStripMenuItem.Size = new Size(268, 22);
          mapModeHotkeysToolStripMenuItem.Text = "What's to come";
          mapModeHotkeysToolStripMenuItem.Click += mapModeHotkeysToolStripMenuItem_Click;
          // 
@@ -819,7 +848,7 @@
          // DataTabPanel
          // 
          DataTabPanel.Controls.Add(ProvincePage);
-         DataTabPanel.Controls.Add(COuntryPage);
+         DataTabPanel.Controls.Add(CountryPage);
          DataTabPanel.Controls.Add(ProvinceGroupsPage);
          DataTabPanel.Dock = DockStyle.Fill;
          DataTabPanel.Location = new Point(0, 26);
@@ -838,6 +867,7 @@
          ProvincePage.Size = new Size(392, 822);
          ProvincePage.TabIndex = 0;
          ProvincePage.Text = "Province";
+         GeneralToolTip.SetToolTip(ProvincePage, "Province data editing\r\n(Ctrl + 1)");
          ProvincePage.UseVisualStyleBackColor = true;
          // 
          // ProvinceEditingLayout
@@ -1789,15 +1819,16 @@
          label26.Text = "Value";
          label26.TextAlign = ContentAlignment.MiddleLeft;
          // 
-         // COuntryPage
+         // CountryPage
          // 
-         COuntryPage.Location = new Point(4, 24);
-         COuntryPage.Name = "COuntryPage";
-         COuntryPage.Padding = new Padding(3);
-         COuntryPage.Size = new Size(392, 822);
-         COuntryPage.TabIndex = 1;
-         COuntryPage.Text = "Country";
-         COuntryPage.UseVisualStyleBackColor = true;
+         CountryPage.Location = new Point(4, 24);
+         CountryPage.Name = "CountryPage";
+         CountryPage.Padding = new Padding(3);
+         CountryPage.Size = new Size(392, 822);
+         CountryPage.TabIndex = 1;
+         CountryPage.Text = "Country";
+         GeneralToolTip.SetToolTip(CountryPage, "Country data editing\r\n(Ctrl + 2)");
+         CountryPage.UseVisualStyleBackColor = true;
          // 
          // ProvinceGroupsPage
          // 
@@ -1808,6 +1839,7 @@
          ProvinceGroupsPage.Size = new Size(392, 822);
          ProvinceGroupsPage.TabIndex = 2;
          ProvinceGroupsPage.Text = "ProvinceGroups";
+         GeneralToolTip.SetToolTip(ProvinceGroupsPage, "Collection editing\r\n(Ctrl + 3)");
          ProvinceGroupsPage.UseVisualStyleBackColor = true;
          // 
          // ProvinceCollectionsPanel
@@ -2050,7 +2082,7 @@
       private Label ProvinceNameLabel;
       private TabControl DataTabPanel;
       private TabPage ProvincePage;
-      private TabPage COuntryPage;
+      private TabPage CountryPage;
       private TabPage ProvinceGroupsPage;
       private Controls.TagComboBox OwnerTagBox;
       private Controls.TagComboBox ControllerTagBox;
@@ -2099,8 +2131,6 @@
       private GroupBox BuildingsGroupBox;
       private GroupBox DiscoveredByGroupBox;
       private ToolStripMenuItem provDiffToolStripMenuItem;
-      private ToolStripMenuItem toolStripMenuItem1;
-      private ToolStripComboBox ProvincePreviewMode;
       private Label EditingModeLabel;
       private Label label14;
       private Label label15;
@@ -2174,6 +2204,13 @@
       private ToolStripMenuItem positionsEditingToolStripMenuItem;
       private ToolStripMenuItem toolStripMenuItem2;
       private ToolStripMenuItem toolStripMenuItem3;
+      private ToolStripSeparator toolStripSeparator5;
+      private ToolStripSeparator toolStripSeparator4;
+      private ToolStripMenuItem toolStripMenuItem1;
+      private ToolStripMenuItem saveManualToolStripMenuItem;
+      private ToolStripSeparator toolStripSeparator6;
+      private ToolTip toolTip1;
+      private ToolStripMenuItem saveModifiedToolStripMenuItem;
    }
 }
 

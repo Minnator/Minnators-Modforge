@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Runtime;
 using System.Text;
 using System.Text.Json;
+using System.Windows.Forms;
 using Editor.Controls;
 using Editor.Controls.Initialisation.ProvinceCollectionEditors;
 using Editor.DataClasses.GameDataClasses;
@@ -11,6 +12,7 @@ using Editor.DataClasses.MapModes;
 using Editor.Events;
 using Editor.Forms;
 using Editor.Forms.Loadingscreen;
+using Editor.Forms.SavingClasses;
 using Editor.Helper;
 using Editor.Parser;
 using Editor.Savers;
@@ -178,9 +180,6 @@ namespace Editor
 
          TopStripLayoutPanel.Controls.Add(DateControl, 4, 0);
          DateControl.OnDateChanged += OnDateChanged;
-
-         ProvincePreviewMode.Items.AddRange([.. Enum.GetNames(typeof(ProvinceEditingStatus))]);
-         ProvincePreviewMode.SelectedIndex = 2;
 
          SelectionTypeBox.Items.AddRange([.. Enum.GetNames<SelectionType>()]);
          SelectionTypeBox.SelectedIndex = 0;
@@ -919,7 +918,13 @@ namespace Editor
                   break;
                // Tabs
                case Keys.D1:
-                  ProvincePreviewMode.SelectedIndex = 0;
+                  DataTabPanel.SelectedIndex = 0;
+                  break;
+               case Keys.D2:
+                  DataTabPanel.SelectedIndex = 1;
+                  break;
+               case Keys.D3:
+                  DataTabPanel.SelectedIndex = 2;
                   break;
             }
          }
@@ -969,17 +974,6 @@ namespace Editor
          Globals.StripesDirection = Enum.Parse<StripesDirection>(StripeDirectionComboBox.SelectedItem?.ToString() ?? StripesDirection.DiagonalLbRt.ToString());
          // Close the menu when an item is selected
          filesToolStripMenuItem.DropDown.Close();
-      }
-
-      private void ProvincePreviewMode_SelectedIndexChanged(object sender, EventArgs e)
-      {
-         Globals.ProvinceEditingStatus = (ProvinceEditingStatus)ProvincePreviewMode.SelectedIndex;
-         // Close the menu strip// Close the menu when an item is selected
-         filesToolStripMenuItem.DropDown.Close();
-      }
-
-      private void MagicWandToolButton_Click(object sender, EventArgs e)
-      {
       }
 
       private void saveAllProvincesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1103,6 +1097,16 @@ namespace Editor
       private void OpenAddModifierForm_Click(object sender, EventArgs e)
       {
          new EventModifierForm().ShowDialog();
+      }
+
+      private void filesToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+
+      }
+
+      private void saveManualToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         new ManualSaving().ShowDialog();
       }
    }
 }

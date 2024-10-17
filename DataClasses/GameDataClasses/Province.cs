@@ -67,6 +67,7 @@ public class ProvinceData()
 
 public class Province : IProvinceCollection, IScope
 {
+   public string Name { get; set; } = string.Empty;
    private readonly ProvinceData _data = new();
    private List<HistoryEntry> _history = [];
    public ProvinceStatus Status { get; set; } = ProvinceStatus.Unchanged;
@@ -596,7 +597,7 @@ public class Province : IProvinceCollection, IScope
       {
          foreach (var tradeCompany in Globals.TradeCompanies.Values)
             if (tradeCompany.Provinces.Contains(this))
-               return tradeCompany.CodeName;
+               return tradeCompany.Name;
          return string.Empty;
       }
    }

@@ -116,8 +116,15 @@ internal static class IO
 
    public static bool WriteToFile(string path, string data, bool append)
    {
+      if (string.IsNullOrEmpty(path))
+         return false;
       try
       {
+         var directoryPath = Path.GetDirectoryName(path);
+         if (string.IsNullOrEmpty(directoryPath))
+            return false;
+         if (!Directory.Exists(directoryPath))
+            Directory.CreateDirectory(directoryPath!);
          if (append)
             File.AppendAllText(path, data);
          else

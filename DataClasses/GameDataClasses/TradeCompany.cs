@@ -8,7 +8,7 @@ namespace Editor.DataClasses.GameDataClasses
    {
       public TradeCompany(string codename)
       {
-         CodeName = codename;
+         Name = codename;
          GenericName = string.Empty;
          SpecificName = string.Empty;
          Provinces = [];
@@ -17,7 +17,7 @@ namespace Editor.DataClasses.GameDataClasses
 
       public TradeCompany(string codeName, string genericName, string specificName, List<Province> provinces, Color color)
       {
-         CodeName = codeName;
+         Name = codeName;
          GenericName = genericName;
          SpecificName = specificName;
          Provinces = [..provinces];
@@ -25,8 +25,7 @@ namespace Editor.DataClasses.GameDataClasses
       }
 
       public static TradeCompany Empty => new ("Empty");
-      
-      public string CodeName { get; init; }
+      public string Name { get; set; }
       public string GenericName { get; set; }
       public string SpecificName { get; set; }
       public HashSet<Province> Provinces { get; set; }
@@ -57,24 +56,24 @@ namespace Editor.DataClasses.GameDataClasses
 
       public string GetLocalisation()
       {
-         return Localisation.GetLoc(CodeName);
+         return Localisation.GetLoc(Name);
       }
 
       public override string ToString()
       {
-         return CodeName;
+         return Name;
       }
 
       public override bool Equals(object? obj)
       {
          if (obj is TradeCompany company)
-            return CodeName.Equals(company.CodeName);
+            return Name.Equals(company.Name);
          return false;
       }
 
       public override int GetHashCode()
       {
-         return CodeName.GetHashCode();
+         return Name.GetHashCode();
       }
    }
 }

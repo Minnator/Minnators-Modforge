@@ -1,5 +1,4 @@
-﻿using System.Security.Policy;
-using Editor.Commands;
+﻿using Editor.Commands;
 using Editor.Controls;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
@@ -8,6 +7,7 @@ using Editor.DataClasses.Settings;
 using Editor.Events;
 using Editor.Forms;
 using Editor.Forms.AdvancedSelections;
+using Editor.Forms.SavingClasses;
 using Editor.Helper;
 using Editor.Loading;
 using Region = Editor.DataClasses.GameDataClasses.Region;
@@ -208,7 +208,7 @@ public static class Globals
    public static Dictionary<string, TradeCompanyInvestment> TradeCompanyInvestments = [];
    public static Dictionary<string, TradeCompany> TradeCompanies = [];
 
-   public static readonly Dictionary<string, int[]> ProvinceGroups = []; // TODO: read in
+   public static readonly Dictionary<string, ProvinceGroup> ProvinceGroups = []; // TODO: read in
    // In Game Groups
    public static Dictionary<string, Area> Areas = [];
    public static Dictionary<string, Region> Regions { get; set; } = [];
@@ -225,10 +225,16 @@ public static class Globals
       if (_superRegions.Remove(name))
          GlobalEventHandlers.RaiseSuperRegionListChanged(name, false);
    }
-
    public static Dictionary<string, Continent> Continents { get; set; } = [];
 
-   // Localisation
+
+   // ------------ Saving ------------ \\
+
+   public static ModifiedData ModifiedData = new();
+
+
+
+   // ------------ Localisation ------------ \\
    public static Dictionary<string, Dictionary<string, string>> VanillaLocalisation { get; set; } = [];
    public static Dictionary<string, Dictionary<string, string>> ModLocalisation { get; set; } = [];
    public static Dictionary<string, Dictionary<string, string>> ReplaceLocalisation { get; set; } = [];

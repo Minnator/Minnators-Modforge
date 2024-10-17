@@ -37,7 +37,7 @@ namespace Editor.DataClasses.MapModes
             if (companyName == string.Empty)
                return "Trade company: [Unknown]";
             if (Globals.TradeCompanies.TryGetValue(companyName, out var company))
-               return $"Trade company: {company.CodeName} ({company.GetLocalisation()})";
+               return $"Trade company: {company.Name} ({company.GetLocalisation()})";
          }
          return "Trade company: [Unknown]";
       }
