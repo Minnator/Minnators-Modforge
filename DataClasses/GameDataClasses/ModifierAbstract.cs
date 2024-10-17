@@ -12,6 +12,27 @@ namespace Editor.DataClasses.GameDataClasses
       CountryModifier,
       TriggeredModifier,
    }
+   public enum ModifierValueType
+   {
+      Bool,
+      Int,
+      Float,
+      Percentile
+   }
+   [Flags]
+   public enum ValueMarkDown
+   {
+      Positive = 1,
+      Negative = 2,
+      Neutral = 4
+   }
+
+   public static class ModifiersColorDefinition
+   {
+      public static Color Positive = Color.Green;
+      public static Color Negative = Color.Red;
+      public static Color Neutral = Color.DarkGoldenrod;
+   }
 
 
    public abstract class ModifierAbstract : ISaveModifier
@@ -178,13 +199,70 @@ namespace Editor.DataClasses.GameDataClasses
       public static EventModifier Empty => new("Empty");
    }
 
-   public enum ModifierValueType
+   public struct ModifierDefinition(string codeName, int index, ModifierValueType type, ValueMarkDown markDown) : IEquatable<ModifierValueType>
    {
-      Bool,
-      Int,
-      Float,
-      Percentile
+      public string CodeName = codeName;
+      public int Index = index;
+      public ModifierValueType Type = type;
+      public ValueMarkDown MarkDown = markDown;
+
+      public Color GetColor(object value)
+      {
+         if (value is bool b)
+         {
+            if ((MarkDown & ValueMarkDown.Positive) == ValueMarkDown.Positive && b)
+               return ModifiersColorDefinition.Positive;
+            if ((MarkDown & ValueMarkDown.Negative) == ValueMarkDown.Negative && !b)
+               return ModifiersColorDefinition.Negative;
+            return ModifiersColorDefinition.Neutral;
+         }
+
+         if (value is float f)
+         {
+            if ((MarkDown & ValueMarkDown.Positive) == ValueMarkDown.Positive && f > 0)
+               return ModifiersColorDefinition.Positive;
+            if ((MarkDown & ValueMarkDown.Negative) == ValueMarkDown.Negative && f < 0)
+               return ModifiersColorDefinition.Negative;
+            return ModifiersColorDefinition.Neutral;
+         }
+
+         if (value is int i)
+         {
+            if ((MarkDown & ValueMarkDown.Positive) == ValueMarkDown.Positive && i > 0)
+               return ModifiersColorDefinition.Positive;
+            if ((MarkDown & ValueMarkDown.Negative) == ValueMarkDown.Negative && i < 0)
+               return ModifiersColorDefinition.Negative;
+            return ModifiersColorDefinition.Neutral;
+         }
+
+         return ModifiersColorDefinition.Neutral;
+      }
+      public override string ToString()
+      {
+         return $"{CodeName}";
+      }
+      public bool Equals(ModifierValueType other)
+      {
+         return Type == other;
+      }
+      public override bool Equals(object? obj)
+      {
+         return obj is ModifierDefinition other && Equals(other);
+      }
+      public override int GetHashCode()
+      {
+         return Index;
+      }
+      public static bool operator ==(ModifierDefinition a, ModifierDefinition b)
+      {
+         return a.Index == b.Index;
+      }
+      public static bool operator !=(ModifierDefinition a, ModifierDefinition b)
+      {
+         return !(a == b);
+      }
    }
+
    public class Modifier(int nameIndex, object value) 
    {
       public readonly int Name = nameIndex;
