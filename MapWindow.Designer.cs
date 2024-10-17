@@ -70,6 +70,7 @@
          toolStripMenuItem3 = new ToolStripMenuItem();
          additionalToolsToolStripMenuItem = new ToolStripMenuItem();
          checkForCyclesInTradenodesToolStripMenuItem = new ToolStripMenuItem();
+         randomModifierToolStripMenuItem = new ToolStripMenuItem();
          MapModeComboBox = new ToolStripComboBox();
          searchToolStripMenuItem = new ToolStripMenuItem();
          helpToolStripMenuItem = new ToolStripMenuItem();
@@ -494,7 +495,7 @@
          // 
          // additionalToolsToolStripMenuItem
          // 
-         additionalToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { checkForCyclesInTradenodesToolStripMenuItem });
+         additionalToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { checkForCyclesInTradenodesToolStripMenuItem, randomModifierToolStripMenuItem });
          additionalToolsToolStripMenuItem.Name = "additionalToolsToolStripMenuItem";
          additionalToolsToolStripMenuItem.Size = new Size(103, 23);
          additionalToolsToolStripMenuItem.Text = "Additional tools";
@@ -505,6 +506,13 @@
          checkForCyclesInTradenodesToolStripMenuItem.Size = new Size(236, 22);
          checkForCyclesInTradenodesToolStripMenuItem.Text = "Check for cycles in Tradenodes";
          checkForCyclesInTradenodesToolStripMenuItem.Click += checkForCyclesInTradenodesToolStripMenuItem_Click;
+         // 
+         // randomModifierToolStripMenuItem
+         // 
+         randomModifierToolStripMenuItem.Name = "randomModifierToolStripMenuItem";
+         randomModifierToolStripMenuItem.Size = new Size(236, 22);
+         randomModifierToolStripMenuItem.Text = "Random Modifier";
+         randomModifierToolStripMenuItem.Click += randomModifierToolStripMenuItem_Click;
          // 
          // MapModeComboBox
          // 
@@ -2205,6 +2213,7 @@
       private ToolStripMenuItem save1ToolStripMenuItem;
       private ToolStripMenuItem saveEuropeToolStripMenuItem;
       private ToolStripMenuItem jsonToolStripMenuItem;
+      private ToolStripMenuItem randomModifierToolStripMenuItem;
    }
 }
 

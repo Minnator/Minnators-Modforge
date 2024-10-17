@@ -1,4 +1,5 @@
 ﻿using Editor.DataClasses.GameDataClasses;
+using Editor.Helper;
 
 namespace Editor.Controls
 {
@@ -18,6 +19,13 @@ namespace Editor.Controls
          Globals.ZoomControl.FocusOn(IsProvince
             ? Province.Center
             : Globals.Countries[CountryTag].Capital.Center);
+
+         // Highlight the province or country
+         return; //TODO why this so fucked
+         if (IsProvince)
+            Selection.HighlightProvince(Province);
+         else
+            Selection.HighlightCountry(CountryTag);
       }
    }
 }

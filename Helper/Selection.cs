@@ -180,6 +180,8 @@ public static class Selection
 
    public static void ClearSelection()
    {
+      if (_highlightedProvinces.Count > 0)
+         ClearHighlightedProvinces();
       MapDrawing.DrawOnMap(_selectedProvinces, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
       OnProvinceGroupDeselected(Globals.ZoomControl, [.. _selectedProvinces]);
       _selectedProvinces.Clear();
@@ -194,6 +196,8 @@ public static class Selection
    
    public static void AddProvincesToSelection(ICollection<Province> provinces, bool deselectSelected = false)
    {
+      if (_highlightedProvinces.Count > 0)
+         ClearHighlightedProvinces();
       if (deselectSelected)
       {
          foreach (var province in provinces)
@@ -239,6 +243,8 @@ public static class Selection
 
    private static void InternalAddProvinceToSelection(Province province, bool fireEvent)
    {
+      if (_highlightedProvinces.Count > 0)
+         ClearHighlightedProvinces();
       _selectedProvinces.Add(province);
       MapDrawing.DrawOnMap(province.Borders, _selectedColor, Globals.ZoomControl);
       if (fireEvent)
@@ -247,6 +253,8 @@ public static class Selection
 
    private static void InternalRemoveProvinceFromSelection(Province province, bool fireEvent)
    {
+      if (_highlightedProvinces.Count > 0)
+         ClearHighlightedProvinces();
       _selectedProvinces.Remove(province);
       MapDrawing.DrawOnMap(province.Borders, _borderColor, Globals.ZoomControl);
       if (fireEvent)
@@ -307,6 +315,12 @@ public static class Selection
    {
       MapDrawing.DrawOnMap(province, _highlightColor, Globals.ZoomControl, PixelsOrBorders.Borders);
       _highlightedProvinces.Add(province);
+   }
+
+   public static void HighlightCountry(Country country)
+   {
+      MapDrawing.DrawOnMap(country.GetProvinces(), _highlightColor, Globals.ZoomControl, PixelsOrBorders.Borders);
+      _highlightedProvinces.UnionWith(country.GetProvinces());
    }
 
    public static void UnhighlightProvince(Province province)
@@ -401,6 +415,8 @@ public static class Selection
       // If the province is already selected, mark it as such again
       if (_selectedProvinces.Contains(LastHoveredProvince))
          RedrawSelection(LastHoveredProvince);
+      if (_highlightedProvinces.Contains(LastHoveredProvince))
+         HighlightProvince(LastHoveredProvince);
       else
          MapDrawing.DrawOnMap(LastHoveredProvince, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
 

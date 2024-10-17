@@ -1092,5 +1092,10 @@ namespace Editor
       {
          new InformationForm().ShowDialog();
       }
+
+      private void randomModifierToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         new ModifierSuggestion().ShowDialog();
+      }
    }
 }

@@ -28,10 +28,12 @@
       /// </summary>
       private void InitializeComponent()
       {
+         components = new System.ComponentModel.Container();
          System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Search));
          tableLayoutPanel1 = new TableLayoutPanel();
          SearchInput = new TextBox();
          SearchResultsPanel = new FlowLayoutPanel();
+         ButtonToolTip = new ToolTip(components);
          tableLayoutPanel1.SuspendLayout();
          SuspendLayout();
          // 
@@ -88,5 +90,6 @@
       private TableLayoutPanel tableLayoutPanel1;
       private TextBox SearchInput;
       private FlowLayoutPanel SearchResultsPanel;
+      private ToolTip ButtonToolTip;
    }
 }

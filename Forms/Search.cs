@@ -27,12 +27,14 @@ namespace Editor.Forms
          foreach (var id in provinceMatches)
          {
             var button = ControlFactory.GetSearchResultButton(true, id, null!);
+            ButtonToolTip.SetToolTip(button, $"{id.GetLocalisation()} ({id})");
             SearchResultsPanel.Controls.Add(button);
          }
 
          foreach (var tag in countryMatches)
          {
             var button = ControlFactory.GetSearchResultButton(false, Province.Empty, tag);
+            ButtonToolTip.SetToolTip(button, $"{Globals.Countries[tag].GetLocalisation()} ({tag})");
             SearchResultsPanel.Controls.Add(button);
          }
          SearchResultsPanel.ResumeLayout();
