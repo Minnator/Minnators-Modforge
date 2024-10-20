@@ -1,4 +1,5 @@
-﻿using DockStyle = System.Windows.Forms.DockStyle;
+﻿using System.Windows.Forms;
+using DockStyle = System.Windows.Forms.DockStyle;
 
 namespace Editor.Controls
 {
@@ -113,7 +114,7 @@ namespace Editor.Controls
             return;
 
          AddToFlowPanel(left, right);
-
+         
          switch (Indexing)
          {
             case IndexingType.None:
@@ -129,7 +130,7 @@ namespace Editor.Controls
                break;
             case IndexingType.Both:
                if (LeftComboBox.SelectedIndex >= MinIndex && LeftComboBox.SelectedIndex <= MaxIndex
-                   && RightComboBox.SelectedIndex >= MinIndex && RightComboBox.SelectedIndex <= MaxIndex)
+                                                          && RightComboBox.SelectedIndex >= MinIndex && RightComboBox.SelectedIndex <= MaxIndex)
                   DualContent.Add(new(LeftComboBox.SelectedIndex.ToString(), RightComboBox.SelectedIndex.ToString()));
                break;
          }
@@ -140,7 +141,7 @@ namespace Editor.Controls
          FlowLayoutPanel.Controls.Add(GetDualContentPanel(left, right, FlowLayoutPanel.Width - 25));
       }
 
-      private TableLayoutPanel GetDualContentPanel(string left, string right, int width)
+      protected TableLayoutPanel GetDualContentPanel(string left, string right, int width)
       {
          var panel = new TableLayoutPanel
          {
@@ -179,8 +180,18 @@ namespace Editor.Controls
          panel.Controls.Add(labelRight, 1, 0);
 
          // if any of the items are right clicked, remove the panel
-         label.MouseDown += (sender, args) => FlowLayoutPanel.Controls.Remove(panel);
-         labelRight.MouseDown += (sender, args) => FlowLayoutPanel.Controls.Remove(panel);
+         label.MouseDown += (sender, args) =>
+         {
+            var index = FlowLayoutPanel.Controls.GetChildIndex(panel);
+            DualContent.RemoveAt(index);
+            FlowLayoutPanel.Controls.Remove(panel);
+         };
+         labelRight.MouseDown += (sender, args) =>
+         {
+            var index = FlowLayoutPanel.Controls.GetChildIndex(panel);
+            DualContent.RemoveAt(index);
+            FlowLayoutPanel.Controls.Remove(panel);
+         };
 
          OnAfterAdd.Invoke(this, panel);
 

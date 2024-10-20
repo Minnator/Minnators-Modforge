@@ -15,16 +15,42 @@ namespace Editor.Loading
       {
          var sw = Stopwatch.StartNew();
 
-         FilesHelper.GetFilesUniquelyAndCombineToOne(out var rawContent, "common", "event_modifiers");
-         Parsing.RemoveCommentFromMultilineString(ref rawContent, out var fileContent);
-         var matches = ModifierRegex.Matches(fileContent);
+         var (modFiles, vanillaFiles) = FilesHelper.GetFilesFromModAndVanillaUniquelySeparated("*.txt", "common", "event_modifiers");
+         Dictionary<string, EventModifier> modifiers = new();
+         
+         foreach (var file in modFiles)
+         {
+            // Add the file to the ObjectSourceFiles and get the index
+            var internalPath = file.Remove(0, Globals.ModPath.Length);
+            ObjectSourceFiles.AddModFile(internalPath, out var index);
+            LoadEventModifier(file, modifiers, index);
+         }
 
-         Dictionary<string, EventModifier> modifiers = new(matches.Count);
+         foreach (var file in vanillaFiles)
+         {
+            // Add the file to the ObjectSourceFiles and get the index
+            var internalPath = file.Remove(0, Globals.VanillaPath.Length);
+            ObjectSourceFiles.AddVanillaFile(internalPath, out var index);
+            LoadEventModifier(file, modifiers, index);
+         }
+
+         Globals.EventModifiers = modifiers;
+         sw.Stop();
+         Globals.LoadingLog.WriteTimeStamp("Event Modifiers", sw.ElapsedMilliseconds);
+      }
+
+      private static void LoadEventModifier(string filePath, Dictionary<string, EventModifier> modifiers, int index)
+      {
+         Parsing.RemoveCommentFromMultilineString(IO.ReadAllInUTF8(filePath), out var fileContent);
+         var matches = ModifierRegex.Matches(fileContent);
 
          foreach (Match element in matches)
          {
             var content = element.Groups["content"].Value;
-            var modifier = new EventModifier(element.Groups["name"].Value.Trim());
+            var modifier = new EventModifier(element.Groups["name"].Value.Trim())
+            {
+               FileIndex = index
+            };
             var kvps = Parsing.GetKeyValueList(content);
 
             for (var i = 0; i < kvps.Count; i++)
@@ -33,7 +59,7 @@ namespace Editor.Loading
                {
                   if (ModifierParser.IsCustomModifierTrigger(kvps[i].Key))
                   {
-                     modifier.TriggerAttribute.Add(new (kvps[i].Key, "yes"));
+                     modifier.TriggerAttribute.Add(new(kvps[i].Key, "yes"));
                      continue;
                   }
                   if (kvps[i].Key == "picture")
@@ -50,15 +76,10 @@ namespace Editor.Loading
                modifier.Modifiers.Add(mod);
             }
 
-            if (!modifiers.TryAdd(modifier.Name, modifier)) 
+            if (!modifiers.TryAdd(modifier.Name, modifier))
                Globals.ErrorLog.Write($"Duplicate modifier found: {modifier.Name}");
          }
-
-         Globals.VanillaModifiers = modifiers;
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("Event Modifiers", sw.ElapsedMilliseconds);
       }
    }
-
 
 }

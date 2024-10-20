@@ -1271,7 +1271,7 @@ namespace Editor.Parser
          { 320, new( "global_institution_spread", 320, ModifierValueType.Float, ValueMarkDown.Positive) },
          { 321, new( "institution_spread_from_true_faith", 321, ModifierValueType.Float, ValueMarkDown.Positive) },
          { 322, new( "native_advancement_cost", 322, ModifierValueType.Float, ValueMarkDown.Negative) },
-         { 323, new( "all_power_cost", 323, ModifierValueType.Float, ValueMarkDown.Positive) },
+         { 323, new( "all_power_cost", 323, ModifierValueType.Float, ValueMarkDown.Negative) },
          { 324, new( "innovativeness_gain", 324, ModifierValueType.Float, ValueMarkDown.Positive) },
          { 325, new( "yearly_innovativeness", 325, ModifierValueType.Float, ValueMarkDown.Positive) },
          { 326, new( "free_adm_policy", 326, ModifierValueType.Int, ValueMarkDown.Positive) },

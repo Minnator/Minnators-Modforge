@@ -14,7 +14,7 @@ internal static class IO
    }
 
 
-   public static void OpenFileDialog(string startPath, string filterText, out string folder)
+   public static void OpenFolderDialog(string startPath, string filterText, out string folder)
    {
       folder = string.Empty;
       if (!Path.Exists(startPath))
@@ -28,6 +28,22 @@ internal static class IO
 
       if (dialog.ShowDialog() == DialogResult.OK)
          folder = Path.GetDirectoryName(dialog.FileName) ?? Environment.SpecialFolder.MyDocuments.ToString();
+   }
+
+   public static void OpenFileSelection(string startFolder, string filterText, out string file)
+   {
+      file = string.Empty;
+      if (!Path.Exists(startFolder))
+         return;
+
+      using var dialog = new OpenFileDialog();
+      dialog.InitialDirectory = startFolder;
+      dialog.CheckFileExists = true;
+      dialog.CheckPathExists = true;
+      dialog.FileName = filterText;
+
+      if (dialog.ShowDialog() == DialogResult.OK)
+         file = dialog.FileName;
    }
 
 
@@ -135,5 +151,18 @@ internal static class IO
       {
          return false;
       }
+   }
+
+   public static string GetDefaultPathForFolder(params string[] innerPath)
+   {
+      var path = Path.Combine(Globals.ModPath, Path.Combine(innerPath));
+      // retrieve the last folder in the path
+      var lastFolder = innerPath[^1];
+      if (string.IsNullOrWhiteSpace(lastFolder))
+      {
+         MessageBox.Show("Failed to create default path!", "Invalid path", MessageBoxButtons.OK, MessageBoxIcon.Error);
+         return string.Empty;
+      }
+      return Path.Combine(path, $"Modforge_Default_{lastFolder}.txt");
    }
 }

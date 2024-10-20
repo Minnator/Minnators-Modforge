@@ -14,6 +14,7 @@ using Editor.Forms;
 using Editor.Forms.Loadingscreen;
 using Editor.Forms.SavingClasses;
 using Editor.Helper;
+using Editor.Interfaces;
 using Editor.Parser;
 using Editor.Savers;
 using static Editor.Helper.ProvinceEnumHelper;
@@ -485,7 +486,7 @@ namespace Editor
       private void InitializeModifierTab()
       {
          _modifierComboBox = ControlFactory.GetExtendedComboBox();
-         _modifierComboBox.Items.AddRange([.. Globals.VanillaModifiers.Keys]);
+         _modifierComboBox.Items.AddRange([.. Globals.EventModifiers.Keys]);
          // No data changed here as they are added via the "Add" button
          ModifiersLayoutPanel.Controls.Add(_modifierComboBox, 1, 1);
 
@@ -732,7 +733,7 @@ namespace Editor
 
       private void OnSavingModifiedEnter(object? sender, EventArgs e)
       {
-         _savingButtonsToolTip.SetToolTip(SaveAllModifiedButton, $"Save modified provinces ({EditingManager.GetModifiedProvinces().Count})");
+         _savingButtonsToolTip.SetToolTip(SaveAllModifiedButton, $"Save modified provinces ({EditingHelper.GetModifiedProvinces().Count})");
       }
 
       private void OnSavingSelectionEnter(object? sender, EventArgs e)
@@ -924,7 +925,7 @@ namespace Editor
 
       private void provDiffToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         var res = EditingManager.GetModifiedProvinces();
+         var res = EditingHelper.GetModifiedProvinces();
 
          Debug.WriteLine($"Modified Provinces: {res.Count}");
          foreach (var province in res)
@@ -966,6 +967,17 @@ namespace Editor
          ProvinceSaver.SaveAllLandProvinces();
       }
 
+      private void saveEuropeToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         var inputForm = new GetSavingFile(Globals.ModPath, "Please enter your input:");
+         if (inputForm.ShowDialog() == DialogResult.OK)
+         {
+            string userInput = inputForm.NewPath;
+            Debug.WriteLine($"Selected path: {userInput}");
+            MessageBox.Show("You entered: " + userInput);
+         }
+
+      }
       private void AddModifierButton_Click(object sender, EventArgs e)
       {
          var error = string.Empty;
@@ -998,25 +1010,29 @@ namespace Editor
          if (!int.TryParse(item.SubItems[1].Text, out var duration) || !Enum.TryParse(item.SubItems[2].Text, out ModifierType type))
             return;
 
-         if (!Globals.VanillaModifiers.TryGetValue(modifierName, out _))
+         if (!Globals.EventModifiers.TryGetValue(modifierName, out _))
             return;
 
          ProvinceEditingEvents.OnModifierRemoved(new ApplicableModifier(modifierName, duration), type);
          ModifiersListView.Items.Remove(item);
       }
 
-      private void jsonToolStripMenuItem_Click(object sender, EventArgs e)
+      private void IsaveableClick(object sender, EventArgs e)
       {
-         Province province = new(123);
-         province.Owner = "ENG";
-         province.Controller = "ENG";
-         province.Religion = "catholic";
+         List<ISaveable> saveables = [];
+         foreach (var mod in Globals.EventModifiers.Values)
+            saveables.Add(mod);
+         var modifiedModifiers =
+            EditingHelper.GetObjectsWithoutStatus(saveables, ObjEditingStatus.Unchanged);
 
-         var jsonSettings = new JsonSerializerOptions { WriteIndented = true };
-         string jsonString = JsonSerializer.Serialize(province, jsonSettings);
+         var sb = new StringBuilder();
+         foreach (var mod in modifiedModifiers)
+         {
+            sb.AppendLine($"{mod.EditingStatus,8} : {mod.ToString()}");
+         }
 
-
-         IO.WriteToFile(Path.Combine(Globals.DownloadsFolder, "jsonTest.json"), jsonString, false);
+         var downloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\";
+         File.WriteAllText(Path.Combine(downloadFolder, "modifiers.txt"), sb.ToString());
       }
       private void yoloToolStripMenuItem_Click(object sender, EventArgs e)
       {
@@ -1080,10 +1096,13 @@ namespace Editor
 
       // ------------------- COUNTRY EDITING TAB ------------------- \\
       private TagComboBox TagSelectionBox;
-      
+      private ColorPickerButton CountryColorPickerButton;
+      private ColorPickerButton RevolutionColorPickerButton;
+
+
       private void InitializeCountryEditGui()
       {
-         Selection.OnCountrySelected += OnCountrySelected;
+         Selection.OnCountrySelected += CountryGuiEvents.OnCountrySelected;
          TagSelectionBox = new()
          {
             Margin = new(1),
@@ -1091,20 +1110,15 @@ namespace Editor
          };
          TagSelectionBox.Items.Add("###");
          TagAndColorTLP.Controls.Add(TagSelectionBox, 1, 0);
-         TagSelectionBox.OnTagChanged += (_, args) =>
-         {
-            if (!DataClasses.GameDataClasses.Tag.TryParse(args.Value.ToString(), out var tag))
-               return;
-            if (tag == DataClasses.GameDataClasses.Tag.Empty)
-               Selection.SetCountrySelected(Country.Empty);
-            else if (Globals.Countries.TryGetValue(tag, out var country))
-               Selection.SetCountrySelected(country);
-         };
-      }
-
-      public void OnCountrySelected(object? sender, Country country)
-      {
-         LoadCountryToGui(country);
+         TagSelectionBox.OnTagChanged += CountryGuiEvents.TagSelectionBox_OnTagChanged;
+         CountryColorPickerButton = ControlFactory.GetColorPickerButton();
+         CountryColorPickerButton.Click += CountryGuiEvents.CountryColorPickerButton_Click;
+         GeneralToolTip.SetToolTip(CountryColorPickerButton, "Set the <color> of the selected country");
+         TagAndColorTLP.Controls.Add(CountryColorPickerButton, 3, 0);
+         RevolutionColorPickerButton = ControlFactory.GetColorPickerButton();
+         RevolutionColorPickerButton.Click += CountryGuiEvents.RevolutionColorPickerButton_Click;
+         GeneralToolTip.SetToolTip(RevolutionColorPickerButton, "Set the <revolutionary_color> of the selected country");
+         TagAndColorTLP.Controls.Add(RevolutionColorPickerButton, 3, 3);
       }
 
       private void ClearCountryGui()
@@ -1114,9 +1128,10 @@ namespace Editor
          CountryColorPickerButton.Text = "(//)";
          CountryADJLoc.Text = "-";
          CountryLoc.Text = "-";
+         RevolutionColorPickerButton.BackColor = Color.Empty;
       }
 
-      private void LoadCountryToGui(Country country)
+      internal void LoadCountryToGui(Country country)
       {
          if (country == Country.Empty)
          {
@@ -1128,19 +1143,13 @@ namespace Editor
          CountryColorPickerButton.Text = $"({country.Color.R}/{country.Color.G}/{country.Color.B})";
          CountryLoc.Text = country.GetLocalisation();
          CountryADJLoc.Text = country.GetAdjectiveLocalisation();
-
+         RevolutionColorPickerButton.BackColor = country.RevolutionaryColor;
       }
 
-      private void CountryColorPickerButton_Click(object sender, EventArgs e)
+      private void CreateFilesByDefault_Click(object sender, EventArgs e)
       {
-         var colorDialog = new ColorDialog();
-         colorDialog.Color = CountryColorPickerButton.BackColor;
-         if (colorDialog.ShowDialog() == DialogResult.OK)
-         {
-            CountryColorPickerButton.BackColor = colorDialog.Color;
-            CountryColorPickerButton.Text = $"({colorDialog.Color.R}/{colorDialog.Color.G}/{colorDialog.Color.B})";
-            Selection.SelectedCountry.Color = colorDialog.Color;
-         }
+         CreateFilesByDefault.Checked = !CreateFilesByDefault.Checked;
+         Globals.Settings.SavingSettings.AlwaysAskBeforeCreatingFiles = CreateFilesByDefault.Checked;
       }
    }
 }

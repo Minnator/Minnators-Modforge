@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Reflection;
 using Editor.DataClasses.GameDataClasses;
+using Editor.Interfaces;
 
 namespace Editor.Helper
 {
-   public static class EditingManager
+   public static class EditingHelper
    {
       private static readonly object DefaultProvince = Activator.CreateInstance(typeof(Province))!;
       private static readonly PropertyInfo[] ProvinceProperties = DefaultProvince.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
@@ -42,26 +43,26 @@ namespace Editor.Helper
          List<Province> modifiedProvinces = [];
          foreach (var province in Globals.Provinces)
          {
-            if (province.Status == ProvinceStatus.Modified)
+            if (province.EditingStatus == ObjEditingStatus.Modified)
                modifiedProvinces.Add(province);
          }
          return modifiedProvinces;
       }
 
-      public static List<Province> GetProvincesWithStatus(ProvinceStatus status)
+      public static List<Province> GetProvincesWithStatus(ObjEditingStatus status)
       {
          List<Province> provinces = [];
          foreach (var province in Globals.Provinces)
-            if (province.Status == status) 
+            if (province.EditingStatus == status) 
                provinces.Add(province);
          return provinces;
       }
 
-      public static List<Province> GetProvincesWithoutStatus(ProvinceStatus status)
+      public static List<Province> GetProvincesWithoutStatus(ObjEditingStatus status)
       {
          List<Province> provinces = [];
          foreach (var province in Globals.Provinces)
-            if (province.Status != status) 
+            if (province.EditingStatus != status) 
                provinces.Add(province);
          return provinces;
       }
@@ -92,6 +93,24 @@ namespace Editor.Helper
          }
 
          return true;
+      }
+      
+      public static List<ISaveable> GetObjectsWithStatus(List<ISaveable> objects, ObjEditingStatus status)
+      {
+         List<ISaveable> objs = [];
+         foreach (var obj in objects)
+            if (obj.EditingStatus == status) 
+               objs.Add(obj);
+         return objs;
+      }
+
+      public static List<ISaveable> GetObjectsWithoutStatus(List<ISaveable> objects, ObjEditingStatus status)
+      {
+         List<ISaveable> objs = [];
+         foreach (var obj in objects)
+            if (obj.EditingStatus != status) 
+               objs.Add(obj);
+         return objs;
       }
    }
 

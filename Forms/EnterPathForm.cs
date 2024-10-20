@@ -20,7 +20,7 @@ namespace Editor.Forms
       private void SelectVanillaPathButton_Click(object sender, EventArgs e)
       {
          var documentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-         IO.OpenFileDialog(documentsFolder, "vanilla base game", out var folder);
+         IO.OpenFolderDialog(documentsFolder, "vanilla base game", out var folder);
 
          VanillaPathTextBox.Text = folder;
       }
@@ -31,7 +31,7 @@ namespace Editor.Forms
          var path = Path.Combine(documentsFolder, "Paradox Interactive", "Europa Universalis IV", "mod");
          if (Path.Exists(path))
             documentsFolder = path;
-         IO.OpenFileDialog(documentsFolder, "mod folder", out var folder);
+         IO.OpenFolderDialog(documentsFolder, "mod folder", out var folder);
 
          ModPathTextBox.Text = folder;
       }

@@ -199,8 +199,7 @@ public static class Globals
    public static Dictionary<string, ColonialRegion> ColonialRegions = [];
 
    // Modifiers
-   public static Dictionary<string, EventModifier> VanillaModifiers = [];
-   public static Dictionary<string, EventModifier> ModModifiers = [];
+   public static Dictionary<string, EventModifier> EventModifiers = [];
    public static Dictionary<string, Modifier> ProvinceTriggeredModifiers = [];
    public static Dictionary<string, Modifier> TriggeredModifiers = [];
 
@@ -209,7 +208,7 @@ public static class Globals
    public static Dictionary<string, TradeCompany> TradeCompanies = [];
 
    public static readonly Dictionary<string, ProvinceGroup> ProvinceGroups = []; // TODO: read in
-   // In Game Groups
+   // Ingame Groups
    public static Dictionary<string, Area> Areas = [];
    public static Dictionary<string, Region> Regions { get; set; } = [];
 

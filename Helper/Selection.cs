@@ -422,7 +422,7 @@ public static class Selection
       // If the province is already selected, mark it as such again
       if (_selectedProvinces.Contains(LastHoveredProvince))
          RedrawSelection(LastHoveredProvince);
-      if (_highlightedProvinces.Contains(LastHoveredProvince))
+      else if (_highlightedProvinces.Contains(LastHoveredProvince))
          HighlightProvince(LastHoveredProvince);
       else
          MapDrawing.DrawOnMap(LastHoveredProvince, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);

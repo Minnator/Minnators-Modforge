@@ -1,6 +1,8 @@
 ﻿using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
+using Editor.Interfaces;
+using Editor.Parser;
 using Editor.Savers;
 
 namespace Editor.DataClasses.GameDataClasses
@@ -39,7 +41,7 @@ namespace Editor.DataClasses.GameDataClasses
 
    public abstract class ModifierAbstract : ISaveModifier
    {
-      public string Name { get; protected init; }
+      public string Name { get; protected init; } = string.Empty;
       public int Duration { get; set; }
       public string Icon { get; set; } = string.Empty;
       public List<KeyValuePair<string, string>> Effects { get; set; } = [];
@@ -66,7 +68,6 @@ namespace Editor.DataClasses.GameDataClasses
          return $"{Name}";
       }
    }
-
    public partial class ApplicableModifier : ModifierAbstract
    {
       public ApplicableModifier(string name, int duration)
@@ -92,7 +93,6 @@ namespace Editor.DataClasses.GameDataClasses
          return $"{Name}";
       }
    }
-
    public class TradeModifier : ModifierAbstract
    {
       public Tag Who { get; set; }
@@ -128,7 +128,6 @@ namespace Editor.DataClasses.GameDataClasses
          return $"{Name}";
       }
    }
-
    public class RulerModifier : ISaveModifier
    {
       public string Name { get; set; } = string.Empty;
@@ -162,8 +161,10 @@ namespace Editor.DataClasses.GameDataClasses
       }
    }
 
-   public class EventModifier(string name)
+   public class EventModifier(string name) : ISaveable
    {
+      public ObjEditingStatus EditingStatus { get; set; }
+      public int FileIndex { get; set; }
       public string Name { get; } = name;
       public List<KeyValuePair<string, string>> TriggerAttribute { get; set; } = [];
       public List<Modifier> Modifiers { get; set; } = [];
@@ -176,7 +177,7 @@ namespace Editor.DataClasses.GameDataClasses
          foreach (var attr in TriggerAttribute)
             sb.AppendLine($"\t{attr} = yes");
          foreach (var mod in Modifiers)
-            sb.AppendLine($"\t{mod.Name} = {mod.Value}");
+            sb.AppendLine($"\t{Globals.ModifierKeys[mod.Name]} = {mod.Value}");
          sb.AppendLine("}");
          return sb.ToString();
       }

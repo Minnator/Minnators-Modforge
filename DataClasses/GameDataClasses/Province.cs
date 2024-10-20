@@ -8,13 +8,6 @@ using static Editor.Helper.ProvinceEnumHelper;
 
 namespace Editor.DataClasses.GameDataClasses;
 
-public enum ProvinceStatus
-{
-   Unchanged,
-   Modified,
-   Added
-}
-
 public class ProvinceData()
 {
    // ======================================== IMPORTANT =========================================
@@ -65,12 +58,13 @@ public class ProvinceData()
    public List<TradeModifier> TradeModifiers = [];  
 }
 
-public class Province : IProvinceCollection, IScope
+public class Province : IProvinceCollection, IScope, ISaveable
 {
    public string Name { get; set; } = string.Empty;
    private readonly ProvinceData _data = new();
    private List<HistoryEntry> _history = [];
-   public ProvinceStatus Status { get; set; } = ProvinceStatus.Unchanged;
+   public int FileIndex { get; set; } = 0;
+   public ObjEditingStatus EditingStatus { get; set; } = ObjEditingStatus.Unchanged;
    public DateTime LastModified { get; set; } = DateTime.MinValue;
    public ProvinceData ProvinceData { get; set; } = new();
    
@@ -736,7 +730,7 @@ public class Province : IProvinceCollection, IScope
    {
       if (Globals.State == State.Running)
       {
-         Status = ProvinceStatus.Modified;
+         EditingStatus = ObjEditingStatus.Modified;
          LastModified = DateTime.Now;
       }
    }

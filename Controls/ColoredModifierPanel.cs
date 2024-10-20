@@ -16,7 +16,9 @@ namespace Editor.Controls
       {
          if (clear)
             FlowLayoutPanel.Controls.Clear();
-         SetDualContentInternal(mod.CodeName, value);
+         //SetDualContentInternal(mod.CodeName, value);
+         FlowLayoutPanel.Controls.Add(GetDualContentPanel(mod.CodeName, value, FlowLayoutPanel.Width - 25));
+         DualContent.Add(new(mod.Index.ToString(), value));
 
          // get the last control in the flowlayoutpanel
          var control = FlowLayoutPanel.Controls[^1];
@@ -29,6 +31,7 @@ namespace Editor.Controls
       public void AddModifiers(List<ModifierDefinition> modifiers, List<string> values)
       {
          FlowLayoutPanel.Controls.Clear();
+         DualContent.Clear();
          if (modifiers.Count != values.Count)
             return;
          for (var i = 0; i < modifiers.Count; i++)
@@ -38,6 +41,8 @@ namespace Editor.Controls
 
             AddModifier(mod, value, false);
          }
+
+         var content = DualContent;
       }
 
 
@@ -48,6 +53,7 @@ namespace Editor.Controls
 
          right.ForeColor = ModifierParser.ModifierDefinitions[LeftComboBox.SelectedIndex].GetColor(right.Text);
       }
+
 
    }
 }

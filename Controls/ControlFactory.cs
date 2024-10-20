@@ -171,4 +171,13 @@ public static class ControlFactory
          Margin = new(3,1,3,3)
       };
    }
+
+   public static ColorPickerButton GetColorPickerButton()
+   {
+      return new ()
+      {
+         Margin = new (1),
+         Dock = DockStyle.Fill
+      };
+   }
 }

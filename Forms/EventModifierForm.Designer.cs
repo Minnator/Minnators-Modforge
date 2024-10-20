@@ -313,6 +313,7 @@
          ModifyButton.Text = "Modify";
          toolTip1.SetToolTip(ModifyButton, "Modifies the selected modifier if it already exists\r\n(Ctrl + D)");
          ModifyButton.UseVisualStyleBackColor = true;
+         ModifyButton.Click += ModifyButton_Click;
          // 
          // EventModifierForm
          // 

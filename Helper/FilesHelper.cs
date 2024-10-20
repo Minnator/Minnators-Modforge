@@ -51,19 +51,26 @@ public static partial class FilesHelper
    /// <returns></returns>
    public static List<string> GetFilesFromModAndVanillaUniquely(string searchPattern = "*.txt", params string[] internalPath)
    {
+      var (modFiles, vanillaFiles) = GetFilesFromModAndVanillaUniquelySeparated(searchPattern, internalPath);
+      return modFiles.Concat(vanillaFiles).ToList();
+   }
 
+   public static (List<string>, List<string>) GetFilesFromModAndVanillaUniquelySeparated(string searchPattern, params string[] internalPath)
+   {
       var folderPath = Path.Combine(internalPath);
       var modPath = Path.Combine(Globals.ModPath, folderPath);
       var vanillaPath = Path.Combine(Globals.VanillaPath, folderPath);
-      List<string> fileSet = [];
-      HashSet<string> fineNames = [];
+      
+      List<string> modFiles = [];
+      List<string> vanillaFiles = [];
+      HashSet<string> uniqueFiles = [];
 
       if (Directory.Exists(modPath))
       {
          foreach (var file in Directory.GetFiles(modPath, searchPattern, SearchOption.TopDirectoryOnly))
          {
-            if (fineNames.Add(Path.GetFileName(file)))
-               fileSet.Add(file);
+            if (uniqueFiles.Add(Path.GetFileName(file)))
+               modFiles.Add(file);
          }
       }
 
@@ -71,12 +78,12 @@ public static partial class FilesHelper
       {
          foreach (var file in Directory.GetFiles(vanillaPath, searchPattern, SearchOption.TopDirectoryOnly))
          {
-            if (fineNames.Add(Path.GetFileName(file)))
-               fileSet.Add(file);
+            if (uniqueFiles.Add(Path.GetFileName(file)))
+               vanillaFiles.Add(file);
          }
       }
 
-      return [.. fileSet];
+      return (modFiles, vanillaFiles);
    }
 
    public static List<string> GetProvinceFilesUniquely()

@@ -52,7 +52,7 @@ namespace Editor.Savers
       public static bool SaveAllModifiedProvinces()
       {
          var worked = true;
-         foreach (var province in EditingManager.GetModifiedProvinces())
+         foreach (var province in EditingHelper.GetModifiedProvinces())
          {
             if (!SaveToHistoryFile(province))
                worked = false;

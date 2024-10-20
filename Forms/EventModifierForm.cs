@@ -1,6 +1,7 @@
 ﻿using Editor.Controls;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
+using Editor.Interfaces;
 using Editor.Parser;
 using ComboBox = System.Windows.Forms.ComboBox;
 
@@ -34,7 +35,7 @@ namespace Editor.Forms
          _customAttrPanel.Dock = DockStyle.Fill;
          _customAttrPanel.SetComboBoxItems([.. ModifierParser.CustomModifierTrigger.Keys], DualSelectionFlowPanel.BoxType.Left, true);
          _customAttrPanel.SetComboBoxItems(["yes", "no"], DualSelectionFlowPanel.BoxType.Right, true);
-         _modifierPanel = new ();
+         _modifierPanel = new();
          _modifierPanel.Dock = DockStyle.Fill;
 
          _modifierPanel.SetComboBoxItems(Globals.ModifierKeys, DualSelectionFlowPanel.BoxType.Left, false);
@@ -66,7 +67,7 @@ namespace Editor.Forms
 
       private void OnModifierComboBoxOnSelectedIndexChanged(object? sender, EventArgs args)
       {
-         if (!Globals.VanillaModifiers.TryGetValue(Globals.MapWindow._modifierComboBox.Text, out var modifier))
+         if (!Globals.EventModifiers.TryGetValue(Globals.MapWindow._modifierComboBox.Text, out var modifier))
             return;
 
          LocalisationTextBox.Text = Localisation.GetLoc(modifier.Name);
@@ -95,7 +96,7 @@ namespace Editor.Forms
       {
          Close();
       }
-      
+
       private void EventModifierForm_KeyDown(object sender, KeyEventArgs e)
       {
          // Close the form when the escape key is pressed
@@ -105,7 +106,7 @@ namespace Editor.Forms
          {
             switch (e.KeyCode)
             {
-               case Keys.D:
+               case Keys.M:
                   ModifyButton.PerformClick();
                   break;
                case Keys.S:
@@ -119,38 +120,76 @@ namespace Editor.Forms
       }
 
       private void SaveButton_Click(object sender, EventArgs e)
-      {  
-         if (!GetModifierFromGui(out var mod))
-            return;
+      {
+         AddOrUpdateModifier();
       }
 
-      private bool GetModifierFromGui(out EventModifier eventMod)
+      private bool AddOrUpdateModifier()
       {
          var name = Globals.MapWindow._modifierComboBox.Text;
          var title = LocalisationTextBox.Text;
          var desc = DescriptionTextBox.Text;
-         var customAttr = _customAttrPanel.GetDualContent();
-         eventMod = EventModifier.Empty;
 
          if (string.IsNullOrEmpty(name))
             return false;
+         if (!GetModifiersFromGui(out var mods))
+            return false;
+         if (!GetCustomAttributesFromGui(out var customAttrs))
+            return false;
 
-         if (Globals.VanillaModifiers.TryGetValue(name, out var modifier))
+         if (Globals.EventModifiers.TryGetValue(name, out var modifier))
          {
-            // TODO how to handle this? If an existing is edited
+            modifier.Modifiers = mods;
+            modifier.TriggerAttribute = customAttrs;
+            modifier.EditingStatus = ObjEditingStatus.Modified;
+            return true;
          }
 
-         // How to handle if it is an existing modifier from vanilla?
-         // How to handle if it is an existing modifier from a mod?
-         // How to handle if it is a new modifier? add to random mod file or create new with certain name and add to that if already existing
-
-         eventMod = new (name){ TriggerAttribute = customAttr };
-         var dualContent = _modifierPanel.GetDualContent();
-         foreach (var kvp in dualContent) 
-            eventMod.Modifiers.Add(new(int.Parse(kvp.Key), kvp.Value));
-
-         
+         //TODO is not correctly added to combobox
+         EventModifier eventMod = new(name)
+         {
+            Modifiers = mods,
+            TriggerAttribute = customAttrs,
+            EditingStatus = ObjEditingStatus.New
+         };
+         Globals.EventModifiers.Add(name, eventMod);
+         Globals.MapWindow._modifierComboBox.Items.Add(eventMod);
+         Globals.MapWindow._modifierComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+         Globals.MapWindow._modifierComboBox.AutoCompleteMode = AutoCompleteMode.None;
+         Globals.MapWindow._modifierComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
          return true;
+      }
+
+      private bool GetModifiersFromGui(out List<Modifier> modifiers)
+      {
+         modifiers = [];
+         foreach (var kvp in _modifierPanel.GetDualContent())
+         {
+            if (int.TryParse(kvp.Key, out var index))
+            {
+
+               modifiers.Add(new(index, kvp.Value));
+            }
+            else
+            {
+               MessageBox.Show("Error: Could not parse index to <int>");
+               modifiers = [];
+               return false;
+            }
+         }
+
+         return true;
+      }
+
+      private bool GetCustomAttributesFromGui(out List<KeyValuePair<string, string>> customAttributes)
+      {
+         customAttributes = _customAttrPanel.GetDualContent();
+         return true;
+      }
+
+      private void ModifyButton_Click(object sender, EventArgs e)
+      {
+         AddOrUpdateModifier();
       }
    }
 }

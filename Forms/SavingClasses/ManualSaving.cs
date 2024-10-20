@@ -23,6 +23,7 @@ namespace Editor.Forms.SavingClasses
          SavingCheckedListBox.SetItemChecked(6, data.SuperRegions);
          SavingCheckedListBox.SetItemChecked(7, data.Continents);
          SavingCheckedListBox.SetItemChecked(8, data.ProvinceGroups);
+         SavingCheckedListBox.SetItemChecked(9, data.EventModifiers);
       }
 
       public ModifiedData GetModifiedDataSelection()
@@ -38,6 +39,7 @@ namespace Editor.Forms.SavingClasses
             SuperRegions = SavingCheckedListBox.GetItemChecked(6),
             Continents = SavingCheckedListBox.GetItemChecked(7),
             ProvinceGroups = SavingCheckedListBox.GetItemChecked(8),
+            EventModifiers = SavingCheckedListBox.GetItemChecked(9)
          };
       }
 

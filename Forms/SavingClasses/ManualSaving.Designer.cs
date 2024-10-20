@@ -59,7 +59,7 @@
          SavingCheckedListBox.CheckOnClick = true;
          SavingCheckedListBox.Dock = DockStyle.Fill;
          SavingCheckedListBox.FormattingEnabled = true;
-         SavingCheckedListBox.Items.AddRange(new object[] { "Provinces", "Areas", "Regions", "Tradenodes", "Tradecompanies", "Colonial regions", "Super regions", "Continents", "Province groups" });
+         SavingCheckedListBox.Items.AddRange(new object[] { "Provinces", "Areas", "Regions", "Tradenodes", "Tradecompanies", "Colonial regions", "Super regions", "Continents", "Province groups", "Event Modifiers" });
          SavingCheckedListBox.Location = new Point(8, 47);
          SavingCheckedListBox.Margin = new Padding(8, 3, 8, 3);
          SavingCheckedListBox.Name = "SavingCheckedListBox";

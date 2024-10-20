@@ -33,12 +33,12 @@ namespace Editor.Savers
                regions.Add(new(region.Name, region.Areas));
             CollectionSavers.SaveStringCollection(regions, "areas", true, "map", "region.txt");
          }
-
          if (modifiedData.SaveTradeNodes)
          {
             SaveTradeNodes.SaveAllTradeNodes(TradeNodeHelper.TopologicalSort(Globals.TradeNodes.Values.ToList()));
          }
-
+         // TODO SaveTradeCompanies
+         // TODO ColonialRegions
          if (modifiedData.SuperRegions)
          {
             List<KeyValuePair<string, List<string>>> superRegions = [];
@@ -60,7 +60,10 @@ namespace Editor.Savers
                provinceGroups.Add(provinceGroup);
             CollectionSavers.SaveIProvinceCollection(provinceGroups, true, "map", "provincegroup.txt");
          }
-
+         if (modifiedData.EventModifiers)
+         {
+            EventModifierSaver.SaveEventModifiers();
+         }
 
       }
 
