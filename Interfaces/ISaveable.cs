@@ -11,5 +11,4 @@ public interface ISaveable
 {
    public ObjEditingStatus EditingStatus { get; set; }
    public int FileIndex { get; set; }
-   
 }

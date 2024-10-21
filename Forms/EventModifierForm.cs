@@ -154,8 +154,8 @@ namespace Editor.Forms
          };
          Globals.EventModifiers.Add(name, eventMod);
          Globals.MapWindow._modifierComboBox.Items.Add(eventMod);
-         Globals.MapWindow._modifierComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
-         Globals.MapWindow._modifierComboBox.AutoCompleteMode = AutoCompleteMode.None;
+         Globals.MapWindow._modifierComboBox.AutoCompleteCustomSource.Add(name);
+         Globals.MapWindow._modifierComboBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
          Globals.MapWindow._modifierComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
          return true;
       }

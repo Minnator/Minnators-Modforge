@@ -30,7 +30,7 @@ namespace Editor.Helper
       {
          if (ModFiles.TryGetValue(fileName, out index))
             return false;
-         if (fileName.StartsWith('\\'))
+         while (fileName.StartsWith('\\'))
             fileName = fileName[1..];
          index = --ModIndex;
          ModFiles.Add(fileName, index);
@@ -41,11 +41,11 @@ namespace Editor.Helper
       public static bool GetFileFromIndex(int index, out string fileName)
       {
          if (index > 0)
-            return IndexToVanillaFile.TryGetValue(index, out fileName);
-         return IndexToModFile.TryGetValue(index, out fileName);
+            return IndexToVanillaFile.TryGetValue(index, out fileName!);
+         return IndexToModFile.TryGetValue(index, out fileName!);
       }
 
-      public static List<T> GetAllElementsOfFile<T> (int fileIndex, List<ISaveable> allElements)
+      public static List<T> GetAllElementsOfFile<T> (int fileIndex, ICollection<ISaveable> allElements)
       {
          if (fileIndex > 0)
             return allElements.Where(x => x.FileIndex == fileIndex).Cast<T>().ToList();
