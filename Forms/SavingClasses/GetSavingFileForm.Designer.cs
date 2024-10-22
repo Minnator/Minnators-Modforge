@@ -1,6 +1,6 @@
 ﻿namespace Editor.Forms.SavingClasses
 {
-   partial class GetSavingFile
+   partial class GetSavingFileForm
    {
       /// <summary>
       /// Required designer variable.
@@ -164,7 +164,7 @@
          AutoScaleMode = AutoScaleMode.Font;
          ClientSize = new Size(451, 133);
          Controls.Add(tableLayoutPanel1);
-         Name = "GetSavingFile";
+         Name = "GetSavingFileForm";
          Text = "GetSavingFile";
          tableLayoutPanel1.ResumeLayout(false);
          tableLayoutPanel1.PerformLayout();

@@ -153,16 +153,4 @@ internal static class IO
       }
    }
 
-   public static string GetDefaultPathForFolder(params string[] innerPath)
-   {
-      var path = Path.Combine(Globals.ModPath, Path.Combine(innerPath));
-      // retrieve the last folder in the path
-      var lastFolder = innerPath[^1];
-      if (string.IsNullOrWhiteSpace(lastFolder))
-      {
-         MessageBox.Show("Failed to create default path!", "Invalid path", MessageBoxButtons.OK, MessageBoxIcon.Error);
-         return string.Empty;
-      }
-      return Path.Combine(path, $"Modforge_Default_{lastFolder}.txt");
-   }
 }

@@ -150,7 +150,6 @@ namespace Editor.Forms
          {
             Modifiers = mods,
             TriggerAttribute = customAttrs,
-            EditingStatus = ObjEditingStatus.New
          };
          Globals.EventModifiers.Add(name, eventMod);
          Globals.MapWindow._modifierComboBox.Items.Add(eventMod);

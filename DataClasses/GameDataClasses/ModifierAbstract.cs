@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
+using Editor.Helper;
 using Editor.Interfaces;
 using Editor.Parser;
 using Editor.Savers;
@@ -161,26 +162,44 @@ namespace Editor.DataClasses.GameDataClasses
       }
    }
 
-   public class EventModifier(string name) : ISaveable
+   public class EventModifier : Saveable
    {
-      public ObjEditingStatus EditingStatus { get; set; }
-      public int FileIndex { get; set; }
-      public string Name { get; } = name;
-      public List<KeyValuePair<string, string>> TriggerAttribute { get; set; } = [];
-      public List<Modifier> Modifiers { get; set; } = [];
-      public string Picture { get; set; } = string.Empty;
+      public EventModifier(string name, ObjEditingStatus status, PathObj path)
+      {
+         Name = name;
+         EditingStatus = status;
+         Path = path;
+      }
+      
+      public EventModifier(string name) : this(name, ObjEditingStatus.Modified, PathObj.Empty) { }
+      public EventModifier(string name, PathObj path) : this(name, ObjEditingStatus.Unchanged, path) { }
 
-      public string GetFormattedString()
+      public override string SavingComment()
+      {
+         return Localisation.GetLoc(Name);
+      }
+
+      public override PathObj GetDefaultSavePath()
+      {
+         return new (["common", "event_modifiers"]);
+      }
+
+      public override string GetSaveString(int tabs)
       {
          var sb = new StringBuilder();
          sb.AppendLine($"{Name} = {{");
          foreach (var attr in TriggerAttribute)
-            sb.AppendLine($"\t{attr} = yes");
+            sb.AppendLine($"\t{attr.Key} = yes");
          foreach (var mod in Modifiers)
             sb.AppendLine($"\t{Globals.ModifierKeys[mod.Name]} = {mod.Value}");
          sb.AppendLine("}");
          return sb.ToString();
       }
+
+      public string Name { get; }
+      public List<KeyValuePair<string, string>> TriggerAttribute { get; set; } = [];
+      public List<Modifier> Modifiers { get; set; } = [];
+      public string Picture { get; set; } = string.Empty;
 
       public override bool Equals(object? obj)
       {

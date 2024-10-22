@@ -95,23 +95,6 @@ namespace Editor.Helper
          return true;
       }
       
-      public static List<ISaveable> GetObjectsWithStatus(List<ISaveable> objects, ObjEditingStatus status)
-      {
-         List<ISaveable> objs = [];
-         foreach (var obj in objects)
-            if (obj.EditingStatus == status) 
-               objs.Add(obj);
-         return objs;
-      }
-
-      public static List<ISaveable> GetObjectsWithoutStatus(List<ISaveable> objects, ObjEditingStatus status)
-      {
-         List<ISaveable> objs = [];
-         foreach (var obj in objects)
-            if (obj.EditingStatus != status) 
-               objs.Add(obj);
-         return objs;
-      }
    }
 
 }

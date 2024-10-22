@@ -782,14 +782,6 @@ namespace Editor
 
       private void debugToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         var sb = new StringBuilder();
-         foreach (var culture in Globals.Religions.Keys)
-         {
-            sb.AppendLine(culture);
-         }
-         // download folder
-         var downloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\";
-         File.WriteAllText(Path.Combine(downloadFolder, "religions.txt"), sb.ToString());
       }
 
       private void MapModeComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -969,7 +961,7 @@ namespace Editor
 
       private void saveEuropeToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         var inputForm = new GetSavingFile(Globals.ModPath, "Please enter your input:");
+         var inputForm = new GetSavingFileForm(Globals.ModPath, "Please enter your input:", ".txt");
          if (inputForm.ShowDialog() == DialogResult.OK)
          {
             string userInput = inputForm.NewPath;
@@ -1019,20 +1011,6 @@ namespace Editor
 
       private void IsaveableClick(object sender, EventArgs e)
       {
-         List<ISaveable> saveables = [];
-         foreach (var mod in Globals.EventModifiers.Values)
-            saveables.Add(mod);
-         var modifiedModifiers =
-            EditingHelper.GetObjectsWithoutStatus(saveables, ObjEditingStatus.Unchanged);
-
-         var sb = new StringBuilder();
-         foreach (var mod in modifiedModifiers)
-         {
-            sb.AppendLine($"{mod.EditingStatus,8} : {mod.ToString()}");
-         }
-
-         var downloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\";
-         File.WriteAllText(Path.Combine(downloadFolder, "modifiers.txt"), sb.ToString());
       }
       private void yoloToolStripMenuItem_Click(object sender, EventArgs e)
       {
@@ -1150,6 +1128,10 @@ namespace Editor
       {
          CreateFilesByDefault.Checked = !CreateFilesByDefault.Checked;
          Globals.Settings.SavingSettings.AlwaysAskBeforeCreatingFiles = CreateFilesByDefault.Checked;
+      }
+
+      private void save1ToolStripMenuItem_Click(object sender, EventArgs e)
+      {
       }
    }
 }

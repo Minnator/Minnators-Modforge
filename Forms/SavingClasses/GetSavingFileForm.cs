@@ -2,15 +2,17 @@
 
 namespace Editor.Forms.SavingClasses
 {
-   public partial class GetSavingFile : Form
+   public partial class GetSavingFileForm : Form
    {
       public string InitPath { get; set; }
       public string NewPath { get; set; } = string.Empty;
-      public GetSavingFile(string initPath, string desc)
+      private string Ending { get; set; } = string.Empty;
+      public GetSavingFileForm(string initPath, string desc, string ending)
       {
          InitializeComponent();
          InitPath = initPath;
          DescriptionLabel.Text = desc;
+         Ending = ending;
       }
 
       private void OpenFileDialogButton_Click(object sender, EventArgs e)
@@ -37,7 +39,13 @@ namespace Editor.Forms.SavingClasses
                MessageBox.Show("The selected File does not exist!", "File does not exist", MessageBoxButtons.OK, MessageBoxIcon.Error);
                return;
             }
-            NewPath = ExistingFilePath.Text;
+            if (ExistingFile.Text.EndsWith(Ending))
+               NewPath = ExistingFilePath.Text;
+            else
+            {
+               MessageBox.Show($"The selected file does not have the correct ending ({Ending})!", "Wrong file ending", MessageBoxButtons.OK, MessageBoxIcon.Error);
+               return;
+            }
          }
          DialogResult = DialogResult.OK;
          Close();

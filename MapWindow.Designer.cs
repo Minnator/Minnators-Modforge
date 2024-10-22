@@ -629,6 +629,7 @@
          save1ToolStripMenuItem.Name = "save1ToolStripMenuItem";
          save1ToolStripMenuItem.Size = new Size(221, 22);
          save1ToolStripMenuItem.Text = "Save 1";
+         save1ToolStripMenuItem.Click += save1ToolStripMenuItem_Click;
          // 
          // saveEuropeToolStripMenuItem
          // 

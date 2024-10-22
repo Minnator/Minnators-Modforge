@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
+using Editor.Interfaces;
 using Editor.Parser;
 
 namespace Editor.Loading
@@ -20,18 +21,30 @@ namespace Editor.Loading
          
          foreach (var file in modFiles)
          {
+            var po = PathObj.FromPath(file, true);
             // Add the file to the ObjectSourceFiles and get the index
-            var internalPath = file.Remove(0, Globals.ModPath.Length);
-            ObjectSourceFiles.AddModFile(internalPath, out var index);
-            LoadEventModifier(file, modifiers, index);
+            HashSet<EventModifier> newModifiers = [];
+            LoadEventModifier(file, po, newModifiers);
+            foreach (var mod in newModifiers)
+            {
+               if (!modifiers.TryAdd(mod.Name, mod))
+                  Globals.ErrorLog.Write($"Duplicate modifier found: {mod.Name}");
+               FileManager.AddToDictionary(po, mod);
+            }
          }
 
          foreach (var file in vanillaFiles)
          {
+            var po = PathObj.FromPath(file, false);
             // Add the file to the ObjectSourceFiles and get the index
-            var internalPath = file.Remove(0, Globals.VanillaPath.Length);
-            ObjectSourceFiles.AddVanillaFile(internalPath, out var index);
-            LoadEventModifier(file, modifiers, index);
+            HashSet<EventModifier> newModifiers = [];
+            LoadEventModifier(file, po, newModifiers);
+            foreach (var mod in newModifiers)
+            {
+               if (!modifiers.TryAdd(mod.Name, mod))
+                  Globals.ErrorLog.Write($"Duplicate modifier found: {mod.Name}");
+               FileManager.AddToDictionary(po, mod);
+            }
          }
 
          Globals.EventModifiers = modifiers;
@@ -39,18 +52,15 @@ namespace Editor.Loading
          Globals.LoadingLog.WriteTimeStamp("Event Modifiers", sw.ElapsedMilliseconds);
       }
 
-      private static void LoadEventModifier(string filePath, Dictionary<string, EventModifier> modifiers, int index)
+      private static void LoadEventModifier(string fullPath, PathObj filePath, HashSet<EventModifier> modifiers)
       {
-         Parsing.RemoveCommentFromMultilineString(IO.ReadAllInUTF8(filePath), out var fileContent);
+         Parsing.RemoveCommentFromMultilineString(IO.ReadAllInUTF8(fullPath), out var fileContent);
          var matches = ModifierRegex.Matches(fileContent);
 
          foreach (Match element in matches)
          {
             var content = element.Groups["content"].Value;
-            var modifier = new EventModifier(element.Groups["name"].Value.Trim())
-            {
-               FileIndex = index
-            };
+            var modifier = new EventModifier(element.Groups["name"].Value.Trim(), filePath);
             var kvps = Parsing.GetKeyValueList(content);
 
             for (var i = 0; i < kvps.Count; i++)
@@ -76,8 +86,7 @@ namespace Editor.Loading
                modifier.Modifiers.Add(mod);
             }
 
-            if (!modifiers.TryAdd(modifier.Name, modifier))
-               Globals.ErrorLog.Write($"Duplicate modifier found: {modifier.Name}");
+            modifiers.Add(modifier);
          }
       }
    }

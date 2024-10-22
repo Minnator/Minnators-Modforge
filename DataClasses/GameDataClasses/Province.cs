@@ -58,7 +58,7 @@ public class ProvinceData()
    public List<TradeModifier> TradeModifiers = [];  
 }
 
-public class Province : IProvinceCollection, IScope, ISaveable
+public class Province : IProvinceCollection, IScope
 {
    public string Name { get; set; } = string.Empty;
    private readonly ProvinceData _data = new();

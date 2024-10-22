@@ -62,7 +62,8 @@ public static class Localisation
 
 }
 
-public class LocObject(string key, string value) : ISaveable
+/* TODO
+public class LocObject(string key, string value) : Saveable
 {
    public string Key { get; } = key;
    public string Value { get; set; } = value;
@@ -74,3 +75,4 @@ public class LocObject(string key, string value) : ISaveable
       return Key.GetHashCode();
    }
 }
+*/

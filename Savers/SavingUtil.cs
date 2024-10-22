@@ -62,7 +62,8 @@ namespace Editor.Savers
          }
          if (modifiedData.EventModifiers)
          {
-            EventModifierSaver.SaveEventModifiers();
+            //TODO
+            FileManager.SaveChanges();
          }
 
       }
