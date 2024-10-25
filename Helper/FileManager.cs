@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 using System.Windows.Forms.VisualStyles;
 using Editor.Forms.SavingClasses;
 using Editor.Interfaces;
@@ -12,7 +13,7 @@ namespace Editor.Helper
       // New ISavables will be saved with an empty string
       private static Dictionary<PathObj, List<Saveable>> AllSaveableFiles = [];
 
-      public static void AddToDictionary(PathObj path, Saveable saveable)
+      public static void AddToDictionary(ref PathObj path, Saveable saveable)
       {
          if (!AllSaveableFiles.TryGetValue(path, out var saveables))
          {
@@ -140,12 +141,10 @@ namespace Editor.Helper
                // Mod modify
                saveables.AddRange(AllSaveableFiles[change]);
                // Maybe use different solution idk :P (only centralized references on paths)
-               for (var index = AllSaveableFiles[change].Count - 1; index >= 0; index--)
-               {
-                  AllSaveableFiles[change][index].Path = modPath;
-               }
 
+               var newPath = AllSaveableFiles[change][0];
                AllSaveableFiles.Remove(change);
+               newPath.Path.isModPath = true;
             }
 
             NeedsToBeHandledMod.Add(modPath);
@@ -261,8 +260,8 @@ namespace Editor.Helper
 
    public class PathObj(string[] path, bool isModPath)
    {
-      public readonly string[] Path = path;
-      public readonly bool isModPath = isModPath;
+      public string[] Path = path;
+      public bool isModPath = isModPath;
 
       public PathObj(string[] path): this(path, true)
       {
@@ -308,6 +307,17 @@ namespace Editor.Helper
          return HashCode.Combine(isModPath.GetHashCode(), Path.GetHashCode());
       }
 
+      public override bool Equals(object? obj)
+      {
+         if (obj is not PathObj other)
+            return false;
+         return isModPath == other.isModPath && Path.SequenceEqual(other.Path);
+      }
+
+      public override string ToString()
+      {
+         return (isModPath ? $"Mod: " : $"Vanilla: ") + System.IO.Path.Combine(Path);
+      }
    }
 
    public class EvilActions : Exception

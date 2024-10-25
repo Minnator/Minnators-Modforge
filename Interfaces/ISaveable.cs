@@ -12,7 +12,10 @@ public enum ObjEditingStatus
 public abstract class Saveable
 {
    private ObjEditingStatus _editingStatus = ObjEditingStatus.Unchanged;
-   public PathObj Path { get; set; } = PathObj.Empty;
+   private PathObj _path = PathObj.Empty;
+   public PathObj Path => _path;
+   public void SetPath(ref PathObj path) => _path = path;
+
    public ObjEditingStatus EditingStatus
    {
       get => _editingStatus;
@@ -20,7 +23,8 @@ public abstract class Saveable
       {
          if (Equals(value, _editingStatus))
             return;
-         FileManager.AddToBeHandled(this);
+         if (!Equals(value, ObjEditingStatus.Unchanged))
+            FileManager.AddToBeHandled(this);
          _editingStatus = value;
       } 
    }

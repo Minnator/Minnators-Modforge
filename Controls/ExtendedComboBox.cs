@@ -12,7 +12,7 @@ namespace Editor.Controls
       public ExtendedComboBox()
       {
          AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-         AutoCompleteSource = AutoCompleteSource.ListItems;
+         AutoCompleteSource = AutoCompleteSource.ListItems; 
          Dock = DockStyle.Fill;
          Height = 21;
       }

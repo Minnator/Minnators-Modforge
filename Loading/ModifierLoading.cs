@@ -24,12 +24,12 @@ namespace Editor.Loading
             var po = PathObj.FromPath(file, true);
             // Add the file to the ObjectSourceFiles and get the index
             HashSet<EventModifier> newModifiers = [];
-            LoadEventModifier(file, po, newModifiers);
+            LoadEventModifier(file, ref po, newModifiers);
             foreach (var mod in newModifiers)
             {
                if (!modifiers.TryAdd(mod.Name, mod))
                   Globals.ErrorLog.Write($"Duplicate modifier found: {mod.Name}");
-               FileManager.AddToDictionary(po, mod);
+               FileManager.AddToDictionary(ref po, mod);
             }
          }
 
@@ -38,12 +38,12 @@ namespace Editor.Loading
             var po = PathObj.FromPath(file, false);
             // Add the file to the ObjectSourceFiles and get the index
             HashSet<EventModifier> newModifiers = [];
-            LoadEventModifier(file, po, newModifiers);
+            LoadEventModifier(file, ref po, newModifiers);
             foreach (var mod in newModifiers)
             {
                if (!modifiers.TryAdd(mod.Name, mod))
                   Globals.ErrorLog.Write($"Duplicate modifier found: {mod.Name}");
-               FileManager.AddToDictionary(po, mod);
+               FileManager.AddToDictionary(ref po, mod);
             }
          }
 
@@ -52,7 +52,7 @@ namespace Editor.Loading
          Globals.LoadingLog.WriteTimeStamp("Event Modifiers", sw.ElapsedMilliseconds);
       }
 
-      private static void LoadEventModifier(string fullPath, PathObj filePath, HashSet<EventModifier> modifiers)
+      private static void LoadEventModifier(string fullPath, ref PathObj filePath, HashSet<EventModifier> modifiers)
       {
          Parsing.RemoveCommentFromMultilineString(IO.ReadAllInUTF8(fullPath), out var fileContent);
          var matches = ModifierRegex.Matches(fileContent);
@@ -60,7 +60,7 @@ namespace Editor.Loading
          foreach (Match element in matches)
          {
             var content = element.Groups["content"].Value;
-            var modifier = new EventModifier(element.Groups["name"].Value.Trim(), filePath);
+            var modifier = new EventModifier(element.Groups["name"].Value.Trim(), ref filePath);
             var kvps = Parsing.GetKeyValueList(content);
 
             for (var i = 0; i < kvps.Count; i++)

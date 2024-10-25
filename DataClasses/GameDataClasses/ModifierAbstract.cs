@@ -164,15 +164,17 @@ namespace Editor.DataClasses.GameDataClasses
 
    public class EventModifier : Saveable
    {
-      public EventModifier(string name, ObjEditingStatus status, PathObj path)
+
+      public EventModifier(string name, ObjEditingStatus status = ObjEditingStatus.Modified)
       {
          Name = name;
          EditingStatus = status;
-         Path = path;
       }
-      
-      public EventModifier(string name) : this(name, ObjEditingStatus.Modified, PathObj.Empty) { }
-      public EventModifier(string name, PathObj path) : this(name, ObjEditingStatus.Unchanged, path) { }
+
+      public EventModifier(string name, ref PathObj path) : this(name, ObjEditingStatus.Unchanged)
+      {
+         SetPath(ref path);
+      }
 
       public override string SavingComment()
       {
