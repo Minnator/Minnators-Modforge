@@ -304,3 +304,4 @@ public static class Globals
 // - [ ] Province Creation and editing
 
 // TODO LIST Until Alpha 1.2
+// Resync files with project

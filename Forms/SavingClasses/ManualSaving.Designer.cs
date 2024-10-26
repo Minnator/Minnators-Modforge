@@ -98,12 +98,14 @@
          ClientSize = new Size(225, 294);
          Controls.Add(tableLayoutPanel1);
          Icon = (Icon)resources.GetObject("$this.Icon");
+         KeyPreview = true;
          Margin = new Padding(4, 3, 4, 3);
          MaximizeBox = false;
          MinimizeBox = false;
          Name = "ManualSaving";
          StartPosition = FormStartPosition.CenterScreen;
          Text = "Manual Saving";
+         KeyDown += ManualSaving_KeyDown;
          tableLayoutPanel1.ResumeLayout(false);
          tableLayoutPanel1.PerformLayout();
          ResumeLayout(false);

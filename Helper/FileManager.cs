@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections;
+using System.Diagnostics;
 using System.Text;
 using System.Windows.Forms.VisualStyles;
 using Editor.Forms.SavingClasses;
@@ -116,7 +117,7 @@ namespace Editor.Helper
                if (replace)
                {
                   // No Mod file but replace, so any name
-                  modPath = new(GetNewFileAt($"_l_{Globals.Language}.yml", modPath.Path), true);
+                  modPath = new(modPath.Path, true);
                }
                AllSaveableFiles.Add(modPath, []); // empty list as it is new
                saveables = AllSaveableFiles[modPath];
@@ -129,11 +130,13 @@ namespace Editor.Helper
 
                for (var i = vanilla.Count - 1; i >= 0; i--)
                {
-                  if (vanilla[i].EditingStatus != ObjEditingStatus.Modified)
+                  var vanillaSavable = vanilla[i];
+                  if (vanillaSavable.EditingStatus != ObjEditingStatus.Modified)
                      continue;
                   // Only add savables to the mod which are changed, since we are in replace
+                  saveables.Add(vanillaSavable);
+                  vanillaSavable.SetPath(ref modPath);
                   vanilla.RemoveAt(i);
-                  saveables.Add(vanilla[i]);
                }
             }
             else
@@ -157,10 +160,15 @@ namespace Editor.Helper
             foreach (var saveable in newSaveables)
             {
                // TODO group by folders to reduce pop up count
-               PathObj modPath = new(GetNewFileAt(pathForFile: saveable.Path.Path), true);
+               PathObj modPath = new(GetNewFileAt(pathForFile: saveable.GetDefaultSavePath().Path), true);
 
                if (!AllSaveableFiles.TryGetValue(modPath, out var saveables))
                {
+                  Debug.WriteLine($"New file: {modPath.GetHashCode()}");
+                  foreach (var sav in AllSaveableFiles.Keys)
+                  {
+                     Debug.WriteLine($"Existing: {sav.GetHashCode()}");
+                  }
                   AllSaveableFiles.Add(modPath, []);
                   saveables = AllSaveableFiles[modPath];
                }
@@ -221,7 +229,10 @@ namespace Editor.Helper
          {
             var inputForm = new GetSavingFileForm(Path.Combine(Globals.ModPath, Path.Combine(pathForFile)), "Please enter your input:", ending);
             if (inputForm.ShowDialog() == DialogResult.OK)
-               return Path.GetFullPath(inputForm.NewPath).Split(Path.DirectorySeparatorChar);
+            {
+               return inputForm.NewPath.Split(Path.DirectorySeparatorChar);
+            }
+
          }
          return GetDefaultPathForFolder(ending, pathForFile);
       }
@@ -269,7 +280,9 @@ namespace Editor.Helper
       }
 
       public bool ShouldReplace()
-      {
+      {  
+         if (isModPath)
+               return false;
          for (var i = 0; i < Path.Length; i++)
          {
             if (Path[i].Equals("localisation"))
@@ -296,7 +309,14 @@ namespace Editor.Helper
       public PathObj GetInverted(bool addReplacePath)
       {
          if (addReplacePath)
-            return new (Path.Append("replace").ToArray(), !isModPath);
+         {
+            var pathParts = new string[Path.Length + 1];
+            Array.Copy(Path, pathParts, Path.Length - 1);
+            pathParts[^2] = "replace";
+            pathParts[^1] = Path[^1];
+            return new(pathParts, !isModPath);
+         }
+
          return new (Path, !isModPath);
       }
 
@@ -304,7 +324,7 @@ namespace Editor.Helper
 
       public override int GetHashCode()
       {
-         return HashCode.Combine(isModPath.GetHashCode(), Path.GetHashCode());
+         return HashCode.Combine(isModPath.GetHashCode(), StructuralComparisons.StructuralEqualityComparer.GetHashCode(Path));
       }
 
       public override bool Equals(object? obj)

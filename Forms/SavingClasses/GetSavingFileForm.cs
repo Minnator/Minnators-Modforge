@@ -25,12 +25,16 @@ namespace Editor.Forms.SavingClasses
       {
          if (NewFile.Checked)
          {
-            NewPath = PathTextBox.Text;
+            if (string.IsNullOrWhiteSpace(NewPath)) 
+               NewPath = PathTextBox.PlaceholderText;
+            if (!NewPath.EndsWith(Ending))
+               NewPath += Ending;
             if (File.Exists(Path.Combine(InitPath, $"{NewPath}.txt")) || string.IsNullOrWhiteSpace(NewPath))
             {
                MessageBox.Show("File already exists, please choose a different name", "Filename already used", MessageBoxButtons.OK, MessageBoxIcon.Information);
                return;
             }
+            NewPath = Path.Combine(InitPath, NewPath)[(Globals.ModPath.Length + 1)..];
          }
          else if (ExistingFile.Checked)
          {
@@ -39,8 +43,14 @@ namespace Editor.Forms.SavingClasses
                MessageBox.Show("The selected File does not exist!", "File does not exist", MessageBoxButtons.OK, MessageBoxIcon.Error);
                return;
             }
-            if (ExistingFile.Text.EndsWith(Ending))
-               NewPath = ExistingFilePath.Text;
+            // Check if ExitingFilePath starts with the Globals.ModPath
+            if (!ExistingFilePath.Text.StartsWith(Globals.ModPath))
+            {
+               MessageBox.Show("The selected file is not in the MOD directory!", "Illegal directory", MessageBoxButtons.OK, MessageBoxIcon.Error);
+               return;
+            }
+            if (ExistingFilePath.Text.EndsWith(Ending))
+               NewPath = ExistingFilePath.Text[(Globals.ModPath.Length + 1)..];
             else
             {
                MessageBox.Show($"The selected file does not have the correct ending ({Ending})!", "Wrong file ending", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -53,7 +63,14 @@ namespace Editor.Forms.SavingClasses
 
       private void ExistingFile_CheckedChanged(object sender, EventArgs e)
       {
-
+         var checkSender = (CheckBox)sender;
+         if (checkSender.Checked)
+         {
+            if (checkSender == ExistingFile)
+               NewFile.Checked = false;
+            else
+               ExistingFile.Checked = false;
+         }
       }
    }
 }

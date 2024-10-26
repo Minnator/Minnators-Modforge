@@ -45,7 +45,13 @@ namespace Editor.Forms.SavingClasses
 
       private void SaveSelectedButton_Click(object sender, EventArgs e)
       {
-          SavingUtil.SaveAllModified(GetModifiedDataSelection());
+         SavingUtil.SaveAllModified(GetModifiedDataSelection());
+      }
+
+      private void ManualSaving_KeyDown(object sender, KeyEventArgs e)
+      {
+         if (e.KeyCode == Keys.Escape)
+            Close();
       }
    }
 }
