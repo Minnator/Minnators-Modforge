@@ -3,7 +3,11 @@
 This is a tool created for visual editing of the EU4 map and its contents.
 It is still in development but is making steady progress.
 
-Current capabilities:
+## Official Discord Server
+Here you can find more information and help with issues, or report bugs:
+[Discord Server](https://discord.gg/22AhD5qkme)
+
+## Current capabilities:
 - Fully interactive map
 - Map modes
 - Complete Province editing
@@ -19,7 +23,7 @@ Current capabilities:
 - Image exporter
 - Map mode exporter
 
-What is to come?
+## What is to come?
 - Add a way to create custom map modes
 - Add a tradegoods creation and editing menu
 - Ideas making via drag and drop
