@@ -186,6 +186,11 @@ namespace Editor.DataClasses.GameDataClasses
          return new (["common", "event_modifiers"]);
       }
 
+      public override string GetSavePromptString()
+      {
+         return $"event_modifier: \"{Name}\"";
+      }
+
       public override string GetSaveString(int tabs)
       {
          var sb = new StringBuilder();

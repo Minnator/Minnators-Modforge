@@ -105,6 +105,8 @@ namespace Editor.Forms.Loadingscreen
          
          try
          {
+            GraphicalCulturesLoading.Load();
+            bw.ReportProgress(++progress);
             FactionsLoading.Load();
             bw.ReportProgress(++progress);
             GovernmentMechanicsLoading.Load();
@@ -164,6 +166,8 @@ namespace Editor.Forms.Loadingscreen
             AdjacenciesLoading.Load();
             bw.ReportProgress(++progress);
             ModifierParser.Demilitarize();
+            bw.ReportProgress(++progress);
+            UnitTypeLoading.Load();
             bw.ReportProgress(++progress);
          }
          catch (Exception exception)

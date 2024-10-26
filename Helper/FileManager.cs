@@ -39,7 +39,7 @@ namespace Editor.Helper
          // It is a new object and will be handled via the PathObj.Empty
          if (obj.Path.Equals(PathObj.Empty))
          {
-            if (!AllSaveableFiles.TryAdd(obj.Path, [obj])) 
+            if (!AllSaveableFiles.TryAdd(obj.Path, [obj]))
                AllSaveableFiles[obj.Path].Add(obj);
          }
          else if (obj.Path.isModPath)
@@ -160,7 +160,7 @@ namespace Editor.Helper
             foreach (var saveable in newSaveables)
             {
                // TODO group by folders to reduce pop up count
-               PathObj modPath = new(GetNewFileAt(pathForFile: saveable.GetDefaultSavePath().Path), true);
+               PathObj modPath = new(GetNewFileAt(saveable), true);
 
                if (!AllSaveableFiles.TryGetValue(modPath, out var saveables))
                {
@@ -178,7 +178,7 @@ namespace Editor.Helper
             AllSaveableFiles.Remove(PathObj.Empty);
          }
       }
-      
+
       private static void SaveModifiedObjects()
       {
          // Since all changes have been added to NeedsToBeHandledMod in CalculateModifiedObjects, only one foreach over the Files is necessary
@@ -220,26 +220,31 @@ namespace Editor.Helper
       /// <summary>
       /// Returns a new Path for a file in the mod folder with the given path either provided by the user or a default file
       /// </summary>
+      /// <param name="saveable"></param>
       /// <param name="ending"></param>
-      /// <param name="pathForFile"></param>
       /// <returns></returns>
-      public static string[] GetNewFileAt(string ending = ".txt", params string[] pathForFile)
+      public static string[] GetNewFileAt(Saveable saveable, string ending = ".txt")
       {
          if (Globals.Settings.SavingSettings.AlwaysAskBeforeCreatingFiles)
          {
-            var inputForm = new GetSavingFileForm(Path.Combine(Globals.ModPath, Path.Combine(pathForFile)), "Please enter your input:", ending);
+            var inputForm = new GetSavingFileForm(Path.Combine(Globals.ModPath, Path.Combine(saveable.GetDefaultSavePath().Path)), $"Please enter your input for: {saveable.GetSavePromptString()}", ending);
             if (inputForm.ShowDialog() == DialogResult.OK)
             {
                return inputForm.NewPath.Split(Path.DirectorySeparatorChar);
             }
 
          }
-         return GetDefaultPathForFolder(ending, pathForFile);
+         return GetDefaultPathForFolder(ending, saveable.GetDefaultSavePath().Path);
       }
-      
+
       private static string[] GetDefaultPathForFolder(string ending, params string[] innerPath)
       {
-         // retrieve the last folder in the path
+         if (innerPath.Length < 1)
+         {
+            MessageBox.Show("Failed to create default path!", "Invalid path", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return [];
+         }
+
          var lastFolder = innerPath[^1];
          if (string.IsNullOrWhiteSpace(lastFolder))
          {
@@ -274,15 +279,15 @@ namespace Editor.Helper
       public string[] Path = path;
       public bool isModPath = isModPath;
 
-      public PathObj(string[] path): this(path, true)
+      public PathObj(string[] path) : this(path, true)
       {
 
       }
 
       public bool ShouldReplace()
-      {  
+      {
          if (isModPath)
-               return false;
+            return false;
          for (var i = 0; i < Path.Length; i++)
          {
             if (Path[i].Equals("localisation"))
@@ -293,10 +298,10 @@ namespace Editor.Helper
 
       public static PathObj FromPath(string path, bool isModPath)
       {
-         var internalPath = isModPath 
-            ? path.Remove(0, Globals.ModPath.Length + System.IO.Path.DirectorySeparatorChar.ToString().Length).Split(System.IO.Path.DirectorySeparatorChar) 
+         var internalPath = isModPath
+            ? path.Remove(0, Globals.ModPath.Length + System.IO.Path.DirectorySeparatorChar.ToString().Length).Split(System.IO.Path.DirectorySeparatorChar)
             : path.Remove(0, Globals.VanillaPath.Length + System.IO.Path.DirectorySeparatorChar.ToString().Length).Split(System.IO.Path.DirectorySeparatorChar);
-         return new (internalPath, isModPath);
+         return new(internalPath, isModPath);
       }
 
       public string ToPath()
@@ -317,10 +322,10 @@ namespace Editor.Helper
             return new(pathParts, !isModPath);
          }
 
-         return new (Path, !isModPath);
+         return new(Path, !isModPath);
       }
 
-      public static PathObj Empty => new ([], true);
+      public static PathObj Empty => new([], true);
 
       public override int GetHashCode()
       {

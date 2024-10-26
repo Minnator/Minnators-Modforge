@@ -43,7 +43,7 @@ public static class Selection
    //--- Selection Types ---\\
    // [x] Lasso Selection
    // [x] Rectangle Selection
-   // [ ] Magic Wand Selection
+   // [x] Magic Wand Selection
 
    //--- Selection Modes ---\\
    // [x] Add Selection (n provinces) // Adds the provinces to the current selection and has bool to remove if it is already selected
@@ -123,11 +123,11 @@ public static class Selection
    public static event EventHandler<Country> OnCountryDeselected = delegate { };
 
    // Colors
-   private static int _hoverColor = Color.FromArgb(255, 0, 255, 255).ToArgb();
-   private static int _selectedColor = Color.FromArgb(255, 185, 235, 235).ToArgb();
-   public static int _borderColor = Color.FromArgb(255, 0, 0, 0).ToArgb();
-   private static int _previewSelectionColor = Color.FromArgb(255, 255, 0, 0).ToArgb();
-   private static int _highlightColor = Color.FromArgb(255, 0, 255, 0).ToArgb();
+   private static readonly int _hoverColor = Color.FromArgb(255, 0, 255, 255).ToArgb();
+   private static readonly int _selectedColor = Color.FromArgb(255, 185, 235, 235).ToArgb();
+   public static readonly int _borderColor = Color.FromArgb(255, 0, 0, 0).ToArgb();
+   private static readonly int _previewSelectionColor = Color.FromArgb(255, 255, 0, 0).ToArgb();
+   private static readonly int _highlightColor = Color.FromArgb(255, 0, 255, 0).ToArgb();
 
    // Selection State
    private static SelectionToolType _selectionToolType = SelectionToolType.Single;
@@ -275,8 +275,12 @@ public static class Selection
 
    private static void SelectCountry(Province province)
    {
-      if (province == Province.Empty || !Globals.Countries.TryGetValue(province.Owner, out var country) || SelectedCountry == country)
+      if (province == Province.Empty || !Globals.Countries.TryGetValue(province.Owner, out var country) ||
+          SelectedCountry == country)
+      {
+         RemoveCountrySelection();
          return;
+      }
 
       if (Globals.MapModeManager.CurrentMapMode is DiplomaticMapMode mapMode)
       {

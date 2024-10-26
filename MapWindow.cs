@@ -322,7 +322,7 @@ namespace Editor
          _buildings = ControlFactory.GetItemListObjects(ItemTypes.String, [.. Globals.Buildings], "Building");
          _buildings.OnItemAdded += ProvinceEditingEvents.OnBuildingAdded;
          _buildings.OnItemRemoved += ProvinceEditingEvents.OnBuildingRemoved;
-         _discoveredBy = ControlFactory.GetItemList(ItemTypes.String, [.. Globals.TechnologyGroups], "TechGroup");
+         _discoveredBy = ControlFactory.GetItemList(ItemTypes.String, [.. Globals.TechnologyGroups.Keys], "TechGroup");
          _discoveredBy.OnItemAdded += ProvinceEditingEvents.OnDiscoveredByAdded;
          _discoveredBy.OnItemRemoved += ProvinceEditingEvents.OnDiscoveredByRemoved;
 
@@ -1074,6 +1074,9 @@ namespace Editor
 
       // ------------------- COUNTRY EDITING TAB ------------------- \\
       private TagComboBox TagSelectionBox;
+
+      private ComboBox GraphicalCultureBox;
+
       private ColorPickerButton CountryColorPickerButton;
       private ColorPickerButton RevolutionColorPickerButton;
 
@@ -1081,6 +1084,7 @@ namespace Editor
       private void InitializeCountryEditGui()
       {
          Selection.OnCountrySelected += CountryGuiEvents.OnCountrySelected;
+         Selection.OnCountryDeselected += CountryGuiEvents.OnCountryDeselected;
          TagSelectionBox = new()
          {
             Margin = new(1),
@@ -1096,17 +1100,24 @@ namespace Editor
          RevolutionColorPickerButton = ControlFactory.GetColorPickerButton();
          RevolutionColorPickerButton.Click += CountryGuiEvents.RevolutionColorPickerButton_Click;
          GeneralToolTip.SetToolTip(RevolutionColorPickerButton, "Set the <revolutionary_color> of the selected country");
+         GraphicalCultureBox = ControlFactory.GetListComboBox(Globals.GraphicalCultures, new(1));
+
+
+
          TagAndColorTLP.Controls.Add(RevolutionColorPickerButton, 3, 3);
+         TagAndColorTLP.Controls.Add(GraphicalCultureBox, 1, 2);
       }
 
-      private void ClearCountryGui()
+      public void ClearCountryGui()
       {
+         TagSelectionBox.SelectedItem = "###";
          CountryNameLabel.Text = "Country: -";
          CountryColorPickerButton.BackColor = Color.Empty;
          CountryColorPickerButton.Text = "(//)";
          CountryADJLoc.Text = "-";
          CountryLoc.Text = "-";
          RevolutionColorPickerButton.BackColor = Color.Empty;
+         GraphicalCultureBox.SelectedIndex = 0;
       }
 
       internal void LoadCountryToGui(Country country)
@@ -1116,12 +1127,14 @@ namespace Editor
             ClearCountryGui();
             return;
          }
+         TagSelectionBox.SelectedItem = country.Tag.ToString();
          CountryNameLabel.Text = $"{country.GetLocalisation()} ({country.Tag})";
          CountryColorPickerButton.BackColor = country.Color;
          CountryColorPickerButton.Text = $"({country.Color.R}/{country.Color.G}/{country.Color.B})";
          CountryLoc.Text = country.GetLocalisation();
          CountryADJLoc.Text = country.GetAdjectiveLocalisation();
          RevolutionColorPickerButton.BackColor = country.RevolutionaryColor;
+         GraphicalCultureBox.SelectedItem = country.Gfx;
       }
 
       private void CreateFilesByDefault_Click(object sender, EventArgs e)

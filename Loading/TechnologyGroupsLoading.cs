@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Editor.DataClasses;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 
 namespace Editor.Loading
@@ -23,8 +24,11 @@ namespace Editor.Loading
             if (block is Block { Name: "groups" } block2)
             {
                foreach (var blk in block2.GetBlockElements)
-                  // We only need the names, no editing supported
-                  Globals.TechnologyGroups.Add(blk.Name); 
+               {
+                  var group = new TechnologyGroup(blk.Name);
+                  // TODO: Load group properties if needed
+                  Globals.TechnologyGroups.Add(blk.Name, group);
+               }
 
                sw.Stop();
                Globals.LoadingLog.WriteTimeStamp("TechnologyGroups", sw.ElapsedMilliseconds);

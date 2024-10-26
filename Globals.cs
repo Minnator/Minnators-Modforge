@@ -1,4 +1,5 @@
-﻿using Editor.Commands;
+﻿using System.Security.Policy;
+using Editor.Commands;
 using Editor.Controls;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
@@ -10,6 +11,7 @@ using Editor.Forms.AdvancedSelections;
 using Editor.Forms.SavingClasses;
 using Editor.Helper;
 using Editor.Loading;
+using static Editor.DataClasses.GameDataClasses.Unit;
 using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor;
@@ -101,7 +103,7 @@ public static class Globals
       }
    }
    private static int _loadingStage = 0;
-   public const int LOADING_STAGES = 35; // Needs to be increased when adding new loading stages
+   public const int LOADING_STAGES = 37; // Needs to be increased when adding new loading stages
    #endregion
    
    public static ConsoleForm? ConsoleForm = null;
@@ -162,6 +164,10 @@ public static class Globals
    public static Dictionary<string, CultureGroup> CultureGroups = [];
    public static Dictionary<string, Culture> Cultures = [];
 
+   // Unit Types and GFX
+   public static List<string> GraphicalCultures = [];
+   public static HashSet<Unit> UnitTypes = [];
+
    // Contains the provinces and options to access them
    public static HashSet<Province> Provinces = [];
    public static Dictionary<int, Province> ProvinceIdToProvince = [];
@@ -171,7 +177,7 @@ public static class Globals
    public static HashSet<Strait> Straits = [];
 
    // TechnologyGroups
-   public static readonly HashSet<string> TechnologyGroups = [];
+   public static readonly Dictionary<string, TechnologyGroup> TechnologyGroups = [];
 
    // Religion Stuff
    public static List<ReligiousGroup> ReligionGroups = [];
@@ -227,7 +233,7 @@ public static class Globals
    public static Dictionary<string, Continent> Continents { get; set; } = [];
 
 
-   // ------------ Saving ------------ \\
+   // ------------ Saving ------------ \\ //TODO implement using flags
 
    public static ModifiedData ModifiedData = new();
 
@@ -237,7 +243,6 @@ public static class Globals
    public static Dictionary<string, Dictionary<string, string>> VanillaLocalisation { get; set; } = [];
    public static Dictionary<string, Dictionary<string, string>> ModLocalisation { get; set; } = [];
    public static Dictionary<string, Dictionary<string, string>> ReplaceLocalisation { get; set; } = [];
-   public static Dictionary<string, string> NewLocalisation { get; set; } = [];
 
    public static Dictionary<string, string> LocalisationCollisions { get; set; } = [];
    
@@ -279,12 +284,12 @@ public static class Globals
 // - [X] Make Magic wand tool
 // - [ ] Add a modifier creation and selection menu to apply to different scopes
 // - [ ] Add saving for all Province Collections
-// - [|] Add descriptions on how to customize tooltips, map modes, and other things
+// - [x] Add descriptions on how to customize tooltips, map modes, and other things
 // - [ ] Add basic country editing
 // - [x] Fix province center calculation
 // - [x] Find last concurrency bugs
-// - [ ] Pre load and layout the Province Collection Editing GUI to prevent LagSpike on first opening said tab
-// - [ ] MelonCoaster easter Egg in Loading Screen
+// - [x] Pre load and layout the Province Collection Editing GUI to prevent LagSpike on first opening said tab
+// - [x] MelonCoaster easter Egg in Loading Screen
 // - [x] Add a help page that leads to the official Discord
 // - [ ] Improve selection modifiers and its GUI by adding more and only listing in context valid options
 // - [|] Straits editing and creation
@@ -296,12 +301,14 @@ public static class Globals
 // - [x] Check if province is selected by color of the pixels instead of bounds or center
 // - [ ] Fix tooltip preventing MouseWheel event
 // - [ ] Item scaling on Graphics (Trade arrows, straits, capitals, text)
+// - [ ] FPS count for map rendering
 
 // TODO LIST Until Alpha 1.1
 // - [ ] Add a way to create custom map modes
 // - [ ] Add a tradegoods creation and editing menu
 // - [ ] Ideas making via drag and drop
 // - [ ] Province Creation and editing
+// - [ ] File syncing
 
 // TODO LIST Until Alpha 1.2
 // Resync files with project

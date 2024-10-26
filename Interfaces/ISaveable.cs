@@ -31,6 +31,6 @@ public abstract class Saveable
 
    public abstract string SavingComment();
    public abstract PathObj GetDefaultSavePath();
-
    public abstract string GetSaveString(int tabs);
+   public abstract string GetSavePromptString();
 }

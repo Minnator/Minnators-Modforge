@@ -34,5 +34,10 @@ namespace Editor.Events
             return;
          Selection.SelectedCountry.RevolutionaryColor = button.GetColor;
       }
+
+      public static void OnCountryDeselected(object? sender, Country e)
+      {
+         Globals.MapWindow.ClearCountryGui();
+      }
    }
 }

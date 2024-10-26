@@ -162,7 +162,19 @@ public static class ControlFactory
       return new ();
    }
 
-
+   public static ComboBox GetListComboBox(List<string> items, Padding margin, bool hasEmptyItemAt0 = true)
+   {
+      var cb = new ComboBox
+      {
+         Margin = margin,
+         Dock = DockStyle.Fill,
+         DropDownStyle = ComboBoxStyle.DropDownList
+      };
+      if (hasEmptyItemAt0)
+         cb.Items.Add(string.Empty);
+      cb.Items.AddRange([..items]);
+      return cb;
+   }
 
    public static ExtendedNumeric GetExtendedNumeric()
    {
