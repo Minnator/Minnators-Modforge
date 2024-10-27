@@ -1,4 +1,5 @@
-﻿using Editor.Helper;
+﻿using Editor.DataClasses;
+using Editor.Helper;
 
 namespace Editor.Interfaces;
 
@@ -6,30 +7,39 @@ public enum ObjEditingStatus
 {
    Unchanged,
    Modified,
+   Immutable
 }
 
 
 public abstract class Saveable
 {
-   private ObjEditingStatus _editingStatus = ObjEditingStatus.Unchanged;
+   protected ObjEditingStatus _editingStatus = ObjEditingStatus.Unchanged;
    private PathObj _path = PathObj.Empty;
    public PathObj Path => _path;
    public void SetPath(ref PathObj path) => _path = path;
 
-   public ObjEditingStatus EditingStatus
+   public virtual ObjEditingStatus EditingStatus
    {
       get => _editingStatus;
       set
       {
+         if (_editingStatus == ObjEditingStatus.Immutable)
+            return;
          if (Equals(value, _editingStatus))
             return;
-         if (!Equals(value, ObjEditingStatus.Unchanged))
+         if (Equals(value, ObjEditingStatus.Modified))
             FileManager.AddToBeHandled(this);
          _editingStatus = value;
       } 
    }
 
+   public abstract ModifiedData GetModifiedDataFlag();
+
    public abstract string SavingComment();
+   /// <summary>
+   /// The internal default path
+   /// </summary>
+   /// <returns></returns>
    public abstract PathObj GetDefaultSavePath();
    public abstract string GetSaveString(int tabs);
    public abstract string GetSavePromptString();

@@ -268,7 +268,6 @@ namespace Editor.Loading
                continue;
             }
 
-
             switch (block.Name)
             {
                case "monarch":

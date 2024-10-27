@@ -1,4 +1,6 @@
-﻿using Editor.Savers;
+﻿using Editor.DataClasses;
+using Editor.Helper;
+using Editor.Savers;
 
 namespace Editor.Forms.SavingClasses
 {
@@ -13,39 +15,63 @@ namespace Editor.Forms.SavingClasses
 
       public void SetCheckBoxStatus(ModifiedData data)
       {
-         // set the checked status of the checkboxes based on the data
-         SavingCheckedListBox.SetItemChecked(0, data.SaveProvinces);
-         SavingCheckedListBox.SetItemChecked(1, data.SaveAreas);
-         SavingCheckedListBox.SetItemChecked(2, data.SaveRegions);
-         SavingCheckedListBox.SetItemChecked(3, data.SaveTradeNodes);
-         SavingCheckedListBox.SetItemChecked(4, data.SaveTradeCompanies);
-         SavingCheckedListBox.SetItemChecked(5, data.ColonialRegions);
-         SavingCheckedListBox.SetItemChecked(6, data.SuperRegions);
-         SavingCheckedListBox.SetItemChecked(7, data.Continents);
-         SavingCheckedListBox.SetItemChecked(8, data.ProvinceGroups);
-         SavingCheckedListBox.SetItemChecked(9, data.EventModifiers);
+         if ((data & ModifiedData.SaveProvinces) != 0)
+            SavingCheckedListBox.SetItemChecked(0, true);
+         if ((data & ModifiedData.SaveAreas) != 0)
+            SavingCheckedListBox.SetItemChecked(1, true);
+         if ((data & ModifiedData.SaveRegions) != 0)
+            SavingCheckedListBox.SetItemChecked(2, true);
+         if ((data & ModifiedData.SaveTradeNodes) != 0)
+            SavingCheckedListBox.SetItemChecked(3, true);
+         if ((data & ModifiedData.SaveTradeCompanies) != 0)
+            SavingCheckedListBox.SetItemChecked(4, true);
+         if ((data & ModifiedData.ColonialRegions) != 0)
+            SavingCheckedListBox.SetItemChecked(5, true);
+         if ((data & ModifiedData.SuperRegions) != 0)
+            SavingCheckedListBox.SetItemChecked(6, true);
+         if ((data & ModifiedData.Continents) != 0)
+            SavingCheckedListBox.SetItemChecked(7, true);
+         if ((data & ModifiedData.ProvinceGroups) != 0)
+            SavingCheckedListBox.SetItemChecked(8, true);
+         if ((data & ModifiedData.EventModifiers) != 0)
+            SavingCheckedListBox.SetItemChecked(9, true);
+         if ((data & ModifiedData.Localisation) != 0)
+            SavingCheckedListBox.SetItemChecked(10, true);
       }
 
       public ModifiedData GetModifiedDataSelection()
       {
-         return new()
-         {
-            SaveProvinces = SavingCheckedListBox.GetItemChecked(0),
-            SaveAreas = SavingCheckedListBox.GetItemChecked(1),
-            SaveRegions = SavingCheckedListBox.GetItemChecked(2),
-            SaveTradeNodes = SavingCheckedListBox.GetItemChecked(3),
-            SaveTradeCompanies = SavingCheckedListBox.GetItemChecked(4),
-            ColonialRegions = SavingCheckedListBox.GetItemChecked(5),
-            SuperRegions = SavingCheckedListBox.GetItemChecked(6),
-            Continents = SavingCheckedListBox.GetItemChecked(7),
-            ProvinceGroups = SavingCheckedListBox.GetItemChecked(8),
-            EventModifiers = SavingCheckedListBox.GetItemChecked(9)
-         };
+         ModifiedData data = 0;
+         if (SavingCheckedListBox.GetItemChecked(0))
+            data |= ModifiedData.SaveProvinces;
+         if (SavingCheckedListBox.GetItemChecked(1))
+            data |= ModifiedData.SaveAreas;
+         if (SavingCheckedListBox.GetItemChecked(2))
+            data |= ModifiedData.SaveRegions;
+         if (SavingCheckedListBox.GetItemChecked(3))
+            data |= ModifiedData.SaveTradeNodes;
+         if (SavingCheckedListBox.GetItemChecked(4))
+            data |= ModifiedData.SaveTradeCompanies;
+         if (SavingCheckedListBox.GetItemChecked(5))
+            data |= ModifiedData.ColonialRegions;
+         if (SavingCheckedListBox.GetItemChecked(6))
+            data |= ModifiedData.SuperRegions;
+         if (SavingCheckedListBox.GetItemChecked(7))
+            data |= ModifiedData.Continents;
+         if (SavingCheckedListBox.GetItemChecked(8))
+            data |= ModifiedData.ProvinceGroups;
+         if (SavingCheckedListBox.GetItemChecked(9))
+            data |= ModifiedData.EventModifiers;
+         if (SavingCheckedListBox.GetItemChecked(10))
+            data |= ModifiedData.Localisation;
+
+         return data;
       }
 
       private void SaveSelectedButton_Click(object sender, EventArgs e)
       {
-         SavingUtil.SaveAllModified(GetModifiedDataSelection());
+         FileManager.SaveChanges(modifiedData:GetModifiedDataSelection());
+         //SavingUtil.SaveAllModified(GetModifiedDataSelection());
       }
 
       private void ManualSaving_KeyDown(object sender, KeyEventArgs e)

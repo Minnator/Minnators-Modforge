@@ -1,5 +1,4 @@
-﻿using System.Security.Policy;
-using Editor.Commands;
+﻿using Editor.Commands;
 using Editor.Controls;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
@@ -8,10 +7,8 @@ using Editor.DataClasses.Settings;
 using Editor.Events;
 using Editor.Forms;
 using Editor.Forms.AdvancedSelections;
-using Editor.Forms.SavingClasses;
 using Editor.Helper;
 using Editor.Loading;
-using static Editor.DataClasses.GameDataClasses.Unit;
 using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor;
@@ -62,6 +59,13 @@ public enum StripesDirection
    Pluses
 }
 
+public enum FileSavingMode
+{
+   AskOnce,
+   AskAlways,
+   Automatic,
+}
+
 // When several provinces are selected only attributes that are the same across all selected provinces are shown.
 // Other attributes e.g. development will be increased per province or set per province: 
 // All province's tax will be increased by 1, all province's manpower will be set to 100.
@@ -88,6 +92,7 @@ public static class Globals
          LocalisationLoading.Load();
       }
    }
+   public static FileSavingMode FileSavingMode { get; set; } = FileSavingMode.AskOnce;
 
 
    #region LoadingScreen
@@ -237,18 +242,21 @@ public static class Globals
    public static Dictionary<string, Continent> Continents { get; set; } = [];
 
 
-   // ------------ Saving ------------ \\ //TODO implement using flags
+   // ------------ Saving ------------ \\ 
 
    public static ModifiedData ModifiedData = new();
 
 
 
    // ------------ Localisation ------------ \\
-   public static Dictionary<string, Dictionary<string, string>> VanillaLocalisation { get; set; } = [];
-   public static Dictionary<string, Dictionary<string, string>> ModLocalisation { get; set; } = [];
-   public static Dictionary<string, Dictionary<string, string>> ReplaceLocalisation { get; set; } = [];
+   public static HashSet<LocObject> Localisation = [];
 
-   public static Dictionary<string, string> LocalisationCollisions { get; set; } = [];
+
+   public static Dictionary<string, Dictionary<string, string>> VanillaLocalisationOld { get; set; } = [];
+   public static Dictionary<string, Dictionary<string, string>> ModLocalisationOld { get; set; } = [];
+   public static Dictionary<string, Dictionary<string, string>> ReplaceLocalisationOld { get; set; } = [];
+
+   public static HashSet<LocObject> LocalisationCollisions { get; set; } = [];
    
    public static HashSet<string> ScriptedEffectNames {get; set; } = [];
    public static List<Building> Buildings { get; set; } = [];
@@ -286,7 +294,7 @@ public static class Globals
 // - [x] Add a way to change the map mode via customizable Hotkeys
 // - [x] Fix Lasso Selection Preview sometimes being incorrect
 // - [X] Make Magic wand tool
-// - [ ] Add a modifier creation and selection menu to apply to different scopes
+// - [x] Add a modifier creation and selection menu
 // - [ ] Add saving for all Province Collections
 // - [x] Add descriptions on how to customize tooltips, map modes, and other things
 // - [ ] Add basic country editing
@@ -303,11 +311,11 @@ public static class Globals
 // - [ ] Region creation is completely broken
 // - [x] Localisation editing for provinces and modifiers
 // - [x] Check if province is selected by color of the pixels instead of bounds or center
-// - [ ] Fix tooltip preventing MouseWheel event
-// - [ ] Item scaling on Graphics (Trade arrows, straits, capitals, text)
-// - [ ] FPS count for map rendering
 
 // TODO LIST Until Alpha 1.1
+// - [ ] PDX language support
+// - [ ] Item scaling on Graphics (Trade arrows, straits, capitals, text)
+// - [ ] FPS count for map rendering
 // - [ ] Add a way to create custom map modes
 // - [ ] Add a tradegoods creation and editing menu
 // - [ ] Ideas making via drag and drop
@@ -315,4 +323,5 @@ public static class Globals
 // - [ ] File syncing
 
 // TODO LIST Until Alpha 1.2
+// - [ ] Fix tooltip preventing MouseWheel event
 // Resync files with project

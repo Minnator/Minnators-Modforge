@@ -1,7 +1,6 @@
 ﻿using System.Collections;
-using System.Diagnostics;
 using System.Text;
-using System.Windows.Forms.VisualStyles;
+using Editor.DataClasses;
 using Editor.Forms.SavingClasses;
 using Editor.Interfaces;
 
@@ -12,7 +11,8 @@ namespace Editor.Helper
       private static HashSet<PathObj> NeedsToBeHandledMod = [];
       private static HashSet<PathObj> NeedsToBeHandledVanilla = [];
       // New ISavables will be saved with an empty string
-      private static Dictionary<PathObj, List<Saveable>> AllSaveableFiles = [];
+      private static Dictionary<PathObj, List<Saveable>> AllSaveableFiles = []; //Saves AllFiles except vanilla localisation files and saveables
+
 
       public static void AddToDictionary(ref PathObj path, Saveable saveable)
       {
@@ -24,18 +24,53 @@ namespace Editor.Helper
          saveables.Add(saveable);
       }
 
-      public static void AddRangeToDictionary(PathObj path, ICollection<Saveable> newSaveables)
+      public static void AddRangeToDictionary(PathObj path, IEnumerable<Saveable> newSaveables)
       {
-         if (!AllSaveableFiles.TryGetValue(path, out var saveables))
+         lock (AllSaveableFiles)
          {
-            AllSaveableFiles.Add(path, []);
-            saveables = AllSaveableFiles[path];
+            if (!AllSaveableFiles.TryGetValue(path, out var saveables))
+            {
+               AllSaveableFiles.Add(path, []);
+               saveables = AllSaveableFiles[path];
+            }
+            saveables.AddRange(newSaveables);
          }
-         saveables.AddRange(newSaveables);
+      }
+
+      public static void AddLocObject(LocObject loc)
+      {
+         Globals.ModifiedData |= loc.GetModifiedDataFlag();
+         if (loc.Path.Equals(PathObj.Empty))
+         {
+            if (!AllSaveableFiles.TryAdd(loc.Path, [loc]))
+               AllSaveableFiles[loc.Path].Add(loc);
+            return;
+         }
+
+         if (loc.Path.isModPath)
+         {
+            NeedsToBeHandledMod.Add(loc.Path);
+            return;
+         }
+
+         var path = loc.Path.GetInverted(true);
+
+         if (!AllSaveableFiles.TryGetValue(path, out var list))
+         {
+            AllSaveableFiles.Add(path, [loc]);
+         }
+         else
+         {
+            path = list[0].Path;
+            list.Add(loc);
+         }
+         loc.SetPath(ref path);
+         NeedsToBeHandledMod.Add(path);
       }
 
       public static void AddToBeHandled(Saveable obj)
       {
+         Globals.ModifiedData |= obj.GetModifiedDataFlag();
          // It is a new object and will be handled via the PathObj.Empty
          if (obj.Path.Equals(PathObj.Empty))
          {
@@ -48,38 +83,18 @@ namespace Editor.Helper
             NeedsToBeHandledVanilla.Add(obj.Path);
       }
 
-      /*
-       
-         vanilla
-            theoretisches mod pathobj
-            wenn pathobj in saveables (aka Mod file existiert)
-               saveables[pathobj].Add(vanilla)
-               saveables[oldpathobj].Remove(vanilla)
-               entweder alle adden oder removen je nachdem ob replace oder modify
-            sonst
-               neues File direkt erstellen
-       
-         new mod (aka saveables[PathObj.Empty])
-            alle benötigten pathObjs erstellen und hinzufügen zu Saveables
-            PathObj.Empty aus dictionary entfernen
-            und zu NeedsToBeHandledMod adden oder direkt bearbeiten
-
-         mod
-            schreiben
-         
-         finally
-            needsToBeHandled Clearen
-            Alle Saveables zurücksetzen auf unchanged
-         
-       */
-
-      public static void SaveChanges(bool onlyModified = true)
+      /// <summary>
+      /// onlyModified: If true, only the modified objects will be saved, if false all objects will be saved
+      /// </summary>
+      /// <param name="onlyModified"></param>
+      /// <param name="modifiedData"></param>
+      public static void SaveChanges(bool onlyModified = true, ModifiedData modifiedData = ModifiedData.All)
       {
          // TODO safe all when only Modified is false
 
          if (onlyModified)
          {
-            CalculateModifiedObjects();
+            CalculateModifiedObjects(modifiedData);
             SaveModifiedObjects();
          }
          else
@@ -103,52 +118,30 @@ namespace Editor.Helper
          throw new NotImplementedException();
       }
 
-      private static void CalculateModifiedObjects()
+      private static void CalculateModifiedObjects(ModifiedData modifiedData)
       {
          // TODO Order and save the position of unchanged, modified and new, so it can be saved neatly or use the SaveModifiedObjects version
          foreach (var change in NeedsToBeHandledVanilla)
          {
-            var replace = change.ShouldReplace();
+            var singleModData = AllSaveableFiles[change][0].GetModifiedDataFlag();
+            if ((modifiedData & singleModData) == 0)
+               continue;
+            var replace = change.ShouldReplace;
             var modPath = change.GetInverted(replace);
-
+            
             // Check is the file already exists
             if (!AllSaveableFiles.TryGetValue(modPath, out var saveables))
             {
-               if (replace)
-               {
-                  // No Mod file but replace, so any name
-                  modPath = new(modPath.Path, true);
-               }
                AllSaveableFiles.Add(modPath, []); // empty list as it is new
                saveables = AllSaveableFiles[modPath];
             }
 
-            // Mod Replace localisation
-            if (replace)
-            {
-               var vanilla = AllSaveableFiles[change];
+            // Mod modify
+            saveables.AddRange(AllSaveableFiles[change]);
 
-               for (var i = vanilla.Count - 1; i >= 0; i--)
-               {
-                  var vanillaSavable = vanilla[i];
-                  if (vanillaSavable.EditingStatus != ObjEditingStatus.Modified)
-                     continue;
-                  // Only add savables to the mod which are changed, since we are in replace
-                  saveables.Add(vanillaSavable);
-                  vanillaSavable.SetPath(ref modPath);
-                  vanilla.RemoveAt(i);
-               }
-            }
-            else
-            {
-               // Mod modify
-               saveables.AddRange(AllSaveableFiles[change]);
-               // Maybe use different solution idk :P (only centralized references on paths)
-
-               var newPath = AllSaveableFiles[change][0];
-               AllSaveableFiles.Remove(change);
-               newPath.Path.isModPath = true;
-            }
+            var newPath = AllSaveableFiles[change][0];
+            AllSaveableFiles.Remove(change);
+            newPath.Path.isModPath = true;
 
             NeedsToBeHandledMod.Add(modPath);
 
@@ -157,18 +150,25 @@ namespace Editor.Helper
          // Adding entirely new obj to the mod
          if (AllSaveableFiles.TryGetValue(PathObj.Empty, out var newSaveables))
          {
+            Dictionary<ModifiedData, PathObj> pathGrouping = [];
             foreach (var saveable in newSaveables)
             {
+               var singleModData = saveable.GetModifiedDataFlag();
+               if ((modifiedData & singleModData) == 0)
+                  continue;
+
                // TODO group by folders to reduce pop up count
-               PathObj modPath = new(GetNewFileAt(saveable), true);
+               var ending = ".txt";
+               if (saveable is LocObject) 
+                  ending = $"_l_{Globals.Language.ToString().ToLower()}.yml";
+               if (!pathGrouping.TryGetValue(singleModData, out var modPath))
+               {
+                  modPath = new(GetNewFileAt(saveable, ending), true);
+                  pathGrouping.Add(singleModData, modPath);
+               }
 
                if (!AllSaveableFiles.TryGetValue(modPath, out var saveables))
                {
-                  Debug.WriteLine($"New file: {modPath.GetHashCode()}");
-                  foreach (var sav in AllSaveableFiles.Keys)
-                  {
-                     Debug.WriteLine($"Existing: {sav.GetHashCode()}");
-                  }
                   AllSaveableFiles.Add(modPath, []);
                   saveables = AllSaveableFiles[modPath];
                }
@@ -188,7 +188,7 @@ namespace Editor.Helper
             var sb = new StringBuilder();
             List<Saveable> unchanged = [];
             List<Saveable> changed = [];
-
+            
             foreach (var item in AllSaveableFiles[obj])
             {
                if (item.EditingStatus == ObjEditingStatus.Modified)
@@ -204,7 +204,10 @@ namespace Editor.Helper
             sb.AppendLine($"### Modified {DateTime.Now} ###");
             AddListToStringBuilder(ref sb, changed);
 
-            IO.WriteToFile(obj.ToPath(), sb.ToString(), false);
+            if (obj.IsLocalisation)
+               IO.WriteLocalisationFile(obj.ToPath(), sb.ToString(), false);
+            else
+               IO.WriteToFile(obj.ToPath(), sb.ToString(), false);
          }
       }
 
@@ -212,7 +215,9 @@ namespace Editor.Helper
       {
          foreach (var item in items)
          {
-            sb.AppendLine($"# {item.SavingComment()}");
+            var saveComment = item.SavingComment();
+            if (!string.IsNullOrWhiteSpace(saveComment))
+               sb.AppendLine($"# {saveComment}");
             sb.AppendLine(item.GetSaveString(0));
          }
       }
@@ -284,17 +289,8 @@ namespace Editor.Helper
 
       }
 
-      public bool ShouldReplace()
-      {
-         if (isModPath)
-            return false;
-         for (var i = 0; i < Path.Length; i++)
-         {
-            if (Path[i].Equals("localisation"))
-               return true;
-         }
-         return false;
-      }
+      public bool ShouldReplace => !isModPath && IsLocalisation;
+      public bool IsLocalisation => Path.Contains("localisation");
 
       public static PathObj FromPath(string path, bool isModPath)
       {
@@ -313,16 +309,13 @@ namespace Editor.Helper
 
       public PathObj GetInverted(bool addReplacePath)
       {
-         if (addReplacePath)
-         {
-            var pathParts = new string[Path.Length + 1];
-            Array.Copy(Path, pathParts, Path.Length - 1);
-            pathParts[^2] = "replace";
-            pathParts[^1] = Path[^1];
-            return new(pathParts, !isModPath);
-         }
-
-         return new(Path, !isModPath);
+         if (!addReplacePath)
+            return new(Path, !isModPath);
+         var pathParts = new string[Path.Length + 1];
+         Array.Copy(Path, pathParts, Path.Length - 1);
+         pathParts[^2] = "replace";
+         pathParts[^1] = Path[^1];
+         return new(pathParts, !isModPath);
       }
 
       public static PathObj Empty => new([], true);

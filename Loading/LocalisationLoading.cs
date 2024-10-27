@@ -1,8 +1,11 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Security.Policy;
 using System.Text.RegularExpressions;
 using Editor.DataClasses;
 using Editor.Helper;
+using Editor.Interfaces;
 using Editor.Savers;
 
 namespace Editor.Loading;
@@ -18,77 +21,88 @@ public partial class LocalisationLoading
       var replaceFiles = FilesHelper.GetFilesFromModAndVanillaUniquely($"*_l_{Globals.Language.ToString().ToLower()}.yml", "localisation", "replace");
 
       var vanillaFiles = FilesHelper.GetAllFilesInFolder( Path.Combine(Globals.VanillaPath, "localisation"), $"*_l_{Globals.Language.ToString().ToLower()}.yml");
-      var modFiles = FilesHelper.GetAllFilesInFolder( Path.Combine(Globals.ModPath, "localisation"), $"*_l_{Globals.Language.ToString().ToLower()}.yml");
+      var modFiles = FilesHelper.GetFilesInFolder( Path.Combine(Globals.ModPath, "localisation"), $"*_l_{Globals.Language.ToString().ToLower()}.yml");
       
-      LocalisationSaver.Initialize(vanillaFiles, modFiles, replaceFiles);
+      HashSet<LocObject> vanillaLocalisation = [];
+      HashSet<LocObject> modLocalisation = [];
+      HashSet<LocObject> replaceLoc = [];
+      HashSet<LocObject> collisions = [];
 
-      Dictionary<string, Dictionary<string, string>> vanillaLocalisation = [];
-      Dictionary<string, Dictionary<string, string>> modLocalisation = [];
-      Dictionary<string, Dictionary<string, string>> replaceLoc = [];
-      var collisions = new Dictionary<string, string>();
-      
-      LoadLocFiles(vanillaFiles, vanillaLocalisation, collisions);
-      LoadLocFiles(modFiles, modLocalisation, collisions);
-      LoadLocFiles(replaceFiles, replaceLoc, collisions);
 
-      var totalLoc = 0;
-      foreach (var loc in vanillaLocalisation.Values)
-         totalLoc += loc.Count;
-      Debug.WriteLine($"{totalLoc} Loc strings");
-      totalLoc = 0;
-      foreach (var loc in replaceLoc.Values)
-         totalLoc += loc.Count;
-      Debug.WriteLine($"{totalLoc} Replace Loc strings");
+      LoadLocFiles(replaceFiles, replaceLoc, collisions, true);
+      LoadLocFiles(modFiles, modLocalisation, collisions, true);
+      LoadLocFiles(vanillaFiles, vanillaLocalisation, collisions, false);
 
-      Globals.VanillaLocalisation.Clear();
-      Globals.ModLocalisation.Clear();
+      CombineWithCollisions(replaceLoc, modLocalisation, collisions);
+      CombineWithCollisions(replaceLoc, vanillaLocalisation, collisions);
+
+      Globals.Localisation.Clear();
+      Globals.Localisation = replaceLoc;
       Globals.LocalisationCollisions.Clear();
-      Globals.ReplaceLocalisation.Clear();
-      Globals.VanillaLocalisation = vanillaLocalisation;
-      Globals.ModLocalisation = modLocalisation;
-      Globals.ReplaceLocalisation = replaceLoc;
       Globals.LocalisationCollisions = collisions;
       sw.Stop();
       if (Globals.State == State.Loading)
          Globals.LoadingLog.WriteTimeStamp($"Localisation loaded [{collisions.Count}] collisions", sw.ElapsedMilliseconds);
    }
 
-   private static void LoadLocFiles(List<string> files, Dictionary<string, Dictionary<string, string>> loc, Dictionary<string, string> collisions)
+   private static void CombineWithCollisions(HashSet<LocObject> locObjects1, HashSet<LocObject> locObject2, HashSet<LocObject> collisions)
    {
-      Parallel.ForEach(files, fileName =>
-      {
-         IO.ReadAllLinesANSI(fileName, out var lines);
-         var threadDict = new Dictionary<string, string>();
+      foreach (var loc in locObject2)
+         if (!locObjects1.Add(loc))
+            collisions.Add(loc);
+   }
 
-         foreach (var line in lines)
-         {
-            var match = Regex.Match(line);
-            if (!match.Success)
-               continue;
 
-            var key = match.Groups["key"].Value;
-            var value = match.Groups["value"].Value;
 
-            if (threadDict.TryGetValue(key, out var existingValue))
-            {
-               if (existingValue == value)
-                  continue;
-               lock (collisions)
-               {
-                  if (!collisions.TryAdd(key, existingValue))
-                     collisions[key] = value;
-               }
-            }
-            else
-            {
-               threadDict.TryAdd(key, value);
-            }
-         }
-         lock (loc)
-         {
-            loc.Add(fileName, threadDict);
-         }
-      });
+   private static void LoadLocFiles(List<string> files, HashSet<LocObject> loc, HashSet<LocObject> collisions, bool isMod)
+   {
+      Parallel.ForEach(files,
+          () => new HashSet<LocObject>(),
+
+          (fileName, state, localHashSet) =>
+          {
+             IO.ReadAllLinesANSI(fileName, out var lines);
+             var pathObj = PathObj.FromPath(fileName, isMod);
+
+             foreach (var line in lines)
+             {
+                var match = Regex.Match(line);
+                if (!match.Success)
+                   continue;
+
+                var value = match.Groups["value"].Value;
+
+                var locObj = new LocObject(match.Groups["key"].Value, value, ObjEditingStatus.Unchanged) ;
+                locObj.SetPath(ref pathObj);
+
+                if (localHashSet.TryGetValue(locObj, out var existingValue))
+                {
+                   if (existingValue.Value == value)
+                      continue;
+                   lock (collisions)
+                   {
+                      collisions.Add(locObj);
+                   }
+                }
+                else
+                {
+                   localHashSet.Add(locObj);
+                }
+             }
+             if (isMod)
+                FileManager.AddRangeToDictionary(pathObj, localHashSet);
+
+             return localHashSet;
+          },
+
+          localHashSet =>
+          {
+             lock (loc)
+             {
+                loc.UnionWith(localHashSet);
+             }
+          }
+      );
    }
 
    [GeneratedRegex(@"\s*(?<key>.*):\d*\s+""(?<value>.*)""", RegexOptions.Compiled)]

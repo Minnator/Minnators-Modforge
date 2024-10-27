@@ -15,6 +15,7 @@ using Editor.Forms.Loadingscreen;
 using Editor.Forms.SavingClasses;
 using Editor.Helper;
 using Editor.Interfaces;
+using Editor.Loading;
 using Editor.Parser;
 using Editor.Savers;
 using static Editor.Helper.ProvinceEnumHelper;
@@ -291,6 +292,14 @@ namespace Editor
          StripeDirectionComboBox.Items.AddRange([.. Enum.GetNames(typeof(StripesDirection))]);
          StripeDirectionComboBox.Text = StripesDirection.DiagonalLbRt.ToString();
          StripeDirectionComboBox.SelectedIndexChanged += OnStripeDirectionChanged;
+
+         FileSavingModeComboBox.Items.AddRange([.. Enum.GetNames(typeof(FileSavingMode))]);
+         FileSavingModeComboBox.SelectedIndex = 0; // AskOnce
+         FileSavingModeComboBox.SelectedIndexChanged += (_, _) =>
+         {
+            Globals.FileSavingMode = (FileSavingMode)FileSavingModeComboBox.SelectedIndex;
+            filesToolStripMenuItem.DropDown.Close();
+         };
 
          // Tooltips for saving Buttons
          _savingButtonsToolTip = new();
@@ -917,13 +926,14 @@ namespace Editor
 
       private void provDiffToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         var res = EditingHelper.GetModifiedProvinces();
-
-         Debug.WriteLine($"Modified Provinces: {res.Count}");
-         foreach (var province in res)
+         var sb = new StringBuilder();
+         foreach (var collision in Globals.LocalisationCollisions)
          {
-            Debug.WriteLine(province.Id);
+            sb.AppendLine($"{collision.Key} : {collision.Value}");
          }
+
+         var downloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\";
+         File.WriteAllText(Path.Combine(downloadFolder, "localisationCollisions.txt"), sb.ToString());
       }
 
       public void OnStripeDirectionChanged(object? sender, EventArgs e)
@@ -1014,10 +1024,13 @@ namespace Editor
       }
       private void yoloToolStripMenuItem_Click(object sender, EventArgs e)
       {
-
-         SettingsManager.CurrentSettings.Setting1 = "Custom Value";
-         SettingsManager.SaveSettings();
-         SettingsManager.LoadSettings();
+         var sw = Stopwatch.StartNew();
+         for (var i = 0; i < 100; i++)
+         {
+            LocalisationLoading.Load();
+         }
+         sw.Stop();
+         Debug.WriteLine($"Time: {sw.ElapsedMilliseconds / 100}");
       }
 
       private void LanguageSelectionToolStrip_SelectedIndexChanged(object sender, EventArgs e)
@@ -1107,8 +1120,8 @@ namespace Editor
          RevolutionColorPickerButton.Click += CountryGuiEvents.RevolutionColorPickerButton_Click;
          GeneralToolTip.SetToolTip(RevolutionColorPickerButton, "Set the <revolutionary_color> of the selected country");
          GraphicalCultureBox = ControlFactory.GetListComboBox(Globals.GraphicalCultures, new(1));
-         UnitTypeBox = ControlFactory.GetListComboBox([..Globals.TechnologyGroups.Keys], new(1));
-         TechGroupBox = ControlFactory.GetListComboBox([..Globals.TechnologyGroups.Keys], new(1));
+         UnitTypeBox = ControlFactory.GetListComboBox([.. Globals.TechnologyGroups.Keys], new(1));
+         TechGroupBox = ControlFactory.GetListComboBox([.. Globals.TechnologyGroups.Keys], new(1));
          GovernmentTypeBox = ControlFactory.GetListComboBox([], new(1));
          GovernmentRankBox = ControlFactory.GetListComboBox(["1", "2", "3"], new(1)); // TODO read in the defines to determine range
          GovernmentReforms = ControlFactory.GetItemList(ItemTypes.String, [], "Government Reforms");
@@ -1168,6 +1181,11 @@ namespace Editor
 
       private void save1ToolStripMenuItem_Click(object sender, EventArgs e)
       {
+      }
+
+      private void SaveAllInDefaultFiles_Click(object sender, EventArgs e)
+      {
+
       }
    }
 }

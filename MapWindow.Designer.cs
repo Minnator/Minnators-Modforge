@@ -39,6 +39,8 @@
          LanguageSelectionToolStrip = new ToolStripComboBox();
          stripesDirectionToolStripMenuItem = new ToolStripMenuItem();
          StripeDirectionComboBox = new ToolStripComboBox();
+         toolStripMenuItem4 = new ToolStripMenuItem();
+         FileSavingModeComboBox = new ToolStripComboBox();
          toolStripSeparator5 = new ToolStripSeparator();
          saveCurrentMapModeToolStripMenuItem = new ToolStripMenuItem();
          saveSelectionToolStripMenuItem = new ToolStripMenuItem();
@@ -179,10 +181,14 @@
          SaveCurrentSelectionButton = new Button();
          LocalisationGroupBox = new GroupBox();
          LocTableLayoutPanel = new TableLayoutPanel();
+         label39 = new Label();
          LocalisationLabel = new Label();
          LocalisationTextBox = new TextBox();
          label25 = new Label();
          label26 = new Label();
+         label37 = new Label();
+         ProvAdjTextBox = new TextBox();
+         ProvAdjLabel = new Label();
          CountryPage = new TabPage();
          CountryMainTLP = new TableLayoutPanel();
          CountryNameLabel = new Label();
@@ -301,7 +307,7 @@
          // 
          // quickSettingsToolStripMenuItem
          // 
-         quickSettingsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { languageToolStripMenuItem, LanguageSelectionToolStrip, stripesDirectionToolStripMenuItem, StripeDirectionComboBox });
+         quickSettingsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { languageToolStripMenuItem, LanguageSelectionToolStrip, stripesDirectionToolStripMenuItem, StripeDirectionComboBox, toolStripMenuItem4, FileSavingModeComboBox });
          quickSettingsToolStripMenuItem.Name = "quickSettingsToolStripMenuItem";
          quickSettingsToolStripMenuItem.Size = new Size(268, 22);
          quickSettingsToolStripMenuItem.Text = "Quick Settings";
@@ -333,6 +339,20 @@
          StripeDirectionComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
          StripeDirectionComboBox.Name = "StripeDirectionComboBox";
          StripeDirectionComboBox.Size = new Size(121, 23);
+         // 
+         // toolStripMenuItem4
+         // 
+         toolStripMenuItem4.Enabled = false;
+         toolStripMenuItem4.Name = "toolStripMenuItem4";
+         toolStripMenuItem4.Size = new Size(181, 22);
+         toolStripMenuItem4.Text = "Saving Mode";
+         toolStripMenuItem4.Click += SaveAllInDefaultFiles_Click;
+         // 
+         // FileSavingModeComboBox
+         // 
+         FileSavingModeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+         FileSavingModeComboBox.Name = "FileSavingModeComboBox";
+         FileSavingModeComboBox.Size = new Size(121, 23);
          // 
          // toolStripSeparator5
          // 
@@ -617,14 +637,14 @@
          // 
          provDiffToolStripMenuItem.Name = "provDiffToolStripMenuItem";
          provDiffToolStripMenuItem.Size = new Size(221, 22);
-         provDiffToolStripMenuItem.Text = "ProvDiff";
+         provDiffToolStripMenuItem.Text = "Collisions";
          provDiffToolStripMenuItem.Click += provDiffToolStripMenuItem_Click;
          // 
          // yoloToolStripMenuItem
          // 
          yoloToolStripMenuItem.Name = "yoloToolStripMenuItem";
          yoloToolStripMenuItem.Size = new Size(221, 22);
-         yoloToolStripMenuItem.Text = "yolo";
+         yoloToolStripMenuItem.Text = "Loc Test";
          yoloToolStripMenuItem.Click += yoloToolStripMenuItem_Click;
          // 
          // saveAllProvincesToolStripMenuItem
@@ -1841,20 +1861,37 @@
          LocTableLayoutPanel.ColumnCount = 2;
          LocTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
          LocTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
+         LocTableLayoutPanel.Controls.Add(label39, 0, 3);
          LocTableLayoutPanel.Controls.Add(LocalisationLabel, 1, 0);
          LocTableLayoutPanel.Controls.Add(LocalisationTextBox, 1, 1);
          LocTableLayoutPanel.Controls.Add(label25, 0, 0);
          LocTableLayoutPanel.Controls.Add(label26, 0, 1);
+         LocTableLayoutPanel.Controls.Add(label37, 0, 2);
+         LocTableLayoutPanel.Controls.Add(ProvAdjTextBox, 1, 3);
+         LocTableLayoutPanel.Controls.Add(ProvAdjLabel, 1, 2);
          LocTableLayoutPanel.Dock = DockStyle.Fill;
          LocTableLayoutPanel.Location = new Point(0, 16);
          LocTableLayoutPanel.Margin = new Padding(0);
          LocTableLayoutPanel.Name = "LocTableLayoutPanel";
-         LocTableLayoutPanel.RowCount = 3;
-         LocTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-         LocTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-         LocTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         LocTableLayoutPanel.RowCount = 4;
+         LocTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
+         LocTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
+         LocTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
+         LocTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
+         LocTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
          LocTableLayoutPanel.Size = new Size(198, 96);
          LocTableLayoutPanel.TabIndex = 0;
+         // 
+         // label39
+         // 
+         label39.AutoSize = true;
+         label39.Dock = DockStyle.Fill;
+         label39.Location = new Point(3, 72);
+         label39.Name = "label39";
+         label39.Size = new Size(53, 24);
+         label39.TabIndex = 5;
+         label39.Text = "Value";
+         label39.TextAlign = ContentAlignment.MiddleLeft;
          // 
          // LocalisationLabel
          // 
@@ -1863,7 +1900,7 @@
          LocalisationLabel.Location = new Point(60, 1);
          LocalisationLabel.Margin = new Padding(1);
          LocalisationLabel.Name = "LocalisationLabel";
-         LocalisationLabel.Size = new Size(137, 23);
+         LocalisationLabel.Size = new Size(137, 22);
          LocalisationLabel.TabIndex = 0;
          LocalisationLabel.Text = "-";
          LocalisationLabel.TextAlign = ContentAlignment.MiddleLeft;
@@ -1871,7 +1908,7 @@
          // LocalisationTextBox
          // 
          LocalisationTextBox.Dock = DockStyle.Fill;
-         LocalisationTextBox.Location = new Point(60, 26);
+         LocalisationTextBox.Location = new Point(60, 25);
          LocalisationTextBox.Margin = new Padding(1);
          LocalisationTextBox.Name = "LocalisationTextBox";
          LocalisationTextBox.Size = new Size(137, 23);
@@ -1884,21 +1921,52 @@
          label25.Dock = DockStyle.Fill;
          label25.Location = new Point(3, 0);
          label25.Name = "label25";
-         label25.Size = new Size(53, 25);
+         label25.Size = new Size(53, 24);
          label25.TabIndex = 2;
-         label25.Text = "Key";
+         label25.Text = "Name";
          label25.TextAlign = ContentAlignment.MiddleLeft;
          // 
          // label26
          // 
          label26.AutoSize = true;
          label26.Dock = DockStyle.Fill;
-         label26.Location = new Point(3, 25);
+         label26.Location = new Point(3, 24);
          label26.Name = "label26";
-         label26.Size = new Size(53, 25);
+         label26.Size = new Size(53, 24);
          label26.TabIndex = 3;
          label26.Text = "Value";
          label26.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // label37
+         // 
+         label37.AutoSize = true;
+         label37.Dock = DockStyle.Fill;
+         label37.Location = new Point(3, 48);
+         label37.Name = "label37";
+         label37.Size = new Size(53, 24);
+         label37.TabIndex = 4;
+         label37.Text = "Adj";
+         label37.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // ProvAdjTextBox
+         // 
+         ProvAdjTextBox.Location = new Point(60, 73);
+         ProvAdjTextBox.Margin = new Padding(1);
+         ProvAdjTextBox.Name = "ProvAdjTextBox";
+         ProvAdjTextBox.Size = new Size(137, 23);
+         ProvAdjTextBox.TabIndex = 7;
+         ProvAdjTextBox.Text = "-";
+         // 
+         // ProvAdjLabel
+         // 
+         ProvAdjLabel.AutoSize = true;
+         ProvAdjLabel.Dock = DockStyle.Fill;
+         ProvAdjLabel.Location = new Point(60, 49);
+         ProvAdjLabel.Margin = new Padding(1);
+         ProvAdjLabel.Name = "ProvAdjLabel";
+         ProvAdjLabel.Size = new Size(137, 22);
+         ProvAdjLabel.TabIndex = 8;
+         ProvAdjLabel.Text = "-";
          // 
          // CountryPage
          // 
@@ -2572,6 +2640,12 @@
       private TableLayoutPanel GovernmentLayoutPanel;
       private Label label36;
       private Label label38;
+      private Label label39;
+      private Label label37;
+      private TextBox ProvAdjTextBox;
+      private Label ProvAdjLabel;
+      private ToolStripMenuItem toolStripMenuItem4;
+      private ToolStripComboBox FileSavingModeComboBox;
    }
 }
 

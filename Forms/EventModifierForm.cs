@@ -26,6 +26,7 @@ namespace Editor.Forms
          };
          Globals.MapWindow.ModifiersLayoutPanel.Controls.Add(tempBox, 1, 1);
          Globals.MapWindow._modifierComboBox.SelectedIndexChanged += OnModifierComboBoxOnSelectedIndexChanged;
+         Globals.MapWindow._modifierComboBox.TextChanged += OnModifierComboBoxTextChanged;
 
          Closing += CloseEvent;
 
@@ -52,6 +53,23 @@ namespace Editor.Forms
          _customAttrPanel.ResumeLayout(true);
       }
 
+      private void OnModifierComboBoxTextChanged(object? sender, EventArgs e)
+      {
+         if (Globals.EventModifiers.ContainsKey(((ComboBox)sender!).Text))
+            return;
+
+         _customAttrPanel.LeftComboBox.Clear();
+         _customAttrPanel.RightComboBox.Clear();
+         _customAttrPanel.FlowLayoutPanel.Controls.Clear();
+
+         _modifierPanel.LeftComboBox.Clear();
+         _modifierPanel.RightComboBox.Clear();
+         _modifierPanel.FlowLayoutPanel.Controls.Clear();
+
+         LocalisationTextBox.Text = "";
+         DescriptionTextBox.Text = "";
+      }
+
       private void SuggestDefaultValues(object? sender, EventArgs e)
       {
          if (sender is not ComboBox comboBox)
@@ -70,8 +88,8 @@ namespace Editor.Forms
          if (!Globals.EventModifiers.TryGetValue(Globals.MapWindow._modifierComboBox.Text, out var modifier))
             return;
 
-         LocalisationTextBox.Text = Localisation.GetLoc(modifier.Name);
-         DescriptionTextBox.Text = Localisation.GetLoc($"desc_{modifier.Name}");
+         LocalisationTextBox.Text = Localisation.GetLoc(modifier.GetTitleLocKey);
+         DescriptionTextBox.Text = Localisation.GetLoc(modifier.GetDescriptionLocKey);
          _customAttrPanel.SetDualContent(modifier.TriggerAttribute);
 
          List<ModifierDefinition> definitions = [];
@@ -89,6 +107,7 @@ namespace Editor.Forms
       {
          Globals.MapWindow.ModifiersLayoutPanel.Controls.Remove(tempBox);
          Globals.MapWindow._modifierComboBox.SelectedIndexChanged -= OnModifierComboBoxOnSelectedIndexChanged;
+         Globals.MapWindow._modifierComboBox.TextChanged -= OnModifierComboBoxTextChanged;
          Globals.MapWindow.ModifiersLayoutPanel.Controls.Add(Globals.MapWindow._modifierComboBox, 1, 1);
       }
 
@@ -142,8 +161,11 @@ namespace Editor.Forms
             modifier.Modifiers = mods;
             modifier.TriggerAttribute = customAttrs;
             modifier.EditingStatus = ObjEditingStatus.Modified;
+            SetModifierLocalisation(ref title, ref desc, ref modifier);
             return true;
          }
+
+         
 
          //TODO is not correctly added to combobox
          EventModifier eventMod = new(name)
@@ -151,12 +173,19 @@ namespace Editor.Forms
             Modifiers = mods,
             TriggerAttribute = customAttrs,
          };
+         SetModifierLocalisation(ref title, ref desc, ref eventMod);
          Globals.EventModifiers.Add(name, eventMod);
          Globals.MapWindow._modifierComboBox.Items.Add(name);
          Globals.MapWindow._modifierComboBox.AutoCompleteCustomSource.Add(name);
          Globals.MapWindow._modifierComboBox.AutoCompleteMode = AutoCompleteMode.None;
          Globals.MapWindow._modifierComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
          return true;
+      }
+
+      private void SetModifierLocalisation(ref string title, ref string desc, ref EventModifier modifier)
+      {
+         Localisation.AddOrModifyLocObject(modifier.GetTitleLocKey, title);
+         Localisation.AddOrModifyLocObject(modifier.GetDescriptionLocKey, desc);
       }
 
       private bool GetModifiersFromGui(out List<Modifier> modifiers)
@@ -166,12 +195,11 @@ namespace Editor.Forms
          {
             if (int.TryParse(kvp.Key, out var index))
             {
-
                modifiers.Add(new(index, kvp.Value));
             }
             else
             {
-               MessageBox.Show("Error: Could not parse index to <int>");
+               MessageBox.Show("Error: Could not parse index to <int> during modifier indexing");
                modifiers = [];
                return false;
             }

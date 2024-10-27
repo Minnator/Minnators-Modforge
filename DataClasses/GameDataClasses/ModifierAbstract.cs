@@ -176,6 +176,11 @@ namespace Editor.DataClasses.GameDataClasses
          SetPath(ref path);
       }
 
+      public override ModifiedData GetModifiedDataFlag()
+      {
+         return ModifiedData.EventModifiers;
+      }
+
       public override string SavingComment()
       {
          return Localisation.GetLoc(Name);
@@ -208,13 +213,15 @@ namespace Editor.DataClasses.GameDataClasses
       public List<Modifier> Modifiers { get; set; } = [];
       public string Picture { get; set; } = string.Empty;
 
+      public string GetTitleLocKey => Name;
+      public string GetDescriptionLocKey => $"desc_{Name}";
+
       public override bool Equals(object? obj)
       {
          if (obj is EventModifier modifier)
             return Name == modifier.Name;
          return false;
       }
-
       public override int GetHashCode()
       {
          return Name.GetHashCode();

@@ -6,11 +6,13 @@ namespace Editor.Helper;
 internal static class IO
 {
    private static readonly Encoding encoding;
+   private static readonly UTF8Encoding bomUtf8Encoding = null!;
    // Get the ANSI encoding
    static IO()
    {
       Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
       encoding = Encoding.GetEncoding("windows-1250");
+      bomUtf8Encoding = new (true);
    }
 
 
@@ -151,6 +153,15 @@ internal static class IO
       {
          return false;
       }
+   }
+
+   public static bool WriteLocalisationFile(string path, string content, bool append)
+   {
+      var streamWriter = new StreamWriter(path, false, bomUtf8Encoding);
+      streamWriter.WriteLine($"l_{Globals.Language.ToString().ToLower()}:");
+      streamWriter.WriteLine(content);
+      streamWriter.Close();
+      return true;
    }
 
 }

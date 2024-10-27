@@ -1,78 +1,123 @@
-﻿using Editor.Interfaces;
+﻿using Editor.DataClasses;
+using Editor.DataClasses.GameDataClasses;
+using Editor.Interfaces;
 
 namespace Editor.Helper;
 
 public static class Localisation
 {
+   private static readonly LocObject SearchLoc = new("", string.Empty, ObjEditingStatus.Immutable);
    public static string GetLoc (string key)
    {
-      foreach (var loc in Globals.ReplaceLocalisation.Values)
-      {
-         if (loc.TryGetValue(key, out var value))
-            return value;
-      }
-
-      foreach (var loc in Globals.ModLocalisation.Values)
-      {
-         if (loc.TryGetValue(key, out var value))
-            return value;
-      }
-
-      foreach (var loc in Globals.VanillaLocalisation.Values)
-      {
-         if (loc.TryGetValue(key, out var value))
-            return value;
-      }
-
-      return key;
+      SearchLoc.Key = key;
+      return GetLocObject(key, out var value) ? value.Value : key;
    }
 
-   public static bool GetFileForKey(string key, out string file)
+   public static bool GetLocObject(string key, out LocObject? locObject)
    {
-      foreach (var loc in Globals.ReplaceLocalisation)
-      {
-         if (loc.Value.ContainsKey(key))
-         {
-            file = loc.Key;
-            return true;
-         }
-      }
-
-      foreach (var loc in Globals.ModLocalisation)
-      {
-         if (loc.Value.ContainsKey(key))
-         {
-            file = loc.Key;
-            return true;
-         }
-      }
-
-      foreach (var loc in Globals.VanillaLocalisation)
-      {
-         if (loc.Value.ContainsKey(key))
-         {
-            file = loc.Key;
-            return true;
-         }
-      }
-
-      file = string.Empty;
-      return false;
+      SearchLoc.Key = key;
+      return Globals.Localisation.TryGetValue(SearchLoc, out locObject);
    }
 
+   /// <summary>
+   /// If the value has not changed, it will not be added or updated
+   /// If the value has changed, it will be updated
+   /// If the key does not exist, it will be added
+   /// </summary>
+   /// <param name="key"></param>
+   /// <param name="value"></param>
+   public static void AddOrModifyLocObject(string key, string value)
+   {
+      if (!GetLocObject(key, out var locObject))
+      {
+         if (!string.IsNullOrEmpty(value))
+            Globals.Localisation.Add(new(key, value));
+      }
+      else
+      {
+         if (locObject.Path.isModPath && string.IsNullOrEmpty(value))
+         {
+            // TODO delete locObject
+         }
+         locObject.Value = value;
+      }
+   }
 }
 
-/* TODO
-public class LocObject(string key, string value) : Saveable
+/// <summary>
+/// The value will never be updated if it would not changed
+/// </summary>
+public class LocObject : Saveable
 {
-   public string Key { get; } = key;
-   public string Value { get; set; } = value;
-   public ObjEditingStatus EditingStatus { get; set; }
-   public int FileIndex { get; set; }
+   public LocObject(string key, string value, ObjEditingStatus status = ObjEditingStatus.Modified)
+   {
+      Key = key;
+      _value = value;
+      EditingStatus = status;
+   }
+   public string Key { get; set; }
+   private string _value;
+
+   public string Value
+   {
+      get => _value;
+      set {
+         if (value == _value)
+            return;
+         _value = value;
+         EditingStatus = ObjEditingStatus.Modified;
+      }
+   }
+
+   public sealed override ObjEditingStatus EditingStatus
+   {
+      get => _editingStatus;
+      set
+      {
+         if (_editingStatus == ObjEditingStatus.Immutable)
+            return;
+         if (Equals(value, _editingStatus))
+            return;
+         if (Equals(value, ObjEditingStatus.Modified))
+            FileManager.AddLocObject(this);
+         _editingStatus = value;
+      }
+   }
+
+   public override ModifiedData GetModifiedDataFlag()
+   {
+      return ModifiedData.Localisation;
+   }
+
+   public override string SavingComment()
+   {
+      return string.Empty;
+   }
+
+   public override PathObj GetDefaultSavePath()
+   {
+      return new(["localisation"]);
+   }
+
+   public override string GetSaveString(int tabs)
+   {
+      return $"{Key}:0 \"{Value}\"";
+   }
+
+   public override string GetSavePromptString()
+   {
+      return $"localisation: \"{Key}\"";
+   }
 
    public override int GetHashCode()
    {
       return Key.GetHashCode();
    }
+
+   public override bool Equals(object? obj)
+   {
+      if (obj is not LocObject locObject) 
+         return false;
+      return Key.Equals(locObject.Key);
+   }
 }
-*/

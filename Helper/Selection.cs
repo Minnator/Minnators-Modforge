@@ -554,7 +554,10 @@ public static class Selection
       Globals.MapWindow.SetSelectedProvinceSum(Count);
 
       // Interaction with the EditingGui
-      
+
+      if (e.Button == MouseButtons.Middle)
+         return;
+
       // ------------------------------ Province Idle Loading ------------------------------
       if (Globals.ProvinceEditingStatus == ProvinceEditingStatus.Selection
           || Globals.ProvinceEditingStatus == ProvinceEditingStatus.PreviewUntilSelection && Count > 1)
