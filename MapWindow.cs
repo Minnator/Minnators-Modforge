@@ -1076,9 +1076,15 @@ namespace Editor
       private TagComboBox TagSelectionBox;
 
       private ComboBox GraphicalCultureBox;
+      private ComboBox UnitTypeBox;
+      private ComboBox TechGroupBox;
+      private ComboBox GovernmentTypeBox;
+      private ComboBox GovernmentRankBox;
 
       private ColorPickerButton CountryColorPickerButton;
       private ColorPickerButton RevolutionColorPickerButton;
+
+      private ItemList GovernmentReforms;
 
 
       private void InitializeCountryEditGui()
@@ -1101,11 +1107,24 @@ namespace Editor
          RevolutionColorPickerButton.Click += CountryGuiEvents.RevolutionColorPickerButton_Click;
          GeneralToolTip.SetToolTip(RevolutionColorPickerButton, "Set the <revolutionary_color> of the selected country");
          GraphicalCultureBox = ControlFactory.GetListComboBox(Globals.GraphicalCultures, new(1));
+         UnitTypeBox = ControlFactory.GetListComboBox([..Globals.TechnologyGroups.Keys], new(1));
+         TechGroupBox = ControlFactory.GetListComboBox([..Globals.TechnologyGroups.Keys], new(1));
+         GovernmentTypeBox = ControlFactory.GetListComboBox([], new(1));
+         GovernmentRankBox = ControlFactory.GetListComboBox(["1", "2", "3"], new(1)); // TODO read in the defines to determine range
+         GovernmentReforms = ControlFactory.GetItemList(ItemTypes.String, [], "Government Reforms");
+
 
 
 
          TagAndColorTLP.Controls.Add(RevolutionColorPickerButton, 3, 3);
          TagAndColorTLP.Controls.Add(GraphicalCultureBox, 1, 2);
+         TagAndColorTLP.Controls.Add(UnitTypeBox, 3, 2);
+         TagAndColorTLP.Controls.Add(TechGroupBox, 1, 3);
+
+         GovernmentLayoutPanel.Controls.Add(GovernmentTypeBox, 1, 0);
+         GovernmentLayoutPanel.Controls.Add(GovernmentRankBox, 3, 0);
+         GovernmentLayoutPanel.Controls.Add(GovernmentReforms, 0, 1);
+         GovernmentLayoutPanel.SetColumnSpan(GovernmentReforms, 3);
       }
 
       public void ClearCountryGui()
@@ -1118,6 +1137,8 @@ namespace Editor
          CountryLoc.Text = "-";
          RevolutionColorPickerButton.BackColor = Color.Empty;
          GraphicalCultureBox.SelectedIndex = 0;
+         UnitTypeBox.SelectedIndex = 0;
+         TechGroupBox.SelectedIndex = 0;
       }
 
       internal void LoadCountryToGui(Country country)
@@ -1135,6 +1156,8 @@ namespace Editor
          CountryADJLoc.Text = country.GetAdjectiveLocalisation();
          RevolutionColorPickerButton.BackColor = country.RevolutionaryColor;
          GraphicalCultureBox.SelectedItem = country.Gfx;
+         UnitTypeBox.SelectedItem = country.UnitType;
+         TechGroupBox.SelectedItem = country.TechnologyGroup;
       }
 
       private void CreateFilesByDefault_Click(object sender, EventArgs e)

@@ -103,7 +103,7 @@ public static class Globals
       }
    }
    private static int _loadingStage = 0;
-   public const int LOADING_STAGES = 37; // Needs to be increased when adding new loading stages
+   public const int LOADING_STAGES = 38; // Needs to be increased when adding new loading stages
    #endregion
    
    public static ConsoleForm? ConsoleForm = null;
@@ -182,6 +182,10 @@ public static class Globals
    // Religion Stuff
    public static List<ReligiousGroup> ReligionGroups = [];
    public static readonly Dictionary<string, Religion> Religions = [];
+
+   // Government Reforms and Government Types
+   public static Dictionary<string, Government> GovernmentTypes = [];
+   public static Dictionary<string, GovernmentReform> GovernmentReforms = [];
 
    // Country Groups
    private static Dictionary<Tag, Country> _countries = [];

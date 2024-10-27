@@ -198,6 +198,13 @@
          label31 = new Label();
          label33 = new Label();
          label32 = new Label();
+         tableLayoutPanel1 = new TableLayoutPanel();
+         button1 = new Button();
+         label35 = new Label();
+         GovernmentGroupBox = new GroupBox();
+         GovernmentLayoutPanel = new TableLayoutPanel();
+         label36 = new Label();
+         label38 = new Label();
          ProvinceGroupsPage = new TabPage();
          ProvinceCollectionsPanel = new Panel();
          ProvinceCollectionsTab = new TableLayoutPanel();
@@ -249,6 +256,9 @@
          CountryMainTLP.SuspendLayout();
          groupBox7.SuspendLayout();
          TagAndColorTLP.SuspendLayout();
+         tableLayoutPanel1.SuspendLayout();
+         GovernmentGroupBox.SuspendLayout();
+         GovernmentLayoutPanel.SuspendLayout();
          ProvinceGroupsPage.SuspendLayout();
          ProvinceCollectionsPanel.SuspendLayout();
          ProvinceCollectionsTab.SuspendLayout();
@@ -1908,14 +1918,19 @@
          CountryMainTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
          CountryMainTLP.Controls.Add(CountryNameLabel, 0, 0);
          CountryMainTLP.Controls.Add(groupBox7, 0, 1);
+         CountryMainTLP.Controls.Add(tableLayoutPanel1, 0, 2);
+         CountryMainTLP.Controls.Add(GovernmentGroupBox, 0, 3);
          CountryMainTLP.Dock = DockStyle.Fill;
          CountryMainTLP.Location = new Point(3, 3);
          CountryMainTLP.Margin = new Padding(0);
          CountryMainTLP.Name = "CountryMainTLP";
-         CountryMainTLP.RowCount = 5;
+         CountryMainTLP.RowCount = 8;
          CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 23F));
          CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 124F));
-         CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 77F));
+         CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 131F));
+         CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 224F));
+         CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 65F));
          CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
          CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
          CountryMainTLP.Size = new Size(401, 810);
@@ -2079,6 +2094,98 @@
          label32.TabIndex = 8;
          label32.Text = "Revol Color";
          label32.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // tableLayoutPanel1
+         // 
+         tableLayoutPanel1.ColumnCount = 2;
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100.000008F));
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25F));
+         tableLayoutPanel1.Controls.Add(button1, 1, 0);
+         tableLayoutPanel1.Controls.Add(label35, 0, 0);
+         tableLayoutPanel1.Dock = DockStyle.Fill;
+         tableLayoutPanel1.Location = new Point(0, 147);
+         tableLayoutPanel1.Margin = new Padding(0);
+         tableLayoutPanel1.Name = "tableLayoutPanel1";
+         tableLayoutPanel1.RowCount = 1;
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         tableLayoutPanel1.Size = new Size(401, 25);
+         tableLayoutPanel1.TabIndex = 3;
+         // 
+         // button1
+         // 
+         button1.Dock = DockStyle.Fill;
+         button1.Enabled = false;
+         button1.Image = Properties.Resources.GreenPlusBg;
+         button1.Location = new Point(377, 1);
+         button1.Margin = new Padding(1);
+         button1.Name = "button1";
+         button1.Size = new Size(23, 23);
+         button1.TabIndex = 0;
+         button1.UseVisualStyleBackColor = true;
+         // 
+         // label35
+         // 
+         label35.AutoSize = true;
+         label35.Dock = DockStyle.Fill;
+         label35.Location = new Point(3, 0);
+         label35.Name = "label35";
+         label35.Size = new Size(370, 25);
+         label35.TabIndex = 1;
+         label35.Text = "IDEAS (later feature)";
+         label35.TextAlign = ContentAlignment.MiddleCenter;
+         // 
+         // GovernmentGroupBox
+         // 
+         GovernmentGroupBox.Controls.Add(GovernmentLayoutPanel);
+         GovernmentGroupBox.Dock = DockStyle.Fill;
+         GovernmentGroupBox.Location = new Point(3, 175);
+         GovernmentGroupBox.Name = "GovernmentGroupBox";
+         GovernmentGroupBox.Padding = new Padding(1);
+         GovernmentGroupBox.Size = new Size(395, 125);
+         GovernmentGroupBox.TabIndex = 4;
+         GovernmentGroupBox.TabStop = false;
+         GovernmentGroupBox.Text = "Government";
+         // 
+         // GovernmentLayoutPanel
+         // 
+         GovernmentLayoutPanel.ColumnCount = 4;
+         GovernmentLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+         GovernmentLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+         GovernmentLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+         GovernmentLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+         GovernmentLayoutPanel.Controls.Add(label36, 0, 0);
+         GovernmentLayoutPanel.Controls.Add(label38, 2, 0);
+         GovernmentLayoutPanel.Dock = DockStyle.Fill;
+         GovernmentLayoutPanel.Location = new Point(1, 17);
+         GovernmentLayoutPanel.Margin = new Padding(0);
+         GovernmentLayoutPanel.Name = "GovernmentLayoutPanel";
+         GovernmentLayoutPanel.RowCount = 2;
+         GovernmentLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         GovernmentLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         GovernmentLayoutPanel.Size = new Size(393, 107);
+         GovernmentLayoutPanel.TabIndex = 0;
+         // 
+         // label36
+         // 
+         label36.AutoSize = true;
+         label36.Dock = DockStyle.Fill;
+         label36.Location = new Point(3, 0);
+         label36.Name = "label36";
+         label36.Size = new Size(92, 25);
+         label36.TabIndex = 0;
+         label36.Text = "Rank";
+         label36.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // label38
+         // 
+         label38.AutoSize = true;
+         label38.Dock = DockStyle.Fill;
+         label38.Location = new Point(199, 0);
+         label38.Name = "label38";
+         label38.Size = new Size(92, 25);
+         label38.TabIndex = 2;
+         label38.Text = "Type";
+         label38.TextAlign = ContentAlignment.MiddleLeft;
          // 
          // ProvinceGroupsPage
          // 
@@ -2260,6 +2367,11 @@
          groupBox7.ResumeLayout(false);
          TagAndColorTLP.ResumeLayout(false);
          TagAndColorTLP.PerformLayout();
+         tableLayoutPanel1.ResumeLayout(false);
+         tableLayoutPanel1.PerformLayout();
+         GovernmentGroupBox.ResumeLayout(false);
+         GovernmentLayoutPanel.ResumeLayout(false);
+         GovernmentLayoutPanel.PerformLayout();
          ProvinceGroupsPage.ResumeLayout(false);
          ProvinceCollectionsPanel.ResumeLayout(false);
          ProvinceCollectionsTab.ResumeLayout(false);
@@ -2453,6 +2565,13 @@
       private Label label33;
       private Label label32;
       private ToolStripMenuItem CreateFilesByDefault;
+      private TableLayoutPanel tableLayoutPanel1;
+      private Button button1;
+      private Label label35;
+      private GroupBox GovernmentGroupBox;
+      private TableLayoutPanel GovernmentLayoutPanel;
+      private Label label36;
+      private Label label38;
    }
 }
 

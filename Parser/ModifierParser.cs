@@ -212,25 +212,25 @@ namespace Editor.Parser
 
          if (ProvinceModifiersDict.ContainsKey(name))
          {
-            modifier = new(ProvinceModifierToIndex[name], value, Scope.Province);
+            modifier = new(ProvinceModifierToIndex[name], value);
             return true;
          }
 
          if (EstateModifiers.Contains(name))
          {
-            modifier = new(EstateModifierToIndex[name], value, Scope.Country);
+            modifier = new(EstateModifierToIndex[name], value);
             return true;
          }
 
          if (GovernmentMechanics.Contains(name))
          {
-            modifier = new(GovernmentMechanicsToIndex[name], value, Scope.Country);
+            modifier = new(GovernmentMechanicsToIndex[name], value);
             return true;
          }
 
          if (FactionModifiers.Contains(name))
          {
-            modifier = new(FactionModifiersToIndex[name], value, Scope.Country);
+            modifier = new(FactionModifiersToIndex[name], value);
             return true;
          }
 

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Text;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
@@ -13,7 +14,7 @@ namespace Editor.Loading
       public static void LoadScriptedEffects()
       {
          var sw = Stopwatch.StartNew();
-         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("common", "scripted_effects");
+         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "scripted_effects");
          HashSet<string> scriptedEffects = [];
 
          // TODO could be sped up by not using GetElements but instead just writing a simple parser for the scripted_effects files which only detects openings,
@@ -45,6 +46,7 @@ namespace Editor.Loading
          Globals.ScriptedEffectNames = scriptedEffects;
          sw.Stop();
          Globals.LoadingLog.WriteTimeStamp("Scripted Effects", sw.ElapsedMilliseconds) ;
+
       }
    }
 }

@@ -313,13 +313,7 @@ namespace Editor.DataClasses.GameDataClasses
    {
       public readonly int Name = nameIndex;
       public object Value = value;
-      public readonly Scope Scope = Scope.Country;
 
-
-      public Modifier(int nameIndex, object value, Scope scope) : this(nameIndex, value)
-      {
-         Scope = scope;
-      }
 
       public override string ToString()
       {

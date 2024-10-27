@@ -89,6 +89,17 @@ public static partial class Parsing
       return idList;
    }
 
+   public static List<string> GetLinesOfString(ref string str)
+   {
+      var lines = str.Split('\n');
+      return RemoveAllEmptyLines(lines);
+   }
+
+   public static List<string> GetLinesOfString(string str)
+   {
+      return GetLinesOfString(ref str);
+   }
+
    public static List<Province> GetProvincesFromString(string str)
    {
       var ids = GetIntListFromString(str);
