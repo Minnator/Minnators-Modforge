@@ -262,6 +262,13 @@ namespace Editor.Loading
                continue;
             }
 
+            if (int.TryParse(block.Name, out var provId) && Globals.ProvinceIdToProvince.ContainsKey(provId))
+            {
+               // TODO add scoped effects when implemented
+               continue;
+            }
+
+
             switch (block.Name)
             {
                case "monarch":
@@ -277,7 +284,6 @@ namespace Editor.Loading
                   break;
                case "federation":
                   var effect = EffectFactory.CreateComplexEffect(block.Name, block.GetContent, EffectValueType.Complex);
-
                   break;
                default:
                   if (Parsing.ParseDynamicContent(block, out _))

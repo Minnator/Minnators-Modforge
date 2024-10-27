@@ -16,6 +16,7 @@
       public List<Person> Persons { get; set; } = [];
       public List<Leader> Leaders { get; set; } = [];
       public List<Effect> Effects { get; set; } = [];
+      
 
       public bool HasPerson => Persons.Any();
       public bool HasEffect => Effects.Any();
