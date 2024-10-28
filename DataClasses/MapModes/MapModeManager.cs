@@ -1,4 +1,5 @@
-﻿using Editor.DataClasses.GameDataClasses;
+﻿using System.Diagnostics;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.MapModes;
 
@@ -35,6 +36,14 @@ public enum MapModeType
 
 public class MapModeManager
 {
+   private int _totalMapModeTime = 0;
+   public int MinMapModeTime = int.MaxValue;
+   public int MaxMapModeTime = int.MinValue;
+   private readonly List<int> _mapModeTimes = new (100);
+   private readonly Stopwatch _stopwatch = new();
+   public int AverageMapModeTime => _mapModeTimes.Count == 0 ? 0 : _totalMapModeTime / _mapModeTimes.Count;
+   public int LasMapModeTime => _mapModeTimes.Count == 0 ? 0 : _mapModeTimes[^1];
+
    private List<MapMode> MapModes { get; } = [];
    public MapMode CurrentMapMode { get; set; } = null!;
    public MapModeType CurrentMapModeType { get; set; }
@@ -111,10 +120,25 @@ public class MapModeManager
       CurrentMapMode?.SetInactive();
       CurrentMapMode = GetMapMode(name); 
       CurrentMapMode.SetActive();
+      _stopwatch.Restart();
       CurrentMapMode.RenderMapMode(CurrentMapMode.GetProvinceColor);
+      _stopwatch.Stop();
       GC.Collect(); // We need to collect the garbage to free up memory but this is not ideal
       Globals.MapWindow.MapModeComboBox.SelectedItem = name.ToString();
       CurrentMapModeType = name;
+
+      if (_mapModeTimes.Count == 100)
+      {
+         _totalMapModeTime -= _mapModeTimes[0];
+         _mapModeTimes.RemoveAt(0);
+      }
+      _totalMapModeTime += (int)_stopwatch.ElapsedMilliseconds;
+      _mapModeTimes.Add((int)_stopwatch.ElapsedMilliseconds);
+      if (_stopwatch.ElapsedMilliseconds < MinMapModeTime)
+         MinMapModeTime = (int)_stopwatch.ElapsedMilliseconds;
+      if (_stopwatch.ElapsedMilliseconds > MaxMapModeTime)
+         MaxMapModeTime = (int)_stopwatch.ElapsedMilliseconds;
+
       MapModeChanged(this, CurrentMapMode);
    }
 

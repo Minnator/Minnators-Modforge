@@ -91,7 +91,7 @@
          jsonToolStripMenuItem = new ToolStripMenuItem();
          ProvinceCollectionsLayoutPanel = new TableLayoutPanel();
          FocusSelectionCheckBox = new CheckBox();
-         toolStrip1 = new ToolStrip();
+         BottomToolStrip = new ToolStrip();
          RamUsageStrip = new ToolStripLabel();
          CpuUsageStrip = new ToolStripLabel();
          toolStripSeparator1 = new ToolStripSeparator();
@@ -99,6 +99,8 @@
          RedoDepthLabel = new ToolStripLabel();
          toolStripSeparator2 = new ToolStripSeparator();
          SelectedProvinceSum = new ToolStripLabel();
+         toolStripSeparator7 = new ToolStripSeparator();
+         MapModeTimesInfo = new ToolStripLabel();
          MainLayoutPanel = new TableLayoutPanel();
          TopStripLayoutPanel = new TableLayoutPanel();
          OwnerCountryNameLabel = new Label();
@@ -221,7 +223,7 @@
          GeneralToolTip = new ToolTip(components);
          toolTip1 = new ToolTip(components);
          MapMenuStrip.SuspendLayout();
-         toolStrip1.SuspendLayout();
+         BottomToolStrip.SuspendLayout();
          MainLayoutPanel.SuspendLayout();
          TopStripLayoutPanel.SuspendLayout();
          tableLayoutPanel5.SuspendLayout();
@@ -703,15 +705,15 @@
          FocusSelectionCheckBox.Text = "Focus Selection";
          FocusSelectionCheckBox.UseVisualStyleBackColor = true;
          // 
-         // toolStrip1
+         // BottomToolStrip
          // 
-         MainLayoutPanel.SetColumnSpan(toolStrip1, 2);
-         toolStrip1.Dock = DockStyle.None;
-         toolStrip1.Items.AddRange(new ToolStripItem[] { RamUsageStrip, CpuUsageStrip, toolStripSeparator1, UndoDepthLabel, RedoDepthLabel, toolStripSeparator2, SelectedProvinceSum });
-         toolStrip1.Location = new Point(0, 876);
-         toolStrip1.Name = "toolStrip1";
-         toolStrip1.Size = new Size(302, 24);
-         toolStrip1.TabIndex = 0;
+         MainLayoutPanel.SetColumnSpan(BottomToolStrip, 2);
+         BottomToolStrip.Dock = DockStyle.None;
+         BottomToolStrip.Items.AddRange(new ToolStripItem[] { RamUsageStrip, CpuUsageStrip, toolStripSeparator1, UndoDepthLabel, RedoDepthLabel, toolStripSeparator2, SelectedProvinceSum, toolStripSeparator7, MapModeTimesInfo });
+         BottomToolStrip.Location = new Point(0, 876);
+         BottomToolStrip.Name = "BottomToolStrip";
+         BottomToolStrip.Size = new Size(599, 24);
+         BottomToolStrip.TabIndex = 0;
          // 
          // RamUsageStrip
          // 
@@ -753,12 +755,23 @@
          SelectedProvinceSum.Size = new Size(49, 21);
          SelectedProvinceSum.Text = "ProSum";
          // 
+         // toolStripSeparator7
+         // 
+         toolStripSeparator7.Name = "toolStripSeparator7";
+         toolStripSeparator7.Size = new Size(6, 24);
+         // 
+         // MapModeTimesInfo
+         // 
+         MapModeTimesInfo.Name = "MapModeTimesInfo";
+         MapModeTimesInfo.Size = new Size(260, 21);
+         MapModeTimesInfo.Text = "MapModeTimes: Avg: 0ms, Min: 0ms, Max: 0ms";
+         // 
          // MainLayoutPanel
          // 
          MainLayoutPanel.ColumnCount = 2;
          MainLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 400F));
          MainLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-         MainLayoutPanel.Controls.Add(toolStrip1, 0, 2);
+         MainLayoutPanel.Controls.Add(BottomToolStrip, 0, 2);
          MainLayoutPanel.Controls.Add(TopStripLayoutPanel, 1, 0);
          MainLayoutPanel.Controls.Add(tableLayoutPanel5, 0, 0);
          MainLayoutPanel.Controls.Add(MainSplitContainer, 0, 1);
@@ -2377,8 +2390,8 @@
          KeyDown += MapWindow_KeyDown;
          MapMenuStrip.ResumeLayout(false);
          MapMenuStrip.PerformLayout();
-         toolStrip1.ResumeLayout(false);
-         toolStrip1.PerformLayout();
+         BottomToolStrip.ResumeLayout(false);
+         BottomToolStrip.PerformLayout();
          MainLayoutPanel.ResumeLayout(false);
          MainLayoutPanel.PerformLayout();
          TopStripLayoutPanel.ResumeLayout(false);
@@ -2455,7 +2468,7 @@
 
       private System.Windows.Forms.MenuStrip MapMenuStrip;
       private System.Windows.Forms.ToolStripMenuItem filesToolStripMenuItem;
-      private System.Windows.Forms.ToolStrip toolStrip1;
+      private System.Windows.Forms.ToolStrip BottomToolStrip;
       private System.Windows.Forms.ToolStripLabel SelectedProvinceSum;
       private System.Windows.Forms.ToolStripLabel RamUsageStrip;
       private System.Windows.Forms.ToolStripLabel CpuUsageStrip;
@@ -2646,6 +2659,8 @@
       private Label ProvAdjLabel;
       private ToolStripMenuItem toolStripMenuItem4;
       private ToolStripComboBox FileSavingModeComboBox;
+      private ToolStripSeparator toolStripSeparator7;
+      private ToolStripLabel MapModeTimesInfo;
    }
 }
 

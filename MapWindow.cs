@@ -174,6 +174,22 @@ namespace Editor
          InitializeProvinceCollectionEditGui();
          InitializeCountryEditGui();
          InitializeMapModeButtons();
+         InitializeInfoStrip();
+      }
+
+      private void InitializeInfoStrip()
+      {
+         Globals.MapModeManager.MapModeChanged += (sender, mode) =>
+         {
+            MapModeTimesInfo.Text = $"MapMode times [ms]: last: {Globals.MapModeManager.LasMapModeTime} | Min: {Globals.MapModeManager.MinMapModeTime} | Max: {Globals.MapModeManager.MaxMapModeTime} | Avg: {Globals.MapModeManager.AverageMapModeTime}";
+         };
+         MapModeTimesInfo.ToolTipText =
+            "Time only counts in the time it takes the Rendering Pipeline to render the map and Invalidate the control.\nOther GUI updates are not included.";
+         RamUsageStrip.ToolTipText = "Current RAM usage of the application\nThis is inflated by HeapAllocation from the GC and will free memory if your PC needs some.";
+         UndoDepthLabel.ToolTipText = "Undo stack depth\nThis is the amount of actions you can undo/redo";
+         RedoDepthLabel.ToolTipText = "Redo stack depth\nThis is the amount of actions you can redo/undo";
+         CpuUsageStrip.ToolTipText = "Current CPU usage of the application";
+         SelectedProvinceSum.ToolTipText = "Sum of selected provinces";
       }
 
       private void InitializeMapModeButtons()

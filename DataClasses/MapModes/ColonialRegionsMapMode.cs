@@ -10,7 +10,7 @@ namespace Editor.DataClasses.MapModes
       public override int GetProvinceColor(Province id)
       {
          foreach (var cr in Globals.ColonialRegions.Values)
-            if (cr.Provinces.Contains(id))
+            if (cr.GetProvinces().Contains(id))
                return cr.Color.ToArgb();
          return Color.DimGray.ToArgb();
       }
@@ -23,7 +23,7 @@ namespace Editor.DataClasses.MapModes
       public override string GetSpecificToolTip(Province provinceId)
       {
          foreach (var cr in Globals.ColonialRegions.Values)
-            if (cr.Provinces.Contains(provinceId))
+            if (cr.GetProvinces().Contains(provinceId))
                return $"Colonial region: {cr.Name} ({cr.GetTitleLocKey})";
          return "Colonial region: [Unknown]";
       }

@@ -17,7 +17,7 @@ public abstract class MapMode
    public virtual void RenderMapMode(Func<Province, int> method)
    {
       // TODO optimize this method
-      var sw = Stopwatch.StartNew();
+      //var sw = Stopwatch.StartNew();
       if (IsLandOnly)
       {
          if (Globals.MapModeManager.PreviousLandOnly)
@@ -45,8 +45,8 @@ public abstract class MapMode
       Globals.ZoomControl.Invalidate();
       Globals.MapModeManager.PreviousLandOnly = IsLandOnly;
 
-      sw.Stop();
-      Debug.WriteLine($"RenderMapMode {GetMapModeName()} took {sw.ElapsedMilliseconds}ms");
+      //sw.Stop();
+      //Debug.WriteLine($"RenderMapMode {GetMapModeName()} took {sw.ElapsedMilliseconds}ms");
    }
 
    public virtual MapModeType GetMapModeName()

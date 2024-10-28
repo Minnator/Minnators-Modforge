@@ -103,6 +103,7 @@ public static class Selection
    // Tooltips
    public static bool ShowToolTip = true;
    private static ToolTip MapToolTip = new();
+   private static ToolTipForm ToolTipForm = new(5000);
 
    // Country Selection Variables
    // Selected Country TODO ADD THIS FEATURE
@@ -943,11 +944,16 @@ public static class Selection
 
       if (ShowToolTip)
       {
-         //var caption = ToolTipBuilder.BuildToolTip(Globals.ToolTipText, LastHoveredProvince);
+         var caption = ToolTipBuilder.BuildToolTip(Globals.ToolTipText, LastHoveredProvince);
+         MapToolTip.SetToolTip(Globals.ZoomControl, caption);
+         /*
          var sw = Stopwatch.StartNew();
-         MapToolTip.SetToolTip(Globals.ZoomControl, "r");
+         ToolTipForm.SetText(caption);
+         ToolTipForm.ShowTooltipAt(Control.MousePosition);
          sw.Stop();
          Debug.WriteLine($"ToolTip: {sw.ElapsedTicks} nano seconds");
+         // TODO make own tooltip
+         */
       }
       Globals.MapWindow.UpdateHoveredInfo(province);
       Globals.MapWindow.SetEditingMode();

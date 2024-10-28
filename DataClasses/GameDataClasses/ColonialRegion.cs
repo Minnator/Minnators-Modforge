@@ -4,12 +4,8 @@ using Editor.Interfaces;
 
 namespace Editor.DataClasses.GameDataClasses
 {
-   public class ColonialRegion : ProvinceCollection<Province>
+   public class ColonialRegion(string name, Color color) : ProvinceCollection<Province>(name, color)
    {
-      public ColonialRegion(string name, Color color) : base(name, color)
-      {
-      }
-
       public int TaxIncome { get; set; }
       public int NativeSize { get; set; }
       public int NativeFerocity { get; set; }
@@ -17,7 +13,6 @@ namespace Editor.DataClasses.GameDataClasses
       public List<KeyValuePair<string, int>> Cultures { get; set; } = [];
       public List<KeyValuePair<string, int>> Religions { get; set; } = [];
       public List<KeyValuePair<string, int>> TradeGoods { get; set; } = [];
-      public HashSet<Province> Provinces { get; set; } = [];
       public List<TriggeredName> Names { get; set; } = [];
 
 

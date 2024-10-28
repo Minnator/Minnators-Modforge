@@ -62,7 +62,7 @@ namespace Editor.Loading
                      region.TradeGoods = tradeGoodChances;
                      break;
                   case "provinces":
-                     region.Provinces = [..Parsing.GetProvincesFromString(b.GetContent)];
+                     region.AddRange(Parsing.GetProvincesFromString(b.GetContent));
                      break;
                   case "names":
                      Parsing.ParseTriggeredName(b, out var tn);

@@ -49,6 +49,7 @@ namespace Editor.Controls
             form.Location = new (MousePosition.X, MousePosition.Y);
             form.ShowDialog();
          }
+
       }
    }
 }

@@ -306,9 +306,6 @@ public static class Globals
 // - [ ] Improve selection modifiers and its GUI by adding more and only listing in context valid options
 // - [|] Straits editing and creation
 // - [ ] Fix the Province Collection Editing gui so that all types work the same and edge cases are handled
-// - [ ] Redo on create area does not work 
-// - [ ] Redo on DeleteRegion still shows the region_name afterwards
-// - [ ] Region creation is completely broken
 // - [x] Localisation editing for provinces and modifiers
 // - [x] Check if province is selected by color of the pixels instead of bounds or center
 
