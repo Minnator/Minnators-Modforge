@@ -15,7 +15,7 @@ public abstract class ProvinceCollection<T>(string name, Color color) : Province
       get => _subCollection;
       set
       {
-         _subCollection = value;
+         AddRange(value);
          SetBounds();
       }
    }
@@ -70,7 +70,7 @@ public abstract class ProvinceCollection<T>(string name, Color color) : Province
          }
       }
       composite.Parents.Add(this);
-      SubCollection.Add(composite);
+      _subCollection.Add(composite);
       if (setBounds)
          SetBounds();
 
@@ -89,7 +89,7 @@ public abstract class ProvinceCollection<T>(string name, Color color) : Province
    public void Remove(T composite, bool setBounds = true, bool toBeAdded = false)
    {
       composite.Parents.Remove(this);
-      SubCollection.Remove(composite);
+      _subCollection.Remove(composite);
       if (setBounds)
          SetBounds();
       if (!toBeAdded)
@@ -161,11 +161,15 @@ public abstract class ProvinceComposite(string name, Color color) : Saveable// P
 
    public static bool operator ==(ProvinceComposite left, ProvinceComposite right)
    {
+      if (left is null)
+         return right is null;
       return left.Equals(right);
    }
 
    public static bool operator !=(ProvinceComposite left, ProvinceComposite right)
    {
+      if (left is null)
+         return !(right is null);
       return !left.Equals(right);
    }
 

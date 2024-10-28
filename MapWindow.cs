@@ -271,7 +271,6 @@ namespace Editor
             CollectionEditorProvinceGroup.DeleteProvinceGroup,
             CollectionEditorProvinceGroup.SingleItemModified
          );
-         */
 
          ProvinceCollectionsLayoutPanel.Controls.Add(AreaEditingGui, 0, 0);
          ProvinceCollectionsLayoutPanel.Controls.Add(RegionEditingGui, 0, 1);
@@ -280,6 +279,7 @@ namespace Editor
          ProvinceCollectionsLayoutPanel.Controls.Add(TradeNodeEditingGui, 0, 4);
          ProvinceCollectionsLayoutPanel.Controls.Add(TradeCompanyEditingGui, 0, 5);
          ProvinceCollectionsLayoutPanel.Controls.Add(ProvinceGroupsEditingGui, 0, 6);
+         */
       }
 
 

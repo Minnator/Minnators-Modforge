@@ -942,7 +942,13 @@ public static class Selection
       HoverProvince(province);
 
       if (ShowToolTip)
-         MapToolTip.SetToolTip(Globals.ZoomControl, ToolTipBuilder.BuildToolTip(Globals.ToolTipText, LastHoveredProvince));
+      {
+         //var caption = ToolTipBuilder.BuildToolTip(Globals.ToolTipText, LastHoveredProvince);
+         var sw = Stopwatch.StartNew();
+         MapToolTip.SetToolTip(Globals.ZoomControl, "r");
+         sw.Stop();
+         Debug.WriteLine($"ToolTip: {sw.ElapsedTicks} nano seconds");
+      }
       Globals.MapWindow.UpdateHoveredInfo(province);
       Globals.MapWindow.SetEditingMode();
       Globals.ZoomControl.Invalidate();

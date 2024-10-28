@@ -9,7 +9,7 @@ namespace Editor.DataClasses.GameDataClasses;
 public class Area : ProvinceCollection<Province>
 {
 
-   public Area(string name, Province[] provinces, Color color) : base (name, color)
+   public Area(string name, ICollection<Province> provinces, Color color) : base (name, color)
    {
       SubCollection = provinces;
    }
@@ -26,7 +26,7 @@ public class Area : ProvinceCollection<Province>
       {
          if (Parents.Count < 1)
             return Region.Empty;
-         return (Parents[0] as Region)!;
+         return (Parents[0] as Region) ?? Region.Empty;
       }
    }
 

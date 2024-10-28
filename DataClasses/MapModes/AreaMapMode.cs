@@ -20,8 +20,8 @@ public sealed class AreaMapMode : MapMode
 
    public override int GetProvinceColor(Province id)
    {
-      if (Globals.Provinces.TryGetValue(id, out var province))
-         return province.Area.Color.ToArgb();
+      if (id.Area != Area.Empty )
+         return id.Area.Color.ToArgb();
       return Color.DarkGray.ToArgb();
    }
 

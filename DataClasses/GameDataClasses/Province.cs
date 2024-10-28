@@ -97,8 +97,8 @@ public class Province(int id, Color color) : ProvinceCollection<Province>(id.ToS
    #region ManagementData
 
    // Management data
-   public int Id { get; init; }
-   public Positions Positions { get; set; }
+   public int Id { get; init; } = id;
+   public Positions Positions { get; set; } = new();
    public int BorderPtr { get; set; }
    public int BorderCnt { get; set; }
    public int PixelPtr { get; set; }
@@ -121,7 +121,10 @@ public class Province(int id, Color color) : ProvinceCollection<Province>(id.ToS
       {
          if (Parents.Count < 1)
             return Area.Empty;
-         return (Parents[0] as Area)!;
+         if (Parents[0] is Area area)
+            return area;
+         var type = Parents[0].WhatAmI();
+         return Area.Empty;
       }
    }
 

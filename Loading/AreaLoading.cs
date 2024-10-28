@@ -46,8 +46,7 @@ public static class AreaLoading
                provinces.Add(province);
          }
 
-         Area newArea = new(areaName, [.. provinces], Globals.ColorProvider.GetRandomColor());
-         newArea.SetBounds();
+         Area newArea = new(areaName, provinces, Globals.ColorProvider.GetRandomColor());
          areaDictionary.Add(areaName, newArea);
       }
 
