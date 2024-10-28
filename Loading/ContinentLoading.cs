@@ -31,9 +31,9 @@ public static class ContinentLoading
       {
          var name = match.Groups["name"].Value;
          var provinces = Parsing.GetProvincesFromString(match.ToString());
-         continentDictionary.Add(name, new (name, provinces){Color = Globals.ColorProvider.GetRandomColor()});
+         continentDictionary.Add(name, new (name, Color.Empty, provinces){Color = Globals.ColorProvider.GetRandomColor()});
 
-         foreach (var provinceId in continentDictionary[name].Provinces)
+         foreach (var provinceId in continentDictionary[name].GetProvinces())
             if (Globals.Provinces.TryGetValue(provinceId, out var province))
                province.Continent = name;
       }

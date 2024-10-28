@@ -3,10 +3,7 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.Runtime;
 using System.Text;
-using System.Text.Json;
-using System.Windows.Forms;
 using Editor.Controls;
-using Editor.Controls.Initialisation.ProvinceCollectionEditors;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.Events;
@@ -14,9 +11,7 @@ using Editor.Forms;
 using Editor.Forms.Loadingscreen;
 using Editor.Forms.SavingClasses;
 using Editor.Helper;
-using Editor.Interfaces;
 using Editor.Loading;
-using Editor.Parser;
 using Editor.Savers;
 using static Editor.Helper.ProvinceEnumHelper;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
@@ -217,6 +212,7 @@ namespace Editor
 
       private void InitializeProvinceCollectionEditGui()
       {
+         /*
          AreaEditingGui = ControlFactory.GetCollectionEditor("Area", MapModeType.Area, ItemTypes.Id, [.. Globals.Areas.Keys],
             CollectionEditorArea.AreaSelected,
             CollectionEditorArea.ModifyExitingArea,
@@ -275,6 +271,7 @@ namespace Editor
             CollectionEditorProvinceGroup.DeleteProvinceGroup,
             CollectionEditorProvinceGroup.SingleItemModified
          );
+         */
 
          ProvinceCollectionsLayoutPanel.Controls.Add(AreaEditingGui, 0, 0);
          ProvinceCollectionsLayoutPanel.Controls.Add(RegionEditingGui, 0, 1);

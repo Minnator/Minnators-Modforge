@@ -1,9 +1,7 @@
-﻿using System.Diagnostics;
-using Editor.DataClasses.GameDataClasses;
-using Editor.DataClasses.MapModes;
+﻿using Editor.DataClasses.GameDataClasses;
 using Editor.Events;
 
-namespace Editor.MapModes;
+namespace Editor.DataClasses.MapModes;
 
 public class FortMapMode : MapMode
 {
@@ -13,7 +11,7 @@ public class FortMapMode : MapMode
    public FortMapMode()
    {
       // Subscribe to events to update the min and max values when a province's development changes
-      ProvinceEventHandler.OnProvinceBuildingsChanged += UpdateProvince;
+      ProvinceEventHandler.OnProvinceBuildingsChanged += UpdateProvince!;
    }
 
    public override int GetProvinceColor(Province id)

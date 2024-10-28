@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Text.RegularExpressions;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
@@ -48,11 +47,8 @@ public static class AreaLoading
          }
 
          Area newArea = new(areaName, [.. provinces], Globals.ColorProvider.GetRandomColor());
-         newArea.CalculateBounds();
+         newArea.SetBounds();
          areaDictionary.Add(areaName, newArea);
-
-         foreach (var provinceId in areaDictionary[areaName].Provinces)
-            if (Globals.Provinces.TryGetValue(provinceId, out var province)) province.Area = areaName;
       }
 
       Globals.Areas = areaDictionary;

@@ -9,14 +9,14 @@ namespace Editor.Commands
    {
       private readonly List<Province> _selectionDelta;
 
-      public CCollectionSelection(List<Province> toSelect, bool executeOnInit = true)
+      public CCollectionSelection(ICollection<Province> toSelect, bool executeOnInit = true)
       {
          _selectionDelta = toSelect.Except(Selection.SelectionPreview).ToList();
          if (executeOnInit)
             Execute();
       }
 
-      public CCollectionSelection(IProvinceCollection collection, bool executeOnInit = true)
+      public CCollectionSelection(ProvinceCollection<Province> collection, bool executeOnInit = true)
       {
          _selectionDelta = collection.GetProvinces().Except(Selection.SelectionPreview).ToList();
          if (executeOnInit)

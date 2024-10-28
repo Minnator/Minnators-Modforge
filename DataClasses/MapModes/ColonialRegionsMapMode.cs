@@ -24,7 +24,7 @@ namespace Editor.DataClasses.MapModes
       {
          foreach (var cr in Globals.ColonialRegions.Values)
             if (cr.Provinces.Contains(provinceId))
-               return $"Colonial region: {cr.Name} ({cr.GetLocalisation()})";
+               return $"Colonial region: {cr.Name} ({cr.GetTitleLocKey})";
          return "Colonial region: [Unknown]";
       }
    }

@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.Interfaces;
 
@@ -6,8 +7,7 @@ namespace Editor.Savers
 {
    public static class CollectionSavers
    {
-      public static void SaveIProvinceCollection(List<IProvinceCollection> provinceCollections, bool locComment,
-         params string[] internalPath)
+      public static void SaveIProvinceCollection(List<ProvinceCollection<Province>> provinceCollections, bool locComment, params string[] internalPath)
       {
          var path = Path.Combine(Globals.ModPath, Path.Combine(internalPath));
          StringBuilder sb = new ();

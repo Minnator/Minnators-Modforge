@@ -176,7 +176,7 @@ namespace Editor.DataClasses.GameDataClasses
          SetPath(ref path);
       }
 
-      public override ModifiedData GetModifiedDataFlag()
+      public override ModifiedData WhatAmI()
       {
          return ModifiedData.EventModifiers;
       }

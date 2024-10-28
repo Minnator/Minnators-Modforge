@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.Metrics;
+using Editor.DataClasses.Commands;
 using Editor.Events;
 using Editor.Helper;
 using Editor.Interfaces;
@@ -28,55 +29,12 @@ public enum CountrySetter
    [CountryAttrMetadata(CountryAttrType.Color)] color,
 }
 
-public class Country(Tag tag, string fileName) : IProvinceCollection
+public class Country(Tag tag, Color color, string fileName) : ProvinceCollection<Province>(tag.ToString(), color)
 {
-   public string Name { get; set; } = tag;
    public Tag Tag { get; } = tag;
    public Tag ColonialParent { get; set; } = Tag.Empty;
    public string FileName { get; } = fileName;
-   public static Country Empty => new(Tag.Empty, string.Empty);
-   
-   public ICollection<Province> GetProvinces()
-   {
-      List<Province> provinces = [];
-      foreach (var prv in Globals.Provinces)
-         if (prv.Owner == Tag)
-            provinces.Add(prv);
-      return [.. provinces];
-   }
-   
-   public int[] GetProvinceIds()
-   {
-      List<int> provinces = [];
-      foreach (var prv in Globals.Provinces)
-      {
-         if (prv.Owner == Tag)
-            provinces.Add(prv.Id);
-      }
-      return [.. provinces];
-   }
-
-   public IProvinceCollection? ScopeOut()
-   {
-      return null; //TODO if there is an overlord return it
-   }
-
-   public List<IProvinceCollection>? ScopeIn()
-   {
-      return null; //TODO if there are vassals return them
-   }
-
-   public Color Color
-   {
-      get => _color;
-      set
-      {
-         _color = value;
-         if (Globals.State == State.Running)
-            CountryEditingEvents.CountryColorChanged.Invoke(null, new (CountrySetter.color, value));
-      }
-   }
-
+   public static Country Empty => new(Tag.Empty, Color.Empty, string.Empty);
    public Color RevolutionaryColor { get; set; } = Color.Empty;
    public string Gfx { get; set; } = string.Empty;
    public string HistoricalCouncil { get; set; } = string.Empty;
@@ -86,7 +44,6 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
    public bool CanBeRandomNation { get; set; } = true;
    public List<ModifierAbstract> Modifiers { get; set; } = [];
    public List<RulerModifier> RulerModifiers { get; set; } = [];
-
    public List<string> HistoricalIdeas { get; set; } = [];
    public List<string> HistoricalUnits { get; set; } = [];
    public List<string> CustomAttributes { get; set; } = [];
@@ -95,10 +52,8 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
    public List<string> FleeTNames { get; set; } = [];
    public List<string> ArmyNames { get; set; } = [];
    public List<string> LeaderNames { get; set; } = [];
-
    // Effects on initialization
    public List<Effect> InitialEffects { get; set; } = [];
-
    // HISTORY
    public List<string> GovernmentReforms { get; set; } = [];
    public List<string> AcceptedCultures { get; set; } = [];
@@ -255,5 +210,78 @@ public class Country(Tag tag, string fileName) : IProvinceCollection
    public static implicit operator Tag(Country country)
    {
       return country.Tag;
+   }
+
+   public override ModifiedData WhatAmI()
+   {
+      return ModifiedData.Country;
+   }
+
+   public override string SavingComment()
+   {
+      return Localisation.GetLoc(Tag);
+   }
+
+   public override PathObj GetDefaultSavePath()
+   {
+      return new (["history", "countries"]);
+   }
+
+   public override string GetSaveString(int tabs)
+   {
+      // TODO
+      return "NOT YET SUPPORTED!";
+   }
+
+   public override string GetSavePromptString()
+   {
+      return $"Save countries file for {SavingComment()}";
+   }
+
+   public EventHandler<ProvinceComposite> ColorChanged = delegate { };
+   public EventHandler<ProvinceComposite> ItemAddedToArea = delegate { };
+   public EventHandler<ProvinceComposite> ItemRemovedFromArea = delegate { };
+   public EventHandler<ProvinceComposite> ItemModified = delegate { };
+
+   public override void Invoke(ProvinceComposite composite)
+   {
+      ColorChanged.Invoke(this, composite);
+   }
+
+   public override void AddToEvent(EventHandler<ProvinceComposite> handler)
+   {
+      ColorChanged += handler;
+   }
+
+   public override void Invoke(CProvinceCollectionType type, ProvinceComposite composite)
+   {
+      switch (type)
+      {
+         case CProvinceCollectionType.Add:
+            ItemAddedToArea.Invoke(this, composite);
+            break;
+         case CProvinceCollectionType.Remove:
+            ItemRemovedFromArea.Invoke(this, composite);
+            break;
+         case CProvinceCollectionType.Modify:
+            ItemModified.Invoke(this, composite);
+            break;
+      }
+   }
+
+   public override void AddToEvent(CProvinceCollectionType type, EventHandler<ProvinceComposite> eventHandler)
+   {
+      switch (type)
+      {
+         case CProvinceCollectionType.Add:
+            ItemAddedToArea += eventHandler;
+            break;
+         case CProvinceCollectionType.Remove:
+            ItemRemovedFromArea += eventHandler;
+            break;
+         case CProvinceCollectionType.Modify:
+            ItemModified += eventHandler;
+            break;
+      }
    }
 }

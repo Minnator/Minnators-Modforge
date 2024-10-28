@@ -39,7 +39,7 @@ namespace Editor.Helper
 
       public static void AddLocObject(LocObject loc)
       {
-         Globals.ModifiedData |= loc.GetModifiedDataFlag();
+         Globals.ModifiedData |= loc.WhatAmI();
          if (loc.Path.Equals(PathObj.Empty))
          {
             if (!AllSaveableFiles.TryAdd(loc.Path, [loc]))
@@ -70,7 +70,7 @@ namespace Editor.Helper
 
       public static void AddToBeHandled(Saveable obj)
       {
-         Globals.ModifiedData |= obj.GetModifiedDataFlag();
+         Globals.ModifiedData |= obj.WhatAmI();
          // It is a new object and will be handled via the PathObj.Empty
          if (obj.Path.Equals(PathObj.Empty))
          {
@@ -123,7 +123,7 @@ namespace Editor.Helper
          // TODO Order and save the position of unchanged, modified and new, so it can be saved neatly or use the SaveModifiedObjects version
          foreach (var change in NeedsToBeHandledVanilla)
          {
-            var singleModData = AllSaveableFiles[change][0].GetModifiedDataFlag();
+            var singleModData = AllSaveableFiles[change][0].WhatAmI();
             if ((modifiedData & singleModData) == 0)
                continue;
             var replace = change.ShouldReplace;
@@ -153,7 +153,7 @@ namespace Editor.Helper
             Dictionary<ModifiedData, PathObj> pathGrouping = [];
             foreach (var saveable in newSaveables)
             {
-               var singleModData = saveable.GetModifiedDataFlag();
+               var singleModData = saveable.WhatAmI();
                if ((modifiedData & singleModData) == 0)
                   continue;
 

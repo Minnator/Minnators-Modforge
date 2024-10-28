@@ -1,6 +1,7 @@
 ﻿using Editor.Commands;
 using Editor.Controls;
 using Editor.DataClasses.GameDataClasses;
+using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor.Helper
 {
@@ -36,8 +37,9 @@ namespace Editor.Helper
             if (Selection.LastHoveredProvince == Province.Empty)
                return;
 
-            if (Globals.Areas.TryGetValue(Selection.LastHoveredProvince.Area, out var area))
-                  Globals.HistoryManager.AddCommand(new CCollectionSelection(area), CommandHistoryType.ComplexSelection);
+            if (Selection.LastHoveredProvince.Area != Area.Empty)
+               Globals.HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.Area), CommandHistoryType.ComplexSelection);
+            
          });
       }
 
@@ -48,9 +50,9 @@ namespace Editor.Helper
             if (Selection.LastHoveredProvince == Province.Empty)
                return;
 
-            if (Globals.Areas.TryGetValue(Selection.LastHoveredProvince.Area, out var area))
-               if (Globals.Regions.TryGetValue(area.Region, out var region))
-                  Globals.HistoryManager.AddCommand(new CCollectionSelection(region), CommandHistoryType.ComplexSelection);
+            if (Selection.LastHoveredProvince.Area != Area.Empty)
+               if (Selection.LastHoveredProvince.Area.Region != Region.Empty)
+                     Globals.HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.Area.Region.GetProvinces()), CommandHistoryType.ComplexSelection);
          });
       }
 
@@ -61,10 +63,10 @@ namespace Editor.Helper
             if (Selection.LastHoveredProvince == Province.Empty)
                return;
 
-            if (Globals.Areas.TryGetValue(Selection.LastHoveredProvince.Area, out var area))
-               if (Globals.Regions.TryGetValue(area.Region, out var region))
-                     if (Globals.SuperRegions.TryGetValue(region.SuperRegion, out var superRegion))
-                        Globals.HistoryManager.AddCommand(new CCollectionSelection(superRegion), CommandHistoryType.ComplexSelection);
+            if (Selection.LastHoveredProvince.Area != Area.Empty)
+               if (Selection.LastHoveredProvince.Area.Region != Region.Empty)
+                  if (Selection.LastHoveredProvince.Area.Region.SuperRegion != SuperRegion.Empty)
+                        Globals.HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.Area.Region.SuperRegion.GetProvinces()), CommandHistoryType.ComplexSelection);
          });
       }
 

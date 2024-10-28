@@ -34,7 +34,7 @@ namespace Editor.Savers
                regions.Add(new(region.Name, region.Areas));
             CollectionSavers.SaveStringCollection(regions, "areas", true, "map", "region.txt");
          }
-         if (modifiedDataClass.SaveTradeNodes)
+         if (modifiedDataClass.TradeNode)
          {
             SaveTradeNodes.SaveAllTradeNodes(TradeNodeHelper.TopologicalSort(Globals.TradeNodes.Values.ToList()));
          }

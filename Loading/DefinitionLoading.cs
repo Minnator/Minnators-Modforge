@@ -38,17 +38,12 @@ public static class DefinitionLoading
 
             if (!provinces.ContainsKey(id))
             {
-               var province = new Province
-               {
-                  Id = id,
-                  Color = color
-               };
+               var province = new Province(id, color);
                provinces.Add(id, province);
             }
 
             // Link to the first found color if there are duplicates
-            if (!colorToId.ContainsKey(color))
-               colorToId.Add(color, id);
+            colorToId.TryAdd(color, id);
             //else
             //   Debug.WriteLine($"Duplicate color found in definition file: {color}");
          }

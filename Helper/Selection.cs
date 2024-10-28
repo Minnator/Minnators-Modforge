@@ -813,13 +813,13 @@ public static class Selection
          case SelectionType.Province:
             return [province];
          case SelectionType.Area:
-            if (Globals.Areas.TryGetValue(province.Area, out var area))
-               return area.Provinces;
+            if (province.Area != Area.Empty)
+               return province.Area.GetProvinces();
             break;
          case SelectionType.Region:
-            if (Globals.Areas.TryGetValue(province.Area, out var area2))
-               if (Globals.Regions.TryGetValue(area2.Region, out var region))
-                  return region.GetProvinces();
+            if (province.Area != Area.Empty)
+               if (province.Area.Region != DataClasses.GameDataClasses.Region.Empty)
+                  return province.Area.Region.GetProvinces();
             break;
          case SelectionType.Country:
             if (Globals.Countries.TryGetValue(province.Owner, out var country))

@@ -40,6 +40,7 @@
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Controls\Initialisation\" />
     <Folder Include="ParadoxLanguage\Effect\" />
     <Folder Include="ParadoxLanguage\Scope\" />
   </ItemGroup>

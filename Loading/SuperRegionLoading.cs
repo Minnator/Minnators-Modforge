@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
+using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor.Loading;
 
@@ -29,19 +30,16 @@ public static class SuperRegionLoading
       foreach (Match match in matches)
       {
          var superRegionName = match.Groups["name"].Value;
-         var regions = Parsing.GetStringList(match.Groups["regions"].Value);
-
-         var sRegion = new SuperRegion(superRegionName, regions)
+         var regionStrings = Parsing.GetStringList(match.Groups["regions"].Value);
+         List<Region> regions = [];
+         foreach (var region in regionStrings)
          {
-            Color = Globals.ColorProvider.GetRandomColor()
-         };
-         sRegion.CalculateBounds();
-         Globals.AddSuperRegion(sRegion);
+            if (Globals.Regions.TryGetValue(region, out var reg))
+               regions.Add(reg);
+         }
 
-         foreach (var region in regions)
-            if (Globals.Regions.TryGetValue(region, out var reg)) 
-               reg.SuperRegion = superRegionName;
-         
+         var sRegion = new SuperRegion(superRegionName, Globals.ColorProvider.GetRandomColor(), regions);
+         Globals.AddSuperRegion(sRegion);
       }
 
       sw.Stop();

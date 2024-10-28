@@ -75,7 +75,7 @@ namespace Editor.Savers
       /// </summary>
       /// <param name="province"></param>
       /// <param name="contentString"></param>
-      private static void GetProvinceFileString(Province province, out string contentString)
+      public static void GetProvinceFileString(Province province, out string contentString)
       {
          contentString = string.Empty;
          var sb = new StringBuilder();

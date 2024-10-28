@@ -1,54 +1,91 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Text;
+using Editor.DataClasses.Commands;
+using Editor.Helper;
 using Editor.Interfaces;
+using Editor.Savers;
 
 namespace Editor.DataClasses.GameDataClasses;
 #nullable enable
-public class Continent(string name, List<Province> provinces) : IProvinceCollection
+public class Continent : ProvinceCollection<Province>
 {
-   public string Name { get; } = name;
-   public List<Province> Provinces { get; set; } = provinces;
-   public Color Color { get; set; }
-
-   public override bool Equals(object? obj)
+   public Continent(string name, Color color, List<Province> provinces) : base(name, color)
    {
-      if (obj is Continent other)
-         return Name == other.Name;
-      return false;
+      SubCollection = provinces;
    }
 
-   public override int GetHashCode()
+   public override ModifiedData WhatAmI()
    {
-      return Name.GetHashCode();
+      return ModifiedData.Continents;
    }
 
-   public int[] GetProvinceIds()
+   public override string SavingComment()
    {
-      var ids = new int[Provinces.Count];
-      for (var i = 0; i < Provinces.Count; i++)
+      return Localisation.GetLoc(Name);
+   }
+
+   public override PathObj GetDefaultSavePath()
+   {
+      return new (["map"]);
+   }
+
+   public override string GetSaveString(int tabs)
+   {
+      var sb = new StringBuilder();
+      SavingUtil.AddFormattedIntList(Name, GetProvinceIds(), 0, ref sb);
+      return sb.ToString();
+   }
+
+   public override string GetSavePromptString()
+   {
+      return $"Save continents file";
+   }
+
+   public EventHandler<ProvinceComposite> ColorChanged = delegate { };
+   public EventHandler<ProvinceComposite> ItemAddedToArea = delegate { };
+   public EventHandler<ProvinceComposite> ItemRemovedFromArea = delegate { };
+   public EventHandler<ProvinceComposite> ItemModified = delegate { };
+
+   public override void Invoke(ProvinceComposite composite)
+   {
+      ColorChanged.Invoke(this, composite);
+   }
+
+   public override void AddToEvent(EventHandler<ProvinceComposite> handler)
+   {
+      ColorChanged += handler;
+   }
+
+   public override void Invoke(CProvinceCollectionType type, ProvinceComposite composite)
+   {
+      switch (type)
       {
-         ids[i] = Provinces[i].Id;
+         case CProvinceCollectionType.Add:
+            ItemAddedToArea.Invoke(this, composite);
+            break;
+         case CProvinceCollectionType.Remove:
+            ItemRemovedFromArea.Invoke(this, composite);
+            break;
+         case CProvinceCollectionType.Modify:
+            ItemModified.Invoke(this, composite);
+            break;
       }
-      return ids;
    }
 
-   public ICollection<Province> GetProvinces()
+   public override void AddToEvent(CProvinceCollectionType type, EventHandler<ProvinceComposite> eventHandler)
    {
-      return Provinces;
-   }
-
-   public List<IProvinceCollection> ScopeIn()
-   {
-      var provs = new List<IProvinceCollection>();
-      foreach (var province in Provinces)
+      switch (type)
       {
-         provs.Add(province);
+         case CProvinceCollectionType.Add:
+            ItemAddedToArea += eventHandler;
+            break;
+         case CProvinceCollectionType.Remove:
+            ItemRemovedFromArea += eventHandler;
+            break;
+         case CProvinceCollectionType.Modify:
+            ItemModified += eventHandler;
+            break;
       }
-      return provs;
-   }
-
-   public IProvinceCollection? ScopeOut()
-   {
-      return null;
    }
 }

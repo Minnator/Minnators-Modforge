@@ -17,11 +17,11 @@ namespace Editor.Forms.SavingClasses
       {
          if ((data & ModifiedData.SaveProvinces) != 0)
             SavingCheckedListBox.SetItemChecked(0, true);
-         if ((data & ModifiedData.SaveAreas) != 0)
+         if ((data & ModifiedData.Areas) != 0)
             SavingCheckedListBox.SetItemChecked(1, true);
-         if ((data & ModifiedData.SaveRegions) != 0)
+         if ((data & ModifiedData.Regions) != 0)
             SavingCheckedListBox.SetItemChecked(2, true);
-         if ((data & ModifiedData.SaveTradeNodes) != 0)
+         if ((data & ModifiedData.TradeNode) != 0)
             SavingCheckedListBox.SetItemChecked(3, true);
          if ((data & ModifiedData.SaveTradeCompanies) != 0)
             SavingCheckedListBox.SetItemChecked(4, true);
@@ -45,11 +45,11 @@ namespace Editor.Forms.SavingClasses
          if (SavingCheckedListBox.GetItemChecked(0))
             data |= ModifiedData.SaveProvinces;
          if (SavingCheckedListBox.GetItemChecked(1))
-            data |= ModifiedData.SaveAreas;
+            data |= ModifiedData.Areas;
          if (SavingCheckedListBox.GetItemChecked(2))
-            data |= ModifiedData.SaveRegions;
+            data |= ModifiedData.Regions;
          if (SavingCheckedListBox.GetItemChecked(3))
-            data |= ModifiedData.SaveTradeNodes;
+            data |= ModifiedData.TradeNode;
          if (SavingCheckedListBox.GetItemChecked(4))
             data |= ModifiedData.SaveTradeCompanies;
          if (SavingCheckedListBox.GetItemChecked(5))

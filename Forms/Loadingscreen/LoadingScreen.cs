@@ -141,6 +141,8 @@ namespace Editor.Forms.Loadingscreen
             bw.ReportProgress(++progress);
             PositionsLoading.Load();
             bw.ReportProgress(++progress);
+            ProvinceParser.ParseAllUniqueProvinces();
+            bw.ReportProgress(++progress);
             AreaLoading.LoadNew();
             bw.ReportProgress(++progress);
             TradeNodeLoading.Load();
@@ -152,8 +154,6 @@ namespace Editor.Forms.Loadingscreen
             ContinentLoading.Load();
             bw.ReportProgress(++progress);
             ScopeParser.GenerateRuntimeScopes();
-            bw.ReportProgress(++progress);
-            ProvinceParser.ParseAllUniqueProvinces();
             bw.ReportProgress(++progress);
             TradeCompanyLoading.Load();
             bw.ReportProgress(++progress);

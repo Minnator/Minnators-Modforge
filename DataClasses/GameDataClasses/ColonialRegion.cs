@@ -1,14 +1,15 @@
-﻿using System.Security.Policy;
+﻿using Editor.DataClasses.Commands;
 using Editor.Helper;
 using Editor.Interfaces;
-using Editor.Parser;
 
 namespace Editor.DataClasses.GameDataClasses
 {
-   public class ColonialRegion(string name) : IProvinceCollection
+   public class ColonialRegion : ProvinceCollection<Province>
    {
-      public string Name { get; init; } = name;
-      public Color Color { get; set; }
+      public ColonialRegion(string name, Color color) : base(name, color)
+      {
+      }
+
       public int TaxIncome { get; set; }
       public int NativeSize { get; set; }
       public int NativeFerocity { get; set; }
@@ -19,49 +20,84 @@ namespace Editor.DataClasses.GameDataClasses
       public HashSet<Province> Provinces { get; set; } = [];
       public List<TriggeredName> Names { get; set; } = [];
 
-      public int[] GetProvinceIds()
-      {
-         List<int> provinces = [];
-         foreach (var prv in Provinces)
-            provinces.Add(prv.Id);
-         return [.. provinces];
-      }
-
-      public ICollection<Province> GetProvinces()
-      {
-         return Provinces;
-      }
-
-      public IProvinceCollection? ScopeOut()
-      {
-         throw new IllegalScopeException("Can not scope out from Colonial Region");
-      }
-
-      public List<IProvinceCollection>? ScopeIn()
-      {
-         throw new IllegalScopeException("Can not scope in from Colonial Region");
-      }
-
-      public string GetLocalisation()
-      {
-         return Localisation.GetLoc(Name);
-      }
-
-      public override bool Equals(object? obj)
-      {
-         if (obj is ColonialRegion other)
-            return Name == other.Name;
-         return false;
-      }
-
-      public override int GetHashCode()
-      {
-         return Name.GetHashCode();
-      }
 
       public override string ToString()
       {
          return Name;
+      }
+
+      public override ModifiedData WhatAmI()
+      {
+         return ModifiedData.ColonialRegions;
+      }
+
+      public override string SavingComment()
+      {
+         return Localisation.GetLoc(Name);
+      }
+
+      public override PathObj GetDefaultSavePath()
+      {
+         return new (["common", "colonial_regions"]);
+      }
+
+      public override string GetSaveString(int tabs)
+      {
+         //TODO
+         return "NOT YET SUPPORTED!";
+      }
+
+      public override string GetSavePromptString()
+      {
+         return $"Save colonial regions file";
+      }
+
+
+      public EventHandler<ProvinceComposite> ColorChanged = delegate { };
+      public EventHandler<ProvinceComposite> ItemAddedToArea = delegate { };
+      public EventHandler<ProvinceComposite> ItemRemovedFromArea = delegate { };
+      public EventHandler<ProvinceComposite> ItemModified = delegate { };
+
+      public override void Invoke(ProvinceComposite composite)
+      {
+         ColorChanged.Invoke(this, composite);
+      }
+
+      public override void AddToEvent(EventHandler<ProvinceComposite> handler)
+      {
+         ColorChanged += handler;
+      }
+
+      public override void Invoke(CProvinceCollectionType type, ProvinceComposite composite)
+      {
+         switch (type)
+         {
+            case CProvinceCollectionType.Add:
+               ItemAddedToArea.Invoke(this, composite);
+               break;
+            case CProvinceCollectionType.Remove:
+               ItemRemovedFromArea.Invoke(this, composite);
+               break;
+            case CProvinceCollectionType.Modify:
+               ItemModified.Invoke(this, composite);
+               break;
+         }
+      }
+
+      public override void AddToEvent(CProvinceCollectionType type, EventHandler<ProvinceComposite> eventHandler)
+      {
+         switch (type)
+         {
+            case CProvinceCollectionType.Add:
+               ItemAddedToArea += eventHandler;
+               break;
+            case CProvinceCollectionType.Remove:
+               ItemRemovedFromArea += eventHandler;
+               break;
+            case CProvinceCollectionType.Modify:
+               ItemModified += eventHandler;
+               break;
+         }
       }
    }
 
@@ -92,5 +128,6 @@ namespace Editor.DataClasses.GameDataClasses
       {
          return Name.GetHashCode();
       }
+
    }
 }

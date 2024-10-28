@@ -1,58 +1,30 @@
-﻿using Editor.Helper;
+﻿using Editor.DataClasses.Commands;
+using Editor.Helper;
 using Editor.Interfaces;
 using Editor.Parser;
 
 namespace Editor.DataClasses.GameDataClasses
 {
-   public class TradeCompany : IProvinceCollection
+   public class TradeCompany : ProvinceCollection<Province>
    {
-      public TradeCompany(string codename)
+      public TradeCompany(string name, Color color) : base(name, color)
       {
-         Name = codename;
          GenericName = string.Empty;
          SpecificName = string.Empty;
          Provinces = [];
-         Color = Color.Empty;
       }
 
-      public TradeCompany(string codeName, string genericName, string specificName, List<Province> provinces, Color color)
+      public TradeCompany(string codeName, string genericName, string specificName, List<Province> provinces, Color color) : base(codeName, color)
       {
-         Name = codeName;
          GenericName = genericName;
          SpecificName = specificName;
          Provinces = [..provinces];
-         Color = color;
       }
 
-      public static TradeCompany Empty => new ("Empty");
-      public string Name { get; set; }
+      public static TradeCompany Empty => new ("Empty", Color.Empty);
       public string GenericName { get; set; }
       public string SpecificName { get; set; }
       public HashSet<Province> Provinces { get; set; }
-      public Color Color { get; set; }
-
-      public int[] GetProvinceIds()
-      {
-         List<int> provinces = [];
-         foreach (var province in Provinces)
-            provinces.Add(province.Id);
-         return [..provinces];
-      }
-
-      public ICollection<Province> GetProvinces()
-      {
-         throw new NotImplementedException();
-      }
-
-      public IProvinceCollection? ScopeOut()
-      {
-         throw new IllegalScopeException(nameof(TradeCompany), "Can not scope out from tradeCompany");
-      }
-
-      public List<IProvinceCollection>? ScopeIn()
-      {
-         throw new IllegalScopeException(nameof(TradeCompany), "Can not scope in from tradeCompany");
-      }
 
       public string GetLocalisation()
       {
@@ -64,16 +36,76 @@ namespace Editor.DataClasses.GameDataClasses
          return Name;
       }
 
-      public override bool Equals(object? obj)
+      public override ModifiedData WhatAmI()
       {
-         if (obj is TradeCompany company)
-            return Name.Equals(company.Name);
-         return false;
+         return ModifiedData.SaveTradeCompanies;
       }
 
-      public override int GetHashCode()
+      public override string SavingComment()
       {
-         return Name.GetHashCode();
+         return Localisation.GetLoc(Name);
+      }
+
+      public override PathObj GetDefaultSavePath()
+      {
+         return new (["common", "trade_companies"]);
+      }
+
+      public override string GetSaveString(int tabs)
+      {
+         return "NOT YET SUPPORTED!";
+      }
+
+      public override string GetSavePromptString()
+      {
+         return $"Save trade companies file";
+      }
+
+      public EventHandler<ProvinceComposite> ColorChanged = delegate { };
+      public EventHandler<ProvinceComposite> ItemAddedToArea = delegate { };
+      public EventHandler<ProvinceComposite> ItemRemovedFromArea = delegate { };
+      public EventHandler<ProvinceComposite> ItemModified = delegate { };
+
+      public override void Invoke(ProvinceComposite composite)
+      {
+         ColorChanged.Invoke(this, composite);
+      }
+
+      public override void AddToEvent(EventHandler<ProvinceComposite> handler)
+      {
+         ColorChanged += handler;
+      }
+
+      public override void Invoke(CProvinceCollectionType type, ProvinceComposite composite)
+      {
+         switch (type)
+         {
+            case CProvinceCollectionType.Add:
+               ItemAddedToArea.Invoke(this, composite);
+               break;
+            case CProvinceCollectionType.Remove:
+               ItemRemovedFromArea.Invoke(this, composite);
+               break;
+            case CProvinceCollectionType.Modify:
+               ItemModified.Invoke(this, composite);
+               break;
+         }
+      }
+
+      public override void AddToEvent(CProvinceCollectionType type, EventHandler<ProvinceComposite> eventHandler)
+      {
+         switch (type)
+         {
+            case CProvinceCollectionType.Add:
+               ItemAddedToArea += eventHandler;
+               break;
+            case CProvinceCollectionType.Remove:
+               ItemRemovedFromArea += eventHandler;
+               break;
+            case CProvinceCollectionType.Modify:
+               ItemModified += eventHandler;
+               break;
+         }
       }
    }
 }

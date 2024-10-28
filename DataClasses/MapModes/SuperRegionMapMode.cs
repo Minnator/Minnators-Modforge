@@ -1,6 +1,7 @@
 ﻿using Editor.DataClasses.GameDataClasses;
 using Editor.Events;
 using Editor.Helper;
+using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor.DataClasses.MapModes;
 
@@ -19,19 +20,17 @@ public sealed class SuperRegionMapMode : MapMode
    public override int GetProvinceColor(Province id)
    {
       if (Globals.Provinces.TryGetValue(id, out var province))
-         if (Globals.Areas.TryGetValue(province.Area, out var areas))
-            if (Globals.Regions.TryGetValue(areas.Region, out var region))
-               if (Globals.SuperRegions.TryGetValue(region.SuperRegion, out var superRegion))
-                  return superRegion.Color.ToArgb();
+         if (province.Area != Area.Empty)
+            if (province.Area.Region != Region.Empty)
+               return province.Area.Region.SuperRegion.Color.ToArgb();
       return Color.DarkGray.ToArgb();
    }
 
    public override string GetSpecificToolTip(Province province)
    {
-      if (Globals.Areas.TryGetValue(province.Area, out var areas))
-         if (Globals.Regions.TryGetValue(areas.Region, out var region))
-            if (Globals.SuperRegions.TryGetValue(region.SuperRegion, out var superRegion))
-               return $"Super Region: {superRegion.Name} ({Localisation.GetLoc(superRegion.Name)})";
+         if (province.Area != Area.Empty)
+            if (province.Area.Region != Region.Empty)
+               return $"Super Region: {province.Area.Region.SuperRegion.Name} ({Localisation.GetLoc(province.Area.Region.SuperRegion.Name)})";
       return "Super Region: [Unknown]";
    }
 }

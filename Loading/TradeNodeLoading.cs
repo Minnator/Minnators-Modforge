@@ -77,7 +77,7 @@ namespace Editor.Loading
                      Globals.ErrorLog.Write($"Invalid location value in tradenode: {value.Value}");
                      break;
                   }
-                  node = new (block.Name, Globals.ProvinceIdToProvince[location]);
+                  node = new (block.Name, Color.Empty, Globals.ProvinceIdToProvince[location]);
                }
                else if (value.Key.Equals("inland"))
                   node.IsInland = Parsing.YesNo(value.Value);

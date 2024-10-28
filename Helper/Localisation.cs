@@ -84,7 +84,7 @@ public class LocObject : Saveable
       }
    }
 
-   public override ModifiedData GetModifiedDataFlag()
+   public override ModifiedData WhatAmI()
    {
       return ModifiedData.Localisation;
    }

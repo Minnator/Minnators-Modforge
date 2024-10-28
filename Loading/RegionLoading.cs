@@ -1,10 +1,7 @@
-﻿using Editor.DataClasses.GameDataClasses;
-using Editor.Helper;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
+﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
+using Editor.DataClasses.GameDataClasses;
+using Editor.Helper;
 using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor.Loading;
@@ -37,7 +34,17 @@ public static partial class RegionLoading
       foreach (Match match in matches)
       {
          var regionName = match.Groups["regionName"].Value;
-         var areas = Parsing.GetStringList(match.Groups["areas"].Value);
+         var areasStrings = Parsing.GetStringList(match.Groups["areas"].Value);
+         List<Area> areas = [];
+
+         foreach (var areaStr in areasStrings)
+         {
+            if (!Globals.Areas.TryGetValue(areaStr, out var area))
+               Globals.ErrorLog.Write($"Error: Area {areaStr} not found in region {regionName}");
+            else
+               areas.Add(area);
+         }
+
          var monsoons = new List<Monsoon>();
 
          foreach (Capture monsoon in match.Groups["monsoons"].Captures)
@@ -47,18 +54,10 @@ public static partial class RegionLoading
             foreach (Match monsoonMatch in monsoonMatches) 
                monsoons.Add(new (monsoonMatch.Groups["start"].Value, monsoonMatch.Groups["end"].Value));
          }
-         var region = new Region(regionName, areas, monsoons)
-         {
-            Color = Globals.ColorProvider.GetRandomColor()
-         };
-         region.CalculateBounds();
-         regionDictionary.Add(regionName, region);
 
-         foreach (var area in areas)
-         {
-            if (Globals.Areas.TryGetValue(area, out var ar))
-               ar.Region = regionName;
-         }
+         var region = new Region(regionName, Globals.ColorProvider.GetRandomColor(), areas) { Monsoon = monsoons };
+         region.SetBounds();
+         regionDictionary.Add(regionName, region);
 
       }
       Globals.Regions = regionDictionary;

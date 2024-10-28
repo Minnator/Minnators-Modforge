@@ -33,7 +33,7 @@ public abstract class Saveable
       } 
    }
 
-   public abstract ModifiedData GetModifiedDataFlag();
+   public abstract ModifiedData WhatAmI();
 
    public abstract string SavingComment();
    /// <summary>

@@ -7,16 +7,8 @@ namespace Editor.Savers
    public static class SaveTradeNodes
    {
 
-      public static void SaveAllTradeNodes(List<TradeNode> tns)
-      {
-         StringBuilder sb = new();
-         foreach (var tradeNode in tns) 
-            FormatTradeNode(tradeNode, ref sb);
 
-         IO.WriteToFile(Path.Combine(Globals.ModPath, "common", "tradenodes", "00_tradenodes.txt"), sb.ToString(), false);
-      }
-
-      private static void FormatTradeNode(TradeNode tn, ref StringBuilder sb)
+      public static void FormatTradeNode(TradeNode tn, ref StringBuilder sb)
       {
          var tabs = 0;
          sb.AppendLine($"{tn.Name} = {{");

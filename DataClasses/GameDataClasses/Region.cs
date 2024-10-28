@@ -1,123 +1,115 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using Editor.Events;
+﻿using System.Text;
+using Editor.DataClasses.Commands;
 using Editor.Helper;
 using Editor.Interfaces;
+using Editor.Savers;
 
 namespace Editor.DataClasses.GameDataClasses;
 #nullable enable
-public class Region(string name) : IProvinceCollection
+public class Region : ProvinceCollection<Area>
 {
-   private List<string> _areas = [];
-   public string Name { get; } = name;
-   public Rectangle Bounds { get; set; } = Rectangle.Empty;
-   public List<string> Areas
+   public List<Monsoon> Monsoon { get; set; } = [];
+   public SuperRegion SuperRegion
    {
-      get => _areas;
-      init
+      get
       {
-         foreach (var area in value) 
-            AddRmvArea(area, true);
+         if (Parents.Count < 1)
+            return SuperRegion.Empty;
+         return (Parents[0] as SuperRegion)!;
       }
    }
 
-   public List<Monsoon> Monsoon { get; set; } = [];
-   public string SuperRegion { get; set; } = string.Empty;
-   public Color Color { get; set; }
-
-   public Region(string name, List<string> areas) : this(name)
-   {
-      Areas = areas;
-   }
-
-   public Region(string name, List<string> areas, List<Monsoon> monsoon) : this(name, areas)
+   public Region(string name, Color color, List<Area> areas, List<Monsoon> monsoon) : this(name, color, areas)
    {
       Monsoon = monsoon;
    }
 
-   public void CalculateBounds()
+   public Region(string name, Color color, List<Area> areas) : base(name, color)
    {
-      List<Rectangle> areaBounds = [];
-      foreach (var area in Areas)
+      SubCollection = areas;
+   }
+
+
+   public new static Region Empty => new ("", Color.Empty, []);
+
+   public override ModifiedData WhatAmI()
+   {
+      return ModifiedData.Regions;
+   }
+
+   public override string SavingComment()
+   {
+      return Localisation.GetLoc(Name);
+   }
+
+   public override PathObj GetDefaultSavePath()
+   {
+      return new (["map"]);
+   }
+
+   public override string GetSaveString(int tabs)
+   {
+      List<string> areaNames = [];
+      foreach (var area in SubCollection)
+         areaNames.Add(area.Name);
+      var sb = new StringBuilder();
+      sb.AppendLine($"{Name} = {{");
+      SavingUtil.AddFormattedStringList("areas", areaNames, 1, ref sb);
+      sb.AppendLine("}");
+      return sb.ToString();
+   }
+
+   public override string GetSavePromptString()
+   {
+      return $"Save regions file";
+   }
+
+   public EventHandler<ProvinceComposite> ColorChanged = delegate { };
+   public EventHandler<ProvinceComposite> ItemAddedToArea = delegate { };
+   public EventHandler<ProvinceComposite> ItemRemovedFromArea = delegate { };
+   public EventHandler<ProvinceComposite> ItemModified = delegate { };
+
+   public override void Invoke(ProvinceComposite composite)
+   {
+      ColorChanged.Invoke(this, composite);
+   }
+
+   public override void AddToEvent(EventHandler<ProvinceComposite> handler)
+   {
+      ColorChanged += handler;
+   }
+
+   public override void Invoke(CProvinceCollectionType type, ProvinceComposite composite)
+   {
+      switch (type)
       {
-         if (Globals.Areas.TryGetValue(area, out var areaObj))
-            areaBounds.Add(areaObj.Bounds);
+         case CProvinceCollectionType.Add:
+            ItemAddedToArea.Invoke(this, composite);
+            break;
+         case CProvinceCollectionType.Remove:
+            ItemRemovedFromArea.Invoke(this, composite);
+            break;
+         case CProvinceCollectionType.Modify:
+            ItemModified.Invoke(this, composite);
+            break;
       }
-      Bounds = Geometry.GetBounds(areaBounds);
    }
 
-   public void AddArea(string areaName)
+   public override void AddToEvent(CProvinceCollectionType type, EventHandler<ProvinceComposite> eventHandler)
    {
-      AddRmvArea(areaName, true);
-   }
-
-   public void RemoveArea(string areaName)
-   {
-      AddRmvArea(areaName, false);
-   }
-
-   private void AddRmvArea(string areaName, bool add)
-   {
-
-      if (add)
+      switch (type)
       {
-         if (!_areas.Contains(areaName))
-            _areas.Add(areaName);
+         case CProvinceCollectionType.Add:
+            ItemAddedToArea += eventHandler;
+            break;
+         case CProvinceCollectionType.Remove:
+            ItemRemovedFromArea += eventHandler;
+            break;
+         case CProvinceCollectionType.Modify:
+            ItemModified += eventHandler;
+            break;
       }
-      else
-      {
-         _areas.Remove(areaName);
-      }
-      if (Globals.State == State.Running)
-         if (Globals.Areas.TryGetValue(areaName, out var area))
-            foreach (var id in area.Provinces)
-               ProvinceEventHandler.RaiseProvinceRegionAreasChanged(id, _areas, nameof(Areas));
-      CalculateBounds();
    }
-
-   public override bool Equals(object? obj)
-   {
-      if (obj is Region other)
-         return Name == other.Name;
-      return false;
-   }
-
-   public override int GetHashCode()
-   {
-      return Name.GetHashCode();
-   }
-
-   public int[] GetProvinceIds()
-   {
-      var provinces = new List<int>();
-      foreach (var area in Areas)
-         provinces.AddRange(Globals.Areas[area].GetProvinceIds());
-      return provinces.ToArray();
-   }
-
-   public ICollection<Province> GetProvinces()
-   {
-      var provinces = new List<Province>();
-      foreach (var area in Areas)
-         provinces.AddRange(Globals.Areas[area].GetProvinces());
-      return provinces;
-   }
-
-   public IProvinceCollection ScopeOut()
-   {
-      return Globals.SuperRegions[SuperRegion];
-   }
-
-   public List<IProvinceCollection> ScopeIn()
-   {
-      var areas = new List<IProvinceCollection>();
-      foreach (var area in Areas)
-      {
-         areas.Add(Globals.Areas[area]);
-      }
-      return areas;
-   }
-
 }
 
 public class Monsoon(string start, string end)

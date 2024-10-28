@@ -29,7 +29,7 @@ namespace Editor.Loading
                continue;
             }
 
-            var region = new ColonialRegion(regionBlock.Name);
+            var region = new ColonialRegion(regionBlock.Name, Color.Empty);
 
             foreach (var block in regionBlock.Blocks)
             {

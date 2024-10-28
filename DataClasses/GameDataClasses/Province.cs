@@ -1,8 +1,10 @@
 ﻿using System.Text;
+using Editor.DataClasses.Commands;
 using Editor.Helper;
 using Editor.Interfaces;
 using Editor.ParadoxLanguage.Scope;
 using Editor.Parser;
+using Editor.Savers;
 using static Editor.Events.ProvinceEventHandler;
 using static Editor.Helper.ProvinceEnumHelper;
 
@@ -40,7 +42,7 @@ public class ProvinceData()
    public string Capital = string.Empty;                    //.
    public string Culture = string.Empty;                    //.
    public string Religion = string.Empty;                   //.
-   public string Area = string.Empty;
+   public Area Area = Area.Empty;
    public string TradeGood = "";                            //.
    public string Continent = string.Empty;                  //! not in province editing interface
    public string LatentTradeGood = string.Empty;            //+ ProvinceHistoryEntry editing interface
@@ -58,13 +60,37 @@ public class ProvinceData()
    public List<TradeModifier> TradeModifiers = [];  
 }
 
-public class Province : IProvinceCollection, IScope
+public class Province(int id, Color color) : ProvinceCollection<Province>(id.ToString(), color)
 {
-   public string Name { get; set; } = string.Empty;
    private readonly ProvinceData _data = new();
    private List<HistoryEntry> _history = [];
    public int FileIndex { get; set; } = 0;
-   public ObjEditingStatus EditingStatus { get; set; } = ObjEditingStatus.Unchanged;
+   public override ModifiedData WhatAmI()
+   {
+      return ModifiedData.Province;
+   }
+
+   public override string SavingComment()
+   {
+      return GetLocalisation();
+   }
+
+   public override PathObj GetDefaultSavePath()
+   {
+      return new (["history", "provinces"]);
+   }
+
+   public override string GetSaveString(int tabs)
+   {
+      ProvinceSaver.GetProvinceFileString(this, out var saveString);
+      return saveString;
+   }
+
+   public override string GetSavePromptString()
+   {
+      return $"Save province file {GetLocalisation()}";
+   }
+
    public DateTime LastModified { get; set; } = DateTime.MinValue;
    public ProvinceData ProvinceData { get; set; } = new();
    
@@ -73,13 +99,10 @@ public class Province : IProvinceCollection, IScope
    // Management data
    public int Id { get; init; }
    public Positions Positions { get; set; }
-   // TODO to int
-   public Color Color { get; set; }
    public int BorderPtr { get; set; }
    public int BorderCnt { get; set; }
    public int PixelPtr { get; set; }
    public int PixelCnt { get; set; }
-   public Rectangle Bounds { get; set; }
    public Point Center { get; set; }
 
    public Point[] Pixels { get; set; }
@@ -87,22 +110,18 @@ public class Province : IProvinceCollection, IScope
 
    #endregion
 
-   public Province(int id) => Id = id;
-   public Province(){ }
-
    // Events for the ProvinceValues will only be raised if the State is Running otherwise they will be suppressed to improve performance when loading
 
    #region Globals from the game
 
    // Globals from the Game
-   public string Area
+   public Area Area
    {
-      get => _data.Area;
-      set
+      get
       {
-         _data.Area = value;
-         if (Globals.State == State.Running)
-            RaiseProvinceAreaChanged(this, value, nameof(Area));
+         if (Parents.Count < 1)
+            return Area.Empty;
+         return (Parents[0] as Area)!;
       }
    }
 
@@ -657,7 +676,7 @@ public class Province : IProvinceCollection, IScope
    /// </summary>
    public void ResetHistory()
    {
-      Area = ProvinceData.Area;
+      Area.Add(this);
       Continent = ProvinceData.Continent;
       Claims = ProvinceData.Claims;
       PermanentClaims = ProvinceData.PermanentClaims;
@@ -1123,24 +1142,16 @@ public class Province : IProvinceCollection, IScope
    {
       return $"PROV{Id}";
    }
-   public int[] GetProvinceIds()
+   public override int[] GetProvinceIds()
    {
       return [Id];
    }
 
-   public ICollection<Province> GetProvinces()
+   public override ICollection<Province> GetProvinces()
    {
       return [this];
    }
 
-   public IProvinceCollection ScopeOut()
-   {
-      return Globals.Areas[Area];
-   }
-   public List<IProvinceCollection> ScopeIn()
-   {
-      return [this];
-   }
    public List<Province> GetProvincesWithSameCulture()
    {
       List<Province> provinces = [];
@@ -1177,14 +1188,14 @@ public class Province : IProvinceCollection, IScope
       foreach (var historyEntry in History)
          sb.AppendLine(historyEntry.ToString());
 
-      File.WriteAllText(Path.Combine(path, $"{Id}_dump.txt"), sb.ToString());
+      File.WriteAllText(System.IO.Path.Combine(path, $"{Id}_dump.txt"), sb.ToString());
    }
 
 
    public string GetHistoryFilePath()
    {
       var fileName = $"{Id}-{GetLocalisation()}.txt";
-      return Path.Combine(Globals.ModPath, "history", "provinces", fileName);
+      return System.IO.Path.Combine(Globals.ModPath, "history", "provinces", fileName);
    }
 
    public override bool Equals(object? obj)
@@ -1219,22 +1230,53 @@ public class Province : IProvinceCollection, IScope
       return $"{Id} ({GetLocalisation()} ";
    }
 
-   // ======================================== ISCOPE IMPL ========================================
 
-   public bool EvaluateTrigger(ParadoxLanguage.Trigger.Trigger trigger)
+   public EventHandler<ProvinceComposite> ColorChanged = delegate { };
+   public EventHandler<ProvinceComposite> ItemAddedToArea = delegate { };
+   public EventHandler<ProvinceComposite> ItemRemovedFromArea = delegate { };
+   public EventHandler<ProvinceComposite> ItemModified = delegate { };
+
+   public override void Invoke(ProvinceComposite composite)
    {
-      return trigger.Evaluate(this);
+      ColorChanged.Invoke(this, composite);
    }
 
-   public void ApplyEffect(ParadoxLanguage.Effect.Effect effect)
+   public override void AddToEvent(EventHandler<ProvinceComposite> handler)
    {
-      effect.Apply(this);
+      ColorChanged += handler;
    }
 
-   public IScope Rescope(ScopeEffector effector, string scopeType)
+   public override void Invoke(CProvinceCollectionType type, ProvinceComposite composite)
    {
-      throw new NotImplementedException();
+      switch (type)
+      {
+         case CProvinceCollectionType.Add:
+            ItemAddedToArea.Invoke(this, composite);
+            break;
+         case CProvinceCollectionType.Remove:
+            ItemRemovedFromArea.Invoke(this, composite);
+            break;
+         case CProvinceCollectionType.Modify:
+            ItemModified.Invoke(this, composite);
+            break;
+      }
    }
 
-   public static Province Empty => new (-1);
+   public override void AddToEvent(CProvinceCollectionType type, EventHandler<ProvinceComposite> eventHandler)
+   {
+      switch (type)
+      {
+         case CProvinceCollectionType.Add:
+            ItemAddedToArea += eventHandler;
+            break;
+         case CProvinceCollectionType.Remove:
+            ItemRemovedFromArea += eventHandler;
+            break;
+         case CProvinceCollectionType.Modify:
+            ItemModified += eventHandler;
+            break;
+      }
+   }
+
+   public static Province Empty => new (-1, System.Drawing.Color.Empty);
 }
