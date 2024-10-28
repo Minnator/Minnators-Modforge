@@ -16,14 +16,9 @@ namespace Editor.Helper
       }
 
       [AttributeUsage(AttributeTargets.Field, Inherited = false, AllowMultiple = false)]
-      public sealed class ProvAttrMetadata : Attribute
+      public sealed class ProvAttrMetadata(ProvAttrType type) : Attribute
       {
-         public ProvAttrType Type { get; }
-
-         public ProvAttrMetadata(ProvAttrType type)
-         {
-            Type = type;
-         }
+         public ProvAttrType Type { get; } = type;
       }
       public enum ProvAttrGet
       {
@@ -144,7 +139,7 @@ namespace Editor.Helper
          return numericalAttributes;
       }
 
-      public static ProvAttrType GetAttributeType(ProvAttrGet attribute)
+      public static ProvAttrType GetAttributeType(this ProvAttrGet attribute)
       {
          // Get the field of the ProvAttr enum
          var field = typeof(ProvAttrGet).GetField(attribute.ToString())!;

@@ -98,8 +98,7 @@ namespace Editor.Helper
       {
          var node = Globals.TradeNodes[nodeName];
          var countries = new List<Tag>();
-         foreach (var member in node.Members)
-            if (Globals.Provinces.TryGetValue(member, out var province))
+         foreach (var province in node.GetProvinces())
                if (province.Owner != Tag.Empty)
                   countries.Add(province.Owner);
          return countries;
@@ -108,7 +107,7 @@ namespace Editor.Helper
       public static TradeNode GetTradeNodeByProvince(Province province)
       {
          foreach (var node in Globals.TradeNodes.Values)
-            if (node.Members.Contains(province))
+            if (node.GetProvinces().Contains(province))
                return node;
          return TradeNode.Empty;
       }
@@ -124,7 +123,7 @@ namespace Editor.Helper
             sb.AppendLine($"\tColor: {node.Color}");
             sb.AppendLine($"\tIsInland: {node.IsInland}");
             sb.Append("\tMembers:\n\t\t");
-            foreach (var member in node.Members)
+            foreach (var member in node.GetProvinceIds())
             {
                sb.Append($"{member}, ");
             }

@@ -11,20 +11,18 @@ namespace Editor.DataClasses.GameDataClasses
       {
          GenericName = string.Empty;
          SpecificName = string.Empty;
-         Provinces = [];
       }
 
       public TradeCompany(string codeName, string genericName, string specificName, List<Province> provinces, Color color) : base(codeName, color)
       {
          GenericName = genericName;
          SpecificName = specificName;
-         Provinces = [..provinces];
+         SubCollection = provinces;
       }
 
       public static TradeCompany Empty => new ("Empty", Color.Empty);
       public string GenericName { get; set; }
       public string SpecificName { get; set; }
-      public HashSet<Province> Provinces { get; set; }
 
       public string GetLocalisation()
       {
@@ -38,7 +36,7 @@ namespace Editor.DataClasses.GameDataClasses
 
       public override ModifiedData WhatAmI()
       {
-         return ModifiedData.SaveTradeCompanies;
+         return ModifiedData.TradeCompany;
       }
 
       public override string SavingComment()
@@ -76,33 +74,33 @@ namespace Editor.DataClasses.GameDataClasses
          ColorChanged += handler;
       }
 
-      public override void Invoke(CProvinceCollectionType type, ProvinceComposite composite)
+      public override void Invoke(ProvinceCollectionType type, ProvinceComposite composite)
       {
          switch (type)
          {
-            case CProvinceCollectionType.Add:
+            case ProvinceCollectionType.Add:
                ItemAddedToArea.Invoke(this, composite);
                break;
-            case CProvinceCollectionType.Remove:
+            case ProvinceCollectionType.Remove:
                ItemRemovedFromArea.Invoke(this, composite);
                break;
-            case CProvinceCollectionType.Modify:
+            case ProvinceCollectionType.Modify:
                ItemModified.Invoke(this, composite);
                break;
          }
       }
 
-      public override void AddToEvent(CProvinceCollectionType type, EventHandler<ProvinceComposite> eventHandler)
+      public override void AddToEvent(ProvinceCollectionType type, EventHandler<ProvinceComposite> eventHandler)
       {
          switch (type)
          {
-            case CProvinceCollectionType.Add:
+            case ProvinceCollectionType.Add:
                ItemAddedToArea += eventHandler;
                break;
-            case CProvinceCollectionType.Remove:
+            case ProvinceCollectionType.Remove:
                ItemRemovedFromArea += eventHandler;
                break;
-            case CProvinceCollectionType.Modify:
+            case ProvinceCollectionType.Modify:
                ItemModified += eventHandler;
                break;
          }

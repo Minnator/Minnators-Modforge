@@ -275,10 +275,6 @@ public static class Globals
       "base_manpower", "base_tax", "base_production",  "total_development", "area", "continent", "claims", "cores", "controller", "owner", "tribal_owner", "center_of_trade", "extra_cost", "native_ferocity", "native_hostileness", "native_size", "revolt_risk", ">local_autonomy", "nationalism", "discovered_by", "capital", "culture", "religion", "has_fort_15th", "is_hre", "is_city", "is_seat_in_parliament", "trade_good", "history", "multiline_attributes", "id", "name", "has_revolt", "is_occupied"
    ];
 
-   public static List<string> SelectionModifiers = [
-      "Deselection"
-   ];
-
    public static readonly HashSet<string> CountryAttributes = 
    [
       "cannot_form_from_collapse_nation", "right_to_bear_arms", "all_your_core_are_belong_to_us", "random_nation_extra_size", 
@@ -303,7 +299,7 @@ public static class Globals
 // - [x] Pre load and layout the Province Collection Editing GUI to prevent LagSpike on first opening said tab
 // - [x] MelonCoaster easter Egg in Loading Screen
 // - [x] Add a help page that leads to the official Discord
-// - [ ] Improve selection modifiers and its GUI by adding more and only listing in context valid options
+// - [x] Improve selection modifiers and its GUI by adding more and only listing in context valid options
 // - [|] Straits editing and creation
 // - [ ] Fix the Province Collection Editing gui so that all types work the same and edge cases are handled
 // - [x] Localisation editing for provinces and modifiers

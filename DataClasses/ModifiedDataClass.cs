@@ -4,19 +4,19 @@
    public enum ModifiedData
    {
       SaveProvinces = 1 << 0,
-      Areas = 1 << 1,
-      Regions = 1 << 2,
+      Area = 1 << 1,
+      Region = 1 << 2,
       TradeNode = 1 << 3,
-      SaveTradeCompanies = 1 << 4,
-      ColonialRegions = 1 << 5,
-      SuperRegions = 1 << 6,
-      Continents = 1 << 7,
+      TradeCompany = 1 << 4,
+      ColonialRegion = 1 << 5,
+      SuperRegion = 1 << 6,
+      Continent = 1 << 7,
       ProvinceGroups = 1 << 8,
       EventModifiers = 1 << 9,
       Localisation = 1 << 10,
       Country = 1 << 11,
       Province = 1 << 12,
-      All = SaveProvinces | Areas | Regions | TradeNode | SaveTradeCompanies | ColonialRegions | SuperRegions | Continents | ProvinceGroups | EventModifiers | Localisation | Country | Province,
+      All = SaveProvinces | Area | Region | TradeNode | TradeCompany | ColonialRegion | SuperRegion | Continent | ProvinceGroups | EventModifiers | Localisation | Country | Province,
    }
 
 }

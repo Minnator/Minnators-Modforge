@@ -17,19 +17,19 @@ namespace Editor.Forms.SavingClasses
       {
          if ((data & ModifiedData.SaveProvinces) != 0)
             SavingCheckedListBox.SetItemChecked(0, true);
-         if ((data & ModifiedData.Areas) != 0)
+         if ((data & ModifiedData.Area) != 0)
             SavingCheckedListBox.SetItemChecked(1, true);
-         if ((data & ModifiedData.Regions) != 0)
+         if ((data & ModifiedData.Region) != 0)
             SavingCheckedListBox.SetItemChecked(2, true);
          if ((data & ModifiedData.TradeNode) != 0)
             SavingCheckedListBox.SetItemChecked(3, true);
-         if ((data & ModifiedData.SaveTradeCompanies) != 0)
+         if ((data & ModifiedData.TradeCompany) != 0)
             SavingCheckedListBox.SetItemChecked(4, true);
-         if ((data & ModifiedData.ColonialRegions) != 0)
+         if ((data & ModifiedData.ColonialRegion) != 0)
             SavingCheckedListBox.SetItemChecked(5, true);
-         if ((data & ModifiedData.SuperRegions) != 0)
+         if ((data & ModifiedData.SuperRegion) != 0)
             SavingCheckedListBox.SetItemChecked(6, true);
-         if ((data & ModifiedData.Continents) != 0)
+         if ((data & ModifiedData.Continent) != 0)
             SavingCheckedListBox.SetItemChecked(7, true);
          if ((data & ModifiedData.ProvinceGroups) != 0)
             SavingCheckedListBox.SetItemChecked(8, true);
@@ -45,19 +45,19 @@ namespace Editor.Forms.SavingClasses
          if (SavingCheckedListBox.GetItemChecked(0))
             data |= ModifiedData.SaveProvinces;
          if (SavingCheckedListBox.GetItemChecked(1))
-            data |= ModifiedData.Areas;
+            data |= ModifiedData.Area;
          if (SavingCheckedListBox.GetItemChecked(2))
-            data |= ModifiedData.Regions;
+            data |= ModifiedData.Region;
          if (SavingCheckedListBox.GetItemChecked(3))
             data |= ModifiedData.TradeNode;
          if (SavingCheckedListBox.GetItemChecked(4))
-            data |= ModifiedData.SaveTradeCompanies;
+            data |= ModifiedData.TradeCompany;
          if (SavingCheckedListBox.GetItemChecked(5))
-            data |= ModifiedData.ColonialRegions;
+            data |= ModifiedData.ColonialRegion;
          if (SavingCheckedListBox.GetItemChecked(6))
-            data |= ModifiedData.SuperRegions;
+            data |= ModifiedData.SuperRegion;
          if (SavingCheckedListBox.GetItemChecked(7))
-            data |= ModifiedData.Continents;
+            data |= ModifiedData.Continent;
          if (SavingCheckedListBox.GetItemChecked(8))
             data |= ModifiedData.ProvinceGroups;
          if (SavingCheckedListBox.GetItemChecked(9))

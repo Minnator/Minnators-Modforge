@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Editor.Helper;
 
 #nullable enable
 
@@ -6,41 +7,93 @@ namespace Editor.Forms.AdvancedSelections
 {
    public partial class AdvancedSelectionsForm : Form
    {
+      private List<ISelectionModifier> SelectionModifiers = [];
+      private ProvinceEnumHelper.ProvAttrType _lastAttrType = ProvinceEnumHelper.ProvAttrType.Int;
+
       public AdvancedSelectionsForm()
       {
          InitializeComponent();
+         SelectionModifiers.Add(new Deselection());
+         SelectionModifiers.Add(new Select());
 
          InitComboBoxes();
+
+         AttributeSelectionComboBox.SelectedIndexChanged += (sender, e) =>
+         {
+            var newAttrType = GetAttribute().GetAttributeType();
+            if (newAttrType != _lastAttrType)
+            {
+               AddValidOperations(newAttrType);
+               _lastAttrType = newAttrType;
+            }
+         };
       }
 
       private void InitComboBoxes()
       {
-         foreach (var selection in Globals.SelectionModifiers) 
-            ActionTypeComboBox.Items.Add(selection);
+         foreach (var selection in SelectionModifiers) 
+            ActionTypeComboBox.Items.Add(selection.Name);
          ActionTypeComboBox.SelectedIndex = 0;
 
-         foreach (var attrs in Globals.ToolTippableAttributes)
-            AttributeSelectionComboBox.Items.Add(attrs);
+         AttributeSelectionComboBox.Items.AddRange([.. Enum.GetNames<ProvinceEnumHelper.ProvAttrGet>()]);
+
+         AddValidOperations(ProvinceEnumHelper.ProvAttrType.Int);
+
+         SelectionSource.Items.AddRange([.. Enum.GetNames<ProvinceSource>()]);
       }
 
-      private void ConfirmButton_Click(object sender, System.EventArgs e)
+      private void AddValidOperations(ProvinceEnumHelper.ProvAttrType type)
       {
-         if (ActionTypeComboBox.SelectedIndex == -1 || AttributeSelectionComboBox.SelectedIndex == -1 || AttributeValueInput.Text == string.Empty)
-            return;
-
-         GetSelectionModifier()?.Execute();
-      }
-
-      private ISelectionModifier? GetSelectionModifier()
-      {
-         switch (ActionTypeComboBox.Text)
+         OperationComboBox.Items.Clear();
+         switch (type)
          {
-            case "Deselection":
-               return new Deselection(AttributeSelectionComboBox.Text, AttributeValueInput.Text);
-            default:
-               return null;
+            case ProvinceEnumHelper.ProvAttrType.String:
+            case ProvinceEnumHelper.ProvAttrType.Bool:
+            case ProvinceEnumHelper.ProvAttrType.Tag:
+               OperationComboBox.Items.AddRange(["=", "!="]);  
+               break;
+            case ProvinceEnumHelper.ProvAttrType.Int:
+            case ProvinceEnumHelper.ProvAttrType.Float:
+               OperationComboBox.Items.AddRange(["=", "!=", "<", ">", ">=", "<="]);
+               break;
          }
       }
+
+      private void ConfirmButton_Click(object sender, EventArgs e)
+      {
+         if (ActionTypeComboBox.SelectedIndex == -1 || AttributeSelectionComboBox.SelectedIndex == -1 || AttributeValueInput.Text == string.Empty || OperationComboBox.SelectedIndex == -1)
+            return;
+
+         GetSelectionModifier().Execute(GetSource(), GetOperation(), GetAttribute(), GetAttributeValue());
+         Globals.ZoomControl.Invalidate();
+      }
+
+      private ProvinceEnumHelper.ProvAttrGet GetAttribute()
+      {
+         return (ProvinceEnumHelper.ProvAttrGet)AttributeSelectionComboBox.SelectedIndex;
+      }
+
+      private object GetAttributeValue()
+      {
+         return AttributeValueInput.Text;
+      }
+
+      private Operations GetOperation()
+      {
+         return (Operations)OperationComboBox.SelectedIndex;
+      }
+
+      public ProvinceSource GetSource()
+      {
+         return (ProvinceSource)SelectionSource.SelectedIndex;
+      }
+
+      private ISelectionModifier GetSelectionModifier()
+      {
+         return SelectionModifiers[ActionTypeComboBox.SelectedIndex];
+      }
+
+
 
       private void CancelButton_Click(object sender, EventArgs e)
       {

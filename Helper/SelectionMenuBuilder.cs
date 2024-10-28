@@ -125,7 +125,7 @@ namespace Editor.Helper
                return;
 
             var node = TradeNodeHelper.GetTradeNodeByProvince(Selection.LastHoveredProvince);
-            Globals.HistoryManager.AddCommand(new CCollectionSelection([.. node.Members]), CommandHistoryType.ComplexSelection);
+            Globals.HistoryManager.AddCommand(new CCollectionSelection([.. node.GetProvinces()]), CommandHistoryType.ComplexSelection);
          });
       }
    }

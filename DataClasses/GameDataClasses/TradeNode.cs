@@ -11,7 +11,6 @@ namespace Editor.DataClasses.GameDataClasses
    {
       public Province Location { get; set; } = location;
       public bool IsInland { get; set; } = false;
-      public HashSet<Province> Members { get; set; } = [];
       public List<string> Incoming { get; set; } = [];
       public List<Outgoing> Outgoing { get; set; } = [];
       public static TradeNode Empty => new ("", Color.Empty, Province.Empty);
@@ -74,33 +73,33 @@ namespace Editor.DataClasses.GameDataClasses
          ColorChanged += handler;
       }
 
-      public override void Invoke(CProvinceCollectionType type, ProvinceComposite composite)
+      public override void Invoke(ProvinceCollectionType type, ProvinceComposite composite)
       {
          switch (type)
          {
-            case CProvinceCollectionType.Add:
+            case ProvinceCollectionType.Add:
                ItemAddedToArea.Invoke(this, composite);
                break;
-            case CProvinceCollectionType.Remove:
+            case ProvinceCollectionType.Remove:
                ItemRemovedFromArea.Invoke(this, composite);
                break;
-            case CProvinceCollectionType.Modify:
+            case ProvinceCollectionType.Modify:
                ItemModified.Invoke(this, composite);
                break;
          }
       }
 
-      public override void AddToEvent(CProvinceCollectionType type, EventHandler<ProvinceComposite> eventHandler)
+      public override void AddToEvent(ProvinceCollectionType type, EventHandler<ProvinceComposite> eventHandler)
       {
          switch (type)
          {
-            case CProvinceCollectionType.Add:
+            case ProvinceCollectionType.Add:
                ItemAddedToArea += eventHandler;
                break;
-            case CProvinceCollectionType.Remove:
+            case ProvinceCollectionType.Remove:
                ItemRemovedFromArea += eventHandler;
                break;
-            case CProvinceCollectionType.Modify:
+            case ProvinceCollectionType.Modify:
                ItemModified += eventHandler;
                break;
          }

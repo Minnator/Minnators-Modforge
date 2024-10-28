@@ -8,34 +8,46 @@ namespace Editor.Commands
    public class CCollectionSelection : ICommand
    {
       private readonly List<Province> _selectionDelta;
+      private readonly bool _deselect;
 
-      public CCollectionSelection(ICollection<Province> toSelect, bool executeOnInit = true)
+      public CCollectionSelection(ICollection<Province> toSelect, bool deselect = false, bool executeOnInit = true)
       {
          _selectionDelta = toSelect.Except(Selection.SelectionPreview).ToList();
+         _deselect = deselect;
          if (executeOnInit)
             Execute();
       }
 
-      public CCollectionSelection(ProvinceCollection<Province> collection, bool executeOnInit = true)
+      public CCollectionSelection(ProvinceCollection<Province> collection, bool deselect = false, bool executeOnInit = true)
       {
-         _selectionDelta = collection.GetProvinces().Except(Selection.SelectionPreview).ToList();
+         _selectionDelta = collection.GetProvinces().ToList();
+         _deselect = deselect;
          if (executeOnInit)
             Execute();
       }
 
       public void Execute()
       {
-         Selection.AddProvincesToSelection(_selectionDelta, false);
+         if (_deselect)
+            Selection.RemoveProvincesFromSelection(_selectionDelta);
+         else
+            Selection.AddProvincesToSelection(_selectionDelta);
       }
 
       public void Undo()
       {
-         Selection.RemoveProvincesFromSelection(_selectionDelta);
+         if (_deselect)
+            Selection.AddProvincesToSelection(_selectionDelta);
+         else
+            Selection.RemoveProvincesFromSelection(_selectionDelta);
       }
 
       public void Redo()
       {
-         Execute();
+         if (_deselect)
+            Execute();
+         else
+            Undo();
       }
 
       public string GetDescription()

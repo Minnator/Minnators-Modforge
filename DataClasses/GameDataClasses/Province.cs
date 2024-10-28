@@ -612,7 +612,7 @@ public class Province(int id, Color color) : ProvinceCollection<Province>(id.ToS
       get
       {
          foreach (var tradeCompany in Globals.TradeCompanies.Values)
-            if (tradeCompany.Provinces.Contains(this))
+            if (tradeCompany.GetProvinces().Contains(this))
                return tradeCompany.Name;
          return string.Empty;
       }
@@ -1249,33 +1249,33 @@ public class Province(int id, Color color) : ProvinceCollection<Province>(id.ToS
       ColorChanged += handler;
    }
 
-   public override void Invoke(CProvinceCollectionType type, ProvinceComposite composite)
+   public override void Invoke(ProvinceCollectionType type, ProvinceComposite composite)
    {
       switch (type)
       {
-         case CProvinceCollectionType.Add:
+         case ProvinceCollectionType.Add:
             ItemAddedToArea.Invoke(this, composite);
             break;
-         case CProvinceCollectionType.Remove:
+         case ProvinceCollectionType.Remove:
             ItemRemovedFromArea.Invoke(this, composite);
             break;
-         case CProvinceCollectionType.Modify:
+         case ProvinceCollectionType.Modify:
             ItemModified.Invoke(this, composite);
             break;
       }
    }
 
-   public override void AddToEvent(CProvinceCollectionType type, EventHandler<ProvinceComposite> eventHandler)
+   public override void AddToEvent(ProvinceCollectionType type, EventHandler<ProvinceComposite> eventHandler)
    {
       switch (type)
       {
-         case CProvinceCollectionType.Add:
+         case ProvinceCollectionType.Add:
             ItemAddedToArea += eventHandler;
             break;
-         case CProvinceCollectionType.Remove:
+         case ProvinceCollectionType.Remove:
             ItemRemovedFromArea += eventHandler;
             break;
-         case CProvinceCollectionType.Modify:
+         case ProvinceCollectionType.Modify:
             ItemModified += eventHandler;
             break;
       }

@@ -107,7 +107,7 @@ namespace Editor.Loading
                break;
             case "members":
                var id = Parsing.GetProvincesFromString(block.GetContent);
-               node.Members = new (id);
+               node.AddRange(id);
                break;
             case "incoming":
                var kvp = Parsing.GetKeyValueList(block.GetContent);

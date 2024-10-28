@@ -44,7 +44,7 @@ public class Area : ProvinceCollection<Province>
    
    public override ModifiedData WhatAmI()
    {
-      return ModifiedData.Areas;
+      return ModifiedData.Area;
    }
 
    public override string SavingComment()
@@ -77,33 +77,33 @@ public class Area : ProvinceCollection<Province>
    public EventHandler<ProvinceComposite> ModifyProvinceInArea = delegate { };
 
 
-   public override void Invoke(CProvinceCollectionType type, ProvinceComposite composite)
+   public override void Invoke(ProvinceCollectionType type, ProvinceComposite composite)
    {
       switch (type)
       {
-         case CProvinceCollectionType.Add:
+         case ProvinceCollectionType.Add:
             ProvinceAddedToArea.Invoke(this, composite);
             break;
-         case CProvinceCollectionType.Remove:
+         case ProvinceCollectionType.Remove:
             ProvinceRemovedFromArea.Invoke(this, composite);
             break;
-         case CProvinceCollectionType.Modify:
+         case ProvinceCollectionType.Modify:
             ModifyProvinceInArea.Invoke(this, composite);
             break;
       }
    }
 
-   public override void AddToEvent(CProvinceCollectionType type, EventHandler<ProvinceComposite> handler)
+   public override void AddToEvent(ProvinceCollectionType type, EventHandler<ProvinceComposite> handler)
    {
       switch (type)
       {
-         case CProvinceCollectionType.Add:
+         case ProvinceCollectionType.Add:
             ProvinceAddedToArea += handler;
             break;
-         case CProvinceCollectionType.Remove:
+         case ProvinceCollectionType.Remove:
             ProvinceRemovedFromArea += handler;
             break;
-         case CProvinceCollectionType.Modify:
+         case ProvinceCollectionType.Modify:
             ModifyProvinceInArea += handler;
             break;
       }

@@ -4,22 +4,22 @@ using Editor.Interfaces;
 namespace Editor.DataClasses.Commands
 {
 
-   public enum CProvinceCollectionType
+   public enum ProvinceCollectionType
    {
       Add,
       Remove,
       Modify
    }
 
-   public class CProvinceCollection<T>(CProvinceCollectionType type, List<ProvinceComposite> composites, List<Color> colors) : ICommand where T : ProvinceComposite
+   public class CProvinceCollection<T>(ProvinceCollectionType type, List<ProvinceComposite> composites, List<Color> colors) : ICommand where T : ProvinceComposite
    {
 
-      public CProvinceCollectionType Type = type;
+      public ProvinceCollectionType Type = type;
       public List<ProvinceComposite> Composites = composites;
       public ProvinceCollection<T> oldParent;
       public ProvinceCollection<T> newParent;
 
-      public CProvinceCollection(CProvinceCollectionType type, List<ProvinceComposite> composites, List<Color> colors, bool executeOnInit = true) : this(type, composites, colors)
+      public CProvinceCollection(ProvinceCollectionType type, List<ProvinceComposite> composites, List<Color> colors, bool executeOnInit = true) : this(type, composites, colors)
       {
          if (executeOnInit)
             Execute();
@@ -29,7 +29,7 @@ namespace Editor.DataClasses.Commands
       {
          switch (type)
          {
-            case CProvinceCollectionType.Add:
+            case ProvinceCollectionType.Add:
                //newParent.AddInt(composites);
                break;
 
@@ -40,7 +40,7 @@ namespace Editor.DataClasses.Commands
       {
          switch (type)
          {
-            case CProvinceCollectionType.Add:
+            case ProvinceCollectionType.Add:
                //newParent.RemoveInt(composites);
                break;
 

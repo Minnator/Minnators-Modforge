@@ -921,7 +921,7 @@ public static class Selection
          return;
 
       // Enable the tolerance if the type is float or int
-      _mwAttributeType = GetAttributeType(_mwComparisionAttribute);
+      _mwAttributeType = _mwComparisionAttribute.GetAttributeType();
       Globals.MapWindow.MagicWandTolerance.Enabled = _mwAttributeType is ProvAttrType.Float or ProvAttrType.Int;
    }
 

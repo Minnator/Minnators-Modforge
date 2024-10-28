@@ -2,6 +2,7 @@
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace Editor.Interfaces;
 
@@ -20,8 +21,8 @@ public abstract class ProvinceCollection<T>(string name, Color color) : Province
       }
    }
 
-   public abstract void Invoke(CProvinceCollectionType type, ProvinceComposite composite);
-   public abstract void AddToEvent(CProvinceCollectionType type, EventHandler<ProvinceComposite> eventHandler);
+   public abstract void Invoke(ProvinceCollectionType type, ProvinceComposite composite);
+   public abstract void AddToEvent(ProvinceCollectionType type, EventHandler<ProvinceComposite> eventHandler);
 
    /// <summary>
    /// Recursively gets all provinces in the SubCollections
@@ -77,12 +78,12 @@ public abstract class ProvinceCollection<T>(string name, Color color) : Province
       if (hadPreviousParent)
       {
          if (Globals.State == State.Running)
-            Invoke(CProvinceCollectionType.Modify, composite);
+            Invoke(ProvinceCollectionType.Modify, composite);
       }
       else
       {
          if (Globals.State == State.Running)
-            Invoke(CProvinceCollectionType.Add, composite);
+            Invoke(ProvinceCollectionType.Add, composite);
       }
    }
 
@@ -95,7 +96,7 @@ public abstract class ProvinceCollection<T>(string name, Color color) : Province
       if (!toBeAdded)
       {
          if (Globals.State == State.Running)
-            Invoke(CProvinceCollectionType.Remove, composite);
+            Invoke(ProvinceCollectionType.Remove, composite);
       }
    }
 
@@ -141,6 +142,21 @@ public abstract class ProvinceComposite(string name, Color color) : Saveable// P
    public abstract ICollection<int> GetProvinceIds();
    public abstract Rectangle GetBounds();
    public abstract void SetBounds();
+   
+   public virtual ProvinceComposite GetFirstParentOfType(ModifiedData type)
+   {
+      foreach (var parent in Parents)
+      {
+         if (parent.WhatAmI() == type)
+            return parent;
+
+         var recursiveParent = parent.GetFirstParentOfType(type);
+         if (recursiveParent != Empty)
+            return recursiveParent;
+      }
+      return Empty;
+   }
+
 
    public override bool Equals(object? obj)
    {

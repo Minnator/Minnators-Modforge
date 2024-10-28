@@ -17,20 +17,4 @@ namespace Editor.Events
    }
 
 
-   public static class ProvinceCollectionEvents
-   {
-      public static void OnTradeCompanyProvinceAdded(object? sender, ProvinceCollectionEventArgs e)
-      {
-         if (!Globals.AllowEditing || e == null!)
-            return;
-         Globals.HistoryManager.AddCommand(new CTradeCompanyProvinceChanged(e.GroupKey, true, true, e.Ids));
-      }
-
-      public static void OnTradeCompanyProvinceRemoved(object? sender, ProvinceCollectionEventArgs e)
-      {
-         if (!Globals.AllowEditing || e == null!)
-            return;
-         Globals.HistoryManager.AddCommand(new CTradeCompanyProvinceChanged(e.GroupKey, false, true, e.Ids));
-      }
-   }
 }

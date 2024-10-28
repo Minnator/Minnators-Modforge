@@ -22,7 +22,7 @@ namespace Editor.Savers
          }
 
          List<int> members = [];
-         foreach (var member in tn.Members)
+         foreach (var member in tn.GetProvinces())
             members.Add(member.Id);
          SavingUtil.AddFormattedIntList("members", members, tabs, ref sb);
          sb.AppendLine("}");
