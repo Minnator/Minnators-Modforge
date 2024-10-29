@@ -10,16 +10,18 @@ namespace Editor.Loading;
 public static class SuperRegionLoading
 {
    private const string MAIN_PATTER = @"(?<name>[a-zA-Z_]*)\s*=\s*{\s*(?<regions>[\w\s]+)\s*\s*}";
-
+   // TODO fix false read in if not formatted correctly
 
    public static void Load()
    {
       var sw = Stopwatch.StartNew();
-      if (!FilesHelper.GetModOrVanillaPath(out var path, "map", "superregion.txt"))
+      if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, "map", "superregion.txt"))
       {
          Globals.ErrorLog.Write("Error: superregion.txt not found!");
          return;
       }
+
+      var pathObj = PathObj.FromPath(path, isModPath);
       var newContent = IO.ReadAllLinesInUTF8(path);
       var sb = new StringBuilder();
 
@@ -39,8 +41,11 @@ public static class SuperRegionLoading
          }
 
          var sRegion = new SuperRegion(superRegionName, Globals.ColorProvider.GetRandomColor(), regions);
+         sRegion.SetPath(ref pathObj);
          Globals.AddSuperRegion(sRegion);
       }
+
+      FileManager.AddRangeToDictionary(pathObj, Globals.SuperRegions.Values);
 
       sw.Stop();
       Globals.LoadingLog.WriteTimeStamp("Parsing Super Regions", sw.ElapsedMilliseconds);

@@ -8,7 +8,7 @@ namespace Editor.DataClasses.Commands
    {
       private readonly bool _increase;
       private readonly int _value;
-      private readonly List<Province> _provinces;
+      private readonly List<Province> _provinces = [];
       private readonly ProvAttrGet _attribute;
       private readonly ProvAttrSet _setter;
 

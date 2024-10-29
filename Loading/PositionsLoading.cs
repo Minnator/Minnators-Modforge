@@ -9,7 +9,7 @@ namespace Editor.Loading
 
       public static void Load()
       {
-         if (!FilesHelper.GetModOrVanillaPath(out var path, "map", "positions.txt"))
+         if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, "map", "positions.txt"))
          {
             Globals.ErrorLog.Write("Could not find positions.txt");
             return;

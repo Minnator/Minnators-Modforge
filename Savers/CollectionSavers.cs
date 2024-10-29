@@ -1,7 +1,6 @@
 ﻿using System.Text;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
-using Editor.Interfaces;
 
 namespace Editor.Savers
 {

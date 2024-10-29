@@ -147,6 +147,11 @@ public static class ControlFactory
       return new (item, type);
    }
 
+   public static ItemButton GetItemButtonFullWidth(string item, ItemTypes type, int width)
+   {
+      return new (item, type) { Width = width, Height = 25 };
+   }
+
    public static ItemButton GetStringItemButton(string item, ItemTypes type)
    {
       return new (item, type){Width = 75, Height = 25};

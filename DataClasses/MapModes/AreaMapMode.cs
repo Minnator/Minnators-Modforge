@@ -1,4 +1,5 @@
-﻿using Editor.DataClasses.GameDataClasses;
+﻿using System.Diagnostics;
+using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.Events;
 using Editor.Helper;
@@ -9,9 +10,10 @@ public sealed class AreaMapMode : MapMode
 {
    public AreaMapMode()
    {
-      // TODO listen to the provinces areas
-      ProvinceEventHandler.OnProvinceAreaChanged += UpdateProvince!;
+      Area.ItemsModified += UpdateProvinceCollection;
+      Area.AreaColorChanged += UpdateComposite<Province>;
    }
+
 
    public override MapModeType GetMapModeName()
    {

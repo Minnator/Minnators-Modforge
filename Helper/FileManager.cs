@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Text;
 using Editor.DataClasses;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Forms.SavingClasses;
 using Editor.Interfaces;
 
@@ -39,7 +40,7 @@ namespace Editor.Helper
 
       public static void AddLocObject(LocObject loc)
       {
-         Globals.ModifiedData |= loc.WhatAmI();
+         Globals.SaveableType |= loc.WhatAmI();
          if (loc.Path.Equals(PathObj.Empty))
          {
             if (!AllSaveableFiles.TryAdd(loc.Path, [loc]))
@@ -70,11 +71,29 @@ namespace Editor.Helper
 
       public static void AddToBeHandled(Saveable obj)
       {
-         Globals.ModifiedData |= obj.WhatAmI();
+         Globals.SaveableType |= obj.WhatAmI();
          // It is a new object and will be handled via the PathObj.Empty
          if (obj.Path.Equals(PathObj.Empty))
          {
-            if (!AllSaveableFiles.TryAdd(obj.Path, [obj]))
+            if (obj is ProvinceComposite and not Province)
+            {
+               // Does it exist in mod or vanilla?
+               var path = obj.GetDefaultSavePath(); // default file name is modPath
+               if (AllSaveableFiles.TryGetValue(path, out var saveables))
+               {
+                  path = saveables[0].Path;
+                  NeedsToBeHandledMod.Add(obj.Path);
+               }
+               else
+               {
+                  path = AllSaveableFiles[path.GetInverted(false)][0].Path;
+                  NeedsToBeHandledVanilla.Add(path);
+               }
+               obj.SetPath(ref path);
+               AllSaveableFiles[path].Add(obj);
+               return;
+            }
+            else if (!AllSaveableFiles.TryAdd(obj.Path, [obj]))
                AllSaveableFiles[obj.Path].Add(obj);
          }
          else if (obj.Path.isModPath)
@@ -87,14 +106,14 @@ namespace Editor.Helper
       /// onlyModified: If true, only the modified objects will be saved, if false all objects will be saved
       /// </summary>
       /// <param name="onlyModified"></param>
-      /// <param name="modifiedData"></param>
-      public static void SaveChanges(bool onlyModified = true, ModifiedData modifiedData = ModifiedData.All)
+      /// <param name="saveableType"></param>
+      public static void SaveChanges(bool onlyModified = true, SaveableType saveableType = SaveableType.All)
       {
          // TODO safe all when only Modified is false
 
          if (onlyModified)
          {
-            CalculateModifiedObjects(modifiedData);
+            CalculateModifiedObjects(saveableType);
             SaveModifiedObjects();
          }
          else
@@ -118,13 +137,13 @@ namespace Editor.Helper
          throw new NotImplementedException();
       }
 
-      private static void CalculateModifiedObjects(ModifiedData modifiedData)
+      private static void CalculateModifiedObjects(SaveableType saveableType)
       {
          // TODO Order and save the position of unchanged, modified and new, so it can be saved neatly or use the SaveModifiedObjects version
          foreach (var change in NeedsToBeHandledVanilla)
          {
             var singleModData = AllSaveableFiles[change][0].WhatAmI();
-            if ((modifiedData & singleModData) == 0)
+            if ((saveableType & singleModData) == 0)
                continue;
             var replace = change.ShouldReplace;
             var modPath = change.GetInverted(replace);
@@ -150,11 +169,11 @@ namespace Editor.Helper
          // Adding entirely new obj to the mod
          if (AllSaveableFiles.TryGetValue(PathObj.Empty, out var newSaveables))
          {
-            Dictionary<ModifiedData, PathObj> pathGrouping = [];
+            Dictionary<SaveableType, PathObj> pathGrouping = [];
             foreach (var saveable in newSaveables)
             {
                var singleModData = saveable.WhatAmI();
-               if ((modifiedData & singleModData) == 0)
+               if ((saveableType & singleModData) == 0)
                   continue;
 
                // TODO group by folders to reduce pop up count
@@ -198,6 +217,8 @@ namespace Editor.Helper
 
                item.EditingStatus = ObjEditingStatus.Unchanged;
             }
+            if (!string.IsNullOrWhiteSpace(changed[0].GetHeader()))
+               sb.AppendLine(changed[0].GetHeader());
 
             // Save the unchanged first
             AddListToStringBuilder(ref sb, unchanged);

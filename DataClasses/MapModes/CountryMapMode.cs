@@ -10,6 +10,8 @@ namespace Editor.DataClasses.MapModes
       {
          ProvinceEventHandler.OnProvinceOwnerChanged += UpdateProvince;
          ProvinceEventHandler.OnProvinceControllerChanged += UpdateProvince;
+         Country.ItemsModified += UpdateProvinceCollection;
+         Country.ColorChanged += UpdateComposite<Province>;
       }
 
       public override bool IsLandOnly => true;

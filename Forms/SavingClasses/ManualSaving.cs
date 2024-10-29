@@ -10,67 +10,67 @@ namespace Editor.Forms.SavingClasses
       {
          InitializeComponent();
 
-         SetCheckBoxStatus(Globals.ModifiedData);
+         SetCheckBoxStatus(Globals.SaveableType);
       }
 
-      public void SetCheckBoxStatus(ModifiedData data)
+      public void SetCheckBoxStatus(SaveableType data)
       {
-         if ((data & ModifiedData.SaveProvinces) != 0)
+         if ((data & SaveableType.SaveProvinces) != 0)
             SavingCheckedListBox.SetItemChecked(0, true);
-         if ((data & ModifiedData.Area) != 0)
+         if ((data & SaveableType.Area) != 0)
             SavingCheckedListBox.SetItemChecked(1, true);
-         if ((data & ModifiedData.Region) != 0)
+         if ((data & SaveableType.Region) != 0)
             SavingCheckedListBox.SetItemChecked(2, true);
-         if ((data & ModifiedData.TradeNode) != 0)
+         if ((data & SaveableType.TradeNode) != 0)
             SavingCheckedListBox.SetItemChecked(3, true);
-         if ((data & ModifiedData.TradeCompany) != 0)
+         if ((data & SaveableType.TradeCompany) != 0)
             SavingCheckedListBox.SetItemChecked(4, true);
-         if ((data & ModifiedData.ColonialRegion) != 0)
+         if ((data & SaveableType.ColonialRegion) != 0)
             SavingCheckedListBox.SetItemChecked(5, true);
-         if ((data & ModifiedData.SuperRegion) != 0)
+         if ((data & SaveableType.SuperRegion) != 0)
             SavingCheckedListBox.SetItemChecked(6, true);
-         if ((data & ModifiedData.Continent) != 0)
+         if ((data & SaveableType.Continent) != 0)
             SavingCheckedListBox.SetItemChecked(7, true);
-         if ((data & ModifiedData.ProvinceGroups) != 0)
+         if ((data & SaveableType.ProvinceGroup) != 0)
             SavingCheckedListBox.SetItemChecked(8, true);
-         if ((data & ModifiedData.EventModifiers) != 0)
+         if ((data & SaveableType.EventModifiers) != 0)
             SavingCheckedListBox.SetItemChecked(9, true);
-         if ((data & ModifiedData.Localisation) != 0)
+         if ((data & SaveableType.Localisation) != 0)
             SavingCheckedListBox.SetItemChecked(10, true);
       }
 
-      public ModifiedData GetModifiedDataSelection()
+      public SaveableType GetModifiedDataSelection()
       {
-         ModifiedData data = 0;
+         SaveableType data = 0;
          if (SavingCheckedListBox.GetItemChecked(0))
-            data |= ModifiedData.SaveProvinces;
+            data |= SaveableType.SaveProvinces;
          if (SavingCheckedListBox.GetItemChecked(1))
-            data |= ModifiedData.Area;
+            data |= SaveableType.Area;
          if (SavingCheckedListBox.GetItemChecked(2))
-            data |= ModifiedData.Region;
+            data |= SaveableType.Region;
          if (SavingCheckedListBox.GetItemChecked(3))
-            data |= ModifiedData.TradeNode;
+            data |= SaveableType.TradeNode;
          if (SavingCheckedListBox.GetItemChecked(4))
-            data |= ModifiedData.TradeCompany;
+            data |= SaveableType.TradeCompany;
          if (SavingCheckedListBox.GetItemChecked(5))
-            data |= ModifiedData.ColonialRegion;
+            data |= SaveableType.ColonialRegion;
          if (SavingCheckedListBox.GetItemChecked(6))
-            data |= ModifiedData.SuperRegion;
+            data |= SaveableType.SuperRegion;
          if (SavingCheckedListBox.GetItemChecked(7))
-            data |= ModifiedData.Continent;
+            data |= SaveableType.Continent;
          if (SavingCheckedListBox.GetItemChecked(8))
-            data |= ModifiedData.ProvinceGroups;
+            data |= SaveableType.ProvinceGroup;
          if (SavingCheckedListBox.GetItemChecked(9))
-            data |= ModifiedData.EventModifiers;
+            data |= SaveableType.EventModifiers;
          if (SavingCheckedListBox.GetItemChecked(10))
-            data |= ModifiedData.Localisation;
+            data |= SaveableType.Localisation;
 
          return data;
       }
 
       private void SaveSelectedButton_Click(object sender, EventArgs e)
       {
-         FileManager.SaveChanges(modifiedData:GetModifiedDataSelection());
+         FileManager.SaveChanges(saveableType:GetModifiedDataSelection());
          //SavingUtil.SaveAllModified(GetModifiedDataSelection());
       }
 

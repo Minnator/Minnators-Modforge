@@ -11,15 +11,35 @@ namespace Editor.Loading
       public static void Load()
       {
          var sw = Stopwatch.StartNew();
-         if(!FilesHelper.GetFilesUniquelyAndCombineToOne(out var rawContent, "common", "trade_companies"))
+
+         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "trade_companies");
+
+
+         Dictionary<string, TradeCompany> tradeCompanies = [];
+
+         foreach (var file in files)
          {
-            Globals.ErrorLog.Write("Error: No file for trade_companies was found");
-            return;
+            Dictionary<string, TradeCompany> tradeCompaniesInternal = [];
+            var pathObj = PathObj.FromPath(file, false);
+            ParseTradeCompabies(IO.ReadAllInUTF8(file), ref pathObj, ref tradeCompaniesInternal);
+
+            FileManager.AddRangeToDictionary(pathObj, tradeCompaniesInternal.Values);
+            foreach (var tcp in tradeCompaniesInternal)
+               if (!tradeCompanies.TryAdd(tcp.Key, tcp.Value))
+                  Globals.ErrorLog.Write($"Trade Company {tcp.Key} already exists in the dictionary");
          }
+
+         Globals.TradeCompanies = tradeCompanies;
+
+         sw.Stop();
+         Globals.LoadingLog.WriteTimeStamp("Trade Companies", sw.ElapsedMilliseconds);
+      }
+
+      private static void ParseTradeCompabies(string rawContent, ref PathObj pathObj, ref Dictionary<string, TradeCompany> tradeCompanies)
+      {
 
          Parsing.RemoveCommentFromMultilineString(rawContent, out var content);
          var elements = Parsing.GetElements(0, content);
-         Dictionary<string, TradeCompany> tradeCompanies = [];
 
          foreach (var element in elements)
          {
@@ -64,17 +84,12 @@ namespace Editor.Loading
                }
             }
 
-            if (!tradeCompanies.TryAdd(block.Name, new(block.Name, genericName, specificName, provinces, color)))
-            {
+            TradeCompany tradeCompany = new(block.Name, genericName, specificName, provinces, color);
+            tradeCompany.SetPath(ref pathObj);
+            if (!tradeCompanies.TryAdd(block.Name, tradeCompany)) 
                Globals.ErrorLog.Write($"Trade Company {block.Name} already exists in the dictionary");
-            }
          }
 
-         Globals.TradeCompanies = tradeCompanies;
-
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("Trade Companies", sw.ElapsedMilliseconds);
       }
-
    }
 }

@@ -13,13 +13,14 @@ public static class ContinentLoading
    public static void Load()
    {
       var sw = Stopwatch.StartNew();
-      if (!FilesHelper.GetModOrVanillaPath(out var path, "map", "continent.txt"))
+      if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, "map", "continent.txt"))
       {
          Globals.ErrorLog.Write("Error: continent.txt not found!");
          return;
       }
       var newContent = IO.ReadAllLinesInUTF8(path);
 
+      var pathObj = PathObj.FromPath(path, isModPath);
       var continentDictionary = new Dictionary<string, Continent>();
       var sb = new StringBuilder();
 
@@ -31,13 +32,13 @@ public static class ContinentLoading
       {
          var name = match.Groups["name"].Value;
          var provinces = Parsing.GetProvincesFromString(match.ToString());
-         continentDictionary.Add(name, new (name, Color.Empty, provinces){Color = Globals.ColorProvider.GetRandomColor()});
+         Continent continent = new(name, Color.Empty, provinces) { Color = Globals.ColorProvider.GetRandomColor() };
+         continent.SetPath(ref pathObj);
+         continentDictionary.Add(name, continent);
 
-         foreach (var provinceId in continentDictionary[name].GetProvinces())
-            if (Globals.Provinces.TryGetValue(provinceId, out var province))
-               province.Continent = name;
       }
 
+      FileManager.AddRangeToDictionary(pathObj, continentDictionary.Values);
       Globals.Continents = continentDictionary;
 
       sw.Stop();

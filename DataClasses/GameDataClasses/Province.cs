@@ -60,14 +60,14 @@ public class ProvinceData()
    public List<TradeModifier> TradeModifiers = [];  
 }
 
-public class Province(int id, Color color) : ProvinceCollection<Province>(id.ToString(), color)
+public class Province(int id, Color color) : ProvinceComposite(id.ToString(), color)
 {
    private readonly ProvinceData _data = new();
    private List<HistoryEntry> _history = [];
    public int FileIndex { get; set; } = 0;
-   public override ModifiedData WhatAmI()
+   public override SaveableType WhatAmI()
    {
-      return ModifiedData.Province;
+      return SaveableType.Province;
    }
 
    public override string SavingComment()
@@ -119,23 +119,15 @@ public class Province(int id, Color color) : ProvinceCollection<Province>(id.ToS
    {
       get
       {
-         if (Parents.Count < 1)
-            return Area.Empty;
-         if (Parents[0] is Area area)
-            return area;
-         var type = Parents[0].WhatAmI();
-         return Area.Empty;
+         return GetFirstParentOfType(SaveableType.Area) as Area ?? Area.Empty;
       }
    }
 
-   public string Continent
+   public Continent Continent
    {
-      get => _data.Continent;
-      set
+      get
       {
-         if (Globals.State == State.Running)
-            RaiseProvinceContinentChanged(this, value, nameof(Continent));
-         _data.Continent = value;
+         return GetFirstParentOfType(SaveableType.Continent) as Continent ?? Continent.Empty;
       }
    }
 
@@ -633,7 +625,6 @@ public class Province(int id, Color color) : ProvinceCollection<Province>(id.ToS
    public void InitializeInitial()
    {
       ProvinceData.Area = Area;
-      ProvinceData.Continent = Continent;
       ProvinceData.Claims = Claims;
       ProvinceData.PermanentClaims = PermanentClaims;
       ProvinceData.Cores = Cores;
@@ -680,7 +671,6 @@ public class Province(int id, Color color) : ProvinceCollection<Province>(id.ToS
    public void ResetHistory()
    {
       Area.Add(this);
-      Continent = ProvinceData.Continent;
       Claims = ProvinceData.Claims;
       PermanentClaims = ProvinceData.PermanentClaims;
       Cores = ProvinceData.Cores;
@@ -1150,6 +1140,16 @@ public class Province(int id, Color color) : ProvinceCollection<Province>(id.ToS
       return [Id];
    }
 
+   public override Rectangle GetBounds()
+   {
+      return Bounds;
+   }
+
+   public override void SetBounds()
+   {
+      Bounds = Geometry.GetBounds(Borders);
+   }
+
    public override ICollection<Province> GetProvinces()
    {
       return [this];
@@ -1234,51 +1234,19 @@ public class Province(int id, Color color) : ProvinceCollection<Province>(id.ToS
    }
 
 
-   public EventHandler<ProvinceComposite> ColorChanged = delegate { };
+   public static EventHandler<ProvinceComposite> ColorChanged = delegate { };
    public EventHandler<ProvinceComposite> ItemAddedToArea = delegate { };
    public EventHandler<ProvinceComposite> ItemRemovedFromArea = delegate { };
    public EventHandler<ProvinceComposite> ItemModified = delegate { };
 
-   public override void Invoke(ProvinceComposite composite)
+   public override void ColorInvoke(ProvinceComposite composite)
    {
       ColorChanged.Invoke(this, composite);
    }
 
-   public override void AddToEvent(EventHandler<ProvinceComposite> handler)
+   public override void AddToColorEvent(EventHandler<ProvinceComposite> handler)
    {
       ColorChanged += handler;
-   }
-
-   public override void Invoke(ProvinceCollectionType type, ProvinceComposite composite)
-   {
-      switch (type)
-      {
-         case ProvinceCollectionType.Add:
-            ItemAddedToArea.Invoke(this, composite);
-            break;
-         case ProvinceCollectionType.Remove:
-            ItemRemovedFromArea.Invoke(this, composite);
-            break;
-         case ProvinceCollectionType.Modify:
-            ItemModified.Invoke(this, composite);
-            break;
-      }
-   }
-
-   public override void AddToEvent(ProvinceCollectionType type, EventHandler<ProvinceComposite> eventHandler)
-   {
-      switch (type)
-      {
-         case ProvinceCollectionType.Add:
-            ItemAddedToArea += eventHandler;
-            break;
-         case ProvinceCollectionType.Remove:
-            ItemRemovedFromArea += eventHandler;
-            break;
-         case ProvinceCollectionType.Modify:
-            ItemModified += eventHandler;
-            break;
-      }
    }
 
    public static Province Empty => new (-1, System.Drawing.Color.Empty);

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using Editor.DataClasses.GameDataClasses;
+﻿using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
-using Editor.Events;
 using Editor.Helper;
-using Editor.Loading;
 
 namespace Editor.MapModes;
 
@@ -13,7 +8,8 @@ public sealed class ContinentMapMode : MapMode
 {
    public ContinentMapMode()
    {
-      ProvinceEventHandler.OnProvinceContinentChanged += UpdateProvince;
+      Continent.ItemsModified += UpdateProvinceCollection;
+      Continent.ColorChanged += UpdateComposite<Province>;
    }
 
    public override MapModeType GetMapModeName()
@@ -24,16 +20,16 @@ public sealed class ContinentMapMode : MapMode
    public override int GetProvinceColor(Province id)
    {
       if (Globals.Provinces.TryGetValue(id, out var province))
-         if (Globals.Continents.TryGetValue(province.Continent, out var continent))
-            return continent.Color.ToArgb();
+         if (province.Continent != Continent.Empty)
+            return province.Continent.Color.ToArgb();
       return Color.DarkGray.ToArgb();
    }
 
    public override string GetSpecificToolTip(Province provinceId)
    {
       if (Globals.Provinces.TryGetValue(provinceId, out var province))
-         if (Globals.Continents.TryGetValue(province.Continent, out var continent))
-            return $"Continent: {continent.Name} ({Localisation.GetLoc(continent.Name)})";
+         if (province.Continent != Continent.Empty)
+            return $"Continent: {province.Continent.Name} ({Localisation.GetLoc(province.Continent.Name)})";
       return "Continent: [Unknown]";
    }
 }

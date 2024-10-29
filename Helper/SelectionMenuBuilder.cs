@@ -1,6 +1,7 @@
 ﻿using Editor.Commands;
 using Editor.Controls;
 using Editor.DataClasses.GameDataClasses;
+using Editor.Forms.AdvancedSelections;
 using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor.Helper
@@ -77,8 +78,8 @@ namespace Editor.Helper
             if (Selection.LastHoveredProvince == Province.Empty)
                return;
 
-            if (Globals.Continents.TryGetValue(Selection.LastHoveredProvince.Continent, out var continent))
-                  Globals.HistoryManager.AddCommand(new CCollectionSelection(continent), CommandHistoryType.ComplexSelection);
+            if (Selection.LastHoveredProvince.Continent != Continent.Empty)
+                  Globals.HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.Continent), CommandHistoryType.ComplexSelection);
          });
       }
 

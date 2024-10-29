@@ -2,6 +2,7 @@
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.MapModes;
+using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor.DataClasses.MapModes;
 
@@ -31,7 +32,8 @@ public enum MapModeType
    ParliamentSeat,
    City,
    HasCapital,
-   Diplomatic
+   Diplomatic, 
+   ProvinceGroup
 }
 
 public class MapModeManager
@@ -146,6 +148,5 @@ public class MapModeManager
    {
       return CurrentMapMode.GetProvinceColor(p);
    }
-
 
 }

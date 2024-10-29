@@ -176,9 +176,9 @@ namespace Editor.DataClasses.GameDataClasses
          SetPath(ref path);
       }
 
-      public override ModifiedData WhatAmI()
+      public override SaveableType WhatAmI()
       {
-         return ModifiedData.EventModifiers;
+         return SaveableType.EventModifiers;
       }
 
       public override string SavingComment()

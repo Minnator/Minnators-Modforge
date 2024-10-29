@@ -15,64 +15,6 @@ namespace Editor.Savers
       public static bool SameSpacePerInt = true;
       public static bool OneLinePerString = true;
 
-      public static void SaveAllModified(ModifiedData modifiedDataClass)
-      {
-         /*
-         if ((modifiedDataClass & ModifiedData.SaveProvinces) != 0)
-            ProvinceSaver.SaveAllModifiedProvinces();
-         if (modifiedDataClass.SaveAreas)
-         {
-            List<IProvinceCollection> areas = [];
-            foreach (var area in Globals.Areas.Values)
-               areas.Add(area);
-            CollectionSavers.SaveIProvinceCollection(areas, true, "map", "area.txt");
-         }
-         if (modifiedDataClass.SaveRegions)
-         {
-            List<KeyValuePair<string, List<string>>> regions = [];
-            foreach (var region in Globals.Regions.Values)
-               regions.Add(new(region.Name, region.Areas));
-            CollectionSavers.SaveStringCollection(regions, "areas", true, "map", "region.txt");
-         }
-         if (modifiedDataClass.TradeNode)
-         {
-            SaveTradeNodes.SaveAllTradeNodes(TradeNodeHelper.TopologicalSort(Globals.TradeNodes.Values.ToList()));
-         }
-         // TODO SaveTradeCompanies
-         // TODO ColonialRegions
-         if (modifiedDataClass.SuperRegions)
-         {
-            List<KeyValuePair<string, List<string>>> superRegions = [];
-            foreach (var superRegion in Globals.SuperRegions.Values)
-               superRegions.Add(new(superRegion.Name, superRegion.Regions));
-            CollectionSavers.SaveStringCollection(superRegions,true, "map", "superregion.txt");
-         }
-         if (modifiedDataClass.Continents)
-         {
-            List<IProvinceCollection> continents = [];
-            foreach (var continent in Globals.Continents.Values)
-               continents.Add(continent);
-            CollectionSavers.SaveIProvinceCollection(continents, true, "map", "continent.txt");
-         }
-         if (modifiedDataClass.ProvinceGroups)
-         {
-            List<IProvinceCollection> provinceGroups = [];
-            foreach (var provinceGroup in Globals.ProvinceGroups.Values)
-               provinceGroups.Add(provinceGroup);
-            CollectionSavers.SaveIProvinceCollection(provinceGroups, true, "map", "provincegroup.txt");
-         }
-         if (modifiedDataClass.EventModifiers)
-         {
-            //TODO
-            FileManager.SaveChanges();
-         }
-         if (modifiedDataClass.Localisation)
-         {
-            FileManager.SaveChanges();
-         }
-         */
-      }
-
       public static string GetYesNo(bool value)
       {
          return value ? "yes" : "no";
@@ -161,6 +103,20 @@ namespace Editor.Savers
          }
 
          sb.Append('\n');
+         AddTabs(tabCount, ref sb);
+         sb.AppendLine("}");
+      }
+
+      public static void AddFormattedStringListOnePerRow(string blockName, ICollection<string> strings, int tabCount,
+         ref StringBuilder sb)
+      {
+         AddTabs(tabCount, ref sb);
+         sb.AppendLine($"{blockName} = {{");
+         foreach (var s in strings)
+         {
+            AddTabs(tabCount + 1, ref sb);
+            sb.AppendLine(s);
+         }
          AddTabs(tabCount, ref sb);
          sb.AppendLine("}");
       }

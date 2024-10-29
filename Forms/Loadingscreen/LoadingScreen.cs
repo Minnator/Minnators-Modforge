@@ -119,6 +119,8 @@ namespace Editor.Forms.Loadingscreen
             bw.ReportProgress(++progress);
             GovernmentReformsLoading.Load();
             bw.ReportProgress(++progress);
+            GovernmentLoading.Load();
+            bw.ReportProgress(++progress);
             RiverLoading.Load();
             bw.ReportProgress(++progress);
             ModifierLoading.Load();

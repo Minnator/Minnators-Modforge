@@ -10,13 +10,14 @@ public static class AreaLoading
    public static void LoadNew()
    {
       var sw = Stopwatch.StartNew();
-      if (!FilesHelper.GetModOrVanillaPath(out var path, "map", "area.txt"))
+      if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, "map", "area.txt"))
       {
          Globals.ErrorLog.Write("Error: area.txt not found!");
          return;
       }
       IO.ReadAllInANSI(path, out var newContent);
 
+      var pathObj = PathObj.FromPath(path, isModPath);
       var areaDictionary = new Dictionary<string, Area>();
 
       Parsing.RemoveCommentFromMultilineString(ref newContent, out var content);
@@ -47,8 +48,10 @@ public static class AreaLoading
          }
 
          Area newArea = new(areaName, provinces, Globals.ColorProvider.GetRandomColor());
+         newArea.SetPath(ref pathObj);
          areaDictionary.Add(areaName, newArea);
       }
+      FileManager.AddRangeToDictionary(pathObj, areaDictionary.Values);
 
       Globals.Areas = areaDictionary;
 

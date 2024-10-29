@@ -1,11 +1,18 @@
 ﻿using System.Diagnostics;
+using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.Events;
 using Editor.Helper;
-using ProvinceCollectionEventArgs = Editor.Events.ProvinceCollectionEventArgs;
 
 namespace Editor.Controls
 {
+   public class ProvinceCollectionEventArgs(string text, List<Province> provinces) : EventArgs
+   {
+      public string Text { get; } = text;
+      public List<Province> Provinces { get; } = provinces;
+
+   }
+
    public class CollectionEditor : Control
    {
       private GroupBox _groupBox = null!;
@@ -166,7 +173,6 @@ namespace Editor.Controls
             ClearAndAddUniquely(_onNewCreated.Invoke(item));
             ExtendedComboBox.Items.Add(item);
             ExtendedComboBox.AutoCompleteCustomSource.Add(item);
-            // Needs to be set to None to delete the item from the cashed? autocomplete list
             ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.None;
             ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
 

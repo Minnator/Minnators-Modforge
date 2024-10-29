@@ -1,7 +1,7 @@
 ﻿namespace Editor.DataClasses
 {
    [Flags]
-   public enum ModifiedData
+   public enum SaveableType
    {
       SaveProvinces = 1 << 0,
       Area = 1 << 1,
@@ -11,12 +11,12 @@
       ColonialRegion = 1 << 5,
       SuperRegion = 1 << 6,
       Continent = 1 << 7,
-      ProvinceGroups = 1 << 8,
+      ProvinceGroup = 1 << 8,
       EventModifiers = 1 << 9,
       Localisation = 1 << 10,
       Country = 1 << 11,
       Province = 1 << 12,
-      All = SaveProvinces | Area | Region | TradeNode | TradeCompany | ColonialRegion | SuperRegion | Continent | ProvinceGroups | EventModifiers | Localisation | Country | Province,
+      All = SaveProvinces | Area | Region | TradeNode | TradeCompany | ColonialRegion | SuperRegion | Continent | ProvinceGroup | EventModifiers | Localisation | Country | Province,
    }
 
 }

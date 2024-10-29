@@ -12,7 +12,7 @@ public sealed class ProvinceMapMode : MapMode
 {
    public ProvinceMapMode()
    {
-
+      Province.ColorChanged += UpdateComposite<Province>;
    }
 
    public override MapModeType GetMapModeName()

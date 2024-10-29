@@ -4,7 +4,6 @@ using Editor.DataClasses;
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
-using Editor.Interfaces;
 using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor.Forms.AdvancedSelections;
@@ -37,30 +36,30 @@ public static class GetProvinceViaOperation
    private static bool GetProvinceCollectionsFromSourceInSelection(ProvinceSource source, out List<ProvinceComposite> collections)
    {
       collections = [];
-      ModifiedData type;
+      SaveableType type;
 
       switch (source)
       {
          case ProvinceSource.AreasFromSelection:
-            type = ModifiedData.Area;
+            type = SaveableType.Area;
             break;
          case ProvinceSource.RegionsFromSelection:
-            type = ModifiedData.Region;
+            type = SaveableType.Region;
             break;
          case ProvinceSource.SuperRegionsFromSelection:
-            type = ModifiedData.SuperRegion;
+            type = SaveableType.SuperRegion;
             break;
          case ProvinceSource.ContinentsFromSelection:
-            type = ModifiedData.Continent;
+            type = SaveableType.Continent;
             break;
          case ProvinceSource.TradeNodesFromSelection:
-            type = ModifiedData.TradeNode;
+            type = SaveableType.TradeNode;
             break;
          case ProvinceSource.TradeCompaniesFromSelection:
-            type = ModifiedData.TradeCompany;
+            type = SaveableType.TradeCompany;
             break;
          case ProvinceSource.ColonialRegionsFromSelection:
-            type = ModifiedData.ColonialRegion;
+            type = SaveableType.ColonialRegion;
             break;
          case ProvinceSource.Selection:
          case ProvinceSource.AllProvinces:

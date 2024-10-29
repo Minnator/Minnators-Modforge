@@ -69,7 +69,7 @@ public abstract class MapMode
       Update(Geometry.GetProvincesInRectangle(rect).ToList());
    }
 
-   public virtual void Update(List<Province> ids)
+   public virtual void Update(ICollection<Province> ids)
    {
       if (ids.Count == 0)
          return;
@@ -78,7 +78,6 @@ public abstract class MapMode
       foreach (var id in ids)
       {
          Update(id, false);
-         MapDrawing.DrawOnMap(id, Selection._borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
       }
       BlockDrawingOfCapitals = false;
 
@@ -97,16 +96,21 @@ public abstract class MapMode
       Update(id);
    }
 
-   public virtual void UpdateProvinceCollection(object? sender, Events.ProvinceCollectionEventArgs e)
+   public virtual void UpdateProvinceCollection<T>(object? sender, ProvinceCollectionEventArguments<T> e) where T : ProvinceComposite
    {
       if (Globals.MapModeManager.CurrentMapMode != this)
          return;
-      foreach (var id in e.Ids)
-      {
-         if (IsLandOnly && !Globals.LandProvinces.Contains(id))
-            continue;
-         Update(id);
-      }
+
+      foreach (var composite in e.Composite) 
+         UpdateComposite<T>(sender, composite);
+   }
+
+   public virtual void UpdateComposite<T> (object? sender, ProvinceComposite composite) where T : ProvinceComposite
+   {
+      if (Globals.MapModeManager.CurrentMapMode != this)
+         return;
+
+      Update(composite.GetProvinces());
    }
 
    public virtual void Update(Province province, bool invalidate = true)
@@ -118,7 +122,6 @@ public abstract class MapMode
          MapDrawing.DrawAllCapitals();
       if (invalidate)
       {
-         MapDrawing.DrawOnMap(province, Selection._borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
          Globals.ZoomControl.Invalidate();
       }
       //TODO fix false border drawing

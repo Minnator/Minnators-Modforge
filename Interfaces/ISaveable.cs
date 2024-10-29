@@ -33,7 +33,7 @@ public abstract class Saveable
       } 
    }
 
-   public abstract ModifiedData WhatAmI();
+   public abstract SaveableType WhatAmI();
 
    public abstract string SavingComment();
    /// <summary>
@@ -41,6 +41,10 @@ public abstract class Saveable
    /// </summary>
    /// <returns></returns>
    public abstract PathObj GetDefaultSavePath();
+   public virtual string GetHeader()
+   {
+      return string.Empty;
+   }
    public abstract string GetSaveString(int tabs);
    public abstract string GetSavePromptString();
 }

@@ -10,8 +10,10 @@ namespace Editor.DataClasses.MapModes
 
       public TradeCompanyMapMode()
       {
-         ProvinceCollectionEventHandler.OnTradeCompanyChanged += UpdateProvinceCollection;
+         TradeCompany.ItemsModified += UpdateProvinceCollection;
+         TradeCompany.ColorChanged += UpdateComposite<Province>;
       }
+
 
       public override int GetProvinceColor(Province id)
       {

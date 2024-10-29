@@ -217,7 +217,6 @@
          ProvinceCollectionsPanel = new Panel();
          ProvinceCollectionsTab = new TableLayoutPanel();
          GroupCollectionOptions = new TableLayoutPanel();
-         CollectionEditorsPanel = new Panel();
          MapLayoutPanel = new TableLayoutPanel();
          MMButtonsTLPanel = new TableLayoutPanel();
          GeneralToolTip = new ToolTip(components);
@@ -271,7 +270,6 @@
          ProvinceCollectionsPanel.SuspendLayout();
          ProvinceCollectionsTab.SuspendLayout();
          GroupCollectionOptions.SuspendLayout();
-         CollectionEditorsPanel.SuspendLayout();
          MapLayoutPanel.SuspendLayout();
          SuspendLayout();
          // 
@@ -679,8 +677,11 @@
          // 
          // ProvinceCollectionsLayoutPanel
          // 
+         ProvinceCollectionsLayoutPanel.AutoScroll = true;
+         ProvinceCollectionsLayoutPanel.AutoSize = true;
          ProvinceCollectionsLayoutPanel.ColumnCount = 1;
          ProvinceCollectionsLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         ProvinceCollectionsLayoutPanel.Dock = DockStyle.Fill;
          ProvinceCollectionsLayoutPanel.Location = new Point(0, 0);
          ProvinceCollectionsLayoutPanel.Margin = new Padding(0);
          ProvinceCollectionsLayoutPanel.Name = "ProvinceCollectionsLayoutPanel";
@@ -692,7 +693,7 @@
          ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
          ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
          ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
-         ProvinceCollectionsLayoutPanel.Size = new Size(365, 1070);
+         ProvinceCollectionsLayoutPanel.Size = new Size(401, 785);
          ProvinceCollectionsLayoutPanel.TabIndex = 0;
          // 
          // FocusSelectionCheckBox
@@ -712,7 +713,7 @@
          BottomToolStrip.Items.AddRange(new ToolStripItem[] { RamUsageStrip, CpuUsageStrip, toolStripSeparator1, UndoDepthLabel, RedoDepthLabel, toolStripSeparator2, SelectedProvinceSum, toolStripSeparator7, MapModeTimesInfo });
          BottomToolStrip.Location = new Point(0, 876);
          BottomToolStrip.Name = "BottomToolStrip";
-         BottomToolStrip.Size = new Size(599, 24);
+         BottomToolStrip.Size = new Size(568, 24);
          BottomToolStrip.TabIndex = 0;
          // 
          // RamUsageStrip
@@ -2295,8 +2296,8 @@
          // 
          ProvinceCollectionsTab.ColumnCount = 1;
          ProvinceCollectionsTab.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         ProvinceCollectionsTab.Controls.Add(ProvinceCollectionsLayoutPanel, 0, 0);
          ProvinceCollectionsTab.Controls.Add(GroupCollectionOptions, 0, 1);
-         ProvinceCollectionsTab.Controls.Add(CollectionEditorsPanel, 0, 0);
          ProvinceCollectionsTab.Dock = DockStyle.Fill;
          ProvinceCollectionsTab.Location = new Point(0, 0);
          ProvinceCollectionsTab.Margin = new Padding(0);
@@ -2322,17 +2323,6 @@
          GroupCollectionOptions.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
          GroupCollectionOptions.Size = new Size(401, 25);
          GroupCollectionOptions.TabIndex = 0;
-         // 
-         // CollectionEditorsPanel
-         // 
-         CollectionEditorsPanel.AutoScroll = true;
-         CollectionEditorsPanel.Controls.Add(ProvinceCollectionsLayoutPanel);
-         CollectionEditorsPanel.Dock = DockStyle.Fill;
-         CollectionEditorsPanel.Location = new Point(0, 0);
-         CollectionEditorsPanel.Margin = new Padding(0);
-         CollectionEditorsPanel.Name = "CollectionEditorsPanel";
-         CollectionEditorsPanel.Size = new Size(401, 785);
-         CollectionEditorsPanel.TabIndex = 0;
          // 
          // MapLayoutPanel
          // 
@@ -2456,9 +2446,9 @@
          ProvinceGroupsPage.ResumeLayout(false);
          ProvinceCollectionsPanel.ResumeLayout(false);
          ProvinceCollectionsTab.ResumeLayout(false);
+         ProvinceCollectionsTab.PerformLayout();
          GroupCollectionOptions.ResumeLayout(false);
          GroupCollectionOptions.PerformLayout();
-         CollectionEditorsPanel.ResumeLayout(false);
          MapLayoutPanel.ResumeLayout(false);
          ResumeLayout(false);
          PerformLayout();
@@ -2575,7 +2565,6 @@
       private ToolStripComboBox StripeDirectionComboBox;
       private TableLayoutPanel ProvinceCollectionsTab;
       private TableLayoutPanel GroupCollectionOptions;
-      private Panel CollectionEditorsPanel;
       private TableLayoutPanel tableLayoutPanel5;
       private Label label24;
       public ComboBox SelectionTypeBox;

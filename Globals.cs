@@ -108,7 +108,7 @@ public static class Globals
       }
    }
    private static int _loadingStage = 0;
-   public const int LOADING_STAGES = 38; // Needs to be increased when adding new loading stages
+   public const int LOADING_STAGES = 39; // Needs to be increased when adding new loading stages
    #endregion
    
    public static ConsoleForm? ConsoleForm = null;
@@ -244,7 +244,7 @@ public static class Globals
 
    // ------------ Saving ------------ \\ 
 
-   public static ModifiedData ModifiedData = new();
+   public static SaveableType SaveableType = new();
 
 
 

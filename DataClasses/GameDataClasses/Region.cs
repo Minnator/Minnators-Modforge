@@ -1,7 +1,5 @@
 ﻿using System.Text;
-using Editor.DataClasses.Commands;
 using Editor.Helper;
-using Editor.Interfaces;
 using Editor.Savers;
 
 namespace Editor.DataClasses.GameDataClasses;
@@ -13,9 +11,7 @@ public class Region : ProvinceCollection<Area>
    {
       get
       {
-         if (Parents.Count < 1)
-            return SuperRegion.Empty;
-         return (Parents[0] as SuperRegion)!;
+         return GetFirstParentOfType(SaveableType.SuperRegion) as SuperRegion ?? SuperRegion.Empty;
       }
    }
 
@@ -32,9 +28,9 @@ public class Region : ProvinceCollection<Area>
 
    public new static Region Empty => new ("", Color.Empty, []);
 
-   public override ModifiedData WhatAmI()
+   public override SaveableType WhatAmI()
    {
-      return ModifiedData.Region;
+      return SaveableType.Region;
    }
 
    public override string SavingComment()
@@ -44,7 +40,7 @@ public class Region : ProvinceCollection<Area>
 
    public override PathObj GetDefaultSavePath()
    {
-      return new (["map"]);
+      return new(["map", "region.txt"]);
    }
 
    public override string GetSaveString(int tabs)
@@ -54,7 +50,7 @@ public class Region : ProvinceCollection<Area>
          areaNames.Add(area.Name);
       var sb = new StringBuilder();
       sb.AppendLine($"{Name} = {{");
-      SavingUtil.AddFormattedStringList("areas", areaNames, 1, ref sb);
+      SavingUtil.AddFormattedStringListOnePerRow("areas", areaNames, 1, ref sb);
       sb.AppendLine("}");
       return sb.ToString();
    }
@@ -64,51 +60,43 @@ public class Region : ProvinceCollection<Area>
       return $"Save regions file";
    }
 
-   public EventHandler<ProvinceComposite> ColorChanged = delegate { };
-   public EventHandler<ProvinceComposite> ItemAddedToArea = delegate { };
-   public EventHandler<ProvinceComposite> ItemRemovedFromArea = delegate { };
-   public EventHandler<ProvinceComposite> ItemModified = delegate { };
+   public static EventHandler<ProvinceComposite> ColorChanged = delegate { };
 
-   public override void Invoke(ProvinceComposite composite)
+   public override void ColorInvoke(ProvinceComposite composite)
    {
       ColorChanged.Invoke(this, composite);
    }
 
-   public override void AddToEvent(EventHandler<ProvinceComposite> handler)
+   public override void AddToColorEvent(EventHandler<ProvinceComposite> handler)
    {
       ColorChanged += handler;
    }
+   public static EventHandler<ProvinceCollectionEventArguments<Area>> ItemsModified = delegate { };
 
-   public override void Invoke(ProvinceCollectionType type, ProvinceComposite composite)
+
+   public override void Invoke(ProvinceCollectionEventArguments<Area> eventArgs)
    {
-      switch (type)
-      {
-         case ProvinceCollectionType.Add:
-            ItemAddedToArea.Invoke(this, composite);
-            break;
-         case ProvinceCollectionType.Remove:
-            ItemRemovedFromArea.Invoke(this, composite);
-            break;
-         case ProvinceCollectionType.Modify:
-            ItemModified.Invoke(this, composite);
-            break;
-      }
+      ItemsModified.Invoke(this, eventArgs);
    }
 
-   public override void AddToEvent(ProvinceCollectionType type, EventHandler<ProvinceComposite> eventHandler)
+   public override void AddToEvent(EventHandler<ProvinceCollectionEventArguments<Area>> eventHandler)
    {
-      switch (type)
-      {
-         case ProvinceCollectionType.Add:
-            ItemAddedToArea += eventHandler;
-            break;
-         case ProvinceCollectionType.Remove:
-            ItemRemovedFromArea += eventHandler;
-            break;
-         case ProvinceCollectionType.Modify:
-            ItemModified += eventHandler;
-            break;
-      }
+      ItemsModified += eventHandler;
+   }
+
+   public override void RemoveGlobal()
+   {
+      Globals.Regions.Remove(Name);
+   }
+
+   public override void AddGlobal()
+   {
+      Globals.Regions.Add(Name, this);
+   }
+
+   public override string GetHeader()
+   {
+      return "# random_new_world_region is used for RNW. Must be first in this list.\r\nrandom_new_world_region = {\r\n}";
    }
 }
 

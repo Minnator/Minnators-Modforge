@@ -4,8 +4,10 @@ namespace Editor.DataClasses.GameDataClasses
 {
    public class GovernmentReform(string name)
    {
-      public string Name { get; set; } = name;
+      public string Name { get; } = name;
       public string Icon { get; set; } = string.Empty;
+      public static GovernmentReform Empty => new (string.Empty);
+
       public List<Trigger> Potential = [];
       public List<Trigger> Trigger = [];
       public List<KeyValuePair<string, string>> Attributes = [];
@@ -18,6 +20,18 @@ namespace Editor.DataClasses.GameDataClasses
       public override string ToString()
       {
          return $"{Name}: ({Modifiers.Count} modifiers)";
+      }
+
+      public override bool Equals(object? obj)
+      {
+         if (obj is GovernmentReform other)
+            return Name == other.Name;
+         return false;
+      }
+
+      public override int GetHashCode()
+      {
+         return Name.GetHashCode();
       }
    }
 

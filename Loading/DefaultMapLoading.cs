@@ -12,7 +12,7 @@ public static class DefaultMapLoading
       var sw = new Stopwatch();
       sw.Start();
 
-      if (!FilesHelper.GetModOrVanillaPath(out var path, "map", "default.map"))
+      if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, "map", "default.map"))
       {
          Globals.ErrorLog.Write("Error: default.map not found!");
          return;

@@ -209,7 +209,7 @@ public class MapDrawing
 
    // --------------- Additional methods --------------- \\
 
-   public static void DrawCapitals(List<Province> ids)
+   public static void DrawCapitals(ICollection<Province> ids)
    {
    }
    public static void DrawAllCapitals()

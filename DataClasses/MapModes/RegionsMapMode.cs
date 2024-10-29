@@ -9,7 +9,8 @@ public sealed class RegionsMapMode : MapMode
 {
    public RegionsMapMode()
    {
-      ProvinceEventHandler.OnProvinceRegionAreasChanged += UpdateProvince!;
+      Region.ItemsModified += UpdateProvinceCollection;
+      Region.ColorChanged += UpdateComposite<Province>;
    }
 
    public override MapModeType GetMapModeName()

@@ -158,7 +158,7 @@ namespace Editor.Controls
          if (Parsing.TryParseFullDate(_dateTextBox.Text, out var date))
             Date = date;
       }
-      public void OnYearIncrease (object sender, EventArgs e)
+      public void OnYearIncrease (object? sender, EventArgs e)
       {
          Date = ModifierKeys switch
          {
@@ -168,7 +168,7 @@ namespace Editor.Controls
          };
       }
 
-      public void OnMonthIncrease (object sender, EventArgs e)
+      public void OnMonthIncrease (object? sender, EventArgs e)
       {
          Date = ModifierKeys switch
          {
@@ -178,7 +178,7 @@ namespace Editor.Controls
          };
       }
 
-      public void OnDayIncrease (object sender, EventArgs e)
+      public void OnDayIncrease (object? sender, EventArgs e)
       {
          Date = ModifierKeys switch
          {
@@ -188,7 +188,7 @@ namespace Editor.Controls
          };
       }
 
-      public void OnYearDecrease (object sender, EventArgs e)
+      public void OnYearDecrease (object? sender, EventArgs e)
       {
          Date = ModifierKeys switch
          {
@@ -198,7 +198,7 @@ namespace Editor.Controls
          };
       }
 
-      public void OnMonthDecrease (object sender, EventArgs e)
+      public void OnMonthDecrease (object? sender, EventArgs e)
       {
          Date = ModifierKeys switch
          {
@@ -208,7 +208,7 @@ namespace Editor.Controls
          };
       }
 
-      public void OnDayDecrease (object sender, EventArgs e)
+      public void OnDayDecrease (object? sender, EventArgs e)
       {
          Date = ModifierKeys switch
          {

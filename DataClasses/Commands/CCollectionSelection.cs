@@ -1,7 +1,6 @@
 ﻿using Editor.Controls;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
-using Editor.Interfaces;
 
 namespace Editor.Commands
 {

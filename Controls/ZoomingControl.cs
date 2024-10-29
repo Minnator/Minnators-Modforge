@@ -15,7 +15,7 @@ public class ImagePositionEventArgs(Rectangle oldRect, Rectangle newRect) : Even
 
 public sealed class ZoomControl : Control, IDisposable
 {
-   private Bitmap map;
+   private Bitmap map = null!;
    public Graphics BmpGfx;
    public IntPtr HBitmap;
 

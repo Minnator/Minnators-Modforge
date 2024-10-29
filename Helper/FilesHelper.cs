@@ -178,16 +178,18 @@ public static partial class FilesHelper
       return files.Count > 0;
    }
 
-   public static bool GetModOrVanillaPath(out string filePath, params string[] internalPath)
+   public static bool GetModOrVanillaPath(out string filePath, out bool isModPath, params string[] internalPath)
    {
       var innerPath = Path.Combine(internalPath);
       var path = Path.Combine(Globals.ModPath, innerPath);
       if (File.Exists(path))
       {
+         isModPath = true;
          filePath = path;
          return true;
       }
       filePath = Path.Combine(Globals.VanillaPath, innerPath);
+      isModPath = false;
       return File.Exists(filePath);
    }
 

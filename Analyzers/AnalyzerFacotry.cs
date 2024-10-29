@@ -13,7 +13,7 @@
          if (Analyzers.TryGetValue(type, out var analyzer))
             return analyzer;
 
-         return null;
+         return null!;
       }
 
       public static bool HasAnalyzer(string type)

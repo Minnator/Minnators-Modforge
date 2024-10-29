@@ -1,7 +1,5 @@
 ﻿using Editor.Events;
 using Editor.Helper;
-using ProvinceCollectionEventArgs = Editor.Events.ProvinceCollectionEventArgs;
-
 namespace Editor.Controls
 {
    public sealed class ExtendedComboBox : ComboBox

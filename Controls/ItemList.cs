@@ -8,7 +8,8 @@ namespace Editor.Controls
    {
       String,
       Tag,
-      Id
+      Id,
+      FullWidth
    }
 
    public partial class ItemList : UserControl
@@ -19,10 +20,6 @@ namespace Editor.Controls
       public event EventHandler<ProvinceEditedEventArgs> OnItemRemoved = delegate { };
       public ItemTypes ItemType { get; set; }
 
-      public ItemList()
-      {
-         InitializeComponent();
-      }
 
       public ItemList(ItemTypes type, ComboBox box)
       {
@@ -83,6 +80,8 @@ namespace Editor.Controls
             FlowLayout.Controls.Add(ControlFactory.GetStringItemButton(item, ItemType));
          else if (ItemType == ItemTypes.Id)
             FlowLayout.Controls.Add(ControlFactory.GetItemButton(item, ItemType));
+         else if (ItemType == ItemTypes.FullWidth)
+            FlowLayout.Controls.Add(ControlFactory.GetItemButtonFullWidth(item, ItemType, FlowLayout.Width - 25));
          else
             throw new ArgumentOutOfRangeException();
 
@@ -165,6 +164,7 @@ namespace Editor.Controls
          switch (ItemType)
          {
             case ItemTypes.String:
+            case ItemTypes.FullWidth:
                return Item;
             case ItemTypes.Tag:
                return $"{Item} ({Localisation.GetLoc(Item)})";

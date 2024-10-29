@@ -4,6 +4,12 @@ namespace Editor.DataClasses.MapModes
 {
    public class ColonialRegionsMapMode : MapMode
    {
+      public ColonialRegionsMapMode()
+      {
+         ColonialRegion.ItemsModified += UpdateProvinceCollection;
+         ColonialRegion.ColorChanged += UpdateComposite<Province>;
+      }
+
       public override bool IsLandOnly => true;
       public override bool ShowOccupation => false;
 

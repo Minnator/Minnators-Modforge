@@ -84,9 +84,9 @@ public class LocObject : Saveable
       }
    }
 
-   public override ModifiedData WhatAmI()
+   public override SaveableType WhatAmI()
    {
-      return ModifiedData.Localisation;
+      return SaveableType.Localisation;
    }
 
    public override string SavingComment()

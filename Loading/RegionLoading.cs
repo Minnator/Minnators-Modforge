@@ -15,20 +15,24 @@ public static partial class RegionLoading
    {
       var sw = new Stopwatch();
       sw.Start();
-      if (!FilesHelper.GetModOrVanillaPath(out var path, "map", "region.txt"))
+
+      if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, "map", "region.txt"))
       {
          Globals.ErrorLog.Write("Error: region.txt not found!");
          return;
       }
       
+      var pathObj = PathObj.FromPath(path, isModPath);
       Parsing.RemoveCommentFromMultilineString(IO.ReadAllInUTF8(path), out var content);
-      ParseRegion(Regex.Matches(content, _pattern, RegexOptions.Multiline));
+      ParseRegion(Regex.Matches(content, _pattern, RegexOptions.Multiline), ref pathObj);
+
+      FileManager.AddRangeToDictionary(pathObj, Globals.Regions.Values);
 
       sw.Stop();
       Globals.LoadingLog.WriteTimeStamp("Parsing regions", sw.ElapsedMilliseconds);
    }
 
-   private static void ParseRegion(MatchCollection matches)
+   private static void ParseRegion(MatchCollection matches, ref PathObj pathObj)
    {
       Dictionary<string, Region> regionDictionary = [];
       foreach (Match match in matches)
@@ -57,6 +61,7 @@ public static partial class RegionLoading
 
          var region = new Region(regionName, Globals.ColorProvider.GetRandomColor(), areas) { Monsoon = monsoons };
          region.SetBounds();
+         region.SetPath(ref pathObj);
          regionDictionary.Add(regionName, region);
 
       }

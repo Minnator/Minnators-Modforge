@@ -1,17 +1,26 @@
 ﻿using Editor.DataClasses;
 using Editor.DataClasses.Commands;
-using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
+using Editor.Commands;
+using Editor.Interfaces;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
+using Timer = System.Threading.Timer;
 
-namespace Editor.Interfaces;
+namespace Editor.DataClasses.GameDataClasses;
 
-public abstract class ProvinceCollection<T>(string name, Color color) : ProvinceComposite(name, color) where T : ProvinceComposite 
-// Area, Region, SuperRegion, TradeNode, TradeCompany, Continent, ProvinceGroup
+public class ProvinceCollectionEventArguments<T>(ProvinceCollectionType type, ICollection<T> composite)
+{
+   public ProvinceCollectionType Type = type;
+   public ICollection<T> Composite = composite;
+
+}
+
+public abstract class ProvinceCollection<T>(string name, Color color) : ProvinceComposite(name, color) where T : ProvinceComposite
+   // Area, Region, SuperRegion, TradeNode, TradeCompany, Continent, ProvinceGroup
 {
    private ICollection<T> _subCollection = [];
 
-   protected ICollection<T> SubCollection
+   internal ICollection<T> SubCollection
    {
       get => _subCollection;
       set
@@ -21,8 +30,8 @@ public abstract class ProvinceCollection<T>(string name, Color color) : Province
       }
    }
 
-   public abstract void Invoke(ProvinceCollectionType type, ProvinceComposite composite);
-   public abstract void AddToEvent(ProvinceCollectionType type, EventHandler<ProvinceComposite> eventHandler);
+   public abstract void Invoke(ProvinceCollectionEventArguments<T> eventArgs);
+   public abstract void AddToEvent(EventHandler<ProvinceCollectionEventArguments<T>> eventHandler);
 
    /// <summary>
    /// Recursively gets all provinces in the SubCollections
@@ -53,7 +62,7 @@ public abstract class ProvinceCollection<T>(string name, Color color) : Province
    }
 
    public override void SetBounds() => Bounds = GetBounds();
-   
+
    public void Add(T composite, bool setBounds = true)
    {
       var whatAmI = WhatAmI();
@@ -77,13 +86,13 @@ public abstract class ProvinceCollection<T>(string name, Color color) : Province
 
       if (hadPreviousParent)
       {
-         if (Globals.State == State.Running)
-            Invoke(ProvinceCollectionType.Modify, composite);
+         //if (Globals.State == State.Running)
+         //   Invoke(ProvinceCollectionType.Modify, composite);
       }
       else
       {
-         if (Globals.State == State.Running)
-            Invoke(ProvinceCollectionType.Add, composite);
+         //if (Globals.State == State.Running)
+         //   Invoke(ProvinceCollectionType.Add, composite);
       }
    }
 
@@ -95,8 +104,8 @@ public abstract class ProvinceCollection<T>(string name, Color color) : Province
          SetBounds();
       if (!toBeAdded)
       {
-         if (Globals.State == State.Running)
-            Invoke(ProvinceCollectionType.Remove, composite);
+         //if (Globals.State == State.Running)
+         //   Invoke(ProvinceCollectionType.Remove, composite);
       }
    }
 
@@ -113,6 +122,78 @@ public abstract class ProvinceCollection<T>(string name, Color color) : Province
          Add(composite, false);
       SetBounds();
    }
+
+   public void NewAdd(T composite, bool addToGlobal = false, bool tryAddEventToHistory = true)
+   {
+      if (_subCollection.Contains(composite))
+         return;
+      var command = new CAddProvinceCollection<T>(this, addToGlobal);
+      command.AddNewComposite(composite);
+      ExecuteAndAdd(command, tryAddEventToHistory);
+   }
+
+   public void NewAddRange(ICollection<T> composites, bool addToGlobal = false, bool tryAddEventToHistory = true)
+   {
+      var command = new CAddProvinceCollection<T>(this, addToGlobal);
+      foreach (var composite in composites)
+      {
+         if (_subCollection.Contains(composite))
+            continue;
+         command.AddNewComposite(composite);
+      }
+      ExecuteAndAdd(command, tryAddEventToHistory);
+   }
+
+   public void NewRemove(T composite, bool removeFromGlobal = false, bool tryAddEventToHistory = true)
+   {
+      if (!_subCollection.Contains(composite))
+         return;
+      var command = new CRemoveProvinceCollection<T>(this, removeFromGlobal);
+      command.RemoveNewComposite(composite);
+      ExecuteAndAdd(command, tryAddEventToHistory);
+   }
+
+   public void NewRemoveRange(ICollection<T> composites, bool removeFromGlobal = false, bool tryAddEventToHistory = true)
+   {
+      var command = new CRemoveProvinceCollection<T>(this, removeFromGlobal);
+      foreach (var composite in composites)
+      {
+         if (!_subCollection.Contains(composite))
+            continue;
+         command.RemoveNewComposite(composite);
+      }
+      ExecuteAndAdd(command, tryAddEventToHistory);
+   }
+
+   public void NewRemoveFromGlobal()
+   {
+      NewRemoveRange(_subCollection, true);
+   }
+
+   public void ExecuteAndAdd(ICommand command, bool tryAddEventToHistory)
+   {
+      EditingStatus = ObjEditingStatus.Modified;
+
+      command.Execute();
+      if (tryAddEventToHistory && Globals.State == State.Running)
+      {
+         Globals.HistoryManager.AddCommand(command);
+      }
+   }
+
+   public void InternalAdd(T composite)
+   {
+      _subCollection.Add(composite);
+   }
+
+   public void InternalRemove(T composite)
+   {
+      _subCollection.Remove(composite);
+   }
+
+   public abstract void RemoveGlobal();
+   public abstract void AddGlobal();
+
 }
 
 public abstract class ProvinceComposite(string name, Color color) : Saveable// Province + IProvinceCollection
@@ -126,12 +207,12 @@ public abstract class ProvinceComposite(string name, Color color) : Saveable// P
       {
          _color = value;
          if (Globals.State == State.Running)
-            Invoke(this);
+            ColorInvoke(this);
       }
    }
 
-   public abstract void Invoke(ProvinceComposite composite);
-   public abstract void AddToEvent(EventHandler<ProvinceComposite> handler);
+   public abstract void ColorInvoke(ProvinceComposite composite);
+   public abstract void AddToColorEvent(EventHandler<ProvinceComposite> handler);
 
    public List<ProvinceComposite> Parents = [];
    public Rectangle Bounds = Rectangle.Empty;
@@ -142,8 +223,8 @@ public abstract class ProvinceComposite(string name, Color color) : Saveable// P
    public abstract ICollection<int> GetProvinceIds();
    public abstract Rectangle GetBounds();
    public abstract void SetBounds();
-   
-   public virtual ProvinceComposite GetFirstParentOfType(ModifiedData type)
+
+   public virtual ProvinceComposite GetFirstParentOfType(SaveableType type)
    {
       foreach (var parent in Parents)
       {
@@ -190,6 +271,7 @@ public abstract class ProvinceComposite(string name, Color color) : Saveable// P
    }
 
    public static ProvinceComposite Empty => Province.Empty;
+
 }
 
 

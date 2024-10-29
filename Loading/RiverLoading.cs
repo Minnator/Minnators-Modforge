@@ -11,7 +11,7 @@ namespace Editor.Loading
       {
          var sw = new Stopwatch();
          sw.Start();
-         if (!FilesHelper.GetModOrVanillaPath(out var path, "map", "rivers.bmp"))
+         if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, "map", "rivers.bmp"))
          {
             Globals.ErrorLog.Write("Could not find rivers.bmp");
             sw.Stop();

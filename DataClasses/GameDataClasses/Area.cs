@@ -1,7 +1,6 @@
 ﻿using System.Text;
 using Editor.DataClasses.Commands;
 using Editor.Helper;
-using Editor.Interfaces;
 using Editor.Savers;
 
 namespace Editor.DataClasses.GameDataClasses;
@@ -24,9 +23,7 @@ public class Area : ProvinceCollection<Province>
    {
       get
       {
-         if (Parents.Count < 1)
-            return Region.Empty;
-         return (Parents[0] as Region) ?? Region.Empty;
+         return GetFirstParentOfType(SaveableType.Region) as Region ?? Region.Empty;
       }
    }
 
@@ -42,9 +39,9 @@ public class Area : ProvinceCollection<Province>
       return Name.GetHashCode();
    }
    
-   public override ModifiedData WhatAmI()
+   public override SaveableType WhatAmI()
    {
-      return ModifiedData.Area;
+      return SaveableType.Area;
    }
 
    public override string SavingComment()
@@ -54,7 +51,7 @@ public class Area : ProvinceCollection<Province>
 
    public override PathObj GetDefaultSavePath()
    {
-      return new (["map"]);
+      return new (["map", "area.txt"]);
    }
 
    public override string GetSaveString(int tabs)
@@ -71,50 +68,35 @@ public class Area : ProvinceCollection<Province>
 
    public new static Area Empty => new("", [], Color.Empty);
 
-   public EventHandler<ProvinceComposite> AreaColorChanged = delegate { };
-   public EventHandler<ProvinceComposite> ProvinceAddedToArea = delegate { };
-   public EventHandler<ProvinceComposite> ProvinceRemovedFromArea = delegate { };
-   public EventHandler<ProvinceComposite> ModifyProvinceInArea = delegate { };
+   public static EventHandler<ProvinceComposite> AreaColorChanged = delegate { };
 
+   public static EventHandler<ProvinceCollectionEventArguments<Province>> ItemsModified = delegate { };
 
-   public override void Invoke(ProvinceCollectionType type, ProvinceComposite composite)
+   public override void Invoke(ProvinceCollectionEventArguments<Province> eventArgs)
    {
-      switch (type)
-      {
-         case ProvinceCollectionType.Add:
-            ProvinceAddedToArea.Invoke(this, composite);
-            break;
-         case ProvinceCollectionType.Remove:
-            ProvinceRemovedFromArea.Invoke(this, composite);
-            break;
-         case ProvinceCollectionType.Modify:
-            ModifyProvinceInArea.Invoke(this, composite);
-            break;
-      }
+      ItemsModified.Invoke(this, eventArgs);
    }
 
-   public override void AddToEvent(ProvinceCollectionType type, EventHandler<ProvinceComposite> handler)
+   public override void AddToEvent(EventHandler<ProvinceCollectionEventArguments<Province>> eventHandler)
    {
-      switch (type)
-      {
-         case ProvinceCollectionType.Add:
-            ProvinceAddedToArea += handler;
-            break;
-         case ProvinceCollectionType.Remove:
-            ProvinceRemovedFromArea += handler;
-            break;
-         case ProvinceCollectionType.Modify:
-            ModifyProvinceInArea += handler;
-            break;
-      }
+      ItemsModified += eventHandler;
    }
-   
-   public override void Invoke(ProvinceComposite composite)
+   public override void RemoveGlobal()
+   {
+      Globals.Areas.Remove(Name);
+   }
+
+   public override void AddGlobal()
+   {
+      Globals.Areas.Add(Name, this);
+   }
+
+   public override void ColorInvoke(ProvinceComposite composite)
    {
       AreaColorChanged.Invoke(this, composite);
    }
 
-   public override void AddToEvent(EventHandler<ProvinceComposite> handler)
+   public override void AddToColorEvent(EventHandler<ProvinceComposite> handler)
    {
       AreaColorChanged += handler;
    }

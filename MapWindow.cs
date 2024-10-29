@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Runtime;
 using System.Text;
 using Editor.Controls;
+using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.Events;
@@ -15,6 +16,7 @@ using Editor.Loading;
 using Editor.Savers;
 using static Editor.Helper.ProvinceEnumHelper;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
+using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor
 {
@@ -51,13 +53,13 @@ namespace Editor
 
       private ToolTip _savingButtonsToolTip = null!;
 
-      public CollectionEditor AreaEditingGui = null!;
-      public CollectionEditor RegionEditingGui = null!;
-      public CollectionEditor SuperRegionEditingGui = null!;
-      public CollectionEditor TradeCompanyEditingGui = null!;
-      public CollectionEditor CountryEditingGui = null!;
-      public CollectionEditor TradeNodeEditingGui = null!;
-      public CollectionEditor ProvinceGroupsEditingGui = null!;
+      public CollectionEditor2<Area, Province> AreaEditingGui = null!;
+      public CollectionEditor2<Region, Area> RegionEditingGui = null!;
+      public CollectionEditor2<SuperRegion, Region> SuperRegionEditingGui = null!;
+      public CollectionEditor2<TradeCompany, Province> TradeCompanyEditingGui = null!;
+      public CollectionEditor2<Country, Province> CountryEditingGui = null!;
+      public CollectionEditor2<TradeNode, Province> TradeNodeEditingGui = null!;
+      public CollectionEditor2<ProvinceGroup, Province> ProvinceGroupsEditingGui = null!;
 
       #endregion
 
@@ -228,74 +230,35 @@ namespace Editor
 
       private void InitializeProvinceCollectionEditGui()
       {
-         /*
-         AreaEditingGui = ControlFactory.GetCollectionEditor("Area", MapModeType.Area, ItemTypes.Id, [.. Globals.Areas.Keys],
-            CollectionEditorArea.AreaSelected,
-            CollectionEditorArea.ModifyExitingArea,
-            CollectionEditorArea.CreateNewArea,
-            CollectionEditorArea.RemoveArea,
-            CollectionEditorArea.SingleItemModified
-         );
+         CountryEditingGui = new(ItemTypes.Tag, SaveableType.Country, SaveableType.Province, MapModeType.Country);
+         Country.ItemsModified += CountryEditingGui.OnCorrespondingDataChange;
 
-         RegionEditingGui = ControlFactory.GetCollectionEditor("Region", MapModeType.Regions, ItemTypes.String, [.. Globals.Regions.Keys],
-            CollectionEditorRegion.RegionSelected,
-            CollectionEditorRegion.ModifyExitingRegion,
-            CollectionEditorRegion.CreateNewRegion,
-            CollectionEditorRegion.DeleteRegion,
-            CollectionEditorRegion.SingleItemModified
-         );
+         AreaEditingGui = new(ItemTypes.Id, SaveableType.Area, SaveableType.Province, MapModeType.Area);
+         Area.ItemsModified += AreaEditingGui.OnCorrespondingDataChange;
 
-         SuperRegionEditingGui = ControlFactory.GetCollectionEditor("SuperRegion", MapModeType.SuperRegion, ItemTypes.String, [.. Globals.SuperRegions.Keys],
-            CollectionEditorSuperRegion.SuperRegionSelected,
-            CollectionEditorSuperRegion.ModifyExitingSuperRegion,
-            CollectionEditorSuperRegion.CreateNewSuperRegion,
-            CollectionEditorSuperRegion.DeleteSuperRegion,
-            CollectionEditorSuperRegion.SingleItemModified
-         );
+         RegionEditingGui = new(ItemTypes.String, SaveableType.Region, SaveableType.Area, MapModeType.Regions);
+         DataClasses.GameDataClasses.Region.ItemsModified += RegionEditingGui.OnCorrespondingDataChange;
 
-         TradeCompanyEditingGui = ControlFactory.GetCollectionEditor("TradeCompany", MapModeType.TradeCompany, ItemTypes.Id, [.. Globals.TradeCompanies.Keys],
-            CollectionEditorTradeCompany.TradeCompanySelected,
-            CollectionEditorTradeCompany.ModifyExitingTradeCompany,
-            CollectionEditorTradeCompany.CreateNewTradeCompany,
-            CollectionEditorTradeCompany.DeleteTradeCompany,
-            CollectionEditorTradeCompany.SingleItemModified
-         );
+         SuperRegionEditingGui = new(ItemTypes.String, SaveableType.SuperRegion, SaveableType.Region, MapModeType.SuperRegion);
+         SuperRegion.ItemsModified += SuperRegionEditingGui.OnCorrespondingDataChange;
 
-         CountryEditingGui = ControlFactory.GetCollectionEditor("Country", MapModeType.Country, ItemTypes.Id, [.. Globals.Countries.Keys],
-            CollectionEditorCountry.CountrySelected,
-            CollectionEditorCountry.ModifyExitingCountry,
-            CollectionEditorCountry.CreateNewCountry,
-            CollectionEditorCountry.DeleteCountry,
-            CollectionEditorCountry.SingleItemModified
-         );
-         CountryEditingGui.AllowAddingNew = false;
-         CountryEditingGui.AllowRemoving = false;
+         TradeCompanyEditingGui = new(ItemTypes.String, SaveableType.TradeCompany, SaveableType.Province, MapModeType.TradeCompany);
+         TradeCompany.ItemsModified += TradeCompanyEditingGui.OnCorrespondingDataChange;
 
-         TradeNodeEditingGui = ControlFactory.GetCollectionEditor("TradeNode", MapModeType.TradeNode, ItemTypes.String, [.. Globals.TradeNodes.Keys],
-            CollectionEditorTradeNodes.TradeNodeSelected,
-            CollectionEditorTradeNodes.ModifyExitingTradeNode,
-            CollectionEditorTradeNodes.CreateNewTradeNode,
-            CollectionEditorTradeNodes.DeleteTradeNode,
-            CollectionEditorTradeNodes.SingleItemModified
-         );
+         TradeNodeEditingGui = new(ItemTypes.String, SaveableType.TradeNode, SaveableType.Province, MapModeType.TradeNode);
+         TradeNode.ItemsModified += TradeNodeEditingGui.OnCorrespondingDataChange;
 
-         // TODO add province group MapModeType
-         ProvinceGroupsEditingGui = ControlFactory.GetCollectionEditor("ProvinceGroup", MapModeType.Province, ItemTypes.String, [.. Globals.ProvinceGroups.Keys],
-            CollectionEditorProvinceGroup.ProvinceGroupSelected,
-            CollectionEditorProvinceGroup.ModifyExitingProvinceGroup,
-            CollectionEditorProvinceGroup.CreateNewProvinceGroup,
-            CollectionEditorProvinceGroup.DeleteProvinceGroup,
-            CollectionEditorProvinceGroup.SingleItemModified
-         );
-
-         ProvinceCollectionsLayoutPanel.Controls.Add(AreaEditingGui, 0, 0);
-         ProvinceCollectionsLayoutPanel.Controls.Add(RegionEditingGui, 0, 1);
+         ProvinceGroupsEditingGui = new(ItemTypes.String, SaveableType.ProvinceGroup, SaveableType.Province, MapModeType.ProvinceGroup);
+         ProvinceGroup.ItemsModified += ProvinceGroupsEditingGui.OnCorrespondingDataChange;
+         
+         ProvinceCollectionsLayoutPanel.Controls.Add(CountryEditingGui, 0, 0);
+         CountryEditingGui.Enabled = false;
+         ProvinceCollectionsLayoutPanel.Controls.Add(RegionEditingGui, 0, 0);
+         ProvinceCollectionsLayoutPanel.Controls.Add(AreaEditingGui, 0, 1);
          ProvinceCollectionsLayoutPanel.Controls.Add(SuperRegionEditingGui, 0, 2);
-         ProvinceCollectionsLayoutPanel.Controls.Add(CountryEditingGui, 0, 3);
+         ProvinceCollectionsLayoutPanel.Controls.Add(TradeCompanyEditingGui, 0, 3);
          ProvinceCollectionsLayoutPanel.Controls.Add(TradeNodeEditingGui, 0, 4);
-         ProvinceCollectionsLayoutPanel.Controls.Add(TradeCompanyEditingGui, 0, 5);
-         ProvinceCollectionsLayoutPanel.Controls.Add(ProvinceGroupsEditingGui, 0, 6);
-         */
+         ProvinceCollectionsLayoutPanel.Controls.Add(ProvinceGroupsEditingGui, 0, 5);
       }
 
 
@@ -1135,9 +1098,10 @@ namespace Editor
          GraphicalCultureBox = ControlFactory.GetListComboBox(Globals.GraphicalCultures, new(1));
          UnitTypeBox = ControlFactory.GetListComboBox([.. Globals.TechnologyGroups.Keys], new(1));
          TechGroupBox = ControlFactory.GetListComboBox([.. Globals.TechnologyGroups.Keys], new(1));
-         GovernmentTypeBox = ControlFactory.GetListComboBox([], new(1));
+         GovernmentTypeBox = ControlFactory.GetListComboBox([.. Globals.GovernmentTypes.Keys], new(1, 1, 6, 1));
          GovernmentRankBox = ControlFactory.GetListComboBox(["1", "2", "3"], new(1)); // TODO read in the defines to determine range
-         GovernmentReforms = ControlFactory.GetItemList(ItemTypes.String, [], "Government Reforms");
+         GovernmentReforms = ControlFactory.GetItemList(ItemTypes.FullWidth, [.. Globals.GovernmentReforms.Keys], "Government Reforms");
+         GovernmentReforms.Width = 117;
 
 
 
@@ -1147,10 +1111,10 @@ namespace Editor
          TagAndColorTLP.Controls.Add(UnitTypeBox, 3, 2);
          TagAndColorTLP.Controls.Add(TechGroupBox, 1, 3);
 
-         GovernmentLayoutPanel.Controls.Add(GovernmentTypeBox, 1, 0);
-         GovernmentLayoutPanel.Controls.Add(GovernmentRankBox, 3, 0);
+         GovernmentLayoutPanel.Controls.Add(GovernmentTypeBox, 3, 0);
+         GovernmentLayoutPanel.Controls.Add(GovernmentRankBox, 1, 0);
          GovernmentLayoutPanel.Controls.Add(GovernmentReforms, 0, 1);
-         GovernmentLayoutPanel.SetColumnSpan(GovernmentReforms, 3);
+         GovernmentLayoutPanel.SetColumnSpan(GovernmentReforms, 4);
       }
 
       public void ClearCountryGui()

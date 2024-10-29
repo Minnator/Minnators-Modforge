@@ -1,20 +1,9 @@
-﻿using Editor.DataClasses.Commands;
-using Editor.DataClasses.GameDataClasses;
+﻿using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.Events
 {
-   public class ProvinceCollectionEventArgs : EventArgs
+   public class ProvinceCollectionEvents
    {
-      public string GroupKey { get; }
-      public List<Province> Ids { get; }
-
-      public ProvinceCollectionEventArgs(string groupKey, List<Province> ids)
-      {
-         GroupKey = groupKey;
-         Ids = ids;
-      }
-
+      public static EventHandler<ICollection<ProvinceComposite>> ProvinceCollectionEvent = delegate { };
    }
-
-
 }

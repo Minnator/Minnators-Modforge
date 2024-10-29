@@ -68,7 +68,7 @@ namespace Editor.DataClasses.MapModes
             RenderClaimsAndCores();
       }
 
-      public override void Update(List<Province> ids)
+      public override void Update(ICollection<Province> ids)
       {
          var sw = Stopwatch.StartNew();
          base.Update(ids);

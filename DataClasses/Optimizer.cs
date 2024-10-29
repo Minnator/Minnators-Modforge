@@ -56,9 +56,16 @@ public static class Optimizer
          // add the province to the dictionary
 
          provs.Add(province);
-
-         //copy the borders of the province to the border array
       }
+
+      // Set the optimized data to the Globals class
+      Globals.Provinces = provs;
+      Globals.ProvinceIdToProvince = dictionary;
+      Globals.ColorToProvId = dic;
+
+
+      HashSet<Point> borderSet = [.. borders];
+      Parallel.ForEach(Globals.Provinces, province => RemoveBorderPixelsFromPixels(province, ref borderSet));
 
       sw.Stop();
       //Debug.WriteLine($"OptimizeProvinces took {sw.ElapsedMilliseconds}ms");
@@ -66,25 +73,22 @@ public static class Optimizer
       //var elapsed = sw.ElapsedMilliseconds;
       //Debug.WriteLine($"Per Province Cost: {elapsed / (float)provinces.Length * 1000} µs");
 
-      // Set the optimized data to the Globals class
-      Globals.Provinces = provs;
-      Globals.ProvinceIdToProvince = dictionary;
-      Globals.ColorToProvId = dic;
 
       // Free up memory from the ConcurrentDictionaries
       colorToBorder.Clear();
       colorToProvId.Clear();
    }
 
-   public static void RemoveBorderPixelsFromPixels(Province province)
+   public static void RemoveBorderPixelsFromPixels(Province province, ref HashSet<Point> borderSet)
    {
       var pixels = province.Pixels;
+
 
       var newPixels = new Point[pixels.Length - province.BorderCnt];
       var cnt = 0;
       for (var i = 0; i < pixels.Length; i++)
       {
-         if (province.Borders.Contains(pixels[i]))
+         if (borderSet.Contains(pixels[i]))
             continue;
          newPixels[cnt++] = pixels[i];
       }

@@ -1,7 +1,6 @@
 ﻿using System.Text;
 using Editor.DataClasses.Commands;
 using Editor.Helper;
-using Editor.Interfaces;
 using Editor.Savers;
 
 namespace Editor.DataClasses.GameDataClasses;
@@ -12,9 +11,9 @@ public class SuperRegion : ProvinceCollection<Region>
       SubCollection = regions;
    }
 
-   public override ModifiedData WhatAmI()
+   public override SaveableType WhatAmI()
    {
-      return ModifiedData.SuperRegion;
+      return SaveableType.SuperRegion;
    }
 
    public override string SavingComment()
@@ -24,7 +23,7 @@ public class SuperRegion : ProvinceCollection<Region>
 
    public override PathObj GetDefaultSavePath()
    {
-      return new (["map"]);
+      return new (["map","superregion.txt"]);
    }
 
    public override string GetSaveString(int tabs)
@@ -34,7 +33,7 @@ public class SuperRegion : ProvinceCollection<Region>
          regionNames.Add(region.Name);
 
       var sb = new StringBuilder();
-      SavingUtil.AddFormattedStringList(Name, regionNames, 0, ref sb);
+      SavingUtil.AddFormattedStringListOnePerRow(Name, regionNames, 0, ref sb);
       return sb.ToString();
    }
 
@@ -43,51 +42,44 @@ public class SuperRegion : ProvinceCollection<Region>
       return $"Save super regions file";
    }
 
-   public EventHandler<ProvinceComposite> ColorChanged = delegate { };
-   public EventHandler<ProvinceComposite> ItemAddedToArea = delegate { };
-   public EventHandler<ProvinceComposite> ItemRemovedFromArea = delegate { };
-   public EventHandler<ProvinceComposite> ItemModified = delegate { };
+   public static EventHandler<ProvinceComposite> ColorChanged = delegate { };
 
-   public override void Invoke(ProvinceComposite composite)
+   public override void ColorInvoke(ProvinceComposite composite)
    {
       ColorChanged.Invoke(this, composite);
    }
 
-   public override void AddToEvent(EventHandler<ProvinceComposite> handler)
+   public override void AddToColorEvent(EventHandler<ProvinceComposite> handler)
    {
       ColorChanged += handler;
    }
+   public static EventHandler<ProvinceCollectionEventArguments<Region>> ItemsModified = delegate { };
 
-   public override void Invoke(ProvinceCollectionType type, ProvinceComposite composite)
+   public override void Invoke(ProvinceCollectionEventArguments<Region> eventArgs)
    {
-      switch (type)
-      {
-         case ProvinceCollectionType.Add:
-            ItemAddedToArea.Invoke(this, composite);
-            break;
-         case ProvinceCollectionType.Remove:
-            ItemRemovedFromArea.Invoke(this, composite);
-            break;
-         case ProvinceCollectionType.Modify:
-            ItemModified.Invoke(this, composite);
-            break;
-      }
+      ItemsModified.Invoke(this, eventArgs);
    }
 
-   public override void AddToEvent(ProvinceCollectionType type, EventHandler<ProvinceComposite> eventHandler)
+   public override void AddToEvent(EventHandler<ProvinceCollectionEventArguments<Region>> eventHandler)
    {
-      switch (type)
-      {
-         case ProvinceCollectionType.Add:
-            ItemAddedToArea += eventHandler;
-            break;
-         case ProvinceCollectionType.Remove:
-            ItemRemovedFromArea += eventHandler;
-            break;
-         case ProvinceCollectionType.Modify:
-            ItemModified += eventHandler;
-            break;
-      }
+      ItemsModified += eventHandler;
    }
-   public static SuperRegion Empty => new ("", Color.Empty, []);
+
+   public override string GetHeader()
+   {
+      return "#\r\n#  ⎛⎝(•ⱅ•)⎠⎞\r\n";
+   }
+
+   public override void RemoveGlobal()
+   {
+      Globals.SuperRegions.Remove(Name);
+   }
+
+   public override void AddGlobal()
+   {
+      Globals.SuperRegions.Add(Name, this);
+   }
+
+   public new static SuperRegion Empty => new ("", Color.Empty, []);
+
 }

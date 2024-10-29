@@ -7,6 +7,12 @@ namespace Editor.DataClasses.MapModes
 {
    public class TradeNodeMapMode : MapMode
    {
+      public TradeNodeMapMode()
+      {
+         TradeNode.ItemsModified += UpdateProvinceCollection;
+         TradeNode.ColorChanged += UpdateComposite<Province>;
+      }
+
       public override MapModeType GetMapModeName()
       {
          return MapModeType.TradeNode;
