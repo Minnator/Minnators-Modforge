@@ -16,12 +16,12 @@ public class CChangeToolTipText : ICommand
 
    public void Execute()
    {
-      Globals.ToolTipText = _newToolTip;
+      Globals.Settings.ToolTipSettings.ToolTipText = _newToolTip;
    }
 
    public void Undo()
    {
-      Globals.ToolTipText = _oldToolTip;
+      Globals.Settings.ToolTipSettings.ToolTipText = _oldToolTip;
    }
 
    public void Redo()

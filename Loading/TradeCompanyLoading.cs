@@ -20,7 +20,7 @@ namespace Editor.Loading
          foreach (var file in files)
          {
             Dictionary<string, TradeCompany> tradeCompaniesInternal = [];
-            var pathObj = PathObj.FromPath(file, false);
+            var pathObj = PathObj.FromPath(file);
             ParseTradeCompabies(IO.ReadAllInUTF8(file), ref pathObj, ref tradeCompaniesInternal);
 
             FileManager.AddRangeToDictionary(pathObj, tradeCompaniesInternal.Values);

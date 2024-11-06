@@ -12,14 +12,17 @@ namespace Editor.Loading
       public static void Load()
       {
          var sw = Stopwatch.StartNew();
-         if (!FilesHelper.GetModOrVanillaPath(out var file, out var isModPath, "common", "tradenodes", "00_tradenodes.txt"))
+         if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, "common", "tradenodes", "00_tradenodes.txt"))
          {
             Globals.ErrorLog.Write("Error: 00_tradenodes.txt not found!");
             return;
          }
-         ParseTradeNodesFromString(IO.ReadAllInUTF8(file));
+
+         var pathObj = PathObj.FromPath(path, isModPath);
+         ParseTradeNodesFromString(IO.ReadAllInUTF8(path), ref pathObj);
          ConnectControlPaths();
          SetIncoming();
+         FileManager.AddRangeToDictionary(pathObj, Globals.TradeNodes.Values);
          sw.Stop();
          Globals.LoadingLog.WriteTimeStamp("Loading TradeNodes", sw.ElapsedMilliseconds);
       }
@@ -54,7 +57,7 @@ namespace Editor.Loading
          }
       }
 
-      private static void ParseTradeNodesFromString(string fileContent)
+      private static void ParseTradeNodesFromString(string fileContent, ref PathObj pathObj)
       {
          var elements = Parsing.GetElements(0, fileContent);
          foreach (var element in elements)
@@ -88,6 +91,8 @@ namespace Editor.Loading
 
             if (node.Color == Color.Empty)
                node.Color = Globals.ColorProvider.GetRandomColor();
+
+            node.SetPath(ref pathObj);
 
             Globals.TradeNodes.Add(node.Name, node);
          }

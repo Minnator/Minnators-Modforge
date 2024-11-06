@@ -43,7 +43,7 @@ namespace Editor.DataClasses.GameDataClasses
 
       public override PathObj GetDefaultSavePath()
       {
-         return new (["common", "tradenodes"]);
+         return new (["common", "tradenodes", "00_tradenodes.txt"]);
       }
 
       public override string GetSaveString(int tabs)

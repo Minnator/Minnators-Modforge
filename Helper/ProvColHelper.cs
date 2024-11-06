@@ -6,7 +6,7 @@ using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor.Helper
 {
-   public static class ProvinceCollectionHelper
+   public static class ProvColHelper
    {
       public static ICollection<string> GetProvinceCollectionNames(SaveableType type)
       {

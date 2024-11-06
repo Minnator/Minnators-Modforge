@@ -158,7 +158,7 @@ internal static class IO
    public static bool WriteLocalisationFile(string path, string content, bool append)
    {
       var streamWriter = new StreamWriter(path, false, bomUtf8Encoding);
-      streamWriter.WriteLine($"l_{Globals.Language.ToString().ToLower()}:");
+      streamWriter.WriteLine($"l_{Globals.Settings.MiscSettings.Language.ToString().ToLower()}:");
       streamWriter.WriteLine(content);
       streamWriter.Close();
       return true;

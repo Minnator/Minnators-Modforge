@@ -76,8 +76,10 @@
          AutoScaleMode = AutoScaleMode.Font;
          ClientSize = new Size(200, 330);
          Controls.Add(tableLayoutPanel1);
-         FormBorderStyle = FormBorderStyle.FixedToolWindow;
+         FormBorderStyle = FormBorderStyle.FixedSingle;
          Icon = (Icon)resources.GetObject("$this.Icon");
+         MaximizeBox = false;
+         MinimizeBox = false;
          Name = "Search";
          Text = "Search";
          tableLayoutPanel1.ResumeLayout(false);

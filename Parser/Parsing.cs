@@ -24,7 +24,10 @@ public static partial class Parsing
    private static readonly Regex FullDateParseRegex = FullDateParseRegexGenerate();
    private static readonly Regex PointFRegex = PointFRegexGenerate();
    private static readonly Regex PointRegex = PointRegexGenerate();
+   private static readonly Regex QuoteStringRegex = QuoteStringRegexGenerate();
 
+   [GeneratedRegex(@"\""(.*)\""", RegexOptions.Compiled)]
+   private static partial Regex QuoteStringRegexGenerate();
    // Generate Regexes during compile time
    [GeneratedRegex(@"[\""""].+?[\""""]|\S+", RegexOptions.Compiled)]
    private static partial Regex SameLineValuesRegexGenerate();
@@ -110,6 +113,20 @@ public static partial class Parsing
             provinces.Add(province);
       }
       return provinces;
+   }
+
+   /// <summary>
+   /// Returns a list of <c>string</c> from a string which are separated by whitespace or newline and in quotes.
+   /// </summary>
+   /// <param name="input"></param>
+   /// <returns></returns>
+   public static List<string> GetQuotedStringList(string input)
+   {
+      List<string> strList = [];
+      var matches = QuoteStringRegex.Matches(input);
+      foreach (Match match in matches)
+         strList.Add(match.ToString().Trim());
+      return strList;
    }
 
    /// <summary>

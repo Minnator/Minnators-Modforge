@@ -82,19 +82,7 @@ public static class Globals
 {
    public static string VanillaPath = string.Empty;
    public static string ModPath = string.Empty;
-
-   public static Language Language
-   {
-      get => _language;
-      set
-      {
-         _language = value;
-         LocalisationLoading.Load();
-      }
-   }
-   public static FileSavingMode FileSavingMode { get; set; } = FileSavingMode.AskOnce;
-
-
+   
    #region LoadingScreen
    public static event EventHandler<int> LoadingStageChanged = delegate { };
 
@@ -108,7 +96,7 @@ public static class Globals
       }
    }
    private static int _loadingStage = 0;
-   public const int LOADING_STAGES = 39; // Needs to be increased when adding new loading stages
+   public const int LOADING_STAGES = 40; // Needs to be increased when adding new loading stages
    #endregion
    
    public static ConsoleForm? ConsoleForm = null;
@@ -119,8 +107,8 @@ public static class Globals
    public static GuiDrawings? GuiDrawings = null;
 
    // SETTINGS
-   public static readonly Settings Settings = new();
-   public static ProvinceEditingStatus ProvinceEditingStatus = ProvinceEditingStatus.Selection;
+   public static Settings Settings = new();
+   public static readonly ProvinceEditingStatus ProvinceEditingStatus = ProvinceEditingStatus.Selection;
 
    // Date of history
    public static DateTime Date
@@ -139,7 +127,8 @@ public static class Globals
    public static State State = State.Loading;
    public static EditingStatus EditingStatus = EditingStatus.Idle;
    public static bool AllowEditing => EditingStatus == EditingStatus.Idle;
-   public static StripesDirection StripesDirection { get; set; } = StripesDirection.DiagonalLbRt;
+
+   public static DescriptorData DescriptorData = new("-1", "none", [], "-1");
 
    // History Manager
    public static readonly HistoryManager HistoryManager = new(new CInitial());
@@ -155,8 +144,6 @@ public static class Globals
    public static int MapHeight;
    public static string MapPath = null!;
 
-   // ToolTip
-   public static string ToolTipText = $"$MAPMODE_SPECIFIC$\n------------------\nId:   $id$\nName: $name$\nOwner: $owner$ ($owner%L$)\nArea: $area$ ($area%L$)";
 
    // Rivers
    public static Dictionary<int, Point[]> Rivers = [];
@@ -229,16 +216,6 @@ public static class Globals
 
    private static readonly Dictionary<string, SuperRegion> _superRegions = [];
    public static Dictionary<string, SuperRegion> SuperRegions => _superRegions;
-   public static void AddSuperRegion(SuperRegion sr)
-   {
-      if (_superRegions.TryAdd(sr.Name, sr)) 
-         GlobalEventHandlers.RaiseSuperRegionListChanged(sr.Name, true);
-   }
-   public static void RemoveSuperRegion(string name)
-   {
-      if (_superRegions.Remove(name))
-         GlobalEventHandlers.RaiseSuperRegionListChanged(name, false);
-   }
    public static Dictionary<string, Continent> Continents { get; set; } = [];
 
 
@@ -279,8 +256,6 @@ public static class Globals
    [
       "cannot_form_from_collapse_nation", "right_to_bear_arms", "all_your_core_are_belong_to_us", "random_nation_extra_size", 
    ];
-
-   private static Language _language = Language.english;
 }
 
 // TODO LIST Until Alpha 1.0
@@ -291,7 +266,7 @@ public static class Globals
 // - [x] Fix Lasso Selection Preview sometimes being incorrect
 // - [X] Make Magic wand tool
 // - [x] Add a modifier creation and selection menu
-// - [ ] Add saving for all Province Collections
+// - [x] Add saving for all Province Collections
 // - [x] Add descriptions on how to customize tooltips, map modes, and other things
 // - [ ] Add basic country editing
 // - [x] Fix province center calculation
@@ -304,6 +279,21 @@ public static class Globals
 // - [ ] Fix the Province Collection Editing gui so that all types work the same and edge cases are handled
 // - [x] Localisation editing for provinces and modifiers
 // - [x] Check if province is selected by color of the pixels instead of bounds or center
+// - [ ] Trade fix
+// - [ ] River fixes
+// - [ ] Province ADJ localization fix
+// - [ ] Language in quicksettings fix
+// - [ ] File saving popup for saving map mode
+// - [ ] Save all and verify all save options
+// - [ ] 3/2 letters prefix from mods
+// - [ ] Toolstip customizer tooltips and fix column width
+// - [ ] Logging and Crash Reporter
+// - [ ] Map mode crashes catchen und reporten and user so that it restarts
+// - [ ] When searching select the results
+// - [x] Settings window / saving
+// - [x] Open LoadingScreen and MapWindow on the same screen
+// - [x] Discord Rich Presence
+
 
 // TODO LIST Until Alpha 1.1
 // - [ ] PDX language support

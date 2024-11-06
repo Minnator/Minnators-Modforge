@@ -38,7 +38,7 @@ public abstract class MapMode
       // draw borders on top of the provinces is always needed
       if (ShowOccupation)
          MapDrawing.DrawOccupations(false, Globals.ZoomControl);
-      if (Globals.Settings.MapModeSettings.ShowCountryCapitals || ShowCapitals)
+      if (ShowCapitals)
          MapDrawing.DrawAllCapitals();
       MapDrawing.DrawAllBorders(Color.Black.ToArgb(), Globals.ZoomControl);
       Selection.RePaintSelection();
@@ -82,7 +82,7 @@ public abstract class MapMode
       BlockDrawingOfCapitals = false;
 
       // Drawing all capitals at once is more optimized
-      if (Globals.Settings.MapModeSettings.ShowCountryCapitals || ShowCapitals)
+      if (ShowCapitals)
          MapDrawing.DrawCapitals(ids);
       Globals.ZoomControl.Invalidate();
    }
@@ -118,7 +118,7 @@ public abstract class MapMode
       MapDrawing.DrawOnMap(province, GetProvinceColor(province), Globals.ZoomControl, PixelsOrBorders.Pixels);
       if (ShowOccupation)
          MapDrawing.DrawOccupations(false, Globals.ZoomControl);
-      if (Globals.Settings.MapModeSettings.ShowCountryCapitals || ShowCapitals)
+      if (ShowCapitals)
          MapDrawing.DrawAllCapitals();
       if (invalidate)
       {

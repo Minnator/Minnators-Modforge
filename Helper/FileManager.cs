@@ -179,7 +179,7 @@ namespace Editor.Helper
                // TODO group by folders to reduce pop up count
                var ending = ".txt";
                if (saveable is LocObject) 
-                  ending = $"_l_{Globals.Language.ToString().ToLower()}.yml";
+                  ending = $"_l_{Globals.Settings.MiscSettings.Language.ToString().ToLower()}.yml";
                if (!pathGrouping.TryGetValue(singleModData, out var modPath))
                {
                   modPath = new(GetNewFileAt(saveable, ending), true);
@@ -319,6 +319,14 @@ namespace Editor.Helper
             ? path.Remove(0, Globals.ModPath.Length + System.IO.Path.DirectorySeparatorChar.ToString().Length).Split(System.IO.Path.DirectorySeparatorChar)
             : path.Remove(0, Globals.VanillaPath.Length + System.IO.Path.DirectorySeparatorChar.ToString().Length).Split(System.IO.Path.DirectorySeparatorChar);
          return new(internalPath, isModPath);
+      }
+
+      public static PathObj FromPath(string path)
+      {
+         // if the path is in the mod folder
+         if (path.StartsWith(Globals.ModPath))
+            return FromPath(path, true);
+         return FromPath(path, false);
       }
 
       public string ToPath()

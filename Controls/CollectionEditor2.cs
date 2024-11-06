@@ -39,7 +39,7 @@ namespace Editor.Controls
 
          InitializeComponents(MapModeType.ToString());
 
-         SetComboBoxItems([.. ProvinceCollectionHelper.GetProvinceCollectionNames(_saveableType)]);
+         SetComboBoxItems([.. ProvColHelper.GetProvinceCollectionNames(_saveableType)]);
       }
 
 
@@ -151,14 +151,14 @@ namespace Editor.Controls
          ProvinceCollection<Q> collection;
          if (e.Button == MouseButtons.Right)
          {
-            collection = ProvinceCollectionHelper.CreateNewObject<T>(item, Globals.ColorProvider.GetRandomColor(), _saveableType);
-            collection.NewAddRange(ProvinceCollectionHelper.GetProvinceCollectionOfTypeForProvinces<Q>(Selection.GetSelectedProvinces, _saveableSubType), true);
+            collection = ProvColHelper.CreateNewObject<T>(item, Globals.ColorProvider.GetRandomColor(), _saveableType);
+            collection.NewAddRange(ProvColHelper.GetProvinceCollectionOfTypeForProvinces<Q>(Selection.GetSelectedProvinces, _saveableSubType), true);
          }
          else
          {
-            if (!ProvinceCollectionHelper.GetProvinceCollectionForTypeAndName(_saveableType, item, out collection))
+            if (!ProvColHelper.GetProvinceCollectionForTypeAndName(_saveableType, item, out collection))
                return;
-            collection.NewAddRange(ProvinceCollectionHelper.GetProvinceCollectionOfTypeForProvinces<Q>(Selection.GetSelectedProvinces, _saveableSubType));
+            collection.NewAddRange(ProvColHelper.GetProvinceCollectionOfTypeForProvinces<Q>(Selection.GetSelectedProvinces, _saveableSubType));
          }
       }
 
@@ -168,9 +168,9 @@ namespace Editor.Controls
          if (string.IsNullOrWhiteSpace(item))
             return;
 
-         var composites = ProvinceCollectionHelper.GetProvinceCollectionOfTypeForProvinces<Q>(Selection.GetSelectedProvinces, _saveableSubType);
+         var composites = ProvColHelper.GetProvinceCollectionOfTypeForProvinces<Q>(Selection.GetSelectedProvinces, _saveableSubType);
          
-         if (!ProvinceCollectionHelper.GetProvinceCollectionForTypeAndName(_saveableType, item, out ProvinceCollection<Q> collection))
+         if (!ProvColHelper.GetProvinceCollectionForTypeAndName(_saveableType, item, out ProvinceCollection<Q> collection))
             return;
 
          if (e.Button == MouseButtons.Right)
@@ -187,7 +187,7 @@ namespace Editor.Controls
          if (string.IsNullOrWhiteSpace(item))
             return;
 
-         if (!ProvinceCollectionHelper.GetProvinceCollectionForTypeAndName<T>(_saveableType, item, out var collection))
+         if (!ProvColHelper.GetProvinceCollectionForTypeAndName<T>(_saveableType, item, out var collection))
             return;
 
          Selection.ClearSelection();
@@ -206,10 +206,10 @@ namespace Editor.Controls
 
       private void OnSingleRemoved(object? sender, string item)
       {
-         if (!ProvinceCollectionHelper.GetProvinceCollectionForTypeAndName(_saveableSubType, item, out Q value))
+         if (!ProvColHelper.GetProvinceCollectionForTypeAndName(_saveableSubType, item, out Q value))
             return;
 
-         if (!ProvinceCollectionHelper.GetProvinceCollectionForTypeAndName(_saveableType, ExtendedComboBox.Text, out T collection))
+         if (!ProvColHelper.GetProvinceCollectionForTypeAndName(_saveableType, ExtendedComboBox.Text, out T collection))
             return;
 
          collection.NewRemove(value);

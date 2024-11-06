@@ -89,6 +89,7 @@
          save1ToolStripMenuItem = new ToolStripMenuItem();
          saveEuropeToolStripMenuItem = new ToolStripMenuItem();
          jsonToolStripMenuItem = new ToolStripMenuItem();
+         bugReportToolStripMenuItem = new ToolStripMenuItem();
          ProvinceCollectionsLayoutPanel = new TableLayoutPanel();
          FocusSelectionCheckBox = new CheckBox();
          BottomToolStrip = new ToolStrip();
@@ -310,7 +311,8 @@
          quickSettingsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { languageToolStripMenuItem, LanguageSelectionToolStrip, stripesDirectionToolStripMenuItem, StripeDirectionComboBox, toolStripMenuItem4, FileSavingModeComboBox });
          quickSettingsToolStripMenuItem.Name = "quickSettingsToolStripMenuItem";
          quickSettingsToolStripMenuItem.Size = new Size(268, 22);
-         quickSettingsToolStripMenuItem.Text = "Quick Settings";
+         quickSettingsToolStripMenuItem.Text = "Settings";
+         quickSettingsToolStripMenuItem.Click += quickSettingsToolStripMenuItem_Click;
          // 
          // languageToolStripMenuItem
          // 
@@ -602,7 +604,7 @@
          // 
          // debugToolStripMenuItem
          // 
-         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem, jsonToolStripMenuItem });
+         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem, jsonToolStripMenuItem, bugReportToolStripMenuItem });
          debugToolStripMenuItem.Name = "debugToolStripMenuItem";
          debugToolStripMenuItem.Size = new Size(54, 23);
          debugToolStripMenuItem.Text = "Debug";
@@ -674,6 +676,13 @@
          jsonToolStripMenuItem.Size = new Size(221, 22);
          jsonToolStripMenuItem.Text = "SaveableObj Debug";
          jsonToolStripMenuItem.Click += IsaveableClick;
+         // 
+         // bugReportToolStripMenuItem
+         // 
+         bugReportToolStripMenuItem.Name = "bugReportToolStripMenuItem";
+         bugReportToolStripMenuItem.Size = new Size(221, 22);
+         bugReportToolStripMenuItem.Text = "BugReport";
+         bugReportToolStripMenuItem.Click += bugReportToolStripMenuItem_Click;
          // 
          // ProvinceCollectionsLayoutPanel
          // 
@@ -2374,7 +2383,7 @@
          MinimumSize = new Size(1000, 960);
          Name = "MapWindow";
          SizeGripStyle = SizeGripStyle.Show;
-         StartPosition = FormStartPosition.CenterParent;
+         StartPosition = FormStartPosition.Manual;
          Text = "Minnator's Modforge (Alpha 0.1.0)";
          FormClosing += MapWindow_FormClosing;
          KeyDown += MapWindow_KeyDown;
@@ -2650,6 +2659,7 @@
       private ToolStripComboBox FileSavingModeComboBox;
       private ToolStripSeparator toolStripSeparator7;
       private ToolStripLabel MapModeTimesInfo;
+      private ToolStripMenuItem bugReportToolStripMenuItem;
    }
 }
 

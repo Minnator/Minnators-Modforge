@@ -12,7 +12,7 @@ public class ModProject
    public string Name { get; set; } = null!;
    public string ModPath { get; set; } = null!;
    public string VanillaPath { get; set; } = null!;
-   public Language Language { get; set; } = Language.English;
+   public Language Language { get; set; } = Language.english;
 
    public Size MapSize { get; set; }
 
@@ -23,12 +23,4 @@ public class ModProject
       Path.Combine(project.ModPath, "name", filename);
 
 
-}
-
-public enum Language
-{
-   English,
-   French,
-   German,
-   Spanish,
 }

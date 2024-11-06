@@ -17,6 +17,7 @@ namespace Editor.Forms.Loadingscreen
       {
          InitializeComponent();
 
+
          Globals.LoadingStageChanged += LoadingScreen_LoadingStageChanged;
           
          ProgressBar = new();
@@ -69,6 +70,8 @@ namespace Editor.Forms.Loadingscreen
             ProgressBar.Invalidate();
          };
          bw.RunWorkerAsync();
+
+         Globals.MapWindow.StartScreen = Screen.FromControl(this);
       }
 
       private int count = 0;
@@ -102,9 +105,11 @@ namespace Editor.Forms.Loadingscreen
          if (s is not BackgroundWorker bw)
             return;
          var progress = 0;
-         
+
          try
          {
+            DescriptorLoading.Load();
+            bw.ReportProgress(++progress);
             GraphicalCulturesLoading.Load();
             bw.ReportProgress(++progress);
             FactionsLoading.Load();
@@ -178,7 +183,6 @@ namespace Editor.Forms.Loadingscreen
          {
             // Create a message box to inform the user that an error occurred
             MessageBox.Show(exception.Message + "\n\nTry restarting the application. There ia a run condition error in the code I could not find yet. Restarting resolves it.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            Debug.WriteLine(exception);
             throw;
          }
          

@@ -422,7 +422,7 @@ public static class Geometry
 
    public static void GetStripesArray(Province province, out Point[] stripes)
    {
-      switch (Globals.StripesDirection)
+      switch (Globals.Settings.RenderingSettings.StripesDirection)
       {
          case StripesDirection.Horizontal:
             GetStripeArrayHorizontal(province, out stripes);

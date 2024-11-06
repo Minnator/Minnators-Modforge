@@ -942,9 +942,9 @@ public static class Selection
       // Update the hovered province and redraw with the new selection.
       HoverProvince(province);
 
-      if (ShowToolTip)
+      if (Globals.Settings.ToolTipSettings.ShowToolTip)
       {
-         var caption = ToolTipBuilder.BuildToolTip(Globals.ToolTipText, LastHoveredProvince);
+         var caption = ToolTipBuilder.BuildToolTip(Globals.Settings.ToolTipSettings.ToolTipText, LastHoveredProvince);
          MapToolTip.SetToolTip(Globals.ZoomControl, caption);
          /*
          var sw = Stopwatch.StartNew();

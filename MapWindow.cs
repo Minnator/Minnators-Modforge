@@ -7,8 +7,10 @@ using Editor.Controls;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
+using Editor.DataClasses.Settings;
 using Editor.Events;
 using Editor.Forms;
+using Editor.Forms.Crash_Reporter;
 using Editor.Forms.Loadingscreen;
 using Editor.Forms.SavingClasses;
 using Editor.Helper;
@@ -61,6 +63,8 @@ namespace Editor
       public CollectionEditor2<TradeNode, Province> TradeNodeEditingGui = null!;
       public CollectionEditor2<ProvinceGroup, Province> ProvinceGroupsEditingGui = null!;
 
+      public Screen StartScreen;
+
       #endregion
 
       public readonly DateControl DateControl = new(DateTime.MinValue, DateControlLayout.Horizontal);
@@ -73,6 +77,19 @@ namespace Editor
          Globals.MapWindow = this;
 
          RunLoadingScreen();
+
+         if (StartScreen != null)
+         {
+            // Center the new form on the StartScreen
+            var screen = Globals.MapWindow.StartScreen;
+            Debug.WriteLine($"Opening on Screen: {StartScreen.DeviceName}");
+            Location = new System.Drawing.Point(
+               screen.Bounds.X + (screen.Bounds.Width - Width) / 2,
+               screen.Bounds.Y + (screen.Bounds.Height - Height) / 2
+            );
+         }
+
+         DiscordActivityManager.StartDiscordActivity();
       }
 
       public void Initialize()
@@ -80,8 +97,10 @@ namespace Editor
          Hide();
          //pause gui updates
          SuspendLayout();
-         InitGui();
+         Globals.Settings = SettingsLoader.Load();
 
+         InitGui();
+         Text = $"{Text} | {Globals.DescriptorData.Name}";
 
          // MUST BE LAST in the loading sequence
          InitMapModes();
@@ -153,6 +172,7 @@ namespace Editor
       private void InitGui()
       {
          InitializeComponent();
+         LanguageSelectionToolStrip.SelectedItem = Language.english.ToString();
          Globals.ZoomControl = new(new(Globals.MapWidth, Globals.MapHeight));
          MapLayoutPanel.Controls.Add(Globals.ZoomControl, 0, 0);
          Selection.Initialize();
@@ -250,7 +270,7 @@ namespace Editor
 
          ProvinceGroupsEditingGui = new(ItemTypes.String, SaveableType.ProvinceGroup, SaveableType.Province, MapModeType.ProvinceGroup);
          ProvinceGroup.ItemsModified += ProvinceGroupsEditingGui.OnCorrespondingDataChange;
-         
+
          ProvinceCollectionsLayoutPanel.Controls.Add(CountryEditingGui, 0, 0);
          CountryEditingGui.Enabled = false;
          ProvinceCollectionsLayoutPanel.Controls.Add(RegionEditingGui, 0, 0);
@@ -273,7 +293,7 @@ namespace Editor
          FileSavingModeComboBox.SelectedIndex = 0; // AskOnce
          FileSavingModeComboBox.SelectedIndexChanged += (_, _) =>
          {
-            Globals.FileSavingMode = (FileSavingMode)FileSavingModeComboBox.SelectedIndex;
+            Globals.Settings.SavingSettings.FileSavingMode = (FileSavingMode)FileSavingModeComboBox.SelectedIndex;
             filesToolStripMenuItem.DropDown.Close();
          };
 
@@ -914,7 +934,7 @@ namespace Editor
 
       public void OnStripeDirectionChanged(object? sender, EventArgs e)
       {
-         Globals.StripesDirection = Enum.Parse<StripesDirection>(StripeDirectionComboBox.SelectedItem?.ToString() ?? StripesDirection.DiagonalLbRt.ToString());
+         Globals.Settings.RenderingSettings.StripesDirection = Enum.Parse<StripesDirection>(StripeDirectionComboBox.SelectedItem?.ToString() ?? StripesDirection.DiagonalLbRt.ToString());
          // Close the menu when an item is selected
          filesToolStripMenuItem.DropDown.Close();
       }
@@ -1011,7 +1031,7 @@ namespace Editor
 
       private void LanguageSelectionToolStrip_SelectedIndexChanged(object sender, EventArgs e)
       {
-         Globals.Language = Enum.Parse<Language>(LanguageSelectionToolStrip.SelectedItem?.ToString() ?? "english");
+         Globals.Settings.MiscSettings.Language = Enum.Parse<Language>(LanguageSelectionToolStrip.SelectedItem?.ToString() ?? "english");
          // close the menu when an item is selected
          filesToolStripMenuItem.DropDown.Close();
       }
@@ -1163,6 +1183,23 @@ namespace Editor
       private void SaveAllInDefaultFiles_Click(object sender, EventArgs e)
       {
 
+      }
+
+      private void bugReportToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         new CrashReporter().ShowDialog();
+      }
+
+      private void quickSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         if (new SettingsWindow(Globals.Settings).ShowDialog() == DialogResult.OK)
+         {
+            // Settings saved
+         }
+         else
+         {
+            // canceled
+         }
       }
    }
 }

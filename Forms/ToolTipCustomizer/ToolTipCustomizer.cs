@@ -14,7 +14,7 @@ namespace Editor.Forms
 
       private void LoadOldToolTip()
       {
-         foreach (var line in Globals.ToolTipText.Split('\n'))
+         foreach (var line in Globals.Settings.ToolTipSettings.ToolTipText.Split('\n'))
          {
             if (line.Length == 0)
                continue;
@@ -95,7 +95,7 @@ namespace Editor.Forms
          foreach (ListViewItem item in ToolTipPreview.Items) 
             str += item.Text + "\n";
 
-         Globals.HistoryManager.AddCommand(new CChangeToolTipText(Globals.ToolTipText, str));
+         Globals.HistoryManager.AddCommand(new CChangeToolTipText(Globals.Settings.ToolTipSettings.ToolTipText, str));
       }
 
       private void CancelButton_Click(object sender, System.EventArgs e)

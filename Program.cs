@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Editor.Forms;
+using Editor.Forms.Crash_Reporter;
 using Editor.Forms.Loadingscreen;
 
 namespace Editor
@@ -18,6 +19,9 @@ namespace Editor
          Application.Run(new EnterPathForm());
          if (Globals.VanillaPath != string.Empty && Globals.ModPath != string.Empty)
             Application.Run(new MapWindow());
+         return;
+         Application.Run(new CrashReporter());
+
       }
    }
 }

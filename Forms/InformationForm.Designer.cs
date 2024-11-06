@@ -171,7 +171,9 @@
          AutoScaleMode = AutoScaleMode.None;
          ClientSize = new Size(384, 221);
          Controls.Add(tableLayoutPanel1);
-         FormBorderStyle = FormBorderStyle.FixedToolWindow;
+         FormBorderStyle = FormBorderStyle.FixedSingle;
+         MaximizeBox = false;
+         MinimizeBox = false;
          Name = "InformationForm";
          StartPosition = FormStartPosition.CenterScreen;
          Text = "Information";
