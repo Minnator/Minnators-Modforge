@@ -289,7 +289,7 @@ public static class Globals
 // - [x] Toolstip customizer tooltips and fix column width
 // - [ ] Logging and Crash Reporter
 // - [-] Map mode crashes catchen und reporten and user so that it restarts
-// - [ ] When searching select the results
+// - [x] When searching select the results
 // - [x] Settings window / saving
 // - [x] Open LoadingScreen and MapWindow on the same screen
 // - [x] Discord Rich Presence
