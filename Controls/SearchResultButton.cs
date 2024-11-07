@@ -16,16 +16,19 @@ namespace Editor.Controls
 
       private void SearchResultButton_Click(object? sender, EventArgs e)
       {
-         Globals.ZoomControl.FocusOn(IsProvince
-            ? Province.Center
-            : Globals.Countries[CountryTag].Capital.Center);
+         Selection.ClearSelection();
 
-         // Highlight the province or country
-         return; //TODO why this so fucked
          if (IsProvince)
-            Selection.HighlightProvince(Province);
+         {
+            Globals.ZoomControl.FocusOn(Province.Bounds);
+            Selection.AddProvinceToSelection(Province);
+         }
          else
-            Selection.HighlightCountry(CountryTag);
+         {
+            var provinces = Globals.Countries[CountryTag].GetOwnedProvinces;
+            Globals.ZoomControl.FocusOn(Geometry.GetBounds(provinces));
+            Selection.AddProvincesToSelection(provinces);
+         }
       }
    }
 }

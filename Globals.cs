@@ -275,7 +275,6 @@ public static class Globals
 // - [x] MelonCoaster easter Egg in Loading Screen
 // - [x] Add a help page that leads to the official Discord
 // - [x] Improve selection modifiers and its GUI by adding more and only listing in context valid options
-// - [|] Straits editing and creation
 // - [ ] Fix the Province Collection Editing gui so that all types work the same and edge cases are handled
 // - [x] Localisation editing for provinces and modifiers
 // - [x] Check if province is selected by color of the pixels instead of bounds or center
@@ -287,9 +286,9 @@ public static class Globals
 // - [ ] Save all and verify all save options
 // - [ ] 3/2 letters prefix from mods
 // - [ ] Support deleting in saving
-// - [ ] Toolstip customizer tooltips and fix column width
+// - [x] Toolstip customizer tooltips and fix column width
 // - [ ] Logging and Crash Reporter
-// - [ ] Map mode crashes catchen und reporten and user so that it restarts
+// - [-] Map mode crashes catchen und reporten and user so that it restarts
 // - [ ] When searching select the results
 // - [x] Settings window / saving
 // - [x] Open LoadingScreen and MapWindow on the same screen
@@ -297,6 +296,7 @@ public static class Globals
 
 
 // TODO LIST Until Alpha 1.1
+// - [ ] Straits editing and creation
 // - [ ] PDX language support
 // - [ ] Item scaling on Graphics (Trade arrows, straits, capitals, text)
 // - [ ] FPS count for map rendering

@@ -29,7 +29,10 @@ namespace Editor.Loading
                Globals.ErrorLog.Write($"Duplicate country tag: {tag}");
                continue;
             }
-            countries.Add(tag, new(tag, Color.Empty, match.Groups["path"].Value));
+
+            Country country = new(tag, Color.Empty, match.Groups["path"].Value);
+            country.SetBounds();
+            countries.Add(tag, country);
          }
 
          Globals.Countries = countries;
