@@ -1,4 +1,5 @@
 ﻿using Editor.DataClasses;
+using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Interfaces;
 
@@ -119,5 +120,48 @@ public class LocObject : Saveable
       if (obj is not LocObject locObject) 
          return false;
       return Key.Equals(locObject.Key);
+   }
+}
+
+public class LocEventArgs : EventArgs
+{
+   public LocObject LocObject { get; }
+   public string NewValue { get; }
+
+   public LocEventArgs(LocObject locObject, string newValue)
+   {
+      LocObject = locObject;
+      NewValue = newValue;
+   }
+}
+
+public static class LocObjectModifications
+{
+   private static readonly LocObject SearchLoc = new("", string.Empty, ObjEditingStatus.Immutable);
+   public static void ModifyIfExistsOtherwiseAdd(string key, string newValue)
+   {
+      SearchLoc.Key = key;
+      if (Globals.Localisation.TryGetValue(SearchLoc, out var loc))
+      {
+         if (loc.Value != newValue)
+            ModifyLocObject(loc, newValue);
+      }
+      else
+         AddLocObject(key, newValue, true);
+   }
+
+   public static void ModifyLocObject(LocObject locObject, string newValue)
+   {
+      Globals.HistoryManager.AddCommand(new CModifyLocalisation(locObject, newValue));
+   }
+
+   public static void AddLocObject(string key, string value, bool add)
+   {
+      Globals.HistoryManager.AddCommand(new CAddDelLocalisation(new (key, value), add));
+   }
+
+   public static void DeleteLocObject(LocObject locObject)
+   {
+      Globals.HistoryManager.AddCommand(new CAddDelLocalisation(locObject, false));
    }
 }

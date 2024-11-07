@@ -35,12 +35,6 @@
          gCToolStripMenuItem = new ToolStripMenuItem();
          graphicalElementsManagerToolStripMenuItem = new ToolStripMenuItem();
          quickSettingsToolStripMenuItem = new ToolStripMenuItem();
-         languageToolStripMenuItem = new ToolStripMenuItem();
-         LanguageSelectionToolStrip = new ToolStripComboBox();
-         stripesDirectionToolStripMenuItem = new ToolStripMenuItem();
-         StripeDirectionComboBox = new ToolStripComboBox();
-         toolStripMenuItem4 = new ToolStripMenuItem();
-         FileSavingModeComboBox = new ToolStripComboBox();
          toolStripSeparator5 = new ToolStripSeparator();
          saveCurrentMapModeToolStripMenuItem = new ToolStripMenuItem();
          saveSelectionToolStripMenuItem = new ToolStripMenuItem();
@@ -90,6 +84,7 @@
          saveEuropeToolStripMenuItem = new ToolStripMenuItem();
          jsonToolStripMenuItem = new ToolStripMenuItem();
          bugReportToolStripMenuItem = new ToolStripMenuItem();
+         crashReportToolStripMenuItem = new ToolStripMenuItem();
          ProvinceCollectionsLayoutPanel = new TableLayoutPanel();
          FocusSelectionCheckBox = new CheckBox();
          BottomToolStrip = new ToolStrip();
@@ -308,53 +303,10 @@
          // 
          // quickSettingsToolStripMenuItem
          // 
-         quickSettingsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { languageToolStripMenuItem, LanguageSelectionToolStrip, stripesDirectionToolStripMenuItem, StripeDirectionComboBox, toolStripMenuItem4, FileSavingModeComboBox });
          quickSettingsToolStripMenuItem.Name = "quickSettingsToolStripMenuItem";
          quickSettingsToolStripMenuItem.Size = new Size(268, 22);
          quickSettingsToolStripMenuItem.Text = "Settings";
          quickSettingsToolStripMenuItem.Click += quickSettingsToolStripMenuItem_Click;
-         // 
-         // languageToolStripMenuItem
-         // 
-         languageToolStripMenuItem.Enabled = false;
-         languageToolStripMenuItem.Name = "languageToolStripMenuItem";
-         languageToolStripMenuItem.Size = new Size(181, 22);
-         languageToolStripMenuItem.Text = "Language";
-         // 
-         // LanguageSelectionToolStrip
-         // 
-         LanguageSelectionToolStrip.DropDownStyle = ComboBoxStyle.DropDownList;
-         LanguageSelectionToolStrip.Items.AddRange(new object[] { "english", "spanish", "french", "german" });
-         LanguageSelectionToolStrip.Name = "LanguageSelectionToolStrip";
-         LanguageSelectionToolStrip.Size = new Size(121, 23);
-         LanguageSelectionToolStrip.SelectedIndexChanged += LanguageSelectionToolStrip_SelectedIndexChanged;
-         // 
-         // stripesDirectionToolStripMenuItem
-         // 
-         stripesDirectionToolStripMenuItem.Enabled = false;
-         stripesDirectionToolStripMenuItem.Name = "stripesDirectionToolStripMenuItem";
-         stripesDirectionToolStripMenuItem.Size = new Size(181, 22);
-         stripesDirectionToolStripMenuItem.Text = "Stripes Direction";
-         // 
-         // StripeDirectionComboBox
-         // 
-         StripeDirectionComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-         StripeDirectionComboBox.Name = "StripeDirectionComboBox";
-         StripeDirectionComboBox.Size = new Size(121, 23);
-         // 
-         // toolStripMenuItem4
-         // 
-         toolStripMenuItem4.Enabled = false;
-         toolStripMenuItem4.Name = "toolStripMenuItem4";
-         toolStripMenuItem4.Size = new Size(181, 22);
-         toolStripMenuItem4.Text = "Saving Mode";
-         toolStripMenuItem4.Click += SaveAllInDefaultFiles_Click;
-         // 
-         // FileSavingModeComboBox
-         // 
-         FileSavingModeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-         FileSavingModeComboBox.Name = "FileSavingModeComboBox";
-         FileSavingModeComboBox.Size = new Size(121, 23);
          // 
          // toolStripSeparator5
          // 
@@ -604,7 +556,7 @@
          // 
          // debugToolStripMenuItem
          // 
-         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem, jsonToolStripMenuItem, bugReportToolStripMenuItem });
+         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem, jsonToolStripMenuItem, bugReportToolStripMenuItem, crashReportToolStripMenuItem });
          debugToolStripMenuItem.Name = "debugToolStripMenuItem";
          debugToolStripMenuItem.Size = new Size(54, 23);
          debugToolStripMenuItem.Text = "Debug";
@@ -683,6 +635,13 @@
          bugReportToolStripMenuItem.Size = new Size(221, 22);
          bugReportToolStripMenuItem.Text = "BugReport";
          bugReportToolStripMenuItem.Click += bugReportToolStripMenuItem_Click;
+         // 
+         // crashReportToolStripMenuItem
+         // 
+         crashReportToolStripMenuItem.Name = "crashReportToolStripMenuItem";
+         crashReportToolStripMenuItem.Size = new Size(221, 22);
+         crashReportToolStripMenuItem.Text = "Crash Report";
+         crashReportToolStripMenuItem.Click += crashReportToolStripMenuItem_Click;
          // 
          // ProvinceCollectionsLayoutPanel
          // 
@@ -2568,10 +2527,6 @@
       private Panel ProvinceCollectionsPanel;
       public CheckBox FocusSelectionCheckBox;
       private ToolStripMenuItem quickSettingsToolStripMenuItem;
-      private ToolStripComboBox LanguageSelectionToolStrip;
-      private ToolStripMenuItem languageToolStripMenuItem;
-      private ToolStripMenuItem stripesDirectionToolStripMenuItem;
-      private ToolStripComboBox StripeDirectionComboBox;
       private TableLayoutPanel ProvinceCollectionsTab;
       private TableLayoutPanel GroupCollectionOptions;
       private TableLayoutPanel tableLayoutPanel5;
@@ -2655,11 +2610,10 @@
       private Label label37;
       private TextBox ProvAdjTextBox;
       private Label ProvAdjLabel;
-      private ToolStripMenuItem toolStripMenuItem4;
-      private ToolStripComboBox FileSavingModeComboBox;
       private ToolStripSeparator toolStripSeparator7;
       private ToolStripLabel MapModeTimesInfo;
       private ToolStripMenuItem bugReportToolStripMenuItem;
+      private ToolStripMenuItem crashReportToolStripMenuItem;
    }
 }
 

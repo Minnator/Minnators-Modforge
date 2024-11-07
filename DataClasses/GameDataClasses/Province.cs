@@ -1131,6 +1131,8 @@ public class Province(int id, Color color) : ProvinceComposite(id.ToString(), co
       return Localisation.GetLoc(GetLocalisationString());
    }
 
+   public string GetLocalisationAdj => $"PROV_ADJ{Id}";
+
    public string GetLocalisationString()
    {
       return $"PROV{Id}";

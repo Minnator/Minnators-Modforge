@@ -3,6 +3,7 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.Runtime;
 using System.Text;
+using Windows.Gaming.Input;
 using Editor.Controls;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
@@ -19,6 +20,7 @@ using Editor.Savers;
 using static Editor.Helper.ProvinceEnumHelper;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 using Region = Editor.DataClasses.GameDataClasses.Region;
+using System.IO;
 
 namespace Editor
 {
@@ -172,7 +174,6 @@ namespace Editor
       private void InitGui()
       {
          InitializeComponent();
-         LanguageSelectionToolStrip.SelectedItem = Language.english.ToString();
          Globals.ZoomControl = new(new(Globals.MapWidth, Globals.MapHeight));
          MapLayoutPanel.Controls.Add(Globals.ZoomControl, 0, 0);
          Selection.Initialize();
@@ -284,19 +285,6 @@ namespace Editor
 
       private void InitializeProvinceEditGui()
       {
-         // Quick Settings
-         StripeDirectionComboBox.Items.AddRange([.. Enum.GetNames(typeof(StripesDirection))]);
-         StripeDirectionComboBox.Text = StripesDirection.DiagonalLbRt.ToString();
-         StripeDirectionComboBox.SelectedIndexChanged += OnStripeDirectionChanged;
-
-         FileSavingModeComboBox.Items.AddRange([.. Enum.GetNames(typeof(FileSavingMode))]);
-         FileSavingModeComboBox.SelectedIndex = 0; // AskOnce
-         FileSavingModeComboBox.SelectedIndexChanged += (_, _) =>
-         {
-            Globals.Settings.SavingSettings.FileSavingMode = (FileSavingMode)FileSavingModeComboBox.SelectedIndex;
-            filesToolStripMenuItem.DropDown.Close();
-         };
-
          // Tooltips for saving Buttons
          _savingButtonsToolTip = new();
          _savingButtonsToolTip.AutoPopDelay = 10000;
@@ -332,6 +320,15 @@ namespace Editor
          _discoveredBy.OnItemRemoved += ProvinceEditingEvents.OnDiscoveredByRemoved;
 
          TradeCenterComboBox.SelectedIndexChanged += ProvinceEditingEvents.OnTradeCenterChanged;
+
+         LocalisationTextBox.LostFocus += (_, _) =>
+         {
+            LocObjectModifications.ModifyIfExistsOtherwiseAdd(LocalisationLabel.Text, LocalisationTextBox.Text);
+         };
+         ProvAdjTextBox.LostFocus += (_, _) =>
+         {
+            LocObjectModifications.ModifyIfExistsOtherwiseAdd(ProvAdjLabel.Text, ProvAdjTextBox.Text);
+         };
 
          CoresAndClaimLayoutPanel.Controls.Add(_permanentClaims, 0, 0);
          CoresAndClaimLayoutPanel.Controls.Add(_claims, 1, 0);
@@ -592,6 +589,8 @@ namespace Editor
             AddAllModifiersToListView(Selection.GetSelectedProvinces[0]);
             LocalisationTextBox.Text = Selection.GetSelectedProvinces[0].GetLocalisation();
             LocalisationLabel.Text = Selection.GetSelectedProvinces[0].GetLocalisationString();
+            ProvAdjTextBox.Text = Localisation.GetLoc(Selection.GetSelectedProvinces[0].GetLocalisationAdj);
+            ProvAdjLabel.Text = Selection.GetSelectedProvinces[0].GetLocalisationAdj;
          }
          ResumeLayout();
          Globals.EditingStatus = EditingStatus.Idle;
@@ -670,6 +669,8 @@ namespace Editor
          _tradeCompanyInvestments.Text = string.Empty;
          LocalisationTextBox.Text = string.Empty;
          LocalisationLabel.Text = string.Empty;
+         ProvAdjTextBox.Text = string.Empty;
+         ProvAdjLabel.Text = string.Empty;
       }
       #endregion
 
@@ -802,9 +803,16 @@ namespace Editor
 
       private void SaveCurrentMapModeToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         var downloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\";
-         using var bmp = Globals.ZoomControl.Map;
-         bmp.Save($@"{downloadFolder}{MapModeComboBox.SelectedItem}.png", ImageFormat.Png);
+         var pictures = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+         var form = new GetSavingFileForm(pictures, "Where to save the map mode as an image to", ".png");
+         form.SetPlaceHolderText(Globals.MapModeManager.CurrentMapMode.GetMapModeName().ToString());
+         form.RequireModDirectory = false;
+         form.ShowDialog();
+         if (form.DialogResult == DialogResult.OK)
+         {
+            using var bmp = Globals.ZoomControl.Map;
+            bmp.Save(form.NewPath, ImageFormat.Png);
+         }
       }
 
       private void openCustomizerToolStripMenuItem_Click(object sender, EventArgs e)
@@ -931,14 +939,7 @@ namespace Editor
          var downloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\";
          File.WriteAllText(Path.Combine(downloadFolder, "localisationCollisions.txt"), sb.ToString());
       }
-
-      public void OnStripeDirectionChanged(object? sender, EventArgs e)
-      {
-         Globals.Settings.RenderingSettings.StripesDirection = Enum.Parse<StripesDirection>(StripeDirectionComboBox.SelectedItem?.ToString() ?? StripesDirection.DiagonalLbRt.ToString());
-         // Close the menu when an item is selected
-         filesToolStripMenuItem.DropDown.Close();
-      }
-
+      
       private void saveAllProvincesToolStripMenuItem_Click(object sender, EventArgs e)
       {
          ProvinceSaver.SaveAllLandProvinces();
@@ -1027,13 +1028,6 @@ namespace Editor
          }
          sw.Stop();
          Debug.WriteLine($"Time: {sw.ElapsedMilliseconds / 100}");
-      }
-
-      private void LanguageSelectionToolStrip_SelectedIndexChanged(object sender, EventArgs e)
-      {
-         Globals.Settings.MiscSettings.Language = Enum.Parse<Language>(LanguageSelectionToolStrip.SelectedItem?.ToString() ?? "english");
-         // close the menu when an item is selected
-         filesToolStripMenuItem.DropDown.Close();
       }
 
       private void graphicalElementsManagerToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1200,6 +1194,11 @@ namespace Editor
          {
             // canceled
          }
+      }
+
+      private void crashReportToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         CrashManager.EnterCrashHandler(new());
       }
    }
 }

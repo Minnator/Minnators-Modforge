@@ -28,6 +28,7 @@
       /// </summary>
       private void InitializeComponent()
       {
+         components = new System.ComponentModel.Container();
          System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ToolTipCustomizer));
          tableLayoutPanel1 = new TableLayoutPanel();
          ToolTipPreview = new ListView();
@@ -39,6 +40,7 @@
          ConfirmButton = new Button();
          CancelButton = new Button();
          InputTextBox = new TextBox();
+         toolTip1 = new ToolTip(components);
          tableLayoutPanel1.SuspendLayout();
          tableLayoutPanel2.SuspendLayout();
          SuspendLayout();
@@ -106,6 +108,7 @@
          AddButton.Size = new Size(61, 25);
          AddButton.TabIndex = 6;
          AddButton.Text = "Add";
+         toolTip1.SetToolTip(AddButton, "Adds a new line to the tooltip");
          AddButton.UseVisualStyleBackColor = true;
          AddButton.Click += AddButton_Click;
          // 
@@ -118,6 +121,7 @@
          RemoveButton.Size = new Size(61, 25);
          RemoveButton.TabIndex = 4;
          RemoveButton.Text = "Remove";
+         toolTip1.SetToolTip(RemoveButton, "Remove the selected line from the  tooltip");
          RemoveButton.UseVisualStyleBackColor = true;
          RemoveButton.Click += RemoveButton_Click;
          // 
@@ -130,6 +134,7 @@
          MoveDownButton.Size = new Size(61, 25);
          MoveDownButton.TabIndex = 1;
          MoveDownButton.Text = "Down";
+         toolTip1.SetToolTip(MoveDownButton, "Move the selected one line down in the tooltip");
          MoveDownButton.UseVisualStyleBackColor = true;
          MoveDownButton.Click += MoveDownButton_Click;
          // 
@@ -142,6 +147,7 @@
          MoveUpButton.Size = new Size(61, 25);
          MoveUpButton.TabIndex = 0;
          MoveUpButton.Text = "Up";
+         toolTip1.SetToolTip(MoveUpButton, "Move the selected line up in the tooltip");
          MoveUpButton.UseVisualStyleBackColor = true;
          MoveUpButton.Click += MoveUpButton_Click;
          // 
@@ -154,6 +160,7 @@
          ConfirmButton.Size = new Size(88, 27);
          ConfirmButton.TabIndex = 6;
          ConfirmButton.Text = "Confirm";
+         toolTip1.SetToolTip(ConfirmButton, "Save and apply the changes");
          ConfirmButton.UseVisualStyleBackColor = true;
          ConfirmButton.Click += ConfirmButton_Click;
          // 
@@ -178,6 +185,7 @@
          InputTextBox.Name = "InputTextBox";
          InputTextBox.Size = new Size(267, 23);
          InputTextBox.TabIndex = 8;
+         toolTip1.SetToolTip(InputTextBox, "Use \"$<province_attribute>$\" to show the given attributes value\r\nUse \"$<province_attribute>%L$\" to show the localisation of the attribute");
          // 
          // ToolTipCustomizer
          // 
@@ -207,5 +215,6 @@
       private System.Windows.Forms.Button ConfirmButton;
       private System.Windows.Forms.Button CancelButton;
       private System.Windows.Forms.TextBox InputTextBox;
+      private ToolTip toolTip1;
    }
 }

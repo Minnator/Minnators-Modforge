@@ -7,6 +7,9 @@ using Editor.Interfaces;
 
 namespace Editor.Helper
 {
+   /*
+    * 
+   */
    public static class FileManager
    {
       private static HashSet<PathObj> NeedsToBeHandledMod = [];

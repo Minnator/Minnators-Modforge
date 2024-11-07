@@ -28,6 +28,11 @@ namespace Editor.Forms
          InputTextBox.AutoCompleteCustomSource.AddRange([.. Globals.ToolTippableAttributes]);
          ToolTipPreview.Columns.Add(new ColumnHeader("Tooltip Row"));
          ToolTipPreview.View = View.Details;
+         ToolTipPreview.FullRowSelect = true;
+         ToolTipPreview.MultiSelect = false;
+         // Size columns to fit
+         ToolTipPreview.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+         ToolTipPreview.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
       }
 
       private void AddButton_Click(object sender, System.EventArgs e)
@@ -102,5 +107,7 @@ namespace Editor.Forms
       {
          Dispose();
       }
+
+
    }
 }
