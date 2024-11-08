@@ -15,7 +15,7 @@ namespace Editor.Controls
       public event EventHandler<ProvinceEditedEventArgs> DownButtonPressedLarge = delegate { };
       public event EventHandler<ProvinceEditedEventArgs> OnTextValueChanged = delegate { };
 
-      private TextBox _textBox;
+      private readonly TextBox _textBox;
 
       public ExtendedNumeric()
       {

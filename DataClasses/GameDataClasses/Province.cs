@@ -105,8 +105,8 @@ public class Province(int id, Color color) : ProvinceComposite(id.ToString(), co
    public int PixelCnt { get; set; }
    public Point Center { get; set; }
 
-   public Point[] Pixels { get; set; }
-   public Point[] Borders { get; set; }
+   public Point[] Pixels { get; set; } = [];
+   public Point[] Borders { get; set; } = [];
 
    #endregion
 
@@ -1215,13 +1215,21 @@ public class Province(int id, Color color) : ProvinceComposite(id.ToString(), co
    }
 
    // == and != operators
-   public static bool operator ==(Province left, Province right)
+   public static bool operator ==(Province? left, Province? right)
    {
+      if (left is null && right is null)
+         return true;
+      if (left is null || right is null)
+         return false;
       return left.Equals(right);
    }
 
-   public static bool operator !=(Province left, Province right)
+   public static bool operator !=(Province? left, Province? right)
    {
+      if (left is null && right is null)
+         return false;
+      if (left is null || right is null)
+         return true;
       return !left.Equals(right);
    }
 
@@ -1251,5 +1259,5 @@ public class Province(int id, Color color) : ProvinceComposite(id.ToString(), co
       ColorChanged += handler;
    }
 
-   public static Province Empty => new (-1, System.Drawing.Color.Empty);
+   public new static Province Empty => new (-1, System.Drawing.Color.Empty);
 }

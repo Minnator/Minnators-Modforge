@@ -170,6 +170,6 @@
       private TextBox PathTextBox;
       private TableLayoutPanel tableLayoutPanel3;
       private Button SaveButton;
-      private Button CancelButton;
+      private new Button CancelButton;
    }
 }

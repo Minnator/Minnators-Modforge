@@ -15,14 +15,14 @@ public class ImagePositionEventArgs(Rectangle oldRect, Rectangle newRect) : Even
 
 public sealed class ZoomControl : Control, IDisposable
 {
-   private Bitmap map = null!;
-   public Graphics BmpGfx;
+   private Bitmap _map = null!;
+   private Graphics _bmpGfx = null!;
    public IntPtr HBitmap;
 
-   public float zoomFactor = 1.0f;
-   private Point panOffset;
-   private Point lastMousePosition;
-   internal bool isPanning;
+   public float ZoomFactor = 1.0f;
+   private Point _panOffset;
+   private Point _lastMousePosition;
+   internal bool IsPanning;
 
    // ---------- Zoom limits ----------
    private float _zoomLimitUpper;
@@ -57,14 +57,14 @@ public sealed class ZoomControl : Control, IDisposable
       Dock = DockStyle.Fill;
    }
 
-   public void Dispose()
+   public new void Dispose()
    {
-      if (HBitmap != null)
+      if (_bmpGfx != null!)
+         _bmpGfx.Dispose();
+      if (HBitmap != IntPtr.Zero)
          DeleteObject(HBitmap);
-      if (BmpGfx != null)
-         BmpGfx.Dispose();
-      if (map != null)
-         map.Dispose();
+      if (_map != null!)
+         _map.Dispose();
    }
    
    // ---------- Properties ----------
@@ -75,32 +75,32 @@ public sealed class ZoomControl : Control, IDisposable
       {
          return Image.FromHbitmap(HBitmap);
       }
-      set
+      private set
       {
-         map = value;
+         _map = value;
          //dispose/delete any previous caches
-         if (BmpGfx != null)
-            BmpGfx.Dispose();
-         if (HBitmap != null)
+         if (_bmpGfx != null!)
+            _bmpGfx.Dispose();
+         if (HBitmap != IntPtr.Zero)
             DeleteObject(HBitmap);
-         if (value == null)
+         if (value == null!)
             return;
          //cache the new HBitmap and Graphics.
-         BmpGfx = Graphics.FromImage(map);
-         HBitmap = map.GetHbitmap();
-         panOffset = new((int)(map.Width / 2), (int)(map.Height / 2));
+         _bmpGfx = Graphics.FromImage(_map);
+         HBitmap = _map.GetHbitmap();
+         _panOffset = new((int)(_map.Width / 2), (int)(_map.Height / 2));
       }
    }
 
-   public Rectangle MapRectangle => new(panOffset.X, panOffset.Y, (int)_widthCorrected, (int)_heightCorrected);
+   public Rectangle MapRectangle => new(_panOffset.X, _panOffset.Y, (int)_widthCorrected, (int)_heightCorrected);
 
    // ---------- Pixel Frame Conversions ----------
 
    public PointF ConvertCoordinatesFloat(Point inPoint, out bool inBounds)
    {
-      PointF outPoint = new((inPoint.X / zoomFactor + panOffset.X), (inPoint.Y / zoomFactor + panOffset.Y));
+      PointF outPoint = new((inPoint.X / ZoomFactor + _panOffset.X), (inPoint.Y / ZoomFactor + _panOffset.Y));
 
-      if (outPoint.X < 0 || outPoint.Y < 0 || outPoint.X >= map.Width || outPoint.Y >= map.Height)
+      if (outPoint.X < 0 || outPoint.Y < 0 || outPoint.X >= _map.Width || outPoint.Y >= _map.Height)
          inBounds = false;
       else
          inBounds = true;
@@ -109,12 +109,12 @@ public sealed class ZoomControl : Control, IDisposable
 
    public Point ConvertCoordinates(Point inPoint, out bool inBounds)
    {
-      var xCord = (inPoint.X / zoomFactor + panOffset.X) % map.Width;
+      var xCord = (inPoint.X / ZoomFactor + _panOffset.X) % _map.Width;
       if (xCord < 0)
-         xCord += map.Width;
-      Point outPoint = new((int)xCord, (int)(inPoint.Y / zoomFactor + panOffset.Y));
+         xCord += _map.Width;
+      Point outPoint = new((int)xCord, (int)(inPoint.Y / ZoomFactor + _panOffset.Y));
 
-      if (outPoint.X < 0 || outPoint.Y < 0 || outPoint.X >= map.Width || outPoint.Y >= map.Height)
+      if (outPoint.X < 0 || outPoint.Y < 0 || outPoint.X >= _map.Width || outPoint.Y >= _map.Height)
          inBounds = false;
       else
          inBounds = true;
@@ -123,20 +123,20 @@ public sealed class ZoomControl : Control, IDisposable
 
    public Point ReverseCoordinate(Point inPoint)
    {
-      return new((int)(zoomFactor * (inPoint.X - panOffset.X)), (int)(zoomFactor * (inPoint.Y - panOffset.Y)));
+      return new((int)(ZoomFactor * (inPoint.X - _panOffset.X)), (int)(ZoomFactor * (inPoint.Y - _panOffset.Y)));
    }
 
    public PointF ReverseCoordinateFloat(PointF inPoint, bool withOverRoll = false)
    {
       if (withOverRoll)
       {
-         if (inPoint.X < MapRectangle.Right - map.Width)
-            inPoint.X += map.Width;
-         else if (inPoint.X > map.Width + MapRectangle.Left)
-            inPoint.X -= map.Width;
+         if (inPoint.X < MapRectangle.Right - _map.Width)
+            inPoint.X += _map.Width;
+         else if (inPoint.X > _map.Width + MapRectangle.Left)
+            inPoint.X -= _map.Width;
       }
 
-      return new((zoomFactor * (inPoint.X - panOffset.X)), (zoomFactor * (inPoint.Y - panOffset.Y)));
+      return new((ZoomFactor * (inPoint.X - _panOffset.X)), (ZoomFactor * (inPoint.Y - _panOffset.Y)));
    }
 
    // ---------- Focusing and Zooming on Points ----------
@@ -154,40 +154,40 @@ public sealed class ZoomControl : Control, IDisposable
 
    public void FocusOn(Point p)
    {
-      panOffset.X = p.X - (int)(Width / (zoomFactor * 2));
-      panOffset.Y = p.Y - (int)(Height / (zoomFactor * 2));
+      _panOffset.X = p.X - (int)(Width / (ZoomFactor * 2));
+      _panOffset.Y = p.Y - (int)(Height / (ZoomFactor * 2));
       LimitPan();
       Invalidate();
    }
 
    public void FocusOn(Point p, float zoom)
    {
-      zoomFactor = zoom;
+      ZoomFactor = zoom;
       LimitZoom();
       FocusOn(p);
    }
 
    public void SetZoomFully(Point point, float newZoom)
    {
-      var oldZoom = zoomFactor;
-      zoomFactor = newZoom;
+      var oldZoom = ZoomFactor;
+      ZoomFactor = newZoom;
       SetZoom(point, oldZoom);
    }
 
    public void SetZoom(Point point, float oldZoom)
    {
       LimitZoom();
-      if (oldZoom == zoomFactor)
+      if (oldZoom.Equals(ZoomFactor))
          return;
 
       var halfHeight = Height / 2;
       var halfWidth = Width / 2;
-      var tempdelta = zoomFactor - oldZoom;
-      var zoomFactorFactor = tempdelta / (oldZoom * zoomFactor);
-      var zoomFactorSqr = tempdelta / (zoomFactor * zoomFactor);
+      var tempDelta = ZoomFactor - oldZoom;
+      var zoomFactorFactor = tempDelta / (oldZoom * ZoomFactor);
+      var zoomFactorSqr = tempDelta / (ZoomFactor * ZoomFactor);
       
-      panOffset.X += (int)(halfWidth * zoomFactorFactor + zoomFactorSqr * (point.X - halfWidth));
-      panOffset.Y += (int)(halfHeight * zoomFactorFactor + zoomFactorSqr * (point.Y - halfHeight));
+      _panOffset.X += (int)(halfWidth * zoomFactorFactor + zoomFactorSqr * (point.X - halfWidth));
+      _panOffset.Y += (int)(halfHeight * zoomFactorFactor + zoomFactorSqr * (point.Y - halfHeight));
 
       LimitPan();
       // Redraw the image with the updated zoom
@@ -199,33 +199,33 @@ public sealed class ZoomControl : Control, IDisposable
       var point = ConvertCoordinates(inPoint, out bool inBounds);
       if (!inBounds)
          return Color.Empty;
-      return map.GetPixel(point.X, point.Y); // TODO maybe find faster way using Hmap? calculate pointer using stride and height
+      return _map.GetPixel(point.X, point.Y); // TODO maybe find faster way using Hmap? calculate pointer using stride and height
    }
 
 
    private void LimitZoom()
    {
-      zoomFactor = Math.Max(Math.Min(zoomFactor, _zoomLimitLower), _zoomLimitUpper);
-      var logzoom = (int)MathF.Round(MathF.Log(zoomFactor) / MathF.Log(1.1f));
+      ZoomFactor = Math.Max(Math.Min(ZoomFactor, _zoomLimitLower), _zoomLimitUpper);
+      var logzoom = (int)MathF.Round(MathF.Log(ZoomFactor) / MathF.Log(1.1f));
 
-      zoomFactor = MathF.Pow(1.1f, logzoom);
+      ZoomFactor = MathF.Pow(1.1f, logzoom);
 
-      _widthCorrected = Width / zoomFactor;
-      _heightCorrected = Height / zoomFactor;
+      _widthCorrected = Width / ZoomFactor;
+      _heightCorrected = Height / ZoomFactor;
 
       _limitX = -0.1f * _widthCorrected;
       _limitY = -0.1f * _heightCorrected;
-      _limitYHeight = map.Height + 9 * _limitY;
-      _limitXWidth = map.Width + 9 * _limitX;
+      _limitYHeight = _map.Height + 9 * _limitY;
+      _limitXWidth = _map.Width + 9 * _limitX;
 
    }
 
    private void LimitPan()
    {
       if (_limitYHeight < _limitY)
-         panOffset.Y = -(int)((Height / zoomFactor - map.Height) / 2);
+         _panOffset.Y = -(int)((Height / ZoomFactor - _map.Height) / 2);
       else
-         panOffset.Y = (int)Math.Max(_limitY, Math.Min(_limitYHeight, panOffset.Y));
+         _panOffset.Y = (int)Math.Max(_limitY, Math.Min(_limitYHeight, _panOffset.Y));
 
       //if (_limitXWidth < _limitX)
       //   panOffset.X = -(int)((Width / zoomFactor - map.Width) / 2);
@@ -234,10 +234,10 @@ public sealed class ZoomControl : Control, IDisposable
 
       var center = MapRectangle.X + MapRectangle.Width / 2;
 
-      if(center > map.Width)
-         panOffset.X -= map.Width;
+      if(center > _map.Width)
+         _panOffset.X -= _map.Width;
       else if(center < 0)
-        panOffset.X += map.Width;
+        _panOffset.X += _map.Width;
       
       var newRect = MapRectangle;
       ImagePositionChange.Invoke(this, new (_oldRectange, newRect));
@@ -265,8 +265,8 @@ public sealed class ZoomControl : Control, IDisposable
    {
       if (e.Button == MouseButtons.Middle)
       {
-         isPanning = true;
-         lastMousePosition = e.Location;
+         IsPanning = true;
+         _lastMousePosition = e.Location;
          Cursor = Cursors.Hand; // Change cursor to hand during panning
       }
    }
@@ -275,31 +275,31 @@ public sealed class ZoomControl : Control, IDisposable
       // --------- Panning ---------
       if (e.Button == MouseButtons.Middle)
       {
-         isPanning = false;
+         IsPanning = false;
          Cursor = Cursors.Default; // Restore default cursor after panning
       }
    }
 
    private void PictureBox_MouseMove(object sender, MouseEventArgs e)
    {
-      if (isPanning)
+      if (IsPanning)
       {
-         var oldOffset = panOffset;
-         panOffset.X += (int)(lastMousePosition.X / zoomFactor) - (int)(e.X / zoomFactor);
-         panOffset.Y += (int)(lastMousePosition.Y / zoomFactor) - (int)(e.Y / zoomFactor);
+         var oldOffset = _panOffset;
+         _panOffset.X += (int)(_lastMousePosition.X / ZoomFactor) - (int)(e.X / ZoomFactor);
+         _panOffset.Y += (int)(_lastMousePosition.Y / ZoomFactor) - (int)(e.Y / ZoomFactor);
          LimitPan();
 
-         if (oldOffset == panOffset)
+         if (oldOffset == _panOffset)
             return;
 
-         lastMousePosition = e.Location;
+         _lastMousePosition = e.Location;
          Invalidate();
       }
    }
 
    private void ZoomingControl_Resize(object sender, EventArgs e)
    {
-      _zoomLimitUpper = Math.Min((float)Width / map.Width, (float)Height / map.Height) / 1.1f;
+      _zoomLimitUpper = Math.Min((float)Width / _map.Width, (float)Height / _map.Height) / 1.1f;
       _zoomLimitLower = Math.Min((float)Width / 80, (float)Height / 80);
 
       LimitZoom();
@@ -316,20 +316,20 @@ public sealed class ZoomControl : Control, IDisposable
 
       // Adjust the zoom factor based on the mouse wheel direction
       if (e.Delta > 0)
-         zoomFactor *= 1.1f; // Zoom in
+         ZoomFactor *= 1.1f; // Zoom in
       else if (e.Delta < 0)
-         zoomFactor /= 1.1f; // Zoom out
+         ZoomFactor /= 1.1f; // Zoom out
       LimitZoom();
       var converted2 = ConvertCoordinates(e.Location, out _);
-      panOffset.X -= converted2.X - converted.X;
-      panOffset.Y -= converted2.Y - converted.Y;
+      _panOffset.X -= converted2.X - converted.X;
+      _panOffset.Y -= converted2.Y - converted.Y;
       LimitPan();
       Invalidate();
    }
 
    private void ZoomOnPaint2(object? sender, PaintEventArgs? e)
    {
-      if (map == null! || e == null) return;
+      if (_map == null! || e == null) return;
 
       Rectangle thisRect = new(0, 0, Width, Height);
 
@@ -338,12 +338,12 @@ public sealed class ZoomControl : Control, IDisposable
       int rectEnd = MapRectangle.Right;
 
       // Calculate how much we need to offset the drawing on the X axis
-      int offsetX = rectEnd % map.Width - MapRectangle.Width;
+      int offsetX = rectEnd % _map.Width - MapRectangle.Width;
 
-      if (offsetX < 0) offsetX += map.Width;
+      if (offsetX < 0) offsetX += _map.Width;
 
       // Draw the bitmap multiple times to repeat on the X-axis
-      for (int x = offsetX; x < MapRectangle.X; x += map.Width)
+      for (int x = offsetX; x < MapRectangle.X; x += _map.Width)
       {
          // Create a new rectangle to draw the bitmap in the correct position
          Rectangle destRect = new Rectangle(x, 0, Width, Height);
@@ -352,29 +352,29 @@ public sealed class ZoomControl : Control, IDisposable
          //Rectangle srcRect = new Rectangle(0, 0, bitmapWidth, map.Height);
 
          // Stretch the bitmap to the destination rectangle
-         DrawStretch(HBitmap, BmpGfx, e.Graphics, MapRectangle, destRect);
+         DrawStretch(HBitmap, _bmpGfx, e.Graphics, MapRectangle, destRect);
       }
    }
 
    private void ZoomOnPaint(object? sender, PaintEventArgs? e)
    {
-      if (map == null! || e == null) return;
+      if (_map == null! || e == null) return;
       
       Rectangle thisRect = new(0, 0, Width, Height);
 
-      DrawStretch(HBitmap, BmpGfx, e.Graphics, MapRectangle, thisRect);
+      DrawStretch(HBitmap, _bmpGfx, e.Graphics, MapRectangle, thisRect);
 
       Rectangle test = MapRectangle;
 
-      int deltax = MapRectangle.Right - map.Width;
+      int deltax = MapRectangle.Right - _map.Width;
       if (deltax > 0)
       {
-         var rightPoint = ReverseCoordinate(new(map.Width, map.Height)).X;
+         var rightPoint = ReverseCoordinate(new(_map.Width, _map.Height)).X;
 
          thisRect = thisRect with { Width = Width - rightPoint, X = rightPoint};
 
-         test = test with { Width = MapRectangle.Right - map.Width, X = 0};
-         DrawStretch(HBitmap, BmpGfx, e.Graphics, test, thisRect);
+         test = test with { Width = MapRectangle.Right - _map.Width, X = 0};
+         DrawStretch(HBitmap, _bmpGfx, e.Graphics, test, thisRect);
       }
 
       if (MapRectangle.X >= 0)
@@ -383,12 +383,12 @@ public sealed class ZoomControl : Control, IDisposable
 
       var zeroPoint = ReverseCoordinateFloat(new(1f,0));
 
-      test = test with { Width = - MapRectangle.X, X = map.Width + MapRectangle.X }; //map.Width + MapRectangle.X
+      test = test with { Width = - MapRectangle.X, X = _map.Width + MapRectangle.X }; //map.Width + MapRectangle.X
 
       thisRect.X = 0;
 
       thisRect = thisRect with { Width = (int)Math.Ceiling(zeroPoint.X)};
-      DrawStretch(HBitmap, BmpGfx, e.Graphics, test, thisRect);
+      DrawStretch(HBitmap, _bmpGfx, e.Graphics, test, thisRect);
    }
 
 }

@@ -13,6 +13,8 @@ public abstract class MapMode
    public virtual bool IsProvinceMapMode => true;
    public virtual bool ShowCapitals => false;
    public virtual bool BlockDrawingOfCapitals { get; set; } = false;
+   public virtual Bitmap? Icon { get; protected set; }
+   public virtual string IconFileName { get; } = null!;
 
    public virtual void RenderMapMode(Func<Province, int> method)
    {
@@ -47,6 +49,27 @@ public abstract class MapMode
 
       //sw.Stop();
       //Debug.WriteLine($"RenderMapMode {GetMapModeName()} took {sw.ElapsedMilliseconds}ms");
+   }
+
+   public virtual void CropAndSetIcon()
+   {
+      var iconPath = Path.Combine(Globals.VanillaPath, "gfx", "interface", IconFileName);
+      if (!File.Exists(iconPath))
+      {
+         MessageBox.Show($"MapMode Icon file not found: {iconPath}", iconPath, MessageBoxButtons.OK);
+         return;
+      }
+
+      using var icon = ImageReader.ReadDDSImage(iconPath);
+      Icon = CropRawIcon(icon);
+   }
+
+   public virtual Bitmap CropRawIcon(Bitmap rawBmp)
+   {
+      var bmp = new Bitmap(27, 21);
+      using var g = Graphics.FromImage(bmp);
+      g.DrawImage(rawBmp, new Rectangle(0, 0, 27, 21), new (7, 5, 27, 21), GraphicsUnit.Pixel);
+      return bmp;
    }
 
    public virtual MapModeType GetMapModeName()
@@ -87,7 +110,7 @@ public abstract class MapMode
       Globals.ZoomControl.Invalidate();
    }
 
-   public virtual void UpdateProvince(object sender, ProvinceEventHandler.ProvinceDataChangedEventArgs e)
+   public virtual void UpdateProvince(object? sender, ProvinceEventHandler.ProvinceDataChangedEventArgs e)
    {
       if (Globals.MapModeManager.CurrentMapMode != this)
          return;

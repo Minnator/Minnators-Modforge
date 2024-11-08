@@ -19,7 +19,7 @@ namespace Editor.DataClasses.GameDataClasses
       public StraitType Type { get; set; }
       public Point Start { get; set; }
       public Point End { get; set; }
-      public string Comment { get; set; }
+      public string Comment { get; set; } = null!;
       public Rectangle Bounds { get; set; }
 
       public Strait(Province from, Province to, Province through, StraitType type)

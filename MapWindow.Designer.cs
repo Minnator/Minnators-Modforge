@@ -85,6 +85,7 @@
          jsonToolStripMenuItem = new ToolStripMenuItem();
          bugReportToolStripMenuItem = new ToolStripMenuItem();
          crashReportToolStripMenuItem = new ToolStripMenuItem();
+         loadDDSFilesTestToolStripMenuItem = new ToolStripMenuItem();
          ProvinceCollectionsLayoutPanel = new TableLayoutPanel();
          FocusSelectionCheckBox = new CheckBox();
          BottomToolStrip = new ToolStrip();
@@ -556,7 +557,7 @@
          // 
          // debugToolStripMenuItem
          // 
-         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem, jsonToolStripMenuItem, bugReportToolStripMenuItem, crashReportToolStripMenuItem });
+         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem, jsonToolStripMenuItem, bugReportToolStripMenuItem, crashReportToolStripMenuItem, loadDDSFilesTestToolStripMenuItem });
          debugToolStripMenuItem.Name = "debugToolStripMenuItem";
          debugToolStripMenuItem.Size = new Size(54, 23);
          debugToolStripMenuItem.Text = "Debug";
@@ -643,6 +644,13 @@
          crashReportToolStripMenuItem.Text = "Crash Report";
          crashReportToolStripMenuItem.Click += crashReportToolStripMenuItem_Click;
          // 
+         // loadDDSFilesTestToolStripMenuItem
+         // 
+         loadDDSFilesTestToolStripMenuItem.Name = "loadDDSFilesTestToolStripMenuItem";
+         loadDDSFilesTestToolStripMenuItem.Size = new Size(221, 22);
+         loadDDSFilesTestToolStripMenuItem.Text = "Load DDS files test";
+         loadDDSFilesTestToolStripMenuItem.Click += loadDDSFilesTestToolStripMenuItem_Click;
+         // 
          // ProvinceCollectionsLayoutPanel
          // 
          ProvinceCollectionsLayoutPanel.AutoScroll = true;
@@ -654,7 +662,7 @@
          ProvinceCollectionsLayoutPanel.Margin = new Padding(0);
          ProvinceCollectionsLayoutPanel.Name = "ProvinceCollectionsLayoutPanel";
          ProvinceCollectionsLayoutPanel.RowCount = 7;
-         ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 123F));
+         ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
          ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
          ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
          ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 182F));
@@ -2302,7 +2310,7 @@
          MapLayoutPanel.Name = "MapLayoutPanel";
          MapLayoutPanel.RowCount = 2;
          MapLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         MapLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
+         MapLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
          MapLayoutPanel.Size = new Size(1086, 844);
          MapLayoutPanel.TabIndex = 0;
          // 
@@ -2320,12 +2328,12 @@
          MMButtonsTLPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
          MMButtonsTLPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
          MMButtonsTLPanel.Dock = DockStyle.Fill;
-         MMButtonsTLPanel.Location = new Point(0, 818);
+         MMButtonsTLPanel.Location = new Point(0, 815);
          MMButtonsTLPanel.Margin = new Padding(0);
          MMButtonsTLPanel.Name = "MMButtonsTLPanel";
          MMButtonsTLPanel.RowCount = 1;
          MMButtonsTLPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         MMButtonsTLPanel.Size = new Size(1086, 26);
+         MMButtonsTLPanel.Size = new Size(1086, 29);
          MMButtonsTLPanel.TabIndex = 0;
          // 
          // MapWindow
@@ -2445,7 +2453,6 @@
       private System.Windows.Forms.ToolStripMenuItem ShowToolTipMenuItem;
       private TableLayoutPanel MainLayoutPanel;
       private TableLayoutPanel TopStripLayoutPanel;
-      private ToolStripContainer MainToolstripContainer;
       private ToolStripMenuItem searchToolStripMenuItem;
       private Label OwnerCountryNameLabel;
       private Label ProvinceNameLabel;
@@ -2614,6 +2621,7 @@
       private ToolStripLabel MapModeTimesInfo;
       private ToolStripMenuItem bugReportToolStripMenuItem;
       private ToolStripMenuItem crashReportToolStripMenuItem;
+      private ToolStripMenuItem loadDDSFilesTestToolStripMenuItem;
    }
 }
 

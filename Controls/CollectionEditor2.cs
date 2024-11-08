@@ -18,11 +18,6 @@ namespace Editor.Controls
       public ExtendedComboBox ExtendedComboBox = null!;
       private FlowLayoutPanel _flowLayout = null!;
       
-      private readonly Func<string, List<string>> _onSelectionAction; // Item name, return list of items to add as buttons
-      private readonly Func<string, bool, List<string>> _onAddedOrRemovedFunc; // Item name, add or remove, returns list of items to add as buttons
-      private readonly Func<string, List<string>> _onNewCreated; // Item name, returns list of items to add as buttons
-      private readonly Action<string> _onDeleted; // Item name
-      private readonly Action<string, string> _onSingleRemoved; // Item name, item to remove
       #endregion
 
       private readonly ItemTypes _itemTypes;

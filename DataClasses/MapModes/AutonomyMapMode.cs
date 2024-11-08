@@ -6,11 +6,13 @@ namespace Editor.DataClasses.MapModes;
 public class AutonomyMapMode : MapMode
 {
    public override bool IsLandOnly => true;
+   public override string IconFileName => "mapmode_local_autonomy.dds";
 
    public AutonomyMapMode()
    {
       // Subscribe to events to update the min and max values when a province's development changes
       ProvinceEventHandler.OnProvinceLocalAutonomyChanged += UpdateProvince;
+      base.CropAndSetIcon();
    }
 
    public override int GetProvinceColor(Province id)

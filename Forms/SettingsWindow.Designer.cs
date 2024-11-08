@@ -118,7 +118,7 @@
 
       private TabControl SettingsTabs;
       private TableLayoutPanel tableLayoutPanel1;
-      private Button CancelButton;
+      private new Button CancelButton;
       private Button SaveButton;
       private Button ResetButton;
    }

@@ -12,7 +12,7 @@ namespace Editor.DataClasses.GameDataClasses
       public bool IsInland { get; set; } = false;
       public List<string> Incoming { get; set; } = [];
       public List<Outgoing> Outgoing { get; set; } = [];
-      public static TradeNode Empty => new ("", Color.Empty, Province.Empty);
+      public new static TradeNode Empty => new ("", Color.Empty, Province.Empty);
 
       public override string ToString()
       {

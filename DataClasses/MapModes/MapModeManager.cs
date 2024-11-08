@@ -146,7 +146,7 @@ public class MapModeManager
 
          MapModeChanged(this, CurrentMapMode);
       }
-      catch (Exception e)
+      catch (Exception)
       {
          SetCurrentMapMode(MapModeType.Province);
       }

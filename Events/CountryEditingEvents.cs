@@ -7,5 +7,7 @@ namespace Editor.Events
    public static class CountryEditingEvents
    {
       public static readonly EventHandler<CountryEditingEventArgs> CountryColorChanged = delegate { };
+
+
    }
 }

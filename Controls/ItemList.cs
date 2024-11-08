@@ -15,10 +15,10 @@ namespace Editor.Controls
    public partial class ItemList : UserControl
    {
       // This autoupdates when there is a tag added or removed
-      private ComboBox _itemsComboBox;
+      private readonly ComboBox _itemsComboBox;
       public event EventHandler<ProvinceEditedEventArgs> OnItemAdded = delegate { };
       public event EventHandler<ProvinceEditedEventArgs> OnItemRemoved = delegate { };
-      public ItemTypes ItemType { get; set; }
+      private ItemTypes ItemType { get; set; }
 
 
       public ItemList(ItemTypes type, ComboBox box)

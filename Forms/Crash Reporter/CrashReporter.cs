@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Text;
 using Discord;
+using Editor.Helper;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Activity = Discord.Activity;
 
@@ -17,23 +18,7 @@ namespace Editor.Forms.Crash_Reporter
 
       private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
       {
-         try
-         {
-            Process.Start(new ProcessStartInfo
-            {
-               UseShellExecute = true,
-               FileName = CheckIfDiscordIsRunning() ? "discord:" + BUG_REPORT_FORUM_LINK : BUG_REPORT_FORUM_LINK
-            });
-         }
-         catch (Exception ex)
-         {
-            MessageBox.Show($"Failed to open the browser: {ex.Message}{Environment.NewLine}Please open the url yourself {BUG_REPORT_FORUM_LINK}");
-         }
-      }
-
-      private bool CheckIfDiscordIsRunning()
-      {
-         return Process.GetProcessesByName("Discord").Length > 0;
+         LinkHelper.OpenDiscordLinkIfDiscordRunning(BUG_REPORT_FORUM_LINK);
       }
 
       private void SaveButton_Click(object sender, EventArgs e)

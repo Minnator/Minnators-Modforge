@@ -35,7 +35,7 @@ namespace Editor.Forms
          return base.ProcessCmdKey(ref msg, keyData);
       }
       
-      private void MMSelectionBox_SelectedIndexChanged(object sender, EventArgs e)
+      private void MMSelectionBox_SelectedIndexChanged(object? sender, EventArgs e)
       {
          if (MMSelectionBox.SelectedItem == null || string.IsNullOrEmpty(MMSelectionBox.SelectedItem.ToString()))
             return;

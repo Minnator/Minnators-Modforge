@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.Json;
 using Editor.Loading;
@@ -7,6 +8,7 @@ using Editor.Helper;
 
 namespace Editor.DataClasses.Settings;
 
+[SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
 public class Settings
 {
    [Description("Contains all settings regarding the misc settings.")]
@@ -39,6 +41,7 @@ public class Settings
    }
 }
 
+[SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
 public class MiscSettings
 {
    private Language _language { get; set; } = Language.english;
@@ -73,6 +76,7 @@ public class MiscSettings
    }
 }
 
+[SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
 public class ToolTipSettings
 {
    [Description("The text that will be shown in the tooltip")]
@@ -88,9 +92,15 @@ public class ToolTipSettings
 
       return ToolTipText == settings.ToolTipText && ShowToolTip == settings.ShowToolTip;
    }
+
+   public override int GetHashCode()
+   {
+      return HashCode.Combine(ToolTipText, ShowToolTip);
+   }
 }
 
 
+[SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
 public class RenderingSettings
 {
    [Description("The direction of occupation stripes on the map")]
@@ -110,6 +120,7 @@ public class RenderingSettings
    }
 }
 
+[SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
 public class SavingSettings
 {
    [Description("<true> Asks for a filename or location beofre creating a new file\n<false> creates files with default names")]

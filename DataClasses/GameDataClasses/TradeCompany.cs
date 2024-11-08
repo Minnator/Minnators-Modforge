@@ -19,7 +19,7 @@ namespace Editor.DataClasses.GameDataClasses
          SubCollection = provinces;
       }
 
-      public static TradeCompany Empty => new ("Empty", Color.Empty);
+      public new static TradeCompany Empty => new ("Empty", Color.Empty);
       public string GenericName { get; set; }
       public string SpecificName { get; set; }
 

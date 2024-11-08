@@ -213,7 +213,7 @@
       private System.Windows.Forms.Button AddButton;
       private System.Windows.Forms.Button RemoveButton;
       private System.Windows.Forms.Button ConfirmButton;
-      private System.Windows.Forms.Button CancelButton;
+      private new System.Windows.Forms.Button CancelButton;
       private System.Windows.Forms.TextBox InputTextBox;
       private ToolTip toolTip1;
    }

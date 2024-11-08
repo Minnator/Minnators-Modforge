@@ -1126,7 +1126,7 @@ namespace Discord
             if (setLogHook.HasValue) {
                setLogHook.Value.Free();
             }
-             setLogHook = GCHandle.Alloc(callback);
+            setLogHook = GCHandle.Alloc(callback);
             Methods.SetLogHook(MethodsPtr, minLevel, GCHandle.ToIntPtr(setLogHook.Value), SetLogHookCallbackImpl);
         }
 

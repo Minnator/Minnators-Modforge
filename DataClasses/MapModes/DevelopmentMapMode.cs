@@ -25,7 +25,7 @@ public class DevelopmentMapMode : MapMode
       ProvinceEventHandler.OnProvinceBaseProductionChanged += UpdateProvince;
    }
 
-   private void UpdateMinMax(object sender, ProvinceEventHandler.ProvinceDataChangedEventArgs e)
+   private void UpdateMinMax(object? sender, ProvinceEventHandler.ProvinceDataChangedEventArgs e)
    {
       if (CalculateMinMax())
       {

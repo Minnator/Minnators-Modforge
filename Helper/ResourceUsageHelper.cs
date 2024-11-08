@@ -24,7 +24,7 @@ namespace Editor.Helper
          _appName = Process.GetCurrentProcess().ProcessName;
 
          _mapWindow = mapWindow;
-         Updater = new Timer(OnTimerTick, null, 0, 1000);
+         Updater = new(OnTimerTick, null, 0, 1000);
          //var sw = Stopwatch.StartNew();
          var initThread = new Thread(() =>
          {
@@ -46,7 +46,7 @@ namespace Editor.Helper
          _memoryUsage = memoryUsage.NextValue() / 1024 / 1024; // Convert bytes to MB
       }
 
-      private static void OnTimerTick(object state)
+      private static void OnTimerTick(object? state)
       {
          Task.Run(() =>
          {

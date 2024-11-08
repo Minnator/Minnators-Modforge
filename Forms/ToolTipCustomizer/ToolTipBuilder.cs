@@ -39,8 +39,8 @@ public static class ToolTipBuilder
                   : useLoc ? Localisation.GetLoc(value.ToString()!) : value.ToString();
             }
             // Replace the match with the value
-            rawToolTip = rawToolTip.Remove(match.Index, match.Length).Insert(match.Index, str);
-            lastMatch = match.Index + str.Length;
+            rawToolTip = rawToolTip.Remove(match.Index, match.Length).Insert(match.Index, str!);
+            lastMatch = match.Index + str!.Length;
          }
          else
             break;

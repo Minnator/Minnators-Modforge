@@ -584,7 +584,7 @@ public static class Selection
             ClearHover();
             break;
          case SelectionToolType.Lasso:
-            if (Globals.ZoomControl.isPanning)
+            if (Globals.ZoomControl.IsPanning)
             {
                var delta = _lassoTruePoints[^1].Subtract(e.Location);
                for (var i = 0; i < _lassoTruePoints.Count; i++)

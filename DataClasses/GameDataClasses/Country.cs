@@ -33,7 +33,7 @@ public class Country(Tag tag, Color color, string fileName) : ProvinceCollection
    public Tag Tag { get; } = tag;
    public Tag ColonialParent { get; set; } = Tag.Empty;
    public string FileName { get; } = fileName;
-   public static Country Empty => new(Tag.Empty, Color.Empty, string.Empty);
+   public new static Country Empty => new(Tag.Empty, Color.Empty, string.Empty);
    public Color RevolutionaryColor { get; set; } = Color.Empty;
    public string Gfx { get; set; } = string.Empty;
    public string HistoricalCouncil { get; set; } = string.Empty;

@@ -13,10 +13,4 @@ public static class GlobalEventHandlers
    {
       OnCountryListChanged.Invoke(null, new (string.Empty, false));
    }
-
-   public static event EventHandler<ProvinceCollectionModified> OnSuperRegionListChanged = delegate { };
-   public static void RaiseSuperRegionListChanged(string name, bool add)
-   {
-      OnSuperRegionListChanged.Invoke(null, new(name, add));
-   }
 }

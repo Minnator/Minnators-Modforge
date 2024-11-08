@@ -114,7 +114,7 @@ namespace Editor.Helper
          VisibleProvinces = Geometry.GetProvincesInRectangle(e.NewRectangle);
       }
 
-      private static void OnMapModePaintRivers(object _, MapModePaintEventArgs e)
+      private static void OnMapModePaintRivers(object? _, MapModePaintEventArgs e)
       {
          var sw = Stopwatch.StartNew();
          foreach (var kvp in Globals.Rivers)
@@ -126,7 +126,7 @@ namespace Editor.Helper
                if (!Geometry.IsPointInRectangle(river, e.ClipRectangle))
                   continue;
                var convertedPoint = Globals.ZoomControl.ReverseCoordinate(new(river.X, river.Y));
-               var size = (int)Math.Ceiling(Globals.ZoomControl.zoomFactor);
+               var size = (int)Math.Ceiling(Globals.ZoomControl.ZoomFactor);
                convertedPoint.X -= size / 2;
                convertedPoint.Y -= size / 2;
                e.Graphics.FillRectangle(brush, new(convertedPoint, new Size(size, size)));
@@ -136,7 +136,7 @@ namespace Editor.Helper
          Debug.WriteLine($"Drawing rivers took {sw.ElapsedMilliseconds}ms");
       }
 
-      private static void OnMapModePaintTradeRoutes(object _, MapModePaintEventArgs e)
+      private static void OnMapModePaintTradeRoutes(object? _, MapModePaintEventArgs e)
       {
          foreach (var node in Globals.TradeNodes.Values)
          {
@@ -166,7 +166,7 @@ namespace Editor.Helper
          e.Graphics.DrawCurve(Pens.BlanchedAlmond, points);
       }
 
-      private static void OnMapModePaintCapitals(object _, MapModePaintEventArgs e)
+      private static void OnMapModePaintCapitals(object? _, MapModePaintEventArgs e)
       {
          var capitals = Geometry.GetVisibleCapitals(e.VisibleProvinces);
          foreach (var capital in capitals)
@@ -177,7 +177,7 @@ namespace Editor.Helper
          }
       }
 
-      private static void OnMapModePaintStraits(object _, MapModePaintEventArgs e)
+      private static void OnMapModePaintStraits(object? _, MapModePaintEventArgs e)
       {
          foreach (var strait in Globals.Straits)
          {

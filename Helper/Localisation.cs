@@ -11,7 +11,7 @@ public static class Localisation
    public static string GetLoc (string key)
    {
       SearchLoc.Key = key;
-      return GetLocObject(key, out var value) ? value.Value : key;
+      return GetLocObject(key, out var value) ? value?.Value ?? "no_loc" : key;
    }
 
    public static bool GetLocObject(string key, out LocObject? locObject)
@@ -36,6 +36,8 @@ public static class Localisation
       }
       else
       {
+         if (locObject == null)
+            return;
          if (locObject.Path.isModPath && string.IsNullOrEmpty(value))
          {
             // TODO delete locObject

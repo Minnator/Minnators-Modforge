@@ -9,6 +9,7 @@ using Editor.Forms;
 using Editor.Forms.AdvancedSelections;
 using Editor.Helper;
 using Editor.Loading;
+using static System.Net.WebRequestMethods;
 using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor;
@@ -80,6 +81,9 @@ public enum ProvinceEditingStatus
 //contains all required and used data across the application and instances of forms.
 public static class Globals
 {
+   public const string DISCORD_INVITATION_LINK = "https://discord.gg/22AhD5qkme";
+   public const string GITHUB_LINK = "https://github.com/Minnator/Editor.git";
+
    public static string VanillaPath = string.Empty;
    public static string ModPath = string.Empty;
    
@@ -214,8 +218,7 @@ public static class Globals
    public static Dictionary<string, Area> Areas = [];
    public static Dictionary<string, Region> Regions { get; set; } = [];
 
-   private static readonly Dictionary<string, SuperRegion> _superRegions = [];
-   public static Dictionary<string, SuperRegion> SuperRegions => _superRegions;
+   public static readonly Dictionary<string, SuperRegion> SuperRegions = [];
    public static Dictionary<string, Continent> Continents { get; set; } = [];
 
 
@@ -293,6 +296,7 @@ public static class Globals
 // - [x] Settings window / saving
 // - [x] Open LoadingScreen and MapWindow on the same screen
 // - [x] Discord Rich Presence
+// - [ ] Country Collection Editing
 
 
 // TODO LIST Until Alpha 1.1

@@ -17,6 +17,7 @@ namespace Editor.Controls
          Dock = DockStyle.Fill;
          Font = new("Arial", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
          Margin = new(1,0,1,0);
+         Padding = new(0);
 
          Click += OnButtonClick;
          MouseDown += OnMouseCLick;
@@ -26,6 +27,15 @@ namespace Editor.Controls
       {
          MapModeName = mapMode;
          Text = $"{mapMode} (&{Hotkey})";
+         var mm = Globals.MapModeManager.GetMapMode(mapMode);
+         return;
+         if (mm.Icon == null)
+         {
+            Text = $"{mapMode} (&{Hotkey})";
+            return;
+         }
+         Text = $"(&{Hotkey})";
+         SetImage(mm.Icon);
       }
 
       public override string ToString()
@@ -49,7 +59,13 @@ namespace Editor.Controls
             form.Location = new (MousePosition.X, MousePosition.Y);
             form.ShowDialog();
          }
+      }
 
+      public void SetImage(Bitmap image)
+      {
+         Image = image;
+         ImageAlign = ContentAlignment.MiddleCenter; 
+         TextAlign = ContentAlignment.MiddleRight; 
       }
    }
 }

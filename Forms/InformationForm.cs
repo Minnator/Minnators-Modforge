@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using Editor.Helper;
 
 namespace Editor.Forms
 {
@@ -15,6 +7,23 @@ namespace Editor.Forms
       public InformationForm()
       {
          InitializeComponent();
+         textBox1.Text = Globals.GITHUB_LINK;
+         textBox2.Text = Globals.DISCORD_INVITATION_LINK;
+      }
+
+      private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+      {
+
+      }
+
+      private void OpenGitButton_Click(object sender, EventArgs e)
+      {
+         LinkHelper.OpenLink(Globals.GITHUB_LINK);
+      }
+
+      private void OpenDiscordButton_Click(object sender, EventArgs e)
+      {
+         LinkHelper.OpenLink(Globals.DISCORD_INVITATION_LINK);
       }
    }
 }

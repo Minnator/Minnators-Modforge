@@ -42,6 +42,7 @@ public static class SuperRegionLoading
 
          var sRegion = new SuperRegion(superRegionName, Globals.ColorProvider.GetRandomColor(), regions);
          sRegion.SetPath(ref pathObj);
+         sRegion.AddGlobal();
       }
 
       FileManager.AddRangeToDictionary(pathObj, Globals.SuperRegions.Values);

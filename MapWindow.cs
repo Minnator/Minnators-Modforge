@@ -65,13 +65,12 @@ namespace Editor
       public CollectionEditor2<TradeNode, Province> TradeNodeEditingGui = null!;
       public CollectionEditor2<ProvinceGroup, Province> ProvinceGroupsEditingGui = null!;
 
-      public Screen StartScreen;
+      public Screen? StartScreen = null;
 
       #endregion
 
       public readonly DateControl DateControl = new(DateTime.MinValue, DateControlLayout.Horizontal);
-      private LoadingScreen ls = null!;
-      private EnterPathForm epf = null!;
+      private LoadingScreen _ls = null!;
 
       public MapWindow()
       {
@@ -84,14 +83,12 @@ namespace Editor
          {
             // Center the new form on the StartScreen
             var screen = Globals.MapWindow.StartScreen;
-            Debug.WriteLine($"Opening on Screen: {StartScreen.DeviceName}");
-            Location = new System.Drawing.Point(
-               screen.Bounds.X + (screen.Bounds.Width - Width) / 2,
-               screen.Bounds.Y + (screen.Bounds.Height - Height) / 2
-            );
+            if (screen != null)
+               Location = new (screen.Bounds.X + (screen.Bounds.Width - Width) / 2, screen.Bounds.Y + (screen.Bounds.Height - Height) / 2);
          }
 
-         DiscordActivityManager.StartDiscordActivity();
+         if (LinkHelper.IsDiscordRunning)
+            DiscordActivityManager.StartDiscordActivity();
       }
 
       public void Initialize()
@@ -166,8 +163,8 @@ namespace Editor
 
       private void RunLoadingScreen()
       {
-         ls = new();
-         ls.ShowDialog();
+         _ls = new();
+         _ls.ShowDialog();
       }
 
       // Loads the map into the created PannablePictureBox
@@ -217,8 +214,8 @@ namespace Editor
 
       private void InitializeMapModeButtons()
       {
-         var button1 = ControlFactory.GetMapModeButton('q');
-         button1.SetMapMode(MapModeType.Province);
+         var button01 = ControlFactory.GetMapModeButton('q');
+         button01.SetMapMode(MapModeType.Province);
          var button2 = ControlFactory.GetMapModeButton('w');
          button2.SetMapMode(MapModeType.Country);
          var button3 = ControlFactory.GetMapModeButton('e');
@@ -237,7 +234,7 @@ namespace Editor
          button9.SetMapMode(MapModeType.CenterOfTrade);
          var button10 = ControlFactory.GetMapModeButton('p');
          button10.SetMapMode(MapModeType.Autonomy);
-         MMButtonsTLPanel.Controls.Add(button1, 0, 0);
+         MMButtonsTLPanel.Controls.Add(button01, 0, 0);
          MMButtonsTLPanel.Controls.Add(button2, 1, 0);
          MMButtonsTLPanel.Controls.Add(button3, 2, 0);
          MMButtonsTLPanel.Controls.Add(button4, 3, 0);
@@ -263,13 +260,13 @@ namespace Editor
          SuperRegionEditingGui = new(ItemTypes.String, SaveableType.SuperRegion, SaveableType.Region, MapModeType.SuperRegion);
          SuperRegion.ItemsModified += SuperRegionEditingGui.OnCorrespondingDataChange;
 
-         TradeCompanyEditingGui = new(ItemTypes.String, SaveableType.TradeCompany, SaveableType.Province, MapModeType.TradeCompany);
+         TradeCompanyEditingGui = new(ItemTypes.Id, SaveableType.TradeCompany, SaveableType.Province, MapModeType.TradeCompany);
          TradeCompany.ItemsModified += TradeCompanyEditingGui.OnCorrespondingDataChange;
 
-         TradeNodeEditingGui = new(ItemTypes.String, SaveableType.TradeNode, SaveableType.Province, MapModeType.TradeNode);
+         TradeNodeEditingGui = new(ItemTypes.Id, SaveableType.TradeNode, SaveableType.Province, MapModeType.TradeNode);
          TradeNode.ItemsModified += TradeNodeEditingGui.OnCorrespondingDataChange;
 
-         ProvinceGroupsEditingGui = new(ItemTypes.String, SaveableType.ProvinceGroup, SaveableType.Province, MapModeType.ProvinceGroup);
+         ProvinceGroupsEditingGui = new(ItemTypes.Id, SaveableType.ProvinceGroup, SaveableType.Province, MapModeType.ProvinceGroup);
          ProvinceGroup.ItemsModified += ProvinceGroupsEditingGui.OnCorrespondingDataChange;
 
          ProvinceCollectionsLayoutPanel.Controls.Add(CountryEditingGui, 0, 0);
@@ -939,7 +936,7 @@ namespace Editor
          var downloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\";
          File.WriteAllText(Path.Combine(downloadFolder, "localisationCollisions.txt"), sb.ToString());
       }
-      
+
       private void saveAllProvincesToolStripMenuItem_Click(object sender, EventArgs e)
       {
          ProvinceSaver.SaveAllLandProvinces();
@@ -1076,18 +1073,18 @@ namespace Editor
 
 
       // ------------------- COUNTRY EDITING TAB ------------------- \\
-      private TagComboBox TagSelectionBox;
+      private TagComboBox TagSelectionBox = null!;
 
-      private ComboBox GraphicalCultureBox;
-      private ComboBox UnitTypeBox;
-      private ComboBox TechGroupBox;
-      private ComboBox GovernmentTypeBox;
-      private ComboBox GovernmentRankBox;
+      private ComboBox GraphicalCultureBox = null!;
+      private ComboBox UnitTypeBox = null!;
+      private ComboBox TechGroupBox = null!;
+      private ComboBox GovernmentTypeBox = null!;
+      private ComboBox GovernmentRankBox = null!;
 
-      private ColorPickerButton CountryColorPickerButton;
-      private ColorPickerButton RevolutionColorPickerButton;
+      private ColorPickerButton CountryColorPickerButton = null!;
+      private ColorPickerButton RevolutionColorPickerButton = null!;
 
-      private ItemList GovernmentReforms;
+      private ItemList GovernmentReforms = null!;
 
 
       private void InitializeCountryEditGui()
@@ -1199,6 +1196,14 @@ namespace Editor
       private void crashReportToolStripMenuItem_Click(object sender, EventArgs e)
       {
          CrashManager.EnterCrashHandler(new());
+      }
+
+      private void loadDDSFilesTestToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         var path = @"S:\SteamLibrary\steamapps\common\Europa Universalis IV\gfx\interface\mapmode_military_access.dds";
+         var bmp = ImageReader.ReadDDSImage(path);
+         
+         bmp.Save(Globals.DownloadsFolder + "\\dds_test.png", ImageFormat.Png);
       }
    }
 }
