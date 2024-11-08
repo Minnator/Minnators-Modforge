@@ -157,4 +157,9 @@ public class MapModeManager
       return CurrentMapMode.GetProvinceColor(p);
    }
 
+   public int GetColorForMapMode(Province p, MapModeType mapMode)
+   {
+      return GetMapMode(mapMode).GetProvinceColor(p);
+   }
+
 }

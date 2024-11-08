@@ -139,7 +139,6 @@ namespace Editor.Events
       {
          if (!Globals.AllowEditing || e?.Value == null)
             return;
-         //TODO own command
          Globals.HistoryManager.AddCommand(new CAddBuilding(e.Provinces, true, e.Value.ToString()!));
       }
 

@@ -111,7 +111,7 @@ namespace Editor.Helper
 
       private static void OnImagePositionChanged(object? sender, ImagePositionEventArgs e)
       {
-         VisibleProvinces = Geometry.GetProvincesInRectangle(e.NewRectangle);
+         VisibleProvinces = [..Geometry.GetProvincesInRectangle(e.NewRectangle)];
       }
 
       private static void OnMapModePaintRivers(object? _, MapModePaintEventArgs e)

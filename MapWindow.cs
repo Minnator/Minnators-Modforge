@@ -3,7 +3,6 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.Runtime;
 using System.Text;
-using Windows.Gaming.Input;
 using Editor.Controls;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
@@ -20,7 +19,6 @@ using Editor.Savers;
 using static Editor.Helper.ProvinceEnumHelper;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 using Region = Editor.DataClasses.GameDataClasses.Region;
-using System.IO;
 
 namespace Editor
 {
@@ -694,8 +692,8 @@ namespace Editor
 
       #region HistoryManager Event Handlers
 
-      public void UpdateRedoDepth(object sender, int e) => RedoDepthLabel.Text = $"Redos [{e}]";
-      public void UpdateUndoDepth(object sender, int e) => UndoDepthLabel.Text = $"Undos [{e}]";
+      private void UpdateRedoDepth(object sender, int e) => RedoDepthLabel.Text = $"Redos [{e}]";
+      private void UpdateUndoDepth(object sender, int e) => UndoDepthLabel.Text = $"Undos [{e}]";
       #endregion
       #endregion
 
@@ -744,7 +742,7 @@ namespace Editor
          _savingButtonsToolTip.SetToolTip(SaveCurrentSelectionButton, $"Save selection ({Selection.Count})");
       }
 
-      private void OnDateChanged(object? sender, EventArgs e)
+      private static void OnDateChanged(object? sender, EventArgs e)
       {
          ProvinceHistoryManager.LoadDate(Globals.Date);
       }

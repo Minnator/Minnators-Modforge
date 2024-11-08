@@ -12,15 +12,6 @@ public static class Geometry
       return r1.X < r2.X + r2.Width && r1.X + r1.Width > r2.X && r1.Y < r2.Y + r2.Height && r1.Y + r1.Height > r2.Y;
    }
 
-   // TODO Rectangle optimzation
-   public static ICollection<Province> GetProvincesOnScreen()
-   {
-      ICollection<Province> provinces = [];
-
-
-      return provinces;
-   }
-
    public static Rectangle GetIntersection (Rectangle r1, Rectangle r2)
    {
       var x = Math.Max(r1.X, r2.X);
@@ -177,17 +168,27 @@ public static class Geometry
       return provinces;
    }
 
-   // TODO optimize using superregion bounds
-   public static HashSet<Province> GetProvincesInRectangle(Rectangle rect)
+   public static ICollection<Province> GetProvincesInRectangle(Rectangle rect)
    {
-      var provinces = new HashSet<Province>();
-      foreach (var province in Globals.Provinces)
+      HashSet<Province> provinces = [];
+      List<SuperRegion> srs = [];
+      foreach (var sr in Globals.SuperRegions.Values)
       {
-         if (RectanglesIntercept(province.Bounds, rect))
-            provinces.Add(province);
+         if (RectanglesIntercept(rect, sr.Bounds))
+            srs.Add(sr);
+      }
+
+      foreach (var sr in srs)
+      {
+         foreach (var province in sr.GetProvinces())
+         {
+            if (RectanglesIntercept(rect, province.Bounds))
+               provinces.Add(province);
+         }
       }
       return provinces;
    }
+
    
    public static List<int> GetProvincesInPolygon(List<Point> polygon)
    {
@@ -337,67 +338,6 @@ public static class Geometry
       return 2 * sum - diffs;
    }
 
-   //TODO does weird stuff idk
-   public static int[] GetBorderPoints(Point p, Province province, ref HashSet<Point> bps)
-   {
-      // goes west, east, north, south until it finds a border pixel
-      var points = new int[4];
-
-      if (bps.Contains(p))
-         return [-1,-1,-1,-1];
-      
-      var y = p.Y;
-      var x = p.X;
-
-      while (y < province.Bounds.Bottom) // N
-      {
-         if (bps.Contains(new Point(x, y)))
-         {
-            points[0] = y - p.Y;
-            break;
-         }
-         y++;
-      }
-
-      y = p.Y;
-      while (y > 0) // S
-      {
-         if (bps.Contains(new Point(x, y)))
-         {
-            points[1] = p.Y - y;
-            break;
-         }
-
-         y--;
-      }
-
-      y = p.Y;
-
-      while (x < province.Bounds.Right) // E
-      {
-         if (bps.Contains(new Point(x, y)))
-         {
-            points[2] = x - p.X;
-            break;
-         }
-
-         x++;
-      }
-
-      x = p.X;
-      while (x > 0) // W
-      {
-         if (bps.Contains(new Point(x, y)))
-         {
-            points[3] = p.X - x;
-            break;
-         }
-         x--;
-      }
-
-      return points;
-   }
-   
    public static bool GetIfHasStripePixels(Province province, bool onlyRebels, out Point[] stripe)
    {
       if (onlyRebels)

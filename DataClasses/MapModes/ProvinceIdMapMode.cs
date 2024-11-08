@@ -1,10 +1,6 @@
-﻿using System;
-using System.Drawing;
-using Editor.DataClasses.GameDataClasses;
-using Editor.DataClasses.MapModes;
-using Editor.Helper;
+﻿using Editor.DataClasses.GameDataClasses;
 
-namespace Editor.MapModes;
+namespace Editor.DataClasses.MapModes;
 
 public sealed class ProvinceIdMapMode : MapMode
 {
@@ -18,5 +14,9 @@ public sealed class ProvinceIdMapMode : MapMode
    {
       return id.Color.ToArgb();
    }
-   
+
+   public override string GetSpecificToolTip(Province provinceId)
+   {
+      return $"{provinceId.Id} ({provinceId.GetLocalisation()})";
+   }
 }

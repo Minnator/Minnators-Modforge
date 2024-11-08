@@ -9,11 +9,12 @@ namespace Editor.Forms
          InitializeComponent();
          StartPosition = FormStartPosition.CenterScreen;
 
-         // TODO remove on release
+#if DEBUG
          Load += (sender, args) =>
          {
             ContinueButton.PerformClick();
          };
+#endif
          
       }
 
@@ -38,10 +39,10 @@ namespace Editor.Forms
 
       private void ContinueButton_Click(object sender, EventArgs e)
       {
-
-         // TODO comment on release
+#if DEBUG
          ModPathTextBox.Text = Consts.MOD_PATH;
          VanillaPathTextBox.Text = Consts.VANILLA_PATH;
+#endif
          
          if (string.IsNullOrEmpty(ModPathTextBox.Text) || string.IsNullOrEmpty(VanillaPathTextBox.Text))
          {

@@ -75,8 +75,8 @@
       public bool IsFemale { get; set; } = false;
       public LeaderType Type { get; set; } = LeaderType.General;
       public DateTime DeathDate { get; set; } = DateTime.MinValue;
-      public List<string> Personalities { get; set; } = []; //TODO replace with dynamic enum
-      public List<string> Traits { get; set; } = []; //TODO replace with dynamic enum
+      public List<string> Personalities { get; set; } = []; 
+      public List<string> Traits { get; set; } = []; 
 
       public bool IsAlive => DeathDate == DateTime.MinValue;
 

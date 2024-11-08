@@ -415,7 +415,7 @@ public class Province(int id, Color color) : ProvinceComposite(id.ToString(), co
          if (Globals.State == State.Running)
             RaiseProvinceBuildingsChanged(this, value, nameof(Buildings));
       }
-   } // TODO parse to check other buildings
+   } 
 
    public bool IsHre
    {
@@ -982,9 +982,6 @@ public class Province(int id, Color color) : ProvinceComposite(id.ToString(), co
             else
                Globals.ErrorLog.Write($"Could not parse unrest: {value} for province id {Id}");
             break;
-         case ProvAttrSet.shipyard:
-            // TODO parse shipyard
-            break;
          case ProvAttrSet.revolt:
             HasRevolt = !string.IsNullOrWhiteSpace(value);
             break;
@@ -1122,10 +1119,9 @@ public class Province(int id, Color color) : ProvinceComposite(id.ToString(), co
       }
    }
 
-   public int GetTotalDevelopment()
-   {
-      return BaseManpower + BaseTax + BaseProduction;
-   }
+   public int GetTotalDevelopment() => BaseManpower + BaseTax + BaseProduction;
+   public ICollection<Province> Neighbors => Globals.AdjacentProvinces[this];
+
    public string GetLocalisation()
    {
       return Localisation.GetLoc(GetLocalisationString());

@@ -9,9 +9,8 @@ namespace Editor.DataClasses.MapModes
    public class DiplomaticMapMode : MapMode
    {
       public override bool IsLandOnly => true;
-      public override bool ShowCapitals => true;
       public bool ClearPreviousCoresClaims = false;
-      private List<Province> CoresAndClaims = [];
+      private readonly List<Province> _coresAndClaims = [];
 
 
       public DiplomaticMapMode()
@@ -88,8 +87,8 @@ namespace Editor.DataClasses.MapModes
          claims.AddRange(ProvColHelper.GetProvincesWithAttribute(ProvAttrGet.permanent_claims, Selection.SelectedCountry.Tag));
          var cores = ProvColHelper.GetProvincesWithAttribute(ProvAttrGet.cores, Selection.SelectedCountry.Tag);
 
-         CoresAndClaims.AddRange(claims);
-         CoresAndClaims.AddRange(cores);
+         _coresAndClaims.AddRange(claims);
+         _coresAndClaims.AddRange(cores);
 
          for (var i = claims.Count - 1; i >= 0; i--)
          {

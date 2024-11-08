@@ -1,5 +1,6 @@
 ﻿using Editor.DataClasses.GameDataClasses;
 using Editor.Events;
+using Editor.Helper;
 
 namespace Editor.DataClasses.MapModes;
 
@@ -16,32 +17,10 @@ public class FortMapMode : MapMode
 
    public override int GetProvinceColor(Province id)
    {
-      // TODO: Expand to better forts
-      switch (GetFortLevel(id))
-      {
-         case 0:
-            return Color.DimGray.ToArgb();
-         case 1:
-            return Color.FromArgb(0, 255, 0).ToArgb();
-         case 2:
-            return Color.BurlyWood.ToArgb();
-         case 3:
-            return Color.FromArgb(255, 255, 0).ToArgb();
-         case 4:
-            return Color.FromArgb(255, 165, 0).ToArgb();
-         case 5:
-            return Color.FromArgb(255, 0, 0).ToArgb();
-         case 6:
-            return Color.FromArgb(139, 0, 0).ToArgb();
-         case 7:
-            return Color.FromArgb(128, 0, 128).ToArgb();
-         case 8:
-            return Color.FromArgb(120, 0, 230).ToArgb();
-         case 9:
-            return Color.FromArgb(0, 0, 0).ToArgb();
-         default:
-            return Color.FloralWhite.ToArgb();
-      }
+      var fortLevel = GetFortLevel(id);
+      return fortLevel < ColorProviderRgb.PredefinedColors.Length 
+         ? ColorProviderRgb.PredefinedColors[fortLevel].ToArgb() 
+         : Color.Azure.ToArgb();
    }
 
    private int GetFortLevel(Province id)

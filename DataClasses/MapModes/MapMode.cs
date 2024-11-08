@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Editor.DataClasses.GameDataClasses;
+﻿using Editor.DataClasses.GameDataClasses;
 using Editor.Events;
 using Editor.Helper;
 
@@ -11,20 +10,16 @@ public abstract class MapMode
    public virtual bool IsLandOnly => false;
    public virtual bool ShowOccupation => false;
    public virtual bool IsProvinceMapMode => true;
-   public virtual bool ShowCapitals => false;
-   public virtual bool BlockDrawingOfCapitals { get; set; } = false;
    public virtual Bitmap? Icon { get; protected set; }
    public virtual string IconFileName { get; } = null!;
 
    public virtual void RenderMapMode(Func<Province, int> method)
    {
       // TODO optimize this method
-      //var sw = Stopwatch.StartNew();
       if (IsLandOnly)
       {
          if (Globals.MapModeManager.PreviousLandOnly)
          {
-            // only update the land provinces
             MapDrawing.DrawOnMap(Globals.LandProvinces, GetProvinceColor, Globals.ZoomControl, PixelsOrBorders.Pixels);
          }
          else
@@ -37,21 +32,16 @@ public abstract class MapMode
       {
          MapDrawing.DrawOnMap(Globals.Provinces, method, Globals.ZoomControl, PixelsOrBorders.Pixels);
       }
-      // draw borders on top of the provinces is always needed
       if (ShowOccupation)
          MapDrawing.DrawOccupations(false, Globals.ZoomControl);
-      if (ShowCapitals)
-         MapDrawing.DrawAllCapitals();
+
       MapDrawing.DrawAllBorders(Color.Black.ToArgb(), Globals.ZoomControl);
       Selection.RePaintSelection();
       Globals.ZoomControl.Invalidate();
       Globals.MapModeManager.PreviousLandOnly = IsLandOnly;
-
-      //sw.Stop();
-      //Debug.WriteLine($"RenderMapMode {GetMapModeName()} took {sw.ElapsedMilliseconds}ms");
    }
 
-   public virtual void CropAndSetIcon()
+   protected virtual void CropAndSetIcon()
    {
       var iconPath = Path.Combine(Globals.VanillaPath, "gfx", "interface", IconFileName);
       if (!File.Exists(iconPath))
@@ -64,7 +54,7 @@ public abstract class MapMode
       Icon = CropRawIcon(icon);
    }
 
-   public virtual Bitmap CropRawIcon(Bitmap rawBmp)
+   protected virtual Bitmap CropRawIcon(Bitmap rawBmp)
    {
       var bmp = new Bitmap(27, 21);
       using var g = Graphics.FromImage(bmp);
@@ -72,41 +62,22 @@ public abstract class MapMode
       return bmp;
    }
 
-   public virtual MapModeType GetMapModeName()
-   {
-      return MapModeType.None;
-   }
+   public abstract MapModeType GetMapModeName();
 
-   public virtual int GetProvinceColor(Province id)
-   {
-      return id.Color.ToArgb();
-   }
+   public abstract int GetProvinceColor(Province id);
 
    public virtual int GetSeaProvinceColor(Province id)
    {
       return id.Color.ToArgb();
    }
-
-   public virtual void Update(Rectangle rect)
-   {
-      Update(Geometry.GetProvincesInRectangle(rect).ToList());
-   }
-
+   
    public virtual void Update(ICollection<Province> ids)
    {
       if (ids.Count == 0)
          return;
-      BlockDrawingOfCapitals = true; // Don't draw the capitals per province, they are more optimized to draw all at once
 
-      foreach (var id in ids)
-      {
+      foreach (var id in ids) 
          Update(id, false);
-      }
-      BlockDrawingOfCapitals = false;
-
-      // Drawing all capitals at once is more optimized
-      if (ShowCapitals)
-         MapDrawing.DrawCapitals(ids);
       Globals.ZoomControl.Invalidate();
    }
 
@@ -141,19 +112,12 @@ public abstract class MapMode
       MapDrawing.DrawOnMap(province, GetProvinceColor(province), Globals.ZoomControl, PixelsOrBorders.Pixels);
       if (ShowOccupation)
          MapDrawing.DrawOccupations(false, Globals.ZoomControl);
-      if (ShowCapitals)
-         MapDrawing.DrawAllCapitals();
-      if (invalidate)
-      {
+      if (invalidate) 
          Globals.ZoomControl.Invalidate();
-      }
-      //TODO fix false border drawing
+      Selection.RePaintSelection();
    }
 
-   public virtual string GetSpecificToolTip(Province provinceId)
-   {
-      return GetMapModeName().ToString();
-   }
+   public abstract string GetSpecificToolTip(Province provinceId);
 
    public virtual void SetActive()
    {

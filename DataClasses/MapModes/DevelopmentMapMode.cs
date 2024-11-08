@@ -27,22 +27,12 @@ public class DevelopmentMapMode : MapMode
 
    private void UpdateMinMax(object? sender, ProvinceEventHandler.ProvinceDataChangedEventArgs e)
    {
-      if (CalculateMinMax())
-      {
-         if (Globals.MapModeManager.CurrentMapMode != this)
-            return;
-         RenderMapMode(GetProvinceColor);
-      }
-      else
-      {
-         if (Globals.MapModeManager.CurrentMapMode != this)
-            return;
-         if (sender is not int id)
-            return;
+      if (!CalculateMinMax())
+         return;
 
-         //TODO WTF DID THIS DO
-         //Update(id);
-      }
+      if (Globals.MapModeManager.CurrentMapMode != this)
+         return;
+      RenderMapMode(GetProvinceColor);
    }
 
    /// <summary>

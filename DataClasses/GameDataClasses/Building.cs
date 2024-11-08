@@ -1,6 +1,6 @@
 ﻿namespace Editor.DataClasses.GameDataClasses
 {
-   public class Building(string name) //TODO expand if needed
+   public class Building(string name) 
    {
       public string Name { get; } = name;
 

@@ -1,6 +1,7 @@
 ﻿using System.Drawing.Imaging;
 using Editor.Controls;
 using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.MapModes;
 using Editor.Helper;
 
 namespace Editor.Forms
@@ -103,7 +104,20 @@ namespace Editor.Forms
                MapDrawing.DrawOnMap(allCountryProvinces, Globals.MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
                break;
             case SecondaryProvinceDrawing.CoastalOutline:
-            // TODO calculate coastlines
+               HashSet<Province> coastalProvinces = [];
+               foreach (var province in Globals.NonLandProvinces)
+               {
+                  foreach (var neighbor in province.Neighbors)
+                  {
+                     if (Globals.LandProvinces.Contains(neighbor))
+                     {
+                        coastalProvinces.Add(province);
+                        break;
+                     }
+                  }
+               }
+               MapDrawing.DrawOnMap(coastalProvinces, Globals.MapModeManager.GetMapMode(MapModeType.Province).GetSeaProvinceColor, ZoomControl, PixelsOrBorders.Both);
+               break;
             case SecondaryProvinceDrawing.SeaProvinces:
                MapDrawing.DrawOnMap(Globals.SeaProvinces, Globals.MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
                break;

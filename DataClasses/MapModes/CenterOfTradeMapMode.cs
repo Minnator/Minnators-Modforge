@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using Editor.DataClasses.GameDataClasses;
+﻿using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.Events;
 

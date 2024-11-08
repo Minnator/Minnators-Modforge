@@ -124,8 +124,8 @@ public static class Globals
    }
    // Logs
    public static readonly string DownloadsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
-   public static readonly Log LoadingLog = new(Path.Combine(DownloadsFolder), "Loading"); //TODO: make this a setting and not hardcoded
-   public static readonly Log ErrorLog = new(Path.Combine(DownloadsFolder), "Error"); //TODO: make this a setting and not hardcoded
+   public static readonly Log LoadingLog = new(Settings.SavingSettings.LoadingLogLocation, "Loading");
+   public static readonly Log ErrorLog = new(Settings.SavingSettings.ErrorLogLocation, "Error");
 
    // Contains the current state of the application
    public static State State = State.Loading;

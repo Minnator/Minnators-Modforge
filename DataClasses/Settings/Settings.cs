@@ -3,8 +3,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.Json;
 using Editor.Loading;
-using Windows.Globalization;
 using Editor.Helper;
+using Windows.Storage;
 
 namespace Editor.DataClasses.Settings;
 
@@ -129,6 +129,12 @@ public class SavingSettings
 
    [Description("Define how often and if the Modforge should ask where to save edited objects.")]
    public FileSavingMode FileSavingMode { get; set; } = FileSavingMode.AskOnce;
+
+   [Description("The location where the loading log will be saved")]
+   public string LoadingLogLocation { get; set; } = Path.Combine(Globals.DownloadsFolder, "Loading");
+
+   [Description("The location where the error log will be saved")]
+   public string ErrorLogLocation { get; set; } = Path.Combine(Globals.DownloadsFolder, "Errors");
 
    public override bool Equals(object? obj)
    {

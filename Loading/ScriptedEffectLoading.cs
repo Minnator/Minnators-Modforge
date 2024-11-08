@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics;
-using System.Text;
 using Editor.DataClasses;
-using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 
 namespace Editor.Loading
@@ -17,8 +15,6 @@ namespace Editor.Loading
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "scripted_effects");
          HashSet<string> scriptedEffects = [];
 
-         // TODO could be sped up by not using GetElements but instead just writing a simple parser for the scripted_effects files which only detects openings,
-         // TODO as GetElements is overkill and slower on larger files as here
          Parallel.ForEach(files, file =>
          {
             IO.ReadAllInANSI(file, out var str);

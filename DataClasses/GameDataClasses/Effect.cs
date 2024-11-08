@@ -1,6 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Text;
-using ABI.Windows.Media.Playback;
 using Editor.Parser;
 using static Editor.Helper.ProvinceEnumHelper;
 
@@ -65,7 +64,6 @@ namespace Editor.DataClasses.GameDataClasses
       {
          if (EffectParser.IsAnyEffect(name) || Globals.Buildings.Contains(new (name)) || Globals.UniqueAttributeKeys.Contains(name))
          {
-            // TODO: This is a weird fix and should be removed in the future
             if (name.Equals("city"))
             {
                province.SetAttribute(ProvAttrSet.is_city, Value);
@@ -75,12 +73,6 @@ namespace Editor.DataClasses.GameDataClasses
             return true;
          }
          Globals.ErrorLog.Write($"Could not execute effect: {Name}");
-         return false;
-      }
-
-      public virtual bool ExecuteCountry(Country country)
-      {
-         //TODO implement this
          return false;
       }
 

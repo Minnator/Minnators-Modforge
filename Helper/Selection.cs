@@ -1,10 +1,7 @@
 ﻿using System.Diagnostics;
-using Windows.UI.ApplicationSettings;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.Forms;
-using Editor.Forms.AdvancedSelections;
-using Newtonsoft.Json.Linq;
 using static Editor.Helper.ProvinceEnumHelper;
 
 namespace Editor.Helper;

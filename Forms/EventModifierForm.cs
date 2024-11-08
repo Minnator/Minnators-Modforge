@@ -164,9 +164,7 @@ namespace Editor.Forms
             SetModifierLocalisation(ref title, ref desc, ref modifier);
             return true;
          }
-
          
-
          //TODO is not correctly added to combobox
          EventModifier eventMod = new(name)
          {

@@ -92,7 +92,6 @@ namespace Editor.Helper
          trade_goods,
          tribal_owner,
          unrest,
-         shipyard,
          revolt,
          revolt_risk,
          add_local_autonomy,

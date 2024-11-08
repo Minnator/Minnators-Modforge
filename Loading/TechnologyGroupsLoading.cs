@@ -26,7 +26,6 @@ namespace Editor.Loading
                foreach (var blk in block2.GetBlockElements)
                {
                   var group = new TechnologyGroup(blk.Name);
-                  // TODO: Load group properties if needed
                   Globals.TechnologyGroups.Add(blk.Name, group);
                }
 

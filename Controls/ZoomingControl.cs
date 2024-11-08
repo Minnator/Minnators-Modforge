@@ -199,7 +199,7 @@ public sealed class ZoomControl : Control, IDisposable
       var point = ConvertCoordinates(inPoint, out bool inBounds);
       if (!inBounds)
          return Color.Empty;
-      return _map.GetPixel(point.X, point.Y); // TODO maybe find faster way using Hmap? calculate pointer using stride and height
+      return _map.GetPixel(point.X, point.Y); 
    }
 
 

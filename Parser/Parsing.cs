@@ -476,7 +476,7 @@ public static partial class Parsing
    /// </summary>
    /// <param name="value"></param>
    /// <returns></returns>
-   public static bool YesNo (string value) // TODO change to return bool if successfull and out bool for value
+   public static bool YesNo (string value) 
    {
       return value.ToLower().Equals("yes");
    }

@@ -1,7 +1,6 @@
 ﻿using System.Windows.Forms;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Parser;
-using Newtonsoft.Json.Linq;
 
 namespace Editor.Controls
 {
