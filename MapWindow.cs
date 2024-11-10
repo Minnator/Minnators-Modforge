@@ -34,12 +34,12 @@ namespace Editor
 
       private ExtendedComboBox _religionComboBox = null!;
       private ExtendedComboBox _cultureComboBox = null!;
-      public ExtendedComboBox _modifierComboBox = null!;
+      public ExtendedComboBox ModifierComboBox = null!;
       private ExtendedComboBox _modifierTypeComboBox = null!;
 
       private ExtendedNumeric _taxNumeric = null!;
-      private ExtendedNumeric _prodNumeric = null!;
-      private ExtendedNumeric _manpNumeric = null!;
+      private ExtendedNumeric _prdNumeric = null!;
+      private ExtendedNumeric _mnpNumeric = null!;
 
       private ExtendedNumeric _autonomyNumeric = null!;
       private ExtendedNumeric _devastationNumeric = null!;
@@ -82,7 +82,7 @@ namespace Editor
             // Center the new form on the StartScreen
             var screen = Globals.MapWindow.StartScreen;
             if (screen != null)
-               Location = new (screen.Bounds.X + (screen.Bounds.Width - Width) / 2, screen.Bounds.Y + (screen.Bounds.Height - Height) / 2);
+               Location = new(screen.Bounds.X + (screen.Bounds.Width - Width) / 2, screen.Bounds.Y + (screen.Bounds.Height - Height) / 2);
          }
 
          if (LinkHelper.IsDiscordRunning)
@@ -365,29 +365,29 @@ namespace Editor
          _taxNumeric.DownButtonPressedLarge += ProvinceEditingEvents.OnDownBaseTaxButtonPressedLarge;
          DevelopmentLayoutPanel.Controls.Add(_taxNumeric, 1, 0);
 
-         _prodNumeric = ControlFactory.GetExtendedNumeric();
-         _prodNumeric.Minimum = 0;
-         _prodNumeric.Maximum = 1000;
-         _prodNumeric.OnTextValueChanged += ProvinceEditingEvents.OnTextBaseProductionChanged;
-         _prodNumeric.UpButtonPressedSmall += ProvinceEditingEvents.OnUpBaseProductionChanged;
-         _prodNumeric.UpButtonPressedMedium += ProvinceEditingEvents.OnUpButtonPressedMediumProduction;
-         _prodNumeric.UpButtonPressedLarge += ProvinceEditingEvents.OnUpButtonPressedLargeProduction;
-         _prodNumeric.DownButtonPressedSmall += ProvinceEditingEvents.OnDownBaseProductionChanged;
-         _prodNumeric.DownButtonPressedMedium += ProvinceEditingEvents.OnDownButtonPressedMediumProduction;
-         _prodNumeric.DownButtonPressedLarge += ProvinceEditingEvents.OnDownButtonPressedLargeProduction;
-         DevelopmentLayoutPanel.Controls.Add(_prodNumeric, 1, 1);
+         _prdNumeric = ControlFactory.GetExtendedNumeric();
+         _prdNumeric.Minimum = 0;
+         _prdNumeric.Maximum = 1000;
+         _prdNumeric.OnTextValueChanged += ProvinceEditingEvents.OnTextBaseProductionChanged;
+         _prdNumeric.UpButtonPressedSmall += ProvinceEditingEvents.OnUpBaseProductionChanged;
+         _prdNumeric.UpButtonPressedMedium += ProvinceEditingEvents.OnUpButtonPressedMediumProduction;
+         _prdNumeric.UpButtonPressedLarge += ProvinceEditingEvents.OnUpButtonPressedLargeProduction;
+         _prdNumeric.DownButtonPressedSmall += ProvinceEditingEvents.OnDownBaseProductionChanged;
+         _prdNumeric.DownButtonPressedMedium += ProvinceEditingEvents.OnDownButtonPressedMediumProduction;
+         _prdNumeric.DownButtonPressedLarge += ProvinceEditingEvents.OnDownButtonPressedLargeProduction;
+         DevelopmentLayoutPanel.Controls.Add(_prdNumeric, 1, 1);
 
-         _manpNumeric = ControlFactory.GetExtendedNumeric();
-         _manpNumeric.Minimum = 0;
-         _manpNumeric.Maximum = 1000;
-         _manpNumeric.OnTextValueChanged += ProvinceEditingEvents.OnTextBaseManpowerChanged;
-         _manpNumeric.UpButtonPressedSmall += ProvinceEditingEvents.OnUpBaseManpowerChanged;
-         _manpNumeric.UpButtonPressedMedium += ProvinceEditingEvents.OnUpButtonPressedMediumManpower;
-         _manpNumeric.UpButtonPressedLarge += ProvinceEditingEvents.OnUpButtonPressedLargeManpower;
-         _manpNumeric.DownButtonPressedSmall += ProvinceEditingEvents.OnDownBaseManpowerChanged;
-         _manpNumeric.DownButtonPressedMedium += ProvinceEditingEvents.OnDownButtonPressedMediumManpower;
-         _manpNumeric.DownButtonPressedLarge += ProvinceEditingEvents.OnDownButtonPressedLargeManpower;
-         DevelopmentLayoutPanel.Controls.Add(_manpNumeric, 1, 2);
+         _mnpNumeric = ControlFactory.GetExtendedNumeric();
+         _mnpNumeric.Minimum = 0;
+         _mnpNumeric.Maximum = 1000;
+         _mnpNumeric.OnTextValueChanged += ProvinceEditingEvents.OnTextBaseManpowerChanged;
+         _mnpNumeric.UpButtonPressedSmall += ProvinceEditingEvents.OnUpBaseManpowerChanged;
+         _mnpNumeric.UpButtonPressedMedium += ProvinceEditingEvents.OnUpButtonPressedMediumManpower;
+         _mnpNumeric.UpButtonPressedLarge += ProvinceEditingEvents.OnUpButtonPressedLargeManpower;
+         _mnpNumeric.DownButtonPressedSmall += ProvinceEditingEvents.OnDownBaseManpowerChanged;
+         _mnpNumeric.DownButtonPressedMedium += ProvinceEditingEvents.OnDownButtonPressedMediumManpower;
+         _mnpNumeric.DownButtonPressedLarge += ProvinceEditingEvents.OnDownButtonPressedLargeManpower;
+         DevelopmentLayoutPanel.Controls.Add(_mnpNumeric, 1, 2);
 
          _autonomyNumeric = ControlFactory.GetExtendedNumeric();
          _autonomyNumeric.Minimum = 0;
@@ -482,10 +482,10 @@ namespace Editor
 
       private void InitializeModifierTab()
       {
-         _modifierComboBox = ControlFactory.GetExtendedComboBox();
-         _modifierComboBox.Items.AddRange([.. Globals.EventModifiers.Keys]);
+         ModifierComboBox = ControlFactory.GetExtendedComboBox();
+         ModifierComboBox.Items.AddRange([.. Globals.EventModifiers.Keys]);
          // No data changed here as they are added via the "Add" button
-         ModifiersLayoutPanel.Controls.Add(_modifierComboBox, 1, 1);
+         ModifiersLayoutPanel.Controls.Add(ModifierComboBox, 1, 1);
 
          _modifierTypeComboBox = ControlFactory.GetExtendedComboBox(["CountryModifier", "ProvinceModifier"]);
          _modifierTypeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -553,9 +553,9 @@ namespace Editor
          if (Selection.GetSharedAttribute(ProvAttrGet.base_tax, out result) && result is int baseTax)
             _taxNumeric.Value = baseTax;
          if (Selection.GetSharedAttribute(ProvAttrGet.base_production, out result) && result is int baseProduction)
-            _prodNumeric.Value = baseProduction;
+            _prdNumeric.Value = baseProduction;
          if (Selection.GetSharedAttribute(ProvAttrGet.base_manpower, out result) && result is int baseManpower)
-            _manpNumeric.Value = baseManpower;
+            _mnpNumeric.Value = baseManpower;
          if (Selection.GetSharedAttribute(ProvAttrGet.local_autonomy, out result) && result is float localAutonomy)
             _autonomyNumeric.Value = (int)localAutonomy;
          if (Selection.GetSharedAttribute(ProvAttrGet.devastation, out result) && result is float devastation)
@@ -606,8 +606,8 @@ namespace Editor
          IsParlimentSeatCheckbox.Checked = province.IsSeatInParliament;
          HasRevoltCheckBox.Checked = province.HasRevolt;
          _taxNumeric.Value = province.BaseTax;
-         _prodNumeric.Value = province.BaseProduction;
-         _manpNumeric.Value = province.BaseManpower;
+         _prdNumeric.Value = province.BaseProduction;
+         _mnpNumeric.Value = province.BaseManpower;
          _claims.AddItemsUnique([.. province.Claims]);
          _permanentClaims.AddItemsUnique([]);
          _cores.AddItemsUnique([.. province.Cores]);
@@ -641,8 +641,8 @@ namespace Editor
          IsParlimentSeatCheckbox.Checked = false;
          HasRevoltCheckBox.Checked = false;
          _taxNumeric.Value = 1;
-         _prodNumeric.Value = 1;
-         _manpNumeric.Value = 1;
+         _prdNumeric.Value = 1;
+         _mnpNumeric.Value = 1;
          _claims.Clear();
          _permanentClaims.Clear();
          _cores.Clear();
@@ -658,7 +658,7 @@ namespace Editor
          _nativesSizeTextBox.Text = "0";
          _nativeFerocityTextBox.Text = "0";
          _nativeHostilityTextBox.Text = "0";
-         _modifierComboBox.Text = string.Empty;
+         ModifierComboBox.Text = string.Empty;
          ModifiersListView.Items.Clear();
          DurationTextBox.Text = string.Empty;
          _tradeCompanyInvestments.Text = string.Empty;
@@ -977,7 +977,7 @@ namespace Editor
          var error = string.Empty;
          if (!int.TryParse(DurationTextBox.Text, out var duration))
             error += "Duration must be a number\n";
-         if (_modifierComboBox.Text == string.Empty)
+         if (ModifierComboBox.Text == string.Empty)
             error += "Modifier must be selected\n";
          if (_modifierTypeComboBox.Text == string.Empty)
             error += "ModifierType must be selected\n";
@@ -988,7 +988,7 @@ namespace Editor
             return;
          }
 
-         var mod = new ApplicableModifier(_modifierComboBox.Text, duration);
+         var mod = new ApplicableModifier(ModifierComboBox.Text, duration);
          var type = Enum.Parse<ModifierType>(_modifierTypeComboBox.Text);
          ProvinceEditingEvents.OnModifierAdded(mod, type);
          AddModifiersToList(mod, type);
@@ -1200,8 +1200,28 @@ namespace Editor
       {
          var path = @"S:\SteamLibrary\steamapps\common\Europa Universalis IV\gfx\interface\mapmode_military_access.dds";
          var bmp = ImageReader.ReadDDSImage(path);
-         
+
          bmp.Save(Globals.DownloadsFolder + "\\dds_test.png", ImageFormat.Png);
+      }
+
+      private void OpenProvinceFileButton_Click(object sender, EventArgs e)
+      {
+         foreach (var province in Selection.GetSelectedProvinces)
+         {
+            var path = province.GetHistoryFilePath();
+            if (File.Exists(path))
+            {
+               Process.Start(new ProcessStartInfo
+               {
+                  FileName = path,
+                  UseShellExecute = true
+               });
+            }
+            else
+            {
+               MessageBox.Show($"File not found: {path}");
+            }
+         }
       }
    }
 }

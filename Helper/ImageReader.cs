@@ -4,7 +4,7 @@ using DirectXTexNet;
 
 namespace Editor.Helper
 {
-   public class ImageReader
+   public partial class ImageReader
    {
       /// <summary>
       /// Loads a DDS image from the specified file path and returns it as a Bitmap
@@ -63,7 +63,7 @@ namespace Editor.Helper
       }
 
 
-      [DllImport("kernel32.dll", EntryPoint = "RtlMoveMemory", SetLastError = false)]
-      private static extern void CopyMemory(IntPtr dest, IntPtr src, int count);
+      [LibraryImport("kernel32.dll", EntryPoint = "RtlMoveMemory", SetLastError = false)]
+      private static partial void CopyMemory(IntPtr dest, IntPtr src, int count);
    }
 }

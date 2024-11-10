@@ -18,15 +18,15 @@ namespace Editor.Forms
          StartPosition = FormStartPosition.CenterScreen;
          InitializeComponent();
 
-         EventModNameTL.Controls.Add(Globals.MapWindow._modifierComboBox, 1, 0);
+         EventModNameTL.Controls.Add(Globals.MapWindow.ModifierComboBox, 1, 0);
          tempBox = new()
          {
             Dock = DockStyle.Fill,
-            Margin = Globals.MapWindow._modifierComboBox.Margin
+            Margin = Globals.MapWindow.ModifierComboBox.Margin
          };
          Globals.MapWindow.ModifiersLayoutPanel.Controls.Add(tempBox, 1, 1);
-         Globals.MapWindow._modifierComboBox.SelectedIndexChanged += OnModifierComboBoxOnSelectedIndexChanged;
-         Globals.MapWindow._modifierComboBox.TextChanged += OnModifierComboBoxTextChanged;
+         Globals.MapWindow.ModifierComboBox.SelectedIndexChanged += OnModifierComboBoxOnSelectedIndexChanged;
+         Globals.MapWindow.ModifierComboBox.TextChanged += OnModifierComboBoxTextChanged;
 
          Closing += CloseEvent;
 
@@ -85,7 +85,7 @@ namespace Editor.Forms
 
       private void OnModifierComboBoxOnSelectedIndexChanged(object? sender, EventArgs args)
       {
-         if (!Globals.EventModifiers.TryGetValue(Globals.MapWindow._modifierComboBox.Text, out var modifier))
+         if (!Globals.EventModifiers.TryGetValue(Globals.MapWindow.ModifierComboBox.Text, out var modifier))
             return;
 
          LocalisationTextBox.Text = Localisation.GetLoc(modifier.GetTitleLocKey);
@@ -106,9 +106,9 @@ namespace Editor.Forms
       private void CloseEvent(object? sender, EventArgs e)
       {
          Globals.MapWindow.ModifiersLayoutPanel.Controls.Remove(tempBox);
-         Globals.MapWindow._modifierComboBox.SelectedIndexChanged -= OnModifierComboBoxOnSelectedIndexChanged;
-         Globals.MapWindow._modifierComboBox.TextChanged -= OnModifierComboBoxTextChanged;
-         Globals.MapWindow.ModifiersLayoutPanel.Controls.Add(Globals.MapWindow._modifierComboBox, 1, 1);
+         Globals.MapWindow.ModifierComboBox.SelectedIndexChanged -= OnModifierComboBoxOnSelectedIndexChanged;
+         Globals.MapWindow.ModifierComboBox.TextChanged -= OnModifierComboBoxTextChanged;
+         Globals.MapWindow.ModifiersLayoutPanel.Controls.Add(Globals.MapWindow.ModifierComboBox, 1, 1);
       }
 
       private void CancelButton_Click(object sender, EventArgs e)
@@ -145,7 +145,7 @@ namespace Editor.Forms
 
       private bool AddOrUpdateModifier()
       {
-         var name = Globals.MapWindow._modifierComboBox.Text;
+         var name = Globals.MapWindow.ModifierComboBox.Text;
          var title = LocalisationTextBox.Text;
          var desc = DescriptionTextBox.Text;
 
@@ -173,10 +173,10 @@ namespace Editor.Forms
          };
          SetModifierLocalisation(ref title, ref desc, ref eventMod);
          Globals.EventModifiers.Add(name, eventMod);
-         Globals.MapWindow._modifierComboBox.Items.Add(name);
-         Globals.MapWindow._modifierComboBox.AutoCompleteCustomSource.Add(name);
-         Globals.MapWindow._modifierComboBox.AutoCompleteMode = AutoCompleteMode.None;
-         Globals.MapWindow._modifierComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+         Globals.MapWindow.ModifierComboBox.Items.Add(name);
+         Globals.MapWindow.ModifierComboBox.AutoCompleteCustomSource.Add(name);
+         Globals.MapWindow.ModifierComboBox.AutoCompleteMode = AutoCompleteMode.None;
+         Globals.MapWindow.ModifierComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
          return true;
       }
 

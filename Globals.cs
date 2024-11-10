@@ -100,7 +100,7 @@ public static class Globals
       }
    }
    private static int _loadingStage = 0;
-   public const int LOADING_STAGES = 40; // Needs to be increased when adding new loading stages
+   public const int LOADING_STAGES = 41; // Needs to be increased when adding new loading stages
    #endregion
    
    public static ConsoleForm? ConsoleForm = null;
@@ -278,7 +278,7 @@ public static class Globals
 // - [x] MelonCoaster easter Egg in Loading Screen
 // - [x] Add a help page that leads to the official Discord
 // - [x] Improve selection modifiers and its GUI by adding more and only listing in context valid options
-// - [ ] Fix the Province Collection Editing gui so that all types work the same and edge cases are handled
+// - [x] Fix the Province Collection Editing gui so that all types work the same and edge cases are handled
 // - [x] Localisation editing for provinces and modifiers
 // - [x] Check if province is selected by color of the pixels instead of bounds or center
 // - [ ] Trade fix

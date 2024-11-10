@@ -7,7 +7,7 @@ namespace Editor.Loading
 {
    public static class GovernmentLoading
    {
-
+      public static string PreDharmaMapping = string.Empty;
       public static void Load()
       {
          var sw = Stopwatch.StartNew();
@@ -43,9 +43,15 @@ namespace Editor.Loading
                continue;
             }
 
+            if (govBlock.Name.Equals("pre_dharma_mapping"))
+            {
+               PreDharmaMapping = govBlock.GetContent;
+               continue;
+            }
+
             var government = new Government(govBlock.Name);
             ParseGovernmentContent(govBlock.GetContent, ref government);
-
+            
             foreach (var govSubBLock in govBlock.GetBlockElements)
             {
                switch (govSubBLock.Name)
@@ -93,6 +99,13 @@ namespace Editor.Loading
                         government.ReformLevels.Add(reformLevel);
                      }
                      break;
+                  case "color":
+                     if (!Parsing.TryParseColor(govSubBLock.GetContent, out government.Color))
+                        Globals.ErrorLog.Write($"Error in {filePath} : Failed to parse color {govSubBLock.GetContent}");
+                     break;
+                  default:
+                     Globals.ErrorLog.Write($"Error in {filePath} : Unknown block {govSubBLock.Name}");
+                     break;
                }
             }
 
@@ -100,13 +113,27 @@ namespace Editor.Loading
             {
                ParseGovernmentContent(govProperty.Value, ref government);
             }
+
+            governments.Add(government);
          }
 
       }
 
       private static void ParseGovernmentContent(string content, ref Government government)
       {
-
+         var kvps = Parsing.GetKeyValueList(content);
+         foreach (var kvp in kvps)
+         {
+            switch (kvp.Key)
+            {
+               case "basic_reform":
+                  government.BasicReform = Globals.GovernmentReforms[kvp.Value];
+                  break;
+               default:
+                  Globals.ErrorLog.Write($"Error in government {government.Name} : Unknown property {kvp.Key}");
+                  break;
+            }
+         }
       }
    }
 }

@@ -1,9 +1,7 @@
 ﻿using System.Globalization;
 using System.Text;
-using System.Text.RegularExpressions;
 using Editor.Helper;
 using Editor.Interfaces;
-using Editor.Parser;
 using Editor.Savers;
 
 namespace Editor.DataClasses.GameDataClasses
@@ -168,7 +166,7 @@ namespace Editor.DataClasses.GameDataClasses
       public EventModifier(string name, ObjEditingStatus status = ObjEditingStatus.Modified)
       {
          Name = name;
-         EditingStatus = status;
+         base.EditingStatus = status;
       }
 
       public EventModifier(string name, ref PathObj path) : this(name, ObjEditingStatus.Unchanged)

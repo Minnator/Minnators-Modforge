@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 

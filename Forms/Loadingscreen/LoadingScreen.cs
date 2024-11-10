@@ -174,9 +174,11 @@ namespace Editor.Forms.Loadingscreen
             bw.ReportProgress(++progress);
             AdjacenciesLoading.Load();
             bw.ReportProgress(++progress);
-            ModifierParser.Demilitarize();
-            bw.ReportProgress(++progress);
             UnitTypeLoading.Load();
+            bw.ReportProgress(++progress);
+            IdeasLoading.Load();
+            bw.ReportProgress(++progress);
+            ModifierParser.Demilitarize();
             bw.ReportProgress(++progress);
          }
          catch (Exception exception)

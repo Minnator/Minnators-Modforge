@@ -131,10 +131,10 @@ public class SavingSettings
    public FileSavingMode FileSavingMode { get; set; } = FileSavingMode.AskOnce;
 
    [Description("The location where the loading log will be saved")]
-   public string LoadingLogLocation { get; set; } = Path.Combine(Globals.DownloadsFolder, "Loading");
+   public string LoadingLogLocation { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
 
    [Description("The location where the error log will be saved")]
-   public string ErrorLogLocation { get; set; } = Path.Combine(Globals.DownloadsFolder, "Errors");
+   public string ErrorLogLocation { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
 
    public override bool Equals(object? obj)
    {

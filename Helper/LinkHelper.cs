@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Microsoft.Win32;
 
 namespace Editor.Helper
 {
@@ -39,5 +40,22 @@ namespace Editor.Helper
       }
 
       public static bool IsDiscordRunning => Process.GetProcessesByName("Discord").Length > 0;
+
+      public static void Open(string app, string args, bool newWindow)
+      {
+         using var myProcess = new Process();
+         myProcess.StartInfo.UseShellExecute = true;
+         myProcess.StartInfo.FileName = app;
+         myProcess.StartInfo.Arguments = args;
+         myProcess.StartInfo.CreateNoWindow = newWindow;
+         myProcess.Start();
+      }
+
+      public static void OpenVsCode(string filePath, bool newWindow)
+      {
+         Open("code", filePath, newWindow);
+      }
+
    }
+
 }

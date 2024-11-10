@@ -175,6 +175,7 @@
          label13 = new Label();
          TradeCenterComboBox = new ComboBox();
          tableLayoutPanel2 = new TableLayoutPanel();
+         OpenProvinceFileButton = new Button();
          SaveAllProvincesButton = new Button();
          SaveAllModifiedButton = new Button();
          SaveCurrentSelectionButton = new Button();
@@ -1780,11 +1781,13 @@
          // 
          // tableLayoutPanel2
          // 
-         tableLayoutPanel2.ColumnCount = 3;
+         tableLayoutPanel2.ColumnCount = 4;
          ProvinceEditingLayout.SetColumnSpan(tableLayoutPanel2, 2);
-         tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-         tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-         tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+         tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+         tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+         tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+         tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+         tableLayoutPanel2.Controls.Add(OpenProvinceFileButton, 3, 0);
          tableLayoutPanel2.Controls.Add(SaveAllProvincesButton, 0, 0);
          tableLayoutPanel2.Controls.Add(SaveAllModifiedButton, 1, 0);
          tableLayoutPanel2.Controls.Add(SaveCurrentSelectionButton, 2, 0);
@@ -1797,13 +1800,25 @@
          tableLayoutPanel2.Size = new Size(407, 25);
          tableLayoutPanel2.TabIndex = 10;
          // 
+         // OpenProvinceFileButton
+         // 
+         OpenProvinceFileButton.Dock = DockStyle.Fill;
+         OpenProvinceFileButton.Location = new Point(305, 0);
+         OpenProvinceFileButton.Margin = new Padding(2, 0, 2, 0);
+         OpenProvinceFileButton.Name = "OpenProvinceFileButton";
+         OpenProvinceFileButton.Size = new Size(100, 25);
+         OpenProvinceFileButton.TabIndex = 3;
+         OpenProvinceFileButton.Text = "Open file";
+         OpenProvinceFileButton.UseVisualStyleBackColor = true;
+         OpenProvinceFileButton.Click += OpenProvinceFileButton_Click;
+         // 
          // SaveAllProvincesButton
          // 
          SaveAllProvincesButton.Dock = DockStyle.Fill;
          SaveAllProvincesButton.Location = new Point(2, 0);
          SaveAllProvincesButton.Margin = new Padding(2, 0, 2, 0);
          SaveAllProvincesButton.Name = "SaveAllProvincesButton";
-         SaveAllProvincesButton.Size = new Size(131, 25);
+         SaveAllProvincesButton.Size = new Size(97, 25);
          SaveAllProvincesButton.TabIndex = 0;
          SaveAllProvincesButton.Text = "Save all";
          SaveAllProvincesButton.UseVisualStyleBackColor = true;
@@ -1812,24 +1827,24 @@
          // SaveAllModifiedButton
          // 
          SaveAllModifiedButton.Dock = DockStyle.Fill;
-         SaveAllModifiedButton.Location = new Point(137, 0);
+         SaveAllModifiedButton.Location = new Point(103, 0);
          SaveAllModifiedButton.Margin = new Padding(2, 0, 2, 0);
          SaveAllModifiedButton.Name = "SaveAllModifiedButton";
-         SaveAllModifiedButton.Size = new Size(131, 25);
+         SaveAllModifiedButton.Size = new Size(97, 25);
          SaveAllModifiedButton.TabIndex = 1;
-         SaveAllModifiedButton.Text = "Save all modified";
+         SaveAllModifiedButton.Text = "Save modified";
          SaveAllModifiedButton.UseVisualStyleBackColor = true;
          SaveAllModifiedButton.Click += SaveAllModifiedButton_Click;
          // 
          // SaveCurrentSelectionButton
          // 
          SaveCurrentSelectionButton.Dock = DockStyle.Fill;
-         SaveCurrentSelectionButton.Location = new Point(272, 0);
+         SaveCurrentSelectionButton.Location = new Point(204, 0);
          SaveCurrentSelectionButton.Margin = new Padding(2, 0, 2, 0);
          SaveCurrentSelectionButton.Name = "SaveCurrentSelectionButton";
-         SaveCurrentSelectionButton.Size = new Size(133, 25);
+         SaveCurrentSelectionButton.Size = new Size(97, 25);
          SaveCurrentSelectionButton.TabIndex = 2;
-         SaveCurrentSelectionButton.Text = "Save cur. selection";
+         SaveCurrentSelectionButton.Text = "Save selection";
          SaveCurrentSelectionButton.UseVisualStyleBackColor = true;
          SaveCurrentSelectionButton.Click += SaveCurrentSelectionButton_Click;
          // 
@@ -1986,7 +2001,7 @@
          CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 23F));
          CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 124F));
          CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-         CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 131F));
+         CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 151F));
          CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 224F));
          CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 65F));
          CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
@@ -2199,7 +2214,7 @@
          GovernmentGroupBox.Location = new Point(3, 175);
          GovernmentGroupBox.Name = "GovernmentGroupBox";
          GovernmentGroupBox.Padding = new Padding(1);
-         GovernmentGroupBox.Size = new Size(395, 125);
+         GovernmentGroupBox.Size = new Size(395, 145);
          GovernmentGroupBox.TabIndex = 4;
          GovernmentGroupBox.TabStop = false;
          GovernmentGroupBox.Text = "Government";
@@ -2220,7 +2235,7 @@
          GovernmentLayoutPanel.RowCount = 2;
          GovernmentLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
          GovernmentLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         GovernmentLayoutPanel.Size = new Size(393, 107);
+         GovernmentLayoutPanel.Size = new Size(393, 127);
          GovernmentLayoutPanel.TabIndex = 0;
          // 
          // label36
@@ -2622,6 +2637,7 @@
       private ToolStripMenuItem bugReportToolStripMenuItem;
       private ToolStripMenuItem crashReportToolStripMenuItem;
       private ToolStripMenuItem loadDDSFilesTestToolStripMenuItem;
+      private Button OpenProvinceFileButton;
    }
 }
 
