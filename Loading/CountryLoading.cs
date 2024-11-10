@@ -48,6 +48,14 @@ namespace Editor.Loading
          Globals.LoadingLog.WriteTimeStamp("Loading CountryHistories", sw.ElapsedMilliseconds);
       }
 
+      public static void LoadProvincesToCountries()
+      {
+         var sw = Stopwatch.StartNew();
+         AssignProvinces();
+         sw.Stop();
+         Globals.LoadingLog.WriteTimeStamp("Country province init", sw.ElapsedMilliseconds);
+      }
+
       private static void LoadCountryHistories()
       {
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "history", "countries");
@@ -462,6 +470,22 @@ namespace Editor.Loading
       }
 
       #endregion
+      public static void AssignProvinces()
+      {
+         foreach (var province in Globals.Provinces)
+         {
+            if (province.Owner == Tag.Empty)
+               continue;
 
+            if (!Globals.Countries.TryGetValue(province.Owner, out var country))
+            {
+               Globals.ErrorLog.Write($"Province {province.Id} has unknown country owner: {province.Owner}");
+               continue;
+            }
+
+            country.Add(province);
+         }
+      }
    }
+
 }

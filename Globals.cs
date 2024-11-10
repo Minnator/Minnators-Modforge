@@ -169,7 +169,6 @@ public static class Globals
    public static Dictionary<int, Province> ProvinceIdToProvince = [];
    public static Dictionary<int, Province> ColorToProvId = [];
    public static Dictionary<Province, Province[]> AdjacentProvinces = [];
-   public static HashSet<Province> Capitals = [];
    public static HashSet<Strait> Straits = [];
 
    // TechnologyGroups

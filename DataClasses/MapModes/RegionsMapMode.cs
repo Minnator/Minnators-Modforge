@@ -20,12 +20,12 @@ public sealed class RegionsMapMode : MapMode
 
    public override int GetProvinceColor(Province id)
    {
-      if (id.Area != Area.Empty)
-         if (id.Area.Region != Region.Empty)
+      if (id.GetArea() != Area.Empty)
+         if (id.GetArea().Region != Region.Empty)
          {
             try
             {
-               return id.Area.Region.Color.ToArgb();
+               return id.GetArea().Region.Color.ToArgb();
             }
             catch (Exception)
             {
@@ -38,8 +38,8 @@ public sealed class RegionsMapMode : MapMode
 
    public override string GetSpecificToolTip(Province province)
    {
-      if (province.Area != Area.Empty)
-            return $"Region: {province.Area.Region.Name} ({Localisation.GetLoc(province.Area.Region.Name)})";
+      if (province.GetArea() != Area.Empty)
+            return $"Region: {province.GetArea().Region.Name} ({Localisation.GetLoc(province.GetArea().Region.Name)})";
       return "Region: [Unknown]";
    }
 }

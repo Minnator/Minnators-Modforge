@@ -1,4 +1,6 @@
-﻿using Editor.Helper;
+﻿using System.ComponentModel;
+using Editor.Helper;
+using Newtonsoft.Json;
 
 namespace Editor.DataClasses.GameDataClasses;
 
@@ -26,68 +28,72 @@ public enum CountrySetter
 
 public class Country(Tag tag, Color color, string fileName) : ProvinceCollection<Province>(tag.ToString(), color)
 {
-   public Tag Tag { get; } = tag;
-   public Tag ColonialParent { get; set; } = Tag.Empty;
-   public string FileName { get; } = fileName;
    public new static Country Empty => new(Tag.Empty, Color.Empty, string.Empty);
+   [Browsable(false)]
+   public Tag Tag { get; set; } = tag;
+   [Browsable(false)]
+   public Tag ColonialParent { get; set; } = Tag.Empty;
+   [Browsable(false)]
+   public string FileName { get; } = fileName;
+   [Browsable(false)]
    public Color RevolutionaryColor { get; set; } = Color.Empty;
+   [Browsable(false)]
    public string Gfx { get; set; } = string.Empty;
+   [Browsable(false)]
    public string HistoricalCouncil { get; set; } = string.Empty;
    public string PreferredReligion { get; set; } = string.Empty;
    public string SpecialUnitCulture { get; set; } = string.Empty;
    public int HistoricalScore { get; set; } = 0;
    public bool CanBeRandomNation { get; set; } = true;
+   [Browsable(false)]
    public List<ModifierAbstract> Modifiers { get; set; } = [];
+   [Browsable(false)]
    public List<RulerModifier> RulerModifiers { get; set; } = [];
    public List<string> HistoricalIdeas { get; set; } = [];
    public List<string> HistoricalUnits { get; set; } = [];
    public List<string> CustomAttributes { get; set; } = [];
+   [Browsable(false)]
    public List<MonarchName> MonarchNames { get; set; } = [];
+   [Browsable(false)]
    public List<string> ShipNames { get; set; } = [];
+   [Browsable(false)]
    public List<string> FleeTNames { get; set; } = [];
+   [Browsable(false)]
    public List<string> ArmyNames { get; set; } = [];
+   [Browsable(false)]
    public List<string> LeaderNames { get; set; } = [];
    // Effects on initialization
+   [Browsable(false)]
    public List<Effect> InitialEffects { get; set; } = [];
    // HISTORY
+   [Browsable(false)]
    public List<string> GovernmentReforms { get; set; } = [];
+   [Browsable(false)]
    public List<string> AcceptedCultures { get; set; } = [];
    public List<string> UnlockedCults { get; set; } = [];
    public List<string> EstatePrivileges { get; set; } = [];
    public List<string> HarmonizedReligions { get; set; } = [];
    public string SecondaryReligion { get; set; } = string.Empty;
+   [Browsable(false)]
    public string Government { get; set; } = string.Empty;
+   [Browsable(false)]
    public string PrimaryCulture { get; set; } = string.Empty;
+   [Browsable(false)]
    public string Religion { get; set; } = string.Empty;
+   [Browsable(false)]
    public string TechnologyGroup { get; set; } = string.Empty;
    public string ReligiousSchool { get; set; } = string.Empty;
+   [Browsable(false)]
    public string UnitType { get; set; } = string.Empty;
+   [Browsable(false)]
    public Mana NationalFocus { get; set; } = Mana.NONE;
    public List<Tag> HistoricalRivals { get; set; } = [];
    public List<Tag> HistoricalFriends { get; set; } = [];
+   [Browsable(false)]
    public int GovernmentRank { get; set; } = 0;
-   private Province _capital = Province.Empty;
-   private Color _color = Color.Empty;
-
-   public Province Capital
-   {
-      get => _capital;
-      set
-      {
-         if (value == Province.Empty)
-            return;
-         // Keeping the capitals list up to date to have a list of all capitals of nations which are currently on the map
-         lock (Globals.Capitals)
-         {
-            if (Exists)
-            {
-               Globals.Capitals.Add(value);
-            }
-            Globals.Capitals.Remove(_capital);
-         }
-         _capital = value;
-      }
-   }
+   [Browsable(false)]
+   [JsonIgnore]
+   public Province Capital { get; set; } = Province.Empty;
 
    public int FixedCapital { get; set; } = -1;
    public int ArmyTradition { get; set; } = 0;
@@ -96,69 +102,41 @@ public class Country(Tag tag, Color color, string fileName) : ProvinceCollection
    public float Prestige { get; set; } = 0;
    public bool IsElector { get; set; } = false;
 
+   [Browsable(false)]
    public List<CountryHistoryEntry> History { get; set; } = [];
 
    public CountryHistoryEntry? GetClosestAfterDate(DateTime date)
    {
-      if (!History.Any())
+      if (History.Count == 0)
          return null;
       return History.OrderBy(h => h.Date).FirstOrDefault(h => h.Date > date);
    }
 
-   public List<Province> GetOwnedProvinces
+   public ICollection<Province> GetCoreProvinces()
    {
-      get
+      ICollection<Province> provinces = [];
+      foreach (var id in Globals.LandProvinces)
       {
-         List<Province> provinces = [];
-         foreach (var id in Globals.LandProvinces)
-         {
-            if (id.Owner == Tag)
-               provinces.Add(id);
-         }
-         return provinces;
+         if (id.Cores.Contains(Tag))
+            provinces.Add(id);
       }
+      return provinces;
    }
 
-   public List<int> GetCoreProvinces
+   public ICollection<Province> GetGetClaimedProvinces()
    {
-      get
+      ICollection<Province> provinces = [];
+      foreach (var id in Globals.LandProvinces)
       {
-         List<int> provinces = [];
-         foreach (var id in Globals.LandProvinces)
-         {
-            if (id.Cores.Contains(Tag))
-               provinces.Add(id);
-         }
-         return provinces;
+         if (id.Claims.Contains(Tag))
+            provinces.Add(id);
       }
+      return provinces;
    }
 
-   public List<int> GetClaimedProvinces
-   {
-      get
-      {
-         List<int> provinces = [];
-         foreach (var id in Globals.LandProvinces)
-         {
-            if (id.Claims.Contains(Tag))
-               provinces.Add(id);
-         }
-         return provinces;
-      }
-   }
-
-   public bool Exists
-   {
-      get
-      {
-         foreach (var id in Globals.LandProvinces)
-         {
-            if (id.Owner == Tag)
-               return true;
-         }
-         return false;
-      }
-   }
+   [Browsable(false)]
+   [JsonIgnore]
+   public bool Exists => SubCollection.Count > 0;
 
    public string GetLocalisation()
    {

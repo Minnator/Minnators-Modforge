@@ -17,21 +17,5 @@ namespace Editor.Helper
          return capitals;
       }
 
-      public static void CrossCheckCapitals()
-      {
-         var capitals = GetAllVisibleCapitals();
-         foreach (var cap in capitals)
-         {
-            Globals.Capitals.Remove(cap);
-         }
-
-         Debug.WriteLine($"{Globals.Capitals.Count} were wrong");
-      }
-
-      public static void CorrectCapitals()
-      {
-         Globals.Capitals = [..GetAllVisibleCapitals()];
-
-      }
    }
 }

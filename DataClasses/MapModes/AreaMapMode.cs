@@ -22,15 +22,15 @@ public sealed class AreaMapMode : MapMode
 
    public override int GetProvinceColor(Province id)
    {
-      if (id.Area != Area.Empty )
-         return id.Area.Color.ToArgb();
+      if (id.GetArea() != Area.Empty )
+         return id.GetArea().Color.ToArgb();
       return Color.DarkGray.ToArgb();
    }
 
    public override string GetSpecificToolTip(Province provinceId)
    {
       if (Globals.Provinces.TryGetValue(provinceId, out var province))
-            return $"Area: {province.Area.Name} ({Localisation.GetLoc(province.Area.Name)})";
+            return $"Area: {province.GetArea().Name} ({Localisation.GetLoc(province.GetArea().Name)})";
       return "Area: [Unknown]";
    }
 }

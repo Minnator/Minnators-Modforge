@@ -118,7 +118,7 @@ public static class Geometry
       return new Rectangle(minX, minY, maxX - minX, maxY - minY);
    }
    
-   public static Rectangle GetBounds(List<Province> provinces)
+   public static Rectangle GetBounds(ICollection<Province> provinces)
    {
       List<Rectangle> rects = [];
       foreach (var province in provinces) 
@@ -129,11 +129,9 @@ public static class Geometry
    public static List<Province> GetVisibleCapitals(HashSet<Province> provs)
    {
       List<Province> provinces = [];
-      foreach (var province in Globals.Capitals)
-      {
-         if (provs.Contains(province))
-            provinces.Add(province);
-      }
+      foreach (var p in provs)
+         if (Globals.Countries.TryGetValue(p.Owner, out var country) && country.Capital == p)
+            provinces.Add(p);
       return provinces;
    }
 

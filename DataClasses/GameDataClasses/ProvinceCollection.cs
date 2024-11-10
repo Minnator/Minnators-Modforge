@@ -1,29 +1,30 @@
-﻿using Editor.DataClasses;
+﻿using System.ComponentModel;
+using Editor.Commands;
 using Editor.DataClasses.Commands;
 using Editor.Helper;
-using Editor.Commands;
 using Editor.Interfaces;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
-using Timer = System.Threading.Timer;
+using Newtonsoft.Json;
 
 namespace Editor.DataClasses.GameDataClasses;
 
 public class ProvinceCollectionEventArguments<T>(ProvinceCollectionType type, ICollection<T> composite)
 {
-   public ProvinceCollectionType Type = type;
-   public ICollection<T> Composite = composite;
+   public readonly ProvinceCollectionType Type = type;
+   public readonly ICollection<T> Composite = composite;
 
 }
 
+// TODO add a flag to not edit the collection but the items in the collection
 public abstract class ProvinceCollection<T>(string name, Color color) : ProvinceComposite(name, color) where T : ProvinceComposite
-   // Area, Region, SuperRegion, TradeNode, TradeCompany, Continent, ProvinceGroup
+   // Area, Region, SuperRegion, TradeNode, TradeCompany, Continent, ProvinceGroup, Country
 {
-   private ICollection<T> _subCollection = [];
+   private readonly ICollection<T> _subCollection = [];
 
+   [Browsable(false)]
    internal ICollection<T> SubCollection
    {
       get => _subCollection;
-      set
+      init
       {
          AddRange(value);
          SetBounds();
@@ -217,7 +218,9 @@ public abstract class ProvinceComposite(string name, Color color) : Saveable// P
    public List<ProvinceComposite> Parents = [];
    public Rectangle Bounds = Rectangle.Empty;
    private Color _color = color;
+   [Browsable(false)]
    public string GetTitleLocKey => Name;
+   [Browsable(false)]
    public string GetDescriptionLocKey => $"desc_{Name}";
    public abstract ICollection<Province> GetProvinces();
    public abstract ICollection<int> GetProvinceIds();

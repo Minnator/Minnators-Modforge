@@ -25,7 +25,7 @@ namespace Editor.Controls
          }
          else
          {
-            var provinces = Globals.Countries[CountryTag].GetOwnedProvinces;
+            var provinces = Globals.Countries[CountryTag].GetProvinces();
             Globals.ZoomControl.FocusOn(Geometry.GetBounds(provinces));
             Selection.AddProvincesToSelection(provinces);
          }

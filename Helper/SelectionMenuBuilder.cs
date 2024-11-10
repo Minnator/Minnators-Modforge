@@ -38,8 +38,8 @@ namespace Editor.Helper
             if (Selection.LastHoveredProvince == Province.Empty)
                return;
 
-            if (Selection.LastHoveredProvince.Area != Area.Empty)
-               Globals.HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.Area), CommandHistoryType.ComplexSelection);
+            if (Selection.LastHoveredProvince.GetArea() != Area.Empty)
+               Globals.HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.GetArea()), CommandHistoryType.ComplexSelection);
             
          });
       }
@@ -51,9 +51,9 @@ namespace Editor.Helper
             if (Selection.LastHoveredProvince == Province.Empty)
                return;
 
-            if (Selection.LastHoveredProvince.Area != Area.Empty)
-               if (Selection.LastHoveredProvince.Area.Region != Region.Empty)
-                     Globals.HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.Area.Region.GetProvinces()), CommandHistoryType.ComplexSelection);
+            if (Selection.LastHoveredProvince.GetArea() != Area.Empty)
+               if (Selection.LastHoveredProvince.GetArea().Region != Region.Empty)
+                     Globals.HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.GetArea().Region.GetProvinces()), CommandHistoryType.ComplexSelection);
          });
       }
 
@@ -64,10 +64,10 @@ namespace Editor.Helper
             if (Selection.LastHoveredProvince == Province.Empty)
                return;
 
-            if (Selection.LastHoveredProvince.Area != Area.Empty)
-               if (Selection.LastHoveredProvince.Area.Region != Region.Empty)
-                  if (Selection.LastHoveredProvince.Area.Region.SuperRegion != SuperRegion.Empty)
-                        Globals.HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.Area.Region.SuperRegion.GetProvinces()), CommandHistoryType.ComplexSelection);
+            if (Selection.LastHoveredProvince.GetArea() != Area.Empty)
+               if (Selection.LastHoveredProvince.GetArea().Region != Region.Empty)
+                  if (Selection.LastHoveredProvince.GetArea().Region.SuperRegion != SuperRegion.Empty)
+                        Globals.HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.GetArea().Region.SuperRegion.GetProvinces()), CommandHistoryType.ComplexSelection);
          });
       }
 
@@ -78,8 +78,8 @@ namespace Editor.Helper
             if (Selection.LastHoveredProvince == Province.Empty)
                return;
 
-            if (Selection.LastHoveredProvince.Continent != Continent.Empty)
-                  Globals.HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.Continent), CommandHistoryType.ComplexSelection);
+            if (Selection.LastHoveredProvince.GetContinent() != Continent.Empty)
+                  Globals.HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.GetContinent()), CommandHistoryType.ComplexSelection);
          });
       }
 

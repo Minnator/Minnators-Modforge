@@ -1,5 +1,7 @@
-﻿using Editor.DataClasses;
+﻿using System.ComponentModel;
+using Editor.DataClasses;
 using Editor.Helper;
+using Newtonsoft.Json;
 
 namespace Editor.Interfaces;
 
@@ -15,9 +17,12 @@ public abstract class Saveable
 {
    protected ObjEditingStatus _editingStatus = ObjEditingStatus.Unchanged;
    private PathObj _path = PathObj.Empty;
+   [Browsable(false)]
+   [JsonIgnore]
    public PathObj Path => _path;
    public void SetPath(ref PathObj path) => _path = path;
 
+   [Browsable(false)]
    public virtual ObjEditingStatus EditingStatus
    {
       get => _editingStatus;

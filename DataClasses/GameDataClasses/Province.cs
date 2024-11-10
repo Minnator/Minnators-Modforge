@@ -5,6 +5,7 @@ using Editor.Interfaces;
 using Editor.ParadoxLanguage.Scope;
 using Editor.Parser;
 using Editor.Savers;
+using Newtonsoft.Json;
 using static Editor.Events.ProvinceEventHandler;
 using static Editor.Helper.ProvinceEnumHelper;
 
@@ -109,27 +110,18 @@ public class Province(int id, Color color) : ProvinceComposite(id.ToString(), co
    public Point[] Borders { get; set; } = [];
 
    #endregion
+   #region Globals from the game
+
+   #endregion
 
    // Events for the ProvinceValues will only be raised if the State is Running otherwise they will be suppressed to improve performance when loading
 
    #region Globals from the game
 
    // Globals from the Game
-   public Area Area
-   {
-      get
-      {
-         return GetFirstParentOfType(SaveableType.Area) as Area ?? Area.Empty;
-      }
-   }
+   public Area GetArea() => GetFirstParentOfType(SaveableType.Area) as Area ?? Area.Empty;
 
-   public Continent Continent
-   {
-      get
-      {
-         return GetFirstParentOfType(SaveableType.Continent) as Continent ?? Continent.Empty;
-      }
-   }
+   public Continent GetContinent() => GetFirstParentOfType(SaveableType.Continent) as Continent ?? Continent.Empty;
 
    #endregion
 
@@ -188,13 +180,21 @@ public class Province(int id, Color color) : ProvinceComposite(id.ToString(), co
       {
          if (_data.Owner == value)
             return;
-         _data.Owner = value;
+
          if (Globals.State == State.Running)
+         {
             RaiseProvinceOwnerChanged(this, value, nameof(Owner));
-         // Trigger an update of the countries capital which will add the capital to the list of capitals if it is not already there 
-         // as a nation could be spawned on the map by setting it as a province owner, and thus it could require to have its capital drawn
-         if (Globals.State == State.Running && Globals.Countries.TryGetValue(_data.Owner, out var country))
-            country.Capital = country.Capital;
+            if (Globals.Countries.TryGetValue(_data.Owner, out var valueOldOwner))
+               valueOldOwner.Remove(this);
+            if (!Globals.Countries.TryGetValue(value, out var owner))
+               return;
+            _data.Owner = value;
+            owner.Add(this);
+         }
+         else
+         {
+            _data.Owner = value;
+         }
       }
    }
 
@@ -583,7 +583,9 @@ public class Province(int id, Color color) : ProvinceComposite(id.ToString(), co
    }
 
    #endregion
+   [JsonIgnore]
    public bool IsNonRebelOccupied => Owner != Controller && Controller != "REB";
+   [JsonIgnore]
    public int GetOccupantColor
    {
       get
@@ -599,6 +601,7 @@ public class Province(int id, Color color) : ProvinceComposite(id.ToString(), co
       }
    }
 
+   [JsonIgnore]
    public string GetTradeCompany
    {
       get
@@ -624,7 +627,7 @@ public class Province(int id, Color color) : ProvinceComposite(id.ToString(), co
    /// </summary>
    public void InitializeInitial()
    {
-      ProvinceData.Area = Area;
+      ProvinceData.Area = GetArea();
       ProvinceData.Claims = Claims;
       ProvinceData.PermanentClaims = PermanentClaims;
       ProvinceData.Cores = Cores;
@@ -670,7 +673,7 @@ public class Province(int id, Color color) : ProvinceComposite(id.ToString(), co
    /// </summary>
    public void ResetHistory()
    {
-      Area.Add(this);
+      GetArea().Add(this);
       Claims = ProvinceData.Claims;
       PermanentClaims = ProvinceData.PermanentClaims;
       Cores = ProvinceData.Cores;
@@ -774,8 +777,8 @@ public class Province(int id, Color color) : ProvinceComposite(id.ToString(), co
          ProvAttrGet.base_tax => BaseTax,
          ProvAttrGet.base_production => BaseProduction,
          ProvAttrGet.total_development => GetTotalDevelopment(),
-         ProvAttrGet.area => Area, 
-         ProvAttrGet.continent => Continent,
+         ProvAttrGet.area => GetArea(), 
+         ProvAttrGet.continent => GetContinent(),
          ProvAttrGet.claims => Claims,
          ProvAttrGet.permanent_claims => PermanentClaims,
          ProvAttrGet.cores => Cores,
@@ -1127,6 +1130,7 @@ public class Province(int id, Color color) : ProvinceComposite(id.ToString(), co
       return Localisation.GetLoc(GetLocalisationString());
    }
 
+   [JsonIgnore]
    public string GetLocalisationAdj => $"PROV_ADJ{Id}";
 
    public string GetLocalisationString()
@@ -1236,13 +1240,16 @@ public class Province(int id, Color color) : ProvinceComposite(id.ToString(), co
 
    public override string ToString()
    {
-      return $"{Id} ({GetLocalisation()} ";
+      return $"{Id} ({GetLocalisation()})";
    }
 
 
    public static EventHandler<ProvinceComposite> ColorChanged = delegate { };
+   [JsonIgnore]
    public EventHandler<ProvinceComposite> ItemAddedToArea = delegate { };
+   [JsonIgnore]
    public EventHandler<ProvinceComposite> ItemRemovedFromArea = delegate { };
+   [JsonIgnore]
    public EventHandler<ProvinceComposite> ItemModified = delegate { };
 
    public override void ColorInvoke(ProvinceComposite composite)
@@ -1255,5 +1262,5 @@ public class Province(int id, Color color) : ProvinceComposite(id.ToString(), co
       ColorChanged += handler;
    }
 
-   public new static Province Empty => new (-1, System.Drawing.Color.Empty);
+   public new static Province Empty => new (-1, Color.Empty);
 }

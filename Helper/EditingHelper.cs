@@ -2,6 +2,7 @@
 using System.Reflection;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Interfaces;
+using Newtonsoft.Json;
 
 namespace Editor.Helper
 {
@@ -94,7 +95,19 @@ namespace Editor.Helper
 
          return true;
       }
-      
+
+      public static bool DeepCopy(object obj, out object? copy)
+      {
+         if (obj == null!)
+         {
+            copy = null;
+            return false;
+         }
+
+         var json = JsonConvert.SerializeObject(obj);
+         copy = JsonConvert.DeserializeObject(json, obj.GetType());
+         return copy != null;
+      }
    }
 
 }

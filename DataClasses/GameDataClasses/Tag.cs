@@ -2,13 +2,13 @@
 
 namespace Editor.DataClasses.GameDataClasses;
 
-public readonly struct Tag(string tag)
+public readonly struct Tag(string tag) : IEquatable<Tag>
 {
-   public string GetTag => tag.ToUpper();
+   public string _tag { get; init; } = tag;
 
    public override string ToString()
    {
-      return GetTag;
+      return _tag;
    }
 
    public static Tag FromString(string tag)
@@ -21,19 +21,17 @@ public readonly struct Tag(string tag)
 
    public override bool Equals(object? obj)
    {
-      if (obj is Tag other)
-         return GetTag == other.GetTag;
-      return false;
+      return obj is Tag other && Equals(other);
    }
 
    public override int GetHashCode()
    {
-      return GetTag.GetHashCode();
+      return _tag.GetHashCode();
    }
 
    public static implicit operator string(Tag tag)
    {
-      return tag.GetTag;
+      return tag._tag;
    }
 
    public static implicit operator Tag(string tag)
@@ -43,12 +41,12 @@ public readonly struct Tag(string tag)
 
    public static bool operator ==(Tag a, Tag b)
    {
-      return a.GetTag == b.GetTag;
+      return a._tag == b._tag;
    }
 
    public static bool operator !=(Tag a, Tag b)
    {
-      return a.GetTag != b.GetTag;
+      return a._tag != b._tag;
    }
 
    // Add an empty state to the Tag struct
@@ -73,5 +71,10 @@ public readonly struct Tag(string tag)
    public bool IsValid()
    {
       return Globals.Countries.ContainsKey(this);
+   }
+
+   public bool Equals(Tag other)
+   {
+      return _tag == other._tag;
    }
 }

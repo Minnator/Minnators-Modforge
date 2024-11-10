@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.MapModes;
 using static Editor.Helper.ProvinceEnumHelper;
 using Region = Editor.DataClasses.GameDataClasses.Region;
 
@@ -8,6 +9,11 @@ namespace Editor.Helper
 {
    public static class ProvColHelper
    {
+      public enum AdvancedPropertiesEditables
+      {
+         Country,
+      }
+
       public static ICollection<string> GetProvinceCollectionNames(SaveableType type)
       {
          return type switch
@@ -130,7 +136,22 @@ namespace Editor.Helper
          }
       }
 
-      // Methode type, name 
+      public static bool SetObjectInCollectionIfExists(object obj)
+      {
+         var converted = Convert.ChangeType(obj, obj.GetType());
+         switch (converted)
+         {
+            case Country country:
+               if (!Globals.Countries.TryGetValue(country.Tag, out _))
+                  return false;
+               Globals.Countries[country.Tag] = country;
+               if (Globals.MapModeManager.CurrentMapModeType == MapModeType.Country)
+                  Globals.MapModeManager.RenderCurrent();
+               return true;
+            default:
+               return false;
+         }
+      }
 
       public static List<Province> GetProvincesWithAttribute(string attribute, object value, bool onlyLandProvinces = true)
       {

@@ -148,6 +148,8 @@ namespace Editor.Forms.Loadingscreen
             bw.ReportProgress(++progress);
             PositionsLoading.Load();
             bw.ReportProgress(++progress);
+            CultureLoading.LoadCultures();
+            bw.ReportProgress(++progress);
             ProvinceParser.ParseAllUniqueProvinces();
             bw.ReportProgress(++progress);
             AreaLoading.LoadNew();
@@ -166,11 +168,9 @@ namespace Editor.Forms.Loadingscreen
             bw.ReportProgress(++progress);
             ColonialRegionsLoading.Load();
             bw.ReportProgress(++progress);
-            CultureLoading.LoadCultures();
+            ScopeParser.GenerateCountryScope();
             bw.ReportProgress(++progress);
             CountryLoading.LoadCountries();
-            bw.ReportProgress(++progress);
-            ScopeParser.GenerateCountryScope();
             bw.ReportProgress(++progress);
             AdjacenciesLoading.Load();
             bw.ReportProgress(++progress);
@@ -178,6 +178,8 @@ namespace Editor.Forms.Loadingscreen
             bw.ReportProgress(++progress);
             IdeasLoading.Load();
             bw.ReportProgress(++progress);
+
+            // Disable loading specific stuff
             ModifierParser.Demilitarize();
             bw.ReportProgress(++progress);
          }

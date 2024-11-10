@@ -118,7 +118,7 @@ namespace Editor
          // ALL LOADING COMPLETE - Set the application to running
 
          DateControl.Date = new(1444, 11, 11);
-         CountryDataHelper.CorrectCapitals();
+         CountryLoading.AssignProvinces();
          Globals.State = State.Running;
          Globals.LoadingStage++;
          Globals.MapModeManager.SetCurrentMapMode(MapModeType.Country);
@@ -246,7 +246,7 @@ namespace Editor
 
       private void InitializeProvinceCollectionEditGui()
       {
-         CountryEditingGui = new(ItemTypes.Tag, SaveableType.Country, SaveableType.Province, MapModeType.Country);
+         CountryEditingGui = new(ItemTypes.Id, SaveableType.Country, SaveableType.Province, MapModeType.Country);
          Country.ItemsModified += CountryEditingGui.OnCorrespondingDataChange;
 
          AreaEditingGui = new(ItemTypes.Id, SaveableType.Area, SaveableType.Province, MapModeType.Area);
@@ -268,7 +268,6 @@ namespace Editor
          ProvinceGroup.ItemsModified += ProvinceGroupsEditingGui.OnCorrespondingDataChange;
 
          ProvinceCollectionsLayoutPanel.Controls.Add(CountryEditingGui, 0, 0);
-         CountryEditingGui.Enabled = false;
          ProvinceCollectionsLayoutPanel.Controls.Add(RegionEditingGui, 0, 0);
          ProvinceCollectionsLayoutPanel.Controls.Add(AreaEditingGui, 0, 1);
          ProvinceCollectionsLayoutPanel.Controls.Add(SuperRegionEditingGui, 0, 2);
@@ -1222,6 +1221,26 @@ namespace Editor
                MessageBox.Show($"File not found: {path}");
             }
          }
+      }
+
+      private void roughEditorToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         new RoughEditorForm(Globals.Countries["TUR"]).ShowDialog();
+      }
+
+      private void button2_Click(object sender, EventArgs e)
+      {
+         new RoughEditorForm(Selection.SelectedCountry).ShowDialog();
+      }
+
+      private void AdvancedProvinceEditing_Click(object sender, EventArgs e)
+      {
+         if (Selection.Count != 1)
+         {
+            MessageBox.Show("Only one province can be selected for advanced editing", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+         }
+         new RoughEditorForm(Selection.GetSelectedProvinces[0], false).ShowDialog();
       }
    }
 }

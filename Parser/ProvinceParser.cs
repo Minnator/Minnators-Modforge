@@ -25,13 +25,11 @@ public static class ProvinceParser
    {
       var sw = Stopwatch.StartNew();
       var files = FilesHelper.GetProvinceFilesUniquely();
-      // Get All nested Blocks and Attributes from the files
       var po = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 };
       Parallel.ForEach(files, po, ProcessProvinceFile);
 
       sw.Stop();
       Globals.LoadingLog.WriteTimeStamp("Parsing provinces", sw.ElapsedMilliseconds);
-      //DebugPrints.PrintAllProvinceHistories();
    }
 
    private static void ProcessProvinceFile(string path)

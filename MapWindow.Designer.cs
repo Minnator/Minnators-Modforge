@@ -86,6 +86,7 @@
          bugReportToolStripMenuItem = new ToolStripMenuItem();
          crashReportToolStripMenuItem = new ToolStripMenuItem();
          loadDDSFilesTestToolStripMenuItem = new ToolStripMenuItem();
+         roughEditorToolStripMenuItem = new ToolStripMenuItem();
          ProvinceCollectionsLayoutPanel = new TableLayoutPanel();
          FocusSelectionCheckBox = new CheckBox();
          BottomToolStrip = new ToolStrip();
@@ -175,10 +176,11 @@
          label13 = new Label();
          TradeCenterComboBox = new ComboBox();
          tableLayoutPanel2 = new TableLayoutPanel();
-         OpenProvinceFileButton = new Button();
+         AdvancedProvinceEditing = new Button();
          SaveAllProvincesButton = new Button();
          SaveAllModifiedButton = new Button();
          SaveCurrentSelectionButton = new Button();
+         OpenProvinceFileButton = new Button();
          LocalisationGroupBox = new GroupBox();
          LocTableLayoutPanel = new TableLayoutPanel();
          label39 = new Label();
@@ -211,6 +213,7 @@
          GovernmentLayoutPanel = new TableLayoutPanel();
          label36 = new Label();
          label38 = new Label();
+         button2 = new Button();
          ProvinceGroupsPage = new TabPage();
          ProvinceCollectionsPanel = new Panel();
          ProvinceCollectionsTab = new TableLayoutPanel();
@@ -558,7 +561,7 @@
          // 
          // debugToolStripMenuItem
          // 
-         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem, jsonToolStripMenuItem, bugReportToolStripMenuItem, crashReportToolStripMenuItem, loadDDSFilesTestToolStripMenuItem });
+         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem, jsonToolStripMenuItem, bugReportToolStripMenuItem, crashReportToolStripMenuItem, loadDDSFilesTestToolStripMenuItem, roughEditorToolStripMenuItem });
          debugToolStripMenuItem.Name = "debugToolStripMenuItem";
          debugToolStripMenuItem.Size = new Size(54, 23);
          debugToolStripMenuItem.Text = "Debug";
@@ -651,6 +654,13 @@
          loadDDSFilesTestToolStripMenuItem.Size = new Size(221, 22);
          loadDDSFilesTestToolStripMenuItem.Text = "Load DDS files test";
          loadDDSFilesTestToolStripMenuItem.Click += loadDDSFilesTestToolStripMenuItem_Click;
+         // 
+         // roughEditorToolStripMenuItem
+         // 
+         roughEditorToolStripMenuItem.Name = "roughEditorToolStripMenuItem";
+         roughEditorToolStripMenuItem.Size = new Size(221, 22);
+         roughEditorToolStripMenuItem.Text = "Rough Editor";
+         roughEditorToolStripMenuItem.Click += roughEditorToolStripMenuItem_Click;
          // 
          // ProvinceCollectionsLayoutPanel
          // 
@@ -1781,16 +1791,18 @@
          // 
          // tableLayoutPanel2
          // 
-         tableLayoutPanel2.ColumnCount = 4;
+         tableLayoutPanel2.ColumnCount = 5;
          ProvinceEditingLayout.SetColumnSpan(tableLayoutPanel2, 2);
          tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
          tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
          tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
          tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-         tableLayoutPanel2.Controls.Add(OpenProvinceFileButton, 3, 0);
+         tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 30F));
+         tableLayoutPanel2.Controls.Add(AdvancedProvinceEditing, 3, 0);
          tableLayoutPanel2.Controls.Add(SaveAllProvincesButton, 0, 0);
          tableLayoutPanel2.Controls.Add(SaveAllModifiedButton, 1, 0);
          tableLayoutPanel2.Controls.Add(SaveCurrentSelectionButton, 2, 0);
+         tableLayoutPanel2.Controls.Add(OpenProvinceFileButton, 4, 0);
          tableLayoutPanel2.Dock = DockStyle.Fill;
          tableLayoutPanel2.Location = new Point(0, 791);
          tableLayoutPanel2.Margin = new Padding(0);
@@ -1800,17 +1812,18 @@
          tableLayoutPanel2.Size = new Size(407, 25);
          tableLayoutPanel2.TabIndex = 10;
          // 
-         // OpenProvinceFileButton
+         // AdvancedProvinceEditing
          // 
-         OpenProvinceFileButton.Dock = DockStyle.Fill;
-         OpenProvinceFileButton.Location = new Point(305, 0);
-         OpenProvinceFileButton.Margin = new Padding(2, 0, 2, 0);
-         OpenProvinceFileButton.Name = "OpenProvinceFileButton";
-         OpenProvinceFileButton.Size = new Size(100, 25);
-         OpenProvinceFileButton.TabIndex = 3;
-         OpenProvinceFileButton.Text = "Open file";
-         OpenProvinceFileButton.UseVisualStyleBackColor = true;
-         OpenProvinceFileButton.Click += OpenProvinceFileButton_Click;
+         AdvancedProvinceEditing.Dock = DockStyle.Fill;
+         AdvancedProvinceEditing.Location = new Point(284, 0);
+         AdvancedProvinceEditing.Margin = new Padding(2, 0, 2, 0);
+         AdvancedProvinceEditing.Name = "AdvancedProvinceEditing";
+         AdvancedProvinceEditing.Size = new Size(90, 25);
+         AdvancedProvinceEditing.TabIndex = 4;
+         AdvancedProvinceEditing.Text = "Advanced";
+         GeneralToolTip.SetToolTip(AdvancedProvinceEditing, "!! This allows editing of any data of a province object.\r\nThis is NOT revertable!\r\nDON't change stuff you don't know. Things might break.");
+         AdvancedProvinceEditing.UseVisualStyleBackColor = true;
+         AdvancedProvinceEditing.Click += AdvancedProvinceEditing_Click;
          // 
          // SaveAllProvincesButton
          // 
@@ -1818,7 +1831,7 @@
          SaveAllProvincesButton.Location = new Point(2, 0);
          SaveAllProvincesButton.Margin = new Padding(2, 0, 2, 0);
          SaveAllProvincesButton.Name = "SaveAllProvincesButton";
-         SaveAllProvincesButton.Size = new Size(97, 25);
+         SaveAllProvincesButton.Size = new Size(90, 25);
          SaveAllProvincesButton.TabIndex = 0;
          SaveAllProvincesButton.Text = "Save all";
          SaveAllProvincesButton.UseVisualStyleBackColor = true;
@@ -1827,10 +1840,10 @@
          // SaveAllModifiedButton
          // 
          SaveAllModifiedButton.Dock = DockStyle.Fill;
-         SaveAllModifiedButton.Location = new Point(103, 0);
+         SaveAllModifiedButton.Location = new Point(96, 0);
          SaveAllModifiedButton.Margin = new Padding(2, 0, 2, 0);
          SaveAllModifiedButton.Name = "SaveAllModifiedButton";
-         SaveAllModifiedButton.Size = new Size(97, 25);
+         SaveAllModifiedButton.Size = new Size(90, 25);
          SaveAllModifiedButton.TabIndex = 1;
          SaveAllModifiedButton.Text = "Save modified";
          SaveAllModifiedButton.UseVisualStyleBackColor = true;
@@ -1839,14 +1852,26 @@
          // SaveCurrentSelectionButton
          // 
          SaveCurrentSelectionButton.Dock = DockStyle.Fill;
-         SaveCurrentSelectionButton.Location = new Point(204, 0);
+         SaveCurrentSelectionButton.Location = new Point(190, 0);
          SaveCurrentSelectionButton.Margin = new Padding(2, 0, 2, 0);
          SaveCurrentSelectionButton.Name = "SaveCurrentSelectionButton";
-         SaveCurrentSelectionButton.Size = new Size(97, 25);
+         SaveCurrentSelectionButton.Size = new Size(90, 25);
          SaveCurrentSelectionButton.TabIndex = 2;
          SaveCurrentSelectionButton.Text = "Save selection";
          SaveCurrentSelectionButton.UseVisualStyleBackColor = true;
          SaveCurrentSelectionButton.Click += SaveCurrentSelectionButton_Click;
+         // 
+         // OpenProvinceFileButton
+         // 
+         OpenProvinceFileButton.Dock = DockStyle.Fill;
+         OpenProvinceFileButton.Image = Properties.Resources.FolderIcon;
+         OpenProvinceFileButton.Location = new Point(378, 0);
+         OpenProvinceFileButton.Margin = new Padding(2, 0, 2, 0);
+         OpenProvinceFileButton.Name = "OpenProvinceFileButton";
+         OpenProvinceFileButton.Size = new Size(27, 25);
+         OpenProvinceFileButton.TabIndex = 3;
+         OpenProvinceFileButton.UseVisualStyleBackColor = true;
+         OpenProvinceFileButton.Click += OpenProvinceFileButton_Click;
          // 
          // LocalisationGroupBox
          // 
@@ -1993,6 +2018,7 @@
          CountryMainTLP.Controls.Add(groupBox7, 0, 1);
          CountryMainTLP.Controls.Add(tableLayoutPanel1, 0, 2);
          CountryMainTLP.Controls.Add(GovernmentGroupBox, 0, 3);
+         CountryMainTLP.Controls.Add(button2, 0, 7);
          CountryMainTLP.Dock = DockStyle.Fill;
          CountryMainTLP.Location = new Point(3, 3);
          CountryMainTLP.Margin = new Padding(0);
@@ -2005,7 +2031,7 @@
          CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 224F));
          CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 65F));
          CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+         CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          CountryMainTLP.Size = new Size(401, 810);
          CountryMainTLP.TabIndex = 0;
          // 
@@ -2259,6 +2285,17 @@
          label38.TabIndex = 2;
          label38.Text = "Type";
          label38.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // button2
+         // 
+         button2.Location = new Point(3, 783);
+         button2.Name = "button2";
+         button2.Size = new Size(149, 23);
+         button2.TabIndex = 5;
+         button2.Text = "Opene advanced editing";
+         GeneralToolTip.SetToolTip(button2, "Only edit properties in here if you know what you are doing.\r\nThere are no input validations or helps.");
+         button2.UseVisualStyleBackColor = true;
+         button2.Click += button2_Click;
          // 
          // ProvinceGroupsPage
          // 
@@ -2638,6 +2675,9 @@
       private ToolStripMenuItem crashReportToolStripMenuItem;
       private ToolStripMenuItem loadDDSFilesTestToolStripMenuItem;
       private Button OpenProvinceFileButton;
+      private ToolStripMenuItem roughEditorToolStripMenuItem;
+      private Button button2;
+      private Button AdvancedProvinceEditing;
    }
 }
 

@@ -15,13 +15,13 @@ namespace Editor.Controls
       private Label _titleLabel = null!;
       private TableLayoutPanel _nameTlp = null!;
       private TableLayoutPanel _tlp = null!;
-      public ExtendedComboBox ExtendedComboBox = null!;
+      private ExtendedComboBox _extendedComboBox = null!;
       private FlowLayoutPanel _flowLayout = null!;
       
       #endregion
 
       private readonly ItemTypes _itemTypes;
-      private readonly MapModeType MapModeType;
+      private readonly MapModeType _mapModeType;
       private readonly SaveableType _saveableType;
       private readonly SaveableType _saveableSubType;
       public CollectionEditor2(ItemTypes types, SaveableType type, SaveableType subType, MapModeType mapModeType)
@@ -29,11 +29,9 @@ namespace Editor.Controls
          _itemTypes = types;
          _saveableType = type;
          _saveableSubType = subType;
-         MapModeType = mapModeType;
-
-
-         InitializeComponents(MapModeType.ToString());
-
+         _mapModeType = mapModeType;
+         
+         InitializeComponents(_mapModeType.ToString());
          SetComboBoxItems([.. ProvColHelper.GetProvinceCollectionNames(_saveableType)]);
       }
 
@@ -90,14 +88,14 @@ namespace Editor.Controls
          var mapModeButton = ControlFactory.GetImageButton(ControlFactory.ImageButtonType.Map, "Switch to the according map mode");
          mapModeButton.MouseUp += SwitchToMapMode;
 
-         ExtendedComboBox = new()
+         _extendedComboBox = new()
          {
             Margin = new(1, 5, 1, 1),
             Dock = DockStyle.Fill,
             AutoCompleteMode = AutoCompleteMode.SuggestAppend,
             AutoCompleteSource = AutoCompleteSource.CustomSource,
          };
-         ExtendedComboBox.SelectedIndexChanged += ComboBoxIndexChanged;
+         _extendedComboBox.SelectedIndexChanged += ComboBoxIndexChanged;
 
          _flowLayout = new()
          {
@@ -110,7 +108,7 @@ namespace Editor.Controls
 
          _nameTlp.Controls.Add(_titleLabel, 0, 0);
          _nameTlp.Controls.Add(mapModeButton, 1, 0);
-         _nameTlp.Controls.Add(ExtendedComboBox, 2, 0);
+         _nameTlp.Controls.Add(_extendedComboBox, 2, 0);
          _nameTlp.Controls.Add(addButton, 3, 0);
          _nameTlp.Controls.Add(removeButton, 4, 0);
 
@@ -125,21 +123,21 @@ namespace Editor.Controls
       public void SetComboBoxItems(List<string> items)
       {
          items.Sort();
-         ExtendedComboBox.Items.Clear();
+         _extendedComboBox.Items.Clear();
          foreach (var item in items)
          {
-            ExtendedComboBox.Items.Add(item);
-            ExtendedComboBox.AutoCompleteCustomSource.Add(item);
+            _extendedComboBox.Items.Add(item);
+            _extendedComboBox.AutoCompleteCustomSource.Add(item);
          }
       }
       private void SwitchToMapMode(object? sender, MouseEventArgs e)
       {
-         Globals.MapModeManager.SetCurrentMapMode(MapModeType);
+         Globals.MapModeManager.SetCurrentMapMode(_mapModeType);
       }
 
       private void OnAddButtonClick(object? sender, MouseEventArgs e)
       {
-         var item = ExtendedComboBox.Text;
+         var item = _extendedComboBox.Text;
          if (string.IsNullOrWhiteSpace(item))
             return;
          
@@ -159,7 +157,7 @@ namespace Editor.Controls
 
       private void OnRemoveButtonClick(object? sender, MouseEventArgs e)
       {
-         var item = ExtendedComboBox.Text;
+         var item = _extendedComboBox.Text;
          if (string.IsNullOrWhiteSpace(item))
             return;
 
@@ -178,7 +176,7 @@ namespace Editor.Controls
 
       private void ComboBoxIndexChanged(object? sender, EventArgs e)
       {
-         var item = ExtendedComboBox.Text;
+         var item = _extendedComboBox.Text;
          if (string.IsNullOrWhiteSpace(item))
             return;
 
@@ -204,7 +202,7 @@ namespace Editor.Controls
          if (!ProvColHelper.GetProvinceCollectionForTypeAndName(_saveableSubType, item, out Q value))
             return;
 
-         if (!ProvColHelper.GetProvinceCollectionForTypeAndName(_saveableType, ExtendedComboBox.Text, out T collection))
+         if (!ProvColHelper.GetProvinceCollectionForTypeAndName(_saveableType, _extendedComboBox.Text, out T collection))
             return;
 
          collection.NewRemove(value);
@@ -252,8 +250,8 @@ namespace Editor.Controls
 
       public void Clear()
       {
-         ExtendedComboBox.Text = string.Empty;
-         ExtendedComboBox.SelectedIndex = -1;
+         _extendedComboBox.Text = string.Empty;
+         _extendedComboBox.SelectedIndex = -1;
          _flowLayout.Controls.Clear();
       }
 
@@ -265,32 +263,32 @@ namespace Editor.Controls
          switch (e.Type)
          {
             case ProvinceCollectionType.AddGlobal:
-               ExtendedComboBox.Items.Add(item);
-               ExtendedComboBox.AutoCompleteCustomSource.Add(item);
-               ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.None;
-               ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-               ExtendedComboBox.Text = item;
-               ExtendedComboBox.SelectionStart = 0;
-               ExtendedComboBox.SelectionLength = item.Length;
+               _extendedComboBox.Items.Add(item);
+               _extendedComboBox.AutoCompleteCustomSource.Add(item);
+               _extendedComboBox.AutoCompleteMode = AutoCompleteMode.None;
+               _extendedComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+               _extendedComboBox.Text = item;
+               _extendedComboBox.SelectionStart = 0;
+               _extendedComboBox.SelectionLength = item.Length;
                ClearAndAddUniquely(collection);
-               ExtendedComboBox.Text = collection.Name;
+               _extendedComboBox.Text = collection.Name;
                break;
             case ProvinceCollectionType.Add:
                foreach (var i in e.Composite)
                   AddIfUnique(i.Name);
-               ExtendedComboBox.Text = collection.Name;
+               _extendedComboBox.Text = collection.Name;
                break;
             case ProvinceCollectionType.RemoveGlobal:
-               ExtendedComboBox.Items.Remove(item);
-               ExtendedComboBox.AutoCompleteCustomSource.Remove(item);
-               ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.None;
-               ExtendedComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+               _extendedComboBox.Items.Remove(item);
+               _extendedComboBox.AutoCompleteCustomSource.Remove(item);
+               _extendedComboBox.AutoCompleteMode = AutoCompleteMode.None;
+               _extendedComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                Clear();
                break;
             case ProvinceCollectionType.Remove:
                foreach (var i in e.Composite)
                   RemoveItem(i.Name);
-               ExtendedComboBox.Text = collection.Name;
+               _extendedComboBox.Text = collection.Name;
                break;
             default:
                throw new ArgumentOutOfRangeException();

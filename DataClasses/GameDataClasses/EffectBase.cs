@@ -44,7 +44,13 @@ namespace Editor.DataClasses.GameDataClasses
       }
    }
 
-   public abstract class Effect(string name, string value, EffectValueType type, Scope scope)
+   public class Effect(string name, string value, EffectValueType type, Scope scope)
+      : EffectBase(name, value, type, scope)
+   {
+      public new static Effect Empty => new SimpleEffect(string.Empty, string.Empty, EffectValueType.String, Scope.Country);
+   }
+
+   public abstract class EffectBase(string name, string value, EffectValueType type, Scope scope)
    {
       public string Name { get; set; } = name.ToLower();
       public string Value { get; set; } = value;
@@ -81,8 +87,7 @@ namespace Editor.DataClasses.GameDataClasses
          return $"{Name} : {Value}";
       }
 
-      //create an effect.Empty
-      public static Effect Empty => new SimpleEffect(string.Empty, string.Empty, EffectValueType.String, Scope.Country);
+      public static EffectBase Empty => new SimpleEffect(string.Empty, string.Empty, EffectValueType.String, Scope.Country);
 
       public bool IsEmpty()
       {
@@ -90,7 +95,11 @@ namespace Editor.DataClasses.GameDataClasses
       }
    }
 
-   public class SimpleEffect(string name, string value, EffectValueType type, Scope scope) : Effect(name, value, type, scope);
+   public class SimpleEffect(string name, string value, EffectValueType type, Scope scope)
+      : Effect(name, value, type, scope)
+   {
+      public new static Effect Empty => new SimpleEffect(string.Empty, string.Empty, EffectValueType.String, Scope.Country);
+   }
    public class DummyComplexEffect(string name, string value, EffectValueType type, Scope scope) : ComplexEffect(name, value, type, scope);
 
 
