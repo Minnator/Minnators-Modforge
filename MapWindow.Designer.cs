@@ -192,8 +192,36 @@
          ProvAdjTextBox = new TextBox();
          ProvAdjLabel = new Label();
          CountryPage = new TabPage();
-         CountryMainTLP = new TableLayoutPanel();
+         tableLayoutPanel7 = new TableLayoutPanel();
+         button2 = new Button();
+         CountryScrollPanel = new Panel();
+         tableLayoutPanel9 = new TableLayoutPanel();
+         groupBox8 = new GroupBox();
+         NamesTabControl = new TabControl();
+         MonarchNamesTab = new TabPage();
+         MonarchNamesTLP = new TableLayoutPanel();
+         tableLayoutPanel6 = new TableLayoutPanel();
+         label40 = new Label();
+         label41 = new Label();
+         label42 = new Label();
+         RegnalNumeric = new NumericUpDown();
+         NameTextBox = new TextBox();
+         ChanceTextBox = new TextBox();
+         button3 = new Button();
+         ShowMonachrNamesCB = new CheckBox();
+         MonarchNamesFlowPanel = new FlowLayoutPanel();
+         ShipNamesTab = new TabPage();
+         ArmyNamesTab = new TabPage();
+         FleetNamesTab = new TabPage();
+         LeaderNamesTab = new TabPage();
          CountryNameLabel = new Label();
+         groupBox9 = new GroupBox();
+         CulturesTLP = new TableLayoutPanel();
+         label43 = new Label();
+         GovernmentGroupBox = new GroupBox();
+         GovernmentLayoutPanel = new TableLayoutPanel();
+         label36 = new Label();
+         label38 = new Label();
          groupBox7 = new GroupBox();
          TagAndColorTLP = new TableLayoutPanel();
          label34 = new Label();
@@ -206,14 +234,18 @@
          label31 = new Label();
          label33 = new Label();
          label32 = new Label();
+         label44 = new Label();
+         label45 = new Label();
+         CapitalTLP = new TableLayoutPanel();
+         SetCapitalToSelected = new Button();
          tableLayoutPanel1 = new TableLayoutPanel();
          button1 = new Button();
          label35 = new Label();
-         GovernmentGroupBox = new GroupBox();
-         GovernmentLayoutPanel = new TableLayoutPanel();
-         label36 = new Label();
-         label38 = new Label();
-         button2 = new Button();
+         groupBox10 = new GroupBox();
+         tableLayoutPanel8 = new TableLayoutPanel();
+         DevelopmenTLP = new TableLayoutPanel();
+         label46 = new Label();
+         button4 = new Button();
          ProvinceGroupsPage = new TabPage();
          ProvinceCollectionsPanel = new Panel();
          ProvinceCollectionsTab = new TableLayoutPanel();
@@ -261,12 +293,26 @@
          LocalisationGroupBox.SuspendLayout();
          LocTableLayoutPanel.SuspendLayout();
          CountryPage.SuspendLayout();
-         CountryMainTLP.SuspendLayout();
-         groupBox7.SuspendLayout();
-         TagAndColorTLP.SuspendLayout();
-         tableLayoutPanel1.SuspendLayout();
+         tableLayoutPanel7.SuspendLayout();
+         CountryScrollPanel.SuspendLayout();
+         tableLayoutPanel9.SuspendLayout();
+         groupBox8.SuspendLayout();
+         NamesTabControl.SuspendLayout();
+         MonarchNamesTab.SuspendLayout();
+         MonarchNamesTLP.SuspendLayout();
+         tableLayoutPanel6.SuspendLayout();
+         ((System.ComponentModel.ISupportInitialize)RegnalNumeric).BeginInit();
+         groupBox9.SuspendLayout();
+         CulturesTLP.SuspendLayout();
          GovernmentGroupBox.SuspendLayout();
          GovernmentLayoutPanel.SuspendLayout();
+         groupBox7.SuspendLayout();
+         TagAndColorTLP.SuspendLayout();
+         CapitalTLP.SuspendLayout();
+         tableLayoutPanel1.SuspendLayout();
+         groupBox10.SuspendLayout();
+         tableLayoutPanel8.SuspendLayout();
+         DevelopmenTLP.SuspendLayout();
          ProvinceGroupsPage.SuspendLayout();
          ProvinceCollectionsPanel.SuspendLayout();
          ProvinceCollectionsTab.SuspendLayout();
@@ -665,7 +711,6 @@
          // ProvinceCollectionsLayoutPanel
          // 
          ProvinceCollectionsLayoutPanel.AutoScroll = true;
-         ProvinceCollectionsLayoutPanel.AutoSize = true;
          ProvinceCollectionsLayoutPanel.ColumnCount = 1;
          ProvinceCollectionsLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
          ProvinceCollectionsLayoutPanel.Dock = DockStyle.Fill;
@@ -2000,7 +2045,7 @@
          // 
          // CountryPage
          // 
-         CountryPage.Controls.Add(CountryMainTLP);
+         CountryPage.Controls.Add(tableLayoutPanel7);
          CountryPage.Location = new Point(4, 24);
          CountryPage.Name = "CountryPage";
          CountryPage.Padding = new Padding(3);
@@ -2010,30 +2055,287 @@
          GeneralToolTip.SetToolTip(CountryPage, "Country data editing\r\n(Ctrl + 2)");
          CountryPage.UseVisualStyleBackColor = true;
          // 
-         // CountryMainTLP
+         // tableLayoutPanel7
          // 
-         CountryMainTLP.ColumnCount = 1;
-         CountryMainTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-         CountryMainTLP.Controls.Add(CountryNameLabel, 0, 0);
-         CountryMainTLP.Controls.Add(groupBox7, 0, 1);
-         CountryMainTLP.Controls.Add(tableLayoutPanel1, 0, 2);
-         CountryMainTLP.Controls.Add(GovernmentGroupBox, 0, 3);
-         CountryMainTLP.Controls.Add(button2, 0, 7);
-         CountryMainTLP.Dock = DockStyle.Fill;
-         CountryMainTLP.Location = new Point(3, 3);
-         CountryMainTLP.Margin = new Padding(0);
-         CountryMainTLP.Name = "CountryMainTLP";
-         CountryMainTLP.RowCount = 8;
-         CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 23F));
-         CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 124F));
-         CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-         CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 151F));
-         CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 224F));
-         CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 65F));
-         CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-         CountryMainTLP.Size = new Size(401, 810);
-         CountryMainTLP.TabIndex = 0;
+         tableLayoutPanel7.ColumnCount = 1;
+         tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         tableLayoutPanel7.Controls.Add(button2, 0, 1);
+         tableLayoutPanel7.Controls.Add(CountryScrollPanel, 0, 0);
+         tableLayoutPanel7.Dock = DockStyle.Fill;
+         tableLayoutPanel7.Location = new Point(3, 3);
+         tableLayoutPanel7.Margin = new Padding(0);
+         tableLayoutPanel7.Name = "tableLayoutPanel7";
+         tableLayoutPanel7.RowCount = 2;
+         tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         tableLayoutPanel7.Size = new Size(401, 810);
+         tableLayoutPanel7.TabIndex = 0;
+         // 
+         // button2
+         // 
+         button2.Location = new Point(3, 783);
+         button2.Name = "button2";
+         button2.Size = new Size(149, 23);
+         button2.TabIndex = 5;
+         button2.Text = "Opene advanced editing";
+         GeneralToolTip.SetToolTip(button2, "Only edit properties in here if you know what you are doing.\r\nThere are no input validations or helps.");
+         button2.UseVisualStyleBackColor = true;
+         button2.Click += button2_Click;
+         // 
+         // CountryScrollPanel
+         // 
+         CountryScrollPanel.AutoScroll = true;
+         CountryScrollPanel.Controls.Add(tableLayoutPanel9);
+         CountryScrollPanel.Dock = DockStyle.Fill;
+         CountryScrollPanel.Location = new Point(0, 0);
+         CountryScrollPanel.Margin = new Padding(0);
+         CountryScrollPanel.Name = "CountryScrollPanel";
+         CountryScrollPanel.Size = new Size(401, 780);
+         CountryScrollPanel.TabIndex = 6;
+         // 
+         // tableLayoutPanel9
+         // 
+         tableLayoutPanel9.AutoSize = true;
+         tableLayoutPanel9.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+         tableLayoutPanel9.ColumnCount = 1;
+         tableLayoutPanel9.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         tableLayoutPanel9.Controls.Add(groupBox8, 0, 5);
+         tableLayoutPanel9.Controls.Add(CountryNameLabel, 0, 0);
+         tableLayoutPanel9.Controls.Add(groupBox9, 0, 4);
+         tableLayoutPanel9.Controls.Add(GovernmentGroupBox, 0, 3);
+         tableLayoutPanel9.Controls.Add(groupBox7, 0, 1);
+         tableLayoutPanel9.Controls.Add(tableLayoutPanel1, 0, 2);
+         tableLayoutPanel9.Controls.Add(groupBox10, 0, 6);
+         tableLayoutPanel9.Dock = DockStyle.Top;
+         tableLayoutPanel9.Location = new Point(0, 0);
+         tableLayoutPanel9.Margin = new Padding(0);
+         tableLayoutPanel9.Name = "tableLayoutPanel9";
+         tableLayoutPanel9.RowCount = 8;
+         tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Absolute, 23F));
+         tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Absolute, 149F));
+         tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Absolute, 151F));
+         tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Absolute, 121F));
+         tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Absolute, 243F));
+         tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Absolute, 400F));
+         tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+         tableLayoutPanel9.Size = new Size(384, 1132);
+         tableLayoutPanel9.TabIndex = 1;
+         // 
+         // groupBox8
+         // 
+         groupBox8.Controls.Add(NamesTabControl);
+         groupBox8.Dock = DockStyle.Fill;
+         groupBox8.Location = new Point(3, 472);
+         groupBox8.Name = "groupBox8";
+         groupBox8.Size = new Size(378, 237);
+         groupBox8.TabIndex = 7;
+         groupBox8.TabStop = false;
+         groupBox8.Text = "Names";
+         // 
+         // NamesTabControl
+         // 
+         NamesTabControl.Controls.Add(MonarchNamesTab);
+         NamesTabControl.Controls.Add(ShipNamesTab);
+         NamesTabControl.Controls.Add(ArmyNamesTab);
+         NamesTabControl.Controls.Add(FleetNamesTab);
+         NamesTabControl.Controls.Add(LeaderNamesTab);
+         NamesTabControl.Dock = DockStyle.Fill;
+         NamesTabControl.Location = new Point(3, 19);
+         NamesTabControl.Name = "NamesTabControl";
+         NamesTabControl.SelectedIndex = 0;
+         NamesTabControl.Size = new Size(372, 215);
+         NamesTabControl.TabIndex = 6;
+         // 
+         // MonarchNamesTab
+         // 
+         MonarchNamesTab.Controls.Add(MonarchNamesTLP);
+         MonarchNamesTab.Location = new Point(4, 24);
+         MonarchNamesTab.Name = "MonarchNamesTab";
+         MonarchNamesTab.Padding = new Padding(3);
+         MonarchNamesTab.Size = new Size(364, 187);
+         MonarchNamesTab.TabIndex = 0;
+         MonarchNamesTab.Text = "Monarchs";
+         MonarchNamesTab.UseVisualStyleBackColor = true;
+         // 
+         // MonarchNamesTLP
+         // 
+         MonarchNamesTLP.ColumnCount = 1;
+         MonarchNamesTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         MonarchNamesTLP.Controls.Add(tableLayoutPanel6, 0, 0);
+         MonarchNamesTLP.Controls.Add(MonarchNamesFlowPanel, 0, 1);
+         MonarchNamesTLP.Dock = DockStyle.Fill;
+         MonarchNamesTLP.Location = new Point(3, 3);
+         MonarchNamesTLP.Margin = new Padding(0);
+         MonarchNamesTLP.Name = "MonarchNamesTLP";
+         MonarchNamesTLP.RowCount = 2;
+         MonarchNamesTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 45F));
+         MonarchNamesTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         MonarchNamesTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+         MonarchNamesTLP.Size = new Size(358, 181);
+         MonarchNamesTLP.TabIndex = 0;
+         // 
+         // tableLayoutPanel6
+         // 
+         tableLayoutPanel6.ColumnCount = 5;
+         tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 55F));
+         tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 55F));
+         tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 55F));
+         tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25F));
+         tableLayoutPanel6.Controls.Add(label40, 0, 0);
+         tableLayoutPanel6.Controls.Add(label41, 1, 0);
+         tableLayoutPanel6.Controls.Add(label42, 2, 0);
+         tableLayoutPanel6.Controls.Add(RegnalNumeric, 1, 1);
+         tableLayoutPanel6.Controls.Add(NameTextBox, 0, 1);
+         tableLayoutPanel6.Controls.Add(ChanceTextBox, 2, 1);
+         tableLayoutPanel6.Controls.Add(button3, 3, 1);
+         tableLayoutPanel6.Controls.Add(ShowMonachrNamesCB, 4, 1);
+         tableLayoutPanel6.Dock = DockStyle.Fill;
+         tableLayoutPanel6.Location = new Point(0, 0);
+         tableLayoutPanel6.Margin = new Padding(0);
+         tableLayoutPanel6.Name = "tableLayoutPanel6";
+         tableLayoutPanel6.RowCount = 2;
+         tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         tableLayoutPanel6.Size = new Size(358, 45);
+         tableLayoutPanel6.TabIndex = 0;
+         // 
+         // label40
+         // 
+         label40.AutoSize = true;
+         label40.Dock = DockStyle.Fill;
+         label40.Font = new Font("Segoe UI", 8.25F);
+         label40.Location = new Point(3, 0);
+         label40.Name = "label40";
+         label40.Size = new Size(162, 15);
+         label40.TabIndex = 0;
+         label40.Text = "Name";
+         label40.TextAlign = ContentAlignment.MiddleCenter;
+         // 
+         // label41
+         // 
+         label41.AutoSize = true;
+         label41.Dock = DockStyle.Fill;
+         label41.Font = new Font("Segoe UI", 8.25F);
+         label41.Location = new Point(171, 0);
+         label41.Name = "label41";
+         label41.Size = new Size(49, 15);
+         label41.TabIndex = 1;
+         label41.Text = "Regnal";
+         label41.TextAlign = ContentAlignment.MiddleCenter;
+         GeneralToolTip.SetToolTip(label41, "Regnal: Start of regnal numeration; always next number -1 \r\n(Kevin I = Kevin #0)");
+         // 
+         // label42
+         // 
+         label42.AutoSize = true;
+         label42.Dock = DockStyle.Fill;
+         label42.Font = new Font("Segoe UI", 8.25F);
+         label42.Location = new Point(226, 0);
+         label42.Name = "label42";
+         label42.Size = new Size(49, 15);
+         label42.TabIndex = 2;
+         label42.Text = "Chance";
+         label42.TextAlign = ContentAlignment.MiddleCenter;
+         GeneralToolTip.SetToolTip(label42, "Chances: 0 = Normal chance; < 0 Femal name; > 0 Male name;\r\n-10/10 are more common than 0");
+         // 
+         // RegnalNumeric
+         // 
+         RegnalNumeric.Dock = DockStyle.Fill;
+         RegnalNumeric.Location = new Point(171, 18);
+         RegnalNumeric.Name = "RegnalNumeric";
+         RegnalNumeric.Size = new Size(49, 23);
+         RegnalNumeric.TabIndex = 4;
+         // 
+         // NameTextBox
+         // 
+         NameTextBox.Dock = DockStyle.Fill;
+         NameTextBox.Location = new Point(3, 18);
+         NameTextBox.Name = "NameTextBox";
+         NameTextBox.PlaceholderText = "Minnator";
+         NameTextBox.Size = new Size(162, 23);
+         NameTextBox.TabIndex = 5;
+         // 
+         // ChanceTextBox
+         // 
+         ChanceTextBox.Dock = DockStyle.Fill;
+         ChanceTextBox.Location = new Point(226, 18);
+         ChanceTextBox.Name = "ChanceTextBox";
+         ChanceTextBox.Size = new Size(49, 23);
+         ChanceTextBox.TabIndex = 6;
+         // 
+         // button3
+         // 
+         button3.Dock = DockStyle.Fill;
+         button3.Location = new Point(281, 18);
+         button3.Name = "button3";
+         button3.Size = new Size(49, 24);
+         button3.TabIndex = 7;
+         button3.Text = "Add";
+         button3.UseVisualStyleBackColor = true;
+         button3.Click += AddMonarchName_Click;
+         // 
+         // ShowMonachrNamesCB
+         // 
+         ShowMonachrNamesCB.AutoSize = true;
+         ShowMonachrNamesCB.Dock = DockStyle.Fill;
+         ShowMonachrNamesCB.Location = new Point(336, 18);
+         ShowMonachrNamesCB.Name = "ShowMonachrNamesCB";
+         ShowMonachrNamesCB.Size = new Size(19, 24);
+         ShowMonachrNamesCB.TabIndex = 8;
+         GeneralToolTip.SetToolTip(ShowMonachrNamesCB, "ShowMonarchNames");
+         ShowMonachrNamesCB.UseVisualStyleBackColor = true;
+         ShowMonachrNamesCB.CheckedChanged += ShowMonarchNamesCB_CheckedChanged;
+         // 
+         // MonarchNamesFlowPanel
+         // 
+         MonarchNamesFlowPanel.Dock = DockStyle.Fill;
+         MonarchNamesFlowPanel.FlowDirection = FlowDirection.TopDown;
+         MonarchNamesFlowPanel.Location = new Point(0, 45);
+         MonarchNamesFlowPanel.Margin = new Padding(0);
+         MonarchNamesFlowPanel.Name = "MonarchNamesFlowPanel";
+         MonarchNamesFlowPanel.Size = new Size(358, 136);
+         MonarchNamesFlowPanel.TabIndex = 1;
+         // 
+         // ShipNamesTab
+         // 
+         ShipNamesTab.Location = new Point(4, 24);
+         ShipNamesTab.Name = "ShipNamesTab";
+         ShipNamesTab.Padding = new Padding(3);
+         ShipNamesTab.Size = new Size(364, 187);
+         ShipNamesTab.TabIndex = 1;
+         ShipNamesTab.Text = "Ships";
+         ShipNamesTab.UseVisualStyleBackColor = true;
+         // 
+         // ArmyNamesTab
+         // 
+         ArmyNamesTab.Location = new Point(4, 24);
+         ArmyNamesTab.Name = "ArmyNamesTab";
+         ArmyNamesTab.Padding = new Padding(3);
+         ArmyNamesTab.Size = new Size(364, 187);
+         ArmyNamesTab.TabIndex = 2;
+         ArmyNamesTab.Text = "Army";
+         ArmyNamesTab.UseVisualStyleBackColor = true;
+         // 
+         // FleetNamesTab
+         // 
+         FleetNamesTab.Location = new Point(4, 24);
+         FleetNamesTab.Name = "FleetNamesTab";
+         FleetNamesTab.Padding = new Padding(3);
+         FleetNamesTab.Size = new Size(364, 187);
+         FleetNamesTab.TabIndex = 3;
+         FleetNamesTab.Text = "Fleets";
+         FleetNamesTab.UseVisualStyleBackColor = true;
+         // 
+         // LeaderNamesTab
+         // 
+         LeaderNamesTab.Location = new Point(4, 24);
+         LeaderNamesTab.Name = "LeaderNamesTab";
+         LeaderNamesTab.Padding = new Padding(3);
+         LeaderNamesTab.Size = new Size(364, 187);
+         LeaderNamesTab.TabIndex = 4;
+         LeaderNamesTab.Text = "Leaders";
+         LeaderNamesTab.UseVisualStyleBackColor = true;
          // 
          // CountryNameLabel
          // 
@@ -2042,10 +2344,101 @@
          CountryNameLabel.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
          CountryNameLabel.Location = new Point(3, 0);
          CountryNameLabel.Name = "CountryNameLabel";
-         CountryNameLabel.Size = new Size(395, 23);
+         CountryNameLabel.Size = new Size(378, 23);
          CountryNameLabel.TabIndex = 0;
          CountryNameLabel.Text = "Tag.Empty";
          CountryNameLabel.TextAlign = ContentAlignment.MiddleCenter;
+         // 
+         // groupBox9
+         // 
+         groupBox9.Controls.Add(CulturesTLP);
+         groupBox9.Dock = DockStyle.Fill;
+         groupBox9.Location = new Point(3, 351);
+         groupBox9.Name = "groupBox9";
+         groupBox9.Size = new Size(378, 115);
+         groupBox9.TabIndex = 8;
+         groupBox9.TabStop = false;
+         groupBox9.Text = "Cultures";
+         // 
+         // CulturesTLP
+         // 
+         CulturesTLP.ColumnCount = 2;
+         CulturesTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         CulturesTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         CulturesTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+         CulturesTLP.Controls.Add(label43, 0, 0);
+         CulturesTLP.Dock = DockStyle.Fill;
+         CulturesTLP.Location = new Point(3, 19);
+         CulturesTLP.Name = "CulturesTLP";
+         CulturesTLP.RowCount = 2;
+         CulturesTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         CulturesTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         CulturesTLP.Size = new Size(372, 93);
+         CulturesTLP.TabIndex = 0;
+         // 
+         // label43
+         // 
+         label43.AutoSize = true;
+         label43.Dock = DockStyle.Fill;
+         label43.Location = new Point(3, 0);
+         label43.Name = "label43";
+         label43.Size = new Size(180, 25);
+         label43.TabIndex = 0;
+         label43.Text = "Primary Culture";
+         label43.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // GovernmentGroupBox
+         // 
+         GovernmentGroupBox.Controls.Add(GovernmentLayoutPanel);
+         GovernmentGroupBox.Dock = DockStyle.Fill;
+         GovernmentGroupBox.Location = new Point(3, 200);
+         GovernmentGroupBox.Name = "GovernmentGroupBox";
+         GovernmentGroupBox.Padding = new Padding(1);
+         GovernmentGroupBox.Size = new Size(378, 145);
+         GovernmentGroupBox.TabIndex = 4;
+         GovernmentGroupBox.TabStop = false;
+         GovernmentGroupBox.Text = "Government";
+         // 
+         // GovernmentLayoutPanel
+         // 
+         GovernmentLayoutPanel.ColumnCount = 4;
+         GovernmentLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+         GovernmentLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+         GovernmentLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+         GovernmentLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+         GovernmentLayoutPanel.Controls.Add(label36, 0, 0);
+         GovernmentLayoutPanel.Controls.Add(label38, 2, 0);
+         GovernmentLayoutPanel.Dock = DockStyle.Fill;
+         GovernmentLayoutPanel.Location = new Point(1, 17);
+         GovernmentLayoutPanel.Margin = new Padding(0);
+         GovernmentLayoutPanel.Name = "GovernmentLayoutPanel";
+         GovernmentLayoutPanel.RowCount = 2;
+         GovernmentLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         GovernmentLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         GovernmentLayoutPanel.Size = new Size(376, 127);
+         GovernmentLayoutPanel.TabIndex = 0;
+         // 
+         // label36
+         // 
+         label36.AutoSize = true;
+         label36.Dock = DockStyle.Fill;
+         label36.Location = new Point(3, 0);
+         label36.Name = "label36";
+         label36.Size = new Size(88, 25);
+         label36.TabIndex = 0;
+         label36.Text = "Rank";
+         label36.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // label38
+         // 
+         label38.AutoSize = true;
+         label38.Dock = DockStyle.Fill;
+         label38.Location = new Point(191, 0);
+         label38.Name = "label38";
+         label38.Size = new Size(88, 25);
+         label38.TabIndex = 2;
+         label38.Text = "Type";
+         label38.TextAlign = ContentAlignment.MiddleLeft;
          // 
          // groupBox7
          // 
@@ -2054,7 +2447,7 @@
          groupBox7.Location = new Point(3, 26);
          groupBox7.Name = "groupBox7";
          groupBox7.Padding = new Padding(1);
-         groupBox7.Size = new Size(395, 118);
+         groupBox7.Size = new Size(378, 143);
          groupBox7.TabIndex = 2;
          groupBox7.TabStop = false;
          groupBox7.Text = "General data";
@@ -2076,16 +2469,20 @@
          TagAndColorTLP.Controls.Add(label31, 0, 2);
          TagAndColorTLP.Controls.Add(label33, 2, 2);
          TagAndColorTLP.Controls.Add(label32, 2, 3);
+         TagAndColorTLP.Controls.Add(label44, 0, 4);
+         TagAndColorTLP.Controls.Add(label45, 2, 4);
+         TagAndColorTLP.Controls.Add(CapitalTLP, 3, 4);
          TagAndColorTLP.Dock = DockStyle.Fill;
          TagAndColorTLP.Location = new Point(1, 17);
          TagAndColorTLP.Margin = new Padding(0);
          TagAndColorTLP.Name = "TagAndColorTLP";
-         TagAndColorTLP.RowCount = 4;
-         TagAndColorTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
-         TagAndColorTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
-         TagAndColorTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
-         TagAndColorTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
-         TagAndColorTLP.Size = new Size(393, 100);
+         TagAndColorTLP.RowCount = 5;
+         TagAndColorTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
+         TagAndColorTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
+         TagAndColorTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
+         TagAndColorTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
+         TagAndColorTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
+         TagAndColorTLP.Size = new Size(376, 125);
          TagAndColorTLP.TabIndex = 1;
          // 
          // label34
@@ -2094,7 +2491,7 @@
          label34.Dock = DockStyle.Fill;
          label34.Location = new Point(3, 75);
          label34.Name = "label34";
-         label34.Size = new Size(92, 25);
+         label34.Size = new Size(88, 25);
          label34.TabIndex = 10;
          label34.Text = "Tech Group";
          label34.TextAlign = ContentAlignment.MiddleLeft;
@@ -2105,7 +2502,7 @@
          label30.Dock = DockStyle.Fill;
          label30.Location = new Point(3, 25);
          label30.Name = "label30";
-         label30.Size = new Size(92, 25);
+         label30.Size = new Size(88, 25);
          label30.TabIndex = 4;
          label30.Text = "Localisation";
          label30.TextAlign = ContentAlignment.MiddleLeft;
@@ -2114,9 +2511,9 @@
          // 
          label27.AutoSize = true;
          label27.Dock = DockStyle.Fill;
-         label27.Location = new Point(199, 0);
+         label27.Location = new Point(191, 0);
          label27.Name = "label27";
-         label27.Size = new Size(92, 25);
+         label27.Size = new Size(88, 25);
          label27.TabIndex = 1;
          label27.Text = "Country Color";
          label27.TextAlign = ContentAlignment.MiddleLeft;
@@ -2127,7 +2524,7 @@
          label28.Dock = DockStyle.Fill;
          label28.Location = new Point(3, 0);
          label28.Name = "label28";
-         label28.Size = new Size(92, 25);
+         label28.Size = new Size(88, 25);
          label28.TabIndex = 2;
          label28.Text = "TAG";
          label28.TextAlign = ContentAlignment.MiddleLeft;
@@ -2136,9 +2533,9 @@
          // 
          label29.AutoSize = true;
          label29.Dock = DockStyle.Fill;
-         label29.Location = new Point(199, 25);
+         label29.Location = new Point(191, 25);
          label29.Name = "label29";
-         label29.Size = new Size(92, 25);
+         label29.Size = new Size(88, 25);
          label29.TabIndex = 3;
          label29.Text = "Loc ADJ";
          label29.TextAlign = ContentAlignment.MiddleLeft;
@@ -2146,19 +2543,19 @@
          // CountryLoc
          // 
          CountryLoc.Dock = DockStyle.Fill;
-         CountryLoc.Location = new Point(99, 26);
+         CountryLoc.Location = new Point(95, 26);
          CountryLoc.Margin = new Padding(1);
          CountryLoc.Name = "CountryLoc";
-         CountryLoc.Size = new Size(96, 23);
+         CountryLoc.Size = new Size(92, 23);
          CountryLoc.TabIndex = 5;
          // 
          // CountryADJLoc
          // 
          CountryADJLoc.Dock = DockStyle.Fill;
-         CountryADJLoc.Location = new Point(295, 26);
+         CountryADJLoc.Location = new Point(283, 26);
          CountryADJLoc.Margin = new Padding(1);
          CountryADJLoc.Name = "CountryADJLoc";
-         CountryADJLoc.Size = new Size(97, 23);
+         CountryADJLoc.Size = new Size(92, 23);
          CountryADJLoc.TabIndex = 6;
          // 
          // label31
@@ -2167,7 +2564,7 @@
          label31.Dock = DockStyle.Fill;
          label31.Location = new Point(3, 50);
          label31.Name = "label31";
-         label31.Size = new Size(92, 25);
+         label31.Size = new Size(88, 25);
          label31.TabIndex = 7;
          label31.Text = "GFX type";
          label31.TextAlign = ContentAlignment.MiddleLeft;
@@ -2176,9 +2573,9 @@
          // 
          label33.AutoSize = true;
          label33.Dock = DockStyle.Fill;
-         label33.Location = new Point(199, 50);
+         label33.Location = new Point(191, 50);
          label33.Name = "label33";
-         label33.Size = new Size(92, 25);
+         label33.Size = new Size(88, 25);
          label33.TabIndex = 9;
          label33.Text = "Unite type";
          label33.TextAlign = ContentAlignment.MiddleLeft;
@@ -2187,27 +2584,77 @@
          // 
          label32.AutoSize = true;
          label32.Dock = DockStyle.Fill;
-         label32.Location = new Point(199, 75);
+         label32.Location = new Point(191, 75);
          label32.Name = "label32";
-         label32.Size = new Size(92, 25);
+         label32.Size = new Size(88, 25);
          label32.TabIndex = 8;
          label32.Text = "Revol Color";
          label32.TextAlign = ContentAlignment.MiddleLeft;
          // 
+         // label44
+         // 
+         label44.AutoSize = true;
+         label44.Dock = DockStyle.Fill;
+         label44.Location = new Point(3, 100);
+         label44.Name = "label44";
+         label44.Size = new Size(88, 25);
+         label44.TabIndex = 11;
+         label44.Text = "NationalFocus";
+         label44.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // label45
+         // 
+         label45.AutoSize = true;
+         label45.Dock = DockStyle.Fill;
+         label45.Location = new Point(191, 100);
+         label45.Name = "label45";
+         label45.Size = new Size(88, 25);
+         label45.TabIndex = 12;
+         label45.Text = "Capital";
+         label45.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // CapitalTLP
+         // 
+         CapitalTLP.ColumnCount = 2;
+         CapitalTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 75F));
+         CapitalTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+         CapitalTLP.Controls.Add(SetCapitalToSelected, 1, 0);
+         CapitalTLP.Dock = DockStyle.Fill;
+         CapitalTLP.Location = new Point(282, 100);
+         CapitalTLP.Margin = new Padding(0);
+         CapitalTLP.Name = "CapitalTLP";
+         CapitalTLP.RowCount = 1;
+         CapitalTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         CapitalTLP.Size = new Size(94, 25);
+         CapitalTLP.TabIndex = 13;
+         // 
+         // SetCapitalToSelected
+         // 
+         SetCapitalToSelected.Dock = DockStyle.Fill;
+         SetCapitalToSelected.Image = Properties.Resources.province_small;
+         SetCapitalToSelected.Location = new Point(70, 0);
+         SetCapitalToSelected.Margin = new Padding(0);
+         SetCapitalToSelected.Name = "SetCapitalToSelected";
+         SetCapitalToSelected.Size = new Size(24, 25);
+         SetCapitalToSelected.TabIndex = 0;
+         GeneralToolTip.SetToolTip(SetCapitalToSelected, "Set the capital to the only selected province");
+         SetCapitalToSelected.UseVisualStyleBackColor = true;
+         SetCapitalToSelected.Click += SetCapitalToSelected_Click;
+         // 
          // tableLayoutPanel1
          // 
          tableLayoutPanel1.ColumnCount = 2;
-         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100.000008F));
-         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25F));
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 26F));
          tableLayoutPanel1.Controls.Add(button1, 1, 0);
          tableLayoutPanel1.Controls.Add(label35, 0, 0);
          tableLayoutPanel1.Dock = DockStyle.Fill;
-         tableLayoutPanel1.Location = new Point(0, 147);
-         tableLayoutPanel1.Margin = new Padding(0);
+         tableLayoutPanel1.Location = new Point(0, 172);
+         tableLayoutPanel1.Margin = new Padding(0, 0, 4, 0);
          tableLayoutPanel1.Name = "tableLayoutPanel1";
          tableLayoutPanel1.RowCount = 1;
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-         tableLayoutPanel1.Size = new Size(401, 25);
+         tableLayoutPanel1.Size = new Size(380, 25);
          tableLayoutPanel1.TabIndex = 3;
          // 
          // button1
@@ -2215,87 +2662,92 @@
          button1.Dock = DockStyle.Fill;
          button1.Enabled = false;
          button1.Image = Properties.Resources.GreenPlusBg;
-         button1.Location = new Point(377, 1);
+         button1.Location = new Point(355, 1);
          button1.Margin = new Padding(1);
          button1.Name = "button1";
-         button1.Size = new Size(23, 23);
+         button1.Size = new Size(24, 23);
          button1.TabIndex = 0;
          button1.UseVisualStyleBackColor = true;
          // 
          // label35
          // 
-         label35.AutoSize = true;
          label35.Dock = DockStyle.Fill;
          label35.Location = new Point(3, 0);
          label35.Name = "label35";
-         label35.Size = new Size(370, 25);
+         label35.Size = new Size(348, 25);
          label35.TabIndex = 1;
          label35.Text = "IDEAS (later feature)";
          label35.TextAlign = ContentAlignment.MiddleCenter;
          // 
-         // GovernmentGroupBox
+         // groupBox10
          // 
-         GovernmentGroupBox.Controls.Add(GovernmentLayoutPanel);
-         GovernmentGroupBox.Dock = DockStyle.Fill;
-         GovernmentGroupBox.Location = new Point(3, 175);
-         GovernmentGroupBox.Name = "GovernmentGroupBox";
-         GovernmentGroupBox.Padding = new Padding(1);
-         GovernmentGroupBox.Size = new Size(395, 145);
-         GovernmentGroupBox.TabIndex = 4;
-         GovernmentGroupBox.TabStop = false;
-         GovernmentGroupBox.Text = "Government";
+         groupBox10.Controls.Add(tableLayoutPanel8);
+         groupBox10.Dock = DockStyle.Fill;
+         groupBox10.Location = new Point(3, 715);
+         groupBox10.Name = "groupBox10";
+         groupBox10.Size = new Size(378, 394);
+         groupBox10.TabIndex = 9;
+         groupBox10.TabStop = false;
+         groupBox10.Text = "Misc";
          // 
-         // GovernmentLayoutPanel
+         // tableLayoutPanel8
          // 
-         GovernmentLayoutPanel.ColumnCount = 4;
-         GovernmentLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-         GovernmentLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-         GovernmentLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-         GovernmentLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-         GovernmentLayoutPanel.Controls.Add(label36, 0, 0);
-         GovernmentLayoutPanel.Controls.Add(label38, 2, 0);
-         GovernmentLayoutPanel.Dock = DockStyle.Fill;
-         GovernmentLayoutPanel.Location = new Point(1, 17);
-         GovernmentLayoutPanel.Margin = new Padding(0);
-         GovernmentLayoutPanel.Name = "GovernmentLayoutPanel";
-         GovernmentLayoutPanel.RowCount = 2;
-         GovernmentLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-         GovernmentLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         GovernmentLayoutPanel.Size = new Size(393, 127);
-         GovernmentLayoutPanel.TabIndex = 0;
+         tableLayoutPanel8.ColumnCount = 1;
+         tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         tableLayoutPanel8.Controls.Add(DevelopmenTLP, 0, 0);
+         tableLayoutPanel8.Dock = DockStyle.Fill;
+         tableLayoutPanel8.Location = new Point(3, 19);
+         tableLayoutPanel8.Margin = new Padding(0);
+         tableLayoutPanel8.Name = "tableLayoutPanel8";
+         tableLayoutPanel8.RowCount = 6;
+         tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
+         tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
+         tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
+         tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
+         tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
+         tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         tableLayoutPanel8.Size = new Size(372, 372);
+         tableLayoutPanel8.TabIndex = 0;
          // 
-         // label36
+         // DevelopmenTLP
          // 
-         label36.AutoSize = true;
-         label36.Dock = DockStyle.Fill;
-         label36.Location = new Point(3, 0);
-         label36.Name = "label36";
-         label36.Size = new Size(92, 25);
-         label36.TabIndex = 0;
-         label36.Text = "Rank";
-         label36.TextAlign = ContentAlignment.MiddleLeft;
+         DevelopmenTLP.ColumnCount = 3;
+         DevelopmenTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 116F));
+         DevelopmenTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
+         DevelopmenTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
+         DevelopmenTLP.Controls.Add(label46, 0, 0);
+         DevelopmenTLP.Controls.Add(button4, 2, 0);
+         DevelopmenTLP.Dock = DockStyle.Fill;
+         DevelopmenTLP.Location = new Point(0, 0);
+         DevelopmenTLP.Margin = new Padding(0);
+         DevelopmenTLP.Name = "DevelopmenTLP";
+         DevelopmenTLP.RowCount = 1;
+         DevelopmenTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         DevelopmenTLP.Size = new Size(372, 29);
+         DevelopmenTLP.TabIndex = 0;
          // 
-         // label38
+         // label46
          // 
-         label38.AutoSize = true;
-         label38.Dock = DockStyle.Fill;
-         label38.Location = new Point(199, 0);
-         label38.Name = "label38";
-         label38.Size = new Size(92, 25);
-         label38.TabIndex = 2;
-         label38.Text = "Type";
-         label38.TextAlign = ContentAlignment.MiddleLeft;
+         label46.AutoSize = true;
+         label46.Dock = DockStyle.Fill;
+         label46.Location = new Point(3, 0);
+         label46.Name = "label46";
+         label46.Size = new Size(110, 29);
+         label46.TabIndex = 0;
+         label46.Text = "Development";
+         label46.TextAlign = ContentAlignment.MiddleLeft;
          // 
-         // button2
+         // button4
          // 
-         button2.Location = new Point(3, 783);
-         button2.Name = "button2";
-         button2.Size = new Size(149, 23);
-         button2.TabIndex = 5;
-         button2.Text = "Opene advanced editing";
-         GeneralToolTip.SetToolTip(button2, "Only edit properties in here if you know what you are doing.\r\nThere are no input validations or helps.");
-         button2.UseVisualStyleBackColor = true;
-         button2.Click += button2_Click;
+         button4.Dock = DockStyle.Fill;
+         button4.Location = new Point(272, 3);
+         button4.Name = "button4";
+         button4.Size = new Size(97, 23);
+         button4.TabIndex = 3;
+         button4.Text = "Redistribute";
+         GeneralToolTip.SetToolTip(button4, "Redistributes the given development among all provinces of the selected Country.\r\nMin and Max values are found in Settings/MiscSettings");
+         button4.UseVisualStyleBackColor = true;
+         button4.Click += RedistributeDev_Click;
          // 
          // ProvinceGroupsPage
          // 
@@ -2333,6 +2785,7 @@
          ProvinceCollectionsTab.RowCount = 2;
          ProvinceCollectionsTab.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
          ProvinceCollectionsTab.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         ProvinceCollectionsTab.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
          ProvinceCollectionsTab.Size = new Size(401, 810);
          ProvinceCollectionsTab.TabIndex = 0;
          // 
@@ -2356,13 +2809,15 @@
          // 
          MapLayoutPanel.ColumnCount = 1;
          MapLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         MapLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
          MapLayoutPanel.Controls.Add(MMButtonsTLPanel, 0, 1);
          MapLayoutPanel.Dock = DockStyle.Fill;
          MapLayoutPanel.Location = new Point(0, 0);
          MapLayoutPanel.Name = "MapLayoutPanel";
          MapLayoutPanel.RowCount = 2;
          MapLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         MapLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
+         MapLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         MapLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
          MapLayoutPanel.Size = new Size(1086, 844);
          MapLayoutPanel.TabIndex = 0;
          // 
@@ -2380,12 +2835,12 @@
          MMButtonsTLPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
          MMButtonsTLPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
          MMButtonsTLPanel.Dock = DockStyle.Fill;
-         MMButtonsTLPanel.Location = new Point(0, 815);
+         MMButtonsTLPanel.Location = new Point(0, 814);
          MMButtonsTLPanel.Margin = new Padding(0);
          MMButtonsTLPanel.Name = "MMButtonsTLPanel";
          MMButtonsTLPanel.RowCount = 1;
          MMButtonsTLPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         MMButtonsTLPanel.Size = new Size(1086, 29);
+         MMButtonsTLPanel.Size = new Size(1086, 30);
          MMButtonsTLPanel.TabIndex = 0;
          // 
          // MapWindow
@@ -2461,20 +2916,36 @@
          LocTableLayoutPanel.ResumeLayout(false);
          LocTableLayoutPanel.PerformLayout();
          CountryPage.ResumeLayout(false);
-         CountryMainTLP.ResumeLayout(false);
-         CountryMainTLP.PerformLayout();
-         groupBox7.ResumeLayout(false);
-         TagAndColorTLP.ResumeLayout(false);
-         TagAndColorTLP.PerformLayout();
-         tableLayoutPanel1.ResumeLayout(false);
-         tableLayoutPanel1.PerformLayout();
+         tableLayoutPanel7.ResumeLayout(false);
+         CountryScrollPanel.ResumeLayout(false);
+         CountryScrollPanel.PerformLayout();
+         tableLayoutPanel9.ResumeLayout(false);
+         tableLayoutPanel9.PerformLayout();
+         groupBox8.ResumeLayout(false);
+         NamesTabControl.ResumeLayout(false);
+         MonarchNamesTab.ResumeLayout(false);
+         MonarchNamesTLP.ResumeLayout(false);
+         tableLayoutPanel6.ResumeLayout(false);
+         tableLayoutPanel6.PerformLayout();
+         ((System.ComponentModel.ISupportInitialize)RegnalNumeric).EndInit();
+         groupBox9.ResumeLayout(false);
+         CulturesTLP.ResumeLayout(false);
+         CulturesTLP.PerformLayout();
          GovernmentGroupBox.ResumeLayout(false);
          GovernmentLayoutPanel.ResumeLayout(false);
          GovernmentLayoutPanel.PerformLayout();
+         groupBox7.ResumeLayout(false);
+         TagAndColorTLP.ResumeLayout(false);
+         TagAndColorTLP.PerformLayout();
+         CapitalTLP.ResumeLayout(false);
+         tableLayoutPanel1.ResumeLayout(false);
+         groupBox10.ResumeLayout(false);
+         tableLayoutPanel8.ResumeLayout(false);
+         DevelopmenTLP.ResumeLayout(false);
+         DevelopmenTLP.PerformLayout();
          ProvinceGroupsPage.ResumeLayout(false);
          ProvinceCollectionsPanel.ResumeLayout(false);
          ProvinceCollectionsTab.ResumeLayout(false);
-         ProvinceCollectionsTab.PerformLayout();
          GroupCollectionOptions.ResumeLayout(false);
          GroupCollectionOptions.PerformLayout();
          MapLayoutPanel.ResumeLayout(false);
@@ -2595,8 +3066,6 @@
       public ComboBox MWAttirbuteCombobox;
       public NumericUpDown MagicWandTolerance;
       private ToolStripMenuItem mapModeHotkeysToolStripMenuItem;
-      private TableLayoutPanel MapLayoutPanel;
-      private TableLayoutPanel MMButtonsTLPanel;
       private GroupBox LocalisationGroupBox;
       private TableLayoutPanel LocTableLayoutPanel;
       private Label LocalisationLabel;
@@ -2643,28 +3112,7 @@
       private ToolStripMenuItem jsonToolStripMenuItem;
       private ToolStripMenuItem randomModifierToolStripMenuItem;
       private ToolStripSeparator toolStripSeparator3;
-      private TableLayoutPanel CountryMainTLP;
-      private Label CountryNameLabel;
-      private TableLayoutPanel TagAndColorTLP;
-      private Label label27;
-      private Label label28;
-      private GroupBox groupBox7;
-      private Label label30;
-      private Label label29;
-      private TextBox CountryLoc;
-      private TextBox CountryADJLoc;
-      private Label label34;
-      private Label label31;
-      private Label label33;
-      private Label label32;
       private ToolStripMenuItem CreateFilesByDefault;
-      private TableLayoutPanel tableLayoutPanel1;
-      private Button button1;
-      private Label label35;
-      private GroupBox GovernmentGroupBox;
-      private TableLayoutPanel GovernmentLayoutPanel;
-      private Label label36;
-      private Label label38;
       private Label label39;
       private Label label37;
       private TextBox ProvAdjTextBox;
@@ -2678,6 +3126,61 @@
       private ToolStripMenuItem roughEditorToolStripMenuItem;
       private Button button2;
       private Button AdvancedProvinceEditing;
+      private TableLayoutPanel tableLayoutPanel7;
+      private TableLayoutPanel MapLayoutPanel;
+      private TableLayoutPanel MMButtonsTLPanel;
+      private TableLayoutPanel tableLayoutPanel9;
+      private GroupBox groupBox8;
+      private TabControl NamesTabControl;
+      private TabPage MonarchNamesTab;
+      private TableLayoutPanel MonarchNamesTLP;
+      private TableLayoutPanel tableLayoutPanel6;
+      private Label label40;
+      private Label label41;
+      private Label label42;
+      private NumericUpDown RegnalNumeric;
+      private TextBox NameTextBox;
+      private TextBox ChanceTextBox;
+      private Button button3;
+      private CheckBox ShowMonachrNamesCB;
+      private FlowLayoutPanel MonarchNamesFlowPanel;
+      private TabPage ShipNamesTab;
+      private TabPage ArmyNamesTab;
+      private TabPage FleetNamesTab;
+      private TabPage LeaderNamesTab;
+      private Label CountryNameLabel;
+      private GroupBox groupBox9;
+      private TableLayoutPanel CulturesTLP;
+      private Label label43;
+      private GroupBox GovernmentGroupBox;
+      private TableLayoutPanel GovernmentLayoutPanel;
+      private Label label36;
+      private Label label38;
+      private GroupBox groupBox7;
+      private TableLayoutPanel TagAndColorTLP;
+      private Label label34;
+      private Label label30;
+      private Label label27;
+      private Label label28;
+      private Label label29;
+      private TextBox CountryLoc;
+      private TextBox CountryADJLoc;
+      private Label label31;
+      private Label label33;
+      private Label label32;
+      private Label label44;
+      private Label label45;
+      private TableLayoutPanel CapitalTLP;
+      private Button SetCapitalToSelected;
+      private TableLayoutPanel tableLayoutPanel1;
+      private Button button1;
+      private Label label35;
+      private Panel CountryScrollPanel;
+      private GroupBox groupBox10;
+      private TableLayoutPanel tableLayoutPanel8;
+      private TableLayoutPanel DevelopmenTLP;
+      private Label label46;
+      private Button button4;
    }
 }
 

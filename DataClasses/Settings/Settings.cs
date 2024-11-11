@@ -62,12 +62,21 @@ public class MiscSettings
    [Description("The last used Vanilla location")]
    public string LastVanillaPath { get; set; } = string.Empty;
 
+   [Description("The minimum development a province will have when development is spread randomly")]
+   public int MinDevelopmentInGeneration { get; set; } = 3;
+
+   [Description("The maximum development a province will have when development is spread randomly")]
+   public int MaxDevelopmentInGeneration { get; set; } = 25;
+
+   [Description("The seed that will be used for random generation")]
+   public int RandomSeed { get; set; } = 1444;
+
    public override bool Equals(object? obj)
    {
       if (obj is not MiscSettings settings)
          return false;
 
-      return Language == settings.Language && LastModPath == settings.LastModPath && LastVanillaPath == settings.LastVanillaPath;
+      return Language == settings.Language && LastModPath == settings.LastModPath && LastVanillaPath == settings.LastVanillaPath && MinDevelopmentInGeneration == settings.MinDevelopmentInGeneration && MaxDevelopmentInGeneration == settings.MaxDevelopmentInGeneration && RandomSeed == settings.RandomSeed;
    }
 
    public override int GetHashCode()

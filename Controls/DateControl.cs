@@ -56,6 +56,7 @@ namespace Editor.Controls
          Size = _tableLayoutPanel.Size;
          Margin = new(0);
          Padding = new(0);
+         _tableLayoutPanel.Margin = new(0, 1, 0, 0);
          Controls.Add(_tableLayoutPanel);
       }
 

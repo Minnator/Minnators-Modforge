@@ -83,8 +83,15 @@ namespace Editor.Loading
                      }
                      break;
                   case "reform_levels":
-                     foreach (var block in govSubBLock.GetBlockElements)
+                     foreach (var outerBlock in govSubBLock.GetBlockElements)
                      {
+                        var block = outerBlock.GetBlockWithName("reforms");
+                        if (block == null) 
+                        {
+                           Globals.ErrorLog.Write($"Error in {filePath} : Expected reforms block, got {outerBlock.Name}");
+                           continue;
+                        }
+
                         var reformLevel = new ReformLevel(block.Name);
                         var reformList = Parsing.GetStringList(block.GetContent);
                         foreach (var item in reformList)

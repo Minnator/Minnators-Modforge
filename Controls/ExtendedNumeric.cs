@@ -27,6 +27,7 @@ namespace Editor.Controls
          var textBoxProperty = type.GetProperty("TextBox", BindingFlags.Instance | BindingFlags.NonPublic);
          _textBox = (TextBox)textBoxProperty?.GetValue(this, null)!;
          _textBox.KeyPress += TextBox_KeyPress;
+         _textBox.LostFocus += OnFocusLost;
       }
 
       private void TextBox_KeyPress(object? sender, KeyPressEventArgs e)
@@ -37,6 +38,11 @@ namespace Editor.Controls
          // Raise the OnTextValueChanged event when the Enter key is pressed == the value has been changed
          if (e.KeyChar == (char)Keys.Enter)
             OnTextValueChanged?.Invoke(this, new (Selection.GetSelectedProvinces, Value));
+      }
+
+      private void OnFocusLost(object? sender, EventArgs e)
+      {
+         OnTextValueChanged?.Invoke(this, new (Selection.GetSelectedProvinces, Value));
       }
 
       public override void UpButton()

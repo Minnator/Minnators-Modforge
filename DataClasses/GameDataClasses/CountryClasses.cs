@@ -1,6 +1,8 @@
-﻿namespace Editor.DataClasses.GameDataClasses
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Editor.DataClasses.GameDataClasses
 {
-   public struct MonarchName(string name, int ordinalNumber, int chance)
+   public readonly struct MonarchName(string name, int ordinalNumber, int chance) : IEquatable<MonarchName>
    {
       public string Name { get; } = name;
       public int OrdinalNumber { get; } = ordinalNumber;
@@ -8,6 +10,35 @@
 
       // Chances for female names are negative
       public readonly bool IsFemale => Chance < 0;
+
+      public static MonarchName Empty => new("", 0, 0);
+
+      public override bool Equals([NotNullWhen(true)] object? obj)
+      {
+         if (obj is MonarchName other)
+            return obj.GetHashCode() == other.GetHashCode();
+         return false;
+      }
+
+      public override int GetHashCode()
+      {
+         return HashCode.Combine(Name, OrdinalNumber, Chance);
+      }
+
+      public static bool operator ==(MonarchName left, MonarchName right)
+      {
+         return left.Equals(right);
+      }
+
+      public static bool operator !=(MonarchName left, MonarchName right)
+      {
+         return !(left == right);
+      }
+
+      public bool Equals(MonarchName other)
+      {
+         return Name == other.Name && OrdinalNumber == other.OrdinalNumber && Chance == other.Chance;
+      }
    }
 
    public class CountryHistoryEntry(DateTime date)

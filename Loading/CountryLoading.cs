@@ -62,7 +62,9 @@ namespace Editor.Loading
 
          Parallel.ForEach(files, new () { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 },file =>
          {
-            Parsing.RemoveCommentFromMultilineString(IO.ReadAllInUTF8(file), out var removed);
+            if (!IO.ReadAllInANSI(file, out var content))
+               return;
+            Parsing.RemoveCommentFromMultilineString(content, out var removed);
             var elements = Parsing.GetElements(0, removed);
             
             foreach (var element in elements)
@@ -411,7 +413,7 @@ namespace Editor.Loading
                   break;
                case "fleet_names":
                   foreach (var name in block.GetContentElements)
-                     country.FleeTNames.AddRange(Parsing.GetStringList(name.Value));
+                     country.FleetNames.AddRange(Parsing.GetStringList(name.Value));
                   break;
                case "army_names":
                   foreach (var name in block.GetContentElements)

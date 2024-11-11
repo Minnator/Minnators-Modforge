@@ -40,10 +40,12 @@ namespace Editor.Controls
 
       public void InitializeItems(List<string> items)
       {
+         SuspendLayout();
          items.Sort();
          _itemsComboBox.Items.Clear();
          foreach (var item in items) 
             _itemsComboBox.Items.Add(item);
+         ResumeLayout();
       }
 
       public List<string> GetItems()

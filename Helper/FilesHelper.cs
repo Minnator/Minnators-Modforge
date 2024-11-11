@@ -128,17 +128,11 @@ public static partial class FilesHelper
       var modPath = Path.Combine(Globals.ModPath, folderPath);
 
       if (File.Exists(modPath))
-      {
-         content = IO.ReadAllInUTF8(modPath);
-         return true;
-      }
+         return IO.ReadAllInANSI(modPath, out content);
 
       var vanillaPath = Path.Combine(Globals.VanillaPath, folderPath);
       if (File.Exists(vanillaPath))
-      {
-         content = IO.ReadAllInUTF8(vanillaPath);
-         return true;
-      }
+         return IO.ReadAllInANSI(vanillaPath, out content);
 
       content = string.Empty;
       return false;

@@ -95,6 +95,7 @@ namespace Editor
          //pause gui updates
          SuspendLayout();
          Globals.Settings = SettingsLoader.Load();
+         Globals.Random = new(Globals.Settings.MiscSettings.RandomSeed);
 
          InitGui();
          Text = $"{Text} | {Globals.DescriptorData.Name}";
@@ -1067,6 +1068,25 @@ namespace Editor
       {
          new ModifierSuggestion().ShowDialog();
       }
+      private void crashReportToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         CrashManager.EnterCrashHandler(new());
+      }
+
+      private void loadDDSFilesTestToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+#if DEBUG
+         var path = @"S:\SteamLibrary\steamapps\common\Europa Universalis IV\gfx\interface\mapmode_military_access.dds";
+         var bmp = ImageReader.ReadDDSImage(path);
+
+         bmp.Save(Globals.DownloadsFolder + "\\dds_test.png", ImageFormat.Png);
+#endif
+      }
+
+      private void roughEditorToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         new RoughEditorForm(Globals.Countries["TUR"]).ShowDialog();
+      }
 
 
       // ------------------- COUNTRY EDITING TAB ------------------- \\
@@ -1077,12 +1097,23 @@ namespace Editor
       private ComboBox TechGroupBox = null!;
       private ComboBox GovernmentTypeBox = null!;
       private ComboBox GovernmentRankBox = null!;
+      private ComboBox PrimaryCultureBox = null!;
+      private ComboBox focusComboBox = null!;
 
       private ColorPickerButton CountryColorPickerButton = null!;
       private ColorPickerButton RevolutionColorPickerButton = null!;
 
       private ItemList GovernmentReforms = null!;
+      private ItemList AcceptedCultures = null!;
 
+      private NamesEditor leaderEditor = null!;
+      private NamesEditor shipEditor = null!;
+      private NamesEditor armyEditor = null!;
+      private NamesEditor fleetEditor = null!;
+
+      private TextBox capitalTextBox = null!;
+
+      private ExtendedNumeric CountryDevelopmentNumeric = null!;
 
       private void InitializeCountryEditGui()
       {
@@ -1094,12 +1125,10 @@ namespace Editor
             Height = 25,
          };
          TagSelectionBox.Items.Add("###");
-         TagAndColorTLP.Controls.Add(TagSelectionBox, 1, 0);
          TagSelectionBox.OnTagChanged += CountryGuiEvents.TagSelectionBox_OnTagChanged;
          CountryColorPickerButton = ControlFactory.GetColorPickerButton();
          CountryColorPickerButton.Click += CountryGuiEvents.CountryColorPickerButton_Click;
          GeneralToolTip.SetToolTip(CountryColorPickerButton, "Set the <color> of the selected country");
-         TagAndColorTLP.Controls.Add(CountryColorPickerButton, 3, 0);
          RevolutionColorPickerButton = ControlFactory.GetColorPickerButton();
          RevolutionColorPickerButton.Click += CountryGuiEvents.RevolutionColorPickerButton_Click;
          GeneralToolTip.SetToolTip(RevolutionColorPickerButton, "Set the <revolutionary_color> of the selected country");
@@ -1107,26 +1136,66 @@ namespace Editor
          UnitTypeBox = ControlFactory.GetListComboBox([.. Globals.TechnologyGroups.Keys], new(1));
          TechGroupBox = ControlFactory.GetListComboBox([.. Globals.TechnologyGroups.Keys], new(1));
          GovernmentTypeBox = ControlFactory.GetListComboBox([.. Globals.GovernmentTypes.Keys], new(1, 1, 6, 1));
+         GovernmentTypeBox.SelectedIndexChanged += GovernmentTypeBox_SelectedIndexChanged;
          GovernmentRankBox = ControlFactory.GetListComboBox(["1", "2", "3"], new(1)); // TODO read in the defines to determine range
-         GovernmentReforms = ControlFactory.GetItemList(ItemTypes.FullWidth, [.. Globals.GovernmentReforms.Keys], "Government Reforms");
+         GovernmentReforms = ControlFactory.GetItemList(ItemTypes.FullWidth, [], "Government Reforms");
          GovernmentReforms.Width = 117;
+         capitalTextBox = new() { Margin = new(1), Dock = DockStyle.Fill };
+         focusComboBox = ControlFactory.GetListComboBox([.. Enum.GetNames<Mana>()], new(1));
 
-
-
-
+         TagAndColorTLP.Controls.Add(TagSelectionBox, 1, 0);
+         TagAndColorTLP.Controls.Add(CountryColorPickerButton, 3, 0);
          TagAndColorTLP.Controls.Add(RevolutionColorPickerButton, 3, 3);
          TagAndColorTLP.Controls.Add(GraphicalCultureBox, 1, 2);
          TagAndColorTLP.Controls.Add(UnitTypeBox, 3, 2);
          TagAndColorTLP.Controls.Add(TechGroupBox, 1, 3);
+         CapitalTLP.Controls.Add(capitalTextBox, 0, 0);
+         TagAndColorTLP.Controls.Add(focusComboBox, 1, 4);
 
          GovernmentLayoutPanel.Controls.Add(GovernmentTypeBox, 3, 0);
          GovernmentLayoutPanel.Controls.Add(GovernmentRankBox, 1, 0);
          GovernmentLayoutPanel.Controls.Add(GovernmentReforms, 0, 1);
          GovernmentLayoutPanel.SetColumnSpan(GovernmentReforms, 4);
+
+         // Names
+         leaderEditor = new([], "Add / Remove any names, separate with \",\"");
+         shipEditor = new([], "Add / Remove any names, separate with \",\"  $PROVINCE$ can be used here.");
+         armyEditor = new([], "Add / Remove any names, separate with \",\"");
+         fleetEditor = new([], "Add / Remove any names, separate with \",\"  $PROVINCE$ can be used here.");
+
+         LeaderNamesTab.Controls.Add(leaderEditor);
+         ShipNamesTab.Controls.Add(shipEditor);
+         ArmyNamesTab.Controls.Add(armyEditor);
+         FleetNamesTab.Controls.Add(fleetEditor);
+
+         // Cultures
+         PrimaryCultureBox = new() { Dock = DockStyle.Fill };
+         PrimaryCultureBox.Items.AddRange([.. Globals.Cultures.Keys]);
+         PrimaryCultureBox.Margin = new(1);
+         AcceptedCultures = ControlFactory.GetItemList(ItemTypes.FullWidth, [.. Globals.Cultures.Keys], "Accepted Cultures");
+
+         CulturesTLP.Controls.Add(PrimaryCultureBox, 1, 0);
+         CulturesTLP.Controls.Add(AcceptedCultures, 0, 1);
+         CulturesTLP.SetColumnSpan(AcceptedCultures, 2);
+
+         // Development
+         CountryDevelopmentNumeric = ControlFactory.GetExtendedNumeric();
+         CountryDevelopmentNumeric.Minimum = 3;
+         CountryDevelopmentNumeric.Maximum = 100000;
+         CountryDevelopmentNumeric.UpButtonPressedSmall += (_, _) => AddDevToSelectedCountryIfValid(1);
+         CountryDevelopmentNumeric.UpButtonPressedMedium += (_, _) => AddDevToSelectedCountryIfValid(5);
+         CountryDevelopmentNumeric.UpButtonPressedLarge += (_, _) => AddDevToSelectedCountryIfValid(10);
+         CountryDevelopmentNumeric.DownButtonPressedSmall += (_, _) => AddDevToSelectedCountryIfValid(-1);
+         CountryDevelopmentNumeric.DownButtonPressedMedium += (_, _) => AddDevToSelectedCountryIfValid(-5);
+         CountryDevelopmentNumeric.DownButtonPressedLarge += (_, _) => AddDevToSelectedCountryIfValid(-10);
+         CountryDevelopmentNumeric.OnTextValueChanged += (_, _) => SpreadDevInSelectedCountryIfValid((int)CountryDevelopmentNumeric.Value);
+         DevelopmenTLP.Controls.Add(CountryDevelopmentNumeric, 1, 0);
+         GeneralToolTip.SetToolTip(CountryDevelopmentNumeric, "LMB = +- 1\nSHIFT + LMB = +- 5\nCTRL + LMB = +-10\nThe development is only added to one random province in the selected country per click.");
       }
 
       public void ClearCountryGui()
       {
+         // Misc
          TagSelectionBox.SelectedItem = "###";
          CountryNameLabel.Text = "Country: -";
          CountryColorPickerButton.BackColor = Color.Empty;
@@ -1137,17 +1206,37 @@ namespace Editor
          GraphicalCultureBox.SelectedIndex = 0;
          UnitTypeBox.SelectedIndex = 0;
          TechGroupBox.SelectedIndex = 0;
+         focusComboBox.SelectedIndex = 0;
+         capitalTextBox.Clear();
+
+         // Names
+         leaderEditor.Clear();
+         shipEditor.Clear();
+         armyEditor.Clear();
+         fleetEditor.Clear();
+         MonarchNamesFlowPanel.Controls.Clear();
+
+         // Cultures
+         PrimaryCultureBox.SelectedIndex = -1;
+         AcceptedCultures.Clear();
+
+         // Government
+         GovernmentTypeBox.SelectedIndex = 0;
+         GovernmentRankBox.SelectedIndex = 0;
+         GovernmentReforms.Clear();
+
       }
 
       internal void LoadCountryToGui(Country country)
       {
          if (country == Country.Empty)
          {
-            ClearCountryGui();
+
             return;
          }
+         SuspendLayout();
          TagSelectionBox.SelectedItem = country.Tag.ToString();
-         CountryNameLabel.Text = $"{country.GetLocalisation()} ({country.Tag})";
+         CountryNameLabel.Text = $"{country.GetLocalisation()} ({country.Tag}) | (Total Dev: {country.GetDevelopment()})";
          CountryColorPickerButton.BackColor = country.Color;
          CountryColorPickerButton.Text = $"({country.Color.R}/{country.Color.G}/{country.Color.B})";
          CountryLoc.Text = country.GetLocalisation();
@@ -1156,6 +1245,67 @@ namespace Editor
          GraphicalCultureBox.SelectedItem = country.Gfx;
          UnitTypeBox.SelectedItem = country.UnitType;
          TechGroupBox.SelectedItem = country.TechnologyGroup;
+         capitalTextBox.Text = country.Capital.Id.ToString();
+         focusComboBox.SelectedItem = country.NationalFocus;
+
+         // Names
+         leaderEditor.SetNames(country.LeaderNames);
+         shipEditor.SetNames(country.ShipNames);
+         armyEditor.SetNames(country.ArmyNames);
+         fleetEditor.SetNames(country.FleetNames);
+         MonarchNamesFlowPanel.Controls.Clear();
+         if (ShowMonachrNamesCB.Checked)
+            AddMonarchNamesToGui(country.MonarchNames);
+         ResumeLayout();
+
+         // Government
+         GovernmentTypeBox.SelectedItem = country.Government;
+         GovernmentRankBox.SelectedItem = country.GovernmentRank.ToString();
+         if (Globals.GovernmentTypes.TryGetValue(country.Government, out var government))
+            GovernmentReforms.InitializeItems([.. government.AllReformNames]);
+
+         // Cultures
+         PrimaryCultureBox.SelectedItem = country.PrimaryCulture;
+         foreach (var cult in country.AcceptedCultures)
+            AcceptedCultures.AddItem(cult);
+
+      }
+
+      private void GovernmentTypeBox_SelectedIndexChanged(object? sender, EventArgs e)
+      {
+         if (GovernmentTypeBox.SelectedItem == null)
+            return;
+         if (Globals.GovernmentTypes.TryGetValue(GovernmentTypeBox.SelectedItem?.ToString()!, out var government))
+            GovernmentReforms.InitializeItems([.. government.AllReformNames]);
+      }
+
+      private void AddDevToSelectedCountryIfValid(int dev)
+      {
+         if (Selection.SelectedCountry == Country.Empty)
+            return;
+         Selection.SelectedCountry.AddDevToRandomProvince(dev);
+      }
+
+      private void SpreadDevInSelectedCountryIfValid(int value)
+      {
+         if (Selection.SelectedCountry == Country.Empty)
+            return;
+         var provinces = Selection.SelectedCountry.GetProvinces();
+         var pieces = MathHelper.SplitIntoNRandomPieces(provinces.Count, value, Globals.Settings.MiscSettings.MinDevelopmentInGeneration, Globals.Settings.MiscSettings.MaxDevelopmentInGeneration);
+         if (pieces.Count != provinces.Count)
+            return;
+         var index = 0;
+         foreach (var province in provinces)
+         {
+            var devParts = MathHelper.SplitIntoNRandomPieces(3, pieces[index], 1,
+               Globals.Settings.MiscSettings.MaxDevelopmentInGeneration);
+
+            province.BaseTax = devParts[0];
+            province.BaseProduction = devParts[1];
+            province.BaseManpower = devParts[2];
+
+            index++;
+         }
       }
 
       private void CreateFilesByDefault_Click(object sender, EventArgs e)
@@ -1166,11 +1316,6 @@ namespace Editor
 
       private void save1ToolStripMenuItem_Click(object sender, EventArgs e)
       {
-      }
-
-      private void SaveAllInDefaultFiles_Click(object sender, EventArgs e)
-      {
-
       }
 
       private void bugReportToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1188,19 +1333,6 @@ namespace Editor
          {
             // canceled
          }
-      }
-
-      private void crashReportToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-         CrashManager.EnterCrashHandler(new());
-      }
-
-      private void loadDDSFilesTestToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-         var path = @"S:\SteamLibrary\steamapps\common\Europa Universalis IV\gfx\interface\mapmode_military_access.dds";
-         var bmp = ImageReader.ReadDDSImage(path);
-
-         bmp.Save(Globals.DownloadsFolder + "\\dds_test.png", ImageFormat.Png);
       }
 
       private void OpenProvinceFileButton_Click(object sender, EventArgs e)
@@ -1223,10 +1355,6 @@ namespace Editor
          }
       }
 
-      private void roughEditorToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-         new RoughEditorForm(Globals.Countries["TUR"]).ShowDialog();
-      }
 
       private void button2_Click(object sender, EventArgs e)
       {
@@ -1242,5 +1370,64 @@ namespace Editor
          }
          new RoughEditorForm(Selection.GetSelectedProvinces[0], false).ShowDialog();
       }
+
+      private void AddMonarchName_Click(object sender, EventArgs e)
+      {
+         if (!InputHelper.GetStringIfNotEmpty(NameTextBox, out var name))
+            return;
+         if (!InputHelper.GetIntIfNotEmpty(ChanceTextBox, out var chance))
+            return;
+         if (!InputHelper.GetIntIfNotEmpty(RegnalNumeric, out var regnal))
+            return;
+
+         // TODO proper country editing
+         var monarchName = new MonarchName(name, chance, regnal);
+         Selection.SelectedCountry.MonarchNames.Add(monarchName);
+
+      }
+
+      private void AddMonarchNamesToGui(List<MonarchName> names)
+      {
+         MonarchNamesFlowPanel.FlowDirection = FlowDirection.TopDown;
+         MonarchNamesFlowPanel.AutoScroll = true;
+         MonarchNamesFlowPanel.WrapContents = false;
+
+         SuspendLayout();
+         foreach (var monName in names)
+            AddMonarchNameToGui(monName);
+         ResumeLayout();
+      }
+
+      private void AddMonarchNameToGui(MonarchName monarchName)
+      {
+         MonarchNameControl monarchNameControl = new(monarchName, new(MonarchNamesFlowPanel.Width - 28, 29));
+         MonarchNamesFlowPanel.Controls.Add(monarchNameControl);
+      }
+
+      private void ShowMonarchNamesCB_CheckedChanged(object sender, EventArgs e)
+      {
+         if (Selection.SelectedCountry == Country.Empty)
+            return;
+         if (ShowMonachrNamesCB.Checked)
+            AddMonarchNamesToGui(Selection.SelectedCountry.MonarchNames);
+         else
+            MonarchNamesFlowPanel.Controls.Clear();
+      }
+
+      private void SetCapitalToSelected_Click(object sender, EventArgs e)
+      {
+         if (Selection.Count != 1)
+            return;
+
+         Selection.GetSelectedProvinces[0].Capital = Selection.SelectedCountry.Tag;
+         capitalTextBox.Text = Selection.GetSelectedProvinces[0].Id.ToString();
+      }
+
+      private void RedistributeDev_Click(object sender, EventArgs e)
+      {
+         SpreadDevInSelectedCountryIfValid((int)CountryDevelopmentNumeric.Value);
+      }
+
+      
    }
 }

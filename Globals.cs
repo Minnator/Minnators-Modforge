@@ -103,6 +103,8 @@ public static class Globals
    public const int LOADING_STAGES = 41; // Needs to be increased when adding new loading stages
    #endregion
    
+   public static Random Random = null!;
+
    public static ConsoleForm? ConsoleForm = null;
    public static Search? SearchForm = null;
    public static MapWindow MapWindow = null!;

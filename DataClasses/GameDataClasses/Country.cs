@@ -57,7 +57,7 @@ public class Country(Tag tag, Color color, string fileName) : ProvinceCollection
    [Browsable(false)]
    public List<string> ShipNames { get; set; } = [];
    [Browsable(false)]
-   public List<string> FleeTNames { get; set; } = [];
+   public List<string> FleetNames { get; set; } = [];
    [Browsable(false)]
    public List<string> ArmyNames { get; set; } = [];
    [Browsable(false)]
@@ -112,6 +112,14 @@ public class Country(Tag tag, Color color, string fileName) : ProvinceCollection
       return History.OrderBy(h => h.Date).FirstOrDefault(h => h.Date > date);
    }
 
+   public int GetDevelopment()
+   {
+      var sum = 0;
+      foreach (var province in GetProvinces())
+         sum += province.GetTotalDevelopment();
+      return sum;
+   }
+
    public ICollection<Province> GetCoreProvinces()
    {
       ICollection<Province> provinces = [];
@@ -132,6 +140,42 @@ public class Country(Tag tag, Color color, string fileName) : ProvinceCollection
             provinces.Add(id);
       }
       return provinces;
+   }
+
+   public Province AddDevToRandomProvince(int dev)
+   {
+      var provinces = GetProvinces().ToList();
+      var prov = provinces[Globals.Random.Next(provinces.Count)];
+
+      if (dev < 3)
+      {
+         var devToImprov = Globals.Random.Next(3);
+         switch (devToImprov)
+         {
+            case 0:
+                  prov.BaseTax += dev;
+               break;
+            case 1:
+                  prov.BaseProduction += dev;
+               break;
+            case 2:
+                  prov.BaseManpower += dev;
+               break;
+            default:
+               prov.BaseTax += dev;
+               break;
+         }
+         return prov;
+      }
+
+      var devParts = MathHelper.SplitIntoNRandomPieces(3, dev, Globals.Settings.MiscSettings.MinDevelopmentInGeneration,
+         Globals.Settings.MiscSettings.MaxDevelopmentInGeneration);
+
+      prov.BaseTax += devParts[0];
+      prov.BaseProduction += devParts[1];
+      prov.BaseManpower += devParts[2];
+
+      return prov;
    }
 
    [Browsable(false)]

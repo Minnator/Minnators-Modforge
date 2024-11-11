@@ -11,6 +11,26 @@ public class Government(string name)
 
    public static Government Empty => new (string.Empty);
 
+   public List<GovernmentReform> AllReforms
+   {
+      get
+      {
+         List<GovernmentReform> allReforms = [];
+         foreach (var level in ReformLevels)
+            allReforms.AddRange(level.Reforms);
+         return allReforms;
+      }
+   }
+
+   public List<string> AllReformNames
+   {
+      get
+      {
+         var allReforms = AllReforms;
+         return allReforms.Select(reform => reform.Name).ToList();
+      }
+   }
+
    public override string ToString()
    {
       return Name;
