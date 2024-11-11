@@ -275,7 +275,7 @@ public static class Globals
 // - [x] Add a modifier creation and selection menu
 // - [x] Add saving for all Province Collections
 // - [x] Add descriptions on how to customize tooltips, map modes, and other things
-// - [ ] Add basic country editing
+// - [x] Add basic country editing there is now EXTENSIVE country editing
 // - [x] Fix province center calculation
 // - [x] Find last concurrency bugs
 // - [x] Pre load and layout the Province Collection Editing GUI to prevent LagSpike on first opening said tab
@@ -285,8 +285,8 @@ public static class Globals
 // - [x] Fix the Province Collection Editing gui so that all types work the same and edge cases are handled
 // - [x] Localisation editing for provinces and modifiers
 // - [x] Check if province is selected by color of the pixels instead of bounds or center
-// - [ ] Trade fix
-// - [ ] River fixes
+// - [ ] Trade fix   //UI
+// - [ ] River fixes //UI
 // - [x] Province ADJ localization fix
 // - [x] Language in quicksettings fix
 // - [x] File saving popup for saving map mode
@@ -294,13 +294,12 @@ public static class Globals
 // - [ ] 3/2 letters prefix from mods
 // - [ ] Support deleting in saving
 // - [x] Toolstip customizer tooltips and fix column width
-// - [ ] Logging and Crash Reporter
-// - [-] Map mode crashes catchen und reporten and user so that it restarts
+// - [ ] Logging and Crash Reporter ==> Map mode crashes catchen und reporten and user so that it restarts
 // - [x] When searching select the results
 // - [x] Settings window / saving
 // - [x] Open LoadingScreen and MapWindow on the same screen
 // - [x] Discord Rich Presence
-// - [ ] Country Collection Editing
+// - [-] Country Collection Editing, Saving is broken
 
 
 // TODO LIST Until Alpha 1.1

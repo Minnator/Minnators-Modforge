@@ -1,4 +1,5 @@
-﻿using Editor.Helper;
+﻿using Editor.DataClasses.Settings;
+using Editor.Helper;
 
 namespace Editor.Forms
 {
@@ -9,6 +10,8 @@ namespace Editor.Forms
          InitializeComponent();
          StartPosition = FormStartPosition.CenterScreen;
 
+         Globals.Settings = SettingsLoader.Load();
+         Globals.Settings.RenderingSettings.MapBorderColor = Color.FromArgb(Globals.Settings.RenderingSettings.MapBorderColor.R, Globals.Settings.RenderingSettings.MapBorderColor.G, Globals.Settings.RenderingSettings.MapBorderColor.B);
 #if DEBUG
          Load += (sender, args) =>
          {
@@ -58,6 +61,9 @@ namespace Editor.Forms
 
          Globals.VanillaPath = VanillaPathTextBox.Text;
          Globals.ModPath = ModPathTextBox.Text;
+
+         Globals.Settings.MiscSettings.LastModPath = ModPathTextBox.Text;
+         Globals.Settings.MiscSettings.LastVanillaPath = VanillaPathTextBox.Text;
 
          Close();
       }

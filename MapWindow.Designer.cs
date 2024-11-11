@@ -2117,9 +2117,8 @@
          tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Absolute, 151F));
          tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Absolute, 121F));
          tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Absolute, 243F));
-         tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Absolute, 200F));
-         tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-         tableLayoutPanel9.Size = new Size(384, 912);
+         tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Absolute, 204F));
+         tableLayoutPanel9.Size = new Size(384, 916);
          tableLayoutPanel9.TabIndex = 1;
          // 
          // groupBox8
@@ -2682,9 +2681,10 @@
          // groupBox10
          // 
          groupBox10.Controls.Add(MiscTLP);
+         groupBox10.Dock = DockStyle.Fill;
          groupBox10.Location = new Point(3, 715);
          groupBox10.Name = "groupBox10";
-         groupBox10.Size = new Size(378, 194);
+         groupBox10.Size = new Size(378, 198);
          groupBox10.TabIndex = 9;
          groupBox10.TabStop = false;
          groupBox10.Text = "Misc";
@@ -2706,7 +2706,7 @@
          MiscTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
          MiscTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
          MiscTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-         MiscTLP.Size = new Size(372, 172);
+         MiscTLP.Size = new Size(372, 176);
          MiscTLP.TabIndex = 0;
          // 
          // DevelopmenTLP

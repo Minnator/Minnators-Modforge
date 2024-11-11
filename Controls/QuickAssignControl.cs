@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-using Editor.Forms;
-using Editor.Properties;
+﻿using Editor.Forms;
 
 namespace Editor.Controls
 {
@@ -10,6 +8,8 @@ namespace Editor.Controls
       private readonly Button _autoButton;
       private readonly Button _clearButton;
       private readonly Button _randomButton;
+
+      private readonly ToolTip _toolTip = new();
 
       private readonly List<string> _source;
       private List<string> _items;
@@ -89,6 +89,12 @@ namespace Editor.Controls
          _autoButton.Click += AutoButton_Click;
          _clearButton.Click += ClearButton_Click;
          _randomButton.Click += RandomButton_Click;
+
+         _toolTip.SetToolTip(_openEditor, $"Open the editor for {description}");
+         _toolTip.SetToolTip(_autoButton, $"Auto select items, following a predefined algorithm");
+         _toolTip.SetToolTip(_clearButton, $"Clear the items");
+         _toolTip.SetToolTip(_randomButton, $"Randomly select items (only works properly if there is a hardcoded max otherwise assigns one item)");
+
       }
 
       public void SetAutoSelectFunc(Func<int, List<string>> autoSelectFunc) => _autoSelectFunc = autoSelectFunc;

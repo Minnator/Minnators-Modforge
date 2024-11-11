@@ -1,13 +1,17 @@
 ﻿using Editor.DataClasses;
 using Editor.DataClasses.Commands;
-using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.Settings;
 using Editor.Interfaces;
+using Editor.Loading;
 
 namespace Editor.Helper;
 
 public static class Localisation
 {
    private static readonly LocObject SearchLoc = new("", string.Empty, ObjEditingStatus.Immutable);
+   
+
+
    public static string GetLoc (string key)
    {
       SearchLoc.Key = key;
@@ -44,6 +48,15 @@ public static class Localisation
          }
          locObject.Value = value;
       }
+   }
+
+   public static void Initialize()
+   {
+      Globals.Settings.MiscSettings.PropertyChanged += (_, args) =>
+      {
+         if (args.PropertyName == nameof(Settings.MiscSettings.Language))
+            LocalisationLoading.Load();
+      };
    }
 }
 

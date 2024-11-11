@@ -75,6 +75,9 @@ namespace Editor
          Globals.State = State.Loading;
          Globals.MapWindow = this;
 
+         Localisation.Initialize();
+         Globals.Random = new(Globals.Settings.MiscSettings.RandomSeed);
+
          RunLoadingScreen();
 
          if (StartScreen != null)
@@ -94,8 +97,6 @@ namespace Editor
          Hide();
          //pause gui updates
          SuspendLayout();
-         Globals.Settings = SettingsLoader.Load();
-         Globals.Random = new(Globals.Settings.MiscSettings.RandomSeed);
 
          InitGui();
          Text = $"{Text} | {Globals.DescriptorData.Name}";
@@ -166,15 +167,38 @@ namespace Editor
          _ls.ShowDialog();
       }
 
-      // Loads the map into the created PannablePictureBox
       private void InitGui()
       {
          InitializeComponent();
-         Globals.ZoomControl = new(new(Globals.MapWidth, Globals.MapHeight));
+         Globals.ZoomControl = new(new(Globals.MapWidth, Globals.MapHeight))
+         {
+            BorderWidth = Globals.Settings.RenderingSettings.MapBorderWidth, 
+            Border = Globals.Settings.RenderingSettings.ShowMapBorder,
+            BorderColor = Globals.Settings.RenderingSettings.MapBorderColor,
+         };
+         Globals.Settings.RenderingSettings.PropertyChanged += (_, args) =>
+         {
+            switch (args.PropertyName)
+            {
+               case nameof(Settings.RenderingSettings.MapBorderColor):
+                  Globals.ZoomControl.BorderColor = Globals.Settings.RenderingSettings.MapBorderColor;
+                  Globals.ZoomControl.Invalidate();
+                  break;
+               case nameof(Settings.RenderingSettings.MapBorderWidth):
+                  Globals.ZoomControl.BorderWidth = Globals.Settings.RenderingSettings.MapBorderWidth;
+                  Globals.ZoomControl.Invalidate();
+                  break;
+               case nameof(Settings.RenderingSettings.ShowMapBorder):
+                  Globals.ZoomControl.Border= Globals.Settings.RenderingSettings.ShowMapBorder;
+                  Globals.ZoomControl.Invalidate();
+                  break;
+            }
+            Globals.ZoomControl.Invalidate();
+         };
          MapLayoutPanel.Controls.Add(Globals.ZoomControl, 0, 0);
          Selection.Initialize();
          GuiDrawing.Initialize();
-
+         
          TopStripLayoutPanel.Controls.Add(DateControl, 4, 0);
          DateControl.OnDateChanged += OnDateChanged;
 
@@ -1267,7 +1291,6 @@ namespace Editor
       {
          if (country == Country.Empty)
          {
-
             return;
          }
          SuspendLayout();

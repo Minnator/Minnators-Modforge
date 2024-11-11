@@ -273,12 +273,14 @@ public static class Selection
 
    private static void SelectCountry(Province province)
    {
-      if (province == Province.Empty || !Globals.Countries.TryGetValue(province.Owner, out var country) ||
-          SelectedCountry == country)
+      if (province == Province.Empty || !Globals.Countries.TryGetValue(province.Owner, out var country))
       {
          RemoveCountrySelection();
          return;
       }
+
+      if (SelectedCountry == country)
+         return;
 
       if (Globals.MapModeManager.CurrentMapMode is DiplomaticMapMode mapMode)
       {

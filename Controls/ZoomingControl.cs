@@ -38,6 +38,37 @@ public sealed class ZoomControl : Control, IDisposable
 
    public bool CanZoom = true;
 
+   private bool _border = true;
+   public bool Border
+   {
+      get => _border;
+      set
+      {
+         _border = value;
+         Invalidate();
+      }
+   }
+   private int _borderWidth = 2;
+   public int BorderWidth
+   {
+      get => _borderWidth;
+      set
+      {
+         _borderWidth = value;
+         Invalidate();
+      }
+   }
+   private Color _borderColor = Color.Black;
+   public Color BorderColor
+   {
+      get => _borderColor;
+      set
+      {
+         _borderColor = value;
+         Invalidate();
+      }
+   }
+
    public EventHandler<ImagePositionEventArgs> ImagePositionChange = delegate { }; 
 
    public ZoomControl(Bitmap bmp)
@@ -358,16 +389,20 @@ public sealed class ZoomControl : Control, IDisposable
 
    private void ZoomOnPaint(object? sender, PaintEventArgs? e)
    {
-      if (_map == null! || e == null) return;
+      if (_map == null! || e == null)
+      {
+         if (e != null)
+            DrawBorder(e.Graphics);
+         return;
+      }
       
       Rectangle thisRect = new(0, 0, Width, Height);
 
       DrawStretch(HBitmap, _bmpGfx, e.Graphics, MapRectangle, thisRect);
 
-      Rectangle test = MapRectangle;
+      var test = MapRectangle;
 
-      int deltax = MapRectangle.Right - _map.Width;
-      if (deltax > 0)
+      if (MapRectangle.Right - _map.Width > 0)
       {
          var rightPoint = ReverseCoordinate(new(_map.Width, _map.Height)).X;
 
@@ -378,7 +413,10 @@ public sealed class ZoomControl : Control, IDisposable
       }
 
       if (MapRectangle.X >= 0)
+      {
+         DrawBorder(e.Graphics);
          return;
+      }
       //var point = ReverseCoordinate(MapRectangle.Location);
 
       var zeroPoint = ReverseCoordinateFloat(new(1f,0));
@@ -389,6 +427,16 @@ public sealed class ZoomControl : Control, IDisposable
 
       thisRect = thisRect with { Width = (int)Math.Ceiling(zeroPoint.X)};
       DrawStretch(HBitmap, _bmpGfx, e.Graphics, test, thisRect);
+      DrawBorder(e.Graphics);
+
+   }
+
+   private void DrawBorder(Graphics g)
+   {
+      if (!Border)
+         return;
+      var halfBorderWidth = BorderWidth / 2;
+      g.DrawRectangle(new(BorderColor, BorderWidth), halfBorderWidth, halfBorderWidth, Width - BorderWidth, Height - BorderWidth);
    }
 
 }
