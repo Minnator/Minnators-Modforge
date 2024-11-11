@@ -1115,6 +1115,12 @@ namespace Editor
 
       private ExtendedNumeric CountryDevelopmentNumeric = null!;
 
+      private QuickAssignControl historicalUnits = null!;
+      private QuickAssignControl historicalIdeas = null!;
+      private QuickAssignControl historicRivals = null!;
+      private QuickAssignControl historicFriends = null!;
+      private QuickAssignControl estatePrivileges = null!;
+
       private void InitializeCountryEditGui()
       {
          Selection.OnCountrySelected += CountryGuiEvents.OnCountrySelected;
@@ -1191,6 +1197,27 @@ namespace Editor
          CountryDevelopmentNumeric.OnTextValueChanged += (_, _) => SpreadDevInSelectedCountryIfValid((int)CountryDevelopmentNumeric.Value);
          DevelopmenTLP.Controls.Add(CountryDevelopmentNumeric, 1, 0);
          GeneralToolTip.SetToolTip(CountryDevelopmentNumeric, "LMB = +- 1\nSHIFT + LMB = +- 5\nCTRL + LMB = +-10\nThe development is only added to one random province in the selected country per click.");
+
+         // Quick Assign
+         List<string> unitsList = [];
+         foreach (var unit in Globals.Units)
+            unitsList.Add(unit.UnitName);
+         historicalUnits = new (unitsList, [], "Historic Units", -1);
+         List<string> ideaGroups = [];
+         foreach (var idea in Globals.Ideas)
+            if (idea.Type == IdeaType.IdeaGroup)
+               ideaGroups.Add(idea.Name);
+         historicalIdeas = new (ideaGroups, [], "Historic Ideas", 8);
+         historicRivals = new([.. Globals.Countries.Keys], [], "Historic Rivals", 8);
+         historicFriends = new([.. Globals.Countries.Keys], [], "Historic Friends", 8);
+         estatePrivileges = new ([], [], "Estate Privileges", 8);
+
+         MiscTLP.Controls.Add(historicalUnits, 0, 1);
+         MiscTLP.Controls.Add(historicalIdeas, 0, 2);
+         MiscTLP.Controls.Add(historicRivals, 0, 3);
+         MiscTLP.Controls.Add(historicFriends, 0, 4);
+         MiscTLP.Controls.Add(estatePrivileges, 0, 5);
+
       }
 
       public void ClearCountryGui()
@@ -1225,6 +1252,15 @@ namespace Editor
          GovernmentRankBox.SelectedIndex = 0;
          GovernmentReforms.Clear();
 
+         // Development
+         CountryDevelopmentNumeric.Value = 3;
+
+         // Quick Assign
+         historicalUnits.Clear();
+         historicalIdeas.Clear();
+         historicRivals.Clear();
+         historicFriends.Clear();
+         estatePrivileges.Clear();
       }
 
       internal void LoadCountryToGui(Country country)
@@ -1269,6 +1305,20 @@ namespace Editor
          foreach (var cult in country.AcceptedCultures)
             AcceptedCultures.AddItem(cult);
 
+         // Development
+         CountryDevelopmentNumeric.Value = country.GetDevelopment();
+
+         historicalUnits.SetItems(country.HistoricalUnits);
+         historicalIdeas.SetItems(country.HistoricalIdeas);
+         List<string> rivals = [];
+         foreach (var rival in country.HistoricalRivals)
+            rivals.Add(rival);
+         historicRivals.SetItems(rivals);
+         List<string> friends = [];
+         foreach (var friend in country.HistoricalFriends)
+            friends.Add(friend);
+         historicFriends.SetItems(friends);
+         estatePrivileges.SetItems(country.EstatePrivileges);
       }
 
       private void GovernmentTypeBox_SelectedIndexChanged(object? sender, EventArgs e)

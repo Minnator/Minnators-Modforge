@@ -64,7 +64,7 @@ namespace Editor.Loading
          else
             AddParamsToLandUnit((LandUnit)unit, kvps);
 
-         Globals.UnitTypes.Add(unit);
+         Globals.Units.Add(unit);
       }
 
       private static void AddParamsToShipUnit(ShipUnit unit, List<KeyValuePair<string, string>> param)
@@ -221,7 +221,7 @@ namespace Editor.Loading
       private static void PrintAllUnitsToFile()
       {
          var sb = new StringBuilder();
-         foreach (var unit in Globals.UnitTypes)
+         foreach (var unit in Globals.Units)
          {
             sb.AppendLine(unit.ToString());
          }

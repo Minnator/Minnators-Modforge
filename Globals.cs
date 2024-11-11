@@ -154,6 +154,9 @@ public static class Globals
    // Rivers
    public static Dictionary<int, Point[]> Rivers = [];
 
+   // Ideas
+   public static List<Idea> Ideas = [];
+
    // Maps the name of TradeGoods to the TradeGood object
    public static readonly Dictionary<string, TradeGood> TradeGoods = [];
    public static readonly Dictionary<string, TradeNode> TradeNodes = [];
@@ -164,7 +167,7 @@ public static class Globals
 
    // Unit Types and GFX
    public static List<string> GraphicalCultures = [];
-   public static HashSet<Unit> UnitTypes = [];
+   public static HashSet<Unit> Units = [];
 
    // Contains the provinces and options to access them
    public static HashSet<Province> Provinces = [];

@@ -61,6 +61,16 @@ namespace Editor.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap autoIcon {
+            get {
+                object obj = ResourceManager.GetObject("autoIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
         internal static System.IO.UnmanagedMemoryStream BonkSoundEffect {
@@ -72,9 +82,29 @@ namespace Editor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap down {
+        internal static System.Drawing.Bitmap clearIcon {
             get {
-                object obj = ResourceManager.GetObject("down", resourceCulture);
+                object obj = ResourceManager.GetObject("clearIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Down {
+            get {
+                object obj = ResourceManager.GetObject("Down", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap editIcon {
+            get {
+                object obj = ResourceManager.GetObject("editIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -155,6 +185,16 @@ namespace Editor.Properties {
         internal static System.Drawing.Bitmap province_small {
             get {
                 object obj = ResourceManager.GetObject("province_small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap randomIcon {
+            get {
+                object obj = ResourceManager.GetObject("randomIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

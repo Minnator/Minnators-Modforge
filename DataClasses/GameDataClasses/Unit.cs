@@ -1,7 +1,4 @@
-﻿using System.Xml.Linq;
-using static Editor.DataClasses.GameDataClasses.LandUnit;
-
-namespace Editor.DataClasses.GameDataClasses
+﻿namespace Editor.DataClasses.GameDataClasses
 {
    public abstract class Unit
    {

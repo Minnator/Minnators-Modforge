@@ -26,8 +26,7 @@ namespace Editor.Loading
             ParseIdeas(file, ref ideas);
          }
 
-
-
+         Globals.Ideas = ideas;
          Globals.LoadingLog.WriteTimeStamp("Ideas", sw.ElapsedMilliseconds);
       }
 

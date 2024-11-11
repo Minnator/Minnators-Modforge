@@ -242,7 +242,7 @@
          button1 = new Button();
          label35 = new Label();
          groupBox10 = new GroupBox();
-         tableLayoutPanel8 = new TableLayoutPanel();
+         MiscTLP = new TableLayoutPanel();
          DevelopmenTLP = new TableLayoutPanel();
          label46 = new Label();
          button4 = new Button();
@@ -311,7 +311,7 @@
          CapitalTLP.SuspendLayout();
          tableLayoutPanel1.SuspendLayout();
          groupBox10.SuspendLayout();
-         tableLayoutPanel8.SuspendLayout();
+         MiscTLP.SuspendLayout();
          DevelopmenTLP.SuspendLayout();
          ProvinceGroupsPage.SuspendLayout();
          ProvinceCollectionsPanel.SuspendLayout();
@@ -2110,16 +2110,16 @@
          tableLayoutPanel9.Location = new Point(0, 0);
          tableLayoutPanel9.Margin = new Padding(0);
          tableLayoutPanel9.Name = "tableLayoutPanel9";
-         tableLayoutPanel9.RowCount = 8;
+         tableLayoutPanel9.RowCount = 7;
          tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Absolute, 23F));
          tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Absolute, 149F));
          tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
          tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Absolute, 151F));
          tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Absolute, 121F));
          tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Absolute, 243F));
-         tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Absolute, 400F));
+         tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Absolute, 200F));
          tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-         tableLayoutPanel9.Size = new Size(384, 1132);
+         tableLayoutPanel9.Size = new Size(384, 912);
          tableLayoutPanel9.TabIndex = 1;
          // 
          // groupBox8
@@ -2681,33 +2681,33 @@
          // 
          // groupBox10
          // 
-         groupBox10.Controls.Add(tableLayoutPanel8);
-         groupBox10.Dock = DockStyle.Fill;
+         groupBox10.Controls.Add(MiscTLP);
          groupBox10.Location = new Point(3, 715);
          groupBox10.Name = "groupBox10";
-         groupBox10.Size = new Size(378, 394);
+         groupBox10.Size = new Size(378, 194);
          groupBox10.TabIndex = 9;
          groupBox10.TabStop = false;
          groupBox10.Text = "Misc";
          // 
-         // tableLayoutPanel8
+         // MiscTLP
          // 
-         tableLayoutPanel8.ColumnCount = 1;
-         tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-         tableLayoutPanel8.Controls.Add(DevelopmenTLP, 0, 0);
-         tableLayoutPanel8.Dock = DockStyle.Fill;
-         tableLayoutPanel8.Location = new Point(3, 19);
-         tableLayoutPanel8.Margin = new Padding(0);
-         tableLayoutPanel8.Name = "tableLayoutPanel8";
-         tableLayoutPanel8.RowCount = 6;
-         tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
-         tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
-         tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
-         tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
-         tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
-         tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         tableLayoutPanel8.Size = new Size(372, 372);
-         tableLayoutPanel8.TabIndex = 0;
+         MiscTLP.ColumnCount = 1;
+         MiscTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         MiscTLP.Controls.Add(DevelopmenTLP, 0, 0);
+         MiscTLP.Dock = DockStyle.Fill;
+         MiscTLP.Location = new Point(3, 19);
+         MiscTLP.Margin = new Padding(0);
+         MiscTLP.Name = "MiscTLP";
+         MiscTLP.RowCount = 6;
+         MiscTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
+         MiscTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
+         MiscTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
+         MiscTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
+         MiscTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
+         MiscTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
+         MiscTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+         MiscTLP.Size = new Size(372, 172);
+         MiscTLP.TabIndex = 0;
          // 
          // DevelopmenTLP
          // 
@@ -2940,7 +2940,7 @@
          CapitalTLP.ResumeLayout(false);
          tableLayoutPanel1.ResumeLayout(false);
          groupBox10.ResumeLayout(false);
-         tableLayoutPanel8.ResumeLayout(false);
+         MiscTLP.ResumeLayout(false);
          DevelopmenTLP.ResumeLayout(false);
          DevelopmenTLP.PerformLayout();
          ProvinceGroupsPage.ResumeLayout(false);
@@ -3177,7 +3177,7 @@
       private Label label35;
       private Panel CountryScrollPanel;
       private GroupBox groupBox10;
-      private TableLayoutPanel tableLayoutPanel8;
+      private TableLayoutPanel MiscTLP;
       private TableLayoutPanel DevelopmenTLP;
       private Label label46;
       private Button button4;
