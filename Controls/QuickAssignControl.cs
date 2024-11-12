@@ -14,7 +14,7 @@ namespace Editor.Controls
       private readonly List<string> _source;
       private List<string> _items;
 
-      private readonly int _maxItems;
+      public readonly int MaxItems;
 
       private Func<int, List<string>>? _autoSelectFunc;
 
@@ -22,7 +22,7 @@ namespace Editor.Controls
       {
          _source = source.ToList();
          _items = items;
-         _maxItems = maxItems;
+         MaxItems = maxItems;
 
          TableLayoutPanel tableLayoutPanel = new()
          {
@@ -104,14 +104,14 @@ namespace Editor.Controls
 
       private void RandomButton_Click(object? sender, EventArgs e)
       {
-         if (_maxItems < 1)// we only do one random item as there is no fixed number of max items
+         if (MaxItems < 1)// we only do one random item as there is no fixed number of max items
          {
             _items = [_source[Globals.Random.Next(_source.Count)]];
             return;
          }
 
          _items.Clear();
-         for (var i = 0; i < _maxItems; i++) 
+         for (var i = 0; i < MaxItems; i++) 
             _items.Add(_source[Globals.Random.Next(_source.Count)]);
       }
 
@@ -125,7 +125,7 @@ namespace Editor.Controls
          if (_autoSelectFunc == null)
             return;
 
-         _items = _autoSelectFunc(_maxItems);
+         _items = _autoSelectFunc(MaxItems);
       }
 
       private void OpenEditor_Click(object? sender, EventArgs e)

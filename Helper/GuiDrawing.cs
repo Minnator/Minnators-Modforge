@@ -117,6 +117,11 @@ namespace Editor.Helper
       private static void OnMapModePaintRivers(object? _, MapModePaintEventArgs e)
       {
          var sw = Stopwatch.StartNew();
+         MapDrawing.DrawRivers();
+         sw.Stop();
+         Debug.WriteLine($"Drawing rivers took {sw.ElapsedMilliseconds}ms");
+         return;
+
          foreach (var kvp in Globals.Rivers)
          {
             var color = Color.FromArgb(kvp.Key);

@@ -142,7 +142,7 @@ namespace Editor.Loading
                   country.Religion = val;
                   break;
                case "technology_group":
-                  country.TechnologyGroup = val;
+                  country.TechnologyGroup = new(val);
                   break;
                case "national_focus":
                   country.NationalFocus = Parsing.ManaFromString(val);

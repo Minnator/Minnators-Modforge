@@ -6,14 +6,17 @@ namespace Editor.Forms.SavingClasses
    {
       public string InitPath { get; set; }
       public string NewPath { get; set; } = string.Empty;
-      private string Ending { get; set; } = string.Empty;
+      private string Ending { get; set; }
       public bool RequireModDirectory {get; set; } = true;
+      public bool UseGrouping { get; set; } = false;
       public GetSavingFileForm(string initPath, string desc, string ending)
       {
          InitializeComponent();
          InitPath = initPath;
          DescriptionLabel.Text = desc;
          Ending = ending;
+
+         PathTextBox.PlaceholderText = $"modforge_{InitPath.Split(Path.DirectorySeparatorChar)[^1]}{ending}";
       }
 
       private void OpenFileDialogButton_Click(object sender, EventArgs e)

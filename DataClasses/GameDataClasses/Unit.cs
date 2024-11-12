@@ -1,4 +1,6 @@
-﻿namespace Editor.DataClasses.GameDataClasses
+﻿using Editor.Helper;
+
+namespace Editor.DataClasses.GameDataClasses
 {
    public abstract class Unit
    {
@@ -51,6 +53,33 @@
       public override string ToString()
       {
          return $"{UnitName} ({Type})";
+      }
+
+      public static List<string> AutoSelectFuncUnits(int max)
+      {
+         if (Selection.SelectedCountry == Country.Empty) 
+            return [];
+
+         List<LandUnit> landUnits = [];
+
+         foreach (var unit in Globals.Units)
+            if (unit is LandUnit landUnit)
+               if (Equals(landUnit.TechnologyGroup, Selection.SelectedCountry.TechnologyGroup))
+                  landUnits.Add(landUnit);
+
+         if (max <= landUnits.Count && max != -1)
+            return landUnits.Select(x => x.UnitName).ToList();
+
+         List<string> selectedUnits = [];
+         if (max == -1) max = Globals.Settings.MiscSettings.AutoPropertiesCountBig;
+         for (var index = 0; index < max; index++)
+         {
+            var randomUnit = landUnits[Globals.Random.Next(landUnits.Count)];
+            selectedUnits.Add(randomUnit.UnitName);
+            landUnits.Remove(randomUnit);
+         }
+
+         return selectedUnits;
       }
    }
 

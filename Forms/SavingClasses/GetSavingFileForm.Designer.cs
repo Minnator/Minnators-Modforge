@@ -123,7 +123,7 @@
          PathTextBox.Dock = DockStyle.Fill;
          PathTextBox.Location = new Point(95, 29);
          PathTextBox.Name = "PathTextBox";
-         PathTextBox.PlaceholderText = "MOD_event_modifiers";
+         PathTextBox.PlaceholderText = "modforge_";
          PathTextBox.Size = new Size(353, 23);
          PathTextBox.TabIndex = 3;
          // 

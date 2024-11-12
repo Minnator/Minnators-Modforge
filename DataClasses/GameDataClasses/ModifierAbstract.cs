@@ -160,7 +160,7 @@ namespace Editor.DataClasses.GameDataClasses
       }
    }
 
-   public class EventModifier : Saveable
+   public class EventModifier : NewSaveable
    {
 
       public EventModifier(string name, ObjEditingStatus status = ObjEditingStatus.Modified)
@@ -169,43 +169,11 @@ namespace Editor.DataClasses.GameDataClasses
          base.EditingStatus = status;
       }
 
-      public EventModifier(string name, ref PathObj path) : this(name, ObjEditingStatus.Unchanged)
+      public EventModifier(string name, ref NewPathObj path) : this(name, ObjEditingStatus.Unchanged)
       {
          SetPath(ref path);
       }
-
-      public override SaveableType WhatAmI()
-      {
-         return SaveableType.EventModifiers;
-      }
-
-      public override string SavingComment()
-      {
-         return Localisation.GetLoc(Name);
-      }
-
-      public override PathObj GetDefaultSavePath()
-      {
-         return new (["common", "event_modifiers"]);
-      }
-
-      public override string GetSavePromptString()
-      {
-         return $"event_modifier: \"{Name}\"";
-      }
-
-      public override string GetSaveString(int tabs)
-      {
-         var sb = new StringBuilder();
-         sb.AppendLine($"{Name} = {{");
-         foreach (var attr in TriggerAttribute)
-            sb.AppendLine($"\t{attr.Key} = yes");
-         foreach (var mod in Modifiers)
-            sb.AppendLine($"\t{Globals.ModifierKeys[mod.Name]} = {mod.Value}");
-         sb.AppendLine("}");
-         return sb.ToString();
-      }
-
+      
       public string Name { get; }
       public List<KeyValuePair<string, string>> TriggerAttribute { get; set; } = [];
       public List<Modifier> Modifiers { get; set; } = [];
@@ -231,6 +199,42 @@ namespace Editor.DataClasses.GameDataClasses
       }
 
       public static EventModifier Empty => new("Empty");
+      public override string[][] GetDefaultFolderPath()
+      {
+         return [["common", "event_modifiers"]];
+      }
+
+      public override string[] GetFileEnding()
+      {
+         return [".txt"];
+      }
+
+      public override KeyValuePair<string, bool>[] GetFileName()
+      {
+         return [new("event_modifier", false)];
+      }
+
+      public override string SavingComment(NewPathObj _)
+      {
+         return Localisation.GetLoc(Name);
+      }
+
+      public override string GetSaveString(int tabs, NewPathObj _)
+      {
+         var sb = new StringBuilder();
+         sb.AppendLine($"{Name} = {{");
+         foreach (var attr in TriggerAttribute)
+            sb.AppendLine($"\t{attr.Key} = yes");
+         foreach (var mod in Modifiers)
+            sb.AppendLine($"\t{Globals.ModifierKeys[mod.Name]} = {mod.Value}");
+         sb.AppendLine("}");
+         return sb.ToString();
+      }
+
+      public override string GetSavePromptString(NewPathObj _)
+      {
+         return $"event_modifier: \"{Name}\"";
+      }
    }
 
    public struct ModifierDefinition(string codeName, int index, ModifierValueType type, ValueMarkDown markDown) : IEquatable<ModifierValueType>

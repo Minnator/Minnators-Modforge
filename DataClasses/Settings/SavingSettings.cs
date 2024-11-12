@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using Editor.Helper;
 
 namespace Editor.DataClasses.Settings
 {
    [SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
-   public class SavingSettings : INotifyPropertyChanged
+   public class SavingSettings : PropertyEquals, INotifyPropertyChanged
    {
       private string _errorLogLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
       private string _loadingLogLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
@@ -45,34 +46,7 @@ namespace Editor.DataClasses.Settings
          get => _errorLogLocation;
          set => SetField(ref _errorLogLocation, value);
       }
-
-      public override bool Equals(object? obj)
-      {
-         if (obj is not SavingSettings settings)
-            return false;
-
-         var properties = GetType().GetProperties()
-            .Where(prop => Attribute.IsDefined(prop, typeof(CompareInEquals)));
-
-         foreach (var property in properties)
-            if (!Equals(property.GetValue(this), property.GetValue(settings)))
-               return false;
-
-         return true;
-      }
-
-      public override int GetHashCode()
-      {
-         var properties = GetType().GetProperties()
-            .Where(prop => Attribute.IsDefined(prop, typeof(CompareInEquals)));
-         var hash = 17;
-
-         foreach (var property in properties)
-            hash = unchecked(hash * 31 + (property.GetValue(this)?.GetHashCode() ?? 0));
-
-         return hash;
-      }
-
+      
       public event PropertyChangedEventHandler? PropertyChanged;
 
       private void OnPropertyChanged([CallerMemberName] string? propertyName = null)

@@ -4,7 +4,7 @@
    {
       public string Name { get; } = name;
       public int StartLevel {get; set; } = 0;
-      public float StarCostModifier { get; set; } = 0f;
+      public float StartCostModifier { get; set; } = 0f;
 
       public static TechnologyGroup Empty => new(string.Empty);
 

@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using Editor.Helper;
 
 namespace Editor.DataClasses.Settings
 {
    [SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
-   public class ToolTipSettings : INotifyPropertyChanged
+   public class ToolTipSettings : PropertyEquals, INotifyPropertyChanged
    {
       private string _toolTipText = $"$MAPMODE_SPECIFIC$\n------------------\nId:   $id$\nName: $name$\nOwner: $owner$ ($owner%L$)\nArea: $area$ ($area%L$)";
       private bool _showToolTip = true;
@@ -25,36 +26,8 @@ namespace Editor.DataClasses.Settings
          get => _showToolTip;
          set => SetField(ref _showToolTip, value);
       }
-
-      public override bool Equals(object? obj)
-      {
-         if (obj is not ToolTipSettings settings)
-            return false;
-
-         var properties = GetType().GetProperties()
-            .Where(prop => Attribute.IsDefined(prop, typeof(CompareInEquals)));
-
-         foreach (var property in properties)
-            if (!Equals(property.GetValue(this), property.GetValue(settings)))
-               return false;
-
-         return true;
-      }
-
-      public override int GetHashCode()
-      {
-         var properties = GetType().GetProperties()
-            .Where(prop => Attribute.IsDefined(prop, typeof(CompareInEquals)));
-         var hash = 17;
-
-         foreach (var property in properties)
-            hash = unchecked(hash * 31 + (property.GetValue(this)?.GetHashCode() ?? 0));
-
-         return hash;
-      }
-
+      
       public event PropertyChangedEventHandler? PropertyChanged;
-
       private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
       {
          PropertyChanged?.Invoke(this, new(propertyName));

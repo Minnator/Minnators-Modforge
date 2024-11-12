@@ -172,7 +172,7 @@ namespace Editor
          InitializeComponent();
          Globals.ZoomControl = new(new(Globals.MapWidth, Globals.MapHeight))
          {
-            BorderWidth = Globals.Settings.RenderingSettings.MapBorderWidth, 
+            BorderWidth = Globals.Settings.RenderingSettings.MapBorderWidth,
             Border = Globals.Settings.RenderingSettings.ShowMapBorder,
             BorderColor = Globals.Settings.RenderingSettings.MapBorderColor,
          };
@@ -189,7 +189,7 @@ namespace Editor
                   Globals.ZoomControl.Invalidate();
                   break;
                case nameof(Settings.RenderingSettings.ShowMapBorder):
-                  Globals.ZoomControl.Border= Globals.Settings.RenderingSettings.ShowMapBorder;
+                  Globals.ZoomControl.Border = Globals.Settings.RenderingSettings.ShowMapBorder;
                   Globals.ZoomControl.Invalidate();
                   break;
             }
@@ -198,7 +198,7 @@ namespace Editor
          MapLayoutPanel.Controls.Add(Globals.ZoomControl, 0, 0);
          Selection.Initialize();
          GuiDrawing.Initialize();
-         
+
          TopStripLayoutPanel.Controls.Add(DateControl, 4, 0);
          DateControl.OnDateChanged += OnDateChanged;
 
@@ -1226,15 +1226,19 @@ namespace Editor
          List<string> unitsList = [];
          foreach (var unit in Globals.Units)
             unitsList.Add(unit.UnitName);
-         historicalUnits = new (unitsList, [], "Historic Units", -1);
+         historicalUnits = new(unitsList, [], "Historic Units", -1);
+         historicalUnits.SetAutoSelectFunc(LandUnit.AutoSelectFuncUnits);
+
          List<string> ideaGroups = [];
          foreach (var idea in Globals.Ideas)
             if (idea.Type == IdeaType.IdeaGroup)
                ideaGroups.Add(idea.Name);
-         historicalIdeas = new (ideaGroups, [], "Historic Ideas", 8);
+         historicalIdeas = new(ideaGroups, [], "Historic Ideas", 8);
+         historicalIdeas.SetAutoSelectFunc(IdeaGroup.GetAutoAssignment);
+
          historicRivals = new([.. Globals.Countries.Keys], [], "Historic Rivals", 8);
          historicFriends = new([.. Globals.Countries.Keys], [], "Historic Friends", 8);
-         estatePrivileges = new ([], [], "Estate Privileges", 8);
+         estatePrivileges = new([], [], "Estate Privileges", 8);
 
          MiscTLP.Controls.Add(historicalUnits, 0, 1);
          MiscTLP.Controls.Add(historicalIdeas, 0, 2);
@@ -1398,14 +1402,7 @@ namespace Editor
 
       private void quickSettingsToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         if (new SettingsWindow(Globals.Settings).ShowDialog() == DialogResult.OK)
-         {
-            // Settings saved
-         }
-         else
-         {
-            // canceled
-         }
+         new SettingsWindow().ShowDialog();
       }
 
       private void OpenProvinceFileButton_Click(object sender, EventArgs e)
@@ -1501,6 +1498,9 @@ namespace Editor
          SpreadDevInSelectedCountryIfValid((int)CountryDevelopmentNumeric.Value);
       }
 
-      
+      private void newSavingToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         SaveMaster.SaveAllChanges();
+      }
    }
 }

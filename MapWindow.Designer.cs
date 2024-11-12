@@ -87,6 +87,7 @@
          crashReportToolStripMenuItem = new ToolStripMenuItem();
          loadDDSFilesTestToolStripMenuItem = new ToolStripMenuItem();
          roughEditorToolStripMenuItem = new ToolStripMenuItem();
+         newSavingToolStripMenuItem = new ToolStripMenuItem();
          ProvinceCollectionsLayoutPanel = new TableLayoutPanel();
          FocusSelectionCheckBox = new CheckBox();
          BottomToolStrip = new ToolStrip();
@@ -607,7 +608,7 @@
          // 
          // debugToolStripMenuItem
          // 
-         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem, jsonToolStripMenuItem, bugReportToolStripMenuItem, crashReportToolStripMenuItem, loadDDSFilesTestToolStripMenuItem, roughEditorToolStripMenuItem });
+         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem, jsonToolStripMenuItem, bugReportToolStripMenuItem, crashReportToolStripMenuItem, loadDDSFilesTestToolStripMenuItem, roughEditorToolStripMenuItem, newSavingToolStripMenuItem });
          debugToolStripMenuItem.Name = "debugToolStripMenuItem";
          debugToolStripMenuItem.Size = new Size(54, 23);
          debugToolStripMenuItem.Text = "Debug";
@@ -707,6 +708,13 @@
          roughEditorToolStripMenuItem.Size = new Size(221, 22);
          roughEditorToolStripMenuItem.Text = "Rough Editor";
          roughEditorToolStripMenuItem.Click += roughEditorToolStripMenuItem_Click;
+         // 
+         // newSavingToolStripMenuItem
+         // 
+         newSavingToolStripMenuItem.Name = "newSavingToolStripMenuItem";
+         newSavingToolStripMenuItem.Size = new Size(221, 22);
+         newSavingToolStripMenuItem.Text = "New Saving";
+         newSavingToolStripMenuItem.Click += newSavingToolStripMenuItem_Click;
          // 
          // ProvinceCollectionsLayoutPanel
          // 
@@ -3181,6 +3189,7 @@
       private TableLayoutPanel DevelopmenTLP;
       private Label label46;
       private Button button4;
+      private ToolStripMenuItem newSavingToolStripMenuItem;
    }
 }
 

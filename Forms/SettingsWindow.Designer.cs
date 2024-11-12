@@ -31,9 +31,9 @@
          System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsWindow));
          SettingsTabs = new TabControl();
          tableLayoutPanel1 = new TableLayoutPanel();
+         ResetButton = new Button();
          CancelButton = new Button();
          SaveButton = new Button();
-         ResetButton = new Button();
          tableLayoutPanel1.SuspendLayout();
          SuspendLayout();
          // 
@@ -66,6 +66,17 @@
          tableLayoutPanel1.Size = new Size(448, 530);
          tableLayoutPanel1.TabIndex = 1;
          // 
+         // ResetButton
+         // 
+         ResetButton.Dock = DockStyle.Fill;
+         ResetButton.Location = new Point(152, 503);
+         ResetButton.Name = "ResetButton";
+         ResetButton.Size = new Size(143, 24);
+         ResetButton.TabIndex = 3;
+         ResetButton.Text = "Reset";
+         ResetButton.UseVisualStyleBackColor = true;
+         ResetButton.Click += ResetButton_Click;
+         // 
          // CancelButton
          // 
          CancelButton.Dock = DockStyle.Fill;
@@ -73,8 +84,9 @@
          CancelButton.Name = "CancelButton";
          CancelButton.Size = new Size(143, 24);
          CancelButton.TabIndex = 1;
-         CancelButton.Text = "Cancel";
+         CancelButton.Text = "Reset All";
          CancelButton.UseVisualStyleBackColor = true;
+         CancelButton.Click += ResetAll_Click;
          // 
          // SaveButton
          // 
@@ -86,17 +98,6 @@
          SaveButton.Text = "Save";
          SaveButton.UseVisualStyleBackColor = true;
          SaveButton.Click += SaveButton_Click;
-         // 
-         // ResetButton
-         // 
-         ResetButton.Dock = DockStyle.Fill;
-         ResetButton.Location = new Point(152, 503);
-         ResetButton.Name = "ResetButton";
-         ResetButton.Size = new Size(143, 24);
-         ResetButton.TabIndex = 3;
-         ResetButton.Text = "Reset";
-         ResetButton.UseVisualStyleBackColor = true;
-         ResetButton.Click += ResetButton_Click;
          // 
          // SettingsWindow
          // 

@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using Editor.Helper;
 
 namespace Editor.DataClasses.Settings;
 
 [SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
-public sealed class Settings : INotifyPropertyChanged
+public sealed class Settings : PropertyEquals, INotifyPropertyChanged
 {
    private ToolTipSettings _toolTipSettings = new();
    private RenderingSettings _renderingSettings = new();
@@ -48,32 +49,6 @@ public sealed class Settings : INotifyPropertyChanged
       set => SetField(ref _toolTipSettings, value);
    }
 
-   public override bool Equals(object? obj)
-   {
-      if (obj is not Settings settings)
-         return false;
-
-      var properties = GetType().GetProperties()
-         .Where(prop => Attribute.IsDefined(prop, typeof(CompareInEquals)));
-
-      foreach (var property in properties)
-         if (!Equals(property.GetValue(this), property.GetValue(settings)))
-            return false;
-
-      return true;
-   }
-
-   public override int GetHashCode()
-   {
-      var properties = GetType().GetProperties()
-         .Where(prop => Attribute.IsDefined(prop, typeof(CompareInEquals)));
-      var hash = 17;
-
-      foreach (var property in properties)
-         hash = unchecked(hash * 31 + (property.GetValue(this)?.GetHashCode() ?? 0));
-
-      return hash;
-   }
 
    public event PropertyChangedEventHandler? PropertyChanged;
 

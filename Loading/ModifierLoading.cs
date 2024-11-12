@@ -21,7 +21,7 @@ namespace Editor.Loading
          
          foreach (var file in modFiles)
          {
-            var po = PathObj.FromPath(file, true);
+            var po = NewPathObj.FromPath(file, true);
             // Add the file to the ObjectSourceFiles and get the index
             HashSet<EventModifier> newModifiers = [];
             LoadEventModifier(file, ref po, newModifiers);
@@ -29,13 +29,13 @@ namespace Editor.Loading
             {
                if (!modifiers.TryAdd(mod.Name, mod))
                   Globals.ErrorLog.Write($"Duplicate modifier found: {mod.Name}");
-               FileManager.AddToDictionary(ref po, mod);
+               SaveMaster.AddToDictionary(ref po, mod);
             }
          }
 
          foreach (var file in vanillaFiles)
          {
-            var po = PathObj.FromPath(file, false);
+            var po = NewPathObj.FromPath(file, false);
             // Add the file to the ObjectSourceFiles and get the index
             HashSet<EventModifier> newModifiers = [];
             LoadEventModifier(file, ref po, newModifiers);
@@ -43,7 +43,7 @@ namespace Editor.Loading
             {
                if (!modifiers.TryAdd(mod.Name, mod))
                   Globals.ErrorLog.Write($"Duplicate modifier found: {mod.Name}");
-               FileManager.AddToDictionary(ref po, mod);
+               SaveMaster.AddToDictionary(ref po, mod);
             }
          }
 
@@ -52,7 +52,7 @@ namespace Editor.Loading
          Globals.LoadingLog.WriteTimeStamp("Event Modifiers", sw.ElapsedMilliseconds);
       }
 
-      private static void LoadEventModifier(string fullPath, ref PathObj filePath, HashSet<EventModifier> modifiers)
+      private static void LoadEventModifier(string fullPath, ref NewPathObj filePath, HashSet<EventModifier> modifiers)
       {
          Parsing.RemoveCommentFromMultilineString(IO.ReadAllInUTF8(fullPath), out var fileContent);
          var matches = ModifierRegex.Matches(fileContent);

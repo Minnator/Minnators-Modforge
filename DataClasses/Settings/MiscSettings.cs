@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using Editor.Helper;
 
 namespace Editor.DataClasses.Settings
 {
    [SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
-   public sealed class MiscSettings : INotifyPropertyChanged
+   public sealed class MiscSettings : PropertyEquals, INotifyPropertyChanged
    {
       private Language _language = Language.english;
       private string _lastModPath = string.Empty;
@@ -13,6 +14,8 @@ namespace Editor.DataClasses.Settings
       private int _minDevelopmentInGeneration = 3;
       private int _maxDevelopmentInGeneration = 25;
       private int _randomSeed = 1444;
+      private int _autoPropertiesCountBig = 8;
+      private int _autoPropertiesCountSmall = 3;
 
       [Description("The language in which the localisation will be shown")]
       [CompareInEquals]
@@ -54,6 +57,22 @@ namespace Editor.DataClasses.Settings
          set => SetField(ref _maxDevelopmentInGeneration, value);
       }
 
+      [Description("The amount of properties that will be generated automatically\nHistoricUnits, HistoricIdeas")]
+      [CompareInEquals]
+      public int AutoPropertiesCountBig
+      {
+         get => _autoPropertiesCountBig;
+         set => SetField(ref _autoPropertiesCountBig, value);
+      }
+
+      [Description("The amount of properties that will be generated automatically\nHistoricRivals, HistoricFriends")]
+      [CompareInEquals]
+      public int AutoPropertiesCountSmall
+      {
+         get => _autoPropertiesCountSmall;
+         set => SetField(ref _autoPropertiesCountSmall, value);
+      }
+
       [Description("The seed that will be used for random generation")]
       [CompareInEquals]
       public int RandomSeed
@@ -61,34 +80,7 @@ namespace Editor.DataClasses.Settings
          get => _randomSeed;
          set => SetField(ref _randomSeed, value);
       }
-
-      public override bool Equals(object? obj)
-      {
-         if (obj is not MiscSettings settings)
-            return false;
-
-         var properties = GetType().GetProperties()
-            .Where(prop => Attribute.IsDefined(prop, typeof(CompareInEquals)));
-
-         foreach (var property in properties)
-            if (!Equals(property.GetValue(this), property.GetValue(settings)))
-               return false;
-
-         return true;
-      }
-
-      public override int GetHashCode()
-      {
-         var properties = GetType().GetProperties()
-             .Where(prop => Attribute.IsDefined(prop, typeof(CompareInEquals)));
-         var hash = 17;
-
-         foreach (var property in properties)
-            hash = unchecked(hash * 31 + (property.GetValue(this)?.GetHashCode() ?? 0));
-
-         return hash;
-      }
-
+      
       public event PropertyChangedEventHandler? PropertyChanged;
 
       private void OnPropertyChanged([CallerMemberName] string? propertyName = null)

@@ -81,7 +81,7 @@ public class Country(Tag tag, Color color, string fileName) : ProvinceCollection
    [Browsable(false)]
    public string Religion { get; set; } = string.Empty;
    [Browsable(false)]
-   public string TechnologyGroup { get; set; } = string.Empty;
+   public TechnologyGroup TechnologyGroup { get; set; } = TechnologyGroup.Empty;
    public string ReligiousSchool { get; set; } = string.Empty;
    [Browsable(false)]
    public string UnitType { get; set; } = string.Empty;

@@ -9,7 +9,8 @@ public enum ObjEditingStatus
 {
    Unchanged,
    Modified,
-   Immutable
+   Immutable,
+   Deleted
 }
 
 

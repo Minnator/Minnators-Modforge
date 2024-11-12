@@ -46,10 +46,5 @@ namespace Editor.DataClasses.MapModes
          return "Country: [Unknown]";
       }
 
-      public override void RenderMapMode(Func<Province, int> method)
-      {
-         base.RenderMapMode(method);
-         MapDrawing.DrawAllCapitals(Color.Yellow.ToArgb());
-      }
    }
 }

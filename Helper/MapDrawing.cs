@@ -14,7 +14,7 @@ public enum PixelsOrBorders
 }
 
 
-public class MapDrawing
+public static class MapDrawing
 {
    public static void DrawOnMap(Point[] points, int color, ZoomControl zoomControl)
    {
@@ -209,16 +209,6 @@ public class MapDrawing
 
    // --------------- Additional methods --------------- \\
 
-   public static void DrawCapitals(ICollection<Province> ids)
-   {
-   }
-   public static void DrawAllCapitals()
-   {
-   }
-
-   public static void DrawAllCapitals(int color)
-   {
-   }
 
    public static void DrawStripes(int color, List<Province> provinces, ZoomControl zoomControl) //Point[] stripes
    {
@@ -229,10 +219,10 @@ public class MapDrawing
       }
    }
 
-   private static void DrawCapital(ref Graphics g, Point provinceCenter)
+   public static void DrawRivers()
    {
-      g.DrawRectangle(new(Color.Black, 1), provinceCenter.X - 2, provinceCenter.Y - 2, 4, 4);
-      g.DrawRectangle(Pens.Yellow, provinceCenter.X - 1, provinceCenter.Y - 1, 2, 2);
+      foreach (var river in Globals.Rivers) 
+         DrawOnMap(river.Value, river.Key, Globals.ZoomControl);
    }
 
    public static void DrawOccupations(bool rebelsOnly, ZoomControl zoomControl)
