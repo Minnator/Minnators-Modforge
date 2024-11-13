@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Editor.Forms;
-using Editor.Forms.Crash_Reporter;
+using Editor.Forms.Feature.Crash_Reporter;
+using Editor.Forms.GetUserInput;
 using Editor.Forms.Loadingscreen;
 
 namespace Editor

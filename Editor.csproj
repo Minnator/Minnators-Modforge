@@ -24,6 +24,20 @@
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="src\Forms\Feature\AdvancedSelections\.vshistory\**" />
+    <Compile Remove="src\Forms\Feature\Crash Reporter\.vshistory\**" />
+    <Compile Remove="src\Forms\Feature\SavingClasses\.vshistory\**" />
+    <Compile Remove="src\Forms\Feature\ToolTipCustomizer\.vshistory\**" />
+    <EmbeddedResource Remove="src\Forms\Feature\AdvancedSelections\.vshistory\**" />
+    <EmbeddedResource Remove="src\Forms\Feature\Crash Reporter\.vshistory\**" />
+    <EmbeddedResource Remove="src\Forms\Feature\SavingClasses\.vshistory\**" />
+    <EmbeddedResource Remove="src\Forms\Feature\ToolTipCustomizer\.vshistory\**" />
+    <None Remove="src\Forms\Feature\AdvancedSelections\.vshistory\**" />
+    <None Remove="src\Forms\Feature\Crash Reporter\.vshistory\**" />
+    <None Remove="src\Forms\Feature\SavingClasses\.vshistory\**" />
+    <None Remove="src\Forms\Feature\ToolTipCustomizer\.vshistory\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="ProvinceFileCreator.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -41,9 +55,7 @@
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controls\Initialisation\" />
-    <Folder Include="ParadoxLanguage\Effect\" />
-    <Folder Include="ParadoxLanguage\Scope\" />
+    <Folder Include="src\Controls\Initialisation\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
