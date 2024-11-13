@@ -12,7 +12,7 @@ namespace Editor.Forms.GetUserInput
          StartPosition = FormStartPosition.CenterScreen;
 
          Globals.Settings = SettingsLoader.Load();
-         Globals.Settings.RenderingSettings.MapBorderColor = Color.FromArgb(Globals.Settings.RenderingSettings.MapBorderColor.R, Globals.Settings.RenderingSettings.MapBorderColor.G, Globals.Settings.RenderingSettings.MapBorderColor.B);
+         Globals.Settings.Rendering.MapBorderColor = Color.FromArgb(Globals.Settings.Rendering.MapBorderColor.R, Globals.Settings.Rendering.MapBorderColor.G, Globals.Settings.Rendering.MapBorderColor.B);
 #if DEBUG
          Load += (sender, args) =>
          {
@@ -63,8 +63,8 @@ namespace Editor.Forms.GetUserInput
          Globals.VanillaPath = VanillaPathTextBox.Text;
          Globals.ModPath = ModPathTextBox.Text;
 
-         Globals.Settings.MiscSettings.LastModPath = ModPathTextBox.Text;
-         Globals.Settings.MiscSettings.LastVanillaPath = VanillaPathTextBox.Text;
+         Globals.Settings.Misc.LastModPath = ModPathTextBox.Text;
+         Globals.Settings.Misc.LastVanillaPath = VanillaPathTextBox.Text;
 
          Close();
       }

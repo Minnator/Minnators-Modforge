@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Globalization;
+using System.Net;
 using System.Runtime;
 using System.Text;
 using Editor.Controls;
@@ -78,7 +79,7 @@ namespace Editor.Forms
          Globals.MapWindow = this;
 
          Localisation.Initialize();
-         Globals.Random = new(Globals.Settings.MiscSettings.RandomSeed);
+         Globals.Random = new(Globals.Settings.Misc.RandomSeed);
 
          RunLoadingScreen();
 
@@ -174,24 +175,24 @@ namespace Editor.Forms
          InitializeComponent();
          Globals.ZoomControl = new(new(Globals.MapWidth, Globals.MapHeight))
          {
-            BorderWidth = Globals.Settings.RenderingSettings.MapBorderWidth,
-            Border = Globals.Settings.RenderingSettings.ShowMapBorder,
-            BorderColor = Globals.Settings.RenderingSettings.MapBorderColor,
+            BorderWidth = Globals.Settings.Rendering.MapBorderWidth,
+            Border = Globals.Settings.Rendering.ShowMapBorder,
+            BorderColor = Globals.Settings.Rendering.MapBorderColor,
          };
-         Globals.Settings.RenderingSettings.PropertyChanged += (_, args) =>
+         Globals.Settings.Rendering.PropertyChanged += (_, args) =>
          {
             switch (args.PropertyName)
             {
-               case nameof(Settings.RenderingSettings.MapBorderColor):
-                  Globals.ZoomControl.BorderColor = Globals.Settings.RenderingSettings.MapBorderColor;
+               case nameof(Settings.Rendering.MapBorderColor):
+                  Globals.ZoomControl.BorderColor = Globals.Settings.Rendering.MapBorderColor;
                   Globals.ZoomControl.Invalidate();
                   break;
-               case nameof(Settings.RenderingSettings.MapBorderWidth):
-                  Globals.ZoomControl.BorderWidth = Globals.Settings.RenderingSettings.MapBorderWidth;
+               case nameof(Settings.Rendering.MapBorderWidth):
+                  Globals.ZoomControl.BorderWidth = Globals.Settings.Rendering.MapBorderWidth;
                   Globals.ZoomControl.Invalidate();
                   break;
-               case nameof(Settings.RenderingSettings.ShowMapBorder):
-                  Globals.ZoomControl.Border = Globals.Settings.RenderingSettings.ShowMapBorder;
+               case nameof(Settings.Rendering.ShowMapBorder):
+                  Globals.ZoomControl.Border = Globals.Settings.Rendering.ShowMapBorder;
                   Globals.ZoomControl.Invalidate();
                   break;
             }
@@ -1118,6 +1119,8 @@ namespace Editor.Forms
       // ------------------- COUNTRY EDITING TAB ------------------- \\
       private TagComboBox TagSelectionBox = null!;
 
+      internal FlagLabel CountryFlagLabel = null!;
+
       private ComboBox GraphicalCultureBox = null!;
       private ComboBox UnitTypeBox = null!;
       private ComboBox TechGroupBox = null!;
@@ -1156,6 +1159,7 @@ namespace Editor.Forms
             Margin = new(1),
             Height = 25,
          };
+         CountryFlagLabel = ControlFactory.GetFlagLabel();
          TagSelectionBox.Items.Add(DataClasses.GameDataClasses.Tag.Empty);
          TagSelectionBox.OnTagChanged += CountryGuiEvents.TagSelectionBox_OnTagChanged;
          CountryColorPickerButton = ControlFactory.GetColorPickerButton();
@@ -1183,6 +1187,7 @@ namespace Editor.Forms
          TagAndColorTLP.Controls.Add(TechGroupBox, 1, 3);
          CapitalTLP.Controls.Add(capitalTextBox, 0, 0);
          TagAndColorTLP.Controls.Add(focusComboBox, 1, 4);
+         CountryHeaderTLP.Controls.Add(CountryFlagLabel, 0, 0);
 
          GovernmentLayoutPanel.Controls.Add(GovernmentTypeBox, 3, 0);
          GovernmentLayoutPanel.Controls.Add(GovernmentRankBox, 1, 0);
@@ -1254,8 +1259,11 @@ namespace Editor.Forms
 
       public void ClearCountryGui()
       {
+         // Flag
+         CountryFlagLabel.SetCountry(Country.Empty);
+
          // Misc
-         TagSelectionBox.SelectedItem = "###";
+         TagSelectionBox.SelectedItem = DataClasses.GameDataClasses.Tag.Empty;
          CountryNameLabel.Text = "Country: -";
          CountryColorPickerButton.BackColor = Color.Empty;
          CountryColorPickerButton.Text = "(//)";
@@ -1300,11 +1308,14 @@ namespace Editor.Forms
       internal void LoadCountryToGui(Country country)
       {
          if (country == Country.Empty)
-         {
             return;
-         }
          SuspendLayout();
          TagSelectionBox.SelectedItem = country.Tag.ToString();
+         if (Globals.Settings.Gui.ShowCountryFlagInCE)
+         {
+            CountryFlagLabel.SetCountry(country);
+            GeneralToolTip.SetToolTip(CountryFlagLabel, $"{country.GetLocalisation()} ({country.Tag})");
+         }
          CountryNameLabel.Text = $"{country.GetLocalisation()} ({country.Tag}) | (Total Dev: {country.GetDevelopment()})";
          CountryColorPickerButton.BackColor = country.Color;
          CountryColorPickerButton.Text = $"({country.Color.R}/{country.Color.G}/{country.Color.B})";
@@ -1374,14 +1385,14 @@ namespace Editor.Forms
          if (Selection.SelectedCountry == Country.Empty)
             return;
          var provinces = Selection.SelectedCountry.GetProvinces();
-         var pieces = MathHelper.SplitIntoNRandomPieces(provinces.Count, value, Globals.Settings.MiscSettings.MinDevelopmentInGeneration, Globals.Settings.MiscSettings.MaxDevelopmentInGeneration);
+         var pieces = MathHelper.SplitIntoNRandomPieces(provinces.Count, value, Globals.Settings.Misc.MinDevelopmentInGeneration, Globals.Settings.Misc.MaxDevelopmentInGeneration);
          if (pieces.Count != provinces.Count)
             return;
          var index = 0;
          foreach (var province in provinces)
          {
             var devParts = MathHelper.SplitIntoNRandomPieces(3, pieces[index], 1,
-               Globals.Settings.MiscSettings.MaxDevelopmentInGeneration);
+               Globals.Settings.Misc.MaxDevelopmentInGeneration);
 
             province.BaseTax = devParts[0];
             province.BaseProduction = devParts[1];
@@ -1394,7 +1405,7 @@ namespace Editor.Forms
       private void CreateFilesByDefault_Click(object sender, EventArgs e)
       {
          CreateFilesByDefault.Checked = !CreateFilesByDefault.Checked;
-         Globals.Settings.SavingSettings.AlwaysAskBeforeCreatingFiles = CreateFilesByDefault.Checked;
+         Globals.Settings.Saving.AlwaysAskBeforeCreatingFiles = CreateFilesByDefault.Checked;
       }
 
       private void save1ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1498,6 +1509,7 @@ namespace Editor.Forms
          Selection.GetSelectedProvinces[0].Capital = Selection.SelectedCountry.Tag;
          capitalTextBox.Text = Selection.GetSelectedProvinces[0].Id.ToString();
       }
+
 
       private void RedistributeDev_Click(object sender, EventArgs e)
       {

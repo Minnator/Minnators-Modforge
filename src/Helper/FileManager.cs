@@ -183,7 +183,7 @@ namespace Editor.Helper
                // TODO group by folders to reduce pop up count
                var ending = ".txt";
                if (saveable is LocObject) 
-                  ending = $"_l_{Globals.Settings.MiscSettings.Language.ToString().ToLower()}.yml";
+                  ending = $"_l_{Globals.Settings.Misc.Language.ToString().ToLower()}.yml";
                if (!pathGrouping.TryGetValue(singleModData, out var modPath))
                {
                   modPath = new(GetNewFileAt(saveable, ending), true);
@@ -255,7 +255,7 @@ namespace Editor.Helper
       /// <returns></returns>
       public static string[] GetNewFileAt(Saveable saveable, string ending = ".txt")
       {
-         if (Globals.Settings.SavingSettings.AlwaysAskBeforeCreatingFiles)
+         if (Globals.Settings.Saving.AlwaysAskBeforeCreatingFiles)
          {
             var inputForm = new GetSavingFileForm(Path.Combine(Globals.ModPath, Path.Combine(saveable.GetDefaultSavePath().Path)), $"Please enter your input for: {saveable.GetSavePromptString()}", ending);
             if (inputForm.ShowDialog() == DialogResult.OK)

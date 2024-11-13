@@ -17,10 +17,10 @@ public partial class LocalisationLoading
       var sw = Stopwatch.StartNew();
       
       //var files = FilesHelper.GetFilesFromModAndVanillaUniquely($"*_l_{Globals.Language.ToString().ToLower()}.yml", "localisation");
-      var replaceFiles = FilesHelper.GetFilesFromModAndVanillaUniquely($"*_l_{Globals.Settings.MiscSettings.Language.ToString().ToLower()}.yml", "localisation", "replace");
+      var replaceFiles = FilesHelper.GetFilesFromModAndVanillaUniquely($"*_l_{Globals.Settings.Misc.Language.ToString().ToLower()}.yml", "localisation", "replace");
 
-      var vanillaFiles = FilesHelper.GetAllFilesInFolder( Path.Combine(Globals.VanillaPath, "localisation"), $"*_l_{Globals.Settings.MiscSettings.Language.ToString().ToLower()}.yml");
-      var modFiles = FilesHelper.GetFilesInFolder( Path.Combine(Globals.ModPath, "localisation"), $"*_l_{Globals.Settings.MiscSettings.Language.ToString().ToLower()}.yml");
+      var vanillaFiles = FilesHelper.GetAllFilesInFolder( Path.Combine(Globals.VanillaPath, "localisation"), $"*_l_{Globals.Settings.Misc.Language.ToString().ToLower()}.yml");
+      var modFiles = FilesHelper.GetFilesInFolder( Path.Combine(Globals.ModPath, "localisation"), $"*_l_{Globals.Settings.Misc.Language.ToString().ToLower()}.yml");
       
       HashSet<LocObject> vanillaLocalisation = [];
       HashSet<LocObject> modLocalisation = [];

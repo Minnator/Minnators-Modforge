@@ -337,7 +337,7 @@ namespace Editor.Saving
          path = folderPath;
          usedGrouping = false;
          // Ask the user where to create the file if it can be decided.
-         if (Globals.Settings.SavingSettings.AlwaysAskBeforeCreatingFiles)
+         if (Globals.Settings.Saving.AlwaysAskBeforeCreatingFiles)
          {
             // The path is forced the user can NOT decide the filename or where to save it
             if (filename.Value || overrideValue)

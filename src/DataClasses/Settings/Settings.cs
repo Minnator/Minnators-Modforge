@@ -12,11 +12,12 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    private RenderingSettings _renderingSettings = new();
    private SavingSettings _savingSettings = new();
    private MiscSettings _miscSettings = new();
+   private GuiSettings _guiSettings = new();
 
    [Description("Contains all settings regarding the misc settings.")]
    [TypeConverter(typeof(ExpandableObjectConverter))]
    [CompareInEquals]
-   public MiscSettings MiscSettings
+   public MiscSettings Misc
    {
       get => _miscSettings;
       set => SetField(ref _miscSettings, value);
@@ -25,7 +26,7 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    [Description("Contains all settings regarding the saving of files.")]
    [TypeConverter(typeof(ExpandableObjectConverter))]
    [CompareInEquals]
-   public SavingSettings SavingSettings
+   public SavingSettings Saving
    {
       get => _savingSettings;
       set => SetField(ref _savingSettings, value);
@@ -34,7 +35,7 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    [Description("Contains all settings regarding the rendering of the map.")]
    [TypeConverter(typeof(ExpandableObjectConverter))]
    [CompareInEquals]
-   public RenderingSettings RenderingSettings
+   public RenderingSettings Rendering
    {
       get => _renderingSettings;
       set => SetField(ref _renderingSettings, value);
@@ -43,10 +44,19 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    [Description("Contains all settings regarding the map tooltip.")]
    [TypeConverter(typeof(ExpandableObjectConverter))]
    [CompareInEquals]
-   public ToolTipSettings ToolTipSettings 
+   public ToolTipSettings ToolTip 
    {
       get => _toolTipSettings;
       set => SetField(ref _toolTipSettings, value);
+   }
+
+   [Description("Contains all settings regarding the GUI customisation")]
+   [TypeConverter(typeof(ExpandableObjectConverter))]
+   [CompareInEquals]
+   public GuiSettings Gui
+   {
+      get => _guiSettings;
+      set => SetField(ref _guiSettings, value);
    }
 
 

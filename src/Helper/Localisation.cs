@@ -2,6 +2,7 @@
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.Misc;
 using Editor.DataClasses.Settings;
+using Editor.Events;
 using Editor.Loading;
 using Editor.Saving;
 
@@ -53,11 +54,7 @@ public static class Localisation
 
    public static void Initialize()
    {
-      Globals.Settings.MiscSettings.PropertyChanged += (_, args) =>
-      {
-         if (args.PropertyName == nameof(Settings.MiscSettings.Language))
-            LocalisationLoading.Load();
-      };
+      CountryGuiEvents.SetGuiEventHandlers();
    }
 }
 

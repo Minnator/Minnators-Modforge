@@ -30,12 +30,14 @@ namespace Editor.Helper
       /// <exception cref="InvalidOperationException"></exception>
       public static Bitmap ReadTGAImage(string filePath)
       {
+         if (!File.Exists(filePath))
+            throw new FileNotFoundException("The specified file does not exist.", filePath);
          var image = TexHelper.Instance.LoadFromTGAFile(filePath);
 
          if (image == null)
             throw new InvalidOperationException("Failed to load the TGA image.");
 
-         return ConvertScratchImageToBitmap(image);
+         return ConvertScratchImageToBitmapBGR(image);
       }
 
       /// <summary>
@@ -61,6 +63,38 @@ namespace Editor.Helper
          bitmap.UnlockBits(bmpData);
          return bitmap;
       }
+
+      private static Bitmap ConvertScratchImageToBitmapBGR(ScratchImage scratchImage)
+      {
+         var metadata = scratchImage.GetMetadata();
+         var bitmap = new Bitmap(metadata.Width, metadata.Height, PixelFormat.Format32bppArgb);
+         var rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+         var bmpData = bitmap.LockBits(rect, ImageLockMode.WriteOnly, bitmap.PixelFormat);
+
+         var sourcePtr = scratchImage.GetImage(0).Pixels;
+
+         unsafe
+         {
+            var destPtr = (byte*)bmpData.Scan0;
+            var srcPtr = (byte*)sourcePtr.ToPointer();
+
+            // Copy and swap channels directly in memory
+            for (var i = 0; i < metadata.Width * metadata.Height; i++)
+            {
+               destPtr[0] = srcPtr[2]; // B (from source) to R (in dest)
+               destPtr[1] = srcPtr[1]; // G stays the same
+               destPtr[2] = srcPtr[0]; // R (from source) to B (in dest)
+               destPtr[3] = srcPtr[3]; // A channel
+
+               srcPtr += 4;  
+               destPtr += 4; 
+            }
+         }
+
+         bitmap.UnlockBits(bmpData);
+         return bitmap;
+      }
+
 
 
       [LibraryImport("kernel32.dll", EntryPoint = "RtlMoveMemory", SetLastError = false)]

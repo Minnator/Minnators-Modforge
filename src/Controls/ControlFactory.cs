@@ -20,22 +20,14 @@ public static class ControlFactory
 
    #endregion
 
+   public static FlagLabel GetFlagLabel()
+   {
+      return new(Country.Empty);
+   }
+
    public static MapModeButton GetMapModeButton(char hotkey)
    {
       return new (hotkey);
-   }
-
-   public static CollectionEditor GetCollectionEditor(string name, MapModeType mapModeName, ItemTypes itemTypes, List<string> comboBoxItems, Func<string, List<string>> onIndexSelectedFunc, Func<string, bool, List<string>> onAddedOrRemovedFunc, Func<string, List<string>> onNewCreated, Action<string> onDeleted, Action<string, string> onSingleRemoved)
-   {
-      CollectionEditor ce = new (name, mapModeName, itemTypes, onIndexSelectedFunc, onAddedOrRemovedFunc, onNewCreated, onDeleted, onSingleRemoved)
-      {
-         Margin = new(1),
-         Dock = DockStyle.Fill
-      };
-
-      ce.SetComboBoxItems(comboBoxItems);
-
-      return ce;
    }
 
    public static ThreeColorStripesButton GetThreeColorsButton()

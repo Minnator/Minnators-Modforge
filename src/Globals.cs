@@ -1,5 +1,4 @@
 ﻿using Editor.Controls;
-using Editor.DataClasses;
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
@@ -12,7 +11,6 @@ using Editor.Forms.Feature.AdvancedSelections;
 using Editor.Forms.PopUps;
 using Editor.Helper;
 using Editor.Loading;
-using static System.Net.WebRequestMethods;
 using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor;
@@ -103,7 +101,7 @@ public static class Globals
       }
    }
    private static int _loadingStage = 0;
-   public const int LOADING_STAGES = 41; // Needs to be increased when adding new loading stages
+   public const int LOADING_STAGES = 42; // Needs to be increased when adding new loading stages
    #endregion
    
    public static Random Random = null!;
@@ -129,8 +127,8 @@ public static class Globals
    }
    // Logs
    public static readonly string DownloadsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
-   public static readonly Log LoadingLog = new(Settings.SavingSettings.LoadingLogLocation, "Loading");
-   public static readonly Log ErrorLog = new(Settings.SavingSettings.ErrorLogLocation, "Error");
+   public static readonly Log LoadingLog = new(Settings.Saving.LoadingLogLocation, "Loading");
+   public static readonly Log ErrorLog = new(Settings.Saving.ErrorLogLocation, "Error");
 
    // Contains the current state of the application
    public static State State = State.Loading;
@@ -187,26 +185,8 @@ public static class Globals
    public static readonly Dictionary<string, Religion> Religions = [];
 
    // Revolutionary Colors
-   public static readonly Dictionary<int, Color> RevolutionaryColors = new()
-   {
-      { 0, Color.FromArgb(255, 255, 255) },  // Argent (White)
-      { 1, Color.FromArgb(20, 20, 20) },     // Sable (Black)
-      { 2, Color.FromArgb(117, 38, 143) },   // Purple
-      { 3, Color.FromArgb(113, 11, 43) },    // Murrey (Mulberry) Burgundy
-      { 4, Color.FromArgb(97, 12, 12) },     // Sanguine (Blood Red)
-      { 5, Color.FromArgb(175, 15, 15) },    // Gules (Red)
-      { 6, Color.FromArgb(188, 90, 27) },    // Tenné (Tawny aka orange)
-      { 7, Color.FromArgb(64, 40, 22) },     // Brown
-      { 8, Color.FromArgb(244, 184, 12) },   // Or (Gold)
-      { 9, Color.FromArgb(17, 53, 13) },     // Dark green
-      { 10, Color.FromArgb(46, 114, 55) },   // Vert (Light Green)
-      { 11, Color.FromArgb(18, 179, 113) },  // Teal
-      { 12, Color.FromArgb(50, 173, 192) },  // Turquoise
-      { 13, Color.FromArgb(30, 30, 128) },   // Azure (Blue)
-      { 14, Color.FromArgb(116, 198, 240) }, // Bleu-Celeste (Sky Blue)
-      { 15, Color.FromArgb(0, 68, 131) },    // Reflex Blue variant (darker than current French)
-      { 16, Color.FromArgb(200, 48, 40) }    // Red 032 variant (darker than current French)
-   };
+   public static readonly Dictionary<int, Color> RevolutionaryColors = [];
+   public static readonly HashSet<Color> CustomCountryColors = [];
 
    // Government Reforms and Government Types
    public static Dictionary<string, Government> GovernmentTypes = [];

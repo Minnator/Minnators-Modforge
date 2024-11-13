@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Parser;
 
 namespace Editor.Helper;
@@ -53,6 +54,11 @@ public static partial class FilesHelper
    {
       var (modFiles, vanillaFiles) = GetFilesFromModAndVanillaUniquelySeparated(searchPattern, internalPath);
       return modFiles.Concat(vanillaFiles).ToList();
+   }
+
+   public static Bitmap GetDefaultFlagPath()
+   {
+      return ImageReader.ReadTGAImage(Path.Combine(Globals.VanillaPath, "gfx", "flags", "REB.tga"));
    }
 
    public static (List<string>, List<string>) GetFilesFromModAndVanillaUniquelySeparated(string searchPattern, params string[] internalPath)

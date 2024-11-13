@@ -1,6 +1,8 @@
 ﻿using Editor.Controls;
 using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.Settings;
 using Editor.Helper;
+using Editor.Loading;
 
 namespace Editor.Events
 {
@@ -32,12 +34,28 @@ namespace Editor.Events
       {
          if (sender is not ColorPickerButton button)
             return;
-         Selection.SelectedCountry.RevolutionaryColor = button.GetColor;
+
+
       }
 
       public static void OnCountryDeselected(object? sender, Country e)
       {
          Globals.MapWindow.ClearCountryGui();
+      }
+
+      public static void SetGuiEventHandlers()
+      {
+         Globals.Settings.Misc.PropertyChanged += (_, args) =>
+         {
+            if (args.PropertyName == nameof(Settings.Misc.Language))
+               LocalisationLoading.Load();
+         };
+
+         Globals.Settings.Gui.PropertyChanged += (_, args) =>
+         {
+            if (args.PropertyName == nameof(GuiSettings.ShowCountryFlagInCE))
+               Globals.MapWindow.CountryFlagLabel.Visible = Globals.Settings.Gui.ShowCountryFlagInCE;
+         };
       }
    }
 }

@@ -102,6 +102,8 @@ namespace Editor.Forms.Loadingscreen
 
          try
          {
+            CustomColorsLoading.Load();
+            bw.ReportProgress(++progress);
             DescriptorLoading.Load();
             bw.ReportProgress(++progress);
             GraphicalCulturesLoading.Load();

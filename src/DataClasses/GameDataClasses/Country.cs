@@ -169,8 +169,8 @@ public class Country(Tag tag, Color color, string fileName) : ProvinceCollection
          return prov;
       }
 
-      var devParts = MathHelper.SplitIntoNRandomPieces(3, dev, Globals.Settings.MiscSettings.MinDevelopmentInGeneration,
-         Globals.Settings.MiscSettings.MaxDevelopmentInGeneration);
+      var devParts = MathHelper.SplitIntoNRandomPieces(3, dev, Globals.Settings.Misc.MinDevelopmentInGeneration,
+         Globals.Settings.Misc.MaxDevelopmentInGeneration);
 
       prov.BaseTax += devParts[0];
       prov.BaseProduction += devParts[1];
@@ -289,6 +289,18 @@ public class Country(Tag tag, Color color, string fileName) : ProvinceCollection
       Globals.Countries.Add(Tag, this);
    }
 
+   public bool GetFlagPath(out string path)
+   {
+      return FilesHelper.GetModOrVanillaPath(out path, out _, "gfx", "flags", $"{Tag}.tga");
+   }
+
+   public Bitmap GetFlagBitmap()
+   {
+      if (!GetFlagPath(out var path))
+         return FilesHelper.GetDefaultFlagPath();
+      return ImageReader.ReadTGAImage(path);
+   }
+
    public List<Country> GetNeighbours()
    {
       List<Country> neighbours = [];
@@ -317,8 +329,8 @@ public class Country(Tag tag, Color color, string fileName) : ProvinceCollection
 
    public List<Country> GetNeighboringCountriesWithSameSize()
    {
-      var maxProvinceDistance = Globals.Settings.MiscSettings.MaxProvinceDistanceForCountryWithSameSize;
-      var maxDevDifference = Globals.Settings.MiscSettings.MaxCountryDevDifferenceForCountryWithSameSize;
+      var maxProvinceDistance = Globals.Settings.Misc.MaxProvinceDistanceForCountryWithSameSize;
+      var maxDevDifference = Globals.Settings.Misc.MaxCountryDevDifferenceForCountryWithSameSize;
 
       List<Country> countries = [];
       List<Country> neighbours = [];

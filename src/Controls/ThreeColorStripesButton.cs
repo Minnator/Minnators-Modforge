@@ -37,9 +37,18 @@
          Rectangle rect = new (3, 3, ClientRectangle.Width - 4, ClientRectangle.Height - 4);
          var width = (rect.Width) / 3;
 
-         using (var brush1 = new SolidBrush(Globals.RevolutionaryColors[ColorIndex1]))
-         using (var brush2 = new SolidBrush(Globals.RevolutionaryColors[ColorIndex2]))
-         using (var brush3 = new SolidBrush(Globals.RevolutionaryColors[ColorIndex3]))
+         if (!Globals.RevolutionaryColors.TryGetValue(ColorIndex1, out var col1)
+             || !Globals.RevolutionaryColors.TryGetValue(ColorIndex2, out var col2)
+             || !Globals.RevolutionaryColors.TryGetValue(ColorIndex3, out var col3))
+         {
+            MessageBox.Show($"Revolutionary Color index not found: ({ColorIndex1}, {ColorIndex2}, {ColorIndex1})", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+         }
+
+
+         using (var brush1 = new SolidBrush(col1))
+         using (var brush2 = new SolidBrush(col2))
+         using (var brush3 = new SolidBrush(col3))
          {
             e.Graphics.FillRectangle(brush1, new(rect.Left, rect.Top, width, rect.Height - 2));
             e.Graphics.FillRectangle(brush2, new(rect.Left + width, rect.Top, width, rect.Height - 2));
