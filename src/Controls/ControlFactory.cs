@@ -38,6 +38,15 @@ public static class ControlFactory
       return ce;
    }
 
+   public static ThreeColorStripesButton GetThreeColorsButton()
+   {
+      return new ()
+      {
+         Margin = new(1),
+         Dock = DockStyle.Fill
+      };
+   }
+
    public static Button GetImageButton(ImageButtonType ibType, string toolTip)
    {
       Button button = new()

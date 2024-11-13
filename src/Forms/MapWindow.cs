@@ -1127,7 +1127,7 @@ namespace Editor.Forms
       private ComboBox focusComboBox = null!;
 
       private ColorPickerButton CountryColorPickerButton = null!;
-      private ColorPickerButton RevolutionColorPickerButton = null!;
+      private ThreeColorStripesButton RevolutionColorPickerButton = null!;
 
       private ItemList GovernmentReforms = null!;
       private ItemList AcceptedCultures = null!;
@@ -1156,12 +1156,12 @@ namespace Editor.Forms
             Margin = new(1),
             Height = 25,
          };
-         TagSelectionBox.Items.Add("###");
+         TagSelectionBox.Items.Add(DataClasses.GameDataClasses.Tag.Empty);
          TagSelectionBox.OnTagChanged += CountryGuiEvents.TagSelectionBox_OnTagChanged;
          CountryColorPickerButton = ControlFactory.GetColorPickerButton();
          CountryColorPickerButton.Click += CountryGuiEvents.CountryColorPickerButton_Click;
          GeneralToolTip.SetToolTip(CountryColorPickerButton, "Set the <color> of the selected country");
-         RevolutionColorPickerButton = ControlFactory.GetColorPickerButton();
+         RevolutionColorPickerButton = ControlFactory.GetThreeColorsButton();
          RevolutionColorPickerButton.Click += CountryGuiEvents.RevolutionColorPickerButton_Click;
          GeneralToolTip.SetToolTip(RevolutionColorPickerButton, "Set the <revolutionary_color> of the selected country");
          GraphicalCultureBox = ControlFactory.GetListComboBox(Globals.GraphicalCultures, new(1));
