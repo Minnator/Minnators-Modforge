@@ -9,10 +9,25 @@
       public ThreeColorStripesButton()
       {
          ColorIndex1 = 0;
-         ColorIndex2 = 1;
-         ColorIndex3 = 2;
-         base.ForeColor = Color.DimGray;
-         base.Text = $"{ColorIndex1,2}      {ColorIndex2,2}      {ColorIndex3,2}";
+         ColorIndex2 = 0;
+         ColorIndex3 = 0;
+         base.ForeColor = Color.Black;
+      }
+
+      public void SetColorIndexes(int one, int two, int three)
+      {
+         ColorIndex1 = one;
+         ColorIndex2 = two;
+         ColorIndex3 = three;
+         Invalidate();
+      }
+
+      public void Clear()
+      {
+         ColorIndex1 = 0;
+         ColorIndex2 = 0;
+         ColorIndex3 = 0;
+         Invalidate();
       }
 
       protected override void OnPaint(PaintEventArgs e)
@@ -50,5 +65,7 @@
             e.Graphics.DrawRectangle(borderPen, 2, 2, rect.Width - 1, rect.Height - 1);
          }
       }
+
+
    }
 }

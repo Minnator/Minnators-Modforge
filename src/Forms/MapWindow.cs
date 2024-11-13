@@ -1261,7 +1261,7 @@ namespace Editor.Forms
          CountryColorPickerButton.Text = "(//)";
          CountryADJLoc.Text = "-";
          CountryLoc.Text = "-";
-         RevolutionColorPickerButton.BackColor = Color.Empty;
+         RevolutionColorPickerButton.Clear();
          GraphicalCultureBox.SelectedIndex = 0;
          UnitTypeBox.SelectedIndex = 0;
          TechGroupBox.SelectedIndex = 0;
@@ -1293,6 +1293,8 @@ namespace Editor.Forms
          historicRivals.Clear();
          historicFriends.Clear();
          estatePrivileges.Clear();
+
+
       }
 
       internal void LoadCountryToGui(Country country)
@@ -1308,7 +1310,7 @@ namespace Editor.Forms
          CountryColorPickerButton.Text = $"({country.Color.R}/{country.Color.G}/{country.Color.B})";
          CountryLoc.Text = country.GetLocalisation();
          CountryADJLoc.Text = country.GetAdjectiveLocalisation();
-         RevolutionColorPickerButton.BackColor = country.RevolutionaryColor;
+         RevolutionColorPickerButton.SetColorIndexes(country.RevolutionaryColor.R, country.RevolutionaryColor.G, country.RevolutionaryColor.B);
          GraphicalCultureBox.SelectedItem = country.Gfx;
          UnitTypeBox.SelectedItem = country.UnitType;
          TechGroupBox.SelectedItem = country.TechnologyGroup;
