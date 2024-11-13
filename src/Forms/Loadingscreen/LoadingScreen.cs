@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Media;
+using System.Reflection;
+using System.Resources;
 using Editor.Controls;
 using Editor.Loading;
 using Editor.Parser;
@@ -33,6 +35,7 @@ namespace Editor.Forms.Loadingscreen
          LoadButton_Click(null!, null!);
       }
 
+      
       ~LoadingScreen()
       {
          _ms.Dispose();

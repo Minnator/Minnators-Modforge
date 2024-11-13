@@ -37,8 +37,15 @@ public sealed class ZoomControl : Control, IDisposable
    private Rectangle _oldRectange = Rectangle.Empty;
 
    public bool CanZoom = true;
-
    private bool _border = true;
+
+   private int _minVisiblePixels = 80;
+   public int MinVisiblePixels
+   {
+      get => _minVisiblePixels;
+      set => _minVisiblePixels = Math.Max(10, value);
+   }
+
    public bool Border
    {
       get => _border;
@@ -328,10 +335,10 @@ public sealed class ZoomControl : Control, IDisposable
       }
    }
 
-   private void ZoomingControl_Resize(object sender, EventArgs e)
+   public void ZoomingControl_Resize(object sender, EventArgs e)
    {
       _zoomLimitUpper = Math.Min((float)Width / _map.Width, (float)Height / _map.Height) / 1.1f;
-      _zoomLimitLower = Math.Min((float)Width / 80, (float)Height / 80);
+      _zoomLimitLower = Math.Min((float)Width / MinVisiblePixels, (float)Height / MinVisiblePixels);
 
       LimitZoom();
       LimitPan();

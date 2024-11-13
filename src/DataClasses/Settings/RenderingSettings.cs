@@ -12,6 +12,7 @@ namespace Editor.DataClasses.Settings
       private bool _showMapBorder = true;
       private Color _mapBorderColor = Color.Black;
       private int _mapBorderWidth = 2;
+      private int _minVisiblePixels = 80;
 
       [Description("The direction of occupation stripes on the map")]
       [CompareInEquals]
@@ -43,6 +44,14 @@ namespace Editor.DataClasses.Settings
       {
          get => _mapBorderWidth;
          set => SetField(ref _mapBorderWidth, value);
+      }
+
+      [Description("The minimum number of pixels of provinces.bmp visible on the map. Capped at 10")]
+      [CompareInEquals]
+      public int MinVisiblePixels
+      {
+         get => _minVisiblePixels;
+         set => SetField(ref _minVisiblePixels, value);
       }
 
 

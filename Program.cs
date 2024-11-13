@@ -1,8 +1,6 @@
-﻿using System.Diagnostics;
-using Editor.Forms;
+﻿using Editor.Forms;
 using Editor.Forms.Feature.Crash_Reporter;
 using Editor.Forms.GetUserInput;
-using Editor.Forms.Loadingscreen;
 
 namespace Editor
 {
@@ -16,6 +14,8 @@ namespace Editor
       {
          Application.EnableVisualStyles();
          Application.SetCompatibleTextRenderingDefault(false);
+
+         
 
          Application.Run(new EnterPathForm());
          if (Globals.VanillaPath != string.Empty && Globals.ModPath != string.Empty)

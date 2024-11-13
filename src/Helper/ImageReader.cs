@@ -75,6 +75,7 @@ namespace Editor.Helper
 
          unsafe
          {
+            // Get the pointer to the destination bitmap data
             var destPtr = (byte*)bmpData.Scan0;
             var srcPtr = (byte*)sourcePtr.ToPointer();
 

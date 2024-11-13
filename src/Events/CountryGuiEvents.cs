@@ -1,6 +1,7 @@
 ﻿using Editor.Controls;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Settings;
+using Editor.Forms.Feature;
 using Editor.Helper;
 using Editor.Loading;
 
@@ -30,12 +31,32 @@ namespace Editor.Events
          Globals.MapWindow.LoadCountryToGui(country);
       }
 
-      public static void RevolutionColorPickerButton_Click(object? sender, EventArgs e)
+      public static void RevolutionColorPickerButton_Click(object? sender, MouseEventArgs e)
       {
-         if (sender is not ColorPickerButton button)
+         if (sender is not ThreeColorStripesButton button || Selection.SelectedCountry == Country.Empty)
             return;
 
+         // Right click to reset the color
+         if (e.Button == MouseButtons.Right)
+         {
+            var max = Globals.RevolutionaryColors.Count;
+            var index1 = Globals.Random.Next(max);
+            var index2 = Globals.Random.Next(max);
+            var index3 = Globals.Random.Next(max);
 
+            Selection.SelectedCountry.RevolutionaryColor = Color.FromArgb(255, index1, index2, index3);
+            button.SetColorIndexes(index1, index2, index3);
+            return;
+         }
+
+         var revColorPicker = new RevolutionaryColorPicker();
+         revColorPicker.SetIndexes(Selection.SelectedCountry.RevolutionaryColor.R, Selection.SelectedCountry.RevolutionaryColor.G, Selection.SelectedCountry.RevolutionaryColor.B);
+         revColorPicker.OnColorsChanged += (o, tuple) =>
+         {
+            Selection.SelectedCountry.RevolutionaryColor = Color.FromArgb(tuple.Item1, tuple.Item2, tuple.Item3);
+            Globals.MapWindow.RevolutionColorPickerButton.SetColorIndexes(tuple.Item1, tuple.Item2, tuple.Item3);
+         };
+         revColorPicker.ShowDialog();
       }
 
       public static void OnCountryDeselected(object? sender, Country e)
