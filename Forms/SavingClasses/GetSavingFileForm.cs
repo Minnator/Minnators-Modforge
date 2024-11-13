@@ -7,7 +7,7 @@ namespace Editor.Forms.SavingClasses
       public string InitPath { get; set; }
       public string NewPath { get; set; } = string.Empty;
       private string Ending { get; set; }
-      public bool RequireModDirectory {get; set; } = true;
+      public bool RequireModDirectory { get; set; } = true;
       public bool UseGrouping { get; set; } = false;
       public GetSavingFileForm(string initPath, string desc, string ending)
       {
@@ -34,7 +34,7 @@ namespace Editor.Forms.SavingClasses
       {
          if (NewFile.Checked)
          {
-            if (string.IsNullOrWhiteSpace(NewPath)) 
+            if (string.IsNullOrWhiteSpace(NewPath))
                NewPath = PathTextBox.PlaceholderText;
             if (!NewPath.EndsWith(Ending))
                NewPath += Ending;
@@ -78,7 +78,7 @@ namespace Editor.Forms.SavingClasses
                return;
             }
          }
-         returnResult:
+      returnResult:
          DialogResult = DialogResult.OK;
          Close();
       }
@@ -93,6 +93,16 @@ namespace Editor.Forms.SavingClasses
             else
                ExistingFile.Checked = false;
          }
+      }
+
+      private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+      {
+
+      }
+
+      private void GroupingCheckbox_CheckedChanged(object sender, EventArgs e)
+      {
+         UseGrouping = GroupingCheckbox.Checked;
       }
    }
 }

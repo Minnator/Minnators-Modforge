@@ -36,18 +36,22 @@
          PathTextBox = new TextBox();
          ExistingFilePath = new TextBox();
          DescriptionLabel = new Label();
+         tableLayoutPanel3 = new TableLayoutPanel();
          button1 = new Button();
+         GroupingCheckbox = new CheckBox();
          tableLayoutPanel1.SuspendLayout();
          tableLayoutPanel2.SuspendLayout();
+         tableLayoutPanel3.SuspendLayout();
          SuspendLayout();
          // 
          // tableLayoutPanel1
          // 
-         tableLayoutPanel1.ColumnCount = 1;
+         tableLayoutPanel1.ColumnCount = 2;
          tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
          tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 1);
          tableLayoutPanel1.Controls.Add(DescriptionLabel, 0, 0);
-         tableLayoutPanel1.Controls.Add(button1, 0, 2);
+         tableLayoutPanel1.Controls.Add(tableLayoutPanel3, 0, 2);
          tableLayoutPanel1.Dock = DockStyle.Fill;
          tableLayoutPanel1.Location = new Point(0, 0);
          tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -57,6 +61,7 @@
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          tableLayoutPanel1.Size = new Size(451, 133);
          tableLayoutPanel1.TabIndex = 0;
+         tableLayoutPanel1.Paint += tableLayoutPanel1_Paint;
          // 
          // tableLayoutPanel2
          // 
@@ -76,7 +81,7 @@
          tableLayoutPanel2.RowCount = 2;
          tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
          tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-         tableLayoutPanel2.Size = new Size(451, 53);
+         tableLayoutPanel2.Size = new Size(431, 53);
          tableLayoutPanel2.TabIndex = 0;
          // 
          // ExistingFile
@@ -109,7 +114,7 @@
          // 
          OpenFileDialogButton.Dock = DockStyle.Fill;
          OpenFileDialogButton.Image = Properties.Resources.FolderIcon;
-         OpenFileDialogButton.Location = new Point(422, 1);
+         OpenFileDialogButton.Location = new Point(402, 1);
          OpenFileDialogButton.Margin = new Padding(1);
          OpenFileDialogButton.Name = "OpenFileDialogButton";
          OpenFileDialogButton.Size = new Size(28, 24);
@@ -124,7 +129,7 @@
          PathTextBox.Location = new Point(95, 29);
          PathTextBox.Name = "PathTextBox";
          PathTextBox.PlaceholderText = "modforge_";
-         PathTextBox.Size = new Size(353, 23);
+         PathTextBox.Size = new Size(333, 23);
          PathTextBox.TabIndex = 3;
          // 
          // ExistingFilePath
@@ -133,7 +138,7 @@
          ExistingFilePath.Location = new Point(95, 3);
          ExistingFilePath.Name = "ExistingFilePath";
          ExistingFilePath.ReadOnly = true;
-         ExistingFilePath.Size = new Size(323, 23);
+         ExistingFilePath.Size = new Size(303, 23);
          ExistingFilePath.TabIndex = 4;
          // 
          // DescriptionLabel
@@ -142,21 +147,49 @@
          DescriptionLabel.Dock = DockStyle.Fill;
          DescriptionLabel.Location = new Point(3, 0);
          DescriptionLabel.Name = "DescriptionLabel";
-         DescriptionLabel.Size = new Size(445, 50);
+         DescriptionLabel.Size = new Size(425, 50);
          DescriptionLabel.TabIndex = 1;
          DescriptionLabel.Text = "Select a file to save or provide a new filename";
          DescriptionLabel.TextAlign = ContentAlignment.MiddleCenter;
          // 
+         // tableLayoutPanel3
+         // 
+         tableLayoutPanel3.ColumnCount = 2;
+         tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100F));
+         tableLayoutPanel3.Controls.Add(button1, 1, 0);
+         tableLayoutPanel3.Controls.Add(GroupingCheckbox, 0, 0);
+         tableLayoutPanel3.Dock = DockStyle.Fill;
+         tableLayoutPanel3.Location = new Point(0, 103);
+         tableLayoutPanel3.Margin = new Padding(0);
+         tableLayoutPanel3.Name = "tableLayoutPanel3";
+         tableLayoutPanel3.RowCount = 1;
+         tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         tableLayoutPanel3.Size = new Size(431, 30);
+         tableLayoutPanel3.TabIndex = 3;
+         // 
          // button1
          // 
-         button1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-         button1.Location = new Point(373, 106);
+         button1.Dock = DockStyle.Fill;
+         button1.Location = new Point(334, 3);
          button1.Name = "button1";
-         button1.Size = new Size(75, 23);
+         button1.Size = new Size(94, 24);
          button1.TabIndex = 2;
          button1.Text = "Confirm";
          button1.UseVisualStyleBackColor = true;
          button1.Click += button1_Click;
+         // 
+         // GroupingCheckbox
+         // 
+         GroupingCheckbox.AutoSize = true;
+         GroupingCheckbox.Dock = DockStyle.Fill;
+         GroupingCheckbox.Location = new Point(3, 3);
+         GroupingCheckbox.Name = "GroupingCheckbox";
+         GroupingCheckbox.Size = new Size(325, 24);
+         GroupingCheckbox.TabIndex = 3;
+         GroupingCheckbox.Text = "Put all edited of the type in this file (grouping)";
+         GroupingCheckbox.UseVisualStyleBackColor = true;
+         GroupingCheckbox.CheckedChanged += GroupingCheckbox_CheckedChanged;
          // 
          // GetSavingFileForm
          // 
@@ -170,6 +203,8 @@
          tableLayoutPanel1.PerformLayout();
          tableLayoutPanel2.ResumeLayout(false);
          tableLayoutPanel2.PerformLayout();
+         tableLayoutPanel3.ResumeLayout(false);
+         tableLayoutPanel3.PerformLayout();
          ResumeLayout(false);
       }
 
@@ -184,5 +219,7 @@
       private TextBox ExistingFilePath;
       private Label DescriptionLabel;
       private Button button1;
+      private TableLayoutPanel tableLayoutPanel3;
+      private CheckBox GroupingCheckbox;
    }
 }

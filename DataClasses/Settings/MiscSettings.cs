@@ -16,6 +16,9 @@ namespace Editor.DataClasses.Settings
       private int _randomSeed = 1444;
       private int _autoPropertiesCountBig = 8;
       private int _autoPropertiesCountSmall = 3;
+      private int _maxProvinceDistanceForCountryWithSameSize = 5;
+      private int _maxCountryDevDifferenceForCountryWithSameSize = 75;
+      private int _historicRivalsFriendsGenerationAmount = 3;
 
       [Description("The language in which the localisation will be shown")]
       [CompareInEquals]
@@ -80,7 +83,31 @@ namespace Editor.DataClasses.Settings
          get => _randomSeed;
          set => SetField(ref _randomSeed, value);
       }
-      
+
+      [Description("The maximum number of provinces to search for a country with the same size")]
+      [CompareInEquals]
+      public int MaxProvinceDistanceForCountryWithSameSize
+      {
+         get => _maxProvinceDistanceForCountryWithSameSize;
+         set => SetField(ref _maxProvinceDistanceForCountryWithSameSize, value);
+      }
+
+      [Description("The maximum development difference for a country to be considered of same size")]
+      [CompareInEquals]
+      public int MaxCountryDevDifferenceForCountryWithSameSize
+      {
+         get => _maxCountryDevDifferenceForCountryWithSameSize;
+         set => SetField(ref _maxCountryDevDifferenceForCountryWithSameSize, value);
+      }
+
+      [Description("The amount of historic rivals and friends that will be generated")]
+      [CompareInEquals]
+      public int HistoricRivalsFriendsGenerationAmount
+      {
+         get => _historicRivalsFriendsGenerationAmount;
+         set => SetField(ref _historicRivalsFriendsGenerationAmount, value);
+      }
+
       public event PropertyChangedEventHandler? PropertyChanged;
 
       private void OnPropertyChanged([CallerMemberName] string? propertyName = null)

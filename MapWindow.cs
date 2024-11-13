@@ -1237,7 +1237,9 @@ namespace Editor
          historicalIdeas.SetAutoSelectFunc(IdeaGroup.GetAutoAssignment);
 
          historicRivals = new([.. Globals.Countries.Keys], [], "Historic Rivals", 8);
+         historicRivals.SetAutoSelectFunc(Country.GetHistoricRivals);
          historicFriends = new([.. Globals.Countries.Keys], [], "Historic Friends", 8);
+         historicFriends.SetAutoSelectFunc(Country.GetHistoricFriends);
          estatePrivileges = new([], [], "Estate Privileges", 8);
 
          MiscTLP.Controls.Add(historicalUnits, 0, 1);

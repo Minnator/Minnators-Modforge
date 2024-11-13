@@ -287,4 +287,99 @@ public class Country(Tag tag, Color color, string fileName) : ProvinceCollection
    {
       Globals.Countries.Add(Tag, this);
    }
+
+   public List<Country> GetNeighbours()
+   {
+      List<Country> neighbours = [];
+      foreach (var province in GetProvinces())
+         foreach (var neighbour in Globals.AdjacentProvinces[province])
+               if (neighbour.Owner != Tag.Empty && !neighbours.Contains(neighbour.Owner) && neighbour.Owner != Tag)
+                  neighbours.Add(neighbour.Owner);
+      return neighbours;
+   }
+
+   private void GetNeighboursInDistanceRecursive(int provinceDistance, List<Country> countries)
+   {
+      if (provinceDistance <= 0)
+         return;
+
+      var neighbours = GetNeighbours();
+      foreach (var neighbour in neighbours)
+      {
+         if (!countries.Contains(neighbour))
+         {
+            countries.Add(neighbour);
+            neighbour.GetNeighboursInDistanceRecursive(provinceDistance - 1, countries);
+         }
+      }
+   }
+
+   public List<Country> GetNeighboringCountriesWithSameSize()
+   {
+      var maxProvinceDistance = Globals.Settings.MiscSettings.MaxProvinceDistanceForCountryWithSameSize;
+      var maxDevDifference = Globals.Settings.MiscSettings.MaxCountryDevDifferenceForCountryWithSameSize;
+
+      List<Country> countries = [];
+      List<Country> neighbours = [];
+
+      GetNeighboursInDistanceRecursive(maxProvinceDistance, neighbours);
+
+      foreach (var neighbour in GetNeighbours())
+         if (Math.Abs(neighbour.GetDevelopment() - GetDevelopment()) <= maxDevDifference)
+            countries.Add(neighbour);
+
+      return countries;
+   }
+
+   public static List<string> GetHistoricRivals(int num)
+   {
+      var country = Selection.SelectedCountry;
+      if (country == Empty)
+         return [];
+
+      var countries = country.GetNeighboringCountriesWithSameSize();
+      if (countries.Count <= num)
+         return countries.Select(c => c.Tag.ToString()).ToList();
+
+      List<string> rivals = [];
+      for (var i = 0; i < num; i++)
+      {
+         var rival = countries[Globals.Random.Next(countries.Count)];
+         if (country.HistoricalFriends.Contains(rival))
+         {
+            i--;
+            goto removeRival;
+         }
+         rivals.Add(rival.Tag);
+         removeRival:
+         countries.Remove(rival);
+      }
+      return rivals;
+   }
+
+   public static List<string> GetHistoricFriends(int num)
+   {
+      var country = Selection.SelectedCountry;
+      if (country == Empty)
+         return [];
+
+      var countries = country.GetNeighboringCountriesWithSameSize();
+      if (countries.Count <= num)
+         return countries.Select(c => c.Tag.ToString()).ToList();
+
+      List<string> friends = [];
+      for (var i = 0; i < num; i++)
+      {
+         var friend = countries[Globals.Random.Next(countries.Count)];
+         if (country.HistoricalRivals.Contains(friend))
+         {
+            i--;
+            goto removeFriend;
+         }
+         friends.Add(friend.Tag);
+         removeFriend:
+         countries.Remove(friend);
+      }
+      return friends;
+   }
 }

@@ -356,6 +356,7 @@
          // quickSettingsToolStripMenuItem
          // 
          quickSettingsToolStripMenuItem.Name = "quickSettingsToolStripMenuItem";
+         quickSettingsToolStripMenuItem.ShortcutKeys = Keys.F4;
          quickSettingsToolStripMenuItem.Size = new Size(268, 22);
          quickSettingsToolStripMenuItem.Text = "Settings";
          quickSettingsToolStripMenuItem.Click += quickSettingsToolStripMenuItem_Click;
@@ -542,7 +543,7 @@
          // openCustomizerToolStripMenuItem
          // 
          openCustomizerToolStripMenuItem.Name = "openCustomizerToolStripMenuItem";
-         openCustomizerToolStripMenuItem.Size = new Size(166, 22);
+         openCustomizerToolStripMenuItem.Size = new Size(180, 22);
          openCustomizerToolStripMenuItem.Text = "Open Customizer";
          openCustomizerToolStripMenuItem.Click += openCustomizerToolStripMenuItem_Click;
          // 
@@ -552,7 +553,7 @@
          ShowToolTipMenuItem.CheckOnClick = true;
          ShowToolTipMenuItem.CheckState = CheckState.Checked;
          ShowToolTipMenuItem.Name = "ShowToolTipMenuItem";
-         ShowToolTipMenuItem.Size = new Size(166, 22);
+         ShowToolTipMenuItem.Size = new Size(180, 22);
          ShowToolTipMenuItem.Text = "Show ToolTip";
          ShowToolTipMenuItem.Click += ShowToolTipMenuItem_Click;
          // 
