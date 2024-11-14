@@ -39,6 +39,12 @@ namespace Editor.DataClasses.GameDataClasses
       {
          return Name == other.Name && OrdinalNumber == other.OrdinalNumber && Chance == other.Chance;
       }
+
+      public override string ToString()
+      {
+         return $"\"{Name} #{OrdinalNumber}\" = {Chance}";
+      }
+
    }
 
    public class CountryHistoryEntry(DateTime date)

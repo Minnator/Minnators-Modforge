@@ -20,6 +20,7 @@ public class CommonCountry(string fileName, Country country) : NewSaveable, INot
    private List<string> _fleetNames = [];
    private List<string> _shipNames = [];
    private List<MonarchName> _monarchNames = [];
+   private int _historicalScore = 0;
 
    public string GraphicalCulture
    {
@@ -81,6 +82,12 @@ public class CommonCountry(string fileName, Country country) : NewSaveable, INot
       set => SetField(ref _monarchNames, value);
    }
 
+   public int HistoricalScore
+   {
+      get => _historicalScore;
+      set => SetField(ref _historicalScore, value);
+   }
+
    public event PropertyChangedEventHandler? PropertyChanged;
    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
    {
@@ -109,9 +116,13 @@ public class CommonCountry(string fileName, Country country) : NewSaveable, INot
       SavingUtil.AddColor(0, Color, ref sb);
       sb.AppendLine($"graphical_culture = {GraphicalCulture}");
       sb.AppendLine($"revolutionary_colors = {{ {RevolutionaryColor.R,3} {RevolutionaryColor.G,3} {RevolutionaryColor.B,3} }}");
-
-
-      //...
+      SavingUtil.AddFormattedStringListOnePerRow("historical_idea_groups", HistoricIdeas, 0, ref sb);
+      SavingUtil.AddFormattedStringListOnePerRow("historical_units", HistoricUnits, 0, ref sb);
+      SavingUtil.AddFormattedStringListOnePerRow("leader_names", LeaderNames, 0, ref sb);
+      SavingUtil.AddFormattedStringListOnePerRow("army_names", ArmyNames, 0, ref sb);
+      SavingUtil.AddFormattedStringListOnePerRow("fleet_names", FleetNames, 0, ref sb);
+      SavingUtil.AddFormattedStringListOnePerRow("ship_names", ShipNames, 0, ref sb);
+      SavingUtil.AddFormattedStringListOnePerRow("monarch_names", MonarchNames.Select(x => x.ToString()).ToList(), 0, ref sb);
 
       return sb.ToString();
    }
@@ -133,7 +144,6 @@ public class HistoryCountry(Country country) : NewSaveable, INotifyPropertyChang
    private string _historicalCouncil = string.Empty;
    private string _preferredReligion = string.Empty;
    private string _specialUnitCulture = string.Empty;
-   private int _historicalScore = 0;
    private bool _canBeRandomNation = true;
    private List<ModifierAbstract> _modifiers = [];
    private List<RulerModifier> _rulerModifiers = [];
@@ -178,12 +188,6 @@ public class HistoryCountry(Country country) : NewSaveable, INotifyPropertyChang
    {
       get => _specialUnitCulture;
       set => SetField(ref _specialUnitCulture, value);
-   }
-
-   public int HistoricalScore
-   {
-      get => _historicalScore;
-      set => SetField(ref _historicalScore, value);
    }
 
    public bool CanBeRandomNation
@@ -377,7 +381,14 @@ public class HistoryCountry(Country country) : NewSaveable, INotifyPropertyChang
    public override string GetFileEnding() => ".txt";
    public override KeyValuePair<string, bool> GetFileName() => new($"{country.Tag} - {country.GetLocalisation()}", true);
    public override string SavingComment() => $"{country.Tag} ({country.GetLocalisation()})";
-   public override string GetSaveString(int tabs) => throw new NotImplementedException();
+   public override string GetSaveString(int tabs)
+   {
+      var sb = new StringBuilder();
+
+
+
+      return sb.ToString();
+   }
    public override string GetSavePromptString() => $"Saving the history/country part";
 
    public event PropertyChangedEventHandler? PropertyChanged;
