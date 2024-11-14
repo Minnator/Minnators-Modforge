@@ -51,7 +51,7 @@
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 27F));
-         tableLayoutPanel1.Size = new Size(225, 294);
+         tableLayoutPanel1.Size = new Size(225, 302);
          tableLayoutPanel1.TabIndex = 0;
          // 
          // SavingCheckedListBox
@@ -59,11 +59,11 @@
          SavingCheckedListBox.CheckOnClick = true;
          SavingCheckedListBox.Dock = DockStyle.Fill;
          SavingCheckedListBox.FormattingEnabled = true;
-         SavingCheckedListBox.Items.AddRange(new object[] { "Provinces", "Areas", "Regions", "Tradenodes", "Tradecompanies", "Colonial regions", "Super regions", "Continents", "Province groups", "Event Modifiers", "Localisation" });
+         SavingCheckedListBox.Items.AddRange(new object[] { "Provinces", "Areas", "Regions", "Tradenodes", "Tradecompanies", "Colonial regions", "Super regions", "Continents", "Province groups", "Event Modifiers", "Localisation", "Countries" });
          SavingCheckedListBox.Location = new Point(8, 47);
          SavingCheckedListBox.Margin = new Padding(8, 3, 8, 3);
          SavingCheckedListBox.Name = "SavingCheckedListBox";
-         SavingCheckedListBox.Size = new Size(209, 217);
+         SavingCheckedListBox.Size = new Size(209, 225);
          SavingCheckedListBox.TabIndex = 0;
          // 
          // label1
@@ -82,7 +82,7 @@
          // SaveSelectedButton
          // 
          SaveSelectedButton.Dock = DockStyle.Fill;
-         SaveSelectedButton.Location = new Point(8, 269);
+         SaveSelectedButton.Location = new Point(8, 277);
          SaveSelectedButton.Margin = new Padding(8, 2, 8, 2);
          SaveSelectedButton.Name = "SaveSelectedButton";
          SaveSelectedButton.Size = new Size(209, 23);
@@ -95,7 +95,7 @@
          // 
          AutoScaleDimensions = new SizeF(7F, 15F);
          AutoScaleMode = AutoScaleMode.Font;
-         ClientSize = new Size(225, 294);
+         ClientSize = new Size(225, 302);
          Controls.Add(tableLayoutPanel1);
          Icon = (Icon)resources.GetObject("$this.Icon");
          KeyPreview = true;

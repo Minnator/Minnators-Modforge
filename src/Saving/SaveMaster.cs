@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.ComponentModel;
 using System.Text;
+using Editor.DataClasses.Misc;
 using Editor.Forms.Feature.SavingClasses;
 using Editor.Helper;
 using Newtonsoft.Json;
@@ -12,7 +13,7 @@ namespace Editor.Saving
       protected ObjEditingStatus _editingStatus = ObjEditingStatus.Unchanged;
       [Browsable(false)]
       [JsonIgnore]
-      public NewPathObj[] paths = [NewPathObj.Empty];
+      public NewPathObj Path = NewPathObj.Empty;
 
       [Browsable(false)]
       public virtual ObjEditingStatus EditingStatus
@@ -30,15 +31,9 @@ namespace Editor.Saving
          }
       }
 
-      public NewPathObj Path
-      {
-         get => paths[0];
-         set => paths[0] = value;
-      }
-
       public void SetPath(ref NewPathObj path)
       {
-         paths[0] = path;
+         Path = path;
       }
 
       public virtual string GetHeader(NewPathObj path)
@@ -46,29 +41,31 @@ namespace Editor.Saving
          return string.Empty;
       }
 
+      public abstract SaveableType WhatAmI();
+
       /// <summary>
       /// The folder where the object should be saved
       /// </summary>
       /// <returns></returns>
-      public abstract string[][] GetDefaultFolderPath();
+      public abstract string[] GetDefaultFolderPath();
 
       /// <summary>
-      /// ".txt"
+      /// Formatted like: ".txt"
       /// </summary>
       /// <returns></returns>
-      public abstract string[] GetFileEnding();
+      public abstract string GetFileEnding();
 
       /// <summary>
-      /// Does NOT contain the file ending
+      /// Returns the default file name for a saveable, if it was not saved in vanilla and was not overwritten by the user unless it is forced
       /// </summary>
-      /// <returns></returns>
-      public abstract KeyValuePair<string, bool>[] GetFileName();
+      /// <returns>KeyValuePair where the key is the default file name and the bool, which indicates if it is forced aka not overwritteable by the user</returns>
+      public abstract KeyValuePair<string, bool> GetFileName();
 
-      public abstract string SavingComment(NewPathObj path);
+      public abstract string SavingComment();
 
-      public abstract string GetSaveString(int tabs, NewPathObj path);
+      public abstract string GetSaveString(int tabs);
 
-      public abstract string GetSavePromptString(NewPathObj path);
+      public abstract string GetSavePromptString();
    }
 
    public class NewPathObj(string[] path, bool isModPathInit)
@@ -79,17 +76,25 @@ namespace Editor.Saving
 
       public static readonly NewPathObj Empty = new([], false);
 
-      public NewPathObj Copy(bool modPath)
+      public NewPathObj Copy(bool modPath, bool addReplacePath = false)
       {
-         return new(Path, modPath);
+         if (!addReplacePath)
+            return new(Path, modPath);
+         var pathParts = new string[Path.Length + 1];
+         Array.Copy(Path, pathParts, Path.Length - 1);
+         pathParts[^2] = "replace";
+         pathParts[^1] = Path[^1];
+         return new(pathParts, modPath);
       }
+
+      public static NewPathObj FromPath(string path) => FromPath(path, path.StartsWith(Globals.ModPath));
 
       public static NewPathObj FromPath(string path, bool isModPath)
       {
-         var internalPath = isModPath
-            ? path.Remove(0, Globals.ModPath.Length + System.IO.Path.DirectorySeparatorChar.ToString().Length).Split(System.IO.Path.DirectorySeparatorChar)
-            : path.Remove(0, Globals.VanillaPath.Length + System.IO.Path.DirectorySeparatorChar.ToString().Length).Split(System.IO.Path.DirectorySeparatorChar);
-         return new(internalPath, isModPath);
+         return new(isModPath 
+            ? path.Remove(0, Globals.ModPath.Length + System.IO.Path.DirectorySeparatorChar.ToString().Length).Split(System.IO.Path.DirectorySeparatorChar) 
+            : path.Remove(0, Globals.VanillaPath.Length + System.IO.Path.DirectorySeparatorChar.ToString().Length).Split(System.IO.Path.DirectorySeparatorChar)
+            , isModPath);
       }
 
       public string ToPath()
@@ -130,64 +135,80 @@ namespace Editor.Saving
    public static class SaveMaster
    {
       private static HashSet<NewPathObj> NeedsToBeHandled = [];
-      private static HashSet<NewSaveable> NeedsToBeHandledReplace = [];
       private static Dictionary<NewPathObj, List<NewSaveable>> AllSaveableFiles = [];
-
-      public static void SaveAllChanges()
+      
+      public static void SaveAllChanges(bool onlyModified = true, SaveableType saveableType = SaveableType.All)
       {
          if (NeedsToBeHandled.Contains(NewPathObj.Empty))
-            AddNewSaveables();
-
+            AddNewSaveables(saveableType);
+         if (!onlyModified)
+         {
+            foreach (var path in AllSaveableFiles.Keys)
+            {
+               var singleModData = AllSaveableFiles[path][0].WhatAmI();
+               if ((saveableType & singleModData) == 0)
+                  continue;
+               SaveFile(path);
+               Globals.SaveableType &= ~singleModData;
+            }
+            return;
+         }
          foreach (var path in NeedsToBeHandled)
          {
-            if (!path.IsModPath) 
+            var singleModData = AllSaveableFiles[path][0].WhatAmI();
+            if ((saveableType & singleModData) == 0)
+               continue;
+
+            if (!path.IsModPath)
                SaveVanillaToMod(path);
             else
                SaveFile(path);
+            Globals.SaveableType &= ~singleModData;
          }
 
          NeedsToBeHandled.Clear();
       }
 
-      public static void AddNewSaveables()
+      public static void AddNewSaveables(SaveableType saveableType)
       {
          Dictionary<string[], NewPathObj> pathGrouping = [];
          foreach (var saveable in AllSaveableFiles[NewPathObj.Empty])
          {
-            var filenamesKVP = saveable.GetFileName();
-            var fileEndings = saveable.GetFileEnding();
-            var defaultPaths = saveable.GetDefaultFolderPath();
-            for (var i = 0; i < saveable.paths.Length; i++)
+            if ((saveableType & saveable.WhatAmI()) == 0)
+               continue;
+
+            var filenameKVP = saveable.GetFileName();
+            var fileEnding = saveable.GetFileEnding();
+            var defaultPath = saveable.GetDefaultFolderPath();
+            var path = saveable.Path;
+            if (path != NewPathObj.Empty)
+               continue;
+
+            GetNewFileAt(defaultPath, filenameKVP, fileEnding, out defaultPath, out _, true);
+
+            if (!pathGrouping.TryGetValue(defaultPath, out path))
             {
-               var path = saveable.paths[i];
-               if (path != NewPathObj.Empty)
-                  continue;
-
-               GetNewFileAt(defaultPaths[i], filenamesKVP[i], fileEndings[i], out var defaultPath, out _, true);
-
-               if (!pathGrouping.TryGetValue(defaultPath, out path))
-               {
-                  GetNewFileAt(defaultPaths[i], filenamesKVP[i], fileEndings[i], out var pathString, out var useGrouping, false, saveable.GetSavePromptString(path));
-                  path = new(pathString, true);
-                  if (useGrouping)
-                     pathGrouping.Add(defaultPath, path);
-               }
-
-
-               if (!AllSaveableFiles.TryGetValue(path, out var otherSaveables))
-               {
-                  // Maybe call AddToDictionary instead
-                  AllSaveableFiles.Add(path, [saveable]);
-                  otherSaveables = AllSaveableFiles[path];
-               }
-               else
-               {
-                  path = otherSaveables[0].paths[i];
-                  otherSaveables.Add(saveable);
-               }
-               saveable.paths[i] = path;
-               NeedsToBeHandled.Add(path);
+               GetNewFileAt(defaultPath, filenameKVP, fileEnding, out var pathString, out var useGrouping, false, saveable.GetSavePromptString());
+               path = new(pathString, true);
+               if (useGrouping)
+                  pathGrouping.Add(defaultPath, path);
             }
+
+
+            if (!AllSaveableFiles.TryGetValue(path, out var otherSaveables))
+            {
+               // Maybe call AddToDictionary instead
+               AllSaveableFiles.Add(path, [saveable]);
+               otherSaveables = AllSaveableFiles[path];
+            }
+            else
+            {
+               path = otherSaveables[0].Path;
+               otherSaveables.Add(saveable);
+            }
+
+            saveable.SetPath(ref path);
+            NeedsToBeHandled.Add(path);
          }
          NeedsToBeHandled.Remove(NewPathObj.Empty);
          AllSaveableFiles.Remove(NewPathObj.Empty);
@@ -195,22 +216,15 @@ namespace Editor.Saving
 
       public static void AddToDictionary(ref NewPathObj path, NewSaveable saveable)
       {
-         if (!AllSaveableFiles.TryGetValue(path, out var saveables))
+         lock (AllSaveableFiles)
          {
-            AllSaveableFiles.Add(path, []);
-
-
-            //print all hashcodes for AllSaveableFiles
-            foreach (var (key, value) in AllSaveableFiles)
+            if (!AllSaveableFiles.TryGetValue(path, out var saveables))
             {
-               System.Diagnostics.Debug.WriteLine($"{Path.Combine(key.Path)} : {key.GetHashCode()}");
+               AllSaveableFiles.Add(path, []);
+               saveables = AllSaveableFiles[path];
             }
-
-            System.Diagnostics.Debug.WriteLine($"{Path.Combine(path.Path)} : {path.GetHashCode()}");
-
-            saveables = AllSaveableFiles[path];
+            saveables.Add(saveable);
          }
-         saveables.Add(saveable);
       }
 
       public static void AddRangeToDictionary(NewPathObj path, IEnumerable<NewSaveable> newSaveables)
@@ -226,47 +240,72 @@ namespace Editor.Saving
          }
       }
 
+      public static void AddToLocObject(NewSaveable saveable)
+      {
+         var path = saveable.Path;
+         if (!path.IsLocalisation)
+            throw new EvilActions($"Should not add a non localisation saveable {path} using AddToLocObject!");
+         Globals.SaveableType |= SaveableType.Localisation;
+
+         if (path.Equals(NewPathObj.Empty))
+         {
+            AddToDictionary(ref path, saveable);
+         }
+         else
+         {
+            path = path.Copy(true, true);
+
+            if (!AllSaveableFiles.TryGetValue(path, out var list))
+            {
+               AllSaveableFiles.Add(path, [saveable]);
+            }
+            else
+            {
+               path = list[0].Path;
+               list.Add(saveable);
+            }
+            saveable.SetPath(ref path);
+         }
+         NeedsToBeHandled.Add(path);
+      }
+
       public static void AddToBeHandled(NewSaveable saveable)
       {
-         var filenamesKVP = saveable.GetFileName();
-         var fileEndings = saveable.GetFileEnding();
-         var defaultPaths = saveable.GetDefaultFolderPath();
-         for (var i = 0; i < saveable.paths.Length; i++)
+         var fileNameKVP = saveable.GetFileName();
+         var fileEnding = saveable.GetFileEnding();
+         var defaultPath = saveable.GetDefaultFolderPath();
+         var path = saveable.Path;
+         if (path != NewPathObj.Empty)
+            NeedsToBeHandled.Add(path);
+         else if (!fileNameKVP.Value)
          {
-            var path = saveable.paths[i];
-            if (path == NewPathObj.Empty)
-            {
-               if (!filenamesKVP[i].Value)
-               {
-                  AddToDictionary(ref path, saveable);
-                  NeedsToBeHandled.Add(path);
-                  continue;
-               }
-
-               if (!GetNewFileAt(defaultPaths[i], filenamesKVP[i], fileEndings[i], out var stringPath, out _))
-                  throw new EvilActions($"Not able to make directory: {defaultPaths}!");
-               
-               path = new(stringPath, true);
-
-               if (AllSaveableFiles.TryGetValue(path, out var saveables))
-               {
-                  path = saveables[0].paths[i];
-               }
-               else
-               {
-                  path.IsModPath = false;
-                  if (!AllSaveableFiles.TryGetValue(path, out saveables))
-                  {
-                     AddToDictionary(ref path, saveable);
-                  }
-                  else
-                     path = saveables[0].paths[i];
-               }
-
-               saveable.paths[i] = path;
-            }
+            AddToDictionary(ref path, saveable);
             NeedsToBeHandled.Add(path);
          }
+         else
+         {
+            if (!GetNewFileAt(defaultPath, fileNameKVP, fileEnding, out var stringPath, out _))
+               throw new EvilActions($"Not able to make directory: {defaultPath}!");
+
+            path = new(stringPath, true);
+
+            if (AllSaveableFiles.TryGetValue(path, out var saveables))
+            {
+               path = saveables[0].Path;
+            }
+            else
+            {
+               path.IsModPath = false;
+               if (!AllSaveableFiles.TryGetValue(path, out saveables))
+                  AddToDictionary(ref path, saveable);
+               else
+                  path = saveables[0].Path;
+            }
+
+            saveable.SetPath(ref path);
+         }
+         NeedsToBeHandled.Add(path);
+         Globals.SaveableType |= saveable.WhatAmI();
       }
 
       private static void SaveFile(NewPathObj path)
@@ -294,9 +333,9 @@ namespace Editor.Saving
             sb.AppendLine(changed[0].GetHeader(path));
 
          // Save the unchanged first
-         AddListToStringBuilder(ref sb, unchanged, path);
+         AddListToStringBuilder(ref sb, unchanged);
          sb.AppendLine($"### Modified {DateTime.Now} ###");
-         AddListToStringBuilder(ref sb, changed, path);
+         AddListToStringBuilder(ref sb, changed);
 
          if (path.IsLocalisation)
             IO.WriteLocalisationFile(path.ToPath(), sb.ToString(), false);
@@ -304,14 +343,14 @@ namespace Editor.Saving
             IO.WriteToFile(path.ToPath(), sb.ToString(), false);
       }
 
-      private static void AddListToStringBuilder(ref StringBuilder sb, List<NewSaveable> items, NewPathObj path)
+      private static void AddListToStringBuilder(ref StringBuilder sb, List<NewSaveable> items, int tabs = 0)
       {
          foreach (var item in items)
          {
-            var saveComment = item.SavingComment(path);
+            var saveComment = item.SavingComment();
             if (!string.IsNullOrWhiteSpace(saveComment))
                sb.AppendLine($"# {saveComment}");
-            sb.AppendLine(item.GetSaveString(0, path));
+            sb.AppendLine(item.GetSaveString(tabs));
          }
       }
 
@@ -326,7 +365,8 @@ namespace Editor.Saving
          // swap the references to the mod version
          AllSaveableFiles.Remove(path);
          path.IsModPath = true;
-         if(savables[0].paths[0] != path)
+         // TODO remove
+         if (savables[0].Path != path)
             throw new EvilActions($"Path was not updated!");
          AllSaveableFiles.Add(path, savables);
          SaveFile(path);

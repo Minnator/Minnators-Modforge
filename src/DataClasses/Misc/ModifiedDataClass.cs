@@ -12,11 +12,11 @@
       SuperRegion = 1 << 6,
       Continent = 1 << 7,
       ProvinceGroup = 1 << 8,
-      EventModifiers = 1 << 9,
+      EventModifier = 1 << 9,
       Localisation = 1 << 10,
       Country = 1 << 11,
       Province = 1 << 12,
-      All = SaveProvinces | Area | Region | TradeNode | TradeCompany | ColonialRegion | SuperRegion | Continent | ProvinceGroup | EventModifiers | Localisation | Country | Province,
+      All = SaveProvinces | Area | Region | TradeNode | TradeCompany | ColonialRegion | SuperRegion | Continent | ProvinceGroup | EventModifier | Localisation | Country | Province,
    }
 
 }

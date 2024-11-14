@@ -200,7 +200,7 @@ public abstract class ProvinceComposite(string name, Color color) : Saveable// P
 {
    public readonly string Name = name;
 
-   public Color Color
+   public virtual Color Color
    {
       get => _color;
       set

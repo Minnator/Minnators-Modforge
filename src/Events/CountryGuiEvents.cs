@@ -44,16 +44,16 @@ namespace Editor.Events
             var index2 = Globals.Random.Next(max);
             var index3 = Globals.Random.Next(max);
 
-            Selection.SelectedCountry.RevolutionaryColor = Color.FromArgb(255, index1, index2, index3);
+            Selection.SelectedCountry.CommonCountry.RevolutionaryColor = Color.FromArgb(255, index1, index2, index3);
             button.SetColorIndexes(index1, index2, index3);
             return;
          }
 
          var revColorPicker = new RevolutionaryColorPicker();
-         revColorPicker.SetIndexes(Selection.SelectedCountry.RevolutionaryColor.R, Selection.SelectedCountry.RevolutionaryColor.G, Selection.SelectedCountry.RevolutionaryColor.B);
+         revColorPicker.SetIndexes(Selection.SelectedCountry.CommonCountry.RevolutionaryColor.R, Selection.SelectedCountry.CommonCountry.RevolutionaryColor.G, Selection.SelectedCountry.CommonCountry.RevolutionaryColor.B);
          revColorPicker.OnColorsChanged += (o, tuple) =>
          {
-            Selection.SelectedCountry.RevolutionaryColor = Color.FromArgb(tuple.Item1, tuple.Item2, tuple.Item3);
+            Selection.SelectedCountry.CommonCountry.RevolutionaryColor = Color.FromArgb(tuple.Item1, tuple.Item2, tuple.Item3);
             Globals.MapWindow.RevolutionColorPickerButton.SetColorIndexes(tuple.Item1, tuple.Item2, tuple.Item3);
          };
          revColorPicker.ShowDialog();

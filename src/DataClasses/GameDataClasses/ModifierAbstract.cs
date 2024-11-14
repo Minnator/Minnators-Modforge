@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Text;
+using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Saving;
 
@@ -198,27 +199,29 @@ namespace Editor.DataClasses.GameDataClasses
       }
 
       public static EventModifier Empty => new("Empty");
-      public override string[][] GetDefaultFolderPath()
+      public override SaveableType WhatAmI() => SaveableType.EventModifier;
+
+      public override string[] GetDefaultFolderPath()
       {
-         return [["common", "event_modifiers"]];
+         return ["common", "event_modifiers"];
       }
 
-      public override string[] GetFileEnding()
+      public override string GetFileEnding()
       {
-         return [".txt"];
+         return ".txt";
       }
 
-      public override KeyValuePair<string, bool>[] GetFileName()
+      public override KeyValuePair<string, bool> GetFileName()
       {
-         return [new("event_modifier", false)];
+         return new("event_modifier", false);
       }
 
-      public override string SavingComment(NewPathObj _)
+      public override string SavingComment()
       {
          return Localisation.GetLoc(Name);
       }
 
-      public override string GetSaveString(int tabs, NewPathObj _)
+      public override string GetSaveString(int tabs)
       {
          var sb = new StringBuilder();
          sb.AppendLine($"{Name} = {{");
@@ -230,7 +233,7 @@ namespace Editor.DataClasses.GameDataClasses
          return sb.ToString();
       }
 
-      public override string GetSavePromptString(NewPathObj _)
+      public override string GetSavePromptString()
       {
          return $"event_modifier: \"{Name}\"";
       }

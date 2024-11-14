@@ -1,5 +1,6 @@
 ﻿using Editor.DataClasses.Misc;
 using Editor.Helper;
+using Editor.Saving;
 
 namespace Editor.Forms.Feature.SavingClasses
 {
@@ -32,10 +33,12 @@ namespace Editor.Forms.Feature.SavingClasses
             SavingCheckedListBox.SetItemChecked(7, true);
          if ((data & SaveableType.ProvinceGroup) != 0)
             SavingCheckedListBox.SetItemChecked(8, true);
-         if ((data & SaveableType.EventModifiers) != 0)
+         if ((data & SaveableType.EventModifier) != 0)
             SavingCheckedListBox.SetItemChecked(9, true);
          if ((data & SaveableType.Localisation) != 0)
             SavingCheckedListBox.SetItemChecked(10, true);
+         if ((data & SaveableType.Country) != 0)
+            SavingCheckedListBox.SetItemChecked(11, true);
       }
 
       public SaveableType GetModifiedDataSelection()
@@ -60,16 +63,18 @@ namespace Editor.Forms.Feature.SavingClasses
          if (SavingCheckedListBox.GetItemChecked(8))
             data |= SaveableType.ProvinceGroup;
          if (SavingCheckedListBox.GetItemChecked(9))
-            data |= SaveableType.EventModifiers;
+            data |= SaveableType.EventModifier;
          if (SavingCheckedListBox.GetItemChecked(10))
             data |= SaveableType.Localisation;
+         if (SavingCheckedListBox.GetItemChecked(11))
+            data |= SaveableType.Country;
 
          return data;
       }
 
       private void SaveSelectedButton_Click(object sender, EventArgs e)
       {
-         FileManager.SaveChanges(saveableType:GetModifiedDataSelection());
+         SaveMaster.SaveAllChanges(saveableType:GetModifiedDataSelection());
          //SavingUtil.SaveAllModified(GetModifiedDataSelection());
       }
 

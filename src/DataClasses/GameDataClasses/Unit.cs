@@ -64,7 +64,7 @@ namespace Editor.DataClasses.GameDataClasses
 
          foreach (var unit in Globals.Units)
             if (unit is LandUnit landUnit)
-               if (Equals(landUnit.TechnologyGroup, Selection.SelectedCountry.TechnologyGroup))
+               if (Equals(landUnit.TechnologyGroup, Selection.SelectedCountry.HistoryCountry.TechnologyGroup))
                   landUnits.Add(landUnit);
 
          if (max <= landUnits.Count && max != -1)

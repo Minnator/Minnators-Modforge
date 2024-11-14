@@ -1,6 +1,6 @@
-﻿namespace Editor.Forms.PopUps
+﻿namespace Editor.src.Forms.GetUserInput
 {
-   partial class RoughEditorForm
+   partial class UserNumberInputForm
    {
       /// <summary>
       /// Required designer variable.
@@ -28,35 +28,23 @@
       /// </summary>
       private void InitializeComponent()
       {
-         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RoughEditorForm));
-         PropGrid = new PropertyGrid();
+         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserNumberInputForm));
          SuspendLayout();
          // 
-         // PropGrid
-         // 
-         PropGrid.Dock = DockStyle.Fill;
-         PropGrid.Location = new Point(0, 0);
-         PropGrid.Name = "PropGrid";
-         PropGrid.Size = new Size(445, 482);
-         PropGrid.TabIndex = 0;
-         // 
-         // RoughEditorForm
+         // UserNumberInputForm
          // 
          AutoScaleDimensions = new SizeF(7F, 15F);
          AutoScaleMode = AutoScaleMode.Font;
-         ClientSize = new Size(445, 482);
-         Controls.Add(PropGrid);
+         ClientSize = new Size(305, 67);
+         FormBorderStyle = FormBorderStyle.FixedSingle;
          Icon = (Icon)resources.GetObject("$this.Icon");
          MaximizeBox = false;
          MinimizeBox = false;
-         Name = "RoughEditorForm";
-         Text = "Advanced Properties Editor";
-         FormClosing += RoughEditorForm_FormClosing;
+         Name = "UserNumberInputForm";
+         Text = "Number Input";
          ResumeLayout(false);
       }
 
       #endregion
-
-      private PropertyGrid PropGrid;
    }
 }

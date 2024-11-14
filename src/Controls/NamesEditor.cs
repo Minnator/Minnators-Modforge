@@ -141,7 +141,7 @@ namespace Editor.Controls
             return;
          if (!GetNames(out var mName))
             return;
-         Selection.SelectedCountry.MonarchNames.Remove(mName);
+         Selection.SelectedCountry.CommonCountry.MonarchNames.Remove(mName);
          Parent?.Controls.Remove(this);
       }
 

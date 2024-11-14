@@ -35,7 +35,7 @@ public class FortMapMode : MapMode
       if (id.Buildings.Contains("fort_18th"))
          level += 8;
 
-      if (Globals.Countries.TryGetValue(id.Owner, out var owner) && owner.Capital == id)
+      if (Globals.Countries.TryGetValue(id.Owner, out var owner) && owner.HistoryCountry.Capital == id)
          level += 1;
       return level;
    }

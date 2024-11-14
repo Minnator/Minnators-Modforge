@@ -1335,48 +1335,48 @@ namespace Editor.Forms
          _countryColorPickerButton.Text = $"({country.Color.R}/{country.Color.G}/{country.Color.B})";
          CountryLoc.Text = country.GetLocalisation();
          CountryADJLoc.Text = country.GetAdjectiveLocalisation();
-         RevolutionColorPickerButton.SetColorIndexes(country.RevolutionaryColor.R, country.RevolutionaryColor.G, country.RevolutionaryColor.B);
-         _graphicalCultureBox.SelectedItem = country.Gfx;
-         _unitTypeBox.SelectedItem = country.UnitType;
-         _techGroupBox.SelectedItem = country.TechnologyGroup;
-         _capitalTextBox.Text = country.Capital.Id.ToString();
-         _focusComboBox.SelectedItem = country.NationalFocus;
+         RevolutionColorPickerButton.SetColorIndexes(country.CommonCountry.RevolutionaryColor.R, country.CommonCountry.RevolutionaryColor.G, country.CommonCountry.RevolutionaryColor.B);
+         _graphicalCultureBox.SelectedItem = country.CommonCountry.GraphicalCulture;
+         _unitTypeBox.SelectedItem = country.HistoryCountry.UnitType;
+         _techGroupBox.SelectedItem = country.HistoryCountry.TechnologyGroup;
+         _capitalTextBox.Text = country.HistoryCountry.Capital.Id.ToString();
+         _focusComboBox.SelectedItem = country.HistoryCountry.NationalFocus;
 
          // Names
-         _leaderEditor.SetNames(country.LeaderNames);
-         _shipEditor.SetNames(country.ShipNames);
-         _armyEditor.SetNames(country.ArmyNames);
-         _fleetEditor.SetNames(country.FleetNames);
+         _leaderEditor.SetNames(country.CommonCountry.LeaderNames);
+         _shipEditor.SetNames(country.CommonCountry.ShipNames);
+         _armyEditor.SetNames(country.CommonCountry.ArmyNames);
+         _fleetEditor.SetNames(country.CommonCountry.FleetNames);
          MonarchNamesFlowPanel.Controls.Clear();
          if (ShowMonachrNamesCB.Checked)
-            AddMonarchNamesToGui(country.MonarchNames);
+            AddMonarchNamesToGui(country.CommonCountry.MonarchNames);
          ResumeLayout();
 
          // Government
-         _governmentTypeBox.SelectedItem = country.Government;
-         _governmentRankBox.SelectedItem = country.GovernmentRank.ToString();
-         if (Globals.GovernmentTypes.TryGetValue(country.Government, out var government))
+         _governmentTypeBox.SelectedItem = country.HistoryCountry.Government;
+         _governmentRankBox.SelectedItem = country.HistoryCountry.GovernmentRank.ToString();
+         if (Globals.GovernmentTypes.TryGetValue(country.HistoryCountry.Government, out var government))
             _governmentReforms.InitializeItems([.. government.AllReformNames]);
 
          // Cultures
-         _primaryCultureBox.SelectedItem = country.PrimaryCulture;
-         foreach (var cult in country.AcceptedCultures)
+         _primaryCultureBox.SelectedItem = country.HistoryCountry.PrimaryCulture;
+         foreach (var cult in country.HistoryCountry.AcceptedCultures)
             _acceptedCultures.AddItem(cult);
 
          // Development
          _countryDevelopmentNumeric.Value = country.GetDevelopment();
 
-         _historicalUnits.SetItems(country.HistoricalUnits);
-         _historicalIdeas.SetItems(country.HistoricalIdeas);
+         _historicalUnits.SetItems(country.HistoryCountry.HistoricalUnits);
+         _historicalIdeas.SetItems(country.HistoryCountry.HistoricalIdeas);
          List<string> rivals = [];
-         foreach (var rival in country.HistoricalRivals)
+         foreach (var rival in country.HistoryCountry.HistoricalRivals)
             rivals.Add(rival);
          _historicRivals.SetItems(rivals);
          List<string> friends = [];
-         foreach (var friend in country.HistoricalFriends)
+         foreach (var friend in country.HistoryCountry.HistoricalFriends)
             friends.Add(friend);
          _historicFriends.SetItems(friends);
-         _estatePrivileges.SetItems(country.EstatePrivileges);
+         _estatePrivileges.SetItems(country.HistoryCountry.EstatePrivileges);
       }
 
       private void GovernmentTypeBox_SelectedIndexChanged(object? sender, EventArgs e)
@@ -1459,7 +1459,7 @@ namespace Editor.Forms
 
       private void button2_Click(object sender, EventArgs e)
       {
-         new RoughEditorForm(Selection.SelectedCountry).ShowDialog();
+         new RoughEditorForm(Selection.SelectedCountry, false).ShowDialog();
       }
 
       private void AdvancedProvinceEditing_Click(object sender, EventArgs e)
@@ -1483,7 +1483,7 @@ namespace Editor.Forms
 
          // TODO proper country editing
          var monarchName = new MonarchName(name, chance, regnal);
-         Selection.SelectedCountry.MonarchNames.Add(monarchName);
+         Selection.SelectedCountry.CommonCountry.MonarchNames.Add(monarchName);
 
       }
 
@@ -1510,7 +1510,7 @@ namespace Editor.Forms
          if (Selection.SelectedCountry == Country.Empty)
             return;
          if (ShowMonachrNamesCB.Checked)
-            AddMonarchNamesToGui(Selection.SelectedCountry.MonarchNames);
+            AddMonarchNamesToGui(Selection.SelectedCountry.CommonCountry.MonarchNames);
          else
             MonarchNamesFlowPanel.Controls.Clear();
       }

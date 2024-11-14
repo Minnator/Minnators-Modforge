@@ -130,7 +130,7 @@ public static class Geometry
    {
       List<Province> provinces = [];
       foreach (var p in provs)
-         if (Globals.Countries.TryGetValue(p.Owner, out var country) && country.Capital == p)
+         if (Globals.Countries.TryGetValue(p.Owner, out var country) && country.HistoryCountry.Capital == p)
             provinces.Add(p);
       return provinces;
    }

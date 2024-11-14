@@ -4,6 +4,7 @@ using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.Parser;
+using Editor.Saving;
 using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
@@ -61,25 +62,31 @@ namespace Editor.Loading
       {
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "history", "countries");
 
-         Parallel.ForEach(files, new () { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 },file =>
+         Parallel.ForEach(files, new (),file =>
          {
             if (!IO.ReadAllInANSI(file, out var content))
                return;
-            Parsing.RemoveCommentFromMultilineString(content, out var removed);
-            var elements = Parsing.GetElements(0, removed);
             
-            foreach (var element in elements)
+            Parsing.RemoveCommentFromMultilineString(content, out var removed);
+            var newPathObj = NewPathObj.FromPath(file);
+            
+            foreach (var element in Parsing.GetElements(0, removed))
             {
                Tag tag = new(Path.GetFileName(file)[..3]);
                if (Globals.Countries.TryGetValue(tag, out var country))
-                  AnalyzeCountryStuff(element, country);
+               {
+                  ParseCountryStuff(element, country);
+                  SaveMaster.AddToDictionary(ref newPathObj, country.HistoryCountry);
+                  country.HistoryCountry.SetPath(ref newPathObj);
+               }
                else
                   Globals.ErrorLog.Write($"Found country file with no no tag reference in 'country_tag' folder: {tag}");
+
             }
          });
       }
 
-      private static void AnalyzeCountryStuff(IElement element, Country country)
+      private static void ParseCountryStuff(IElement element, Country country)
       {
          if (element is Block block)
          {
@@ -87,31 +94,31 @@ namespace Editor.Loading
             {
                case "add_country_modifier":
                   if (ModifierParser.ParseApplicableModifier(block.GetContent, out var mod)) 
-                     country.Modifiers.Add(mod);
+                     country.HistoryCountry.Modifiers.Add(mod);
                   else
                      Globals.ErrorLog.Write($"Invalid modifier in {country.Tag}: {block.GetContent}");
                   break;
                case "add_ruler_modifier":
                   if (ModifierParser.ParseRulerModifier(block.GetContent, out var rulerMod))
-                     country.RulerModifiers.Add(rulerMod);
+                     country.HistoryCountry.RulerModifiers.Add(rulerMod);
                   else
                      Globals.ErrorLog.Write($"Invalid ruler modifier in {country.Tag}: {block.GetContent}");
                   break;
                case "add_opinion":
                   if (EffectParser.ParseOpinionEffects("add_opinion", block.GetContent, out var effect))
-                     country.InitialEffects.Add(effect);
+                     country.HistoryCountry.InitialEffects.Add(effect);
                   else
                      Globals.ErrorLog.Write($"Invalid opinion effect in {country.Tag}: {block.GetContent}");
                   break;
                case "add_estate_loyalty":
                   if (EffectParser.ParseAddEstateLoyaltyEffect(block.GetContent, out var loyaltyEffect))
-                     country.InitialEffects.Add(loyaltyEffect);
+                     country.HistoryCountry.InitialEffects.Add(loyaltyEffect);
                   else
                      Globals.ErrorLog.Write($"Invalid estate loyalty effect in {country.Tag}: {block.GetContent}");
                   break;
                default:
                   ParseHistoryBlock(block, out var che);
-                  country.History.Add(che);
+                  country.HistoryCountry.History.Add(che);
                   break;
             }
 
@@ -130,103 +137,103 @@ namespace Editor.Loading
 
             if (EffectParser.ParseSimpleEffect(kvp.Key, val, out var effect))
             {
-               country.InitialEffects.Add(effect);
+               country.HistoryCountry.InitialEffects.Add(effect);
                continue;
             }
             
             switch (kvp.Key)
             {
                case "government":
-                  country.Government = val;
+                  country.HistoryCountry.Government = val;
                   break;
                case "religion":
-                  country.Religion = val;
+                  country.HistoryCountry.Religion = val;
                   break;
                case "technology_group":
-                  country.TechnologyGroup = new(val);
+                  country.HistoryCountry.TechnologyGroup = new(val);
                   break;
                case "national_focus":
-                  country.NationalFocus = Parsing.ManaFromString(val);
+                  country.HistoryCountry.NationalFocus = Parsing.ManaFromString(val);
                   break;
                case "add_historical_rival":
                case "historical_rival":
-                  country.HistoricalRivals.Add(val);
+                  country.HistoryCountry.HistoricalRivals.Add(val);
                   break;
                case "add_historical_friend":
                case "historical_friend":
-                  country.HistoricalFriends.Add(val);
+                  country.HistoryCountry.HistoricalFriends.Add(val);
                   break;
                case "set_estate_privilege":
-                  country.EstatePrivileges.Add(val);
+                  country.HistoryCountry.EstatePrivileges.Add(val);
                   break;
                case "religious_school":
-                  country.ReligiousSchool = val;
+                  country.HistoryCountry.ReligiousSchool = val;
                   break;
                case "add_harmonized_religion":
-                  country.HarmonizedReligions.Add(val);
+                  country.HistoryCountry.HarmonizedReligions.Add(val);
                   break;
                case "secondary_religion":
-                  country.SecondaryReligion = val;
+                  country.HistoryCountry.SecondaryReligion = val;
                   break;
                case "unit_type":
-                  country.UnitType = val;
+                  country.HistoryCountry.UnitType = val;
                   break;
                case "capital":
                   if (int.TryParse(val, out var value))
-                     country.Capital = Globals.ProvinceIdToProvince[value];
+                     country.HistoryCountry.Capital = Globals.ProvinceIdToProvince[value];
                   else
                      Globals.ErrorLog.Write($"Invalid capital in {country.Tag}: {val}");
                   break;
                case "add_government_reform":
-                  country.GovernmentReforms.Add(val);
+                  country.HistoryCountry.GovernmentReforms.Add(val);
                   break;
                case "add_accepted_culture":
-                  country.AcceptedCultures.Add(val);
+                  country.HistoryCountry.AcceptedCultures.Add(val);
                   break;
                case "government_rank":
                   if (int.TryParse(val, out var rank))
-                     country.GovernmentRank = rank;
+                     country.HistoryCountry.GovernmentRank = rank;
                   else
                      Globals.ErrorLog.Write($"Invalid government rank in {country.Tag}: {val}");
                   break;
                case "primary_culture":
-                  country.PrimaryCulture = val;
+                  country.HistoryCountry.PrimaryCulture = val;
                   break;
                case "fixed_capital":
                   if (int.TryParse(val, out var capProv))
-                     country.FixedCapital = capProv;
+                     country.HistoryCountry.FixedCapital = capProv;
                   else
                      Globals.ErrorLog.Write($"Invalid fixed capital in {country.Tag}: {val}");
                   break;
                case "mercantilism":
                   if (float.TryParse(val, out var mercantilism))
-                     country.Mercantilism = mercantilism;
+                     country.HistoryCountry.Mercantilism = mercantilism;
                   else
                      Globals.ErrorLog.Write($"Invalid mercantilism in {country.Tag}: {val}");
                   break;
                case "add_army_tradition":
                   if (int.TryParse(val, out var armyTradition))
-                     country.ArmyTradition = armyTradition;
+                     country.HistoryCountry.ArmyTradition = armyTradition;
                   else
                      Globals.ErrorLog.Write($"Invalid army tradition in {country.Tag}: {val}");
                   break;
                case "add_army_professionalism":
                   if (float.TryParse(val, out var armyProfessionalism))
-                     country.ArmyProfessionalism = armyProfessionalism;
+                     country.HistoryCountry.ArmyProfessionalism = armyProfessionalism;
                   else
                      Globals.ErrorLog.Write($"Invalid army professionalism in {country.Tag}: {val}");
                   break;
                case "add_prestige":
                   if (float.TryParse(val, out var prestige))
-                     country.Prestige = prestige;
+                     country.HistoryCountry.Prestige = prestige;
                   else
                      Globals.ErrorLog.Write($"Invalid prestige in {country.Tag}: {val}");
                   break;
                case "unlock_cult":
-                  country.UnlockedCults.Add(val);
+                  country.HistoryCountry.UnlockedCults.Add(val);
                   break;
                case "elector":
-                  country.IsElector = Parsing.YesNo(val);
+                  country.HistoryCountry.IsElector = Parsing.YesNo(val);
                   break;
                case "add_truce_with":
                   //TODO
@@ -343,10 +350,18 @@ namespace Editor.Loading
 
          Parallel.ForEach(Globals.Countries.Values, new () { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 }, country =>
          {
-            FilesHelper.GetFileUniquely(out var content, "common", country.FileName);
+            FilesHelper.GetFilePathUniquely(out var path, "common", country.FileName);
+            if (!IO.ReadAllInANSI(path, out var content))
+               return;
+
+            path = path.Replace('/', '\\');
+
+            var newPathObj = NewPathObj.FromPath(path);
+            SaveMaster.AddToDictionary(ref newPathObj, country.CommonCountry);
+            country.CommonCountry.SetPath(ref newPathObj);
+
             Parsing.RemoveCommentFromMultilineString(ref content, out var removed);
             var blocks = Parsing.GetElements(0, ref removed);
-
             AssignCountryAttributes(country, ref blocks);
          });
 
@@ -391,38 +406,38 @@ namespace Editor.Loading
                      Globals.ErrorLog.Write($"Invalid revolutionary color in {country.Tag}: {((Content)block.Blocks[0]).Value}");
                      break;
                   }
-                  country.RevolutionaryColor = revolutionaryColor;
+                  country.CommonCountry.RevolutionaryColor = revolutionaryColor;
                   break;
                case "historical_idea_groups":
                   foreach (var idea in block.GetContentElements)
-                     country.HistoricalIdeas.AddRange(Parsing.GetStringList(idea.Value));
+                     country.CommonCountry.HistoricIdeas.AddRange(Parsing.GetStringList(idea.Value));
                   break;
                case "historical_units":
                   foreach (var unit in block.GetContentElements)
-                     country.HistoricalUnits.AddRange(Parsing.GetStringList(unit.Value));
+                     country.CommonCountry.HistoricUnits.AddRange(Parsing.GetStringList(unit.Value));
                   break;
                case "monarch_names":
                   foreach (var name in block.GetContentElements)
                   {
                      Parsing.ParseMonarchNames(name.Value, out var monarchNames);
-                     country.MonarchNames.AddRange(monarchNames);
+                     country.CommonCountry.MonarchNames.AddRange(monarchNames);
                   }
                   break;
                case "ship_names":
                   foreach (var name in block.GetContentElements)
-                     country.ShipNames.AddRange(Parsing.GetStringList(name.Value));
+                     country.CommonCountry.ShipNames.AddRange(Parsing.GetStringList(name.Value));
                   break;
                case "fleet_names":
                   foreach (var name in block.GetContentElements)
-                     country.FleetNames.AddRange(Parsing.GetStringList(name.Value));
+                     country.CommonCountry.FleetNames.AddRange(Parsing.GetStringList(name.Value));
                   break;
                case "army_names":
                   foreach (var name in block.GetContentElements)
-                     country.ArmyNames.AddRange(Parsing.GetStringList(name.Value));
+                     country.CommonCountry.ArmyNames.AddRange(Parsing.GetStringList(name.Value));
                   break;
                case "leader_names":
                   foreach (var name in block.GetContentElements)
-                     country.LeaderNames.AddRange(Parsing.GetStringList(name.Value));
+                     country.CommonCountry.LeaderNames.AddRange(Parsing.GetStringList(name.Value));
                   break;
                default:
                   Globals.ErrorLog.Write($"Unknown block in {country.Tag}: {block.Name}");
@@ -437,33 +452,33 @@ namespace Editor.Loading
          {
             if (Globals.CountryAttributes.Contains(kvp.Key))
             {
-               country.CustomAttributes.Add(kvp.Key);
+               country.HistoryCountry.CustomAttributes.Add(kvp.Key);
                continue;
             }
 
             switch (kvp.Key)
             {
                case "historical_council":
-                  country.HistoricalCouncil = kvp.Value;
+                  country.HistoryCountry.HistoricalCouncil = kvp.Value;
                   break;
                case "historical_score":
-                  country.HistoricalScore = int.Parse(kvp.Value);
+                  country.HistoryCountry.HistoricalScore = int.Parse(kvp.Value);
                   break;
                case "graphical_culture":
-                  country.Gfx = kvp.Value;
+                  country.CommonCountry.GraphicalCulture = kvp.Value;
                   break;
                case "random_nation_chance":
                   if (int.TryParse(kvp.Value, out var value) && value == 0)
-                     country.CanBeRandomNation = false;
+                     country.HistoryCountry.CanBeRandomNation = false;
                   break;
                case "preferred_religion":
-                  country.PreferredReligion = kvp.Value;
+                  country.HistoryCountry.PreferredReligion = kvp.Value;
                   break;
                case "colonial_parent":
-                  country.ColonialParent = new(kvp.Value);
+                  country.HistoryCountry.ColonialParent = new(kvp.Value);
                   break;
                case "special_unit_culture":
-                  country.SpecialUnitCulture = kvp.Value;
+                  country.HistoryCountry.SpecialUnitCulture = kvp.Value;
                   break;
                default:
                   Globals.ErrorLog.Write($"Unknown key in {country.Tag}: {kvp.Key}");
