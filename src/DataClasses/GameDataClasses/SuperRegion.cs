@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using Editor.DataClasses.Commands;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Saving;
@@ -17,14 +16,24 @@ public class SuperRegion : ProvinceCollection<Region>
       return SaveableType.SuperRegion;
    }
 
+   public override string[] GetDefaultFolderPath()
+   {
+      return ["map"];
+   }
+
+   public override string GetFileEnding()
+   {
+      return ".txt";
+   }
+
    public override string SavingComment()
    {
       return Localisation.GetLoc(Name);
    }
 
-   public override PathObj GetDefaultSavePath()
+   public override KeyValuePair<string, bool> GetFileName()
    {
-      return new (["map","superregion.txt"]);
+      return new("superregion", true);
    }
 
    public override string GetSaveString(int tabs)

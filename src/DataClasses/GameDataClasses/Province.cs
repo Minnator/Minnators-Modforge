@@ -72,14 +72,24 @@ public class Province(int id, Color color) : ProvinceComposite(id.ToString(), co
       return SaveableType.Province;
    }
 
+   public override string[] GetDefaultFolderPath()
+   {
+      return ["history", "provinces"];
+   }
+
+   public override string GetFileEnding()
+   {
+      return ".txt";
+   }
+
+   public override KeyValuePair<string, bool> GetFileName()
+   {
+      return new ($"{Id.ToString()} - {GetLocalisation()}", true);
+   }
+
    public override string SavingComment()
    {
       return GetLocalisation();
-   }
-
-   public override PathObj GetDefaultSavePath()
-   {
-      return new (["history", "provinces"]);
    }
 
    public override string GetSaveString(int tabs)

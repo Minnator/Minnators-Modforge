@@ -26,16 +26,26 @@ namespace Editor.DataClasses.GameDataClasses
          return SaveableType.ColonialRegion;
       }
 
+      public override string[] GetDefaultFolderPath()
+      {
+         return ["common", "colonial_regions"];
+      }
+
+      public override string GetFileEnding()
+      {
+         return ".txt";
+      }
+
+      public override KeyValuePair<string, bool> GetFileName()
+      {
+         throw new NotImplementedException();
+      }
+
       public override string SavingComment()
       {
          return Localisation.GetLoc(Name);
       }
-
-      public override PathObj GetDefaultSavePath()
-      {
-         return new (["common", "colonial_regions"]);
-      }
-
+      
       public override string GetSaveString(int tabs)
       {
          //TODO

@@ -39,14 +39,24 @@ namespace Editor.DataClasses.GameDataClasses
          return SaveableType.TradeCompany;
       }
 
+      public override string[] GetDefaultFolderPath()
+      {
+         return ["common", "trade_companies"];
+      }
+
+      public override string GetFileEnding()
+      {
+         return ".txt";
+      }
+
       public override string SavingComment()
       {
          return Localisation.GetLoc(Name);
       }
 
-      public override PathObj GetDefaultSavePath()
+      public override KeyValuePair<string, bool> GetFileName()
       {
-         return new (["common", "trade_companies", "00_trade_companies.txt"]);
+         return new("00_trade_companies", true);
       }
 
       public override string GetSaveString(int tabs)

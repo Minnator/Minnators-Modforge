@@ -5,6 +5,7 @@ using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.Parser;
+using Editor.Saving;
 using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
@@ -20,11 +21,11 @@ namespace Editor.Loading
             return;
          }
 
-         var pathObj = PathObj.FromPath(path, isModPath);
+         var pathObj = NewPathObj.FromPath(path, isModPath);
          ParseTradeNodesFromString(IO.ReadAllInUTF8(path), ref pathObj);
          ConnectControlPaths();
          SetIncoming();
-         FileManager.AddRangeToDictionary(pathObj, Globals.TradeNodes.Values);
+         SaveMaster.AddRangeToDictionary(pathObj, Globals.TradeNodes.Values);
          sw.Stop();
          Globals.LoadingLog.WriteTimeStamp("Loading TradeNodes", sw.ElapsedMilliseconds);
       }
@@ -59,7 +60,7 @@ namespace Editor.Loading
          }
       }
 
-      private static void ParseTradeNodesFromString(string fileContent, ref PathObj pathObj)
+      private static void ParseTradeNodesFromString(string fileContent, ref NewPathObj pathObj)
       {
          var elements = Parsing.GetElements(0, fileContent);
          foreach (var element in elements)

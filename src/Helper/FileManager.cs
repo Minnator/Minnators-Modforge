@@ -79,7 +79,7 @@ namespace Editor.Helper
          // It is a new object and will be handled via the PathObj.Empty
          if (obj.Path.Equals(PathObj.Empty))
          {
-            if (obj is ProvinceComposite and not Province)
+            if (false)
             {
                // Does it exist in mod or vanilla?
                var path = obj.GetDefaultSavePath(); // default file name is modPath

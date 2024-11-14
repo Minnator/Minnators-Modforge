@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
-using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.Parser;
+using Editor.Saving;
 using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading;
@@ -19,7 +19,7 @@ public static class AreaLoading
       }
       IO.ReadAllInANSI(path, out var newContent);
 
-      var pathObj = PathObj.FromPath(path, isModPath);
+      var pathObj = NewPathObj.FromPath(path, isModPath);
       var areaDictionary = new Dictionary<string, Area>();
 
       Parsing.RemoveCommentFromMultilineString(ref newContent, out var content);
@@ -53,7 +53,7 @@ public static class AreaLoading
          newArea.SetPath(ref pathObj);
          areaDictionary.Add(areaName, newArea);
       }
-      FileManager.AddRangeToDictionary(pathObj, areaDictionary.Values);
+      SaveMaster.AddRangeToDictionary(pathObj, areaDictionary.Values);
 
       Globals.Areas = areaDictionary;
 

@@ -45,14 +45,24 @@ public class Area : ProvinceCollection<Province>
       return SaveableType.Area;
    }
 
+   public override string[] GetDefaultFolderPath()
+   {
+      return ["map"];
+   }
+
+   public override string GetFileEnding()
+   {
+      return ".txt";
+   }
+
+   public override KeyValuePair<string, bool> GetFileName()
+   {
+      return new("area", true);
+   }
+
    public override string SavingComment()
    {
       return Localisation.GetLoc(Name);
-   }
-
-   public override PathObj GetDefaultSavePath()
-   {
-      return new (["map", "area.txt"]);
    }
 
    public override string GetSaveString(int tabs)

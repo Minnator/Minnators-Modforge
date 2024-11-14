@@ -196,7 +196,7 @@ public abstract class ProvinceCollection<T>(string name, Color color) : Province
 
 }
 
-public abstract class ProvinceComposite(string name, Color color) : Saveable// Province + IProvinceCollection
+public abstract class ProvinceComposite(string name, Color color) : NewSaveable// Province + IProvinceCollection
 {
    public readonly string Name = name;
 

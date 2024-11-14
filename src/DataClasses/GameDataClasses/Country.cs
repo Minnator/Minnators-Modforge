@@ -523,8 +523,22 @@ public class Country : ProvinceCollection<Province>
    public static implicit operator Country(Tag tag) => Globals.Countries[tag];
    public static implicit operator Tag(Country country) => country.Tag;
    public override SaveableType WhatAmI() => SaveableType.Country;
+   public override string[] GetDefaultFolderPath()
+   {
+      return ["common", "countries"];
+   }
+
+   public override string GetFileEnding()
+   {
+      return ".txt";
+   }
+
+   public override KeyValuePair<string, bool> GetFileName()
+   {
+      return new("modforge_country_tags", false);
+   }
+
    public override string SavingComment() => Localisation.GetLoc(Tag);
-   public override PathObj GetDefaultSavePath() => new (["history", "countries"]);
    public override string GetSaveString(int tabs)
    {
       // TODO

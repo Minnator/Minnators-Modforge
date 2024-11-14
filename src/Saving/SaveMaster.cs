@@ -36,7 +36,7 @@ namespace Editor.Saving
          Path = path;
       }
 
-      public virtual string GetHeader(NewPathObj path)
+      public virtual string GetHeader()
       {
          return string.Empty;
       }
@@ -329,8 +329,8 @@ namespace Editor.Saving
             // TODO final delete
          }
 
-         if (!string.IsNullOrWhiteSpace(changed[0].GetHeader(path)))
-            sb.AppendLine(changed[0].GetHeader(path));
+         if (!string.IsNullOrWhiteSpace(changed[0].GetHeader()))
+            sb.AppendLine(changed[0].GetHeader());
 
          // Save the unchanged first
          AddListToStringBuilder(ref sb, unchanged);

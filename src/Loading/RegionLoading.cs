@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
+using Editor.Saving;
 using Parsing = Editor.Parser.Parsing;
 using Region = Editor.DataClasses.GameDataClasses.Region;
 
@@ -23,17 +24,17 @@ public static partial class RegionLoading
          return;
       }
       
-      var pathObj = PathObj.FromPath(path, isModPath);
+      var pathObj = NewPathObj.FromPath(path, isModPath);
       Parsing.RemoveCommentFromMultilineString(IO.ReadAllInUTF8(path), out var content);
       ParseRegion(Regex.Matches(content, _pattern, RegexOptions.Multiline), ref pathObj);
 
-      FileManager.AddRangeToDictionary(pathObj, Globals.Regions.Values);
+      SaveMaster.AddRangeToDictionary(pathObj, Globals.Regions.Values);
 
       sw.Stop();
       Globals.LoadingLog.WriteTimeStamp("Parsing regions", sw.ElapsedMilliseconds);
    }
 
-   private static void ParseRegion(MatchCollection matches, ref PathObj pathObj)
+   private static void ParseRegion(MatchCollection matches, ref NewPathObj pathObj)
    {
       Dictionary<string, Region> regionDictionary = [];
       foreach (Match match in matches)

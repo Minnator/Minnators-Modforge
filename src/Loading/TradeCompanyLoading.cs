@@ -3,6 +3,7 @@ using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.Parser;
+using Editor.Saving;
 using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
@@ -22,10 +23,10 @@ namespace Editor.Loading
          foreach (var file in files)
          {
             Dictionary<string, TradeCompany> tradeCompaniesInternal = [];
-            var pathObj = PathObj.FromPath(file);
+            var pathObj = NewPathObj.FromPath(file);
             ParseTradeCompabies(IO.ReadAllInUTF8(file), ref pathObj, ref tradeCompaniesInternal);
 
-            FileManager.AddRangeToDictionary(pathObj, tradeCompaniesInternal.Values);
+            SaveMaster.AddRangeToDictionary(pathObj, tradeCompaniesInternal.Values);
             foreach (var tcp in tradeCompaniesInternal)
                if (!tradeCompanies.TryAdd(tcp.Key, tcp.Value))
                   Globals.ErrorLog.Write($"Trade Company {tcp.Key} already exists in the dictionary");
@@ -37,7 +38,7 @@ namespace Editor.Loading
          Globals.LoadingLog.WriteTimeStamp("Trade Companies", sw.ElapsedMilliseconds);
       }
 
-      private static void ParseTradeCompabies(string rawContent, ref PathObj pathObj, ref Dictionary<string, TradeCompany> tradeCompanies)
+      private static void ParseTradeCompabies(string rawContent, ref NewPathObj pathObj, ref Dictionary<string, TradeCompany> tradeCompanies)
       {
 
          Parsing.RemoveCommentFromMultilineString(rawContent, out var content);

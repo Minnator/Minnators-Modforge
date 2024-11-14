@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
+using Editor.Saving;
 using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading;
@@ -21,7 +22,7 @@ public static class ContinentLoading
       }
       var newContent = IO.ReadAllLinesInUTF8(path);
 
-      var pathObj = PathObj.FromPath(path, isModPath);
+      var pathObj = NewPathObj.FromPath(path, isModPath);
       var continentDictionary = new Dictionary<string, Continent>();
       var sb = new StringBuilder();
 
@@ -39,7 +40,7 @@ public static class ContinentLoading
 
       }
 
-      FileManager.AddRangeToDictionary(pathObj, continentDictionary.Values);
+      SaveMaster.AddRangeToDictionary(pathObj, continentDictionary.Values);
       Globals.Continents = continentDictionary;
 
       sw.Stop();

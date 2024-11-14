@@ -17,14 +17,24 @@ public class Continent : ProvinceCollection<Province>
       return SaveableType.Continent;
    }
 
+   public override string[] GetDefaultFolderPath()
+   {
+      return ["map"];
+   }
+
+   public override string GetFileEnding()
+   {
+      return ".txt";
+   }
+
+   public override KeyValuePair<string, bool> GetFileName()
+   {
+      return new ("continent", true);
+   }
+
    public override string SavingComment()
    {
       return Localisation.GetLoc(Name);
-   }
-
-   public override PathObj GetDefaultSavePath()
-   {
-      return new (["map", "continent.txt"]);
    }
 
    public override string GetSaveString(int tabs)

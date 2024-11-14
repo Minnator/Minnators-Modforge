@@ -1,6 +1,4 @@
-﻿using System.Net;
-using System.Text;
-using Editor.DataClasses.Commands;
+﻿using System.Text;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Saving;
@@ -37,14 +35,24 @@ namespace Editor.DataClasses.GameDataClasses
          return SaveableType.TradeNode;
       }
 
+      public override string[] GetDefaultFolderPath()
+      {
+         return ["common", "tradenodes"];
+      }
+
+      public override string GetFileEnding()
+      {
+         return ".txt";
+      }
+
+      public override KeyValuePair<string, bool> GetFileName()
+      {
+         return new("00_tradenodes", true);
+      }
+
       public override string SavingComment()
       {
          return Localisation.GetLoc(Name);
-      }
-
-      public override PathObj GetDefaultSavePath()
-      {
-         return new (["common", "tradenodes", "00_tradenodes.txt"]);
       }
 
       public override string GetSaveString(int tabs)

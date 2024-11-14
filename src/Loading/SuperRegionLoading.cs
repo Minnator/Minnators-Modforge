@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
+using Editor.Saving;
 using Parsing = Editor.Parser.Parsing;
 using Region = Editor.DataClasses.GameDataClasses.Region;
 
@@ -22,7 +23,7 @@ public static class SuperRegionLoading
          return;
       }
 
-      var pathObj = PathObj.FromPath(path, isModPath);
+      var pathObj = NewPathObj.FromPath(path, isModPath);
       var newContent = IO.ReadAllLinesInUTF8(path);
       var sb = new StringBuilder();
 
@@ -46,7 +47,7 @@ public static class SuperRegionLoading
          sRegion.AddGlobal();
       }
 
-      FileManager.AddRangeToDictionary(pathObj, Globals.SuperRegions.Values);
+      SaveMaster.AddRangeToDictionary(pathObj, Globals.SuperRegions.Values);
 
       sw.Stop();
       Globals.LoadingLog.WriteTimeStamp("Parsing Super Regions", sw.ElapsedMilliseconds);
