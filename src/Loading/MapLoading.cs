@@ -6,7 +6,6 @@ using Editor.Parser;
 
 namespace Editor.Loading;
 
-
 public static class MapLoading
 {
    internal static void Load()

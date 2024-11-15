@@ -89,7 +89,7 @@ public static class Globals
    public static string ModPath = string.Empty;
    
    #region LoadingScreen
-   public static int LoadingStages = 0; // Needs to be increased when adding new loading stages
+   public static int LoadingStages = 0;
    #endregion
    
    public static Random Random = null!;

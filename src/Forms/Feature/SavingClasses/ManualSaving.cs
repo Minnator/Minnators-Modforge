@@ -67,7 +67,6 @@ namespace Editor.Forms.Feature.SavingClasses
       private void SaveSelectedButton_Click(object sender, EventArgs e)
       {
          SaveMaster.SaveAllChanges(saveableType: GetItemsToSave());
-         //SavingUtil.SaveAllModified(GetModifiedDataSelection());
       }
 
       private void ManualSaving_KeyDown(object sender, KeyEventArgs e)

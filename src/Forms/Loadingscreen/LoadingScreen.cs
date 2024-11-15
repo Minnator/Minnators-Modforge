@@ -80,7 +80,7 @@ namespace Editor.Forms.LoadingScreen
          _progressBar.Dock = DockStyle.Fill;
          _progressBar.TaskCount = Globals.LoadingStages;
          _progressBar.DisplayStyle = ProgressBarDisplayText.CustomPercentage;
-         tableLayoutPanel1.Controls.Add(_progressBar, 0, 2);
+         tableLayoutPanel1.Controls.Add(_progressBar, 0, 1);
 
          LoadingAnimation.Click += TotallyNormalClickEvent;
 
@@ -88,7 +88,18 @@ namespace Editor.Forms.LoadingScreen
 
          StartPosition = FormStartPosition.CenterScreen;
 
-         LoadButton_Click(null!, null!);
+         //create a background worker to load the data
+         var bw = new BackgroundWorker();
+         bw.WorkerReportsProgress = true;
+         bw.DoWork += OnBwOnDoWork;
+         bw.RunWorkerCompleted += (s, e) => LoadingCompleted();
+         bw.ProgressChanged += (s, e) =>
+         {
+            LoadingStage++;
+         };
+         bw.RunWorkerAsync();
+
+         Globals.MapWindow.StartScreen = Screen.FromControl(this);
       }
 
       
@@ -115,19 +126,7 @@ namespace Editor.Forms.LoadingScreen
       
       private void LoadButton_Click(object sender, EventArgs e)
       {
-         LoadButton.Enabled = false;
-         //create a background worker to load the data
-         var bw = new BackgroundWorker();
-         bw.WorkerReportsProgress = true;
-         bw.DoWork += OnBwOnDoWork;
-         bw.RunWorkerCompleted += (s, e) => LoadingCompleted();
-         bw.ProgressChanged += (s, e) =>
-         {
-            LoadingStage++;
-         };
-         bw.RunWorkerAsync();
-
-         Globals.MapWindow.StartScreen = Screen.FromControl(this);
+         
       }
 
       private int count = 0;
