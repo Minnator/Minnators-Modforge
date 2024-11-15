@@ -1,5 +1,4 @@
 ﻿using Editor.DataClasses.GameDataClasses;
-using Editor.Helper;
 
 namespace Editor.Parser
 {

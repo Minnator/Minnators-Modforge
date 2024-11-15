@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Misc;

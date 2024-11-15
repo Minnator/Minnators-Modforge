@@ -1,5 +1,4 @@
 ﻿using Editor.DataClasses.GameDataClasses;
-using Editor.Events;
 
 namespace Editor.DataClasses.MapModes
 {

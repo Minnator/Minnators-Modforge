@@ -1,9 +1,10 @@
 ﻿using System.Text.RegularExpressions;
 using Editor.DataClasses.GameDataClasses;
-using Editor.Helper;
+using Editor.Loading;
 
 namespace Editor.Parser
 {
+   [Loading]
    public static class ModifierParser
    {
       private const string PROVINCE_MODIFIER_REGEX = "name\\s*=\\s*(.*)\\s*duration\\s*=\\s*(.*)";

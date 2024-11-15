@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.Formatters
 {

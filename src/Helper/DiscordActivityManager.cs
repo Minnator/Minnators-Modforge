@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Editor.DiscordGame_SDK;
+﻿using Editor.DiscordGame_SDK;
 using Activity = Editor.DiscordGame_SDK.Activity;
 
 namespace Editor.Helper

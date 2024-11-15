@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.Loading;
 
+[Loading]
 public static class DefinitionLoading
 {
 

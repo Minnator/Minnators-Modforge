@@ -8,6 +8,7 @@ using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor.Loading;
 
+[Loading]
 public static partial class RegionLoading
 {
    private static string _pattern =

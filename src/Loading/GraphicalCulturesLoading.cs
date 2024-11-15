@@ -4,6 +4,7 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
 {
+   [Loading]
    public static class GraphicalCulturesLoading
    {
 

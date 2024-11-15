@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using System.Text;
+﻿using System.Text;
 using Editor.Parser;
 using static Editor.Helper.ProvinceEnumHelper;
 

@@ -1,7 +1,5 @@
 ﻿using System.Reflection;
 using Editor.Helper;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Editor.DataClasses.Settings

@@ -1,5 +1,4 @@
-﻿using System;
-using Editor.DataClasses.GameDataClasses;
+﻿using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.Events;
 

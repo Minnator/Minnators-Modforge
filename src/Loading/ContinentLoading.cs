@@ -8,6 +8,7 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading;
 
+[Loading]
 public static class ContinentLoading
 {
    private static readonly string Pattern = @"(?<name>[A-Za-z_]*)\s*=\s*{(?<ids>(?:\s*[0-9]+\s*)*)}";

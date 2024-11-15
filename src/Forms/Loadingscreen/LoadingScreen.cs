@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel;
-using System.Diagnostics;
 using System.Media;
 using System.Reflection;
-using System.Resources;
 using Editor.Controls;
 using Editor.Loading;
 using Editor.Parser;
@@ -19,9 +17,16 @@ namespace Editor.Forms.Loadingscreen
       {
          InitializeComponent();
 
+         // Calculate the number of loading stages
+        Globals.LoadingStages = Assembly.GetExecutingAssembly()
+            .GetTypes()
+            .Where(t => t is { IsClass: true, IsAbstract: true, IsSealed: true }) // Static classes
+            .Where(t => t.GetCustomAttribute<LoadingAttribute>() != null)
+            .ToList().Count;
+         
 
          Globals.LoadingStageChanged += LoadingScreen_LoadingStageChanged;
-          
+         
          ProgressBar = new();
          ProgressBar.Dock = DockStyle.Fill;
          tableLayoutPanel1.Controls.Add(ProgressBar, 0, 2);
@@ -43,7 +48,7 @@ namespace Editor.Forms.Loadingscreen
       
       private void LoadingScreen_LoadingStageChanged(object? sender, int e)
       {
-         ProgressBar.Value = Math.Min(100, (int)((float)e / Globals.LOADING_STAGES * 100));
+         ProgressBar.Value = Math.Min(100, (int)((float)e / Globals.LoadingStages * 100));
          ProgressBar.Invalidate();
       }
 
@@ -63,7 +68,7 @@ namespace Editor.Forms.Loadingscreen
          bw.RunWorkerCompleted += (s, e) => LoadingCompleted();
          bw.ProgressChanged += (s, e) =>
          {
-            ProgressBar.Value = Math.Min(100, (int)((float)e.ProgressPercentage / Globals.LOADING_STAGES * 100));
+            ProgressBar.Value = Math.Min(100, (int)((float)e.ProgressPercentage / Globals.LoadingStages * 100));
             ProgressBar.Invalidate();
          };
          bw.RunWorkerAsync();
@@ -119,7 +124,7 @@ namespace Editor.Forms.Loadingscreen
             bw.ReportProgress(++progress);
             GraphicalCulturesLoading.Load();
             bw.ReportProgress(++progress);
-            ScriptedEffectLoading.LoadScriptedEffects();
+            ScriptedEffectLoading.Load();
             bw.ReportProgress(++progress);
             GovernmentReformsLoading.Load();
             bw.ReportProgress(++progress);
@@ -141,17 +146,17 @@ namespace Editor.Forms.Loadingscreen
             bw.ReportProgress(++progress);
             ReligionLoading.Load();
             bw.ReportProgress(++progress);
-            MapLoading.LoadDefinitionAndMap();
+            MapLoading.Load();
             bw.ReportProgress(++progress);
-            DefaultMapLoading.CreateProvinceGroups();
+            DefaultMapLoading.Load();
             bw.ReportProgress(++progress);
             PositionsLoading.Load();
             bw.ReportProgress(++progress);
-            CultureLoading.LoadCultures();
+            CultureLoading.Load();
             bw.ReportProgress(++progress);
-            ProvinceParser.ParseAllUniqueProvinces();
+            ProvinceParser.ParseAllUniqueProvinces(); // Also marked as loading
             bw.ReportProgress(++progress);
-            AreaLoading.LoadNew();
+            AreaLoading.Load();
             bw.ReportProgress(++progress);
             TradeNodeLoading.Load();
             bw.ReportProgress(++progress);
@@ -161,15 +166,13 @@ namespace Editor.Forms.Loadingscreen
             bw.ReportProgress(++progress);
             ContinentLoading.Load();
             bw.ReportProgress(++progress);
-            ScopeParser.GenerateRuntimeScopes();
+            ScopeParser.GenerateRuntimeScopes(); // Also marked as loading
             bw.ReportProgress(++progress);
             TradeCompanyLoading.Load();
             bw.ReportProgress(++progress);
             ColonialRegionsLoading.Load();
             bw.ReportProgress(++progress);
-            ScopeParser.GenerateCountryScope();
-            bw.ReportProgress(++progress);
-            CountryLoading.LoadCountries();
+            CountryLoading.Load();
             bw.ReportProgress(++progress);
             AdjacenciesLoading.Load();
             bw.ReportProgress(++progress);
@@ -179,7 +182,7 @@ namespace Editor.Forms.Loadingscreen
             bw.ReportProgress(++progress);
 
             // Disable loading specific stuff
-            ModifierParser.Demilitarize();
+            ModifierParser.Demilitarize(); // Also marked as loading
             bw.ReportProgress(++progress);
          }
          catch (Exception exception)

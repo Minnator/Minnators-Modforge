@@ -1,7 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Drawing;
-using System.Linq.Expressions;
-using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.Parser;
@@ -9,6 +6,7 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
 {
+   [Loading]
    public static class ColonialRegionsLoading
    {
       public static void Load()

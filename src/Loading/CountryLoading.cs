@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
-using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.Parser;
@@ -10,11 +9,12 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
 {
+   [Loading]
    public static class CountryLoading
    {
       private static readonly Regex CountryRegex = new(@"(?<tag>[A-Z0-9]{3})\s*=\s*""(?<path>[^""]+)""", RegexOptions.Compiled);
 
-      public static void LoadCountries()
+      public static void Load()
       {
          var sw = Stopwatch.StartNew();
          // Loads the country_tags file

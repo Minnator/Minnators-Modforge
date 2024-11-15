@@ -1,12 +1,12 @@
 ﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
-using Windows.Gaming.Preview.GamesEnumeration;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
 {
+   [Loading]
    public static partial class AdjacenciesLoading
    {
       private static readonly Regex AdjacencyRegex = CompileAdjacencyRegex();

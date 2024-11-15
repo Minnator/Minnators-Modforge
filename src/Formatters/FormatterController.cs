@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using Editor.DataClasses.GameDataClasses;
 using static Editor.Helper.ProvinceEnumHelper;
 
 namespace Editor.Formatters

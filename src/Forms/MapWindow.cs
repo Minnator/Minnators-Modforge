@@ -1,10 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Globalization;
-using System.Net;
-using System.Reflection;
-using System.Resources;
 using System.Runtime;
 using System.Text;
 using Editor.Controls;
@@ -110,15 +106,12 @@ namespace Editor.Forms
 
          // MUST BE LAST in the loading sequence
          InitMapModes();
-         Globals.LoadingStage++;
          Globals.HistoryManager.UndoDepthChanged += UpdateUndoDepth!;
          Globals.HistoryManager.RedoDepthChanged += UpdateRedoDepth!;
-         Globals.LoadingStage++;
 
 
          //Needs to be after loading the game data to populate the gui with it
          InitializeEditGui();
-         Globals.LoadingStage++;
          //resume gui updates
          // Enable the Application
          Globals.LoadingLog.Close();
@@ -129,10 +122,8 @@ namespace Editor.Forms
          DateControl.Date = new(1444, 11, 11);
          CountryLoading.AssignProvinces();
          Globals.State = State.Running;
-         Globals.LoadingStage++;
          Globals.MapModeManager.SetCurrentMapMode(MapModeType.Country);
          ResumeLayout();
-         Globals.LoadingStage++;
 
          StartPosition = FormStartPosition.CenterScreen;
          Globals.ZoomControl.FocusOn(new(3100, 600), 1f);
@@ -143,11 +134,6 @@ namespace Editor.Forms
          Globals.ZoomControl.Invalidate();
          AfterLoad();
 
-         RestructureModifierNameDict();
-      }
-
-      public void RestructureModifierNameDict()
-      {
       }
 
       private void AfterLoad()

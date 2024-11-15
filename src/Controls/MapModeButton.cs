@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using Editor.DataClasses.MapModes;
-using Editor.Forms;
+﻿using Editor.DataClasses.MapModes;
 using Editor.Forms.PopUps;
 
 namespace Editor.Controls

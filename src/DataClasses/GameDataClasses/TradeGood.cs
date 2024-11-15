@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using Editor.Helper;
 
 namespace Editor.DataClasses.GameDataClasses;
 

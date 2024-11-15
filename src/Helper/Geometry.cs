@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using System.Windows.Forms.VisualStyles;
-using Editor.DataClasses.GameDataClasses;
+﻿using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.Helper;
 

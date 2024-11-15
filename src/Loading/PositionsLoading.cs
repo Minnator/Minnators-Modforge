@@ -1,11 +1,11 @@
-﻿using Editor.DataClasses;
-using Editor.DataClasses.GameDataClasses;
+﻿using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.Parser;
 using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
 {
+   [Loading]
    public static class PositionsLoading
    {
 

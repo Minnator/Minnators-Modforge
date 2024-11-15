@@ -1,6 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Xml.Linq;
-using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.Parser;
@@ -8,10 +6,10 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading;
 
+[Loading]
 public static class CultureLoading
 {
-
-   public static void LoadCultures()
+   public static void Load()
    {
       var sw = Stopwatch.StartNew();
       FilesHelper.GetFilesUniquelyAndCombineToOne(out var culturesContent, "common", "cultures");

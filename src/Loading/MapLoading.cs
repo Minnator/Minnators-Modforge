@@ -1,15 +1,15 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Drawing.Imaging;
-using Editor.DataClasses;
 using Editor.Helper;
 using Editor.Parser;
 
 namespace Editor.Loading;
 
+[Loading]
 public static class MapLoading
 {
-   internal static void LoadDefinitionAndMap()
+   internal static void Load()
    {
       if (!FilesHelper.GetFilePathUniquely(out var definitionPath, "map", "definition.csv"))
          throw new FileNotFoundException("Could not find definition.csv in mod or vanilla folder");

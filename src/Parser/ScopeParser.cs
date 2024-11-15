@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics;
+using Editor.Loading;
 
 namespace Editor.Parser
 {
+   [Loading]
    public static class ScopeParser
    {
       public enum EffectScopeType
@@ -62,6 +64,8 @@ namespace Editor.Parser
 
          foreach (var tradeNode in Globals.TradeNodes.Keys)
             RuntimeScopes.Add(tradeNode);
+
+         GenerateCountryScope();
 
          sw.Stop();
          Globals.LoadingLog.WriteTimeStamp("Generating Runtime Scopes", sw.ElapsedMilliseconds);

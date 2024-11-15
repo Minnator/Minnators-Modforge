@@ -101,7 +101,7 @@ public static class Globals
       }
    }
    private static int _loadingStage = 0;
-   public const int LOADING_STAGES = 42; // Needs to be increased when adding new loading stages
+   public static int LoadingStages = 0; // Needs to be increased when adding new loading stages
    #endregion
    
    public static Random Random = null!;

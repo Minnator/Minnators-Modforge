@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Editor.DataClasses.GameDataClasses;
-using Editor.DataClasses.MapModes;
+﻿using Editor.DataClasses.GameDataClasses;
 using Button = System.Windows.Forms.Button;
 
 namespace Editor.Controls;

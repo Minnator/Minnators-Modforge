@@ -4,7 +4,8 @@ using Editor.Parser;
 
 namespace Editor.Loading
 {
-   public class CustomColorsLoading
+   [Loading]
+   public static class CustomColorsLoading
    {
       
       public static void Load()

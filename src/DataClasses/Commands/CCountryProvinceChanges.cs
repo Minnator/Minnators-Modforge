@@ -1,6 +1,5 @@
 ﻿using Editor.Controls;
 using Editor.DataClasses.GameDataClasses;
-using Editor.Helper;
 
 namespace Editor.DataClasses.Commands
 {

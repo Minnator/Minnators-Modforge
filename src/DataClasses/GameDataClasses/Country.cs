@@ -1,11 +1,9 @@
 ﻿using System.ComponentModel;
-using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Saving;
-using Newtonsoft.Json;
 using static Editor.Saving.SavingUtil;
 
 namespace Editor.DataClasses.GameDataClasses;

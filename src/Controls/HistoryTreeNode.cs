@@ -1,6 +1,4 @@
-﻿using System.Windows.Forms;
-
-namespace Editor.Controls;
+﻿namespace Editor.Controls;
 
 public class HistoryTreeNode(CommandHistoryType commandHistoryType) : TreeNode
 {

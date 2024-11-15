@@ -7,9 +7,10 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading;
 
+[Loading]
 public static class AreaLoading
 {
-   public static void LoadNew()
+   public static void Load()
    {
       var sw = Stopwatch.StartNew();
       if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, "map", "area.txt"))

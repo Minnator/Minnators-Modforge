@@ -1,7 +1,5 @@
-﻿using System.Diagnostics;
-using Editor.DataClasses.GameDataClasses;
+﻿using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
-using Editor.Events;
 using Editor.Helper;
 using Region = Editor.DataClasses.GameDataClasses.Region;
 

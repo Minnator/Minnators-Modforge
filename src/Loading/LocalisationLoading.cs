@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Diagnostics;
-using System.Security.Policy;
+﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
-using Editor.DataClasses;
 using Editor.Helper;
 using Editor.Saving;
 
 namespace Editor.Loading;
 
+[Loading]
 public partial class LocalisationLoading
 {
    private static readonly Regex Regex = LocalisationRegex();

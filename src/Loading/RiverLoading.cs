@@ -5,6 +5,7 @@ using Editor.Helper;
 
 namespace Editor.Loading
 {
+   [Loading]
    public static class RiverLoading
    {
       public static void Load()

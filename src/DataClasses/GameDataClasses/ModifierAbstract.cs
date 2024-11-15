@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using System.Text;
-using Windows.Devices.Bluetooth.Advertisement;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Saving;
@@ -341,15 +340,21 @@ namespace Editor.DataClasses.GameDataClasses
       }
    }
 
-   public class Modifier(int nameIndex, object value) 
+   public class Modifier(int nameIndex, object value) : ISaveModifier
    {
       public readonly int Name = nameIndex;
-      public object Value = value;
+      public readonly object Value = value;
 
 
       public override string ToString()
       {
          return $"{Name} : {Value}";
+      }
+
+      public string GetModifierString()
+      {
+
+         return $"{Name} = {Value}";
       }
 
       public override bool Equals(object? obj)

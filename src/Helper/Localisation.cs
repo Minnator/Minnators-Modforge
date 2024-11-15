@@ -1,9 +1,6 @@
-﻿using Editor.DataClasses;
-using Editor.DataClasses.Commands;
+﻿using Editor.DataClasses.Commands;
 using Editor.DataClasses.Misc;
-using Editor.DataClasses.Settings;
 using Editor.Events;
-using Editor.Loading;
 using Editor.Saving;
 
 namespace Editor.Helper;

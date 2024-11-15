@@ -9,6 +9,7 @@ using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor.Loading;
 
+[Loading]
 public static class SuperRegionLoading
 {
    private const string MAIN_PATTER = @"(?<name>[a-zA-Z_]*)\s*=\s*{\s*(?<regions>[\w\s]+)\s*\s*}";

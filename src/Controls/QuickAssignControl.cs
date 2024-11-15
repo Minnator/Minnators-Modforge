@@ -1,5 +1,4 @@
-﻿using Editor.Forms;
-using Editor.Forms.PopUps;
+﻿using Editor.Forms.PopUps;
 
 namespace Editor.Controls
 {

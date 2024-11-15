@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace Editor.Controls;
+﻿namespace Editor.Controls;
 
 using System.ComponentModel;
 using System.Runtime.InteropServices;

@@ -1,5 +1,4 @@
-﻿using System.Security.Policy;
-using Editor.Controls;
+﻿using Editor.Controls;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 

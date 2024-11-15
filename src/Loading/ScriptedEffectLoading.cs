@@ -1,17 +1,17 @@
 ﻿using System.Diagnostics;
-using Editor.DataClasses;
 using Editor.Helper;
 using Editor.Parser;
 using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
 {
+   [Loading]
    public static class ScriptedEffectLoading
    {
       /// <summary>
       /// Gathers all names of the scripted Effects in common/scripted_effects/*.txt files
       /// </summary>
-      public static void LoadScriptedEffects()
+      public static void Load()
       {
          var sw = Stopwatch.StartNew();
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "scripted_effects");

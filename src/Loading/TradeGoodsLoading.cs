@@ -1,6 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Text;
-using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.Parser;
@@ -12,6 +10,7 @@ namespace Editor.Loading
    // ALSO CONTAINS PRICE LOADING
    //=================================================================================================================
 
+   [Loading]
    public static class TradeGoodsLoading
    {
 

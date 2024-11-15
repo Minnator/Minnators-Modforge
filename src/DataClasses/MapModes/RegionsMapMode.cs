@@ -1,5 +1,4 @@
 ﻿using Editor.DataClasses.GameDataClasses;
-using Editor.Events;
 using Editor.Helper;
 using Region = Editor.DataClasses.GameDataClasses.Region;
 

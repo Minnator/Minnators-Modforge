@@ -1,9 +1,7 @@
-﻿using Editor.DataClasses;
-using Editor.DataClasses.Commands;
+﻿using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Misc;
-using Editor.Events;
 using Editor.Helper;
 
 namespace Editor.Controls

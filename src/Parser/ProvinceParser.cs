@@ -1,11 +1,12 @@
 ﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
-using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
+using Editor.Loading;
 
 namespace Editor.Parser;
 
+[Loading]
 public static class ProvinceParser
 {
    private const string ID_FROM_FILE_NAME_PATTERN = @"(\d+)\s*-?";

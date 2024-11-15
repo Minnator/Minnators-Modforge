@@ -1,5 +1,4 @@
-﻿using System.Windows.Forms;
-using Editor.DataClasses.GameDataClasses;
+﻿using Editor.DataClasses.GameDataClasses;
 using Editor.Parser;
 
 namespace Editor.Controls

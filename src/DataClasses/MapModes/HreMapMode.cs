@@ -15,7 +15,14 @@ namespace Editor.DataClasses.MapModes
       public override int GetProvinceColor(Province id)
       {
          if (Globals.Provinces.TryGetValue(id, out var province))
-            return province.IsHre ? Color.Green.ToArgb() : Color.DimGray.ToArgb();
+         {
+            if (Globals.Countries.TryGetValue(province.Owner, out var country))
+               if (country.HistoryCountry.IsElector)
+                  return Color.Purple.ToArgb();
+            if (province.IsHre)
+               return Color.Green.ToArgb();
+         }
+
          return Color.DimGray.ToArgb();
       }
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-
-namespace Editor.DataClasses.GameDataClasses;
+﻿namespace Editor.DataClasses.GameDataClasses;
 
 public class Culture(string name)
 {

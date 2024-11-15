@@ -1,7 +1,5 @@
-﻿using Editor.DataClasses.Commands;
-using Editor.DataClasses.Misc;
+﻿using Editor.DataClasses.Misc;
 using Editor.Helper;
-using Editor.Parser;
 
 namespace Editor.DataClasses.GameDataClasses
 {

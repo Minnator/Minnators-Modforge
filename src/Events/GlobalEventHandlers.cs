@@ -1,8 +1,4 @@
-﻿using static Editor.Events.ProvinceEventHandler;
-using System;
-using Editor.DataClasses.GameDataClasses;
-
-namespace Editor.Events;
+﻿namespace Editor.Events;
 
 public static class GlobalEventHandlers
 {

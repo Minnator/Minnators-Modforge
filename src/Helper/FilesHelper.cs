@@ -1,9 +1,5 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.Text;
 using System.Text.RegularExpressions;
-using Editor.DataClasses.GameDataClasses;
 using Editor.Parser;
 
 namespace Editor.Helper;

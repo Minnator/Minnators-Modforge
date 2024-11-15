@@ -1,5 +1,4 @@
-﻿using System.Windows.Forms;
-using DockStyle = System.Windows.Forms.DockStyle;
+﻿using DockStyle = System.Windows.Forms.DockStyle;
 
 namespace Editor.Controls
 {

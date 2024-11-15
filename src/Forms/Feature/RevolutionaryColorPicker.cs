@@ -1,5 +1,4 @@
 ﻿using Editor.Controls;
-using Editor.Loading;
 
 namespace Editor.Forms.Feature
 {

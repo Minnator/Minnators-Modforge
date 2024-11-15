@@ -1,8 +1,6 @@
 ﻿using System.Text;
-using Editor.DataClasses.Commands;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
-using Editor.ParadoxLanguage.Scope;
 using Editor.Parser;
 using Editor.Saving;
 using Newtonsoft.Json;

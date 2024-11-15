@@ -1,5 +1,4 @@
-﻿using System.Net.Mime;
-using Editor.DataClasses.GameDataClasses;
+﻿using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.Properties;
 

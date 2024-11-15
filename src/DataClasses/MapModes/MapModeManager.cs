@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics;
 using Editor.DataClasses.GameDataClasses;
-using Editor.Helper;
-using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor.DataClasses.MapModes;
 

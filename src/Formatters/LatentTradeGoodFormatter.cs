@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using Editor.DataClasses.GameDataClasses;
-using static System.Windows.Forms.DataFormats;
 
 namespace Editor.Formatters
 {

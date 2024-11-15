@@ -16,7 +16,7 @@
       // Method to update the ProgressBar value from another thread
       public void UpdateProgress(int current)
       {
-         var value = Math.Min(Max, (int)((float)current / Globals.LOADING_STAGES * 100));
+         var value = Math.Min(Max, (int)((float)current / Globals.LoadingStages * 100));
          if (ProgressBar.InvokeRequired)
          {
             // If we're on another thread, invoke the method on the UI thread

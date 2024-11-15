@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.Parser;
@@ -7,6 +6,7 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
 {
+   [Loading]
    public static class ReligionLoading
    {
       private static readonly HashSet<string> ForbiddenWords = ["flag_emblem_index_range", "religious_schools"];

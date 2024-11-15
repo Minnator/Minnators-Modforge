@@ -1,5 +1,4 @@
-﻿using Editor.DataClasses;
-using Editor.Helper;
+﻿using Editor.Helper;
 using Editor.Parser;
 using Parsing = Editor.Parser.Parsing;
 
@@ -21,6 +20,7 @@ namespace Editor.Loading
       }
    }
 
+   [Loading]
    public static class DescriptorLoading
    {
       public static void Load()

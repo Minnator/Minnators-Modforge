@@ -6,9 +6,10 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading;
 
+[Loading]
 public static class DefaultMapLoading
 {
-   public static void CreateProvinceGroups()
+   public static void Load()
    {
       var sw = new Stopwatch();
       sw.Start();
