@@ -50,6 +50,10 @@ namespace Editor.DataClasses.GameDataClasses
    public class CountryHistoryEntry(DateTime date)
    {
       public DateTime Date { get; } = date;
+
+      // TODO: this is temporary, we need to implement a proper way to store the content after creating pdx langauge parser
+      public string Content { get; set; } = string.Empty;
+
       public List<Person> Persons { get; set; } = [];
       public List<Leader> Leaders { get; set; } = [];
       public List<Effect> Effects { get; set; } = [];

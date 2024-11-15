@@ -1,4 +1,6 @@
-﻿namespace Editor.Parser
+﻿using System.Text;
+
+namespace Editor.Parser
 {
 
    public class Block(int start, int end, string name, List<IElement> subBlocks) : IElement
@@ -39,6 +41,26 @@
 
       public bool HasOnlyContent => Blocks.TrueForAll(b => !b.IsBlock);
       public string GetContent => string.Join("\n", GetContentElements.Select(c => c.Value));
+
+      public string GetAllContent
+      {
+         get
+         {
+            var sb = new StringBuilder();
+            sb.AppendLine($"{Name} = {{");
+            foreach (var element in Blocks)
+            {
+               if (element is Content content)
+                  sb.AppendLine(content.Value);
+               else if (element is Block block)
+               {
+                  sb.AppendLine(block.GetAllContent);
+               }
+            }
+            sb.AppendLine("}");
+            return sb.ToString();
+         }
+      }
       
       public Block? GetBlockWithName(string name)
       {

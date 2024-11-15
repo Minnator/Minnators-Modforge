@@ -68,7 +68,7 @@ public static class ProvinceParser
       if (!Parsing.TryParseDate(block.Name, out var date))
       {
          // Take any scope with its effects save them as a complex effect and thus put it back into the province on saving
-         if (ScopeParser.IsAnyScope(block.Name))
+         if (ScopeParser.IsAnyScope(block.Name) || EffectParser.IsScriptedEffect(block.Name))
          {
             EffectFactory.CreateComplexEffect(block.Name, block.GetContent, EffectValueType.Complex);
             return;

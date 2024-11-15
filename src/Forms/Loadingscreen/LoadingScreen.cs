@@ -105,12 +105,6 @@ namespace Editor.Forms.Loadingscreen
 
          try
          {
-            CustomColorsLoading.Load();
-            bw.ReportProgress(++progress);
-            DescriptorLoading.Load();
-            bw.ReportProgress(++progress);
-            GraphicalCulturesLoading.Load();
-            bw.ReportProgress(++progress);
             FactionsLoading.Load();
             bw.ReportProgress(++progress);
             GovernmentMechanicsLoading.Load();
@@ -118,6 +112,12 @@ namespace Editor.Forms.Loadingscreen
             LoadEstateModifiers.Load();
             bw.ReportProgress(++progress);
             ModifierParser.Initialize();
+            bw.ReportProgress(++progress);
+            CustomColorsLoading.Load();
+            bw.ReportProgress(++progress);
+            DescriptorLoading.Load();
+            bw.ReportProgress(++progress);
+            GraphicalCulturesLoading.Load();
             bw.ReportProgress(++progress);
             ScriptedEffectLoading.LoadScriptedEffects();
             bw.ReportProgress(++progress);

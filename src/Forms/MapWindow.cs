@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.Net;
@@ -1178,7 +1179,7 @@ namespace Editor.Forms
          GeneralToolTip.SetToolTip(_countryColorPickerButton, "Set the <color> of the selected country");
          RevolutionColorPickerButton = ControlFactory.GetThreeColorsButton();
          RevolutionColorPickerButton.MouseUp += CountryGuiEvents.RevolutionColorPickerButton_Click;
-         
+
          GeneralToolTip.SetToolTip(RevolutionColorPickerButton, "LMB: Set the <revolutionary_color> of the selected country\nRMB: randomize");
          _graphicalCultureBox = ControlFactory.GetListComboBox(Globals.GraphicalCultures, new(1));
          _unitTypeBox = ControlFactory.GetListComboBox([.. Globals.TechnologyGroups.Keys], new(1));
@@ -1268,7 +1269,7 @@ namespace Editor.Forms
          MiscTLP.Controls.Add(_historicFriends, 0, 4);
          MiscTLP.Controls.Add(_estatePrivileges, 0, 5);
 
-         
+
       }
 
       public void ClearCountryGui()
@@ -1357,17 +1358,20 @@ namespace Editor.Forms
          _governmentRankBox.SelectedItem = country.HistoryCountry.GovernmentRank.ToString();
          if (Globals.GovernmentTypes.TryGetValue(country.HistoryCountry.Government, out var government))
             _governmentReforms.InitializeItems([.. government.AllReformNames]);
+         _governmentReforms.Clear();
+         _governmentReforms.AddItemsUnique(country.HistoryCountry.GovernmentReforms);
 
          // Cultures
          _primaryCultureBox.SelectedItem = country.HistoryCountry.PrimaryCulture;
+         _acceptedCultures.Clear();
          foreach (var cult in country.HistoryCountry.AcceptedCultures)
             _acceptedCultures.AddItem(cult);
 
          // Development
          _countryDevelopmentNumeric.Value = country.GetDevelopment();
 
-         _historicalUnits.SetItems(country.HistoryCountry.HistoricalUnits);
-         _historicalIdeas.SetItems(country.HistoryCountry.HistoricalIdeas);
+         _historicalUnits.SetItems(country.CommonCountry.HistoricUnits);
+         _historicalIdeas.SetItems(country.CommonCountry.HistoricIdeas);
          List<string> rivals = [];
          foreach (var rival in country.HistoryCountry.HistoricalRivals)
             rivals.Add(rival);
@@ -1533,6 +1537,29 @@ namespace Editor.Forms
       private void newSavingToolStripMenuItem_Click(object sender, EventArgs e)
       {
          SaveMaster.SaveAllChanges();
+      }
+
+      private void refStackToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         List<string> customAttributes = [];
+         foreach (var country in Globals.Countries.Values)
+         {
+            if (country.HistoryCountry.InitialEffects.Count == 0)
+               continue;
+            foreach (var effect in country.HistoryCountry.InitialEffects)
+            {
+               if (customAttributes.Contains(effect.Name))
+                  continue;
+               customAttributes.Add(effect.Name);
+            }
+         }
+
+         var sb = new StringBuilder();
+         foreach (var attribute in customAttributes.Distinct())
+            sb.AppendLine(attribute);
+
+         var downloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\";
+         File.WriteAllText(Path.Combine(downloadFolder, "customAttributes.txt"), sb.ToString());
       }
    }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Text;
 using System.Text.RegularExpressions;
 using Editor.DataClasses;
 using Editor.DataClasses.GameDataClasses;
@@ -135,12 +136,6 @@ namespace Editor.Loading
          {
             var val = Parsing.RemoveCommentFromLine(kvp.Value);
 
-            if (EffectParser.ParseSimpleEffect(kvp.Key, val, out var effect))
-            {
-               country.HistoryCountry.InitialEffects.Add(effect);
-               continue;
-            }
-            
             switch (kvp.Key)
             {
                case "government":
@@ -205,44 +200,24 @@ namespace Editor.Loading
                   else
                      Globals.ErrorLog.Write($"Invalid fixed capital in {country.Tag}: {val}");
                   break;
-               case "mercantilism":
-                  if (float.TryParse(val, out var mercantilism))
-                     country.HistoryCountry.Mercantilism = mercantilism;
-                  else
-                     Globals.ErrorLog.Write($"Invalid mercantilism in {country.Tag}: {val}");
-                  break;
-               case "add_army_tradition":
-                  if (int.TryParse(val, out var armyTradition))
-                     country.HistoryCountry.ArmyTradition = armyTradition;
-                  else
-                     Globals.ErrorLog.Write($"Invalid army tradition in {country.Tag}: {val}");
-                  break;
-               case "add_army_professionalism":
-                  if (float.TryParse(val, out var armyProfessionalism))
-                     country.HistoryCountry.ArmyProfessionalism = armyProfessionalism;
-                  else
-                     Globals.ErrorLog.Write($"Invalid army professionalism in {country.Tag}: {val}");
-                  break;
-               case "add_prestige":
-                  if (float.TryParse(val, out var prestige))
-                     country.HistoryCountry.Prestige = prestige;
-                  else
-                     Globals.ErrorLog.Write($"Invalid prestige in {country.Tag}: {val}");
-                  break;
-               case "unlock_cult":
-                  country.HistoryCountry.UnlockedCults.Add(val);
-                  break;
                case "elector":
                   country.HistoryCountry.IsElector = Parsing.YesNo(val);
                   break;
-               case "add_truce_with":
-                  //TODO
-                  break;
-               case "add_piety":
-                  //TODO
+               case "mercantilism":
+                  if (int.TryParse(val, out var merc))
+                     country.HistoryCountry.Mercantilism = merc;
+                  else
+                     Globals.ErrorLog.Write($"Invalid mercantilism in {country.Tag}: {val}");
                   break;
 
                default:
+
+                  if (EffectParser.ParseSimpleEffect(kvp.Key, val, out var effect))
+                  {
+                     country.HistoryCountry.InitialEffects.Add(effect);
+                     continue;
+                  }
+
                   Globals.ErrorLog.Write($"Unknown key in toppers {country.Tag}: {kvp.Key}");
                   break;
             }
@@ -260,8 +235,26 @@ namespace Editor.Loading
          }
 
          che = new(date);
+         TempHistoryEntries(ref che, block.Blocks);
+         return;
+         //TODO: properly implement this after pdx language parser is written
          AssignHistoryEntryAttributes(ref che, block.Blocks);
          AssignHistoryEntryContent(ref che, block.GetContentElements);
+      }
+
+      private static void TempHistoryEntries(ref CountryHistoryEntry entry, List<IElement> elements)
+      {
+         var sb = new StringBuilder();
+         foreach (var element in elements)
+         {
+            if (element is Content c)
+            {
+               sb.AppendLine(c.Value);
+               continue;
+            }
+            sb.AppendLine(((Block)element).GetAllContent);
+         }
+         entry.Content = sb.ToString();
       }
 
       private static void AssignHistoryEntryAttributes(ref CountryHistoryEntry che, List<IElement> elements)
@@ -304,6 +297,7 @@ namespace Editor.Loading
                   break;
                case "federation":
                   var effect = EffectFactory.CreateComplexEffect(block.Name, block.GetContent, EffectValueType.Complex);
+                  che.Effects.Add(effect);
                   break;
                default:
                   if (Parsing.ParseDynamicContent(block, out _))
@@ -452,33 +446,33 @@ namespace Editor.Loading
          {
             if (Globals.CountryAttributes.Contains(kvp.Key))
             {
-               country.HistoryCountry.CustomAttributes.Add(kvp.Key);
+               country.CommonCountry.CustomAttributes.Add(kvp.Key);
                continue;
             }
 
             switch (kvp.Key)
             {
                case "historical_council":
-                  country.HistoryCountry.HistoricalCouncil = kvp.Value;
+                  country.CommonCountry.HistoricalCouncil = kvp.Value;
                   break;
                case "historical_score":
-                  country.HistoryCountry.HistoricalScore = int.Parse(kvp.Value);
+                  country.CommonCountry.HistoricalScore = int.Parse(kvp.Value);
                   break;
                case "graphical_culture":
                   country.CommonCountry.GraphicalCulture = kvp.Value;
                   break;
                case "random_nation_chance":
                   if (int.TryParse(kvp.Value, out var value) && value == 0)
-                     country.HistoryCountry.CanBeRandomNation = false;
+                     country.CommonCountry.RandomNationChance = value;
                   break;
                case "preferred_religion":
-                  country.HistoryCountry.PreferredReligion = kvp.Value;
+                  country.CommonCountry.PreferredReligion = kvp.Value;
                   break;
                case "colonial_parent":
-                  country.HistoryCountry.ColonialParent = new(kvp.Value);
+                  country.CommonCountry.ColonialParent = new(kvp.Value);
                   break;
                case "special_unit_culture":
-                  country.HistoryCountry.SpecialUnitCulture = kvp.Value;
+                  country.CommonCountry.SpecialUnitCulture = kvp.Value;
                   break;
                default:
                   Globals.ErrorLog.Write($"Unknown key in {country.Tag}: {kvp.Key}");

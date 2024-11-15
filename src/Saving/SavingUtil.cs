@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Text;
+using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.Saving
 {
@@ -139,10 +140,63 @@ namespace Editor.Saving
          sb.AppendLine($"{boolName} = {GetYesNo(b)}");
       }
 
-      public static void AddInt(int tabs, int b, string intName, ref StringBuilder sb)
+      public static void AddInt(int tabs, string intName, int num, ref StringBuilder sb)
       {
+         if (num == 0)
+            return;
          AddTabs(tabs, ref sb);
-         sb.AppendLine($"{intName} = {b}");
+         sb.AppendLine($"{intName} = {num}");
+      }
+
+      public static void AddString(int tabs, string s, string stringName, ref StringBuilder sb)
+      {
+         if (string.IsNullOrEmpty(s))
+            return;
+         AddTabs(tabs, ref sb);
+         sb.AppendLine($"{stringName} = {s}");
+      }
+
+      public static void AddQuotedString(int tabs, string s, string stringName, ref StringBuilder sb)
+      {
+         if (string.IsNullOrEmpty(s))
+            return;
+         AddTabs(tabs, ref sb);
+         sb.AppendLine($"{stringName} = \"{s}\"");
+      }
+
+      public static void AddStringList(int tabs, string stringName, ICollection<string> strings, ref StringBuilder sb)
+      {
+         if (strings.Count == 0)
+            return;
+         foreach (var s in strings)
+         {
+            AddTabs(tabs + 1, ref sb);
+            sb.AppendLine($"{stringName} = {s}");
+         }
+      }
+
+      public static void AddEffects(int tabs, List<Effect> effects, ref StringBuilder sb)
+      {
+         if (effects.Count == 0)
+            return;
+         foreach (var effect in effects) 
+            sb.AppendLine(effect.GetEffectString(tabs + 1));
+      }
+
+      public static void AddFloat(int tabs, string floatName, float num, ref StringBuilder sb)
+      {
+         if (num == 0)
+            return;
+         AddTabs(tabs, ref sb);
+         sb.AppendLine($"{floatName} = {num:F2}");
+      }
+
+      public static void AddModifiers(int tabs, List<ISaveModifier> modifiers, ref StringBuilder sb)
+      {
+         if (modifiers.Count == 0)
+            return;
+         foreach (var modifier in modifiers) 
+            sb.AppendLine(modifier.GetModifierString());
       }
    }
 }

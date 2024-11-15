@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel;
+using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Saving;
 using Newtonsoft.Json;
+using static Editor.Saving.SavingUtil;
 
 namespace Editor.DataClasses.GameDataClasses;
 
@@ -21,6 +23,12 @@ public class CommonCountry(string fileName, Country country) : NewSaveable, INot
    private List<string> _shipNames = [];
    private List<MonarchName> _monarchNames = [];
    private int _historicalScore = 0;
+   private Tag _colonialParent = Tag.Empty;
+   private int _randomNationChance = -1;
+   private string _historicalCouncil = string.Empty;
+   private string _preferredReligion = string.Empty;
+   private string _specialUnitCulture = string.Empty;
+   private List<string> _customAttributes = [];
 
    public string GraphicalCulture
    {
@@ -87,6 +95,42 @@ public class CommonCountry(string fileName, Country country) : NewSaveable, INot
       get => _historicalScore;
       set => SetField(ref _historicalScore, value);
    }
+   public Tag ColonialParent
+   {
+      get => _colonialParent;
+      set => SetField(ref _colonialParent, value);
+   }
+   public int RandomNationChance
+   {
+      get => _randomNationChance;
+      set => SetField(ref _randomNationChance, value);
+   }
+
+   public string HistoricalCouncil
+   {
+      get => _historicalCouncil;
+      set => SetField(ref _historicalCouncil, value);
+   }
+
+   public string PreferredReligion
+   {
+      get => _preferredReligion;
+      set => SetField(ref _preferredReligion, value);
+   }
+
+   public string SpecialUnitCulture
+   {
+      get => _specialUnitCulture;
+      set => SetField(ref _specialUnitCulture, value);
+   }
+
+   public List<string> CustomAttributes
+   {
+      get => _customAttributes;
+      set => SetField(ref _customAttributes, value);
+   }
+
+
 
    public event PropertyChangedEventHandler? PropertyChanged;
    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -113,16 +157,24 @@ public class CommonCountry(string fileName, Country country) : NewSaveable, INot
    public override string GetSaveString(int tabs)
    {
       var sb = new StringBuilder();
-      SavingUtil.AddColor(0, Color, ref sb);
+      AddColor(0, Color, ref sb);
       sb.AppendLine($"graphical_culture = {GraphicalCulture}");
       sb.AppendLine($"revolutionary_colors = {{ {RevolutionaryColor.R,3} {RevolutionaryColor.G,3} {RevolutionaryColor.B,3} }}");
-      SavingUtil.AddFormattedStringListOnePerRow("historical_idea_groups", HistoricIdeas, 0, ref sb);
-      SavingUtil.AddFormattedStringListOnePerRow("historical_units", HistoricUnits, 0, ref sb);
-      SavingUtil.AddFormattedStringListOnePerRow("leader_names", LeaderNames, 0, ref sb);
-      SavingUtil.AddFormattedStringListOnePerRow("army_names", ArmyNames, 0, ref sb);
-      SavingUtil.AddFormattedStringListOnePerRow("fleet_names", FleetNames, 0, ref sb);
-      SavingUtil.AddFormattedStringListOnePerRow("ship_names", ShipNames, 0, ref sb);
-      SavingUtil.AddFormattedStringListOnePerRow("monarch_names", MonarchNames.Select(x => x.ToString()).ToList(), 0, ref sb);
+      if (ColonialParent != Tag.Empty)
+         AddString(0, "colonial_parent", ColonialParent.ToString(), ref sb);
+      if (RandomNationChance != -1)
+         AddInt(0, "random_nation_chance", RandomNationChance, ref sb);
+      AddString(0, "historical_council", HistoricalCouncil, ref sb);
+      AddString(0, "preferred_religion", PreferredReligion, ref sb);
+      AddString(0, "special_unit_culture", SpecialUnitCulture, ref sb);
+      AddInt(0, "historical_score", HistoricalScore, ref sb);
+      AddFormattedStringListOnePerRow("historical_idea_groups", HistoricIdeas, 0, ref sb);
+      AddFormattedStringListOnePerRow("historical_units", HistoricUnits, 0, ref sb);
+      AddFormattedStringListOnePerRow("leader_names", LeaderNames, 0, ref sb);
+      AddFormattedStringListOnePerRow("army_names", ArmyNames, 0, ref sb);
+      AddFormattedStringListOnePerRow("fleet_names", FleetNames, 0, ref sb);
+      AddFormattedStringListOnePerRow("ship_names", ShipNames, 0, ref sb);
+      AddFormattedStringListOnePerRow("monarch_names", MonarchNames.Select(x => x.ToString()).ToList(), 0, ref sb);
 
       return sb.ToString();
    }
@@ -130,70 +182,37 @@ public class CommonCountry(string fileName, Country country) : NewSaveable, INot
 
 public class HistoryCountry(Country country) : NewSaveable, INotifyPropertyChanged
 {
-   private List<CountryHistoryEntry> _history = [];
-   private bool _isElector = false;
-   private float _prestige = 0;
-   private float _armyProfessionalism = 0;
-   private float _mercantilism = 0;
-   private int _armyTradition = 0;
-   private int _fixedCapital = -1;
-   private List<Tag> _historicalFriends = [];
-   private List<Tag> _historicalRivals = [];
-   private Province _capital = Province.Empty;
-   private Tag _colonialParent = Tag.Empty;
-   private string _historicalCouncil = string.Empty;
-   private string _preferredReligion = string.Empty;
-   private string _specialUnitCulture = string.Empty;
-   private bool _canBeRandomNation = true;
-   private List<ModifierAbstract> _modifiers = [];
-   private List<RulerModifier> _rulerModifiers = [];
-   private List<string> _historicalIdeas = [];
-   private List<string> _historicalUnits = [];
-   private List<string> _customAttributes = [];
-   private List<Effect> _initialEffects = [];
-   private List<string> _governmentReforms = [];
-   private List<string> _acceptedCultures = [];
-   private List<string> _unlockedCults = [];
-   private List<string> _estatePrivileges = [];
-   private List<string> _harmonizedReligions = [];
-   private string _secondaryReligion = string.Empty;
-   private string _government = string.Empty;
-   private string _primaryCulture = string.Empty;
-   private string _religion = string.Empty;
-   private TechnologyGroup _technologyGroup = TechnologyGroup.Empty;
-   private string _religiousSchool = string.Empty;
-   private string _unitType = string.Empty;
-   private Mana _nationalFocus = Mana.NONE;
-   private int _governmentRank = 0;
+   private bool _isElector; //
+   private int _mercantilism = 0; //
+   private int _fixedCapital = -1;//
+   private int _governmentRank = 0; //
+   private string _secondaryReligion = string.Empty; //
+   private string _government = string.Empty; //
+   private string _primaryCulture = string.Empty; //
+   private string _religion = string.Empty; //
+   private string _religiousSchool = string.Empty; //
+   private string _unitType = string.Empty; //
+   private List<string> _governmentReforms = []; //
+   private List<string> _acceptedCultures = []; //
+   private List<string> _unlockedCults = []; //
+   private List<string> _estatePrivileges = []; //
+   private List<string> _harmonizedReligions = []; //
+   private Province _capital = Province.Empty; //
+   private List<Effect> _initialEffects = []; //
+   private List<ModifierAbstract> _modifiers = []; //
+   private List<RulerModifier> _rulerModifiers = []; //
+   private TechnologyGroup _technologyGroup = TechnologyGroup.Empty; //
+   private List<CountryHistoryEntry> _history = []; //
+   private List<Tag> _historicalFriends = []; //
+   private List<Tag> _historicalRivals = []; //
+   private Mana _nationalFocus = Mana.NONE; //
 
-   public Tag ColonialParent
-   {
-      get => _colonialParent;
-      set => SetField(ref _colonialParent, value);
-   }
+   #region Getters and Setters
 
-   public string HistoricalCouncil
+   public int Mercantilism
    {
-      get => _historicalCouncil;
-      set => SetField(ref _historicalCouncil, value);
-   }
-
-   public string PreferredReligion
-   {
-      get => _preferredReligion;
-      set => SetField(ref _preferredReligion, value);
-   }
-
-   public string SpecialUnitCulture
-   {
-      get => _specialUnitCulture;
-      set => SetField(ref _specialUnitCulture, value);
-   }
-
-   public bool CanBeRandomNation
-   {
-      get => _canBeRandomNation;
-      set => SetField(ref _canBeRandomNation, value);
+      get => _mercantilism;
+      set => SetField(ref _mercantilism, value);
    }
 
    public List<ModifierAbstract> Modifiers
@@ -207,25 +226,7 @@ public class HistoryCountry(Country country) : NewSaveable, INotifyPropertyChang
       get => _rulerModifiers;
       set => SetField(ref _rulerModifiers, value);
    }
-
-   public List<string> HistoricalIdeas
-   {
-      get => _historicalIdeas;
-      set => SetField(ref _historicalIdeas, value);
-   }
-
-   public List<string> HistoricalUnits
-   {
-      get => _historicalUnits;
-      set => SetField(ref _historicalUnits, value);
-   }
-
-   public List<string> CustomAttributes
-   {
-      get => _customAttributes;
-      set => SetField(ref _customAttributes, value);
-   }
-
+   
    public List<Effect> InitialEffects
    {
       get => _initialEffects;
@@ -339,31 +340,7 @@ public class HistoryCountry(Country country) : NewSaveable, INotifyPropertyChang
       get => _fixedCapital;
       set => SetField(ref _fixedCapital, value);
    }
-
-   public int ArmyTradition
-   {
-      get => _armyTradition;
-      set => SetField(ref _armyTradition, value);
-   }
-
-   public float Mercantilism
-   {
-      get => _mercantilism;
-      set => SetField(ref _mercantilism, value);
-   }
-
-   public float ArmyProfessionalism
-   {
-      get => _armyProfessionalism;
-      set => SetField(ref _armyProfessionalism, value);
-   }
-
-   public float Prestige
-   {
-      get => _prestige;
-      set => SetField(ref _prestige, value);
-   }
-
+   
    public bool IsElector
    {
       get => _isElector;
@@ -376,6 +353,8 @@ public class HistoryCountry(Country country) : NewSaveable, INotifyPropertyChang
       set => SetField(ref _history, value);
    }
 
+   #endregion
+
    public override SaveableType WhatAmI() => SaveableType.Country;
    public override string[] GetDefaultFolderPath() => ["history", "countries"];
    public override string GetFileEnding() => ".txt";
@@ -384,8 +363,41 @@ public class HistoryCountry(Country country) : NewSaveable, INotifyPropertyChang
    public override string GetSaveString(int tabs)
    {
       var sb = new StringBuilder();
+      AddString(0, "government", Government, ref sb);
+      AddStringList(0, "add_government_reform", GovernmentReforms, ref sb);
+      AddInt(0, "government_rank", GovernmentRank, ref sb);
+      AddString(0, "primary_culture", PrimaryCulture, ref sb);
+      AddStringList(0, "add_accepted_culture", AcceptedCultures, ref sb);
+      AddString(0, "religion", Religion, ref sb);
+      AddString(0, "secondary_religion", SecondaryReligion, ref sb);
+      AddString(0, "technology_group", TechnologyGroup.ToString(), ref sb);
+      AddString(0, "unit_type", UnitType, ref sb);
+      if (Capital != Province.Empty)
+         AddInt(0, "capital", Capital.Id, ref sb);
+      if (FixedCapital != -1)
+         AddInt(0, "fixed_capital", FixedCapital, ref sb);
+      if (IsElector)
+         AddBool(0, IsElector, "elector", ref sb);
+      sb.AppendLine("# Specific Effects #");
+      AddStringList(0, "historical_friend", HistoricalFriends.Select(tag => tag.ToString()).ToList(), ref sb);
+      AddStringList(0, "historical_rival", HistoricalRivals.Select(tag => tag.ToString()).ToList(), ref sb);
+      AddEffects(0, InitialEffects, ref sb);
+      if (NationalFocus != Mana.NONE)
+         AddString(0, "national_focus", NationalFocus.ToString(), ref sb);
+      AddStringList(0, "set_estate_privilege", EstatePrivileges, ref sb);
+      AddStringList(0, "add_harmonized_religion", HarmonizedReligions, ref sb);
+      AddString(0, "religious_school", ReligiousSchool, ref sb);
+      AddStringList(0, "unlock_cult", UnlockedCults, ref sb);
 
+      AddModifiers(0, Modifiers.Cast<ISaveModifier>().ToList(), ref sb);
+      AddModifiers(0, RulerModifiers.Cast<ISaveModifier>().ToList(), ref sb);
 
+      foreach (var entry in History)
+      {
+         sb.AppendLine($"{entry.Date} = {{");
+         sb.AppendLine(entry.Content);
+         sb.AppendLine("}");
+      }
 
       return sb.ToString();
    }

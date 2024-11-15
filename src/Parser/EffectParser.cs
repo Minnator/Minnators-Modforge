@@ -5,6 +5,11 @@ namespace Editor.Parser
 {
    public static class EffectParser
    {
+      public static bool IsScriptedEffect(string effectName)
+      {
+         return Globals.ScriptedEffectNames.Contains(effectName);
+      }
+
       public static bool IsAnyEffect(string input)
       {
          return CountryEffects.Contains(input) || ProvinceEffects.Contains(input);

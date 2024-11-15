@@ -1,5 +1,4 @@
 ﻿using Editor.DataClasses.Misc;
-using Editor.Helper;
 using Editor.Saving;
 
 namespace Editor.Forms.Feature.SavingClasses
@@ -9,72 +8,65 @@ namespace Editor.Forms.Feature.SavingClasses
       public ManualSaving()
       {
          InitializeComponent();
-
-         SetCheckBoxStatus(Globals.SaveableType);
+         GenerateTlpCheckBoxes();
       }
 
-      public void SetCheckBoxStatus(SaveableType data)
+      private void GenerateTlpCheckBoxes()
       {
-         if ((data & SaveableType.SaveProvinces) != 0)
-            SavingCheckedListBox.SetItemChecked(0, true);
-         if ((data & SaveableType.Area) != 0)
-            SavingCheckedListBox.SetItemChecked(1, true);
-         if ((data & SaveableType.Region) != 0)
-            SavingCheckedListBox.SetItemChecked(2, true);
-         if ((data & SaveableType.TradeNode) != 0)
-            SavingCheckedListBox.SetItemChecked(3, true);
-         if ((data & SaveableType.TradeCompany) != 0)
-            SavingCheckedListBox.SetItemChecked(4, true);
-         if ((data & SaveableType.ColonialRegion) != 0)
-            SavingCheckedListBox.SetItemChecked(5, true);
-         if ((data & SaveableType.SuperRegion) != 0)
-            SavingCheckedListBox.SetItemChecked(6, true);
-         if ((data & SaveableType.Continent) != 0)
-            SavingCheckedListBox.SetItemChecked(7, true);
-         if ((data & SaveableType.ProvinceGroup) != 0)
-            SavingCheckedListBox.SetItemChecked(8, true);
-         if ((data & SaveableType.EventModifier) != 0)
-            SavingCheckedListBox.SetItemChecked(9, true);
-         if ((data & SaveableType.Localisation) != 0)
-            SavingCheckedListBox.SetItemChecked(10, true);
-         if ((data & SaveableType.Country) != 0)
-            SavingCheckedListBox.SetItemChecked(11, true);
+         var names = Enum.GetNames(typeof(SaveableType));
+         CheckboxesTLP.RowCount = names.Length + 1;
+
+         for (var i = 0; i < names.Length; i++) 
+            CheckboxesTLP.RowStyles.Add(new (SizeType.Absolute, 20));
+         CheckboxesTLP.RowStyles.Add(new (SizeType.Percent, 100));
+
+
+         for (var i = 0; i < names.Length; i++)
+         {
+            // Is modifiable by the user
+            var checkBox = new CheckBox
+            {
+               Text = names[i],
+               Margin = new(1),
+               TextAlign = ContentAlignment.MiddleLeft,
+               Dock = DockStyle.Fill
+            };
+
+            checkBox.Checked = Globals.SaveableType.HasFlag((SaveableType) (1 << i));
+            CheckboxesTLP.Controls.Add(checkBox, 1, i);
+
+            var wasModifiedCheckBox = new CheckBox
+            {
+               Text = "",
+               Margin = new(1, 1, 4, 1),
+               TextAlign = ContentAlignment.MiddleRight,
+               Dock = DockStyle.Fill,
+               Enabled = false,
+               RightToLeft = RightToLeft.Yes,
+            };
+
+            wasModifiedCheckBox.Checked = Globals.SaveableType.HasFlag((SaveableType) (1 << i));
+            CheckboxesTLP.Controls.Add(wasModifiedCheckBox, 0, i);
+         }
       }
 
-      public SaveableType GetModifiedDataSelection()
+      public SaveableType GetItemsToSave()
       {
          SaveableType data = 0;
-         if (SavingCheckedListBox.GetItemChecked(0))
-            data |= SaveableType.SaveProvinces;
-         if (SavingCheckedListBox.GetItemChecked(1))
-            data |= SaveableType.Area;
-         if (SavingCheckedListBox.GetItemChecked(2))
-            data |= SaveableType.Region;
-         if (SavingCheckedListBox.GetItemChecked(3))
-            data |= SaveableType.TradeNode;
-         if (SavingCheckedListBox.GetItemChecked(4))
-            data |= SaveableType.TradeCompany;
-         if (SavingCheckedListBox.GetItemChecked(5))
-            data |= SaveableType.ColonialRegion;
-         if (SavingCheckedListBox.GetItemChecked(6))
-            data |= SaveableType.SuperRegion;
-         if (SavingCheckedListBox.GetItemChecked(7))
-            data |= SaveableType.Continent;
-         if (SavingCheckedListBox.GetItemChecked(8))
-            data |= SaveableType.ProvinceGroup;
-         if (SavingCheckedListBox.GetItemChecked(9))
-            data |= SaveableType.EventModifier;
-         if (SavingCheckedListBox.GetItemChecked(10))
-            data |= SaveableType.Localisation;
-         if (SavingCheckedListBox.GetItemChecked(11))
-            data |= SaveableType.Country;
+         for (var i = 0; i < CheckboxesTLP.RowCount - 1; i++)
+         {
+            if (CheckboxesTLP.GetControlFromPosition(1, i) is not CheckBox checkBox) 
+               continue;
+            if (checkBox.Checked)
+               data |= (SaveableType) (1 << i);
+         }
 
          return data;
       }
 
       private void SaveSelectedButton_Click(object sender, EventArgs e)
       {
-         SaveMaster.SaveAllChanges(saveableType:GetModifiedDataSelection());
+         SaveMaster.SaveAllChanges(saveableType: GetItemsToSave());
          //SavingUtil.SaveAllModified(GetModifiedDataSelection());
       }
 
@@ -82,6 +74,24 @@ namespace Editor.Forms.Feature.SavingClasses
       {
          if (e.KeyCode == Keys.Escape)
             Close();
+      }
+
+      private void MarkAllModified_Click(object sender, EventArgs e)
+      {
+         for (var i = 0; i < CheckboxesTLP.RowCount - 1; i++)
+         {
+            if (CheckboxesTLP.GetControlFromPosition(0, i) is not CheckBox toCompareBox || toCompareBox.Checked == false)
+               continue;
+            if (CheckboxesTLP.GetControlFromPosition(1, i) is CheckBox checkBox) 
+               checkBox.Checked = true;
+         }
+      }
+
+      private void UnmarkAllSelected_Click(object sender, EventArgs e)
+      {
+         for (var i = 0; i < CheckboxesTLP.RowCount - 1; i++)
+            if (CheckboxesTLP.GetControlFromPosition(1, i) is CheckBox checkBox) 
+               checkBox.Checked = false;
       }
    }
 }

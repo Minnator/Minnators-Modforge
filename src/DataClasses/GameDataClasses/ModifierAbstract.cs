@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Text;
+using Windows.Devices.Bluetooth.Advertisement;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Saving;
@@ -45,10 +46,7 @@ namespace Editor.DataClasses.GameDataClasses
       public string Icon { get; set; } = string.Empty;
       public List<KeyValuePair<string, string>> Effects { get; set; } = [];
 
-      public string GetModifierString()
-      {
-         return ToString();
-      }
+      public abstract string GetModifierString();
 
       public override bool Equals(object? obj)
       {
@@ -82,6 +80,16 @@ namespace Editor.DataClasses.GameDataClasses
          return false;
       }
 
+      public override string GetModifierString()
+      {
+         var sb = new StringBuilder();
+         sb.AppendLine("add_country_modifier = {");
+         sb.AppendLine($"\tname = {Name}");
+         sb.AppendLine($"\tduration = {Duration}");
+         sb.AppendLine($"}}");
+         return sb.ToString();
+      }
+
       public override int GetHashCode()
       {
          return Name.GetHashCode();
@@ -109,7 +117,19 @@ namespace Editor.DataClasses.GameDataClasses
          Key = key;
          Duration = duration;
       }
-      
+
+      public override string GetModifierString()
+      {
+         var sb = new StringBuilder();
+         sb.AppendLine("add_trade_modifier = {");
+         sb.AppendLine($"\twho = {Who}");
+         sb.AppendLine($"\tduration = {Duration}");
+         sb.AppendLine($"\tpower = {Power}");
+         sb.AppendLine($"\tkey = {Key}");
+         sb.AppendLine($"}}");
+         return sb.ToString();
+      }
+
       public override bool Equals(object? obj)
       {
          if (obj is TradeModifier modifier)
@@ -142,7 +162,8 @@ namespace Editor.DataClasses.GameDataClasses
          var sb = new StringBuilder();
          sb.AppendLine("add_ruler_modifier = {");
          sb.AppendLine($"\tname = {Name}");
-         sb.AppendLine($"\thidden = {SavingUtil.GetYesNo(IsHidden)}");
+         if (IsHidden)
+            sb.AppendLine($"\thidden = {SavingUtil.GetYesNo(IsHidden)}");
          sb.AppendLine($"}}");
          return sb.ToString();
       }

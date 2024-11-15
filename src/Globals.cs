@@ -291,13 +291,13 @@ public static class Globals
 // - [x] Localisation editing for provinces and modifiers
 // - [x] Check if province is selected by color of the pixels instead of bounds or center
 // - [ ] Trade fix   //UI
-// - [ ] River fixes //UI
+// - [-] River fixes //UI
 // - [x] Province ADJ localization fix
 // - [x] Language in quicksettings fix
 // - [x] File saving popup for saving map mode
-// - [ ] Save all and verify all save options
+// - [-] Save all and verify all save options
 // - [ ] 3/2 letters prefix from mods
-// - [ ] Support deleting in saving
+// - [-] Support deleting in saving
 // - [x] Toolstip customizer tooltips and fix column width
 // - [ ] Logging and Crash Reporter ==> Map mode crashes catchen und reporten and user so that it restarts
 // - [x] When searching select the results

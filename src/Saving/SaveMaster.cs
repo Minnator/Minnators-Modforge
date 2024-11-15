@@ -163,6 +163,7 @@ namespace Editor.Saving
                SaveVanillaToMod(path);
             else
                SaveFile(path);
+            // Remove the saved type from the still to save types
             Globals.SaveableType &= ~singleModData;
          }
 
@@ -340,7 +341,7 @@ namespace Editor.Saving
          if (path.IsLocalisation)
             IO.WriteLocalisationFile(path.ToPath(), sb.ToString(), false);
          else
-            IO.WriteToFile(path.ToPath(), sb.ToString(), false);
+            IO.WriteAllInANSI(path.ToPath(), sb.ToString(), false);
       }
 
       private static void AddListToStringBuilder(ref StringBuilder sb, List<NewSaveable> items, int tabs = 0)

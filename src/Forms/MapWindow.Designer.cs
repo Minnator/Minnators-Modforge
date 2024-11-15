@@ -620,102 +620,104 @@
          // testToolStripMenuItem
          // 
          testToolStripMenuItem.Name = "testToolStripMenuItem";
-         testToolStripMenuItem.Size = new Size(221, 22);
+         testToolStripMenuItem.Size = new Size(234, 22);
          testToolStripMenuItem.Text = "Test";
          // 
          // telescopeToolStripMenuItem
          // 
          telescopeToolStripMenuItem.Name = "telescopeToolStripMenuItem";
-         telescopeToolStripMenuItem.Size = new Size(221, 22);
+         telescopeToolStripMenuItem.Size = new Size(234, 22);
          telescopeToolStripMenuItem.Text = "Telescope";
          telescopeToolStripMenuItem.Click += telescopeToolStripMenuItem_Click;
          // 
          // refStackToolStripMenuItem
          // 
          refStackToolStripMenuItem.Name = "refStackToolStripMenuItem";
-         refStackToolStripMenuItem.Size = new Size(221, 22);
+         refStackToolStripMenuItem.Size = new Size(234, 22);
+         refStackToolStripMenuItem.Text = "All Custom Country Attributes";
+         refStackToolStripMenuItem.Click += refStackToolStripMenuItem_Click;
          // 
          // bestPointsToolStripMenuItem
          // 
          bestPointsToolStripMenuItem.Name = "bestPointsToolStripMenuItem";
-         bestPointsToolStripMenuItem.Size = new Size(221, 22);
+         bestPointsToolStripMenuItem.Size = new Size(234, 22);
          bestPointsToolStripMenuItem.Text = "Topological Sort verification";
          bestPointsToolStripMenuItem.Click += bestPointsToolStripMenuItem_Click;
          // 
          // provDiffToolStripMenuItem
          // 
          provDiffToolStripMenuItem.Name = "provDiffToolStripMenuItem";
-         provDiffToolStripMenuItem.Size = new Size(221, 22);
+         provDiffToolStripMenuItem.Size = new Size(234, 22);
          provDiffToolStripMenuItem.Text = "Collisions";
          provDiffToolStripMenuItem.Click += provDiffToolStripMenuItem_Click;
          // 
          // yoloToolStripMenuItem
          // 
          yoloToolStripMenuItem.Name = "yoloToolStripMenuItem";
-         yoloToolStripMenuItem.Size = new Size(221, 22);
+         yoloToolStripMenuItem.Size = new Size(234, 22);
          yoloToolStripMenuItem.Text = "Loc Test";
          yoloToolStripMenuItem.Click += yoloToolStripMenuItem_Click;
          // 
          // saveAllProvincesToolStripMenuItem
          // 
          saveAllProvincesToolStripMenuItem.Name = "saveAllProvincesToolStripMenuItem";
-         saveAllProvincesToolStripMenuItem.Size = new Size(221, 22);
+         saveAllProvincesToolStripMenuItem.Size = new Size(234, 22);
          saveAllProvincesToolStripMenuItem.Text = "Save all provinces";
          saveAllProvincesToolStripMenuItem.Click += saveAllProvincesToolStripMenuItem_Click;
          // 
          // save1ToolStripMenuItem
          // 
          save1ToolStripMenuItem.Name = "save1ToolStripMenuItem";
-         save1ToolStripMenuItem.Size = new Size(221, 22);
+         save1ToolStripMenuItem.Size = new Size(234, 22);
          save1ToolStripMenuItem.Text = "Save 1";
          save1ToolStripMenuItem.Click += save1ToolStripMenuItem_Click;
          // 
          // saveEuropeToolStripMenuItem
          // 
          saveEuropeToolStripMenuItem.Name = "saveEuropeToolStripMenuItem";
-         saveEuropeToolStripMenuItem.Size = new Size(221, 22);
+         saveEuropeToolStripMenuItem.Size = new Size(234, 22);
          saveEuropeToolStripMenuItem.Text = "Test File Dialog feedback";
          saveEuropeToolStripMenuItem.Click += saveEuropeToolStripMenuItem_Click;
          // 
          // jsonToolStripMenuItem
          // 
          jsonToolStripMenuItem.Name = "jsonToolStripMenuItem";
-         jsonToolStripMenuItem.Size = new Size(221, 22);
+         jsonToolStripMenuItem.Size = new Size(234, 22);
          jsonToolStripMenuItem.Text = "SaveableObj Debug";
          jsonToolStripMenuItem.Click += IsaveableClick;
          // 
          // bugReportToolStripMenuItem
          // 
          bugReportToolStripMenuItem.Name = "bugReportToolStripMenuItem";
-         bugReportToolStripMenuItem.Size = new Size(221, 22);
+         bugReportToolStripMenuItem.Size = new Size(234, 22);
          bugReportToolStripMenuItem.Text = "BugReport";
          bugReportToolStripMenuItem.Click += bugReportToolStripMenuItem_Click;
          // 
          // crashReportToolStripMenuItem
          // 
          crashReportToolStripMenuItem.Name = "crashReportToolStripMenuItem";
-         crashReportToolStripMenuItem.Size = new Size(221, 22);
+         crashReportToolStripMenuItem.Size = new Size(234, 22);
          crashReportToolStripMenuItem.Text = "Crash Report";
          crashReportToolStripMenuItem.Click += crashReportToolStripMenuItem_Click;
          // 
          // loadDDSFilesTestToolStripMenuItem
          // 
          loadDDSFilesTestToolStripMenuItem.Name = "loadDDSFilesTestToolStripMenuItem";
-         loadDDSFilesTestToolStripMenuItem.Size = new Size(221, 22);
+         loadDDSFilesTestToolStripMenuItem.Size = new Size(234, 22);
          loadDDSFilesTestToolStripMenuItem.Text = "Load DDS files test";
          loadDDSFilesTestToolStripMenuItem.Click += loadDDSFilesTestToolStripMenuItem_Click;
          // 
          // roughEditorToolStripMenuItem
          // 
          roughEditorToolStripMenuItem.Name = "roughEditorToolStripMenuItem";
-         roughEditorToolStripMenuItem.Size = new Size(221, 22);
+         roughEditorToolStripMenuItem.Size = new Size(234, 22);
          roughEditorToolStripMenuItem.Text = "Rough Editor";
          roughEditorToolStripMenuItem.Click += roughEditorToolStripMenuItem_Click;
          // 
          // newSavingToolStripMenuItem
          // 
          newSavingToolStripMenuItem.Name = "newSavingToolStripMenuItem";
-         newSavingToolStripMenuItem.Size = new Size(221, 22);
+         newSavingToolStripMenuItem.Size = new Size(234, 22);
          newSavingToolStripMenuItem.Text = "New Saving";
          newSavingToolStripMenuItem.Click += newSavingToolStripMenuItem_Click;
          // 
