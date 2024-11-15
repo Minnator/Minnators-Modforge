@@ -5,15 +5,12 @@ using Editor.Saving;
 
 namespace Editor.Loading;
 
-[Loading]
+
 public partial class LocalisationLoading
 {
    private static readonly Regex Regex = LocalisationRegex();
    public static void Load()
    {
-      var sw = Stopwatch.StartNew();
-      
-      //var files = FilesHelper.GetFilesFromModAndVanillaUniquely($"*_l_{Globals.Language.ToString().ToLower()}.yml", "localisation");
       var replaceFiles = FilesHelper.GetFilesFromModAndVanillaUniquely($"*_l_{Globals.Settings.Misc.Language.ToString().ToLower()}.yml", "localisation", "replace");
 
       var vanillaFiles = FilesHelper.GetAllFilesInFolder( Path.Combine(Globals.VanillaPath, "localisation"), $"*_l_{Globals.Settings.Misc.Language.ToString().ToLower()}.yml");
@@ -36,9 +33,6 @@ public partial class LocalisationLoading
       Globals.Localisation = replaceLoc;
       Globals.LocalisationCollisions.Clear();
       Globals.LocalisationCollisions = collisions;
-      sw.Stop();
-      if (Globals.State == State.Loading)
-         Globals.LoadingLog.WriteTimeStamp($"Localisation loaded [{collisions.Count}] collisions", sw.ElapsedMilliseconds);
    }
 
    private static void CombineWithCollisions(HashSet<LocObject> locObjects1, HashSet<LocObject> locObject2, HashSet<LocObject> collisions)

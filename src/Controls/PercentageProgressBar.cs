@@ -3,16 +3,22 @@
    public enum ProgressBarDisplayText
    {
       Percentage,
-      CustomText
+      CustomText,
+      Both,
+      PercentageNumOfTasks,
+      All,
+      CustomPercentage
    }
 
    class CustomProgressBar : ProgressBar
    {
       //Property to set to decide whether to print a % or Text
       public ProgressBarDisplayText DisplayStyle { get; set; }
+      public int TaskCompletedCount = 0;
+      public int TaskCount = 0;
 
       //Property to hold the custom text
-      public String CustomText { get; set; } = "Loading..";
+      public string CustomText { get; set; } = "Loading..";
 
       public CustomProgressBar()
       {
@@ -31,14 +37,34 @@
          rect.Inflate(-3, -3);
          if (Value > 0)
          {
-            // As we are doing this ourselves we need to draw the chunks on the progress bar
             var clip = rect with { Width = (int)Math.Round(((float)Value / Maximum) * rect.Width) };
             ProgressBarRenderer.DrawHorizontalChunks(g, clip);
          }
 
          // Set the Display text (Either a % amount or our custom text
          var percent = (int)(((double)Value / Maximum) * 100);
-         var text = DisplayStyle == ProgressBarDisplayText.Percentage ? percent.ToString() + '%' : CustomText;
+         var text = string.Empty;
+         switch (DisplayStyle)
+         {
+            case ProgressBarDisplayText.Percentage:
+               text = percent + "%";
+               break;
+            case ProgressBarDisplayText.CustomText:
+               text = CustomText;
+               break;
+            case ProgressBarDisplayText.Both:
+               text = percent + "% " + CustomText;
+               break;
+            case ProgressBarDisplayText.PercentageNumOfTasks:
+               text = $"{percent}% ({TaskCompletedCount}/{TaskCount})";
+               break;
+            case ProgressBarDisplayText.All:
+               text = $"{percent}% ({TaskCompletedCount}/{TaskCount}) ({CustomText})";
+               break;
+            case ProgressBarDisplayText.CustomPercentage:
+               text = $"{percent}% ({CustomText})";
+               break;
+         }
 
          using var f = new Font(FontFamily.GenericSerif, 10);
          var len = g.MeasureString(text, f);

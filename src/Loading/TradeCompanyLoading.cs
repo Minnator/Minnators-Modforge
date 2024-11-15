@@ -7,14 +7,12 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
 {
-   [Loading]
+   
    public static class TradeCompanyLoading
    {
 
       public static void Load()
       {
-         var sw = Stopwatch.StartNew();
-
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "trade_companies");
 
 
@@ -33,9 +31,6 @@ namespace Editor.Loading
          }
 
          Globals.TradeCompanies = tradeCompanies;
-
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("Trade Companies", sw.ElapsedMilliseconds);
       }
 
       private static void ParseTradeCompabies(string rawContent, ref NewPathObj pathObj, ref Dictionary<string, TradeCompany> tradeCompanies)

@@ -5,7 +5,7 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
 {
-   [Loading]
+   
    public static class ScriptedEffectLoading
    {
       /// <summary>
@@ -13,7 +13,6 @@ namespace Editor.Loading
       /// </summary>
       public static void Load()
       {
-         var sw = Stopwatch.StartNew();
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "scripted_effects");
          HashSet<string> scriptedEffects = [];
 
@@ -42,9 +41,6 @@ namespace Editor.Loading
          });
 
          Globals.ScriptedEffectNames = scriptedEffects;
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("Scripted Effects", sw.ElapsedMilliseconds) ;
-
       }
    }
 }

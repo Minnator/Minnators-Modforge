@@ -9,7 +9,7 @@ using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor.Loading;
 
-[Loading]
+
 public static class SuperRegionLoading
 {
    private const string MAIN_PATTER = @"(?<name>[a-zA-Z_]*)\s*=\s*{\s*(?<regions>[\w\s]+)\s*\s*}";
@@ -17,7 +17,6 @@ public static class SuperRegionLoading
 
    public static void Load()
    {
-      var sw = Stopwatch.StartNew();
       if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, "map", "superregion.txt"))
       {
          Globals.ErrorLog.Write("Error: superregion.txt not found!");
@@ -49,8 +48,5 @@ public static class SuperRegionLoading
       }
 
       SaveMaster.AddRangeToDictionary(pathObj, Globals.SuperRegions.Values);
-
-      sw.Stop();
-      Globals.LoadingLog.WriteTimeStamp("Parsing Super Regions", sw.ElapsedMilliseconds);
    }
 }

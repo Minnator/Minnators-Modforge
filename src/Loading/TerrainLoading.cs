@@ -5,12 +5,11 @@ using Editor.Parser;
 
 namespace Editor.Loading;
 
-[Loading]
+
 public static class TerrainLoading
 {
    public static void Load()
    {
-      var sw = Stopwatch.StartNew();
       if (!FilesHelper.GetFilePathUniquely(out var path, "map", "terrain.txt"))
       {
          Globals.ErrorLog.Write("Failed to find terrain.txt");
@@ -19,10 +18,7 @@ public static class TerrainLoading
 
       Parsing.RemoveCommentFromMultilineString(IO.ReadAllInUTF8(path), out var content);
       var elements = Parsing.GetElements(0, content);
-      List<Terrain> terrains = [];
-      TerrainDefinitions terrainDefinitions = new();
-      TreeDefinitions treeDefinitions = new();
-
+      
       foreach (var element in elements)
       {
          if (element is not Block block)
@@ -34,22 +30,19 @@ public static class TerrainLoading
          switch (block.Name)
          {
             case "categories":
-               ParseCategoriesBlock(block, ref terrains);
+               ParseCategoriesBlock(block, ref Globals.Terrains);
                break;
             case "terrain":
-               ParseTerrainBlock(block, ref terrainDefinitions);
+               ParseTerrainBlock(block, ref Globals.TerrainDefinitions);
                break;
             case "tree":
-               ParseTreeBlocks(block, ref treeDefinitions);
+               ParseTreeBlocks(block, ref Globals.TreeDefinitions);
                break;
             default:
                Globals.ErrorLog.Write($"TerrainLoading: Unknown block: {block.Name}");
                break;
          }
       }
-
-      sw.Stop();
-      Globals.LoadingLog.WriteTimeStamp("Terrain.txt", sw.ElapsedMilliseconds);
    }
 
    private static void ParseCategoriesBlock(Block block, ref List<Terrain> terrains)
@@ -84,6 +77,8 @@ public static class TerrainLoading
                   break;
             }
          }
+
+         terrains.Add(terrain);
       }
 
    }
@@ -158,11 +153,76 @@ public static class TerrainLoading
 
    private static void ParseTreeBlocks(Block block, ref TreeDefinitions treeDefinitions)
    {
-      
+      if (block.GetContent != string.Empty)
+      {
+         Globals.ErrorLog.Write($"Tree block has content forbidden: {block.GetContent}");
+         return;
+      }
+
+      foreach (var blk in block.GetBlockElements)
+      {
+         string name;
+         string terrain;
+         byte[] colorIndex;
+
+         name = blk.Name;
+
+         var kvps = Parsing.GetKeyValueList(blk.GetContent);
+         if (kvps.Count != 1)
+         {
+            Globals.ErrorLog.Write($"Failed to parse tree block: {blk.GetContent}");
+            continue;
+         }
+         terrain = kvps[0].Value;
+
+         if (blk.GetBlockElements.Count != 1)
+         {
+            Globals.ErrorLog.Write($"Failed to parse tree block, unexpected: {blk.GetContent}");
+            continue;
+         }
+
+         colorIndex = Parsing.GetByteListFromString(blk.GetBlockElements[0].GetContent).ToArray();
+         treeDefinitions.AddDefinition(name, terrain, colorIndex);
+      }
    }
 
    private static void ParseTerrainBlock(Block block, ref TerrainDefinitions terrainDefinitions)
    {
+      if (block.GetContent != string.Empty)
+      {
+         Globals.ErrorLog.Write($"Terrain block has content forbidden: {block.GetContent}");
+         return;
+      }
 
+      foreach (var blk in block.GetBlockElements)
+      {
+         string name;
+         string type;
+         byte colorIndex;
+
+         name = blk.Name;
+
+         var kvps = Parsing.GetKeyValueList(blk.GetContent);
+         if (kvps.Count != 1)
+         {
+            Globals.ErrorLog.Write($"Failed to parse terrain block: {blk.GetContent}");
+            continue;
+         }
+         type = kvps[0].Value;
+
+         if (blk.GetBlockElements.Count != 1)
+         {
+            Globals.ErrorLog.Write($"Failed to parse terrain block, unexpected: {blk.GetContent}");
+            continue;
+         }
+
+         if (!byte.TryParse(blk.GetBlockElements[0].GetContent, out colorIndex))
+         {
+            Globals.ErrorLog.Write($"Failed to parse color index: {blk.GetBlockElements[0].GetContent}");
+            continue;
+         }
+
+         terrainDefinitions.AddDefinition(name, type, colorIndex);
+      }
    }
 }

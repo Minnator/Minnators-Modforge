@@ -8,14 +8,13 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading;
 
-[Loading]
+
 public static class ContinentLoading
 {
    private static readonly string Pattern = @"(?<name>[A-Za-z_]*)\s*=\s*{(?<ids>(?:\s*[0-9]+\s*)*)}";
 
    public static void Load()
    {
-      var sw = Stopwatch.StartNew();
       if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, "map", "continent.txt"))
       {
          Globals.ErrorLog.Write("Error: continent.txt not found!");
@@ -43,8 +42,5 @@ public static class ContinentLoading
 
       SaveMaster.AddRangeToDictionary(pathObj, continentDictionary.Values);
       Globals.Continents = continentDictionary;
-
-      sw.Stop();
-      Globals.LoadingLog.WriteTimeStamp("Parsing Continents", sw.ElapsedMilliseconds);
    }
 }

@@ -6,14 +6,12 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
 {
-   [Loading]
+   
    public static class GovernmentLoading
    {
       public static string PreDharmaMapping = string.Empty;
       public static void Load()
       {
-         var sw = Stopwatch.StartNew();
-
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "governments");
 
          List<Government> governments = [];
@@ -24,9 +22,6 @@ namespace Editor.Loading
 
          foreach (var government in governments) 
             Globals.GovernmentTypes.Add(government.Name, government);
-
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("Governments", sw.ElapsedMilliseconds);
       }
 
       private static void LoadGovernmentsFiles(string filePath, List<Government> governments)

@@ -20,7 +20,7 @@ namespace Editor.Loading
       }
    }
 
-   [Loading]
+   
    public static class DescriptorLoading
    {
       public static void Load()
@@ -78,7 +78,6 @@ namespace Editor.Loading
          }
 
          Globals.DescriptorData = new (version, name, tags, supportedVersion);
-
       }
 
    }

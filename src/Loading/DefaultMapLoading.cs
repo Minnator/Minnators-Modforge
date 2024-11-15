@@ -6,14 +6,11 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading;
 
-[Loading]
+
 public static class DefaultMapLoading
 {
    public static void Load()
    {
-      var sw = new Stopwatch();
-      sw.Start();
-
       if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, "map", "default.map"))
       {
          Globals.ErrorLog.Write("Error: default.map not found!");
@@ -67,9 +64,6 @@ public static class DefaultMapLoading
       Globals.CoastalProvinces = coastal;
       Globals.NonLandProvinces = [.. nonLandProvinces];
       Globals.LandProvinceIds = [.. landProvinces];
-
-      sw.Stop();
-      Globals.LoadingLog.WriteTimeStamp("Parsing default.map", sw.ElapsedMilliseconds);
    }
 
    private static void AddProvincesToDictionary(string provinceList, HashSet<Province> hashSet)

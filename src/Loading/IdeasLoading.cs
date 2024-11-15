@@ -6,7 +6,7 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
 {
-   [Loading]
+   
    public static class IdeasLoading
    {
       /// <summary>
@@ -15,7 +15,6 @@ namespace Editor.Loading
       /// </summary>
       public static void Load()
       {
-         var sw = Stopwatch.StartNew();
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "ideas");
          if (files.Count == 0)
             return;
@@ -28,7 +27,6 @@ namespace Editor.Loading
          }
 
          Globals.Ideas = ideas;
-         Globals.LoadingLog.WriteTimeStamp("Ideas", sw.ElapsedMilliseconds);
       }
 
       /// <summary>

@@ -4,20 +4,17 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
 {
-   [Loading]
+   
    public static class FactionsLoading
    {
       public static void Load()
       {
-         var sw = System.Diagnostics.Stopwatch.StartNew();
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt","common", "factions");
  
          foreach (var file in files)
          {
             LoadFile(file);
          }
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("Factions", sw.ElapsedMilliseconds);
       }
 
       private static void LoadFile(string file)

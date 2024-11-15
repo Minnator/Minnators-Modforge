@@ -89,18 +89,6 @@ public static class Globals
    public static string ModPath = string.Empty;
    
    #region LoadingScreen
-   public static event EventHandler<int> LoadingStageChanged = delegate { };
-
-   public static int LoadingStage
-   {
-      get => _loadingStage;
-      set
-      {
-         _loadingStage = value;
-         LoadingStageChanged?.Invoke(null, _loadingStage);
-      }
-   }
-   private static int _loadingStage = 0;
    public static int LoadingStages = 0; // Needs to be increased when adding new loading stages
    #endregion
    
@@ -151,6 +139,10 @@ public static class Globals
    public static int MapHeight;
    public static string MapPath = null!;
 
+   // Terrain
+   public static List<Terrain> Terrains = [];
+   public static TerrainDefinitions TerrainDefinitions = new();
+   public static TreeDefinitions TreeDefinitions = new();
 
    // Rivers
    public static Dictionary<int, Point[]> Rivers = [];

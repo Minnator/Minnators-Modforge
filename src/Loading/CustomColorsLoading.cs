@@ -4,18 +4,16 @@ using Editor.Parser;
 
 namespace Editor.Loading
 {
-   [Loading]
+   
    public static class CustomColorsLoading
    {
       
       public static void Load()
       {
-         var sw = Stopwatch.StartNew();
-
          if (!FilesHelper.GetFilePathUniquely(out var path, "common", "custom_country_colors", "00_custom_country_colors.txt"))
          {
             Globals.ErrorLog.Write("Could not find custom_colors.txt");
-            goto finishLoad;
+            return;
          }
 
          var content = IO.ReadAllInUTF8(path);
@@ -27,10 +25,6 @@ namespace Editor.Loading
             if (element is Block blk)
                ParseColorBlock(blk, Globals.RevolutionaryColors, Globals.CustomCountryColors);
          }
-
-         finishLoad:
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("Custom Colors", sw.ElapsedMilliseconds);
       }
 
       private static void ParseColorBlock(Block blk, Dictionary<int, Color> revColors, HashSet<Color> customColors)

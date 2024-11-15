@@ -81,12 +81,28 @@ public static partial class Parsing
    {
       List<int> idList = [];
 
-      var matches = Regex.Matches(str, @"\s*(\d+)");
+      var matches = IntListRegex().Matches(str);
       foreach (var match in matches)
       {
          if (int.TryParse(match.ToString(), out var value))
             idList.Add(value);
       }
+      return idList;
+   }
+
+   /// <summary>
+   /// Returns a list of <c>byte</c> from a string which are separated by <c>n</c> whitespace chars.
+   /// </summary>
+   /// <param name="str"></param>
+   /// <returns></returns>
+   public static List<byte> GetByteListFromString(string str)
+   {
+      List<byte> idList = [];
+
+      var matches = ByteListRegex().Matches(str);
+      foreach (var match in matches)
+         if (byte.TryParse(match.ToString(), out var value))
+            idList.Add(value);
       return idList;
    }
 
@@ -846,5 +862,10 @@ public static partial class Parsing
       trimmed = str;
       return false;
    }
+
+   [GeneratedRegex(@"\s*(\d+)")]
+   private static partial Regex ByteListRegex();
+   [GeneratedRegex(@"\s*(\d+)")]
+   private static partial Regex IntListRegex();
 }
 

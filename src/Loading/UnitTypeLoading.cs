@@ -6,12 +6,11 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
 {
-   [Loading]
+   
    public static class UnitTypeLoading
    {
       public static void Load()
       {
-         var sw = Stopwatch.StartNew();
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "units");
 
          foreach (var file in files)
@@ -20,8 +19,6 @@ namespace Editor.Loading
             LoadUnitType(file);
          }
 
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("Unit types", sw.ElapsedMilliseconds);
          PrintAllUnitsToFile();
       }
 

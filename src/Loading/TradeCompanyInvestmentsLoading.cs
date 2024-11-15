@@ -6,13 +6,11 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
 {
-   [Loading]
+   
    public static class TradeCompanyInvestmentsLoading
    {
       public static void Load()
       {
-         var sw = new Stopwatch();
-
          FilesHelper.GetFilesUniquelyAndCombineToOne(out var rawContent, "common", "tradecompany_investments");
          Parsing.RemoveCommentFromMultilineString(ref rawContent, out var content);
 
@@ -73,9 +71,6 @@ namespace Editor.Loading
 
             Globals.TradeCompanyInvestments.Add(tci.Name, tci);
          }
-
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("Trade Company Investments", sw.ElapsedMilliseconds);
       }
 
       private static void ParseTCIAttributes(Content content, TradeCompanyInvestment tci)

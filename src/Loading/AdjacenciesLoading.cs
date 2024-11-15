@@ -6,7 +6,7 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
 {
-   [Loading]
+   
    public static partial class AdjacenciesLoading
    {
       private static readonly Regex AdjacencyRegex = CompileAdjacencyRegex();
@@ -16,7 +16,6 @@ namespace Editor.Loading
 
       public static void Load()
       {
-         var sw = Stopwatch.StartNew();
          if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, "map", "adjacencies.csv"))
          {
             Globals.ErrorLog.Write("Could not find adjacencies.csv");
@@ -33,9 +32,6 @@ namespace Editor.Loading
                continue;
             Globals.Straits.Add(strait);
          }
-
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("Adjacencies", sw.ElapsedMilliseconds);
       }
 
       private static bool ParseStrait(string straitString, out Strait strait)

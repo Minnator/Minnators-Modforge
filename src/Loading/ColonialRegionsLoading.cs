@@ -6,12 +6,11 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
 {
-   [Loading]
+   
    public static class ColonialRegionsLoading
    {
       public static void Load()
       {
-         var sw = Stopwatch.StartNew();
          if (!FilesHelper.GetFilesUniquelyAndCombineToOne(out var rawContent, "common", "colonial_regions"))
          {
             Globals.ErrorLog.Write("Error: No files for colonial_regions found!");
@@ -73,9 +72,6 @@ namespace Editor.Loading
             if (!Globals.ColonialRegions.TryAdd(region.Name, region))
                Globals.ErrorLog.Write($"Error: Colonial Region {region.Name} already exists!");
          }
-
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("Colonial Regions", sw.ElapsedMilliseconds);
       }
 
       private static void AssignAttributes(ColonialRegion cr, Content content)

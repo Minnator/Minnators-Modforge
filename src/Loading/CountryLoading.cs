@@ -9,15 +9,13 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
 {
-   [Loading]
+   
    public static class CountryLoading
    {
       private static readonly Regex CountryRegex = new(@"(?<tag>[A-Z0-9]{3})\s*=\s*""(?<path>[^""]+)""", RegexOptions.Compiled);
 
       public static void Load()
       {
-         var sw = Stopwatch.StartNew();
-         // Loads the country_tags file
          FilesHelper.GetFilesUniquelyAndCombineToOne(out var content, "common", "country_tags");
 
          Parsing.RemoveCommentFromMultilineString(ref content, out var removed);
@@ -40,15 +38,9 @@ namespace Editor.Loading
 
          Globals.Countries = countries;
 
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("Parsing Country Tags", sw.ElapsedMilliseconds);
          ParseCountryAttributes();
 
-         // CreateProvinceGroups country history
-         sw.Restart();
          LoadCountryHistories();
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("Loading CountryHistories", sw.ElapsedMilliseconds);
       }
 
       public static void LoadProvincesToCountries()

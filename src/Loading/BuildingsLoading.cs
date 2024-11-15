@@ -6,12 +6,11 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
 {
-   [Loading]
+   
    public static class BuildingsLoading
    {
       public static void Load()
       {
-         var sw = Stopwatch.StartNew();
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "buildings");
          List<Building> buildings = [];
 
@@ -23,8 +22,6 @@ namespace Editor.Loading
             Globals.BuildingKeys.Add(building.Name);
          
          Globals.Buildings = buildings;
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("Buildings", sw.ElapsedMilliseconds);
       }
 
       private static void ParseBuildingsFile(string file, ref List<Building> buildings)

@@ -8,7 +8,7 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
 {
-   [Loading]
+   
    public static class ModifierLoading
    {
       private const string MODIFIER_PATTERN = "(?<name>[A-Za-z_0-9]+)\\s*=\\s*{\\s*(?<content>[\\s\\S]*?)\\s*}";
@@ -16,8 +16,6 @@ namespace Editor.Loading
 
       public static void Load()
       {
-         var sw = Stopwatch.StartNew();
-
          var (modFiles, vanillaFiles) = FilesHelper.GetFilesFromModAndVanillaUniquelySeparated("*.txt", "common", "event_modifiers");
          Dictionary<string, EventModifier> modifiers = new();
          
@@ -50,8 +48,6 @@ namespace Editor.Loading
          }
 
          Globals.EventModifiers = modifiers;
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("Event Modifiers", sw.ElapsedMilliseconds);
       }
 
       private static void LoadEventModifier(string fullPath, ref NewPathObj filePath, HashSet<EventModifier> modifiers)

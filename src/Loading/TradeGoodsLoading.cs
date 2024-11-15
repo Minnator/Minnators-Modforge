@@ -10,22 +10,18 @@ namespace Editor.Loading
    // ALSO CONTAINS PRICE LOADING
    //=================================================================================================================
 
-   [Loading]
+   
    public static class TradeGoodsLoading
    {
 
       public static void Load()
       {
-         var sw = Stopwatch.StartNew();
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "tradegoods");
 
          foreach (var file in files)
          {
             ParseTradeGoodsFromFile(IO.ReadAllInUTF8(file));
          }
-
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("Loading TradeGoods", sw.ElapsedMilliseconds);
       }
 
       private static void ParseTradeGoodsFromFile(string content)

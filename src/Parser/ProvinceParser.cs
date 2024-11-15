@@ -6,7 +6,7 @@ using Editor.Loading;
 
 namespace Editor.Parser;
 
-[Loading]
+
 public static class ProvinceParser
 {
    private const string ID_FROM_FILE_NAME_PATTERN = @"(\d+)\s*-?";
@@ -24,13 +24,9 @@ public static class ProvinceParser
 
    public static void ParseAllUniqueProvinces()
    {
-      var sw = Stopwatch.StartNew();
       var files = FilesHelper.GetProvinceFilesUniquely();
       var po = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 };
       Parallel.ForEach(files, po, ProcessProvinceFile);
-
-      sw.Stop();
-      Globals.LoadingLog.WriteTimeStamp("Parsing provinces", sw.ElapsedMilliseconds);
    }
 
    private static void ProcessProvinceFile(string path)

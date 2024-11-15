@@ -13,7 +13,6 @@ using Editor.Events;
 using Editor.Forms.Feature;
 using Editor.Forms.Feature.Crash_Reporter;
 using Editor.Forms.Feature.SavingClasses;
-using Editor.Forms.Loadingscreen;
 using Editor.Forms.PopUps;
 using Editor.Helper;
 using Editor.Loading;
@@ -71,7 +70,7 @@ namespace Editor.Forms
       #endregion
 
       public readonly DateControl DateControl = new(DateTime.MinValue, DateControlLayout.Horizontal);
-      private LoadingScreen _ls = null!;
+      private LoadingScreen.LoadingScreen _ls = null!;
 
       public MapWindow()
       {
@@ -146,12 +145,9 @@ namespace Editor.Forms
 
       public void InitMapModes()
       {
-         var sw = Stopwatch.StartNew();
          Globals.MapModeManager = new(); // Initialize the MapModeManager
          MapModeComboBox.Items.Clear();
          MapModeComboBox.Items.AddRange([.. Enum.GetNames<MapModeType>()]);
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("Initializing MapModes", sw.ElapsedMilliseconds);
       }
 
       private void RunLoadingScreen()

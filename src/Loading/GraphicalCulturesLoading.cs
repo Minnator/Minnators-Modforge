@@ -4,13 +4,12 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
 {
-   [Loading]
+   
    public static class GraphicalCulturesLoading
    {
 
       public static void Load()
       {
-         var sw = Stopwatch.StartNew();
          if (!FilesHelper.GetFilePathUniquely(out var path, "common", "graphicalculturetype.txt"))
          {
             Globals.ErrorLog.Write("Could not find graphicalculturetype.txt");
@@ -28,9 +27,6 @@ namespace Editor.Loading
             clearLine = clearLine.Trim();
             Globals.GraphicalCultures.Add(clearLine);
          }
-
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("GraphicalCultures", sw.ElapsedMilliseconds);
       }
       
    }

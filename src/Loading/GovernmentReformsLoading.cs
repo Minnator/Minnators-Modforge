@@ -7,14 +7,12 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
 {
-   [Loading]
+   
    public static class GovernmentReformsLoading
    {
 
       public static void Load()
       {
-         var sw = Stopwatch.StartNew();
-
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "government_reforms");
 
          //TODO parallelize
@@ -22,9 +20,6 @@ namespace Editor.Loading
          {
             ParseGovernmentReformsFile(file);
          }
-
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("Government Reforms", sw.ElapsedMilliseconds);
 
          var sb = new StringBuilder();
          sb.AppendLine("Government Reforms:");

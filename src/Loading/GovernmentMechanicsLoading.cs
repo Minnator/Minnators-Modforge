@@ -4,20 +4,17 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
 {
-   [Loading]
+   
    public static class GovernmentMechanicsLoading
    {
       public static void Load()
       {
-         var sw = System.Diagnostics.Stopwatch.StartNew();
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt","common", "government_mechanics");
 
          foreach (var file in files)
          {
             LoadFile(file);
          }
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("Government Mechanics", sw.ElapsedMilliseconds);
       }
 
       private static void LoadFile(string file)

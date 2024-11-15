@@ -3,7 +3,7 @@ using Editor.Loading;
 
 namespace Editor.Parser
 {
-   [Loading]
+   
    public static class ScopeParser
    {
       public enum EffectScopeType
@@ -34,7 +34,6 @@ namespace Editor.Parser
       private static HashSet<string> RuntimeScopes = [];
       public static void GenerateRuntimeScopes()
       {
-         var sw = Stopwatch.StartNew();
          RuntimeScopes = new(Globals.LandProvinces.Count + Globals.Countries.Count); //Prevent too many resizes of the HashSet
          foreach (var id in Globals.LandProvinceIds)
             RuntimeScopes.Add(id.ToString());
@@ -66,18 +65,12 @@ namespace Editor.Parser
             RuntimeScopes.Add(tradeNode);
 
          GenerateCountryScope();
-
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("Generating Runtime Scopes", sw.ElapsedMilliseconds);
       }
 
       public static void GenerateCountryScope()
       {
-         var sw = Stopwatch.StartNew();
          foreach (var tag in Globals.Countries.Keys)
             RuntimeScopes.Add(tag.ToString());
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("Generating Country Scopes", sw.ElapsedMilliseconds);
       }
 
       public static bool IsRuntimeScope(string scope)

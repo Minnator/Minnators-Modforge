@@ -6,12 +6,11 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
 {
-   [Loading]
+   
    public static class TechnologyGroupsLoading
    {
       public static void Load()
       {
-         var sw = Stopwatch.StartNew();
          FilesHelper.GetFileUniquely(out var content, "common", "technology.txt");
          var blocks = Parsing.GetElements(0, ref content);
          
@@ -30,15 +29,10 @@ namespace Editor.Loading
                   var group = new TechnologyGroup(blk.Name);
                   Globals.TechnologyGroups.Add(blk.Name, group);
                }
-
-               sw.Stop();
-               Globals.LoadingLog.WriteTimeStamp("TechnologyGroups", sw.ElapsedMilliseconds);
                return;
             }
          }
 
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("TechnologyGroups", sw.ElapsedMilliseconds);
          MessageBox.Show("Error parsing technology.txt. No 'groups' block found. Technology groups will not be loaded.");
       }
 

@@ -6,14 +6,13 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
 {
-   [Loading]
+   
    public static class ReligionLoading
    {
       private static readonly HashSet<string> ForbiddenWords = ["flag_emblem_index_range", "religious_schools"];
 
       public static void Load()
       {
-         var sw = Stopwatch.StartNew();
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "religions");
 
          List<ReligiousGroup> religionGroups = [];
@@ -30,9 +29,6 @@ namespace Editor.Loading
             foreach (var religion in group.Religions)
                if (!Globals.Religions.TryAdd(religion.Name, religion)) 
                   MessageBox.Show($"Religion {religion.Name} already exists in the dictionary");
-
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("Religions", sw.ElapsedMilliseconds);
       }
 
       private static void ParseReligionFile(string file, ref List<ReligiousGroup> religionGroups)

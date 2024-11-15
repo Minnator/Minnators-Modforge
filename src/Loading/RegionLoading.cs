@@ -8,7 +8,7 @@ using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor.Loading;
 
-[Loading]
+
 public static partial class RegionLoading
 {
    private static string _pattern =
@@ -16,9 +16,6 @@ public static partial class RegionLoading
 
    public static void Load()
    {
-      var sw = new Stopwatch();
-      sw.Start();
-
       if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, "map", "region.txt"))
       {
          Globals.ErrorLog.Write("Error: region.txt not found!");
@@ -30,9 +27,6 @@ public static partial class RegionLoading
       ParseRegion(Regex.Matches(content, _pattern, RegexOptions.Multiline), ref pathObj);
 
       SaveMaster.AddRangeToDictionary(pathObj, Globals.Regions.Values);
-
-      sw.Stop();
-      Globals.LoadingLog.WriteTimeStamp("Parsing regions", sw.ElapsedMilliseconds);
    }
 
    private static void ParseRegion(MatchCollection matches, ref NewPathObj pathObj)

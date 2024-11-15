@@ -5,18 +5,14 @@ using Editor.Helper;
 
 namespace Editor.Loading
 {
-   [Loading]
+   
    public static class RiverLoading
    {
       public static void Load()
       {
-         var sw = new Stopwatch();
-         sw.Start();
          if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, "map", "rivers.bmp"))
          {
             Globals.ErrorLog.Write("Could not find rivers.bmp");
-            sw.Stop();
-            Globals.LoadingLog.WriteTimeStamp("Rivers", sw.ElapsedMilliseconds);
             return;
          }
 
@@ -62,10 +58,6 @@ namespace Editor.Loading
             var color = palette[river.Key].ToArgb();
             Globals.Rivers.Add(color, river.Value.ToArray());
          }
-
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("Rivers", sw.ElapsedMilliseconds);
-
       }
    }
 }

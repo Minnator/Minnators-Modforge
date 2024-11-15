@@ -6,7 +6,7 @@ using Editor.Parser;
 
 namespace Editor.Loading;
 
-[Loading]
+
 public static class MapLoading
 {
    internal static void Load()
@@ -26,7 +26,7 @@ public static class MapLoading
       Globals.MapHeight = image.Size.Height;
       Globals.MapWidth = image.Size.Width;
 
-      var (colorToProvId, colorToBorder, adjacency) = MapLoading.LoadMap(Globals.MapPath);
+      var (colorToProvId, colorToBorder, adjacency) = LoadMap(Globals.MapPath);
 
       Optimizer.OptimizeProvinces(ref provinces, colorToProvId, colorToBorder, image.Width * image.Height);
 
@@ -41,7 +41,6 @@ public static class MapLoading
       var height = bmp.Height;
       var stride = bmpData.Stride;
       var scan0 = bmpData.Scan0;
-      var sw = new Stopwatch();
 
       ConcurrentDictionary<int, List<Point>> colorToProvId = new();
       ConcurrentDictionary<int, List<Point>> colorToBorder = new();
@@ -50,7 +49,6 @@ public static class MapLoading
       var widthMinusOne = width - 1; // to avoid calculating height times width - 1
       var heightMinusOne = height - 1; // to avoid calculating width times height - 1
 
-      sw.Start();
       // could further be optimized by writing 4 loops for the special cases on the edges: top, bottom, left, right and
       // one that does not need to check for the edges would save ~14.000.000 if checks but code would be less readable not to say horrible
       Parallel.For(0, width, x =>
@@ -180,10 +178,6 @@ public static class MapLoading
             }
          }
       });
-
-
-      sw.Stop();
-      Globals.LoadingLog.WriteTimeStamp("Pixel Initialisation", sw.ElapsedMilliseconds);
 
       Globals.MapWidth = width;
       Globals.MapHeight = height;

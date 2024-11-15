@@ -1,35 +1,86 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Media;
 using System.Reflection;
 using Editor.Controls;
 using Editor.Loading;
 using Editor.Parser;
 
-namespace Editor.Forms.Loadingscreen
+namespace Editor.Forms.LoadingScreen
 {
    public partial class LoadingScreen : Form
    {
       private const bool SKIP_LOADING = true;
-      private readonly CustomProgressBar ProgressBar;
-      private MemoryStream _ms = null!;
+      private readonly CustomProgressBar _progressBar;
+      private readonly MemoryStream _ms = null!;
+
+      public int LoadingStage
+      {
+         get => _loadingStage;
+         set
+         {
+            _loadingStage = value;
+            LoadingStageChanged.Invoke(this, value);
+         }
+      }
+
+      public EventHandler<int> LoadingStageChanged = delegate{};
+      private readonly List<Action> _loadingActions =
+      [
+         FactionsLoading.Load,
+         GovernmentMechanicsLoading.Load,
+         LoadEstateModifiers.Load,
+         ModifierParser.Initialize,
+         CustomColorsLoading.Load,
+         DescriptorLoading.Load,
+         GraphicalCulturesLoading.Load,
+         ScriptedEffectLoading.Load,
+         GovernmentReformsLoading.Load,
+         GovernmentLoading.Load,
+         // Insert here
+         TerrainLoading.Load,
+         RiverLoading.Load,
+         ModifierLoading.Load,
+         LocalisationLoading.Load,
+         TradeGoodsLoading.Load,
+         TechnologyGroupsLoading.Load,
+         BuildingsLoading.Load,
+         TradeCompanyInvestmentsLoading.Load,
+         ReligionLoading.Load,
+         MapLoading.Load,
+         DefaultMapLoading.Load,
+         PositionsLoading.Load,
+         CultureLoading.Load,
+         ProvinceParser.ParseAllUniqueProvinces,
+         AreaLoading.Load,
+         TradeNodeLoading.Load,
+         RegionLoading.Load,
+         SuperRegionLoading.Load,
+         ContinentLoading.Load,
+         ScopeParser.GenerateRuntimeScopes,
+         TradeCompanyLoading.Load,
+         ColonialRegionsLoading.Load,
+         CountryLoading.Load,
+         AdjacenciesLoading.Load,
+         UnitTypeLoading.Load,
+         IdeasLoading.Load,
+
+         // Must be last
+         ModifierParser.Demilitarize
+      ];
 
       public LoadingScreen()
       {
          InitializeComponent();
 
-         // Calculate the number of loading stages
-        Globals.LoadingStages = Assembly.GetExecutingAssembly()
-            .GetTypes()
-            .Where(t => t is { IsClass: true, IsAbstract: true, IsSealed: true }) // Static classes
-            .Where(t => t.GetCustomAttribute<LoadingAttribute>() != null)
-            .ToList().Count;
+         Globals.LoadingStages = _loadingActions.Count;
+         LoadingStageChanged += LoadingScreen_LoadingStageChanged;
          
-
-         Globals.LoadingStageChanged += LoadingScreen_LoadingStageChanged;
-         
-         ProgressBar = new();
-         ProgressBar.Dock = DockStyle.Fill;
-         tableLayoutPanel1.Controls.Add(ProgressBar, 0, 2);
+         _progressBar = new();
+         _progressBar.Dock = DockStyle.Fill;
+         _progressBar.TaskCount = Globals.LoadingStages;
+         _progressBar.DisplayStyle = ProgressBarDisplayText.CustomPercentage;
+         tableLayoutPanel1.Controls.Add(_progressBar, 0, 2);
 
          LoadingAnimation.Click += TotallyNormalClickEvent;
 
@@ -48,8 +99,12 @@ namespace Editor.Forms.Loadingscreen
       
       private void LoadingScreen_LoadingStageChanged(object? sender, int e)
       {
-         ProgressBar.Value = Math.Min(100, (int)((float)e / Globals.LoadingStages * 100));
-         ProgressBar.Invalidate();
+         var percent = (int)(((double)e / Globals.LoadingStages) * 100);
+         _progressBar.Value = Math.Min(100, percent);
+         if (e < _loadingActions.Count)
+            _progressBar.CustomText = _loadingActions[e].Method.DeclaringType?.Name ?? string.Empty;
+         _progressBar.TaskCompletedCount = e;
+         _progressBar.Invalidate();
       }
 
       private void StartLoadingAnimation()
@@ -68,8 +123,7 @@ namespace Editor.Forms.Loadingscreen
          bw.RunWorkerCompleted += (s, e) => LoadingCompleted();
          bw.ProgressChanged += (s, e) =>
          {
-            ProgressBar.Value = Math.Min(100, (int)((float)e.ProgressPercentage / Globals.LoadingStages * 100));
-            ProgressBar.Invalidate();
+            LoadingStage++;
          };
          bw.RunWorkerAsync();
 
@@ -78,6 +132,7 @@ namespace Editor.Forms.Loadingscreen
 
       private int count = 0;
       private DateTime end = DateTime.Today;
+      private int _loadingStage = 0;
 
       private void TotallyNormalClickEvent(object? s, EventArgs e)
       {
@@ -106,95 +161,25 @@ namespace Editor.Forms.Loadingscreen
       {
          if (s is not BackgroundWorker bw)
             return;
+         var sw = Stopwatch.StartNew();
          var progress = 0;
 
          try
          {
-            FactionsLoading.Load();
-            bw.ReportProgress(++progress);
-            GovernmentMechanicsLoading.Load();
-            bw.ReportProgress(++progress);
-            LoadEstateModifiers.Load();
-            bw.ReportProgress(++progress);
-            ModifierParser.Initialize();
-            bw.ReportProgress(++progress);
-            CustomColorsLoading.Load();
-            bw.ReportProgress(++progress);
-            DescriptorLoading.Load();
-            bw.ReportProgress(++progress);
-            GraphicalCulturesLoading.Load();
-            bw.ReportProgress(++progress);
-            ScriptedEffectLoading.Load();
-            bw.ReportProgress(++progress);
-            GovernmentReformsLoading.Load();
-            bw.ReportProgress(++progress);
-            GovernmentLoading.Load();
-            bw.ReportProgress(++progress);
-            RiverLoading.Load();
-            bw.ReportProgress(++progress);
-            ModifierLoading.Load();
-            bw.ReportProgress(++progress);
-            LocalisationLoading.Load();
-            bw.ReportProgress(++progress);
-            TradeGoodsLoading.Load();
-            bw.ReportProgress(++progress);
-            TechnologyGroupsLoading.Load();
-            bw.ReportProgress(++progress);
-            BuildingsLoading.Load();
-            bw.ReportProgress(++progress);
-            TradeCompanyInvestmentsLoading.Load();
-            bw.ReportProgress(++progress);
-            ReligionLoading.Load();
-            bw.ReportProgress(++progress);
-            MapLoading.Load();
-            bw.ReportProgress(++progress);
-            DefaultMapLoading.Load();
-            bw.ReportProgress(++progress);
-            PositionsLoading.Load();
-            bw.ReportProgress(++progress);
-            CultureLoading.Load();
-            bw.ReportProgress(++progress);
-            ProvinceParser.ParseAllUniqueProvinces(); // Also marked as loading
-            bw.ReportProgress(++progress);
-            AreaLoading.Load();
-            bw.ReportProgress(++progress);
-            TradeNodeLoading.Load();
-            bw.ReportProgress(++progress);
-            RegionLoading.Load();
-            bw.ReportProgress(++progress);
-            SuperRegionLoading.Load();
-            bw.ReportProgress(++progress);
-            ContinentLoading.Load();
-            bw.ReportProgress(++progress);
-            ScopeParser.GenerateRuntimeScopes(); // Also marked as loading
-            bw.ReportProgress(++progress);
-            TradeCompanyLoading.Load();
-            bw.ReportProgress(++progress);
-            ColonialRegionsLoading.Load();
-            bw.ReportProgress(++progress);
-            CountryLoading.Load();
-            bw.ReportProgress(++progress);
-            AdjacenciesLoading.Load();
-            bw.ReportProgress(++progress);
-            UnitTypeLoading.Load();
-            bw.ReportProgress(++progress);
-            IdeasLoading.Load();
-            bw.ReportProgress(++progress);
-
-            // Disable loading specific stuff
-            ModifierParser.Demilitarize(); // Also marked as loading
-            bw.ReportProgress(++progress);
+            foreach (var task in _loadingActions)
+            {
+               sw.Restart();
+               task.Invoke(); 
+               sw.Stop();
+               Globals.LoadingLog.WriteTimeStamp(task.Method.DeclaringType?.Name ?? "Unknown", sw.ElapsedMilliseconds);
+               bw.ReportProgress(++progress); 
+            }
          }
          catch (Exception exception)
          {
-            // Create a message box to inform the user that an error occurred
-            MessageBox.Show(exception.Message + "\n\nTry restarting the application. There ia a run condition error in the code I could not find yet. Restarting resolves it.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(exception.Message + "\n\nTry restarting the application, this may solve many issues. \n\nIf the error persists please use the Crash Reporter to report the error to the developer.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             throw;
          }
-         
-
-         GC.Collect();
-         Globals.LoadingStage = progress;
       }
 
       private void LoadingCompleted()

@@ -7,12 +7,11 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
 {
-   [Loading]
+   
    public static class TradeNodeLoading
    {
       public static void Load()
       {
-         var sw = Stopwatch.StartNew();
          if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, "common", "tradenodes", "00_tradenodes.txt"))
          {
             Globals.ErrorLog.Write("Error: 00_tradenodes.txt not found!");
@@ -24,8 +23,6 @@ namespace Editor.Loading
          ConnectControlPaths();
          SetIncoming();
          SaveMaster.AddRangeToDictionary(pathObj, Globals.TradeNodes.Values);
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("Loading TradeNodes", sw.ElapsedMilliseconds);
       }
 
       private static void SetIncoming()

@@ -6,12 +6,11 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading;
 
-[Loading]
+
 public static class CultureLoading
 {
    public static void Load()
    {
-      var sw = Stopwatch.StartNew();
       FilesHelper.GetFilesUniquelyAndCombineToOne(out var culturesContent, "common", "cultures");
 
       Parsing.RemoveCommentFromMultilineString(ref culturesContent, out var commentLessContent);
@@ -21,12 +20,6 @@ public static class CultureLoading
       var (groups, cultures) = GetCultureGroups(ref blocks, Globals.ColorProvider);
       Globals.CultureGroups = groups;
       Globals.Cultures = cultures;
-      sw.Stop();
-      Globals.LoadingLog.WriteTimeStamp("Parsing cultures", sw.ElapsedMilliseconds);
-      sw.Restart();
-      AnalyzeCultures([.. groups.Values]);
-      sw.Stop();
-      Globals.LoadingLog.WriteTimeStamp("Analyzing cultures", sw.ElapsedMilliseconds);
    }
 
    private static (Dictionary<string, CultureGroup>, Dictionary<string, Culture>) GetCultureGroups(ref List<IElement> blocks, ColorProviderRgb colorProvider)
