@@ -35,6 +35,8 @@ public abstract class Saveable : IDisposable
             return;
          if (Equals(value, ObjEditingStatus.Modified))
             SaveMaster.AddToBeHandled(this);
+         if (Equals(value, ObjEditingStatus.Deleted))
+            SaveMaster.AddToBeHandled(this);
          //TODO: what if we undo here?
          _editingStatus = value;
       }

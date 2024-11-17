@@ -173,8 +173,6 @@ public abstract class ProvinceCollection<T>(string name, Color color) : Province
 
    public void ExecuteAndAdd(ICommand command, bool tryAddEventToHistory)
    {
-      EditingStatus = ObjEditingStatus.Modified;
-
       command.Execute();
       if (tryAddEventToHistory && Globals.State == State.Running)
       {

@@ -202,21 +202,13 @@ namespace Editor.Saving
          foreach (var item in AllSaveableFiles[path])
          {
             if (item.EditingStatus == ObjEditingStatus.Modified)
-            {
-               item.EditingStatus = ObjEditingStatus.Unchanged;
                changed.Add(item);
-            }
             else if (item.EditingStatus != ObjEditingStatus.Deleted)
                unchanged.Add(item);
-            else
-            {
-               item.Dispose();
-            }
-            // TODO final delete
-            
+            item.EditingStatus = ObjEditingStatus.Unchanged;
          }
-
-         if (!string.IsNullOrWhiteSpace(changed[0].GetHeader()))
+         
+         if (changed.Count > 0 && !string.IsNullOrWhiteSpace(changed[0].GetHeader()))
             sb.AppendLine(changed[0].GetHeader());
 
          // Save the unchanged first

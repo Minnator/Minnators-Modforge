@@ -1,4 +1,5 @@
 ﻿using Editor.DataClasses.GameDataClasses;
+using Editor.Saving;
 
 namespace Editor.DataClasses.Commands
 {
@@ -26,6 +27,8 @@ namespace Editor.DataClasses.Commands
       // TODO if parent does not have any left remove it from globals
       public void Execute()
       {
+         //Todo fix
+         newParent.EditingStatus = ObjEditingStatus.Modified;
          for (var i = 0; i < Composites.Count; i++)
          {
             var composite = Composites[i];
@@ -47,6 +50,7 @@ namespace Editor.DataClasses.Commands
          }
          else
             newParent.Invoke(new(ProvinceCollectionType.Add, Composites));
+
       }
 
 
@@ -94,6 +98,8 @@ namespace Editor.DataClasses.Commands
          {
             parent = null!;
          }
+         //Todo fix
+         parent.EditingStatus = ObjEditingStatus.Modified;
          oldParent.Add(parent);
       }
    }
@@ -103,6 +109,8 @@ namespace Editor.DataClasses.Commands
       private List<T> Composites = [];
       private ProvinceCollection<T> oldParent = oldParent;
       private bool _removeFromGlobal = remove;
+      private ObjEditingStatus previous_state;
+      private bool flag_set;
       public CRemoveProvinceCollection(ProvinceCollection<T> oldParent, bool remove, bool executeOnInit = false) : this(oldParent, remove)
       {
          if (executeOnInit)
@@ -125,6 +133,9 @@ namespace Editor.DataClasses.Commands
          }
          else
             oldParent.Invoke(new(ProvinceCollectionType.Remove, Composites));
+         previous_state = oldParent.EditingStatus;
+         flag_set = (Globals.SaveableType & oldParent.WhatAmI()) != 0;
+         oldParent.EditingStatus = ObjEditingStatus.Deleted;
       }
 
 
@@ -144,6 +155,14 @@ namespace Editor.DataClasses.Commands
          }
          else
             oldParent.Invoke(new(ProvinceCollectionType.Add, Composites));
+         if (oldParent.EditingStatus == ObjEditingStatus.Deleted)
+         {
+            oldParent.EditingStatus = previous_state;
+            if (!flag_set)
+               Globals.SaveableType &= ~oldParent.WhatAmI();
+         }
+         else
+            oldParent.EditingStatus = ObjEditingStatus.Modified;
       }
 
       public void Redo()

@@ -30,7 +30,9 @@ public enum MapModeType
    City,
    HasCapital,
    Diplomatic, 
-   ProvinceGroup
+   ProvinceGroup,
+   TerrainOverrides,
+   Terrain
 }
 
 public class MapModeManager
@@ -83,6 +85,7 @@ public class MapModeManager
       MapModes.Add(new CityMapMode());
       MapModes.Add(new HasCapitalMapMode());
       MapModes.Add(new DiplomaticMapMode());
+      MapModes.Add(new TerrainOverrides());
 
 
 

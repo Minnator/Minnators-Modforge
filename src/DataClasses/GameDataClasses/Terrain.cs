@@ -20,7 +20,10 @@ public class Terrain(string name) : INotifyPropertyChanged
 
    public List<Province> TerrainOverrides = [];
 
-
+   public override string ToString()
+   {
+      return Name;
+   }
 
    #region Property Changed
 

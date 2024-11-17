@@ -38,7 +38,6 @@ namespace Editor.Forms.LoadingScreen
          GovernmentReformsLoading.Load,
          GovernmentLoading.Load,
          // Insert here
-         TerrainLoading.Load,
          RiverLoading.Load,
          ModifierLoading.Load,
          LocalisationLoading.Load,
@@ -52,6 +51,7 @@ namespace Editor.Forms.LoadingScreen
          PositionsLoading.Load,
          CultureLoading.Load,
          ProvinceParser.ParseAllUniqueProvinces,
+         TerrainLoading.Load, // Requires Provinces
          AreaLoading.Load,
          TradeNodeLoading.Load,
          RegionLoading.Load,
