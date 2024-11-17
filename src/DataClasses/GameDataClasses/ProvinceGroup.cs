@@ -7,6 +7,7 @@ namespace Editor.DataClasses.GameDataClasses
 {
    public class ProvinceGroup(string name, Color color) : ProvinceCollection<Province>(name, color)
    {
+      public override void OnPropertyChanged(string? propertyName = null) { }
       public override SaveableType WhatAmI()
       {
          return SaveableType.ProvinceGroup;

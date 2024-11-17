@@ -38,7 +38,9 @@ public class Area : ProvinceCollection<Province>
    {
       return Name.GetHashCode();
    }
-   
+
+   public override void OnPropertyChanged(string? propertyName = null) {  }
+
    public override SaveableType WhatAmI()
    {
       return SaveableType.Area;

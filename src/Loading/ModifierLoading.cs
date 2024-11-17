@@ -21,7 +21,7 @@ namespace Editor.Loading
          
          foreach (var file in modFiles)
          {
-            var po = NewPathObj.FromPath(file, true);
+            var po = PathObj.FromPath(file, true);
             // Add the file to the ObjectSourceFiles and get the index
             HashSet<EventModifier> newModifiers = [];
             LoadEventModifier(file, ref po, newModifiers);
@@ -35,7 +35,7 @@ namespace Editor.Loading
 
          foreach (var file in vanillaFiles)
          {
-            var po = NewPathObj.FromPath(file, false);
+            var po = PathObj.FromPath(file, false);
             // Add the file to the ObjectSourceFiles and get the index
             HashSet<EventModifier> newModifiers = [];
             LoadEventModifier(file, ref po, newModifiers);
@@ -50,7 +50,7 @@ namespace Editor.Loading
          Globals.EventModifiers = modifiers;
       }
 
-      private static void LoadEventModifier(string fullPath, ref NewPathObj filePath, HashSet<EventModifier> modifiers)
+      private static void LoadEventModifier(string fullPath, ref PathObj filePath, HashSet<EventModifier> modifiers)
       {
          Parsing.RemoveCommentFromMultilineString(IO.ReadAllInUTF8(fullPath), out var fileContent);
          var matches = ModifierRegex.Matches(fileContent);

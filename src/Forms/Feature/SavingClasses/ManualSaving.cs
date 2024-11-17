@@ -67,6 +67,14 @@ namespace Editor.Forms.Feature.SavingClasses
       private void SaveSelectedButton_Click(object sender, EventArgs e)
       {
          SaveMaster.SaveAllChanges(saveableType: GetItemsToSave());
+         for (var i = 0; i < CheckboxesTLP.RowCount; i++)
+         {
+            var state = Globals.SaveableType.HasFlag((SaveableType)(1 << i));
+            if (CheckboxesTLP.GetControlFromPosition(0, i) is CheckBox wasModifiedCheckBox)
+               wasModifiedCheckBox.Checked = state;
+            if (CheckboxesTLP.GetControlFromPosition(1, i) is CheckBox checkBox)
+               checkBox.Checked = state;
+         }
       }
 
       private void ManualSaving_KeyDown(object sender, KeyEventArgs e)

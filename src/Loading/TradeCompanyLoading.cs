@@ -21,7 +21,7 @@ namespace Editor.Loading
          foreach (var file in files)
          {
             Dictionary<string, TradeCompany> tradeCompaniesInternal = [];
-            var pathObj = NewPathObj.FromPath(file);
+            var pathObj = PathObj.FromPath(file);
             ParseTradeCompabies(IO.ReadAllInUTF8(file), ref pathObj, ref tradeCompaniesInternal);
 
             SaveMaster.AddRangeToDictionary(pathObj, tradeCompaniesInternal.Values);
@@ -33,7 +33,7 @@ namespace Editor.Loading
          Globals.TradeCompanies = tradeCompanies;
       }
 
-      private static void ParseTradeCompabies(string rawContent, ref NewPathObj pathObj, ref Dictionary<string, TradeCompany> tradeCompanies)
+      private static void ParseTradeCompabies(string rawContent, ref PathObj pathObj, ref Dictionary<string, TradeCompany> tradeCompanies)
       {
 
          Parsing.RemoveCommentFromMultilineString(rawContent, out var content);

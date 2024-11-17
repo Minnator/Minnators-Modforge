@@ -7,6 +7,7 @@ namespace Editor.DataClasses.GameDataClasses
 {
    public class TradeNode(string name, Color color, Province location) : ProvinceCollection<Province>(name, color)
    {
+      public override void OnPropertyChanged(string? propertyName = null) { }
       public Province Location { get; set; } = location;
       public bool IsInland { get; set; } = false;
       public List<string> Incoming { get; set; } = [];

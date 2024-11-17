@@ -70,6 +70,8 @@ public class Province(int id, Color color) : ProvinceComposite(id.ToString(), co
       return SaveableType.Province;
    }
 
+   public override void OnPropertyChanged(string? propertyName = null) { }
+
    public override string[] GetDefaultFolderPath()
    {
       return ["history", "provinces"];

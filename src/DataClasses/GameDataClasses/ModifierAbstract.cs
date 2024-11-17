@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System.ComponentModel;
+using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
@@ -180,8 +182,11 @@ namespace Editor.DataClasses.GameDataClasses
       }
    }
 
-   public class EventModifier : NewSaveable
+   public class EventModifier : Saveable
    {
+      private List<Modifier> _modifiers = [];
+      private List<KeyValuePair<string, string>> _triggerAttribute = [];
+      private string _picture = string.Empty;
 
       public EventModifier(string name, ObjEditingStatus status = ObjEditingStatus.Modified)
       {
@@ -189,15 +194,36 @@ namespace Editor.DataClasses.GameDataClasses
          base.EditingStatus = status;
       }
 
-      public EventModifier(string name, ref NewPathObj path) : this(name, ObjEditingStatus.Unchanged)
+      public EventModifier(string name, ref PathObj path) : this(name, ObjEditingStatus.Unchanged)
       {
          SetPath(ref path);
       }
       
       public string Name { get; }
-      public List<KeyValuePair<string, string>> TriggerAttribute { get; set; } = [];
-      public List<Modifier> Modifiers { get; set; } = [];
-      public string Picture { get; set; } = string.Empty;
+
+      public List<KeyValuePair<string, string>> TriggerAttribute
+      {
+         get => _triggerAttribute;
+         set => SetIfModifiedEnumerable< List<KeyValuePair<string, string>>, KeyValuePair<string, string>>(ref _triggerAttribute, value);
+      }
+
+      public List<Modifier> Modifiers
+      {
+         get => _modifiers;
+         set => SetIfModifiedEnumerable<List<Modifier>, Modifier>(ref _modifiers, value);
+      }
+
+      public string Picture
+      {
+         get => _picture;
+         set => SetField(ref _picture, value);
+      }
+
+      public event PropertyChangedEventHandler? PropertyChanged;
+      public override void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+      {
+         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+      }
 
       public string GetTitleLocKey => Name;
       public string GetDescriptionLocKey => $"desc_{Name}";

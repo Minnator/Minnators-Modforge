@@ -22,7 +22,7 @@ public static class ContinentLoading
       }
       var newContent = IO.ReadAllLinesInUTF8(path);
 
-      var pathObj = NewPathObj.FromPath(path, isModPath);
+      var pathObj = PathObj.FromPath(path, isModPath);
       var continentDictionary = new Dictionary<string, Continent>();
       var sb = new StringBuilder();
 

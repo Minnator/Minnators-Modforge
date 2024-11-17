@@ -18,7 +18,7 @@ namespace Editor.Loading
             return;
          }
 
-         var pathObj = NewPathObj.FromPath(path, isModPath);
+         var pathObj = PathObj.FromPath(path, isModPath);
          ParseTradeNodesFromString(IO.ReadAllInUTF8(path), ref pathObj);
          ConnectControlPaths();
          SetIncoming();
@@ -55,7 +55,7 @@ namespace Editor.Loading
          }
       }
 
-      private static void ParseTradeNodesFromString(string fileContent, ref NewPathObj pathObj)
+      private static void ParseTradeNodesFromString(string fileContent, ref PathObj pathObj)
       {
          var elements = Parsing.GetElements(0, fileContent);
          foreach (var element in elements)

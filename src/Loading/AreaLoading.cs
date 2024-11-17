@@ -19,7 +19,7 @@ public static class AreaLoading
       }
       IO.ReadAllInANSI(path, out var newContent);
 
-      var pathObj = NewPathObj.FromPath(path, isModPath);
+      var pathObj = PathObj.FromPath(path, isModPath);
       var areaDictionary = new Dictionary<string, Area>();
 
       Parsing.RemoveCommentFromMultilineString(ref newContent, out var content);

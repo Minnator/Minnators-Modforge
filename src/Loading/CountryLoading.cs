@@ -61,7 +61,7 @@ namespace Editor.Loading
                return;
             
             Parsing.RemoveCommentFromMultilineString(content, out var removed);
-            var newPathObj = NewPathObj.FromPath(file);
+            var newPathObj = PathObj.FromPath(file);
             
             foreach (var element in Parsing.GetElements(0, removed))
             {
@@ -342,7 +342,7 @@ namespace Editor.Loading
 
             path = path.Replace('/', '\\');
 
-            var newPathObj = NewPathObj.FromPath(path);
+            var newPathObj = PathObj.FromPath(path);
             SaveMaster.AddToDictionary(ref newPathObj, country.CommonCountry);
             country.CommonCountry.SetPath(ref newPathObj);
 

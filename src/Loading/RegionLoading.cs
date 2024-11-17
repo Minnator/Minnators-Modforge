@@ -22,14 +22,14 @@ public static partial class RegionLoading
          return;
       }
       
-      var pathObj = NewPathObj.FromPath(path, isModPath);
+      var pathObj = PathObj.FromPath(path, isModPath);
       Parsing.RemoveCommentFromMultilineString(IO.ReadAllInUTF8(path), out var content);
       ParseRegion(Regex.Matches(content, _pattern, RegexOptions.Multiline), ref pathObj);
 
       SaveMaster.AddRangeToDictionary(pathObj, Globals.Regions.Values);
    }
 
-   private static void ParseRegion(MatchCollection matches, ref NewPathObj pathObj)
+   private static void ParseRegion(MatchCollection matches, ref PathObj pathObj)
    {
       Dictionary<string, Region> regionDictionary = [];
       foreach (Match match in matches)

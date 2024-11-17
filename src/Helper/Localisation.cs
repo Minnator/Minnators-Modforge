@@ -41,7 +41,7 @@ public static class Localisation
       {
          if (locObject == null)
             return;
-         if (locObject.Path.isModPath && string.IsNullOrEmpty(value))
+         if (locObject.Path.IsModPath && string.IsNullOrEmpty(value))
          {
             // TODO delete locObject
          }
@@ -60,6 +60,7 @@ public static class Localisation
 /// </summary>
 public class LocObject : Saveable
 {
+   public override void OnPropertyChanged(string? propertyName = null) { }
    public LocObject(string key, string value, ObjEditingStatus status = ObjEditingStatus.Modified)
    {
       Key = key;
@@ -90,7 +91,7 @@ public class LocObject : Saveable
          if (Equals(value, _editingStatus))
             return;
          if (Equals(value, ObjEditingStatus.Modified))
-            FileManager.AddLocObject(this);
+            SaveMaster.AddLocObject(this);
          _editingStatus = value;
       }
    }
@@ -100,14 +101,24 @@ public class LocObject : Saveable
       return SaveableType.Localisation;
    }
 
+   public override string[] GetDefaultFolderPath()
+   {
+      return ["localisation"];
+   }
+
+   public override string GetFileEnding()
+   {
+      return $"_l_{Globals.Settings.Misc.Language.ToString().ToLower()}.yml";
+   }
+
+   public override KeyValuePair<string, bool> GetFileName()
+   {
+      return new("Modforge_loc", false);
+   }
+
    public override string SavingComment()
    {
       return string.Empty;
-   }
-
-   public override PathObj GetDefaultSavePath()
-   {
-      return new(["localisation"]);
    }
 
    public override string GetSaveString(int tabs)

@@ -36,6 +36,7 @@ public class Continent : ProvinceCollection<Province>
    {
       return Localisation.GetLoc(Name);
    }
+   public override void OnPropertyChanged(string? propertyName = null) { }
 
    public override string GetSaveString(int tabs)
    {

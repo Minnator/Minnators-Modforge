@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
+using Editor.DataClasses.Commands;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Saving;
@@ -8,7 +9,7 @@ using static Editor.Saving.SavingUtil;
 
 namespace Editor.DataClasses.GameDataClasses;
 
-public class CommonCountry(string fileName, Country country) : NewSaveable, INotifyPropertyChanged
+public class CommonCountry(string fileName, Country country) : Saveable
 {
    private Color _revolutionaryColor = Color.Empty;
    private string _graphicalCulture = string.Empty;
@@ -127,24 +128,11 @@ public class CommonCountry(string fileName, Country country) : NewSaveable, INot
       get => _customAttributes;
       set => SetField(ref _customAttributes, value);
    }
-
-
-
+   
    public event PropertyChangedEventHandler? PropertyChanged;
-   protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+   public override void OnPropertyChanged([CallerMemberName] string? propertyName = null)
    {
-      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-   }
-   protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-   {
-      if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-      field = value;
-      if (Globals.State == State.Running)
-      {
-         OnPropertyChanged(propertyName);
-         EditingStatus = ObjEditingStatus.Modified;
-      }
-      return true;
+      PropertyChanged?.Invoke(this, new (propertyName));
    }
    public override SaveableType WhatAmI() => SaveableType.Country;
    public override string[] GetDefaultFolderPath() => ["common", "countries"];
@@ -178,7 +166,7 @@ public class CommonCountry(string fileName, Country country) : NewSaveable, INot
    }
 }
 
-public class HistoryCountry(Country country) : NewSaveable, INotifyPropertyChanged
+public class HistoryCountry(Country country) : Saveable
 {
    private bool _isElector; //
    private int _mercantilism = 0; //
@@ -403,23 +391,10 @@ public class HistoryCountry(Country country) : NewSaveable, INotifyPropertyChang
 
    public event PropertyChangedEventHandler? PropertyChanged;
 
-   protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+   public override void OnPropertyChanged([CallerMemberName] string? propertyName = null)
    {
       PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
    }
-
-   protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-   {
-      if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-      field = value;
-      if (Globals.State == State.Running)
-      {
-         OnPropertyChanged(propertyName);
-         EditingStatus = ObjEditingStatus.Modified;
-      }
-      return true;
-   }
-
 }
 
 
@@ -453,7 +428,8 @@ public class Country : ProvinceCollection<Province>
       }
    }
 
-   
+   public override void OnPropertyChanged(string? propertyName = null) { }
+
    public CountryHistoryEntry? GetClosestAfterDate(DateTime date)
    {
       if (HistoryCountry.History.Count == 0)

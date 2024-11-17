@@ -80,7 +80,7 @@ public partial class LocalisationLoading
                 }
              }
              if (isMod)
-                FileManager.AddRangeToDictionary(pathObj, localHashSet);
+                SaveMaster.AddRangeToDictionary(pathObj, localHashSet);
 
              return localHashSet;
           },

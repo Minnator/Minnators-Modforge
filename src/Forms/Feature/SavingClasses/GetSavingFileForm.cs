@@ -21,7 +21,7 @@ namespace Editor.Forms.Feature.SavingClasses
 
       private void OpenFileDialogButton_Click(object sender, EventArgs e)
       {
-         IO.OpenFileSelection(InitPath, "Select a file ", out var path);
+         IO.OpenFileSelection(Path.Combine(Globals.ModPath, InitPath), "Select a file ", out var path);
          ExistingFilePath.Text = path;
       }
 

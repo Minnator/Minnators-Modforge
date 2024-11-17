@@ -7,6 +7,7 @@ namespace Editor.DataClasses.GameDataClasses;
 #nullable enable
 public class Region : ProvinceCollection<Area>
 {
+   public override void OnPropertyChanged(string? propertyName = null) { }
    public List<Monsoon> Monsoon { get; set; } = [];
    public SuperRegion SuperRegion
    {

@@ -27,6 +27,11 @@ namespace Editor.Forms.Feature
          Globals.MapWindow.ModifiersLayoutPanel.Controls.Add(tempBox, 1, 1);
          Globals.MapWindow.ModifierComboBox.SelectedIndexChanged += OnModifierComboBoxOnSelectedIndexChanged;
          Globals.MapWindow.ModifierComboBox.TextChanged += OnModifierComboBoxTextChanged;
+         Globals.MapWindow.ModifierComboBox.KeyPress += (sender, args) =>
+         {
+            if (args.KeyChar == (char) Keys.Space)
+               args.Handled = true;
+         };
 
          Closing += CloseEvent;
 
@@ -160,7 +165,6 @@ namespace Editor.Forms.Feature
          {
             modifier.Modifiers = mods;
             modifier.TriggerAttribute = customAttrs;
-            modifier.EditingStatus = ObjEditingStatus.Modified;
             SetModifierLocalisation(ref title, ref desc, ref modifier);
             return true;
          }

@@ -6,6 +6,7 @@ using Editor.Saving;
 namespace Editor.DataClasses.GameDataClasses;
 public class SuperRegion : ProvinceCollection<Region>
 {
+   public override void OnPropertyChanged(string? propertyName = null) { }
    public SuperRegion(string name, Color color, List<Region> regions) : base(name, color)
    {
       SubCollection = regions;

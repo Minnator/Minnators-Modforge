@@ -5,6 +5,7 @@ namespace Editor.DataClasses.GameDataClasses
 {
    public class TradeCompany : ProvinceCollection<Province>
    {
+      public override void OnPropertyChanged(string? propertyName = null) { }
       public TradeCompany(string name, Color color) : base(name, color)
       {
          GenericName = string.Empty;

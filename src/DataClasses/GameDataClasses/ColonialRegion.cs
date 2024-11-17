@@ -20,6 +20,8 @@ namespace Editor.DataClasses.GameDataClasses
          return Name;
       }
 
+      public override void OnPropertyChanged(string? propertyName = null) {  }
+
       public override SaveableType WhatAmI()
       {
          return SaveableType.ColonialRegion;

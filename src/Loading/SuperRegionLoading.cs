@@ -23,7 +23,7 @@ public static class SuperRegionLoading
          return;
       }
 
-      var pathObj = NewPathObj.FromPath(path, isModPath);
+      var pathObj = PathObj.FromPath(path, isModPath);
       var newContent = IO.ReadAllLinesInUTF8(path);
       var sb = new StringBuilder();
 
