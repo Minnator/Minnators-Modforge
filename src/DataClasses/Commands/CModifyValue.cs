@@ -1,4 +1,6 @@
-﻿using Editor.DataClasses.GameDataClasses;
+﻿using System.Text;
+using Editor.DataClasses.GameDataClasses;
+using Editor.Saving;
 using static Editor.Helper.ProvinceEnumHelper;
 
 namespace Editor.DataClasses.Commands
@@ -86,6 +88,20 @@ namespace Editor.DataClasses.Commands
          return _provinces.Count == 1
             ? $"{(_increase ? "Increased" : "Decreased")} {_attribute} of {_provinces[0].Id} ({_provinces[0].GetLocalisation()}) by [{_value}]"
             : $"{(_increase ? "Increased" : "Decreased")} {_attribute} of [{_provinces.Count}] provinces by [{_value}]";
+      }
+
+      public string GetDebugInformation(int indent)
+      {
+         var sb = new StringBuilder();
+         SavingUtil.AddTabs(indent, ref sb);
+         if (_increase)
+            sb.AppendLine($"Increased {_attribute} of [{_provinces.Count}] provinces by [{_value}]:");
+         else
+            sb.AppendLine($"Decreased {_attribute} of [{_provinces.Count}] provinces by [{_value}]:");
+         SavingUtil.AddTabs(indent, ref sb);
+         foreach (var province in _provinces)
+            sb.Append($"{province.Id}, ");
+         return sb.ToString();
       }
    }
 }

@@ -1,6 +1,7 @@
 ﻿using Editor.Forms;
 using Editor.Forms.Feature.Crash_Reporter;
 using Editor.Forms.GetUserInput;
+using Editor.Helper;
 
 namespace Editor
 {
@@ -19,10 +20,16 @@ namespace Editor
 
          Application.Run(new EnterPathForm());
          if (Globals.VanillaPath != string.Empty && Globals.ModPath != string.Empty)
-            Application.Run(new MapWindow());
-         return;
-         Application.Run(new CrashReporter());
-
+         {
+            try
+            {
+               Application.Run(new MapWindow());
+            }
+            catch (Exception e)
+            {
+               CrashManager.EnterCrashHandler(e);
+            }
+         }
       }
    }
 }

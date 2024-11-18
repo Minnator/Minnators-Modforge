@@ -72,6 +72,8 @@
          MapModeComboBox = new ToolStripComboBox();
          searchToolStripMenuItem = new ToolStripMenuItem();
          helpToolStripMenuItem = new ToolStripMenuItem();
+         infoToolStripMenuItem = new ToolStripMenuItem();
+         clearCrashLogsToolStripMenuItem = new ToolStripMenuItem();
          debugToolStripMenuItem = new ToolStripMenuItem();
          testToolStripMenuItem = new ToolStripMenuItem();
          telescopeToolStripMenuItem = new ToolStripMenuItem();
@@ -604,10 +606,25 @@
          // 
          // helpToolStripMenuItem
          // 
+         helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { infoToolStripMenuItem, clearCrashLogsToolStripMenuItem });
          helpToolStripMenuItem.Name = "helpToolStripMenuItem";
          helpToolStripMenuItem.Size = new Size(76, 23);
          helpToolStripMenuItem.Text = "Help / Info";
          helpToolStripMenuItem.Click += helpToolStripMenuItem_Click;
+         // 
+         // infoToolStripMenuItem
+         // 
+         infoToolStripMenuItem.Name = "infoToolStripMenuItem";
+         infoToolStripMenuItem.Size = new Size(180, 22);
+         infoToolStripMenuItem.Text = "Info";
+         infoToolStripMenuItem.Click += infoToolStripMenuItem_Click;
+         // 
+         // clearCrashLogsToolStripMenuItem
+         // 
+         clearCrashLogsToolStripMenuItem.Name = "clearCrashLogsToolStripMenuItem";
+         clearCrashLogsToolStripMenuItem.Size = new Size(180, 22);
+         clearCrashLogsToolStripMenuItem.Text = "Clear Crash Logs";
+         clearCrashLogsToolStripMenuItem.Click += clearCrashLogsToolStripMenuItem_Click;
          // 
          // debugToolStripMenuItem
          // 
@@ -3212,6 +3229,8 @@
       private Button button4;
       private ToolStripMenuItem newSavingToolStripMenuItem;
       private TableLayoutPanel CountryHeaderTLP;
+      private ToolStripMenuItem infoToolStripMenuItem;
+      private ToolStripMenuItem clearCrashLogsToolStripMenuItem;
    }
 }
 

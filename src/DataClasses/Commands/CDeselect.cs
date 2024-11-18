@@ -1,5 +1,7 @@
-﻿using Editor.DataClasses.GameDataClasses;
+﻿using System.Text;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
+using Editor.Saving;
 
 namespace Editor.DataClasses.Commands;
 
@@ -59,5 +61,16 @@ public class CDeselectCommand :ICommand
    public string GetDescription()
    {
       return $"Deselected all Provinces with attribute [{_attr} = {_value}] in selection";
+   }
+
+   public string GetDebugInformation(int indent)
+   {
+      var sb = new StringBuilder();
+      SavingUtil.AddTabs(indent, ref sb);
+      sb.AppendLine($"Deselected all Provinces with attribute [{_attr} = {_value}] in selection:");
+      SavingUtil.AddTabs(indent, ref sb);
+      foreach (var province in _selectionDelta)
+         sb.Append($"{province.Id}, ");
+      return sb.ToString();
    }
 }

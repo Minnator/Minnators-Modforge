@@ -1,4 +1,6 @@
-﻿using Editor.DataClasses.GameDataClasses;
+﻿using System.Text;
+using Editor.DataClasses.GameDataClasses;
+using Editor.Saving;
 using static Editor.Helper.ProvinceEnumHelper;
 
 namespace Editor.DataClasses.Commands
@@ -47,6 +49,20 @@ namespace Editor.DataClasses.Commands
          return _provinces.Count == 1
             ? $"{(_add ? "Added" : "Removed")} {_attribute} {_value} to {_provinces[0].Id} ({_provinces[0].GetLocalisation()})"
             : $"{(_add ? "Added" : "Removed")} {_attribute} {_value} to [{_provinces.Count}] provinces";
+      }
+
+      public string GetDebugInformation(int indent)
+      {
+         var sb = new StringBuilder();
+         SavingUtil.AddTabs(indent, ref sb);
+         if (_add)
+            sb.AppendLine($"Added {_attribute} \"{_value}\" to {_provinces.Count} provinces:");
+         else
+            sb.AppendLine($"Removed {_attribute} \"{_value}\" from {_provinces.Count} provinces:");
+         SavingUtil.AddTabs(indent, ref sb);
+         foreach (var province in _provinces)
+            sb.Append($"{province.Id}, ");
+         return sb.ToString();
       }
    }
 }

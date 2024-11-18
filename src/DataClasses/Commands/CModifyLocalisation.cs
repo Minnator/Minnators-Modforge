@@ -38,6 +38,11 @@ namespace Editor.DataClasses.Commands
       {
          return $"Modified \"{_locObject.Key[..Math.Min(_locObject.Key.Length, 20)]}\" to \"{_newLoc[..Math.Min(_newLoc.Length, 20)]}\"";
       }
+
+      public string GetDebugInformation(int indent)
+      {
+         return $"Changed \"{_locObject.Key}\" from \"{_oldLoc}\" to \"{_newLoc}\"";
+      }
    }
 
    public class CAddDelLocalisation : ICommand
@@ -84,6 +89,11 @@ namespace Editor.DataClasses.Commands
       public string GetDescription()
       {
          return _add ? $"Added \"{_locObject.Key[..Math.Min(_locObject.Key.Length, 20)]}\"" : $"Deleted \"{_locObject.Key[..Math.Min(_locObject.Key.Length, 20)]}\"";
+      }
+
+      public string GetDebugInformation(int indent)
+      {
+         return _add ? $"Added \"{_locObject.Key}\"" : $"Deleted \"{_locObject.Key}\"";
       }
    }
 }

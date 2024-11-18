@@ -735,7 +735,7 @@ namespace Editor.Forms
       private void RevertInSelectionHistory(object sender, EventArgs e)
       {
          var historyTreeView = new HistoryTree(Globals.HistoryManager.RevertTo);
-         historyTreeView.VisualizeFull(Globals.HistoryManager.GetRoot());
+         historyTreeView.VisualizeFull(Globals.HistoryManager.Root);
          historyTreeView.ShowDialog();
       }
 
@@ -1082,7 +1082,6 @@ namespace Editor.Forms
 
       private void helpToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         new InformationForm().ShowDialog();
       }
 
       private void randomModifierToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1542,6 +1541,16 @@ namespace Editor.Forms
 
          var downloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\";
          File.WriteAllText(Path.Combine(downloadFolder, "customAttributes.txt"), sb.ToString());
+      }
+
+      private void infoToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         new InformationForm().ShowDialog();
+      }
+
+      private void clearCrashLogsToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         CrashManager.ClearCrashLogs();
       }
    }
 }

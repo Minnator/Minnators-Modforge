@@ -119,11 +119,11 @@ namespace Editor.Forms.Feature
       {
          if (ShowAllSelections.Checked)
          {
-            VisualizeFull(Globals.HistoryManager.GetRoot());
+            VisualizeFull(Globals.HistoryManager.Root);
          }
          else
          {
-            Visualize(Globals.HistoryManager.GetRoot());
+            Visualize(Globals.HistoryManager.Root);
          }
       }
    }

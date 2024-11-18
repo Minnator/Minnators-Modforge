@@ -6,4 +6,8 @@ public class CInitial : ICommand
    public void Undo() {  }
    public void Redo() {  }
    public string GetDescription() => "Initial Command";
+   public string GetDebugInformation(int indent)
+   {
+      return "Cheese.";
+   }
 }

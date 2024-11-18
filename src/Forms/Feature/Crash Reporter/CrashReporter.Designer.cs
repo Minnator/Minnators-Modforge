@@ -39,7 +39,7 @@
          SaveButton = new Button();
          linkLabel1 = new LinkLabel();
          label4 = new Label();
-         textBox1 = new TextBox();
+         DescriptionBox = new TextBox();
          MainLayoutPanel.SuspendLayout();
          tableLayoutPanel1.SuspendLayout();
          SuspendLayout();
@@ -54,7 +54,7 @@
          MainLayoutPanel.Controls.Add(label3, 0, 2);
          MainLayoutPanel.Controls.Add(tableLayoutPanel1, 0, 5);
          MainLayoutPanel.Controls.Add(label4, 0, 0);
-         MainLayoutPanel.Controls.Add(textBox1, 0, 3);
+         MainLayoutPanel.Controls.Add(DescriptionBox, 0, 3);
          MainLayoutPanel.Dock = DockStyle.Fill;
          MainLayoutPanel.Location = new Point(0, 0);
          MainLayoutPanel.Margin = new Padding(3, 8, 3, 3);
@@ -183,14 +183,14 @@
          label4.Text = "Oh no....! Something went wrong. ";
          label4.TextAlign = ContentAlignment.MiddleCenter;
          // 
-         // textBox1
+         // DescriptionBox
          // 
-         textBox1.Dock = DockStyle.Fill;
-         textBox1.Location = new Point(3, 83);
-         textBox1.Multiline = true;
-         textBox1.Name = "textBox1";
-         textBox1.Size = new Size(598, 188);
-         textBox1.TabIndex = 5;
+         DescriptionBox.Dock = DockStyle.Fill;
+         DescriptionBox.Location = new Point(3, 83);
+         DescriptionBox.Multiline = true;
+         DescriptionBox.Name = "DescriptionBox";
+         DescriptionBox.Size = new Size(598, 188);
+         DescriptionBox.TabIndex = 5;
          // 
          // CrashReporter
          // 
@@ -218,7 +218,7 @@
       private Button button1;
       private Button button2;
       private Button SaveButton;
-      private TextBox textBox1;
+      private TextBox DescriptionBox;
       private Label label3;
       private Label label4;
       private LinkLabel linkLabel1;

@@ -291,7 +291,7 @@ public static class Globals
 // - [ ] 3/2 letters prefix from mods
 // - [-] Support deleting in saving
 // - [x] Toolstip customizer tooltips and fix column width
-// - [ ] Logging and Crash Reporter ==> Map mode crashes catchen und reporten and user so that it restarts
+// - [x] Logging and Crash Reporter ==> Map mode crashes catchen und reporten and user so that it restarts
 // - [x] When searching select the results
 // - [x] Settings window / saving
 // - [x] Open LoadingScreen and MapWindow on the same screen

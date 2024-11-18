@@ -33,4 +33,9 @@ public class CChangeToolTipText : ICommand
    {
       return $"Modified Tooltip string by [{_oldToolTip.Length - _newToolTip.Length}] chars";
    }
+
+   public string GetDebugInformation(int indent)
+   {
+      return $"Changed Tooltip from \"{_oldToolTip}\" to \"{_newToolTip}\"";
+   }
 }

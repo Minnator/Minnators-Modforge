@@ -91,6 +91,11 @@ namespace Editor.DataClasses.Commands
          return $"Added {numbers} {objType} to {newParent.Name}";
       }
 
+      public string GetDebugInformation(int indent)
+      {
+         return $"Added {Composites.Count} {Composites[0].WhatAmI()} to {newParent.Name}";
+      }
+
       public void AddNewComposite(T composite)
       {
          Composites.Add(composite);
@@ -175,6 +180,11 @@ namespace Editor.DataClasses.Commands
          var numbers = Composites.Count;
          var objType = Composites[0].WhatAmI() + (numbers > 1 ? "s" : "");
          return $"Removed {numbers} {objType}";
+      }
+
+      public string GetDebugInformation(int indent)
+      {
+         return $"Removed {Composites.Count} {Composites[0].WhatAmI()}";
       }
 
       public void RemoveNewComposite(T composite)

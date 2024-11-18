@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
+using System.Text;
 using Editor.DataClasses.GameDataClasses;
+using Editor.Saving;
 using static Editor.Helper.ProvinceEnumHelper;
 
 namespace Editor.DataClasses.Commands
@@ -59,6 +61,17 @@ namespace Editor.DataClasses.Commands
          return _provinces.Count == 1
             ? $"Changed {_attribute} of {_provinces[0].Id} ({_provinces[0].GetLocalisation()}) to [{_value}]"
             : $"Changed {_attribute} of [{_provinces.Count}] provinces to [{_value}]";
+      }
+
+      public string GetDebugInformation(int indent)
+      {
+         var sb = new StringBuilder();
+         SavingUtil.AddTabs(indent, ref sb);
+         sb.AppendLine($"Changed {_attribute} to [{_value}] in provinces:");
+         SavingUtil.AddTabs(indent, ref sb);
+         foreach (var province in _provinces)
+            sb.Append($"{province.Id}, ");
+         return sb.ToString();
       }
    }
 }

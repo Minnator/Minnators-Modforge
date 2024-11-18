@@ -1,5 +1,7 @@
-﻿using Editor.DataClasses.GameDataClasses;
+﻿using System.Text;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
+using Editor.Saving;
 
 namespace Editor.DataClasses.Commands
 {
@@ -51,6 +53,20 @@ namespace Editor.DataClasses.Commands
       public string GetDescription()
       {
          return $"Selected [{_selectionDelta.Count}] provinces";
+      }
+
+      public string GetDebugInformation(int indent)
+      {
+         var sb = new StringBuilder();
+         SavingUtil.AddTabs(indent, ref sb);
+         if (_deselect)
+            sb.AppendLine($"Deselected [{_selectionDelta.Count}] provinces:");
+         else
+            sb.AppendLine($"Selected [{_selectionDelta.Count}] provinces:");
+         SavingUtil.AddTabs(indent, ref sb);
+         foreach (var province in _selectionDelta)
+            sb.Append($"{province.Id}, ");
+         return sb.ToString();
       }
    }
 }

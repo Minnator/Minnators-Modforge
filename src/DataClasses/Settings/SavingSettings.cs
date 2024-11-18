@@ -12,6 +12,7 @@ namespace Editor.DataClasses.Settings
       private string _loadingLogLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
       private bool _alwaysAskBeforeCreatingFiles = true;
       private FileSavingMode _fileSavingMode = FileSavingMode.AskOnce;
+      private bool _playCrashSound = true;
 
       [Description(
          "<true> Asks for a filename or location beofre creating a new file\n<false> creates files with default names")]
@@ -46,7 +47,15 @@ namespace Editor.DataClasses.Settings
          get => _errorLogLocation;
          set => SetField(ref _errorLogLocation, value);
       }
-      
+
+      [Description("Play a sound when a crash occurs")]
+      [CompareInEquals]
+      public bool PlayCrashSound
+      {
+         get => _playCrashSound;
+         set => SetField(ref _playCrashSound, value);
+      }
+
       public event PropertyChangedEventHandler? PropertyChanged;
 
       private void OnPropertyChanged([CallerMemberName] string? propertyName = null)

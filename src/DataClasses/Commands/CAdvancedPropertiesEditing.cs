@@ -23,5 +23,10 @@ namespace Editor.DataClasses.Commands
       {
          return $"Modified {Convert.ChangeType(preEditing, preEditing.GetType())} in advanced Prop Editor";
       }
+
+      public string GetDebugInformation(int indent)
+      {
+         return $"Modified {Convert.ChangeType(preEditing, preEditing.GetType())} in advanced Prop Editor";
+      }
    }
 }

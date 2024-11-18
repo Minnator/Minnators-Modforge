@@ -38,5 +38,10 @@ namespace Editor.DataClasses.Commands
       {
          return $"Modify property {property} of {target} to {newValue}";
       }
+
+      public string GetDebugInformation(int indent)
+      {
+         return $"Changed {property} from {oldValue} to {newValue} in {target.WhatAmI()} object ({target})";
+      }
    }
 }

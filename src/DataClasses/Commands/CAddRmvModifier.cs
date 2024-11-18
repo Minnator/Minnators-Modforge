@@ -1,4 +1,6 @@
-﻿using Editor.DataClasses.GameDataClasses;
+﻿using System.Text;
+using Editor.DataClasses.GameDataClasses;
+using Editor.Saving;
 
 namespace Editor.DataClasses.Commands
 {
@@ -49,6 +51,20 @@ namespace Editor.DataClasses.Commands
       public string GetDescription()
       {
          return $"Add {_modifier.Name} to {_provinces.Count} provinces";
+      }
+
+      public string GetDebugInformation(int indent)
+      {
+         var sb = new StringBuilder();
+         SavingUtil.AddTabs(indent, ref sb);
+         if (_add)
+            sb.AppendLine($"Added {_modifier.Name} to {_provinces.Count} provinces:");
+         else
+            sb.AppendLine($"Removed {_modifier.Name} from {_provinces.Count} provinces:");
+         SavingUtil.AddTabs(indent, ref sb);
+         foreach (var province in _provinces)
+            sb.Append($"{province.Id}, ");
+         return sb.ToString();
       }
    }
 }

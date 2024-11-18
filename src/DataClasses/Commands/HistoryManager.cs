@@ -1,4 +1,7 @@
-﻿namespace Editor.DataClasses.Commands;
+﻿using System.Collections;
+using Newtonsoft.Json;
+
+namespace Editor.DataClasses.Commands;
 #nullable enable
 public class HistoryManager
 {
@@ -17,6 +20,8 @@ public class HistoryManager
    public event EventHandler<int>? UndoDepthChanged;
    public event EventHandler<int>? RedoDepthChanged;
    
+   public HistoryNode GetCurrent => _current;
+
    // Add a new command to the history
    public void AddCommand(ICommand newCommand, CommandHistoryType type = CommandHistoryType.Action)
    {
@@ -176,10 +181,7 @@ public class HistoryManager
       return false;
    }
 
-   public HistoryNode GetRoot()
-   {
-      return _root;
-   }
+   public HistoryNode Root => _root;
 
    public void Clear()
    {
@@ -189,13 +191,26 @@ public class HistoryManager
       UndoDepthChanged?.Invoke(this, GetUndoDepth());
       RedoDepthChanged?.Invoke(this, GetRedoDepth());
    }
+
+   public HistoryNode GetNodeAbove(HistoryNode node, int n)
+   {
+      var current = node;
+      for (var i = 0; i < n; i++)
+      {
+         if (current.Parent == null!)
+            return current;
+         current = current.Parent;
+      }
+
+      return current;
+   }
 }
 
 
 //============================================================
 // A Node for the HistoryManager to store the history of commands for undo/redo
 
-public class HistoryNode(int id, ICommand command, CommandHistoryType type, HistoryNode parent = null!)
+public class HistoryNode(int id, ICommand command, CommandHistoryType type, HistoryNode parent = null!) : IEnumerable<(HistoryNode Node, int Level)>
 {
    public int Id { get; } = id;
    public ICommand Command { get; } = command;
@@ -208,5 +223,26 @@ public class HistoryNode(int id, ICommand command, CommandHistoryType type, Hist
       return Children.Single(child => child.Id == id);
    }
 
+   public IEnumerator<(HistoryNode Node, int Level)> GetEnumerator()
+   {
+      return Traverse(this, 0).GetEnumerator();
+   }
+
+   IEnumerator IEnumerable.GetEnumerator()
+   {
+      return GetEnumerator();
+   }
+
+   private IEnumerable<(HistoryNode, int)> Traverse(HistoryNode node, int level)
+   {
+      if (node == null) 
+         yield break;
+
+      yield return (node, level);
+
+      foreach (var child in node.Children)
+         foreach (var descendant in Traverse(child, level + 1))
+            yield return descendant;
+   }
 
 }
