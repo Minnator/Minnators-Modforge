@@ -14,9 +14,11 @@ namespace Editor.Forms.Feature.Crash_Reporter
       {
          InitializeComponent();
 
-
-         using SoundPlayer player = new(Properties.Resources.CrashSound);
-         player.Play();
+         if (Globals.Settings.Saving.PlayCrashSound)
+         {
+            using SoundPlayer player = new(Properties.Resources.CrashSound);
+            player.Play();
+         }
       }
 
       private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

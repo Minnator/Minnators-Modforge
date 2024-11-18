@@ -82,7 +82,7 @@ namespace Editor.Helper
       public static void ClearCrashLogs()
       {
          var files = Directory.GetFiles(LogFolder, $"*.{LOG_FILE_ENDING}");
-         var result = MessageBox.Show($"Are you sure you want to delete all --[{files.Length}]-- crash logs?", "Delete Crash Logs", MessageBoxButtons.OKCancel);
+         var result = MessageBox.Show($"Are you sure you want to delete all --[{files.Length}]-- crash logs?", "Delete Crash Logs", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
 
          if (result != DialogResult.OK)
             return;
