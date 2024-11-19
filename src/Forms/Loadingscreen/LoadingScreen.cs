@@ -64,6 +64,7 @@ namespace Editor.Forms.LoadingScreen
          AdjacenciesLoading.Load,
          UnitTypeLoading.Load,
          IdeasLoading.Load,
+         TerrainBmpLoading.Load,
 
          // Must be last
          ModifierParser.Demilitarize
@@ -163,21 +164,13 @@ namespace Editor.Forms.LoadingScreen
          var sw = Stopwatch.StartNew();
          var progress = 0;
 
-         try
+         foreach (var task in _loadingActions)
          {
-            foreach (var task in _loadingActions)
-            {
-               sw.Restart();
-               task.Invoke(); 
-               sw.Stop();
-               Globals.LoadingLog.WriteTimeStamp(task.Method.DeclaringType?.Name ?? "Unknown", sw.ElapsedMilliseconds);
-               bw.ReportProgress(++progress); 
-            }
-         }
-         catch (Exception exception)
-         {
-            MessageBox.Show(exception.Message + "\n\nTry restarting the application, this may solve many issues. \n\nIf the error persists please use the Crash Reporter to report the error to the developer.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            throw;
+            sw.Restart();
+            task.Invoke();
+            sw.Stop();
+            Globals.LoadingLog.WriteTimeStamp(task.Method.DeclaringType?.Name ?? "Unknown", sw.ElapsedMilliseconds);
+            bw.ReportProgress(++progress);
          }
       }
 

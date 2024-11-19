@@ -86,6 +86,7 @@ public class MapModeManager
       MapModes.Add(new HasCapitalMapMode());
       MapModes.Add(new DiplomaticMapMode());
       MapModes.Add(new TerrainOverrides());
+      MapModes.Add(new TerrainMapMode());
 
 
 
@@ -118,16 +119,14 @@ public class MapModeManager
       try
       {
          // CAN be null
-         // REMOVE old event handle form GlobalsEventhandler
          if (CurrentMapMode?.GetMapModeName() == name)
-            return; // no need to change map mode if it is already the same
+            return; 
          CurrentMapMode?.SetInactive();
          CurrentMapMode = GetMapMode(name);
          CurrentMapMode.SetActive();
          _stopwatch.Restart();
          CurrentMapMode.RenderMapMode(CurrentMapMode.GetProvinceColor);
          _stopwatch.Stop();
-         GC.Collect(); // We need to collect the garbage to free up memory but this is not ideal
          Globals.MapWindow.MapModeComboBox.SelectedItem = name.ToString();
          CurrentMapModeType = name;
 
@@ -148,6 +147,8 @@ public class MapModeManager
       }
       catch (Exception)
       {
+         MessageBox.Show("Mapmode rendering failed.\nTry again and if the issue persists contact a developer",
+            "Error in Rendering!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
          SetCurrentMapMode(MapModeType.Province);
       }
    }

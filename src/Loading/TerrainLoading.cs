@@ -182,7 +182,8 @@ public static class TerrainLoading
          }
 
          colorIndex = Parsing.GetByteListFromString(blk.GetBlockElements[0].GetContent).ToArray();
-         treeDefinitions.AddDefinition(name, terrain, colorIndex);
+         // find the terrain with equal name
+         treeDefinitions.AddDefinition(name, Globals.Terrains.Find(x => x.Name.Equals(terrain)) ?? Terrain.Empty, colorIndex);
       }
    }
 
@@ -222,7 +223,7 @@ public static class TerrainLoading
             continue;
          }
 
-         terrainDefinitions.AddDefinition(name, type, colorIndex);
+         terrainDefinitions.AddDefinition(name, Globals.Terrains.Find(x => x.Name.Equals(type)) ?? Terrain.Empty, colorIndex);
       }
    }
 }

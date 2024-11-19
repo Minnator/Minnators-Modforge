@@ -1,6 +1,6 @@
 ﻿using Editor.DataClasses.GameDataClasses;
 
-namespace Editor.Debug;
+namespace Editor.Testing;
 
 public static class DebugPrints
 {

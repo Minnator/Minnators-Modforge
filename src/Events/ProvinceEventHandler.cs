@@ -376,4 +376,12 @@ public static class ProvinceEventHandler
       OnSuperRegionRegionChanged.Invoke(id, new(value, propertyName));
       RaiseProvinceDataChanged(id, value, propertyName);
    }
+
+   // Terrain
+   public static event EventHandler<ProvinceDataChangedEventArgs> OnProvinceTerrainChanged = delegate { };
+   public static void RaiseProvinceTerrainChanged(Province id, object value, string propertyName)
+   {
+      OnProvinceTerrainChanged.Invoke(id, new(value, propertyName));
+      RaiseProvinceDataChanged(id, value, propertyName);
+   }
 }

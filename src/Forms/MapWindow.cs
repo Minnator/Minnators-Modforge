@@ -8,7 +8,7 @@ using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Misc;
 using Editor.DataClasses.Settings;
-using Editor.Debug;
+using Editor.Testing;
 using Editor.Events;
 using Editor.Forms.Feature;
 using Editor.Forms.Feature.Crash_Reporter;

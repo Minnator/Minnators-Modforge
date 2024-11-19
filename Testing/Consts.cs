@@ -1,4 +1,4 @@
-﻿namespace Editor.Debug;
+﻿namespace Editor.Testing;
 
 public class Consts
 {

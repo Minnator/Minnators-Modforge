@@ -42,6 +42,34 @@ public class Terrain(string name) : INotifyPropertyChanged
       return true;
    }
 
+   public static Terrain Empty => new("undefined");
+
+
+   public override bool Equals(object? obj)
+   {
+      if (obj == null) return false;
+
+      if (obj is Terrain terrain)
+         return Name == terrain.Name;
+
+      return false;
+   }
+
+   public override int GetHashCode()
+   {
+      return Name.GetHashCode();
+   }
+
+   public static bool operator ==(Terrain a, Terrain b)
+   {
+      return a.Equals(b);
+   }
+
+   public static bool operator !=(Terrain a, Terrain b)
+   {
+      return !a.Equals(b);
+   }
+
    #endregion
       
 }
@@ -51,10 +79,10 @@ public class Terrain(string name) : INotifyPropertyChanged
 public struct TDefinition
 {
    public string Name { get; set; }
-   public string Type { get; set; }
+   public Terrain Type { get; set; }
    public byte ColorIndex { get; set; }
 
-   public TDefinition(string name, string type, byte colorIndex)
+   public TDefinition(string name, Terrain type, byte colorIndex)
    {
       Name = name;
       Type = type;
@@ -68,7 +96,7 @@ public class TerrainDefinitions
 {
    List<TDefinition> Definitions = [];
 
-   public void AddDefinition(string name, string type, byte colorIndex)
+   public void AddDefinition(string name, Terrain type, byte colorIndex)
    {
       Definitions.Add(new TDefinition(name, type, colorIndex));
    }
@@ -82,6 +110,16 @@ public class TerrainDefinitions
       sb.AppendLine("}");
       return sb.ToString();
    }
+
+   public Terrain GetTerrainForIndex(int index)
+   {
+      foreach (var def in Definitions)
+      {
+         if (def.ColorIndex == index)
+            return def.Type;
+      }
+      return Terrain.Empty;
+   }
 }
 
 #endregion
@@ -91,10 +129,10 @@ public class TerrainDefinitions
 public struct TreeDefinition
 {
    public string Name { get; set; }
-   public string Terrain { get; set; }
+   public Terrain Terrain { get; set; }
    public byte[] ColorIndex { get; set; }
 
-   public TreeDefinition(string name, string terrain, byte[] colorIndex)
+   public TreeDefinition(string name, Terrain terrain, byte[] colorIndex)
    {
       Name = name;
       Terrain = terrain;
@@ -106,9 +144,9 @@ public struct TreeDefinition
 
 public class TreeDefinitions
 {
-   List<TreeDefinition> Definitions = [];
+   public List<TreeDefinition> Definitions = [];
 
-   public void AddDefinition(string name, string terrain, byte[] colorIndex)
+   public void AddDefinition(string name, Terrain terrain, byte[] colorIndex)
    {
       Definitions.Add(new TreeDefinition(name, terrain, colorIndex));
    }
@@ -121,6 +159,16 @@ public class TreeDefinitions
          sb.AppendLine(def.GetSavingString());
       sb.AppendLine("}");
       return sb.ToString();
+   }
+
+   public Terrain GetTerrainForIndex(int index)
+   {
+      foreach (var def in Definitions)
+      {
+         if (def.ColorIndex.Contains((byte)index))
+            return def.Terrain;
+      }
+      return Terrain.Empty;
    }
 }
 
