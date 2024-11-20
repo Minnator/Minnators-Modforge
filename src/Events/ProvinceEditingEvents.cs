@@ -566,5 +566,11 @@ namespace Editor.Events
             type, false));
       }
 
+      public static void OnTerrainChanged(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (!Globals.AllowEditing || e?.Value == null)
+            return;
+
+      }
    }
 }

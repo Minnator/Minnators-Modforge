@@ -283,7 +283,7 @@ public static class Globals
 // - [x] Localisation editing for provinces and modifiers
 // - [x] Check if province is selected by color of the pixels instead of bounds or center
 // - [ ] Trade fix   //UI
-// - [-] River fixes //UI
+// - [x] River fixes //UI
 // - [x] Province ADJ localization fix
 // - [x] Language in quicksettings fix
 // - [x] File saving popup for saving map mode

@@ -13,6 +13,7 @@ namespace Editor.DataClasses.Settings
       private bool _alwaysAskBeforeCreatingFiles = true;
       private FileSavingMode _fileSavingMode = FileSavingMode.AskOnce;
       private bool _playCrashSound = true;
+      private string _modPrefix = "mmf";
 
       [Description(
          "<true> Asks for a filename or location beofre creating a new file\n<false> creates files with default names")]
@@ -55,6 +56,15 @@ namespace Editor.DataClasses.Settings
          get => _playCrashSound;
          set => SetField(ref _playCrashSound, value);
       }
+
+      [Description("The prefix which will be use in all created objects e.g. eventmodifier names, file names, etc...")]
+      [CompareInEquals]
+      public string ModPrefix
+      {
+         get => _modPrefix;
+         set => SetField(ref _modPrefix, value);
+      }
+
 
       public event PropertyChangedEventHandler? PropertyChanged;
 

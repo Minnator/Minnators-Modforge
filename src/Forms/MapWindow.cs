@@ -17,6 +17,7 @@ using Editor.Forms.PopUps;
 using Editor.Helper;
 using Editor.Loading;
 using Editor.Saving;
+using Editor.src.Forms.GetUserInput;
 using static Editor.Helper.ProvinceEnumHelper;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 using MethodInvoker = System.Windows.Forms.MethodInvoker;
@@ -50,6 +51,7 @@ namespace Editor.Forms
 
       private TagComboBox _tribalOwner = null!;
       private ExtendedComboBox _tradeCompanyInvestments = null!;
+      private ExtendedComboBox _terrainComboBox = null!;
 
       private NumberTextBox _nativesSizeTextBox = null!;
       private NumberTextBox _nativeFerocityTextBox = null!;
@@ -251,7 +253,7 @@ namespace Editor.Forms
          var button8 = ControlFactory.GetMapModeButton('i');
          button8.SetMapMode(MapModeType.Development);
          var button9 = ControlFactory.GetMapModeButton('o');
-         button9.SetMapMode(MapModeType.CenterOfTrade);
+         button9.SetMapMode(MapModeType.Terrain);
          var button10 = ControlFactory.GetMapModeButton('p');
          button10.SetMapMode(MapModeType.Autonomy);
          MMButtonsTLPanel.Controls.Add(button01, 0, 0);
@@ -315,8 +317,8 @@ namespace Editor.Forms
          OwnerTagBox.OnTagChanged += ProvinceEditingEvents.OnOwnerChanged;
          ControllerTagBox = ControlFactory.GetTagComboBox();
          ControllerTagBox.OnTagChanged += ProvinceEditingEvents.OnControllerChanged;
-         OwnerControllerLayoutPanel.Controls.Add(OwnerTagBox, 1, 0);
-         OwnerControllerLayoutPanel.Controls.Add(ControllerTagBox, 1, 1);
+         MisProvinceData.Controls.Add(OwnerTagBox, 1, 0);
+         MisProvinceData.Controls.Add(ControllerTagBox, 1, 1);
 
          _cores = ControlFactory.GetItemList(ItemTypes.Tag, [.. Globals.Countries.Keys], "Cores");
          _cores.OnItemAdded += ProvinceEditingEvents.OnCoreAdded;
@@ -363,16 +365,44 @@ namespace Editor.Forms
          List<string> culturesString = [.. Globals.Cultures.Keys];
          culturesString.Sort();
          _cultureComboBox = ControlFactory.GetExtendedComboBox();
-         RCCLayoutPanel.Controls.Add(_cultureComboBox, 1, 1);
+         MisProvinceData.Controls.Add(_cultureComboBox, 1, 3);
          _cultureComboBox.Items.AddRange([.. culturesString]);
          _cultureComboBox.OnDataChanged += ProvinceEditingEvents.OnCultureChanged;
 
          List<string> religionsString = [.. Globals.Religions.Keys];
          religionsString.Sort();
          _religionComboBox = ControlFactory.GetExtendedComboBox();
-         RCCLayoutPanel.Controls.Add(_religionComboBox, 1, 0);
+         MisProvinceData.Controls.Add(_religionComboBox, 1, 2);
          _religionComboBox.Items.AddRange([.. religionsString]);
          _religionComboBox.OnDataChanged += ProvinceEditingEvents.OnReligionChanged;
+
+         List<string> terrainString = [string.Empty];
+         terrainString.AddRange([.. Globals.Terrains.Select(x => x.Name).ToList()]);
+         terrainString.Sort();
+         _terrainComboBox = ControlFactory.GetExtendedComboBox();
+         _terrainComboBox.Items.AddRange([.. terrainString]);
+         _terrainComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+         _terrainComboBox.OnDataChanged += (_, args) =>
+         {
+            if (args.Value is not string val)
+               return;
+
+            if (val.Equals(string.Empty))
+            {
+               foreach (var p in args.Provinces)
+                  Terrain.RemoveFromAll(p);
+            }
+            else
+            {
+               foreach (var p in args.Provinces)
+                  foreach (var ter in Globals.Terrains.Where(ter => ter.Name.Equals(val)))
+                  {
+                     ter.SetOverride(p);
+                     break;
+                  }
+            }
+         };
+         MisProvinceData.Controls.Add(_terrainComboBox, 1, 5);
 
          _taxNumeric = ControlFactory.GetExtendedNumeric();
          _taxNumeric.Minimum = 0;
@@ -384,7 +414,7 @@ namespace Editor.Forms
          _taxNumeric.DownButtonPressedSmall += ProvinceEditingEvents.OnDownBaseTaxChanged;
          _taxNumeric.DownButtonPressedMedium += ProvinceEditingEvents.OnDownBaseTaxButtonPressedMedium;
          _taxNumeric.DownButtonPressedLarge += ProvinceEditingEvents.OnDownBaseTaxButtonPressedLarge;
-         DevelopmentLayoutPanel.Controls.Add(_taxNumeric, 1, 0);
+         MisProvinceData.Controls.Add(_taxNumeric, 3, 0);
 
          _prdNumeric = ControlFactory.GetExtendedNumeric();
          _prdNumeric.Minimum = 0;
@@ -396,7 +426,7 @@ namespace Editor.Forms
          _prdNumeric.DownButtonPressedSmall += ProvinceEditingEvents.OnDownBaseProductionChanged;
          _prdNumeric.DownButtonPressedMedium += ProvinceEditingEvents.OnDownButtonPressedMediumProduction;
          _prdNumeric.DownButtonPressedLarge += ProvinceEditingEvents.OnDownButtonPressedLargeProduction;
-         DevelopmentLayoutPanel.Controls.Add(_prdNumeric, 1, 1);
+         MisProvinceData.Controls.Add(_prdNumeric, 3, 1);
 
          _mnpNumeric = ControlFactory.GetExtendedNumeric();
          _mnpNumeric.Minimum = 0;
@@ -408,7 +438,7 @@ namespace Editor.Forms
          _mnpNumeric.DownButtonPressedSmall += ProvinceEditingEvents.OnDownBaseManpowerChanged;
          _mnpNumeric.DownButtonPressedMedium += ProvinceEditingEvents.OnDownButtonPressedMediumManpower;
          _mnpNumeric.DownButtonPressedLarge += ProvinceEditingEvents.OnDownButtonPressedLargeManpower;
-         DevelopmentLayoutPanel.Controls.Add(_mnpNumeric, 1, 2);
+         MisProvinceData.Controls.Add(_mnpNumeric, 3, 2);
 
          _autonomyNumeric = ControlFactory.GetExtendedNumeric();
          _autonomyNumeric.Minimum = 0;
@@ -597,6 +627,8 @@ namespace Editor.Forms
             _nativeFerocityTextBox.Text = nativeFerocity.ToString(CultureInfo.InvariantCulture);
          if (Selection.GetSharedAttribute(ProvAttrGet.native_hostileness, out result) && result is float nativeHostileness)
             _nativeHostilityTextBox.Text = nativeHostileness.ToString(CultureInfo.InvariantCulture);
+         if (Selection.GetSharedAttribute(ProvAttrGet.terrain, out result) && result is Terrain terrain)
+            _terrainComboBox.Text = terrain.Name;
          // TODO The Gui needs to be able to represent several trade company investments
          //if (Selection.GetSharedAttribute(ProvAttrGet.trade_company_investment, out result) && result is string tradeCompanyInvestments)
          //   _tradeCompanyInvestments.Text = tradeCompanyInvestments;
@@ -644,7 +676,7 @@ namespace Editor.Forms
          _nativesSizeTextBox.Text = province.NativeSize.ToString();
          _nativeFerocityTextBox.Text = province.NativeFerocity.ToString(CultureInfo.InvariantCulture);
          _nativeHostilityTextBox.Text = province.NativeHostileness.ToString(CultureInfo.InvariantCulture);
-         // _tradeCompanyInvestments.Text = province.TradeCompanyInvestments;
+         _terrainComboBox.Text = province.Terrain.Name;
          AddAllModifiersToListView(province);
          ResumeLayout();
          Globals.EditingStatus = EditingStatus.Idle;
@@ -687,6 +719,7 @@ namespace Editor.Forms
          LocalisationLabel.Text = string.Empty;
          ProvAdjTextBox.Text = string.Empty;
          ProvAdjLabel.Text = string.Empty;
+         _terrainComboBox.SelectedItem = string.Empty;
       }
       #endregion
 
@@ -1551,6 +1584,40 @@ namespace Editor.Forms
       private void clearCrashLogsToolStripMenuItem_Click(object sender, EventArgs e)
       {
          CrashManager.ClearCrashLogs();
+      }
+
+      private void toolStripMenuItem4_Click(object sender, EventArgs e)
+      {
+         var sb = new StringBuilder();
+         foreach (var terrain in Globals.Terrains)
+         {
+            sb.AppendLine($"{terrain.Name} : {terrain.TerrainOverrides.Count}");
+            foreach (var or in terrain.TerrainOverrides)
+            {
+               sb.Append($"{or.Id}, ");
+            }
+            sb.AppendLine();
+         }
+
+         var downloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\";
+         File.WriteAllText(Path.Combine(downloadFolder, "terrainOverrides.txt"), sb.ToString());
+      }
+
+      private void deleteProvinceHistoryEntriesToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         GetDateInput dateInputForm = new ("Select the date:");
+         dateInputForm.ShowDialog();
+         if (dateInputForm.DialogResult == DialogResult.OK)
+         {
+            if (!dateInputForm.GetDate(out var date))
+               return;
+
+            foreach (var province in Globals.Provinces)
+               for (var i = province.History.Count - 1; i >= 0; i--)
+                  if (province.History[i].Date >= date)
+                     province.History.RemoveAt(i);
+         }
+
       }
    }
 }

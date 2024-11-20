@@ -61,6 +61,7 @@ namespace Editor.Helper
          [ProvAttrMetadata(ProvAttrType.Int)] total_development,
          [ProvAttrMetadata(ProvAttrType.String)] continent,
          [ProvAttrMetadata(ProvAttrType.List)] buildings,
+         [ProvAttrMetadata(ProvAttrType.String)] terrain,
       }
       public enum ProvAttrSet
       {

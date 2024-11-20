@@ -302,10 +302,6 @@ namespace Editor.Loading
          resultBmp4.UnlockBits(resultData4);
          resultBmp4.Save("terrainFromProvinces.png", ImageFormat.Png);
 
-         foreach (var ter in Globals.Terrains)
-            foreach (var province in ter.TerrainOverrides) 
-               province.Terrain = ter;
-
          // paint combined map
 
          var resultBmp5 = new Bitmap(Globals.MapWidth, Globals.MapHeight);

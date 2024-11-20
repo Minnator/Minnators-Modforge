@@ -6,6 +6,7 @@ namespace Editor.DataClasses.GameDataClasses;
 
 public class Terrain(string name) : INotifyPropertyChanged
 {
+   public static EventHandler<Province> OnTerrainChanged = delegate { };
    public string Name { get; set; } = name;
    public Color Color { get; set; } = Color.DimGray;
    public string SoundType = string.Empty;
@@ -18,7 +19,7 @@ public class Terrain(string name) : INotifyPropertyChanged
 
    public List<Modifier> Modifiers = [];
 
-   public List<Province> TerrainOverrides = [];
+   public HashSet<Province> TerrainOverrides = [];
 
    public override string ToString()
    {
@@ -43,6 +44,30 @@ public class Terrain(string name) : INotifyPropertyChanged
    }
 
    public static Terrain Empty => new("undefined");
+
+   public void SetOverride(Province p)
+   {
+      foreach (var ter in Globals.Terrains.Where(ter => ter.TerrainOverrides.Contains(p))) 
+         ter.TerrainOverrides.Remove(p);
+      TerrainOverrides.Add(p);
+      OnPropertyChanged(nameof(TerrainOverrides));
+      OnTerrainChanged.Invoke(this, p);
+   }
+
+   public void RemoveOverride(Province p)
+   {
+      TerrainOverrides.Remove(p);
+      OnPropertyChanged(nameof(TerrainOverrides));
+      OnTerrainChanged.Invoke(this, p);
+   }
+
+   public static void RemoveFromAll(Province p)
+   {
+      foreach (var ter in Globals.Terrains) 
+         ter.TerrainOverrides.Remove(p);
+
+      OnTerrainChanged.Invoke(null, p);
+   }
 
 
    public override bool Equals(object? obj)

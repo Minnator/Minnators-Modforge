@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Parser;
@@ -140,15 +141,17 @@ public class Province(int id, Color color) : ProvinceComposite(id.ToString(), co
 
    // Province data
    public Terrain AutoTerrain = Terrain.Empty;
-   private Terrain _terrain = Terrain.Empty;
    public Terrain Terrain
    {
-      get => _terrain;
-      set
+      get
       {
-         _terrain = value;
-         if (Globals.State == State.Running)
-            RaiseProvinceTerrainChanged(this, value, nameof(Terrain));
+         foreach (var terrain in Globals.Terrains)
+         {
+            if (terrain.TerrainOverrides.Contains(this))
+               return terrain;
+         }
+
+         return Terrain.Empty;
       }
    }
 
@@ -835,6 +838,7 @@ public class Province(int id, Color color) : ProvinceComposite(id.ToString(), co
          ProvAttrGet.prosperity => Prosperity,
          ProvAttrGet.latent_trade_good => LatentTradeGood,
          ProvAttrGet.citysize => CitySize,
+         ProvAttrGet.terrain => Terrain,
          _ => ""
       };
    }
