@@ -48,7 +48,9 @@ namespace Editor.Loading
                unsafe
                {
                   for (var y = 0; y < height; y++)
+                  {
                      line[y] = palette[*((byte*)scan0 + x + y * stride)].ToArgb();
+                  }
                }
                colorMap[x] = line;
             });
@@ -210,7 +212,7 @@ namespace Editor.Loading
 
             foreach (var col in colorCounts)
             {
-               if (col.Value > maxCount)
+               if (col.Value > maxCount && col.Value != blackInt)
                {
                   maxCount = col.Value;
                   maxColor = col.Key;
@@ -318,10 +320,7 @@ namespace Editor.Loading
                unsafe
                {
                   int color;
-                  if (Equals(province.Terrain, Terrain.Empty))
-                     color = province.AutoTerrain.Color.ToArgb();
-                  else
-                     color = province.Terrain.Color.ToArgb();
+                  color = province.Terrain == Terrain.Empty ? province.AutoTerrain.Color.ToArgb() : province.Terrain.Color.ToArgb();
 
                   foreach (var point in province.Pixels) 
                      *((int*)resultScan05 + point.X + point.Y * resultStride5 / 4) = color;

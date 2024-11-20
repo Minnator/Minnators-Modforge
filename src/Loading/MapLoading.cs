@@ -84,9 +84,11 @@ public static class MapLoading
                {
                   var nRow = (byte*)scan0 + (y - 1) * stride;
                   var colN = Color.FromArgb(nRow[xTimesThree + 2], nRow[xTimesThree + 1], nRow[xTimesThree]).ToArgb();
-                  if (colN != currentColor) 
+                  if (colN != currentColor)
                      AddBorderAndAdj(colN, ref found);
                }
+               else
+                  AddBorder(ref found);
 
                if (x < widthMinusOne)
                {
@@ -94,6 +96,8 @@ public static class MapLoading
                   if (colN != currentColor) 
                      AddBorderAndAdj(colN, ref found);
                }
+               else
+                  AddBorder(ref found);
 
                if (y < heightMinusOne)
                {
@@ -102,6 +106,8 @@ public static class MapLoading
                   if (colN != currentColor) 
                      AddBorderAndAdj(colN, ref found);
                }
+               else
+                  AddBorder(ref found);
 
                if (x > 0)
                {
@@ -109,6 +115,8 @@ public static class MapLoading
                   if (colN != currentColor) 
                      AddBorderAndAdj(colN, ref found);
                }
+               else
+                  AddBorder(ref found);
 
                continue;
 
@@ -133,6 +141,19 @@ public static class MapLoading
                      localColorToAdj[currentColor] = adjColors;
                   }
                   adjColors.Add(neighborColor);
+               }
+               void AddBorder(ref bool found)
+               {
+                  if (!found)
+                  {
+                     if (!localColorToBorder.TryGetValue(currentColor, out var borderPoints))
+                     {
+                        borderPoints = [];
+                        localColorToBorder[currentColor] = borderPoints;
+                     }
+                     borderPoints.Add(currentPoint);
+                     found = true;
+                  }
                }
             }
 

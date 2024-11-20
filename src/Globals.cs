@@ -297,6 +297,7 @@ public static class Globals
 // - [x] Open LoadingScreen and MapWindow on the same screen
 // - [x] Discord Rich Presence
 // - [-] Country Collection Editing, Saving is broken
+// - [-] Terrain Editing and map mode
 
 
 // TODO LIST Until Alpha 1.1

@@ -424,13 +424,13 @@ public sealed class ZoomControl : Control, IDisposable
       }
       //var point = ReverseCoordinate(MapRectangle.Location);
 
-      var zeroPoint = ReverseCoordinateFloat(new(1f,0));
+      var zeroPoint = ReverseCoordinateFloat(new(0f,0));
 
       test = test with { Width = - MapRectangle.X, X = _map.Width + MapRectangle.X }; //map.Width + MapRectangle.X
 
       thisRect.X = 0;
 
-      thisRect = thisRect with { Width = (int)Math.Ceiling(zeroPoint.X)};
+      thisRect = thisRect with { Width = (int)Math.Ceiling(zeroPoint.X + 1.5)};
       DrawStretch(HBitmap, _bmpGfx, e.Graphics, test, thisRect);
       DrawBorder(e.Graphics);
 

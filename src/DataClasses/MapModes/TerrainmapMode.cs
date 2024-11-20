@@ -1,4 +1,5 @@
-﻿using Editor.DataClasses.GameDataClasses;
+﻿using System.Diagnostics;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 
 namespace Editor.DataClasses.MapModes
@@ -13,7 +14,10 @@ namespace Editor.DataClasses.MapModes
       public override int GetProvinceColor(Province id)
       {
          if (id.Terrain == Terrain.Empty)
-            return id.AutoTerrain.Color.ToArgb();
+            if(Globals.Settings.Rendering.ShowOceansAsGreyInTerrain && id.AutoTerrain.Name.ToLower().Equals("ocean"))
+               return Color.DimGray.ToArgb();
+            else
+               return id.AutoTerrain.Color.ToArgb();
          return id.Terrain.Color.ToArgb();
       }
 

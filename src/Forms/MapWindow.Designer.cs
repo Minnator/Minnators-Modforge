@@ -615,14 +615,14 @@
          // infoToolStripMenuItem
          // 
          infoToolStripMenuItem.Name = "infoToolStripMenuItem";
-         infoToolStripMenuItem.Size = new Size(180, 22);
+         infoToolStripMenuItem.Size = new Size(162, 22);
          infoToolStripMenuItem.Text = "Info";
          infoToolStripMenuItem.Click += infoToolStripMenuItem_Click;
          // 
          // clearCrashLogsToolStripMenuItem
          // 
          clearCrashLogsToolStripMenuItem.Name = "clearCrashLogsToolStripMenuItem";
-         clearCrashLogsToolStripMenuItem.Size = new Size(180, 22);
+         clearCrashLogsToolStripMenuItem.Size = new Size(162, 22);
          clearCrashLogsToolStripMenuItem.Text = "Clear Crash Logs";
          clearCrashLogsToolStripMenuItem.Click += clearCrashLogsToolStripMenuItem_Click;
          // 

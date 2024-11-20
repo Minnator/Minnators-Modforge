@@ -13,6 +13,7 @@ namespace Editor.DataClasses.Settings
       private Color _mapBorderColor = Color.Black;
       private int _mapBorderWidth = 2;
       private int _minVisiblePixels = 80;
+      private bool _showOceansAsGreyInTerrain = true;
 
       [Description("The direction of occupation stripes on the map")]
       [CompareInEquals]
@@ -52,6 +53,14 @@ namespace Editor.DataClasses.Settings
       {
          get => _minVisiblePixels;
          set => SetField(ref _minVisiblePixels, value);
+      }
+
+      [Description("If the oceans will be shown as grey in the terrain map mode")]
+      [CompareInEquals]
+      public bool ShowOceansAsGreyInTerrain
+      {
+         get => _showOceansAsGreyInTerrain;
+         set => SetField(ref _showOceansAsGreyInTerrain, value);
       }
 
 

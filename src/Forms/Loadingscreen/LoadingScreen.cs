@@ -64,7 +64,8 @@ namespace Editor.Forms.LoadingScreen
          AdjacenciesLoading.Load,
          UnitTypeLoading.Load,
          IdeasLoading.Load,
-         TerrainBmpLoading.Load,
+         AutoTerrainCalculations.Load,
+         HeightMapLoading.Load,
 
          // Must be last
          ModifierParser.Demilitarize

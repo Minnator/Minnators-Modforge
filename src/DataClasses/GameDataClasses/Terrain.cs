@@ -94,7 +94,7 @@ public struct TDefinition
 
 public class TerrainDefinitions
 {
-   List<TDefinition> Definitions = [];
+   public List<TDefinition> Definitions = [];
 
    public void AddDefinition(string name, Terrain type, byte colorIndex)
    {
@@ -119,6 +119,17 @@ public class TerrainDefinitions
             return def.Type;
       }
       return Terrain.Empty;
+   }
+
+   public List<KeyValuePair<int, Terrain>> GetColorToTerrain()
+   {
+      List<KeyValuePair<int, Terrain>> kvps = [];
+      for (var i = 0; i < Definitions.Count; i++)
+      {
+         var terrain = GetTerrainForIndex(Definitions[i].ColorIndex);
+         kvps.Add(new(Definitions[i].ColorIndex, terrain));
+      }
+      return kvps;
    }
 }
 
@@ -169,6 +180,20 @@ public class TreeDefinitions
             return def.Terrain;
       }
       return Terrain.Empty;
+   }
+
+   public List<KeyValuePair<int, Terrain>> GetColorToIndexKvps()
+   {
+      List<KeyValuePair<int, Terrain>> kvps = [];
+      for (var i = 0; i < Definitions.Count; i++)
+      {
+         for (var j = 0; j < Definitions[i].ColorIndex.Length; j++)
+         {
+            var terrain = GetTerrainForIndex(Definitions[i].ColorIndex[j]);
+            kvps.Add(new(Definitions[i].ColorIndex[j], terrain));
+         }
+      }
+      return kvps;
    }
 }
 

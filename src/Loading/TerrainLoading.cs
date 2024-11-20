@@ -184,6 +184,10 @@ public static class TerrainLoading
          colorIndex = Parsing.GetByteListFromString(blk.GetBlockElements[0].GetContent).ToArray();
          // find the terrain with equal name
          treeDefinitions.AddDefinition(name, Globals.Terrains.Find(x => x.Name.Equals(terrain)) ?? Terrain.Empty, colorIndex);
+
+         foreach (var ter in Globals.Terrains)
+            foreach (var province in ter.TerrainOverrides)
+               province.Terrain = ter;
       }
    }
 

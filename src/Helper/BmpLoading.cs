@@ -48,6 +48,12 @@ namespace Editor.Helper
          return (riverSizes, bmp.Palette.Entries);
       }
 
+      public static Bitmap ResizeIndexedBitmap(string input, int width, int height)
+      {
+         using var bmp = new Bitmap(input);
+         return ResizeIndexedBitmap(bmp, width, height);
+      }
+
       public static Bitmap ResizeIndexedBitmap(Bitmap input, int width, int height)
       {
          var bpp24Map = new Bitmap(width, height, PixelFormat.Format24bppRgb);
