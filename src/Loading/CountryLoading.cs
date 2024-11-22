@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.Text;
 using System.Text.RegularExpressions;
 using Editor.DataClasses.GameDataClasses;
@@ -83,6 +84,13 @@ namespace Editor.Loading
       {
          if (element is Block block)
          {
+            if (EffectParser.IsAnyEffectCountryHistory(block.Name))
+            {
+               EffectParser.ParseEffect(block.Name, block.GetContent, out var eff);
+               country.HistoryCountry.InitialEffects.Add(eff);
+               return;
+            }
+
             switch (block.Name)
             {
                case "add_country_modifier":
@@ -226,9 +234,10 @@ namespace Editor.Loading
                return;
          }
 
+
          che = new(date);
-         TempHistoryEntries(ref che, block.Blocks);
-         return;
+         //TempHistoryEntries(ref che, block.Blocks);
+         //return;
          //TODO: properly implement this after pdx language parser is written
          AssignHistoryEntryAttributes(ref che, block.Blocks);
          AssignHistoryEntryContent(ref che, block.GetContentElements);
@@ -291,10 +300,21 @@ namespace Editor.Loading
                   var effect = EffectFactory.CreateComplexEffect(block.Name, block.GetContent, EffectValueType.Complex);
                   che.Effects.Add(effect);
                   break;
+               case "if":
+                  che.IsDummy = true;
+                  che.Content = block.GetAllContent;
+                  break;
+               case "change_price":
+                  if (EffectParser.ParseChangePriceEffect(block.GetContent, out var priceEffect))
+                     che.Effects.Add(priceEffect);
+                  else
+                     Globals.ErrorLog.Write($"Invalid change_price effect in {che}: {block.GetContent}");
+                  break;
                default:
+                  Globals.ErrorLog.Write($"Unknown block in history entry: {block.Name}");
+                  break;
                   if (Parsing.ParseDynamicContent(block, out _))
                      break;
-                  Globals.ErrorLog.Write($"Unknown block in history entry: {block.Name}");
                   break;
             }
          }

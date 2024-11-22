@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Editor.DataClasses.Commands;
@@ -150,10 +151,11 @@ public class CommonCountry(string fileName, Country country) : Saveable
          AddString(0, "colonial_parent", ColonialParent.ToString(), ref sb);
       if (RandomNationChance != -1)
          AddInt(0, "random_nation_chance", RandomNationChance, ref sb);
-      AddString(0, "historical_council", HistoricalCouncil, ref sb);
-      AddString(0, "preferred_religion", PreferredReligion, ref sb);
-      AddString(0, "special_unit_culture", SpecialUnitCulture, ref sb);
+      AddString(0, HistoricalCouncil, "historical_council", ref sb);
+      AddString(0, PreferredReligion, "preferred_religion", ref sb);
+      AddString(0, SpecialUnitCulture, "special_unit_culture", ref sb);
       AddInt(0, "historical_score", HistoricalScore, ref sb);
+      sb.AppendLine();
       AddFormattedStringListOnePerRow("historical_idea_groups", HistoricIdeas, 0, ref sb);
       AddFormattedStringListOnePerRow("historical_units", HistoricUnits, 0, ref sb);
       AddFormattedStringListOnePerRow("leader_names", LeaderNames, 0, ref sb);
@@ -349,15 +351,15 @@ public class HistoryCountry(Country country) : Saveable
    public override string GetSaveString(int tabs)
    {
       var sb = new StringBuilder();
-      AddString(0, "government", Government, ref sb);
+      AddString(0, Government, "government", ref sb);
       AddStringList(0, "add_government_reform", GovernmentReforms, ref sb);
       AddInt(0, "government_rank", GovernmentRank, ref sb);
-      AddString(0, "primary_culture", PrimaryCulture, ref sb);
+      AddString(0, PrimaryCulture, "primary_culture", ref sb);
       AddStringList(0, "add_accepted_culture", AcceptedCultures, ref sb);
-      AddString(0, "religion", Religion, ref sb);
-      AddString(0, "secondary_religion", SecondaryReligion, ref sb);
-      AddString(0, "technology_group", TechnologyGroup.ToString(), ref sb);
-      AddString(0, "unit_type", UnitType, ref sb);
+      AddString(0, Religion, "religion", ref sb);
+      AddString(0, SecondaryReligion, "secondary_religion", ref sb);
+      AddString(0, TechnologyGroup.ToString(), "technology_group", ref sb);
+      AddString(0, UnitType, "unit_type", ref sb);
       if (Capital != Province.Empty)
          AddInt(0, "capital", Capital.Id, ref sb);
       if (FixedCapital != -1)
@@ -369,10 +371,10 @@ public class HistoryCountry(Country country) : Saveable
       AddStringList(0, "historical_rival", HistoricalRivals.Select(tag => tag.ToString()).ToList(), ref sb);
       AddEffects(0, InitialEffects, ref sb);
       if (NationalFocus != Mana.NONE)
-         AddString(0, "national_focus", NationalFocus.ToString(), ref sb);
+         AddString(0, NationalFocus.ToString(), "national_focus", ref sb);
       AddStringList(0, "set_estate_privilege", EstatePrivileges, ref sb);
       AddStringList(0, "add_harmonized_religion", HarmonizedReligions, ref sb);
-      AddString(0, "religious_school", ReligiousSchool, ref sb);
+      AddString(0, ReligiousSchool, "religious_school", ref sb);
       AddStringList(0, "unlock_cult", UnlockedCults, ref sb);
 
       AddModifiers(0, Modifiers.Cast<ISaveModifier>().ToList(), ref sb);
@@ -380,8 +382,11 @@ public class HistoryCountry(Country country) : Saveable
 
       foreach (var entry in History)
       {
-         sb.AppendLine($"{entry.Date} = {{");
+         sb.AppendLine($"{entry.Date:yyyy.dd.MM} = {{");
+         AddTabs(1, ref sb);
          sb.AppendLine(entry.Content);
+         Debug.WriteLine(entry.Content);
+         AddTabs(1, ref sb);
          sb.AppendLine("}");
       }
 

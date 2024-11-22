@@ -178,19 +178,23 @@
          MiscProvGroupBox = new GroupBox();
          MisProvinceData = new TableLayoutPanel();
          CapitalNameTextBox = new TextBox();
-         IsCityCheckBox = new CheckBox();
          label6 = new Label();
-         IsHreCheckBox = new CheckBox();
          label5 = new Label();
-         IsParlimentSeatCheckbox = new CheckBox();
          label8 = new Label();
-         HasRevoltCheckBox = new CheckBox();
          label7 = new Label();
          label2 = new Label();
          label4 = new Label();
          label3 = new Label();
          label1 = new Label();
          label47 = new Label();
+         IsCityCheckBox = new CheckBox();
+         IsHreCheckBox = new CheckBox();
+         IsParlimentSeatCheckbox = new CheckBox();
+         HasRevoltCheckBox = new CheckBox();
+         label48 = new Label();
+         label49 = new Label();
+         label50 = new Label();
+         label51 = new Label();
          CountryPage = new TabPage();
          tableLayoutPanel7 = new TableLayoutPanel();
          button2 = new Button();
@@ -255,10 +259,6 @@
          MMButtonsTLPanel = new TableLayoutPanel();
          GeneralToolTip = new ToolTip(components);
          toolTip1 = new ToolTip(components);
-         label48 = new Label();
-         label49 = new Label();
-         label50 = new Label();
-         label51 = new Label();
          MapMenuStrip.SuspendLayout();
          BottomToolStrip.SuspendLayout();
          MainLayoutPanel.SuspendLayout();
@@ -1859,17 +1859,6 @@
          CapitalNameTextBox.Size = new Size(92, 23);
          CapitalNameTextBox.TabIndex = 5;
          // 
-         // IsCityCheckBox
-         // 
-         IsCityCheckBox.AutoSize = true;
-         IsCityCheckBox.Cursor = Cursors.Hand;
-         IsCityCheckBox.Location = new Point(297, 78);
-         IsCityCheckBox.Name = "IsCityCheckBox";
-         IsCityCheckBox.Size = new Size(29, 19);
-         IsCityCheckBox.TabIndex = 0;
-         IsCityCheckBox.Text = " ";
-         IsCityCheckBox.UseVisualStyleBackColor = true;
-         // 
          // label6
          // 
          label6.AutoSize = true;
@@ -1880,17 +1869,6 @@
          label6.TabIndex = 2;
          label6.Text = "Manpower";
          label6.TextAlign = ContentAlignment.MiddleLeft;
-         // 
-         // IsHreCheckBox
-         // 
-         IsHreCheckBox.AutoSize = true;
-         IsHreCheckBox.Cursor = Cursors.Hand;
-         IsHreCheckBox.Location = new Point(297, 103);
-         IsHreCheckBox.Name = "IsHreCheckBox";
-         IsHreCheckBox.Size = new Size(29, 19);
-         IsHreCheckBox.TabIndex = 1;
-         IsHreCheckBox.Text = " ";
-         IsHreCheckBox.UseVisualStyleBackColor = true;
          // 
          // label5
          // 
@@ -1903,17 +1881,6 @@
          label5.Text = "Capital";
          label5.TextAlign = ContentAlignment.MiddleLeft;
          // 
-         // IsParlimentSeatCheckbox
-         // 
-         IsParlimentSeatCheckbox.AutoSize = true;
-         IsParlimentSeatCheckbox.Cursor = Cursors.Hand;
-         IsParlimentSeatCheckbox.Location = new Point(297, 128);
-         IsParlimentSeatCheckbox.Name = "IsParlimentSeatCheckbox";
-         IsParlimentSeatCheckbox.Size = new Size(29, 19);
-         IsParlimentSeatCheckbox.TabIndex = 2;
-         IsParlimentSeatCheckbox.Text = " ";
-         IsParlimentSeatCheckbox.UseVisualStyleBackColor = true;
-         // 
          // label8
          // 
          label8.AutoSize = true;
@@ -1924,17 +1891,6 @@
          label8.TabIndex = 1;
          label8.Text = "Production";
          label8.TextAlign = ContentAlignment.MiddleLeft;
-         // 
-         // HasRevoltCheckBox
-         // 
-         HasRevoltCheckBox.AutoSize = true;
-         HasRevoltCheckBox.Cursor = Cursors.Hand;
-         HasRevoltCheckBox.Location = new Point(297, 153);
-         HasRevoltCheckBox.Name = "HasRevoltCheckBox";
-         HasRevoltCheckBox.Size = new Size(29, 19);
-         HasRevoltCheckBox.TabIndex = 3;
-         HasRevoltCheckBox.Text = " ";
-         HasRevoltCheckBox.UseVisualStyleBackColor = true;
          // 
          // label7
          // 
@@ -2001,6 +1957,94 @@
          label47.TabIndex = 6;
          label47.Text = "Terrain";
          label47.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // IsCityCheckBox
+         // 
+         IsCityCheckBox.AutoSize = true;
+         IsCityCheckBox.Cursor = Cursors.Hand;
+         IsCityCheckBox.Location = new Point(297, 78);
+         IsCityCheckBox.Name = "IsCityCheckBox";
+         IsCityCheckBox.Size = new Size(29, 19);
+         IsCityCheckBox.TabIndex = 0;
+         IsCityCheckBox.Text = " ";
+         IsCityCheckBox.UseVisualStyleBackColor = true;
+         // 
+         // IsHreCheckBox
+         // 
+         IsHreCheckBox.AutoSize = true;
+         IsHreCheckBox.Cursor = Cursors.Hand;
+         IsHreCheckBox.Location = new Point(297, 103);
+         IsHreCheckBox.Name = "IsHreCheckBox";
+         IsHreCheckBox.Size = new Size(29, 19);
+         IsHreCheckBox.TabIndex = 1;
+         IsHreCheckBox.Text = " ";
+         IsHreCheckBox.UseVisualStyleBackColor = true;
+         // 
+         // IsParlimentSeatCheckbox
+         // 
+         IsParlimentSeatCheckbox.AutoSize = true;
+         IsParlimentSeatCheckbox.Cursor = Cursors.Hand;
+         IsParlimentSeatCheckbox.Location = new Point(297, 128);
+         IsParlimentSeatCheckbox.Name = "IsParlimentSeatCheckbox";
+         IsParlimentSeatCheckbox.Size = new Size(29, 19);
+         IsParlimentSeatCheckbox.TabIndex = 2;
+         IsParlimentSeatCheckbox.Text = " ";
+         IsParlimentSeatCheckbox.UseVisualStyleBackColor = true;
+         // 
+         // HasRevoltCheckBox
+         // 
+         HasRevoltCheckBox.AutoSize = true;
+         HasRevoltCheckBox.Cursor = Cursors.Hand;
+         HasRevoltCheckBox.Location = new Point(297, 153);
+         HasRevoltCheckBox.Name = "HasRevoltCheckBox";
+         HasRevoltCheckBox.Size = new Size(29, 19);
+         HasRevoltCheckBox.TabIndex = 3;
+         HasRevoltCheckBox.Text = " ";
+         HasRevoltCheckBox.UseVisualStyleBackColor = true;
+         // 
+         // label48
+         // 
+         label48.AutoSize = true;
+         label48.Dock = DockStyle.Fill;
+         label48.Location = new Point(199, 75);
+         label48.Name = "label48";
+         label48.Size = new Size(92, 25);
+         label48.TabIndex = 7;
+         label48.Text = "Is city";
+         label48.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // label49
+         // 
+         label49.AutoSize = true;
+         label49.Dock = DockStyle.Fill;
+         label49.Location = new Point(199, 100);
+         label49.Name = "label49";
+         label49.Size = new Size(92, 25);
+         label49.TabIndex = 8;
+         label49.Text = "Is HRE";
+         label49.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // label50
+         // 
+         label50.AutoSize = true;
+         label50.Dock = DockStyle.Fill;
+         label50.Location = new Point(199, 125);
+         label50.Name = "label50";
+         label50.Size = new Size(92, 25);
+         label50.TabIndex = 9;
+         label50.Text = "Praliament Seat";
+         label50.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // label51
+         // 
+         label51.AutoSize = true;
+         label51.Dock = DockStyle.Fill;
+         label51.Location = new Point(199, 150);
+         label51.Name = "label51";
+         label51.Size = new Size(92, 25);
+         label51.TabIndex = 10;
+         label51.Text = "Has Revolt";
+         label51.TextAlign = ContentAlignment.MiddleLeft;
          // 
          // CountryPage
          // 
@@ -2816,50 +2860,6 @@
          MMButtonsTLPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
          MMButtonsTLPanel.Size = new Size(1086, 30);
          MMButtonsTLPanel.TabIndex = 0;
-         // 
-         // label48
-         // 
-         label48.AutoSize = true;
-         label48.Dock = DockStyle.Fill;
-         label48.Location = new Point(199, 75);
-         label48.Name = "label48";
-         label48.Size = new Size(92, 25);
-         label48.TabIndex = 7;
-         label48.Text = "Is city";
-         label48.TextAlign = ContentAlignment.MiddleLeft;
-         // 
-         // label49
-         // 
-         label49.AutoSize = true;
-         label49.Dock = DockStyle.Fill;
-         label49.Location = new Point(199, 100);
-         label49.Name = "label49";
-         label49.Size = new Size(92, 25);
-         label49.TabIndex = 8;
-         label49.Text = "Is HRE";
-         label49.TextAlign = ContentAlignment.MiddleLeft;
-         // 
-         // label50
-         // 
-         label50.AutoSize = true;
-         label50.Dock = DockStyle.Fill;
-         label50.Location = new Point(199, 125);
-         label50.Name = "label50";
-         label50.Size = new Size(92, 25);
-         label50.TabIndex = 9;
-         label50.Text = "Praliament Seat";
-         label50.TextAlign = ContentAlignment.MiddleLeft;
-         // 
-         // label51
-         // 
-         label51.AutoSize = true;
-         label51.Dock = DockStyle.Fill;
-         label51.Location = new Point(199, 150);
-         label51.Name = "label51";
-         label51.Size = new Size(92, 25);
-         label51.TabIndex = 10;
-         label51.Text = "Has Revolt";
-         label51.TextAlign = ContentAlignment.MiddleLeft;
          // 
          // MapWindow
          // 

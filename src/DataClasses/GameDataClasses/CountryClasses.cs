@@ -57,7 +57,8 @@ namespace Editor.DataClasses.GameDataClasses
       public List<Person> Persons { get; set; } = [];
       public List<Leader> Leaders { get; set; } = [];
       public List<Effect> Effects { get; set; } = [];
-      
+
+      public bool IsDummy { get; set; }= false;
 
       public bool HasPerson => Persons.Any();
       public bool HasEffect => Effects.Any();
@@ -68,6 +69,11 @@ namespace Editor.DataClasses.GameDataClasses
       public int MonarchCount => Persons.Count(p => p.Type == PersonType.Monarch);
       public int HeirCount => Persons.Count(p => p.Type == PersonType.Heir);
       public int QueenCount => Persons.Count(p => p.Type == PersonType.Queen);
+
+      public override string ToString()
+      {
+         return $"{Date:yyyy.dd.MM}| P: {Persons.Count}| L: {Leaders.Count}| E: {Effects.Count}";
+      }
    }
 
    public enum PersonType

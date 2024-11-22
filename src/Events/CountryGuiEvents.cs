@@ -78,5 +78,23 @@ namespace Editor.Events
                Globals.MapWindow.CountryFlagLabel.Visible = Globals.Settings.Gui.ShowCountryFlagInCE;
          };
       }
+
+      public static void GraphicalCultureBox_SelectedIndexChanged(object? sender, EventArgs e)
+      {
+         if (sender is not ComboBox box || box.SelectedItem == null)
+            return;
+         if (Selection.SelectedCountry == Country.Empty)
+            return;
+         Selection.SelectedCountry.CommonCountry.GraphicalCulture = box.SelectedItem.ToString()!;
+      }
+
+      public static void UnitTypeBox_SelectedIndexChanged(object? sender, EventArgs e)
+      {
+         if (sender is not ComboBox box || box.SelectedItem == null)
+            return;
+         if (Selection.SelectedCountry == Country.Empty)
+            return;
+         Selection.SelectedCountry.HistoryCountry.UnitType = box.SelectedItem.ToString()!;
+      }
    }
 }

@@ -41,6 +41,63 @@ namespace Editor.DataClasses.GameDataClasses
       {
          return new (name, value, type, Scope.Country);
       }
+
+      public static OpinionEffect CreateOpinionEffect(string name, string value, EffectValueType type)
+      {
+         return new (name, value, type, Scope.Country);
+      }
+
+      public static AddEstateLoyaltyEffect CreateAddEstateLoyaltyEffect(string name, string value, EffectValueType type)
+      {
+         return new (name, value, type, Scope.Country);
+      }
+
+      public static SpawnRebelsEffect CreateSpawnRebelsEffect(string name, string value, EffectValueType type)
+      {
+         return new (name, value, type, Scope.Province);
+      }
+
+      public static ChangePriceEffect CreateChangePriceEffect(string value, EffectValueType type)
+      {
+         return new ("change_price", value, type);
+      }
+   }
+
+   public class ChangePriceEffect(string name, string value, EffectValueType type) : ComplexEffect(name, value, type, Scope.Country)
+   {
+      public string TradeGood { get; set; } = string.Empty;
+      public string Key { get; set; } = string.Empty;
+      public new float Value { get; set; } = 1.0f;
+      public int Duration { get; set; } = -1;
+
+      public override string ToString()
+      {
+         return $"{TradeGood} : {Key} : {Value} : {Duration}";
+      }
+
+      public override string GetEffectString(int tabs)
+      {
+         var sb = new StringBuilder();
+         sb.AppendLine($"change_price = {{");
+         sb.AppendLine($"\ttrade_good = {TradeGood}");
+         sb.AppendLine($"\tkey = {Key}");
+         sb.AppendLine($"\tvalue = {Value}");
+         sb.AppendLine($"\tduration = {Duration}");
+         sb.AppendLine("}");
+         return sb.ToString();
+      }
+
+      public override bool Equals(object? obj)
+      {
+         if (obj is ChangePriceEffect other)
+            return TradeGood == other.TradeGood && Key == other.Key && Value == other.Value && Duration == other.Duration;
+         return false;
+      }
+
+      public override int GetHashCode()
+      {
+         return TradeGood.GetHashCode() ^ Key.GetHashCode() ^ Value.GetHashCode() ^ Duration.GetHashCode();
+      }
    }
 
    public class Effect(string name, string value, EffectValueType type, Scope scope)

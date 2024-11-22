@@ -123,6 +123,51 @@ namespace Editor.Parser
          return true;
       }
 
+
+      public static bool ParseChangePriceEffect(string content, out ChangePriceEffect eff)
+      {
+         eff = EffectFactory.CreateChangePriceEffect(string.Empty, EffectValueType.Complex);
+
+         var kvps = Parsing.GetKeyValueList(ref content);
+
+         foreach (var kvp in kvps)
+         {
+            if (kvp.Key.Equals("value"))
+            {
+               if (!float.TryParse(kvp.Value, out var price))
+               {
+                  Globals.ErrorLog.Write($"Could not parse 'value' attribute in 'change_price' effect: {kvp.Value}");
+                  continue;
+               }
+               eff.Value = price;
+            }
+            else if (kvp.Key.Equals("trade_goods"))
+            {
+               eff.TradeGood = kvp.Value;
+            }
+            else if (kvp.Key.Equals("key"))
+            {
+               eff.Key = kvp.Value;
+            }
+            else if (kvp.Key.Equals("duration"))
+            {
+               if (!int.TryParse(kvp.Value, out var duration))
+               {
+                  Globals.ErrorLog.Write($"Could not parse 'duration' attribute in 'change_price' effect: {kvp.Value}");
+                  continue;
+               }
+               eff.Duration = duration;
+            }
+            else
+            {
+               Globals.ErrorLog.Write($"Unknown attribute in 'change_price' effect: '{kvp.Key}'");
+               return false;
+            }
+         }
+         return true;
+      }
+
+
       public static bool ParseAddEstateLoyaltyEffect(string input, out AddEstateLoyaltyEffect loyaltyEffect)
       {
          loyaltyEffect = new("add_estate_loyalty", string.Empty, EffectValueType.Complex, Scope.Country);
@@ -260,5 +305,6 @@ namespace Editor.Parser
       [
          "province_event", "add_province_modifier", "add_permanent_province_modifier", "extend_province_modifier", "remove_province_modifier", "add_province_triggered_modifier", "remove_province_triggered_modifier", "set_province_flag", "clr_province_flag", "change_province_name", "rename_capital", "remove_revolution_from_province_effect", "change_tribal_land", "add_base_tax", "add_base_production", "add_base_manpower", "add_prosperity", "add_devastation", "add_local_autonomy", "set_local_autonomy", "change_trade_goods", "add_scaled_local_adm_power", "add_scaled_local_dip_power", "add_scaled_local_mil_power", "cancel_construction", "add_great_project", "move_great_project", "destroy_great_project", "add_great_project_tier", "add_construction_progress", "add_building", "remove_building", "add_building_construction", "set_base_tax", "set_base_production", "set_base_manpower", "add_random_development", "create_advisor", "set_seat_in_parliament", "back_current_issue", "change_culture", "change_original_culture", "add_culture_construction", "change_religion", "change_to_secondary_religion", "send_missionary", "add_cardinal", "remove_cardinal", "add_reform_center", "remove_reform_center", "set_in_empire", "add_institution_embracement", "reset_golden_age", "extend_golden_age", "add_nationalism", "add_unrest", "create_native", "create_pirate", "create_revolt", "spawn_rebels", "create_colony", "add_colonysize", "multiply_colonysize", "add_siberian_construction", "change_native_ferocity", "change_native_hostileness", "change_native_size", "discover_country", "undiscover_country", "native_policy", "add_claim", "add_core", "add_core_construction", "add_permanent_claim", "add_territorial_core", "cede_province", "change_controller", "decolonize", "remove_claim", "remove_core", "remove_territorial_core", "artillery", "revolutionary_guard_artillery", "cavalry", "mercenary_cavalry", "cossack_cavalry", "hussars_cavalry", "revolutionary_guard_cavalry", "banner_cavalry", "qizilbash_cavalry", "mamluks_cavalry", "infantry", "mercenary_infantry", "streltsy_infantry", "rajput_infantry", "cawa_infantry", "carolean_infantry", "marine_infantry", "janissary_infantry", "revolutionary_guard_infantry", "tercio_infantry", "musketeer_infantry", "samurai_infantry", "cossack_infantry", "banner_infantry", "qizilbash_infantry", "mamluks_infantry", "heavy_ship", "man_of_war_heavy", "galleon_heavy", "create_flagship", "light_ship", "man_of_war_light", "caravel_light", "voc_indiamen_light", "galley", "geobukseon_galley", "galleass_galley", "transport", "kill_leader", "kill_units", "add_unit_construction", "build_to_forcelimit", "remove_loot", "change_siege", "clear_rebels", "recall_merchant", "add_trade_node_income", "add_trade_modifier", "remove_trade_modifier", "add_to_trade_company", "add_trade_company_investment", "center_of_trade", "add_center_of_trade_level"
       ];
+
    }
 }

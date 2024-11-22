@@ -1196,7 +1196,9 @@ namespace Editor.Forms
 
          GeneralToolTip.SetToolTip(RevolutionColorPickerButton, "LMB: Set the <revolutionary_color> of the selected country\nRMB: randomize");
          _graphicalCultureBox = ControlFactory.GetListComboBox(Globals.GraphicalCultures, new(1));
+         _graphicalCultureBox.SelectedIndexChanged += CountryGuiEvents.GraphicalCultureBox_SelectedIndexChanged;
          _unitTypeBox = ControlFactory.GetListComboBox([.. Globals.TechnologyGroups.Keys], new(1));
+         _unitTypeBox.SelectedIndexChanged += CountryGuiEvents.UnitTypeBox_SelectedIndexChanged;
          _techGroupBox = ControlFactory.GetListComboBox([.. Globals.TechnologyGroups.Keys], new(1));
          _governmentTypeBox = ControlFactory.GetListComboBox([.. Globals.GovernmentTypes.Keys], new(1, 1, 6, 1));
          _governmentTypeBox.SelectedIndexChanged += GovernmentTypeBox_SelectedIndexChanged;
@@ -1477,7 +1479,9 @@ namespace Editor.Forms
 
       private void button2_Click(object sender, EventArgs e)
       {
-         new RoughEditorForm(Selection.SelectedCountry, false).ShowDialog();
+         var editor = new RoughEditorForm(Selection.SelectedCountry, false);
+         editor.ExpandObjectsOfType(nameof(Country.HistoryCountry), nameof(Country.CommonCountry));
+         editor.ShowDialog();
       }
 
       private void AdvancedProvinceEditing_Click(object sender, EventArgs e)

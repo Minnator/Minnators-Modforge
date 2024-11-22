@@ -168,11 +168,8 @@ namespace Editor.Saving
       {
          if (strings.Count == 0)
             return;
-         foreach (var s in strings)
-         {
-            AddTabs(tabs + 1, ref sb);
+         foreach (var s in strings) 
             sb.AppendLine($"{stringName} = {s}");
-         }
       }
 
       public static void AddEffects(int tabs, List<Effect> effects, ref StringBuilder sb)
