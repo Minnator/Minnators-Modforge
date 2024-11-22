@@ -6,6 +6,7 @@ namespace Editor.Forms.PopUps
    public partial class MapModeSelection : Form
    {
       private readonly MapModeButton _button;
+      public MapModeType SelectedMapMode { get; private set; } = MapModeType.None;
 
       public MapModeSelection(MapModeButton button)
       {
@@ -40,6 +41,7 @@ namespace Editor.Forms.PopUps
             return;
          var enumFromItem = Enum.Parse<MapModeType>(MMSelectionBox.SelectedItem!.ToString()!);
          _button.SetMapMode(enumFromItem);
+         SelectedMapMode = enumFromItem;
          Close();
       }
    }

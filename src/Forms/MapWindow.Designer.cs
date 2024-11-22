@@ -74,7 +74,10 @@
          searchToolStripMenuItem = new ToolStripMenuItem();
          helpToolStripMenuItem = new ToolStripMenuItem();
          infoToolStripMenuItem = new ToolStripMenuItem();
+         toolStripSeparator8 = new ToolStripSeparator();
          clearCrashLogsToolStripMenuItem = new ToolStripMenuItem();
+         toolStripSeparator9 = new ToolStripSeparator();
+         TutorialBrowser = new ToolStripMenuItem();
          debugToolStripMenuItem = new ToolStripMenuItem();
          testToolStripMenuItem = new ToolStripMenuItem();
          telescopeToolStripMenuItem = new ToolStripMenuItem();
@@ -608,7 +611,7 @@
          // 
          // helpToolStripMenuItem
          // 
-         helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { infoToolStripMenuItem, clearCrashLogsToolStripMenuItem });
+         helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { infoToolStripMenuItem, toolStripSeparator8, clearCrashLogsToolStripMenuItem, toolStripSeparator9, TutorialBrowser });
          helpToolStripMenuItem.Name = "helpToolStripMenuItem";
          helpToolStripMenuItem.Size = new Size(76, 23);
          helpToolStripMenuItem.Text = "Help / Info";
@@ -621,12 +624,29 @@
          infoToolStripMenuItem.Text = "Info";
          infoToolStripMenuItem.Click += infoToolStripMenuItem_Click;
          // 
+         // toolStripSeparator8
+         // 
+         toolStripSeparator8.Name = "toolStripSeparator8";
+         toolStripSeparator8.Size = new Size(159, 6);
+         // 
          // clearCrashLogsToolStripMenuItem
          // 
          clearCrashLogsToolStripMenuItem.Name = "clearCrashLogsToolStripMenuItem";
          clearCrashLogsToolStripMenuItem.Size = new Size(162, 22);
          clearCrashLogsToolStripMenuItem.Text = "Clear Crash Logs";
          clearCrashLogsToolStripMenuItem.Click += clearCrashLogsToolStripMenuItem_Click;
+         // 
+         // toolStripSeparator9
+         // 
+         toolStripSeparator9.Name = "toolStripSeparator9";
+         toolStripSeparator9.Size = new Size(159, 6);
+         // 
+         // TutorialBrowser
+         // 
+         TutorialBrowser.Enabled = false;
+         TutorialBrowser.Name = "TutorialBrowser";
+         TutorialBrowser.Size = new Size(162, 22);
+         TutorialBrowser.Text = "Tutorial Browser";
          // 
          // debugToolStripMenuItem
          // 
@@ -3196,6 +3216,9 @@
       private Label label49;
       private Label label50;
       private Label label51;
+      private ToolStripSeparator toolStripSeparator8;
+      private ToolStripSeparator toolStripSeparator9;
+      private ToolStripMenuItem TutorialBrowser;
    }
 }
 

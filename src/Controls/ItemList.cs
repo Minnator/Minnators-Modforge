@@ -18,10 +18,12 @@ namespace Editor.Controls
       public event EventHandler<ProvinceEditedEventArgs> OnItemAdded = delegate { };
       public event EventHandler<ProvinceEditedEventArgs> OnItemRemoved = delegate { };
       private ItemTypes ItemType { get; set; }
+      public bool Initializing = false;
 
 
       public ItemList(ItemTypes type, ComboBox box)
       {
+         Initializing = true;
          _itemsComboBox = box;
          InitializeComponent();
          ItemType = type;
@@ -29,6 +31,7 @@ namespace Editor.Controls
          tableLayoutPanel1.Controls.Add(_itemsComboBox, 1, 0);
          _itemsComboBox.KeyDown += ItemsComboBox_KeyDown!;
          _itemsComboBox.SelectedIndexChanged += ItemsComboBox_SelectedIndexChanged!;
+         Initializing = false;
       }
 
       // Create a setter for the Title
@@ -39,12 +42,14 @@ namespace Editor.Controls
 
       public void InitializeItems(List<string> items)
       {
+         Initializing = true;
          SuspendLayout();
          items.Sort();
          _itemsComboBox.Items.Clear();
          foreach (var item in items) 
             _itemsComboBox.Items.Add(item);
          ResumeLayout();
+         Initializing = false;
       }
 
       public List<string> GetItems()
@@ -86,7 +91,8 @@ namespace Editor.Controls
          else
             throw new ArgumentOutOfRangeException();
 
-         OnItemAdded?.Invoke(this, new(Selection.GetSelectedProvinces, item));
+         if (!Initializing)
+            OnItemAdded?.Invoke(this, new(Selection.GetSelectedProvinces, item));
 
          _itemsComboBox.Text = "";
          _itemsComboBox.Focus();
@@ -94,7 +100,8 @@ namespace Editor.Controls
       
       public void RemoveItem(string item)
       {
-         OnItemRemoved?.Invoke(this, new(Selection.GetSelectedProvinces, item));
+         if (!Initializing)
+            OnItemRemoved?.Invoke(this, new(Selection.GetSelectedProvinces, item));
       }
 
       public void Clear()

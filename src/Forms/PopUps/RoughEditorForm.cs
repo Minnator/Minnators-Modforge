@@ -64,22 +64,18 @@ namespace Editor.Forms.PopUps
 
       private GridItem? FindGridItemRecursive(GridItem? gridItem, string propName)
       {
-         if (gridItem == null) return null;
+         if (gridItem == null) 
+            return null;
 
-         // Check if this item matches the target property name
-         if (gridItem.Label.Equals(propName, StringComparison.OrdinalIgnoreCase))
-         {
+         if (gridItem.Label!.Equals(propName, StringComparison.OrdinalIgnoreCase))
             return gridItem;
-         }
 
          // Recurse into child grid items
          foreach (GridItem childItem in gridItem.GridItems)
          {
             var found = FindGridItemRecursive(childItem, propName);
             if (found != null)
-            {
                return found;
-            }
          }
 
          return null;
@@ -95,7 +91,7 @@ namespace Editor.Forms.PopUps
 
       private static int CountVisibleGridItems(GridItem parent)
       {
-         if (parent == null)
+         if (parent == null!)
             return 0;
 
          var count = 0;
@@ -113,16 +109,13 @@ namespace Editor.Forms.PopUps
       private int GetPropertyGridContentHeight()
       {
          var root = PropGrid.SelectedGridItem;
-         //Get the parent
          while (root.Parent != null)
             root = root.Parent;
 
-         if (root == null)
+         if (root == null!)
             return 0;
 
-         var propertyCount = CountVisibleGridItems(root);
-
-         return (propertyCount + 1) * PROPERTY_GRID_ROW_HEIGHT + 90; // 90 to account for description box and header
+         return (CountVisibleGridItems(root) + 1) * PROPERTY_GRID_ROW_HEIGHT + 90; // 90 to account for description box and header
       }
 
       private void RoughEditorForm_FormClosing(object sender, FormClosingEventArgs e)

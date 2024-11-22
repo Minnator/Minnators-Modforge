@@ -4,6 +4,8 @@ namespace Editor.Controls
 {
    public sealed class ExtendedComboBox : ComboBox
    {
+      public static bool AllowEvents = true;
+
       public EventHandler<ProvinceEditedEventArgs>? OnDataChanged = delegate { };
       public EventHandler<ProvinceCollectionEventArgs>? OnCollectionDataChanged = delegate { };
 
@@ -18,6 +20,8 @@ namespace Editor.Controls
       protected override void OnSelectedIndexChanged(EventArgs e)
       {
          base.OnSelectedIndexChanged(e);
+         if (!AllowEvents)
+            return;
          OnDataChanged?.Invoke(this, new (Selection.GetSelectedProvinces, Text));
          OnCollectionDataChanged?.Invoke(this, new (Text, Selection.GetSelectedProvinces));
       }

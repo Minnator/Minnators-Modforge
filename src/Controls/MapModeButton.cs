@@ -57,6 +57,9 @@ namespace Editor.Controls
             form.StartPosition = FormStartPosition.Manual;
             form.Location = new (MousePosition.X, MousePosition.Y);
             form.ShowDialog();
+            if (form.SelectedMapMode != MapModeType.None)
+               Globals.MapModeManager.SetCurrentMapMode(form.SelectedMapMode);
+
          }
       }
 

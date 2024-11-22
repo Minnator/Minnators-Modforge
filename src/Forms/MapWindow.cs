@@ -570,6 +570,7 @@ namespace Editor.Forms
       /// </summary>
       public void LoadSelectedProvincesToGui()
       {
+         ExtendedComboBox.AllowEvents = false;
          Globals.EditingStatus = EditingStatus.LoadingInterface;
          SuspendLayout();
          ClearProvinceGui();
@@ -641,6 +642,7 @@ namespace Editor.Forms
             ProvAdjLabel.Text = Selection.GetSelectedProvinces[0].GetLocalisationAdj;
          }
          ResumeLayout();
+         ExtendedComboBox.AllowEvents = true;
          Globals.EditingStatus = EditingStatus.Idle;
       }
 
@@ -684,6 +686,7 @@ namespace Editor.Forms
 
       public void ClearProvinceGui()
       {
+         ExtendedComboBox.AllowEvents = false;
          OwnerTagBox.Clear();
          ControllerTagBox.Clear();
          _religionComboBox.Clear();
@@ -720,6 +723,7 @@ namespace Editor.Forms
          ProvAdjTextBox.Text = string.Empty;
          ProvAdjLabel.Text = string.Empty;
          _terrainComboBox.SelectedItem = string.Empty;
+         ExtendedComboBox.AllowEvents = true;
       }
       #endregion
 
@@ -842,7 +846,6 @@ namespace Editor.Forms
       private void MapModeComboBox_SelectedIndexChanged(object sender, EventArgs e)
       {
          Globals.MapModeManager.SetCurrentMapMode(Enum.Parse<MapModeType>(MapModeComboBox.SelectedItem?.ToString() ?? string.Empty));
-         GC.Collect(); // We force the garbage collector to collect the old bitmap
       }
 
       private void gCToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1200,13 +1203,19 @@ namespace Editor.Forms
          _unitTypeBox = ControlFactory.GetListComboBox([.. Globals.TechnologyGroups.Keys], new(1));
          _unitTypeBox.SelectedIndexChanged += CountryGuiEvents.UnitTypeBox_SelectedIndexChanged;
          _techGroupBox = ControlFactory.GetListComboBox([.. Globals.TechnologyGroups.Keys], new(1));
+         _techGroupBox.SelectedIndexChanged += CountryGuiEvents.TechGroupBox_SelectedIndexChanged;
          _governmentTypeBox = ControlFactory.GetListComboBox([.. Globals.GovernmentTypes.Keys], new(1, 1, 6, 1));
          _governmentTypeBox.SelectedIndexChanged += GovernmentTypeBox_SelectedIndexChanged;
          _governmentRankBox = ControlFactory.GetListComboBox(["1", "2", "3"], new(1)); // TODO read in the defines to determine range
          _governmentReforms = ControlFactory.GetItemList(ItemTypes.FullWidth, [], "Government Reforms");
          _governmentReforms.Width = 117;
+         _governmentReforms.OnItemAdded += CountryGuiEvents.GovernmentReforms_OnItemAdded;
+         _governmentReforms.OnItemRemoved += CountryGuiEvents.GovernmentReforms_OnItemRemoved;
          _capitalTextBox = new() { Margin = new(1), Dock = DockStyle.Fill };
-         _focusComboBox = ControlFactory.GetListComboBox([.. Enum.GetNames<Mana>()], new(1));
+         _capitalTextBox.LostFocus += CountryGuiEvents.CapitalTextBox_LostFocus;
+         _capitalTextBox.KeyPress += CountryGuiEvents.OnlyNumbers_KeyPress;
+         _focusComboBox = ControlFactory.GetListComboBox([.. Enum.GetNames<Mana>()], new(1), false);
+         _focusComboBox.SelectedIndexChanged += CountryGuiEvents.FocusComboBox_SelectedIndexChanged;
 
          TagAndColorTLP.Controls.Add(_tagSelectionBox, 1, 0);
          TagAndColorTLP.Controls.Add(_countryColorPickerButton, 3, 0);
@@ -1353,11 +1362,11 @@ namespace Editor.Forms
          CountryLoc.Text = country.GetLocalisation();
          CountryADJLoc.Text = country.GetAdjectiveLocalisation();
          RevolutionColorPickerButton.SetColorIndexes(country.CommonCountry.RevolutionaryColor.R, country.CommonCountry.RevolutionaryColor.G, country.CommonCountry.RevolutionaryColor.B);
-         _graphicalCultureBox.SelectedItem = country.CommonCountry.GraphicalCulture;
-         _unitTypeBox.SelectedItem = country.HistoryCountry.UnitType;
-         _techGroupBox.SelectedItem = country.HistoryCountry.TechnologyGroup;
+         _graphicalCultureBox.Text = country.CommonCountry.GraphicalCulture;
+         _unitTypeBox.Text = country.HistoryCountry.UnitType;
+         _techGroupBox.Text = country.HistoryCountry.TechnologyGroup.Name;
          _capitalTextBox.Text = country.HistoryCountry.Capital.Id.ToString();
-         _focusComboBox.SelectedItem = country.HistoryCountry.NationalFocus;
+         _focusComboBox.Text = country.HistoryCountry.NationalFocus.ToString();
 
          // Names
          _leaderEditor.SetNames(country.CommonCountry.LeaderNames);
@@ -1374,8 +1383,11 @@ namespace Editor.Forms
          _governmentRankBox.SelectedItem = country.HistoryCountry.GovernmentRank.ToString();
          if (Globals.GovernmentTypes.TryGetValue(country.HistoryCountry.Government, out var government))
             _governmentReforms.InitializeItems([.. government.AllReformNames]);
+
          _governmentReforms.Clear();
+         _governmentReforms.Initializing = true;// we dont want to fire events that modify this collection when adding stuff as we are not editing it just loading.
          _governmentReforms.AddItemsUnique(country.HistoryCountry.GovernmentReforms);
+         _governmentReforms.Initializing = false;
 
          // Cultures
          _primaryCultureBox.SelectedItem = country.HistoryCountry.PrimaryCulture;
@@ -1404,7 +1416,13 @@ namespace Editor.Forms
          if (_governmentTypeBox.SelectedItem == null)
             return;
          if (Globals.GovernmentTypes.TryGetValue(_governmentTypeBox.SelectedItem?.ToString()!, out var government))
+         {
             _governmentReforms.InitializeItems([.. government.AllReformNames]);
+            if (Selection.SelectedCountry != Country.Empty)
+               Selection.SelectedCountry.HistoryCountry.Government = _governmentTypeBox.SelectedItem!.ToString()!;
+         }
+
+
       }
 
       private void AddDevToSelectedCountryIfValid(int dev)
@@ -1541,9 +1559,9 @@ namespace Editor.Forms
       {
          if (Selection.Count != 1)
             return;
-
-         Selection.GetSelectedProvinces[0].Capital = Selection.SelectedCountry.Tag;
+         
          _capitalTextBox.Text = Selection.GetSelectedProvinces[0].Id.ToString();
+         _capitalTextBox.Focus();
       }
 
 
