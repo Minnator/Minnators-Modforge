@@ -1,25 +1,27 @@
 ﻿using Editor.DataClasses.Misc;
 using Editor.Helper;
+using Editor.Saving;
 
 namespace Editor.DataClasses.GameDataClasses
 {
    public class TradeCompany : ProvinceCollection<Province>
    {
-      public override void OnPropertyChanged(string? propertyName = null) { }
-      public TradeCompany(string name, Color color) : base(name, color)
-      {
-         GenericName = string.Empty;
-         SpecificName = string.Empty;
-      }
-
-      public TradeCompany(string codeName, string genericName, string specificName, List<Province> provinces, Color color) : base(codeName, color)
+      public TradeCompany(string genericName, string specificName, string name, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(name, color, status)
       {
          GenericName = genericName;
          SpecificName = specificName;
-         SubCollection = provinces;
       }
 
-      public new static TradeCompany Empty => new ("Empty", Color.Empty);
+      public TradeCompany(string name, Color color, ref PathObj path, ICollection<Province> provinces, string genericName, string specificName) : base(name, color, ref path, provinces)
+      {
+         GenericName = genericName;
+         SpecificName = specificName;
+      }
+
+      public override void OnPropertyChanged(string? propertyName = null) { }
+      
+
+      public new static TradeCompany Empty => new (string.Empty, string.Empty, string.Empty, Color.Empty, ObjEditingStatus.Immutable);
       public string GenericName { get; set; }
       public string SpecificName { get; set; }
 

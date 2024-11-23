@@ -34,10 +34,8 @@ public static class ContinentLoading
       {
          var name = match.Groups["name"].Value;
          var provinces = Parsing.GetProvincesFromString(match.ToString());
-         Continent continent = new(name, Color.Empty, provinces) { Color = Globals.ColorProvider.GetRandomColor() };
-         continent.SetPath(ref pathObj);
+         Continent continent = new(name, Globals.ColorProvider.GetRandomColor(), ref pathObj, provinces);
          continentDictionary.Add(name, continent);
-
       }
 
       SaveMaster.AddRangeToDictionary(pathObj, continentDictionary.Values);

@@ -165,13 +165,22 @@ namespace Editor.Forms.LoadingScreen
          var sw = Stopwatch.StartNew();
          var progress = 0;
 
-         foreach (var task in _loadingActions)
+         try
          {
-            sw.Restart();
-            task.Invoke();
-            sw.Stop();
-            Globals.LoadingLog.WriteTimeStamp(task.Method.DeclaringType?.Name ?? "Unknown", sw.ElapsedMilliseconds);
-            bw.ReportProgress(++progress);
+            foreach (var task in _loadingActions)
+            {
+               sw.Restart();
+               task.Invoke();
+               sw.Stop();
+               Globals.LoadingLog.WriteTimeStamp(task.Method.DeclaringType?.Name ?? "Unknown", sw.ElapsedMilliseconds);
+               bw.ReportProgress(++progress);
+            }
+         }
+         catch (Exception exception)
+         {
+            Debug.WriteLine(exception);
+            Debug.WriteLine(exception.StackTrace);
+            throw;
          }
       }
 

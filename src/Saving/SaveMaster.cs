@@ -178,12 +178,10 @@ namespace Editor.Saving
             else
             {
                path.IsModPath = false;
-               if (!AllSaveableFiles.TryGetValue(path, out saveables))
-                  AddToDictionary(ref path, saveable);
-               else
+               if (AllSaveableFiles.TryGetValue(path, out saveables))
                   path = saveables[0].Path;
             }
-
+            AddToDictionary(ref path, saveable);
             saveable.SetPath(ref path);
          }
          NeedsToBeHandled.Add(path);
@@ -255,6 +253,7 @@ namespace Editor.Saving
       {
          path = folderPath;
          usedGrouping = false;
+         
          // Ask the user where to create the file if it can be decided.
          if (Globals.Settings.Saving.AlwaysAskBeforeCreatingFiles)
          {
@@ -266,6 +265,7 @@ namespace Editor.Saving
             if (form.ShowDialog() == DialogResult.OK)
             {
                path = form.NewPath.Split(Path.DirectorySeparatorChar);
+               path[^1] = SavingUtil.ApplyModPrefix(path[^1]);
                usedGrouping = form.UseGrouping;
                return true;
             }

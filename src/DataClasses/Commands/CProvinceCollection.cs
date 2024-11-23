@@ -103,8 +103,10 @@ namespace Editor.DataClasses.Commands
          {
             parent = null!;
          }
-         //Todo fix
-         parent.EditingStatus = ObjEditingStatus.Modified;
+         else
+         {
+            parent.EditingStatus = ObjEditingStatus.Modified;
+         }
          oldParent.Add(parent);
       }
    }

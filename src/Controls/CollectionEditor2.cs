@@ -3,6 +3,7 @@ using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
+using Editor.Saving;
 
 namespace Editor.Controls
 {
@@ -143,7 +144,7 @@ namespace Editor.Controls
          ProvinceCollection<Q> collection;
          if (e.Button == MouseButtons.Right)
          {
-            collection = ProvColHelper.CreateNewObject<T>(item, Globals.ColorProvider.GetRandomColor(), _saveableType);
+            collection = ProvColHelper.CreateNewObject<T>(SavingUtil.ApplyModPrefix(item), Globals.ColorProvider.GetRandomColor(), _saveableType);
             collection.NewAddRange(ProvColHelper.GetProvinceCollectionOfTypeForProvinces<Q>(Selection.GetSelectedProvinces, _saveableSubType), true);
          }
          else

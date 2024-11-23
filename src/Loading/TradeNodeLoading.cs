@@ -78,7 +78,7 @@ namespace Editor.Loading
                      Globals.ErrorLog.Write($"Invalid location value in tradenode: {value.Value}");
                      break;
                   }
-                  node = new (block.Name, Color.Empty, Globals.ProvinceIdToProvince[location]);
+                  node = new (block.Name, Color.Empty, ref pathObj, [], Globals.ProvinceIdToProvince[location]);
                }
                else if (value.Key.Equals("inland"))
                   node.IsInland = Parsing.YesNo(value.Value);
@@ -90,7 +90,7 @@ namespace Editor.Loading
             if (node.Color == Color.Empty)
                node.Color = Globals.ColorProvider.GetRandomColor();
 
-            node.SetPath(ref pathObj);
+            node.SetBounds();
 
             Globals.TradeNodes.Add(node.Name, node);
          }

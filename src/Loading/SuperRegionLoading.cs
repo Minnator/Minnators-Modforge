@@ -42,8 +42,8 @@ public static class SuperRegionLoading
                regions.Add(reg);
          }
 
-         var sRegion = new SuperRegion(superRegionName, Globals.ColorProvider.GetRandomColor(), regions);
-         sRegion.SetPath(ref pathObj);
+         var sRegion = new SuperRegion(superRegionName, Globals.ColorProvider.GetRandomColor(), ref pathObj, regions);
+         sRegion.SetBounds();
          sRegion.AddGlobal();
       }
 

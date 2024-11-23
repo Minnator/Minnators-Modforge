@@ -114,23 +114,23 @@ namespace Editor.Helper
          switch (type)
          {
             case SaveableType.Area:
-               return (new Area(name,[], color) as T)!;
+               return (new Area(name, color) as T)!;
             case SaveableType.Region:
-               return (new Region(name, color, []) as T)!;
+               return (new Region(name, color) as T)!;
             case SaveableType.TradeNode:
-               return (new TradeNode(name, color, Province.Empty) as T)!;
+               return (new TradeNode(name, color) as T)!;
             case SaveableType.TradeCompany:
-               return (new TradeCompany(name, color) as T)!;
+               return (new TradeCompany(string.Empty, string.Empty, name, color) as T)!;
             case SaveableType.ColonialRegion:
                return (new ColonialRegion(name, color) as T)!;
             case SaveableType.SuperRegion:
-               return (new SuperRegion(name, color, []) as T)!;
+               return (new SuperRegion(name, color) as T)!;
             case SaveableType.Continent:
-               return (new Continent(name, color, []) as T)!;
+               return (new Continent(name, color) as T)!;
             case SaveableType.ProvinceGroup:
                return (new ProvinceGroup(name, color) as T)!;
             case SaveableType.Country:
-               return (new Country(name, color, string.Empty) as T)!;
+               return (new Country(name, string.Empty, color) as T)!;
             default:
                throw new ArgumentOutOfRangeException(nameof(type), type, null);
          }

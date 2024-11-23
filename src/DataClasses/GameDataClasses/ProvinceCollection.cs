@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections;
+using System.ComponentModel;
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
@@ -14,9 +15,20 @@ public class ProvinceCollectionEventArguments<T>(ProvinceCollectionType type, IC
 }
 
 // TODO add a flag to not edit the collection but the items in the collection
-public abstract class ProvinceCollection<T>(string name, Color color) : ProvinceComposite(name, color) where T : ProvinceComposite
+public abstract class ProvinceCollection<T> : ProvinceComposite where T : ProvinceComposite
    // Area, Region, SuperRegion, TradeNode, TradeCompany, Continent, ProvinceGroup, Country
 {
+   public ProvinceCollection (string name, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(name, color)
+   {
+      base.EditingStatus = status;
+   }
+
+   public ProvinceCollection(string name, Color color, ref PathObj path, ICollection<T> provinces) : this(name, color, ObjEditingStatus.Unchanged) 
+   {
+      SetPath(ref path);
+      SubCollection = provinces;
+   }
+
    private readonly ICollection<T> _subCollection = [];
 
    [Browsable(false)]

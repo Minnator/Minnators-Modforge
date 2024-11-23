@@ -195,5 +195,12 @@ namespace Editor.Saving
          foreach (var modifier in modifiers) 
             sb.AppendLine(modifier.GetModifierString());
       }
+
+      public static string ApplyModPrefix(string str)
+      {
+         if (!string.IsNullOrEmpty(Globals.Settings.Saving.ModPrefix))
+            return Globals.Settings.Saving.ModPrefix + "_" + str;
+         return str;
+      }
    }
 }

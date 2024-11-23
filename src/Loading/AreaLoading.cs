@@ -49,9 +49,10 @@ public static class AreaLoading
                provinces.Add(province);
          }
 
-         Area newArea = new(areaName, provinces, Globals.ColorProvider.GetRandomColor());
-         newArea.SetPath(ref pathObj);
-         areaDictionary.Add(areaName, newArea);
+         Area newArea = new(areaName, Globals.ColorProvider.GetRandomColor(), ref pathObj, provinces);
+         newArea.SetBounds();
+         if (!areaDictionary.TryAdd(areaName, newArea))
+            Globals.ErrorLog.Write($"Error: Area {areaName} already exists!");
       }
       SaveMaster.AddRangeToDictionary(pathObj, areaDictionary.Values);
 

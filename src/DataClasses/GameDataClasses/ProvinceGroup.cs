@@ -5,8 +5,16 @@ using Editor.Saving;
 
 namespace Editor.DataClasses.GameDataClasses
 {
-   public class ProvinceGroup(string name, Color color) : ProvinceCollection<Province>(name, color)
+   public class ProvinceGroup : ProvinceCollection<Province>
    {
+      public ProvinceGroup(string name, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(name, color, status)
+      {
+      }
+
+      public ProvinceGroup(string name, Color color, ref PathObj path, ICollection<Province> provinces) : base(name, color, ref path, provinces)
+      {
+      }
+
       public override void OnPropertyChanged(string? propertyName = null) { }
       public override SaveableType WhatAmI()
       {
@@ -36,7 +44,7 @@ namespace Editor.DataClasses.GameDataClasses
       public override string GetSaveString(int tabs)
       {
          var sb = new StringBuilder();
-         SavingUtil.AddFormattedIntList(name, GetProvinceIds(), 0, ref sb);
+         SavingUtil.AddFormattedIntList(Name, GetProvinceIds(), 0, ref sb);
          return sb.ToString();
       }
 

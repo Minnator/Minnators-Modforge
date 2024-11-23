@@ -5,14 +5,24 @@ using Editor.Saving;
 
 namespace Editor.DataClasses.GameDataClasses
 {
-   public class TradeNode(string name, Color color, Province location) : ProvinceCollection<Province>(name, color)
+   public class TradeNode : ProvinceCollection<Province>
    {
+      public TradeNode(string name, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(name, color, status)
+      {
+         Location = Province.Empty;
+      }
+
+      public TradeNode(string name, Color color, ref PathObj path, ICollection<Province> provinces, Province location) : base(name, color, ref path, provinces)
+      {
+         Location = location;
+      }
+
       public override void OnPropertyChanged(string? propertyName = null) { }
-      public Province Location { get; set; } = location;
+      public Province Location { get; set; }
       public bool IsInland { get; set; } = false;
       public List<string> Incoming { get; set; } = [];
       public List<Outgoing> Outgoing { get; set; } = [];
-      public new static TradeNode Empty => new ("", Color.Empty, Province.Empty);
+      public new static TradeNode Empty => new (string.Empty, Color.Empty, ObjEditingStatus.Immutable);
 
       public override string ToString()
       {

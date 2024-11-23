@@ -38,6 +38,9 @@
     <None Remove="src\Forms\Feature\ToolTipCustomizer\.vshistory\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="ProjectOverview\NewFile1.txt" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="ProvinceFileCreator.ico" />
   </ItemGroup>
   <ItemGroup>

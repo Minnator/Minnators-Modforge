@@ -25,7 +25,15 @@
       // Parses the scopeType and returns a new scope of that type if the context allows it
       public virtual IScope Rescope(ScopeEffector effector, string scopeType)
       {
-         throw new NotImplementedException();
+         throw new 
+            
+            
+            
+            
+            
+            
+            
+            ();
          return this;
       }
    }

@@ -1,10 +1,19 @@
 ﻿using Editor.DataClasses.Misc;
 using Editor.Helper;
+using Editor.Saving;
 
 namespace Editor.DataClasses.GameDataClasses
 {
-   public class ColonialRegion(string name, Color color) : ProvinceCollection<Province>(name, color)
+   public class ColonialRegion : ProvinceCollection<Province>
    {
+      public ColonialRegion(string name, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(name, color, status)
+      {
+      }
+
+      public ColonialRegion(string name, Color color, ref PathObj path, ICollection<Province> provinces) : base(name, color, ref path, provinces)
+      {
+      }
+
       public int TaxIncome { get; set; }
       public int NativeSize { get; set; }
       public int NativeFerocity { get; set; }
@@ -39,7 +48,7 @@ namespace Editor.DataClasses.GameDataClasses
 
       public override KeyValuePair<string, bool> GetFileName()
       {
-         throw new NotImplementedException();
+         return new($"01_colonial_regions.txt", false);
       }
 
       public override string SavingComment()

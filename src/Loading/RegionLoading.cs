@@ -56,9 +56,8 @@ public static partial class RegionLoading
                monsoons.Add(new (monsoonMatch.Groups["start"].Value, monsoonMatch.Groups["end"].Value));
          }
 
-         var region = new Region(regionName, Globals.ColorProvider.GetRandomColor(), areas) { Monsoon = monsoons };
+         var region = new Region(regionName, Globals.ColorProvider.GetRandomColor(), ref pathObj, areas) { Monsoon = monsoons };
          region.SetBounds();
-         region.SetPath(ref pathObj);
          regionDictionary.Add(regionName, region);
 
       }

@@ -4,9 +4,18 @@ using Editor.Helper;
 using Editor.Saving;
 
 namespace Editor.DataClasses.GameDataClasses;
-#nullable enable
 public class Region : ProvinceCollection<Area>
 {
+   public Region(string name, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(name, color, status)
+   {
+
+   }
+
+   public Region(string name, Color color, ref PathObj path, ICollection<Area> provinces) : base(name, color, ref path, provinces)
+   {
+
+   }
+
    public override void OnPropertyChanged(string? propertyName = null) { }
    public List<Monsoon> Monsoon { get; set; } = [];
    public SuperRegion SuperRegion
@@ -17,18 +26,8 @@ public class Region : ProvinceCollection<Area>
       }
    }
 
-   public Region(string name, Color color, List<Area> areas, List<Monsoon> monsoon) : this(name, color, areas)
-   {
-      Monsoon = monsoon;
-   }
 
-   public Region(string name, Color color, List<Area> areas) : base(name, color)
-   {
-      SubCollection = areas;
-   }
-
-
-   public new static Region Empty => new ("", Color.Empty, []);
+   public new static Region Empty => new (string.Empty, System.Drawing.Color.Empty, ObjEditingStatus.Immutable);
 
    public override SaveableType WhatAmI()
    {

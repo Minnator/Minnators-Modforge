@@ -288,7 +288,7 @@ public static class Globals
 // - [x] Language in quicksettings fix
 // - [x] File saving popup for saving map mode
 // - [-] Save all and verify all save options
-// - [ ] 3/2 letters prefix from mods
+// - [x] 3/2 letters prefix from mods
 // - [-] Support deleting in saving
 // - [x] Toolstip customizer tooltips and fix column width
 // - [x] Logging and Crash Reporter ==> Map mode crashes catchen und reporten and user so that it restarts
@@ -297,10 +297,13 @@ public static class Globals
 // - [x] Open LoadingScreen and MapWindow on the same screen
 // - [x] Discord Rich Presence
 // - [-] Country Collection Editing, Saving is broken
-// - [-] Terrain Editing and map mode
+// - [x] Terrain Editing and map mode
+// - [ ] Province Group parsing
 
 
 // TODO LIST Until Alpha 1.1
+// - [ ] Generalize Loading
+// - [ ] Add Prefix ignoring in search boxes
 // - [ ] Straits editing and creation
 // - [ ] PDX language support
 // - [ ] Item scaling on Graphics (Trade arrows, straits, capitals, text)

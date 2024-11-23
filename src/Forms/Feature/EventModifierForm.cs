@@ -170,6 +170,8 @@ namespace Editor.Forms.Feature
          }
          
          //TODO is not correctly added to combobox
+         name = SavingUtil.ApplyModPrefix(name);
+
          EventModifier eventMod = new(name)
          {
             Modifiers = mods,

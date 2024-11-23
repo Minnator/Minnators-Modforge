@@ -2,6 +2,7 @@
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.Parser;
+using Editor.Saving;
 using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
@@ -11,15 +12,17 @@ namespace Editor.Loading
    {
       public static void Load()
       {
-         if (!FilesHelper.GetFilesUniquelyAndCombineToOne(out var rawContent, "common", "colonial_regions"))
-         {
-            Globals.ErrorLog.Write("Error: No files for colonial_regions found!");
-            return;
-         }
+         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "colonial_regions");
+         foreach (var file in files) 
+            FirstStep(file);
+      }
 
-         Parsing.RemoveCommentFromMultilineString(ref rawContent, out var content);
+      private static void FirstStep(string path)
+      {
+         Dictionary<string, ColonialRegion> localDict = [];
+         Parsing.RemoveCommentFromMultilineString(IO.ReadAllInUTF8(path), out var content);
          var colonialRegionBlocks = Parsing.GetElements(0, content);
-
+         var pathObj = PathObj.FromPath(path);
          foreach (var regionElement in colonialRegionBlocks)
          {
             if (regionElement is not Block regionBlock)
@@ -28,13 +31,13 @@ namespace Editor.Loading
                continue;
             }
 
-            var region = new ColonialRegion(regionBlock.Name, Color.Empty);
+            var region = new ColonialRegion(regionBlock.Name, Color.Empty, ObjEditingStatus.Unchanged);
 
             foreach (var block in regionBlock.Blocks)
             {
                if (block is not Block b)
                {
-                  AssignAttributes(region, (Content)block);         
+                  AssignAttributes(region, (Content)block);
                   continue;
                }
 
@@ -69,9 +72,15 @@ namespace Editor.Loading
                      break;
                }
             }
-            if (!Globals.ColonialRegions.TryAdd(region.Name, region))
+
+            if (!localDict.TryAdd(region.Name, region)) 
                Globals.ErrorLog.Write($"Error: Colonial Region {region.Name} already exists!");
          }
+         SaveMaster.AddRangeToDictionary(pathObj, localDict.Values);
+         
+         foreach (var region in localDict.Values)
+            if (!Globals.ColonialRegions.TryAdd(region.Name, region))
+               Globals.ErrorLog.Write($"Error: Colonial Region {region.Name} already exists!");
       }
 
       private static void AssignAttributes(ColonialRegion cr, Content content)

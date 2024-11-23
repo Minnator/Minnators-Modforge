@@ -1,0 +1,11 @@
+What,Where (PCE = ProvinceCollectionEditor, PEG = ProvinceEditorGui, CEG = CountryEditorGui)
+EventModifier,PEG_ModifierTab
+Area, PCE
+Region, PCE
+SuperRegion, PCE
+Continent, PCE
+TradeNode, PCE
+TradeCompanyRegion, PCE
+ColonialRegion, PCE
+Country, PCE
+ProvinceGroups, PCE

@@ -82,8 +82,8 @@ namespace Editor.Loading
                }
             }
 
-            TradeCompany tradeCompany = new(block.Name, genericName, specificName, provinces, color);
-            tradeCompany.SetPath(ref pathObj);
+            TradeCompany tradeCompany = new(block.Name, color, ref pathObj, provinces, genericName, specificName);
+            tradeCompany.SetBounds();
             if (!tradeCompanies.TryAdd(block.Name, tradeCompany)) 
                Globals.ErrorLog.Write($"Trade Company {block.Name} already exists in the dictionary");
          }

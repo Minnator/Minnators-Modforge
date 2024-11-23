@@ -405,20 +405,24 @@ public class HistoryCountry(Country country) : Saveable
 
 public class Country : ProvinceCollection<Province>
 {
-   public new static Country Empty => new(Tag.Empty, Color.Empty, string.Empty);
+   public Country(Tag tag, string fileName, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(tag.ToString(), color, status)
+   {
+      Tag = tag;
+      FileName = fileName;
+      CommonCountry = new(fileName, this);
+      HistoryCountry = new(this);
+   }
+
+
+   public new static Country Empty => new(Tag.Empty, string.Empty, Color.Empty, ObjEditingStatus.Immutable);
 
    [TypeConverter(typeof(ExpandableObjectConverter))]
    public HistoryCountry HistoryCountry { get; set; }
    [TypeConverter(typeof(ExpandableObjectConverter))]
    public CommonCountry CommonCountry { get; set; }
 
-   public Country(Tag tag, Color color, string fileName) : base(tag.ToString(), color)
-   {
-      CommonCountry = new (fileName, this);
-      HistoryCountry = new (this);
-      FileName = fileName;
-      Tag = tag;
-   }
+
+   
    public Tag Tag { get; set; }
    public string FileName { get; }
 

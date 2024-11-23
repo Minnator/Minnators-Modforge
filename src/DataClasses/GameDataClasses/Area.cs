@@ -4,17 +4,18 @@ using Editor.Helper;
 using Editor.Saving;
 
 namespace Editor.DataClasses.GameDataClasses;
-#nullable enable
+
 public class Area : ProvinceCollection<Province>
 {
 
-   public Area(string name, ICollection<Province> provinces, Color color) : base (name, color)
-   {
-      SubCollection = provinces;
-   }
-
    // Contains the provinces in the area will be editable as the array is only a few elements long
-   
+
+   public Area(string name, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(name, color, status)
+   {}
+
+   public Area(string name, Color color, ref PathObj path, ICollection<Province> provinces) : base(name, color,
+      ref path, provinces) {}
+
    public string Edict { get; set; } = string.Empty;
    public float Prosperity { get; set; } = 0;
    public bool IsStated { get; set; } = false;
@@ -78,7 +79,7 @@ public class Area : ProvinceCollection<Province>
       return $"Save areas file";
    }
 
-   public new static Area Empty => new("", [], Color.Empty);
+   public new static Area Empty => new("", Color.Empty, ObjEditingStatus.Immutable);
 
    public static EventHandler<ProvinceComposite> AreaColorChanged = delegate { };
 

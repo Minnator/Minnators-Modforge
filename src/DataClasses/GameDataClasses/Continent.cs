@@ -4,10 +4,13 @@ using Editor.Helper;
 using Editor.Saving;
 
 namespace Editor.DataClasses.GameDataClasses;
-#nullable enable
 public class Continent : ProvinceCollection<Province>
 {
-   public Continent(string name, Color color, List<Province> provinces) : base(name, color)
+   public Continent(string name, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(name, color, status)
+   {
+   }
+
+   public Continent(string name, Color color, ref PathObj path, ICollection<Province> provinces) : base(name, color, ref path, provinces)
    {
       SubCollection = provinces;
    }
@@ -83,5 +86,5 @@ public class Continent : ProvinceCollection<Province>
       Globals.Continents.Add(Name, this);
    }
 
-   public new static Continent Empty => new("", Color.Empty, []);
+   public new static Continent Empty => new(string.Empty, System.Drawing.Color.Empty, ObjEditingStatus.Immutable);
 }

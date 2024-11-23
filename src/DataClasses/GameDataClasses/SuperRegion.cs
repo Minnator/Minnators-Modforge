@@ -6,11 +6,16 @@ using Editor.Saving;
 namespace Editor.DataClasses.GameDataClasses;
 public class SuperRegion : ProvinceCollection<Region>
 {
-   public override void OnPropertyChanged(string? propertyName = null) { }
-   public SuperRegion(string name, Color color, List<Region> regions) : base(name, color)
+   public SuperRegion(string name, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(name, color, status)
    {
-      SubCollection = regions;
    }
+
+   public SuperRegion(string name, Color color, ref PathObj path, ICollection<Region> provinces) : base(name, color, ref path, provinces)
+   {
+   }
+
+   public override void OnPropertyChanged(string? propertyName = null) { }
+  
 
    public override SaveableType WhatAmI()
    {
@@ -91,6 +96,6 @@ public class SuperRegion : ProvinceCollection<Region>
       Globals.SuperRegions.Add(Name, this);
    }
 
-   public new static SuperRegion Empty => new ("", Color.Empty, []);
+   public new static SuperRegion Empty => new (string.Empty, System.Drawing.Color.Empty, ObjEditingStatus.Immutable);
 
 }

@@ -32,7 +32,7 @@ namespace Editor.Loading
                continue;
             }
 
-            Country country = new(tag, Color.Empty, match.Groups["path"].Value);
+            Country country = new(tag, match.Groups["path"].Value, Color.Empty, ObjEditingStatus.Unchanged);
             country.SetBounds();
             countries.Add(tag, country);
          }
