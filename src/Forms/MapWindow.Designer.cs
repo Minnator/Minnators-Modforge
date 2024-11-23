@@ -2852,6 +2852,7 @@
          MapLayoutPanel.Controls.Add(MMButtonsTLPanel, 0, 1);
          MapLayoutPanel.Dock = DockStyle.Fill;
          MapLayoutPanel.Location = new Point(0, 0);
+         MapLayoutPanel.Margin = new Padding(0);
          MapLayoutPanel.Name = "MapLayoutPanel";
          MapLayoutPanel.RowCount = 2;
          MapLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));

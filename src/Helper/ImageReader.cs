@@ -36,10 +36,7 @@ namespace Editor.Helper
             throw new FileNotFoundException("The specified file does not exist.", filePath);
          var image = TexHelper.Instance.LoadFromTGAFile(filePath);
 
-         var sw = Stopwatch.StartNew();
          image = image.Convert(DXGI_FORMAT.B8G8R8A8_UNORM, TEX_FILTER_FLAGS.DEFAULT, 0.5f);
-         sw.Stop();
-         Debug.WriteLine($"Convert time: {sw.ElapsedMilliseconds}ms");
 
          if (image == null)
             throw new InvalidOperationException("Failed to load the TGA image.");
@@ -73,7 +70,6 @@ namespace Editor.Helper
 
       private static Bitmap ConvertScratchImageToBitmapBGR(ScratchImage scratchImage)
       {
-         var sw = Stopwatch.StartNew();
          var metadata = scratchImage.GetMetadata();
          var bitmap = new Bitmap(metadata.Width, metadata.Height, PixelFormat.Format32bppArgb);
          var rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
@@ -108,9 +104,6 @@ namespace Editor.Helper
          }
 
          bitmap.UnlockBits(bmpData);
-         sw.Stop();
-         Debug.WriteLine($"Convert to bmp time: {sw.ElapsedMilliseconds}ms");
-
          return bitmap;
       }
 

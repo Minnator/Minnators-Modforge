@@ -111,7 +111,7 @@ public abstract class MapMode
    {
       MapDrawing.DrawOnMap(province, GetProvinceColor(province), Globals.ZoomControl, PixelsOrBorders.Pixels);
       if (ShowOccupation)
-         MapDrawing.DrawOccupations(false, Globals.ZoomControl);
+         MapDrawing.DrawOccupation(province, false, Globals.ZoomControl);
       if (invalidate) 
          Globals.ZoomControl.Invalidate();
       Selection.RePaintSelection();

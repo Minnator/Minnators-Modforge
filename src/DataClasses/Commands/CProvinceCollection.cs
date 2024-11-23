@@ -116,8 +116,8 @@ namespace Editor.DataClasses.Commands
       private List<T> Composites = [];
       private ProvinceCollection<T> oldParent = oldParent;
       private bool _removeFromGlobal = remove;
-      private ObjEditingStatus previous_state;
-      private bool flag_set;
+      private ObjEditingStatus _previousState;
+      private bool _flagSet;
       public CRemoveProvinceCollection(ProvinceCollection<T> oldParent, bool remove, bool executeOnInit = false) : this(oldParent, remove)
       {
          if (executeOnInit)
@@ -140,8 +140,8 @@ namespace Editor.DataClasses.Commands
          }
          else
             oldParent.Invoke(new(ProvinceCollectionType.Remove, Composites));
-         previous_state = oldParent.EditingStatus;
-         flag_set = (Globals.SaveableType & oldParent.WhatAmI()) != 0;
+         _previousState = oldParent.EditingStatus;
+         _flagSet = (Globals.SaveableType & oldParent.WhatAmI()) != 0;
          oldParent.EditingStatus = ObjEditingStatus.Deleted;
       }
 
@@ -164,8 +164,8 @@ namespace Editor.DataClasses.Commands
             oldParent.Invoke(new(ProvinceCollectionType.Add, Composites));
          if (oldParent.EditingStatus == ObjEditingStatus.Deleted)
          {
-            oldParent.EditingStatus = previous_state;
-            if (!flag_set)
+            oldParent.EditingStatus = _previousState;
+            if (!_flagSet)
                Globals.SaveableType &= ~oldParent.WhatAmI();
          }
          else

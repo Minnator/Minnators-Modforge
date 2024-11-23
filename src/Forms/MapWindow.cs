@@ -168,6 +168,8 @@ namespace Editor.Forms
             Border = Globals.Settings.Rendering.ShowMapBorder,
             BorderColor = Globals.Settings.Rendering.MapBorderColor,
             MinVisiblePixels = Globals.Settings.Rendering.MinVisiblePixels,
+            Dock = DockStyle.Fill,
+            Margin = new(0),
          };
 
 
@@ -238,13 +240,14 @@ namespace Editor.Forms
       private void InitializeMapModeButtons()
       {
          var button01 = ControlFactory.GetMapModeButton('q');
+         button01.Margin = new (0, 0, 3, 0);
          button01.SetMapMode(MapModeType.Province);
-         var button2 = ControlFactory.GetMapModeButton('w');
-         button2.SetMapMode(MapModeType.Country);
-         var button3 = ControlFactory.GetMapModeButton('e');
-         button3.SetMapMode(MapModeType.TradeNode);
-         var button4 = ControlFactory.GetMapModeButton('r');
-         button4.SetMapMode(MapModeType.Area);
+         var button21 = ControlFactory.GetMapModeButton('w');
+         button21.SetMapMode(MapModeType.Country);
+         var button31 = ControlFactory.GetMapModeButton('e');
+         button31.SetMapMode(MapModeType.TradeNode);
+         var button41 = ControlFactory.GetMapModeButton('r');
+         button41.SetMapMode(MapModeType.Area);
          var button5 = ControlFactory.GetMapModeButton('t');
          button5.SetMapMode(MapModeType.Regions);
          var button6 = ControlFactory.GetMapModeButton('y');
@@ -256,11 +259,12 @@ namespace Editor.Forms
          var button9 = ControlFactory.GetMapModeButton('o');
          button9.SetMapMode(MapModeType.Terrain);
          var button10 = ControlFactory.GetMapModeButton('p');
+         button10.Margin= new(3, 0, 0, 0);
          button10.SetMapMode(MapModeType.Autonomy);
          MMButtonsTLPanel.Controls.Add(button01, 0, 0);
-         MMButtonsTLPanel.Controls.Add(button2, 1, 0);
-         MMButtonsTLPanel.Controls.Add(button3, 2, 0);
-         MMButtonsTLPanel.Controls.Add(button4, 3, 0);
+         MMButtonsTLPanel.Controls.Add(button21, 1, 0);
+         MMButtonsTLPanel.Controls.Add(button31, 2, 0);
+         MMButtonsTLPanel.Controls.Add(button41, 3, 0);
          MMButtonsTLPanel.Controls.Add(button5, 4, 0);
          MMButtonsTLPanel.Controls.Add(button6, 5, 0);
          MMButtonsTLPanel.Controls.Add(button7, 6, 0);
@@ -1212,6 +1216,7 @@ namespace Editor.Forms
          _governmentTypeBox = ControlFactory.GetListComboBox([.. Globals.GovernmentTypes.Keys], new(1, 1, 6, 1));
          _governmentTypeBox.SelectedIndexChanged += GovernmentTypeBox_SelectedIndexChanged;
          _governmentRankBox = ControlFactory.GetListComboBox(["1", "2", "3"], new(1)); // TODO read in the defines to determine range
+         _governmentRankBox.SelectedIndexChanged += CountryGuiEvents.GovernmentRankBox_SelectedIndexChanged;
          _governmentReforms = ControlFactory.GetItemList(ItemTypes.FullWidth, [], "Government Reforms");
          _governmentReforms.Width = 117;
          _governmentReforms.OnItemAdded += CountryGuiEvents.GovernmentReforms_OnItemAdded;

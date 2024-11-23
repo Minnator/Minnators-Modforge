@@ -298,7 +298,7 @@ public static class Globals
 // - [x] Discord Rich Presence
 // - [-] Country Collection Editing, Saving is broken
 // - [x] Terrain Editing and map mode
-// - [ ] Province Group parsing
+// - [x] Province Group parsing
 
 
 // TODO LIST Until Alpha 1.1

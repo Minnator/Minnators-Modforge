@@ -153,5 +153,15 @@ namespace Editor.Events
             return;
          Selection.SelectedCountry.HistoryCountry.GovernmentReforms.Remove(reform);
       }
+
+      public static void GovernmentRankBox_SelectedIndexChanged(object? sender, EventArgs e)
+      {
+         if (sender is not ComboBox box || box.SelectedItem == null)
+            return;
+         if (Selection.SelectedCountry == Country.Empty)
+            return;
+         if (int.TryParse(box.SelectedItem.ToString()!, out var rank))
+            Selection.SelectedCountry.HistoryCountry.GovernmentRank = rank;
+      }
    }
 }

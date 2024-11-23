@@ -6,7 +6,7 @@ using static Editor.Helper.ProvinceEnumHelper;
 
 namespace Editor.DataClasses.Commands
 {
-   public class CProvinceAttributeChange : ICommand
+   public sealed class CProvinceAttributeChange : CSaveablesCommand
    {
       private readonly List<Province> _provinces;
       private readonly List<string> _oldValues = [];
@@ -14,7 +14,7 @@ namespace Editor.DataClasses.Commands
       private readonly ProvAttrGet _attribute;
       private readonly ProvAttrSet _setter;
 
-      public CProvinceAttributeChange(List<Province> provinces, string value, ProvAttrGet pa, ProvAttrSet ps, bool executeOnInit = true)
+      public CProvinceAttributeChange(List<Province> provinces, string value, ProvAttrGet pa, ProvAttrSet ps, bool executeOnInit = true) : base(provinces.Cast<Saveable>().ToList())
       {
          _provinces = provinces;
          _value = value;
@@ -24,7 +24,7 @@ namespace Editor.DataClasses.Commands
          foreach (var p in _provinces)
          {
             var attr = p.GetAttribute(_attribute);
-            if (attr == null)
+            if (attr == null!)
                Debugger.Break();
             else
                _oldValues.Add(attr.ToString()!);
@@ -35,8 +35,9 @@ namespace Editor.DataClasses.Commands
       }
 
 
-      public void Execute()
+      public override void Execute() 
       {
+         base.Execute();
          foreach (var province in _provinces)
          {
             if (province.GetAttribute(_attribute)!.ToString()! == _value)
@@ -45,25 +46,27 @@ namespace Editor.DataClasses.Commands
          }
       }
 
-      public void Undo()
+      public override void Undo()
       {
+         base.Undo();
          for (var i = 0; i < _provinces.Count; i++)
             _provinces[i].SetAttribute(_setter, _oldValues[i]);
       }
 
-      public void Redo()
+      public override void Redo()
       {
+         base.Redo();
          Execute();
       }
 
-      public string GetDescription()
+      public override string GetDescription()
       {
          return _provinces.Count == 1
             ? $"Changed {_attribute} of {_provinces[0].Id} ({_provinces[0].GetLocalisation()}) to [{_value}]"
             : $"Changed {_attribute} of [{_provinces.Count}] provinces to [{_value}]";
       }
 
-      public string GetDebugInformation(int indent)
+      public override string GetDebugInformation(int indent)
       {
          var sb = new StringBuilder();
          SavingUtil.AddTabs(indent, ref sb);

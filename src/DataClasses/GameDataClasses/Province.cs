@@ -210,13 +210,13 @@ public class Province(int id, Color color) : ProvinceComposite(id.ToString(), co
 
          if (Globals.State == State.Running)
          {
-            RaiseProvinceOwnerChanged(this, value, nameof(Owner));
             if (Globals.Countries.TryGetValue(_data.Owner, out var valueOldOwner))
                valueOldOwner.Remove(this);
             if (!Globals.Countries.TryGetValue(value, out var owner))
                return;
             _data.Owner = value;
             owner.Add(this);
+            RaiseProvinceOwnerChanged(this, value, nameof(Owner));
          }
          else
          {

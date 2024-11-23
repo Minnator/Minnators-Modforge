@@ -228,17 +228,20 @@ public static class MapDrawing
    public static void DrawOccupations(bool rebelsOnly, ZoomControl zoomControl)
    {
       foreach (var province in Globals.LandProvinces)
-      {
-         if (rebelsOnly && !province.HasRevolt) // Has no rebels but we only want to show rebels
-            continue;
-         if (!rebelsOnly && province is { IsNonRebelOccupied: false, HasRevolt: false }) // has neither rebels nor occupation, but we want to show some
-            continue;
+         DrawOccupation(province, rebelsOnly, zoomControl);
+   }
 
-         if (!Geometry.GetIfHasStripePixels(province, rebelsOnly, out var stripePixels))
-            continue;
+   public static void DrawOccupation(Province province, bool rebelsOnly, ZoomControl zoomControl)
+   {
+      if (rebelsOnly && !province.HasRevolt) // Has no rebels but we only want to show rebels
+         return;
+      if (!rebelsOnly && province is { IsNonRebelOccupied: false, HasRevolt: false }) // has neither rebels nor occupation, but we want to show some
+         return;
 
-         DrawOnMap(stripePixels, province.GetOccupantColor, zoomControl);
-      }
+      if (!Geometry.GetIfHasStripePixels(province, rebelsOnly, out var stripePixels))
+         return;
+
+      DrawOnMap(stripePixels, province.GetOccupantColor, zoomControl);
    }
 
    public static void WriteOnProvince(Func<Province, string> textProvider)
