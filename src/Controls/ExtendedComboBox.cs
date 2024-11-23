@@ -4,10 +4,15 @@ namespace Editor.Controls
 {
    public sealed class ExtendedComboBox : ComboBox
    {
-      public static bool AllowEvents = true;
+      public static bool AllowEvents
+      {
+         get => _allowEvents;
+         set => _allowEvents = value;
+      }
 
       public EventHandler<ProvinceEditedEventArgs>? OnDataChanged = delegate { };
       public EventHandler<ProvinceCollectionEventArgs>? OnCollectionDataChanged = delegate { };
+      private static bool _allowEvents = true;
 
       public ExtendedComboBox()
       {

@@ -202,7 +202,7 @@ namespace Editor.Loading
          }
 
          sw.Stop();
-         Debug.WriteLine($"Loading terrain and trees took {sw.ElapsedMilliseconds}ms");
+         //Debug.WriteLine($"Loading terrain and trees took {sw.ElapsedMilliseconds}ms");
       }
 
    }

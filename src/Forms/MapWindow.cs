@@ -66,6 +66,7 @@ namespace Editor.Forms
       public CollectionEditor2<Country, Province> CountryEditingGui = null!;
       public CollectionEditor2<TradeNode, Province> TradeNodeEditingGui = null!;
       public CollectionEditor2<ProvinceGroup, Province> ProvinceGroupsEditingGui = null!;
+      public CollectionEditor2<ColonialRegion, Province> ColonialRegionEditingGui = null!;
 
       public Screen? StartScreen = null;
 
@@ -291,13 +292,17 @@ namespace Editor.Forms
          ProvinceGroupsEditingGui = new(ItemTypes.Id, SaveableType.ProvinceGroup, SaveableType.Province, MapModeType.ProvinceGroup);
          ProvinceGroup.ItemsModified += ProvinceGroupsEditingGui.OnCorrespondingDataChange;
 
+         ColonialRegionEditingGui = new(ItemTypes.Id, SaveableType.ColonialRegion, SaveableType.Province, MapModeType.ColonialRegions);
+         ColonialRegion.ItemsModified += ColonialRegionEditingGui.OnCorrespondingDataChange;
+
          ProvinceCollectionsLayoutPanel.Controls.Add(CountryEditingGui, 0, 0);
-         ProvinceCollectionsLayoutPanel.Controls.Add(RegionEditingGui, 0, 0);
+         ProvinceCollectionsLayoutPanel.Controls.Add(RegionEditingGui, 0, 2);
          ProvinceCollectionsLayoutPanel.Controls.Add(AreaEditingGui, 0, 1);
-         ProvinceCollectionsLayoutPanel.Controls.Add(SuperRegionEditingGui, 0, 2);
-         ProvinceCollectionsLayoutPanel.Controls.Add(TradeCompanyEditingGui, 0, 3);
+         ProvinceCollectionsLayoutPanel.Controls.Add(SuperRegionEditingGui, 0, 3);
+         ProvinceCollectionsLayoutPanel.Controls.Add(TradeCompanyEditingGui, 0, 5);
          ProvinceCollectionsLayoutPanel.Controls.Add(TradeNodeEditingGui, 0, 4);
-         ProvinceCollectionsLayoutPanel.Controls.Add(ProvinceGroupsEditingGui, 0, 5);
+         ProvinceCollectionsLayoutPanel.Controls.Add(ProvinceGroupsEditingGui, 0, 6);
+         ProvinceCollectionsLayoutPanel.Controls.Add(ColonialRegionEditingGui, 0, 7);
       }
 
 
@@ -570,10 +575,10 @@ namespace Editor.Forms
       /// </summary>
       public void LoadSelectedProvincesToGui()
       {
-         ExtendedComboBox.AllowEvents = false;
          Globals.EditingStatus = EditingStatus.LoadingInterface;
          SuspendLayout();
          ClearProvinceGui();
+         ExtendedComboBox.AllowEvents = false;
          if (Selection.GetSharedAttribute(ProvAttrGet.claims, out var result) && result is List<Tag> tags)
             _claims.AddItemsUnique([.. tags]);
          if (Selection.GetSharedAttribute(ProvAttrGet.permanent_claims, out result) && result is List<Tag> permanentTags)
@@ -642,8 +647,8 @@ namespace Editor.Forms
             ProvAdjLabel.Text = Selection.GetSelectedProvinces[0].GetLocalisationAdj;
          }
          ResumeLayout();
-         ExtendedComboBox.AllowEvents = true;
          Globals.EditingStatus = EditingStatus.Idle;
+         ExtendedComboBox.AllowEvents = true;
       }
 
       public void LoadProvinceToGui(Province province)

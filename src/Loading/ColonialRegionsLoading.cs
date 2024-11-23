@@ -31,7 +31,7 @@ namespace Editor.Loading
                continue;
             }
 
-            var region = new ColonialRegion(regionBlock.Name, Color.Empty, ObjEditingStatus.Unchanged);
+            var region = new ColonialRegion(regionBlock.Name, Color.Empty, ref pathObj, []);
 
             foreach (var block in regionBlock.Blocks)
             {

@@ -50,7 +50,7 @@ namespace Editor.DataClasses.GameDataClasses
 
       public override string GetSavePromptString()
       {
-         return $"Save province groups file";
+         return $"Province Group: {Name}";
       }
       
       public static EventHandler<ProvinceComposite> ColorChanged = delegate { };

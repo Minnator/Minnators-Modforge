@@ -197,22 +197,40 @@ namespace Editor.Saving
          if (!path.IsModPath)
             throw new EvilActions($"The file {path} is a vanilla file and cannot be overwritten!");
 
+         var saveIndividually = true;
+         Saveable last_item = null;
          foreach (var item in AllSaveableFiles[path])
          {
+            if (last_item is null)
+            {
+               last_item = item;
+               saveIndividually = item.GetSaveStringIndividually;
+            }
+            
             if (item.EditingStatus == ObjEditingStatus.Modified)
                changed.Add(item);
             else if (item.EditingStatus != ObjEditingStatus.Deleted)
                unchanged.Add(item);
             item.EditingStatus = ObjEditingStatus.Unchanged;
          }
-         
-         if (changed.Count > 0 && !string.IsNullOrWhiteSpace(changed[0].GetHeader()))
-            sb.AppendLine(changed[0].GetHeader());
 
-         // Save the unchanged first
-         AddListToStringBuilder(ref sb, unchanged);
-         sb.AppendLine($"### Modified {DateTime.Now} ###");
-         AddListToStringBuilder(ref sb, changed);
+         if (saveIndividually)
+         {
+            if (changed.Count > 0 && !string.IsNullOrWhiteSpace(changed[0].GetHeader()))
+               sb.AppendLine(changed[0].GetHeader());
+
+            // Save the unchanged first
+            AddListToStringBuilder(ref sb, unchanged);
+            sb.AppendLine($"### Modified {DateTime.Now} ###");
+            AddListToStringBuilder(ref sb, changed);
+
+            if (changed.Count > 0 && !string.IsNullOrWhiteSpace(changed[0].GetFooter()))
+               sb.AppendLine(changed[0].GetFooter());
+         }
+         else
+         {
+            sb.Append(last_item.GetFullFileString(changed, unchanged));
+         }
 
          if (path.IsLocalisation)
             IO.WriteLocalisationFile(path.ToPath(), sb.ToString(), false);

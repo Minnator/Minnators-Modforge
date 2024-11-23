@@ -776,11 +776,12 @@
          ProvinceCollectionsLayoutPanel.Location = new Point(0, 0);
          ProvinceCollectionsLayoutPanel.Margin = new Padding(0);
          ProvinceCollectionsLayoutPanel.Name = "ProvinceCollectionsLayoutPanel";
-         ProvinceCollectionsLayoutPanel.RowCount = 7;
+         ProvinceCollectionsLayoutPanel.RowCount = 8;
          ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
          ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
          ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
          ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 182F));
+         ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
          ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
          ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
          ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));

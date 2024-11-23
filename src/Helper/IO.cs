@@ -120,6 +120,7 @@ internal static class IO
    {
       try
       {
+         CreateDirectoryIfRequired(path);
          if (append)
             File.AppendAllText(path, data, encoding);
          else
@@ -132,17 +133,26 @@ internal static class IO
       }
    }
 
+   public static bool CreateDirectoryIfRequired(string filePath)
+   {
+      if (!File.Exists(filePath))
+      {
+         var directoryPath = Path.GetDirectoryName(filePath);
+         if (string.IsNullOrEmpty(directoryPath))
+            return false;
+         if (!Directory.Exists(directoryPath))
+            Directory.CreateDirectory(directoryPath!);
+      }
+      return true;
+   }
+
    public static bool WriteToFile(string path, string data, bool append)
    {
       if (string.IsNullOrEmpty(path))
          return false;
       try
       {
-         var directoryPath = Path.GetDirectoryName(path);
-         if (string.IsNullOrEmpty(directoryPath))
-            return false;
-         if (!Directory.Exists(directoryPath))
-            Directory.CreateDirectory(directoryPath!);
+         CreateDirectoryIfRequired(path);
          if (append)
             File.AppendAllText(path, data);
          else
@@ -157,6 +167,7 @@ internal static class IO
 
    public static bool WriteLocalisationFile(string path, string content, bool append)
    {
+      CreateDirectoryIfRequired(path);
       var streamWriter = new StreamWriter(path, false, bomUtf8Encoding);
       streamWriter.WriteLine($"l_{Globals.Settings.Misc.Language.ToString().ToLower()}:");
       streamWriter.WriteLine(content);

@@ -214,7 +214,7 @@ public static class Globals
    public static Dictionary<string, TradeCompanyInvestment> TradeCompanyInvestments = [];
    public static Dictionary<string, TradeCompany> TradeCompanies = [];
 
-   public static readonly Dictionary<string, ProvinceGroup> ProvinceGroups = []; // TODO: read in
+   public static Dictionary<string, ProvinceGroup> ProvinceGroups = [];
    // Ingame Groups
    public static Dictionary<string, Area> Areas = [];
    public static Dictionary<string, Region> Regions { get; set; } = [];

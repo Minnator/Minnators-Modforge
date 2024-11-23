@@ -66,6 +66,7 @@ namespace Editor.Forms.LoadingScreen
          IdeasLoading.Load,
          AutoTerrainCalculations.Load,
          HeightMapLoading.Load,
+         ProvinceGroupsLoading.Load,
 
          // Must be last
          ModifierParser.Demilitarize

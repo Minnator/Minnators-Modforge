@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Text;
+using Windows.ApplicationModel.Store.Preview.InstallControl;
 using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.Saving
@@ -140,12 +141,30 @@ namespace Editor.Saving
          sb.AppendLine($"{boolName} = {GetYesNo(b)}");
       }
 
-      public static void AddInt(int tabs, string intName, int num, ref StringBuilder sb)
+      public static void AddBoolIfYes(int tabs, bool b, string boolName, ref StringBuilder sb)
       {
-         if (num == 0)
-            return;
-         AddTabs(tabs, ref sb);
-         sb.AppendLine($"{intName} = {num}");
+         if (b)
+            AddBool(tabs, b, boolName, ref sb);
+      }
+
+      public static void AddBoolIfNo(int tabs, bool b, string boolName, ref StringBuilder sb)
+      {
+         if (!b)
+            AddBool(tabs, b, boolName, ref sb);
+      }
+
+      public static void AddInt(int tabs, int num, string intName, ref StringBuilder sb)
+      {
+         AddIntIfNotValue(tabs, num, intName, 0, ref sb);
+      }
+
+      public static void AddIntIfNotValue(int tabs, int num, string intName, int val, ref StringBuilder sb)
+      {
+         if (num != val)
+         {
+            AddTabs(tabs, ref sb);
+            sb.AppendLine($"{intName} = {num}");
+         }
       }
 
       public static void AddString(int tabs, string s, string stringName, ref StringBuilder sb)
@@ -156,7 +175,7 @@ namespace Editor.Saving
          sb.AppendLine($"{stringName} = {s}");
       }
 
-      public static void AddQuotedString(int tabs, string s, string stringName, ref StringBuilder sb)
+      public static void AddQuotedString(int tabs, string stringName, string s, ref StringBuilder sb)
       {
          if (string.IsNullOrEmpty(s))
             return;
@@ -180,12 +199,12 @@ namespace Editor.Saving
             sb.AppendLine(effect.GetEffectString(tabs + 1));
       }
 
-      public static void AddFloat(int tabs, string floatName, float num, ref StringBuilder sb)
+      public static void AddFloat(int tabs, float num, string floatName, ref StringBuilder sb)
       {
          if (num == 0)
             return;
          AddTabs(tabs, ref sb);
-         sb.AppendLine($"{floatName} = {num:F2}");
+         sb.AppendLine($"{floatName} = {num.ToString("F2", CultureInfo.InvariantCulture)}");
       }
 
       public static void AddModifiers(int tabs, List<ISaveModifier> modifiers, ref StringBuilder sb)
@@ -193,7 +212,7 @@ namespace Editor.Saving
          if (modifiers.Count == 0)
             return;
          foreach (var modifier in modifiers) 
-            sb.AppendLine(modifier.GetModifierString());
+            AddModifier(tabs, modifier, ref sb);
       }
 
       public static string ApplyModPrefix(string str)
@@ -202,5 +221,31 @@ namespace Editor.Saving
             return Globals.Settings.Saving.ModPrefix + "_" + str;
          return str;
       }
+
+      public static void OpenBlock(ref int tabs, string blockName, ref StringBuilder sb)
+      {
+         AddTabs(tabs, ref sb);
+         sb.AppendLine($"{blockName} = {{");
+         tabs++;
+      }
+
+      public static void CloseBlock(ref int tabs, ref StringBuilder sb)
+      {
+         AddTabs(--tabs, ref sb);
+         sb.AppendLine("}");
+      }
+
+      public static void AddModifier(int tabs, ISaveModifier mod, ref StringBuilder sb)
+      {
+         AddTabs(tabs, ref sb);
+         sb.AppendLine(mod.GetModifierString());
+      }
+
+      public static void AddFormattedProvinceList(int tabCount, ICollection<Province> provinces, string blockName, ref StringBuilder sb)
+      {
+         var ids = provinces.Select(x => x.Id).ToList();
+         AddFormattedIntList(blockName, ids, tabCount, ref sb);
+      }
+
    }
 }

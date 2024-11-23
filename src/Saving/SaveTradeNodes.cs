@@ -13,7 +13,7 @@ namespace Editor.Saving
          sb.AppendLine($"{tn.Name} = {{");
          tabs++;
          SavingUtil.AddColor(tabs, tn.Color, ref sb);
-         SavingUtil.AddInt(tabs, "location", tn.Location, ref sb);
+         SavingUtil.AddInt(tabs, tn.Location, "location", ref sb);
          SavingUtil.AddBool(tabs, tn.IsInland, "inland", ref sb);
          foreach (var outgoing in tn.Outgoing)
          {

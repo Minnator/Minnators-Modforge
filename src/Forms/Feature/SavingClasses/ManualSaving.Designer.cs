@@ -61,7 +61,7 @@
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 27F));
-         tableLayoutPanel1.Size = new Size(303, 396);
+         tableLayoutPanel1.Size = new Size(303, 451);
          tableLayoutPanel1.TabIndex = 0;
          // 
          // label1
@@ -87,7 +87,7 @@
          tableLayoutPanel2.Controls.Add(MarkAllModified, 1, 0);
          tableLayoutPanel2.Controls.Add(UnmarkAllSelected, 0, 0);
          tableLayoutPanel2.Dock = DockStyle.Fill;
-         tableLayoutPanel2.Location = new Point(0, 369);
+         tableLayoutPanel2.Location = new Point(0, 424);
          tableLayoutPanel2.Margin = new Padding(0);
          tableLayoutPanel2.Name = "tableLayoutPanel2";
          tableLayoutPanel2.RowCount = 1;
@@ -143,7 +143,7 @@
          CheckboxesTLP.RowCount = 2;
          CheckboxesTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
          CheckboxesTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-         CheckboxesTLP.Size = new Size(303, 305);
+         CheckboxesTLP.Size = new Size(303, 360);
          CheckboxesTLP.TabIndex = 4;
          // 
          // tableLayoutPanel3
@@ -188,7 +188,7 @@
          // 
          AutoScaleDimensions = new SizeF(7F, 15F);
          AutoScaleMode = AutoScaleMode.Font;
-         ClientSize = new Size(303, 396);
+         ClientSize = new Size(303, 451);
          Controls.Add(tableLayoutPanel1);
          Icon = (Icon)resources.GetObject("$this.Icon");
          KeyPreview = true;

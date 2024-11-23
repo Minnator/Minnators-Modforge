@@ -2,7 +2,7 @@
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.Parser;
-
+using Editor.Saving;
 namespace Editor.Loading;
 
 
@@ -18,7 +18,9 @@ public static class TerrainLoading
 
       Parsing.RemoveCommentFromMultilineString(IO.ReadAllInUTF8(path), out var content);
       var elements = Parsing.GetElements(0, content);
-      
+
+      var pathObj = PathObj.FromPath(path);
+
       foreach (var element in elements)
       {
          if (element is not Block block)
@@ -30,7 +32,7 @@ public static class TerrainLoading
          switch (block.Name)
          {
             case "categories":
-               ParseCategoriesBlock(block, ref Globals.Terrains);
+               ParseCategoriesBlock(block, ref Globals.Terrains, ref pathObj);
                break;
             case "terrain":
                ParseTerrainBlock(block, ref Globals.TerrainDefinitions);
@@ -45,11 +47,11 @@ public static class TerrainLoading
       }
    }
 
-   private static void ParseCategoriesBlock(Block block, ref List<Terrain> terrains)
+   private static void ParseCategoriesBlock(Block block, ref List<Terrain> terrains, ref PathObj path)
    {
       foreach (var blk in block.GetBlockElements)
       {
-         Terrain terrain = new(blk.Name);
+         Terrain terrain = new(blk.Name, ref path);
          ParseTerrainContent(blk.GetContent, ref terrain);
 
          foreach (var innerBlock in blk.GetBlockElements)
@@ -80,7 +82,7 @@ public static class TerrainLoading
 
          terrains.Add(terrain);
       }
-
+      SaveMaster.AddRangeToDictionary(path, terrains);
    }
 
    private static void ParseTerrainContent(string content, ref Terrain terrain)

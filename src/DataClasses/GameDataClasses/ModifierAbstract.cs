@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
+using Editor.Parser;
 using Editor.Saving;
 
 namespace Editor.DataClasses.GameDataClasses
@@ -380,7 +381,7 @@ namespace Editor.DataClasses.GameDataClasses
       public string GetModifierString()
       {
 
-         return $"{Name} = {Value}";
+         return $"{ModifierParser.ModifierDefinitions[Name].CodeName} = {Value}";
       }
 
       public override bool Equals(object? obj)

@@ -1,6 +1,8 @@
-﻿using Editor.DataClasses.Misc;
+﻿using System.Text;
+using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Saving;
+using static Editor.Saving.SavingUtil;
 
 namespace Editor.DataClasses.GameDataClasses
 {
@@ -48,7 +50,7 @@ namespace Editor.DataClasses.GameDataClasses
 
       public override KeyValuePair<string, bool> GetFileName()
       {
-         return new($"01_colonial_regions.txt", false);
+         return new("01_colonial_regions", false);
       }
 
       public override string SavingComment()
@@ -58,13 +60,43 @@ namespace Editor.DataClasses.GameDataClasses
       
       public override string GetSaveString(int tabs)
       {
-         //TODO
-         return "NOT YET SUPPORTED!";
+         var sb = new StringBuilder();
+         OpenBlock(ref tabs, Name, ref sb);
+         AddColor(tabs, Color, ref sb);
+         AddInt(tabs, TaxIncome, "tax_income", ref sb);
+         AddInt(tabs, NativeSize, "native_size", ref sb);
+         AddInt(tabs, NativeFerocity, "native_ferocity", ref sb);
+         AddInt(tabs, NativeHostileness, "native_hostileness", ref sb);
+
+         OpenBlock(ref tabs, "trade_goods", ref sb);
+         foreach (var tradeGood in TradeGoods) 
+            AddInt(tabs, tradeGood.Value, tradeGood.Key, ref sb);
+         CloseBlock(ref tabs, ref sb);
+         OpenBlock(ref tabs, "culture", ref sb);
+         foreach (var culture in Cultures) 
+            AddInt(tabs, culture.Value, culture.Key, ref sb);
+         CloseBlock(ref tabs, ref sb);
+         OpenBlock(ref tabs, "religion", ref sb);
+         foreach (var religion in Religions) 
+            AddInt(tabs, religion.Value, religion.Key, ref sb);
+         CloseBlock(ref tabs, ref sb);
+         AddFormattedProvinceList(tabs, GetProvinces(), "provinces", ref sb);
+         // Names
+         foreach (var name in Names)
+         {
+            OpenBlock(ref tabs, "names", ref sb);
+            if (name.Trigger != string.Empty)
+               AddString(tabs, "trigger", name.Trigger, ref sb);
+            AddString(tabs, "name", name.Name, ref sb);
+            CloseBlock(ref tabs, ref sb);
+         }
+         CloseBlock(ref tabs, ref sb);
+         return sb.ToString();
       }
 
       public override string GetSavePromptString()
       {
-         return $"Save colonial regions file";
+         return $"colonial_region: {Name}";
       }
 
 

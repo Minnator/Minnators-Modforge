@@ -150,11 +150,11 @@ public class CommonCountry(string fileName, Country country) : Saveable
       if (ColonialParent != Tag.Empty)
          AddString(0, "colonial_parent", ColonialParent.ToString(), ref sb);
       if (RandomNationChance != -1)
-         AddInt(0, "random_nation_chance", RandomNationChance, ref sb);
+         AddInt(0,  RandomNationChance, "random_nation_chance",ref sb);
       AddString(0, HistoricalCouncil, "historical_council", ref sb);
       AddString(0, PreferredReligion, "preferred_religion", ref sb);
       AddString(0, SpecialUnitCulture, "special_unit_culture", ref sb);
-      AddInt(0, "historical_score", HistoricalScore, ref sb);
+      AddInt(0, HistoricalScore, "historical_score", ref sb);
       sb.AppendLine();
       AddFormattedStringListOnePerRow("historical_idea_groups", HistoricIdeas, 0, ref sb);
       AddFormattedStringListOnePerRow("historical_units", HistoricUnits, 0, ref sb);
@@ -353,7 +353,7 @@ public class HistoryCountry(Country country) : Saveable
       var sb = new StringBuilder();
       AddString(0, Government, "government", ref sb);
       AddStringList(0, "add_government_reform", GovernmentReforms, ref sb);
-      AddInt(0, "government_rank", GovernmentRank, ref sb);
+      AddInt(0, GovernmentRank, "government_rank", ref sb);
       AddString(0, PrimaryCulture, "primary_culture", ref sb);
       AddStringList(0, "add_accepted_culture", AcceptedCultures, ref sb);
       AddString(0, Religion, "religion", ref sb);
@@ -361,9 +361,9 @@ public class HistoryCountry(Country country) : Saveable
       AddString(0, TechnologyGroup.ToString(), "technology_group", ref sb);
       AddString(0, UnitType, "unit_type", ref sb);
       if (Capital != Province.Empty)
-         AddInt(0, "capital", Capital.Id, ref sb);
+         AddInt(0, Capital.Id, "capital", ref sb);
       if (FixedCapital != -1)
-         AddInt(0, "fixed_capital", FixedCapital, ref sb);
+         AddInt(0, FixedCapital, "fixed_capital", ref sb);
       if (IsElector)
          AddBool(0, IsElector, "elector", ref sb);
       sb.AppendLine("# Specific Effects #");

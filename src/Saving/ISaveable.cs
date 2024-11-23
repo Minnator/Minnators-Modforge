@@ -23,6 +23,9 @@ public abstract class Saveable : IDisposable
    [JsonIgnore]
    public PathObj Path = PathObj.Empty;
 
+   // Says if the object should be saved as a file or if for all objects of this type GetSavingString is called
+   public virtual bool GetSaveStringIndividually => true;
+
    [Browsable(false)]
    public virtual ObjEditingStatus EditingStatus
    {
@@ -80,6 +83,16 @@ public abstract class Saveable : IDisposable
       return string.Empty;
    }
 
+   public virtual string GetFooter()
+   {
+      return string.Empty;
+   }
+
+   public virtual string GetFullFileString(List<Saveable> changed, List<Saveable> unchanged)
+   {
+      throw new EvilActions("NO, don't save like dis");
+   }
+
    
 
    public abstract SaveableType WhatAmI();
@@ -106,6 +119,10 @@ public abstract class Saveable : IDisposable
 
    public abstract string GetSaveString(int tabs);
 
+   /// <summary>
+   /// Should line up with: Please enter your input for: your string
+   /// </summary>
+   /// <returns></returns>
    public abstract string GetSavePromptString();
 
    /// <summary>

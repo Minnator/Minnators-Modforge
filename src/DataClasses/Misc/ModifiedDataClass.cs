@@ -16,7 +16,8 @@
       Localisation = 1 << 10,
       Country = 1 << 11,
       Province = 1 << 12,
-      All = SaveProvinces | Area | Region | TradeNode | TradeCompany | ColonialRegion | SuperRegion | Continent | ProvinceGroup | EventModifier | Localisation | Country | Province,
+      Terrain = 1 << 13,
+      All = SaveProvinces | Area | Region | TradeNode | TradeCompany | ColonialRegion | SuperRegion | Continent | ProvinceGroup | EventModifier | Localisation | Country | Province | Terrain,
    }
 
 }
