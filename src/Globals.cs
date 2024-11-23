@@ -225,18 +225,27 @@ public static class Globals
 
    // ------------ Saving ------------ \\ 
 
-   public static SaveableType SaveableType = new();
-
+   public static SaveableType SaveableType
+   {
+      get => _saveableType;
+      set
+      {
+         
+         if (value == 0)
+         {
+            if (MapWindow.Text.EndsWith('*'))
+               MapWindow.Text = MapWindow.Text[..^1];
+         }
+         else if(_saveableType == 0)
+            MapWindow.Text += "*";
+         
+         _saveableType = value;
+      }
+   }
 
 
    // ------------ Localisation ------------ \\
    public static HashSet<LocObject> Localisation = [];
-
-
-   public static Dictionary<string, Dictionary<string, string>> VanillaLocalisationOld { get; set; } = [];
-   public static Dictionary<string, Dictionary<string, string>> ModLocalisationOld { get; set; } = [];
-   public static Dictionary<string, Dictionary<string, string>> ReplaceLocalisationOld { get; set; } = [];
-
    public static HashSet<LocObject> LocalisationCollisions { get; set; } = [];
    
    public static HashSet<string> ScriptedEffectNames {get; set; } = [];
@@ -260,6 +269,8 @@ public static class Globals
    [
       "cannot_form_from_collapse_nation", "right_to_bear_arms", "all_your_core_are_belong_to_us", "random_nation_extra_size", 
    ];
+
+   private static SaveableType _saveableType = 0;
 }
 
 // TODO LIST Until Alpha 1.0

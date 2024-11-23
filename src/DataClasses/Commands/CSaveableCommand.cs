@@ -57,7 +57,7 @@ namespace Editor.DataClasses.Commands
    public abstract class CSaveablesCommand(ICollection<Saveable> saveables) : ICommand
    {
       // caches the previous state of the object
-      private ObjEditingStatus _previousState;
+      private List<ObjEditingStatus> _previousState = [];
       // saves if theis object type is marked as modified
       private bool _flagSet;
 
@@ -66,20 +66,34 @@ namespace Editor.DataClasses.Commands
       public virtual void Execute()
       {
          _flagSet = (Globals.SaveableType & test_saveable.WhatAmI()) != 0; 
-         _previousState = test_saveable.EditingStatus;
+         foreach (var saveable in saveables) 
+            _previousState.Add(saveable.EditingStatus);
          SetAllEditingStates(ObjEditingStatus.Modified);
       }
 
-      public void SetAllEditingStates(ObjEditingStatus state)
+      private void SetAllPreviousStates(List<ObjEditingStatus> states)
       {
-         foreach (var saveable in saveables)
-         {
-            saveable.EditingStatus = state;
-         }
+         var cnt = 0;
+         foreach (var state in states)
+            _previousState[cnt++] = state;
       }
 
+      private void SetAllEditingStates(List<ObjEditingStatus> states)
+      {
+         var cnt = 0;
+         foreach (var saveable in saveables)
+            saveable.EditingStatus = states[cnt++];
+      }
+
+      private void SetAllEditingStates(ObjEditingStatus state)
+      {
+         foreach (var saveable in saveables) 
+            saveable.EditingStatus = state;
+      }
+      
       public virtual void Undo()
       {
+         List<ObjEditingStatus> states = [..saveables.Select(x => x.EditingStatus)];
          var state = test_saveable.EditingStatus;
          if (state != ObjEditingStatus.Modified)
          {
@@ -92,11 +106,12 @@ namespace Editor.DataClasses.Commands
                Globals.SaveableType &= ~test_saveable.WhatAmI();
             SetAllEditingStates(_previousState);
          }
-         _previousState = state;
+         SetAllPreviousStates(states);
       }
 
       public virtual void Redo()
       {
+         List<ObjEditingStatus> states = [.. saveables.Select(x => x.EditingStatus)];
          var state = test_saveable.EditingStatus;
          if (state != ObjEditingStatus.Modified) // default case
          {
@@ -108,7 +123,7 @@ namespace Editor.DataClasses.Commands
                Globals.SaveableType &= ~test_saveable.WhatAmI();
             SetAllEditingStates(_previousState);
          }
-         _previousState = state;
+         SetAllPreviousStates(states);
       }
 
       public abstract string GetDescription();

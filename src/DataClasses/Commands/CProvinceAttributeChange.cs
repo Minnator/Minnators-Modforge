@@ -36,8 +36,14 @@ namespace Editor.DataClasses.Commands
 
 
       public override void Execute() 
-      {
+      {  
          base.Execute();
+         InternalExecute();
+         
+      }
+
+      private void InternalExecute()
+      {
          foreach (var province in _provinces)
          {
             if (province.GetAttribute(_attribute)!.ToString()! == _value)
@@ -56,7 +62,8 @@ namespace Editor.DataClasses.Commands
       public override void Redo()
       {
          base.Redo();
-         Execute();
+         InternalExecute();
+         
       }
 
       public override string GetDescription()

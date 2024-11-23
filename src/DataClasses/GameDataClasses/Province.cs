@@ -770,11 +770,13 @@ public class Province(int id, Color color) : ProvinceComposite(id.ToString(), co
 
    public void ProvinceDataChanged(object? obj, ProvinceDataChangedEventArgs e)
    {
+      /*
       if (Globals.State == State.Running)
       {
          EditingStatus = ObjEditingStatus.Modified;
          LastModified = DateTime.Now;
       }
+      */
    }
 
    public object GetAttribute(ProvAttrGet key)
