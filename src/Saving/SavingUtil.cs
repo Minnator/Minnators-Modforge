@@ -247,5 +247,17 @@ namespace Editor.Saving
          AddFormattedIntList(blockName, ids, tabCount, ref sb);
       }
 
+      public static void AddNames(int tabs, ICollection<TriggeredName> Names, ref StringBuilder sb)
+      {
+         foreach (var name in Names)
+         {
+            OpenBlock(ref tabs, "names", ref sb);
+            if (name.Trigger != null)
+               sb.AppendLine(name.Trigger.GetFormattedElement(tabs));
+            AddString(tabs, name.Name, "name", ref sb);
+            CloseBlock(ref tabs, ref sb);
+         }
+      }
+
    }
 }

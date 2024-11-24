@@ -7,6 +7,8 @@ namespace Editor.DataClasses.GameDataClasses
 {
    public class TradeNode : ProvinceCollection<Province>
    {
+      public override bool GetSaveStringIndividually => false;
+
       public TradeNode(string name, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(name, color, status)
       {
          Location = Province.Empty;
@@ -68,8 +70,19 @@ namespace Editor.DataClasses.GameDataClasses
 
       public override string GetSaveString(int tabs)
       {
+         throw new EvilActions("Trade nodes can not be saved individually!");
+      }
+
+      public override string GetFullFileString(List<Saveable> changed, List<Saveable> unchanged)
+      {
          StringBuilder sb = new();
-         SaveTradeNodes.FormatTradeNode(this, ref sb);
+         var nodesSorted = TradeNodeHelper.TopologicalSort(Globals.TradeNodes.Values.ToList());
+         foreach (var node in nodesSorted)
+         {
+            if (Globals.Settings.Saving.AddCommentAboveObjectsInFiles)
+               sb.Append("# ").Append(node.SavingComment()).AppendLine();
+            SaveTradeNodes.FormatTradeNode(node, ref sb);
+         }
          return sb.ToString();
       }
 

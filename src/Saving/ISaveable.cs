@@ -94,7 +94,10 @@ public abstract class Saveable : IDisposable
    }
 
    
-
+   /// <summary>
+   /// This MUST always return a single SaveableType and no combinations. Otherwise, Exception.
+   /// </summary>
+   /// <returns></returns>
    public abstract SaveableType WhatAmI();
 
    /// <summary>

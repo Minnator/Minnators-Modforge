@@ -11,6 +11,15 @@ namespace Editor.Saving
    {
       private static HashSet<PathObj> NeedsToBeHandled = [];
       private static Dictionary<PathObj, List<Saveable>> AllSaveableFiles = [];
+      private static Dictionary<SaveableType, int> _cache;
+
+      static SaveMaster()
+      {
+         var names = EnumHelper.GetSaveableNames();
+         _cache = new(names.Count);
+         foreach (var name in names) 
+            _cache.Add(Enum.Parse<SaveableType>(name), 0);
+      }
 
       public static void SaveSaveables(ICollection<Saveable> saveables, SaveableType saveableType = SaveableType.All)
       {
@@ -22,14 +31,26 @@ namespace Editor.Saving
       {
          if (!onlyModified)
          {
+            List<PathObj> toBeSaved = [];
             foreach (var path in AllSaveableFiles.Keys)
             {
                var singleModData = AllSaveableFiles[path][0].WhatAmI();
                if ((saveableType & singleModData) == 0)
                   continue;
-               SaveFile(path);
-               Globals.SaveableType &= ~singleModData;
+               toBeSaved.Add(path);  
             }
+
+            foreach (var path in toBeSaved)
+            {
+               var singleModData = AllSaveableFiles[path][0].WhatAmI();
+               if (!path.IsModPath)
+                  SaveVanillaToMod(path);
+               else
+                  SaveFile(path);
+               Globals.SaveableType &= ~singleModData;
+               _cache[singleModData] = 0;
+            }
+
             return;
          }
          SavePaths(ref NeedsToBeHandled, saveableType);
@@ -51,8 +72,15 @@ namespace Editor.Saving
                SaveFile(path);
             // Remove the saved type from the still to save types
             // TODO FIX
-            Globals.SaveableType &= ~singleModData;
-            NeedsToBeHandled.Remove(path);
+
+            if (_cache[singleModData] == 0)
+            {
+               NeedsToBeHandled.Remove(path);
+               Globals.SaveableType &= ~singleModData;
+            }
+            // The cache has to be always above 0
+            else if (_cache[singleModData] < 0)
+               throw new EvilActions("The cache value is below 0 this should never happen!");
          }   
       }
 
@@ -139,6 +167,7 @@ namespace Editor.Saving
             throw new EvilActions($"Should not add a non Loc Object {saveable} using AddLocObject!");
          var path = saveable.Path;
          Globals.SaveableType |= SaveableType.Localisation;
+         _cache[SaveableType.Localisation]++;
 
          if (path.Equals(PathObj.Empty))
          {
@@ -196,7 +225,9 @@ namespace Editor.Saving
             saveable.SetPath(ref path);
          }
          NeedsToBeHandled.Add(path);
-         Globals.SaveableType |= saveable.WhatAmI();
+         var type = saveable.WhatAmI();
+         Globals.SaveableType |= type;
+         _cache[type]++;
       }
 
       private static void SaveFile(PathObj path)
@@ -209,12 +240,13 @@ namespace Editor.Saving
             throw new EvilActions($"The file {path} is a vanilla file and cannot be overwritten!");
 
          var saveIndividually = true;
-         Saveable last_item = null;
+         Saveable? lastItem = null;
+         var saveabletype = AllSaveableFiles[path].First().WhatAmI();
          foreach (var item in AllSaveableFiles[path])
          {
-            if (last_item is null)
+            if (lastItem is null)
             {
-               last_item = item;
+               lastItem = item;
                saveIndividually = item.GetSaveStringIndividually;
             }
             
@@ -222,6 +254,12 @@ namespace Editor.Saving
                changed.Add(item);
             else if (item.EditingStatus != ObjEditingStatus.Deleted)
                unchanged.Add(item);
+
+            if (item.EditingStatus is ObjEditingStatus.Modified or ObjEditingStatus.Deleted)
+            {
+               _cache[saveabletype]--;
+            }
+
             item.EditingStatus = ObjEditingStatus.Unchanged;
          }
 
@@ -232,7 +270,8 @@ namespace Editor.Saving
 
             // Save the unchanged first
             AddListToStringBuilder(ref sb, unchanged);
-            sb.AppendLine($"### Modified {DateTime.Now} ###");
+            if (Globals.Settings.Saving.AddModifiedCommentToFilesWhenSaving)
+               sb.AppendLine($"### Modified {DateTime.Now} ###");
             AddListToStringBuilder(ref sb, changed);
 
             if (changed.Count > 0 && !string.IsNullOrWhiteSpace(changed[0].GetFooter()))
@@ -240,7 +279,7 @@ namespace Editor.Saving
          }
          else
          {
-            sb.Append(last_item.GetFullFileString(changed, unchanged));
+            sb.Append(lastItem?.GetFullFileString(changed, unchanged));
          }
 
          if (path.IsLocalisation)
@@ -253,9 +292,12 @@ namespace Editor.Saving
       {
          foreach (var item in items)
          {
-            var saveComment = item.SavingComment();
-            if (!string.IsNullOrWhiteSpace(saveComment))
-               sb.AppendLine($"# {saveComment}");
+            if (Globals.Settings.Saving.AddCommentAboveObjectsInFiles)
+            {
+               var saveComment = item.SavingComment();
+               if (!string.IsNullOrWhiteSpace(saveComment))
+                  sb.AppendLine($"# {saveComment}");
+            }
             sb.AppendLine(item.GetSaveString(tabs));
          }
       }

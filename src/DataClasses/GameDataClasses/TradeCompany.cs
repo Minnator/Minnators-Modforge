@@ -1,29 +1,40 @@
-﻿using Editor.DataClasses.Misc;
+﻿using System.Security.AccessControl;
+using Editor.DataClasses.Misc;
 using Editor.Helper;
+using Editor.ParadoxLanguage.Trigger;
+using Editor.Parser;
 using Editor.Saving;
+using static Editor.Saving.SavingUtil;
 
 namespace Editor.DataClasses.GameDataClasses
 {
    public class TradeCompany : ProvinceCollection<Province>
    {
-      public TradeCompany(string genericName, string specificName, string name, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(name, color, status)
+      public TradeCompany(List<TriggeredName> names, string name, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(name, color, status)
       {
-         GenericName = genericName;
-         SpecificName = specificName;
+         Names = names;
       }
 
-      public TradeCompany(string name, Color color, ref PathObj path, ICollection<Province> provinces, string genericName, string specificName) : base(name, color, ref path, provinces)
+      public TradeCompany(List<TriggeredName> names, string name, Color color, ref PathObj path, ICollection<Province> provinces) : base(name, color, ref path, provinces)
       {
-         GenericName = genericName;
-         SpecificName = specificName;
+         Names = names;
       }
 
       public override void OnPropertyChanged(string? propertyName = null) { }
       
 
-      public new static TradeCompany Empty => new (string.Empty, string.Empty, string.Empty, Color.Empty, ObjEditingStatus.Immutable);
-      public string GenericName { get; set; }
-      public string SpecificName { get; set; }
+      public new static TradeCompany Empty => new ([], string.Empty, Color.Empty, ObjEditingStatus.Immutable);
+      
+      List<TriggeredName> Names { get; set; } = [];
+      public string GetSpecificName()
+      {
+         foreach (var name  in Names)
+         {
+            if (name.Name.Contains("Root_Culture"))
+               return name.Name;
+         }
+         return string.Empty;
+      }
 
       public string GetLocalisation()
       {
@@ -62,7 +73,13 @@ namespace Editor.DataClasses.GameDataClasses
 
       public override string GetSaveString(int tabs)
       {
-         return "NOT YET SUPPORTED!";
+         var sb = new System.Text.StringBuilder();
+         OpenBlock(ref tabs, Name, ref sb);
+         AddColor(tabs, Color, ref sb);
+         AddFormattedProvinceList(tabs, GetProvinces(),"provinces", ref sb);
+         AddNames(tabs, Names, ref sb);
+         CloseBlock(ref tabs, ref sb);
+         return sb.ToString();
       }
 
       public override string GetSavePromptString()

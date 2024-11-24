@@ -14,15 +14,14 @@ namespace Editor.Loading
       public static void Load()
       {
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "trade_companies");
-
-
+          
          Dictionary<string, TradeCompany> tradeCompanies = [];
 
          foreach (var file in files)
          {
             Dictionary<string, TradeCompany> tradeCompaniesInternal = [];
             var pathObj = PathObj.FromPath(file);
-            ParseTradeCompabies(IO.ReadAllInUTF8(file), ref pathObj, ref tradeCompaniesInternal);
+            ParseTradeCompanies(IO.ReadAllInUTF8(file), ref pathObj, ref tradeCompaniesInternal);
 
             SaveMaster.AddRangeToDictionary(pathObj, tradeCompaniesInternal.Values);
             foreach (var tcp in tradeCompaniesInternal)
@@ -33,7 +32,7 @@ namespace Editor.Loading
          Globals.TradeCompanies = tradeCompanies;
       }
 
-      private static void ParseTradeCompabies(string rawContent, ref PathObj pathObj, ref Dictionary<string, TradeCompany> tradeCompanies)
+      private static void ParseTradeCompanies(string rawContent, ref PathObj pathObj, ref Dictionary<string, TradeCompany> tradeCompanies)
       {
 
          Parsing.RemoveCommentFromMultilineString(rawContent, out var content);
@@ -49,8 +48,7 @@ namespace Editor.Loading
 
             var color = Color.Empty;
             List<Province> provinces = [];
-            var genericName = string.Empty;
-            var specificName = string.Empty;
+            List<TriggeredName> tns = [];
 
             foreach (var subBlock in block.Blocks)
             {
@@ -72,17 +70,15 @@ namespace Editor.Loading
                      provinces = Parsing.GetProvincesFromString(suBlock.GetContent);
                      break;
                   case "names":
-                     if (suBlock.GetContent.Contains("Root_Culture"))
-                     {
-                        specificName = suBlock.GetContent;
-                        break;
-                     }
-                     genericName = suBlock.GetContent;
+                     if (Parsing.ParseTriggeredName(suBlock, out var tn))
+                        tns.Add(tn);
+                     else
+                        Globals.ErrorLog.Write($"Error parsing TriggeredName for {suBlock.Name}");
                      break;
                }
             }
 
-            TradeCompany tradeCompany = new(block.Name, color, ref pathObj, provinces, genericName, specificName);
+            TradeCompany tradeCompany = new(tns, block.Name, color, ref pathObj, provinces);
             tradeCompany.SetBounds();
             if (!tradeCompanies.TryAdd(block.Name, tradeCompany)) 
                Globals.ErrorLog.Write($"Trade Company {block.Name} already exists in the dictionary");

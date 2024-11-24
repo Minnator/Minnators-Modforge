@@ -14,6 +14,8 @@ namespace Editor.DataClasses.Settings
       private FileSavingMode _fileSavingMode = FileSavingMode.AskOnce;
       private bool _playCrashSound = true;
       private string _modPrefix = "mmf";
+      private bool _addModifiedCommentToFilesWhenSaving = true;
+      private bool _addCommentAboveObjectsInFiles = true;
 
       [Description(
          "<true> Asks for a filename or location beofre creating a new file\n<false> creates files with default names")]
@@ -63,6 +65,22 @@ namespace Editor.DataClasses.Settings
       {
          get => _modPrefix;
          set => SetField(ref _modPrefix, value);
+      }
+
+      [Description("If true a comment is added above the modified elements in a file when it is being saved.")]
+      [CompareInEquals]
+      public bool AddModifiedCommentToFilesWhenSaving
+      {
+         get => _addModifiedCommentToFilesWhenSaving;
+         set => SetField(ref _addModifiedCommentToFilesWhenSaving, value);
+      }
+
+      [Description("If true a comment is added above the objects with it's localisation when it is being saved.")]
+      [CompareInEquals]
+      public bool AddCommentAboveObjectsInFiles
+      {
+         get => _addCommentAboveObjectsInFiles;
+         set => SetField(ref _addCommentAboveObjectsInFiles, value);
       }
 
 

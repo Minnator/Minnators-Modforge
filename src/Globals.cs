@@ -305,29 +305,34 @@ public static class Globals
 // - [x] Province ADJ localization fix
 // - [x] Language in quicksettings fix
 // - [x] File saving popup for saving map mode
-// - [-] Save all and verify all save options
 // - [x] 3/2 letters prefix from mods
-// - [-] Support deleting in saving
+// - [x] Support deleting in saving
 // - [x] Toolstip customizer tooltips and fix column width
 // - [x] Logging and Crash Reporter ==> Map mode crashes catchen und reporten and user so that it restarts
 // - [x] When searching select the results
 // - [x] Settings window / saving
 // - [x] Open LoadingScreen and MapWindow on the same screen
 // - [x] Discord Rich Presence
-// - [-] Country Collection Editing, Saving is broken
 // - [x] Terrain Editing and map mode
 // - [x] Province Group parsing
 // - [x] Fix Remove from province collection
-// - [ ] Fix Setting Saveable Type (Dictionary for each type) to prevent from setting it to 0 if there are other items still of that type
-// - [ ] Fix Trade Node Saving
-// - [ ] Trade company saving
-// - [ ] province groups map mode and force file name
+// - [x] Fix Setting Saveable Type (Dictionary for each type) to prevent from setting it to 0 if there are other items still of that type
+// - [x] province groups map mode and force file name
 // - [x] empty culture and religion in colonial regions
-// - [ ] Country saving broken
+// - [-] Save all and verify all save options
+// - [-] Country Collection Editing, Saving is broken
+// - [x] Fix Trade Node Saving
+// - [x] Trade company saving
 // - [ ] Fix Settings not saving when modified
-
+// - [ ] Warning that it may corrupt files if there are error
+// - [ ] Button to add a new Country
+// - [ ] Fix province saving
+// - [ ] Country saving broken
+// - [ ] Verify that all province modifications set the ObjEditingStatus
 
 // TODO LIST Until Alpha 1.1
+// - [ ] Loading bar when saving using threads
+// - [ ] In Depth deleting with pop up to show what objects are related to the one being deleted
 // - [ ] Radial Menu for Map Modes
 // - [ ] Trade fix   //UI
 // - [ ] Generalize Loading

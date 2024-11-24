@@ -13,15 +13,15 @@ namespace Editor.Forms.Feature.SavingClasses
 
       private void GenerateTlpCheckBoxes()
       {
-         var names = Enum.GetNames(typeof(SaveableType));
-         CheckboxesTLP.RowCount = names.Length;
+         var names = EnumHelper.GetSaveableNames();
+         CheckboxesTLP.RowCount = names.Count + 1;
 
-         for (var i = 0; i < names.Length - 1; i++) 
+         for (var i = 0; i < names.Count; i++) 
             CheckboxesTLP.RowStyles.Add(new (SizeType.Absolute, 20));
          CheckboxesTLP.RowStyles.Add(new (SizeType.Percent, 100));
 
 
-         for (var i = 0; i < names.Length - 1; i++)
+         for (var i = 0; i < names.Count; i++)
          {
             // Is modifiable by the user
             var checkBox = new CheckBox
@@ -66,7 +66,7 @@ namespace Editor.Forms.Feature.SavingClasses
 
       private void SaveSelectedButton_Click(object sender, EventArgs e)
       {
-         SaveMaster.SaveAllChanges(saveableType: GetItemsToSave());
+         SaveMaster.SaveAllChanges(saveableType: GetItemsToSave(), onlyModified: SaveOnlyModifiedCheckBox.Checked);
          for (var i = 0; i < CheckboxesTLP.RowCount; i++)
          {
             var state = Globals.SaveableType.HasFlag((SaveableType)(1 << i));

@@ -120,7 +120,7 @@ namespace Editor.Helper
             case SaveableType.TradeNode:
                return (new TradeNode(name, color) as T)!;
             case SaveableType.TradeCompany:
-               return (new TradeCompany(string.Empty, string.Empty, name, color) as T)!;
+               return (new TradeCompany([], name, color) as T)!;
             case SaveableType.ColonialRegion:
                return (new ColonialRegion(name, color) as T)!;
             case SaveableType.SuperRegion:

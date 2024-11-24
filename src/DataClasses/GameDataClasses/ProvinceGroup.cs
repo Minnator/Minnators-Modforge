@@ -33,7 +33,7 @@ namespace Editor.DataClasses.GameDataClasses
 
       public override KeyValuePair<string, bool> GetFileName()
       {
-         return new (Name, true);
+         return new ("provincegroup", true);
       }
 
       public override string SavingComment()

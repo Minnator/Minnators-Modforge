@@ -20,4 +20,19 @@
       All = SaveProvinces | Area | Region | TradeNode | TradeCompany | ColonialRegion | SuperRegion | Continent | ProvinceGroup | EventModifier | Localisation | Country | Province | Terrain,
    }
 
+   public static class EnumHelper
+   {
+      public static List<string> GetSaveableNames()
+      {
+         return GetNamesExcluding(typeof(SaveableType), SaveableType.All.ToString());
+      }
+
+      public static List<string> GetNamesExcluding(this Type enumType, params string[] excludedNames)
+      {
+         if (!enumType.IsEnum)
+            throw new ArgumentException("The type must be an enum.", nameof(enumType));
+         return Enum.GetNames(enumType).Except(excludedNames, StringComparer.OrdinalIgnoreCase).ToList();
+      }
+   }
+
 }
