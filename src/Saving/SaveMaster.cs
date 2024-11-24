@@ -11,11 +11,15 @@ namespace Editor.Saving
    {
       private static HashSet<PathObj> NeedsToBeHandled = [];
       private static Dictionary<PathObj, List<Saveable>> AllSaveableFiles = [];
-      
+
+      public static void SaveSaveables(ICollection<Saveable> saveables, SaveableType saveableType = SaveableType.All)
+      {
+         HashSet<PathObj> paths = [..saveables.Select((x)=>x.Path)];
+         SavePaths(ref paths, saveableType);
+      }
+
       public static void SaveAllChanges(bool onlyModified = true, SaveableType saveableType = SaveableType.All)
       {
-         if (NeedsToBeHandled.Contains(PathObj.Empty))
-            AddNewSaveables(saveableType);
          if (!onlyModified)
          {
             foreach (var path in AllSaveableFiles.Keys)
@@ -28,7 +32,14 @@ namespace Editor.Saving
             }
             return;
          }
-         foreach (var path in NeedsToBeHandled)
+         SavePaths(ref NeedsToBeHandled, saveableType);
+      }
+
+      public static void SavePaths(ref HashSet<PathObj> localToBeHandled, SaveableType saveableType = SaveableType.All)
+      {
+         if (localToBeHandled.Contains(PathObj.Empty))
+            AddNewSaveables(saveableType, ref localToBeHandled);
+         foreach (var path in localToBeHandled)
          {
             var singleModData = AllSaveableFiles[path][0].WhatAmI();
             if ((saveableType & singleModData) == 0)
@@ -39,13 +50,13 @@ namespace Editor.Saving
             else
                SaveFile(path);
             // Remove the saved type from the still to save types
+            // TODO FIX
             Globals.SaveableType &= ~singleModData;
-         }
-
-         NeedsToBeHandled.Clear();
+            NeedsToBeHandled.Remove(path);
+         }   
       }
 
-      public static void AddNewSaveables(SaveableType saveableType)
+      public static void AddNewSaveables(SaveableType saveableType, ref HashSet<PathObj> localToBeHandled)
       {
          Dictionary<string, PathObj> pathGrouping = [];
          foreach (var saveable in AllSaveableFiles[PathObj.Empty])
@@ -84,9 +95,9 @@ namespace Editor.Saving
             }
 
             saveable.SetPath(ref path);
-            NeedsToBeHandled.Add(path);
+            localToBeHandled.Add(path);
          }
-         NeedsToBeHandled.Remove(PathObj.Empty);
+         localToBeHandled.Remove(PathObj.Empty);
          AllSaveableFiles.Remove(PathObj.Empty);
       }
 

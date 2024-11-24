@@ -51,11 +51,11 @@ namespace Editor.Loading
                      }
                      region.Color = color;
                      break;
-                  case "cultures":
+                  case "culture":
                      Parsing.GetChancesListFromKeyValuePairs(Parsing.GetKeyValueList(b.GetContent), out var cultureChances);
                      region.Cultures = cultureChances;
                      break;
-                  case "religions":
+                  case "religion":
                      Parsing.GetChancesListFromKeyValuePairs(Parsing.GetKeyValueList(b.GetContent), out var religionChances);
                      region.Religions = religionChances;
                      break;

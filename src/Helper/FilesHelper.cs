@@ -194,4 +194,9 @@ public static partial class FilesHelper
       return Path.Combine(Globals.ModPath, Path.Combine(internalPath));
    }
 
+   public static bool GetVanillaPath(out string filePath, params string[] path)
+   {
+      filePath = Path.Combine(Globals.VanillaPath, Path.Combine(path));
+      return File.Exists(filePath);
+   }
 }

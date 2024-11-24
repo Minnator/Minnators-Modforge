@@ -214,7 +214,12 @@ public static partial class Parsing
             // if there is content between this closing bracket and the next opening bracket add it as a content element.
             if (start != int.MaxValue && stack.Count > 0)
             {
-               var content = str[(end + 1)..start].Trim();
+               string content;
+               if (end < start && nextEnd < start && end < nextEnd)
+                  content = str[(end + 1)..nextEnd].Trim();
+               else
+                  content = str[(end + 1)..start].Trim();
+
                if (content.Contains('}'))
                {
                   content = content.Replace('}', ' ').Trim();
@@ -824,23 +829,27 @@ public static partial class Parsing
    {
       tn = TriggeredName.Empty;
       var name = string.Empty;
-      var trigger = string.Empty;
+      IElement? trigger = null;
 
       foreach (var element in block.Blocks)
       {
-         if (element is not Block b)
+         if (element is Block { Name: "trigger" } triggerBlock)
          {
-            var elementContent = ((Content)element).Value.Split('=');
-            if (elementContent.Length != 2)
-            {
-               Globals.ErrorLog.Write($"Error: Illegal Content found in {((Content)element).Value}");
-               return false;
-            }
-            elementContent[1].Trim().TrimQuotes(out name);
+            trigger = triggerBlock;
             continue;
          }
-         if (b.Name == "trigger") 
-            trigger = b.GetContent;
+         if (element is not Content c)
+         {
+            Globals.ErrorLog.Write($"Error: Illegal Element found in {block.Name}");
+            return false;
+         }
+         var elementContent = c.Value.Split('=');
+         if (elementContent.Length != 2)
+         {
+            Globals.ErrorLog.Write($"Error: Illegal Content found in {c.Value}");
+            return false;
+         }
+         elementContent[1].Trim().TrimQuotes(out name);
       }
       tn = new(name, trigger);
       return true;

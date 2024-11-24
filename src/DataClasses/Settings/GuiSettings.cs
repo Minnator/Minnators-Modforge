@@ -7,6 +7,7 @@ namespace Editor.DataClasses.Settings
    public class GuiSettings : PropertyEquals, INotifyPropertyChanged
    {
       private bool _showCountryFlagInCe = true;
+      private bool _jumpToSelectedProvinceCollection = true;
       public event PropertyChangedEventHandler? PropertyChanged;
 
       protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -28,6 +29,14 @@ namespace Editor.DataClasses.Settings
       {
          get => _showCountryFlagInCe;
          set => SetField(ref _showCountryFlagInCe, value);
+      }
+
+      [Description("Determines if the map should focus on a newly selected province collection.")]
+      [CompareInEquals]
+      public bool JumpToSelectedProvinceCollection
+      {
+         get => _jumpToSelectedProvinceCollection;
+         set => SetField(ref _jumpToSelectedProvinceCollection, value);
       }
    }
 }

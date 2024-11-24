@@ -797,6 +797,7 @@
          FocusSelectionCheckBox.TabIndex = 0;
          FocusSelectionCheckBox.Text = "Focus Selection";
          FocusSelectionCheckBox.UseVisualStyleBackColor = true;
+         FocusSelectionCheckBox.CheckedChanged += FocusSelectionCheckBox_CheckedChanged;
          // 
          // BottomToolStrip
          // 
@@ -1667,7 +1668,6 @@
          SaveAllModifiedButton.TabIndex = 1;
          SaveAllModifiedButton.Text = "Save modified";
          SaveAllModifiedButton.UseVisualStyleBackColor = true;
-         SaveAllModifiedButton.Click += SaveAllModifiedButton_Click;
          // 
          // SaveCurrentSelectionButton
          // 

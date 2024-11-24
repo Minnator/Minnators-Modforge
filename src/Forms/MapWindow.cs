@@ -83,6 +83,7 @@ namespace Editor.Forms
          Localisation.Initialize();
          Globals.Random = new(Globals.Settings.Misc.RandomSeed);
 
+         //CursorHelper.SetCursor(Eu4CursorTypes.Loading, this);
          RunLoadingScreen();
 
          if (StartScreen != null)
@@ -95,6 +96,8 @@ namespace Editor.Forms
 
          if (LinkHelper.IsDiscordRunning)
             DiscordActivityManager.StartDiscordActivity();
+
+         //CursorHelper.SetCursor(Eu4CursorTypes.Normal, this);
       }
 
       public void Initialize()
@@ -162,6 +165,10 @@ namespace Editor.Forms
       private void InitGui()
       {
          InitializeComponent();
+
+         Globals.HistoryManager.UndoEvent += (sender, args) => UpdateGui();
+         Globals.HistoryManager.RedoEvent += (sender, args) => UpdateGui();
+
          Globals.ZoomControl = new(new(Globals.MapWidth, Globals.MapHeight))
          {
             BorderWidth = Globals.Settings.Rendering.MapBorderWidth,
@@ -208,6 +215,31 @@ namespace Editor.Forms
          SelectionTypeBox.SelectedIndex = 0;
       }
 
+      private void UpdateGui()
+      {
+         var currentTab = DataTabPanel.SelectedIndex;
+         switch (currentTab)
+         {
+            case 0:
+               UpdateProvinceTab();
+               break;
+            case 1:
+               UpdateCountryTab();
+               break;
+            case 2:
+               UpdateProvinceCollectionTab();
+               break;
+         }
+      }
+
+      private void UpdateProvinceTab() => LoadSelectedProvincesToGui();
+      private void UpdateCountryTab() => LoadCountryToGui(Selection.SelectedCountry);
+
+      private void UpdateProvinceCollectionTab()
+      {
+
+      }
+
 
       #region EditGui
       /// <summary>
@@ -240,7 +272,7 @@ namespace Editor.Forms
       private void InitializeMapModeButtons()
       {
          var button01 = ControlFactory.GetMapModeButton('q');
-         button01.Margin = new (0, 0, 3, 0);
+         button01.Margin = new(0, 0, 3, 0);
          button01.SetMapMode(MapModeType.Province);
          var button21 = ControlFactory.GetMapModeButton('w');
          button21.SetMapMode(MapModeType.Country);
@@ -259,7 +291,7 @@ namespace Editor.Forms
          var button9 = ControlFactory.GetMapModeButton('o');
          button9.SetMapMode(MapModeType.Terrain);
          var button10 = ControlFactory.GetMapModeButton('p');
-         button10.Margin= new(3, 0, 0, 0);
+         button10.Margin = new(3, 0, 0, 0);
          button10.SetMapMode(MapModeType.Autonomy);
          MMButtonsTLPanel.Controls.Add(button01, 0, 0);
          MMButtonsTLPanel.Controls.Add(button21, 1, 0);
@@ -307,6 +339,8 @@ namespace Editor.Forms
          ProvinceCollectionsLayoutPanel.Controls.Add(TradeNodeEditingGui, 0, 4);
          ProvinceCollectionsLayoutPanel.Controls.Add(ProvinceGroupsEditingGui, 0, 6);
          ProvinceCollectionsLayoutPanel.Controls.Add(ColonialRegionEditingGui, 0, 7);
+
+         FocusSelectionCheckBox.Checked = Globals.Settings.Gui.JumpToSelectedProvinceCollection;
       }
 
 
@@ -1017,10 +1051,6 @@ namespace Editor.Forms
          ProvinceSaver.SaveSelectedProvinces();
       }
 
-      private void SaveAllModifiedButton_Click(object sender, EventArgs e)
-      {
-         ProvinceSaver.SaveAllModifiedProvinces();
-      }
 
       private void SaveAllProvincesButton_Click(object sender, EventArgs e)
       {
@@ -1152,6 +1182,7 @@ namespace Editor.Forms
       {
          new RoughEditorForm(Globals.Countries["TUR"]).ShowDialog();
       }
+
 
 
       // ------------------- COUNTRY EDITING TAB ------------------- \\
@@ -1569,7 +1600,7 @@ namespace Editor.Forms
       {
          if (Selection.Count != 1)
             return;
-         
+
          _capitalTextBox.Text = Selection.GetSelectedProvinces[0].Id.ToString();
          _capitalTextBox.Focus();
       }
@@ -1637,7 +1668,7 @@ namespace Editor.Forms
 
       private void deleteProvinceHistoryEntriesToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         GetDateInput dateInputForm = new ("Select the date:");
+         GetDateInput dateInputForm = new("Select the date:");
          dateInputForm.ShowDialog();
          if (dateInputForm.DialogResult == DialogResult.OK)
          {
@@ -1649,6 +1680,11 @@ namespace Editor.Forms
                   if (province.History[i].Date >= date)
                      province.History.RemoveAt(i);
          }
+
+      }
+
+      private void FocusSelectionCheckBox_CheckedChanged(object sender, EventArgs e)
+      {
 
       }
    }

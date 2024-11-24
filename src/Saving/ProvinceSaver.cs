@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Text;
 using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.Misc;
 using Editor.Helper;
 using static Editor.Helper.ProvinceEnumHelper;
 
@@ -12,16 +13,9 @@ namespace Editor.Saving
       //---------------------------------------- Accessible Methods ----------------------------------------
 
       
-      public static bool SaveAllLandProvinces()
+      public static void SaveAllLandProvinces()
       {
-         var worked = true;
-         foreach (var province in Globals.LandProvinces)
-         {
-            if (!SaveToHistoryFile(province))
-               worked = false;
-         }
-
-         return worked;
+         SaveMaster.SaveSaveables([..Globals.LandProvinces]);
       }
 
       /// <summary>
@@ -30,36 +24,9 @@ namespace Editor.Saving
       /// <exception cref="NotImplementedException"></exception>
       public static void SaveSelectedProvinces()
       {
-         foreach (var province in Selection.GetSelectedProvinces) 
-            province.SaveToHistoryFile();
+         SaveMaster.SaveSaveables([..Selection.GetSelectedProvinces]);
       }
 
-      /// <summary>
-      /// Writes a file for the given province with all its values which are not default.
-      /// </summary>
-      /// <param name="province"></param>
-      /// <returns></returns>
-      public static bool SaveToHistoryFile(this Province province)
-      {
-         GetProvinceFileString(province, out var content);
-         return IO.WriteToFile(province.GetHistoryFilePath(), content, false);
-      }
-
-      /// <summary>
-      /// Writes a file for all provinces with all its values which are not default and have the status "Modified".
-      /// </summary>
-      /// <returns></returns>
-      public static bool SaveAllModifiedProvinces()
-      {
-         var worked = true;
-         foreach (var province in EditingHelper.GetModifiedProvinces())
-         {
-            if (!SaveToHistoryFile(province))
-               worked = false;
-         }
-
-         return worked;
-      }
 
       //---------------------------------------- Helper Methods ----------------------------------------
 

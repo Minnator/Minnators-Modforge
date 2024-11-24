@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.Loading;
+using Editor.Saving;
 
 namespace Editor.Parser;
 
@@ -31,7 +32,6 @@ public static class ProvinceParser
 
    private static void ProcessProvinceFile(string path)
    {
-      // Retrieve the ID from the file name
       var match = IdRegex.Match(Path.GetFileName(path));
       if (!match.Success || !int.TryParse(match.Groups[1].Value, out var id))
       {
@@ -44,6 +44,9 @@ public static class ProvinceParser
          Globals.ErrorLog.Write($"Could not find province with id {id}");
          return;
       } 
+      var pathObj = PathObj.FromPath(path);
+      province.SetPath(ref pathObj);
+      
       IO.ReadAllInANSI(path, out var rawContent);
       Parsing.RemoveCommentFromMultilineString(rawContent, out var fileContent);
       var blocks = Parsing.GetElements(0, ref fileContent);
@@ -58,6 +61,8 @@ public static class ProvinceParser
 
       // Copy the initial attributes to the ProvinceData to be able to revert to the initial state
       province.InitializeInitial();
+
+      SaveMaster.AddToDictionary(ref pathObj, province);
    }
 
    private static void ParseProvinceBlockBlock(ref Province province, Block block)

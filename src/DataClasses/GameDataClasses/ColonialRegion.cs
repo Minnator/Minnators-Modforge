@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
+using Editor.Parser;
 using Editor.Saving;
 using static Editor.Saving.SavingUtil;
 
@@ -85,9 +86,9 @@ namespace Editor.DataClasses.GameDataClasses
          foreach (var name in Names)
          {
             OpenBlock(ref tabs, "names", ref sb);
-            if (name.Trigger != string.Empty)
-               AddString(tabs, "trigger", name.Trigger, ref sb);
-            AddString(tabs, "name", name.Name, ref sb);
+            if (name.Trigger != null)
+               sb.AppendLine(name.Trigger.GetFormattedElement(tabs));
+            AddString(tabs, name.Name, "name", ref sb);
             CloseBlock(ref tabs, ref sb);
          }
          CloseBlock(ref tabs, ref sb);
@@ -133,12 +134,12 @@ namespace Editor.DataClasses.GameDataClasses
       }
    }
 
-   public class TriggeredName(string name, string trigger)
+   public class TriggeredName(string name, IElement? trigger)
    {
       public string Name { get; init; } = name;
-      public string Trigger { get; set; } = trigger;
+      public IElement? Trigger { get; set; } = trigger;
 
-      public TriggeredName(string name) : this(name, string.Empty)
+      public TriggeredName(string name) : this(name, null)
       {
       }
 

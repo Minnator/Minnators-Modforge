@@ -61,8 +61,19 @@ public class ProvinceData()
    public List<TradeModifier> TradeModifiers = [];  
 }
 
-public class Province(int id, Color color) : ProvinceComposite(id.ToString(), color)
+public class Province : ProvinceComposite
 {
+   public Province(int id, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(id.ToString(), color)
+   {
+      base.EditingStatus = status;
+      Id = id;
+   }
+
+   public Province(int id, Color color, ref PathObj path) : this(id, color, ObjEditingStatus.Unchanged)
+   {
+      SetPath(ref path);
+   }
+
    private readonly ProvinceData _data = new();
    private List<HistoryEntry> _history = [];
    public int FileIndex { get; set; } = 0;
@@ -110,7 +121,7 @@ public class Province(int id, Color color) : ProvinceComposite(id.ToString(), co
    #region ManagementData
 
    // Management data
-   public int Id { get; init; } = id;
+   public int Id { get; init; } 
    public Positions Positions { get; set; } = new();
    public int BorderPtr { get; set; }
    public int BorderCnt { get; set; }
@@ -1292,5 +1303,5 @@ public class Province(int id, Color color) : ProvinceComposite(id.ToString(), co
       ColorChanged += handler;
    }
 
-   public new static Province Empty => new (-1, Color.Empty);
+   public new static Province Empty => new (-1, Color.Empty, ObjEditingStatus.Immutable);
 }

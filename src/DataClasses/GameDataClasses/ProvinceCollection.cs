@@ -180,7 +180,6 @@ public abstract class ProvinceCollection<T> : ProvinceComposite where T : Provin
    public void NewRemoveFromGlobal()
    {
       NewRemoveRange(_subCollection, true);
-
    }
 
    public void ExecuteAndAdd(ICommand command, bool tryAddEventToHistory)

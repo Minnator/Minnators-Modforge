@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using static Editor.Saving.SavingUtil;
 
 namespace Editor.Parser
 {
@@ -39,6 +40,18 @@ namespace Editor.Parser
          }
       }
 
+      public string GetFormattedElement(int tabs)
+      {
+         var sb = new StringBuilder();
+         AddTabs(tabs, ref sb);
+         sb.AppendLine($"{Name} = {{");
+         foreach (var element in Blocks) 
+            sb.AppendLine(element.GetFormattedElement(tabs + 1));
+         AddTabs(tabs, ref sb);
+         sb.Append('}');
+         return sb.ToString();
+      }
+
       public bool HasOnlyContent => Blocks.TrueForAll(b => !b.IsBlock);
       public string GetContent => string.Join("\n", GetContentElements.Select(c => c.Value));
 
@@ -77,6 +90,24 @@ namespace Editor.Parser
       public string Value { get; set; } = value;
       public bool IsBlock => false;
 
+      public string GetFormattedElement(int tabs)
+      {
+         var sb = new StringBuilder();
+         var split = Value.Split(Environment.NewLine);
+         for (var i = 0; i < split.Length; i++)
+         {
+            var lineContent = split[i].Trim();
+            if (string.IsNullOrWhiteSpace(lineContent))
+               continue;
+            AddTabs(tabs, ref sb);
+            sb.Append(lineContent);
+            if (i < split.Length - 1)
+               sb.Append(Environment.NewLine);
+         }
+
+         return sb.ToString();
+      }
+
       public override string ToString()
       {
          return Value;
@@ -85,5 +116,6 @@ namespace Editor.Parser
    public interface IElement
    {
       public bool IsBlock { get; }
+      public string GetFormattedElement(int tabs);
    }
 }

@@ -569,7 +569,11 @@ public static class Selection
    private static void ZoomControl_MouseMove(object? sender, MouseEventArgs e)
    {
       if ((Control.ModifierKeys & Keys.Control) != 0 && (Control.ModifierKeys & Keys.Alt) != 0)
+      {
          HoverCollection(e.Location);
+         MapToolTip.RemoveAll();
+         return;
+      }
       if ((Control.ModifierKeys & Keys.Alt) != 0 && (Control.ModifierKeys & Keys.Shift) != 0)
       {
          MagicWandSelectionMove(e.Location);

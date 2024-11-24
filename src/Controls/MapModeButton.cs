@@ -7,7 +7,8 @@ namespace Editor.Controls
    {
       private MapModeType MapModeName = MapModeType.None;
       private char Hotkey;
-      
+      private const float MAXFONTSIZE = 8;
+      private const float MINFONTSIZE = 1;
       public MapModeButton(char hotkey)
       {
          Hotkey = hotkey;
@@ -26,15 +27,32 @@ namespace Editor.Controls
       {
          MapModeName = mapMode;
          Text = $"{mapMode} (&{Hotkey})";
-         var mm = Globals.MapModeManager.GetMapMode(mapMode);
-         return;
-         if (mm.Icon == null)
-         {
-            Text = $"{mapMode} (&{Hotkey})";
+         AdaptToLength(Text);
+      }
+
+      public void AdaptToLength(string str)
+      {
+         using var g = CreateGraphics();
+         var baseSize = g.MeasureString(str, Font);
+         var estimate = MAXFONTSIZE * Width / baseSize.Width;
+
+         if (estimate > MAXFONTSIZE)
             return;
+         else if (estimate < MINFONTSIZE)
+            estimate = MINFONTSIZE;
+
+         
+
+         Font = new(Font.FontFamily, estimate, Font.Style, Font.Unit, Font.GdiCharSet);
+         var estimatedSize = g.MeasureString(str, Font);
+         while (estimatedSize.Width > Width)
+         {
+            if (estimate <= MINFONTSIZE)
+               break;
+            Font = new(Font.FontFamily, estimate, Font.Style, Font.Unit, Font.GdiCharSet);
+            estimate -= 0.5f;
+            estimatedSize = g.MeasureString(str, Font);
          }
-         Text = $"(&{Hotkey})";
-         SetImage(mm.Icon);
       }
 
       public override string ToString()

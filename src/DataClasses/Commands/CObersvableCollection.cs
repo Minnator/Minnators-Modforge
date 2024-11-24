@@ -3,44 +3,58 @@ using Editor.Saving;
 
 namespace Editor.DataClasses.Commands
 {
-   public class CObersvableCollection<T>(Saveable saveable, ref ObservableICollection<T> collection, ICollection<T> items, bool add) : CSaveableCommand(saveable) 
+   public class CObersveableCollection<T> : ICommand
    {
-      private readonly ObservableICollection<T> _collection = collection;
+      private readonly ObservableICollection<T> _collection;
 
-      public override void Execute()
+      private readonly SaveableCommandHelper _collectionOwner;
+      private readonly bool _add;
+      private readonly ICollection<T> _items;
+
+      public CObersveableCollection(Saveable saveable, ref ObservableICollection<T> collection, ICollection<T> items, bool add)
       {
-         base.Execute();
-         if (add)
-            foreach (var item in items)
+         _collection = collection;
+         _collectionOwner = new (saveable);
+         _items = items;
+         _add = add;
+      }
+
+      public void Execute()
+      {
+         _collectionOwner.Execute();
+         if (_add)
+            foreach (var item in _items)
                _collection.Add(item);
          else
-            foreach (var item in items)
+            foreach (var item in _items)
                _collection.Remove(item);
 
       }
 
-      public override void Undo()
+      public void Undo()
       {
-         base.Undo();
-         if (add)
-            foreach (var item in items)
+         _collectionOwner.Undo();
+         if (_add)
+            foreach (var item in _items)
                _collection.Remove(item);
          else
-            foreach (var item in items)
+            foreach (var item in _items)
                _collection.Add(item);
-
       }
 
-      public override string GetDescription()
+      public void Redo()
       {
-         if (add)
-            return "Add " + items.Count + " items to collection";
-         return "Remove " + items.Count + " items from collection";
+         _collectionOwner.Redo();
       }
 
-      public override string GetDebugInformation(int indent)
+      public string GetDescription()
       {
-         return new string(' ', indent) + "Items: " + items.Count;
+         return _add ? "Add " : "Remove " + _items.Count + " items";
+      }
+
+      public string GetDebugInformation(int indent)
+      {
+         return new string(' ', indent) + GetDescription();
       }
    }
 }

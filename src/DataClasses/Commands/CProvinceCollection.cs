@@ -24,7 +24,6 @@ namespace Editor.DataClasses.Commands
             Execute();
       }
 
-      // TODO if parent does not have any left remove it from globals
       public void Execute()
       {
          //Todo fix
@@ -111,87 +110,82 @@ namespace Editor.DataClasses.Commands
       }
    }
 
-   public class CRemoveProvinceCollection<T>(ProvinceCollection<T> oldParent, bool remove) : ICommand where T : ProvinceComposite
+   public class CRemoveProvinceCollection<T> : ICommand where T : ProvinceComposite
    {
-      private List<T> Composites = [];
-      private ProvinceCollection<T> oldParent = oldParent;
-      private bool _removeFromGlobal = remove;
-      private ObjEditingStatus _previousState;
-      private bool _flagSet;
-      public CRemoveProvinceCollection(ProvinceCollection<T> oldParent, bool remove, bool executeOnInit = false) : this(oldParent, remove)
+      private HashSet<T> Composites = [];
+      private SaveableCommandHelper _oldParentSaveable;
+      private ProvinceCollection<T> _oldParent;
+      private bool _removeFromGlobal;
+
+      public CRemoveProvinceCollection(ProvinceCollection<T> oldParent, bool remove)
       {
-         if (executeOnInit)
-            Execute();
+         _oldParent = oldParent;
+         _oldParentSaveable = new(oldParent);
+         _removeFromGlobal = remove;
       }
 
       public void Execute()
       {
-         for (var i = 0; i < Composites.Count; i++)
-         {
-            var composite = Composites[i];
-            oldParent.InternalRemove(composite);
-            composite.Parents.Remove(oldParent);
-         }
-         oldParent.SetBounds();
-         if (_removeFromGlobal)
-         {
-            oldParent.RemoveGlobal();
-            oldParent.Invoke(new(ProvinceCollectionType.RemoveGlobal, Composites));
-         }
-         else
-            oldParent.Invoke(new(ProvinceCollectionType.Remove, Composites));
-         _previousState = oldParent.EditingStatus;
-         _flagSet = (Globals.SaveableType & oldParent.WhatAmI()) != 0;
-         oldParent.EditingStatus = ObjEditingStatus.Deleted;
+         _oldParentSaveable.Execute();
+         internalExecute();
       }
 
+      private void internalExecute()
+      {
+         foreach (var composite in Composites)
+         {
+            _oldParent.InternalRemove(composite);
+            composite.Parents.Remove(_oldParent);
+         }
+         _oldParent.SetBounds();
+         if (_removeFromGlobal)
+         {
+            _oldParent.RemoveGlobal();
+            _oldParent.Invoke(new(ProvinceCollectionType.RemoveGlobal, Composites));
+         }
+         _oldParent.Invoke(new(ProvinceCollectionType.Remove, Composites));
+      }
 
       public void Undo()
       {
-         for (var i = 0; i < Composites.Count; i++)
+         _oldParentSaveable.Undo();
+         foreach (var composite in Composites)
          {
-            var composite = Composites[i];
-            oldParent.InternalAdd(composite);
-            composite.Parents.Add(oldParent);
+            _oldParent.InternalAdd(composite);
+            composite.Parents.Add(_oldParent);
          }
-         oldParent.SetBounds();
          if (_removeFromGlobal)
          {
-            oldParent.AddGlobal();
-            oldParent.Invoke(new(ProvinceCollectionType.AddGlobal, Composites));
+            _oldParent.RemoveGlobal();
+            _oldParent.Invoke(new(ProvinceCollectionType.RemoveGlobal, Composites));
          }
          else
-            oldParent.Invoke(new(ProvinceCollectionType.Add, Composites));
-         if (oldParent.EditingStatus == ObjEditingStatus.Deleted)
-         {
-            oldParent.EditingStatus = _previousState;
-            if (!_flagSet)
-               Globals.SaveableType &= ~oldParent.WhatAmI();
-         }
-         else
-            oldParent.EditingStatus = ObjEditingStatus.Modified;
+            _oldParent.Invoke(new(ProvinceCollectionType.Add, Composites));
+         
+         
       }
 
       public void Redo()
       {
-         Execute();
-      }
-
-      public string GetDescription()
-      {
-         var numbers = Composites.Count;
-         var objType = Composites[0].WhatAmI() + (numbers > 1 ? "s" : "");
-         return $"Removed {numbers} {objType}";
-      }
-
-      public string GetDebugInformation(int indent)
-      {
-         return $"Removed {Composites.Count} {Composites[0].WhatAmI()}";
+         _oldParentSaveable.Redo();
+         internalExecute();
       }
 
       public void RemoveNewComposite(T composite)
       {
          Composites.Add(composite);
+      }
+
+      public string GetDescription()
+      {
+         var numbers = Composites.Count;
+         var objType = Composites.First().WhatAmI() + (numbers > 1 ? "s" : "");
+         return $"Removed {numbers} {objType}";
+      }
+
+      public string GetDebugInformation(int indent)
+      {
+         return $"Removed {Composites.Count} {Composites.First().WhatAmI()}";
       }
    }
 

@@ -14,14 +14,14 @@ namespace Editor.Forms.Feature.SavingClasses
       private void GenerateTlpCheckBoxes()
       {
          var names = Enum.GetNames(typeof(SaveableType));
-         CheckboxesTLP.RowCount = names.Length + 1;
+         CheckboxesTLP.RowCount = names.Length;
 
-         for (var i = 0; i < names.Length; i++) 
+         for (var i = 0; i < names.Length - 1; i++) 
             CheckboxesTLP.RowStyles.Add(new (SizeType.Absolute, 20));
          CheckboxesTLP.RowStyles.Add(new (SizeType.Percent, 100));
 
 
-         for (var i = 0; i < names.Length; i++)
+         for (var i = 0; i < names.Length - 1; i++)
          {
             // Is modifiable by the user
             var checkBox = new CheckBox

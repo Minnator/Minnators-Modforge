@@ -16,6 +16,14 @@ using Region = Editor.DataClasses.GameDataClasses.Region;
 namespace Editor;
 
 #region enums
+
+public enum Eu4CursorTypes
+{
+   Loading,
+   Normal,
+   Select,
+}
+
 public enum CommandHistoryType
 {
    SimpleSelection,
@@ -293,7 +301,6 @@ public static class Globals
 // - [x] Fix the Province Collection Editing gui so that all types work the same and edge cases are handled
 // - [x] Localisation editing for provinces and modifiers
 // - [x] Check if province is selected by color of the pixels instead of bounds or center
-// - [ ] Trade fix   //UI
 // - [x] River fixes //UI
 // - [x] Province ADJ localization fix
 // - [x] Language in quicksettings fix
@@ -310,9 +317,18 @@ public static class Globals
 // - [-] Country Collection Editing, Saving is broken
 // - [x] Terrain Editing and map mode
 // - [x] Province Group parsing
+// - [ ] Fix Remove from province collection
+// - [ ] Fix Setting Saveable Type (Dictionary for each type) to prevent from setting it to 0 if there are other items still of that type
+// - [ ] Fix Trade Node Saving
+// - [ ] Trade company saving
+// - [ ] province groups map mode and force file name
+// - [ ] empty culture and religion in colonial regions
+// - [ ] Country saving broken
 
 
 // TODO LIST Until Alpha 1.1
+// - [ ] Radial Menu for Map Modes
+// - [ ] Trade fix   //UI
 // - [ ] Generalize Loading
 // - [ ] Add Prefix ignoring in search boxes
 // - [ ] Straits editing and creation
@@ -327,4 +343,4 @@ public static class Globals
 
 // TODO LIST Until Alpha 1.2
 // - [ ] Fix tooltip preventing MouseWheel event
-// Resync files with project
+// - [ ] Resync files with project

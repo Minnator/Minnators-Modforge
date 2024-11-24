@@ -2,7 +2,7 @@
 
 namespace Editor.DataClasses.Commands
 {
-   public abstract class CSaveableCommand(Saveable saveable) : ICommand
+   public class SaveableCommandHelper(Saveable saveable)
    {
       // caches the previous state of the object
       private ObjEditingStatus _previousState;
@@ -48,13 +48,9 @@ namespace Editor.DataClasses.Commands
          }
          _previousState = state;
       }
-
-      public abstract string GetDescription();
-
-      public abstract string GetDebugInformation(int indent);
    }
 
-   public abstract class CSaveablesCommand(ICollection<Saveable> saveables) : ICommand
+   public class SaveablesCommandHelper(ICollection<Saveable> saveables)
    {
       // caches the previous state of the object
       private List<ObjEditingStatus> _previousState = [];
@@ -125,9 +121,5 @@ namespace Editor.DataClasses.Commands
          }
          SetAllPreviousStates(states);
       }
-
-      public abstract string GetDescription();
-
-      public abstract string GetDebugInformation(int indent);
    }
 }

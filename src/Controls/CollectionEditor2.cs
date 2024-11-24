@@ -197,6 +197,7 @@ namespace Editor.Controls
          _flowLayout.ResumeLayout(true);
       }
 
+      // A single subtype should be removed from the collection
       private void OnSingleRemoved(object? sender, string item)
       {
          if (!ProvColHelper.GetProvinceCollectionForTypeAndName(_saveableSubType, item, out Q value))
@@ -259,6 +260,7 @@ namespace Editor.Controls
       {
          if (obj is not T collection)
             return;
+         _flowLayout.SuspendLayout();
          var item = collection.Name;
          switch (e.Type)
          {
@@ -293,7 +295,7 @@ namespace Editor.Controls
             default:
                throw new ArgumentOutOfRangeException();
          }
-
+         _flowLayout.ResumeLayout(true);
       }
    }
 }

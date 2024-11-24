@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Editor.DataClasses.GameDataClasses;
+using Editor.Saving;
 
 namespace Editor.Loading;
 
@@ -32,7 +33,7 @@ public static class DefinitionLoading
 
             if (!provinces.ContainsKey(id))
             {
-               var province = new Province(id, color);
+               var province = new Province(id, color, ObjEditingStatus.Unchanged);
                provinces.Add(id, province);
             }
          }

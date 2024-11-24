@@ -19,6 +19,10 @@ public class HistoryManager
    // Events for when the undo/redo depth changes
    public event EventHandler<int>? UndoDepthChanged;
    public event EventHandler<int>? RedoDepthChanged;
+
+   public EventHandler UndoEvent = delegate { };
+   public EventHandler RedoEvent = delegate { };
+
    
    public HistoryNode GetCurrent => _current;
 
@@ -49,6 +53,7 @@ public class HistoryManager
       }
 
       UndoDepthChanged?.Invoke(this, GetUndoDepth());
+      UndoEvent.Invoke(this, EventArgs.Empty);
    }
 
    public void Redo(int childIndex = -1)
@@ -62,6 +67,7 @@ public class HistoryManager
       }
 
       RedoDepthChanged?.Invoke(this, GetRedoDepth());
+      RedoEvent.Invoke(this, EventArgs.Empty);
    }
 
    public void RevertTo(int id)
