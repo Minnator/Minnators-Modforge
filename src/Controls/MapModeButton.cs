@@ -9,8 +9,10 @@ namespace Editor.Controls
       private char Hotkey;
       private const float MAXFONTSIZE = 8;
       private const float MINFONTSIZE = 1;
-      public MapModeButton(char hotkey)
+      private int MapModeIndex;
+      public MapModeButton(char hotkey, int mapModeIndex)
       {
+         MapModeIndex = mapModeIndex;
          Hotkey = hotkey;
          Text = $"(&{hotkey})";
          UseMnemonic = true;
@@ -21,6 +23,9 @@ namespace Editor.Controls
 
          Click += OnButtonClick;
          MouseDown += OnMouseCLick;
+
+         if (mapModeIndex < Globals.Settings.Gui.MapModes.Length)
+            SetMapMode(Globals.Settings.Gui.MapModes[mapModeIndex]);
       }
 
       public void SetMapMode(MapModeType mapMode)
@@ -28,6 +33,8 @@ namespace Editor.Controls
          MapModeName = mapMode;
          Text = $"{mapMode} (&{Hotkey})";
          AdaptToLength(Text);
+         if (MapModeIndex < Globals.Settings.Gui.MapModes.Length)
+            Globals.Settings.Gui.MapModes[MapModeIndex] = mapMode;
       }
 
       public void AdaptToLength(string str)

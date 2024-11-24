@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Editor.DataClasses.MapModes;
 using Editor.Helper;
 
 namespace Editor.DataClasses.Settings
@@ -8,6 +9,7 @@ namespace Editor.DataClasses.Settings
    {
       private bool _showCountryFlagInCe = true;
       private bool _jumpToSelectedProvinceCollection = true;
+      private MapModeType[] _mapModes = [];
       public event PropertyChangedEventHandler? PropertyChanged;
 
       protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -37,6 +39,14 @@ namespace Editor.DataClasses.Settings
       {
          get => _jumpToSelectedProvinceCollection;
          set => SetField(ref _jumpToSelectedProvinceCollection, value);
+      }
+
+      [Description("The mapmodes which are available in the hotkey buttons where inxex 0 ist the button on the left and ^1 is the one on the right.")]
+      [CompareInEquals]
+      public MapModeType[] MapModes
+      {
+         get => _mapModes;
+         set => SetField(ref _mapModes, value);
       }
    }
 }

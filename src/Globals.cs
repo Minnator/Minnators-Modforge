@@ -317,13 +317,14 @@ public static class Globals
 // - [-] Country Collection Editing, Saving is broken
 // - [x] Terrain Editing and map mode
 // - [x] Province Group parsing
-// - [ ] Fix Remove from province collection
+// - [x] Fix Remove from province collection
 // - [ ] Fix Setting Saveable Type (Dictionary for each type) to prevent from setting it to 0 if there are other items still of that type
 // - [ ] Fix Trade Node Saving
 // - [ ] Trade company saving
 // - [ ] province groups map mode and force file name
-// - [ ] empty culture and religion in colonial regions
+// - [x] empty culture and religion in colonial regions
 // - [ ] Country saving broken
+// - [ ] Fix Settings not saving when modified
 
 
 // TODO LIST Until Alpha 1.1

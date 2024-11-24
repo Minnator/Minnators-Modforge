@@ -271,28 +271,18 @@ namespace Editor.Forms
 
       private void InitializeMapModeButtons()
       {
-         var button01 = ControlFactory.GetMapModeButton('q');
+         var button01 = ControlFactory.GetMapModeButton('q', 0);
          button01.Margin = new(0, 0, 3, 0);
-         button01.SetMapMode(MapModeType.Province);
-         var button21 = ControlFactory.GetMapModeButton('w');
-         button21.SetMapMode(MapModeType.Country);
-         var button31 = ControlFactory.GetMapModeButton('e');
-         button31.SetMapMode(MapModeType.TradeNode);
-         var button41 = ControlFactory.GetMapModeButton('r');
-         button41.SetMapMode(MapModeType.Area);
-         var button5 = ControlFactory.GetMapModeButton('t');
-         button5.SetMapMode(MapModeType.Regions);
-         var button6 = ControlFactory.GetMapModeButton('y');
-         button6.SetMapMode(MapModeType.SuperRegion);
-         var button7 = ControlFactory.GetMapModeButton('u');
-         button7.SetMapMode(MapModeType.Continent);
-         var button8 = ControlFactory.GetMapModeButton('i');
-         button8.SetMapMode(MapModeType.Development);
-         var button9 = ControlFactory.GetMapModeButton('o');
-         button9.SetMapMode(MapModeType.Terrain);
-         var button10 = ControlFactory.GetMapModeButton('p');
+         var button21 = ControlFactory.GetMapModeButton('w', 1);
+         var button31 = ControlFactory.GetMapModeButton('e', 2);
+         var button41 = ControlFactory.GetMapModeButton('r', 3);
+         var button5 = ControlFactory.GetMapModeButton('t', 4);
+         var button6 = ControlFactory.GetMapModeButton('y', 5);
+         var button7 = ControlFactory.GetMapModeButton('u', 6);
+         var button8 = ControlFactory.GetMapModeButton('i', 7);
+         var button9 = ControlFactory.GetMapModeButton('o', 8);
+         var button10 = ControlFactory.GetMapModeButton('p', 9);
          button10.Margin = new(3, 0, 0, 0);
-         button10.SetMapMode(MapModeType.Autonomy);
          MMButtonsTLPanel.Controls.Add(button01, 0, 0);
          MMButtonsTLPanel.Controls.Add(button21, 1, 0);
          MMButtonsTLPanel.Controls.Add(button31, 2, 0);
@@ -303,6 +293,8 @@ namespace Editor.Forms
          MMButtonsTLPanel.Controls.Add(button8, 7, 0);
          MMButtonsTLPanel.Controls.Add(button9, 8, 0);
          MMButtonsTLPanel.Controls.Add(button10, 9, 0);
+
+         Globals.Settings.Gui.MapModes = new MapModeType[10];
       }
 
       private void InitializeProvinceCollectionEditGui()

@@ -23,9 +23,9 @@ public static class ControlFactory
       return new(Country.Empty);
    }
 
-   public static MapModeButton GetMapModeButton(char hotkey)
+   public static MapModeButton GetMapModeButton(char hotkey, int mapModeIndex)
    {
-      return new (hotkey);
+      return new (hotkey, mapModeIndex);
    }
 
    public static ThreeColorStripesButton GetThreeColorsButton()
