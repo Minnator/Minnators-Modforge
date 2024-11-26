@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using Editor.Forms.Feature;
 using Editor.Helper;
 
 namespace Editor.DataClasses.Settings;
@@ -13,6 +14,21 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    private SavingSettings _savingSettings = new();
    private MiscSettings _miscSettings = new();
    private GuiSettings _guiSettings = new();
+   
+
+   public Settings()
+   {
+      PropertyChanged += (sender, args) =>
+      {
+         if (Form.ActiveForm?.GetType() != typeof(SettingsWindow))
+         {
+            if(Globals.State == State.Running)
+               SettingsSaver.Save(Globals.Settings);
+         }
+      };
+   }
+
+
 
    [Description("Contains all settings regarding the misc settings.")]
    [TypeConverter(typeof(ExpandableObjectConverter))]
@@ -59,10 +75,9 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
       set => SetField(ref _guiSettings, value);
    }
 
-
    public event PropertyChangedEventHandler? PropertyChanged;
 
-   private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+   public void OnPropertyChanged([CallerMemberName] string? propertyName = null)
    {
       PropertyChanged?.Invoke(this, new (propertyName));
    }
@@ -80,3 +95,30 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
 
 [AttributeUsage(AttributeTargets.Property)]
 public class CompareInEquals : Attribute;
+
+public abstract class SubSettings : PropertyEquals, INotifyPropertyChanged
+{
+   public event PropertyChangedEventHandler? PropertyChanged;
+   private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+   {
+      if (Globals.State != State.Running)
+         return;
+      PropertyChanged?.Invoke(this, new(propertyName));
+      Globals.Settings.OnPropertyChanged(propertyName);
+   }
+
+   public void Invalidate(string propertyName)
+   {
+      OnPropertyChanged(propertyName);
+   }
+
+   internal bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+   {
+      if (EqualityComparer<T>.Default.Equals(field, value))
+         return false;
+      field = value;
+      OnPropertyChanged(propertyName);
+      return true;
+   }
+}
+

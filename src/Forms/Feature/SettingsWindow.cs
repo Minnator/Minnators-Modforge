@@ -40,12 +40,13 @@ namespace Editor.Forms.Feature
       private void SaveButton_Click(object sender, EventArgs e)
       {
          SettingsSaver.Save(Globals.Settings);
+         Globals.Settings.Gui.Invalidate(nameof(GuiSettings.MapModes));
          Close();
       }
 
       private void ResetAll_Click(object sender, EventArgs e)
       {
-         Globals.Settings = new ();
+         Globals.Settings = new();
          CreateTabsForSettings();
       }
 
@@ -65,6 +66,11 @@ namespace Editor.Forms.Feature
             if (control is PropertyGrid propertyGrid)
                propertyGrid.SelectedObject = property.GetValue(Globals.Settings);
          }
+      }
+
+      private void SettingsWindow_FormClosing(object sender, FormClosingEventArgs e)
+      {
+         Globals.Settings.Gui.Invalidate(nameof(GuiSettings.MapModes));
       }
    }
 }

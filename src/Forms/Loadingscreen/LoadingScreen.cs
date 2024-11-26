@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Media;
 using System.Reflection;
 using Editor.Controls;
+using Editor.Helper;
 using Editor.Loading;
 using Editor.Parser;
 
@@ -67,6 +68,7 @@ namespace Editor.Forms.LoadingScreen
          AutoTerrainCalculations.Load,
          HeightMapLoading.Load,
          ProvinceGroupsLoading.Load,
+         GameIcon.Initialize,
 
          // Must be last
          ModifierParser.Demilitarize

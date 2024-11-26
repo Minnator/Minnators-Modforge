@@ -659,4 +659,9 @@ public class Country : ProvinceCollection<Province>
       }
       return friends;
    }
+
+   public static void Create(string tag)
+   {
+      //TODO do the Country creation
+   }
 }

@@ -1,12 +1,10 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
-using Editor.Helper;
 
 namespace Editor.DataClasses.Settings
 {
    [SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
-   public class RenderingSettings : PropertyEquals, INotifyPropertyChanged
+   public class RenderingSettings : SubSettings
    {
       private StripesDirection _stripesDirection = StripesDirection.DiagonalLbRt;
       private bool _showMapBorder = true;
@@ -61,23 +59,6 @@ namespace Editor.DataClasses.Settings
       {
          get => _showOceansAsGreyInTerrain;
          set => SetField(ref _showOceansAsGreyInTerrain, value);
-      }
-
-
-      public event PropertyChangedEventHandler? PropertyChanged;
-
-      private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-      {
-         PropertyChanged?.Invoke(this, new(propertyName));
-      }
-
-      private bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-      {
-         if (EqualityComparer<T>.Default.Equals(field, value))
-            return false;
-         field = value;
-         OnPropertyChanged(propertyName);
-         return true;
       }
    }
 }

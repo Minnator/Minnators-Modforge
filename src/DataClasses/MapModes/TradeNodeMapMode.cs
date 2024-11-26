@@ -4,12 +4,16 @@ using Editor.Helper;
 
 namespace Editor.DataClasses.MapModes
 {
-   public class TradeNodeMapMode : MapMode
+   public class TradeNodeMapMode : CollectionMapMode
    {
+      public override bool IsLandOnly => false;
+
       public TradeNodeMapMode()
       {
          TradeNode.ItemsModified += UpdateProvinceCollection;
          TradeNode.ColorChanged += UpdateComposite<Province>;
+
+         Collections = [.. Globals.TradeNodes.Values];
       }
 
       public override MapModeType GetMapModeName()
@@ -23,12 +27,6 @@ namespace Editor.DataClasses.MapModes
          if (Equals(node, TradeNode.Empty))
             return Color.DimGray.ToArgb();
          return node.Color.ToArgb();
-      }
-
-      public override void RenderMapMode(Func<Province, int> method)
-      {
-         base.RenderMapMode(method);
-         MapDrawing.WriteOnProvince(GetCoTLevel);
       }
 
       private string GetCoTLevel(Province provinceId)

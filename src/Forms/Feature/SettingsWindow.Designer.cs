@@ -111,6 +111,7 @@
          MinimizeBox = false;
          Name = "SettingsWindow";
          Text = "SettingsWindow";
+         FormClosing += SettingsWindow_FormClosing;
          tableLayoutPanel1.ResumeLayout(false);
          ResumeLayout(false);
       }

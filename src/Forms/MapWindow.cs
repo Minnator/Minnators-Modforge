@@ -294,7 +294,6 @@ namespace Editor.Forms
          MMButtonsTLPanel.Controls.Add(button9, 8, 0);
          MMButtonsTLPanel.Controls.Add(button10, 9, 0);
 
-         Globals.Settings.Gui.MapModes = new MapModeType[10];
       }
 
       private void InitializeProvinceCollectionEditGui()
@@ -761,6 +760,17 @@ namespace Editor.Forms
          ExtendedComboBox.AllowEvents = true;
       }
       #endregion
+
+      public void UpdateMapModeButtons(bool buttonInv = true)
+      {
+         foreach (var mapModeButton in MMButtonsTLPanel.Controls)
+         {
+            if (mapModeButton is not MapModeButton button)
+               continue;
+
+            button.UpdateMapMode(buttonInv);
+         }
+      }
 
 
       #region ToolStrip update methods
@@ -1678,6 +1688,11 @@ namespace Editor.Forms
       private void FocusSelectionCheckBox_CheckedChanged(object sender, EventArgs e)
       {
 
+      }
+
+      private void AddNewCountryButton_Click(object sender, EventArgs e)
+      {
+         new CreateCountryForm().ShowDialog();
       }
    }
 }

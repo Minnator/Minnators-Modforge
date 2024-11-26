@@ -74,9 +74,18 @@ namespace Editor.Events
 
          Globals.Settings.Gui.PropertyChanged += (_, args) =>
          {
-            if (args.PropertyName == nameof(GuiSettings.ShowCountryFlagInCE))
-               Globals.MapWindow.CountryFlagLabel.Visible = Globals.Settings.Gui.ShowCountryFlagInCE;
+            switch (args.PropertyName)
+            {
+               case nameof(GuiSettings.ShowCountryFlagInCE):
+                  Globals.MapWindow.CountryFlagLabel.Visible = Globals.Settings.Gui.ShowCountryFlagInCE;
+                  break;
+               case nameof(GuiSettings.MapModes):
+                  Globals.MapWindow.UpdateMapModeButtons(false);
+                  break;
+            }
+
          };
+
       }
 
       public static void GraphicalCultureBox_SelectedIndexChanged(object? sender, EventArgs e)

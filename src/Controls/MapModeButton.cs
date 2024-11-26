@@ -1,4 +1,5 @@
 ﻿using Editor.DataClasses.MapModes;
+using Editor.DataClasses.Settings;
 using Editor.Forms.PopUps;
 
 namespace Editor.Controls
@@ -9,7 +10,7 @@ namespace Editor.Controls
       private char Hotkey;
       private const float MAXFONTSIZE = 8;
       private const float MINFONTSIZE = 1;
-      private int MapModeIndex;
+      internal int MapModeIndex;
       public MapModeButton(char hotkey, int mapModeIndex)
       {
          MapModeIndex = mapModeIndex;
@@ -18,7 +19,7 @@ namespace Editor.Controls
          UseMnemonic = true;
          Dock = DockStyle.Fill;
          Font = new("Arial", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-         Margin = new(1,0,1,0);
+         Margin = new(1, 0, 1, 0);
          Padding = new(0);
 
          Click += OnButtonClick;
@@ -28,14 +29,26 @@ namespace Editor.Controls
             SetMapMode(Globals.Settings.Gui.MapModes[mapModeIndex]);
       }
 
-      public void SetMapMode(MapModeType mapMode)
+      public void SetMapMode(MapModeType mapMode, bool callInv = true)
       {
          MapModeName = mapMode;
          Text = $"{mapMode} (&{Hotkey})";
          AdaptToLength(Text);
          if (MapModeIndex < Globals.Settings.Gui.MapModes.Length)
+         {
             Globals.Settings.Gui.MapModes[MapModeIndex] = mapMode;
+            if (Globals.State != State.Running)
+               return;
+            if (callInv)
+               Globals.Settings.Gui.Invalidate(nameof(GuiSettings.MapModes));
+         }
       }
+
+      public void UpdateMapMode(bool callInv = true)
+      {
+         SetMapMode(Globals.Settings.Gui.MapModes[MapModeIndex], callInv);
+      }
+
 
       public void AdaptToLength(string str)
       {

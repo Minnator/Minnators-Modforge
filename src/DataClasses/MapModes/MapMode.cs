@@ -12,6 +12,7 @@ public abstract class MapMode
    public virtual bool IsProvinceMapMode => true;
    public virtual Bitmap? Icon { get; protected set; }
    public virtual string IconFileName { get; } = null!;
+   public virtual bool IsCollectionMapMode => false;
 
    public virtual void RenderMapMode(Func<Province, int> method)
    {
@@ -40,7 +41,7 @@ public abstract class MapMode
       Globals.ZoomControl.Invalidate();
       Globals.MapModeManager.PreviousLandOnly = IsLandOnly;
    }
-
+   
    protected virtual void CropAndSetIcon()
    {
       var iconPath = Path.Combine(Globals.VanillaPath, "gfx", "interface", IconFileName);

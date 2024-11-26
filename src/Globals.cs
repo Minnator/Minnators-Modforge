@@ -323,12 +323,13 @@ public static class Globals
 // - [-] Country Collection Editing, Saving is broken
 // - [x] Fix Trade Node Saving
 // - [x] Trade company saving
-// - [ ] Fix Settings not saving when modified
+// - [x] Fix Settings not saving when modified
 // - [ ] Warning that it may corrupt files if there are error
-// - [ ] Button to add a new Country
+// - [x] Button to add a new Country
 // - [ ] Fix province saving
 // - [ ] Country saving broken
 // - [ ] Verify that all province modifications set the ObjEditingStatus
+// - [ ] Country Tags editing
 
 // TODO LIST Until Alpha 1.1
 // - [ ] Loading bar when saving using threads

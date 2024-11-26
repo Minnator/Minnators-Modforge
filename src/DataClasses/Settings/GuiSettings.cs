@@ -1,29 +1,13 @@
 ﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using Editor.DataClasses.MapModes;
-using Editor.Helper;
 
 namespace Editor.DataClasses.Settings
 {
-   public class GuiSettings : PropertyEquals, INotifyPropertyChanged
+   public class GuiSettings : SubSettings
    {
       private bool _showCountryFlagInCe = true;
       private bool _jumpToSelectedProvinceCollection = true;
-      private MapModeType[] _mapModes = [];
-      public event PropertyChangedEventHandler? PropertyChanged;
-
-      protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-      {
-         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-      }
-
-      protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-      {
-         if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-         field = value;
-         OnPropertyChanged(propertyName);
-         return true;
-      }
+      private MapModeType[] _mapModes = new MapModeType[10];
 
       [Description("Determines if the country flag should be shown in the country editor.")]
       [CompareInEquals]

@@ -254,6 +254,7 @@
          button4 = new Button();
          CountryHeaderTLP = new TableLayoutPanel();
          CountryNameLabel = new Label();
+         AddNewCountryButton = new Button();
          ProvinceGroupsPage = new TabPage();
          ProvinceCollectionsPanel = new Panel();
          ProvinceCollectionsTab = new TableLayoutPanel();
@@ -2763,10 +2764,12 @@
          // 
          // CountryHeaderTLP
          // 
-         CountryHeaderTLP.ColumnCount = 2;
+         CountryHeaderTLP.ColumnCount = 3;
          CountryHeaderTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
          CountryHeaderTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 90F));
+         CountryHeaderTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 28F));
          CountryHeaderTLP.Controls.Add(CountryNameLabel, 1, 0);
+         CountryHeaderTLP.Controls.Add(AddNewCountryButton, 2, 0);
          CountryHeaderTLP.Dock = DockStyle.Fill;
          CountryHeaderTLP.Location = new Point(0, 0);
          CountryHeaderTLP.Margin = new Padding(0);
@@ -2781,12 +2784,25 @@
          CountryNameLabel.AutoSize = true;
          CountryNameLabel.Dock = DockStyle.Fill;
          CountryNameLabel.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-         CountryNameLabel.Location = new Point(41, 0);
+         CountryNameLabel.Location = new Point(38, 0);
          CountryNameLabel.Name = "CountryNameLabel";
-         CountryNameLabel.Size = new Size(340, 30);
+         CountryNameLabel.Size = new Size(314, 30);
          CountryNameLabel.TabIndex = 0;
          CountryNameLabel.Text = "Tag.Empty";
          CountryNameLabel.TextAlign = ContentAlignment.MiddleCenter;
+         // 
+         // AddNewCountryButton
+         // 
+         AddNewCountryButton.Dock = DockStyle.Fill;
+         AddNewCountryButton.Image = Properties.Resources.GreenPlusBg;
+         AddNewCountryButton.Location = new Point(356, 1);
+         AddNewCountryButton.Margin = new Padding(1);
+         AddNewCountryButton.Name = "AddNewCountryButton";
+         AddNewCountryButton.Size = new Size(27, 28);
+         AddNewCountryButton.TabIndex = 1;
+         GeneralToolTip.SetToolTip(AddNewCountryButton, "Add new Country");
+         AddNewCountryButton.UseVisualStyleBackColor = true;
+         AddNewCountryButton.Click += AddNewCountryButton_Click;
          // 
          // ProvinceGroupsPage
          // 
@@ -3221,6 +3237,7 @@
       private ToolStripSeparator toolStripSeparator8;
       private ToolStripSeparator toolStripSeparator9;
       private ToolStripMenuItem TutorialBrowser;
+      private Button AddNewCountryButton;
    }
 }
 

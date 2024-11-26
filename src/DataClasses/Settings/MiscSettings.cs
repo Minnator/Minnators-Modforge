@@ -6,7 +6,7 @@ using Editor.Helper;
 namespace Editor.DataClasses.Settings
 {
    [SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
-   public sealed class MiscSettings : PropertyEquals, INotifyPropertyChanged
+   public sealed class MiscSettings : SubSettings
    {
       private Language _language = Language.english;
       private string _lastModPath = string.Empty;
@@ -106,22 +106,6 @@ namespace Editor.DataClasses.Settings
       {
          get => _historicRivalsFriendsGenerationAmount;
          set => SetField(ref _historicRivalsFriendsGenerationAmount, value);
-      }
-
-      public event PropertyChangedEventHandler? PropertyChanged;
-
-      private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-      {
-         PropertyChanged?.Invoke(this, new(propertyName));
-      }
-
-      private bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-      {
-         if (EqualityComparer<T>.Default.Equals(field, value)) 
-            return false;
-         field = value;
-         OnPropertyChanged(propertyName);
-         return true;
       }
    }
 }
