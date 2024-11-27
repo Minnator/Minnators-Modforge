@@ -29,36 +29,49 @@
       private void InitializeComponent()
       {
          System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CreateCountryForm));
-         tableLayoutPanel1 = new TableLayoutPanel();
+         MTLP = new TableLayoutPanel();
          AvailabilityLabel = new Label();
          TagBox = new ComboBox();
          CancelButton = new Button();
          CreateButton = new Button();
          InfoLabel = new Label();
-         tableLayoutPanel1.SuspendLayout();
+         label1 = new Label();
+         label2 = new Label();
+         CountryNameTextBox = new TextBox();
+         CountryAdjTextBox = new TextBox();
+         label3 = new Label();
+         MTLP.SuspendLayout();
          SuspendLayout();
          // 
-         // tableLayoutPanel1
+         // MTLP
          // 
-         tableLayoutPanel1.ColumnCount = 3;
-         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 30F));
-         tableLayoutPanel1.Controls.Add(AvailabilityLabel, 2, 0);
-         tableLayoutPanel1.Controls.Add(TagBox, 0, 0);
-         tableLayoutPanel1.Controls.Add(CancelButton, 0, 2);
-         tableLayoutPanel1.Controls.Add(CreateButton, 1, 2);
-         tableLayoutPanel1.Controls.Add(InfoLabel, 0, 1);
-         tableLayoutPanel1.Dock = DockStyle.Fill;
-         tableLayoutPanel1.Location = new Point(0, 0);
-         tableLayoutPanel1.Margin = new Padding(0);
-         tableLayoutPanel1.Name = "tableLayoutPanel1";
-         tableLayoutPanel1.RowCount = 3;
-         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         tableLayoutPanel1.Size = new Size(298, 88);
-         tableLayoutPanel1.TabIndex = 0;
+         MTLP.ColumnCount = 3;
+         MTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         MTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         MTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 30F));
+         MTLP.Controls.Add(AvailabilityLabel, 2, 0);
+         MTLP.Controls.Add(TagBox, 0, 0);
+         MTLP.Controls.Add(CancelButton, 0, 5);
+         MTLP.Controls.Add(CreateButton, 1, 5);
+         MTLP.Controls.Add(InfoLabel, 0, 1);
+         MTLP.Controls.Add(label1, 0, 2);
+         MTLP.Controls.Add(label2, 0, 3);
+         MTLP.Controls.Add(CountryNameTextBox, 1, 2);
+         MTLP.Controls.Add(CountryAdjTextBox, 1, 3);
+         MTLP.Controls.Add(label3, 0, 4);
+         MTLP.Dock = DockStyle.Fill;
+         MTLP.Location = new Point(0, 0);
+         MTLP.Margin = new Padding(0);
+         MTLP.Name = "MTLP";
+         MTLP.RowCount = 6;
+         MTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         MTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         MTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
+         MTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
+         MTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
+         MTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         MTLP.Size = new Size(298, 168);
+         MTLP.TabIndex = 0;
          // 
          // AvailabilityLabel
          // 
@@ -72,7 +85,7 @@
          // 
          // TagBox
          // 
-         tableLayoutPanel1.SetColumnSpan(TagBox, 2);
+         MTLP.SetColumnSpan(TagBox, 2);
          TagBox.Dock = DockStyle.Fill;
          TagBox.FormattingEnabled = true;
          TagBox.Location = new Point(3, 3);
@@ -86,7 +99,7 @@
          // CancelButton
          // 
          CancelButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-         CancelButton.Location = new Point(1, 64);
+         CancelButton.Location = new Point(1, 144);
          CancelButton.Margin = new Padding(1);
          CancelButton.Name = "CancelButton";
          CancelButton.Size = new Size(75, 23);
@@ -98,8 +111,8 @@
          // CreateButton
          // 
          CreateButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-         tableLayoutPanel1.SetColumnSpan(CreateButton, 2);
-         CreateButton.Location = new Point(222, 64);
+         MTLP.SetColumnSpan(CreateButton, 2);
+         CreateButton.Location = new Point(222, 144);
          CreateButton.Margin = new Padding(1);
          CreateButton.Name = "CreateButton";
          CreateButton.Size = new Size(75, 23);
@@ -121,29 +134,84 @@
          InfoLabel.Text = "Ok";
          InfoLabel.TextAlign = ContentAlignment.MiddleLeft;
          // 
+         // label1
+         // 
+         label1.AutoSize = true;
+         label1.Dock = DockStyle.Fill;
+         label1.Location = new Point(3, 55);
+         label1.Name = "label1";
+         label1.Size = new Size(128, 28);
+         label1.TabIndex = 5;
+         label1.Text = "Country Name";
+         label1.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // label2
+         // 
+         label2.AutoSize = true;
+         label2.Dock = DockStyle.Fill;
+         label2.Location = new Point(3, 83);
+         label2.Name = "label2";
+         label2.Size = new Size(128, 28);
+         label2.TabIndex = 6;
+         label2.Text = "Country Adjective";
+         label2.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // CountryNameTextBox
+         // 
+         CountryNameTextBox.Dock = DockStyle.Fill;
+         CountryNameTextBox.Location = new Point(137, 58);
+         CountryNameTextBox.Name = "CountryNameTextBox";
+         CountryNameTextBox.Size = new Size(128, 23);
+         CountryNameTextBox.TabIndex = 7;
+         // 
+         // CountryAdjTextBox
+         // 
+         CountryAdjTextBox.Dock = DockStyle.Fill;
+         CountryAdjTextBox.Location = new Point(137, 86);
+         CountryAdjTextBox.Name = "CountryAdjTextBox";
+         CountryAdjTextBox.Size = new Size(128, 23);
+         CountryAdjTextBox.TabIndex = 8;
+         // 
+         // label3
+         // 
+         label3.AutoSize = true;
+         label3.Dock = DockStyle.Fill;
+         label3.Location = new Point(3, 111);
+         label3.Name = "label3";
+         label3.Size = new Size(128, 28);
+         label3.TabIndex = 9;
+         label3.Text = "Color";
+         label3.TextAlign = ContentAlignment.MiddleLeft;
+         // 
          // CreateCountryForm
          // 
          AutoScaleDimensions = new SizeF(7F, 15F);
          AutoScaleMode = AutoScaleMode.Font;
-         ClientSize = new Size(298, 88);
-         Controls.Add(tableLayoutPanel1);
+         ClientSize = new Size(298, 168);
+         Controls.Add(MTLP);
+         FormBorderStyle = FormBorderStyle.FixedSingle;
          Icon = (Icon)resources.GetObject("$this.Icon");
          MaximizeBox = false;
          MinimizeBox = false;
          Name = "CreateCountryForm";
          Text = "Create Country";
-         tableLayoutPanel1.ResumeLayout(false);
-         tableLayoutPanel1.PerformLayout();
+         MTLP.ResumeLayout(false);
+         MTLP.PerformLayout();
          ResumeLayout(false);
       }
 
       #endregion
 
-      private TableLayoutPanel tableLayoutPanel1;
+      private TableLayoutPanel MTLP;
       private Label AvailabilityLabel;
       private ComboBox TagBox;
       private Button CancelButton;
       private Button CreateButton;
       private Label InfoLabel;
+      private Label label1;
+      private Label label2;
+      private TextBox CountryNameTextBox;
+      private TextBox CountryAdjTextBox;
+      private Label label3;
    }
 }

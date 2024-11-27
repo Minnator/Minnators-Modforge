@@ -79,7 +79,7 @@ public partial class LocalisationLoading
                    localHashSet.Add(locObj);
                 }
              }
-             if (isMod)
+             if (isMod && localHashSet.Count > 0)
                 SaveMaster.AddRangeToDictionary(pathObj, localHashSet);
 
              return localHashSet;

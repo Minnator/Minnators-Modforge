@@ -6,12 +6,26 @@ using Editor.DataClasses.Commands;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Saving;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
 using static Editor.Saving.SavingUtil;
 
 namespace Editor.DataClasses.GameDataClasses;
 
-public class CommonCountry(string fileName, Country country) : Saveable
+public class CommonCountry : Saveable
 {
+   public CommonCountry(Country country, ObjEditingStatus status = ObjEditingStatus.Modified)
+   {
+      country.CommonCountry = this;
+      _country = country;
+      base.EditingStatus = status;
+   }
+
+   public CommonCountry(Country country, ref PathObj path) : this(country, ObjEditingStatus.Unchanged)
+   {
+      SetPath(ref path);
+   }
+
+   private Country _country;
    private Color _revolutionaryColor = Color.Empty;
    private string _graphicalCulture = string.Empty;
    private Color _color;
@@ -136,11 +150,11 @@ public class CommonCountry(string fileName, Country country) : Saveable
       PropertyChanged?.Invoke(this, new (propertyName));
    }
    public override SaveableType WhatAmI() => SaveableType.Country;
-   public override string[] GetDefaultFolderPath() => ["common", "countries"];
+   public override string[] GetDefaultFolderPath() => ["common", _country.CountryFilePath.FilePath];
    public override string GetFileEnding() => ".txt";
-   public override KeyValuePair<string, bool> GetFileName() => new(country.GetLocalisation(), true);
-   public override string SavingComment() => $"{country.Tag} ({country.GetLocalisation()})";
-   public override string GetSavePromptString() => $"Save common country file for {country.GetLocalisation()}";
+   public override KeyValuePair<string, bool> GetFileName() => new(_country.CountryFilePath.FileName, true);
+   public override string SavingComment() => $"{_country.Tag} ({_country.GetLocalisation()})";
+   public override string GetSavePromptString() => $"Save common country file for {_country.GetLocalisation()}";
    public override string GetSaveString(int tabs)
    {
       var sb = new StringBuilder();
@@ -168,8 +182,22 @@ public class CommonCountry(string fileName, Country country) : Saveable
    }
 }
 
-public class HistoryCountry(Country country) : Saveable
+public class HistoryCountry : Saveable
 {
+
+   public HistoryCountry(Country country, ObjEditingStatus status = ObjEditingStatus.Modified)
+   {
+      country.HistoryCountry = this;
+      _country = country;
+      base.EditingStatus = status;
+   }
+
+   public HistoryCountry(Country country, ref PathObj path) : this(country, ObjEditingStatus.Unchanged)
+   {
+      SetPath(ref path);
+   }
+
+   private Country _country;
    private bool _isElector; //
    private int _mercantilism = 0; //
    private int _fixedCapital = -1;//
@@ -346,8 +374,8 @@ public class HistoryCountry(Country country) : Saveable
    public override SaveableType WhatAmI() => SaveableType.Country;
    public override string[] GetDefaultFolderPath() => ["history", "countries"];
    public override string GetFileEnding() => ".txt";
-   public override KeyValuePair<string, bool> GetFileName() => new($"{country.Tag} - {country.GetLocalisation()}", true);
-   public override string SavingComment() => $"{country.Tag} ({country.GetLocalisation()})";
+   public override KeyValuePair<string, bool> GetFileName() => new($"{_country.Tag} - {_country.GetLocalisation()}", true);
+   public override string SavingComment() => $"{_country.Tag} ({_country.GetLocalisation()})";
    public override string GetSaveString(int tabs)
    {
       var sb = new StringBuilder();
@@ -398,33 +426,109 @@ public class HistoryCountry(Country country) : Saveable
 
    public override void OnPropertyChanged([CallerMemberName] string? propertyName = null)
    {
-      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+      PropertyChanged?.Invoke(this, new (propertyName));
    }
 }
 
+public class CountryFilePath : Saveable
+{
+   public event PropertyChangedEventHandler? PropertyChanged;
+
+   private string[] _filePathArr;
+   private Country _country;
+
+   public CountryFilePath(string filePath, ObjEditingStatus status = ObjEditingStatus.Modified)
+   {
+      InitPath(filePath);
+      base.EditingStatus = status;
+   }
+
+   public CountryFilePath(string filePath, ref PathObj path) : this(filePath, ObjEditingStatus.Unchanged)
+   {
+      SetPath(ref path);
+   }
+   
+   public void SetCountry(Country country)
+   {
+      _country = country;
+   }
+
+   private void InitPath(string path)
+   {
+      _filePathArr = path.Split('/');
+   }
+
+   public string FilePath => System.IO.Path.Combine(_filePathArr[..^1]);
+   public string FileName => _filePathArr[^1][.._filePathArr[^1].LastIndexOf('.')];
+
+   public string[] FilePathArr
+   {
+      get => _filePathArr;
+      set => SetField(ref _filePathArr, value);
+   }
+
+   public static CountryFilePath Empty => new(string.Empty, ObjEditingStatus.Immutable);
+
+   public override void OnPropertyChanged(string? propertyName = null)
+   {
+      PropertyChanged?.Invoke(this, new(propertyName));
+   }
+
+   public override SaveableType WhatAmI()
+   {
+      return SaveableType.Country;
+   }
+
+   public override string[] GetDefaultFolderPath()
+   {
+      return ["common", "country_tags"];
+   }
+
+   public override string GetFileEnding()
+   {
+      return ".txt";
+   }
+
+   public override KeyValuePair<string, bool> GetFileName()
+   {
+      return new("modforge_country_tags", false);
+   }
+
+   public override string SavingComment()
+   {
+      return string.Empty;
+   }
+
+   public override string GetSaveString(int tabs)
+   {
+      return $"{_country?.Tag} = \"{System.IO.Path.Combine(_filePathArr).Replace('\\', '/')}\"";
+   }
+
+   public override string GetSavePromptString() => $"Saving the filenames/country part";
+}
 
 public class Country : ProvinceCollection<Province>
 {
-   public Country(Tag tag, string fileName, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(tag.ToString(), color, status)
+   public Country(Tag tag, CountryFilePath fileName, Color color, ObjEditingStatus status = ObjEditingStatus.Immutable) : base(tag.ToString(), color, status)
    {
       Tag = tag;
-      FileName = fileName;
-      CommonCountry = new(fileName, this);
-      HistoryCountry = new(this);
+      CountryFilePath = fileName;
+      fileName.SetCountry(this);
    }
 
 
-   public new static Country Empty => new(Tag.Empty, string.Empty, Color.Empty, ObjEditingStatus.Immutable);
+   public new static Country Empty => new(Tag.Empty, GameDataClasses.CountryFilePath.Empty, Color.Empty, ObjEditingStatus.Immutable);
 
    [TypeConverter(typeof(ExpandableObjectConverter))]
    public HistoryCountry HistoryCountry { get; set; }
    [TypeConverter(typeof(ExpandableObjectConverter))]
    public CommonCountry CommonCountry { get; set; }
-
+   [TypeConverter(typeof(CountryFilePath))]
+   public CountryFilePath CountryFilePath { get; set; }
 
    
    public Tag Tag { get; set; }
-   public string FileName { get; }
+
 
    public override Color Color
    {
@@ -514,8 +618,9 @@ public class Country : ProvinceCollection<Province>
 
    public bool Exists => SubCollection.Count > 0;
 
+   public string GetAdjectiveLocKey => $"{Tag}_ADJ";
    public string GetLocalisation() => Localisation.GetLoc(Tag);
-   public string GetAdjectiveLocalisation() => Localisation.GetLoc($"{Tag}_ADJ");
+   public string GetAdjectiveLocalisation() => Localisation.GetLoc(GetAdjectiveLocKey);
    public override string ToString() => $"{Tag.ToString()} ({GetLocalisation()})";
    public override bool Equals(object? obj)
    {
@@ -547,8 +652,7 @@ public class Country : ProvinceCollection<Province>
    public override string SavingComment() => Localisation.GetLoc(Tag);
    public override string GetSaveString(int tabs)
    {
-      // TODO
-      return "NOT YET SUPPORTED!";
+      throw new EvilActions("You should not do this! We need to fix the country mess!");
    }
 
    public override string GetSavePromptString() => $"Save countries file for {SavingComment()}";
@@ -660,8 +764,18 @@ public class Country : ProvinceCollection<Province>
       return friends;
    }
 
-   public static void Create(string tag)
+   public static EventHandler<Country> CountryCreated = delegate { };
+
+   public static void Create(string tag, Color color)
    {
-      //TODO do the Country creation
+      var fileName = Localisation.GetLoc(tag);
+      if (string.IsNullOrWhiteSpace(fileName)) 
+         fileName = tag;
+      var country = new Country(tag, new ($"countries/{fileName}.txt"), color, ObjEditingStatus.Unchanged);
+      var temp = new CommonCountry(country);
+      var temp2 = new HistoryCountry(country);
+      Globals.Countries.Add(tag, country);
+
+      CountryCreated.Invoke(country, country);
    }
 }

@@ -1694,5 +1694,18 @@ namespace Editor.Forms
       {
          new CreateCountryForm().ShowDialog();
       }
+
+      private void fileNamesToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         var sb = new StringBuilder();
+         foreach (var country in Globals.Countries.Values)
+         {
+            sb.AppendLine($"{country.Tag} : {country.CountryFilePath.FilePathArr.ToString()}");
+         }
+
+         var downloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\";
+         File.WriteAllText(Path.Combine(downloadFolder, "countryFileNames.txt"), sb.ToString());
+
+      }
    }
 }

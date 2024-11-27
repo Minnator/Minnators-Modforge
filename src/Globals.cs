@@ -332,6 +332,7 @@ public static class Globals
 // - [ ] Country Tags editing
 
 // TODO LIST Until Alpha 1.1
+// - [ ] UnitType loading optimization
 // - [ ] Loading bar when saving using threads
 // - [ ] In Depth deleting with pop up to show what objects are related to the one being deleted
 // - [ ] Radial Menu for Map Modes

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Editor.Controls;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.Saving;
@@ -7,6 +8,8 @@ namespace Editor.Forms.PopUps
 {
    public partial class CreateCountryForm : Form
    {
+      private ColorPickerButton _colorPickerButton;
+
       public Dictionary<char, int> DynamicTags = new()
       {
          { 'C', 75 },
@@ -23,6 +26,8 @@ namespace Editor.Forms.PopUps
       {
          InitializeComponent();
          StartPosition = FormStartPosition.CenterParent;
+         _colorPickerButton = ControlFactory.GetColorPickerButton();
+         MTLP.Controls.Add(_colorPickerButton, 1, 4);
       }
 
       private void CreateButton_Click(object sender, EventArgs e)
@@ -30,7 +35,9 @@ namespace Editor.Forms.PopUps
          if (!VerifyTag())
             return;
 
-         Country.Create(TagBox.Text);
+         Localisation.AddOrModifyLocObject(TagBox.Text, CountryNameTextBox.Text);
+         Localisation.AddOrModifyLocObject(TagBox.Text + "_ADJ", CountryAdjTextBox.Text);
+         Country.Create(TagBox.Text, _colorPickerButton.GetColor);
          Close();
       }
 
@@ -50,7 +57,6 @@ namespace Editor.Forms.PopUps
 
          if (VerifyTag()) 
             SuggestTags();
-
       }
 
       public void SuggestTags(int number = 4)
@@ -85,6 +91,12 @@ namespace Editor.Forms.PopUps
 
       public bool VerifyTag()
       {
+         if (TagBox.Text.Length <= 1)
+         {
+            SetInfo(Info.ToShort);
+            SetOk(false);
+            return false;
+         }
          var firstTextChar = TagBox.Text[0];
          if (DynamicTags.ContainsKey(firstTextChar))
          {
@@ -109,10 +121,10 @@ namespace Editor.Forms.PopUps
             return false;
          }
 
-         var isUsed = !Globals.Countries.ContainsKey(TagBox.Text);
-         SetOk(isUsed);
-         SetInfo(!isUsed ? Info.Used : Info.Ok);
-         return !isUsed;
+         var isFree = !Globals.Countries.ContainsKey(TagBox.Text);
+         SetOk(isFree);
+         SetInfo(!isFree ? Info.Used : Info.Ok);
+         return isFree;
       }
 
       private void TagBox_KeyPress(object sender, KeyPressEventArgs e)

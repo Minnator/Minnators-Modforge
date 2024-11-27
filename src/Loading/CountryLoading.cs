@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Diagnostics.Metrics;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using Editor.DataClasses.GameDataClasses;
@@ -11,37 +12,47 @@ using Parsing = Editor.Parser.Parsing;
 namespace Editor.Loading
 {
    
-   public static class CountryLoading
+   public static partial class CountryLoading
    {
-      private static readonly Regex CountryRegex = new(@"(?<tag>[A-Z0-9]{3})\s*=\s*""(?<path>[^""]+)""", RegexOptions.Compiled);
+      private static readonly Regex CountryRegex = CountryTagRegex();
 
       public static void Load()
       {
-         FilesHelper.GetFilesUniquelyAndCombineToOne(out var content, "common", "country_tags");
+         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "country_tags");
 
-         Parsing.RemoveCommentFromMultilineString(ref content, out var removed);
-         var matches = CountryRegex.Matches(removed);
-         Dictionary<Tag, Country> countries = new(matches.Count);
 
-         foreach (Match match in matches)
+         foreach (var file in files)
          {
-            var tag = new Tag(match.Groups["tag"].Value);
-            if (countries.ContainsKey(tag))
-            {
-               Globals.ErrorLog.Write($"Duplicate country tag: {tag}");
+            if (!IO.ReadAllInANSI(file, out var content))
                continue;
+            Parsing.RemoveCommentFromMultilineString(content, out var removed);
+            var matches = CountryRegex.Matches(removed);
+            Dictionary<Tag, Country> countries = new(matches.Count);
+
+            foreach (Match match in matches)
+            {
+               var tag = new Tag(match.Groups["tag"].Value);
+               if (countries.ContainsKey(tag))
+               {
+                  Globals.ErrorLog.Write($"Duplicate country tag: {tag}");
+                  continue;
+               }
+
+               var pathObj = PathObj.FromPath(file);
+               var fileNameObj = new CountryFilePath(match.Groups["path"].Value, ref pathObj);
+               Country country = new(tag, fileNameObj, Color.Empty, ObjEditingStatus.Unchanged);
+               fileNameObj.SetCountry(country);
+               country.SetBounds();
+               countries.Add(tag, country);
             }
 
-            Country country = new(tag, match.Groups["path"].Value, Color.Empty, ObjEditingStatus.Unchanged);
-            country.SetBounds();
-            countries.Add(tag, country);
+            Globals.Countries = countries;
+
+            ParseCountryAttributes();
+
+            LoadCountryHistories();
          }
 
-         Globals.Countries = countries;
-
-         ParseCountryAttributes();
-
-         LoadCountryHistories();
       }
 
       public static void LoadProvincesToCountries()
@@ -63,24 +74,22 @@ namespace Editor.Loading
             
             Parsing.RemoveCommentFromMultilineString(content, out var removed);
             var newPathObj = PathObj.FromPath(file);
-            
-            foreach (var element in Parsing.GetElements(0, removed))
-            {
-               Tag tag = new(Path.GetFileName(file)[..3]);
-               if (Globals.Countries.TryGetValue(tag, out var country))
-               {
-                  ParseCountryStuff(element, country);
-                  SaveMaster.AddToDictionary(ref newPathObj, country.HistoryCountry);
-                  country.HistoryCountry.SetPath(ref newPathObj);
-               }
-               else
-                  Globals.ErrorLog.Write($"Found country file with no no tag reference in 'country_tag' folder: {tag}");
 
+            Tag tag = new(Path.GetFileName(file)[..3]);
+            if (Globals.Countries.TryGetValue(tag, out var country))
+               SaveMaster.AddToDictionary(ref newPathObj, new HistoryCountry(country, ref newPathObj));
+            else
+            {
+               Globals.ErrorLog.Write($"Found country file with no no tag reference in 'country_tag' folder: {tag}");
+               return;
             }
+
+            foreach (var element in Parsing.GetElements(0, removed)) 
+               ParseCountryStuff(element, ref file, country);
          });
       }
 
-      private static void ParseCountryStuff(IElement element, Country country)
+      private static void ParseCountryStuff(IElement element, ref string file, Country country)
       {
          if (element is Block block)
          {
@@ -118,7 +127,7 @@ namespace Editor.Loading
                      Globals.ErrorLog.Write($"Invalid estate loyalty effect in {country.Tag}: {block.GetContent}");
                   break;
                default:
-                  ParseHistoryBlock(block, out var che);
+                  ParseHistoryBlock(block, ref file, out var che);
                   country.HistoryCountry.History.Add(che);
                   break;
             }
@@ -224,7 +233,7 @@ namespace Editor.Loading
          }
       }
 
-      private static void ParseHistoryBlock(Block block, out CountryHistoryEntry che)
+      private static void ParseHistoryBlock(Block block, ref string file, out CountryHistoryEntry che)
       {
          che = null!;
 
@@ -239,8 +248,8 @@ namespace Editor.Loading
          //TempHistoryEntries(ref che, block.Blocks);
          //return;
          //TODO: properly implement this after pdx language parser is written
-         AssignHistoryEntryAttributes(ref che, block.Blocks);
-         AssignHistoryEntryContent(ref che, block.GetContentElements);
+         AssignHistoryEntryAttributes(ref che, ref file, block.Blocks);
+         AssignHistoryEntryContent(ref che, ref file, block.GetContentElements);
       }
 
       private static void TempHistoryEntries(ref CountryHistoryEntry entry, List<IElement> elements)
@@ -258,7 +267,7 @@ namespace Editor.Loading
          entry.Content = sb.ToString();
       }
 
-      private static void AssignHistoryEntryAttributes(ref CountryHistoryEntry che, List<IElement> elements)
+      private static void AssignHistoryEntryAttributes(ref CountryHistoryEntry che, ref string file, List<IElement> elements)
       {
          if (elements.Count == 0)
             return;
@@ -276,13 +285,6 @@ namespace Editor.Loading
                che.Effects.Add(effect);
                continue;
             }
-
-            if (int.TryParse(block.Name, out var provId) && Globals.ProvinceIdToProvince.ContainsKey(provId))
-            {
-               // TODO add scoped effects when implemented
-               continue;
-            }
-
             switch (block.Name)
             {
                case "monarch":
@@ -311,16 +313,14 @@ namespace Editor.Loading
                      Globals.ErrorLog.Write($"Invalid change_price effect in {che}: {block.GetContent}");
                   break;
                default:
-                  Globals.ErrorLog.Write($"Unknown block in history entry: {block.Name}");
-                  break;
-                  if (Parsing.ParseDynamicContent(block, out _))
-                     break;
+
+                  Globals.ErrorLog.Write($"Unknown block in history entry: {block.Name} ({file})");
                   break;
             }
          }
       }
 
-      private static void AssignHistoryEntryContent(ref CountryHistoryEntry che, List<Content> element)
+      private static void AssignHistoryEntryContent(ref CountryHistoryEntry che, ref string file, List<Content> element)
       {
          if (element.Count == 0)
             return;
@@ -342,7 +342,7 @@ namespace Editor.Loading
                }
                else
                {
-                  Globals.ErrorLog.Write($"Unknown key in history entry effects: {kvp.Key} in {content}");
+                  Globals.ErrorLog.Write($"Unknown key in history entry effects: {kvp.Key} in {content} ({file})");
                }
             }
          }
@@ -356,15 +356,14 @@ namespace Editor.Loading
 
          Parallel.ForEach(Globals.Countries.Values, new () { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 }, country =>
          {
-            FilesHelper.GetFilePathUniquely(out var path, "common", country.FileName);
+            FilesHelper.GetFilePathUniquely(out var path, "common", Path.Combine(country.CountryFilePath.FilePathArr));
             if (!IO.ReadAllInANSI(path, out var content))
                return;
 
             path = path.Replace('/', '\\');
 
             var newPathObj = PathObj.FromPath(path);
-            SaveMaster.AddToDictionary(ref newPathObj, country.CommonCountry);
-            country.CommonCountry.SetPath(ref newPathObj);
+            SaveMaster.AddToDictionary(ref newPathObj, new CommonCountry(country, ref newPathObj));
 
             Parsing.RemoveCommentFromMultilineString(ref content, out var removed);
             var blocks = Parsing.GetElements(0, ref removed);
@@ -510,6 +509,9 @@ namespace Editor.Loading
             country.Add(province);
          }
       }
+
+      [GeneratedRegex(@"(?<tag>[A-Z0-9]{3})\s*=\s*""(?<path>[^""]+)""", RegexOptions.Compiled)]
+      private static partial Regex CountryTagRegex();
    }
 
 }

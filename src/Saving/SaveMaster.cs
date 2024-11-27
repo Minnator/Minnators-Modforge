@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 using Editor.DataClasses.Misc;
 using Editor.Forms.Feature.SavingClasses;
 using Editor.Helper;
@@ -152,6 +153,8 @@ namespace Editor.Saving
       {
          lock (AllSaveableFiles)
          {
+            if (!newSaveables.Any())
+               throw new EvilActions("There needs to be at least one element added to the path.");
             if (!AllSaveableFiles.TryGetValue(path, out var saveables))
             {
                AllSaveableFiles.Add(path, []);

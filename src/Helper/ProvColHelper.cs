@@ -130,7 +130,7 @@ namespace Editor.Helper
             case SaveableType.ProvinceGroup:
                return (new ProvinceGroup(name, color) as T)!;
             case SaveableType.Country:
-               return (new Country(name, string.Empty, color) as T)!;
+               return (new Country(name, CountryFilePath.Empty, color) as T)!;
             default:
                throw new ArgumentOutOfRangeException(nameof(type), type, null);
          }

@@ -19,7 +19,8 @@ namespace Editor.Loading
          }
 
          var pathObj = PathObj.FromPath(path, isModPath);
-         ParseTradeNodesFromString(IO.ReadAllInUTF8(path), ref pathObj);
+         Parsing.RemoveCommentFromMultilineString(IO.ReadAllInUTF8(path), out var fileContent);
+         ParseTradeNodesFromString(fileContent, ref pathObj);
          ConnectControlPaths();
          SetIncoming();
          SaveMaster.AddRangeToDictionary(pathObj, Globals.TradeNodes.Values);

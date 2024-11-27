@@ -95,6 +95,7 @@
          roughEditorToolStripMenuItem = new ToolStripMenuItem();
          newSavingToolStripMenuItem = new ToolStripMenuItem();
          toolStripMenuItem4 = new ToolStripMenuItem();
+         fileNamesToolStripMenuItem = new ToolStripMenuItem();
          ProvinceCollectionsLayoutPanel = new TableLayoutPanel();
          FocusSelectionCheckBox = new CheckBox();
          BottomToolStrip = new ToolStrip();
@@ -651,7 +652,7 @@
          // 
          // debugToolStripMenuItem
          // 
-         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem, jsonToolStripMenuItem, bugReportToolStripMenuItem, crashReportToolStripMenuItem, loadDDSFilesTestToolStripMenuItem, roughEditorToolStripMenuItem, newSavingToolStripMenuItem, toolStripMenuItem4 });
+         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem, jsonToolStripMenuItem, bugReportToolStripMenuItem, crashReportToolStripMenuItem, loadDDSFilesTestToolStripMenuItem, roughEditorToolStripMenuItem, newSavingToolStripMenuItem, toolStripMenuItem4, fileNamesToolStripMenuItem });
          debugToolStripMenuItem.Name = "debugToolStripMenuItem";
          debugToolStripMenuItem.Size = new Size(54, 23);
          debugToolStripMenuItem.Text = "Debug";
@@ -767,6 +768,13 @@
          toolStripMenuItem4.Size = new Size(234, 22);
          toolStripMenuItem4.Text = "Terrain";
          toolStripMenuItem4.Click += toolStripMenuItem4_Click;
+         // 
+         // fileNamesToolStripMenuItem
+         // 
+         fileNamesToolStripMenuItem.Name = "fileNamesToolStripMenuItem";
+         fileNamesToolStripMenuItem.Size = new Size(234, 22);
+         fileNamesToolStripMenuItem.Text = "FileNames";
+         fileNamesToolStripMenuItem.Click += fileNamesToolStripMenuItem_Click;
          // 
          // ProvinceCollectionsLayoutPanel
          // 
@@ -3238,6 +3246,7 @@
       private ToolStripSeparator toolStripSeparator9;
       private ToolStripMenuItem TutorialBrowser;
       private Button AddNewCountryButton;
+      private ToolStripMenuItem fileNamesToolStripMenuItem;
    }
 }
 
