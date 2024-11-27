@@ -32,4 +32,10 @@ namespace Editor.Helper
          return hash;
       }
    }
+
+   public interface IGetSetProperty
+   {
+      public object? GetProperty(string propertyName);
+      public void SetProperty(string propertyName, object value);
+   }
 }

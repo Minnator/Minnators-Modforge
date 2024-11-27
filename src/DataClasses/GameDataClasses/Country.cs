@@ -2,16 +2,14 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text;
-using Editor.DataClasses.Commands;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Saving;
-using static System.ComponentModel.Design.ObjectSelectorEditor;
 using static Editor.Saving.SavingUtil;
 
 namespace Editor.DataClasses.GameDataClasses;
 
-public class CommonCountry : Saveable
+public class CommonCountry : Saveable, IGetSetProperty
 {
    public CommonCountry(Country country, ObjEditingStatus status = ObjEditingStatus.Modified)
    {
@@ -143,7 +141,25 @@ public class CommonCountry : Saveable
       get => _customAttributes;
       set => SetField(ref _customAttributes, value);
    }
-   
+
+   public static CommonCountry Empty => new(Country.Empty, ObjEditingStatus.Immutable);
+
+   public void SetProperty(string propName, object value)
+   {
+      var prop = GetType().GetProperty(propName);
+      if (prop == null)
+         return;
+      prop.SetValue(this, value);
+   }
+
+   public object? GetProperty(string propName)
+   {
+      var prop = GetType().GetProperty(propName);
+      if (prop == null)
+         return null;
+      return prop.GetValue(this);
+   }
+
    public event PropertyChangedEventHandler? PropertyChanged;
    public override void OnPropertyChanged([CallerMemberName] string? propertyName = null)
    {
@@ -159,10 +175,10 @@ public class CommonCountry : Saveable
    {
       var sb = new StringBuilder();
       AddColor(0, Color, ref sb);
-      sb.AppendLine($"graphical_culture = {GraphicalCulture}");
+      AddString(0, GraphicalCulture, "graphical_culture", ref sb);
       sb.AppendLine($"revolutionary_colors = {{ {RevolutionaryColor.R,3} {RevolutionaryColor.G,3} {RevolutionaryColor.B,3} }}");
       if (ColonialParent != Tag.Empty)
-         AddString(0, "colonial_parent", ColonialParent.ToString(), ref sb);
+         AddString(0, ColonialParent.ToString(), "colonial_parent", ref sb);
       if (RandomNationChance != -1)
          AddInt(0,  RandomNationChance, "random_nation_chance",ref sb);
       AddString(0, HistoricalCouncil, "historical_council", ref sb);
@@ -182,7 +198,7 @@ public class CommonCountry : Saveable
    }
 }
 
-public class HistoryCountry : Saveable
+public class HistoryCountry : Saveable, IGetSetProperty
 {
 
    public HistoryCountry(Country country, ObjEditingStatus status = ObjEditingStatus.Modified)
@@ -371,6 +387,22 @@ public class HistoryCountry : Saveable
 
    #endregion
 
+   public static HistoryCountry Empty => new(Country.Empty, ObjEditingStatus.Immutable);
+   public void SetProperty(string propName, object value)
+   {
+      var prop = GetType().GetProperty(propName);
+      if (prop == null)
+         return;
+      prop.SetValue(this, value);
+   }
+
+   public object? GetProperty(string propName)
+   {
+      var prop = GetType().GetProperty(propName);
+      if (prop == null)
+         return null;
+      return prop.GetValue(this);
+   }
    public override SaveableType WhatAmI() => SaveableType.Country;
    public override string[] GetDefaultFolderPath() => ["history", "countries"];
    public override string GetFileEnding() => ".txt";
@@ -542,7 +574,7 @@ public class Country : ProvinceCollection<Province>
    }
 
    public override void OnPropertyChanged(string? propertyName = null) { }
-
+   
    public CountryHistoryEntry? GetClosestAfterDate(DateTime date)
    {
       if (HistoryCountry.History.Count == 0)
@@ -603,7 +635,7 @@ public class Country : ProvinceCollection<Province>
                prov.BaseTax += dev;
                break;
          }
-         return prov;
+         return prov; 
       }
 
       var devParts = MathHelper.SplitIntoNRandomPieces(3, dev, Globals.Settings.Misc.MinDevelopmentInGeneration,
@@ -712,7 +744,7 @@ public class Country : ProvinceCollection<Province>
 
       return countries;
    }
-   public static List<string> GetHistoricRivals(int num)
+   public static List<Tag> GetHistoricRivals(int num)
    {
       var country = Selection.SelectedCountry;
       if (country == Empty)
@@ -720,9 +752,9 @@ public class Country : ProvinceCollection<Province>
 
       var countries = country.GetNeighboringCountriesWithSameSize();
       if (countries.Count <= num)
-         return countries.Select(c => c.Tag.ToString()).ToList();
+         return countries.Select(c => c.Tag).ToList();
 
-      List<string> rivals = [];
+      List<Tag> rivals = [];
       for (var i = 0; i < num; i++)
       {
          var rival = countries[Globals.Random.Next(countries.Count)];
@@ -738,7 +770,7 @@ public class Country : ProvinceCollection<Province>
       return rivals;
    }
 
-   public static List<string> GetHistoricFriends(int num)
+   public static List<Tag> GetHistoricFriends(int num)
    {
       var country = Selection.SelectedCountry;
       if (country == Empty)
@@ -746,9 +778,9 @@ public class Country : ProvinceCollection<Province>
 
       var countries = country.GetNeighboringCountriesWithSameSize();
       if (countries.Count <= num)
-         return countries.Select(c => c.Tag.ToString()).ToList();
+         return countries.Select(c => c.Tag).ToList();
 
-      List<string> friends = [];
+      List<Tag> friends = [];
       for (var i = 0; i < num; i++)
       {
          var friend = countries[Globals.Random.Next(countries.Count)];

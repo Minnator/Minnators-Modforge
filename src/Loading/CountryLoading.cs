@@ -47,11 +47,10 @@ namespace Editor.Loading
             }
 
             Globals.Countries = countries;
-
-            ParseCountryAttributes();
-
-            LoadCountryHistories();
          }
+
+         ParseCountryAttributes();
+         LoadCountryHistories();
 
       }
 
@@ -80,7 +79,7 @@ namespace Editor.Loading
                SaveMaster.AddToDictionary(ref newPathObj, new HistoryCountry(country, ref newPathObj));
             else
             {
-               Globals.ErrorLog.Write($"Found country file with no no tag reference in 'country_tag' folder: {tag}");
+               Globals.ErrorLog.Write($"Found country file with no tag reference in 'country_tag' folder: {tag}");
                return;
             }
 

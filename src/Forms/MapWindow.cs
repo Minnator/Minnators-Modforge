@@ -1215,11 +1215,11 @@ namespace Editor.Forms
 
       private ExtendedNumeric _countryDevelopmentNumeric = null!;
 
-      private QuickAssignControl _historicalUnits = null!;
-      private QuickAssignControl _historicalIdeas = null!;
-      private QuickAssignControl _historicRivals = null!;
-      private QuickAssignControl _historicFriends = null!;
-      private QuickAssignControl _estatePrivileges = null!;
+      private QuickAssignControl<string> _historicalUnits = null!;
+      private QuickAssignControl<string> _historicalIdeas = null!;
+      private QuickAssignControl<Tag> _historicRivals = null!;
+      private QuickAssignControl<Tag> _historicFriends = null!;
+      private QuickAssignControl<string> _estatePrivileges = null!;
 
       private void InitializeCountryEditGui()
       {
@@ -1314,21 +1314,21 @@ namespace Editor.Forms
          List<string> unitsList = [];
          foreach (var unit in Globals.Units)
             unitsList.Add(unit.UnitName);
-         _historicalUnits = new(unitsList, [], "Historic Units", -1);
+         _historicalUnits = new(unitsList, CommonCountry.Empty, nameof(CommonCountry.HistoricUnits),"Historic Units", -1);
          _historicalUnits.SetAutoSelectFunc(LandUnit.AutoSelectFuncUnits);
 
          List<string> ideaGroups = [];
          foreach (var idea in Globals.Ideas)
             if (idea.Type == IdeaType.IdeaGroup)
                ideaGroups.Add(idea.Name);
-         _historicalIdeas = new(ideaGroups, [], "Historic Ideas", 8);
+         _historicalIdeas = new(ideaGroups, CommonCountry.Empty, nameof(CommonCountry.HistoricIdeas), "Historic Ideas", 8);
          _historicalIdeas.SetAutoSelectFunc(IdeaGroup.GetAutoAssignment);
 
-         _historicRivals = new([.. Globals.Countries.Keys], [], "Historic Rivals", 8);
+         _historicRivals = new([.. Globals.Countries.Keys], HistoryCountry.Empty, nameof(HistoryCountry.HistoricalRivals), "Historic Rivals", 8);
          _historicRivals.SetAutoSelectFunc(Country.GetHistoricRivals);
-         _historicFriends = new([.. Globals.Countries.Keys], [], "Historic Friends", 8);
+         _historicFriends = new([.. Globals.Countries.Keys], HistoryCountry.Empty, nameof(HistoryCountry.HistoricalFriends), "Historic Friends", 8);
          _historicFriends.SetAutoSelectFunc(Country.GetHistoricFriends);
-         _estatePrivileges = new([], [], "Estate Privileges", 8);
+         _estatePrivileges = new([], HistoryCountry.Empty, nameof(HistoryCountry.EstatePrivileges), "Estate Privileges", 8);
          _estatePrivileges.Enabled = false;
 
          MiscTLP.Controls.Add(_historicalUnits, 0, 1);
@@ -1441,17 +1441,11 @@ namespace Editor.Forms
          // Development
          _countryDevelopmentNumeric.Value = country.GetDevelopment();
 
-         _historicalUnits.SetItems(country.CommonCountry.HistoricUnits);
-         _historicalIdeas.SetItems(country.CommonCountry.HistoricIdeas);
-         List<string> rivals = [];
-         foreach (var rival in country.HistoryCountry.HistoricalRivals)
-            rivals.Add(rival);
-         _historicRivals.SetItems(rivals);
-         List<string> friends = [];
-         foreach (var friend in country.HistoryCountry.HistoricalFriends)
-            friends.Add(friend);
-         _historicFriends.SetItems(friends);
-         _estatePrivileges.SetItems(country.HistoryCountry.EstatePrivileges);
+         _historicalUnits.UpdateCountry(country.CommonCountry);
+         _historicalIdeas.UpdateCountry(country.CommonCountry);
+         _historicRivals.UpdateCountry(country.HistoryCountry);
+         _historicFriends.UpdateCountry(country.HistoryCountry);
+         _estatePrivileges.UpdateCountry(country.HistoryCountry);
       }
 
       private void GovernmentTypeBox_SelectedIndexChanged(object? sender, EventArgs e)

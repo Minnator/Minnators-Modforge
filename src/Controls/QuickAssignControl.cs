@@ -1,8 +1,11 @@
-﻿using Editor.Forms.PopUps;
+﻿using System.ComponentModel;
+using Editor.DataClasses.GameDataClasses;
+using Editor.Forms.PopUps;
+using Editor.Helper;
 
 namespace Editor.Controls
 {
-   public class QuickAssignControl : Control 
+   public class QuickAssignControl<T> : Control 
    {
       private readonly Button _openEditor;
       private readonly Button _autoButton;
@@ -11,19 +14,24 @@ namespace Editor.Controls
 
       private readonly ToolTip _toolTip = new();
 
-      private readonly List<string> _source;
-      private List<string> _items;
+      private readonly List<T> _source;
+      private List<T> _items;
 
       public readonly int MaxItems;
 
-      private Func<int, List<string>>? _autoSelectFunc;
+      private Func<int, List<T>>? _autoSelectFunc;
 
-      public QuickAssignControl(ICollection<string> source, List<string> items, string description, int maxItems)
+      private IGetSetProperty _propertyProvider;
+      private readonly string _propName;
+
+      public QuickAssignControl(ICollection<T> source, IGetSetProperty propertyProvider, string propName, string description, int maxItems)
       {
          _source = source.ToList();
-         _items = items;
+         _propertyProvider = propertyProvider;
+         _propName = propName;
+         _items = propertyProvider.GetProperty(propName) as List<T> ?? [];
          MaxItems = maxItems;
-
+         
          TableLayoutPanel tableLayoutPanel = new()
          {
             Margin = new (0),
@@ -97,8 +105,20 @@ namespace Editor.Controls
 
       }
 
-      public void SetAutoSelectFunc(Func<int, List<string>> autoSelectFunc) => _autoSelectFunc = autoSelectFunc;
-      public void SetItems(List<string> items) => _items = items;
+      public void SetAutoSelectFunc(Func<int, List<T>> autoSelectFunc) => _autoSelectFunc = autoSelectFunc;
+      public void SetItems(List<T> items) => _items = items;
+
+      public void UpdateCountry(IGetSetProperty provider)
+      {
+         _propertyProvider = provider;
+         UpdateItems();
+      }
+
+
+      public void UpdateItems()
+      {
+         _items = _propertyProvider.GetProperty(_propName) as List<T> ?? [];
+      }
 
       public void Clear() => _items.Clear();
 
@@ -107,17 +127,21 @@ namespace Editor.Controls
          if (MaxItems < 1)// we only do one random item as there is no fixed number of max items
          {
             _items = [_source[Globals.Random.Next(_source.Count)]];
+            SaveItems();
             return;
          }
 
          _items.Clear();
          for (var i = 0; i < MaxItems; i++) 
             _items.Add(_source[Globals.Random.Next(_source.Count)]);
+
+         SaveItems();
       }
 
       private void ClearButton_Click(object? sender, EventArgs e)
       {
          _items.Clear();
+         SaveItems();
       }
 
       private void AutoButton_Click(object? sender, EventArgs e)
@@ -126,13 +150,35 @@ namespace Editor.Controls
             return;
 
          _items = _autoSelectFunc(MaxItems);
+         SaveItems();
       }
 
       private void OpenEditor_Click(object? sender, EventArgs e)
       {
+         UpdateItems();
          using StringCollectionEditor editor = new(_source.Select(x => x.ToString()).ToList()!, [.._items.Select(x => x.ToString())!]);
          editor.ShowDialog();
-         _items = [..editor.Items];
+         _items = ConvertItems(editor.Items);
+         SaveItems();
+      }
+
+      private List<T> ConvertItems(BindingList<string> itemNames)
+      {
+         if (typeof(T) == typeof(string))
+            return itemNames.Cast<T>().ToList();
+         List<T> items = [];
+         foreach (var itemName in itemNames)
+         {
+            var item = _source.FirstOrDefault(x => x?.ToString() == itemName);
+            if (item != null)
+               items.Add(item);
+         }
+         return items;
+      }
+
+      private void SaveItems()
+      {
+         _propertyProvider.SetProperty(_propName, _items);
       }
    }
 }

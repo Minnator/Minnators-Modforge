@@ -36,7 +36,7 @@ public readonly struct Tag(string tag) : IEquatable<Tag>
    {
       return new Tag(tag);
    }
-
+   
    public static bool operator ==(Tag a, Tag b)
    {
       return a._tag == b._tag;

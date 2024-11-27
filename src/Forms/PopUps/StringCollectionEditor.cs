@@ -36,7 +36,7 @@ namespace Editor.Forms.PopUps
             DropDownStyle = ComboBoxStyle.DropDown,
          };
 
-         _addButton = new() { Text = "", Dock = DockStyle.Fill, Margin = new(1), Image = Properties.Resources.GreePlus};
+         _addButton = new() { Text = "", Dock = DockStyle.Fill, Margin = new(1), Image = Properties.Resources.GreePlus };
          _removeButton = new() { Text = "", Dock = DockStyle.Fill, Enabled = false, Margin = new(1), Image = Properties.Resources.RedX };
          _moveUpButton = new() { Text = "", Dock = DockStyle.Fill, Enabled = false, Margin = new(1), Image = Properties.Resources.Up };
          _moveDownButton = new() { Text = "", Dock = DockStyle.Fill, Enabled = false, Margin = new(1), Image = Properties.Resources.Down };
@@ -123,6 +123,11 @@ namespace Editor.Forms.PopUps
       {
          if (_listBox.SelectedItem is string selectedItem)
             _items.Remove(selectedItem);
+      }
+
+      private void InitializeComponent()
+      {
+
       }
 
       private void ListBox_SelectedIndexChanged(object? sender, EventArgs e)

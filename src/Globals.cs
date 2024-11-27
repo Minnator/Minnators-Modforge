@@ -329,7 +329,7 @@ public static class Globals
 // - [ ] Fix province saving
 // - [ ] Country saving broken
 // - [ ] Verify that all province modifications set the ObjEditingStatus
-// - [ ] Country Tags editing
+// - [x] Country Tags editing
 
 // TODO LIST Until Alpha 1.1
 // - [ ] UnitType loading optimization
