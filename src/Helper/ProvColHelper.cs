@@ -26,7 +26,7 @@ namespace Editor.Helper
             SaveableType.TradeNode => Globals.TradeNodes.Keys,
             SaveableType.TradeCompany => Globals.TradeCompanies.Keys,
             SaveableType.ColonialRegion => Globals.ColonialRegions.Keys,
-            SaveableType.Country => [..Globals.Countries.Keys],
+            //SaveableType.Country => [..Globals.Countries.Keys],
             _ => []
          };
       }

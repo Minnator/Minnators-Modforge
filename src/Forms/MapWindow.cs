@@ -300,6 +300,7 @@ namespace Editor.Forms
       {
          CountryEditingGui = new(ItemTypes.Id, SaveableType.Country, SaveableType.Province, MapModeType.Country);
          Country.ItemsModified += CountryEditingGui.OnCorrespondingDataChange;
+         CountryEditingGui._extendedComboBox.DataSource = new BindingSource(Globals.Countries.Keys, null);
 
          AreaEditingGui = new(ItemTypes.Id, SaveableType.Area, SaveableType.Province, MapModeType.Area);
          Area.ItemsModified += AreaEditingGui.OnCorrespondingDataChange;
@@ -1561,7 +1562,6 @@ namespace Editor.Forms
          // TODO proper country editing
          var monarchName = new MonarchName(name, chance, regnal);
          Selection.SelectedCountry.CommonCountry.MonarchNames.Add(monarchName);
-
       }
 
       private void AddMonarchNamesToGui(List<MonarchName> names)

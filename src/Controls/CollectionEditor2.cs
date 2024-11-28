@@ -15,7 +15,7 @@ namespace Editor.Controls
       private Label _titleLabel = null!;
       private TableLayoutPanel _nameTlp = null!;
       private TableLayoutPanel _tlp = null!;
-      private ExtendedComboBox _extendedComboBox = null!;
+      public ExtendedComboBox _extendedComboBox = null!;
       private FlowLayoutPanel _flowLayout = null!;
       
       #endregion
