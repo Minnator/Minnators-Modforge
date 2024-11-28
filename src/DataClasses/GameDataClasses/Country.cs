@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
+using Editor.Parser;
 using Editor.Saving;
 using static Editor.Saving.SavingUtil;
 
@@ -230,7 +231,7 @@ public class HistoryCountry : Saveable, IGetSetProperty
    private List<string> _estatePrivileges = []; //
    private List<string> _harmonizedReligions = []; //
    private Province _capital = Province.Empty; //
-   private List<Effect> _initialEffects = []; //
+   private List<IElement> _initialEffects = []; //
    private List<ModifierAbstract> _modifiers = []; //
    private List<RulerModifier> _rulerModifiers = []; //
    private TechnologyGroup _technologyGroup = TechnologyGroup.Empty; //
@@ -259,7 +260,7 @@ public class HistoryCountry : Saveable, IGetSetProperty
       set => SetField(ref _rulerModifiers, value);
    }
    
-   public List<Effect> InitialEffects
+   public List<IElement> InitialEffects
    {
       get => _initialEffects;
       set => SetField(ref _initialEffects, value);
@@ -440,15 +441,8 @@ public class HistoryCountry : Saveable, IGetSetProperty
       AddModifiers(0, Modifiers.Cast<ISaveModifier>().ToList(), ref sb);
       AddModifiers(0, RulerModifiers.Cast<ISaveModifier>().ToList(), ref sb);
 
-      foreach (var entry in History)
-      {
-         sb.AppendLine($"{entry.Date:yyyy.dd.MM} = {{");
-         AddTabs(1, ref sb);
-         sb.AppendLine(entry.Content);
-         Debug.WriteLine(entry.Content);
-         AddTabs(1, ref sb);
-         sb.AppendLine("}");
-      }
+      foreach (var entry in History) 
+         entry.GetSavingString(tabs, ref sb);
 
       return sb.ToString();
    }

@@ -1614,6 +1614,7 @@ namespace Editor.Forms
 
       private void refStackToolStripMenuItem_Click(object sender, EventArgs e)
       {
+         /*
          List<string> customAttributes = [];
          foreach (var country in Globals.Countries.Values)
          {
@@ -1633,6 +1634,7 @@ namespace Editor.Forms
 
          var downloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\";
          File.WriteAllText(Path.Combine(downloadFolder, "customAttributes.txt"), sb.ToString());
+         */
       }
 
       private void infoToolStripMenuItem_Click(object sender, EventArgs e)

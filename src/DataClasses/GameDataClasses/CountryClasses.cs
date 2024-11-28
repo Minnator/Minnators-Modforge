@@ -1,4 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Text;
+using Editor.ParadoxLanguage.Effect;
+using Editor.Parser;
+using Editor.Saving;
+using static Editor.Saving.SavingUtil;
 
 namespace Editor.DataClasses.GameDataClasses
 {
@@ -56,7 +61,7 @@ namespace Editor.DataClasses.GameDataClasses
 
       public List<Person> Persons { get; set; } = [];
       public List<Leader> Leaders { get; set; } = [];
-      public List<Effect> Effects { get; set; } = [];
+      public List<IElement> Effects { get; set; } = [];
 
       public bool IsDummy { get; set; }= false;
 
@@ -70,9 +75,22 @@ namespace Editor.DataClasses.GameDataClasses
       public int HeirCount => Persons.Count(p => p.Type == PersonType.Heir);
       public int QueenCount => Persons.Count(p => p.Type == PersonType.Queen);
 
+      public void GetSavingString(int tabs, ref StringBuilder sb)
+      {
+         sb.AppendLine();
+         OpenBlock(ref tabs, $"{Date:yyyy.M.d}", ref sb);
+         foreach (var leaders in Leaders)
+            leaders.GetSavingString(tabs, ref sb);
+         foreach (var person in Persons)
+            person.GetSavingString(tabs, ref sb);
+         foreach (var eff in Effects)
+            eff.FormatElement(tabs, ref sb);
+         CloseBlock(ref tabs, ref sb);
+      }
+
       public override string ToString()
       {
-         return $"{Date:yyyy.dd.MM}| P: {Persons.Count}| L: {Leaders.Count}| E: {Effects.Count}";
+         return $"{Date:yyyy.MM.dd}| P: {Persons.Count}| L: {Leaders.Count}| E: {Effects.Count}";
       }
    }
 
@@ -80,7 +98,8 @@ namespace Editor.DataClasses.GameDataClasses
    {
       Monarch,
       Heir,
-      Queen
+      Queen,
+      Monarch_Consort
    }
 
    public struct Person
@@ -101,6 +120,27 @@ namespace Editor.DataClasses.GameDataClasses
       public bool IsRegent { get; set; }
       public bool BlockDisinherit { get; set; }
       public Tag CountryOfOrigin { get; set; }
+
+      public void GetSavingString(int tabs, ref StringBuilder sb)
+      {
+         OpenBlock(ref tabs, Type.ToString().ToLower(), ref sb);
+         AddQuotedString(tabs, "name", Name, ref sb);
+         AddQuotedString(tabs, "monarch_name", MonarchName, ref sb);
+         AddQuotedString(tabs, "dynasty", Dynasty, ref sb);
+         AddQuotedString(tabs, "culture", Culture, ref sb);
+         AddQuotedString(tabs, "religion", Religion, ref sb);
+         AddDate(tabs, BirthDate, "birth_date", ref sb);
+         AddDate(tabs, DeathDate, "death_date", ref sb);
+         AddInt(tabs, ClaimStrength, "claim", ref sb);
+         AddInt(tabs, Adm, "ADM", ref sb);
+         AddInt(tabs, Dip, "DIP", ref sb);
+         AddInt(tabs, Mil, "MIL", ref sb);
+         AddBoolIfYes(tabs, IsFemale, "female", ref sb);
+         AddBoolIfYes(tabs, IsRegent, "regent", ref sb);
+         AddBoolIfYes(tabs, BlockDisinherit, "block_disinherit", ref sb);
+         AddQuotedString(tabs, "country_of_origin", CountryOfOrigin, ref sb);
+         CloseBlock(ref tabs, ref sb);
+      }
    }
 
    public enum LeaderType
@@ -135,6 +175,19 @@ namespace Editor.DataClasses.GameDataClasses
       public Leader()
       {
 
+      }
+
+      public void GetSavingString(int tabs, ref StringBuilder sb)
+      {
+         OpenBlock(ref tabs, "leader", ref sb);
+         AddQuotedString(tabs, "name", Name, ref sb);
+         AddString(tabs, Type.ToString().ToLower(), "type", ref sb);
+         AddInt(tabs, Fire, "fire", ref sb);
+         AddInt(tabs, Shock, "shock", ref sb);
+         AddInt(tabs, Maneuver, "manuever", ref sb);
+         AddInt(tabs, Siege, "siege", ref sb);
+         AddDate(tabs, DeathDate, "death_date", ref sb);
+         CloseBlock(ref tabs, ref sb);
       }
    }
 }

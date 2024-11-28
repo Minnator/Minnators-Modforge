@@ -94,8 +94,8 @@ namespace Editor.Loading
          {
             if (EffectParser.IsAnyEffectCountryHistory(block.Name))
             {
-               EffectParser.ParseEffect(block.Name, block.GetContent, out var eff);
-               country.HistoryCountry.InitialEffects.Add(eff);
+               //EffectParser.ParseEffect(block.Name, block.GetContent, out var eff);
+               country.HistoryCountry.InitialEffects.Add(block);
                return;
             }
 
@@ -114,16 +114,16 @@ namespace Editor.Loading
                      Globals.ErrorLog.Write($"Invalid ruler modifier in {country.Tag}: {block.GetContent}");
                   break;
                case "add_opinion":
-                  if (EffectParser.ParseOpinionEffects("add_opinion", block.GetContent, out var effect))
-                     country.HistoryCountry.InitialEffects.Add(effect);
-                  else
-                     Globals.ErrorLog.Write($"Invalid opinion effect in {country.Tag}: {block.GetContent}");
+                  //if (EffectParser.ParseOpinionEffects("add_opinion", block.GetContent, out var effect))
+                  country.HistoryCountry.InitialEffects.Add(block);
+                  //else
+                  //   Globals.ErrorLog.Write($"Invalid opinion effect in {country.Tag}: {block.GetContent}");
                   break;
                case "add_estate_loyalty":
-                  if (EffectParser.ParseAddEstateLoyaltyEffect(block.GetContent, out var loyaltyEffect))
-                     country.HistoryCountry.InitialEffects.Add(loyaltyEffect);
-                  else
-                     Globals.ErrorLog.Write($"Invalid estate loyalty effect in {country.Tag}: {block.GetContent}");
+                  //if (EffectParser.ParseAddEstateLoyaltyEffect(block.GetContent, out var loyaltyEffect))
+                  country.HistoryCountry.InitialEffects.Add(block);
+                  //else
+                  //   Globals.ErrorLog.Write($"Invalid estate loyalty effect in {country.Tag}: {block.GetContent}");
                   break;
                default:
                   ParseHistoryBlock(block, ref file, out var che);
@@ -219,14 +219,15 @@ namespace Editor.Loading
                   break;
 
                default:
-
+                  country.HistoryCountry.InitialEffects.Add(content);
+                  /*
                   if (EffectParser.ParseSimpleEffect(kvp.Key, val, out var effect))
                   {
                      country.HistoryCountry.InitialEffects.Add(effect);
                      continue;
                   }
-
                   Globals.ErrorLog.Write($"Unknown key in toppers {country.Tag}: {kvp.Key}");
+                  */
                   break;
             }
          }
@@ -280,8 +281,8 @@ namespace Editor.Loading
 
             if (Globals.ScriptedEffectNames.Contains(block.Name))
             {
-               var effect = EffectFactory.CreateScriptedEffect(block.Name, block.GetContent, EffectValueType.Complex);
-               che.Effects.Add(effect);
+               //var effect = EffectFactory.CreateScriptedEffect(block.Name, block.GetContent, EffectValueType.Complex);
+               che.Effects.Add(block);
                continue;
             }
             switch (block.Name)
@@ -291,6 +292,7 @@ namespace Editor.Loading
                case "queen":
                case "monarch_consort":
                   Parsing.ParsePersonFromString(block.GetContentElements[0].Value, out var person);
+                  person.Type = Enum.Parse<PersonType>(block.Name, true);
                   che.Persons.Add(person);
                   break;
                case "leader":
@@ -298,21 +300,21 @@ namespace Editor.Loading
                   che.Leaders.Add(leader);
                   break;
                case "federation":
-                  var effect = EffectFactory.CreateComplexEffect(block.Name, block.GetContent, EffectValueType.Complex);
-                  che.Effects.Add(effect);
+                  //var effect = EffectFactory.CreateComplexEffect(block.Name, block.GetContent, EffectValueType.Complex);
+                  che.Effects.Add(block);
                   break;
                case "if":
                   che.IsDummy = true;
                   che.Content = block.GetAllContent;
                   break;
                case "change_price":
-                  if (EffectParser.ParseChangePriceEffect(block.GetContent, out var priceEffect))
-                     che.Effects.Add(priceEffect);
-                  else
-                     Globals.ErrorLog.Write($"Invalid change_price effect in {che}: {block.GetContent}");
+                  //if (EffectParser.ParseChangePriceEffect(block.GetContent, out var priceEffect))
+                  che.Effects.Add(block);
+                  //else
+                  //   Globals.ErrorLog.Write($"Invalid change_price effect in {che}: {block.GetContent}");
                   break;
                default:
-
+                  che.Effects.Add(block);
                   Globals.ErrorLog.Write($"Unknown block in history entry: {block.Name} ({file})");
                   break;
             }
@@ -323,15 +325,18 @@ namespace Editor.Loading
       {
          if (element.Count == 0)
             return;
+         che.Effects.AddRange(element);
+
+         /*
          foreach (var content in element)
          {
+            che.Effects.Add(content);
             var kvps= Parsing.GetKeyValueList(content.Value);
             if (kvps.Count < 1)
             {
                Globals.ErrorLog.Write($"Invalid key value pair in history entry effects: {content.Value}");
                continue;
             }
-
             foreach (var kvp in kvps)
             {
                if (EffectParser.IsAnyEffectCountryHistory(kvp.Key))
@@ -345,6 +350,7 @@ namespace Editor.Loading
                }
             }
          }
+         */
       }
 
       #region CountryTags and non history data

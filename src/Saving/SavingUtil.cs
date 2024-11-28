@@ -2,6 +2,7 @@
 using System.Text;
 using Windows.ApplicationModel.Store.Preview.InstallControl;
 using Editor.DataClasses.GameDataClasses;
+using Editor.Parser;
 
 namespace Editor.Saving
 {
@@ -191,12 +192,10 @@ namespace Editor.Saving
             sb.AppendLine($"{stringName} = {s}");
       }
 
-      public static void AddEffects(int tabs, List<Effect> effects, ref StringBuilder sb)
+      public static void AddEffects(int tabs, List<IElement> effects, ref StringBuilder sb)
       {
-         if (effects.Count == 0)
-            return;
          foreach (var effect in effects) 
-            sb.AppendLine(effect.GetEffectString(tabs + 1));
+            effect.FormatElement(tabs, ref sb);
       }
 
       public static void AddFloat(int tabs, float num, string floatName, ref StringBuilder sb)
@@ -253,11 +252,22 @@ namespace Editor.Saving
          {
             OpenBlock(ref tabs, "names", ref sb);
             if (name.Trigger != null)
-               sb.AppendLine(name.Trigger.GetFormattedElement(tabs));
+               name.Trigger.FormatElement(tabs, ref sb);
             AddString(tabs, name.Name, "name", ref sb);
             CloseBlock(ref tabs, ref sb);
          }
       }
 
+      public static void AddElements(int tabs, ICollection<IElement> elements, ref StringBuilder sb)
+      {
+         foreach (var element in elements) 
+            element.FormatElement(tabs, ref sb);
+      }
+
+      public static void AddDate(int tabs, DateTime date, string dateString, ref StringBuilder sb)
+      {
+         AddTabs(tabs, ref sb);
+         sb.AppendLine($"{dateString} = {date:yyyy.M.d}");
+      }
    }
 }

@@ -584,16 +584,20 @@ public static partial class Parsing
                person.CountryOfOrigin = val;
                break;
             case "name":
-               person.Name = val;
+               val.TrimQuotes(out var trim1);
+               person.Name = trim1;
                break;
             case "monarch_name":
-               person.MonarchName = val;
+               val.TrimQuotes(out var trim2);
+               person.MonarchName = trim2;
                break;
             case "dynasty":
-               person.Dynasty = val;
+               val.TrimQuotes(out var trim);
+               person.Dynasty = trim;
                break;
             case "culture":
-               person.Culture = val;
+               val.TrimQuotes(out var trimmed);
+               person.Culture = trimmed;
                break;
             case "religion":
                person.Religion = val;
@@ -664,7 +668,8 @@ public static partial class Parsing
          switch (kv.Key.ToLower())
          {
             case "name":
-               leader.Name = kv.Value;
+               kv.Value.TrimQuotes(out var trimmed);
+               leader.Name = trimmed;
                break;
             case "fire":
                if (int.TryParse(kv.Value, out var fire))
