@@ -1,4 +1,5 @@
-﻿using Editor.Parser;
+﻿using Editor.DataClasses.Misc;
+using Editor.Parser;
 
 namespace Editor.Controls
 {
@@ -29,12 +30,12 @@ namespace Editor.Controls
 
       public DateControl()
       {
-         Date = DateTime.MinValue;
+         Date = Date.MinValue;
          DateControlLayout = DateControlLayout.Horizontal;
          InitHorizontal();
       }
 
-      public DateControl(DateTime date, DateControlLayout layout)
+      public DateControl(Date date, DateControlLayout layout)
       {
          Date = date;
          DateControlLayout = layout;
@@ -136,8 +137,8 @@ namespace Editor.Controls
          _dayIncreaseButton.Text = ">";
       }
 
-      private DateTime _date;
-      public DateTime Date
+      private Date _date;
+      public Date Date
       {
          get => _date;
          set
@@ -145,7 +146,7 @@ namespace Editor.Controls
             if (_date == value)
                return;
             _date = value;
-            _dateTextBox.Text = _date.ToString("yyyy-MM-dd");
+            _dateTextBox.Text = _date;
             OnDateChanged?.Invoke(this, EventArgs.Empty);
          }
       } 
@@ -156,7 +157,7 @@ namespace Editor.Controls
 
       private void OnDateTextChanged(object? sender, EventArgs e)
       {
-         if (Parsing.TryParseFullDate(_dateTextBox.Text, out var date))
+         if (Parsing.TryParseDate(_dateTextBox.Text, out var date))
             Date = date;
       }
       public void OnYearIncrease (object? sender, EventArgs e)

@@ -57,19 +57,9 @@ public static partial class Parsing
    /// <param name="dateString"></param>
    /// <param name="dateValue"></param>
    /// <returns></returns>
-   public static bool TryParseDate(string dateString, out DateTime dateValue)
+   public static bool TryParseDate(string dateString, out Date dateValue)
    {
-      // Define possible formats
-      string[] formats = ["yyyy.MM.dd", "yyyy.M.d","yyy.mm.dd", "yyy.M.d", "y.M.d", "yy.M.d", ];
-
-      // Attempt to parse the date string using the defined formats
-      return DateTime.TryParseExact(
-         dateString,
-         formats,
-         CultureInfo.InvariantCulture,
-         DateTimeStyles.None,
-         out dateValue
-      );
+      return Date.TryParseDate(dateString, out dateValue);
    }
 
    /// <summary>

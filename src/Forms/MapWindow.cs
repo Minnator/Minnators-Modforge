@@ -72,7 +72,7 @@ namespace Editor.Forms
 
       #endregion
 
-      public readonly DateControl DateControl = new(DateTime.MinValue, DateControlLayout.Horizontal);
+      public readonly DateControl DateControl = new(Date.MinValue, DateControlLayout.Horizontal);
       private LoadingScreen.LoadingScreen _ls = null!;
 
       public MapWindow()

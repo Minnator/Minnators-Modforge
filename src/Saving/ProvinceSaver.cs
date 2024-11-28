@@ -176,7 +176,7 @@ namespace Editor.Saving
 
       private static void SaveHistoryEntry(HistoryEntry entry, ref StringBuilder sb)
       {
-         sb.AppendLine($"{entry.Date.ToString("yyyy.MM.dd")} = {{");
+         sb.AppendLine($"{entry.Date} = {{");
          foreach (var effect in entry.Effects)
             sb.AppendLine($"{effect.GetEffectString(1)}");
          sb.AppendLine("}");

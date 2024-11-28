@@ -756,7 +756,7 @@ public class Province : ProvinceComposite
    /// Loads the history for the given date
    /// </summary>
    /// <param name="date"></param>
-   public void LoadHistoryForDate(DateTime date)
+   public void LoadHistoryForDate(Date date)
    {
       // History Entries are sorted by default. Se w can load entries as long as the date is less than the current date
       foreach (var historyEntry in _history)

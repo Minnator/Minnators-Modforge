@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Text;
+using Editor.DataClasses.Misc;
 using Editor.ParadoxLanguage.Effect;
 using Editor.Parser;
 using Editor.Saving;
@@ -52,9 +54,9 @@ namespace Editor.DataClasses.GameDataClasses
 
    }
 
-   public class CountryHistoryEntry(DateTime date)
+   public class CountryHistoryEntry(Date date)
    {
-      public DateTime Date { get; } = date;
+      public Date Date { get; } = date;
 
       // TODO: this is temporary, we need to implement a proper way to store the content after creating pdx langauge parser
       public string Content { get; set; } = string.Empty;
@@ -78,7 +80,7 @@ namespace Editor.DataClasses.GameDataClasses
       public void GetSavingString(int tabs, ref StringBuilder sb)
       {
          sb.AppendLine();
-         OpenBlock(ref tabs, $"{Date:yyyy.M.d}", ref sb);
+         OpenBlock(ref tabs, $"{date}", ref sb);
          foreach (var leaders in Leaders)
             leaders.GetSavingString(tabs, ref sb);
          foreach (var person in Persons)
@@ -90,7 +92,7 @@ namespace Editor.DataClasses.GameDataClasses
 
       public override string ToString()
       {
-         return $"{Date:yyyy.MM.dd}| P: {Persons.Count}| L: {Leaders.Count}| E: {Effects.Count}";
+         return $"{Date:yyyy.M.d}| P: {Persons.Count}| L: {Leaders.Count}| E: {Effects.Count}";
       }
    }
 
@@ -104,14 +106,19 @@ namespace Editor.DataClasses.GameDataClasses
 
    public struct Person
    {
+      public Person()
+      {
+         BirthDate = Date.MinValue;
+         DeathDate = Date.MinValue;
+      }
       public PersonType Type { get; set; }
       public string Name { get; set; }
       public string MonarchName { get; set; }
       public string Dynasty { get; set; }
       public string Culture { get; set; }
       public string Religion { get; set; }
-      public DateTime BirthDate { get; set; }
-      public DateTime DeathDate { get; set; }
+      public Date BirthDate { get; set; }
+      public Date DeathDate { get; set; }
       public int ClaimStrength { get; set; }
       public int Adm { get; set; }
       public int Dip { get; set; }
@@ -124,11 +131,11 @@ namespace Editor.DataClasses.GameDataClasses
       public void GetSavingString(int tabs, ref StringBuilder sb)
       {
          OpenBlock(ref tabs, Type.ToString().ToLower(), ref sb);
-         AddQuotedString(tabs, "name", Name, ref sb);
-         AddQuotedString(tabs, "monarch_name", MonarchName, ref sb);
-         AddQuotedString(tabs, "dynasty", Dynasty, ref sb);
-         AddQuotedString(tabs, "culture", Culture, ref sb);
-         AddQuotedString(tabs, "religion", Religion, ref sb);
+         AddQuotedString(tabs, Name, "name", ref sb);
+         AddQuotedString(tabs, MonarchName, "monarch_name", ref sb);
+         AddQuotedString(tabs, Dynasty, "dynasty", ref sb);
+         AddString(tabs, Culture, "culture", ref sb);
+         AddString(tabs, Religion, "religion", ref sb);
          AddDate(tabs, BirthDate, "birth_date", ref sb);
          AddDate(tabs, DeathDate, "death_date", ref sb);
          AddInt(tabs, ClaimStrength, "claim", ref sb);
@@ -138,7 +145,7 @@ namespace Editor.DataClasses.GameDataClasses
          AddBoolIfYes(tabs, IsFemale, "female", ref sb);
          AddBoolIfYes(tabs, IsRegent, "regent", ref sb);
          AddBoolIfYes(tabs, BlockDisinherit, "block_disinherit", ref sb);
-         AddQuotedString(tabs, "country_of_origin", CountryOfOrigin, ref sb);
+         AddString(tabs, CountryOfOrigin, "country_of_origin", ref sb);
          CloseBlock(ref tabs, ref sb);
       }
    }
@@ -161,11 +168,11 @@ namespace Editor.DataClasses.GameDataClasses
       public int Age { get; set; } = 0;
       public bool IsFemale { get; set; } = false;
       public LeaderType Type { get; set; } = LeaderType.General;
-      public DateTime DeathDate { get; set; } = DateTime.MinValue;
+      public Date DeathDate { get; set; } = Date.MinValue;
       public List<string> Personalities { get; set; } = []; 
       public List<string> Traits { get; set; } = []; 
 
-      public bool IsAlive => DeathDate == DateTime.MinValue;
+      public bool IsAlive => DeathDate == Date.MinValue;
 
       public override string ToString()
       {
@@ -180,7 +187,7 @@ namespace Editor.DataClasses.GameDataClasses
       public void GetSavingString(int tabs, ref StringBuilder sb)
       {
          OpenBlock(ref tabs, "leader", ref sb);
-         AddQuotedString(tabs, "name", Name, ref sb);
+         AddQuotedString(tabs, Name, "name", ref sb);
          AddString(tabs, Type.ToString().ToLower(), "type", ref sb);
          AddInt(tabs, Fire, "fire", ref sb);
          AddInt(tabs, Shock, "shock", ref sb);

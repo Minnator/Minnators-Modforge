@@ -1,8 +1,10 @@
-﻿namespace Editor.src.Forms.GetUserInput
+﻿using Editor.DataClasses.Misc;
+
+namespace Editor.src.Forms.GetUserInput
 {
    public partial class GetDateInput : Form
    {
-      public DateTime DefaultDate = new(1444, 11, 11);
+      public Date DefaultDate = new(1444, 11, 11);
 
 
 
@@ -33,7 +35,7 @@
          DialogResult = DialogResult.None;
       }
 
-      public void SetDate(DateTime date)
+      public void SetDate(Date date)
       {
          DayBox.SelectedIndex = date.Day - 1;
          MonthBox.SelectedIndex = date.Month - 1;
@@ -44,13 +46,13 @@
       public void SetDays(int month)
       {
          DayBox.Items.Clear();
-         for (var i = 1; i <= DateTime.DaysInMonth(1, month); i++)
+         for (var i = 1; i <= Date.DaysInMonth((byte)month); i++)
             DayBox.Items.Add(i);
       }
 
-      public bool GetDate(out DateTime date)
+      public bool GetDate(out Date date)
       {
-         return DateTime.TryParse($"{DayBox.Text}.{MonthBox.Text}.{YearBox.Text}", out date);
+         return Date.TryParseDate($"{DayBox.Text}.{MonthBox.Text}.{YearBox.Text}", out date);
       }
 
       // block non digit input and leading zeros for the year

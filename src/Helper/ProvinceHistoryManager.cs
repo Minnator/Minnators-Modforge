@@ -1,9 +1,11 @@
-﻿namespace Editor.Helper
+﻿using Editor.DataClasses.Misc;
+
+namespace Editor.Helper
 {
    public static class ProvinceHistoryManager
    {
-      private static DateTime _lastDate = DateTime.MinValue;
-      public static void LoadDate(DateTime date)
+      private static Date _lastDate = Date.MinValue;
+      public static void LoadDate(Date date)
       {
          if (date == _lastDate)
             return;

@@ -569,7 +569,7 @@ public class Country : ProvinceCollection<Province>
 
    public override void OnPropertyChanged(string? propertyName = null) { }
    
-   public CountryHistoryEntry? GetClosestAfterDate(DateTime date)
+   public CountryHistoryEntry? GetClosestAfterDate(Date date)
    {
       if (HistoryCountry.History.Count == 0)
          return null;

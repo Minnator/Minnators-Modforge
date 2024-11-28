@@ -1,10 +1,11 @@
 ﻿using System.Text;
+using Editor.DataClasses.Misc;
 
 namespace Editor.DataClasses.GameDataClasses;
 
-public class HistoryEntry(DateTime date)
+public class HistoryEntry(Date date)
 {
-   public DateTime Date { get; set; } = date;
+   public Date Date { get; set; } = date;
    public List<Effect> Effects { get; set; } = [];
 
    public void Apply(Province province)

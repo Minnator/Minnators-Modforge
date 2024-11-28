@@ -2,6 +2,7 @@
 using System.Text;
 using Windows.ApplicationModel.Store.Preview.InstallControl;
 using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.Misc;
 using Editor.Parser;
 
 namespace Editor.Saving
@@ -176,7 +177,7 @@ namespace Editor.Saving
          sb.AppendLine($"{stringName} = {s}");
       }
 
-      public static void AddQuotedString(int tabs, string stringName, string s, ref StringBuilder sb)
+      public static void AddQuotedString(int tabs, string s, string stringName, ref StringBuilder sb)
       {
          if (string.IsNullOrEmpty(s))
             return;
@@ -264,8 +265,17 @@ namespace Editor.Saving
             element.FormatElement(tabs, ref sb);
       }
 
-      public static void AddDate(int tabs, DateTime date, string dateString, ref StringBuilder sb)
+      /// <summary>
+      /// this ignores all dates for the 1.1.1
+      /// </summary>
+      /// <param name="tabs"></param>
+      /// <param name="date"></param>
+      /// <param name="dateString"></param>
+      /// <param name="sb"></param>
+      public static void AddDate(int tabs, Date date, string dateString, ref StringBuilder sb)
       {
+         if (date == Date.MinValue)
+            return;
          AddTabs(tabs, ref sb);
          sb.AppendLine($"{dateString} = {date:yyyy.M.d}");
       }

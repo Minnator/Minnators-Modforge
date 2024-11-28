@@ -114,7 +114,7 @@ public static class Globals
    public static readonly ProvinceEditingStatus ProvinceEditingStatus = ProvinceEditingStatus.Selection;
 
    // Date of history
-   public static DateTime Date
+   public static Date Date
    { 
       get
       {
@@ -319,16 +319,16 @@ public static class Globals
 // - [x] Fix Setting Saveable Type (Dictionary for each type) to prevent from setting it to 0 if there are other items still of that type
 // - [x] province groups map mode and force file name
 // - [x] empty culture and religion in colonial regions
-// - [-] Save all and verify all save options
-// - [-] Country Collection Editing, Saving is broken
 // - [x] Fix Trade Node Saving
 // - [x] Trade company saving
 // - [x] Fix Settings not saving when modified
-// - [ ] Warning that it may corrupt files if there are error
 // - [x] Button to add a new Country
+// - [ ] Warning that it may corrupt files if there are error
 // - [ ] Fix province saving
-// - [ ] Country saving broken
+// - [-] Save all and verify all save options
+// - [-] Country Collection Editing, Saving is broken
 // - [ ] Verify that all province modifications set the ObjEditingStatus
+// - [x] Country saving broken
 // - [x] Country Tags editing
 
 // TODO LIST Until Alpha 1.1
