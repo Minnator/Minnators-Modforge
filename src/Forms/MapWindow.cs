@@ -22,6 +22,7 @@ using static Editor.Helper.ProvinceEnumHelper;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 using MethodInvoker = System.Windows.Forms.MethodInvoker;
 using Region = Editor.DataClasses.GameDataClasses.Region;
+using System.ComponentModel;
 
 namespace Editor.Forms
 {
@@ -300,7 +301,12 @@ namespace Editor.Forms
       {
          CountryEditingGui = new(ItemTypes.Id, SaveableType.Country, SaveableType.Province, MapModeType.Country);
          Country.ItemsModified += CountryEditingGui.OnCorrespondingDataChange;
-         CountryEditingGui._extendedComboBox.DataSource = new BindingSource(Globals.Countries.Keys, null);
+         CountryEditingGui._extendedComboBox.DataSource = new BindingSource
+         {
+            DataSource = Globals.Countries
+         };
+         CountryEditingGui._extendedComboBox.DisplayMember = "Key";
+         CountryEditingGui._extendedComboBox.ValueMember = "Value";
 
          AreaEditingGui = new(ItemTypes.Id, SaveableType.Area, SaveableType.Province, MapModeType.Area);
          Area.ItemsModified += AreaEditingGui.OnCorrespondingDataChange;
@@ -355,13 +361,13 @@ namespace Editor.Forms
          MisProvinceData.Controls.Add(OwnerTagBox, 1, 0);
          MisProvinceData.Controls.Add(ControllerTagBox, 1, 1);
 
-         _cores = ControlFactory.GetItemList(ItemTypes.Tag, [.. Globals.Countries.Keys], "Cores");
+         _cores = ControlFactory.GetItemList(ItemTypes.Tag, [], "Cores");
          _cores.OnItemAdded += ProvinceEditingEvents.OnCoreAdded;
          _cores.OnItemRemoved += ProvinceEditingEvents.OnCoreRemoved;
-         _claims = ControlFactory.GetItemList(ItemTypes.Tag, [.. Globals.Countries.Keys], "Regular");
+         _claims = ControlFactory.GetItemList(ItemTypes.Tag, [], "Regular");
          _claims.OnItemAdded += ProvinceEditingEvents.OnClaimAdded;
          _claims.OnItemRemoved += ProvinceEditingEvents.OnClaimRemoved;
-         _permanentClaims = ControlFactory.GetItemList(ItemTypes.Tag, [.. Globals.Countries.Keys], "Permanent");
+         _permanentClaims = ControlFactory.GetItemList(ItemTypes.Tag, [], "Permanent");
          _permanentClaims.OnItemAdded += ProvinceEditingEvents.OnPermanentClaimAdded;
          _permanentClaims.OnItemRemoved += ProvinceEditingEvents.OnPermanentClaimRemoved;
 
@@ -1189,7 +1195,7 @@ namespace Editor.Forms
 
 
       // ------------------- COUNTRY EDITING TAB ------------------- \\
-      private TagComboBox _tagSelectionBox = null!;
+      public TagComboBox _tagSelectionBox = null!;
 
       internal FlagLabel CountryFlagLabel = null!;
 
@@ -1232,7 +1238,6 @@ namespace Editor.Forms
             Height = 25,
          };
          CountryFlagLabel = ControlFactory.GetFlagLabel();
-         _tagSelectionBox.Items.Add(DataClasses.GameDataClasses.Tag.Empty);
          _tagSelectionBox.OnTagChanged += CountryGuiEvents.TagSelectionBox_OnTagChanged;
          _countryColorPickerButton = ControlFactory.GetColorPickerButton();
          _countryColorPickerButton.Click += CountryGuiEvents.CountryColorPickerButton_Click;
@@ -1699,8 +1704,6 @@ namespace Editor.Forms
             sb.AppendLine($"{country.Tag} : {country.CountryFilePath.FilePathArr.ToString()}");
          }
 
-         var downloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\";
-         File.WriteAllText(Path.Combine(downloadFolder, "countryFileNames.txt"), sb.ToString());
 
       }
    }

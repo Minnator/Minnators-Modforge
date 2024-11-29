@@ -193,16 +193,7 @@ public static class Globals
    public static Dictionary<string, GovernmentReform> GovernmentReforms = [];
 
    // Country Groups
-   private static Dictionary<Tag, Country> _countries = [];
-   public static Dictionary<Tag, Country> Countries
-   {
-      get => _countries;
-      set
-      {
-         _countries = value;
-         GlobalEventHandlers.RaiseCountryListChanged();
-      } 
-   }
+   public static BindingDictionary<Tag, Country> Countries = [];
 
    // Province Groups
    public static HashSet<Province> LandProvinces = [];

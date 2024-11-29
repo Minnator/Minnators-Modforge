@@ -1,12 +1,19 @@
 ﻿namespace Editor.DataClasses.GameDataClasses;
 
-public readonly struct Tag(string tag) : IEquatable<Tag>
+public readonly struct Tag(string tag) : IEquatable<Tag>, IComparable
 {
    public string _tag { get; init; } = tag;
 
    public override string ToString()
    {
       return _tag;
+   }
+
+   public int CompareTo(object? obj)
+   {
+      if (obj is Tag other)
+         return string.Compare(_tag, other._tag, StringComparison.Ordinal);
+      throw new ArgumentException("Object is not a Tag");
    }
 
    public static Tag FromString(string tag)

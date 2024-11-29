@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Windows.Forms;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Parser;
@@ -801,7 +802,6 @@ public class Country : ProvinceCollection<Province>
       var temp = new CommonCountry(country);
       var temp2 = new HistoryCountry(country);
       Globals.Countries.Add(tag, country);
-
       CountryCreated.Invoke(country, country);
    }
 }

@@ -1,4 +1,5 @@
-﻿using Editor.Events;
+﻿using System.ComponentModel;
+using Editor.Events;
 using Editor.Helper;
 
 namespace Editor.Controls
@@ -13,30 +14,20 @@ namespace Editor.Controls
          Dock = DockStyle.Fill;
          Height = 21;
          
-         GenerateOptions();
-         GlobalEventHandlers.OnCountryListChanged += (sender, args) => GenerateOptions();
+         DataSource = new BindingSource
+         {
+            DataSource = Globals.Countries
+         };
+         Globals.Countries.AddControl(this);
       }
-
-      public void InitializeItems(List<string> items)
-      {
-         items.Sort();
-         Items.Clear();
-         foreach (var item in items)
-            Items.Add(item);
-      }
-
-      private void GenerateOptions()
-      {
-         InitializeItems([.. Globals.Countries.Keys]);
-      }
-
+      
       protected override void OnSelectedIndexChanged(EventArgs e)
       {
          base.OnSelectedIndexChanged(e);
-         OnTagChanged?.Invoke(this, new (Selection.GetSelectedProvinces, Text));
+         //OnTagChanged?.Invoke(this, new (Selection.GetSelectedProvinces, Text));
       }
    }
-
+   
    public static class ComboBoxExtensions
    {
       public static void Clear(this ComboBox box)

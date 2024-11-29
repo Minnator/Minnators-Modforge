@@ -27,26 +27,19 @@ namespace Editor.Loading
                continue;
             Parsing.RemoveCommentFromMultilineString(content, out var removed);
             var matches = CountryRegex.Matches(removed);
-            Dictionary<Tag, Country> countries = new(matches.Count);
 
             foreach (Match match in matches)
             {
                var tag = new Tag(match.Groups["tag"].Value);
-               if (countries.ContainsKey(tag))
-               {
-                  Globals.ErrorLog.Write($"Duplicate country tag: {tag}");
-                  continue;
-               }
-
                var pathObj = PathObj.FromPath(file);
                var fileNameObj = new CountryFilePath(match.Groups["path"].Value, ref pathObj);
                Country country = new(tag, fileNameObj, Color.Empty, ObjEditingStatus.Unchanged);
                fileNameObj.SetCountry(country);
                country.SetBounds();
-               countries.Add(tag, country);
+               if (!Globals.Countries.TryAdd(tag, country))
+                  Globals.ErrorLog.Write($"Duplicate country tag: {tag}");
             }
 
-            Globals.Countries = countries;
          }
 
          ParseCountryAttributes();

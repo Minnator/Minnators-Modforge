@@ -107,8 +107,10 @@ public static class ControlFactory
 
    public static ItemList GetItemList(ItemTypes itemType, List<string> items, string title)
    {
-      var list = new ItemList(itemType, GetTagComboBox());
-      list.InitializeItems(items);
+      ComboBox box = itemType == ItemTypes.Tag ? GetTagComboBox() : GetExtendedComboBox(items);
+      var list = new ItemList(itemType, box);
+      if (itemType != ItemTypes.Tag)
+         list.InitializeItems(items);
       list.SetTitle(title);
       list.Margin = new(3, 1, 3, 3);
       list.Dock = DockStyle.Fill;
