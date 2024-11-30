@@ -1,4 +1,5 @@
 ﻿using Editor.DataClasses.Settings;
+using Editor.Forms.PopUps;
 using Editor.Helper;
 using Editor.Testing;
 
@@ -13,6 +14,9 @@ namespace Editor.Forms.GetUserInput
 
          Globals.Settings = SettingsLoader.Load();
          Globals.Settings.Rendering.MapBorderColor = Color.FromArgb(Globals.Settings.Rendering.MapBorderColor.R, Globals.Settings.Rendering.MapBorderColor.G, Globals.Settings.Rendering.MapBorderColor.B);
+
+         ModPathTextBox.Text = Globals.Settings.Misc.LastModPath;
+         VanillaPathTextBox.Text = Globals.Settings.Misc.LastVanillaPath;
 #if DEBUG
          Load += (sender, args) =>
          {
@@ -60,11 +64,23 @@ namespace Editor.Forms.GetUserInput
             return;
          }
 
+         if (!ModPathTextBox.Text.Equals(Globals.Settings.Misc.LastModPath))
+         {
+            var result = new UsageWarningForm().ShowDialog();
+            if (result == DialogResult.Cancel)
+            {
+               Close();
+               return;
+            }
+         }
+
          Globals.VanillaPath = VanillaPathTextBox.Text;
          Globals.ModPath = ModPathTextBox.Text;
 
          Globals.Settings.Misc.LastModPath = ModPathTextBox.Text;
          Globals.Settings.Misc.LastVanillaPath = VanillaPathTextBox.Text;
+
+         SettingsSaver.Save(Globals.Settings);
 
          Close();
       }

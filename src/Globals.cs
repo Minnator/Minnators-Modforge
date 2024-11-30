@@ -314,7 +314,7 @@ public static class Globals
 // - [x] Trade company saving
 // - [x] Fix Settings not saving when modified
 // - [x] Button to add a new Country
-// - [ ] Warning that it may corrupt files if there are error
+// - [x] Warning that it may corrupt files if there are error
 // - [ ] Fix province saving
 // - [-] Save all and verify all save options
 // - [-] Country Collection Editing, Saving is broken
