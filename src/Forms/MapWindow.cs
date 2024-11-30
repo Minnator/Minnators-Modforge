@@ -98,7 +98,6 @@ namespace Editor.Forms
          if (LinkHelper.IsDiscordRunning)
             DiscordActivityManager.StartDiscordActivity();
 
-         //CursorHelper.SetCursor(Eu4CursorTypes.Normal, this);
       }
 
       public void Initialize()
@@ -344,6 +343,46 @@ namespace Editor.Forms
 
       private void InitializeProvinceEditGui()
       {
+
+         DataTabPanel.TabPages[0].Enabled = false;
+         Selection.OnProvinceSelectionChange += (sender, i) =>
+         {
+            if (i == 0)
+            {
+               DataTabPanel.TabPages[0].SuspendLayout();
+               Globals.EditingStatus = EditingStatus.LoadingInterface;
+               ClearProvinceGui();
+               Globals.EditingStatus = EditingStatus.Idle;
+               DataTabPanel.TabPages[0].Enabled = false;
+               DataTabPanel.TabPages[0].ResumeLayout();
+            }
+            else
+            {
+               DataTabPanel.TabPages[0].Enabled = true;
+               LoadSelectedProvincesToGui();
+            }
+         };
+
+         DataTabPanel.TabPages[1].Enabled = false;
+         Selection.OnCountrySelectionChange += (_, _) =>
+         {
+            if (Selection.SelectedCountry == Country.Empty)
+            {
+               DataTabPanel.TabPages[1].SuspendLayout();
+               Globals.EditingStatus = EditingStatus.LoadingInterface;
+               ClearCountryGui();
+               Globals.EditingStatus = EditingStatus.Idle;
+               DataTabPanel.TabPages[1].Enabled = false;
+               DataTabPanel.TabPages[1].ResumeLayout();
+            }
+            else
+            {
+               DataTabPanel.TabPages[1].Enabled = true;
+               LoadCountryToGui(Selection.SelectedCountry);
+            }
+         };
+
+
          // Tooltips for saving Buttons
          _savingButtonsToolTip = new();
          _savingButtonsToolTip.AutoPopDelay = 10000;
@@ -597,14 +636,6 @@ namespace Editor.Forms
 
       // ======================== Province GUI Update Methods ========================
       #region Province Gui
-
-      /// <summary>
-      /// Is executed once a province is selected
-      /// </summary>
-      public void ProvinceClick()
-      {
-         LoadSelectedProvincesToGui();
-      }
 
       /// <summary>
       /// This will only load the province attributes to the gui which are shared by all provinces
@@ -1304,7 +1335,7 @@ namespace Editor.Forms
 
          // Development
          _countryDevelopmentNumeric = ControlFactory.GetExtendedNumeric();
-         _countryDevelopmentNumeric.Minimum = 3;
+         _countryDevelopmentNumeric.Minimum = 0;
          _countryDevelopmentNumeric.Maximum = 100000;
          _countryDevelopmentNumeric.UpButtonPressedSmall += (_, _) => AddDevToSelectedCountryIfValid(1);
          _countryDevelopmentNumeric.UpButtonPressedMedium += (_, _) => AddDevToSelectedCountryIfValid(5);
@@ -1399,7 +1430,7 @@ namespace Editor.Forms
          if (country == Country.Empty)
             return;
          SuspendLayout();
-         _tagSelectionBox.SelectedItem = country.Tag.ToString();
+         _tagSelectionBox.SelectedItem = country.Tag;
          if (Globals.Settings.Gui.ShowCountryFlagInCE)
          {
             CountryFlagLabel.SetCountry(country);

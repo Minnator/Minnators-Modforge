@@ -117,8 +117,12 @@ public static class Selection
    public static event EventHandler<List<Province>> OnProvinceGroupSelected = delegate { };
    public static event EventHandler<List<Province>> OnProvinceGroupDeselected = delegate { };
 
+   public static event EventHandler<int> OnProvinceSelectionChange = delegate { }; 
+   
    public static event EventHandler<Country> OnCountrySelected = delegate { };
    public static event EventHandler<Country> OnCountryDeselected = delegate { };
+
+   public static event EventHandler OnCountrySelectionChange = delegate { };
 
    // Colors
    private static readonly int _hoverColor = Color.FromArgb(255, 0, 255, 255).ToArgb();
@@ -155,10 +159,12 @@ public static class Selection
    }
 
    // ------------ Country Selection Methods ------------ \\
-   public static void SetCountrySelected(Country country)
+   public static void SetCountrySelected(Country country, bool onCountrySelectedChange = true)
    {
       _selectedCountry = country;
       OnCountrySelected?.Invoke(Globals.ZoomControl, country);
+      if (onCountrySelectedChange)
+         OnCountrySelectionChange.Invoke(Globals.ZoomControl, EventArgs.Empty);
    }
 
    // ------------ Province Selection Methods ------------ \\
@@ -183,13 +189,15 @@ public static class Selection
       MapDrawing.DrawOnMap(province, _selectedColor, Globals.ZoomControl, PixelsOrBorders.Borders);
    }
 
-   public static void ClearSelection()
+   public static void ClearSelection(bool onProvinceSelectionChange = true)
    {
       if (_highlightedProvinces.Count > 0)
          ClearHighlightedProvinces();
       MapDrawing.DrawOnMap(_selectedProvinces, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
       OnProvinceGroupDeselected(Globals.ZoomControl, [.. _selectedProvinces]);
       _selectedProvinces.Clear();
+      if (onProvinceSelectionChange)
+         OnProvinceSelectionChange.Invoke(Globals.ZoomControl, 0);
    }
 
    public static void RemoveProvincesFromSelection(ICollection<Province> provinces)
@@ -197,6 +205,7 @@ public static class Selection
       _selectedProvinces.ExceptWith(provinces);
       MapDrawing.DrawOnMap(provinces, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
       OnProvinceGroupDeselected(Globals.ZoomControl, provinces.ToList());
+      OnProvinceSelectionChange.Invoke(Globals.ZoomControl, _selectedProvinces.Count);
    }
    
    public static void AddProvincesToSelection(ICollection<Province> provinces, bool deselectSelected = false)
@@ -215,6 +224,7 @@ public static class Selection
       }
 
       OnProvinceGroupSelected(Globals.ZoomControl, provinces.ToList());
+      OnProvinceSelectionChange.Invoke(Globals.ZoomControl, _selectedProvinces.Count);
    }
 
    public static void AddOrRemoveAllFromSelection(ICollection<Province> provinces)
@@ -253,7 +263,10 @@ public static class Selection
       _selectedProvinces.Add(province);
       MapDrawing.DrawOnMap(province.Borders, _selectedColor, Globals.ZoomControl);
       if (fireEvent)
+      {
          OnProvinceGroupSelected(Globals.ZoomControl, [province]);
+         OnProvinceSelectionChange.Invoke(Globals.ZoomControl, _selectedProvinces.Count);
+      }
    }
 
    private static void InternalRemoveProvinceFromSelection(Province province, bool fireEvent)
@@ -263,7 +276,10 @@ public static class Selection
       _selectedProvinces.Remove(province);
       MapDrawing.DrawOnMap(province.Borders, _borderColor, Globals.ZoomControl);
       if (fireEvent)
+      {
          OnProvinceGroupSelected(Globals.ZoomControl, [province]);
+         OnProvinceSelectionChange.Invoke(Globals.ZoomControl, _selectedProvinces.Count);
+      }
    }
 
    public static void FocusSelection()
@@ -271,7 +287,7 @@ public static class Selection
       Globals.ZoomControl.FocusOn(Geometry.GetBounds(_selectedProvinces.ToList()));
    }
 
-   private static void SelectCountry(Province province)
+   private static void SelectCountry(Province province, bool onCountrySelectedChange = true)
    {
       if (province == Province.Empty || !Globals.Countries.TryGetValue(province.Owner, out var country))
       {
@@ -295,13 +311,17 @@ public static class Selection
          if (Globals.MapModeManager.CurrentMapMode is DiplomaticMapMode)
             Globals.MapModeManager.CurrentMapMode.Update(province);
          OnCountrySelected?.Invoke(Globals.ZoomControl, SelectedCountry);
+         if (onCountrySelectedChange)
+            OnCountrySelectionChange.Invoke(Globals.ZoomControl, EventArgs.Empty);
       }
    }
 
-   private static void RemoveCountrySelection()
+   private static void RemoveCountrySelection(bool onCountrySelectionChange = true)
    {
       SelectedCountry = Country.Empty;
       OnCountryDeselected?.Invoke(Globals.ZoomControl, SelectedCountry);
+      if (onCountrySelectionChange)
+         OnCountrySelectionChange.Invoke(Globals.ZoomControl, EventArgs.Empty);
    }
 
    #endregion
@@ -553,17 +573,6 @@ public static class Selection
       SetCount:
       Globals.MapWindow.SetSelectedProvinceSum(Count);
 
-      // Interaction with the EditingGui
-
-      if (e.Button == MouseButtons.Middle)
-         return;
-
-      // ------------------------------ Province Idle Loading ------------------------------
-      if (Globals.ProvinceEditingStatus == ProvinceEditingStatus.Selection
-          || Globals.ProvinceEditingStatus == ProvinceEditingStatus.PreviewUntilSelection && Count > 1)
-      {
-         Globals.MapWindow.ProvinceClick();
-      }
    }
 
    private static void ZoomControl_MouseMove(object? sender, MouseEventArgs e)
@@ -636,7 +645,7 @@ public static class Selection
       }
       else
       {
-         ClearSelection();
+         ClearSelection(false);
          AddProvinceToSelection(prov);
          SelectCountry(prov);
       }

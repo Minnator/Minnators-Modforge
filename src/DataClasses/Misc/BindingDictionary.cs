@@ -7,6 +7,29 @@ public class BindingDictionary<TKey, TValue> : BindingList<TKey>, IDictionary<TK
 {
    private readonly Dictionary<TKey, TValue> _internalDictionary = [];
    private readonly List<ComboBox> _boundControls = [];
+   private readonly List<TKey> _internalList;
+   private readonly IComparer<TKey> _keyComparer;
+
+   private BindingDictionary(List<TKey> list, IComparer<TKey>? comparer) : base(list) 
+   {
+      _keyComparer = comparer ?? Comparer<TKey>.Default;
+      _internalList = list;
+   }
+   
+   public BindingDictionary(IComparer<TKey>? comparer = null) : this([], comparer) {  }
+
+   public void Sort()
+   {
+      _internalList.Sort();
+   }
+
+   // Override InsertItem to maintain sorting if necessary
+   public void InsertItemSorted(TKey item)
+   {
+      var index = _internalList.BinarySearch(item, _keyComparer);
+      index = index >= 0 ? index : ~index;
+      base.InsertItem(index, item);
+   }
 
    public void AddControl(ComboBox control)
    {
@@ -34,7 +57,7 @@ public class BindingDictionary<TKey, TValue> : BindingList<TKey>, IDictionary<TK
    {
       BeginUpdate();
       _internalDictionary.Add(key, value);
-      base.Add(key);
+      InsertItemSorted(key);
       EndUpdate();
    }
    

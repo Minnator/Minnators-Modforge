@@ -47,7 +47,7 @@ namespace Editor.DataClasses.Misc
          !byte.TryParse(match.Groups["day"].Value, out var day))
             return false;
 
-         if (month < 1 || month > 12 || day < 1 || day > 31)
+         if (month < 1 || month > 12 || day < 1 || day > DaysInMonth(month))
             return false;
 
          date = new (year, month, day);

@@ -28,7 +28,7 @@ namespace Editor.Events
 
       public static void OnCountrySelected(object? sender, Country country)
       {
-         Globals.MapWindow.LoadCountryToGui(country);
+         //Globals.MapWindow.LoadCountryToGui(country);
       }
 
       public static void RevolutionColorPickerButton_Click(object? sender, MouseEventArgs e)

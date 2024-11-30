@@ -18,6 +18,7 @@ namespace Editor.Loading
 
       public static void Load()
       {
+         Globals.Countries.Add(Tag.Empty, Country.Empty);
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "country_tags");
 
 
