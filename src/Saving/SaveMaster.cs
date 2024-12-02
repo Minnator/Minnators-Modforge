@@ -22,10 +22,15 @@ namespace Editor.Saving
             _cache.Add(Enum.Parse<SaveableType>(name), 0);
       }
 
-      public static void SaveSaveables(ICollection<Saveable> saveables, SaveableType saveableType = SaveableType.All)
+      public static void SaveSaveables(ICollection<Saveable> saveables, SaveableType saveableType = SaveableType.All, bool onlyModified = false)
       {
-         HashSet<PathObj> paths = [..saveables.Select((x)=>x.Path)];
+         HashSet<PathObj> paths;
+         if (onlyModified)
+             paths = [..saveables.Where(x => x.EditingStatus is ObjEditingStatus.Modified or ObjEditingStatus.Deleted).Select((x)=>x.Path)];
+         else
+            paths = [..saveables.Select((x)=>x.Path)];
          SavePaths(ref paths, saveableType);
+         MessageBox.Show("All files saved!", "Save", MessageBoxButtons.OK, MessageBoxIcon.Information);
       }
 
       public static void SaveAllChanges(bool onlyModified = true, SaveableType saveableType = SaveableType.All)
@@ -371,6 +376,21 @@ namespace Editor.Saving
       private static bool VerifyFilename(string fileName)
       {
          return !string.IsNullOrWhiteSpace(fileName) && fileName.IndexOfAny(Path.GetInvalidFileNameChars()) < 0;
+      }
+
+      public static int GetNumOfModifiedObjects()
+      {
+         var total = 0;
+         foreach (var singleKVP in _cache)
+         {
+            total += singleKVP.Value;
+         }
+         return total;
+      }
+
+      public static int GetNumOfModifiedObjects(SaveableType type)
+      {
+         return _cache.GetValueOrDefault(type, 0);
       }
 
    }

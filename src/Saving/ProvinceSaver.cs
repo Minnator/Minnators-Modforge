@@ -13,20 +13,6 @@ namespace Editor.Saving
       //---------------------------------------- Accessible Methods ----------------------------------------
 
       
-      public static void SaveAllLandProvinces()
-      {
-         SaveMaster.SaveSaveables([..Globals.LandProvinces]);
-      }
-
-      /// <summary>
-      /// Save all provinces which are currently selected.
-      /// </summary>
-      /// <exception cref="NotImplementedException"></exception>
-      public static void SaveSelectedProvinces()
-      {
-         SaveMaster.SaveSaveables([..Selection.GetSelectedProvinces]);
-      }
-
 
       //---------------------------------------- Helper Methods ----------------------------------------
 

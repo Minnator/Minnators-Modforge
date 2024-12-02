@@ -39,43 +39,6 @@ namespace Editor.Helper
          return nonDefaultValues;
       }
 
-      public static List<Province> GetModifiedProvinces()
-      {
-         List<Province> modifiedProvinces = [];
-         foreach (var province in Globals.Provinces)
-         {
-            if (province.EditingStatus == ObjEditingStatus.Modified)
-               modifiedProvinces.Add(province);
-         }
-         return modifiedProvinces;
-      }
-
-      public static List<Province> GetProvincesWithStatus(ObjEditingStatus status)
-      {
-         List<Province> provinces = [];
-         foreach (var province in Globals.Provinces)
-            if (province.EditingStatus == status) 
-               provinces.Add(province);
-         return provinces;
-      }
-
-      public static List<Province> GetProvincesWithoutStatus(ObjEditingStatus status)
-      {
-         List<Province> provinces = [];
-         foreach (var province in Globals.Provinces)
-            if (province.EditingStatus != status) 
-               provinces.Add(province);
-         return provinces;
-      }
-
-      public static void PrintModifiedProvinceValues(this Province province, out string str)
-      {
-         var nonDefaultValues = province.GetNonDefaultValues();
-         str = "";
-         foreach (var (key, value) in nonDefaultValues)
-            str += $"{key}: {value}\n";
-      }
-
       private static bool AreListsEqual(IList? list1, IList? list2)
       {
          if (list1 == null || list2 == null)

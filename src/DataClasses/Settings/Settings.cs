@@ -14,7 +14,8 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    private SavingSettings _savingSettings = new();
    private MiscSettings _miscSettings = new();
    private GuiSettings _guiSettings = new();
-   
+   private PopUpSettings _popUpSettings = new();
+
 
    public Settings()
    {
@@ -73,6 +74,15 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    {
       get => _guiSettings;
       set => SetField(ref _guiSettings, value);
+   }
+
+   [Description("Contains all settings regarding Pop ups")]
+   [TypeConverter(typeof(ExpandableObjectConverter))]
+   [CompareInEquals]
+   public PopUpSettings PopUps
+   {
+      get => _popUpSettings;
+      set => SetField(ref _popUpSettings, value);
    }
 
    public event PropertyChangedEventHandler? PropertyChanged;

@@ -40,7 +40,6 @@
          saveSelectionToolStripMenuItem = new ToolStripMenuItem();
          toolStripSeparator4 = new ToolStripSeparator();
          toolStripMenuItem1 = new ToolStripMenuItem();
-         saveModifiedToolStripMenuItem = new ToolStripMenuItem();
          saveManualToolStripMenuItem = new ToolStripMenuItem();
          toolStripSeparator6 = new ToolStripSeparator();
          mapModeHotkeysToolStripMenuItem = new ToolStripMenuItem();
@@ -97,6 +96,7 @@
          toolStripMenuItem4 = new ToolStripMenuItem();
          fileNamesToolStripMenuItem = new ToolStripMenuItem();
          emptyCOlorInCountryToolStripMenuItem = new ToolStripMenuItem();
+         iMBTESTToolStripMenuItem = new ToolStripMenuItem();
          ProvinceCollectionsLayoutPanel = new TableLayoutPanel();
          FocusSelectionCheckBox = new CheckBox();
          BottomToolStrip = new ToolStrip();
@@ -338,7 +338,7 @@
          // 
          // filesToolStripMenuItem
          // 
-         filesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { gCToolStripMenuItem, graphicalElementsManagerToolStripMenuItem, quickSettingsToolStripMenuItem, toolStripSeparator5, saveCurrentMapModeToolStripMenuItem, saveSelectionToolStripMenuItem, toolStripSeparator4, toolStripMenuItem1, saveModifiedToolStripMenuItem, saveManualToolStripMenuItem, toolStripSeparator6, mapModeHotkeysToolStripMenuItem, CreateFilesByDefault });
+         filesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { gCToolStripMenuItem, graphicalElementsManagerToolStripMenuItem, quickSettingsToolStripMenuItem, toolStripSeparator5, saveCurrentMapModeToolStripMenuItem, saveSelectionToolStripMenuItem, toolStripSeparator4, toolStripMenuItem1, saveManualToolStripMenuItem, toolStripSeparator6, mapModeHotkeysToolStripMenuItem, CreateFilesByDefault });
          filesToolStripMenuItem.Name = "filesToolStripMenuItem";
          filesToolStripMenuItem.Size = new Size(42, 23);
          filesToolStripMenuItem.Text = "Files";
@@ -395,14 +395,10 @@
          // toolStripMenuItem1
          // 
          toolStripMenuItem1.Name = "toolStripMenuItem1";
+         toolStripMenuItem1.ShortcutKeys = Keys.Control | Keys.S;
          toolStripMenuItem1.Size = new Size(268, 22);
          toolStripMenuItem1.Text = "Save All";
-         // 
-         // saveModifiedToolStripMenuItem
-         // 
-         saveModifiedToolStripMenuItem.Name = "saveModifiedToolStripMenuItem";
-         saveModifiedToolStripMenuItem.Size = new Size(268, 22);
-         saveModifiedToolStripMenuItem.Text = "Save Modified";
+         toolStripMenuItem1.Click += SaveAllMenuItemClick;
          // 
          // saveManualToolStripMenuItem
          // 
@@ -653,7 +649,7 @@
          // 
          // debugToolStripMenuItem
          // 
-         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem, jsonToolStripMenuItem, bugReportToolStripMenuItem, crashReportToolStripMenuItem, loadDDSFilesTestToolStripMenuItem, roughEditorToolStripMenuItem, newSavingToolStripMenuItem, toolStripMenuItem4, fileNamesToolStripMenuItem, emptyCOlorInCountryToolStripMenuItem });
+         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem, jsonToolStripMenuItem, bugReportToolStripMenuItem, crashReportToolStripMenuItem, loadDDSFilesTestToolStripMenuItem, roughEditorToolStripMenuItem, newSavingToolStripMenuItem, toolStripMenuItem4, fileNamesToolStripMenuItem, emptyCOlorInCountryToolStripMenuItem, iMBTESTToolStripMenuItem });
          debugToolStripMenuItem.Name = "debugToolStripMenuItem";
          debugToolStripMenuItem.Size = new Size(54, 23);
          debugToolStripMenuItem.Text = "Debug";
@@ -783,6 +779,13 @@
          emptyCOlorInCountryToolStripMenuItem.Size = new Size(234, 22);
          emptyCOlorInCountryToolStripMenuItem.Text = "Empty COlor in Country";
          emptyCOlorInCountryToolStripMenuItem.Click += emptyCOlorInCountryToolStripMenuItem_Click;
+         // 
+         // iMBTESTToolStripMenuItem
+         // 
+         iMBTESTToolStripMenuItem.Name = "iMBTESTToolStripMenuItem";
+         iMBTESTToolStripMenuItem.Size = new Size(234, 22);
+         iMBTESTToolStripMenuItem.Text = "IMB_TEST";
+         iMBTESTToolStripMenuItem.Click += iMBTESTToolStripMenuItem_Click;
          // 
          // ProvinceCollectionsLayoutPanel
          // 
@@ -1685,6 +1688,7 @@
          SaveAllModifiedButton.TabIndex = 1;
          SaveAllModifiedButton.Text = "Save modified";
          SaveAllModifiedButton.UseVisualStyleBackColor = true;
+         SaveAllModifiedButton.Click += SaveAllModifiedButton_Click;
          // 
          // SaveCurrentSelectionButton
          // 
@@ -2930,7 +2934,7 @@
          Name = "MapWindow";
          SizeGripStyle = SizeGripStyle.Show;
          StartPosition = FormStartPosition.Manual;
-         Text = "Minnator's Modforge (Alpha 0.1.0)";
+         Text = "Minnator's Modforge (Closed Alpha 0.1.0)";
          FormClosing += MapWindow_FormClosing;
          KeyDown += MapWindow_KeyDown;
          MapMenuStrip.ResumeLayout(false);
@@ -3150,7 +3154,6 @@
       private ToolStripMenuItem saveManualToolStripMenuItem;
       private ToolStripSeparator toolStripSeparator6;
       private ToolTip toolTip1;
-      private ToolStripMenuItem saveModifiedToolStripMenuItem;
       private ToolStripMenuItem additionalToolsToolStripMenuItem;
       private ToolStripMenuItem checkForCyclesInTradenodesToolStripMenuItem;
       private SplitContainer MainSplitContainer;
@@ -3256,6 +3259,7 @@
       private Button AddNewCountryButton;
       private ToolStripMenuItem fileNamesToolStripMenuItem;
       private ToolStripMenuItem emptyCOlorInCountryToolStripMenuItem;
+      private ToolStripMenuItem iMBTESTToolStripMenuItem;
    }
 }
 

@@ -316,13 +316,14 @@ public static class Globals
 // - [x] Button to add a new Country
 // - [x] Warning that it may corrupt files if there are error
 // - [ ] Fix province saving
-// - [-] Save all and verify all save options
-// - [-] Country Collection Editing
+// - [x] Save all and verify all save options
+// - [x] Country Collection Editing
 // - [ ] Verify that all province modifications set the ObjEditingStatus
 // - [x] Country saving broken
 // - [x] Country Tags editing
 
 // TODO LIST Until Alpha 1.1
+// - [ ] Sounds for buttons and actions
 // - [ ] UnitType loading optimization
 // - [ ] Loading bar when saving using threads
 // - [ ] In Depth deleting with pop up to show what objects are related to the one being deleted

@@ -23,6 +23,8 @@ using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 using MethodInvoker = System.Windows.Forms.MethodInvoker;
 using Region = Editor.DataClasses.GameDataClasses.Region;
 using System.ComponentModel;
+using System.Media;
+using Editor.src.Forms.PopUps;
 
 namespace Editor.Forms
 {
@@ -144,7 +146,7 @@ namespace Editor.Forms
 
       private void StartBWHeapThread()
       {
-         Thread backgroundThread = new (() =>
+         Thread backgroundThread = new(() =>
          {
             for (var i = 0; i < 30; i++)
             {
@@ -893,7 +895,7 @@ namespace Editor.Forms
 
       private void OnSavingModifiedEnter(object? sender, EventArgs e)
       {
-         _savingButtonsToolTip.SetToolTip(SaveAllModifiedButton, $"Save modified provinces ({EditingHelper.GetModifiedProvinces().Count})");
+         _savingButtonsToolTip.SetToolTip(SaveAllModifiedButton, $"Save modified provinces ({SaveMaster.GetNumOfModifiedObjects(SaveableType.Province)})");
       }
 
       private void OnSavingSelectionEnter(object? sender, EventArgs e)
@@ -1095,9 +1097,29 @@ namespace Editor.Forms
 
       private void saveAllProvincesToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         ProvinceSaver.SaveAllLandProvinces();
+         SaveMaster.SaveSaveables([.. Globals.LandProvinces]);
       }
 
+      // PE Button saves all changes
+      private void SaveAllModifiedButton_Click(object sender, EventArgs e)
+      {
+         SaveMaster.SaveSaveables([.. Globals.Provinces], onlyModified: true);
+      }
+
+      // Menu item saves all changes
+      private void SaveAllMenuItemClick(object sender, EventArgs e)
+      {
+         var numOfChanges = SaveMaster.GetNumOfModifiedObjects();
+         if (numOfChanges == 0)
+         {
+            MessageBox.Show("No changes to save", "No Changes", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return;
+         }
+
+         var result = ImprovedMessageBox.Show($"Are you sure you want to save all {numOfChanges} modified objects?", "Confirm Saving", ref Globals.Settings.PopUps.AskWhenSavingAllChangesRef, MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+         if(result == DialogResult.OK)
+            SaveMaster.SaveAllChanges();
+      }
 
       private void saveSelectionToolStripMenuItem_Click(object sender, EventArgs e)
       {
@@ -1106,13 +1128,13 @@ namespace Editor.Forms
 
       private void SaveCurrentSelectionButton_Click(object sender, EventArgs e)
       {
-         ProvinceSaver.SaveSelectedProvinces();
+         SaveMaster.SaveSaveables([.. Selection.GetSelectedProvinces]);
       }
 
 
       private void SaveAllProvincesButton_Click(object sender, EventArgs e)
       {
-         ProvinceSaver.SaveAllLandProvinces();
+         SaveMaster.SaveSaveables([.. Globals.LandProvinces]);
       }
 
       private void saveEuropeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1763,6 +1785,11 @@ namespace Editor.Forms
             if (country.Color == Color.Empty)
                Debug.WriteLine(country.Tag);
          }
+      }
+
+      private void iMBTESTToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         SystemSounds.Question.Play();
       }
    }
 }
