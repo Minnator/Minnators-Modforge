@@ -22,7 +22,7 @@ namespace Editor.Loading
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "country_tags");
 
 
-         foreach (var file in files)
+         foreach (var file in files) 
          {
             if (!IO.ReadAllInANSI(file, out var content))
                continue;
@@ -46,14 +46,6 @@ namespace Editor.Loading
          ParseCountryAttributes();
          LoadCountryHistories();
 
-      }
-
-      public static void LoadProvincesToCountries()
-      {
-         var sw = Stopwatch.StartNew();
-         AssignProvinces();
-         sw.Stop();
-         Globals.LoadingLog.WriteTimeStamp("Country province init", sw.ElapsedMilliseconds);
       }
 
       private static void LoadCountryHistories()
@@ -309,7 +301,7 @@ namespace Editor.Loading
                   break;
                default:
                   che.Effects.Add(block);
-                  Globals.ErrorLog.Write($"Unknown block in history entry: {block.Name} ({file})");
+                  //Globals.ErrorLog.Write($"Unknown block in history entry: {block.Name} ({file})");
                   break;
             }
          }
@@ -357,7 +349,10 @@ namespace Editor.Loading
          {
             FilesHelper.GetFilePathUniquely(out var path, "common", Path.Combine(country.CountryFilePath.FilePathArr));
             if (!IO.ReadAllInANSI(path, out var content))
+            {
+
                return;
+            }
 
             path = path.Replace('/', '\\');
 

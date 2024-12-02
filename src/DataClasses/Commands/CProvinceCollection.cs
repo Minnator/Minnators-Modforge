@@ -65,6 +65,7 @@ namespace Editor.DataClasses.Commands
          _saveables.Undo();
          foreach (var (composite, parent) in NewComposites)
          {
+            _newParent.InternalRemove(composite);
             if (parent != null!)
             {
                parent.InternalAdd(composite);
@@ -72,7 +73,7 @@ namespace Editor.DataClasses.Commands
                composite.Parents.Add(parent);
             }
             composite.Parents.Remove(_newParent);
-            _newParent.InternalRemove(composite);
+            
          }
          _newParent.SetBounds();
          if (_addToGlobal)

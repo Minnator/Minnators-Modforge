@@ -73,6 +73,9 @@
          {
             e.Graphics.DrawRectangle(borderPen, 2, 2, rect.Width - 1, rect.Height - 1);
          }
+         
+         if (!Enabled)
+            e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(128, Color.White)), ClientRectangle);
       }
 
 

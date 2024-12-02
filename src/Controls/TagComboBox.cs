@@ -9,8 +9,6 @@ namespace Editor.Controls
       public EventHandler<ProvinceEditedEventArgs>? OnTagChanged = delegate { };
       public TagComboBox()
       {
-         AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-         AutoCompleteSource = AutoCompleteSource.ListItems;
          Dock = DockStyle.Fill;
          Height = 21;
          
@@ -19,6 +17,9 @@ namespace Editor.Controls
             DataSource = Globals.Countries
          };
          Globals.Countries.AddControl(this);
+         //TODO broken
+         //AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+         //AutoCompleteSource = AutoCompleteSource.CustomSource;
       }
       
       protected override void OnSelectedIndexChanged(EventArgs e)

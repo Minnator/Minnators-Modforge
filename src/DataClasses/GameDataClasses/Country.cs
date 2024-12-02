@@ -28,7 +28,7 @@ public class CommonCountry : Saveable, IGetSetProperty
    private Country _country;
    private Color _revolutionaryColor = Color.Empty;
    private string _graphicalCulture = string.Empty;
-   private Color _color;
+   private Color _color = Color.Empty;
    private List<string> _historicIdeas = [];
    private List<string> _historicUnits = [];
    private List<string> _leaderNames = [];
@@ -541,10 +541,13 @@ public class Country : ProvinceCollection<Province>
       Tag = tag;
       CountryFilePath = fileName;
       fileName.SetCountry(this);
+
+      HistoryCountry = new(this, ObjEditingStatus.Unchanged);
+      CommonCountry = new(this, ObjEditingStatus.Unchanged);
    }
 
 
-   public new static Country Empty => new(Tag.Empty, GameDataClasses.CountryFilePath.Empty, Color.Empty, ObjEditingStatus.Immutable);
+   public new static Country Empty => new(Tag.Empty, CountryFilePath.Empty, Color.Empty, ObjEditingStatus.Immutable);
 
    [TypeConverter(typeof(ExpandableObjectConverter))]
    public HistoryCountry HistoryCountry { get; set; }
@@ -555,8 +558,6 @@ public class Country : ProvinceCollection<Province>
 
    
    public Tag Tag { get; set; }
-
-
    public override Color Color
    {
       get => CommonCountry.Color;
@@ -569,7 +570,22 @@ public class Country : ProvinceCollection<Province>
    }
 
    public override void OnPropertyChanged(string? propertyName = null) { }
-   
+
+   public override void InternalAdd(Province composite)
+   {
+      base.InternalAdd(composite);
+      composite.Owner = Tag;
+      composite.Controller = Tag;
+   }
+
+   public override void InternalRemove(Province composite)
+   {
+      base.InternalRemove(composite);
+
+      composite.Owner = Tag.Empty;
+      composite.Controller = Tag.Empty;
+   }
+
    public CountryHistoryEntry? GetClosestAfterDate(Date date)
    {
       if (HistoryCountry.History.Count == 0)

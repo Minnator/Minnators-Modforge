@@ -48,6 +48,9 @@ namespace Editor.Controls
                e.Graphics.DrawImage(flag, ClientRectangle);
                break;
          }
+
+         if (!Enabled) 
+            e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(128, Color.White)), ClientRectangle);
       }
    }
 }

@@ -86,6 +86,7 @@ namespace Editor.Forms
 
          //CursorHelper.SetCursor(Eu4CursorTypes.Loading, this);
          RunLoadingScreen();
+         StartBWHeapThread();
 
          if (StartScreen != null)
          {
@@ -139,6 +140,23 @@ namespace Editor.Forms
          Globals.ZoomControl.Invalidate();
          AfterLoad();
 
+      }
+
+      private void StartBWHeapThread()
+      {
+         Thread backgroundThread = new (() =>
+         {
+            for (var i = 0; i < 30; i++)
+            {
+               Thread.Sleep(1000);
+               GC.Collect();
+               GC.WaitForPendingFinalizers();
+            }
+         })
+         {
+            IsBackground = true // Make it a background thread
+         };
+         backgroundThread.Start();
       }
 
       private void AfterLoad()
@@ -1351,7 +1369,7 @@ namespace Editor.Forms
          List<string> unitsList = [];
          foreach (var unit in Globals.Units)
             unitsList.Add(unit.UnitName);
-         _historicalUnits = new(unitsList, CommonCountry.Empty, nameof(CommonCountry.HistoricUnits),"Historic Units", -1);
+         _historicalUnits = new(unitsList, CommonCountry.Empty, nameof(CommonCountry.HistoricUnits), "Historic Units", -1);
          _historicalUnits.SetAutoSelectFunc(LandUnit.AutoSelectFuncUnits);
 
          List<string> ideaGroups = [];
@@ -1736,6 +1754,15 @@ namespace Editor.Forms
          }
 
 
+      }
+
+      private void emptyCOlorInCountryToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         foreach (var country in Globals.Countries.Values)
+         {
+            if (country.Color == Color.Empty)
+               Debug.WriteLine(country.Tag);
+         }
       }
    }
 }

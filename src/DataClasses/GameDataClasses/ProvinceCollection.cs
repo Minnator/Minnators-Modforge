@@ -191,12 +191,12 @@ public abstract class ProvinceCollection<T> : ProvinceComposite where T : Provin
       }
    }
 
-   public void InternalAdd(T composite)
+   public virtual void InternalAdd(T composite)
    {
       _subCollection.Add(composite);
    }
 
-   public void InternalRemove(T composite)
+   public virtual void InternalRemove(T composite)
    {
       _subCollection.Remove(composite);
    }

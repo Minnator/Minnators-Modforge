@@ -23,6 +23,7 @@ public class BindingDictionary<TKey, TValue> : BindingList<TKey>, IDictionary<TK
       _internalList.Sort();
    }
 
+
    // Override InsertItem to maintain sorting if necessary
    public void InsertItemSorted(TKey item)
    {

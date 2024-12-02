@@ -317,7 +317,7 @@ public static class Globals
 // - [x] Warning that it may corrupt files if there are error
 // - [ ] Fix province saving
 // - [-] Save all and verify all save options
-// - [-] Country Collection Editing, Saving is broken
+// - [-] Country Collection Editing
 // - [ ] Verify that all province modifications set the ObjEditingStatus
 // - [x] Country saving broken
 // - [x] Country Tags editing
