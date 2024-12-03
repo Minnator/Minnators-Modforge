@@ -12,27 +12,136 @@ namespace Editor.DataClasses.Commands
       RemoveGlobal,
    }
 
-   public class CAddProvinceCollection<T> : ICommand where T : ProvinceComposite
+   public class CAddToCountryProvinceCollection : CAddProvinceCollectionGeneral<Province>
    {
-      private List<ProvinceCollection<T>> _oldParentsNotNull = [];
-      private List<KeyValuePair<T, ProvinceCollection<T>>> NewComposites = [];
       private SaveablesCommandHelper _saveables;
-      private ProvinceCollection<T> _newParent;
-      private bool _addToGlobal;
-      public CAddProvinceCollection(ProvinceCollection<T> newParent, bool add, bool executeOnInit = false)
+
+      public CAddToCountryProvinceCollection(ProvinceCollection<Province> newParent, bool add, bool executeOnInit = false) : base(newParent, add, executeOnInit)
+      {
+      }
+
+      public override void Execute()
+      {
+         _saveables = new([.. NewComposites.Select(x => x.Key)]);
+         _saveables.Execute();
+         base.Execute();
+      }
+
+      public override void Undo()
+      {
+         _saveables.Undo();
+         base.Undo();
+      }
+
+      public override void Redo()
+      {
+         _saveables.Redo();
+         base.Redo();
+      }
+   }
+
+   public class CAddProvinceCollection<T> : CAddProvinceCollectionGeneral<T> where T : ProvinceComposite
+   {
+      private SaveablesCommandHelper _saveables;
+
+      public CAddProvinceCollection(ProvinceCollection<T> newParent, bool add, bool executeOnInit = false) : base(newParent, add, executeOnInit)
+      {
+
+      }
+
+      public override void Execute()
+      {
+         _saveables = new([.. OldParentsNotNull, NewParent]);
+         _saveables.Execute();
+         base.Execute();
+      }
+
+      public override void Undo()
+      {
+         _saveables.Undo();
+         base.Undo();
+      }
+
+      public override void Redo()
+      {
+         _saveables.Redo();
+         base.Redo();
+      }
+   }
+
+   public class CRemoveCountryProvinceCollection<T> : CRemoveProvinceCollectionGeneral<T> where T : ProvinceComposite
+   {
+      private SaveablesCommandHelper _saveables;
+      public CRemoveCountryProvinceCollection(ProvinceCollection<T> oldParent, bool remove) : base(oldParent, remove)
+      {
+      }
+
+      public override void Execute()
+      {
+         _saveables = new([.. Composites]);
+         _saveables.Execute();
+         base.Execute();
+      }
+
+      public override void Undo()
+      {
+         _saveables.Undo();
+         base.Undo();
+      }
+
+      public override void Redo()
+      {
+         _saveables.Redo();
+         base.Redo();
+      }
+   }
+
+   public class CRemoveProvinceCollection<T> : CRemoveProvinceCollectionGeneral<T> where T : ProvinceComposite
+   {
+      private SaveablesCommandHelper _saveables;
+
+      public CRemoveProvinceCollection(ProvinceCollection<T> oldParent, bool remove) : base(oldParent, remove)
+      {
+      }
+
+      public override void Execute()
+      {
+         _saveables = new([.. Composites]);
+         _saveables.Execute();
+         base.Execute();
+      }
+
+      public override void Undo()
+      {
+         _saveables.Undo();
+         base.Undo();
+      }
+
+      public override void Redo()
+      {
+         _saveables.Redo();
+         base.Redo();
+      }
+   }
+
+   public abstract class CAddProvinceCollectionGeneral<T> : ICommand where T : ProvinceComposite
+   {
+      protected List<ProvinceCollection<T>> OldParentsNotNull = [];
+      protected readonly List<KeyValuePair<T, ProvinceCollection<T>>> NewComposites = [];
+      protected readonly ProvinceCollection<T> NewParent;
+      private readonly bool _addToGlobal;
+      public CAddProvinceCollectionGeneral(ProvinceCollection<T> newParent, bool add, bool executeOnInit = false)
       {
          _addToGlobal = add;
-         _newParent = newParent;
+         NewParent = newParent;
          if (executeOnInit)
             Execute();
       }
 
-      public void Execute()
+      public virtual void Execute()
       {
-         _saveables = new([.. _oldParentsNotNull, _newParent]);
          // No longer needed
-         _oldParentsNotNull = null;
-         _saveables.Execute();
+         OldParentsNotNull = null!;
          InternalExecute();
       }
 
@@ -46,48 +155,46 @@ namespace Editor.DataClasses.Commands
                parent.SetBounds();
                composite.Parents.Remove(parent);
             }
-            composite.Parents.Add(_newParent);
-            _newParent.InternalAdd(composite);
+            composite.Parents.Add(NewParent);
+            NewParent.InternalAdd(composite);
          }
-         _newParent.SetBounds();
+         NewParent.SetBounds();
          if (_addToGlobal)
          {
-            _newParent.AddGlobal();
-            _newParent.Invoke(new(ProvinceCollectionType.AddGlobal, [.. NewComposites.Select(x=>x.Key)]));
+            NewParent.AddGlobal();
+            NewParent.Invoke(new(ProvinceCollectionType.AddGlobal, [.. NewComposites.Select(x=>x.Key)]));
          }
          else
-            _newParent.Invoke(new(ProvinceCollectionType.Add, [.. NewComposites.Select(x => x.Key)]));
+            NewParent.Invoke(new(ProvinceCollectionType.Add, [.. NewComposites.Select(x => x.Key)]));
       }
 
 
-      public void Undo()
+      public virtual void Undo()
       {
-         _saveables.Undo();
          foreach (var (composite, parent) in NewComposites)
          {
-            _newParent.InternalRemove(composite);
+            NewParent.InternalRemove(composite);
             if (parent != null!)
             {
                parent.InternalAdd(composite);
                parent.SetBounds();
                composite.Parents.Add(parent);
             }
-            composite.Parents.Remove(_newParent);
+            composite.Parents.Remove(NewParent);
             
          }
-         _newParent.SetBounds();
+         NewParent.SetBounds();
          if (_addToGlobal)
          {
-            _newParent.RemoveGlobal();
-            _newParent.Invoke(new(ProvinceCollectionType.RemoveGlobal, [.. NewComposites.Select(x => x.Key)]));
+            NewParent.RemoveGlobal();
+            NewParent.Invoke(new(ProvinceCollectionType.RemoveGlobal, [.. NewComposites.Select(x => x.Key)]));
          }
          else
-            _newParent.Invoke(new(ProvinceCollectionType.Remove, [.. NewComposites.Select(x => x.Key)]));
+            NewParent.Invoke(new(ProvinceCollectionType.Remove, [.. NewComposites.Select(x => x.Key)]));
       }
 
-      public void Redo()
+      public virtual void Redo()
       {
-         _saveables.Redo();
          InternalExecute();
       }
 
@@ -95,45 +202,45 @@ namespace Editor.DataClasses.Commands
       {
          var numbers = NewComposites.Count;
          var objType = NewComposites[0].Key.WhatAmI() + (numbers > 1 ? "s" : "");
-         return $"Added {numbers} {objType} to {_newParent.Name}";
+         return $"Added {numbers} {objType} to {NewParent.Name}";
       }
 
       public string GetDebugInformation(int indent)
       {
-         return $"Added {NewComposites.Count} {NewComposites[0].Key.WhatAmI()} to {_newParent.Name}";
+         return $"Added {NewComposites.Count} {NewComposites[0].Key.WhatAmI()} to {NewParent.Name}";
       }
 
       public void AddNewComposite(T composite)
       {
-         if (composite.GetFirstParentOfType(_newParent.WhatAmI()) is ProvinceCollection<T> parent)
-            _oldParentsNotNull.Add(parent);
+         if (composite.GetFirstParentOfType(NewParent.WhatAmI()) is ProvinceCollection<T> parent)
+         {
+            if (!OldParentsNotNull.Contains(parent))
+               OldParentsNotNull.Add(parent);
+         }
          else
             parent = null!;
          NewComposites.Add(new(composite, parent));
       }
    }
 
-   public class CRemoveProvinceCollection<T> : ICommand where T : ProvinceComposite
+   public abstract class CRemoveProvinceCollectionGeneral<T> : ICommand where T : ProvinceComposite
    {
-      private List<T> Composites = [];
-      private SaveableCommandHelper _oldParentSaveable;
-      private ProvinceCollection<T> _oldParent;
-      private bool _removeFromGlobal;
+      protected List<T> Composites = [];
+      protected ProvinceCollection<T> _oldParent;
+      protected bool _removeFromGlobal;
 
-      public CRemoveProvinceCollection(ProvinceCollection<T> oldParent, bool remove)
+      public CRemoveProvinceCollectionGeneral(ProvinceCollection<T> oldParent, bool remove)
       {
          _oldParent = oldParent;
-         _oldParentSaveable = new(oldParent);
          _removeFromGlobal = remove;
       }
 
-      public void Execute()
+      public virtual void Execute()
       {
-         _oldParentSaveable.Execute();
-         internalExecute();
+         InternalExecute();
       }
 
-      private void internalExecute()
+      private void InternalExecute()
       {
          foreach (var composite in Composites)
          {
@@ -149,9 +256,8 @@ namespace Editor.DataClasses.Commands
          _oldParent.Invoke(new(ProvinceCollectionType.Remove, Composites));
       }
 
-      public void Undo()
+      public virtual void Undo()
       {
-         _oldParentSaveable.Undo();
          foreach (var composite in Composites)
          {
             _oldParent.InternalAdd(composite);
@@ -168,10 +274,9 @@ namespace Editor.DataClasses.Commands
          
       }
 
-      public void Redo()
+      public virtual void Redo()
       {
-         _oldParentSaveable.Redo();
-         internalExecute();
+         InternalExecute();
       }
 
       public void RemoveNewComposite(T composite)

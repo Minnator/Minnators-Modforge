@@ -22,9 +22,9 @@ public class ProvinceData()
    public Tag Owner = Tag.Empty;                            //.
    public Tag TribalOwner = Tag.Empty;                      //.NAT
    public Tag TradeCompany = Tag.Empty;                     //.TC
-   public int BaseManpower = 1;                             //.
-   public int BaseTax = 1;                                  //.
-   public int BaseProduction = 1;                           //.
+   public int BaseManpower;                                 //.
+   public int BaseTax;                                      //.
+   public int BaseProduction;                               //.
    public int CenterOfTrade;                                //.
    public int ExtraCost;                                    //.
    public int NativeHostileness;                            //.NAT
@@ -43,7 +43,7 @@ public class ProvinceData()
    public string Capital = string.Empty;                    //.
    public string Culture = string.Empty;                    //.
    public string Religion = string.Empty;                   //.
-   public string TradeGood = "";                            //.
+   public string TradeGood = string.Empty;                            //.
    public string LatentTradeGood = string.Empty;            //+ ProvinceHistoryEntry editing interface
    public string ReformationCenter = string.Empty;          //+ ProvinceHistoryEntry editing interface
    public List<Tag> Claims = [];                            //.
@@ -55,7 +55,7 @@ public class ProvinceData()
    public List<ApplicableModifier> PermanentProvinceModifiers = [];   // MOD
    public List<ApplicableModifier> ProvinceModifiers = [];            // MOD
    public List<string> ProvinceTriggeredModifiers = [];     // MOD
-   public List<Effect> ScriptedEffects = [];           
+   public List<IElement> ScriptedEffects = [];           
    public List<TradeModifier> TradeModifiers = [];  
 }
 
@@ -596,7 +596,7 @@ public class Province : ProvinceComposite
       }
    }
 
-   public List<Effect> Effects
+   public List<IElement> Effects
    {
       get => _data.ScriptedEffects;
       set
@@ -882,6 +882,8 @@ public class Province : ProvinceComposite
 
       if (!Enum.TryParse<ProvAttrSet>(name, true, out var setter))
       {
+         Effects.Add(new Content(value));
+         /*
          if (EffectParser.ParseScriptedEffect(name, value, out var effect))
          {
             Effects.Add(effect);
@@ -894,6 +896,7 @@ public class Province : ProvinceComposite
             return;
          }
          Globals.ErrorLog.Write($"Could not parse {name} to set attribute for province id {Id}");
+         */
          return;
       }
 

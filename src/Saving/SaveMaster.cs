@@ -3,6 +3,7 @@ using System.Text;
 using Editor.DataClasses.Misc;
 using Editor.Forms.Feature.SavingClasses;
 using Editor.Helper;
+using static Editor.Saving.ObjEditingStatus;
 
 namespace Editor.Saving
 {
@@ -18,17 +19,32 @@ namespace Editor.Saving
       {
          var names = EnumHelper.GetSaveableNames();
          _cache = new(names.Count);
-         foreach (var name in names) 
+         foreach (var name in names)
             _cache.Add(Enum.Parse<SaveableType>(name), 0);
       }
 
       public static void SaveSaveables(ICollection<Saveable> saveables, SaveableType saveableType = SaveableType.All, bool onlyModified = false)
       {
-         HashSet<PathObj> paths;
+
+         HashSet<PathObj> paths = [];
+
          if (onlyModified)
-             paths = [..saveables.Where(x => x.EditingStatus is ObjEditingStatus.Modified or ObjEditingStatus.Deleted).Select((x)=>x.Path)];
+            foreach (var saveable in saveables)
+            {
+               if (!(saveable.EditingStatus is Modified or Deleted))
+                  continue;
+               if (saveable.Path == PathObj.Empty)
+                  ManageEmptyPathObjects(ref paths, saveable);
+            }
          else
-            paths = [..saveables.Select((x)=>x.Path)];
+            foreach (var saveable in saveables)
+            {
+               // In case we try to save something which is not selected and the path is empty we will ignore for now
+               // TODO: Later there should be a different Empty object for new and vanilla empties which allows this differentiation
+               if (saveable.EditingStatus is not (Modified or Deleted) && saveable.Path == PathObj.Empty)
+                  continue;
+               ManageEmptyPathObjects(ref paths, saveable);
+            }
          SavePaths(ref paths, saveableType);
          MessageBox.Show("All files saved!", "Save", MessageBoxButtons.OK, MessageBoxIcon.Information);
       }
@@ -38,12 +54,16 @@ namespace Editor.Saving
          if (!onlyModified)
          {
             List<PathObj> toBeSaved = [];
+
+            if (NeedsToBeHandled.Contains(PathObj.Empty))
+               AddNewSaveables(saveableType, ref NeedsToBeHandled);
+
             foreach (var path in AllSaveableFiles.Keys)
             {
                var singleModData = AllSaveableFiles[path][0].WhatAmI();
                if ((saveableType & singleModData) == 0)
                   continue;
-               toBeSaved.Add(path);  
+               toBeSaved.Add(path);
             }
 
             foreach (var path in toBeSaved)
@@ -54,12 +74,17 @@ namespace Editor.Saving
                else
                   SaveFile(path);
                Globals.SaveableType &= ~singleModData;
-               _cache[singleModData] = 0;
             }
+
+            if (GetNumOfModifiedObjects() != 0)
+               throw new EvilActions("The cache value should be 0 here, since we just saved!");
+
+            NeedsToBeHandled.Clear();
 
             return;
          }
          SavePaths(ref NeedsToBeHandled, saveableType);
+         CheckEmptyCacheForCombinedSaveable(saveableType);
       }
 
       public static void SavePaths(ref HashSet<PathObj> localToBeHandled, SaveableType saveableType = SaveableType.All)
@@ -77,17 +102,15 @@ namespace Editor.Saving
             else
                SaveFile(path);
             // Remove the saved type from the still to save types
-            // TODO FIX
-
+            NeedsToBeHandled.Remove(path);
             if (_cache[singleModData] == 0)
             {
-               NeedsToBeHandled.Remove(path);
                Globals.SaveableType &= ~singleModData;
             }
             // The cache has to be always above 0
             else if (_cache[singleModData] < 0)
                throw new EvilActions("The cache value is below 0 this should never happen!");
-         }   
+         }
       }
 
       public static void AddNewSaveables(SaveableType saveableType, ref HashSet<PathObj> localToBeHandled)
@@ -199,18 +222,50 @@ namespace Editor.Saving
          NeedsToBeHandled.Add(path);
       }
 
-      public static void AddToBeHandled(Saveable saveable)
+      public static void RemoveFromToBeHandled(ICollection<Saveable> saveables)
       {
+         HashSet<PathObj> allPaths = [];
+         var count = 0;
+         foreach (var saveable in saveables)
+         {
+            if (saveable.EditingStatus is not (Modified or Deleted))
+            {
+               allPaths.Add(saveable.Path);
+               count++;
+            }
+         }
+
+         _cache[saveables.First().WhatAmI()] -= count;
+         
+         foreach (var path in allPaths)
+         {
+            foreach (var saveable in AllSaveableFiles[path])
+               if (saveable.EditingStatus is Modified or Deleted)
+                  goto pathLoop;
+            Debug.WriteLine($"removed {path} since it was not modified");
+            if (!NeedsToBeHandled.Remove(path))
+               throw new EvilActions("The path was not found in the NeedsToBeHandled list but was meant to be removed!");
+            pathLoop:
+            continue;
+         }
+      }
+
+      private static void ManageEmptyPathObjects(ref HashSet<PathObj> localToBeHandled, Saveable saveable)
+      {
+         var path = saveable.Path;
+         if (path != PathObj.Empty)
+         {
+            localToBeHandled.Add(path);
+            return;
+         }
          var fileNameKVP = saveable.GetFileName();
          var fileEnding = saveable.GetFileEnding();
          var defaultPath = saveable.GetDefaultFolderPath();
-         var path = saveable.Path;
-         if (path != PathObj.Empty)
-            NeedsToBeHandled.Add(path);
-         else if (!fileNameKVP.Value)
+         if (!fileNameKVP.Value)
          {
+            
             AddToDictionary(ref path, saveable);
-            NeedsToBeHandled.Add(path);
+            localToBeHandled.Add(path);
          }
          else
          {
@@ -232,7 +287,12 @@ namespace Editor.Saving
             AddToDictionary(ref path, saveable);
             saveable.SetPath(ref path);
          }
-         NeedsToBeHandled.Add(path);
+         localToBeHandled.Add(path);
+      }
+
+      public static void AddToBeHandled(Saveable saveable)
+      {
+         ManageEmptyPathObjects(ref NeedsToBeHandled, saveable);
          var type = saveable.WhatAmI();
          Globals.SaveableType |= type;
          _cache[type]++;
@@ -258,17 +318,17 @@ namespace Editor.Saving
                saveIndividually = item.GetSaveStringIndividually;
             }
             
-            if (item.EditingStatus == ObjEditingStatus.Modified)
+            if (item.EditingStatus == Modified)
                changed.Add(item);
-            else if (item.EditingStatus != ObjEditingStatus.Deleted)
+            else if (item.EditingStatus != Deleted)
                unchanged.Add(item);
 
-            if (item.EditingStatus is ObjEditingStatus.Modified or ObjEditingStatus.Deleted)
+            if (item.EditingStatus is Modified or Deleted)
             {
                _cache[saveabletype]--;
             }
 
-            item.EditingStatus = ObjEditingStatus.Unchanged;
+            item.EditingStatus = Unchanged;
          }
 
          if (saveIndividually)
@@ -393,5 +453,13 @@ namespace Editor.Saving
          return _cache.GetValueOrDefault(type, 0);
       }
 
+      public static void CheckEmptyCacheForCombinedSaveable(SaveableType type)
+      {
+         foreach (var kvp in _cache)
+         {
+            if ((type & kvp.Key) != 0 && kvp.Value != 0)
+                  throw new EvilActions("The cache value should be 0 here, since we just saved!");
+         }
+      }
    }
 }

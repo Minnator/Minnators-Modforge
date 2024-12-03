@@ -72,6 +72,7 @@ public static class ProvinceParser
          // Take any scope with its effects save them as a complex effect and thus put it back into the province on saving
          if (ScopeParser.IsAnyScope(block.Name) || EffectParser.IsScriptedEffect(block.Name))
          {
+            //province.Effects.Add(block);
             EffectFactory.CreateComplexEffect(block.Name, block.GetContent, EffectValueType.Complex);
             return;
          }
@@ -97,8 +98,11 @@ public static class ProvinceParser
                   province.TradeModifiers.Add(tradeMod);
                return;
             case "spawn_rebels":
+               province.Effects.Add(block);
+               /*
                if (EffectParser.ParseSpawnRebels(block.GetContent, out var rebelsEffect))
                   province.Effects.Add(rebelsEffect);
+               */
                return;
             default:
                Globals.ErrorLog.Write($"Could not parse date: {block.Name}");
@@ -158,5 +162,3 @@ public static class ProvinceParser
    }
 
 }
-
-public class AttributeParsingException(string message) : Exception(message);

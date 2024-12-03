@@ -101,8 +101,10 @@ namespace Editor.DataClasses.Commands
             if (!_flagSet)
                Globals.SaveableType &= ~test_saveable.WhatAmI();
             SetAllEditingStates(_previousState);
+            SaveMaster.RemoveFromToBeHandled(saveables);
          }
          SetAllPreviousStates(states);
+         
       }
 
       public virtual void Redo()
@@ -118,6 +120,7 @@ namespace Editor.DataClasses.Commands
             if (!_flagSet)
                Globals.SaveableType &= ~test_saveable.WhatAmI();
             SetAllEditingStates(_previousState);
+            SaveMaster.RemoveFromToBeHandled(saveables);
          }
          SetAllPreviousStates(states);
       }

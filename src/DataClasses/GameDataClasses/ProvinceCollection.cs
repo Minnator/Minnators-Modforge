@@ -135,18 +135,28 @@ public abstract class ProvinceCollection<T> : ProvinceComposite where T : Provin
       SetBounds();
    }
 
+   public virtual CAddProvinceCollectionGeneral<T> GetAddCommand(ProvinceCollection<T> collection, bool addToGlobal)
+   {
+      return new CAddProvinceCollection<T>(this, addToGlobal);
+   }
+
+   public virtual CRemoveProvinceCollectionGeneral<T> GetRemoveCommand(ProvinceCollection<T> collection, bool removeFromGlobal)
+   {
+      return new CRemoveProvinceCollection<T>(this, removeFromGlobal);
+   }
+
    public void NewAdd(T composite, bool addToGlobal = false, bool tryAddEventToHistory = true)
    {
       if (_subCollection.Contains(composite))
          return;
-      var command = new CAddProvinceCollection<T>(this, addToGlobal);
+      var command = GetAddCommand(this, addToGlobal);
       command.AddNewComposite(composite);
       ExecuteAndAdd(command, tryAddEventToHistory);
    }
 
    public void NewAddRange(ICollection<T> composites, bool addToGlobal = false, bool tryAddEventToHistory = true)
    {
-      var command = new CAddProvinceCollection<T>(this, addToGlobal);
+      var command = GetAddCommand(this, addToGlobal);
       foreach (var composite in composites)
       {
          if (_subCollection.Contains(composite))
@@ -235,6 +245,7 @@ public abstract class ProvinceComposite(string name, Color color) : Saveable// P
    public abstract ICollection<int> GetProvinceIds();
    public abstract Rectangle GetBounds();
    public abstract void SetBounds();
+
 
    public virtual ProvinceComposite GetFirstParentOfType(SaveableType type)
    {

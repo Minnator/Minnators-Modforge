@@ -4,6 +4,7 @@ using System.Text;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
+using Editor.Parser;
 using static Editor.Helper.ProvinceEnumHelper;
 
 namespace Editor.Saving
@@ -66,10 +67,8 @@ namespace Editor.Saving
          AddItem("culture", p.GetAttribute(ProvAttrGet.culture), ref sb);
          AddItem("religion", p.GetAttribute(ProvAttrGet.religion), ref sb);
          var capital = p.GetAttribute(ProvAttrGet.capital) as string;
-         if (capital!.StartsWith('\"'))
-            sb.AppendLine($"capital = {capital}");
-         else
-            sb.AppendLine($"capital = \"{capital}\"");
+         capital.TrimQuotes(out var trimmed);
+         SavingUtil.AddQuotedString(0, trimmed, "capital", ref sb);
          sb.AppendLine();
          AddItem("hre", p.GetAttribute(ProvAttrGet.hre), ref sb);
          AddItem("is_city", p.GetAttribute(ProvAttrGet.is_city), ref sb);
@@ -83,7 +82,8 @@ namespace Editor.Saving
          AddItem("native_ferocity", p.GetAttribute(ProvAttrGet.native_ferocity), ref sb);
          AddItem("native_hostileness", p.GetAttribute(ProvAttrGet.native_hostileness), ref sb);
          AddItem("tribal_owner", p.GetAttribute(ProvAttrGet.tribal_owner), ref sb);
-         AddCollection("add_building", p.Buildings, ref sb);
+         foreach (var building in p.Buildings)
+            AddItem(building, "yes", ref sb);
          AddCollection("add_claim", p.GetAttribute(ProvAttrGet.claims), ref sb);
          AddCollection("add_permanent_claim", p.GetAttribute(ProvAttrGet.permanent_claims), ref sb);
          sb.AppendLine();
@@ -91,7 +91,7 @@ namespace Editor.Saving
          sb.AppendLine();
          AddCollection("add_province_triggered_modifier", p.ProvinceTriggeredModifiers, ref sb);
          sb.AppendLine();
-         AddEffects(ref sb);
+         AddEffects(p, ref sb);
          // TODO complete complexer saving
          // TradeCompanyInvestments
       }
@@ -99,9 +99,9 @@ namespace Editor.Saving
       /// <summary>
       /// Writes all effects to the string builder.
       /// </summary>
-      private static void AddEffects(ref StringBuilder sb)
+      private static void AddEffects(Province p, ref StringBuilder sb)
       {
-         // TODO EFFECT SAVING
+         SavingUtil.AddElements(0, p.Effects, ref sb);
       }
 
       /// <summary>
@@ -144,9 +144,6 @@ namespace Editor.Saving
                .AppendLine("}");
          }
 
-         // Effects
-         foreach (var effect in province.Effects)
-            sb.AppendLine(effect.GetEffectString(0));
       }
 
       /// <summary>
@@ -201,7 +198,9 @@ namespace Editor.Saving
                   break;
                sb.AppendLine($"{name} = {t.ToString()}");
                break;
-            default:
+            case string s:
+               if (string.IsNullOrEmpty(s))
+                  break;
                sb.AppendLine($"{name} = {value.ToString()}");
                break;
          }

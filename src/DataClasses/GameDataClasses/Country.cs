@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Forms;
+using Editor.DataClasses.Commands;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Parser;
@@ -570,6 +571,16 @@ public class Country : ProvinceCollection<Province>
    }
 
    public override void OnPropertyChanged(string? propertyName = null) { }
+
+   public override CAddProvinceCollectionGeneral<Province> GetAddCommand(ProvinceCollection<Province> collection, bool addToGlobal)
+   {
+      return new CAddToCountryProvinceCollection(collection, addToGlobal);
+   }
+
+   public override CRemoveCountryProvinceCollection<Province> GetRemoveCommand(ProvinceCollection<Province> collection, bool addToGlobal)
+   {
+      return new (collection, addToGlobal);
+   }
 
    public override void InternalAdd(Province composite)
    {
