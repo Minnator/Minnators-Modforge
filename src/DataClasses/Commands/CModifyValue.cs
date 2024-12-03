@@ -10,6 +10,7 @@ namespace Editor.DataClasses.Commands
       private readonly bool _increase;
       private readonly int _value;
       private readonly List<Province> _provinces = [];
+      private readonly SaveablesCommandHelper _provinceSaveables;
       private readonly ProvAttrGet _attribute;
       private readonly ProvAttrSet _setter;
 
@@ -18,6 +19,7 @@ namespace Editor.DataClasses.Commands
          if (provinces.Count == 0)
             return;
          _provinces = provinces;
+         _provinceSaveables = new([.. provinces]);
          _attribute = attribute;
          _setter = ps;
          _value = value;
@@ -29,28 +31,13 @@ namespace Editor.DataClasses.Commands
 
       public void Execute()
       {
-         foreach (var province in _provinces)
-         {
-            var attributeValue = province.GetAttribute(_attribute);
-
-            var attr = attributeValue switch
-            {
-               int intValue => intValue,
-               float floatValue => (int)floatValue,
-               _ => throw new InvalidOperationException($"Cannot convert attribute {_attribute} to int or float.")
-            };
-
-            if (_increase)
-               attr += _value;
-            else
-               attr -= _value;
-
-            province.SetAttribute(_setter, attr.ToString());
-         }
+         _provinceSaveables.Execute();
+         InternalExecute();
       }
 
       public void Undo()
       {
+         _provinceSaveables.Undo();
          foreach (var province in _provinces)
          {
             object? attributeValue = province.GetAttribute(_attribute);
@@ -80,7 +67,30 @@ namespace Editor.DataClasses.Commands
 
       public void Redo()
       {
-         Execute();
+         _provinceSaveables.Redo();
+         InternalExecute();
+      }
+
+      private void InternalExecute()
+      {
+         foreach (var province in _provinces)
+         {
+            var attributeValue = province.GetAttribute(_attribute);
+
+            var attr = attributeValue switch
+            {
+               int intValue => intValue,
+               float floatValue => (int)floatValue,
+               _ => throw new InvalidOperationException($"Cannot convert attribute {_attribute} to int or float.")
+            };
+
+            if (_increase)
+               attr += _value;
+            else
+               attr -= _value;
+
+            province.SetAttribute(_setter, attr.ToString());
+         }
       }
 
       public string GetDescription()

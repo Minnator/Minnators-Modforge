@@ -9,24 +9,33 @@ using static Editor.Saving.SavingUtil;
 
 namespace Editor.DataClasses.GameDataClasses;
 
-public class Terrain : Saveable, INotifyPropertyChanged
+public class Terrain : ProvinceCollection<Province>, INotifyPropertyChanged
 {
 
-   public Terrain(string name, ObjEditingStatus status = ObjEditingStatus.Modified)
+   public Terrain(string name, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(name, color, status)
    {
-      Name = name;
       base.EditingStatus = status;
-      TerrainOverrides = new(this);
+      SubCollection = [];
    }
 
-   public Terrain(string name, ref PathObj path) : this(name, ObjEditingStatus.Unchanged)
+   public Terrain(string name, Color color, ref PathObj path) : this(name, color, ObjEditingStatus.Unchanged)
    {
       SetPath(ref path);
    }
 
    public static EventHandler<Province> OnTerrainChanged = delegate { };
-   public string Name { get; set; }
-   public Color Color { get; set; } = Color.DimGray;
+
+   private EventHandler<ProvinceComposite> ColorEvent = delegate { };
+   public override void ColorInvoke(ProvinceComposite composite)
+   {
+      ColorEvent.Invoke(this, composite);
+   }
+
+   public override void AddToColorEvent(EventHandler<ProvinceComposite> handler)
+   {
+      ColorEvent += handler;
+   }
+
    public string SoundType = string.Empty;
    public string Type = string.Empty;
    public bool IsWater = false;
@@ -37,7 +46,10 @@ public class Terrain : Saveable, INotifyPropertyChanged
 
    public List<ISaveModifier> Modifiers = [];
 
-   public ObservableHashSet<Province> TerrainOverrides;
+   public static Terrain GetTerrainFroString(string val)
+   {
+      return Globals.Terrains.First(ter => ter.Name.Equals(val));
+   }
 
    public override bool GetSaveStringIndividually => false;
 
@@ -97,7 +109,7 @@ public class Terrain : Saveable, INotifyPropertyChanged
       AddFloat(tabs, MovementCostMultiplier,"movement_cost", ref sb);
       AddModifiers(tabs, Modifiers, ref sb);
       AddFloat(tabs, NationDesignerCostMultiplier, "nation_designer_cost_multiplier", ref sb);
-      AddFormattedProvinceList(tabs, TerrainOverrides, "terrain_override", ref sb);
+      AddFormattedProvinceList(tabs, SubCollection, "terrain_override", ref sb);
       CloseBlock(ref tabs, ref sb);
    }
 
@@ -150,37 +162,28 @@ public class Terrain : Saveable, INotifyPropertyChanged
       return "##################################################################\r\n### Terrain Categories\r\n###\r\n### Terrain types: plains, mountains, hills, desert, artic, forest, jungle, marsh, pti\r\n### Types are used by the game to apply certain bonuses/maluses on movement/combat etc.\r\n###\r\n### Sound types: plains, forest, desert, sea, jungle, mountains\r\n";
    }
 
-   public static Terrain Empty => new("undefined", ObjEditingStatus.Immutable);
+   public new static Terrain Empty => new("undefined", System.Drawing.Color.Empty, ObjEditingStatus.Immutable);
 
-   public void SetOverride(Province p)
+   public void SetOverride(ICollection<Province> p)
    {
-      foreach (var ter in Globals.Terrains.Where(ter => ter.TerrainOverrides.Contains(p))) 
-         ter.TerrainOverrides.Remove(p);
-      TerrainOverrides.Add(p);
-      OnPropertyChanged(nameof(TerrainOverrides));
-      OnTerrainChanged.Invoke(this, p);
+      NewAddRange(p);
+      OnPropertyChanged(nameof(SubCollection));
+      foreach (var province in p)
+         OnTerrainChanged.Invoke(this, province);
    }
-
-   public void RemoveOverride(Province p)
+   
+   public static void RemoveFromAll(ICollection<Province> p)
    {
-      TerrainOverrides.Remove(p);
-      OnPropertyChanged(nameof(TerrainOverrides));
-      OnTerrainChanged.Invoke(this, p);
-   }
+      foreach (var ter in Globals.Terrains) // TODO: Remove curse from this code
+         ter.NewRemoveRange(p);
 
-   public static void RemoveFromAll(Province p)
-   {
-      foreach (var ter in Globals.Terrains) 
-         ter.TerrainOverrides.Remove(p);
-
-      OnTerrainChanged.Invoke(null, p);
+      foreach (var province in p)
+         OnTerrainChanged.Invoke(null, province);
    }
 
 
    public override bool Equals(object? obj)
    {
-      if (obj == null) return false;
-
       if (obj is Terrain terrain)
          return Name == terrain.Name;
 
@@ -203,7 +206,27 @@ public class Terrain : Saveable, INotifyPropertyChanged
    }
 
    #endregion
-      
+
+   public override void Invoke(ProvinceCollectionEventArguments<Province> eventArgs)
+   {
+      ItemsModified.Invoke(this, eventArgs);
+   }
+
+   public static EventHandler<ProvinceCollectionEventArguments<Province>> ItemsModified = delegate { };
+   public override void AddToEvent(EventHandler<ProvinceCollectionEventArguments<Province>> eventHandler)
+   {
+      ItemsModified += eventHandler;
+   }
+
+   public override void RemoveGlobal()
+   {
+      Globals.Terrains.Remove(this);
+   }
+
+   public override void AddGlobal()
+   {
+      Globals.Terrains.Add(this);   
+   }
 }
 
 #region Terrain Definitions

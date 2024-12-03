@@ -70,11 +70,13 @@ public class LocObject : Saveable
    public string Key { get; set; }
    private string _value;
 
+   public void SilentSet(string value) => _value = value;
+
    public string Value
    {
       get => _value;
       set {
-         if (value == _value)
+         if (value.Equals(_value))
             return;
          _value = value;
          EditingStatus = ObjEditingStatus.Modified;

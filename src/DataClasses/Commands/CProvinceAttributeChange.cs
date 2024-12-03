@@ -28,6 +28,8 @@ namespace Editor.DataClasses.Commands
             var attr = p.GetAttribute(_attribute);
             if (attr == null!)
                Debugger.Break();
+            else if (attr is bool b)
+               _oldValues.Add(b ? "yes" : "no");
             else
                _oldValues.Add(attr.ToString()!);
          }

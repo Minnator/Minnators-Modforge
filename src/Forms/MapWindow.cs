@@ -489,17 +489,11 @@ namespace Editor.Forms
 
             if (val.Equals(string.Empty))
             {
-               foreach (var p in args.Provinces)
-                  Terrain.RemoveFromAll(p);
+               Terrain.RemoveFromAll(args.Provinces);
             }
             else
             {
-               foreach (var p in args.Provinces)
-                  foreach (var ter in Globals.Terrains.Where(ter => ter.Name.Equals(val)))
-                  {
-                     ter.SetOverride(p);
-                     break;
-                  }
+               Terrain.GetTerrainFroString(val).SetOverride(args.Provinces);
             }
          };
          MisProvinceData.Controls.Add(_terrainComboBox, 1, 5);
@@ -1728,8 +1722,8 @@ namespace Editor.Forms
          var sb = new StringBuilder();
          foreach (var terrain in Globals.Terrains)
          {
-            sb.AppendLine($"{terrain.Name} : {terrain.TerrainOverrides.Count}");
-            foreach (var or in terrain.TerrainOverrides)
+            sb.AppendLine($"{terrain.Name} : {terrain.SubCollection.Count}");
+            foreach (var or in terrain.SubCollection)
             {
                sb.Append($"{or.Id}, ");
             }

@@ -7,10 +7,12 @@ namespace Editor.DataClasses.Commands
    {
       private readonly bool _add;
       private readonly string _building;
+      private readonly SaveablesCommandHelper _provinceSaveables;
       private readonly List<Province> _provinces;
       public CAddBuilding(List<Province> provinces, bool add, string building, bool executeOnInit = true)
       {
          _provinces = provinces;
+         _provinceSaveables = new([.. provinces]);
          _add = add;
          _building = building;
 
@@ -21,19 +23,27 @@ namespace Editor.DataClasses.Commands
 
       public void Execute()
       {
-         foreach (var province in _provinces) 
-            province.SetAttribute(_building, _add ? "yes" : "no");
+         _provinceSaveables.Execute();
+         InternalExecute();
       }
 
       public void Undo()
       {
+         _provinceSaveables.Undo();
          foreach (var province in _provinces)
             province.SetAttribute(_building, _add ? "no" : "yes");
       }
 
       public void Redo()
       {
-         Execute();
+         _provinceSaveables.Redo();
+         InternalExecute();
+      }
+
+      private void InternalExecute()
+      {
+         foreach (var province in _provinces)
+            province.SetAttribute(_building, _add ? "yes" : "no");
       }
 
       public string GetDescription()

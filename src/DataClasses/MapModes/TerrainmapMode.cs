@@ -9,6 +9,7 @@ namespace Editor.DataClasses.MapModes
       public TerrainMapMode()
       {
          Terrain.OnTerrainChanged += UpdateComposite<Province>;
+         Terrain.ItemsModified += UpdateProvinceCollection;
       }
 
       public override MapModeType GetMapModeName()

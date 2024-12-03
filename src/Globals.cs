@@ -229,7 +229,6 @@ public static class Globals
       get => _saveableType;
       set
       {
-         
          if (value == 0)
          {
             if (MapWindow.Text.EndsWith('*'))
@@ -294,11 +293,11 @@ public static class Globals
 // - [x] Check if province is selected by color of the pixels instead of bounds or center
 // - [x] River fixes //UI
 // - [x] Province ADJ localization fix
-// - [x] Language in quicksettings fix
+// - [x] Language in quick settings fix
 // - [x] File saving popup for saving map mode
 // - [x] 3/2 letters prefix from mods
 // - [x] Support deleting in saving
-// - [x] Toolstip customizer tooltips and fix column width
+// - [x] ToolStrip customizer tooltips and fix column width
 // - [x] Logging and Crash Reporter ==> Map mode crashes catchen und reporten and user so that it restarts
 // - [x] When searching select the results
 // - [x] Settings window / saving
@@ -315,14 +314,16 @@ public static class Globals
 // - [x] Fix Settings not saving when modified
 // - [x] Button to add a new Country
 // - [x] Warning that it may corrupt files if there are error
-// - [ ] Fix province saving
 // - [x] Save all and verify all save options
-// - [x] Country Collection Editing
-// - [ ] Verify that all province modifications set the ObjEditingStatus
+// - [-] Country Collection Editing
+// - [ ] Fix province saving
+// - [x] Verify that all province modifications set the ObjEditingStatus
 // - [x] Country saving broken
 // - [x] Country Tags editing
 
 // TODO LIST Until Alpha 1.1
+// - [ ] Smart Gui reloading
+// - [ ] Rewrite Province.cs, Province Command and Gui
 // - [ ] Sounds for buttons and actions
 // - [ ] UnitType loading optimization
 // - [ ] Loading bar when saving using threads

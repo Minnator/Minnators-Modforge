@@ -43,9 +43,7 @@ public class ProvinceData()
    public string Capital = string.Empty;                    //.
    public string Culture = string.Empty;                    //.
    public string Religion = string.Empty;                   //.
-   public Area Area = Area.Empty;
    public string TradeGood = "";                            //.
-   public string Continent = string.Empty;                  //! not in province editing interface
    public string LatentTradeGood = string.Empty;            //+ ProvinceHistoryEntry editing interface
    public string ReformationCenter = string.Empty;          //+ ProvinceHistoryEntry editing interface
    public List<Tag> Claims = [];                            //.
@@ -158,7 +156,7 @@ public class Province : ProvinceComposite
       {
          foreach (var terrain in Globals.Terrains)
          {
-            if (terrain.TerrainOverrides.Contains(this))
+            if (terrain.SubCollection.Contains(this))
                return terrain;
          }
 
@@ -665,7 +663,6 @@ public class Province : ProvinceComposite
    /// </summary>
    public void InitializeInitial()
    {
-      ProvinceData.Area = GetArea();
       ProvinceData.Claims = Claims;
       ProvinceData.PermanentClaims = PermanentClaims;
       ProvinceData.Cores = Cores;

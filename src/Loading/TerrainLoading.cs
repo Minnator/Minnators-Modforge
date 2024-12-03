@@ -51,7 +51,7 @@ public static class TerrainLoading
    {
       foreach (var blk in block.GetBlockElements)
       {
-         Terrain terrain = new(blk.Name, ref path);
+         Terrain terrain = new(blk.Name, Color.Empty, ref path);
          ParseTerrainContent(blk.GetContent, ref terrain);
 
          foreach (var innerBlock in blk.GetBlockElements)
@@ -74,7 +74,7 @@ public static class TerrainLoading
                         Globals.ErrorLog.Write($"Failed to find province: {id} in {terrain.Name} in terrain_override");
                         continue;
                      }
-                     terrain.TerrainOverrides.Add(province);
+                     terrain.Add(province);
                   }
                   break;
             }

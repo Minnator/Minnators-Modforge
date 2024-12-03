@@ -8,6 +8,11 @@ namespace Editor.DataClasses.MapModes
    {
       public override bool IsLandOnly => true;
 
+      public TerrainOverrides()
+      {
+         Terrain.ItemsModified += UpdateProvinceCollection;
+      }
+
       public override MapModeType GetMapModeName()
       {
          return MapModeType.TerrainOverrides;
@@ -17,7 +22,7 @@ namespace Editor.DataClasses.MapModes
       {
          foreach (var terrain in Globals.Terrains)
          {
-            if (terrain.TerrainOverrides.Contains(id))
+            if (terrain.SubCollection.Contains(id))
                return terrain.Color.ToArgb();
          }
 
@@ -28,7 +33,7 @@ namespace Editor.DataClasses.MapModes
       {
          foreach (var terrain in Globals.Terrains)
          {
-            if (terrain.TerrainOverrides.Contains(provinceId))
+            if (terrain.SubCollection.Contains(provinceId))
                return $"{Localisation.GetLoc(terrain.Name)} ({terrain.Name})";
          }
 

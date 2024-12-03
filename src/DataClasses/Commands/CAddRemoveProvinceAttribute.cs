@@ -8,6 +8,7 @@ namespace Editor.DataClasses.Commands
    public class CAddRemoveProvinceAttribute : ICommand
    {
       private readonly List<Province> _provinces;
+      private readonly SaveablesCommandHelper _provinceSaveables;
       private readonly bool _add;
       private readonly ProvAttrGet _attribute;
       private readonly ProvAttrSet _setter;
@@ -17,6 +18,7 @@ namespace Editor.DataClasses.Commands
       public CAddRemoveProvinceAttribute(List<Province> provinces, string value, ProvAttrGet pa, ProvAttrSet ps, ProvAttrSet pr, bool add, bool executeOnInit = true)
       {
          _provinces = provinces;
+         _provinceSaveables = new([.. provinces]);
          _value = value;
          _attribute = pa;
          _setter = ps;
@@ -29,19 +31,27 @@ namespace Editor.DataClasses.Commands
 
       public void Execute()
       {
-         foreach (var province in _provinces) 
-            province.SetAttribute(_setter, _value);
+         _provinceSaveables.Execute();
+         InternalExecute();
       }
 
       public void Undo()
       {
+         _provinceSaveables.Undo();
          foreach (var province in _provinces) 
             province.SetAttribute(_remover, _value);
       }
 
       public void Redo()
       {
-         Execute();
+         _provinceSaveables.Redo();
+         InternalExecute();
+      }
+
+      private void InternalExecute()
+      {
+         foreach (var province in _provinces) 
+            province.SetAttribute(_setter, _value);
       }
 
       public string GetDescription()
