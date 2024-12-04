@@ -325,7 +325,8 @@ public static class Globals
 // - [ ] Fix Empties in TagBoxes
 // - [ ] Fix mass editing loc
 // - [x] Fix Unneeded quotes on capital
-// - [ ] Fix stupid text boxes
+// - [x] Fix stupid text boxes
+// - [x] Fix Localisation behaving weird
 // - [ ] Fix government reforms not saveable
 // - [x] Save file at popup in center of screen
 // - [ ] Fix Saving state getting lost on multiple undos after saving

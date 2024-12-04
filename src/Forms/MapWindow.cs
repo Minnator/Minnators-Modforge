@@ -443,9 +443,19 @@ namespace Editor.Forms
          {
             LocObjectModifications.ModifyIfExistsOtherwiseAdd(LocalisationLabel.Text, LocalisationTextBox.Text);
          };
+         LocalisationTextBox.KeyDown += (_, args) =>
+         {
+            if (args.KeyCode == Keys.Enter)
+               LocObjectModifications.ModifyIfExistsOtherwiseAdd(LocalisationLabel.Text, LocalisationTextBox.Text);
+         };
          ProvAdjTextBox.LostFocus += (_, _) =>
          {
             LocObjectModifications.ModifyIfExistsOtherwiseAdd(ProvAdjLabel.Text, ProvAdjTextBox.Text);
+         };
+         ProvAdjTextBox.KeyDown += (_, args) =>
+         {
+            if (args.KeyCode == Keys.Enter)
+               LocObjectModifications.ModifyIfExistsOtherwiseAdd(ProvAdjLabel.Text, ProvAdjTextBox.Text);
          };
 
          CoresAndClaimLayoutPanel.Controls.Add(_permanentClaims, 0, 0);
@@ -583,6 +593,7 @@ namespace Editor.Forms
          TradePanel.Controls.Add(_extraCostNumeric, 1, 2);
 
          CapitalNameTextBox.Leave += ProvinceEditingEvents.OnCapitalNameChanged;
+         SetFinishEditingOnEnter(CapitalNameTextBox, ProvinceEditingEvents.OnCapitalNameChanged);
 
          IsCityCheckBox.CheckedChanged += ProvinceEditingEvents.OnIsCityChanged;
          IsHreCheckBox.CheckedChanged += ProvinceEditingEvents.OnIsHreChanged;
@@ -857,6 +868,15 @@ namespace Editor.Forms
          EditingModeLabel.Text = Selection.Count <= 1
             ? "Idle Mode: Single Province"
             : $"Idle Mode: Multi Province ({Selection.Count})";
+      }
+
+      private void SetFinishEditingOnEnter(TextBox tb, Action<object?, EventArgs> handler)
+      {
+         tb.KeyDown += (sender, e) =>
+         {
+            if (e.KeyCode == Keys.Enter) 
+               handler(sender, e);
+         };
       }
 
       private void MapWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -1408,6 +1428,10 @@ namespace Editor.Forms
          MiscTLP.Controls.Add(_historicFriends, 0, 4);
          MiscTLP.Controls.Add(_estatePrivileges, 0, 5);
 
+         CountryLoc.LostFocus += CountryGuiEvents.CountryNameLoc_Changed;
+         SetFinishEditingOnEnter(CountryLoc, CountryGuiEvents.CountryNameLoc_Changed);
+         CountryADJLoc.LostFocus += CountryGuiEvents.CountryAdjectiveLoc_Changed;
+         SetFinishEditingOnEnter(CountryADJLoc, CountryGuiEvents.CountryAdjectiveLoc_Changed);
 
       }
 

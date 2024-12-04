@@ -3222,8 +3222,6 @@
       private Label label27;
       private Label label28;
       private Label label29;
-      private TextBox CountryLoc;
-      private TextBox CountryADJLoc;
       private Label label31;
       private Label label33;
       private Label label32;
@@ -3260,6 +3258,8 @@
       private ToolStripMenuItem fileNamesToolStripMenuItem;
       private ToolStripMenuItem emptyCOlorInCountryToolStripMenuItem;
       private ToolStripMenuItem iMBTESTToolStripMenuItem;
+      public TextBox CountryLoc;
+      public TextBox CountryADJLoc;
    }
 }
 
