@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.Parser;
@@ -116,20 +117,13 @@ namespace Editor.Loading
             case "incoming":
                var kvp = Parsing.GetKeyValueList(block.GetContent);
                for (var index = 0; index < kvp.Count; index++)
-               {
                   if (kvp[index].Key.Equals("name"))
                      node.Incoming.Add(kvp[index].Value);
-               }
                break;
             case "outgoing":
-               var kvp2 = Parsing.GetKeyValueList(block.GetContent);
-               for (var index = 0; index < kvp2.Count; index++)
-                  if (kvp2[index].Key.Equals("name"))
-                  {
-                     kvp2[index].Value.TrimQuotes(out var name);
-                     ParseOutgoing(ref node, ref block, name);
-                  }
-               
+               foreach (var kvPair in Parsing.GetKeyValueList(block.GetContent))
+                  if (kvPair.Key.Equals("name"))
+                     ParseOutgoing(ref node, ref block, kvPair.Value.TrimQuotes());
                break;
             default:
                Globals.ErrorLog.Write($"Forbidden block in tradenode: {block.Name}");

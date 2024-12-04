@@ -72,8 +72,7 @@ namespace Editor.Loading
                   }
                   if (kvps[i].Key == "picture")
                   {
-                     kvps[i].Value.TrimQuotes(out var pic);
-                     modifier.Picture = pic;
+                     modifier.Picture = kvps[i].Value.TrimQuotes();
                      continue;
                   }
 

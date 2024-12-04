@@ -66,9 +66,7 @@ namespace Editor.Saving
          sb.AppendLine();
          AddItem("culture", p.GetAttribute(ProvAttrGet.culture), ref sb);
          AddItem("religion", p.GetAttribute(ProvAttrGet.religion), ref sb);
-         var capital = p.GetAttribute(ProvAttrGet.capital) as string;
-         capital.TrimQuotes(out var trimmed);
-         SavingUtil.AddQuotedString(0, trimmed, "capital", ref sb);
+         SavingUtil.AddQuotedString(0, p.GetAttribute(ProvAttrGet.capital).ToString()!, "capital", ref sb);
          sb.AppendLine();
          AddItem("hre", p.GetAttribute(ProvAttrGet.hre), ref sb);
          AddItem("is_city", p.GetAttribute(ProvAttrGet.is_city), ref sb);

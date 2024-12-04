@@ -67,12 +67,21 @@ namespace Editor.Loading
 
                foreach (var kvp in kvps)
                {
-                  if (kvp.Key.Equals("name"))
-                     kvp.Value.TrimQuotes(out name);
-                  else if (kvp.Key.Equals("version"))
-                     kvp.Value.TrimQuotes(out version);
-                  else if (kvp.Key.Equals("supported_version")) 
-                     kvp.Value.TrimQuotes(out supportedVersion);
+                  switch (kvp.Key)
+                  {
+                     case "name":
+                        name = kvp.Value.TrimQuotes();
+                        break;
+                     case "version":
+                        version = kvp.Value.TrimQuotes();
+                        break;
+                     case "supported_version":
+                        supportedVersion = kvp.Value.TrimQuotes();
+                        break;
+                     default:
+                        Globals.ErrorLog.Write($"Unknown Key in Descriptor File: {kvp.Key}");
+                        break;
+                  }
                }
             }
          }

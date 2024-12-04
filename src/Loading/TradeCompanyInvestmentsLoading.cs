@@ -100,8 +100,7 @@ namespace Editor.Loading
                   tci.Cost = (int)cost;
                   break;
                case "sprite":
-                  kvp.Value.TrimQuotes(out var sprite);
-                  tci.Sprite = sprite;
+                  tci.Sprite = kvp.Value.TrimQuotes();
                   break;
                default:
                   Globals.ErrorLog.Write($"Unknown Attribute in <{content}>: {kvp.Key}");

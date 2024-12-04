@@ -398,14 +398,7 @@ public static partial class Parsing
 
    public static List<KeyValuePair<string, string>> GetKeyValueListWithoutQuotes(string value)
    {
-      var kvps = GetKeyValueList(ref value);
-      var result = new List<KeyValuePair<string, string>>();
-      foreach (var kvp in kvps)
-      {
-         kvp.Value.TrimQuotes(out var trimmed);
-         result.Add(new(kvp.Key, trimmed));
-      }
-      return result;
+      return GetKeyValueList(ref value).Select(kvp => new KeyValuePair<string, string>(kvp.Key, kvp.Value.TrimQuotes())).ToList();
    }
 
    public static List<Point> GetPointList(string value)
@@ -586,20 +579,16 @@ public static partial class Parsing
                person.CountryOfOrigin = val;
                break;
             case "name":
-               val.TrimQuotes(out var trim1);
-               person.Name = trim1;
+               person.Name = val.TrimQuotes();
                break;
             case "monarch_name":
-               val.TrimQuotes(out var trim2);
-               person.MonarchName = trim2;
+               person.MonarchName = val.TrimQuotes();
                break;
             case "dynasty":
-               val.TrimQuotes(out var trim);
-               person.Dynasty = trim;
+               person.Dynasty = val.TrimQuotes();
                break;
             case "culture":
-               val.TrimQuotes(out var trimmed);
-               person.Culture = trimmed;
+               person.Culture = val.TrimQuotes();
                break;
             case "religion":
                person.Religion = val;
@@ -670,8 +659,7 @@ public static partial class Parsing
          switch (kv.Key.ToLower())
          {
             case "name":
-               kv.Value.TrimQuotes(out var trimmed);
-               leader.Name = trimmed;
+               leader.Name = kv.Value.TrimQuotes();
                break;
             case "fire":
                if (int.TryParse(kv.Value, out var fire))
@@ -856,27 +844,33 @@ public static partial class Parsing
             Globals.ErrorLog.Write($"Error: Illegal Content found in {c.Value}");
             return false;
          }
-         elementContent[1].Trim().TrimQuotes(out name);
+         elementContent[1] = elementContent[1].TrimQuotes();
       }
       tn = new(name, trigger);
       return true;
    }
 
-   public static bool TrimQuotes(this string str, out string trimmed)
+   /// <summary>
+   /// Trims quotes (single or double) from the start and end of the string.
+   /// </summary>
+   /// <param name="input">The input string.</param>
+   /// <param name="trim">If ture the string is also trimmed before removing quotes</param>
+   /// <returns>The trimmed string.</returns>
+   public static string TrimQuotes(this string input, bool trim = true)
    {
-      trimmed = string.Empty;
-      if (str.Length < 2)
+      if (string.IsNullOrEmpty(input))
+         return input;
+
+      if (trim)
+         input = input.Trim();
+
+      if (input.Length >= 2 &&
+          ((input[0] == '"' && input[^1] == '"') ||
+           (input[0] == '\'' && input[^1] == '\'')))
       {
-         trimmed = str;
-         return false;
+         return input[1..^1];
       }
-      if (str[0] == '"' && str[^1] == '"')
-      {
-         trimmed = str[1..^1];
-         return true;
-      }
-      trimmed = str;
-      return false;
+      return input;
    }
 
    [GeneratedRegex(@"\s*(\d+)")]
