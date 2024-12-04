@@ -92,7 +92,7 @@ namespace Editor.Forms
 
          if (StartScreen != null)
          {
-            // Center the new form on the StartScreen
+            // Center the new form on the StartScreen; Cannot use StartPosition.CenterScreen because it centers on the current screen not the screen it was started on
             var screen = Globals.MapWindow.StartScreen;
             if (screen != null)
                Location = new(screen.Bounds.X + (screen.Bounds.Width - Width) / 2, screen.Bounds.Y + (screen.Bounds.Height - Height) / 2);
@@ -897,9 +897,9 @@ namespace Editor.Forms
          _savingButtonsToolTip.SetToolTip(SaveCurrentSelectionButton, $"Save selection ({Selection.Count})");
       }
 
-      private static void OnDateChanged(object? sender, EventArgs e)
+      private static void OnDateChanged(object? sender, Date date)
       {
-         ProvinceHistoryManager.LoadDate(Globals.Date);
+         ProvinceHistoryManager.LoadDate(date);
       }
 
       public void UpdateHoveredInfo(Province? province)

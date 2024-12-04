@@ -5,9 +5,44 @@ namespace Editor.DataClasses.Misc
 {
    public partial class Date
    {
-      public short Year => _year;
-      public byte Month => _month;
-      public byte Day => _day;
+      public short Year
+      {
+         get => _year;
+         set
+         {
+            if (_year == value)
+               return;
+            _year = value;
+            OnYearChanged(this, value);
+            OnDateChanged.Invoke(this, this);
+         }
+      }
+
+      public byte Month
+      {
+         get => _month;
+         set
+         {
+            if (_month == value)
+               return;
+            _month = value;
+            OnMonthChanged(this, value);
+            OnDateChanged.Invoke(this, this);
+         }
+      }
+
+      public byte Day
+      {
+         get => _day;
+         set
+         {
+            if (_day == value)
+               return;
+            _day = value;
+            OnDayChanged(this, value);
+            OnDateChanged.Invoke(this, this);
+         }
+      }
 
       private static readonly Regex DateRegex = DateRegexGeneration();
       private short _year;
@@ -15,6 +50,11 @@ namespace Editor.DataClasses.Misc
       private byte _day;
 
       public const int DAYS_IN_YEAR = 365;
+
+      public EventHandler<int> OnYearChanged = delegate { };
+      public EventHandler<int> OnMonthChanged = delegate { };
+      public EventHandler<int> OnDayChanged = delegate { };
+      public EventHandler<Date> OnDateChanged = delegate { };
 
       [GeneratedRegex(@"(?<year>-?\d{1,4}).(?<month>\d{1,2}).(?<day>\d{1,2})")]
       private static partial Regex DateRegexGeneration();
@@ -32,6 +72,14 @@ namespace Editor.DataClasses.Misc
       public static Date MaxValue => new(short.MaxValue, 12, 31);
       [Browsable(false)]
       public static Date Empty => new(0, 0, 0);
+
+      public void CopyDate(Date date2)
+      {
+         Year = date2.Year;
+         Month = date2.Month;
+         Day = date2.Day;
+      }
+
 
       public static bool TryParseDate(string str, out Date date)
       {
@@ -69,22 +117,22 @@ namespace Editor.DataClasses.Misc
          while (days > 0)
          {
             var daysInMonth = DaysInMonth(Month);
-            if (_day + days <= daysInMonth)
+            if (Day + days <= daysInMonth)
             {
-               _day += (byte)days;
+               Day += (byte)days;
                return this;
             }
 
-            days -= daysInMonth - _day - 1;
-            _day = 1;
-            if (_month == 12)
+            days -= daysInMonth - Day - 1;
+            Day = 1;
+            if (Month == 12)
             {
-               _month = 1;
-               _year++;
+               Month = 1;
+               Year++;
             }
             else
             {
-               _month++;
+               Month++;
             }
          }
          return this;
@@ -94,22 +142,22 @@ namespace Editor.DataClasses.Misc
       {
          while (months > 0)
          {
-            if (_month + months <= 12)
+            if (Month + months <= 12)
             {
-               _month += (byte)months;
+               Month += (byte)months;
                return this;
             }
 
-            months -= 12 - _month;
-            _month = 1;
-            _year++;
+            months -= 12 - Month;
+            Month = 1;
+            Year++;
          }
          return this;
       }
 
       public Date AddYears(int years)
       {
-         _year += (short)years;
+         Year += (short)years;
          return this;
       }
 
@@ -312,7 +360,7 @@ namespace Editor.DataClasses.Misc
 
       public static implicit operator string(Date date)
       {
-         return date.ToString();
+         return date?.ToString() ?? string.Empty;
       }
    }
 }

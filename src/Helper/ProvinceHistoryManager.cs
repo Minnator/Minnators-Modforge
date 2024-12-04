@@ -5,25 +5,21 @@ namespace Editor.Helper
    public static class ProvinceHistoryManager
    {
       private static Date _lastDate = Date.MinValue;
-      public static void LoadDate(Date date)
+
+      private static Date LastDate
       {
-         if (date == _lastDate)
-            return;
-         if (date < _lastDate)
-         {
-            foreach (var province in Globals.Provinces)
-            {
-               province.ResetHistory();
-            }
-         }
-         foreach (var province in Globals.Provinces)
-         {
-            province.LoadHistoryForDate(date);
-         }
-         _lastDate = date;
+         get => _lastDate;
+         set => _lastDate = value;
       }
 
-
-
+      public static void LoadDate(Date date)
+      {
+         if (date < LastDate)
+            foreach (var province in Globals.Provinces) 
+               province.ResetHistory();
+         foreach (var province in Globals.Provinces) 
+            province.LoadHistoryForDate(date);
+         LastDate.CopyDate(date);
+      }
    }
 }

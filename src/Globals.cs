@@ -328,6 +328,7 @@ public static class Globals
 // - [ ] Fix government reforms not saveable
 // - [ ] Save file at popup in center of screen
 // - [ ] Fix Saving state getting lost on multiple undos after saving
+// - [ ] Test Remove Command for countries
 
 // TODO LIST Until Alpha 1.1
 // - [ ] Block Waterprovinces should not be viable for countries

@@ -11,8 +11,9 @@ namespace Editor.Controls
    public class DateControl : Control
    {
       private TableLayoutPanel _tableLayoutPanel= new ();
+      public static event EventHandler<Date> OnDateChanged = delegate { };
 
-      private TextBox _dateTextBox = new ()
+      private readonly TextBox _dateTextBox = new ()
       {
          Dock = DockStyle.Fill,
          TextAlign = HorizontalAlignment.Center,
@@ -28,16 +29,16 @@ namespace Editor.Controls
       private readonly IncreaseButton _monthIncreaseButton = new ();
       private readonly IncreaseButton _dayIncreaseButton = new ();
 
-      public DateControl()
+      public DateControl(Date date)
       {
+         Date = date;
          Date = Date.MinValue;
          DateControlLayout = DateControlLayout.Horizontal;
          InitHorizontal();
       }
 
-      public DateControl(Date date, DateControlLayout layout)
+      public DateControl(Date date, DateControlLayout layout) : this(date)
       {
-         Date = date;
          DateControlLayout = layout;
 
          if (DateControlLayout == DateControlLayout.Vertical) 
@@ -53,6 +54,11 @@ namespace Editor.Controls
          _yearDecreaseButton.Click += OnYearDecrease;
          _monthDecreaseButton.Click += OnMonthDecrease;
          _dayDecreaseButton.Click += OnDayDecrease;
+
+         Date.OnDateChanged += (sender, d) =>
+         {
+            SetDate(d);
+         };
          
          Size = _tableLayoutPanel.Size;
          Margin = new(0);
@@ -137,7 +143,7 @@ namespace Editor.Controls
          _dayIncreaseButton.Text = ">";
       }
 
-      private Date _date;
+      private Date _date = Date.MinValue;
       public Date Date
       {
          get => _date;
@@ -147,18 +153,24 @@ namespace Editor.Controls
                return;
             _date = value;
             _dateTextBox.Text = _date;
-            OnDateChanged?.Invoke(this, EventArgs.Empty);
          }
       } 
 
       public DateControlLayout DateControlLayout { get; set; }
 
-      public static event EventHandler<EventArgs> OnDateChanged = delegate { };
 
+      public void SetDate(Date date)
+      {
+         Date = date;
+         _dateTextBox.Text = Date.ToString();
+         OnDateChanged.Invoke(this, Date);
+      }
+      
       private void OnDateTextChanged(object? sender, EventArgs e)
       {
          if (Parsing.TryParseDate(_dateTextBox.Text, out var date))
             Date = date;
+         OnDateChanged.Invoke(this, Date);
       }
       public void OnYearIncrease (object? sender, EventArgs e)
       {
@@ -168,6 +180,7 @@ namespace Editor.Controls
             Keys.Shift => Date.AddYears(5),
             _ => Date.AddYears(1)
          };
+         _dateTextBox.Text = Date.ToString();
       }
 
       public void OnMonthIncrease (object? sender, EventArgs e)
@@ -178,6 +191,7 @@ namespace Editor.Controls
             Keys.Shift => Date.AddMonths(5),
             _ => Date.AddMonths(1)
          };
+         _dateTextBox.Text = Date.ToString();
       }
 
       public void OnDayIncrease (object? sender, EventArgs e)
@@ -188,6 +202,7 @@ namespace Editor.Controls
             Keys.Shift => Date.AddDays(5),
             _ => Date.AddDays(1)
          };
+         _dateTextBox.Text = Date.ToString();
       }
 
       public void OnYearDecrease (object? sender, EventArgs e)
@@ -198,6 +213,7 @@ namespace Editor.Controls
             Keys.Shift => Date.AddYears(-5),
             _ => Date.AddYears(-1)
          };
+         _dateTextBox.Text = Date.ToString();
       }
 
       public void OnMonthDecrease (object? sender, EventArgs e)
@@ -208,6 +224,7 @@ namespace Editor.Controls
             Keys.Shift => Date.AddMonths(-5),
             _ => Date.AddMonths(-1)
          };
+         _dateTextBox.Text = Date.ToString();
       }
 
       public void OnDayDecrease (object? sender, EventArgs e)
@@ -218,6 +235,7 @@ namespace Editor.Controls
             Keys.Shift => Date.AddDays(-5),
             _ => Date.AddDays(-1)
          };
+         _dateTextBox.Text = Date.ToString();
       }
 
    }
