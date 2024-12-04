@@ -11,6 +11,7 @@ namespace Editor.Forms.Feature.SavingClasses
       public bool UseGrouping { get; set; } = false;
       public GetSavingFileForm(string initPath, string desc, string ending)
       {
+         StartPosition = FormStartPosition.CenterParent;
          InitializeComponent();
          InitPath = initPath;
          DescriptionLabel.Text = desc;

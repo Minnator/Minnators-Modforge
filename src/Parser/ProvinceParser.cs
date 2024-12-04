@@ -53,7 +53,7 @@ public static class ProvinceParser
 
       foreach (var block in blocks)
          if (block is Content content)
-            foreach (var att in Parsing.GetKeyValueList(content.Value))
+            foreach (var att in Parsing.GetKeyValueListWithoutQuotes(content.Value))
                province.SetAttribute(att.Key, att.Value);
          else
             // Parse the block, aka the history entries and some special cases

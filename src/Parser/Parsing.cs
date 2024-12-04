@@ -396,6 +396,18 @@ public static partial class Parsing
       return points;
    }
 
+   public static List<KeyValuePair<string, string>> GetKeyValueListWithoutQuotes(string value)
+   {
+      var kvps = GetKeyValueList(ref value);
+      var result = new List<KeyValuePair<string, string>>();
+      foreach (var kvp in kvps)
+      {
+         kvp.Value.TrimQuotes(out var trimmed);
+         result.Add(new(kvp.Key, trimmed));
+      }
+      return result;
+   }
+
    public static List<Point> GetPointList(string value)
    {
       List<Point> points = [];

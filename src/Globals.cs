@@ -320,18 +320,19 @@ public static class Globals
 // - [x] Verify that all province modifications set the ObjEditingStatus
 // - [x] Country saving broken
 // - [x] Country Tags editing
-// - [ ] Fix date control
+
+// - [x] Fix date control
 // - [ ] Fix Empties in TagBoxes
 // - [ ] Fix mass editing loc
-// - [ ] Fix Unneeded quotes on capital
+// - [x] Fix Unneeded quotes on capital
 // - [ ] Fix stupid text boxes
 // - [ ] Fix government reforms not saveable
-// - [ ] Save file at popup in center of screen
+// - [x] Save file at popup in center of screen
 // - [ ] Fix Saving state getting lost on multiple undos after saving
-// - [ ] Test Remove Command for countries
+// - [x] Test Remove Command for countries
 
 // TODO LIST Until Alpha 1.1
-// - [ ] Block Waterprovinces should not be viable for countries
+// - [ ] Block Water provinces; should not be viable for countries
 // - [ ] Loosing hover when selecting and deselecting a province
 // - [ ] Smart Gui reloading
 // - [ ] Rewrite Province.cs, Province Command and Gui

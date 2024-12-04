@@ -4,13 +4,7 @@ namespace Editor.Helper
 {
    public static class ProvinceHistoryManager
    {
-      private static Date _lastDate = Date.MinValue;
-
-      private static Date LastDate
-      {
-         get => _lastDate;
-         set => _lastDate = value;
-      }
+      private static Date LastDate = Date.MinValue;
 
       public static void LoadDate(Date date)
       {
