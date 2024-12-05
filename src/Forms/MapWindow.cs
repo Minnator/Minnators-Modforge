@@ -441,21 +441,21 @@ namespace Editor.Forms
 
          LocalisationTextBox.LostFocus += (_, _) =>
          {
-            LocObjectModifications.ModifyIfExistsOtherwiseAdd(LocalisationLabel.Text, LocalisationTextBox.Text);
+            LocObjectModifications.ModifyProvinceLocalisation(false, LocalisationTextBox.Text);
          };
          LocalisationTextBox.KeyDown += (_, args) =>
          {
             if (args.KeyCode == Keys.Enter)
-               LocObjectModifications.ModifyIfExistsOtherwiseAdd(LocalisationLabel.Text, LocalisationTextBox.Text);
+               LocObjectModifications.ModifyProvinceLocalisation(false, LocalisationTextBox.Text);
          };
          ProvAdjTextBox.LostFocus += (_, _) =>
          {
-            LocObjectModifications.ModifyIfExistsOtherwiseAdd(ProvAdjLabel.Text, ProvAdjTextBox.Text);
+            LocObjectModifications.ModifyProvinceLocalisation(true, ProvAdjTextBox.Text);
          };
          ProvAdjTextBox.KeyDown += (_, args) =>
          {
             if (args.KeyCode == Keys.Enter)
-               LocObjectModifications.ModifyIfExistsOtherwiseAdd(ProvAdjLabel.Text, ProvAdjTextBox.Text);
+               LocObjectModifications.ModifyProvinceLocalisation(true, ProvAdjTextBox.Text);
          };
 
          CoresAndClaimLayoutPanel.Controls.Add(_permanentClaims, 0, 0);
@@ -874,7 +874,7 @@ namespace Editor.Forms
       {
          tb.KeyDown += (sender, e) =>
          {
-            if (e.KeyCode == Keys.Enter) 
+            if (e.KeyCode == Keys.Enter)
                handler(sender, e);
          };
       }
@@ -1131,7 +1131,7 @@ namespace Editor.Forms
          }
 
          var result = ImprovedMessageBox.Show($"Are you sure you want to save all {numOfChanges} modified objects?", "Confirm Saving", ref Globals.Settings.PopUps.AskWhenSavingAllChangesRef, MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
-         if(result == DialogResult.OK)
+         if (result == DialogResult.OK)
             SaveMaster.SaveAllChanges();
       }
 
@@ -1382,6 +1382,8 @@ namespace Editor.Forms
          _primaryCultureBox.Items.AddRange([.. Globals.Cultures.Keys]);
          _primaryCultureBox.Margin = new(1, 1, 6, 1);
          _acceptedCultures = ControlFactory.GetItemList(ItemTypes.FullWidth, [.. Globals.Cultures.Keys], "Accepted Cultures");
+         _acceptedCultures.OnItemAdded += CountryGuiEvents.AcceptedCultures_OnItemAdded;
+         _acceptedCultures.OnItemRemoved += CountryGuiEvents.AcceptedCultures_OnItemRemoved;
 
          CulturesTLP.Controls.Add(_primaryCultureBox, 1, 0);
          CulturesTLP.Controls.Add(_acceptedCultures, 0, 1);
@@ -1808,6 +1810,11 @@ namespace Editor.Forms
       private void iMBTESTToolStripMenuItem_Click(object sender, EventArgs e)
       {
          SystemSounds.Question.Play();
+      }
+
+      private void browseEditedObjectsToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         new EditedObjectsExplorer().Show();
       }
    }
 }

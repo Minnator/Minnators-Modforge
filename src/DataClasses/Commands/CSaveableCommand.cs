@@ -2,7 +2,26 @@
 
 namespace Editor.DataClasses.Commands
 {
-   public class SaveableCommandHelper(Saveable saveable)
+
+   public abstract class SaveableCommand : ICommand
+   {
+      public abstract void Execute();
+      public abstract void Undo();
+      public abstract void Redo();
+      public abstract string GetDescription();
+      public abstract string GetDebugInformation(int indent);
+   }
+
+   public abstract class TestSaveableHelper
+   {  
+      private class EmptySaveableHelper : TestSaveableHelper;
+      public static TestSaveableHelper Empty = new EmptySaveableHelper();
+      protected TestSaveableHelper lastSaved = Empty;
+   }
+
+
+
+   public class SaveableCommandHelper(Saveable saveable) : TestSaveableHelper
    {
       // caches the previous state of the object
       private ObjEditingStatus _previousState;
@@ -50,7 +69,7 @@ namespace Editor.DataClasses.Commands
       }
    }
 
-   public class SaveablesCommandHelper(ICollection<Saveable> saveables)
+   public class SaveablesCommandHelper(ICollection<Saveable> saveables) : TestSaveableHelper
    {
       // caches the previous state of the object
       private List<ObjEditingStatus> _previousState = [];

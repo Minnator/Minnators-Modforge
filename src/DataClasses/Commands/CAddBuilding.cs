@@ -9,6 +9,8 @@ namespace Editor.DataClasses.Commands
       private readonly string _building;
       private readonly SaveablesCommandHelper _provinceSaveables;
       private readonly List<Province> _provinces;
+      
+
       public CAddBuilding(List<Province> provinces, bool add, string building, bool executeOnInit = true)
       {
          _provinces = provinces;

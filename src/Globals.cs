@@ -28,7 +28,8 @@ public enum CommandHistoryType
 {
    SimpleSelection,
    ComplexSelection,
-   Action
+   Action,
+   SaveableAction
 }
 public enum State
 {
@@ -322,15 +323,17 @@ public static class Globals
 // - [x] Country Tags editing
 
 // - [x] Fix date control
-// - [ ] Fix Empties in TagBoxes
-// - [ ] Fix mass editing loc
+// - [x] Fix Empties in TagBoxes
+// - [x] Fix mass editing loc
 // - [x] Fix Unneeded quotes on capital
-// - [x] Fix stupid text boxes
+// - [x] Fix stupid text boxes --> Don't save empty changes
 // - [x] Fix Localisation behaving weird
-// - [ ] Fix government reforms not saveable
+// - [x] Fix government reforms not saveable
 // - [x] Save file at popup in center of screen
 // - [ ] Fix Saving state getting lost on multiple undos after saving
 // - [x] Test Remove Command for countries
+// - [x] Added Debbuging interface for edited objects
+// - [ ] Fix Saving state getting lost on undo on collections
 
 // TODO LIST Until Alpha 1.1
 // - [ ] Block Water provinces; should not be viable for countries

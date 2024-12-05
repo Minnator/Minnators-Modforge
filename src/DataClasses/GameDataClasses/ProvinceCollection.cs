@@ -238,7 +238,7 @@ public abstract class ProvinceComposite(string name, Color color) : Saveable// P
    public Rectangle Bounds = Rectangle.Empty;
    private Color _color = color;
    [Browsable(false)]
-   public string GetTitleLocKey => Name;
+   public string GetTitleLocKey => $"PROV{Name}";
    [Browsable(false)]
    public string GetDescriptionLocKey => $"desc_{Name}";
    public abstract ICollection<Province> GetProvinces();

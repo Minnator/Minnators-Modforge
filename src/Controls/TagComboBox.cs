@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Events;
 using Editor.Helper;
 
@@ -7,6 +8,7 @@ namespace Editor.Controls
    public sealed class TagComboBox : ComboBox
    {
       public EventHandler<ProvinceEditedEventArgs>? OnTagChanged = delegate { };
+      public bool IgnoreEmpty { get; set; } = false;
       public TagComboBox()
       {
          Dock = DockStyle.Fill;
@@ -24,6 +26,13 @@ namespace Editor.Controls
 
       protected override void OnSelectedIndexChanged(EventArgs e)
       {
+         if (IgnoreEmpty && (Tag)Text == DataClasses.GameDataClasses.Tag.Empty)
+         {
+            Text = string.Empty;
+            SelectedIndex = -1;
+            return;
+         }
+
          base.OnSelectedIndexChanged(e);
          OnTagChanged?.Invoke(this, new (Selection.GetSelectedProvinces, Text));
       }

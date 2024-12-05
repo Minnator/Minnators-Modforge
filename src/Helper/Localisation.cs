@@ -187,4 +187,10 @@ public static class LocObjectModifications
    {
       Globals.HistoryManager.AddCommand(new CAddDelLocalisation(locObject, false));
    }
+
+   public static void ModifyProvinceLocalisation(bool adjective, string newValue)
+   {
+      foreach (var province in Selection.GetSelectedProvinces) 
+         ModifyIfExistsOtherwiseAdd(adjective ? province.GetDescriptionLocKey : province.GetTitleLocKey, newValue);
+   }
 }

@@ -41,6 +41,7 @@
          toolStripSeparator4 = new ToolStripSeparator();
          toolStripMenuItem1 = new ToolStripMenuItem();
          saveManualToolStripMenuItem = new ToolStripMenuItem();
+         browseEditedObjectsToolStripMenuItem = new ToolStripMenuItem();
          toolStripSeparator6 = new ToolStripSeparator();
          mapModeHotkeysToolStripMenuItem = new ToolStripMenuItem();
          alpha12ToolStripMenuItem = new ToolStripMenuItem();
@@ -338,7 +339,7 @@
          // 
          // filesToolStripMenuItem
          // 
-         filesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { gCToolStripMenuItem, graphicalElementsManagerToolStripMenuItem, quickSettingsToolStripMenuItem, toolStripSeparator5, saveCurrentMapModeToolStripMenuItem, saveSelectionToolStripMenuItem, toolStripSeparator4, toolStripMenuItem1, saveManualToolStripMenuItem, toolStripSeparator6, mapModeHotkeysToolStripMenuItem, CreateFilesByDefault });
+         filesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { gCToolStripMenuItem, graphicalElementsManagerToolStripMenuItem, quickSettingsToolStripMenuItem, toolStripSeparator5, saveCurrentMapModeToolStripMenuItem, saveSelectionToolStripMenuItem, toolStripSeparator4, toolStripMenuItem1, saveManualToolStripMenuItem, browseEditedObjectsToolStripMenuItem, toolStripSeparator6, mapModeHotkeysToolStripMenuItem, CreateFilesByDefault });
          filesToolStripMenuItem.Name = "filesToolStripMenuItem";
          filesToolStripMenuItem.Size = new Size(42, 23);
          filesToolStripMenuItem.Text = "Files";
@@ -407,6 +408,13 @@
          saveManualToolStripMenuItem.Size = new Size(268, 22);
          saveManualToolStripMenuItem.Text = "Save manual";
          saveManualToolStripMenuItem.Click += saveManualToolStripMenuItem_Click;
+         // 
+         // browseEditedObjectsToolStripMenuItem
+         // 
+         browseEditedObjectsToolStripMenuItem.Name = "browseEditedObjectsToolStripMenuItem";
+         browseEditedObjectsToolStripMenuItem.Size = new Size(268, 22);
+         browseEditedObjectsToolStripMenuItem.Text = "Browse Edited Objects";
+         browseEditedObjectsToolStripMenuItem.Click += browseEditedObjectsToolStripMenuItem_Click;
          // 
          // toolStripSeparator6
          // 
@@ -3260,6 +3268,7 @@
       private ToolStripMenuItem iMBTESTToolStripMenuItem;
       public TextBox CountryLoc;
       public TextBox CountryADJLoc;
+      private ToolStripMenuItem browseEditedObjectsToolStripMenuItem;
    }
 }
 

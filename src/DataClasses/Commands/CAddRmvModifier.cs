@@ -10,8 +10,8 @@ namespace Editor.DataClasses.Commands
       private readonly ModifierAbstract _modifier;
       private readonly ModifierType _type;
       private readonly bool _add;
-
-
+      
+      
       public CAddRmvModifier(List<Province> provinces, ModifierAbstract modifier, ModifierType type, bool add = true, bool executeOnInit = true)
       {
          _provinces = provinces;

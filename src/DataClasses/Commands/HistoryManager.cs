@@ -1,18 +1,16 @@
 ﻿using System.Collections;
-using Newtonsoft.Json;
 
 namespace Editor.DataClasses.Commands;
-#nullable enable
+
 public class HistoryManager
 {
    private int _nodeId;
-   private HistoryNode _current;
    private HistoryNode _root;
 
    public HistoryManager(ICommand initial)
    {
-      _current = new HistoryNode(_nodeId++, initial, CommandHistoryType.Action);
-      _root = _current;
+      Current = new (_nodeId++, initial, CommandHistoryType.Action);
+      _root = Current;
    }
 
 
@@ -24,32 +22,32 @@ public class HistoryManager
    public EventHandler RedoEvent = delegate { };
 
    
-   public HistoryNode GetCurrent => _current;
+   public HistoryNode GetCurrent => Current;
 
    // Add a new command to the history
    public void AddCommand(ICommand newCommand, CommandHistoryType type = CommandHistoryType.Action)
    {
-      var newNode = new HistoryNode(_nodeId++, newCommand, type, _current);
-      _current.Children.Add(newNode);
-      _current = newNode;
+      var newNode = new HistoryNode(_nodeId++, newCommand, type, Current);
+      Current.Children.Add(newNode);
+      Current = newNode;
 
       UndoDepthChanged?.Invoke(this, GetUndoDepth());
    }
 
    // Check if there are any commands to undo or redo
-   public bool CanUndo => _current.Parent != null!;
+   public bool CanUndo => Current.Parent != null!;
 
    // Check if there are any commands to redo
-   public bool CanRedo => _current.Children.Count > 0;
-   public HistoryNode Current => _current;
+   public bool CanRedo => Current.Children.Count > 0;
+   public HistoryNode Current { get; private set; }
 
    // Undo the last command
    public void Undo()
    {
       if (CanUndo)
       {
-         _current.Command.Undo();
-         _current = _current.Parent;
+         Current.Command.Undo();
+         Current = Current.Parent;
       }
 
       UndoDepthChanged?.Invoke(this, GetUndoDepth());
@@ -59,11 +57,11 @@ public class HistoryManager
    public void Redo(int childIndex = -1)
    {
       if (childIndex == -1)
-         childIndex += _current.Children.Count;
-      if (CanRedo && childIndex < _current.Children.Count)
+         childIndex += Current.Children.Count;
+      if (CanRedo && childIndex < Current.Children.Count)
       {
-         _current = _current.Children[childIndex];
-         _current.Command.Redo();
+         Current = Current.Children[childIndex];
+         Current.Command.Redo();
       }
 
       RedoDepthChanged?.Invoke(this, GetRedoDepth());
@@ -72,9 +70,9 @@ public class HistoryManager
 
    public void RevertTo(int id)
    {
-      if (id == _current.Id)
+      if (id == Current.Id)
          return;
-      var (undo, redo) = GetPathBetweenNodes(_current.Id, id);
+      var (undo, redo) = GetPathBetweenNodes(Current.Id, id);
       RestoreState(undo, redo);
    }
 
@@ -86,7 +84,7 @@ public class HistoryManager
       foreach (var node in redo)
          node.Command.Redo(); // Cant use Redo() because it would change the current node
       
-      _current = redo[^1];
+      Current = redo[^1];
 
       UndoDepthChanged?.Invoke(this, GetUndoDepth());
       RedoDepthChanged?.Invoke(this, GetRedoDepth());
@@ -95,7 +93,7 @@ public class HistoryManager
    public int GetUndoDepth()
    {
       var depth = 0;
-      var node = _current;
+      var node = Current;
       while (node.Parent != null!)
       {
          depth++;
@@ -108,7 +106,7 @@ public class HistoryManager
    public int GetRedoDepth()
    {
       var depth = 0;
-      var node = _current;
+      var node = Current;
       while (node.Children.Count > 0)
       {
          depth++;
@@ -117,9 +115,7 @@ public class HistoryManager
 
       return depth;
    }
-
-   public ICommand GetCurrentCommand() => _current.Command;
-
+   
    public (List<HistoryNode>, List<HistoryNode>) GetPathBetweenNodes(int from, int to)
    {
       List<HistoryNode> p1 = [];
@@ -192,8 +188,8 @@ public class HistoryManager
    public void Clear()
    {
       _nodeId = 0;
-      _root = _current = new HistoryNode(_nodeId++, new CInitial(), CommandHistoryType.Action);
-      _current = _root;
+      _root = Current = new HistoryNode(_nodeId++, new CInitial(), CommandHistoryType.Action);
+      Current = _root;
       UndoDepthChanged?.Invoke(this, GetUndoDepth());
       RedoDepthChanged?.Invoke(this, GetRedoDepth());
    }
@@ -210,6 +206,7 @@ public class HistoryManager
 
       return current;
    }
+
 }
 
 

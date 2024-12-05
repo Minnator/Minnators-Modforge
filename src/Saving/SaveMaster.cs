@@ -13,14 +13,14 @@ namespace Editor.Saving
    {
       private static HashSet<PathObj> NeedsToBeHandled = [];
       private static Dictionary<PathObj, List<Saveable>> AllSaveableFiles = [];
-      private static Dictionary<SaveableType, int> _cache;
+      internal static Dictionary<SaveableType, int> Cache;
 
       static SaveMaster()
       {
          var names = EnumHelper.GetSaveableNames();
-         _cache = new(names.Count);
+         Cache = new(names.Count);
          foreach (var name in names)
-            _cache.Add(Enum.Parse<SaveableType>(name), 0);
+            Cache.Add(Enum.Parse<SaveableType>(name), 0);
       }
 
       public static void SaveSaveables(ICollection<Saveable> saveables, SaveableType saveableType = SaveableType.All, bool onlyModified = false)
@@ -103,12 +103,12 @@ namespace Editor.Saving
                SaveFile(path);
             // Remove the saved type from the still to save types
             NeedsToBeHandled.Remove(path);
-            if (_cache[singleModData] == 0)
+            if (Cache[singleModData] == 0)
             {
                Globals.SaveableType &= ~singleModData;
             }
             // The cache has to be always above 0
-            else if (_cache[singleModData] < 0)
+            else if (Cache[singleModData] < 0)
                throw new EvilActions("The cache value is below 0 this should never happen!");
          }
       }
@@ -198,7 +198,7 @@ namespace Editor.Saving
             throw new EvilActions($"Should not add a non Loc Object {saveable} using AddLocObject!");
          var path = saveable.Path;
          Globals.SaveableType |= SaveableType.Localisation;
-         _cache[SaveableType.Localisation]++;
+         Cache[SaveableType.Localisation]++;
 
          if (path.Equals(PathObj.Empty))
          {
@@ -235,7 +235,7 @@ namespace Editor.Saving
             }
          }
 
-         _cache[saveables.First().WhatAmI()] -= count;
+         Cache[saveables.First().WhatAmI()] -= count;
          
          foreach (var path in allPaths)
          {
@@ -295,7 +295,7 @@ namespace Editor.Saving
          ManageEmptyPathObjects(ref NeedsToBeHandled, saveable);
          var type = saveable.WhatAmI();
          Globals.SaveableType |= type;
-         _cache[type]++;
+         Cache[type]++;
       }
 
       private static void SaveFile(PathObj path)
@@ -325,7 +325,7 @@ namespace Editor.Saving
 
             if (item.EditingStatus is Modified or Deleted)
             {
-               _cache[saveabletype]--;
+               Cache[saveabletype]--;
             }
 
             item.EditingStatus = Unchanged;
@@ -441,7 +441,7 @@ namespace Editor.Saving
       public static int GetNumOfModifiedObjects()
       {
          var total = 0;
-         foreach (var singleKVP in _cache)
+         foreach (var singleKVP in Cache)
          {
             total += singleKVP.Value;
          }
@@ -450,16 +450,32 @@ namespace Editor.Saving
 
       public static int GetNumOfModifiedObjects(SaveableType type)
       {
-         return _cache.GetValueOrDefault(type, 0);
+         return Cache.GetValueOrDefault(type, 0);
       }
 
       public static void CheckEmptyCacheForCombinedSaveable(SaveableType type)
       {
-         foreach (var kvp in _cache)
-         {
+         foreach (var kvp in Cache)
             if ((type & kvp.Key) != 0 && kvp.Value != 0)
-                  throw new EvilActions("The cache value should be 0 here, since we just saved!");
+               throw new EvilActions("The cache value should be 0 here, since we just saved!");
+      }
+
+      public static List<Saveable> GetModifiedObjectsOfType(SaveableType type)
+      {
+         List<Saveable> saveables = [];
+         foreach (var path in NeedsToBeHandled)
+         {
+            foreach (var obj in AllSaveableFiles[path])
+            {
+               if (obj.WhatAmI() != type)
+                  goto outerLoop;
+               if (obj.EditingStatus is Modified or Deleted)
+                  saveables.Add(obj);
+            }
+            outerLoop:
+            continue;
          }
+         return saveables;
       }
    }
 }

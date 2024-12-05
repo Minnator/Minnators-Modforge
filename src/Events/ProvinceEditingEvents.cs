@@ -46,6 +46,15 @@ namespace Editor.Events
       {
          if (!Globals.AllowEditing || sender is not TextBox tb)
             return;
+
+         if (Selection.Count == 1)
+         {
+            var attrLength = Selection.GetSelectedProvinces.First().GetAttribute(ProvAttrGet.capital).ToString()?.Length ?? 0;
+            if (tb.Text.Length > attrLength)
+               if (string.IsNullOrWhiteSpace(tb.Text.Substring(attrLength, tb.Text.Length)))
+                  return;
+         }
+
          Globals.HistoryManager.AddCommand(new CProvinceAttributeChange(Selection.GetSelectedProvinces, tb.Text, ProvAttrGet.capital, ProvAttrSet.capital));
       }
 

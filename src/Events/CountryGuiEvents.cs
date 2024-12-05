@@ -151,7 +151,8 @@ namespace Editor.Events
             return;
          if (e.Value is not string reform || !Globals.GovernmentReforms.ContainsKey(reform))
             return;
-         Selection.SelectedCountry.HistoryCountry.GovernmentReforms.Add(reform);
+         var items = new List<string>(Selection.SelectedCountry.HistoryCountry.GovernmentReforms) { reform };
+         Selection.SelectedCountry.HistoryCountry.GovernmentReforms = items;
       }
 
       public static void GovernmentReforms_OnItemRemoved(object? sender, ProvinceEditedEventArgs e)
@@ -160,7 +161,9 @@ namespace Editor.Events
             return;
          if (e.Value is not string reform) // we dont check if it is a valid reform to allow broken stuff being fixed
             return;
-         Selection.SelectedCountry.HistoryCountry.GovernmentReforms.Remove(reform);
+         var items = new List<string>(Selection.SelectedCountry.HistoryCountry.GovernmentReforms);
+         items.Remove(reform);
+         Selection.SelectedCountry.HistoryCountry.GovernmentReforms = items;
       }
 
       public static void GovernmentRankBox_SelectedIndexChanged(object? sender, EventArgs e)
@@ -187,6 +190,27 @@ namespace Editor.Events
             return;
 
          Localisation.AddOrModifyLocObject(Selection.SelectedCountry.GetAdjectiveLocKey, Globals.MapWindow.CountryADJLoc.Text);
+      }
+
+      public static void AcceptedCultures_OnItemRemoved(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (Selection.SelectedCountry == Country.Empty)
+            return;
+         if (e.Value is not string reform) 
+            return;
+         var items = new List<string>(Selection.SelectedCountry.HistoryCountry.AcceptedCultures);
+         items.Remove(reform);
+         Selection.SelectedCountry.HistoryCountry.AcceptedCultures = items;
+      }
+
+      public static void AcceptedCultures_OnItemAdded(object? sender, ProvinceEditedEventArgs e)
+      {
+         if (Selection.SelectedCountry == Country.Empty)
+            return;
+         if (e.Value is not string reform || Selection.SelectedCountry.HistoryCountry.AcceptedCultures.Contains(e.Value))
+            return;
+         var items = new List<string>(Selection.SelectedCountry.HistoryCountry.AcceptedCultures) { reform };
+         Selection.SelectedCountry.HistoryCountry.AcceptedCultures = items;
       }
    }
 }

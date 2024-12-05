@@ -199,6 +199,11 @@ public class CommonCountry : Saveable, IGetSetProperty
 
       return sb.ToString();
    }
+
+   public override string ToString()
+   {
+      return $"{_country.Tag}: [common\\{_country.CountryFilePath.FilePath}]";
+   }
 }
 
 public class HistoryCountry : Saveable, IGetSetProperty
@@ -271,13 +276,13 @@ public class HistoryCountry : Saveable, IGetSetProperty
    public List<string> GovernmentReforms
    {
       get => _governmentReforms;
-      set => SetField(ref _governmentReforms, value);
+      set => SetIfModifiedEnumerable<List<string>, string>(ref _governmentReforms, value);
    }
 
    public List<string> AcceptedCultures
    {
       get => _acceptedCultures;
-      set => SetField(ref _acceptedCultures, value);
+      set => SetIfModifiedEnumerable<List<string>, string>(ref _acceptedCultures, value);
    }
 
    public List<string> UnlockedCults
@@ -456,6 +461,11 @@ public class HistoryCountry : Saveable, IGetSetProperty
    {
       PropertyChanged?.Invoke(this, new (propertyName));
    }
+
+   public override string ToString()
+   {
+      return $"{_country.Tag}: [history\\countries\\]";
+   }
 }
 
 public class CountryFilePath : Saveable
@@ -533,6 +543,11 @@ public class CountryFilePath : Saveable
    }
 
    public override string GetSavePromptString() => $"Saving the filenames/country part";
+
+   public override string ToString()
+   {
+      return $"{_country.Tag}: [{System.IO.Path.Combine(_filePathArr)}]";
+   }
 }
 
 public class Country : ProvinceCollection<Province>

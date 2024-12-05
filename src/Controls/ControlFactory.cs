@@ -96,18 +96,19 @@ public static class ControlFactory
       };
    }
 
-   public static TagComboBox GetTagComboBox()
+   public static TagComboBox GetTagComboBox(bool ignoreEmpty = false)
    {
       return new ()
       {
          Margin = new(3, 1, 3, 3),
-         Dock = DockStyle.Fill
+         Dock = DockStyle.Fill,
+         IgnoreEmpty = ignoreEmpty
       };
    }
 
    public static ItemList GetItemList(ItemTypes itemType, List<string> items, string title)
    {
-      ComboBox box = itemType == ItemTypes.Tag ? GetTagComboBox() : GetExtendedComboBox(items);
+      ComboBox box = itemType == ItemTypes.Tag ? GetTagComboBox(true) : GetExtendedComboBox(items);
       var list = new ItemList(itemType, box);
       if (itemType != ItemTypes.Tag)
          list.InitializeItems(items);
@@ -130,7 +131,7 @@ public static class ControlFactory
 
       if (strings.Count > 1)
          return GetItemList(itemType, strings, title);
-      return new (itemType, GetTagComboBox());
+      return new (itemType, GetTagComboBox(true));
    }
 
    public static ItemButton GetItemButton(string item, ItemTypes type)

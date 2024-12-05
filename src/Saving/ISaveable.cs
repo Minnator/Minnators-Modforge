@@ -52,6 +52,7 @@ public abstract class Saveable : IDisposable
          return false;
       return InternalFieldSet(ref field, value, propertyName);
    }
+   
 
    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
    {
