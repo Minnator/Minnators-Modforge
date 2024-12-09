@@ -665,6 +665,7 @@ public static class Selection
       Globals.ZoomControl.Invalidate();
 
       _rectangleStartPoint = Globals.ZoomControl.ConvertCoordinates(point, out _);
+      Eu4Cursors.SetEu4CursorIfEnabled(Eu4CursorTypes.Select, Cursors.Default, Globals.ZoomControl.FindForm());
    }
 
    private static void ExitRectangleSelection()
@@ -678,6 +679,7 @@ public static class Selection
       _rectangleSelectionRectangle = Rectangle.Empty;
       _selectionToolType = SelectionToolType.Single;
       Globals.ZoomControl.CanZoom = true;
+      Eu4Cursors.SetEu4CursorIfEnabled(Eu4CursorTypes.Normal, Cursors.Default, Globals.ZoomControl.FindForm());
    }
 
    private static void RectangleMouseMove(Point eventPoint)
@@ -785,6 +787,7 @@ public static class Selection
       _lassoConvertedPoints.Clear();
       Globals.ZoomControl.CanZoom = true;
       _lastLassoTriangle = Triangle.Empty;
+      Eu4Cursors.SetEu4CursorIfEnabled(Eu4CursorTypes.Normal, Cursors.Default, Globals.ZoomControl.FindForm());
    }
 
    private static void EnterLassoSelection(Point point)
@@ -794,6 +797,7 @@ public static class Selection
       _selectionToolType = SelectionToolType.Lasso;
       _lassoTruePoints.Add(point);
       _lassoConvertedPoints.Add(Globals.ZoomControl.ConvertCoordinates(point, out _));
+      Eu4Cursors.SetEu4CursorIfEnabled(Eu4CursorTypes.Select, Cursors.Default, Globals.ZoomControl.FindForm());
    }
 
 

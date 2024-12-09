@@ -19,6 +19,7 @@ namespace Editor.DataClasses.Settings
       private int _maxProvinceDistanceForCountryWithSameSize = 5;
       private int _maxCountryDevDifferenceForCountryWithSameSize = 75;
       private int _historicRivalsFriendsGenerationAmount = 3;
+      private bool _useEu4Cursor = true;
 
       [Description("The language in which the localisation will be shown")]
       [CompareInEquals]
@@ -106,6 +107,14 @@ namespace Editor.DataClasses.Settings
       {
          get => _historicRivalsFriendsGenerationAmount;
          set => SetField(ref _historicRivalsFriendsGenerationAmount, value);
+      }
+
+      [Description("Determines if the EU4 cursor should be used")]
+      [CompareInEquals]
+      public bool UseEu4Cursor   
+      {
+         get => _useEu4Cursor;
+         set => SetField(ref _useEu4Cursor, value);
       }
    }
 }

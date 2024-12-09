@@ -1,4 +1,6 @@
-﻿namespace Editor.Controls;
+﻿using Editor.Helper;
+
+namespace Editor.Controls;
 
 using System.ComponentModel;
 using System.Runtime.InteropServices;
@@ -303,7 +305,8 @@ public sealed class ZoomControl : Control, IDisposable
       {
          IsPanning = true;
          _lastMousePosition = e.Location;
-         Cursor = Cursors.Hand; // Change cursor to hand during panning
+
+         Eu4Cursors.SetEu4CursorIfEnabled(Eu4CursorTypes.Normal, Cursors.Hand, FindForm());
       }
    }
    private void PictureBox_MouseUp(object sender, MouseEventArgs e)
@@ -312,7 +315,7 @@ public sealed class ZoomControl : Control, IDisposable
       if (e.Button == MouseButtons.Middle)
       {
          IsPanning = false;
-         Cursor = Cursors.Default; // Restore default cursor after panning
+         Eu4Cursors.SetEu4CursorIfEnabled(Eu4CursorTypes.Normal, Cursors.Default, FindForm());
       }
    }
 

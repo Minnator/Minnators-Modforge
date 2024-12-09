@@ -334,6 +334,9 @@ public static class Globals
 // - [x] Test Remove Command for countries
 // - [x] Added Debbuging interface for edited objects
 // - [ ] Fix Saving state getting lost on undo on collections
+// - [x] Fix Discord SDK crash
+// - [x] Fix Custom cursors not working and changing back to normal cursor
+// - [ ] Adding metric for startup (Currently in settings will be separate later)
 
 // TODO LIST Until Alpha 1.1
 // - [ ] Block Water provinces; should not be viable for countries

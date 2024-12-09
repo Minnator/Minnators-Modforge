@@ -14,6 +14,9 @@ namespace Editor.Saving
       private static HashSet<PathObj> NeedsToBeHandled = [];
       private static Dictionary<PathObj, List<Saveable>> AllSaveableFiles = [];
       internal static Dictionary<SaveableType, int> Cache;
+      private static bool working = false;
+
+      public static event EventHandler<SaveableType> Saving;
 
       static SaveMaster()
       {
@@ -25,7 +28,6 @@ namespace Editor.Saving
 
       public static void SaveSaveables(ICollection<Saveable> saveables, SaveableType saveableType = SaveableType.All, bool onlyModified = false)
       {
-
          HashSet<PathObj> paths = [];
 
          if (onlyModified)
@@ -46,6 +48,7 @@ namespace Editor.Saving
                ManageEmptyPathObjects(ref paths, saveable);
             }
          SavePaths(ref paths, saveableType);
+         OnSaving(saveableType);
          MessageBox.Show("All files saved!", "Save", MessageBoxButtons.OK, MessageBoxIcon.Information);
       }
 
@@ -85,6 +88,7 @@ namespace Editor.Saving
          }
          SavePaths(ref NeedsToBeHandled, saveableType);
          CheckEmptyCacheForCombinedSaveable(saveableType);
+         OnSaving(saveableType);
       }
 
       public static void SavePaths(ref HashSet<PathObj> localToBeHandled, SaveableType saveableType = SaveableType.All)
@@ -222,6 +226,25 @@ namespace Editor.Saving
          NeedsToBeHandled.Add(path);
       }
 
+      public static void RemoveFromToBeHandled(Saveable saveable)
+      {
+         if (working || saveable.EditingStatus is Unchanged)
+            return;
+         var type = saveable.WhatAmI();
+         if (--Cache[type] == 0)
+         {
+            Globals.SaveableType &= ~type;
+         }
+
+         var path = saveable.Path;
+         foreach (var pathSaveable in AllSaveableFiles[path])
+            if (pathSaveable.EditingStatus is Modified or Deleted)
+               return;
+         Debug.WriteLine($"removed {path} since it was not modified");
+         if (!NeedsToBeHandled.Remove(path))
+            throw new EvilActions("The path was not found in the NeedsToBeHandled list but was meant to be removed!");
+      }
+
       public static void RemoveFromToBeHandled(ICollection<Saveable> saveables)
       {
          HashSet<PathObj> allPaths = [];
@@ -310,6 +333,7 @@ namespace Editor.Saving
          var saveIndividually = true;
          Saveable? lastItem = null;
          var saveabletype = AllSaveableFiles[path].First().WhatAmI();
+         working = true;
          foreach (var item in AllSaveableFiles[path])
          {
             if (lastItem is null)
@@ -330,6 +354,7 @@ namespace Editor.Saving
 
             item.EditingStatus = Unchanged;
          }
+         working = false;
 
          if (saveIndividually)
          {
@@ -476,6 +501,11 @@ namespace Editor.Saving
             continue;
          }
          return saveables;
+      }
+
+      private static void OnSaving(SaveableType e)
+      {
+         Saving?.Invoke(null, e);
       }
    }
 }

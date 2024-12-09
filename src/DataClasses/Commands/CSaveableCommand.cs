@@ -13,59 +13,58 @@ namespace Editor.DataClasses.Commands
    }
 
    public abstract class TestSaveableHelper
-   {  
-      private class EmptySaveableHelper : TestSaveableHelper;
-      public static TestSaveableHelper Empty = new EmptySaveableHelper();
-      protected TestSaveableHelper lastSaved = Empty;
+   {
+      static TestSaveableHelper()
+      {
+         SaveMaster.Saving += (_, _) => SaveTest();
+      }
+
+      protected static int globalState = 0;
+
+      public static void SaveTest()
+      {
+         globalState++;
+      }
    }
 
 
 
    public class SaveableCommandHelper(Saveable saveable) : TestSaveableHelper
    {
-      // caches the previous state of the object
       private ObjEditingStatus _previousState;
-      // saves if theis object type is marked as modified
-      private bool _flagSet;
+      private int internalState = globalState;
+
+      private void ReasignStates()
+      {
+         var state = saveable.EditingStatus;
+         if (internalState != globalState)
+         {
+            // Not current
+
+            saveable.EditingStatus = ObjEditingStatus.Modified;
+
+            internalState = globalState;
+         }
+         else
+            saveable.EditingStatus = _previousState;
+         _previousState = state;
+      }
 
       public virtual void Execute()
       {
-         _flagSet = (Globals.SaveableType & saveable.WhatAmI()) != 0;
-         _previousState = saveable.EditingStatus;
+         if (internalState != globalState)
+            throw new EvilActions("History Commands are not in Sync with global state!");
          saveable.EditingStatus = ObjEditingStatus.Modified;
       }
 
       public virtual void Undo()
       {
-         var state = saveable.EditingStatus;
-         if (state != ObjEditingStatus.Modified)
-         {
-            _flagSet = (Globals.SaveableType & saveable.WhatAmI()) != 0;
-            saveable.EditingStatus = ObjEditingStatus.Modified;
-         }
-         else // default case
-         {
-            if (!_flagSet)
-               Globals.SaveableType &= ~saveable.WhatAmI();
-            saveable.EditingStatus = _previousState;
-         }
-         _previousState = state;
+         ReasignStates();
       }
 
       public virtual void Redo()
       {
-         var state = saveable.EditingStatus;
-         if (state != ObjEditingStatus.Modified) // default case
-         {
-            saveable.EditingStatus = ObjEditingStatus.Modified;
-         }
-         else
-         {
-            if (!_flagSet)
-               Globals.SaveableType &= ~saveable.WhatAmI();
-            saveable.EditingStatus = _previousState;
-         }
-         _previousState = state;
+         ReasignStates();
       }
    }
 
@@ -73,14 +72,11 @@ namespace Editor.DataClasses.Commands
    {
       // caches the previous state of the object
       private List<ObjEditingStatus> _previousState = [];
-      // saves if theis object type is marked as modified
-      private bool _flagSet;
-
+      private int internalState = globalState;
       private Saveable test_saveable = saveables.First();
 
       public virtual void Execute()
       {
-         _flagSet = (Globals.SaveableType & test_saveable.WhatAmI()) != 0; 
          foreach (var saveable in saveables) 
             _previousState.Add(saveable.EditingStatus);
          SetAllEditingStates(ObjEditingStatus.Modified);
@@ -105,43 +101,31 @@ namespace Editor.DataClasses.Commands
          foreach (var saveable in saveables) 
             saveable.EditingStatus = state;
       }
-      
+
+      private void reasignStates()
+      {
+         List<ObjEditingStatus> states = [.. saveables.Select(x => x.EditingStatus)];
+         if (internalState != globalState)
+         {
+            // Not current
+
+            SetAllEditingStates(ObjEditingStatus.Modified);
+
+            internalState = globalState;
+         }
+         else
+            SetAllEditingStates(_previousState);
+         SetAllPreviousStates(states);
+      }
+
       public virtual void Undo()
       {
-         List<ObjEditingStatus> states = [..saveables.Select(x => x.EditingStatus)];
-         var state = test_saveable.EditingStatus;
-         if (state != ObjEditingStatus.Modified)
-         {
-            _flagSet = (Globals.SaveableType & test_saveable.WhatAmI()) != 0;
-            SetAllEditingStates(ObjEditingStatus.Modified);
-         }
-         else // default case
-         {
-            if (!_flagSet)
-               Globals.SaveableType &= ~test_saveable.WhatAmI();
-            SetAllEditingStates(_previousState);
-            SaveMaster.RemoveFromToBeHandled(saveables);
-         }
-         SetAllPreviousStates(states);
-         
+         reasignStates();
       }
 
       public virtual void Redo()
       {
-         List<ObjEditingStatus> states = [.. saveables.Select(x => x.EditingStatus)];
-         var state = test_saveable.EditingStatus;
-         if (state != ObjEditingStatus.Modified) // default case
-         {
-            SetAllEditingStates(ObjEditingStatus.Modified);
-         }
-         else
-         {
-            if (!_flagSet)
-               Globals.SaveableType &= ~test_saveable.WhatAmI();
-            SetAllEditingStates(_previousState);
-            SaveMaster.RemoveFromToBeHandled(saveables);
-         }
-         SetAllPreviousStates(states);
+         reasignStates();
       }
    }
 }

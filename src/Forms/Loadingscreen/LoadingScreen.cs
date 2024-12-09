@@ -28,6 +28,7 @@ namespace Editor.Forms.LoadingScreen
       public EventHandler<int> LoadingStageChanged = delegate{};
       private readonly List<Action> _loadingActions =
       [
+         StartUpMetrics.StartMetrics,
          FactionsLoading.Load,
          GovernmentMechanicsLoading.Load,
          LoadEstateModifiers.Load,
@@ -69,9 +70,11 @@ namespace Editor.Forms.LoadingScreen
          HeightMapLoading.Load,
          ProvinceGroupsLoading.Load,
          GameIcon.Initialize,
+         Eu4Cursors.LoadCursors,
+
 
          // Must be last
-         ModifierParser.Demilitarize
+         ModifierParser.Demilitarize,
       ];
 
       public LoadingScreen()
@@ -129,11 +132,6 @@ namespace Editor.Forms.LoadingScreen
          LoadingAnimation.SizeMode = PictureBoxSizeMode.Zoom;
       }
       
-      private void LoadButton_Click(object sender, EventArgs e)
-      {
-         
-      }
-
       private int count = 0;
       private DateTime end = DateTime.Today;
       private int _loadingStage = 0;
@@ -175,6 +173,8 @@ namespace Editor.Forms.LoadingScreen
                sw.Restart();
                task.Invoke();
                sw.Stop();
+               if (Globals.Settings.Metrics.EnableLoadingMetrics)
+                  StartUpMetrics.AddOperationLoadingTime(task.Method.DeclaringType?.Name ?? "Unknown", (int)sw.ElapsedMilliseconds);
                Globals.LoadingLog.WriteTimeStamp(task.Method.DeclaringType?.Name ?? "Unknown", sw.ElapsedMilliseconds);
                bw.ReportProgress(++progress);
             }
@@ -189,6 +189,7 @@ namespace Editor.Forms.LoadingScreen
 
       private void LoadingCompleted()
       {
+         StartUpMetrics.EndMetrics();
          Globals.MapWindow.Initialize();
          Close();
       }

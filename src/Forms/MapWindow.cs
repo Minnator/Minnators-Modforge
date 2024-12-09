@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Globalization;
+using System.Media;
 using System.Runtime;
 using System.Text;
 using Editor.Controls;
@@ -8,7 +9,6 @@ using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Misc;
 using Editor.DataClasses.Settings;
-using Editor.Testing;
 using Editor.Events;
 using Editor.Forms.Feature;
 using Editor.Forms.Feature.Crash_Reporter;
@@ -18,13 +18,12 @@ using Editor.Helper;
 using Editor.Loading;
 using Editor.Saving;
 using Editor.src.Forms.GetUserInput;
+using Editor.src.Forms.PopUps;
+using Editor.Testing;
 using static Editor.Helper.ProvinceEnumHelper;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 using MethodInvoker = System.Windows.Forms.MethodInvoker;
 using Region = Editor.DataClasses.GameDataClasses.Region;
-using System.ComponentModel;
-using System.Media;
-using Editor.src.Forms.PopUps;
 
 namespace Editor.Forms
 {
@@ -62,14 +61,14 @@ namespace Editor.Forms
 
       private ToolTip _savingButtonsToolTip = null!;
 
-      public CollectionEditor2<Area, Province> AreaEditingGui = null!;
-      public CollectionEditor2<Region, Area> RegionEditingGui = null!;
-      public CollectionEditor2<SuperRegion, Region> SuperRegionEditingGui = null!;
-      public CollectionEditor2<TradeCompany, Province> TradeCompanyEditingGui = null!;
-      public CollectionEditor2<Country, Province> CountryEditingGui = null!;
-      public CollectionEditor2<TradeNode, Province> TradeNodeEditingGui = null!;
-      public CollectionEditor2<ProvinceGroup, Province> ProvinceGroupsEditingGui = null!;
-      public CollectionEditor2<ColonialRegion, Province> ColonialRegionEditingGui = null!;
+      private CollectionEditor2<Area, Province> _areaEditingGui = null!;
+      private CollectionEditor2<Region, Area> _regionEditingGui = null!;
+      private CollectionEditor2<SuperRegion, Region> _superRegionEditingGui = null!;
+      private CollectionEditor2<TradeCompany, Province> _tradeCompanyEditingGui = null!;
+      private CollectionEditor2<Country, Province> _countryEditingGui = null!;
+      private CollectionEditor2<TradeNode, Province> _tradeNodeEditingGui = null!;
+      private CollectionEditor2<ProvinceGroup, Province> _provinceGroupsEditingGui = null!;
+      private CollectionEditor2<ColonialRegion, Province> _colonialRegionEditingGui = null!;
 
       public Screen? StartScreen = null;
 
@@ -86,9 +85,10 @@ namespace Editor.Forms
          Localisation.Initialize();
          Globals.Random = new(Globals.Settings.Misc.RandomSeed);
 
-         //CursorHelper.SetCursor(Eu4CursorTypes.Loading, this);
          RunLoadingScreen();
          StartBWHeapThread();
+
+         Eu4Cursors.SetEu4CursorIfEnabled(Eu4CursorTypes.Normal, Cursors.Default, this);
 
          if (StartScreen != null)
          {
@@ -179,6 +179,7 @@ namespace Editor.Forms
       private void RunLoadingScreen()
       {
          _ls = new();
+         Eu4Cursors.SetEu4CursorIfEnabled(Eu4CursorTypes.Loading, Cursors.AppStarting, _ls);
          _ls.ShowDialog();
       }
 
@@ -318,44 +319,44 @@ namespace Editor.Forms
 
       private void InitializeProvinceCollectionEditGui()
       {
-         CountryEditingGui = new(ItemTypes.Id, SaveableType.Country, SaveableType.Province, MapModeType.Country);
-         Country.ItemsModified += CountryEditingGui.OnCorrespondingDataChange;
-         CountryEditingGui._extendedComboBox.DataSource = new BindingSource
+         _countryEditingGui = new(ItemTypes.Id, SaveableType.Country, SaveableType.Province, MapModeType.Country);
+         Country.ItemsModified += _countryEditingGui.OnCorrespondingDataChange;
+         _countryEditingGui._extendedComboBox.DataSource = new BindingSource
          {
             DataSource = Globals.Countries
          };
-         CountryEditingGui._extendedComboBox.DisplayMember = "Key";
-         CountryEditingGui._extendedComboBox.ValueMember = "Value";
+         _countryEditingGui._extendedComboBox.DisplayMember = "Key";
+         _countryEditingGui._extendedComboBox.ValueMember = "Value";
 
-         AreaEditingGui = new(ItemTypes.Id, SaveableType.Area, SaveableType.Province, MapModeType.Area);
-         Area.ItemsModified += AreaEditingGui.OnCorrespondingDataChange;
+         _areaEditingGui = new(ItemTypes.Id, SaveableType.Area, SaveableType.Province, MapModeType.Area);
+         Area.ItemsModified += _areaEditingGui.OnCorrespondingDataChange;
 
-         RegionEditingGui = new(ItemTypes.String, SaveableType.Region, SaveableType.Area, MapModeType.Regions);
-         DataClasses.GameDataClasses.Region.ItemsModified += RegionEditingGui.OnCorrespondingDataChange;
+         _regionEditingGui = new(ItemTypes.String, SaveableType.Region, SaveableType.Area, MapModeType.Regions);
+         DataClasses.GameDataClasses.Region.ItemsModified += _regionEditingGui.OnCorrespondingDataChange;
 
-         SuperRegionEditingGui = new(ItemTypes.String, SaveableType.SuperRegion, SaveableType.Region, MapModeType.SuperRegion);
-         SuperRegion.ItemsModified += SuperRegionEditingGui.OnCorrespondingDataChange;
+         _superRegionEditingGui = new(ItemTypes.String, SaveableType.SuperRegion, SaveableType.Region, MapModeType.SuperRegion);
+         SuperRegion.ItemsModified += _superRegionEditingGui.OnCorrespondingDataChange;
 
-         TradeCompanyEditingGui = new(ItemTypes.Id, SaveableType.TradeCompany, SaveableType.Province, MapModeType.TradeCompany);
-         TradeCompany.ItemsModified += TradeCompanyEditingGui.OnCorrespondingDataChange;
+         _tradeCompanyEditingGui = new(ItemTypes.Id, SaveableType.TradeCompany, SaveableType.Province, MapModeType.TradeCompany);
+         TradeCompany.ItemsModified += _tradeCompanyEditingGui.OnCorrespondingDataChange;
 
-         TradeNodeEditingGui = new(ItemTypes.Id, SaveableType.TradeNode, SaveableType.Province, MapModeType.TradeNode);
-         TradeNode.ItemsModified += TradeNodeEditingGui.OnCorrespondingDataChange;
+         _tradeNodeEditingGui = new(ItemTypes.Id, SaveableType.TradeNode, SaveableType.Province, MapModeType.TradeNode);
+         TradeNode.ItemsModified += _tradeNodeEditingGui.OnCorrespondingDataChange;
 
-         ProvinceGroupsEditingGui = new(ItemTypes.Id, SaveableType.ProvinceGroup, SaveableType.Province, MapModeType.ProvinceGroup);
-         ProvinceGroup.ItemsModified += ProvinceGroupsEditingGui.OnCorrespondingDataChange;
+         _provinceGroupsEditingGui = new(ItemTypes.Id, SaveableType.ProvinceGroup, SaveableType.Province, MapModeType.ProvinceGroup);
+         ProvinceGroup.ItemsModified += _provinceGroupsEditingGui.OnCorrespondingDataChange;
 
-         ColonialRegionEditingGui = new(ItemTypes.Id, SaveableType.ColonialRegion, SaveableType.Province, MapModeType.ColonialRegions);
-         ColonialRegion.ItemsModified += ColonialRegionEditingGui.OnCorrespondingDataChange;
+         _colonialRegionEditingGui = new(ItemTypes.Id, SaveableType.ColonialRegion, SaveableType.Province, MapModeType.ColonialRegions);
+         ColonialRegion.ItemsModified += _colonialRegionEditingGui.OnCorrespondingDataChange;
 
-         ProvinceCollectionsLayoutPanel.Controls.Add(CountryEditingGui, 0, 0);
-         ProvinceCollectionsLayoutPanel.Controls.Add(RegionEditingGui, 0, 2);
-         ProvinceCollectionsLayoutPanel.Controls.Add(AreaEditingGui, 0, 1);
-         ProvinceCollectionsLayoutPanel.Controls.Add(SuperRegionEditingGui, 0, 3);
-         ProvinceCollectionsLayoutPanel.Controls.Add(TradeCompanyEditingGui, 0, 5);
-         ProvinceCollectionsLayoutPanel.Controls.Add(TradeNodeEditingGui, 0, 4);
-         ProvinceCollectionsLayoutPanel.Controls.Add(ProvinceGroupsEditingGui, 0, 6);
-         ProvinceCollectionsLayoutPanel.Controls.Add(ColonialRegionEditingGui, 0, 7);
+         ProvinceCollectionsLayoutPanel.Controls.Add(_countryEditingGui, 0, 0);
+         ProvinceCollectionsLayoutPanel.Controls.Add(_regionEditingGui, 0, 2);
+         ProvinceCollectionsLayoutPanel.Controls.Add(_areaEditingGui, 0, 1);
+         ProvinceCollectionsLayoutPanel.Controls.Add(_superRegionEditingGui, 0, 3);
+         ProvinceCollectionsLayoutPanel.Controls.Add(_tradeCompanyEditingGui, 0, 5);
+         ProvinceCollectionsLayoutPanel.Controls.Add(_tradeNodeEditingGui, 0, 4);
+         ProvinceCollectionsLayoutPanel.Controls.Add(_provinceGroupsEditingGui, 0, 6);
+         ProvinceCollectionsLayoutPanel.Controls.Add(_colonialRegionEditingGui, 0, 7);
 
          FocusSelectionCheckBox.Checked = Globals.Settings.Gui.JumpToSelectedProvinceCollection;
       }

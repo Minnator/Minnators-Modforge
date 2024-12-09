@@ -15,6 +15,7 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    private MiscSettings _miscSettings = new();
    private GuiSettings _guiSettings = new();
    private PopUpSettings _popUpSettings = new();
+   private MetricDummySetting _metrics = new();
 
 
    public Settings()
@@ -83,6 +84,15 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    {
       get => _popUpSettings;
       set => SetField(ref _popUpSettings, value);
+   }
+
+   [Description("Contains all settings regarding the start up metrics of the application")]
+   [TypeConverter(typeof(ExpandableObjectConverter))]
+   [CompareInEquals]
+   public MetricDummySetting Metrics
+   {
+      get => _metrics;
+      set => SetField(ref _metrics, value);
    }
 
    public event PropertyChangedEventHandler? PropertyChanged;

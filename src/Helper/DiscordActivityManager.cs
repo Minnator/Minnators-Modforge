@@ -20,6 +20,7 @@ namespace Editor.Helper
       {
          var discordBackground = new Thread(() =>
          {
+            var disposeDiscord = true;
             try
             {
                UpdateActivity();
@@ -29,9 +30,18 @@ namespace Editor.Helper
                   Thread.Sleep(50);
                }
             }
+            catch (ResultException)
+            {
+               disposeDiscord = false; // Prevent disposing in finally
+               MessageBox.Show("Discord Activity will no longer be available as the application has been closed.\nFor it to be available again, restart the Modforge.",
+                  "Error loading Discord Activity", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             finally
             {
-               Discord.Dispose();
+               if (disposeDiscord)
+               {
+                  Discord.Dispose();
+               }
             }
          })
          {
