@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text;
+using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
 using Editor.Forms.Feature.SavingClasses;
 using Editor.Helper;
@@ -33,7 +34,7 @@ namespace Editor.Saving
          if (onlyModified)
             foreach (var saveable in saveables)
             {
-               if (!(saveable.EditingStatus is Modified or Deleted))
+               if (!(saveable.EditingStatus is Modified or ToBeDeleted))
                   continue;
                if (saveable.Path == PathObj.Empty)
                   ManageEmptyPathObjects(ref paths, saveable);
@@ -43,7 +44,7 @@ namespace Editor.Saving
             {
                // In case we try to save something which is not selected and the path is empty we will ignore for now
                // TODO: Later there should be a different Empty object for new and vanilla empties which allows this differentiation
-               if (saveable.EditingStatus is not (Modified or Deleted) && saveable.Path == PathObj.Empty)
+               if (saveable.EditingStatus is not (Modified or ToBeDeleted) && saveable.Path == PathObj.Empty)
                   continue;
                ManageEmptyPathObjects(ref paths, saveable);
             }
@@ -238,7 +239,7 @@ namespace Editor.Saving
 
          var path = saveable.Path;
          foreach (var pathSaveable in AllSaveableFiles[path])
-            if (pathSaveable.EditingStatus is Modified or Deleted)
+            if (pathSaveable.EditingStatus is Modified or ToBeDeleted)
                return;
          Debug.WriteLine($"removed {path} since it was not modified");
          if (!NeedsToBeHandled.Remove(path))
@@ -251,7 +252,7 @@ namespace Editor.Saving
          var count = 0;
          foreach (var saveable in saveables)
          {
-            if (saveable.EditingStatus is not (Modified or Deleted))
+            if (saveable.EditingStatus is not (Modified or ToBeDeleted))
             {
                allPaths.Add(saveable.Path);
                count++;
@@ -263,7 +264,7 @@ namespace Editor.Saving
          foreach (var path in allPaths)
          {
             foreach (var saveable in AllSaveableFiles[path])
-               if (saveable.EditingStatus is Modified or Deleted)
+               if (saveable.EditingStatus is Modified or ToBeDeleted)
                   goto pathLoop;
             Debug.WriteLine($"removed {path} since it was not modified");
             if (!NeedsToBeHandled.Remove(path))
@@ -336,23 +337,32 @@ namespace Editor.Saving
          working = true;
          foreach (var item in AllSaveableFiles[path])
          {
+            if (item is Area area && area.Name.Equals("mmf_mittelmark_area"))
+               Debugger.Break();
             if (lastItem is null)
             {
                lastItem = item;
                saveIndividually = item.GetSaveStringIndividually;
             }
-            
-            if (item.EditingStatus == Modified)
-               changed.Add(item);
-            else if (item.EditingStatus != Deleted)
-               unchanged.Add(item);
 
-            if (item.EditingStatus is Modified or Deleted)
+            switch (item.EditingStatus)
             {
-               Cache[saveabletype]--;
+               case Modified:
+                  changed.Add(item);
+                  item.EditingStatus = Unchanged;
+                  Cache[saveabletype]--;
+                  break;
+               case Unchanged:
+               case Immutable:
+                  unchanged.Add(item);
+                  break;
+               case ToBeDeleted:
+                  item.EditingStatus = Deleted;
+                  Cache[saveabletype]--;
+                  break;
+               case Deleted:
+                  break;
             }
-
-            item.EditingStatus = Unchanged;
          }
          working = false;
 
@@ -494,7 +504,7 @@ namespace Editor.Saving
             {
                if (obj.WhatAmI() != type)
                   goto outerLoop;
-               if (obj.EditingStatus is Modified or Deleted)
+               if (obj.EditingStatus is Modified or ToBeDeleted)
                   saveables.Add(obj);
             }
             outerLoop:

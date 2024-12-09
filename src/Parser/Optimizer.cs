@@ -21,7 +21,7 @@ public static class Optimizer
       var pixelPtr = 0;
       var borderPtr = 0;
       
-      foreach (var province in provinces)
+      foreach (var province in provinces.AsSpan())
       {
          var color = Color.FromArgb(province.Color.R, province.Color.G, province.Color.B).ToArgb();
          dic[color] = province;
@@ -71,9 +71,7 @@ public static class Optimizer
 
    public static void RemoveBorderPixelsFromPixels(Province province, ref HashSet<Point> borderSet)
    {
-      var pixels = province.Pixels;
-
-
+      var pixels = province.Pixels.AsSpan();
       var newPixels = new Point[pixels.Length - province.BorderCnt];
       var cnt = 0;
       for (var i = 0; i < pixels.Length; i++)

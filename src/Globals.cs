@@ -330,13 +330,18 @@ public static class Globals
 // - [x] Fix Localisation behaving weird
 // - [x] Fix government reforms not saveable
 // - [x] Save file at popup in center of screen
-// - [ ] Fix Saving state getting lost on multiple undos after saving
+// - [x] Fix Saving state getting lost on multiple undos after saving
 // - [x] Test Remove Command for countries
 // - [x] Added Debbuging interface for edited objects
-// - [ ] Fix Saving state getting lost on undo on collections
+// - [x] Fix Saving state getting lost on undo on collections
 // - [x] Fix Discord SDK crash
 // - [x] Fix Custom cursors not working and changing back to normal cursor
-// - [ ] Adding metric for startup (Currently in settings will be separate later)
+// - [x] Adding metric for startup (Currently in settings will be separate later)
+// -     Collection Editor:
+//       - [ ] Remove all buttons (with an empty to select?)
+//       - [ ] TryAdd instead of add
+// - [ ] Change all Saveable commands to NOT use SaveableHelper
+// - [ ] Demonstration Video
 
 // TODO LIST Until Alpha 1.1
 // - [ ] Block Water provinces; should not be viable for countries

@@ -13,6 +13,7 @@ public enum ObjEditingStatus
    Unchanged,
    Modified,
    Immutable,
+   ToBeDeleted,
    Deleted
 }
 
@@ -39,10 +40,11 @@ public abstract class Saveable : IDisposable
          switch (value)
          {
             case ObjEditingStatus.Modified:
-            case ObjEditingStatus.Deleted:
+            case ObjEditingStatus.ToBeDeleted:
                SaveMaster.AddToBeHandled(this);
                break;
             case ObjEditingStatus.Unchanged:
+            case ObjEditingStatus.Deleted:
                SaveMaster.RemoveFromToBeHandled(this);
                break;
          }

@@ -1013,44 +1013,6 @@ namespace Editor.Forms
          File.WriteAllText(Path.Combine(downloadFolder, "buildings.txt"), sb.ToString());
       }
 
-      private void fasdfToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-         if (GuiDrawing.CurrentElements.HasFlag(GuiDrawing.GuiElements.TradeRoutes))
-         {
-            GuiDrawing.CurrentElements = GuiDrawing.GuiElements.None;
-         }
-         else
-         {
-            GuiDrawing.CurrentElements = GuiDrawing.GuiElements.TradeRoutes;
-         }
-      }
-
-      public void FunnyPaint(object? sender, PaintEventArgs e)
-      {
-         //using var g = Globals.ZoomControl.CreateGraphics();
-         float[] data = new float[]
-         {
-            3239.500000f, 1153.500000f,
-            3180.000000f, 1204.000000f,
-            3093.000000f, 1203.000000f,
-            3017.500000f, 1244.500000f,
-            2977.000000f, 1288.000000f,
-            2967.000000f, 1347.000000f,
-            2935.000000f, 1348.000000f
-         };
-
-         PointF[] points = new PointF[data.Length / 2 + 2];
-         for (int i = 0; i < data.Length; i += 2)
-         {
-            points[i / 2 + 1] = Globals.ZoomControl.ReverseCoordinateFloat(new PointF(data[i], Globals.MapHeight - data[i + 1]));
-         }
-
-         points[0] = Globals.ZoomControl.ReverseCoordinateFloat(new PointF((float)Globals.ProvinceIdToProvince[358].Center.X, (float)Globals.ProvinceIdToProvince[358].Center.Y));
-         points[^1] = Globals.ZoomControl.ReverseCoordinateFloat(new PointF((float)Globals.ProvinceIdToProvince[1298].Center.X, (float)Globals.ProvinceIdToProvince[1298].Center.Y));
-
-         e.Graphics.DrawCurve(new Pen(Color.Red, 2), points);
-         //g.DrawRectangle(Pens.BlueViolet, new RectangleF(points[0], new SizeF(400f, 400f)));
-      }
       private void MapWindow_KeyDown(object sender, KeyEventArgs e)
       {
          if (ModifierKeys == Keys.Control)
