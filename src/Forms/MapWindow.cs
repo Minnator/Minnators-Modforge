@@ -368,6 +368,8 @@ namespace Editor.Forms
          DataTabPanel.TabPages[0].Enabled = false;
          Selection.OnProvinceSelectionChange += (sender, i) =>
          {
+
+
             if (i == 0)
             {
                DataTabPanel.TabPages[0].SuspendLayout();
@@ -439,6 +441,11 @@ namespace Editor.Forms
          _discoveredBy.OnItemRemoved += ProvinceEditingEvents.OnDiscoveredByRemoved;
 
          TradeCenterComboBox.SelectedIndexChanged += ProvinceEditingEvents.OnTradeCenterChanged;
+
+         LocalisationTextBox.TextChanged += (_, _) =>
+         {
+
+         };
 
          LocalisationTextBox.LostFocus += (_, _) =>
          {

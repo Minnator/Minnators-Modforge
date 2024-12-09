@@ -17,7 +17,21 @@ namespace Editor.Forms.Feature
          MainTLP.Controls.Add(mainTreeView, 0, 0);
          mainTreeView.NodeMouseDoubleClick += mainTreeView_NodeMouseDoubleClick;
          RestructureCache();
+
+         SaveMaster.Saving += (_, _) => RestructureCache();
+         SaveMaster.SaveMasterModified += (_, a) =>
+         {
+            var add = a.Item1;
+            var saveable = a.Item2;
+            if (add)
+               Cache[saveable.WhatAmI()].Add(saveable);
+            else
+               Cache[saveable.WhatAmI()].Remove(saveable);
+            GenerateTreeView();
+         };
       }
+
+
 
       private void RestructureCache()
       {

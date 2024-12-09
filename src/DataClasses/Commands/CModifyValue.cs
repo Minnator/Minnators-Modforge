@@ -5,12 +5,11 @@ using static Editor.Helper.ProvinceEnumHelper;
 
 namespace Editor.DataClasses.Commands
 {
-   public class CModifyValue : ICommand
+   public class CModifyValue : SaveableCommandBasic
    {
       private readonly bool _increase;
       private readonly int _value;
       private readonly List<Province> _provinces = [];
-      private readonly SaveablesCommandHelper _provinceSaveables;
       private readonly ProvAttrGet _attribute;
       private readonly ProvAttrSet _setter;
 
@@ -19,7 +18,6 @@ namespace Editor.DataClasses.Commands
          if (provinces.Count == 0)
             return;
          _provinces = provinces;
-         _provinceSaveables = new([.. provinces]);
          _attribute = attribute;
          _setter = ps;
          _value = value;
@@ -29,18 +27,18 @@ namespace Editor.DataClasses.Commands
             Execute();
       }
 
-      public void Execute()
+      public override void Execute()
       {
-         _provinceSaveables.Execute();
+         base.Execute([.. _provinces]);
          InternalExecute();
       }
 
-      public void Undo()
+      public override void Undo()
       {
-         _provinceSaveables.Undo();
+         base.Undo();
          foreach (var province in _provinces)
          {
-            object? attributeValue = province.GetAttribute(_attribute);
+            var attributeValue = province.GetAttribute(_attribute);
             int attr;
 
             if (attributeValue is int intValue)
@@ -65,9 +63,9 @@ namespace Editor.DataClasses.Commands
          }
       }
 
-      public void Redo()
+      public override void Redo()
       {
-         _provinceSaveables.Redo();
+         base.Redo();
          InternalExecute();
       }
 
@@ -93,14 +91,14 @@ namespace Editor.DataClasses.Commands
          }
       }
 
-      public string GetDescription()
+      public override string GetDescription()
       {
          return _provinces.Count == 1
             ? $"{(_increase ? "Increased" : "Decreased")} {_attribute} of {_provinces[0].Id} ({_provinces[0].GetLocalisation()}) by [{_value}]"
             : $"{(_increase ? "Increased" : "Decreased")} {_attribute} of [{_provinces.Count}] provinces by [{_value}]";
       }
 
-      public string GetDebugInformation(int indent)
+      public override string GetDebugInformation(int indent)
       {
          var sb = new StringBuilder();
          SavingUtil.AddTabs(indent, ref sb);

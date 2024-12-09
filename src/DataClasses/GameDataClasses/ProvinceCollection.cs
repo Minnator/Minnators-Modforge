@@ -170,14 +170,14 @@ public abstract class ProvinceCollection<T> : ProvinceComposite where T : Provin
    {
       if (!_subCollection.Contains(composite))
          return;
-      var command = new CRemoveProvinceCollection<T>(this, removeFromGlobal);
+      var command = GetRemoveCommand(this, removeFromGlobal);
       command.RemoveNewComposite(composite);
       ExecuteAndAdd(command, tryAddEventToHistory);
    }
 
    public void NewRemoveRange(ICollection<T> composites, bool removeFromGlobal = false, bool tryAddEventToHistory = true)
    {
-      var command = new CRemoveProvinceCollection<T>(this, removeFromGlobal);
+      var command = GetRemoveCommand(this, removeFromGlobal);
       foreach (var composite in composites)
       {
          if (!_subCollection.Contains(composite))

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
@@ -18,6 +19,8 @@ namespace Editor.Saving
       private static bool working = false;
 
       public static event EventHandler<SaveableType> Saving;
+
+      public static event EventHandler<(bool, Saveable)> SaveMasterModified;
 
       static SaveMaster()
       {
@@ -240,40 +243,18 @@ namespace Editor.Saving
          var path = saveable.Path;
          foreach (var pathSaveable in AllSaveableFiles[path])
             if (pathSaveable.EditingStatus is Modified or ToBeDeleted)
+            {
+               OnChange(false, saveable);
                return;
+            }
+
          Debug.WriteLine($"removed {path} since it was not modified");
          if (!NeedsToBeHandled.Remove(path))
             throw new EvilActions("The path was not found in the NeedsToBeHandled list but was meant to be removed!");
+
+         OnChange(false, saveable);
       }
-
-      public static void RemoveFromToBeHandled(ICollection<Saveable> saveables)
-      {
-         HashSet<PathObj> allPaths = [];
-         var count = 0;
-         foreach (var saveable in saveables)
-         {
-            if (saveable.EditingStatus is not (Modified or ToBeDeleted))
-            {
-               allPaths.Add(saveable.Path);
-               count++;
-            }
-         }
-
-         Cache[saveables.First().WhatAmI()] -= count;
-         
-         foreach (var path in allPaths)
-         {
-            foreach (var saveable in AllSaveableFiles[path])
-               if (saveable.EditingStatus is Modified or ToBeDeleted)
-                  goto pathLoop;
-            Debug.WriteLine($"removed {path} since it was not modified");
-            if (!NeedsToBeHandled.Remove(path))
-               throw new EvilActions("The path was not found in the NeedsToBeHandled list but was meant to be removed!");
-            pathLoop:
-            continue;
-         }
-      }
-
+      
       private static void ManageEmptyPathObjects(ref HashSet<PathObj> localToBeHandled, Saveable saveable)
       {
          var path = saveable.Path;
@@ -320,6 +301,7 @@ namespace Editor.Saving
          var type = saveable.WhatAmI();
          Globals.SaveableType |= type;
          Cache[type]++;
+         OnChange(true, saveable);
       }
 
       private static void SaveFile(PathObj path)
@@ -337,8 +319,6 @@ namespace Editor.Saving
          working = true;
          foreach (var item in AllSaveableFiles[path])
          {
-            if (item is Area area && area.Name.Equals("mmf_mittelmark_area"))
-               Debugger.Break();
             if (lastItem is null)
             {
                lastItem = item;
@@ -516,6 +496,11 @@ namespace Editor.Saving
       private static void OnSaving(SaveableType e)
       {
          Saving?.Invoke(null, e);
+      }
+
+      private static void OnChange(bool add, Saveable e)
+      {
+         SaveMasterModified?.Invoke(null, (add, e));
       }
    }
 }

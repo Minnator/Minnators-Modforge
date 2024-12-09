@@ -592,9 +592,9 @@ public class Country : ProvinceCollection<Province>
       return new CAddToCountryProvinceCollection(collection, addToGlobal);
    }
 
-   public override CRemoveCountryProvinceCollection<Province> GetRemoveCommand(ProvinceCollection<Province> collection, bool addToGlobal)
+   public override CRemoveProvinceCollectionGeneral<Province> GetRemoveCommand(ProvinceCollection<Province> collection, bool addToGlobal)
    {
-      return new (collection, addToGlobal);
+      return new CRemoveCountryProvinceCollection(collection, addToGlobal);
    }
 
    public override void InternalAdd(Province composite)

@@ -5,10 +5,9 @@ using static Editor.Helper.ProvinceEnumHelper;
 
 namespace Editor.DataClasses.Commands
 {
-   public class CAddRemoveProvinceAttribute : ICommand
+   public class CAddRemoveProvinceAttribute : SaveableCommandBasic
    {
       private readonly List<Province> _provinces;
-      private readonly SaveablesCommandHelper _provinceSaveables;
       private readonly bool _add;
       private readonly ProvAttrGet _attribute;
       private readonly ProvAttrSet _setter;
@@ -18,7 +17,6 @@ namespace Editor.DataClasses.Commands
       public CAddRemoveProvinceAttribute(List<Province> provinces, string value, ProvAttrGet pa, ProvAttrSet ps, ProvAttrSet pr, bool add, bool executeOnInit = true)
       {
          _provinces = provinces;
-         _provinceSaveables = new([.. provinces]);
          _value = value;
          _attribute = pa;
          _setter = ps;
@@ -29,22 +27,22 @@ namespace Editor.DataClasses.Commands
             Execute();
       }
 
-      public void Execute()
+      public override void Execute()
       {
-         _provinceSaveables.Execute();
+         base.Execute([.. _provinces]);
          InternalExecute();
       }
 
-      public void Undo()
+      public override void Undo()
       {
-         _provinceSaveables.Undo();
+         base.Undo();
          foreach (var province in _provinces) 
             province.SetAttribute(_remover, _value);
       }
 
-      public void Redo()
+      public override void Redo()
       {
-         _provinceSaveables.Redo();
+         base.Redo();
          InternalExecute();
       }
 
@@ -54,14 +52,14 @@ namespace Editor.DataClasses.Commands
             province.SetAttribute(_setter, _value);
       }
 
-      public string GetDescription()
+      public override string GetDescription()
       {
          return _provinces.Count == 1
             ? $"{(_add ? "Added" : "Removed")} {_attribute} {_value} to {_provinces[0].Id} ({_provinces[0].GetLocalisation()})"
             : $"{(_add ? "Added" : "Removed")} {_attribute} {_value} to [{_provinces.Count}] provinces";
       }
 
-      public string GetDebugInformation(int indent)
+      public override string GetDebugInformation(int indent)
       {
          var sb = new StringBuilder();
          SavingUtil.AddTabs(indent, ref sb);

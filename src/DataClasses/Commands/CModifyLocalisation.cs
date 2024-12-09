@@ -2,17 +2,15 @@
 
 namespace Editor.DataClasses.Commands
 {
-   public class CModifyLocalisation : ICommand
+   public class CModifyLocalisation : SaveableCommandBasic
    {
       private readonly LocObject _locObject;
-      private readonly SaveableCommandHelper _locObjectSaveableHelper;
       private readonly string _newLoc;
       private readonly string _oldLoc;
 
       public CModifyLocalisation(LocObject obj, string newLoc, bool executeOnInit = true)
       {
          _newLoc = newLoc;
-         _locObjectSaveableHelper = new(obj);
          _locObject = obj;
          _oldLoc = _locObject.Value;
 
@@ -21,21 +19,21 @@ namespace Editor.DataClasses.Commands
       }
 
 
-      public void Execute()
+      public override void Execute()
       {
-         _locObjectSaveableHelper.Execute();
+         base.Execute([_locObject]);
          InternalExecute();
       }
 
-      public void Undo()
+      public override void Undo()
       {
-         _locObjectSaveableHelper.Undo();
+         base.Undo();
          _locObject.SilentSet(_oldLoc);
       }
 
-      public void Redo()
+      public override void Redo()
       {
-         _locObjectSaveableHelper.Redo();
+         base.Redo();
          InternalExecute();
       }
 
@@ -44,51 +42,49 @@ namespace Editor.DataClasses.Commands
          _locObject.SilentSet(_newLoc);
       }
 
-      public string GetDescription()
+      public override string GetDescription()
       {
          return $"Modified \"{_locObject.Key[..Math.Min(_locObject.Key.Length, 20)]}\" to \"{_newLoc[..Math.Min(_newLoc.Length, 20)]}\"";
       }
 
-      public string GetDebugInformation(int indent)
+      public override string GetDebugInformation(int indent)
       {
          return $"Changed \"{_locObject.Key}\" from \"{_oldLoc}\" to \"{_newLoc}\"";
       }
    }
 
-   public class CAddDelLocalisation : ICommand
+   public class CAddDelLocalisation : SaveableCommandBasic
    {
       private readonly LocObject _locObject;
-      private readonly SaveableCommandHelper _locObjectSaveableHelper;
       private readonly bool _add;
 
       public CAddDelLocalisation(LocObject obj, bool add, bool executeOnInit = true)
       {
          _locObject = obj;
-         _locObjectSaveableHelper = new(obj);
          _add = add;
 
          if (executeOnInit)
             Execute();
       }
 
-      public void Execute()
+      public override void Execute()
       {
-         _locObjectSaveableHelper.Execute();
+         base.Execute([_locObject]);
          InternalExecute();
       }
 
-      public void Undo()
+      public override void Undo()
       {
-         _locObjectSaveableHelper.Undo();
+         base.Undo();
          if (_add)
             Globals.Localisation.Remove(_locObject);
          else
             Globals.Localisation.Add(_locObject);
       }
 
-      public void Redo()
+      public override void Redo()
       {
-         _locObjectSaveableHelper.Redo();
+         base.Redo();
          InternalExecute();
       }
 
@@ -100,12 +96,12 @@ namespace Editor.DataClasses.Commands
             Globals.Localisation.Remove(_locObject);
       }
 
-      public string GetDescription()
+      public override string GetDescription()
       {
          return _add ? $"Added \"{_locObject.Key[..Math.Min(_locObject.Key.Length, 20)]}\"" : $"Deleted \"{_locObject.Key[..Math.Min(_locObject.Key.Length, 20)]}\"";
       }
 
-      public string GetDebugInformation(int indent)
+      public override string GetDebugInformation(int indent)
       {
          return _add ? $"Added \"{_locObject.Key}\"" : $"Deleted \"{_locObject.Key}\"";
       }
