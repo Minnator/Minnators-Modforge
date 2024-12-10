@@ -340,7 +340,7 @@ public static class Globals
 // -     Collection Editor:
 //       - [ ] Remove all buttons (with an empty to select?)
 //       - [ ] TryAdd instead of add
-// - [ ] Change all Saveable commands to NOT use SaveableHelper
+// - [x] Change all Saveable commands to NOT use SaveableHelper
 // - [ ] Demonstration Video
 
 // TODO LIST Until Alpha 1.1

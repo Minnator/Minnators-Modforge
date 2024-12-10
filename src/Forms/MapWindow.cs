@@ -5,6 +5,7 @@ using System.Media;
 using System.Runtime;
 using System.Text;
 using Editor.Controls;
+using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Misc;
@@ -58,6 +59,10 @@ namespace Editor.Forms
       private NumberTextBox _nativesSizeTextBox = null!;
       private NumberTextBox _nativeFerocityTextBox = null!;
       private NumberTextBox _nativeHostilityTextBox = null!;
+
+      private TextSaveableTextBox<CModifyLocalisation> _localisationTextBox = null!;
+      private TextSaveableTextBox<CModifyLocalisation> _provAdjTextBox = null!;
+      private TextSaveableTextBox<CProvinceAttributeChange> _capitalNameTextBox = null!;
 
       private ToolTip _savingButtonsToolTip = null!;
 
@@ -405,6 +410,20 @@ namespace Editor.Forms
             }
          };
 
+         // CustomTextBox
+         _localisationTextBox = new(Selection.GetSelectedProvincesAsSaveable, new CLocObjFactory(true))
+         {
+            Margin = new(3,1,3,3),
+            Dock = DockStyle.Fill
+         };
+         LocTableLayoutPanel.Controls.Add(_localisationTextBox, 1, 1);
+
+         _provAdjTextBox = new(Selection.GetSelectedProvincesAsSaveable, new CLocObjFactory(false))
+         {
+            Margin = new(3,1,3,3),
+            Dock = DockStyle.Fill
+         };
+         LocTableLayoutPanel.Controls.Add(_provAdjTextBox, 1, 3);
 
          // Tooltips for saving Buttons
          _savingButtonsToolTip = new();
@@ -441,31 +460,7 @@ namespace Editor.Forms
          _discoveredBy.OnItemRemoved += ProvinceEditingEvents.OnDiscoveredByRemoved;
 
          TradeCenterComboBox.SelectedIndexChanged += ProvinceEditingEvents.OnTradeCenterChanged;
-
-         LocalisationTextBox.TextChanged += (_, _) =>
-         {
-
-         };
-
-         LocalisationTextBox.LostFocus += (_, _) =>
-         {
-            LocObjectModifications.ModifyProvinceLocalisation(false, LocalisationTextBox.Text);
-         };
-         LocalisationTextBox.KeyDown += (_, args) =>
-         {
-            if (args.KeyCode == Keys.Enter)
-               LocObjectModifications.ModifyProvinceLocalisation(false, LocalisationTextBox.Text);
-         };
-         ProvAdjTextBox.LostFocus += (_, _) =>
-         {
-            LocObjectModifications.ModifyProvinceLocalisation(true, ProvAdjTextBox.Text);
-         };
-         ProvAdjTextBox.KeyDown += (_, args) =>
-         {
-            if (args.KeyCode == Keys.Enter)
-               LocObjectModifications.ModifyProvinceLocalisation(true, ProvAdjTextBox.Text);
-         };
-
+         
          CoresAndClaimLayoutPanel.Controls.Add(_permanentClaims, 0, 0);
          CoresAndClaimLayoutPanel.Controls.Add(_claims, 1, 0);
          CoresGroupBox.Controls.Add(_cores);
@@ -600,8 +595,12 @@ namespace Editor.Forms
          _extraCostNumeric.DownButtonPressedLarge += ProvinceEditingEvents.OnDownButtonPressedLargeExtraCost;
          TradePanel.Controls.Add(_extraCostNumeric, 1, 2);
 
-         CapitalNameTextBox.Leave += ProvinceEditingEvents.OnCapitalNameChanged;
-         SetFinishEditingOnEnter(CapitalNameTextBox, ProvinceEditingEvents.OnCapitalNameChanged);
+         _capitalNameTextBox = new(Selection.GetSelectedProvincesAsSaveable, new CProvinceAttributeFactory(ProvAttrGet.capital, ProvAttrSet.capital))
+         {
+            Dock = DockStyle.Fill,
+            Margin = new(3, 1, 3, 3)
+         };
+         MisProvinceData.Controls.Add(_capitalNameTextBox, 1, 4);
 
          IsCityCheckBox.CheckedChanged += ProvinceEditingEvents.OnIsCityChanged;
          IsHreCheckBox.CheckedChanged += ProvinceEditingEvents.OnIsHreChanged;
@@ -698,7 +697,7 @@ namespace Editor.Forms
          if (Selection.GetSharedAttribute(ProvAttrGet.culture, out result) && result is string culture)
             _cultureComboBox.Text = culture;
          if (Selection.GetSharedAttribute(ProvAttrGet.capital, out result) && result is string capital)
-            CapitalNameTextBox.Text = capital;
+            _capitalNameTextBox.Text = capital;
          if (Selection.GetSharedAttribute(ProvAttrGet.is_city, out result) && result is bool isCity)
             IsCityCheckBox.Checked = isCity;
          if (Selection.GetSharedAttribute(ProvAttrGet.hre, out result) && result is bool isHre)
@@ -741,10 +740,10 @@ namespace Editor.Forms
          if (Selection.GetSelectedProvinces.Count == 1)
          {
             AddAllModifiersToListView(Selection.GetSelectedProvinces[0]);
-            LocalisationTextBox.Text = Selection.GetSelectedProvinces[0].GetLocalisation();
-            LocalisationLabel.Text = Selection.GetSelectedProvinces[0].GetLocalisationString();
-            ProvAdjTextBox.Text = Localisation.GetLoc(Selection.GetSelectedProvinces[0].GetLocalisationAdj);
-            ProvAdjLabel.Text = Selection.GetSelectedProvinces[0].GetLocalisationAdj;
+            _localisationTextBox.Text = Selection.GetSelectedProvinces[0].GetLocalisation();
+            LocalisationLabel.Text = Selection.GetSelectedProvinces[0].GetTitleKey();
+            _provAdjTextBox.Text = Localisation.GetLoc(Selection.GetSelectedProvinces[0].GetAdjectiveKey());
+            ProvAdjLabel.Text = Selection.GetSelectedProvinces[0].GetAdjectiveKey();
          }
          ResumeLayout();
          Globals.EditingStatus = EditingStatus.Idle;
@@ -760,7 +759,7 @@ namespace Editor.Forms
          ControllerTagBox.Text = province.Controller;
          _religionComboBox.Text = province.Religion;
          _cultureComboBox.Text = province.Culture;
-         CapitalNameTextBox.Text = province.Capital;
+         _capitalNameTextBox.Text = province.Capital;
          IsCityCheckBox.Checked = province.IsCity;
          IsHreCheckBox.Checked = province.IsHre;
          IsParlimentSeatCheckbox.Checked = province.IsSeatInParliament;
@@ -796,7 +795,7 @@ namespace Editor.Forms
          ControllerTagBox.Clear();
          _religionComboBox.Clear();
          _cultureComboBox.Clear();
-         CapitalNameTextBox.Clear();
+         _capitalNameTextBox.Clear();
          IsCityCheckBox.Checked = false;
          IsHreCheckBox.Checked = false;
          IsParlimentSeatCheckbox.Checked = false;
@@ -823,9 +822,9 @@ namespace Editor.Forms
          ModifiersListView.Items.Clear();
          DurationTextBox.Text = string.Empty;
          _tradeCompanyInvestments.Text = string.Empty;
-         LocalisationTextBox.Text = string.Empty;
+         _localisationTextBox.Clear();
          LocalisationLabel.Text = string.Empty;
-         ProvAdjTextBox.Text = string.Empty;
+         _provAdjTextBox.Clear();
          ProvAdjLabel.Text = string.Empty;
          _terrainComboBox.SelectedItem = string.Empty;
          ExtendedComboBox.AllowEvents = true;
@@ -1283,6 +1282,9 @@ namespace Editor.Forms
       private QuickAssignControl<Tag> _historicFriends = null!;
       private QuickAssignControl<string> _estatePrivileges = null!;
 
+      private TextSaveableTextBox<CModifyLocalisation> CountryLoc = null!;
+      private TextSaveableTextBox<CModifyLocalisation> CountryADJLoc = null!;
+
       private void InitializeCountryEditGui()
       {
          Selection.OnCountrySelected += CountryGuiEvents.OnCountrySelected;
@@ -1400,10 +1402,19 @@ namespace Editor.Forms
          MiscTLP.Controls.Add(_historicFriends, 0, 4);
          MiscTLP.Controls.Add(_estatePrivileges, 0, 5);
 
-         CountryLoc.LostFocus += CountryGuiEvents.CountryNameLoc_Changed;
-         SetFinishEditingOnEnter(CountryLoc, CountryGuiEvents.CountryNameLoc_Changed);
-         CountryADJLoc.LostFocus += CountryGuiEvents.CountryAdjectiveLoc_Changed;
-         SetFinishEditingOnEnter(CountryADJLoc, CountryGuiEvents.CountryAdjectiveLoc_Changed);
+         CountryLoc = new(Selection.GetSelectedCountry, new CLocObjFactory(true))
+         {
+            Dock = DockStyle.Fill,
+            Margin = new(3,1,3,3),
+         };
+         TagAndColorTLP.Controls.Add(CountryLoc, 1, 1);
+
+         CountryADJLoc = new (Selection.GetSelectedCountry, new CLocObjFactory(false))
+         {
+            Dock = DockStyle.Fill,
+            Margin = new(3,1,3,3),
+         };
+         TagAndColorTLP.Controls.Add(CountryADJLoc, 3, 1);
 
       }
 

@@ -55,6 +55,13 @@ public static class Localisation
    }
 }
 
+public interface ITitleAdjProvider
+{
+   public string GetTitleKey();
+   public string GetAdjectiveKey();
+}
+
+
 /// <summary>
 /// The value will never be updated if it would not changed
 /// </summary>
@@ -92,8 +99,19 @@ public class LocObject : Saveable
             return;
          if (Equals(value, _editingStatus))
             return;
-         if (Equals(value, ObjEditingStatus.Modified))
-            SaveMaster.AddLocObject(this);
+         switch (value)
+         {
+            case ObjEditingStatus.Modified:
+            case ObjEditingStatus.ToBeDeleted:
+               SaveMaster.AddLocObject(this);
+               break;
+            case ObjEditingStatus.Unchanged:
+            case ObjEditingStatus.Deleted:
+               SaveMaster.RemoveFromToBeHandled(this);
+               break;
+         }
+
+         //TODO: what if we undo here? - ~no.
          _editingStatus = value;
       }
    }
@@ -138,6 +156,11 @@ public class LocObject : Saveable
       return Key.GetHashCode();
    }
 
+   public override string ToString()
+   {
+      return $"{Key} : {Value}";
+   }
+
    public override bool Equals(object? obj)
    {
       if (obj is not LocObject locObject) 
@@ -175,7 +198,7 @@ public static class LocObjectModifications
 
    public static void ModifyLocObject(LocObject locObject, string newValue)
    {
-      Globals.HistoryManager.AddCommand(new CModifyLocalisation(locObject, newValue));
+      Globals.HistoryManager.AddCommand(new CModifyLocalisation([locObject], newValue));
    }
 
    public static void AddLocObject(string key, string value, bool add)
@@ -191,6 +214,6 @@ public static class LocObjectModifications
    public static void ModifyProvinceLocalisation(bool adjective, string newValue)
    {
       foreach (var province in Selection.GetSelectedProvinces) 
-         ModifyIfExistsOtherwiseAdd(adjective ? province.GetDescriptionLocKey : province.GetTitleLocKey, newValue);
+         ModifyIfExistsOtherwiseAdd(adjective ? province.GetDescriptionLocKey : province.GetTitleKey(), newValue);
    }
 }

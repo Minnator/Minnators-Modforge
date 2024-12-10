@@ -6,11 +6,11 @@ using static Editor.Helper.ProvinceEnumHelper;
 
 namespace Editor.DataClasses.Commands
 {
-   public sealed class CProvinceAttributeChange : SaveableCommandBasic
+   public sealed class CProvinceAttributeChange : CTextEditingWrapper
    {
       private readonly List<Province> _provinces;
       private readonly List<string> _oldValues = [];
-      private readonly string _value;
+      private string _value;
       private readonly ProvAttrGet _attribute;
       private readonly ProvAttrSet _setter;
 
@@ -24,9 +24,7 @@ namespace Editor.DataClasses.Commands
          foreach (var p in _provinces)
          {
             var attr = p.GetAttribute(_attribute);
-            if (attr == null!)
-               Debugger.Break();
-            else if (attr is bool b)
+            if (attr is bool b)
                _oldValues.Add(b ? "yes" : "no");
             else
                _oldValues.Add(attr.ToString()!);
@@ -84,6 +82,12 @@ namespace Editor.DataClasses.Commands
          foreach (var province in _provinces)
             sb.Append($"{province.Id}, ");
          return sb.ToString();
+      }
+
+      public override void SetValue(string value)
+      {
+         Debug.Assert(_setter == ProvAttrSet.capital);
+         _value = value;
       }
    }
 }

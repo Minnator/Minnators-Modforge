@@ -550,7 +550,7 @@ public class CountryFilePath : Saveable
    }
 }
 
-public class Country : ProvinceCollection<Province>
+public class Country : ProvinceCollection<Province>, ITitleAdjProvider
 {
    public Country(Tag tag, CountryFilePath fileName, Color color, ObjEditingStatus status = ObjEditingStatus.Immutable) : base(tag.ToString(), color, status)
    {
@@ -687,9 +687,8 @@ public class Country : ProvinceCollection<Province>
 
    public bool Exists => SubCollection.Count > 0;
 
-   public string GetAdjectiveLocKey => $"{Tag}_ADJ";
    public string GetLocalisation() => Localisation.GetLoc(Tag);
-   public string GetAdjectiveLocalisation() => Localisation.GetLoc(GetAdjectiveLocKey);
+   public string GetAdjectiveLocalisation() => Localisation.GetLoc(GetAdjectiveKey());
    public override string ToString() => $"{Tag.ToString()} ({GetLocalisation()})";
    public override bool Equals(object? obj)
    {
@@ -718,7 +717,7 @@ public class Country : ProvinceCollection<Province>
       return new("modforge_country_tags", false);
    }
 
-   public override string SavingComment() => Localisation.GetLoc(Tag);
+   public override string SavingComment() => Localisation.GetLoc(GetTitleKey());
    public override string GetSaveString(int tabs)
    {
       throw new EvilActions("You should not do this! We need to fix the country mess!");
@@ -845,5 +844,15 @@ public class Country : ProvinceCollection<Province>
       var temp2 = new HistoryCountry(country);
       Globals.Countries.Add(tag, country);
       CountryCreated.Invoke(country, country);
+   }
+
+   public string GetTitleKey()
+   {
+      return Tag;
+   }
+
+   public string GetAdjectiveKey()
+   {
+      return $"{Tag}_ADJ";
    }
 }

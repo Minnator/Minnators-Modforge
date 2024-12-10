@@ -176,22 +176,6 @@ namespace Editor.Events
             Selection.SelectedCountry.HistoryCountry.GovernmentRank = rank;
       }
 
-      public static void CountryNameLoc_Changed(object? sender, EventArgs e)
-      {
-         if (Selection.SelectedCountry == Country.Empty)
-            return;
-
-         Localisation.AddOrModifyLocObject(Selection.SelectedCountry.GetTitleLocKey, Globals.MapWindow.CountryLoc.Text);
-      }
-
-      public static void CountryAdjectiveLoc_Changed(object? sender, EventArgs e)
-      {
-         if (Selection.SelectedCountry == Country.Empty)
-            return;
-
-         Localisation.AddOrModifyLocObject(Selection.SelectedCountry.GetAdjectiveLocKey, Globals.MapWindow.CountryADJLoc.Text);
-      }
-
       public static void AcceptedCultures_OnItemRemoved(object? sender, ProvinceEditedEventArgs e)
       {
          if (Selection.SelectedCountry == Country.Empty)

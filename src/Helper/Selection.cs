@@ -2,6 +2,7 @@
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.Forms.Feature;
+using Editor.Saving;
 using static Editor.Helper.ProvinceEnumHelper;
 
 namespace Editor.Helper;
@@ -105,7 +106,8 @@ public static class Selection
    // Country Selection Variables
    // Selected Country TODO ADD THIS FEATURE
    private static HashSet<Country> _selectedCountries = []; // Use later when multiple countries can be selected and edited at once
-   private static Country _selectedCountry = Country.Empty; 
+   private static Country _selectedCountry = Country.Empty;
+   public static ICollection<Saveable> GetSelectedCountry() => [_selectedCountry];
    public static Country SelectedCountry
    {
       get => _selectedCountry;
@@ -138,6 +140,7 @@ public static class Selection
    private static ProvAttrType _mwAttributeType = ProvAttrType.String;
 
    // ------------ Getters ------------ \\
+   public static ICollection<Saveable> GetSelectedProvincesAsSaveable() => [.._selectedProvinces];
    public static List<Province> GetSelectedProvinces => _selectedProvinces.ToList();
    public static int[] GetSelectedProvincesIds => _selectedProvinces.Select(p => p.Id).ToArray();
    public static List<Province> SelectionPreview => [.._selectionPreview];

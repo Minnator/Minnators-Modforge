@@ -175,15 +175,12 @@
          LocTableLayoutPanel = new TableLayoutPanel();
          label39 = new Label();
          LocalisationLabel = new Label();
-         LocalisationTextBox = new TextBox();
          label25 = new Label();
          label26 = new Label();
          label37 = new Label();
-         ProvAdjTextBox = new TextBox();
          ProvAdjLabel = new Label();
          MiscProvGroupBox = new GroupBox();
          MisProvinceData = new TableLayoutPanel();
-         CapitalNameTextBox = new TextBox();
          label6 = new Label();
          label5 = new Label();
          label8 = new Label();
@@ -238,8 +235,6 @@
          label27 = new Label();
          label28 = new Label();
          label29 = new Label();
-         CountryLoc = new TextBox();
-         CountryADJLoc = new TextBox();
          label31 = new Label();
          label33 = new Label();
          label32 = new Label();
@@ -412,6 +407,7 @@
          // browseEditedObjectsToolStripMenuItem
          // 
          browseEditedObjectsToolStripMenuItem.Name = "browseEditedObjectsToolStripMenuItem";
+         browseEditedObjectsToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.S;
          browseEditedObjectsToolStripMenuItem.Size = new Size(268, 22);
          browseEditedObjectsToolStripMenuItem.Text = "Browse Edited Objects";
          browseEditedObjectsToolStripMenuItem.Click += browseEditedObjectsToolStripMenuItem_Click;
@@ -1742,11 +1738,9 @@
          LocTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
          LocTableLayoutPanel.Controls.Add(label39, 0, 3);
          LocTableLayoutPanel.Controls.Add(LocalisationLabel, 1, 0);
-         LocTableLayoutPanel.Controls.Add(LocalisationTextBox, 1, 1);
          LocTableLayoutPanel.Controls.Add(label25, 0, 0);
          LocTableLayoutPanel.Controls.Add(label26, 0, 1);
          LocTableLayoutPanel.Controls.Add(label37, 0, 2);
-         LocTableLayoutPanel.Controls.Add(ProvAdjTextBox, 1, 3);
          LocTableLayoutPanel.Controls.Add(ProvAdjLabel, 1, 2);
          LocTableLayoutPanel.Dock = DockStyle.Fill;
          LocTableLayoutPanel.Location = new Point(0, 16);
@@ -1784,16 +1778,6 @@
          LocalisationLabel.Text = "-";
          LocalisationLabel.TextAlign = ContentAlignment.MiddleLeft;
          // 
-         // LocalisationTextBox
-         // 
-         LocalisationTextBox.Dock = DockStyle.Fill;
-         LocalisationTextBox.Location = new Point(60, 25);
-         LocalisationTextBox.Margin = new Padding(1);
-         LocalisationTextBox.Name = "LocalisationTextBox";
-         LocalisationTextBox.Size = new Size(137, 23);
-         LocalisationTextBox.TabIndex = 1;
-         LocalisationTextBox.Text = "-";
-         // 
          // label25
          // 
          label25.AutoSize = true;
@@ -1827,15 +1811,6 @@
          label37.Text = "Adj";
          label37.TextAlign = ContentAlignment.MiddleLeft;
          // 
-         // ProvAdjTextBox
-         // 
-         ProvAdjTextBox.Location = new Point(60, 73);
-         ProvAdjTextBox.Margin = new Padding(1);
-         ProvAdjTextBox.Name = "ProvAdjTextBox";
-         ProvAdjTextBox.Size = new Size(137, 23);
-         ProvAdjTextBox.TabIndex = 7;
-         ProvAdjTextBox.Text = "-";
-         // 
          // ProvAdjLabel
          // 
          ProvAdjLabel.AutoSize = true;
@@ -1867,7 +1842,6 @@
          MisProvinceData.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
          MisProvinceData.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
          MisProvinceData.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-         MisProvinceData.Controls.Add(CapitalNameTextBox, 1, 4);
          MisProvinceData.Controls.Add(label6, 2, 2);
          MisProvinceData.Controls.Add(label5, 0, 4);
          MisProvinceData.Controls.Add(label8, 2, 1);
@@ -1899,15 +1873,6 @@
          MisProvinceData.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
          MisProvinceData.Size = new Size(395, 173);
          MisProvinceData.TabIndex = 12;
-         // 
-         // CapitalNameTextBox
-         // 
-         CapitalNameTextBox.Dock = DockStyle.Fill;
-         CapitalNameTextBox.Location = new Point(101, 101);
-         CapitalNameTextBox.Margin = new Padding(3, 1, 3, 3);
-         CapitalNameTextBox.Name = "CapitalNameTextBox";
-         CapitalNameTextBox.Size = new Size(92, 23);
-         CapitalNameTextBox.TabIndex = 5;
          // 
          // label6
          // 
@@ -2504,8 +2469,6 @@
          TagAndColorTLP.Controls.Add(label27, 2, 0);
          TagAndColorTLP.Controls.Add(label28, 0, 0);
          TagAndColorTLP.Controls.Add(label29, 2, 1);
-         TagAndColorTLP.Controls.Add(CountryLoc, 1, 1);
-         TagAndColorTLP.Controls.Add(CountryADJLoc, 3, 1);
          TagAndColorTLP.Controls.Add(label31, 0, 2);
          TagAndColorTLP.Controls.Add(label33, 2, 2);
          TagAndColorTLP.Controls.Add(label32, 2, 3);
@@ -2579,24 +2542,6 @@
          label29.TabIndex = 3;
          label29.Text = "Loc ADJ";
          label29.TextAlign = ContentAlignment.MiddleLeft;
-         // 
-         // CountryLoc
-         // 
-         CountryLoc.Dock = DockStyle.Fill;
-         CountryLoc.Location = new Point(95, 26);
-         CountryLoc.Margin = new Padding(1);
-         CountryLoc.Name = "CountryLoc";
-         CountryLoc.Size = new Size(92, 23);
-         CountryLoc.TabIndex = 5;
-         // 
-         // CountryADJLoc
-         // 
-         CountryADJLoc.Dock = DockStyle.Fill;
-         CountryADJLoc.Location = new Point(283, 26);
-         CountryADJLoc.Margin = new Padding(1);
-         CountryADJLoc.Name = "CountryADJLoc";
-         CountryADJLoc.Size = new Size(92, 23);
-         CountryADJLoc.TabIndex = 6;
          // 
          // label31
          // 
@@ -3075,7 +3020,6 @@
       private Label label5;
       private Label label3;
       private Label label4;
-      private TextBox CapitalNameTextBox;
       private Label label6;
       private Label label7;
       private Label label8;
@@ -3137,7 +3081,6 @@
       private GroupBox LocalisationGroupBox;
       private TableLayoutPanel LocTableLayoutPanel;
       private Label LocalisationLabel;
-      private TextBox LocalisationTextBox;
       private Label label25;
       private Label label26;
       private TableLayoutPanel ModTypeSubLayout;
@@ -3182,7 +3125,6 @@
       private ToolStripMenuItem CreateFilesByDefault;
       private Label label39;
       private Label label37;
-      private TextBox ProvAdjTextBox;
       private Label ProvAdjLabel;
       private ToolStripSeparator toolStripSeparator7;
       private ToolStripLabel MapModeTimesInfo;
@@ -3266,8 +3208,6 @@
       private ToolStripMenuItem fileNamesToolStripMenuItem;
       private ToolStripMenuItem emptyCOlorInCountryToolStripMenuItem;
       private ToolStripMenuItem iMBTESTToolStripMenuItem;
-      public TextBox CountryLoc;
-      public TextBox CountryADJLoc;
       private ToolStripMenuItem browseEditedObjectsToolStripMenuItem;
    }
 }

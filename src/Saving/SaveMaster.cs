@@ -228,6 +228,8 @@ namespace Editor.Saving
             saveable.SetPath(ref path);
          }
          NeedsToBeHandled.Add(path);
+
+         OnChange(true, saveable);
       }
 
       public static void RemoveFromToBeHandled(Saveable saveable)

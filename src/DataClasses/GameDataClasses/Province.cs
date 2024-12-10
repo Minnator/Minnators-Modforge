@@ -59,7 +59,7 @@ public class ProvinceData()
    public List<TradeModifier> TradeModifiers = [];  
 }
 
-public class Province : ProvinceComposite
+public class Province : ProvinceComposite, ITitleAdjProvider
 {
    public Province(int id, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(id.ToString(), color)
    {
@@ -1168,16 +1168,10 @@ public class Province : ProvinceComposite
 
    public string GetLocalisation()
    {
-      return Localisation.GetLoc(GetLocalisationString());
+      return Localisation.GetLoc(GetTitleKey());
    }
 
-   [JsonIgnore]
-   public string GetLocalisationAdj => $"PROV_ADJ{Id}";
-
-   public string GetLocalisationString()
-   {
-      return $"PROV{Id}";
-   }
+   
    public override int[] GetProvinceIds()
    {
       return [Id];
@@ -1304,4 +1298,13 @@ public class Province : ProvinceComposite
    }
 
    public new static Province Empty => new (-1, Color.Empty, ObjEditingStatus.Immutable);
+   public string GetTitleKey()
+   {
+      return $"PROV{ Id}";
+   }
+
+   public string GetAdjectiveKey()
+   {
+      return $"PROV_ADJ{Id}";
+   }
 }

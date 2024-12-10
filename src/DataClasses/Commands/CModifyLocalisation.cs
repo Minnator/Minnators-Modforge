@@ -2,17 +2,17 @@
 
 namespace Editor.DataClasses.Commands
 {
-   public class CModifyLocalisation : SaveableCommandBasic
+   public class CModifyLocalisation : CTextEditingWrapper
    {
-      private readonly LocObject _locObject;
-      private readonly string _newLoc;
-      private readonly string _oldLoc;
+      private readonly List<LocObject> _locObjects;
+      private string _newLoc;
+      private readonly List<string> _oldLoc;
 
-      public CModifyLocalisation(LocObject obj, string newLoc, bool executeOnInit = true)
+      public CModifyLocalisation(ICollection<LocObject> obj, string newLoc, bool executeOnInit = true)
       {
          _newLoc = newLoc;
-         _locObject = obj;
-         _oldLoc = _locObject.Value;
+         _locObjects = [..obj];
+         _oldLoc = obj.Select(x => x.Value).ToList();
 
          if (executeOnInit)
             Execute();
@@ -21,14 +21,19 @@ namespace Editor.DataClasses.Commands
 
       public override void Execute()
       {
-         base.Execute([_locObject]);
+         base.Execute([.. _locObjects]);
          InternalExecute();
       }
 
       public override void Undo()
       {
          base.Undo();
-         _locObject.SilentSet(_oldLoc);
+         var cnt = 0;
+         foreach (var obj in _locObjects)
+         {
+            obj.SilentSet(_oldLoc[cnt]);
+            cnt++;
+         }
       }
 
       public override void Redo()
@@ -39,17 +44,27 @@ namespace Editor.DataClasses.Commands
 
       private void InternalExecute()
       {
-         _locObject.SilentSet(_newLoc);
+         _locObjects.ForEach((x) => x.SilentSet(_newLoc));
       }
 
       public override string GetDescription()
       {
-         return $"Modified \"{_locObject.Key[..Math.Min(_locObject.Key.Length, 20)]}\" to \"{_newLoc[..Math.Min(_newLoc.Length, 20)]}\"";
+         if (_locObjects.Count == 1)
+         {
+            var locObject = _locObjects.First();
+            return $"Modified \"{locObject.Key[..Math.Min(locObject.Key.Length, 20)]}\" to \"{_newLoc[..Math.Min(_newLoc.Length, 20)]}\"";
+         }
+         return $"Modified \"{_locObjects.Count}\" localisations to \"{_newLoc}\"";
       }
 
       public override string GetDebugInformation(int indent)
       {
-         return $"Changed \"{_locObject.Key}\" from \"{_oldLoc}\" to \"{_newLoc}\"";
+         return _locObjects.Count == 1 ? $"Modified \"{_locObjects[^1].Value}\" to \"{_newLoc}\"" : $"Modified \"{_locObjects.Count}\" localisations to \"{_newLoc}\"";
+      }
+
+      public override void SetValue(string value)
+      {
+         _newLoc = value;
       }
    }
 

@@ -1,4 +1,5 @@
 ﻿using Editor.DataClasses.GameDataClasses;
+using Editor.Helper;
 
 namespace Editor.DataClasses.MapModes
 {
@@ -30,7 +31,7 @@ namespace Editor.DataClasses.MapModes
       {
          foreach (var cr in Globals.ColonialRegions.Values)
             if (cr.GetProvinces().Contains(provinceId))
-               return $"Colonial region: {cr.Name} ({cr.GetTitleLocKey})";
+               return $"Colonial region: {cr.Name} ({Localisation.GetLoc(cr.Name)})";
          return "Colonial region: [Unknown]";
       }
    }
