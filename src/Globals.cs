@@ -338,10 +338,16 @@ public static class Globals
 // - [x] Fix Custom cursors not working and changing back to normal cursor
 // - [x] Adding metric for startup (Currently in settings will be separate later)
 // -     Collection Editor:
-//       - [ ] Remove all buttons (with an empty to select?)
-//       - [ ] TryAdd instead of add
+//       - [x] Remove all buttons (with an empty to select?)
+//       - [x] TryAdd instead of add
 // - [x] Change all Saveable commands to NOT use SaveableHelper
 // - [ ] Demonstration Video
+// - [x] Fix Error sound playing on ReDo
+// - [ ] Fix Revolutionary Color Command
+// - [ ] Fix Command spamming in Natives interface
+// - [ ] Fix Names Interface not being saved
+// - [ ] Fix Capital box not saving on enter
+// - [ ] Fix all combo-boxes taking the input from the suggestion without the use ever using it
 
 // TODO LIST Until Alpha 1.1
 // - [ ] Block Water provinces; should not be viable for countries

@@ -98,6 +98,9 @@
          fileNamesToolStripMenuItem = new ToolStripMenuItem();
          emptyCOlorInCountryToolStripMenuItem = new ToolStripMenuItem();
          iMBTESTToolStripMenuItem = new ToolStripMenuItem();
+         clearGUIToolStripMenuItem = new ToolStripMenuItem();
+         provinceToolStripMenuItem = new ToolStripMenuItem();
+         countryToolStripMenuItem = new ToolStripMenuItem();
          ProvinceCollectionsLayoutPanel = new TableLayoutPanel();
          FocusSelectionCheckBox = new CheckBox();
          BottomToolStrip = new ToolStrip();
@@ -653,7 +656,7 @@
          // 
          // debugToolStripMenuItem
          // 
-         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem, jsonToolStripMenuItem, bugReportToolStripMenuItem, crashReportToolStripMenuItem, loadDDSFilesTestToolStripMenuItem, roughEditorToolStripMenuItem, newSavingToolStripMenuItem, toolStripMenuItem4, fileNamesToolStripMenuItem, emptyCOlorInCountryToolStripMenuItem, iMBTESTToolStripMenuItem });
+         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem, jsonToolStripMenuItem, bugReportToolStripMenuItem, crashReportToolStripMenuItem, loadDDSFilesTestToolStripMenuItem, roughEditorToolStripMenuItem, newSavingToolStripMenuItem, toolStripMenuItem4, fileNamesToolStripMenuItem, emptyCOlorInCountryToolStripMenuItem, iMBTESTToolStripMenuItem, clearGUIToolStripMenuItem });
          debugToolStripMenuItem.Name = "debugToolStripMenuItem";
          debugToolStripMenuItem.Size = new Size(54, 23);
          debugToolStripMenuItem.Text = "Debug";
@@ -790,6 +793,27 @@
          iMBTESTToolStripMenuItem.Size = new Size(234, 22);
          iMBTESTToolStripMenuItem.Text = "IMB_TEST";
          iMBTESTToolStripMenuItem.Click += iMBTESTToolStripMenuItem_Click;
+         // 
+         // clearGUIToolStripMenuItem
+         // 
+         clearGUIToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { provinceToolStripMenuItem, countryToolStripMenuItem });
+         clearGUIToolStripMenuItem.Name = "clearGUIToolStripMenuItem";
+         clearGUIToolStripMenuItem.Size = new Size(234, 22);
+         clearGUIToolStripMenuItem.Text = "Clear GUI";
+         // 
+         // provinceToolStripMenuItem
+         // 
+         provinceToolStripMenuItem.Name = "provinceToolStripMenuItem";
+         provinceToolStripMenuItem.Size = new Size(180, 22);
+         provinceToolStripMenuItem.Text = "Province";
+         provinceToolStripMenuItem.Click += provinceToolStripMenuItem_Click;
+         // 
+         // countryToolStripMenuItem
+         // 
+         countryToolStripMenuItem.Name = "countryToolStripMenuItem";
+         countryToolStripMenuItem.Size = new Size(180, 22);
+         countryToolStripMenuItem.Text = "Country";
+         countryToolStripMenuItem.Click += countryToolStripMenuItem_Click;
          // 
          // ProvinceCollectionsLayoutPanel
          // 
@@ -3209,6 +3233,9 @@
       private ToolStripMenuItem emptyCOlorInCountryToolStripMenuItem;
       private ToolStripMenuItem iMBTESTToolStripMenuItem;
       private ToolStripMenuItem browseEditedObjectsToolStripMenuItem;
+      private ToolStripMenuItem clearGUIToolStripMenuItem;
+      private ToolStripMenuItem provinceToolStripMenuItem;
+      private ToolStripMenuItem countryToolStripMenuItem;
    }
 }
 

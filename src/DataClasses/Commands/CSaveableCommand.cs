@@ -109,8 +109,16 @@ namespace Editor.DataClasses.Commands
       protected virtual void Execute(List<KeyValuePair<ICollection<Saveable>, SaveableOperation>> actions)
       {
          this._actions = actions;
-         foreach (var saveable in GetAllSaveables())
-            _previousState.Add(saveable.EditingStatus);
+         //Needs to be identical to the GetAllSaveables Loop
+         foreach (var kvp in _actions)
+            //TODO Remove the test when the saveable constructor is initialised with to be deleted
+            if (kvp.Value != SaveableOperation.Created)
+               foreach (var saveable in kvp.Key)
+                  _previousState.Add(saveable.EditingStatus);
+            else
+               foreach (var saveable in kvp.Key)
+                  _previousState.Add(ObjEditingStatus.Deleted);
+
          foreach (var action in _actions)
             SetAllEditingStates(action.Key, GetEditingState(true, action.Value));
       }
@@ -151,8 +159,15 @@ namespace Editor.DataClasses.Commands
 
          _saveables = saveables;
          _operation = operation;
-         foreach (var saveable in _saveables)
-            _previousState.Add(saveable.EditingStatus);
+
+         //TODO Remove the test when the saveable constructor is initialised with to be deleted
+         if (operation != SaveableOperation.Created)
+            foreach (var saveable in _saveables)
+               _previousState.Add(saveable.EditingStatus);
+         else
+            foreach (var saveable in _saveables)
+               _previousState.Add(ObjEditingStatus.Deleted);
+
          SetAllEditingStates(_saveables, GetEditingState(true, _operation));
 
       }

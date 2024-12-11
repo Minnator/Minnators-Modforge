@@ -1,4 +1,5 @@
-﻿using System.Security.AccessControl;
+﻿using System.Collections.Generic;
+using System.Security.AccessControl;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.ParadoxLanguage.Trigger;
@@ -118,7 +119,8 @@ namespace Editor.DataClasses.GameDataClasses
 
       public override void AddGlobal()
       {
-         Globals.TradeCompanies.Add(Name, this);
+         if (!Globals.TradeCompanies.TryAdd(Name, this))
+            MessageBox.Show($"The TradeCompany {Name} does already exist and can not be created.", $"TradeCompany {Name} already exists!", MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
    }
 }

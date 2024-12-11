@@ -77,7 +77,7 @@
          DescLabel.Name = "DescLabel";
          DescLabel.Size = new Size(320, 28);
          DescLabel.TabIndex = 0;
-         DescLabel.Text = "label1";
+         DescLabel.Text = "Select the date";
          DescLabel.TextAlign = ContentAlignment.MiddleCenter;
          // 
          // label1

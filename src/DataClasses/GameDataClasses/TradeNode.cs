@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Saving;
@@ -119,7 +120,8 @@ namespace Editor.DataClasses.GameDataClasses
 
       public override void AddGlobal()
       {
-         Globals.TradeNodes.Add(Name, this);
+         if (!Globals.TradeNodes.TryAdd(Name, this))
+            MessageBox.Show($"The TradeNode {Name} does already exist and can not be created.", $"TradeNode {Name} already exists!", MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
    }
 

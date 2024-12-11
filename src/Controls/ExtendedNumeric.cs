@@ -28,16 +28,22 @@ namespace Editor.Controls
          _textBox = (TextBox)textBoxProperty?.GetValue(this, null)!;
          _textBox.KeyPress += TextBox_KeyPress;
          _textBox.LostFocus += OnFocusLost;
+         _textBox.KeyDown += TextBox_KeyDown;
       }
 
       private void TextBox_KeyPress(object? sender, KeyPressEventArgs e)
       {
          if (!char.IsDigit(e.KeyChar) && e.KeyChar != '\b' && e.KeyChar != (char)Keys.Enter) 
             e.Handled = true;
+      }
 
-         // Raise the OnTextValueChanged event when the Enter key is pressed == the value has been changed
-         if (e.KeyChar == (char)Keys.Enter)
-            OnTextValueChanged?.Invoke(this, new (Selection.GetSelectedProvinces, Value));
+      private void TextBox_KeyDown(object? sender, KeyEventArgs e)
+      {
+         if (e.KeyCode == Keys.Enter)
+         {
+            e.SuppressKeyPress = true;
+            OnTextValueChanged?.Invoke(this, new(Selection.GetSelectedProvinces, Value));
+         }
       }
 
       private void OnFocusLost(object? sender, EventArgs e)

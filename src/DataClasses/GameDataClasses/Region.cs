@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Saving;
@@ -102,7 +103,8 @@ public class Region : ProvinceCollection<Area>
 
    public override void AddGlobal()
    {
-      Globals.Regions.Add(Name, this);
+      if (!Globals.Regions.TryAdd(Name, this))
+         MessageBox.Show($"The Region {Name} does already exist and can not be created.", $"Region {Name} already exists!", MessageBoxButtons.OK, MessageBoxIcon.Error);
    }
 
    public override string GetHeader()

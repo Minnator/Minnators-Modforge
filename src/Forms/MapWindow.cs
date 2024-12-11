@@ -413,14 +413,14 @@ namespace Editor.Forms
          // CustomTextBox
          _localisationTextBox = new(Selection.GetSelectedProvincesAsSaveable, new CLocObjFactory(true))
          {
-            Margin = new(3,1,3,3),
+            Margin = new(3, 1, 3, 3),
             Dock = DockStyle.Fill
          };
          LocTableLayoutPanel.Controls.Add(_localisationTextBox, 1, 1);
 
          _provAdjTextBox = new(Selection.GetSelectedProvincesAsSaveable, new CLocObjFactory(false))
          {
-            Margin = new(3,1,3,3),
+            Margin = new(3, 1, 3, 3),
             Dock = DockStyle.Fill
          };
          LocTableLayoutPanel.Controls.Add(_provAdjTextBox, 1, 3);
@@ -460,7 +460,7 @@ namespace Editor.Forms
          _discoveredBy.OnItemRemoved += ProvinceEditingEvents.OnDiscoveredByRemoved;
 
          TradeCenterComboBox.SelectedIndexChanged += ProvinceEditingEvents.OnTradeCenterChanged;
-         
+
          CoresAndClaimLayoutPanel.Controls.Add(_permanentClaims, 0, 0);
          CoresAndClaimLayoutPanel.Controls.Add(_claims, 1, 0);
          CoresGroupBox.Controls.Add(_cores);
@@ -1033,6 +1033,8 @@ namespace Editor.Forms
                   break;
                case Keys.Y:
                   Globals.HistoryManager.Redo();
+                  e.SuppressKeyPress = true;
+                  e.Handled = true;
                   break;
                // Tabs
                case Keys.D1:
@@ -1405,14 +1407,14 @@ namespace Editor.Forms
          CountryLoc = new(Selection.GetSelectedCountry, new CLocObjFactory(true))
          {
             Dock = DockStyle.Fill,
-            Margin = new(3,1,3,3),
+            Margin = new(3, 1, 3, 3),
          };
          TagAndColorTLP.Controls.Add(CountryLoc, 1, 1);
 
-         CountryADJLoc = new (Selection.GetSelectedCountry, new CLocObjFactory(false))
+         CountryADJLoc = new(Selection.GetSelectedCountry, new CLocObjFactory(false))
          {
             Dock = DockStyle.Fill,
-            Margin = new(3,1,3,3),
+            Margin = new(3, 1, 3, 3),
          };
          TagAndColorTLP.Controls.Add(CountryADJLoc, 3, 1);
 
@@ -1796,6 +1798,20 @@ namespace Editor.Forms
       private void browseEditedObjectsToolStripMenuItem_Click(object sender, EventArgs e)
       {
          new EditedObjectsExplorer().Show();
+      }
+
+      private void provinceToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         Globals.EditingStatus = EditingStatus.LoadingInterface;
+         ClearProvinceGui();
+         Globals.EditingStatus = EditingStatus.Idle;
+      }
+
+      private void countryToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         Globals.EditingStatus = EditingStatus.LoadingInterface;
+         ClearCountryGui();
+         Globals.EditingStatus = EditingStatus.Idle;
       }
    }
 }

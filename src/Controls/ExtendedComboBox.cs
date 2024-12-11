@@ -20,6 +20,8 @@ namespace Editor.Controls
          AutoCompleteSource = AutoCompleteSource.ListItems; 
          Dock = DockStyle.Fill;
          Height = 21;
+
+         KeyDown += ComboBox_KeyDown;
       }
 
       protected override void OnSelectedIndexChanged(EventArgs e)
@@ -29,6 +31,14 @@ namespace Editor.Controls
             return;
          OnDataChanged?.Invoke(this, new (Selection.GetSelectedProvinces, Text));
          OnCollectionDataChanged?.Invoke(this, new (Text, Selection.GetSelectedProvinces));
+      }
+
+      private void ComboBox_KeyDown(object? sender, KeyEventArgs e)
+      {
+         if (e.KeyCode == Keys.Enter)
+         {
+            e.SuppressKeyPress = true;
+         }
       }
 
       public void ReplaceItems(List<string> items)

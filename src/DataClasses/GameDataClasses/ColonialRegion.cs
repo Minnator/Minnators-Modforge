@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Parser;
@@ -123,7 +124,8 @@ namespace Editor.DataClasses.GameDataClasses
 
       public override void AddGlobal()
       {
-         Globals.ColonialRegions.Add(Name, this);
+         if (!Globals.ColonialRegions.TryAdd(Name, this))
+            MessageBox.Show($"The ColonialRegion {Name} does already exist and can not be created.", $"ColonialRegion {Name} already exists!", MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
    }
 

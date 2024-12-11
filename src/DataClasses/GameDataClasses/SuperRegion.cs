@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Saving;
@@ -93,7 +94,8 @@ public class SuperRegion : ProvinceCollection<Region>
 
    public override void AddGlobal()
    {
-      Globals.SuperRegions.Add(Name, this);
+      if (!Globals.SuperRegions.TryAdd(Name, this))
+         MessageBox.Show($"The SuperRegion {Name} does already exist and can not be created.", $"SuperRegion {Name} already exists!", MessageBoxButtons.OK, MessageBoxIcon.Error);
    }
 
    public new static SuperRegion Empty => new (string.Empty, System.Drawing.Color.Empty, ObjEditingStatus.Immutable);

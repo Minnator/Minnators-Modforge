@@ -76,7 +76,7 @@ public sealed class ZoomControl : Control, IDisposable
       }
    }
 
-   public EventHandler<ImagePositionEventArgs> ImagePositionChange = delegate { }; 
+   public EventHandler<ImagePositionEventArgs> ImagePositionChange = delegate { };
 
    public ZoomControl(Bitmap bmp)
    {
@@ -91,7 +91,7 @@ public sealed class ZoomControl : Control, IDisposable
       Paint += ZoomOnPaint!;
 
       BackColor = Color.DimGray;
-      MinimumSize = new (10, 10);
+      MinimumSize = new(10, 10);
       Dock = DockStyle.Fill;
    }
 

@@ -101,7 +101,8 @@ public class Area : ProvinceCollection<Province>
 
    public override void AddGlobal()
    {
-      Globals.Areas.Add(Name, this);
+      if (!Globals.Areas.TryAdd(Name, this))
+         MessageBox.Show($"The Area {Name} does already exist and can not be created.", $"Area {Name} already exists!", MessageBoxButtons.OK, MessageBoxIcon.Error);
    }
 
    public override void ColorInvoke(ProvinceComposite composite)

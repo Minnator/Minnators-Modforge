@@ -252,7 +252,7 @@ namespace Editor.Saving
 
          Debug.WriteLine($"removed {path} since it was not modified");
          if (!NeedsToBeHandled.Remove(path))
-            throw new EvilActions("The path was not found in the NeedsToBeHandled list but was meant to be removed!");
+            throw new EvilActions($"The path ({path}) was not found in the NeedsToBeHandled list but was meant to be removed!");
 
          OnChange(false, saveable);
       }
@@ -457,12 +457,7 @@ namespace Editor.Saving
 
       public static int GetNumOfModifiedObjects()
       {
-         var total = 0;
-         foreach (var singleKVP in Cache)
-         {
-            total += singleKVP.Value;
-         }
-         return total;
+         return Cache.Sum(singleKVP => singleKVP.Value);
       }
 
       public static int GetNumOfModifiedObjects(SaveableType type)
@@ -474,7 +469,7 @@ namespace Editor.Saving
       {
          foreach (var kvp in Cache)
             if ((type & kvp.Key) != 0 && kvp.Value != 0)
-               throw new EvilActions("The cache value should be 0 here, since we just saved!");
+               throw new EvilActions($"The cache value for {kvp.Key} should be 0 here but is {kvp.Value}, since we just saved!");
       }
 
       public static List<Saveable> GetModifiedObjectsOfType(SaveableType type)

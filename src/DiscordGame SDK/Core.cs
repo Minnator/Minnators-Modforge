@@ -95,7 +95,8 @@ namespace Editor.DiscordGame_SDK
 
     public enum ActivityType
     {
-        Playing,
+        
+       ing,
         Streaming,
         Listening,
         Watching,

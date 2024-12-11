@@ -96,6 +96,18 @@ namespace Editor.Controls
             AutoCompleteSource = AutoCompleteSource.CustomSource,
          };
          _extendedComboBox.SelectedIndexChanged += ComboBoxIndexChanged;
+         _extendedComboBox.KeyDown += (sender, e) =>
+         {
+            if (e.Handled)
+               return;
+
+            if (e.KeyCode == Keys.Escape)
+            {
+               Clear();
+               e.Handled = true;
+            }
+         };
+         Globals.MapWindow.GeneralToolTip.SetToolTip(_extendedComboBox, "Select the collection to edit\n       or \ntype the name for a new collection\n\nESC clear / cancel");
 
          _flowLayout = new()
          {

@@ -133,13 +133,16 @@ namespace Editor.DataClasses.Commands
 
       public void AddNewComposite(T composite)
       {
+
          if (composite.GetFirstParentOfType(NewParent.WhatAmI()) is ProvinceCollection<T> parent)
          {
             if (!OldParentsNotNull.Contains(parent))
                OldParentsNotNull.Add(parent);
          }
          else
+         {
             parent = null!;
+         }
          NewComposites.Add(new(composite, parent));
       }
    }

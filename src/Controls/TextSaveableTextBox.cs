@@ -39,6 +39,7 @@ namespace Editor.Controls
       {
          if (e.KeyCode == Keys.Enter)
          {
+            e.SuppressKeyPress = true;
             _command?.Execute();
             Globals.ZoomControl.Focus();
          }

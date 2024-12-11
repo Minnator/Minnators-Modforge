@@ -22,6 +22,8 @@ namespace Editor.Controls
          //TODO broken https://stackoverflow.com/questions/11780558/c-sharp-winforms-combobox-dynamic-autocomplete
          //AutoCompleteMode = AutoCompleteMode.SuggestAppend;
          //AutoCompleteSource = AutoCompleteSource.CustomSource;
+
+
       }
 
       protected override void OnSelectedIndexChanged(EventArgs e)
