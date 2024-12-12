@@ -1,9 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Security.AccessControl;
-using Editor.DataClasses.Misc;
+﻿using Editor.DataClasses.Misc;
 using Editor.Helper;
-using Editor.ParadoxLanguage.Trigger;
-using Editor.Parser;
 using Editor.Saving;
 using static Editor.Saving.SavingUtil;
 

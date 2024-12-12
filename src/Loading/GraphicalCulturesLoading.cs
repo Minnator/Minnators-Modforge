@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Editor.Helper;
+﻿using Editor.Helper;
 using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading

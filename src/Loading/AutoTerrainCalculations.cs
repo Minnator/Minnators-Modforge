@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Drawing.Imaging;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;

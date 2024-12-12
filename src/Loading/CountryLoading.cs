@@ -1,6 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Diagnostics.Metrics;
-using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using Editor.DataClasses.GameDataClasses;

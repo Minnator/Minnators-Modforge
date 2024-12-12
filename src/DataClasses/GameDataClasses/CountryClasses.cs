@@ -1,10 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Text;
 using Editor.DataClasses.Misc;
-using Editor.ParadoxLanguage.Effect;
 using Editor.Parser;
-using Editor.Saving;
 using static Editor.Saving.SavingUtil;
 
 namespace Editor.DataClasses.GameDataClasses

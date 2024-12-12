@@ -1,10 +1,17 @@
 ﻿namespace Editor.DataClasses.Misc;
 
-public class Log(string path, string logName)
+public class Log
 {
    private int _logCount;
    private int _totalTime;
-   private readonly StreamWriter _logFile = new(Path.Combine(path, logName + ".txt"));
+   private readonly StreamWriter _logFile;
+
+   public Log(string path, string logName)
+   {
+      if (!Directory.Exists(path))
+         Directory.CreateDirectory(path);
+      _logFile = new (Path.Combine(path, $"{logName}.txt"));
+   }
 
    public void Write(string message)
    {

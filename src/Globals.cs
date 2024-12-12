@@ -4,7 +4,6 @@ using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Misc;
 using Editor.DataClasses.Settings;
-using Editor.Events;
 using Editor.Forms;
 using Editor.Forms.Feature;
 using Editor.Forms.Feature.AdvancedSelections;
@@ -91,12 +90,25 @@ public enum ProvinceEditingStatus
 //contains all required and used data across the application and instances of forms.
 public static class Globals
 {
+   static Globals()
+   {
+#if DEBUG
+      if (!Directory.Exists(DebugPath))
+         Directory.CreateDirectory(DebugPath);
+#endif
+   }
+
    public const string DISCORD_INVITATION_LINK = "https://discord.gg/22AhD5qkme";
    public const string GITHUB_LINK = "https://github.com/Minnator/Editor.git";
 
    public static string VanillaPath = string.Empty;
    public static string ModPath = string.Empty;
-   
+   public static string AppDirectory = AppDomain.CurrentDomain.BaseDirectory;
+
+#if DEBUG
+   public static string DebugPath = Path.Combine(AppDirectory, "Debug");
+#endif
+
    #region LoadingScreen
    public static int LoadingStages = 0;
    #endregion
@@ -123,9 +135,9 @@ public static class Globals
       }
    }
    // Logs
-   public static readonly string DownloadsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
-   public static readonly Log LoadingLog = new(Settings.Saving.LoadingLogLocation, "Loading");
-   public static readonly Log ErrorLog = new(Settings.Saving.ErrorLogLocation, "Error");
+   //public static readonly string DownloadsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
+   public static readonly Log LoadingLog = new(Settings.Saving.LogLocation, "Loading");
+   public static readonly Log ErrorLog = new(Settings.Saving.LogLocation, "Error");
 
    // Contains the current state of the application
    public static State State = State.Loading;
@@ -347,7 +359,11 @@ public static class Globals
 // - [ ] Fix Command spamming in Natives interface
 // - [ ] Fix Names Interface not being saved
 // - [ ] Fix Capital box not saving on enter
-// - [ ] Fix all combo-boxes taking the input from the suggestion without the use ever using it
+// - [ ] Fix all combo-boxes taking the input from the suggestion without the use ever using it (when both are empty)
+// - [ ] Disable country GUI when selecting several countries or invalid after having selected a valid
+// - [x] Fix folder creation in root directory when folder is missing in mod
+// - [x] Fix log location and remove all dumps to download
+// - [x] Expose Setting to disable Discord Integration to settings menu
 
 // TODO LIST Until Alpha 1.1
 // - [ ] Block Water provinces; should not be viable for countries

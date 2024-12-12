@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Editor.Helper;
 
 namespace Editor.DataClasses.Settings
@@ -7,12 +6,11 @@ namespace Editor.DataClasses.Settings
    public static class SettingsSaver
    {
       public const string SETTINGS_FILE_NAME = "modforge_settings.json";
-      public static readonly string? ExecutableFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
       public static bool Save(Settings settings)
       {
          var settingsJSON = JsonSerializer.Serialize(settings, options: new() { WriteIndented = true });
-         return IO.WriteToFile(Path.Combine(ExecutableFolder ?? Globals.DownloadsFolder, SETTINGS_FILE_NAME), settingsJSON, false);
+         return IO.WriteToFile(Path.Combine(Globals.AppDirectory, SETTINGS_FILE_NAME), settingsJSON, false);
       }
 
    }

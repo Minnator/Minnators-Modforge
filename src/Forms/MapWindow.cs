@@ -9,7 +9,6 @@ using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Misc;
-using Editor.DataClasses.Settings;
 using Editor.Events;
 using Editor.Forms.Feature;
 using Editor.Forms.Feature.Crash_Reporter;
@@ -103,9 +102,7 @@ namespace Editor.Forms
                Location = new(screen.Bounds.X + (screen.Bounds.Width - Width) / 2, screen.Bounds.Y + (screen.Bounds.Height - Height) / 2);
          }
 
-         if (LinkHelper.IsDiscordRunning)
-            DiscordActivityManager.StartDiscordActivity();
-
+         DiscordActivityManager.ActivateActivity();
       }
 
       public void Initialize()
@@ -204,32 +201,7 @@ namespace Editor.Forms
             Dock = DockStyle.Fill,
             Margin = new(0),
          };
-
-
-
-         Globals.Settings.Rendering.PropertyChanged += (_, args) =>
-         {
-            switch (args.PropertyName)
-            {
-               case nameof(Settings.Rendering.MapBorderColor):
-                  Globals.ZoomControl.BorderColor = Globals.Settings.Rendering.MapBorderColor;
-                  Globals.ZoomControl.Invalidate();
-                  break;
-               case nameof(Settings.Rendering.MapBorderWidth):
-                  Globals.ZoomControl.BorderWidth = Globals.Settings.Rendering.MapBorderWidth;
-                  Globals.ZoomControl.Invalidate();
-                  break;
-               case nameof(Settings.Rendering.ShowMapBorder):
-                  Globals.ZoomControl.Border = Globals.Settings.Rendering.ShowMapBorder;
-                  Globals.ZoomControl.Invalidate();
-                  break;
-               case nameof(Settings.Rendering.MinVisiblePixels):
-                  Globals.ZoomControl.MinVisiblePixels = Globals.Settings.Rendering.MinVisiblePixels;
-                  Globals.ZoomControl.ZoomingControl_Resize(null!, null!);
-                  break;
-            }
-            Globals.ZoomControl.Invalidate();
-         };
+         
          MapLayoutPanel.Controls.Add(Globals.ZoomControl, 0, 0);
          Selection.Initialize();
          GuiDrawing.Initialize();
@@ -239,6 +211,9 @@ namespace Editor.Forms
 
          SelectionTypeBox.Items.AddRange([.. Enum.GetNames<SelectionType>()]);
          SelectionTypeBox.SelectedIndex = 0;
+
+         // Initalize Settings Events and Listeners
+         SettingsHelper.InitializeEvent();
       }
 
       private void UpdateGui()
@@ -265,8 +240,7 @@ namespace Editor.Forms
       {
 
       }
-
-
+      
       #region EditGui
       /// <summary>
       /// Initializes all Tabs of the EditGui
@@ -640,9 +614,7 @@ namespace Editor.Forms
       }
 
       #endregion
-
-
-
+      
       private void InitializeModifierTab()
       {
          ModifierComboBox = ControlFactory.GetExtendedComboBox();
@@ -665,14 +637,16 @@ namespace Editor.Forms
          ModifiersListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
       }
 
+      
 
-      // ======================== Province GUI Update Methods ========================
-      #region Province Gui
 
-      /// <summary>
-      /// This will only load the province attributes to the gui which are shared by all provinces
-      /// </summary>
-      public void LoadSelectedProvincesToGui()
+// ======================== Province GUI Update Methods ========================
+#region Province Gui
+
+/// <summary>
+/// This will only load the province attributes to the gui which are shared by all provinces
+/// </summary>
+public void LoadSelectedProvincesToGui()
       {
          Globals.EditingStatus = EditingStatus.LoadingInterface;
          SuspendLayout();
@@ -876,7 +850,6 @@ namespace Editor.Forms
             ? "Idle Mode: Single Province"
             : $"Idle Mode: Multi Province ({Selection.Count})";
       }
-
       private void SetFinishEditingOnEnter(TextBox tb, Action<object?, EventArgs> handler)
       {
          tb.KeyDown += (sender, e) =>
@@ -1014,9 +987,7 @@ namespace Editor.Forms
             }
             sb.AppendLine();
          }
-         // download folder
-         var downloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\";
-         File.WriteAllText(Path.Combine(downloadFolder, "buildings.txt"), sb.ToString());
+         File.WriteAllText(Path.Combine(Globals.DebugPath, "buildings.txt"), sb.ToString());
       }
 
       private void MapWindow_KeyDown(object sender, KeyEventArgs e)
@@ -1076,8 +1047,7 @@ namespace Editor.Forms
             sb.AppendLine($"{collision.Key} : {collision.Value}");
          }
 
-         var downloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\";
-         File.WriteAllText(Path.Combine(downloadFolder, "localisationCollisions.txt"), sb.ToString());
+         File.WriteAllText(Path.Combine(Globals.DebugPath, "localisationCollisions.txt"), sb.ToString());
       }
 
       private void saveAllProvincesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1239,7 +1209,7 @@ namespace Editor.Forms
          var path = @"S:\SteamLibrary\steamapps\common\Europa Universalis IV\gfx\interface\mapmode_military_access.dds";
          var bmp = ImageReader.ReadDDSImage(path);
 
-         bmp.Save(Globals.DownloadsFolder + "\\dds_test.png", ImageFormat.Png);
+         bmp.Save(Globals.DebugPath + "\\dds_test.png", ImageFormat.Png);
 #endif
       }
 
@@ -1693,27 +1663,7 @@ namespace Editor.Forms
 
       private void refStackToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         /*
-         List<string> customAttributes = [];
-         foreach (var country in Globals.Countries.Values)
-         {
-            if (country.HistoryCountry.InitialEffects.Count == 0)
-               continue;
-            foreach (var effect in country.HistoryCountry.InitialEffects)
-            {
-               if (customAttributes.Contains(effect.Name))
-                  continue;
-               customAttributes.Add(effect.Name);
-            }
-         }
 
-         var sb = new StringBuilder();
-         foreach (var attribute in customAttributes.Distinct())
-            sb.AppendLine(attribute);
-
-         var downloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\";
-         File.WriteAllText(Path.Combine(downloadFolder, "customAttributes.txt"), sb.ToString());
-         */
       }
 
       private void infoToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1739,8 +1689,7 @@ namespace Editor.Forms
             sb.AppendLine();
          }
 
-         var downloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads\";
-         File.WriteAllText(Path.Combine(downloadFolder, "terrainOverrides.txt"), sb.ToString());
+         File.WriteAllText(Path.Combine(Globals.DebugPath, "terrainOverrides.txt"), sb.ToString());
       }
 
       private void deleteProvinceHistoryEntriesToolStripMenuItem_Click(object sender, EventArgs e)

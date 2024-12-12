@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-using System.Windows.Forms;
-using Editor.DataClasses.Commands;
+﻿using Editor.DataClasses.Commands;
 using Editor.Helper;
 
 namespace Editor.Forms.PopUps

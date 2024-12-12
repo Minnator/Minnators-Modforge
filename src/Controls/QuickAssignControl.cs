@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using Editor.DataClasses.GameDataClasses;
 using Editor.Forms.PopUps;
 using Editor.Helper;
 

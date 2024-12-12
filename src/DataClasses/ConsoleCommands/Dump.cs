@@ -15,7 +15,7 @@ namespace Editor.DataClasses.ConsoleCommands
       ];
       public override void Execute(string[] args)
       {
-         var defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
+         var defaultPath = Path.Combine(Globals.DebugPath);
          if (args.Length == 2)
          {
             if (!_validObjects.Contains(args[1]))

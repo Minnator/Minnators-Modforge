@@ -1,5 +1,4 @@
-﻿using System.Data;
-using Editor.DataClasses.GameDataClasses;
+﻿using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.Saving;
 

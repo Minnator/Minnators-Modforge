@@ -1,7 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
-using Editor.Helper;
 
 namespace Editor.DataClasses.Settings
 {
@@ -20,6 +18,7 @@ namespace Editor.DataClasses.Settings
       private int _maxCountryDevDifferenceForCountryWithSameSize = 75;
       private int _historicRivalsFriendsGenerationAmount = 3;
       private bool _useEu4Cursor = true;
+      private bool _useDiscordRichPresence = true;
 
       [Description("The language in which the localisation will be shown")]
       [CompareInEquals]
@@ -115,6 +114,14 @@ namespace Editor.DataClasses.Settings
       {
          get => _useEu4Cursor;
          set => SetField(ref _useEu4Cursor, value);
+      }
+
+      [Description("Determines if the Discord Rich Presence should be used. \n Changing this requires restarting the application.")]
+      [CompareInEquals]
+      public bool UseDiscordRichPresence
+      {
+         get => _useDiscordRichPresence;
+         set => SetField(ref _useDiscordRichPresence, value);
       }
    }
 }

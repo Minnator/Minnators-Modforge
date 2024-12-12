@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Editor.DataClasses.GameDataClasses;
+﻿using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 
 namespace Editor.DataClasses.MapModes

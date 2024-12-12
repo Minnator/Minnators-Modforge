@@ -4,7 +4,8 @@ public class Consts
 {
    //public const string MOD_PATH = @"O:\Users\david\Documents\Paradox Interactive\Europa Universalis V\mod\HexMap";
    // POST FINEM
-   //public const string MOD_PATH = @"C:\Users\david\Downloads\PostFinem-1.35_MAIN\PostFinem-1.35_MAIN";
+   //public const string MOD_PATH = @"C:\Users\david\
+   //\PostFinem-1.35_MAIN\PostFinem-1.35_MAIN";
    //public const string MOD_PATH = @"S:\SteamLibrary\steamapps\workshop\content\236850\3142739241";
    // Extended Timeline
    //public const string MOD_PATH = @"S:\SteamLibrary\steamapps\workshop\content\236850\217416366";

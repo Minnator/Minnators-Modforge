@@ -1,5 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Drawing.Imaging;
 using Editor.Helper;
 using Editor.Parser;

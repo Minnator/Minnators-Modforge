@@ -1,6 +1,5 @@
 ﻿using System.Text.RegularExpressions;
 using Editor.DataClasses.GameDataClasses;
-using Editor.Loading;
 
 namespace Editor.Parser
 {

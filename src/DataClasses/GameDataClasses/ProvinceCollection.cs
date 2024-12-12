@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.Misc;
 using Editor.Helper;

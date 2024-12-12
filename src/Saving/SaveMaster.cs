@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Text;
-using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
 using Editor.Forms.Feature.SavingClasses;
 using Editor.Helper;

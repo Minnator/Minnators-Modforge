@@ -28,6 +28,8 @@ namespace Editor.Helper
                {
                   Discord.RunCallbacks();
                   Thread.Sleep(50);
+                  if (!Globals.Settings.Misc.UseDiscordRichPresence)
+                     return;
                }
             }
             catch (ResultException)
@@ -67,6 +69,12 @@ namespace Editor.Helper
          };
 
          activityManager.UpdateActivity(activity, _ => { });
+      }
+
+      public static void ActivateActivity()
+      {
+         if (Globals.Settings.Misc.UseDiscordRichPresence)
+            StartDiscordActivity();
       }
    }
 }

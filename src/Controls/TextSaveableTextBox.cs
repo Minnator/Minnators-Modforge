@@ -1,5 +1,4 @@
 ﻿using Editor.DataClasses.Commands;
-using Editor.Helper;
 using Editor.Saving;
 
 namespace Editor.Controls

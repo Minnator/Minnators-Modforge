@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using Editor.Loading;
-
-namespace Editor.Parser
+﻿namespace Editor.Parser
 {
    
    public static class ScopeParser

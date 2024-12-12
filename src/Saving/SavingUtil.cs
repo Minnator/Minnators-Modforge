@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using System.Text;
-using Windows.ApplicationModel.Store.Preview.InstallControl;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
 using Editor.Parser;

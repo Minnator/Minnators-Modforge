@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Text;
+﻿using System.Text;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Parsing = Editor.Parser.Parsing;
@@ -19,7 +18,7 @@ namespace Editor.Loading
             LoadUnitType(file);
          }
 
-         PrintAllUnitsToFile();
+         //PrintAllUnitsToFile();
       }
 
       private static void LoadUnitType(string path)
@@ -224,10 +223,7 @@ namespace Editor.Loading
          {
             sb.AppendLine(unit.ToString());
          }
-
-         //get the download folder of the current user
-         var downloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\Downloads";
-         var path = Path.Combine(downloadFolder, "AllUnits.txt");
+         var path = Path.Combine(Globals.DebugPath, "AllUnits.txt");
          File.WriteAllText(path, sb.ToString());
       }
    }

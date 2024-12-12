@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Editor.Saving;
 
 namespace Editor.DataClasses.ObservableObjects

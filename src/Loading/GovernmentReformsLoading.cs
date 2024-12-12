@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Text;
+﻿using System.Text;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 using Editor.Parser;
@@ -21,15 +20,14 @@ namespace Editor.Loading
             ParseGovernmentReformsFile(file);
          }
 
+         return;
          var sb = new StringBuilder();
          sb.AppendLine("Government Reforms:");
          foreach (var reform in Globals.GovernmentReforms.Values)
          {
             sb.AppendLine(reform.ToString());
          }
-         // users downloads folder
-         var downloads = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
-         File.WriteAllText(Path.Combine(downloads, "government_reforms.txt"), sb.ToString());
+         File.WriteAllText(Path.Combine(Globals.DebugPath, "government_reforms.txt"), sb.ToString());
          
       }
 

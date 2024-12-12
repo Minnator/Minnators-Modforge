@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using Editor.DataClasses.GameDataClasses;
+﻿using Editor.DataClasses.GameDataClasses;
 using Editor.Events;
 using Editor.Helper;
 
@@ -37,6 +36,18 @@ namespace Editor.Controls
 
          base.OnSelectedIndexChanged(e);
          OnTagChanged?.Invoke(this, new (Selection.GetSelectedProvinces, Text));
+      }
+
+
+      protected override void OnKeyPress(KeyPressEventArgs e)
+      {
+         if (Text.Length >= 3)
+         {
+            e.Handled = true;
+            return;
+         }
+         base.OnKeyPress(e);
+         e.KeyChar = char.ToUpper(e.KeyChar);
       }
    }
    

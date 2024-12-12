@@ -1,8 +1,6 @@
-﻿using System.Diagnostics;
-using System.Drawing.Imaging;
+﻿using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using DirectXTexNet;
-using Image = DirectXTexNet.Image;
 
 namespace Editor.Helper
 {

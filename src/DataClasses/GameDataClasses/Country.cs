@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text;
-using System.Windows.Forms;
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.Misc;
 using Editor.Helper;

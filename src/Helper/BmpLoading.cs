@@ -1,7 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using Windows.UI.ViewManagement;
 
 namespace Editor.Helper
 {

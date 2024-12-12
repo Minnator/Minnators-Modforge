@@ -1,8 +1,6 @@
-﻿using System.Diagnostics;
-using Editor.Controls;
+﻿using Editor.Controls;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
-using Editor.Saving;
 
 namespace Editor.Forms.PopUps
 {
