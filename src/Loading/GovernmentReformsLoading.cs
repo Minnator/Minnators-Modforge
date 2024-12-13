@@ -20,7 +20,7 @@ namespace Editor.Loading
             ParseGovernmentReformsFile(file);
          }
 
-         return;
+#if DEBUG
          var sb = new StringBuilder();
          sb.AppendLine("Government Reforms:");
          foreach (var reform in Globals.GovernmentReforms.Values)
@@ -28,7 +28,8 @@ namespace Editor.Loading
             sb.AppendLine(reform.ToString());
          }
          File.WriteAllText(Path.Combine(Globals.DebugPath, "government_reforms.txt"), sb.ToString());
-         
+#endif
+
       }
 
       private static void ParseGovernmentReformsFile(string path)

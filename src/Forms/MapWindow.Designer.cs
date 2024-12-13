@@ -212,12 +212,10 @@
          MonarchNamesTLP = new TableLayoutPanel();
          tableLayoutPanel6 = new TableLayoutPanel();
          label40 = new Label();
-         label41 = new Label();
          label42 = new Label();
-         RegnalNumeric = new NumericUpDown();
          NameTextBox = new TextBox();
          ChanceTextBox = new TextBox();
-         button3 = new Button();
+         AddNewMonarchNameButton = new Button();
          ShowMonachrNamesCB = new CheckBox();
          MonarchNamesFlowPanel = new FlowLayoutPanel();
          ShipNamesTab = new TabPage();
@@ -305,7 +303,6 @@
          MonarchNamesTab.SuspendLayout();
          MonarchNamesTLP.SuspendLayout();
          tableLayoutPanel6.SuspendLayout();
-         ((System.ComponentModel.ISupportInitialize)RegnalNumeric).BeginInit();
          groupBox9.SuspendLayout();
          CulturesTLP.SuspendLayout();
          GovernmentGroupBox.SuspendLayout();
@@ -804,14 +801,14 @@
          // provinceToolStripMenuItem
          // 
          provinceToolStripMenuItem.Name = "provinceToolStripMenuItem";
-         provinceToolStripMenuItem.Size = new Size(180, 22);
+         provinceToolStripMenuItem.Size = new Size(120, 22);
          provinceToolStripMenuItem.Text = "Province";
          provinceToolStripMenuItem.Click += provinceToolStripMenuItem_Click;
          // 
          // countryToolStripMenuItem
          // 
          countryToolStripMenuItem.Name = "countryToolStripMenuItem";
-         countryToolStripMenuItem.Size = new Size(180, 22);
+         countryToolStripMenuItem.Size = new Size(120, 22);
          countryToolStripMenuItem.Text = "Country";
          countryToolStripMenuItem.Click += countryToolStripMenuItem_Click;
          // 
@@ -2218,20 +2215,18 @@
          // 
          // tableLayoutPanel6
          // 
-         tableLayoutPanel6.ColumnCount = 5;
+         tableLayoutPanel6.ColumnCount = 4;
          tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
          tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 55F));
          tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 55F));
-         tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 55F));
          tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 25F));
+         tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
          tableLayoutPanel6.Controls.Add(label40, 0, 0);
-         tableLayoutPanel6.Controls.Add(label41, 1, 0);
-         tableLayoutPanel6.Controls.Add(label42, 2, 0);
-         tableLayoutPanel6.Controls.Add(RegnalNumeric, 1, 1);
+         tableLayoutPanel6.Controls.Add(label42, 1, 0);
          tableLayoutPanel6.Controls.Add(NameTextBox, 0, 1);
-         tableLayoutPanel6.Controls.Add(ChanceTextBox, 2, 1);
-         tableLayoutPanel6.Controls.Add(button3, 3, 1);
-         tableLayoutPanel6.Controls.Add(ShowMonachrNamesCB, 4, 1);
+         tableLayoutPanel6.Controls.Add(ChanceTextBox, 1, 1);
+         tableLayoutPanel6.Controls.Add(AddNewMonarchNameButton, 2, 1);
+         tableLayoutPanel6.Controls.Add(ShowMonachrNamesCB, 3, 1);
          tableLayoutPanel6.Dock = DockStyle.Fill;
          tableLayoutPanel6.Location = new Point(0, 0);
          tableLayoutPanel6.Margin = new Padding(0);
@@ -2249,23 +2244,10 @@
          label40.Font = new Font("Segoe UI", 8.25F);
          label40.Location = new Point(3, 0);
          label40.Name = "label40";
-         label40.Size = new Size(162, 15);
+         label40.Size = new Size(217, 15);
          label40.TabIndex = 0;
          label40.Text = "Name";
          label40.TextAlign = ContentAlignment.MiddleCenter;
-         // 
-         // label41
-         // 
-         label41.AutoSize = true;
-         label41.Dock = DockStyle.Fill;
-         label41.Font = new Font("Segoe UI", 8.25F);
-         label41.Location = new Point(171, 0);
-         label41.Name = "label41";
-         label41.Size = new Size(49, 15);
-         label41.TabIndex = 1;
-         label41.Text = "Regnal";
-         label41.TextAlign = ContentAlignment.MiddleCenter;
-         GeneralToolTip.SetToolTip(label41, "Regnal: Start of regnal numeration; always next number -1 \r\n(Kevin I = Kevin #0)");
          // 
          // label42
          // 
@@ -2280,41 +2262,36 @@
          label42.TextAlign = ContentAlignment.MiddleCenter;
          GeneralToolTip.SetToolTip(label42, "Chances: 0 = Normal chance; < 0 Femal name; > 0 Male name;\r\n-10/10 are more common than 0");
          // 
-         // RegnalNumeric
-         // 
-         RegnalNumeric.Dock = DockStyle.Fill;
-         RegnalNumeric.Location = new Point(171, 18);
-         RegnalNumeric.Name = "RegnalNumeric";
-         RegnalNumeric.Size = new Size(49, 23);
-         RegnalNumeric.TabIndex = 4;
-         // 
          // NameTextBox
          // 
          NameTextBox.Dock = DockStyle.Fill;
+         NameTextBox.Enabled = false;
          NameTextBox.Location = new Point(3, 18);
          NameTextBox.Name = "NameTextBox";
          NameTextBox.PlaceholderText = "Minnator";
-         NameTextBox.Size = new Size(162, 23);
+         NameTextBox.Size = new Size(217, 23);
          NameTextBox.TabIndex = 5;
          // 
          // ChanceTextBox
          // 
          ChanceTextBox.Dock = DockStyle.Fill;
+         ChanceTextBox.Enabled = false;
          ChanceTextBox.Location = new Point(226, 18);
          ChanceTextBox.Name = "ChanceTextBox";
          ChanceTextBox.Size = new Size(49, 23);
          ChanceTextBox.TabIndex = 6;
          // 
-         // button3
+         // AddNewMonarchNameButton
          // 
-         button3.Dock = DockStyle.Fill;
-         button3.Location = new Point(281, 18);
-         button3.Name = "button3";
-         button3.Size = new Size(49, 24);
-         button3.TabIndex = 7;
-         button3.Text = "Add";
-         button3.UseVisualStyleBackColor = true;
-         button3.Click += AddMonarchName_Click;
+         AddNewMonarchNameButton.Dock = DockStyle.Fill;
+         AddNewMonarchNameButton.Enabled = false;
+         AddNewMonarchNameButton.Location = new Point(281, 18);
+         AddNewMonarchNameButton.Name = "AddNewMonarchNameButton";
+         AddNewMonarchNameButton.Size = new Size(49, 24);
+         AddNewMonarchNameButton.TabIndex = 7;
+         AddNewMonarchNameButton.Text = "Add";
+         AddNewMonarchNameButton.UseVisualStyleBackColor = true;
+         AddNewMonarchNameButton.Click += AddNewMonarchNameButton_Click_1;
          // 
          // ShowMonachrNamesCB
          // 
@@ -2970,7 +2947,6 @@
          MonarchNamesTLP.ResumeLayout(false);
          tableLayoutPanel6.ResumeLayout(false);
          tableLayoutPanel6.PerformLayout();
-         ((System.ComponentModel.ISupportInitialize)RegnalNumeric).EndInit();
          groupBox9.ResumeLayout(false);
          CulturesTLP.ResumeLayout(false);
          CulturesTLP.PerformLayout();
@@ -3169,17 +3145,13 @@
       private TableLayoutPanel MonarchNamesTLP;
       private TableLayoutPanel tableLayoutPanel6;
       private Label label40;
-      private Label label41;
       private Label label42;
-      private NumericUpDown RegnalNumeric;
-      private TextBox NameTextBox;
-      private TextBox ChanceTextBox;
-      private Button button3;
+      internal TextBox NameTextBox;
+      internal TextBox ChanceTextBox;
+      private Button AddNewMonarchNameButton;
       private CheckBox ShowMonachrNamesCB;
-      private FlowLayoutPanel MonarchNamesFlowPanel;
-      private TabPage ShipNamesTab;
+      public FlowLayoutPanel MonarchNamesFlowPanel;
       private TabPage ArmyNamesTab;
-      private TabPage FleetNamesTab;
       private TabPage LeaderNamesTab;
       private Label CountryNameLabel;
       private GroupBox groupBox9;
@@ -3236,6 +3208,8 @@
       private ToolStripMenuItem clearGUIToolStripMenuItem;
       private ToolStripMenuItem provinceToolStripMenuItem;
       private ToolStripMenuItem countryToolStripMenuItem;
+      private TabPage ShipNamesTab;
+      private TabPage FleetNamesTab;
    }
 }
 

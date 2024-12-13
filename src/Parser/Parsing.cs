@@ -23,7 +23,10 @@ public static partial class Parsing
    private static readonly Regex PointFRegex = PointFRegexGenerate();
    private static readonly Regex PointRegex = PointRegexGenerate();
    private static readonly Regex QuoteStringRegex = QuoteStringRegexGenerate();
+   private static readonly Regex RegnalRegex = RegnalRegexGenerate();
 
+   [GeneratedRegex(@"#(?<num>\d+)", RegexOptions.Compiled)]
+   private static partial Regex RegnalRegexGenerate();
    [GeneratedRegex(@"\""(.*)\""", RegexOptions.Compiled)]
    private static partial Regex QuoteStringRegexGenerate();
    // Generate Regexes during compile time
@@ -43,7 +46,7 @@ public static partial class Parsing
    private static partial Regex StringListRegexGenerate();
    [GeneratedRegex(@"(?<r>\d+)\s+(?<g>\d+)\s+(?<b>\d+)", RegexOptions.Compiled)]
    private static partial Regex ColorRegexGenerate();
-   [GeneratedRegex(@"([\p{L} ]+) #(\d+)""\s*=\s*(-?\d+)", RegexOptions.Compiled)]
+   [GeneratedRegex(@"""(?<name>.+)""\s*=\s*(?<chance>[\d-]+)", RegexOptions.Compiled)]
    private static partial Regex MonarchNameRegexGenerate();
    [GeneratedRegex(@"(?<key>[A-Za-z_0-9-.]+)\s*=\s*""?(?<value>[A-Za-z_0-9-.]+)""?", RegexOptions.Compiled)]
    private static partial Regex KeyValueRegexGenerate();
@@ -373,6 +376,16 @@ public static partial class Parsing
       return GetStringList(ref value);
    }
 
+   public static List<string> GetStringListWithoutQuotes(string value)
+   {
+      List<string> strList = [];
+
+      var matches = StringListRegex.Matches(value);
+      foreach (Match match in matches)
+         strList.Add(match.ToString().Trim().TrimQuotes());
+      return strList;
+   }
+
    /// <summary>
    /// Removes all comments from the given string.
    /// Parses the string to a list of <c>KeyValuePair</c> with the key and value of each line.
@@ -553,11 +566,10 @@ public static partial class Parsing
 
       foreach (Match match in matches)
       {
-         var name = match.Groups[1].Value;
-         var ordinal = int.Parse(match.Groups[2].Value);
-         var chance = int.Parse(match.Groups[3].Value);
+         var name = match.Groups["name"].Value;
+         var chance = int.Parse(match.Groups["chance"].Value);
 
-         names.Add(new (name, ordinal, chance));
+         names.Add(new (name, chance));
       }
    }
 
@@ -873,6 +885,16 @@ public static partial class Parsing
       return input;
    }
 
+
+   public static int GetRegnalFromString(string str)
+   {
+      if (RegnalRegex.IsMatch(str))
+      {
+         var match = RegnalRegex.Match(str);
+         return int.Parse(match.Groups["num"].Value);
+      }
+      return int.MinValue;
+   }
    [GeneratedRegex(@"\s*(\d+)")]
    private static partial Regex ByteListRegex();
    [GeneratedRegex(@"\s*(\d+)")]

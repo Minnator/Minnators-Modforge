@@ -1,12 +1,16 @@
-﻿using Editor.DataClasses.GameDataClasses;
+﻿using System.Text.RegularExpressions;
+using System.Threading.Channels;
+using Editor.DataClasses.GameDataClasses;
+using Editor.Events;
 using Editor.Helper;
+using Editor.Parser;
 using Editor.Properties;
 
 namespace Editor.Controls
 {
    public sealed class NamesEditor : Control
    {
-      public TextBox TextBox { get; set; } = new();
+      public SmartTextBox TextBox { get; set; } = new();
       public Label Description { get; set; } = new();
       private TableLayoutPanel _tbl;
 
@@ -60,12 +64,13 @@ namespace Editor.Controls
       }
    }
 
-   public sealed class MonarchNameControl : Control
+   public partial class MonarchNameControl : Control
    {
+      
+
       internal TableLayoutPanel _tbl;
-      private TextBox _nameBox;
-      private TextBox _regnalBox;
-      private TextBox _chanceBox;
+      private SmartTextBox _nameBox;
+      private SmartTextBox _chanceBox;
       private Button _deleteButton;
 
       public MonarchNameControl(MonarchName name, Size size)
@@ -79,7 +84,6 @@ namespace Editor.Controls
                new (SizeType.Percent, 100),
                new (SizeType.Absolute, 55),
                new (SizeType.Absolute, 55),
-               new (SizeType.Absolute, 55),
             },
             RowCount = 1,
             Margin = new (0)
@@ -88,12 +92,6 @@ namespace Editor.Controls
          _nameBox = new()
          {
             Text = name.Name,
-            Dock = DockStyle.Fill
-         };
-
-         _regnalBox = new()
-         {
-            Text = name.OrdinalNumber.ToString(),
             Dock = DockStyle.Fill
          };
 
@@ -111,22 +109,32 @@ namespace Editor.Controls
          _deleteButton.Click += OnDeleteButton_Click;
 
          _tbl.Controls.Add(_nameBox, 0, 0);
-         _tbl.Controls.Add(_regnalBox, 1, 0);
-         _tbl.Controls.Add(_chanceBox, 2, 0);
-         _tbl.Controls.Add(_deleteButton, 3, 0);
+         _tbl.Controls.Add(_chanceBox, 1, 0);
+         _tbl.Controls.Add(_deleteButton, 2, 0);
 
          Controls.Add(_tbl);
 
          Size = size;
+
+         _nameBox.ContentModified += ((sender, s) =>
+         {
+            CountryGuiEvents.MonarchName_ContentModified(sender, _nameBox.OldText, s, int.Parse(_chanceBox.Text));
+         });
+
+         _chanceBox.ContentModified += ((sender, s) =>
+         {
+            CountryGuiEvents.MonarchName_ContentModified(sender, _nameBox.Text, _nameBox.Text, int.Parse(s));
+         });
       }
 
       public bool GetNames(out MonarchName mName)
       {
+         var rNum = Parsing.GetRegnalFromString(_nameBox.Text);
          if (InputHelper.GetIntIfNotEmpty(_chanceBox, out var chance) &&
-             InputHelper.GetIntIfNotEmpty(_regnalBox, out var regnal) &&
+             rNum != int.MinValue &&
              InputHelper.GetStringIfNotEmpty(_nameBox, out var name))
          {
-            mName = new(name, regnal, chance);
+            mName = new(name, rNum, chance);
             return true;
          }
 
@@ -134,15 +142,13 @@ namespace Editor.Controls
          return false;
       }
 
+
       public void OnDeleteButton_Click(object? sender, EventArgs e)
       {
-         if (Selection.SelectedCountry == Country.Empty)
-            return;
-         if (!GetNames(out var mName))
-            return;
-         Selection.SelectedCountry.CommonCountry.MonarchNames.Remove(mName);
+         CountryGuiEvents.MonarchName_DeleteButton_Click(sender, _nameBox.Text);
          Parent?.Controls.Remove(this);
       }
 
+      
    }
 }

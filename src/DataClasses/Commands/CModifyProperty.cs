@@ -1,4 +1,5 @@
-﻿using Editor.Saving;
+﻿using System.Collections;
+using Editor.Saving;
 
 namespace Editor.DataClasses.Commands
 {
@@ -34,14 +35,23 @@ namespace Editor.DataClasses.Commands
             property1.SetValue(target, value);
       }
 
+      private List<string> GetDiff()
+      {
+         if (newValue is not List<string> list || oldValue is not List<string> old)
+            return [];
+         return list.Except(old).ToList();
+      }
+
       public string GetDescription()
       {
-         return $"Modify property {property} of {target} to {newValue}";
+         return newValue is not List<string> list ? $"Modify property {property} of {target} to {newValue}" : $"Modify property {property} of {target} to {string.Join(", ", GetDiff())}";
       }
 
       public string GetDebugInformation(int indent)
       {
-         return $"Changed {property} from {oldValue} to {newValue} in {target.WhatAmI()} object ({target})";
+         if (newValue is not IList list)
+            return $"Changed {property} from {oldValue} to {newValue} in {target.WhatAmI()} object ({target})";
+         return $"Changed {property} from {oldValue} to {string.Join(", ", GetDiff())} in {target.WhatAmI()} object ({target})";
       }
    }
 }

@@ -1,16 +1,31 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Editor.DataClasses.Misc;
+using Editor.Helper;
 using Editor.Parser;
 using static Editor.Saving.SavingUtil;
 
 namespace Editor.DataClasses.GameDataClasses
 {
-   public readonly struct MonarchName(string name, int ordinalNumber, int chance) : IEquatable<MonarchName>
+   public readonly struct MonarchName : IEquatable<MonarchName>
    {
-      public string Name { get; } = name;
-      public int OrdinalNumber { get; } = ordinalNumber;
-      public int Chance { get; } = chance;
+      public MonarchName(string name, int ordinalNumber, int chance)
+      {
+         Name = name;
+         OrdinalNumber = ordinalNumber;
+         Chance = chance;
+      }
+
+      public MonarchName(string name, int chance)
+      {
+         Name = name;
+         OrdinalNumber = Parsing.GetRegnalFromString(name);
+         Chance = chance;
+      }
+
+      public string Name { get; }
+      public int OrdinalNumber { get; }
+      public int Chance { get; }
 
       // Chances for female names are negative
       public readonly bool IsFemale => Chance < 0;
@@ -46,9 +61,33 @@ namespace Editor.DataClasses.GameDataClasses
 
       public override string ToString()
       {
-         return $"\"{Name} #{OrdinalNumber}\" = {Chance}";
+         return $"\"{Name}\" = {Chance}";
+      }
+      public static void DeleteFromGlobals(string name)
+      {
+         List<MonarchName> countryMonarchNames = [.. Selection.SelectedCountry.CommonCountry.MonarchNames];
+         InternalDelete(name, ref countryMonarchNames);
+         Selection.SelectedCountry.CommonCountry.MonarchNames = countryMonarchNames;
       }
 
+      private static void InternalDelete(string name, ref List<MonarchName> names) => names.RemoveAt(names.FindIndex(x => x.Name.Equals(name)));
+
+      public static void AddToGlobals(MonarchName name)
+      {
+         List<MonarchName> countryMonarchNames = [..Selection.SelectedCountry.CommonCountry.MonarchNames];
+         InternalAdd(name, ref countryMonarchNames);
+         Selection.SelectedCountry.CommonCountry.MonarchNames = countryMonarchNames;
+      }
+
+      private static void InternalAdd(MonarchName name, ref List<MonarchName> names) => names.Add(name);
+
+      public static void UpdateGlobals(string oldName, MonarchName newName)
+      {
+         List<MonarchName> countryMonarchNames = [.. Selection.SelectedCountry.CommonCountry.MonarchNames];
+         InternalDelete(oldName, ref countryMonarchNames);
+         InternalAdd(newName, ref countryMonarchNames);
+         Selection.SelectedCountry.CommonCountry.MonarchNames = countryMonarchNames;
+      }
    }
 
    public class CountryHistoryEntry(Date date)

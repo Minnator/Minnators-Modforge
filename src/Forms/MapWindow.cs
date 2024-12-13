@@ -201,7 +201,7 @@ namespace Editor.Forms
             Dock = DockStyle.Fill,
             Margin = new(0),
          };
-         
+
          MapLayoutPanel.Controls.Add(Globals.ZoomControl, 0, 0);
          Selection.Initialize();
          GuiDrawing.Initialize();
@@ -240,7 +240,7 @@ namespace Editor.Forms
       {
 
       }
-      
+
       #region EditGui
       /// <summary>
       /// Initializes all Tabs of the EditGui
@@ -614,7 +614,7 @@ namespace Editor.Forms
       }
 
       #endregion
-      
+
       private void InitializeModifierTab()
       {
          ModifierComboBox = ControlFactory.GetExtendedComboBox();
@@ -637,16 +637,16 @@ namespace Editor.Forms
          ModifiersListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
       }
 
-      
 
 
-// ======================== Province GUI Update Methods ========================
-#region Province Gui
 
-/// <summary>
-/// This will only load the province attributes to the gui which are shared by all provinces
-/// </summary>
-public void LoadSelectedProvincesToGui()
+      // ======================== Province GUI Update Methods ========================
+      #region Province Gui
+
+      /// <summary>
+      /// This will only load the province attributes to the gui which are shared by all provinces
+      /// </summary>
+      public void LoadSelectedProvincesToGui()
       {
          Globals.EditingStatus = EditingStatus.LoadingInterface;
          SuspendLayout();
@@ -977,6 +977,7 @@ public void LoadSelectedProvincesToGui()
 
       private void telescopeToolStripMenuItem_Click(object sender, EventArgs e)
       {
+#if DEBUG
          var sb = new StringBuilder();
          foreach (var province in Globals.Provinces)
          {
@@ -988,6 +989,8 @@ public void LoadSelectedProvincesToGui()
             sb.AppendLine();
          }
          File.WriteAllText(Path.Combine(Globals.DebugPath, "buildings.txt"), sb.ToString());
+#endif
+
       }
 
       private void MapWindow_KeyDown(object sender, KeyEventArgs e)
@@ -1041,6 +1044,7 @@ public void LoadSelectedProvincesToGui()
 
       private void provDiffToolStripMenuItem_Click(object sender, EventArgs e)
       {
+#if DEBUG
          var sb = new StringBuilder();
          foreach (var collision in Globals.LocalisationCollisions)
          {
@@ -1048,6 +1052,7 @@ public void LoadSelectedProvincesToGui()
          }
 
          File.WriteAllText(Path.Combine(Globals.DebugPath, "localisationCollisions.txt"), sb.ToString());
+#endif
       }
 
       private void saveAllProvincesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1389,6 +1394,8 @@ public void LoadSelectedProvincesToGui()
          };
          TagAndColorTLP.Controls.Add(CountryADJLoc, 3, 1);
 
+         AddNewMonarchNameButton.Click += CountryGuiEvents.AddMonarchName_Click;
+
       }
 
       public void ClearCountryGui()
@@ -1464,10 +1471,13 @@ public void LoadSelectedProvincesToGui()
 
          // Names
          _leaderEditor.SetNames(country.CommonCountry.LeaderNames);
+         _leaderEditor.TextBox.ContentModified += CountryGuiEvents.LeaderNames_ContentModified;
          _shipEditor.SetNames(country.CommonCountry.ShipNames);
+         _shipEditor.TextBox.ContentModified += CountryGuiEvents.ShipNames_ContentModified;
          _armyEditor.SetNames(country.CommonCountry.ArmyNames);
+         _armyEditor.TextBox.ContentModified += CountryGuiEvents.ArmyNames_ContentModified;
          _fleetEditor.SetNames(country.CommonCountry.FleetNames);
-         MonarchNamesFlowPanel.Controls.Clear();
+         _fleetEditor.TextBox.ContentModified += CountryGuiEvents.FleetNames_ContentModified;
          if (ShowMonachrNamesCB.Checked)
             AddMonarchNamesToGui(country.CommonCountry.MonarchNames);
          ResumeLayout();
@@ -1509,8 +1519,6 @@ public void LoadSelectedProvincesToGui()
             if (Selection.SelectedCountry != Country.Empty)
                Selection.SelectedCountry.HistoryCountry.Government = _governmentTypeBox.SelectedItem!.ToString()!;
          }
-
-
       }
 
       private void AddDevToSelectedCountryIfValid(int dev)
@@ -1600,19 +1608,7 @@ public void LoadSelectedProvincesToGui()
          new RoughEditorForm(Selection.GetSelectedProvinces[0], false).ShowDialog();
       }
 
-      private void AddMonarchName_Click(object sender, EventArgs e)
-      {
-         if (!InputHelper.GetStringIfNotEmpty(NameTextBox, out var name))
-            return;
-         if (!InputHelper.GetIntIfNotEmpty(ChanceTextBox, out var chance))
-            return;
-         if (!InputHelper.GetIntIfNotEmpty(RegnalNumeric, out var regnal))
-            return;
 
-         // TODO proper country editing
-         var monarchName = new MonarchName(name, chance, regnal);
-         Selection.SelectedCountry.CommonCountry.MonarchNames.Add(monarchName);
-      }
 
       private void AddMonarchNamesToGui(List<MonarchName> names)
       {
@@ -1620,13 +1616,14 @@ public void LoadSelectedProvincesToGui()
          MonarchNamesFlowPanel.AutoScroll = true;
          MonarchNamesFlowPanel.WrapContents = false;
 
+         MonarchNamesFlowPanel.Controls.Clear();
          SuspendLayout();
          foreach (var monName in names)
             AddMonarchNameToGui(monName);
          ResumeLayout();
       }
 
-      private void AddMonarchNameToGui(MonarchName monarchName)
+      internal void AddMonarchNameToGui(MonarchName monarchName)
       {
          MonarchNameControl monarchNameControl = new(monarchName, new(MonarchNamesFlowPanel.Width - 28, 29));
          MonarchNamesFlowPanel.Controls.Add(monarchNameControl);
@@ -1637,9 +1634,19 @@ public void LoadSelectedProvincesToGui()
          if (Selection.SelectedCountry == Country.Empty)
             return;
          if (ShowMonachrNamesCB.Checked)
+         {
             AddMonarchNamesToGui(Selection.SelectedCountry.CommonCountry.MonarchNames);
+            NameTextBox.Enabled = true;
+            AddNewMonarchNameButton.Enabled = true;
+            ChanceTextBox.Enabled = true;
+         }
          else
+         {
             MonarchNamesFlowPanel.Controls.Clear();
+            NameTextBox.Enabled = false;
+            AddNewMonarchNameButton.Enabled = false;
+            ChanceTextBox.Enabled = false;
+         }
       }
 
       private void SetCapitalToSelected_Click(object sender, EventArgs e)
@@ -1679,6 +1686,7 @@ public void LoadSelectedProvincesToGui()
 
       private void toolStripMenuItem4_Click(object sender, EventArgs e)
       {
+#if DEBUG
          var sb = new StringBuilder();
          foreach (var terrain in Globals.Terrains)
          {
@@ -1691,6 +1699,7 @@ public void LoadSelectedProvincesToGui()
          }
 
          File.WriteAllText(Path.Combine(Globals.DebugPath, "terrainOverrides.txt"), sb.ToString());
+#endif
       }
 
       private void deleteProvinceHistoryEntriesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1762,6 +1771,14 @@ public void LoadSelectedProvincesToGui()
          Globals.EditingStatus = EditingStatus.LoadingInterface;
          ClearCountryGui();
          Globals.EditingStatus = EditingStatus.Idle;
+      }
+
+
+      private void AddNewMonarchNameButton_Click_1(object sender, EventArgs e)
+      {
+         CountryGuiEvents.AddMonarchName_Click(sender, e);
+         NameTextBox.Clear();
+         ChanceTextBox.Clear();
       }
    }
 }

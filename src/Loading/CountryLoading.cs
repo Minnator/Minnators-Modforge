@@ -422,19 +422,19 @@ namespace Editor.Loading
                   break;
                case "ship_names":
                   foreach (var name in block.GetContentElements)
-                     country.CommonCountry.ShipNames.AddRange(Parsing.GetStringList(name.Value));
+                     country.CommonCountry.ShipNames.AddRange(Parsing.GetStringListWithoutQuotes(name.Value));
                   break;
                case "fleet_names":
                   foreach (var name in block.GetContentElements)
-                     country.CommonCountry.FleetNames.AddRange(Parsing.GetStringList(name.Value));
+                     country.CommonCountry.FleetNames.AddRange(Parsing.GetStringListWithoutQuotes(name.Value));
                   break;
                case "army_names":
                   foreach (var name in block.GetContentElements)
-                     country.CommonCountry.ArmyNames.AddRange(Parsing.GetStringList(name.Value));
+                     country.CommonCountry.ArmyNames.AddRange(Parsing.GetStringListWithoutQuotes(name.Value));
                   break;
                case "leader_names":
                   foreach (var name in block.GetContentElements)
-                     country.CommonCountry.LeaderNames.AddRange(Parsing.GetStringList(name.Value));
+                     country.CommonCountry.LeaderNames.AddRange(Parsing.GetStringListWithoutQuotes(name.Value));
                   break;
                default:
                   Globals.ErrorLog.Write($"Unknown block in {country.Tag}: {block.Name}");

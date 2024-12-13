@@ -218,6 +218,7 @@ namespace Editor.Loading
 
       private static void PrintAllUnitsToFile()
       {
+#if DEBUG
          var sb = new StringBuilder();
          foreach (var unit in Globals.Units)
          {
@@ -225,6 +226,7 @@ namespace Editor.Loading
          }
          var path = Path.Combine(Globals.DebugPath, "AllUnits.txt");
          File.WriteAllText(path, sb.ToString());
+#endif
       }
    }
 }

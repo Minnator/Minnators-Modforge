@@ -1,6 +1,8 @@
-﻿using Editor.Controls;
+﻿using System.Diagnostics;
+using Editor.Controls;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Settings;
+using Editor.DiscordGame_SDK;
 using Editor.Forms.Feature;
 using Editor.Helper;
 using Editor.Loading;
@@ -195,6 +197,78 @@ namespace Editor.Events
             return;
          var items = new List<string>(Selection.SelectedCountry.HistoryCountry.AcceptedCultures) { reform };
          Selection.SelectedCountry.HistoryCountry.AcceptedCultures = items;
+      }
+
+      public static void ShipNames_ContentModified(object? sender, string s)
+      {
+         if (Selection.SelectedCountry == Country.Empty || sender is not SmartTextBox { Parent: TableLayoutPanel
+                {
+                   Parent: NamesEditor ne
+                }
+             })
+            return;
+         Selection.SelectedCountry.CommonCountry.ShipNames = ne.GetNames();
+      }
+
+      public static void ArmyNames_ContentModified(object? sender, string s)
+      {
+         if (Selection.SelectedCountry == Country.Empty || sender is not SmartTextBox { Parent: TableLayoutPanel
+                {
+                   Parent: NamesEditor ne
+                }
+             })
+            return;
+         Selection.SelectedCountry.CommonCountry.ArmyNames = ne.GetNames();
+      }
+
+      public static void FleetNames_ContentModified(object? sender, string s)
+      {
+         if (Selection.SelectedCountry == Country.Empty || sender is not SmartTextBox { Parent: TableLayoutPanel
+                {
+                   Parent: NamesEditor ne
+                }
+             })
+            return;
+         Selection.SelectedCountry.CommonCountry.FleetNames = ne.GetNames();
+      }
+
+      public static void LeaderNames_ContentModified(object? sender, string s)
+      {
+         if (Selection.SelectedCountry == Country.Empty || sender is not SmartTextBox { Parent: TableLayoutPanel
+                {
+                   Parent: NamesEditor ne
+                }
+             })
+            return;
+         Selection.SelectedCountry.CommonCountry.LeaderNames = ne.GetNames();
+      }
+
+      public static void AddMonarchName_Click(object? sender, EventArgs e)
+      {
+         if (!InputHelper.GetStringIfNotEmpty(Globals.MapWindow.NameTextBox, out var name))
+            return;
+         if (!InputHelper.GetIntIfNotEmpty(Globals.MapWindow.ChanceTextBox, out var chance))
+            return;
+
+         Debug.Assert(Selection.SelectedCountry != Country.Empty, "Selection.SelectedCountry != Country.Empty when it must not be empty");
+
+         MonarchName mName = new(name, chance);
+         MonarchName.AddToGlobals(mName);
+         Globals.MapWindow.AddMonarchNameToGui(mName);
+      }
+
+      public static void MonarchName_ContentModified(object? sender, string oldStr, string newStr, int chance)
+      {
+         Debug.Assert(Selection.SelectedCountry != Country.Empty, "Selection.SelectedCountry != Country.Empty when it must not be empty");
+         
+         MonarchName.UpdateGlobals(oldStr, new (newStr, chance));
+      }
+
+      public static void MonarchName_DeleteButton_Click(object? sender, string name)
+      {
+         Debug.Assert(Selection.SelectedCountry != Country.Empty, "Selection.SelectedCountry != Country.Empty when it must not be empty");
+
+         MonarchName.DeleteFromGlobals(name);
       }
    }
 }

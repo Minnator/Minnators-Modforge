@@ -15,7 +15,7 @@ namespace Editor.DataClasses.ConsoleCommands
       ];
       public override void Execute(string[] args)
       {
-         var defaultPath = Path.Combine(Globals.DebugPath);
+         var defaultPath = Path.Combine(Globals.AppDirectory);
          if (args.Length == 2)
          {
             if (!_validObjects.Contains(args[1]))

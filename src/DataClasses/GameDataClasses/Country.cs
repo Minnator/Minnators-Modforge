@@ -75,26 +75,27 @@ public class CommonCountry : Saveable, IGetSetProperty
 
    public List<string> ShipNames
    {
+      // TODO: why is this being called twice if set by the interface
       get => _shipNames;
-      set => SetField(ref _shipNames, value);
+      set => SetIfModifiedEnumerable<List<string>, string>(ref _shipNames, value);
    }
 
    public List<string> FleetNames
    {
       get => _fleetNames;
-      set => SetField(ref _fleetNames, value);
+      set => SetIfModifiedEnumerable<List<string>, string>(ref _fleetNames, value);
    }
 
    public List<string> ArmyNames
    {
       get => _armyNames;
-      set => SetField(ref _armyNames, value);
+      set => SetIfModifiedEnumerable<List<string>, string>(ref _armyNames, value);
    }
 
    public List<string> LeaderNames
    {
       get => _leaderNames;
-      set => SetField(ref _leaderNames, value);
+      set => SetIfModifiedEnumerable<List<string>, string>(ref _leaderNames, value);
    }
 
    public List<MonarchName> MonarchNames
