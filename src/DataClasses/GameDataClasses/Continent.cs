@@ -87,5 +87,5 @@ public class Continent : ProvinceCollection<Province>
          MessageBox.Show($"The Continent {Name} does already exist and can not be created.", $"Continent {Name} already exists!", MessageBoxButtons.OK, MessageBoxIcon.Error);
    }
 
-   public new static Continent Empty => new(string.Empty, System.Drawing.Color.Empty, ObjEditingStatus.Immutable);
+   public new static Continent Empty { get; } = new(string.Empty, System.Drawing.Color.Empty, ObjEditingStatus.Immutable);
 }

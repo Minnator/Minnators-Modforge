@@ -79,7 +79,7 @@ public class Area : ProvinceCollection<Province>
       return $"Save areas file";
    }
 
-   public new static Area Empty => new("", Color.Empty, ObjEditingStatus.Immutable);
+   public new static Area Empty { get; } = new("", Color.Empty, ObjEditingStatus.Immutable);
 
    public static EventHandler<ProvinceComposite> AreaColorChanged = delegate { };
 

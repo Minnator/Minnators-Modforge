@@ -20,7 +20,7 @@ namespace Editor.DataClasses.GameDataClasses
       public override void OnPropertyChanged(string? propertyName = null) { }
       
 
-      public new static TradeCompany Empty => new ([], string.Empty, Color.Empty, ObjEditingStatus.Immutable);
+      public new static TradeCompany Empty  { get; } = new ([], string.Empty, Color.Empty, ObjEditingStatus.Immutable);
       
       List<TriggeredName> Names { get; set; } = [];
       public string GetSpecificName()

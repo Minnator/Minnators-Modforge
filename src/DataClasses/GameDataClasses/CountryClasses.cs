@@ -15,7 +15,7 @@ namespace Editor.DataClasses.GameDataClasses
       // Chances for female names are negative
       public readonly bool IsFemale => Chance < 0;
 
-      public static MonarchName Empty => new("", 0, 0);
+      public static MonarchName Empty { get; } = new("", 0, 0);
 
       public override bool Equals([NotNullWhen(true)] object? obj)
       {

@@ -6,7 +6,7 @@
       public int StartLevel {get; set; } = 0;
       public float StartCostModifier { get; set; } = 0f;
 
-      public static TechnologyGroup Empty => new(string.Empty);
+      public static TechnologyGroup Empty  { get; } = new(string.Empty);
 
       public override int GetHashCode()
       {

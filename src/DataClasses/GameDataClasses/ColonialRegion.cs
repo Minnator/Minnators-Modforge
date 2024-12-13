@@ -137,7 +137,7 @@ namespace Editor.DataClasses.GameDataClasses
       {
       }
 
-      public static TriggeredName Empty => new (string.Empty);
+      public static TriggeredName Empty { get; } = new (string.Empty);
 
       public override string ToString()
       {

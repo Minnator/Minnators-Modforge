@@ -290,7 +290,7 @@ public abstract class ProvinceComposite(string name, Color color) : Saveable// P
       return !left.Equals(right);
    }
 
-   public static ProvinceComposite Empty => Province.Empty;
+   public static ProvinceComposite Empty  { get; } = Province.Empty;
 
 }
 

@@ -27,7 +27,7 @@ public class Region : ProvinceCollection<Area>
    }
 
 
-   public new static Region Empty => new (string.Empty, System.Drawing.Color.Empty, ObjEditingStatus.Immutable);
+   public new static Region Empty  { get; } = new (string.Empty, System.Drawing.Color.Empty, ObjEditingStatus.Immutable);
 
    public override SaveableType WhatAmI()
    {

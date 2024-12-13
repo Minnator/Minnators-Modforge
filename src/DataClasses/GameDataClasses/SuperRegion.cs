@@ -97,6 +97,6 @@ public class SuperRegion : ProvinceCollection<Region>
          MessageBox.Show($"The SuperRegion {Name} does already exist and can not be created.", $"SuperRegion {Name} already exists!", MessageBoxButtons.OK, MessageBoxIcon.Error);
    }
 
-   public new static SuperRegion Empty => new (string.Empty, System.Drawing.Color.Empty, ObjEditingStatus.Immutable);
+   public new static SuperRegion Empty  { get; } = new (string.Empty, System.Drawing.Color.Empty, ObjEditingStatus.Immutable);
 
 }

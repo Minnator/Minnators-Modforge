@@ -9,7 +9,7 @@ public class Government(string name)
    public List<HashSet<GovernmentReform>> ExclusiveReforms = [];
    public Color Color = Color.Empty;
 
-   public static Government Empty => new (string.Empty);
+   public static Government Empty  { get; } = new (string.Empty);
 
    public List<GovernmentReform> AllReforms
    {
@@ -54,7 +54,7 @@ public class ReformLevel(string name)
    public string Name { get; } = name;
    public List<GovernmentReform> Reforms = [];
 
-   public static ReformLevel Empty => new (string.Empty);
+   public static ReformLevel Empty  { get; } = new (string.Empty);
 
    public override string ToString()
    {

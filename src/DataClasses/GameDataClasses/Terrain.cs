@@ -161,7 +161,7 @@ public class Terrain : ProvinceCollection<Province>, INotifyPropertyChanged
       return "##################################################################\r\n### Terrain Categories\r\n###\r\n### Terrain types: plains, mountains, hills, desert, artic, forest, jungle, marsh, pti\r\n### Types are used by the game to apply certain bonuses/maluses on movement/combat etc.\r\n###\r\n### Sound types: plains, forest, desert, sea, jungle, mountains\r\n";
    }
 
-   public new static Terrain Empty => new("undefined", System.Drawing.Color.Empty, ObjEditingStatus.Immutable);
+   public new static Terrain Empty  { get; } = new("undefined", System.Drawing.Color.Empty, ObjEditingStatus.Immutable);
 
    public void SetOverride(ICollection<Province> p)
    {

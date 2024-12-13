@@ -7,7 +7,7 @@ namespace Editor.DataClasses.GameDataClasses
       public string UnitName { get; set; } = string.Empty;
       public UnitType UnitType { get; set; }
 
-      public static Unit Empty => LandUnit.Empty;
+      public static Unit Empty  { get; } = LandUnit.Empty;
    }
 
    public enum UnitType
@@ -37,7 +37,7 @@ namespace Editor.DataClasses.GameDataClasses
          UnitName = unitTypeName;
          Type = type;
       }
-      public new static LandUnit Empty => new(string.Empty, UnitType.Infantry);
+      public new static LandUnit Empty  { get; } = new(string.Empty, UnitType.Infantry);
 
       public override int GetHashCode()
       {
@@ -99,7 +99,7 @@ namespace Editor.DataClasses.GameDataClasses
          UnitType = type;
       }
 
-      public new static ShipUnit Empty => new(string.Empty, UnitType.Light_Ship);
+      public new static ShipUnit Empty  { get; } = new(string.Empty, UnitType.Light_Ship);
 
       public override int GetHashCode()
       {

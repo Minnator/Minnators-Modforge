@@ -143,7 +143,7 @@ public class CommonCountry : Saveable, IGetSetProperty
       set => SetField(ref _customAttributes, value);
    }
 
-   public static CommonCountry Empty => new(Country.Empty, ObjEditingStatus.Immutable);
+   public static CommonCountry Empty { get; } = new(Country.Empty, ObjEditingStatus.Immutable);
 
    public void SetProperty(string propName, object value)
    {
@@ -393,7 +393,7 @@ public class HistoryCountry : Saveable, IGetSetProperty
 
    #endregion
 
-   public static HistoryCountry Empty => new(Country.Empty, ObjEditingStatus.Immutable);
+   public static HistoryCountry Empty { get; } = new(Country.Empty, ObjEditingStatus.Immutable);
    public void SetProperty(string propName, object value)
    {
       var prop = GetType().GetProperty(propName);
@@ -503,7 +503,7 @@ public class CountryFilePath : Saveable
       set => SetField(ref _filePathArr, value);
    }
 
-   public static CountryFilePath Empty => new(string.Empty, ObjEditingStatus.Immutable);
+   public static CountryFilePath Empty { get; } = new(string.Empty, ObjEditingStatus.Immutable);
 
    public override void OnPropertyChanged(string? propertyName = null)
    {
@@ -561,7 +561,7 @@ public class Country : ProvinceCollection<Province>, ITitleAdjProvider
    }
 
 
-   public new static Country Empty => new(Tag.Empty, CountryFilePath.Empty, Color.Empty, ObjEditingStatus.Immutable);
+   public new static Country Empty { get; } = new(Tag.Empty, CountryFilePath.Empty, Color.Empty, ObjEditingStatus.Immutable);
 
    [TypeConverter(typeof(ExpandableObjectConverter))]
    public HistoryCountry HistoryCountry { get; set; }

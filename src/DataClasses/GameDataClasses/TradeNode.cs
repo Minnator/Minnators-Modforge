@@ -24,7 +24,7 @@ namespace Editor.DataClasses.GameDataClasses
       public bool IsInland { get; set; } = false;
       public List<string> Incoming { get; set; } = [];
       public List<Outgoing> Outgoing { get; set; } = [];
-      public new static TradeNode Empty => new (string.Empty, Color.Empty, ObjEditingStatus.Immutable);
+      public new static TradeNode Empty  { get; } = new (string.Empty, Color.Empty, ObjEditingStatus.Immutable);
 
       public override string ToString()
       {

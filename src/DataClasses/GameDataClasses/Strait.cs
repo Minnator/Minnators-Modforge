@@ -71,6 +71,6 @@ namespace Editor.DataClasses.GameDataClasses
          return !left.Equals(right);
       }
 
-      public static Strait Empty => new(Province.Empty, Province.Empty, Province.Empty, StraitType.Land);
+      public static Strait Empty  { get; } = new(Province.Empty, Province.Empty, Province.Empty, StraitType.Land);
    }
 }

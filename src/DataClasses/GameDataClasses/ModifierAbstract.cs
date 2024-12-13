@@ -245,7 +245,7 @@ namespace Editor.DataClasses.GameDataClasses
          return $"\"{Name}\" ({Modifiers.Count})";
       }
 
-      public static EventModifier Empty => new("Empty");
+      public static EventModifier Empty  { get; } = new("Empty");
       public override SaveableType WhatAmI() => SaveableType.EventModifier;
 
       public override string[] GetDefaultFolderPath()

@@ -1296,7 +1296,7 @@ public class Province : ProvinceComposite, ITitleAdjProvider
       ColorChanged += handler;
    }
 
-   public new static Province Empty => new (-1, Color.Empty, ObjEditingStatus.Immutable);
+   public new static Province Empty  { get; } = new (-1, Color.Empty, ObjEditingStatus.Immutable);
    public string GetTitleKey()
    {
       return $"PROV{ Id}";

@@ -71,7 +71,7 @@ namespace Editor.DataClasses.Misc
       [Browsable(false)]
       public static Date MaxValue => new(short.MaxValue, 12, 31);
       [Browsable(false)]
-      public static Date Empty => new(0, 0, 0);
+      public static Date Empty  { get; } = new(0, 0, 0);
 
       public void CopyDate(Date date2)
       {

@@ -6,7 +6,7 @@ namespace Editor.DataClasses.GameDataClasses
    {
       public string Name { get; } = name;
       public string Icon { get; set; } = string.Empty;
-      public static GovernmentReform Empty => new (string.Empty);
+      public static GovernmentReform Empty  { get; } = new (string.Empty);
 
       public List<Trigger> Potential = [];
       public List<Trigger> Trigger = [];
