@@ -44,7 +44,7 @@ namespace Editor.DataClasses.MapModes
       private void Timer_Tick(object? sender, EventArgs e)
       {
          _totalRunTime += _timer.Interval;
-         _scaledTime = _totalRunTime / 1000f;
+         _scaledTime = _totalRunTime / 3000f;
          RenderMapMode(GetProvinceColor);
          _timer.Interval = Globals.Settings.Rendering.MsTimerIntervalMapModeTimer;
       }
@@ -66,7 +66,10 @@ namespace Editor.DataClasses.MapModes
             case RGBMapModeType.Vertical:
                return HSVToRGBSmooth((center.Y) / 3000f + _scaledTime, 1, 1);
             case RGBMapModeType.Random:
-               break;
+               var temp = center.X + 12.9898f + center.Y * 78.233f;
+               temp = MathF.Sin(temp) * 43758.5453123f;
+               temp -= MathF.Floor(temp);
+               return HSVToRGBSmooth(temp + _scaledTime, 1, 1);
             case RGBMapModeType.Rotating:
                return HSVToRGBSmooth((MathF.Cos(_scaledTime) * center.X + MathF.Sin(_scaledTime) * center.Y) / 3000, 1, 1);
             default:

@@ -34,7 +34,8 @@ public enum MapModeType
    TradeGoods,
    TradeNode,
    GameOfLive,
-   RGB
+   RGB,
+   BadApple
 }
 
 
@@ -92,6 +93,7 @@ public class MapModeManager
       MapModes.Add(new TerrainMapMode());
       MapModes.Add(new GameOfLiveMapMode());
       MapModes.Add(new RGBMapMode());
+      //MapModes.Add(new MemeMode());
 
 
 
@@ -106,24 +108,7 @@ public class MapModeManager
 
    public void RenderCurrent()
    {
-      _stopwatch.Restart();
       CurrentMapMode.RenderMapMode(CurrentMapMode.GetProvinceColor);
-      _stopwatch.Stop();
-
-      if (_mapModeTimes.Count == 100)
-      {
-         _totalMapModeTime -= _mapModeTimes[0];
-         _mapModeTimes.RemoveAt(0);
-      }
-
-      _totalMapModeTime += (int)_stopwatch.ElapsedMilliseconds;
-      _mapModeTimes.Add((int)_stopwatch.ElapsedMilliseconds);
-      if (_stopwatch.ElapsedMilliseconds < MinMapModeTime)
-         MinMapModeTime = (int)_stopwatch.ElapsedMilliseconds;
-      if (_stopwatch.ElapsedMilliseconds > MaxMapModeTime)
-         MaxMapModeTime = (int)_stopwatch.ElapsedMilliseconds;
-
-      MapModeChanged(this, CurrentMapMode);
    }
 
    public List<MapMode> GetMapModes()
