@@ -1780,5 +1780,10 @@ namespace Editor.Forms
          NameTextBox.Clear();
          ChanceTextBox.Clear();
       }
+
+      private void gameOfLiveToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         GameOfLive.RunGameOfLive(100);
+      }
    }
 }

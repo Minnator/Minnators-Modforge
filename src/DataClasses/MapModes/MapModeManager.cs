@@ -33,6 +33,7 @@ public enum MapModeType
    TradeCompany,
    TradeGoods,
    TradeNode,
+   GameOfLive
 }
 
 
@@ -88,6 +89,7 @@ public class MapModeManager
       MapModes.Add(new DiplomaticMapMode());
       MapModes.Add(new TerrainOverrides());
       MapModes.Add(new TerrainMapMode());
+      MapModes.Add(new GameOfLiveMapMode());
 
 
 
