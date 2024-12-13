@@ -1272,6 +1272,7 @@ public void LoadSelectedProvincesToGui()
          _countryColorPickerButton.Click += CountryGuiEvents.CountryColorPickerButton_Click;
          GeneralToolTip.SetToolTip(_countryColorPickerButton, "Set the <color> of the selected country");
          RevolutionColorPickerButton = ControlFactory.GetThreeColorsButton();
+         RevolutionColorPickerButton.Margin = new(0);
          RevolutionColorPickerButton.MouseUp += CountryGuiEvents.RevolutionColorPickerButton_Click;
 
          GeneralToolTip.SetToolTip(RevolutionColorPickerButton, "LMB: Set the <revolutionary_color> of the selected country\nRMB: randomize");
@@ -1377,14 +1378,14 @@ public void LoadSelectedProvincesToGui()
          CountryLoc = new(Selection.GetSelectedCountry, new CLocObjFactory(true))
          {
             Dock = DockStyle.Fill,
-            Margin = new(3, 1, 3, 3),
+            Margin = new(1),
          };
          TagAndColorTLP.Controls.Add(CountryLoc, 1, 1);
 
          CountryADJLoc = new(Selection.GetSelectedCountry, new CLocObjFactory(false))
          {
             Dock = DockStyle.Fill,
-            Margin = new(3, 1, 3, 3),
+            Margin = new(1),
          };
          TagAndColorTLP.Controls.Add(CountryADJLoc, 3, 1);
 
@@ -1400,8 +1401,8 @@ public void LoadSelectedProvincesToGui()
          CountryNameLabel.Text = "Country: -";
          _countryColorPickerButton.BackColor = Color.Empty;
          _countryColorPickerButton.Text = "(//)";
-         CountryADJLoc.Text = "-";
-         CountryLoc.Text = "-";
+         CountryADJLoc.Clear();
+         CountryLoc.Clear();
          RevolutionColorPickerButton.Clear();
          _graphicalCultureBox.SelectedIndex = 0;
          _unitTypeBox.SelectedIndex = 0;
