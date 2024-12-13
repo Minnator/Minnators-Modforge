@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using Editor.DataClasses.MapModes;
+using Editor.Helper;
 
 namespace Editor.DataClasses.Settings
 {
@@ -12,6 +14,12 @@ namespace Editor.DataClasses.Settings
       private int _mapBorderWidth = 2;
       private int _minVisiblePixels = 80;
       private bool _showOceansAsGreyInTerrain = true;
+      private int _msTimerIntervalMapModeTimer = 17;
+      private RGBMapMode.RGBMapModeType _rgbMapModeType = RGBMapMode.RGBMapModeType.Rotating;
+      private GameOfLive.SurvivalRules _gameOfLiveSurvivalRules = GameOfLive.SurvivalRules.PopulationDynamics;
+      private int _gameOfLiveGenerations = 100;
+      private bool _gameOfLiveUseRandomCellChanges = false;
+      private bool _allowAnimatedMapModes = true;
 
       [Description("The direction of occupation stripes on the map")]
       [CompareInEquals]
@@ -59,6 +67,55 @@ namespace Editor.DataClasses.Settings
       {
          get => _showOceansAsGreyInTerrain;
          set => SetField(ref _showOceansAsGreyInTerrain, value);
+      }
+
+
+      [Description("The interval in milliseconds for the map mode timer (60 FPS is the base value)")]
+      [CompareInEquals]
+      public int MsTimerIntervalMapModeTimer
+      {
+         get => _msTimerIntervalMapModeTimer;
+         set => SetField(ref _msTimerIntervalMapModeTimer, value);
+      }
+
+      [Description("The type of RGB map mode rendering which will be used")]
+      [CompareInEquals]
+      public RGBMapMode.RGBMapModeType RGBMapModeType
+      {
+         get => _rgbMapModeType;
+         set => SetField(ref _rgbMapModeType, value);
+      }
+
+      [Description("The survival rules for the Game of Live map mode")]
+      [CompareInEquals]
+      public GameOfLive.SurvivalRules GameOfLiveSurvivalRules
+      {
+         get => _gameOfLiveSurvivalRules;
+         set => SetField(ref _gameOfLiveSurvivalRules, value);
+      }
+
+      [Description("The number of generations which will be simulated for the Game of Live map mode")]
+      [CompareInEquals]
+      public int GameOfLiveGenerations
+      {
+         get => _gameOfLiveGenerations;
+         set => SetField(ref _gameOfLiveGenerations, value);
+      }
+
+      [Description("If the Game of Live map mode will use random cell changes")]
+      [CompareInEquals]
+      public bool GameOfLiveUseRandomCellChanges
+      {
+         get => _gameOfLiveUseRandomCellChanges;
+         set => SetField(ref _gameOfLiveUseRandomCellChanges, value);
+      }
+
+      [Description("If animated map modes are allowed")]
+      [CompareInEquals]
+      public bool AllowAnimatedMapModes
+      {
+         get => _allowAnimatedMapModes;
+         set => SetField(ref _allowAnimatedMapModes, value);
       }
    }
 }

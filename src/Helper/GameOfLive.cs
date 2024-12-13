@@ -14,7 +14,6 @@ namespace Editor.Helper
 
       private static Timer _timer = new();
       private static readonly Random Random = new();
-      private const bool USE_RANDOM_STATE_CHANGE = false;
 
       private static readonly int MinSurvival = 2;
       private static readonly int MaxSurvival = 3;
@@ -23,7 +22,7 @@ namespace Editor.Helper
       private static readonly double SurvivalProbabilityThreshold = 0.2;
       private static readonly double ResistanceChance = 0.5;
 
-      public static readonly SurvivalRules Rules = SurvivalRules.PopulationDynamics;
+      public static SurvivalRules Rules = SurvivalRules.PopulationDynamics;
 
       public enum SurvivalRules
       {
@@ -84,7 +83,7 @@ namespace Editor.Helper
                   throw new ArgumentOutOfRangeException();
             }
 
-            if (USE_RANDOM_STATE_CHANGE && Random.Next(0, 100) < 5)
+            if (Globals.Settings.Rendering.GameOfLiveUseRandomCellChanges && Random.Next(0, 100) < 5)
                tempState[province] = tempState[province] == CellState.Alive ? CellState.Dead : CellState.Alive;
          }
 

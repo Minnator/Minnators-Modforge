@@ -39,6 +39,19 @@ namespace Editor.Helper
                Globals.ZoomControl.MinVisiblePixels = Globals.Settings.Rendering.MinVisiblePixels;
                Globals.ZoomControl.ZoomingControl_Resize(null!, null!);
                break;
+            case nameof(Settings.Rendering.GameOfLiveSurvivalRules):
+               GameOfLive.Rules = Globals.Settings.Rendering.GameOfLiveSurvivalRules;
+               GameOfLive.RunGameOfLive(Globals.Settings.Rendering.GameOfLiveGenerations);
+               break;
+            case nameof(Settings.Rendering.GameOfLiveGenerations):
+               GameOfLive.RunGameOfLive(Globals.Settings.Rendering.GameOfLiveGenerations);
+               break;
+            case nameof(Settings.Rendering.AllowAnimatedMapModes):
+               if (Globals.Settings.Rendering.AllowAnimatedMapModes)
+                  Globals.MapModeManager.CurrentMapMode.SetActive();
+               else
+                  Globals.MapModeManager.CurrentMapMode.SetInactive();
+               break;
          }
          Globals.ZoomControl.Invalidate();
       }
