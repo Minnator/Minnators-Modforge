@@ -16,24 +16,30 @@ Here you can find more information and help with issues, or report bugs:
 - (Statistics)
 - Modifiers management
 - File formatting and beautyfying
-- Date viewer (Any date can bee viewed with the map live updating)
+- Timeline (Any date can bee viewed with the map live updating)
 - Automatic Tradenode topological sorting and cycle detection
-- Full history capabilities to revert any action taken
+- Full history capabilities to undo and redo any action taken
 - Customizable tooltip for the map
 - Image exporter
 - Map mode exporter
+- Localisation modification for Provinces, Coutnries and EventModifiers
 
 ## What is to come?
+- Lexing, parsing, interpretation capabilites for the pdx modding language
+- Update the map to use shaders
+- allow creating gif from the map with animated proince color changes when going through the history
+- Command Batching (Context sensitive undo and redo stepsizes)
 - Add a way to create custom map modes
 - Add a tradegoods creation and editing menu
-- Ideas making via drag and drop
+- Ideas creation via drag and drop
 - Province Creation and editing (editing of provinces.bmp)
 - Filessyncing (Reload files while the program is running)
 - Visual editing for positions.txt, straits, great projects, channels, tradenodes...
 - Mission tree creator (Drag and drop, AI?)
 
 ## How to install and run the Modforge
-- Download the .exe file and run it
+- Download the .zip file and extract it
+- run the .exe file found in extracted files
 - Select the path where your mod is at (can be an empty folder)
 - Select the the vanilla base game folder
 - Press load and let the program load
@@ -55,7 +61,9 @@ Here you can find more information and help with issues, or report bugs:
 - Hotkey buttons on the bottom of the map (Can be customized by RMB on them)
 
 ## Errors & Bugs
-If you encounter any bugs please report them in the official discord or here on github using the github issues.
+If you encounter a bug, please report it through our official Discord channel or by creating an issue on GitHub.
+
+In the event of a crash, a log containing important diagnostic information will be generated in the crash_logs folder located in the application's root directory. When reporting a crash, kindly attach the relevant log file to help us address the issue more effectively.
 
 ## Information
 This project is developed in my free time, so updates may not be frequent. If you are developing your own tool and are interested in using some of my systems or visuals, please ask for permission first. I’d be happy to discuss if and how they can be shared.
