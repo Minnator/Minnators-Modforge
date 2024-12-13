@@ -8,8 +8,9 @@ namespace Editor.Helper
 {
    public static class GameOfLive
    {
-      public static Dictionary<Province, CellState> IsAlive = [];
+      public static Dictionary<Province, CellState> CellStates = [];
       public static Dictionary<Province, double> SurvivalProbability = [];
+      public static Dictionary<Province, int> Population = [];
 
       private static Timer _timer = new();
       private static readonly Random Random = new();
@@ -20,14 +21,17 @@ namespace Editor.Helper
       private static readonly int BirthThreshold = 3;
 
       private static readonly double SurvivalProbabilityThreshold = 0.2;
+      private static readonly double ResistanceChance = 0.5;
 
-      private static readonly SurvivalRules Rules = SurvivalRules.SurvivalProbability;
+      public static readonly SurvivalRules Rules = SurvivalRules.PopulationDynamics;
 
-      enum SurvivalRules
+      public enum SurvivalRules
       {
          NeighbourLimits,
          Default,
-         SurvivalProbability
+         SurvivalProbability,
+         MultipleCellStates,
+         PopulationDynamics
       }
 
       public enum CellState
@@ -39,81 +43,138 @@ namespace Editor.Helper
 
       public static void Initialize()
       {
-         IsAlive.Clear();
+         CellStates.Clear();
+         SurvivalProbability.Clear();
+         Population.Clear();
          foreach (var province in Globals.Provinces)
          {
-            IsAlive[province] = CellState.Dead;
+            CellStates[province] = CellState.Dead;
             SurvivalProbability[province] = Random.NextDouble();
+            Population[province] = 0;
          }
       }
 
       public static void NextGeneration()
       {
-         var tempState = new Dictionary<Province, CellState>(IsAlive);
+         var tempState = new Dictionary<Province, CellState>(CellStates);
+         var tempPopulation = new Dictionary<Province, int>(Population);
+
          foreach (var province in Globals.Provinces)
          {
             var aliveNeighbours = GetAliveNeighbours(province);
+
             switch (Rules)
             {
                case SurvivalRules.NeighbourLimits:
-                  if (IsAlive[province] == CellState.Alive)
-                  {
-                     if (aliveNeighbours >= MinSurvival && aliveNeighbours <= MaxSurvival)
-                        tempState[province] = CellState.Alive;
-                     else
-                        tempState[province] = CellState.Dead;
-                  }
-                  else
-                  {
-                     if (aliveNeighbours == BirthThreshold)
-                        tempState[province] = CellState.Alive;
-                     else
-                        tempState[province] = CellState.Dead;
-                  }
+                  ApplyNeighbourLimitsRule(province, tempState, aliveNeighbours);
                   break;
                case SurvivalRules.Default:
-                  if (IsAlive[province] == CellState.Alive)
-                  {
-                     if (aliveNeighbours is 2 or 3)
-                        tempState[province] = CellState.Alive;
-                     else
-                        tempState[province] = CellState.Dead;
-                  }
-                  else
-                  {
-                     if (aliveNeighbours == 3)
-                        tempState[province] = CellState.Alive;
-                     else
-                        tempState[province] = CellState.Dead;
-                  }
+                  ApplyDefaultRule(province, tempState, aliveNeighbours);
                   break;
                case SurvivalRules.SurvivalProbability:
-                  var survives = IsAlive[province] == CellState.Alive && aliveNeighbours is >= 2 and <= 3;
-                  var born = IsAlive[province] != CellState.Alive  && aliveNeighbours == 3;
-
-                  if (survives || (born && SurvivalProbability[province] > SurvivalProbabilityThreshold))
-                     tempState[province] = CellState.Alive;
-                  else
-                     tempState[province] = CellState.Dead;
+                  ApplySurvivalProbabilityRule(province, tempState, aliveNeighbours);
+                  break;
+               case SurvivalRules.MultipleCellStates:
+                  ApplyMultipleCellStatesRule(province, tempState, aliveNeighbours);
+                  break;
+               case SurvivalRules.PopulationDynamics:
+                  ApplyPopulationDynamicsRule(province, tempPopulation);
                   break;
                default:
                   throw new ArgumentOutOfRangeException();
             }
 
             if (USE_RANDOM_STATE_CHANGE && Random.Next(0, 100) < 5)
-               if (tempState[province] == CellState.Alive)
-                  tempState[province] = CellState.Dead;
-               else
-                  tempState[province] = CellState.Alive;
+               tempState[province] = tempState[province] == CellState.Alive ? CellState.Dead : CellState.Alive;
          }
-         IsAlive = tempState;
+
+         CellStates = tempState;
+         Population = tempPopulation;
+      }
+
+      private static void ApplyNeighbourLimitsRule(Province province, Dictionary<Province, CellState> tempState, int aliveNeighbours)
+      {
+         if (CellStates[province] == CellState.Alive)
+         {
+            tempState[province] = aliveNeighbours >= MinSurvival && aliveNeighbours <= MaxSurvival
+                ? CellState.Alive
+                : CellState.Dead;
+         }
+         else
+         {
+            tempState[province] = aliveNeighbours == BirthThreshold
+                ? CellState.Alive
+                : CellState.Dead;
+         }
+      }
+
+      private static void ApplyDefaultRule(Province province, Dictionary<Province, CellState> tempState, int aliveNeighbours)
+      {
+         if (CellStates[province] == CellState.Alive)
+         {
+            tempState[province] = aliveNeighbours is 2 or 3 ? CellState.Alive : CellState.Dead;
+         }
+         else
+         {
+            tempState[province] = aliveNeighbours == 3 ? CellState.Alive : CellState.Dead;
+         }
+      }
+
+      private static void ApplySurvivalProbabilityRule(Province province, Dictionary<Province, CellState> tempState, int aliveNeighbours)
+      {
+         var survives = CellStates[province] == CellState.Alive && aliveNeighbours is >= 2 and <= 3;
+         var born = CellStates[province] != CellState.Alive && aliveNeighbours == 3;
+
+         tempState[province] = survives || (born && SurvivalProbability[province] > SurvivalProbabilityThreshold)
+             ? CellState.Alive
+             : CellState.Dead;
+      }
+
+      private static void ApplyMultipleCellStatesRule(Province province, Dictionary<Province, CellState> tempState, int aliveNeighbours)
+      {
+         if (CellStates[province] == CellState.Alive)
+         {
+            tempState[province] = aliveNeighbours is 2 or 3 ? CellState.Alive : CellState.Infected;
+         }
+         else if (CellStates[province] == CellState.Dead)
+         {
+            tempState[province] = aliveNeighbours == 3 ? CellState.Alive : CellState.Dead;
+         }
+         else if (CellStates[province] == CellState.Infected)
+         {
+            tempState[province] = CellState.Dead;
+         }
+      }
+
+      private static void ApplyPopulationDynamicsRule(Province province, Dictionary<Province, int> tempPopulation)
+      {
+         var neighborCounts = Globals.AdjacentProvinces[province]
+             .GroupBy(neighbour => Population[neighbour])
+             .ToDictionary(g => g.Key, g => g.Count());
+         
+         var topPopulations = neighborCounts
+            .Where(kvp => kvp.Value == neighborCounts.Values.Max())
+            .Select(kvp => kvp.Key)
+            .ToList();
+
+         var dominantPopulation = topPopulations[Random.Next(topPopulations.Count)];
+
+         if (Random.NextDouble() < ResistanceChance)
+         {
+            tempPopulation[province] = Population[province];
+            return;
+         }
+
+
+         tempPopulation[province] = dominantPopulation; // Province adopts the dominant neighbor's population
+         
       }
 
       private static int GetAliveNeighbours(Province province)
       {
          var aliveNeighbours = 0;
          foreach (var neighbour in Globals.AdjacentProvinces[province])
-            if (IsAlive[neighbour] == CellState.Alive)
+            if (CellStates[neighbour] == CellState.Alive)
                aliveNeighbours++;
          return aliveNeighbours;
       }
@@ -122,10 +183,8 @@ namespace Editor.Helper
       {
          foreach (var province in Globals.Provinces)
          {
-            if (Random.Next(0, 2) == 1)
-               IsAlive[province] = CellState.Alive;
-            else
-               IsAlive[province] = CellState.Dead;
+            CellStates[province] = Random.Next(0, 2) == 1 ? CellState.Alive : CellState.Dead;
+            Population[province] = Random.Next(0, 3);
          }
       }
 
@@ -134,7 +193,7 @@ namespace Editor.Helper
          _timer.Stop();
          _timer = new Timer {Interval = (int)deltaTime};
 
-         if (IsAlive.Count != Globals.Provinces.Count)
+         if (CellStates.Count != Globals.Provinces.Count)
             Initialize();
          InitializeRandomValues();
          Globals.MapModeManager.SetCurrentMapMode(MapModeType.GameOfLive);

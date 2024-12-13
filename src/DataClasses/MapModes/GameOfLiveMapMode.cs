@@ -12,7 +12,25 @@ namespace Editor.DataClasses.MapModes
 
       public override int GetProvinceColor(Province id)
       {
-         if (GameOfLive.IsAlive.TryGetValue(id, out var alive))
+         if (GameOfLive.Rules == GameOfLive.SurvivalRules.PopulationDynamics)
+         {
+            if (GameOfLive.Population.TryGetValue(id, out var population))
+            {
+               switch (population)
+               {
+                  case 0:
+                     return System.Drawing.Color.OliveDrab.ToArgb();
+                  case 1:
+                     return System.Drawing.Color.DarkOrange.ToArgb();
+                  case 2:
+                     return System.Drawing.Color.DarkSlateBlue.ToArgb();
+                  default:
+                     return 0x000000;
+               }
+            }
+         }
+
+         if (GameOfLive.CellStates.TryGetValue(id, out var alive))
             return alive switch             {
                GameOfLive.CellState.Alive => 0x00FF00,
                GameOfLive.CellState.Dead => 0x000000,
@@ -24,7 +42,7 @@ namespace Editor.DataClasses.MapModes
 
       public override string GetSpecificToolTip(Province provinceId)
       {
-         if (GameOfLive.IsAlive.TryGetValue(provinceId, out var alive))
+         if (GameOfLive.CellStates.TryGetValue(provinceId, out var alive))
             return alive switch
             {
                GameOfLive.CellState.Alive => "Alive",
