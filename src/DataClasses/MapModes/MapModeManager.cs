@@ -35,7 +35,7 @@ public enum MapModeType
    TradeNode,
    GameOfLive,
    RGB,
-   BadApple
+   // BadApple
 }
 
 

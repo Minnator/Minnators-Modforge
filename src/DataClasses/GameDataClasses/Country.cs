@@ -101,7 +101,7 @@ public class CommonCountry : Saveable, IGetSetProperty
    public List<MonarchName> MonarchNames
    {
       get => _monarchNames;
-      set => SetField(ref _monarchNames, value);
+      set => SetIfModifiedEnumerable<List<MonarchName>, MonarchName>(ref _monarchNames, value);
    }
 
    public int HistoricalScore

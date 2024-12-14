@@ -7,25 +7,30 @@ namespace Editor.DataClasses.Commands
       string? property,
       Saveable target,
       T newValue,
-      T oldValue,
-      ObjEditingStatus editingStatus)
-      : ICommand
+      T oldValue)
+      : SaveableCommandBasic
    {
-      public void Execute()
+      public override void Execute()
+      {
+         base.Execute([target]);
+         InternalExecute();
+      }
+
+      private void InternalExecute()
       {
          SetProperty(newValue);
-         target.EditingStatus = ObjEditingStatus.Modified;
       }
 
-      public void Undo()
+      public override void Undo()
       {
+         base.Undo();
          SetProperty(oldValue);
-         target.EditingStatus = editingStatus;
       }
 
-      public void Redo()
-      {  
-         Execute();
+      public override void Redo()
+      {
+         base.Redo();
+         InternalExecute();
       }
 
       private void SetProperty(T value)
@@ -42,16 +47,21 @@ namespace Editor.DataClasses.Commands
          return list.Except(old).ToList();
       }
 
-      public string GetDescription()
+      public override string GetDescription()
       {
          return newValue is not List<string> list ? $"Modify property {property} of {target} to {newValue}" : $"Modify property {property} of {target} to {string.Join(", ", GetDiff())}";
       }
 
-      public string GetDebugInformation(int indent)
+      public override string GetDebugInformation(int indent)
       {
          if (newValue is not IList list)
             return $"Changed {property} from {oldValue} to {newValue} in {target.WhatAmI()} object ({target})";
          return $"Changed {property} from {oldValue} to {string.Join(", ", GetDiff())} in {target.WhatAmI()} object ({target})";
+      }
+
+      protected override void ReasignStates(bool forwards)
+      {
+         
       }
    }
 }

@@ -43,7 +43,7 @@ namespace Editor.DataClasses.MapModes
 
       public override MapModeType GetMapModeName()
       {
-         return MapModeType.BadApple;
+         return MapModeType.None;
       }
 
       private void Timer_Tick(object? sender, EventArgs e)
