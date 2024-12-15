@@ -107,7 +107,24 @@ public static class Selection
    // Selected Country TODO ADD THIS FEATURE
    private static HashSet<Country> _selectedCountries = []; // Use later when multiple countries can be selected and edited at once
    private static Country _selectedCountry = Country.Empty;
-   public static ICollection<Saveable> GetSelectedCountry() => [_selectedCountry];
+   public static Saveable GetSelectedCountry() => _selectedCountry;
+
+
+   public static ICollection<Saveable> GetHistoryCountryAsList()
+   {
+      return [SelectedCountry.HistoryCountry];
+   }
+
+   public static ICollection<Saveable> GetCommonCountryAsList()
+   {
+      return [SelectedCountry.CommonCountry];
+   }
+
+   public static ICollection<Saveable> GetCountryAsList()
+   {
+      return [SelectedCountry];
+   }
+
    public static Country SelectedCountry
    {
       get => _selectedCountry;
@@ -121,6 +138,7 @@ public static class Selection
 
    public static event EventHandler<int> OnProvinceSelectionChange = delegate { }; 
    
+
    public static event EventHandler<Country> OnCountrySelected = delegate { };
    public static event EventHandler<Country> OnCountryDeselected = delegate { };
 
@@ -761,7 +779,7 @@ public static class Selection
 
       foreach (var prov in provs)
       {
-         if (Geometry.IsPointInPolygon(prov.Borders[0], _lassoConvertedPoints))
+         if (Geometry.IsPointInPolygon(prov.Borders.Span[0], _lassoConvertedPoints))
             PreviewProvince(prov);
          else
             RemoveProvinceFromPreview(prov);

@@ -144,7 +144,7 @@ namespace Editor.Loading
             {
                Dictionary<int, int> colorCounts = [];
 
-               foreach (var point in province.Pixels)
+               foreach (var point in province.Pixels.Span)
                {
                   var color = colorMap[point.X][point.Y];
                   if (!colorCounts.TryAdd(color, 1))

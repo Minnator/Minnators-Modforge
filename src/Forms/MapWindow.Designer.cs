@@ -263,6 +263,7 @@
          MMButtonsTLPanel = new TableLayoutPanel();
          GeneralToolTip = new ToolTip(components);
          toolTip1 = new ToolTip(components);
+         benchmarkMapModesToolStripMenuItem = new ToolStripMenuItem();
          MapMenuStrip.SuspendLayout();
          BottomToolStrip.SuspendLayout();
          MainLayoutPanel.SuspendLayout();
@@ -661,7 +662,7 @@
          // 
          // debugToolStripMenuItem
          // 
-         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem, jsonToolStripMenuItem, bugReportToolStripMenuItem, crashReportToolStripMenuItem, loadDDSFilesTestToolStripMenuItem, roughEditorToolStripMenuItem, newSavingToolStripMenuItem, toolStripMenuItem4, fileNamesToolStripMenuItem, emptyCOlorInCountryToolStripMenuItem, iMBTESTToolStripMenuItem, clearGUIToolStripMenuItem });
+         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem, jsonToolStripMenuItem, bugReportToolStripMenuItem, crashReportToolStripMenuItem, loadDDSFilesTestToolStripMenuItem, roughEditorToolStripMenuItem, newSavingToolStripMenuItem, toolStripMenuItem4, fileNamesToolStripMenuItem, emptyCOlorInCountryToolStripMenuItem, iMBTESTToolStripMenuItem, clearGUIToolStripMenuItem, benchmarkMapModesToolStripMenuItem });
          debugToolStripMenuItem.Name = "debugToolStripMenuItem";
          debugToolStripMenuItem.Size = new Size(54, 23);
          debugToolStripMenuItem.Text = "Debug";
@@ -2881,6 +2882,13 @@
          MMButtonsTLPanel.Size = new Size(1086, 30);
          MMButtonsTLPanel.TabIndex = 0;
          // 
+         // benchmarkMapModesToolStripMenuItem
+         // 
+         benchmarkMapModesToolStripMenuItem.Name = "benchmarkMapModesToolStripMenuItem";
+         benchmarkMapModesToolStripMenuItem.Size = new Size(234, 22);
+         benchmarkMapModesToolStripMenuItem.Text = "Benchmark MapModes";
+         benchmarkMapModesToolStripMenuItem.Click += benchmarkMapModesToolStripMenuItem_Click;
+         // 
          // MapWindow
          // 
          AutoScaleDimensions = new SizeF(7F, 15F);
@@ -3219,6 +3227,7 @@
       private TabPage ShipNamesTab;
       private TabPage FleetNamesTab;
       private ToolStripMenuItem gameOfLiveToolStripMenuItem;
+      private ToolStripMenuItem benchmarkMapModesToolStripMenuItem;
    }
 }
 

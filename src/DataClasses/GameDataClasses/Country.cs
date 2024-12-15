@@ -584,6 +584,22 @@ public class Country : ProvinceCollection<Province>, ITitleAdjProvider
       }
    }
 
+   public void SetProperty(string propName, object value)
+   {
+      var prop = GetType().GetProperty(propName);
+      if (prop == null)
+         return;
+      prop.SetValue(this, value);
+   }
+
+   public object? GetProperty(string propName)
+   {
+      var prop = GetType().GetProperty(propName);
+      if (prop == null)
+         return null;
+      return prop.GetValue(this);
+   }
+
    public override void OnPropertyChanged(string? propertyName = null) { }
 
    public override CAddProvinceCollectionGeneral<Province> GetAddCommand(ProvinceCollection<Province> collection, bool addToGlobal)

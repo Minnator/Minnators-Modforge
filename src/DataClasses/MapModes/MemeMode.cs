@@ -8,7 +8,7 @@ namespace Editor.DataClasses.MapModes
    {
       private Timer _timer = new();
       private int _frameIndex = 0;
-      private readonly string _pathAndFile = $"{Path.Combine(Globals.AppDirectory, "BadApple")}";
+      private readonly string _pathAndFile = $"{Path.Combine(Globals.AppDirectory, "NeverGonnaGiveYouUp")}";
       private const string ending = "";
       private Bitmap[] frames;
       private Point _offset;
@@ -43,7 +43,7 @@ namespace Editor.DataClasses.MapModes
 
       public override MapModeType GetMapModeName()
       {
-         return MapModeType.None;
+         return MapModeType.BadApple;
       }
 
       private void Timer_Tick(object? sender, EventArgs e)
@@ -54,9 +54,9 @@ namespace Editor.DataClasses.MapModes
          _scale = MathF.Min(_scaleX, _scaleY);
 
          if (_scaleX > _scaleY)
-            _offset = new((int)((Globals.MapWidth / _scale - frames[0].Width) / 1.25f), 0);
+            _offset = new((int)((Globals.MapWidth / _scale - frames[0].Width) / 2f), 0);
          else
-            _offset = new(0, (int)((Globals.MapHeight / _scale - frames[0].Height)));
+            _offset = new(0, (int)((Globals.MapHeight / _scale - frames[0].Height) / 2f));
 
          RenderMapMode(GetProvinceColor);
 

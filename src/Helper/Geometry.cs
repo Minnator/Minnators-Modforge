@@ -1,4 +1,6 @@
-﻿using Editor.DataClasses.GameDataClasses;
+﻿using ABI.Windows.Foundation;
+using Editor.DataClasses.GameDataClasses;
+using Point = System.Drawing.Point;
 
 namespace Editor.Helper;
 
@@ -67,6 +69,30 @@ public static class Geometry
       }
 
       return new ((int)MathF.Floor(minX), (int)MathF.Floor(minY), (int)MathF.Ceiling(maxX - minX + 1), (int)MathF.Ceiling(maxY - minY + 1));
+   }
+
+   public static Rectangle GetBounds(Memory<Point> mem)
+   {
+      var points = mem.Span;
+      if (points.Length == 0)
+         return Rectangle.Empty;
+      var minX = points[0].X;
+      var minY = points[0].Y;
+      var maxX = points[0].X;
+      var maxY = points[0].Y;
+
+      for (var i = 1; i < points.Length; i++)
+      {
+         if (points[i].X < minX)
+            minX = points[i].X;
+         if (points[i].X > maxX)
+            maxX = points[i].X;
+         if (points[i].Y < minY)
+            minY = points[i].Y;
+         if (points[i].Y > maxY)
+            maxY = points[i].Y;
+      }
+      return new(minX, minY, maxX - minX + 1, maxY - minY + 1);
    }
 
    // Returns the bounding rectangle of the given points
@@ -386,7 +412,7 @@ public static class Geometry
    private static void GetStripesArrayPluses(Province province, out Point[] stripes)
    {
       List<Point> stripeList = [];
-      foreach (var pixel in province.Pixels)
+      foreach (var pixel in province.Pixels.Span)
       {
          var moduloX = pixel.X % 8;
          var moduloY = pixel.Y % 8;
@@ -407,7 +433,7 @@ public static class Geometry
    {
       List<Point> stripeList = [];
 
-      foreach (var pixel in province.Pixels)
+      foreach (var pixel in province.Pixels.Span)
       {
          if ((pixel.X % 8) < 2 && (pixel.Y % 8) < 2)
             stripeList.Add(pixel);
@@ -425,7 +451,7 @@ public static class Geometry
    {
       List<Point> stripeList = [];
 
-      foreach (var pixel in province.Pixels)
+      foreach (var pixel in province.Pixels.Span)
       {
          if (((pixel.X + pixel.Y) % 8) < 2)
             stripeList.Add(pixel);
@@ -438,7 +464,7 @@ public static class Geometry
    {
       List<Point> stripeList = [];
 
-      foreach (var pixel in province.Pixels)
+      foreach (var pixel in province.Pixels.Span)
       {
          if (((pixel.X - pixel.Y) % 8) < 2)
             stripeList.Add(pixel);
@@ -451,7 +477,7 @@ public static class Geometry
    {
       List<Point> stripeList = [];
 
-      foreach (var pixel in province.Pixels)
+      foreach (var pixel in province.Pixels.Span)
       {
          if ((pixel.Y % 8) < 2)
             stripeList.Add(pixel);
@@ -464,7 +490,7 @@ public static class Geometry
    {
       List<Point> stripeList = [];
       
-      foreach (var pixel in province.Pixels)
+      foreach (var pixel in province.Pixels.Span)
       {
          if ((pixel.X % 8) < 2)
             stripeList.Add(pixel);
@@ -715,7 +741,7 @@ public static class Geometry
 
    public static bool CheckIfHasPixelInTriangle(Province province, ref Triangle tri)
    {
-      foreach (var pixel in province.Borders)
+      foreach (var pixel in province.Borders.Span)
       {
          if (tri.Contains(pixel))
             return true;
@@ -725,7 +751,7 @@ public static class Geometry
 
    public static bool CheckIfHasPixelInRectangle(Province province, Rectangle rect)
    {
-      foreach (var pixel in province.Borders)
+      foreach (var pixel in province.Borders.Span)
       {
          if (rect.Contains(pixel))
             return true;
@@ -792,7 +818,7 @@ public static class Geometry
 
       for (; i < prov.Borders.Length; i++)
       {
-         var res = ComplexLineCalc(ref a, ref connectionVector, ref prov.Borders[i], connectionMagSqrt, out var inside);
+         var res = ComplexLineCalc(ref a, ref connectionVector, ref prov.Borders.Span[i], connectionMagSqrt, out var inside);
          if (inside)
          {
             if (res == 0)
@@ -808,7 +834,7 @@ public static class Geometry
 
       for (; i < prov.Borders.Length; i++)
       {
-         var newside = ComplexLineCalc(ref a, ref connectionVector, ref prov.Borders[i], connectionMagSqrt, out var inside);
+         var newside = ComplexLineCalc(ref a, ref connectionVector, ref prov.Borders.Span[i], connectionMagSqrt, out var inside);
          if (inside && (newside == 0 || side != newside > 0))
             return true;
       }

@@ -209,5 +209,9 @@ namespace Editor.Helper
          _timer.Start();
       }
 
+      public static void Stop()
+      {
+         _timer.Stop();
+      }
    }
 }

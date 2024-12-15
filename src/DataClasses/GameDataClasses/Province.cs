@@ -126,8 +126,17 @@ public class Province : ProvinceComposite, ITitleAdjProvider
    public int PixelCnt { get; set; }
    public Point Center { get; set; }
 
-   public Point[] Pixels { get; set; } = [];
-   public Point[] Borders { get; set; } = [];
+   public Memory<Point> Pixels
+   {
+      get => _pixels;
+      set => _pixels = value;
+   }
+
+   public Memory<Point> Borders
+   {
+      get => _borders;
+      set => _borders = value;
+   }
 
    #endregion
    #region Globals from the game
@@ -1237,6 +1246,15 @@ public class Province : ProvinceComposite, ITitleAdjProvider
       return System.IO.Path.Combine(Globals.ModPath, "history", "provinces", fileName);
    }
 
+   public static bool ConvertToGameObject(string value, out Province province)
+   {
+      if (int.TryParse(value, out var id))
+         if (Globals.ProvinceIdToProvince.TryGetValue(id, out province!))
+            return true;
+      province = Empty;
+      return false;
+   }
+
    public override bool Equals(object? obj)
    {
       if (obj is Province other)
@@ -1285,6 +1303,9 @@ public class Province : ProvinceComposite, ITitleAdjProvider
    public EventHandler<ProvinceComposite> ItemRemovedFromArea = delegate { };
    [JsonIgnore]
    public EventHandler<ProvinceComposite> ItemModified = delegate { };
+
+   private Memory<Point> _pixels;
+   private Memory<Point> _borders;
 
    public override void ColorInvoke(ProvinceComposite composite)
    {

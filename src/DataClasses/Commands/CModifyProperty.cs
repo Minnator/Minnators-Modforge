@@ -3,28 +3,47 @@ using Editor.Saving;
 
 namespace Editor.DataClasses.Commands
 {
-   public class CModifyProperty<T>(
-      string? property,
-      Saveable target,
-      T newValue,
-      T oldValue)
-      : SaveableCommandBasic
+   public class CModifyProperty<T> : SaveableCommandBasic
    {
+      private T _newValue;
+      private readonly string _property;
+      private readonly Saveable _target;
+      private readonly T _oldValue;
+
+      public CModifyProperty(string property,
+         Saveable target,
+         T newValue,
+         T oldValue,
+         bool executeOnInit = true)
+      {
+         _property = property;
+         _target = target;
+         _oldValue = oldValue;
+         _newValue = newValue;
+         if (executeOnInit)
+            Execute();
+      }
+
+      protected void SetValue(T value)
+      {
+         _newValue = value;
+      }
+
       public override void Execute()
       {
-         base.Execute([target]);
+         base.Execute([_target]);
          InternalExecute();
       }
 
       private void InternalExecute()
       {
-         SetProperty(newValue);
+         _target.SetFieldSilent(_property, _newValue);
       }
 
       public override void Undo()
       {
          base.Undo();
-         SetProperty(oldValue);
+         _target.SetFieldSilent(_property, _oldValue);
       }
 
       public override void Redo()
@@ -33,35 +52,24 @@ namespace Editor.DataClasses.Commands
          InternalExecute();
       }
 
-      private void SetProperty(T value)
-      {
-         var property1 = target.GetType().GetProperty(property);
-         if (property1 != null && property1.CanWrite) 
-            property1.SetValue(target, value);
-      }
 
       private List<string> GetDiff()
       {
-         if (newValue is not List<string> list || oldValue is not List<string> old)
+         if (_newValue is not List<string> list || _oldValue is not List<string> old)
             return [];
          return list.Except(old).ToList();
       }
 
       public override string GetDescription()
       {
-         return newValue is not List<string> list ? $"Modify property {property} of {target} to {newValue}" : $"Modify property {property} of {target} to {string.Join(", ", GetDiff())}";
+         return _newValue is not List<string> list ? $"Modify property {_property} of {_target} to {_newValue}" : $"Modify property {_property} of {_target} to {string.Join(", ", GetDiff())}";
       }
 
       public override string GetDebugInformation(int indent)
       {
-         if (newValue is not IList list)
-            return $"Changed {property} from {oldValue} to {newValue} in {target.WhatAmI()} object ({target})";
-         return $"Changed {property} from {oldValue} to {string.Join(", ", GetDiff())} in {target.WhatAmI()} object ({target})";
-      }
-
-      protected override void ReasignStates(bool forwards)
-      {
-         
+         if (_newValue is not IList list)
+            return $"Changed {_property} from {_oldValue} to {_newValue} in {_target.WhatAmI()} object ({_target})";
+         return $"Changed {_property} from {_oldValue} to {string.Join(", ", GetDiff())} in {_target.WhatAmI()} object ({_target})";
       }
    }
 }

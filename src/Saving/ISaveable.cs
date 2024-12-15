@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.Misc;
@@ -18,6 +20,7 @@ public enum ObjEditingStatus
 public abstract class Saveable : IDisposable
 {
    protected ObjEditingStatus _editingStatus = ObjEditingStatus.Unchanged;
+   internal bool Suppressed;
    [Browsable(false)]
    [JsonIgnore]
    public PathObj Path = PathObj.Empty;
@@ -59,7 +62,28 @@ public abstract class Saveable : IDisposable
          return false;
       return InternalFieldSet(ref field, value, propertyName);
    }
+
+   public void SetProperty<T>(string propertyName, T value)
+   {
+      Debug.Assert(GetProperty(propertyName) != null, $"Property {propertyName} not found in {GetType().Name}");
+      GetProperty(propertyName)!.SetValue(this, value);
+   }
+
+   public PropertyInfo? GetProperty(string propertyName)
+   {
+      return GetType().GetProperty(propertyName);
+   }
    
+   public void SetFieldSilent<T> (string propertyName, T value)
+   {
+      Debug.Assert(GetProperty(propertyName) != null, $"Property {propertyName} not found in {GetType().Name}");
+      lock (this)
+      {
+         Suppressed = true;
+         GetProperty(propertyName)!.SetValue(this, value);
+         Suppressed = false;
+      }
+   }
 
    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
    {
@@ -70,11 +94,10 @@ public abstract class Saveable : IDisposable
 
    private bool InternalFieldSet<T>(ref T field, T value, string? propertyName)
    {
-      if (Globals.State == State.Running)
+      if (Globals.State == State.Running && !Suppressed)
       {
          Globals.HistoryManager.AddCommand(new CModifyProperty<T>(propertyName, this, value, field));
          OnPropertyChanged(propertyName);
-         EditingStatus = ObjEditingStatus.Modified;
       }
       field = value;
       return true;

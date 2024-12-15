@@ -200,7 +200,7 @@ namespace Editor.Loading
          {
             Dictionary<int, int> colorCounts = [];
 
-            foreach (var point in province.Pixels)
+            foreach (var point in province.Pixels.Span)
             {
                var color = colorMap[point.X][point.Y];
                if (!colorCounts.TryAdd(color, 1))
@@ -244,7 +244,7 @@ namespace Editor.Loading
                }
             }
             
-            foreach (var point in province.Pixels)
+            foreach (var point in province.Pixels.Span)
                provTerrainMap[point.X][point.Y] = colorInt;
          }
 
@@ -288,7 +288,7 @@ namespace Editor.Loading
             {
                unsafe
                {
-                  foreach (var point in province.Pixels)
+                  foreach (var point in province.Pixels.Span)
                      *((int*)resultScan04 + point.X + point.Y * resultStride4 / 4) = province.AutoTerrain.Color.ToArgb();
                }
             });
@@ -318,7 +318,7 @@ namespace Editor.Loading
                   int color;
                   color = province.Terrain == Terrain.Empty ? province.AutoTerrain.Color.ToArgb() : province.Terrain.Color.ToArgb();
 
-                  foreach (var point in province.Pixels) 
+                  foreach (var point in province.Pixels.Span) 
                      *((int*)resultScan05 + point.X + point.Y * resultStride5 / 4) = color;
                }
             });

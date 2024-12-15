@@ -35,7 +35,7 @@ public enum MapModeType
    TradeNode,
    GameOfLive,
    RGB,
-   // BadApple
+   BadApple
 }
 
 
@@ -94,10 +94,6 @@ public class MapModeManager
       MapModes.Add(new GameOfLiveMapMode());
       MapModes.Add(new RGBMapMode());
       //MapModes.Add(new MemeMode());
-
-
-
-      // We set the default map mode to retrieve province colors
 
       IdMapMode = new ()
       {

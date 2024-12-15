@@ -10,6 +10,16 @@ namespace Editor.DataClasses.MapModes
          return MapModeType.GameOfLive;
       }
 
+      public override void SetActive()
+      {
+         GameOfLive.RunGameOfLive(Globals.Settings.Rendering.GameOfLiveGenerations);
+      }
+
+      public override void SetInactive()
+      {
+         GameOfLive.Stop();
+      }
+
       public override int GetProvinceColor(Province id)
       {
          if (GameOfLive.Rules == GameOfLive.SurvivalRules.PopulationDynamics)

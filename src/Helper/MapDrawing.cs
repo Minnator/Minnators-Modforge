@@ -1,4 +1,5 @@
-﻿using Editor.Controls;
+﻿using System.Collections.Concurrent;
+using Editor.Controls;
 
 namespace Editor.Helper;
 using System;
@@ -16,7 +17,7 @@ public enum PixelsOrBorders
 
 public static class MapDrawing
 {
-   public static void DrawOnMap(Point[] points, int color, ZoomControl zoomControl)
+   public static void DrawOnMap(Memory<Point> points, int color, ZoomControl zoomControl)
    {
       if (points.Length > 4000)
          DrawPixelsParallel(points, color, zoomControl);
@@ -148,7 +149,7 @@ public static class MapDrawing
    /// <param name="points"></param>
    /// <param name="color"></param>
    /// <param name="zoomControl"></param>
-   private static void DrawPixels(Point[] points, int color, ZoomControl zoomControl)
+   private static void DrawPixels(Memory<Point> points, int color, ZoomControl zoomControl)
    {
       // Check if the bitmap is still in RAM at the same location. Can maybe be removed?
       BITMAP bmp = new();
@@ -156,19 +157,12 @@ public static class MapDrawing
 
       // Calculate necessary values
       var stride = bmp.bmWidthBytes / 4;
-      var tempHeight = (bmp.bmHeight - 1) * stride;
 
       unsafe
       {
-         var scan0 = (int*)bmp.bmBits;
-
-         foreach (var point in points)
-         {
-            // Calculate pixel address in the bitmap
-            var pixelAddress = (scan0 + tempHeight - point.Y * stride + point.X);
-            // Write the full color int (ARGB) directly to the pixel address
-            *pixelAddress = color;
-         }
+         var bmpBmHeight = (int*)bmp.bmBits + (bmp.bmHeight - 1) * stride;
+         foreach (var point in points.Span) 
+            *(bmpBmHeight - point.Y * stride + point.X) = color;
       }
    }
 
@@ -178,27 +172,28 @@ public static class MapDrawing
    /// <param name="points"></param>
    /// <param name="color"></param>
    /// <param name="zoomControl"></param>
-   private static void DrawPixelsParallel(Point[] points, int color, ZoomControl zoomControl)
+   private static void DrawPixelsParallel(Memory<Point> points, int color, ZoomControl zoomControl)
    {
       // Check if the bitmap is still in RAM at the same location. Can maybe be removed?
       BITMAP bmp = new();
       GetObject(zoomControl.HBitmap, Marshal.SizeOf(bmp), ref bmp);
 
-      // Calculate necessary values
       var stride = bmp.bmWidthBytes / 4;
       var tempHeight = (bmp.bmHeight - 1) * stride;
 
       unsafe
       {
          var scan0 = (int*)bmp.bmBits;
-
-         Parallel.ForEach(points, point =>
-         {
-            // Calculate pixel address in the bitmap
-            var pixelAddress = (scan0 + tempHeight - point.Y * stride + point.X);
-            // Write the full color int (ARGB) directly to the pixel address
-            *pixelAddress = color;
-         });
+         var scan0Height = scan0 + tempHeight;
+         Parallel.ForEach(
+            Partitioner.Create(0, points.Length),  
+            range =>
+            {
+               var sliceSpan = points.Slice(range.Item1, range.Item2 - range.Item1).Span; 
+               for (var i = 0; i < sliceSpan.Length; i++) 
+                  *(scan0Height - sliceSpan[i].Y * stride + sliceSpan[i].X) = color;
+            }
+         );
       }
    }
 
@@ -242,10 +237,5 @@ public static class MapDrawing
          return;
 
       DrawOnMap(stripePixels, province.GetOccupantColor, zoomControl);
-   }
-
-   public static void WriteOnProvince(Func<Province, string> textProvider)
-   {
-
    }
 }

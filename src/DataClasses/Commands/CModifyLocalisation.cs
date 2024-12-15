@@ -2,7 +2,7 @@
 
 namespace Editor.DataClasses.Commands
 {
-   public class CModifyLocalisation : CTextEditingWrapper
+   public class CModifyLocalisation : SaveableCommandBasic
    {
       private readonly List<LocObject> _locObjects;
       private string _newLoc;
@@ -60,11 +60,6 @@ namespace Editor.DataClasses.Commands
       public override string GetDebugInformation(int indent)
       {
          return _locObjects.Count == 1 ? $"Modified \"{_locObjects[^1].Value}\" to \"{_newLoc}\"" : $"Modified \"{_locObjects.Count}\" localisations to \"{_newLoc}\"";
-      }
-
-      public override void SetValue(string value)
-      {
-         _newLoc = value;
       }
    }
 

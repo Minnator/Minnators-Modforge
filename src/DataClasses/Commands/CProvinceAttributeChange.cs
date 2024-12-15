@@ -6,7 +6,7 @@ using static Editor.Helper.ProvinceEnumHelper;
 
 namespace Editor.DataClasses.Commands
 {
-   public sealed class CProvinceAttributeChange : CTextEditingWrapper
+   public sealed class CProvinceAttributeChange : SaveableCommandBasic
    {
       private readonly List<Province> _provinces;
       private readonly List<string> _oldValues = [];
@@ -82,12 +82,6 @@ namespace Editor.DataClasses.Commands
          foreach (var province in _provinces)
             sb.Append($"{province.Id}, ");
          return sb.ToString();
-      }
-
-      public override void SetValue(string value)
-      {
-         Debug.Assert(_setter == ProvAttrSet.capital);
-         _value = value;
       }
    }
 }

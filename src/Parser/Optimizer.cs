@@ -11,8 +11,8 @@ public static class Optimizer
    // This allows for duplicate points in the BorderPixels array but increases performance.
    public static void OptimizeProvinces(ref Province[] provinces, ConcurrentDictionary<int, List<Point>> colorToProvId, ConcurrentDictionary<int, List<Point>> colorToBorder, int pixelCount)
    {
-      var pixels = new Point[pixelCount];
-      var borders = new Point[colorToBorder.Values.Sum(list => list.Count)];
+      Memory<Point> pixels = new(new Point[pixelCount]);
+      Memory<Point> borders = new(new Point[colorToBorder.Values.Sum(list => list.Count)]);
       var dic = new Dictionary<int, Province>(provinces.Length);
       var dictionary = new Dictionary<int, Province>(provinces.Length);
       var provs = new HashSet<Province>(provinces.Length);
@@ -30,24 +30,23 @@ public static class Optimizer
          //copy the pixels of the province to the pixel array
          if (!colorToProvId.ContainsKey(color))
             continue;
-         colorToProvId[color].CopyTo(pixels, pixelPtr);
+         colorToProvId[color].ToArray().AsSpan().CopyTo(pixels.Slice(pixelPtr, colorToProvId[color].Count).Span);
          province.PixelPtr = pixelPtr;
          province.PixelCnt = colorToProvId[color].Count;
          pixelPtr += province.PixelCnt;
-         colorToBorder[color].CopyTo(borders, borderPtr);
+         colorToBorder[color].ToArray().AsSpan().CopyTo(borders.Slice(borderPtr, colorToBorder[color].Count).Span);
          province.BorderPtr = borderPtr;
          province.BorderCnt = colorToBorder[color].Count;
          borderPtr += province.BorderCnt;
 
          //calculate the bounds of the provinces and set the center
          province.Bounds = Geometry.GetBounds([.. colorToBorder[color]]);
-         province.Center = new Point(province.Bounds.X + province.Bounds.Width / 2, province.Bounds.Y + province.Bounds.Height / 2);
+         province.Center = new (province.Bounds.X + province.Bounds.Width / 2, province.Bounds.Y + province.Bounds.Height / 2);
 
-         province.Pixels = new Point[province.PixelCnt];
-         Array.Copy(pixels, province.PixelPtr, province.Pixels, 0, province.PixelCnt);
 
-         province.Borders = new Point[province.BorderCnt];
-         Array.Copy(borders, province.BorderPtr, province.Borders, 0, province.BorderCnt);
+
+         province.Pixels = pixels.Slice(province.PixelPtr, province.PixelCnt);
+         province.Borders = borders.Slice(province.BorderPtr, province.BorderCnt);
          // add the province to the dictionary
          // add the province to the dictionary
 
@@ -60,7 +59,7 @@ public static class Optimizer
       Globals.ColorToProvId = dic;
 
 
-      HashSet<Point> borderSet = [.. borders];
+      HashSet<Point> borderSet = [.. borders.Span];
       Parallel.ForEach(Globals.Provinces, province => RemoveBorderPixelsFromPixels(province, ref borderSet));
 
       // Free up memory from the ConcurrentDictionaries
@@ -70,7 +69,7 @@ public static class Optimizer
 
    public static void RemoveBorderPixelsFromPixels(Province province, ref HashSet<Point> borderSet)
    {
-      var pixels = province.Pixels.AsSpan();
+      var pixels = province.Pixels.Span;
       var newPixels = new Point[pixels.Length - province.BorderCnt];
       var cnt = 0;
       for (var i = 0; i < pixels.Length; i++)

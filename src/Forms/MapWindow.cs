@@ -59,9 +59,9 @@ namespace Editor.Forms
       private NumberTextBox _nativeFerocityTextBox = null!;
       private NumberTextBox _nativeHostilityTextBox = null!;
 
-      private TextSaveableTextBox<CModifyLocalisation> _localisationTextBox = null!;
-      private TextSaveableTextBox<CModifyLocalisation> _provAdjTextBox = null!;
-      private TextSaveableTextBox<CProvinceAttributeChange> _capitalNameTextBox = null!;
+      private TextSaveableTextBox<string, CModifyLocalisation> _localisationTextBox = null!;
+      private TextSaveableTextBox<string, CModifyLocalisation> _provAdjTextBox = null!;
+      private TextSaveableTextBox<string, CProvinceAttributeChange> _capitalNameTextBox = null!;
 
       private ToolTip _savingButtonsToolTip = null!;
 
@@ -572,7 +572,8 @@ namespace Editor.Forms
          _capitalNameTextBox = new(Selection.GetSelectedProvincesAsSaveable, new CProvinceAttributeFactory(ProvAttrGet.capital, ProvAttrSet.capital))
          {
             Dock = DockStyle.Fill,
-            Margin = new(3, 1, 3, 3)
+            Margin = new(3, 1, 3, 3),
+            DigitOnly = false,
          };
          MisProvinceData.Controls.Add(_capitalNameTextBox, 1, 4);
 
@@ -1249,7 +1250,7 @@ namespace Editor.Forms
       private NamesEditor _armyEditor = null!;
       private NamesEditor _fleetEditor = null!;
 
-      private TextBox _capitalTextBox = null!;
+      private TextSaveableTextBox<Province, CModifyProperty<Province>> _capitalTextBox = null!;
 
       private ExtendedNumeric _countryDevelopmentNumeric = null!;
 
@@ -1259,8 +1260,8 @@ namespace Editor.Forms
       private QuickAssignControl<Tag> _historicFriends = null!;
       private QuickAssignControl<string> _estatePrivileges = null!;
 
-      private TextSaveableTextBox<CModifyLocalisation> CountryLoc = null!;
-      private TextSaveableTextBox<CModifyLocalisation> CountryADJLoc = null!;
+      private TextSaveableTextBox<string, CModifyLocalisation> CountryLoc = null!;
+      private TextSaveableTextBox<string, CModifyLocalisation> CountryADJLoc = null!;
 
       private void InitializeCountryEditGui()
       {
@@ -1295,9 +1296,12 @@ namespace Editor.Forms
          _governmentReforms.Width = 117;
          _governmentReforms.OnItemAdded += CountryGuiEvents.GovernmentReforms_OnItemAdded;
          _governmentReforms.OnItemRemoved += CountryGuiEvents.GovernmentReforms_OnItemRemoved;
-         _capitalTextBox = new() { Margin = new(1), Dock = DockStyle.Fill };
-         _capitalTextBox.LostFocus += CountryGuiEvents.CapitalTextBox_LostFocus;
-         _capitalTextBox.KeyPress += CountryGuiEvents.OnlyNumbers_KeyPress;
+         _capitalTextBox = new(Selection.GetHistoryCountryAsList, new CCountryPropertyChangeFactory<Province>(nameof(HistoryCountry.Capital)))
+         {
+            Margin = new(1), Dock = DockStyle.Fill,
+            DigitOnly = true
+         };
+         
          _focusComboBox = ControlFactory.GetListComboBox([.. Enum.GetNames<Mana>()], new(1), false);
          _focusComboBox.SelectedIndexChanged += CountryGuiEvents.FocusComboBox_SelectedIndexChanged;
 
@@ -1380,14 +1384,14 @@ namespace Editor.Forms
          MiscTLP.Controls.Add(_historicFriends, 0, 4);
          MiscTLP.Controls.Add(_estatePrivileges, 0, 5);
 
-         CountryLoc = new(Selection.GetSelectedCountry, new CLocObjFactory(true))
+         CountryLoc = new(Selection.GetCountryAsList, new CLocObjFactory(true))
          {
             Dock = DockStyle.Fill,
             Margin = new(1),
          };
          TagAndColorTLP.Controls.Add(CountryLoc, 1, 1);
 
-         CountryADJLoc = new(Selection.GetSelectedCountry, new CLocObjFactory(false))
+         CountryADJLoc = new(Selection.GetCountryAsList, new CLocObjFactory(false))
          {
             Dock = DockStyle.Fill,
             Margin = new(1),
@@ -1400,6 +1404,7 @@ namespace Editor.Forms
 
       public void ClearCountryGui()
       {
+         Globals.EditingStatus = EditingStatus.LoadingInterface;
          // Flag
          CountryFlagLabel.SetCountry(Country.Empty);
 
@@ -1442,8 +1447,8 @@ namespace Editor.Forms
          _historicRivals.Clear();
          _historicFriends.Clear();
          _estatePrivileges.Clear();
-
-
+         
+         Globals.EditingStatus = EditingStatus.Idle;
       }
 
       internal void LoadCountryToGui(Country country)
@@ -1784,6 +1789,18 @@ namespace Editor.Forms
       private void gameOfLiveToolStripMenuItem_Click(object sender, EventArgs e)
       {
          GameOfLive.RunGameOfLive(100);
+      }
+
+      private void benchmarkMapModesToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         var sw = Stopwatch.StartNew();
+         for (var i = 0; i < 1000; i++)
+         {
+            Globals.MapModeManager.SetCurrentMapMode(MapModeType.Area);
+            Globals.MapModeManager.SetCurrentMapMode(MapModeType.Country);
+         }
+         sw.Stop();
+         System.Diagnostics.Debug.WriteLine($"Time: {sw.ElapsedMilliseconds / 1000 * 2}");
       }
    }
 }
