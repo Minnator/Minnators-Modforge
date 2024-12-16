@@ -753,7 +753,7 @@ public class Country : ProvinceCollection<Province>, ITitleAdjProvider
    {
       if (!GetFlagPath(out var path))
          return FilesHelper.GetDefaultFlagPath();
-      return ImageReader.ReadTGAImage(path);
+      return ImageReader.ReadImage(path);
    }
    public List<Country> GetNeighbours()
    {

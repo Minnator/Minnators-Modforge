@@ -51,7 +51,7 @@ public abstract class MapMode
          return;
       }
 
-      using var icon = ImageReader.ReadDDSImage(iconPath);
+      using var icon = ImageReader.ReadImage(iconPath);
       Icon = CropRawIcon(icon);
    }
 

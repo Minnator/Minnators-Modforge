@@ -1219,7 +1219,7 @@ namespace Editor.Forms
       {
 #if DEBUG
          var path = @"S:\SteamLibrary\steamapps\common\Europa Universalis IV\gfx\interface\mapmode_military_access.dds";
-         var bmp = ImageReader.ReadDDSImage(path);
+         var bmp = ImageReader.ReadImage(path);
 
          bmp.Save(Globals.DebugPath + "\\dds_test.png", ImageFormat.Png);
 #endif

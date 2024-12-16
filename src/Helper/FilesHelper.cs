@@ -45,7 +45,7 @@ public static partial class FilesHelper
 
    public static Bitmap GetDefaultFlagPath()
    {
-      return ImageReader.ReadTGAImage(Path.Combine(Globals.VanillaPath, "gfx", "flags", "REB.tga"));
+      return ImageReader.ReadImage(Path.Combine(Globals.VanillaPath, "gfx", "flags", "REB.tga"));
    }
 
    public static (List<string>, List<string>) GetFilesFromModAndVanillaUniquelySeparated(string searchPattern, params string[] internalPath)

@@ -52,7 +52,7 @@ namespace Editor.Helper
          };
       }
 
-      private static Bitmap ReadImage(string path) => path.EndsWith(".dds") ? ImageReader.ReadDDSImage(path) : ImageReader.ReadTGAImage(path);
+      private static Bitmap ReadImage(string path) => ImageReader.ReadImage(path);
 
       private static bool VerifyInputs(string[] path, GameIcons iconEnum)
       {
