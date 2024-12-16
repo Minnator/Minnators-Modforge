@@ -102,7 +102,7 @@ namespace Editor.Forms
                Location = new(screen.Bounds.X + (screen.Bounds.Width - Width) / 2, screen.Bounds.Y + (screen.Bounds.Height - Height) / 2);
          }
 
-         DiscordActivityManager.ActivateActivity();
+         //DiscordActivityManager.ActivateActivity();
       }
 
       public void Initialize()

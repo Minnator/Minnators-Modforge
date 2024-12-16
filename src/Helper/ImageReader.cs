@@ -25,8 +25,10 @@ namespace Editor.Helper
             case ImageFormat.Rgb24:
                format = PixelFormat.Format24bppRgb;
                break;
-            case ImageFormat.Rgb8:
             case ImageFormat.R5g5b5:
+               format = PixelFormat.Format16bppRgb555;
+               break;
+            case ImageFormat.Rgb8:
             case ImageFormat.R5g6b5:
             case ImageFormat.R5g5b5a1:
             case ImageFormat.Rgba16:

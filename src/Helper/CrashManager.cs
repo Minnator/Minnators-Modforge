@@ -17,7 +17,7 @@ namespace Editor.Helper
 
       static CrashManager()
       {
-         LogFolder = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "crash_logs");
+         LogFolder = Path.Combine(Globals.AppDirectory, "crash_logs");
          if (!Directory.Exists(LogFolder))
             Directory.CreateDirectory(LogFolder);
       }
