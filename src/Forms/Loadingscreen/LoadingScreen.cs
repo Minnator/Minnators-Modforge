@@ -10,7 +10,6 @@ namespace Editor.Forms.LoadingScreen
 {
    public partial class LoadingScreen : Form
    {
-      private const bool SKIP_LOADING = true;
       private readonly CustomProgressBar _progressBar;
       private readonly MemoryStream _ms = null!;
 
@@ -131,9 +130,9 @@ namespace Editor.Forms.LoadingScreen
          LoadingAnimation.SizeMode = PictureBoxSizeMode.Zoom;
       }
       
-      private int count = 0;
+      private int count;
       private DateTime end = DateTime.Today;
-      private int _loadingStage = 0;
+      private int _loadingStage;
 
       private void TotallyNormalClickEvent(object? s, EventArgs e)
       {

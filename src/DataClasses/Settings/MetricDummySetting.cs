@@ -8,6 +8,7 @@ namespace Editor.DataClasses.Settings
       private List<int> _startTimes = [];
       private List<List<KeyValuePair<string, int>>> _operationLoadingTimes = new();
       private bool _enableLoadingMetrics = true;
+      private int _maxNumOfMetrics = 5;
 
       [Description("Determines if the loading metrics should be enabled, If true the last 10 loading times will be saved")]
       [CompareInEquals]
@@ -42,6 +43,15 @@ namespace Editor.DataClasses.Settings
       {
          get => _operationLoadingTimes;
          set => SetField(ref _operationLoadingTimes, value);
+      }
+
+      [Description("The maximum number of metrics that will be saved")]
+      [CompareInEquals]
+      [ReadOnly(true)]
+      public int MaxNumOfMetrics
+      {
+         get => _maxNumOfMetrics;
+         set => SetField(ref _maxNumOfMetrics, value);
       }
    }
 }

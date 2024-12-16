@@ -8,7 +8,6 @@ namespace Editor.Helper
       private static List<KeyValuePair<string, int>>? _operationLoadingTimes = [];
       private static List<int>? _startTimes = [];
 
-      private const int MAX_METRICS = 5;
 
       /// <summary>
       /// Starts the metrics and initializes the static variables
@@ -20,11 +19,8 @@ namespace Editor.Helper
 
          _startTimes = Globals.Settings.Metrics.StartTimes;
 
-         if (_startTimes.Count >= MAX_METRICS) 
+         if (_startTimes.Count >= Globals.Settings.Metrics.MaxNumOfMetrics) 
             _startTimes.RemoveAt(0);
-
-         if (_operationLoadingTimes.Count >= MAX_METRICS)
-            _operationLoadingTimes.RemoveAt(0);
       }
 
       /// <summary>
@@ -53,7 +49,10 @@ namespace Editor.Helper
          
          _startTimes.Add(_operationLoadingTimes.Sum(x => x.Value));
          
+         if (Globals.Settings.Metrics.OperationLoadingTimes.Count >= Globals.Settings.Metrics.MaxNumOfMetrics)
+            Globals.Settings.Metrics.OperationLoadingTimes.RemoveAt(0);
          Globals.Settings.Metrics.OperationLoadingTimes.Add(_operationLoadingTimes);
+
          Globals.Settings.Metrics.StartTimes = _startTimes;
          Globals.Settings.Metrics.NumOfStarts++;
 
