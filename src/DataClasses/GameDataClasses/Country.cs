@@ -222,7 +222,7 @@ public class HistoryCountry : Saveable, IGetSetProperty
 
    private Country _country;
    private bool _isElector; //
-   private int _mercantilism = 0; //
+   private float _mercantilism = 0; //
    private int _fixedCapital = -1;//
    private int _governmentRank = 0; //
    private string _secondaryReligion = string.Empty; //
@@ -248,7 +248,7 @@ public class HistoryCountry : Saveable, IGetSetProperty
 
    #region Getters and Setters
 
-   public int Mercantilism
+   public float Mercantilism
    {
       get => _mercantilism;
       set => SetField(ref _mercantilism, value);

@@ -144,7 +144,7 @@ public static class Globals
    public static EditingStatus EditingStatus = EditingStatus.Idle;
    public static bool AllowEditing => EditingStatus == EditingStatus.Idle;
 
-   public static DescriptorData DescriptorData = new("-1", "none", [], "-1");
+   public static DescriptorData DescriptorData = new("-1", "none", [], [], [], "-1");
 
    // History Manager
    public static readonly HistoryManager HistoryManager = new(new CInitial());
@@ -355,15 +355,16 @@ public static class Globals
 // - [x] Change all Saveable commands to NOT use SaveableHelper
 // - [ ] Demonstration Video
 // - [x] Fix Error sound playing on ReDo
-// - [ ] Fix Revolutionary Color Command
-// - [ ] Fix Command spamming in Natives interface
-// - [ ] Fix Names Interface not being saved
-// - [ ] Fix Capital box not saving on enter
+// - [x] Fix Revolutionary Color Command
+// - [x] Fix Command spamming in Natives interface
+// - [x] Fix Names Interface not being saved
+// - [x] Fix Capital box not saving on enter
 // - [ ] Fix all combo-boxes taking the input from the suggestion without the use ever using it (when both are empty)
-// - [ ] Disable country GUI when selecting several countries or invalid after having selected a valid
+// - [x] Disable country GUI when selecting several countries or invalid after having selected a valid
 // - [x] Fix folder creation in root directory when folder is missing in mod
 // - [x] Fix log location and remove all dumps to download
 // - [x] Expose Setting to disable Discord Integration to settings menu
+// - [x] Added Support for Replace_Path
 
 // TODO LIST Until Alpha 1.1
 // - [ ] Block Water provinces; should not be viable for countries

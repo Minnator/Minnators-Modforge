@@ -69,7 +69,10 @@ public static class DefaultMapLoading
    {
       foreach (var item in Parsing.GetIntListFromString(provinceList))
       {
-         hashSet.Add(Globals.ProvinceIdToProvince[item]);
+         if (Globals.ProvinceIdToProvince.TryGetValue(item, out var prov))
+            hashSet.Add(prov);
+         else
+            Globals.ErrorLog.Write($"Error: Province {item} used in default.map which is not defined in definition.csv");
       }
    }
 }

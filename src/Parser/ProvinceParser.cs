@@ -23,7 +23,7 @@ public static class ProvinceParser
 
    public static void ParseAllUniqueProvinces()
    {
-      var files = FilesHelper.GetProvinceFilesUniquely();
+      var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "history", "provinces");
       var po = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 };
       Parallel.ForEach(files, po, ProcessProvinceFile);
    }
@@ -47,8 +47,18 @@ public static class ProvinceParser
       
       IO.ReadAllInANSI(path, out var rawContent);
       Parsing.RemoveCommentFromMultilineString(rawContent, out var fileContent);
-      var blocks = Parsing.GetElements(0, ref fileContent);
 
+      List<IElement> blocks = [];
+      
+      try
+      {
+         blocks = Parsing.GetElements(0, ref fileContent);
+      }
+      catch (ParsingException e)
+      {
+         Globals.ErrorLog.Write($"Error parsing province file: {path} || {e.Message}");
+         return;
+      }
       foreach (var block in blocks)
          if (block is Content content)
             foreach (var att in Parsing.GetKeyValueListWithoutQuotes(content.Value))

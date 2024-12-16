@@ -153,7 +153,7 @@ public static partial class Parsing
    /// <param name="index"></param>
    /// <param name="str"></param>
    /// <returns></returns>
-   /// TODO improve performance by rewrite and rethink the logic
+   /// TODO: improve performance by rewrite and rethink the logic
    public static unsafe List<IElement> GetElements(int index, ref string str)
    {
       var openingMatches = OpeningRegex.Matches(str, index);
@@ -164,6 +164,7 @@ public static partial class Parsing
 
       var closingCount = closingMatches.Count;
       var openingCount = openingMatches.Count;
+
 
       if (closingCount == 0 && openingCount == 0)
       {
@@ -179,9 +180,14 @@ public static partial class Parsing
          // openingMatch is null when there are no more opening brackets, but we need to close the current element.
          var openingMatch = i == openingCount ? null : openingMatches[i];
          var start = openingMatch?.Index ?? int.MaxValue;
+
          
+
          if (endCnt >= closingMatches.Count)
-            throw new ParsingException("Could not find closing bracket for opening bracket at index " + start);
+            if(start == int.MaxValue)
+               throw new ParsingException($"Missing closing bracket at end of file!");
+            else
+               throw new ParsingException($"Could not find closing bracket for opening bracket {start}");
          var end = closingMatches[endCnt].Index;
 
          // If there is content before the first opening bracket add it as a content element.

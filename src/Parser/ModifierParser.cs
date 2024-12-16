@@ -809,7 +809,10 @@ namespace Editor.Parser
          { "reduced_trade_penalty_on_non_main_tradenode", ModifierValueType.Float },
          { "mil_tech_cost_modifier", ModifierValueType.Float },
          { "dip_tech_cost_modifier", ModifierValueType.Float },
-         { "adm_tech_cost_modifier", ModifierValueType.Float }
+         { "adm_tech_cost_modifier", ModifierValueType.Float },
+         { "rulers_can_be_generals", ModifierValueType.Bool },
+         { "heirs_can_be_generals", ModifierValueType.Bool },
+         { "artillery_bonus_vs_fort", ModifierValueType.Int },
       };
       public static readonly Dictionary<string, ModifierValueType> CustomModifierTrigger = new()
       {

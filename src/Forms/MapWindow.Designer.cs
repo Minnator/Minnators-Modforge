@@ -102,6 +102,7 @@
          clearGUIToolStripMenuItem = new ToolStripMenuItem();
          provinceToolStripMenuItem = new ToolStripMenuItem();
          countryToolStripMenuItem = new ToolStripMenuItem();
+         benchmarkMapModesToolStripMenuItem = new ToolStripMenuItem();
          ProvinceCollectionsLayoutPanel = new TableLayoutPanel();
          FocusSelectionCheckBox = new CheckBox();
          BottomToolStrip = new ToolStrip();
@@ -263,7 +264,6 @@
          MMButtonsTLPanel = new TableLayoutPanel();
          GeneralToolTip = new ToolTip(components);
          toolTip1 = new ToolTip(components);
-         benchmarkMapModesToolStripMenuItem = new ToolStripMenuItem();
          MapMenuStrip.SuspendLayout();
          BottomToolStrip.SuspendLayout();
          MainLayoutPanel.SuspendLayout();
@@ -625,38 +625,38 @@
          // infoToolStripMenuItem
          // 
          infoToolStripMenuItem.Name = "infoToolStripMenuItem";
-         infoToolStripMenuItem.Size = new Size(180, 22);
+         infoToolStripMenuItem.Size = new Size(162, 22);
          infoToolStripMenuItem.Text = "Info";
          infoToolStripMenuItem.Click += infoToolStripMenuItem_Click;
          // 
          // toolStripSeparator8
          // 
          toolStripSeparator8.Name = "toolStripSeparator8";
-         toolStripSeparator8.Size = new Size(177, 6);
+         toolStripSeparator8.Size = new Size(159, 6);
          // 
          // clearCrashLogsToolStripMenuItem
          // 
          clearCrashLogsToolStripMenuItem.Name = "clearCrashLogsToolStripMenuItem";
-         clearCrashLogsToolStripMenuItem.Size = new Size(180, 22);
+         clearCrashLogsToolStripMenuItem.Size = new Size(162, 22);
          clearCrashLogsToolStripMenuItem.Text = "Clear Crash Logs";
          clearCrashLogsToolStripMenuItem.Click += clearCrashLogsToolStripMenuItem_Click;
          // 
          // toolStripSeparator9
          // 
          toolStripSeparator9.Name = "toolStripSeparator9";
-         toolStripSeparator9.Size = new Size(177, 6);
+         toolStripSeparator9.Size = new Size(159, 6);
          // 
          // TutorialBrowser
          // 
          TutorialBrowser.Enabled = false;
          TutorialBrowser.Name = "TutorialBrowser";
-         TutorialBrowser.Size = new Size(180, 22);
+         TutorialBrowser.Size = new Size(162, 22);
          TutorialBrowser.Text = "Tutorial Browser";
          // 
          // gameOfLiveToolStripMenuItem
          // 
          gameOfLiveToolStripMenuItem.Name = "gameOfLiveToolStripMenuItem";
-         gameOfLiveToolStripMenuItem.Size = new Size(180, 22);
+         gameOfLiveToolStripMenuItem.Size = new Size(162, 22);
          gameOfLiveToolStripMenuItem.Text = "Game of live";
          gameOfLiveToolStripMenuItem.Click += gameOfLiveToolStripMenuItem_Click;
          // 
@@ -820,6 +820,13 @@
          countryToolStripMenuItem.Size = new Size(120, 22);
          countryToolStripMenuItem.Text = "Country";
          countryToolStripMenuItem.Click += countryToolStripMenuItem_Click;
+         // 
+         // benchmarkMapModesToolStripMenuItem
+         // 
+         benchmarkMapModesToolStripMenuItem.Name = "benchmarkMapModesToolStripMenuItem";
+         benchmarkMapModesToolStripMenuItem.Size = new Size(234, 22);
+         benchmarkMapModesToolStripMenuItem.Text = "Benchmark MapModes";
+         benchmarkMapModesToolStripMenuItem.Click += benchmarkMapModesToolStripMenuItem_Click;
          // 
          // ProvinceCollectionsLayoutPanel
          // 
@@ -2881,13 +2888,6 @@
          MMButtonsTLPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
          MMButtonsTLPanel.Size = new Size(1086, 30);
          MMButtonsTLPanel.TabIndex = 0;
-         // 
-         // benchmarkMapModesToolStripMenuItem
-         // 
-         benchmarkMapModesToolStripMenuItem.Name = "benchmarkMapModesToolStripMenuItem";
-         benchmarkMapModesToolStripMenuItem.Size = new Size(234, 22);
-         benchmarkMapModesToolStripMenuItem.Text = "Benchmark MapModes";
-         benchmarkMapModesToolStripMenuItem.Click += benchmarkMapModesToolStripMenuItem_Click;
          // 
          // MapWindow
          // 

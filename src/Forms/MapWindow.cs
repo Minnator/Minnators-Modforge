@@ -55,9 +55,9 @@ namespace Editor.Forms
       private ExtendedComboBox _tradeCompanyInvestments = null!;
       private ExtendedComboBox _terrainComboBox = null!;
 
-      private NumberTextBox _nativesSizeTextBox = null!;
-      private NumberTextBox _nativeFerocityTextBox = null!;
-      private NumberTextBox _nativeHostilityTextBox = null!;
+      private TextSaveableTextBox<string, CProvinceAttributeChange> _nativesSizeTextBox = null!;
+      private TextSaveableTextBox<string, CProvinceAttributeChange> _nativeFerocityTextBox = null!;
+      private TextSaveableTextBox<string, CProvinceAttributeChange> _nativeHostilityTextBox = null!;
 
       private TextSaveableTextBox<string, CModifyLocalisation> _localisationTextBox = null!;
       private TextSaveableTextBox<string, CModifyLocalisation> _provAdjTextBox = null!;
@@ -573,7 +573,7 @@ namespace Editor.Forms
          {
             Dock = DockStyle.Fill,
             Margin = new(3, 1, 3, 3),
-            DigitOnly = false,
+            Input = InputType.Text,
          };
          MisProvinceData.Controls.Add(_capitalNameTextBox, 1, 4);
 
@@ -589,17 +589,23 @@ namespace Editor.Forms
          _tribalOwner.OnTagChanged += ProvinceEditingEvents.OnTribalOwnerChanged;
          NativesLayoutPanel.Controls.Add(_tribalOwner, 1, 0);
 
-         _nativesSizeTextBox = ControlFactory.GetNumberTextBox();
-         _nativesSizeTextBox.OnDataChanged += ProvinceEditingEvents.OnNativeSizeChanged;
+         _nativesSizeTextBox = new(Selection.GetSelectedProvincesAsSaveable, new CProvinceAttributeFactory(ProvAttrGet.native_size, ProvAttrSet.native_size))
+         {
+            Input = InputType.UnsignedNumber
+         };
          NativesLayoutPanel.Controls.Add(_nativesSizeTextBox, 1, 1);
 
-         _nativeFerocityTextBox = ControlFactory.GetNumberTextBox();
-         _nativeFerocityTextBox.OnDataChanged += ProvinceEditingEvents.OnNativeFerocityChanged;
-         NativesLayoutPanel.Controls.Add(_nativeFerocityTextBox, 1, 2);
+         _nativeFerocityTextBox = new(Selection.GetSelectedProvincesAsSaveable, new CProvinceAttributeFactory(ProvAttrGet.native_ferocity, ProvAttrSet.native_ferocity))
+         {
+            Input = InputType.DecimalNumber
+         };
+         NativesLayoutPanel.Controls.Add(_nativeFerocityTextBox, 1, 3);
 
-         _nativeHostilityTextBox = ControlFactory.GetNumberTextBox();
-         _nativeHostilityTextBox.OnDataChanged += ProvinceEditingEvents.OnNativeHostilityChanged;
-         NativesLayoutPanel.Controls.Add(_nativeHostilityTextBox, 1, 3);
+         _nativeHostilityTextBox = new(Selection.GetSelectedProvincesAsSaveable, new CProvinceAttributeFactory(ProvAttrGet.native_hostileness, ProvAttrSet.native_hostileness))
+         {
+            Input = InputType.UnsignedNumber
+         };
+         NativesLayoutPanel.Controls.Add(_nativeHostilityTextBox, 1, 2);
 
          // TRADE_COMPANIES TAB
          _tradeCompanyInvestments = ControlFactory.GetExtendedComboBox();
@@ -790,9 +796,9 @@ namespace Editor.Forms
          TradeCenterComboBox.Clear();
          _extraCostNumeric.Value = 0;
          _tribalOwner.Clear();
-         _nativesSizeTextBox.Text = "0";
-         _nativeFerocityTextBox.Text = "0";
-         _nativeHostilityTextBox.Text = "0";
+         _nativesSizeTextBox.Clear();
+         _nativeFerocityTextBox.Clear();
+         _nativeHostilityTextBox.Clear();
          ModifierComboBox.Text = string.Empty;
          ModifiersListView.Items.Clear();
          DurationTextBox.Text = string.Empty;
@@ -1299,7 +1305,7 @@ namespace Editor.Forms
          _capitalTextBox = new(Selection.GetHistoryCountryAsList, new CCountryPropertyChangeFactory<Province>(nameof(HistoryCountry.Capital)))
          {
             Margin = new(1), Dock = DockStyle.Fill,
-            DigitOnly = true
+            Input = InputType.UnsignedNumber
          };
          
          _focusComboBox = ControlFactory.GetListComboBox([.. Enum.GetNames<Mana>()], new(1), false);
@@ -1453,6 +1459,7 @@ namespace Editor.Forms
 
       internal void LoadCountryToGui(Country country)
       {
+         Globals.EditingStatus = EditingStatus.LoadingInterface;
          if (country == Country.Empty)
             return;
          SuspendLayout();
@@ -1512,6 +1519,9 @@ namespace Editor.Forms
          _historicRivals.UpdateCountry(country.HistoryCountry);
          _historicFriends.UpdateCountry(country.HistoryCountry);
          _estatePrivileges.UpdateCountry(country.HistoryCountry);
+
+
+         Globals.EditingStatus = EditingStatus.Idle;
       }
 
       private void GovernmentTypeBox_SelectedIndexChanged(object? sender, EventArgs e)

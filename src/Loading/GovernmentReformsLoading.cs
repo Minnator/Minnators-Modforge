@@ -51,7 +51,7 @@ namespace Editor.Loading
 
             if (!Globals.GovernmentReforms.TryAdd(reform.Name, reform))
             {
-               Globals.ErrorLog.Write($"Dublicate government reform in file {path}: {reform.Name} already exists");
+               Globals.ErrorLog.Write($"Duplicate government reform in file {path}: {reform.Name} already exists");
                continue;
             }
          }

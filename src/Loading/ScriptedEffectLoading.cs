@@ -27,7 +27,7 @@ namespace Editor.Loading
             {
                if (element is not Block block)
                {
-                  Globals.ErrorLog.Write($"Error in scripted_effects file {file}: Invalid content: {element}");
+                  Globals.ErrorLog.Write($"Error in scripted_effects file {file}: Invalid content: {element.ToString()?.Trim()}");
                   continue;
                }
                effects.Add(block.Name);

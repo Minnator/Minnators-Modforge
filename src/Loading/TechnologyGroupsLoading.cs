@@ -10,8 +10,14 @@ namespace Editor.Loading
    {
       public static void Load()
       {
-         FilesHelper.GetFileUniquely(out var content, "common", "technology.txt");
-         var blocks = Parsing.GetElements(0, ref content);
+         FilesHelper.GetFilePathUniquely(out var path, "common", "technology.txt");
+         if (!IO.ReadAllInANSI(path, out var content))
+         {
+            Globals.ErrorLog.Write("Could not read \"technology.txt\"!");
+            return;
+         }
+
+         var blocks = Parsing.GetElements(0, content);
          
          if (blocks.Count < 1)
          {

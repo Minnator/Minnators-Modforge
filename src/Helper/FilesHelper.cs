@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 using System.Text.RegularExpressions;
 using Editor.Parser;
 
@@ -15,29 +16,19 @@ public static partial class FilesHelper
    // Gets all files in a folder with a specific file ending in all subfolders of the folder
    public static List<string> GetAllFilesInFolder(string folderPath, string searchPattern)
    {
-      List<string> files = [];
-
       if (!Directory.Exists(folderPath))
-         return files;
+         return [];
 
-      foreach (var file in Directory.GetFiles(folderPath, searchPattern, SearchOption.AllDirectories)) 
-         files.Add(file);
-
-      return files;
+      return Directory.GetFiles(folderPath, searchPattern, SearchOption.AllDirectories).ToList();
    }
 
    // Gets all files in a folder with a specific file ending in the folder
    public static List<string> GetFilesInFolder(string folderPath, string searchPattern)
    {
-      List<string> files = [];
-
       if (!Directory.Exists(folderPath))
-         return files;
+         return [];
 
-      foreach (var file in Directory.GetFiles(folderPath, searchPattern)) 
-         files.Add(file);
-
-      return files;
+      return Directory.GetFiles(folderPath, searchPattern).ToList();
    }
 
    /// <summary>
@@ -63,117 +54,62 @@ public static partial class FilesHelper
       var modPath = Path.Combine(Globals.ModPath, folderPath);
       var vanillaPath = Path.Combine(Globals.VanillaPath, folderPath);
       
-      List<string> modFiles = [];
-      List<string> vanillaFiles = [];
       HashSet<string> uniqueFiles = [];
+      
+      var modFiles = GetFilesInPath(modPath, searchPattern, ref uniqueFiles);
+      
+      if (IsPathReplaced(internalPath))
+         return (modFiles, []);
+      
+      return (modFiles, GetFilesInPath(vanillaPath, searchPattern, ref uniqueFiles));
+   }
 
-      if (Directory.Exists(modPath))
-      {
-         foreach (var file in Directory.GetFiles(modPath, searchPattern, SearchOption.TopDirectoryOnly))
-         {
+   private static bool IsPathReplaced(string[] internalPath)
+   {
+      var result = Globals.DescriptorData.ReplacePaths.Any(path => CheckIfPathInPath(path, internalPath));
+#if DEBUG
+      if (result)
+         Debug.WriteLine($"Path {string.Join(Path.DirectorySeparatorChar, internalPath)} is replaced");
+#endif
+      return result;
+      }
+
+   public static bool CheckIfPathInPath(string[] path, string[] checkPath)
+   {
+      for (var i = 0; i < Math.Min(path.Length, checkPath.Length); i++)
+         if (!path[i].Equals(checkPath[i]))
+            return false;
+      return true;
+   }
+
+   private static List<string> GetFilesInPath(string path, string searchPattern, ref HashSet<string> uniqueFiles, SearchOption searchOption = SearchOption.TopDirectoryOnly)
+   {
+      List<string> modFiles = [];
+      if (Directory.Exists(path))
+         foreach (var file in Directory.GetFiles(path, searchPattern, searchOption))
             if (uniqueFiles.Add(Path.GetFileName(file)))
                modFiles.Add(file);
-         }
-      }
 
-      if (Directory.Exists(vanillaPath))
-      {
-         foreach (var file in Directory.GetFiles(vanillaPath, searchPattern, SearchOption.TopDirectoryOnly))
-         {
-            if (uniqueFiles.Add(Path.GetFileName(file)))
-               vanillaFiles.Add(file);
-         }
-      }
-
-      return (modFiles, vanillaFiles);
+      return modFiles;
    }
 
-   public static List<string> GetProvinceFilesUniquely()
-   {
-      var modPath = Path.Combine(Globals.ModPath, "history", "provinces");
-      var vanillaPath = Path.Combine(Globals.VanillaPath, "history", "provinces");
-      List<string> fileSet = [];
-      HashSet<int> provinceIds = [];
-
-      if (Directory.Exists(modPath))
-      {
-         foreach (var file in Directory.GetFiles(modPath, "*.txt", SearchOption.TopDirectoryOnly))
-         {
-            var match = ProvinceParser.IdRegex.Match(Path.GetFileName(file));
-            if (match.Success)
-            {
-               if (provinceIds.Add(int.Parse(match.Groups[1].Value)))
-                  fileSet.Add(file);
-            }
-         }
-      }
-
-      if (Directory.Exists(vanillaPath))
-      {
-         foreach (var file in Directory.GetFiles(vanillaPath, "*.txt", SearchOption.TopDirectoryOnly))
-         {
-            var match = ProvinceParser.IdRegex.Match(Path.GetFileName(file));
-            if (match.Success)
-            {
-               if (provinceIds.Add(int.Parse(match.Groups[1].Value)))
-                  fileSet.Add(file);
-            }
-         }
-      }
-
-      return [..fileSet];
-   }
-   
-   public static bool GetFileUniquely(out string content, params string[] internalPath)
-   {
-      var folderPath = Path.Combine(internalPath);
-      var modPath = Path.Combine(Globals.ModPath, folderPath);
-
-      if (File.Exists(modPath))
-         return IO.ReadAllInANSI(modPath, out content);
-
-      var vanillaPath = Path.Combine(Globals.VanillaPath, folderPath);
-      if (File.Exists(vanillaPath))
-         return IO.ReadAllInANSI(vanillaPath, out content);
-
-      content = string.Empty;
-      return false;
-   }
 
    public static bool GetFilePathUniquely(out string path, params string[] internalPath)
    {
-      var intPath = Path.Combine(internalPath);
-      var modPath = Path.Combine(Globals.ModPath, intPath);
-
-      if (File.Exists(modPath))
-      {
-         path = modPath;
-         return true;
-      }
-
-      var vanillaPath = Path.Combine(Globals.VanillaPath, intPath);
-      if (File.Exists(vanillaPath))
-      {
-         path = vanillaPath;
-         return true;
-      }
-
-      path = string.Empty;
-      return false;
+      return GetModOrVanillaPath(out path, out _, internalPath);
    }
 
    public static bool GetFilesUniquelyAndCombineToOne(out string output, params string[] internalPath)
    {
       var sb = new StringBuilder();
       var files = GetFilesFromModAndVanillaUniquely(internalPath: internalPath);
-      foreach (var file in files)
-      {
+      foreach (var file in files) 
          sb.Append(File.ReadAllText(file)).Append('\n');
-      }
       output = sb.ToString();
       return files.Count > 0;
    }
 
+   //TODO FIX
    public static bool GetModOrVanillaPath(out string filePath, out bool isModPath, params string[] internalPath)
    {
       var innerPath = Path.Combine(internalPath);
@@ -184,16 +120,19 @@ public static partial class FilesHelper
          filePath = path;
          return true;
       }
+
+      if (IsPathReplaced(internalPath))
+      {
+         isModPath = false;
+         filePath = string.Empty;
+         return false;
+      }
+
       filePath = Path.Combine(Globals.VanillaPath, innerPath);
       isModPath = false;
       return File.Exists(filePath);
    }
-
-   public static string CreateModPath(params string[] internalPath)
-   {
-      return Path.Combine(Globals.ModPath, Path.Combine(internalPath));
-   }
-
+   
    public static bool GetVanillaPath(out string filePath, params string[] path)
    {
       filePath = Path.Combine(Globals.VanillaPath, Path.Combine(path));

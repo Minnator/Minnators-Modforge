@@ -8,15 +8,46 @@ namespace Editor.Loading
    {
       public string Version;
       public string Name;
-      public List<string> ReplacePaths;
+      public List<string[]> ReplacePaths;
+      public List<string> Tags;
+      public List<string> Dependencies;
       public string SupportedVersion;
 
-      public DescriptorData(string version, string name, List<string> replacePaths, string supportedVersion)
+      public DescriptorData(string version, string name, List<string[]> replacePaths, List<string> tags, List<string> dependencies, string supportedVersion)
       {
          Version = version;
          Name = name;
          ReplacePaths = replacePaths;
+         Tags = tags;
+         Dependencies = dependencies;
          SupportedVersion = supportedVersion;
+
+         // Sort Paths by length to have major replacements first and speed up replacement detection
+         OptimizePaths();
+      }
+
+      public void SortPaths()
+      {
+         ReplacePaths.Sort((a, b) => a.Length.CompareTo(b.Length));
+      }
+
+      private bool IsPathInList(List<string[]> paths, string[] path)
+      {
+         foreach (var optimizedPath in paths)
+            if (FilesHelper.CheckIfPathInPath(path, optimizedPath))
+               return true;
+         return false;
+      }
+
+      public void OptimizePaths()
+      {
+         SortPaths();
+         List<string[]> optimizedPaths = [];
+         foreach (var path in ReplacePaths)
+            if (!IsPathInList(optimizedPaths, path)) 
+               optimizedPaths.Add(path);
+
+         ReplacePaths = optimizedPaths;
       }
    }
 
@@ -40,6 +71,8 @@ namespace Editor.Loading
 
          var name = string.Empty;
          List<string> tags = [];
+         List<string[]> paths = [];
+         List<string> dependencies = [];
          var version = string.Empty;
          var supportedVersion = string.Empty;
          
@@ -48,13 +81,19 @@ namespace Editor.Loading
          {
             if (item is Block b)
             {
-               if (!b.Name.Equals("tags"))
+               switch (b.Name)
                {
-                  Globals.ErrorLog.Write($"Unknown Block in Descriptor File: {b.Name}");
-                  continue;
+                  case "tags":
+                     tags = Parsing.GetQuotedStringList(b.GetContent);
+                     break;
+                  case "dependencies":
+                     dependencies = Parsing.GetQuotedStringList(b.GetContent);
+                     break;
+                  default:
+                     Globals.ErrorLog.Write($"Unknown Block in Descriptor File: {b.Name}");
+                     break;
                }
 
-               tags = Parsing.GetQuotedStringList(b.GetContent);
             }
             else
             {
@@ -78,6 +117,12 @@ namespace Editor.Loading
                      case "supported_version":
                         supportedVersion = kvp.Value.TrimQuotes();
                         break;
+                     case "replace_path":
+                        paths.Add(kvp.Value.TrimQuotes().Split('/'));
+                        break;
+                     case "picture":
+                     case "remote_file_id":
+                        break;
                      default:
                         Globals.ErrorLog.Write($"Unknown Key in Descriptor File: {kvp.Key}");
                         break;
@@ -86,7 +131,7 @@ namespace Editor.Loading
             }
          }
 
-         Globals.DescriptorData = new (version, name, tags, supportedVersion);
+         Globals.DescriptorData = new (version, name, paths, tags, dependencies, supportedVersion);
       }
 
    }

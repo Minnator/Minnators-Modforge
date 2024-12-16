@@ -196,7 +196,7 @@ namespace Editor.Loading
                   country.HistoryCountry.IsElector = Parsing.YesNo(val);
                   break;
                case "mercantilism":
-                  if (int.TryParse(val, out var merc))
+                  if (float.TryParse(val, out var merc))
                      country.HistoryCountry.Mercantilism = merc;
                   else
                      Globals.ErrorLog.Write($"Invalid mercantilism in {country.Tag}: {val}");

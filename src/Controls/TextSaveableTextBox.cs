@@ -1,18 +1,39 @@
-﻿using Editor.DataClasses.Commands;
+﻿using System.Text.RegularExpressions;
+using Editor.DataClasses.Commands;
 using Editor.Helper;
 using Editor.Saving;
 
 namespace Editor.Controls
 {
-   public class TextSaveableTextBox<T, C> : TextBox where C : SaveableCommand
+   public enum InputType
    {
+      Text,
+      UnsignedNumber,
+      SignedNumber,
+      DecimalNumber
+   }
+   public partial class TextSaveableTextBox<T, C> : TextBox where C : SaveableCommand
+   {
+      private readonly Regex _unsignedNumberRegex = NumberRegex();
+      private readonly Regex _signedNumberRegex = SignedNumberRegex();
+      private readonly Regex _decimalNumberRegex = DecimalNumberRegex();
+
+      [GeneratedRegex(@"^[-+]?(?:0|[1-9]\d*)?\.?\d*$", RegexOptions.Compiled)]
+      private static partial Regex DecimalNumberRegex();
+      [GeneratedRegex(@"^(?:0|[1-9]\d*)$", RegexOptions.Compiled)]
+      private static partial Regex NumberRegex();
+      [GeneratedRegex(@"^[-+]?(?:0|[1-9]\d*)$", RegexOptions.Compiled)]
+      private static partial Regex SignedNumberRegex();
+
+      
+
       private string _oldText = string.Empty;
       private string _newText = string.Empty;
       private Func<ICollection<Saveable>> _getSaveables;
       private readonly CTextEditingFactory<C, T> _factory;
 
 
-      public bool DigitOnly { get; set; }
+      public InputType Input { get; set; } = InputType.Text;
 
       public TextSaveableTextBox(Func<ICollection<Saveable>> getSaveables, CTextEditingFactory<C, T> factory)
       {
@@ -22,12 +43,27 @@ namespace Editor.Controls
          KeyDown += OnKeyDown;
          Enter += OnFocusGained;
          TextChanged += OnTextChanged;
+         KeyPress += OnKeyPress;
+      }
+
+      private void OnKeyPress(object? sender, KeyPressEventArgs e)
+      {
+         var keyChar = e.KeyChar;
+
+         if (char.IsControl(e.KeyChar))
+            return;
+
+         if (!CheckText(Text + keyChar))
+         {
+            e.Handled = true;
+         }
       }
 
       private void OnTextChanged(object? sender, EventArgs e)
       {
          if (_oldText.Equals(Text) || Globals.EditingStatus == EditingStatus.LoadingInterface)
             return;
+
          _newText = Text;
       }
 
@@ -37,9 +73,26 @@ namespace Editor.Controls
          _newText = Text;
       }
 
+
+      private bool CheckText(string text)
+      {
+         if (text.Length == 0)
+            return true;
+         return Input switch
+         {
+            InputType.Text => true,
+            InputType.SignedNumber => _signedNumberRegex.IsMatch(text),
+            InputType.UnsignedNumber => _unsignedNumberRegex.IsMatch(text),
+            InputType.DecimalNumber => _decimalNumberRegex.IsMatch(text),
+            _ => throw new ArgumentOutOfRangeException()
+         };
+      }
+
       private void OnKeyDown(object? sender, KeyEventArgs e)
       {
-         if (e.KeyCode == Keys.Enter)
+         var keyCode = e.KeyCode;
+
+         if (keyCode == Keys.Enter)
          {
             e.SuppressKeyPress = true;
             if (!ExecuteCommand())
@@ -50,46 +103,18 @@ namespace Editor.Controls
             }
             Globals.ZoomControl.Focus();
          }
-         else if (e.KeyCode == Keys.Escape)
+         else if (keyCode == Keys.Escape)
          {
             Text = _oldText;
             Globals.ZoomControl.Focus();
          }
-         else if (DigitOnly)
-         {
-            if (!char.IsDigit((char)e.KeyCode))
-               switch (e.KeyCode) // WHY TF IS THERE NO BETTER WAY
-               {
-                  case Keys.Back:
-                  case Keys.Delete:
-                  case Keys.Left:
-                  case Keys.Right:
-                  case Keys.NumPad0:
-                  case Keys.NumPad1:
-                  case Keys.NumPad2:
-                  case Keys.NumPad3:
-                  case Keys.NumPad4:
-                  case Keys.NumPad5:
-                  case Keys.NumPad6:
-                  case Keys.NumPad7:
-                  case Keys.NumPad8:
-                  case Keys.NumPad9:
-                     break;
-                  default:
-                     e.SuppressKeyPress = true;
-                     return;
-               }
-            
-            // Do your numeric stuff here
-            // I am doing nothing.
-
-         }
+         
       }
 
 
       private bool ExecuteCommand()
       {
-         if (_oldText.Equals(_newText))
+         if (_newText.Length == 0 || _oldText.Equals(_newText) || !CheckText(Text))
             return false;
 
          if (!Converter.Convert<T>(_newText, out var value))
