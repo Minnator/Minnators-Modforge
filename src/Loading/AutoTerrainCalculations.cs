@@ -114,7 +114,7 @@ namespace Editor.Loading
          }
 
          resultBmp.UnlockBits(resultData);
-         resultBmp.Save("terrain.png", ImageFormat.Png);
+         //resultBmp.Save("terrain.png", ImageFormat.Png);
 
 
          //Average out the colors of each province and resolve back to indices
