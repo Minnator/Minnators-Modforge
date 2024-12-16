@@ -52,7 +52,7 @@ namespace Editor.src.Forms.GetUserInput
 
       public bool GetDate(out Date date)
       {
-         return Date.TryParseDate($"{DayBox.Text}.{MonthBox.Text}.{YearBox.Text}", out date);
+         return Date.TryParse($"{DayBox.Text}.{MonthBox.Text}.{YearBox.Text}", out date);
       }
 
       // block non digit input and leading zeros for the year

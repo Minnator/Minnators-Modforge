@@ -62,7 +62,7 @@ public static partial class Parsing
    /// <returns></returns>
    public static bool TryParseDate(string dateString, out Date dateValue)
    {
-      return Date.TryParseDate(dateString, out dateValue);
+      return Date.TryParse(dateString, out dateValue);
    }
 
    /// <summary>

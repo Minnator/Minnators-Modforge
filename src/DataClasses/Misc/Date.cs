@@ -1,70 +1,49 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 namespace Editor.DataClasses.Misc
 {
    public partial class Date
    {
-      public short Year
-      {
-         get => _year;
-         set
-         {
-            if (_year == value)
-               return;
-            _year = value;
-            OnYearChanged(this, value);
-            OnDateChanged.Invoke(this, this);
-         }
-      }
-
-      public byte Month
-      {
-         get => _month;
-         set
-         {
-            if (_month == value)
-               return;
-            _month = value;
-            OnMonthChanged(this, value);
-            OnDateChanged.Invoke(this, this);
-         }
-      }
-
-      public byte Day
-      {
-         get => _day;
-         set
-         {
-            if (_day == value)
-               return;
-            _day = value;
-            OnDayChanged(this, value);
-            OnDateChanged.Invoke(this, this);
-         }
-      }
-
+      // Errorcodes: 
       private static readonly Regex DateRegex = DateRegexGeneration();
-      private short _year;
-      private byte _month;
-      private byte _day;
-
-      public const int DAYS_IN_YEAR = 365;
-
-      public EventHandler<int> OnYearChanged = delegate { };
-      public EventHandler<int> OnMonthChanged = delegate { };
-      public EventHandler<int> OnDayChanged = delegate { };
-      public EventHandler<Date> OnDateChanged = delegate { };
+      private int _timeStamp;
 
       [GeneratedRegex(@"(?<year>-?\d{1,4}).(?<month>\d{1,2}).(?<day>\d{1,2})")]
       private static partial Regex DateRegexGeneration();
 
-      public Date(short year, byte month, byte day)
+      /// <summary>
+      /// Each day is one tick
+      /// Every year is 365 days
+      /// The valid range is from -10.000 to 10.000
+      /// 0 is the year 0 and 0.0.0 is the first day of the year 0: 1.1.0
+      /// Months are 30, 31 or 28 days
+      /// </summary>
+      public int TimeStamp
       {
-         _year = year;
-         _month = month;
-         _day = day;
+         get => _timeStamp;
+         private set
+         {
+            _timeStamp = value;
+            OnDateChanged.Invoke(this, this);
+         }
       }
+
+      public EventHandler<Date> OnDateChanged = delegate { };
+
+      public Date(int year, int month, int day)
+      {
+         TimeStamp = year * 365 + SumDaysToMonth(month) + day;
+      }
+      public Date(int timeStamp)
+      {
+         TimeStamp = timeStamp;
+      }
+
+      public int Year => TimeStamp / 365;
+      public int Month => GetMonth(TimeStamp, out _);
+      public int Day => GetDay(GetMonth(TimeStamp, out var remainder), remainder);
 
       [Browsable(false)]
       public static Date MinValue { get; } = new(short.MinValue, 1, 1);
@@ -72,38 +51,104 @@ namespace Editor.DataClasses.Misc
       [Browsable(false)]
       public static Date MaxValue { get; } = new(short.MaxValue, 12, 31);
       [Browsable(false)]
-      public static Date Empty  { get; } = new(0, 0, 0);
+      public static Date Empty { get; } = new(0, 0, 0);
 
-      public void CopyDate(Date date2)
+      public void SetDate(Date date) => TimeStamp = date.TimeStamp;
+      public Date Copy() => new(Year, Month, Day);
+      public Date Copy(Date d) => new(d.TimeStamp);
+
+      public Date AddYears(int years)
       {
-         Year = date2.Year;
-         Month = date2.Month;
-         Day = date2.Day;
+         TimeStamp += years * 365;
+         return this;
       }
 
-
-      public static bool TryParseDate(string str, out Date date)
+      public Date AddMonths(int months)
       {
-         date = MinValue;
-         if (string.IsNullOrWhiteSpace(str))
-            return false;
-         var match = DateRegex.Match(str);
-         if (!match.Success)
-            return false;
+         var curMonth = GetMonth(TimeStamp, out var remainder);
+         var curDay = GetDay(curMonth, remainder);
 
-         if (!short.TryParse(match.Groups["year"].Value, out var year) ||
-         !byte.TryParse(match.Groups["month"].Value, out var month) ||
-         !byte.TryParse(match.Groups["day"].Value, out var day))
-            return false;
+         while (months > 0)
+         {
+            if (curMonth + months <= 12)
+            {
+               curMonth += months;
+               TimeStamp = SumDaysToMonth(curMonth) + curDay;
+               return this;
+            }
 
-         if (month < 1 || month > 12 || day < 1 || day > DaysInMonth(month))
-            return false;
-
-         date = new (year, month, day);
-         return true;
+            months -= 12 - curMonth;
+            curMonth = 1;
+            TimeStamp = Year * 365 + SumDaysToMonth(curMonth) + curDay;
+            AddYears(1);
+         }
+         return this;
       }
 
-      public static int DaysInMonth(byte month)
+      public Date AddDays(int days)
+      {
+         var curYear = Year;
+         var curMonth = GetMonth(TimeStamp, out var remainder);
+         var curDay = GetDay(curMonth, remainder);
+
+         while (days > 0)
+         {
+            var daysInMonth = DaysInMonth(curMonth);
+            if (curDay + days <= daysInMonth)
+            {
+               curDay += days;
+               TimeStamp = Year * 365 + SumDaysToMonth(curMonth) + curDay;
+               return this;
+            }
+
+            days -= daysInMonth - curDay - 1;
+            curDay = 1;
+            if (curMonth == 12)
+            {
+               curMonth = 1;
+               curYear++;
+            }
+            else
+               curMonth++;
+            TimeStamp = curYear * 365 + SumDaysToMonth(curMonth) + curDay;
+         }
+         return this;
+      }
+
+      public int DaysBetween(Date date) => date.TimeStamp - TimeStamp;
+      
+      private static int SumDaysToMonth(int month)
+      {
+         var sum = 0;
+         for (var i = 1; i < month; i++)
+            sum += DaysInMonth(i);
+         return sum;
+      }
+
+      private static int GetDay(int month, int remainder)
+      {
+         Debug.Assert(remainder <= DaysInMonth(month), "Bigger remainder than days in month");
+         return remainder;
+      }
+
+      private static int GetMonth(int timeStamp, out int remainder)
+      {
+         var curMonth = 1;  
+         remainder = timeStamp % 365; 
+
+         Debug.Assert(remainder <= 365, "Why are there more days in a year left than there are in a full year");
+
+         while (remainder > DaysInMonth(curMonth)) 
+         {
+            remainder -= DaysInMonth(curMonth);  
+            curMonth++; 
+            if (curMonth > 12) 
+               break; 
+         }
+         return curMonth;  
+      }
+
+      public static int DaysInMonth(int month)
       {
          return month switch
          {
@@ -113,202 +158,74 @@ namespace Editor.DataClasses.Misc
          };
       }
 
-      public Date AddDays(int days)
+      public static bool TryParse(string str, out Date date)
       {
-         while (days > 0)
-         {
-            var daysInMonth = DaysInMonth(Month);
-            if (Day + days <= daysInMonth)
-            {
-               Day += (byte)days;
-               return this;
-            }
-
-            days -= daysInMonth - Day - 1;
-            Day = 1;
-            if (Month == 12)
-            {
-               Month = 1;
-               Year++;
-            }
-            else
-            {
-               Month++;
-            }
-         }
-         return this;
-      }
-
-      public Date AddMonths(int months)
-      {
-         while (months > 0)
-         {
-            if (Month + months <= 12)
-            {
-               Month += (byte)months;
-               return this;
-            }
-
-            months -= 12 - Month;
-            Month = 1;
-            Year++;
-         }
-         return this;
-      }
-
-      public Date AddYears(int years)
-      {
-         Year += (short)years;
-         return this;
-      }
-
-      public int DaysBetween(Date d1, Date d2)
-      {
-         var diff = Math.Abs(d1.Day - d2.Day);
-         diff += d1.Year > d2.Year ? Math.Abs(d1.Year - d2.Year) : Math.Abs(d2.Year - d1.Year) * DAYS_IN_YEAR;
-         diff += GetDaysForMonths(d1.Month, d2.Month);
-         return diff;
-      }
-
-      /// <summary>
-      /// Does not include days for the start month
-      /// </summary>
-      /// <param name="m1"></param>
-      /// <param name="m2"></param>
-      /// <returns></returns>
-      public int GetDaysForMonths(int m1, int m2)
-      {
-         var days = 0;
-         for (var i = 1; i < Math.Abs(m1 - m2); i++)
-         {
-            var month = m1 + i;
-            if (month > 12)
-               month -= 12;
-            days += DaysInMonth((byte)(month));
-         }
-         return days;
-      }
-
-      public bool IsValid()
-      {
-         if (Month < 1 || Month > 12 || Day < 1 || Day > 31)
+         date = MinValue;
+         if (string.IsNullOrWhiteSpace(str))
+            return false;
+         var match = DateRegex.Match(str);
+         if (!match.Success)
             return false;
 
-         if (Month == 2 && Day > 28)
+         if (!short.TryParse(match.Groups["year"].Value, out var year) ||
+             !byte.TryParse(match.Groups["month"].Value, out var month) ||
+             !byte.TryParse(match.Groups["day"].Value, out var day))
             return false;
 
-         if (Day > DaysInMonth(Month))
+         if (month < 1 || month > 12 || day < 1 || day > DaysInMonth(month))
             return false;
 
+         date = new(year, month, day);
          return true;
       }
 
-      public override string ToString()
+      public override string ToString() => $"{Year}.{Month}.{Day}";
+
+      public override bool Equals(object? obj) => obj is Date date && TimeStamp == date.TimeStamp;
+
+      protected bool Equals(Date other)
       {
-         return $"{Year}.{Month}.{Day}";
-      }
-
-      public override bool Equals(object? obj)
-      {
-         if (obj is Date other)
-            return Year == other.Year && Month == other.Month && Day == other.Day;
-         return false;
-      }
-      public bool Equals(Date other)
-      {
-         return Year == other.Year && Month == other.Month && Day == other.Day;
-      }
-
-      public int CompareTo(Date other)
-      {
-         if (Year > other.Year)
-            return 1;
-         if (Year < other.Year)
-            return -1;
-
-         if (Month > other.Month)
-            return 1;
-         if (Month < other.Month)
-            return -1;
-
-         if (Day > other.Day)
-            return 1;
-         if (Day < other.Day)
-            return -1;
-
-         return 0;
+         return TimeStamp == other.TimeStamp;
       }
 
       public override int GetHashCode()
       {
-         return HashCode.Combine(Year, Month, Day);
+         return TimeStamp;
       }
 
-      public static bool operator ==(Date? left, Date? right)
+      public int CompareTo(Date other)
       {
-         if (left is null && right is null)
-            return true;
-         if (left is null || right is null)
-            return false;
-         return left.Equals(right);
+         return TimeStamp.CompareTo(other.TimeStamp);
       }
 
-      public static bool operator !=(Date? left, Date? right)
+      public static bool operator ==(Date left, Date right)
       {
-         if (left is null && right is null)
-            return true;
-         if (left is null || right is null)
-            return false;
-         return !(left == right);
+         return Equals(left, right);
       }
 
-      // >, <, >=, <= operators
-      public static bool operator >(Date? left, Date? right)
+      public static bool operator !=(Date left, Date right)
       {
-         if (left is null && right is null)
-            return true;
-         if (left is null || right is null)
-            return false;
-         if (left.Year > right.Year)
-            return true;
-         if (left.Year < right.Year)
-            return false;
-
-         if (left.Month > right.Month)
-            return true;
-         if (left.Month < right.Month)
-            return false;
-
-         return left.Day > right.Day;
+         return !Equals(left, right);
       }
 
-      public static bool operator <(Date? left, Date? right)
+      public static bool operator >(Date left, Date right)
       {
-         if (left is null && right is null)
-            return true;
-         if (left is null || right is null)
-            return false;
-         if (left.Year < right.Year)
-            return true;
-         if (left.Year > right.Year)
-            return false;
+         return left.TimeStamp > right.TimeStamp;
+      }
 
-         if (left.Month < right.Month)
-            return true;
-         if (left.Month > right.Month)
-            return false;
-
-         return left.Day < right.Day;
+      public static bool operator <(Date left, Date right)
+      {
+         return left.TimeStamp < right.TimeStamp;
       }
 
       public static bool operator >=(Date left, Date right)
       {
-         return left > right || left == right;
+         return left.TimeStamp >= right.TimeStamp;
       }
 
       public static bool operator <=(Date left, Date right)
       {
-         return left < right || left == right;
+         return left.TimeStamp <= right.TimeStamp;
       }
 
       public static Date operator +(Date date, int days)
@@ -325,43 +242,32 @@ namespace Editor.DataClasses.Misc
          return newDate;
       }
 
-      public static Date operator +(Date date, (int months, int days) tuple)
+      public static Date operator +(Date date, Date other)
       {
          var newDate = new Date(date.Year, date.Month, date.Day);
-         newDate.AddMonths(tuple.months);
-         newDate.AddDays(tuple.days);
+         newDate.TimeStamp += other.TimeStamp;
          return newDate;
       }
 
-      public static Date operator -(Date date, (int months, int days) tuple)
+      public static Date operator -(Date date, Date other)
       {
          var newDate = new Date(date.Year, date.Month, date.Day);
-         newDate.AddMonths(-tuple.months);
-         newDate.AddDays(-tuple.days);
+         newDate.TimeStamp -= other.TimeStamp;
          return newDate;
       }
 
-      public static Date operator +(Date date, (int years, int months, int days) tuple)
+      public static Date operator ++(Date date)
       {
-         var newDate = new Date(date.Year, date.Month, date.Day);
-         newDate.AddYears(tuple.years);
-         newDate.AddMonths(tuple.months);
-         newDate.AddDays(tuple.days);
-         return newDate;
+         date.AddDays(1);
+         return date;
       }
 
-      public static Date operator -(Date date, (int years, int months, int days) tuple)
+      public static Date operator --(Date date)
       {
-         var newDate = new Date(date.Year, date.Month, date.Day);
-         newDate.AddYears(-tuple.years);
-         newDate.AddMonths(-tuple.months);
-         newDate.AddDays(-tuple.days);
-         return newDate;
+         date.AddDays(-1);
+         return date;
       }
 
-      public static implicit operator string(Date date)
-      {
-         return date?.ToString() ?? string.Empty;
-      }
+      public static implicit operator string(Date date) => date.ToString();
    }
 }

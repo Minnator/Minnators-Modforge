@@ -13,7 +13,7 @@ namespace Editor.Helper
                province.ResetHistory();
          foreach (var province in Globals.Provinces) 
             province.LoadHistoryForDate(date);
-         LastDate.CopyDate(date);
+         LastDate.Copy(date);
       }
    }
 }
