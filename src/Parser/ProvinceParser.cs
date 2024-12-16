@@ -118,7 +118,7 @@ public static class ProvinceParser
          }
       }
 
-      var che = new HistoryEntry(date);
+      var che = new ProvinceHistoryEntry(date);
 
       foreach (var element in block.Blocks)
       {
@@ -155,7 +155,7 @@ public static class ProvinceParser
       }
    }
 
-   private static void AddEffectsToHistory(ref HistoryEntry che, Content content)
+   private static void AddEffectsToHistory(ref ProvinceHistoryEntry che, Content content)
    {
       var attributes = Parsing.GetKeyValueList(content.Value);
       foreach (var element in attributes)

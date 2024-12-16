@@ -58,7 +58,7 @@ public class ProvinceData()
    public List<TradeModifier> TradeModifiers = [];  
 }
 
-public class Province : ProvinceComposite, ITitleAdjProvider
+public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<ProvinceHistoryEntry>
 {
    public Province(int id, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(id.ToString(), color)
    {
@@ -72,7 +72,7 @@ public class Province : ProvinceComposite, ITitleAdjProvider
    }
 
    private readonly ProvinceData _data = new();
-   private List<HistoryEntry> _history = [];
+   private List<ProvinceHistoryEntry> _history = [];
    public int FileIndex { get; set; } = 0;
    public override SaveableType WhatAmI()
    {
@@ -137,9 +137,6 @@ public class Province : ProvinceComposite, ITitleAdjProvider
       get => _borders;
       set => _borders = value;
    }
-
-   #endregion
-   #region Globals from the game
 
    #endregion
 
@@ -505,10 +502,10 @@ public class Province : ProvinceComposite, ITitleAdjProvider
       }
    }
 
-   public List<HistoryEntry> History
+   public List<ProvinceHistoryEntry> History
    {
       get => _history;
-      private set
+      set
       {
          _history = value;
          if (Globals.State == State.Running)
@@ -773,7 +770,7 @@ public class Province : ProvinceComposite, ITitleAdjProvider
       }
    }
 
-   public void AddHistoryEntry(HistoryEntry entryOld)
+   public void AddHistoryEntry(ProvinceHistoryEntry entryOld)
    {
       _history.Add(entryOld);
       SortHistoryEntriesByDate();

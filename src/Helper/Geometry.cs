@@ -12,14 +12,20 @@ public static class Geometry
       return r1.X < r2.X + r2.Width && r1.X + r1.Width > r2.X && r1.Y < r2.Y + r2.Height && r1.Y + r1.Height > r2.Y;
    }
 
-   public static Rectangle GetIntersection (Rectangle r1, Rectangle r2)
+   public static Rectangle GetIntersection(Rectangle r1, Rectangle r2)
    {
       var x = Math.Max(r1.X, r2.X);
       var y = Math.Max(r1.Y, r2.Y);
       var width = Math.Min(r1.X + r1.Width, r2.X + r2.Width) - x;
       var height = Math.Min(r1.Y + r1.Height, r2.Y + r2.Height) - y;
-      return new Rectangle(x, y, width, height);
+
+      // Ensure valid dimensions
+      if (width <= 0 || height <= 0)
+         return Rectangle.Empty;
+
+      return new (x, y, width, height);
    }
+
 
    // Returns the center of the rectangle
    public static Point GetCenter (Rectangle rect)

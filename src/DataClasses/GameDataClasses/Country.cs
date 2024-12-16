@@ -205,7 +205,7 @@ public class CommonCountry : Saveable, IGetSetProperty
    }
 }
 
-public class HistoryCountry : Saveable, IGetSetProperty
+public class HistoryCountry : Saveable, IGetSetProperty, IHistoryProvider<CountryHistoryEntry>
 {
 
    public HistoryCountry(Country country, ObjEditingStatus status = ObjEditingStatus.Modified)

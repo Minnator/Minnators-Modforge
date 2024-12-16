@@ -61,6 +61,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Pfim" Version="0.11.3" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="xunit" Version="2.9.2" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\Controls\Initialisation\" />

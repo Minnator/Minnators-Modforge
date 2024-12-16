@@ -67,9 +67,10 @@ namespace Editor.DataClasses.Misc
       }
 
       [Browsable(false)]
-      public static Date MinValue => new(short.MinValue, 1, 1);
+      public static Date MinValue { get; } = new(short.MinValue, 1, 1);
+
       [Browsable(false)]
-      public static Date MaxValue => new(short.MaxValue, 12, 31);
+      public static Date MaxValue { get; } = new(short.MaxValue, 12, 31);
       [Browsable(false)]
       public static Date Empty  { get; } = new(0, 0, 0);
 

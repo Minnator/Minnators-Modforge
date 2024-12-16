@@ -103,6 +103,11 @@ namespace Editor.Forms
          }
 
          //DiscordActivityManager.ActivateActivity();
+
+#if DEBUG
+         debugToolStripMenuItem.Enabled = true;
+         debugToolStripMenuItem.Visible = true;
+#endif
       }
 
       public void Initialize()
@@ -405,7 +410,6 @@ namespace Editor.Forms
          _savingButtonsToolTip.InitialDelay = 100;
          _savingButtonsToolTip.ShowAlways = true;
 
-         SaveAllModifiedButton.MouseEnter += OnSavingModifiedEnter;
          SaveAllProvincesButton.MouseEnter += OnSavingAllEnter;
          SaveCurrentSelectionButton.MouseEnter += OnSavingSelectionEnter;
 
@@ -850,22 +854,7 @@ namespace Editor.Forms
       private void UpdateUndoDepth(object sender, int e) => UndoDepthLabel.Text = $"Undos [{e}]";
       #endregion
       #endregion
-
-      public void SetEditingMode()
-      {
-         EditingModeLabel.Text = Selection.Count <= 1
-            ? "Idle Mode: Single Province"
-            : $"Idle Mode: Multi Province ({Selection.Count})";
-      }
-      private void SetFinishEditingOnEnter(TextBox tb, Action<object?, EventArgs> handler)
-      {
-         tb.KeyDown += (sender, e) =>
-         {
-            if (e.KeyCode == Keys.Enter)
-               handler(sender, e);
-         };
-      }
-
+      
       private void MapWindow_FormClosing(object sender, FormClosingEventArgs e)
       {
          ResourceUsageHelper.Dispose();
@@ -893,12 +882,6 @@ namespace Editor.Forms
       {
          _savingButtonsToolTip.SetToolTip(SaveAllProvincesButton, $"Save all provinces ({Globals.LandProvinceIds.Length})");
       }
-
-      private void OnSavingModifiedEnter(object? sender, EventArgs e)
-      {
-         _savingButtonsToolTip.SetToolTip(SaveAllModifiedButton, $"Save modified provinces ({SaveMaster.GetNumOfModifiedObjects(SaveableType.Province)})");
-      }
-
       private void OnSavingSelectionEnter(object? sender, EventArgs e)
       {
          _savingButtonsToolTip.SetToolTip(SaveCurrentSelectionButton, $"Save selection ({Selection.Count})");

@@ -119,9 +119,9 @@
          TopStripLayoutPanel = new TableLayoutPanel();
          OwnerCountryNameLabel = new Label();
          ProvinceNameLabel = new Label();
-         EditingModeLabel = new Label();
          SelectionTypeBox = new ComboBox();
          label24 = new Label();
+         CreateHistoryEntryCheckBox = new CheckBox();
          tableLayoutPanel5 = new TableLayoutPanel();
          MagicWandTolerance = new NumericUpDown();
          MWAttirbuteCombobox = new ComboBox();
@@ -173,9 +173,8 @@
          tableLayoutPanel2 = new TableLayoutPanel();
          AdvancedProvinceEditing = new Button();
          SaveAllProvincesButton = new Button();
-         SaveAllModifiedButton = new Button();
-         SaveCurrentSelectionButton = new Button();
          OpenProvinceFileButton = new Button();
+         SaveCurrentSelectionButton = new Button();
          LocalisationGroupBox = new GroupBox();
          LocTableLayoutPanel = new TableLayoutPanel();
          label39 = new Label();
@@ -663,9 +662,11 @@
          // debugToolStripMenuItem
          // 
          debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem, jsonToolStripMenuItem, bugReportToolStripMenuItem, crashReportToolStripMenuItem, loadDDSFilesTestToolStripMenuItem, roughEditorToolStripMenuItem, newSavingToolStripMenuItem, toolStripMenuItem4, fileNamesToolStripMenuItem, emptyCOlorInCountryToolStripMenuItem, iMBTESTToolStripMenuItem, clearGUIToolStripMenuItem, benchmarkMapModesToolStripMenuItem });
+         debugToolStripMenuItem.Enabled = false;
          debugToolStripMenuItem.Name = "debugToolStripMenuItem";
          debugToolStripMenuItem.Size = new Size(54, 23);
          debugToolStripMenuItem.Text = "Debug";
+         debugToolStripMenuItem.Visible = false;
          debugToolStripMenuItem.Click += debugToolStripMenuItem_Click;
          // 
          // testToolStripMenuItem
@@ -951,9 +952,9 @@
          TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 210F));
          TopStripLayoutPanel.Controls.Add(OwnerCountryNameLabel, 2, 0);
          TopStripLayoutPanel.Controls.Add(ProvinceNameLabel, 3, 0);
-         TopStripLayoutPanel.Controls.Add(EditingModeLabel, 4, 0);
          TopStripLayoutPanel.Controls.Add(SelectionTypeBox, 1, 0);
          TopStripLayoutPanel.Controls.Add(label24, 0, 0);
+         TopStripLayoutPanel.Controls.Add(CreateHistoryEntryCheckBox, 5, 0);
          TopStripLayoutPanel.Dock = DockStyle.Fill;
          TopStripLayoutPanel.Location = new Point(400, 0);
          TopStripLayoutPanel.Margin = new Padding(0);
@@ -985,17 +986,6 @@
          ProvinceNameLabel.Text = "Province: -";
          ProvinceNameLabel.TextAlign = ContentAlignment.MiddleCenter;
          // 
-         // EditingModeLabel
-         // 
-         EditingModeLabel.AutoSize = true;
-         EditingModeLabel.Dock = DockStyle.Fill;
-         EditingModeLabel.Location = new Point(671, 0);
-         EditingModeLabel.Name = "EditingModeLabel";
-         EditingModeLabel.Size = new Size(225, 26);
-         EditingModeLabel.TabIndex = 3;
-         EditingModeLabel.Text = "Idle Mode: -";
-         EditingModeLabel.TextAlign = ContentAlignment.MiddleCenter;
-         // 
          // SelectionTypeBox
          // 
          SelectionTypeBox.Dock = DockStyle.Fill;
@@ -1018,6 +1008,19 @@
          label24.TabIndex = 5;
          label24.Text = "Selection type";
          label24.TextAlign = ContentAlignment.MiddleCenter;
+         // 
+         // CreateHistoryEntryCheckBox
+         // 
+         CreateHistoryEntryCheckBox.AutoSize = true;
+         CreateHistoryEntryCheckBox.Dock = DockStyle.Fill;
+         CreateHistoryEntryCheckBox.Location = new Point(900, 1);
+         CreateHistoryEntryCheckBox.Margin = new Padding(1);
+         CreateHistoryEntryCheckBox.Name = "CreateHistoryEntryCheckBox";
+         CreateHistoryEntryCheckBox.Size = new Size(210, 24);
+         CreateHistoryEntryCheckBox.TabIndex = 6;
+         CreateHistoryEntryCheckBox.Text = "Create Historyentries";
+         GeneralToolTip.SetToolTip(CreateHistoryEntryCheckBox, "<TRUE> When editing a property of either a province or a country a history entry for the currently selected date and the modification is created\r\n<FALSE> Edit base values of provinces / countries");
+         CreateHistoryEntryCheckBox.UseVisualStyleBackColor = true;
          // 
          // tableLayoutPanel5
          // 
@@ -1682,9 +1685,8 @@
          tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 30F));
          tableLayoutPanel2.Controls.Add(AdvancedProvinceEditing, 3, 0);
          tableLayoutPanel2.Controls.Add(SaveAllProvincesButton, 0, 0);
-         tableLayoutPanel2.Controls.Add(SaveAllModifiedButton, 1, 0);
-         tableLayoutPanel2.Controls.Add(SaveCurrentSelectionButton, 2, 0);
          tableLayoutPanel2.Controls.Add(OpenProvinceFileButton, 4, 0);
+         tableLayoutPanel2.Controls.Add(SaveCurrentSelectionButton, 1, 0);
          tableLayoutPanel2.Dock = DockStyle.Fill;
          tableLayoutPanel2.Location = new Point(0, 791);
          tableLayoutPanel2.Margin = new Padding(0);
@@ -1719,30 +1721,6 @@
          SaveAllProvincesButton.UseVisualStyleBackColor = true;
          SaveAllProvincesButton.Click += SaveAllProvincesButton_Click;
          // 
-         // SaveAllModifiedButton
-         // 
-         SaveAllModifiedButton.Dock = DockStyle.Fill;
-         SaveAllModifiedButton.Location = new Point(96, 0);
-         SaveAllModifiedButton.Margin = new Padding(2, 0, 2, 0);
-         SaveAllModifiedButton.Name = "SaveAllModifiedButton";
-         SaveAllModifiedButton.Size = new Size(90, 25);
-         SaveAllModifiedButton.TabIndex = 1;
-         SaveAllModifiedButton.Text = "Save modified";
-         SaveAllModifiedButton.UseVisualStyleBackColor = true;
-         SaveAllModifiedButton.Click += SaveAllModifiedButton_Click;
-         // 
-         // SaveCurrentSelectionButton
-         // 
-         SaveCurrentSelectionButton.Dock = DockStyle.Fill;
-         SaveCurrentSelectionButton.Location = new Point(190, 0);
-         SaveCurrentSelectionButton.Margin = new Padding(2, 0, 2, 0);
-         SaveCurrentSelectionButton.Name = "SaveCurrentSelectionButton";
-         SaveCurrentSelectionButton.Size = new Size(90, 25);
-         SaveCurrentSelectionButton.TabIndex = 2;
-         SaveCurrentSelectionButton.Text = "Save selection";
-         SaveCurrentSelectionButton.UseVisualStyleBackColor = true;
-         SaveCurrentSelectionButton.Click += SaveCurrentSelectionButton_Click;
-         // 
          // OpenProvinceFileButton
          // 
          OpenProvinceFileButton.Dock = DockStyle.Fill;
@@ -1754,6 +1732,18 @@
          OpenProvinceFileButton.TabIndex = 3;
          OpenProvinceFileButton.UseVisualStyleBackColor = true;
          OpenProvinceFileButton.Click += OpenProvinceFileButton_Click;
+         // 
+         // SaveCurrentSelectionButton
+         // 
+         SaveCurrentSelectionButton.Dock = DockStyle.Fill;
+         SaveCurrentSelectionButton.Location = new Point(96, 0);
+         SaveCurrentSelectionButton.Margin = new Padding(2, 0, 2, 0);
+         SaveCurrentSelectionButton.Name = "SaveCurrentSelectionButton";
+         SaveCurrentSelectionButton.Size = new Size(90, 25);
+         SaveCurrentSelectionButton.TabIndex = 2;
+         SaveCurrentSelectionButton.Text = "Save selection";
+         SaveCurrentSelectionButton.UseVisualStyleBackColor = true;
+         SaveCurrentSelectionButton.Click += SaveCurrentSelectionButton_Click;
          // 
          // LocalisationGroupBox
          // 
@@ -3056,7 +3046,6 @@
       private Label DevastationLabel;
       private GroupBox BuildingsGroupBox;
       private GroupBox DiscoveredByGroupBox;
-      private Label EditingModeLabel;
       private Label label14;
       private Label label15;
       private ToolStripMenuItem saveSelectionToolStripMenuItem;
@@ -3067,7 +3056,6 @@
       private Label label19;
       private TableLayoutPanel tableLayoutPanel2;
       private Button SaveAllProvincesButton;
-      private Button SaveAllModifiedButton;
       private Button SaveCurrentSelectionButton;
       private TableLayoutPanel TradeCompaniesLayoutPanel;
       private Label label20;
@@ -3228,6 +3216,7 @@
       private TabPage FleetNamesTab;
       private ToolStripMenuItem gameOfLiveToolStripMenuItem;
       private ToolStripMenuItem benchmarkMapModesToolStripMenuItem;
+      private CheckBox CreateHistoryEntryCheckBox;
    }
 }
 

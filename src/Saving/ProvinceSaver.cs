@@ -152,7 +152,7 @@ namespace Editor.Saving
             SaveHistoryEntry(entry, ref sb);
       }
 
-      private static void SaveHistoryEntry(HistoryEntry entry, ref StringBuilder sb)
+      private static void SaveHistoryEntry(ProvinceHistoryEntry entry, ref StringBuilder sb)
       {
          sb.AppendLine($"{entry.Date} = {{");
          foreach (var effect in entry.Effects)

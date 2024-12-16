@@ -976,24 +976,12 @@ public static class Selection
          return;
       }
 
-      // Update the hovered province and redraw with the new selection.
       HoverProvince(province);
 
       if (Globals.Settings.ToolTip.ShowToolTip)
-      {
-         var caption = ToolTipBuilder.BuildToolTip(Globals.Settings.ToolTip.ToolTipText, LastHoveredProvince);
-         MapToolTip.SetToolTip(Globals.ZoomControl, caption);
-         /*
-         var sw = Stopwatch.StartNew();
-         ToolTipForm.SetText(caption);
-         ToolTipForm.ShowTooltipAt(Control.MousePosition);
-         sw.Stop();
-         Debug.WriteLine($"ToolTip: {sw.ElapsedTicks} nano seconds");
-         // TODO make own tooltip
-         */
-      }
+         MapToolTip.SetToolTip(Globals.ZoomControl, ToolTipBuilder.BuildToolTip(Globals.Settings.ToolTip.ToolTipText, LastHoveredProvince));
+      
       Globals.MapWindow.UpdateHoveredInfo(province);
-      Globals.MapWindow.SetEditingMode();
       Globals.ZoomControl.Invalidate();
    }
    
