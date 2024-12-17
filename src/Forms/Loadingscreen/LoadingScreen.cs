@@ -180,8 +180,7 @@ namespace Editor.Forms.LoadingScreen
          }
          catch (Exception exception)
          {
-            Debug.WriteLine(exception);
-            Debug.WriteLine(exception.StackTrace);
+            CrashManager.EnterCrashHandler(exception);
             throw;
          }
       }

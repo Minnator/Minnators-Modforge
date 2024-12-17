@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using Editor.ErrorHandling;
 
 namespace Editor.DataClasses.Misc
 {
@@ -158,14 +159,22 @@ namespace Editor.DataClasses.Misc
          };
       }
 
-      public static bool TryParse(string str, out Date date)
+      public static bool TryParse(string str, out Date date, bool asCheck = false)
       {
          date = MinValue;
          if (string.IsNullOrWhiteSpace(str))
+         {
+            if (!asCheck)
+               new ErrorObject($"An empty string \"[{str}]\" can not be parsed to a date", ErrorType.IllegalDateFormat);
             return false;
+         }
          var match = DateRegex.Match(str);
          if (!match.Success)
+         {
+            if (!asCheck)
+               new ErrorObject($"The string \"{str}\" does not match the date format <yyyy.mm.dd>", ErrorType.IllegalDateFormat);
             return false;
+         }
 
          if (!short.TryParse(match.Groups["year"].Value, out var year) ||
              !byte.TryParse(match.Groups["month"].Value, out var month) ||
@@ -173,7 +182,10 @@ namespace Editor.DataClasses.Misc
             return false;
 
          if (month < 1 || month > 12 || day < 1 || day > DaysInMonth(month))
+         {
+            new ErrorObject($"The date {year}.{month}.{day} is not a valid date.", ErrorType.IllegalDate);
             return false;
+         }
 
          date = new(year, month, day);
          return true;

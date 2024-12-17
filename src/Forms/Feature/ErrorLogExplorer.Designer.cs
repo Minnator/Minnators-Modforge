@@ -36,11 +36,11 @@
          InfoCheckBox = new CheckBox();
          DebugCheckBox = new CheckBox();
          ErrorView = new ListView();
+         IndexHeader = new ColumnHeader();
          TimeHeader = new ColumnHeader();
          VerbocityHeader = new ColumnHeader();
          MessageHeader = new ColumnHeader();
          label1 = new Label();
-         IndexHeader = new ColumnHeader();
          MainTLP.SuspendLayout();
          TopTLP.SuspendLayout();
          SuspendLayout();
@@ -60,7 +60,7 @@
          MainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          MainTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
          MainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-         MainTLP.Size = new Size(800, 450);
+         MainTLP.Size = new Size(1129, 450);
          MainTLP.TabIndex = 0;
          // 
          // TopTLP
@@ -80,14 +80,14 @@
          TopTLP.Name = "TopTLP";
          TopTLP.RowCount = 1;
          TopTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         TopTLP.Size = new Size(800, 30);
+         TopTLP.Size = new Size(1129, 30);
          TopTLP.TabIndex = 0;
          // 
          // ErrorCheckBox
          // 
          ErrorCheckBox.Anchor = AnchorStyles.None;
          ErrorCheckBox.AutoSize = true;
-         ErrorCheckBox.Location = new Point(72, 5);
+         ErrorCheckBox.Location = new Point(113, 5);
          ErrorCheckBox.Name = "ErrorCheckBox";
          ErrorCheckBox.Size = new Size(56, 19);
          ErrorCheckBox.TabIndex = 0;
@@ -98,7 +98,7 @@
          // 
          WarningCheckBox.Anchor = AnchorStyles.None;
          WarningCheckBox.AutoSize = true;
-         WarningCheckBox.Location = new Point(262, 5);
+         WarningCheckBox.Location = new Point(385, 5);
          WarningCheckBox.Name = "WarningCheckBox";
          WarningCheckBox.Size = new Size(76, 19);
          WarningCheckBox.TabIndex = 1;
@@ -109,7 +109,7 @@
          // 
          InfoCheckBox.Anchor = AnchorStyles.None;
          InfoCheckBox.AutoSize = true;
-         InfoCheckBox.Location = new Point(455, 5);
+         InfoCheckBox.Location = new Point(660, 5);
          InfoCheckBox.Name = "InfoCheckBox";
          InfoCheckBox.Size = new Size(89, 19);
          InfoCheckBox.TabIndex = 2;
@@ -120,7 +120,7 @@
          // 
          DebugCheckBox.Anchor = AnchorStyles.None;
          DebugCheckBox.AutoSize = true;
-         DebugCheckBox.Location = new Point(669, 5);
+         DebugCheckBox.Location = new Point(957, 5);
          DebugCheckBox.Name = "DebugCheckBox";
          DebugCheckBox.Size = new Size(61, 19);
          DebugCheckBox.TabIndex = 3;
@@ -129,16 +129,22 @@
          // 
          // ErrorView
          // 
+         ErrorView.Activation = ItemActivation.OneClick;
          ErrorView.Columns.AddRange(new ColumnHeader[] { IndexHeader, TimeHeader, VerbocityHeader, MessageHeader });
          ErrorView.Dock = DockStyle.Fill;
          ErrorView.FullRowSelect = true;
+         ErrorView.HeaderStyle = ColumnHeaderStyle.Nonclickable;
          ErrorView.Location = new Point(3, 33);
          ErrorView.Name = "ErrorView";
          ErrorView.OwnerDraw = true;
-         ErrorView.Size = new Size(794, 384);
+         ErrorView.Size = new Size(1123, 384);
          ErrorView.TabIndex = 1;
          ErrorView.UseCompatibleStateImageBehavior = false;
          ErrorView.View = View.Details;
+         // 
+         // IndexHeader
+         // 
+         IndexHeader.Text = "Index";
          // 
          // TimeHeader
          // 
@@ -158,20 +164,16 @@
          label1.Dock = DockStyle.Fill;
          label1.Location = new Point(3, 420);
          label1.Name = "label1";
-         label1.Size = new Size(794, 30);
+         label1.Size = new Size(1123, 30);
          label1.TabIndex = 2;
          label1.Text = "Double click rows marked by yellow background to get more detailed info and tips how to fix the issues.";
          label1.TextAlign = ContentAlignment.MiddleLeft;
-         // 
-         // IndexHeader
-         // 
-         IndexHeader.Text = "Index";
          // 
          // ErrorLogExplorer
          // 
          AutoScaleDimensions = new SizeF(7F, 15F);
          AutoScaleMode = AutoScaleMode.Font;
-         ClientSize = new Size(800, 450);
+         ClientSize = new Size(1129, 450);
          Controls.Add(MainTLP);
          Icon = (Icon)resources.GetObject("$this.Icon");
          Name = "ErrorLogExplorer";

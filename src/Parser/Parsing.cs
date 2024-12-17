@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics;
+using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using Editor.DataClasses.GameDataClasses;
@@ -62,7 +63,7 @@ public static partial class Parsing
    /// <returns></returns>
    public static bool TryParseDate(string dateString, out Date dateValue)
    {
-      return Date.TryParse(dateString, out dateValue);
+      return Date.TryParse(dateString, out dateValue, true);
    }
 
    /// <summary>
@@ -573,9 +574,18 @@ public static partial class Parsing
       foreach (Match match in matches)
       {
          var name = match.Groups["name"].Value;
-         var chance = int.Parse(match.Groups["chance"].Value);
 
-         names.Add(new (name, chance));
+         try
+         {
+            var chance = int.Parse(match.Groups["chance"].Value);
+            names.Add(new(name, chance));
+         }
+         catch (Exception e)
+         {
+            Globals.ErrorLog.Write($"Could not parse chance: {match.Groups["chance"].Value} in {name} = {match.Groups["chance"].Value}");
+            return;
+         }
+
       }
    }
 

@@ -32,53 +32,18 @@ namespace Editor.Forms.Feature
             var form = new LogEntryViewer(provider);
             form.ShowDialog();
          };
-
+         
          LogManager.LogEntryAdded += (_, a) =>
          {
-            AddLogEntry(a);
+            AddLogEntry(a, true);
             if (ErrorView.Items.Count == 1)
                SizeHeadersAndColumns();
          };
 
 
          LoadLogType(Globals.Settings.Logging.LoggingVerbosity);
-         AddLogEntries(LogManager.ActiveEntries);
 
          CustomDrawing();
-         
-         Timer timer = new Timer();
-         timer.Interval = 300;
-         timer.Tick += (sender, args) =>
-         {
-            var rand = Globals.Random.Next(0, 4);
-            switch (rand)
-            {
-               case 0:
-                  LogManager.Error("This is an error message");
-                  break;
-               case 1:
-                  LogManager.Warn("This is a warning message");
-                  break;
-               case 2:
-                  LogManager.Inform("This is an information message");
-                  break;
-               case 3:
-                  LogManager.Debug("This is a debug message");
-                  break;
-            }
-         };
-         timer.Start();
-
-         new ErrorObject("upsi this is a test error hehehe!", ErrorType.FileNotFound);
-
-         var t2 = new Timer();
-         t2.Interval = 6000;
-         t2.Tick += (sender, args) =>
-         {
-            timer.Stop();
-            t2.Stop();
-         };
-         t2.Start();
          SizeHeadersAndColumns();
       }
       
@@ -94,6 +59,7 @@ namespace Editor.Forms.Feature
          DebugCheckBox.Checked = type.HasFlag(LogType.Debug);
          DebugCheckBox.Enabled = DebugCheckBox.Checked;
          _loading = false;
+         UpdateListView();
       }
 
       public void SizeHeadersAndColumns()
@@ -108,23 +74,23 @@ namespace Editor.Forms.Feature
          }
       }
 
-      public void AddLogEntry(LogEntry entry)
+      public void AddLogEntry(LogEntry entry, bool events)
       {
          var backColor = entry is IExtendedLogInformationProvider ? Color.DarkKhaki : SystemColors.Window;
-         
+
          var item = new ListViewItem((ErrorView.Items.Count + 1).ToString());
          ListViewItem.ListViewSubItem timeItem = new()
          {
             Text = entry.Timestamp.ToString("yyyy-MM-dd HH:mm:ss"),
             BackColor = backColor,
          };
-         ListViewItem.ListViewSubItem levelItem = new ()
+         ListViewItem.ListViewSubItem levelItem = new()
          {
             BackColor = entry.Level.GetAttributeOfType<LogColorAttribute>()!.Color,
             ForeColor = entry.Level.GetAttributeOfType<LogColorAttribute>()!.BlackColor ? Color.Black : Color.White,
             Text = entry.Level.ToString(),
          };
-         ListViewItem.ListViewSubItem messageItem = new ()
+         ListViewItem.ListViewSubItem messageItem = new()
          {
             Text = entry.Message,
             BackColor = backColor,
@@ -139,10 +105,16 @@ namespace Editor.Forms.Feature
       public void AddLogEntries(ICollection<LogEntry> entries)
       {
          foreach (var entry in entries) 
-            AddLogEntry(entry);
+            AddLogEntry(entry, false);
       }
 
+
       private void OnVerbosityChanged(object? sender, EventArgs e)
+      {
+         UpdateListView();
+      }
+
+      private void UpdateListView()
       {
          if (_loading)
             return;
