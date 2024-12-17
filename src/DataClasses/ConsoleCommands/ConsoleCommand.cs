@@ -1,4 +1,7 @@
-﻿namespace Editor.DataClasses.ConsoleCommands;
+﻿using Editor.Forms.Feature;
+using Editor.Helper;
+
+namespace Editor.DataClasses.ConsoleCommands;
 
 public abstract class ConsoleCommand
 {
@@ -7,7 +10,8 @@ public abstract class ConsoleCommand
    public abstract string Help { get; }
    public abstract string[] Aliases { get; }
 
-   public virtual RichTextBox Output => Globals.ConsoleForm!.Output;
+   public virtual RichTextBox Output => FormsHelper.GetOpenForm(out ConsoleForm f) ? f.Output : null!;
+
    public abstract void Execute(string[] args);
 
    public virtual void ExecuteHelp()

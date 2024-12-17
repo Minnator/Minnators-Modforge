@@ -989,7 +989,7 @@ namespace Editor.Forms
             switch (e.KeyCode)
             {
                case Keys.F:
-                  Globals.SearchForm = FormHelper.OpenOrBringToFront(Globals.SearchForm);
+                  FormsHelper.ShowIfAnyOpen<Search>();
                   break;
                case Keys.Z:
                   HistoryManager.Undo();
@@ -1015,14 +1015,14 @@ namespace Editor.Forms
          switch (e.KeyCode)
          {
             case Keys.F1:
-               Globals.ConsoleForm = FormHelper.OpenOrBringToFront(Globals.ConsoleForm);
+               FormsHelper.ShowIfAnyOpen<ConsoleForm>();
                break;
          }
       }
 
       private void searchToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         FormHelper.OpenOrBringToFront(Globals.SearchForm);
+         FormsHelper.ShowIfAnyOpen<Search>();
       }
 
       private void bestPointsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1152,9 +1152,7 @@ namespace Editor.Forms
 
       private void graphicalElementsManagerToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         if (Globals.GuiDrawings == null || Globals.GuiDrawings.IsDisposed)
-            Globals.GuiDrawings = new();
-         Globals.GuiDrawings.Show();
+         FormsHelper.ShowIfAnyOpen<GuiDrawings>();
       }
 
       private void OpenAddModifierForm_Click(object sender, EventArgs e)

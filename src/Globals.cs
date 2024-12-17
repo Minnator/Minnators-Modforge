@@ -103,10 +103,10 @@ public static class Globals
 
    public static string VanillaPath = string.Empty;
    public static string ModPath = string.Empty;
-   public static string AppDirectory = AppDomain.CurrentDomain.BaseDirectory;
+   public static readonly string AppDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
 #if DEBUG
-   public static string DebugPath = Path.Combine(AppDirectory, "Debug");
+   public static readonly string DebugPath = Path.Combine(AppDirectory, "Debug");
 #endif
 
    #region LoadingScreen
@@ -115,12 +115,8 @@ public static class Globals
    
    public static Random Random = null!;
 
-   public static ConsoleForm? ConsoleForm = null;
-   public static Search? SearchForm = null;
    public static MapWindow MapWindow = null!;
    public static ZoomControl ZoomControl = null!;
-   public static AdvancedSelectionsForm? AdvancedSelectionsForm = null;
-   public static GuiDrawings? GuiDrawings = null;
 
    // SETTINGS
    public static Settings Settings = new();

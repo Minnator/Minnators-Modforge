@@ -2,6 +2,7 @@
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.Forms.Feature;
+using Editor.Forms.Feature.AdvancedSelections;
 using Editor.Saving;
 using static Editor.Helper.ProvinceEnumHelper;
 
@@ -1029,18 +1030,8 @@ public static class Selection
 
    private static void AdditionalFeatures_MouseUp(object? sender, MouseEventArgs e)
    {
-      if (e.Button == MouseButtons.Right && Control.ModifierKeys == Keys.Control)
-      {
-         if (Globals.AdvancedSelectionsForm == null || Globals.AdvancedSelectionsForm.IsDisposed)
-         {
-            Globals.AdvancedSelectionsForm = new();
-            Globals.AdvancedSelectionsForm.Show();
-         }
-         else
-            Globals.AdvancedSelectionsForm.BringToFront();
-
-         Globals.AdvancedSelectionsForm.Location = Globals.ZoomControl.PointToScreen(e.Location);
-      }
+      if (e.Button == MouseButtons.Right && Control.ModifierKeys == Keys.Control) 
+         FormsHelper.ShowDialogIfAnyOpen<AdvancedSelectionsForm>(Globals.ZoomControl.PointToScreen(e.Location));
    }
 
    // SelectionTypeBox SelectedIndexChanged

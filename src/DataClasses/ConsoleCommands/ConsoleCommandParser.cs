@@ -1,4 +1,5 @@
 ﻿using Editor.Controls;
+using Editor.Forms.Feature;
 using Editor.Helper;
 
 namespace Editor.DataClasses.ConsoleCommands;
@@ -36,9 +37,8 @@ public static class ConsoleCommandParser
 
       if (!_commands.TryGetValue(args[0], out var cmd))
       {
-         // Print red error message to Output
-         Globals.ConsoleForm!.Output.AppendText($"Command '{args[0]}' not found.\n", Color.Red);
-         return;
+         if (FormsHelper.GetOpenForm(out ConsoleForm f))
+            f.Output.AppendText($"Command '{args[0]}' not found.\n", Color.Red);
       }
 
       switch (args.Length)

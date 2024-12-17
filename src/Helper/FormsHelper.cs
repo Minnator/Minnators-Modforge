@@ -1,4 +1,6 @@
-﻿namespace Editor.Helper
+﻿using Windows.ApplicationModel.Appointments.DataProvider;
+
+namespace Editor.Helper
 {
    public static class FormsHelper
    {
@@ -27,11 +29,46 @@
          }
       }
 
-      public static void ShowIfAnyOpen<T>() where T : Form, new()
+      public static Form GetIfAnyOpen<T>() where T : Form, new()
       {
-         if (!GetOpenForm(out T form))
-            ShowForm(ref form!);
-         form.BringToFront();
+         if (GetOpenForm(out T f))
+            return f;
+         return new T();
       }
+
+      public static Form ShowIfAnyOpen<T>() where T : Form, new()
+      {
+         var form = GetIfAnyOpen<T>();
+         form.Show();
+         form.BringToFront();
+         return form;
+      }
+
+      public static Form ShowDialogIfAnyOpen<T>() where T : Form, new()
+      {
+         var form = GetIfAnyOpen<T>();
+         form.ShowDialog();
+         return form;
+      }
+
+      public static Form ShowIfAnyOpen<T>(Point location) where T : Form, new()
+      {
+         var form = GetIfAnyOpen<T>();
+         form.StartPosition = FormStartPosition.Manual;
+         form.Location = location;
+         form.Show();
+         form.BringToFront();
+         return form;
+      }
+
+      public static Form ShowDialogIfAnyOpen<T>(Point location) where T : Form, new()
+      {
+         var form = GetIfAnyOpen<T>();
+         form.StartPosition = FormStartPosition.Manual;
+         form.Location = location;
+         form.ShowDialog();
+         return form;
+      }
+
    }
 }
