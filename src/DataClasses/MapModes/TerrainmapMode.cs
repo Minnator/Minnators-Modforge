@@ -11,10 +11,7 @@ namespace Editor.DataClasses.MapModes
          Terrain.ItemsModified += UpdateProvinceCollection;
       }
 
-      public override MapModeType GetMapModeName()
-      {
-         return MapModeType.Terrain;
-      }
+      public override MapModeType MapModeType => MapModeType.Terrain;
 
       public override int GetProvinceColor(Province id)
       {

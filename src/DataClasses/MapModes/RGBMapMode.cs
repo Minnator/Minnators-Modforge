@@ -49,10 +49,7 @@ namespace Editor.DataClasses.MapModes
          _timer.Interval = Globals.Settings.Rendering.MsTimerIntervalMapModeTimer;
       }
 
-      public override MapModeType GetMapModeName()
-      {
-         return MapModeType.RGB;
-      }
+      public override MapModeType MapModeType => MapModeType.RGB;
 
       public override int GetProvinceColor(Province id)
       {

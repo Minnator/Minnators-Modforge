@@ -19,7 +19,7 @@ public abstract class MapMode
       // TODO optimize this method
       if (IsLandOnly)
       {
-         if (Globals.MapModeManager.PreviousLandOnly)
+         if (MapModeManager.PreviousLandOnly)
          {
             MapDrawing.DrawOnMap(Globals.LandProvinces, GetProvinceColor, Globals.ZoomControl, PixelsOrBorders.Pixels);
          }
@@ -39,7 +39,7 @@ public abstract class MapMode
       MapDrawing.DrawAllBorders(Color.Black.ToArgb(), Globals.ZoomControl);
       Selection.RePaintSelection();
       Globals.ZoomControl.Invalidate();
-      Globals.MapModeManager.PreviousLandOnly = IsLandOnly;
+      MapModeManager.PreviousLandOnly = IsLandOnly;
    }
    
    protected virtual void CropAndSetIcon()
@@ -63,7 +63,7 @@ public abstract class MapMode
       return bmp;
    }
 
-   public abstract MapModeType GetMapModeName();
+   public abstract MapModeType MapModeType { get; }
 
    public abstract int GetProvinceColor(Province id);
 
@@ -84,7 +84,7 @@ public abstract class MapMode
 
    public virtual void UpdateProvince(object? sender, ProvinceEventHandler.ProvinceDataChangedEventArgs e)
    {
-      if (Globals.MapModeManager.CurrentMapMode != this)
+      if (MapModeManager.CurrentMapMode != this)
          return;
       if (sender is not Province id || (IsLandOnly && !Globals.LandProvinces.Contains(id)))
          return;
@@ -93,7 +93,7 @@ public abstract class MapMode
 
    public virtual void UpdateProvinceCollection<T>(object? sender, ProvinceCollectionEventArguments<T> e) where T : ProvinceComposite
    {
-      if (Globals.MapModeManager.CurrentMapMode != this)
+      if (MapModeManager.CurrentMapMode != this)
          return;
 
       foreach (var composite in e.Composite) 
@@ -102,7 +102,7 @@ public abstract class MapMode
 
    public virtual void UpdateComposite<T> (object? sender, ProvinceComposite composite) where T : ProvinceComposite
    {
-      if (Globals.MapModeManager.CurrentMapMode != this)
+      if (MapModeManager.CurrentMapMode != this)
          return;
 
       Update(composite.GetProvinces());

@@ -39,31 +39,30 @@ public enum MapModeType
 }
 
 
-public class MapModeManager
+public static class MapModeManager
 {
-   private int _totalMapModeTime = 0;
-   public int MinMapModeTime = int.MaxValue;
-   public int MaxMapModeTime = int.MinValue;
-   private readonly List<int> _mapModeTimes = new (100);
-   private readonly Stopwatch _stopwatch = new();
-   public int AverageMapModeTime => _mapModeTimes.Count == 0 ? 0 : _totalMapModeTime / _mapModeTimes.Count;
-   public int LasMapModeTime => _mapModeTimes.Count == 0 ? 0 : _mapModeTimes[^1];
+   private static int _totalMapModeTime = 0;
+   public static int MinMapModeTime = int.MaxValue;
+   public static int MaxMapModeTime = int.MinValue;
+   private static readonly List<int> MapModeTimes = new (100);
+   private static readonly Stopwatch Stopwatch = new();
+   public static int AverageMapModeTime => MapModeTimes.Count == 0 ? 0 : _totalMapModeTime / MapModeTimes.Count;
+   public static int LasMapModeTime => MapModeTimes.Count == 0 ? 0 : MapModeTimes[^1];
 
-   private List<MapMode> MapModes { get; } = [];
-   public MapMode CurrentMapMode { get; set; } = null!;
-   public MapModeType CurrentMapModeType { get; set; }
-   public ProvinceIdMapMode IdMapMode { get; set; } = null!;
-   public bool PreviousLandOnly { get; set; }
-   public bool RequireFullRedraw { get; set; } = true;
 
-   public EventHandler<MapMode> MapModeChanged = delegate { };
+   private static List<MapMode> MapModes { get; } = [];
+   public static MapMode CurrentMapMode { get; set; } = null!;
+   public static ProvinceIdMapMode IdMapMode { get; set; } = null!;
+   public static bool PreviousLandOnly { get; set; }
 
-   public MapModeManager()
+   public static EventHandler<MapMode> MapModeChanged = delegate { };
+
+   static MapModeManager()
    {
       InitializeAllMapModes();
    }
 
-   public void InitializeAllMapModes()
+   public static void InitializeAllMapModes()
    {
       MapModes.Add(new ProvinceMapMode());
       MapModes.Add(new AreaMapMode());
@@ -102,51 +101,49 @@ public class MapModeManager
    }
    
 
-   public void RenderCurrent()
+   public static void RenderCurrent()
    {
       CurrentMapMode.RenderMapMode(CurrentMapMode.GetProvinceColor);
    }
 
-   public List<MapMode> GetMapModes()
+   public static MapMode GetMapMode(MapModeType type)
    {
-      return MapModes;
-   }
-
-   public MapMode GetMapMode(MapModeType name)
-   {
-      return MapModes.Find(mode => mode.GetMapModeName() == name) ?? IdMapMode;
+      return MapModes.Find(mode => mode.MapModeType == type) ?? IdMapMode;
    }
    
-   public void SetCurrentMapMode(MapModeType name)
+   public static void SetCurrentMapMode(MapModeType type)
    {
       try
       {
-         // CAN be null
-         if (CurrentMapMode?.GetMapModeName() == name)
-            return; 
+         // This is null only on the first run when loading
+         if (CurrentMapMode?.MapModeType == type)
+            return;
          CurrentMapMode?.SetInactive();
-         CurrentMapMode = GetMapMode(name);
+         CurrentMapMode = GetMapMode(type);
          CurrentMapMode.SetActive();
-         _stopwatch.Restart();
-         CurrentMapMode.RenderMapMode(CurrentMapMode.GetProvinceColor);
-         _stopwatch.Stop();
-         Globals.MapWindow.MapModeComboBox.SelectedItem = name.ToString();
-         CurrentMapModeType = name;
+         Stopwatch.Restart();
+         RenderCurrent();
+         Stopwatch.Stop();
+         Globals.MapWindow.MapModeComboBox.SelectedItem = type.ToString();
 
-         if (_mapModeTimes.Count == 100)
+         #region Metrics
+
+         if (MapModeTimes.Count == 100)
          {
-            _totalMapModeTime -= _mapModeTimes[0];
-            _mapModeTimes.RemoveAt(0);
+            _totalMapModeTime -= MapModeTimes[0];
+            MapModeTimes.RemoveAt(0);
          }
 
-         _totalMapModeTime += (int)_stopwatch.ElapsedMilliseconds;
-         _mapModeTimes.Add((int)_stopwatch.ElapsedMilliseconds);
-         if (_stopwatch.ElapsedMilliseconds < MinMapModeTime)
-            MinMapModeTime = (int)_stopwatch.ElapsedMilliseconds;
-         if (_stopwatch.ElapsedMilliseconds > MaxMapModeTime)
-            MaxMapModeTime = (int)_stopwatch.ElapsedMilliseconds;
+         _totalMapModeTime += (int)Stopwatch.ElapsedMilliseconds;
+         MapModeTimes.Add((int)Stopwatch.ElapsedMilliseconds);
+         if (Stopwatch.ElapsedMilliseconds < MinMapModeTime)
+            MinMapModeTime = (int)Stopwatch.ElapsedMilliseconds;
+         if (Stopwatch.ElapsedMilliseconds > MaxMapModeTime)
+            MaxMapModeTime = (int)Stopwatch.ElapsedMilliseconds;
 
-         MapModeChanged(this, CurrentMapMode);
+         #endregion
+
+         MapModeChanged(null, CurrentMapMode);
       }
       catch (Exception)
       {
@@ -156,12 +153,12 @@ public class MapModeManager
       }
    }
 
-   public int GetMapModeColor(Province p)
+   public static int GetMapModeColor(Province p)
    {
       return CurrentMapMode.GetProvinceColor(p);
    }
 
-   public int GetColorForMapMode(Province p, MapModeType mapMode)
+   public static int GetColorForMapMode(Province p, MapModeType mapMode)
    {
       return GetMapMode(mapMode).GetProvinceColor(p);
    }

@@ -26,10 +26,7 @@ namespace Editor.DataClasses.MapModes
          return Color.DimGray.ToArgb();
       }
 
-      public override MapModeType GetMapModeName()
-      {
-         return MapModeType.Hre;
-      }
+      public override MapModeType MapModeType => MapModeType.Hre;
 
       public override string GetSpecificToolTip(Province provinceId)
       {

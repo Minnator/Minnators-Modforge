@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.MapModes;
 using Editor.Helper;
 
 namespace Editor.Forms.Feature;
@@ -21,7 +22,7 @@ public static class ToolTipBuilder
             var str = string.Empty;
             if (match.Groups["attrName"].Value == "MAPMODE_SPECIFIC")
             {
-               str = Globals.MapModeManager.CurrentMapMode.GetSpecificToolTip(province);
+               str = MapModeManager.CurrentMapMode.GetSpecificToolTip(province);
             }
             else
             {

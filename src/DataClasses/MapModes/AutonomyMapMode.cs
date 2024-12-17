@@ -22,10 +22,7 @@ public class AutonomyMapMode : MapMode
       return Globals.ColorProvider.GetColorOnGreenRedShade(100, 0, id.LocalAutonomy).ToArgb();
    }
 
-   public override MapModeType GetMapModeName()
-   {
-      return MapModeType.Autonomy;
-   }
+   public override MapModeType MapModeType => MapModeType.Autonomy;
 
    public override string GetSpecificToolTip(Province provinceId)
    {

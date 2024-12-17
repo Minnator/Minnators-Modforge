@@ -13,10 +13,7 @@ public sealed class SuperRegionMapMode : MapMode
       SuperRegion.ColorChanged += UpdateComposite<Province>;
    }
 
-   public override MapModeType GetMapModeName()
-   {
-      return MapModeType.SuperRegion;
-   }
+   public override MapModeType MapModeType => MapModeType.SuperRegion;
 
    public override int GetProvinceColor(Province id)
    {

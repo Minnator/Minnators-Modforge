@@ -19,10 +19,7 @@ namespace Editor.DataClasses.MapModes
          return Color.DimGray.ToArgb();
       }
 
-      public override MapModeType GetMapModeName()
-      {
-         return MapModeType.ParliamentSeat;
-      }
+      public override MapModeType MapModeType => MapModeType.ParliamentSeat;
 
       public override string GetSpecificToolTip(Province provinceId)
       {

@@ -195,12 +195,12 @@ namespace Editor.Helper
          if (CellStates.Count != Globals.Provinces.Count)
             Initialize();
          InitializeRandomValues();
-         Globals.MapModeManager.SetCurrentMapMode(MapModeType.GameOfLive);
+         MapModeManager.SetCurrentMapMode(MapModeType.GameOfLive);
 
          _timer.Tick += (sender, args) =>
          {
             NextGeneration();
-            Globals.MapModeManager.RenderCurrent();
+            MapModeManager.RenderCurrent();
             iterations--;
             if (iterations == 0)
                _timer.Stop();

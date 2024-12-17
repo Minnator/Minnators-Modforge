@@ -25,7 +25,7 @@ public class DevelopmentMapMode : MapMode
       if (!CalculateMinMax())
          return;
 
-      if (Globals.MapModeManager.CurrentMapMode != this)
+      if (MapModeManager.CurrentMapMode != this)
          return;
       RenderMapMode(GetProvinceColor);
    }
@@ -77,10 +77,7 @@ public class DevelopmentMapMode : MapMode
    }
 
 
-   public override MapModeType GetMapModeName()
-   {
-      return MapModeType.Development;
-   }
+   public override MapModeType MapModeType => MapModeType.Development;
 
    public override string GetSpecificToolTip(Province provinceId)
    {

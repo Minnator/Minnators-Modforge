@@ -41,10 +41,7 @@ namespace Editor.DataClasses.MapModes
          Globals.Settings.ToolTip.ShowToolTip = true;
       }
 
-      public override MapModeType GetMapModeName()
-      {
-         return MapModeType.BadApple;
-      }
+      public override MapModeType MapModeType => MapModeType.BadApple;
 
       private void Timer_Tick(object? sender, EventArgs e)
       {

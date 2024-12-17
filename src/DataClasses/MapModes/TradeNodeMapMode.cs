@@ -16,10 +16,7 @@ namespace Editor.DataClasses.MapModes
          Collections = [.. Globals.TradeNodes.Values];
       }
 
-      public override MapModeType GetMapModeName()
-      {
-         return MapModeType.TradeNode;
-      }
+      public override MapModeType MapModeType => MapModeType.TradeNode;
 
       public override int GetProvinceColor(Province id)
       {

@@ -20,10 +20,7 @@ public class CultureMapMode : MapMode
       return Color.DimGray.ToArgb();
    }
 
-   public override MapModeType GetMapModeName()
-   {
-      return MapModeType.Culture;
-   }
+   public override MapModeType MapModeType => MapModeType.Culture;
 
    public override string GetSpecificToolTip(Province id)
    {

@@ -9,10 +9,7 @@ public sealed class ProvinceMapMode : MapMode
       Province.ColorChanged += UpdateComposite<Province>;
    }
 
-   public override MapModeType GetMapModeName()
-   {
-      return MapModeType.Province;
-   }
+   public override MapModeType MapModeType => MapModeType.Province;
 
    public override int GetProvinceColor(Province provinceId)
    {

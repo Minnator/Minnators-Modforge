@@ -11,10 +11,7 @@ public sealed class ContinentMapMode : MapMode
       Continent.ColorChanged += UpdateComposite<Province>;
    }
 
-   public override MapModeType GetMapModeName()
-   {
-      return MapModeType.Continent;
-   }
+   public override MapModeType MapModeType => MapModeType.Continent;
 
    public override int GetProvinceColor(Province id)
    {

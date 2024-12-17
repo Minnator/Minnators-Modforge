@@ -249,7 +249,7 @@ public static class DebugMaps
    {
       var sw = Stopwatch.StartNew();
 
-      var bmp = new Bitmap(Globals.MapModeManager.GetMapMode("Provinces").Bitmap);
+      var bmp = new Bitmap(MapModeManager.GetMapMode("Provinces").Bitmap);
       BitMapHelper.WriteOnProvince(GetProvinceIdString, bmp);
       bmp.Save("C:\\Users\\david\\Downloads\\areas.png", ImageFormat.Png);
       sw.Stop();

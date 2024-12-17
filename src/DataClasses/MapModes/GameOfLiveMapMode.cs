@@ -5,10 +5,7 @@ namespace Editor.DataClasses.MapModes
 {
    public class GameOfLiveMapMode : MapMode
    {
-      public override MapModeType GetMapModeName()
-      {
-         return MapModeType.GameOfLive;
-      }
+      public override MapModeType MapModeType => MapModeType.GameOfLive;
 
       public override void SetActive()
       {

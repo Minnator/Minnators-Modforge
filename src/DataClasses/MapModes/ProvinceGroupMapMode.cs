@@ -11,10 +11,7 @@ namespace Editor.DataClasses.MapModes
          ProvinceGroup.ItemsModified += UpdateProvinceCollection;
       }
 
-      public override MapModeType GetMapModeName()
-      {
-         return MapModeType.ProvinceGroup;
-      }
+      public override MapModeType MapModeType => MapModeType.ProvinceGroup;
 
       public override int GetProvinceColor(Province id)
       {

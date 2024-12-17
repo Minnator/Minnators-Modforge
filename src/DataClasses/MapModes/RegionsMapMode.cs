@@ -12,10 +12,7 @@ public sealed class RegionsMapMode : MapMode
       Region.ColorChanged += UpdateComposite<Province>;
    }
 
-   public override MapModeType GetMapModeName()
-   {
-      return MapModeType.Regions;
-   }
+   public override MapModeType MapModeType => MapModeType.Regions;
 
    public override int GetProvinceColor(Province id)
    {

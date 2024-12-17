@@ -22,10 +22,7 @@ public class CultureGroupMapMode : MapMode
       return Color.DimGray.ToArgb();
    }
 
-   public override MapModeType GetMapModeName()
-   {
-      return MapModeType.CultureGroup;
-   }
+   public override MapModeType MapModeType => MapModeType.CultureGroup;
 
    public override string GetSpecificToolTip(Province provinceId)
    {

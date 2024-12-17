@@ -13,10 +13,7 @@ namespace Editor.DataClasses.MapModes
          ProvinceEventHandler.OnProvinceProsperityChanged += UpdateProvince;
       }
 
-      public override MapModeType GetMapModeName()
-      {
-         return MapModeType.Prosperity;
-      }
+      public override MapModeType MapModeType => MapModeType.Prosperity;
 
       public override string GetSpecificToolTip(Province provinceId)
       {

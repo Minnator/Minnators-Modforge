@@ -22,10 +22,7 @@ namespace Editor.DataClasses.MapModes
          return Color.DimGray.ToArgb();
       }
 
-      public override MapModeType GetMapModeName()
-      {
-         return MapModeType.ColonialRegions;
-      }
+      public override MapModeType MapModeType => MapModeType.ColonialRegions;
 
       public override string GetSpecificToolTip(Province provinceId)
       {

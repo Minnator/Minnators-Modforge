@@ -142,7 +142,7 @@ namespace Editor.Controls
 
       private void SwitchToMapMode(object? sender, MouseEventArgs e)
       {
-         Globals.MapModeManager.SetCurrentMapMode(_mapModeName);
+         MapModeManager.SetCurrentMapMode(_mapModeName);
       }
 
       private void OnAddButtonClick(object? sender, MouseEventArgs e)

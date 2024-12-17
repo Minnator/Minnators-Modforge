@@ -145,8 +145,8 @@ namespace Editor.Helper
                if (!Globals.Countries.TryGetValue(country.Tag, out _))
                   return false;
                Globals.Countries[country.Tag] = country;
-               if (Globals.MapModeManager.CurrentMapModeType == MapModeType.Country)
-                  Globals.MapModeManager.RenderCurrent();
+               if (MapModeManager.CurrentMapMode.MapModeType == MapModeType.Country)
+                  MapModeManager.RenderCurrent();
                return true;
             default:
                return false;

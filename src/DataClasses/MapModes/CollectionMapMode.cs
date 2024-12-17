@@ -12,7 +12,7 @@ namespace Editor.DataClasses.MapModes
       {
          if (IsLandOnly)
          {
-            if (Globals.MapModeManager.PreviousLandOnly)
+            if (MapModeManager.PreviousLandOnly)
             {
                foreach (var collection in Collections)
                {
@@ -54,7 +54,7 @@ namespace Editor.DataClasses.MapModes
 
          Selection.RePaintSelection();
          Globals.ZoomControl.Invalidate();
-         Globals.MapModeManager.PreviousLandOnly = IsLandOnly;
+         MapModeManager.PreviousLandOnly = IsLandOnly;
       }
    }
 }

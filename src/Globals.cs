@@ -146,9 +146,6 @@ public static class Globals
 
    public static DescriptorData DescriptorData = new("-1", "none", [], [], [], "-1");
 
-   // Contains the current map mode
-   public static MapModeManager MapModeManager = null!;
-
    // Color Provider
    public static readonly ColorProviderRgb ColorProvider = new();
 

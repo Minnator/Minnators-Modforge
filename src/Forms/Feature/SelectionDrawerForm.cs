@@ -21,7 +21,7 @@ namespace Editor.Forms.Feature
          ExportSettingsPropertyGrid.PropertyValueChanged += ExportSettingsPropertyChanged;
          ExportSettingsPropertyGrid.SelectedObject = ExportSettings;
 
-         Globals.MapModeManager.MapModeChanged += (s, e) => RenderImage();
+         MapModeManager.MapModeChanged += (s, e) => RenderImage();
          Selection.OnProvinceGroupDeselected += (s, e) =>
          {
             RenderImage();
@@ -49,13 +49,13 @@ namespace Editor.Forms.Feature
             case PrimaryProvinceDrawing.None:
                break;
             case PrimaryProvinceDrawing.Selection:
-               MapDrawing.DrawOnMap(Selection.GetSelectedProvinces, Globals.MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
+               MapDrawing.DrawOnMap(Selection.GetSelectedProvinces, MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
                break;
             case PrimaryProvinceDrawing.Land:
-               MapDrawing.DrawOnMap(Globals.LandProvinces, Globals.MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
+               MapDrawing.DrawOnMap(Globals.LandProvinces, MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
                break;
             case PrimaryProvinceDrawing.All:
-               MapDrawing.DrawOnMap(Globals.Provinces, Globals.MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
+               MapDrawing.DrawOnMap(Globals.Provinces, MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
                break;
          }
 
@@ -90,7 +90,7 @@ namespace Editor.Forms.Feature
                break;
             case SecondaryProvinceDrawing.NeighboringProvinces:
                var neighboringProvinces = Geometry.GetAllNeighboringProvinces(Selection.GetSelectedProvinces);
-               MapDrawing.DrawOnMap(neighboringProvinces, Globals.MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
+               MapDrawing.DrawOnMap(neighboringProvinces, MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
                break;
             case SecondaryProvinceDrawing.NeighboringCountries:
                var neighboringCountries = Geometry.GetAllNeighboringCountries(Selection.GetSelectedProvinces);
@@ -101,7 +101,7 @@ namespace Editor.Forms.Feature
                   foreach (var province in provinces)
                      allCountryProvinces.Add(province);
                }
-               MapDrawing.DrawOnMap(allCountryProvinces, Globals.MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
+               MapDrawing.DrawOnMap(allCountryProvinces, MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
                break;
             case SecondaryProvinceDrawing.CoastalOutline:
                HashSet<Province> coastalProvinces = [];
@@ -116,13 +116,13 @@ namespace Editor.Forms.Feature
                      }
                   }
                }
-               MapDrawing.DrawOnMap(coastalProvinces, Globals.MapModeManager.GetMapMode(MapModeType.Province).GetSeaProvinceColor, ZoomControl, PixelsOrBorders.Both);
+               MapDrawing.DrawOnMap(coastalProvinces, MapModeManager.GetMapMode(MapModeType.Province).GetSeaProvinceColor, ZoomControl, PixelsOrBorders.Both);
                break;
             case SecondaryProvinceDrawing.SeaProvinces:
-               MapDrawing.DrawOnMap(Globals.SeaProvinces, Globals.MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
+               MapDrawing.DrawOnMap(Globals.SeaProvinces, MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
                break;
             case SecondaryProvinceDrawing.All:
-               MapDrawing.DrawOnMap(Globals.Provinces, Globals.MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
+               MapDrawing.DrawOnMap(Globals.Provinces, MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
                break;
          }
       }
@@ -133,7 +133,7 @@ namespace Editor.Forms.Feature
          switch (ExportSettings.ImageSize)
          {
             case ImageSize.Original:
-               bmp.Save(Path.Combine(PathTextBox.Text, $"{Globals.MapModeManager.CurrentMapMode.GetMapModeName()}.png"), ImageFormat.Png);
+               bmp.Save(Path.Combine(PathTextBox.Text, $"{MapModeManager.CurrentMapMode.MapModeType}.png"), ImageFormat.Png);
                break;
             case ImageSize.Selection:
                var rect = Geometry.GetBounds(Selection.GetSelectedProvinces);
@@ -143,7 +143,7 @@ namespace Editor.Forms.Feature
                {
                   g.DrawImage(bmp, rect with { X = 0, Y = 0 }, rect, GraphicsUnit.Pixel);
                }
-               bitmap.Save(Path.Combine(PathTextBox.Text, $"{Globals.MapModeManager.CurrentMapMode.GetMapModeName()}.png"), ImageFormat.Png);
+               bitmap.Save(Path.Combine(PathTextBox.Text, $"{MapModeManager.CurrentMapMode.MapModeType}.png"), ImageFormat.Png);
                bitmap?.Dispose();
                break;
          }

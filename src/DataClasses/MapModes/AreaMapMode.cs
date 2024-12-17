@@ -12,10 +12,7 @@ public sealed class AreaMapMode : MapMode
    }
 
 
-   public override MapModeType GetMapModeName()
-   {
-      return MapModeType.Area;
-   }
+   public override MapModeType MapModeType => MapModeType.Area;
 
    public override int GetProvinceColor(Province id)
    {

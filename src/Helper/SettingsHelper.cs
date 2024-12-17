@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.InteropServices.JavaScript;
+using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Settings;
 using Editor.ErrorHandling;
 using Editor.Forms.Feature;
@@ -69,9 +70,9 @@ namespace Editor.Helper
                break;
             case nameof(Settings.Rendering.AllowAnimatedMapModes):
                if (Globals.Settings.Rendering.AllowAnimatedMapModes)
-                  Globals.MapModeManager.CurrentMapMode.SetActive();
+                  MapModeManager.CurrentMapMode.SetActive();
                else
-                  Globals.MapModeManager.CurrentMapMode.SetInactive();
+                  MapModeManager.CurrentMapMode.SetInactive();
                break;
          }
          Globals.ZoomControl.Invalidate();

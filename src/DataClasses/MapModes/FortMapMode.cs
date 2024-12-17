@@ -40,10 +40,7 @@ public class FortMapMode : MapMode
       return level;
    }
 
-   public override MapModeType GetMapModeName()
-   {
-      return MapModeType.Fort;
-   }
+   public override MapModeType MapModeType => MapModeType.Fort;
 
    public override string GetSpecificToolTip(Province provinceId)
    {

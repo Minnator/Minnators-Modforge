@@ -83,7 +83,7 @@ namespace Editor.Controls
       public void OnButtonClick(object? sender, EventArgs e)
       {
          if (MapModeName != MapModeType.None) 
-            Globals.MapModeManager.SetCurrentMapMode(MapModeName);
+            MapModeManager.SetCurrentMapMode(MapModeName);
       }
 
       public void OnMouseCLick(object? sender, MouseEventArgs e)
@@ -96,7 +96,7 @@ namespace Editor.Controls
             form.Location = new (MousePosition.X, MousePosition.Y);
             form.ShowDialog();
             if (form.SelectedMapMode != MapModeType.None)
-               Globals.MapModeManager.SetCurrentMapMode(form.SelectedMapMode);
+               MapModeManager.SetCurrentMapMode(form.SelectedMapMode);
 
          }
       }

@@ -20,10 +20,7 @@ namespace Editor.DataClasses.MapModes
          //TODO add permanent claims
       }
 
-      public override MapModeType GetMapModeName()
-      {
-         return MapModeType.Diplomatic;
-      }
+      public override MapModeType MapModeType => MapModeType.Diplomatic;
 
       public override string GetSpecificToolTip(Province province)
       {
@@ -72,7 +69,7 @@ namespace Editor.DataClasses.MapModes
          var sw = Stopwatch.StartNew();
          base.Update(ids);
          sw.Stop();
-         System.Diagnostics.Debug.WriteLine($"Update {GetMapModeName()} took {sw.ElapsedMilliseconds}ms");
+         System.Diagnostics.Debug.WriteLine($"Update {MapModeType} took {sw.ElapsedMilliseconds}ms");
          if (!ClearPreviousCoresClaims) 
             RenderClaimsAndCores();
       }

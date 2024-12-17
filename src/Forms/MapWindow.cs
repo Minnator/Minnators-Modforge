@@ -137,7 +137,7 @@ namespace Editor.Forms
          DateControl.Date = new(1444, 11, 11);
          CountryLoading.AssignProvinces();
          Globals.State = State.Running;
-         Globals.MapModeManager.SetCurrentMapMode(MapModeType.Country);
+         MapModeManager.SetCurrentMapMode(MapModeType.Country);
          ResumeLayout();
 
          StartPosition = FormStartPosition.CenterScreen;
@@ -178,7 +178,6 @@ namespace Editor.Forms
 
       public void InitMapModes()
       {
-         Globals.MapModeManager = new(); // Initialize the MapModeManager
          MapModeComboBox.Items.Clear();
          MapModeComboBox.Items.AddRange([.. Enum.GetNames<MapModeType>()]);
       }
@@ -261,9 +260,9 @@ namespace Editor.Forms
 
       private void InitializeInfoStrip()
       {
-         Globals.MapModeManager.MapModeChanged += (sender, mode) =>
+         MapModeManager.MapModeChanged += (sender, mode) =>
          {
-            MapModeTimesInfo.Text = $"MapMode times [ms]: last: {Globals.MapModeManager.LasMapModeTime} | Min: {Globals.MapModeManager.MinMapModeTime} | Max: {Globals.MapModeManager.MaxMapModeTime} | Avg: {Globals.MapModeManager.AverageMapModeTime}";
+            MapModeTimesInfo.Text = $"MapMode times [ms]: last: {MapModeManager.LasMapModeTime} | Min: {MapModeManager.MinMapModeTime} | Max: {MapModeManager.MaxMapModeTime} | Avg: {MapModeManager.AverageMapModeTime}";
          };
          MapModeTimesInfo.ToolTipText =
             "Time only counts in the time it takes the Rendering Pipeline to render the map and Invalidate the control.\nOther GUI updates are not included.";
@@ -932,7 +931,7 @@ namespace Editor.Forms
 
       private void MapModeComboBox_SelectedIndexChanged(object sender, EventArgs e)
       {
-         Globals.MapModeManager.SetCurrentMapMode(Enum.Parse<MapModeType>(MapModeComboBox.SelectedItem?.ToString() ?? string.Empty));
+         MapModeManager.SetCurrentMapMode(Enum.Parse<MapModeType>(MapModeComboBox.SelectedItem?.ToString() ?? string.Empty));
       }
 
       private void gCToolStripMenuItem_Click(object sender, EventArgs e)
@@ -944,7 +943,7 @@ namespace Editor.Forms
       {
          var pictures = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
          var form = new GetSavingFileForm(pictures, "Where to save the map mode as an image to", ".png");
-         form.SetPlaceHolderText(Globals.MapModeManager.CurrentMapMode.GetMapModeName().ToString());
+         form.SetPlaceHolderText(MapModeManager.CurrentMapMode.MapModeType.ToString());
          form.RequireModDirectory = false;
          form.ShowDialog();
          if (form.DialogResult == DialogResult.OK)
@@ -1790,8 +1789,8 @@ namespace Editor.Forms
          var sw = Stopwatch.StartNew();
          for (var i = 0; i < 1000; i++)
          {
-            Globals.MapModeManager.SetCurrentMapMode(MapModeType.Area);
-            Globals.MapModeManager.SetCurrentMapMode(MapModeType.Country);
+            MapModeManager.SetCurrentMapMode(MapModeType.Area);
+            MapModeManager.SetCurrentMapMode(MapModeType.Country);
          }
          sw.Stop();
          System.Diagnostics.Debug.WriteLine($"Time: {sw.ElapsedMilliseconds / 1000 * 2}");

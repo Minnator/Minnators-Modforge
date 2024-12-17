@@ -319,7 +319,7 @@ public static class Selection
       if (SelectedCountry == country)
          return;
 
-      if (Globals.MapModeManager.CurrentMapMode is DiplomaticMapMode mapMode)
+      if (MapModeManager.CurrentMapMode is DiplomaticMapMode mapMode)
       {
          // Set flag to remove the old claims and cores
          mapMode.ClearPreviousCoresClaims = true;
@@ -329,8 +329,8 @@ public static class Selection
       SelectedCountry = country;
       if (SelectedCountry != Country.Empty && Count == 1)
       {
-         if (Globals.MapModeManager.CurrentMapMode is DiplomaticMapMode)
-            Globals.MapModeManager.CurrentMapMode.Update(province);
+         if (MapModeManager.CurrentMapMode is DiplomaticMapMode)
+            MapModeManager.CurrentMapMode.Update(province);
          OnCountrySelected?.Invoke(Globals.ZoomControl, SelectedCountry);
          if (onCountrySelectedChange)
             OnCountrySelectionChange.Invoke(Globals.ZoomControl, EventArgs.Empty);
@@ -501,7 +501,7 @@ public static class Selection
       if (!isValid)
          return false;
 
-      if (Globals.ColorToProvId.TryGetValue(Globals.MapModeManager.IdMapMode.Bitmap.GetPixel(coords.X, coords.Y).ToArgb(), out province!) 
+      if (Globals.ColorToProvId.TryGetValue(MapModeManager.IdMapMode.Bitmap.GetPixel(coords.X, coords.Y).ToArgb(), out province!) 
             && province != Province.Empty)
       {
          return true;
