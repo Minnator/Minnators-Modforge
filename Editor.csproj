@@ -41,9 +41,6 @@
     <None Remove="ProjectOverview\NewFile1.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ProvinceFileCreator.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -81,19 +78,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Update="discord_game_sdk.bundle">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
     <None Update="discord_game_sdk.dll">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-    <None Update="discord_game_sdk.dll.lib">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
     <None Update="discord_game_sdk.dylib">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-    <None Update="discord_game_sdk.so">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Update="Properties\Settings.settings">

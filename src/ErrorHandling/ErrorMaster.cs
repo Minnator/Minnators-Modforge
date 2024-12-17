@@ -1,0 +1,269 @@
+﻿using Editor.Helper;
+using Editor.Saving;
+
+namespace Editor.ErrorHandling
+{
+
+   // Attribute to store color for each enum value
+   [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
+   public class LogColorAttribute : Attribute
+   {
+      public Color Color { get; }
+      public bool BlackColor { get; }
+
+      public LogColorAttribute(string backColor, bool blackColor)
+      {
+         Color = ColorTranslator.FromHtml(backColor); // Convert HEX to Color
+         BlackColor = blackColor;
+      }
+      
+   }
+
+
+   [Flags]
+   public enum LogType
+   {
+      None = 0,
+
+      [LogColor("#B00B00", false)] // Red for Error
+      Error = 1,
+
+      [LogColor("#DEAD00", false)] // Orange for Warning
+      Warning = 2,
+
+      [LogColor("#00BEEF", true)] // Blueish for Info
+      Information = 4,
+
+      [LogColor("#DE00AD", true)] // Pink for Debug
+      Debug = 8,
+   }
+
+   public static class LogManager
+   {
+      public static List<LogEntry> ActiveEntries = [];
+      public static List<LogEntry> Informations = [];
+      public static List<LogEntry> Warnings = [];
+      public static List<LogEntry> Errors = [];
+      public static List<LogEntry> Debugs = [];
+      private static LogType _currentLogType = LogType.None;
+
+      public static event EventHandler<LogEntry>? LogEntryAdded;
+
+      public static void AddLogEntries(List<LogEntry> list)
+      {
+         lock (ActiveEntries)
+         {
+            lock (list)
+            {
+               if (list.Count == 0)
+                  return;
+               if (ActiveEntries.Count == 0)
+               {
+                  ActiveEntries.AddRange(list);
+                  return;
+               }
+               var i = 0;
+               var j = 0;
+
+               while (i < ActiveEntries.Count && j < list.Count)
+               {
+                  if (ActiveEntries[i].CompareTo(list[j]) <= 0)
+                     i++;
+                  else
+                  {
+                     ActiveEntries.Insert(i, list[j]);
+                     j++;
+                     i++;
+                  }
+               }
+
+               while (j < list.Count)
+               {
+                  ActiveEntries.Add(list[j]);
+                  j++;
+               }
+            }
+         }
+      }
+
+      public static void RemoveLogEntries(LogType type)
+      {
+         lock (ActiveEntries)
+         {
+            ActiveEntries.RemoveAll(x => x.Level.HasFlag(type));
+         }
+      }
+
+      private static void AddOrRemoveLogEntries(LogType type, LogType delta, LogType newLogType)
+      {
+         if (delta.HasFlag(type))
+            if (newLogType.HasFlag(type))
+               AddLogEntries(GetListForType(type));
+            else
+               RemoveLogEntries(type);
+      }
+
+      public static void ChangeVerbosity(LogType logType)
+      {
+         if (logType == LogType.None)
+         {
+            lock (ActiveEntries)
+            {
+               ActiveEntries.Clear();
+            }
+            return;
+         }
+
+         var delta = logType ^ _currentLogType;
+         _currentLogType = logType;
+
+
+
+         AddOrRemoveLogEntries(LogType.Error, delta, logType);
+         AddOrRemoveLogEntries(LogType.Warning, delta, logType);
+         AddOrRemoveLogEntries(LogType.Information, delta, logType);
+         AddOrRemoveLogEntries(LogType.Debug, delta, logType);
+      }
+
+      private static List<LogEntry> GetListForType(LogType type)
+      {
+         switch (type)
+         {
+            case LogType.Error:
+               return Errors;
+            case LogType.Warning:
+               return Warnings;
+            case LogType.Information:
+               return Informations;
+            case LogType.Debug:
+               return Debugs;
+            default:
+               return [];
+         }
+      }
+      private static void AddToList(LogEntry entry)
+      {
+         var list = GetListForType(entry.Level);
+         lock (list)
+         {
+            list.Add(entry);
+         }
+      }
+
+      public static void AddLogEntry(LogEntry entry)
+      {
+         var verbosity = entry.Level;
+         if (Globals.Settings.Logging.LoggingVerbosity.HasFlag(verbosity))
+         {
+            if (_currentLogType.HasFlag(verbosity))
+            {
+               AddToList(entry);
+               lock (ActiveEntries)
+               {
+                  ActiveEntries.Add(entry);
+                  OnLogEntryAdded(entry);
+               }
+            }  
+            
+         }
+      }
+
+      public static LogEntry Inform(string message)
+      {
+         return new (LogType.Information, message);
+      }
+
+      public static LogEntry Warn(string message)
+      {
+         return new (LogType.Warning, message);
+      }
+
+      public static LogEntry Error(string message)
+      {
+         return new (LogType.Error, message);
+      }
+
+      public static LogEntry Debug(string message)
+      {
+         return new (LogType.Debug, message);
+      }
+
+      private static void OnLogEntryAdded(LogEntry e)
+      {
+         LogEntryAdded?.Invoke(null, e);
+      }
+   }
+
+   public class LogEntry
+   {
+      public LogEntry(LogType level, string message)
+      {
+         Level = level;
+         Message = message;
+         LogManager.AddLogEntry(this);
+      }
+
+      public DateTime Timestamp { get; } = DateTime.Now;
+      public LogType Level { get; }
+      public string Message { get; }
+
+      public override string ToString()
+      {
+         return $"[{Timestamp:yyyy-MM-dd HH:mm:ss}] [{Level}] {Message}";
+      }
+
+      public int CompareTo(LogEntry logEntry)
+      {
+         return Timestamp.CompareTo(logEntry.Timestamp);
+      }
+   }
+
+   public class ErrorObject : LogEntry, IExtendedLogInformationProvider
+   {
+      private const string DEFAULT_INFORMATION = "N/A";
+
+      private readonly string Description;
+      private readonly string Resolution;
+
+      public ErrorObject(string message, string resolution, string description) : base(LogType.Error, message)
+      {
+         Description = description;
+         Resolution = resolution;
+      }
+
+      public ErrorObject(string message, ErrorType type) : base(LogType.Error, $"{Enum.GetName(type)}: " + message)
+      {
+         var information = type.GetAttributeOfType<ErrorInformation>();
+
+         if (information is null)
+            Resolution = Description = DEFAULT_INFORMATION;
+         else
+         {
+            Resolution = information.Resolution;
+            Description = information.Description;
+         }
+      }
+
+      public string GetDescription()
+      {
+         return Description;
+      }
+
+      public string GetResolution()
+      {
+         return Resolution;
+      }
+
+      public string GetMessage()
+      {
+         return Message;
+      }
+   }
+
+   public interface IExtendedLogInformationProvider
+   {
+      public string GetDescription();
+      public string GetResolution();
+      public string GetMessage();
+   }
+}

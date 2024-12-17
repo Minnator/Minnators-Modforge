@@ -16,6 +16,7 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    private GuiSettings _guiSettings = new();
    private PopUpSettings _popUpSettings = new();
    private MetricDummySetting _metrics = new();
+   private LoggingSettings _logging = new();
 
 
    public Settings()
@@ -93,6 +94,15 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    {
       get => _metrics;
       set => SetField(ref _metrics, value);
+   }
+
+   [Description("Contains all settings regarding the logging of the application")]
+   [TypeConverter(typeof(ExpandableObjectConverter))]
+   [CompareInEquals]
+   public LoggingSettings Logging
+   {
+      get => _logging;
+      set => SetField(ref _logging, value);
    }
 
    public event PropertyChangedEventHandler? PropertyChanged;

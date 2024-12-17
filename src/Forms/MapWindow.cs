@@ -854,7 +854,7 @@ namespace Editor.Forms
       private void UpdateUndoDepth(object sender, int e) => UndoDepthLabel.Text = $"Undos [{e}]";
       #endregion
       #endregion
-      
+
       private void MapWindow_FormClosing(object sender, FormClosingEventArgs e)
       {
          ResourceUsageHelper.Dispose();
@@ -1287,10 +1287,11 @@ namespace Editor.Forms
          _governmentReforms.OnItemRemoved += CountryGuiEvents.GovernmentReforms_OnItemRemoved;
          _capitalTextBox = new(Selection.GetHistoryCountryAsList, new CCountryPropertyChangeFactory<Province>(nameof(HistoryCountry.Capital)))
          {
-            Margin = new(1), Dock = DockStyle.Fill,
+            Margin = new(1),
+            Dock = DockStyle.Fill,
             Input = InputType.UnsignedNumber
          };
-         
+
          _focusComboBox = ControlFactory.GetListComboBox([.. Enum.GetNames<Mana>()], new(1), false);
          _focusComboBox.SelectedIndexChanged += CountryGuiEvents.FocusComboBox_SelectedIndexChanged;
 
@@ -1436,7 +1437,7 @@ namespace Editor.Forms
          _historicRivals.Clear();
          _historicFriends.Clear();
          _estatePrivileges.Clear();
-         
+
          Globals.EditingStatus = EditingStatus.Idle;
       }
 
@@ -1565,7 +1566,7 @@ namespace Editor.Forms
 
       private void quickSettingsToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         new SettingsWindow().ShowDialog();
+         FormsHelper.ShowIfAnyOpen<SettingsWindow>();
       }
 
       private void OpenProvinceFileButton_Click(object sender, EventArgs e)
@@ -1794,6 +1795,14 @@ namespace Editor.Forms
          }
          sw.Stop();
          System.Diagnostics.Debug.WriteLine($"Time: {sw.ElapsedMilliseconds / 1000 * 2}");
+      }
+
+      private void viewErrorlogToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         new ErrorLogExplorer()
+         {
+            StartPosition = FormStartPosition.CenterParent
+         }.Show();
       }
    }
 }

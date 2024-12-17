@@ -76,6 +76,7 @@
          infoToolStripMenuItem = new ToolStripMenuItem();
          toolStripSeparator8 = new ToolStripSeparator();
          clearCrashLogsToolStripMenuItem = new ToolStripMenuItem();
+         viewErrorlogToolStripMenuItem = new ToolStripMenuItem();
          toolStripSeparator9 = new ToolStripSeparator();
          TutorialBrowser = new ToolStripMenuItem();
          gameOfLiveToolStripMenuItem = new ToolStripMenuItem();
@@ -615,7 +616,7 @@
          // 
          // helpToolStripMenuItem
          // 
-         helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { infoToolStripMenuItem, toolStripSeparator8, clearCrashLogsToolStripMenuItem, toolStripSeparator9, TutorialBrowser, gameOfLiveToolStripMenuItem });
+         helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { infoToolStripMenuItem, toolStripSeparator8, clearCrashLogsToolStripMenuItem, viewErrorlogToolStripMenuItem, toolStripSeparator9, TutorialBrowser, gameOfLiveToolStripMenuItem });
          helpToolStripMenuItem.Name = "helpToolStripMenuItem";
          helpToolStripMenuItem.Size = new Size(76, 23);
          helpToolStripMenuItem.Text = "Help / Info";
@@ -624,38 +625,46 @@
          // infoToolStripMenuItem
          // 
          infoToolStripMenuItem.Name = "infoToolStripMenuItem";
-         infoToolStripMenuItem.Size = new Size(162, 22);
+         infoToolStripMenuItem.Size = new Size(180, 22);
          infoToolStripMenuItem.Text = "Info";
          infoToolStripMenuItem.Click += infoToolStripMenuItem_Click;
          // 
          // toolStripSeparator8
          // 
          toolStripSeparator8.Name = "toolStripSeparator8";
-         toolStripSeparator8.Size = new Size(159, 6);
+         toolStripSeparator8.Size = new Size(177, 6);
          // 
          // clearCrashLogsToolStripMenuItem
          // 
          clearCrashLogsToolStripMenuItem.Name = "clearCrashLogsToolStripMenuItem";
-         clearCrashLogsToolStripMenuItem.Size = new Size(162, 22);
+         clearCrashLogsToolStripMenuItem.Size = new Size(180, 22);
          clearCrashLogsToolStripMenuItem.Text = "Clear Crash Logs";
          clearCrashLogsToolStripMenuItem.Click += clearCrashLogsToolStripMenuItem_Click;
+         // 
+         // viewErrorlogToolStripMenuItem
+         // 
+         viewErrorlogToolStripMenuItem.Name = "viewErrorlogToolStripMenuItem";
+         viewErrorlogToolStripMenuItem.ShortcutKeys = Keys.F10;
+         viewErrorlogToolStripMenuItem.Size = new Size(180, 22);
+         viewErrorlogToolStripMenuItem.Text = "View Error.log";
+         viewErrorlogToolStripMenuItem.Click += viewErrorlogToolStripMenuItem_Click;
          // 
          // toolStripSeparator9
          // 
          toolStripSeparator9.Name = "toolStripSeparator9";
-         toolStripSeparator9.Size = new Size(159, 6);
+         toolStripSeparator9.Size = new Size(177, 6);
          // 
          // TutorialBrowser
          // 
          TutorialBrowser.Enabled = false;
          TutorialBrowser.Name = "TutorialBrowser";
-         TutorialBrowser.Size = new Size(162, 22);
+         TutorialBrowser.Size = new Size(180, 22);
          TutorialBrowser.Text = "Tutorial Browser";
          // 
          // gameOfLiveToolStripMenuItem
          // 
          gameOfLiveToolStripMenuItem.Name = "gameOfLiveToolStripMenuItem";
-         gameOfLiveToolStripMenuItem.Size = new Size(162, 22);
+         gameOfLiveToolStripMenuItem.Size = new Size(180, 22);
          gameOfLiveToolStripMenuItem.Text = "Game of live";
          gameOfLiveToolStripMenuItem.Click += gameOfLiveToolStripMenuItem_Click;
          // 
@@ -3217,6 +3226,7 @@
       private ToolStripMenuItem gameOfLiveToolStripMenuItem;
       private ToolStripMenuItem benchmarkMapModesToolStripMenuItem;
       private CheckBox CreateHistoryEntryCheckBox;
+      private ToolStripMenuItem viewErrorlogToolStripMenuItem;
    }
 }
 

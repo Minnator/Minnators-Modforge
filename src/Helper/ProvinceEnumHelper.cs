@@ -114,31 +114,6 @@ namespace Editor.Helper
          citysize,
       }
 
-      public static List<ProvAttrGet> GetNumericalAttributes(params ProvAttrType[] types)
-      {
-         // Create a list to hold the numerical attributes
-         List<ProvAttrGet> numericalAttributes = [];
-
-         // Get all the fields of the ProvAttr enum
-         var fields = typeof(ProvAttrGet).GetFields(BindingFlags.Public | BindingFlags.Static);
-
-         // Iterate through each field
-         foreach (var field in fields)
-         {
-            // Get the ProvAttrMetadata attribute of the field
-            var attrMeta = (ProvAttrMetadata)Attribute.GetCustomAttribute(field, typeof(ProvAttrMetadata))!;
-
-            // If the attribute is of the specified type, add it to the list
-            if (types.Contains(attrMeta.Type))
-            {
-               numericalAttributes.Add((ProvAttrGet)field.GetValue(null)!);
-            }
-         }
-
-         // Return the list of numerical attributes
-         return numericalAttributes;
-      }
-
       public static ProvAttrType GetAttributeType(this ProvAttrGet attribute)
       {
          // Get the field of the ProvAttr enum

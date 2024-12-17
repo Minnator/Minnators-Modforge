@@ -1,14 +1,35 @@
 ﻿using System.ComponentModel;
+using System.Runtime.InteropServices.JavaScript;
 using Editor.DataClasses.Settings;
+using Editor.ErrorHandling;
+using Editor.Forms.Feature;
 
 namespace Editor.Helper
 {
    public static class SettingsHelper
    {
+      public static void LoadSettingsToComponents()
+      {
+         LogManager.ChangeVerbosity(Globals.Settings.Logging.LoggingVerbosity);
+      }
+
+
       public static void InitializeEvent()
       {
          Globals.Settings.Rendering.PropertyChanged += OnRenderSettingsChanged;
          Globals.Settings.Misc.PropertyChanged += OnMiscSettingsChanged;
+         Globals.Settings.Logging.PropertyChanged += OnLoggingSettingsChanged;
+      }
+
+      private static void OnLoggingSettingsChanged(object? sender, PropertyChangedEventArgs args)
+      {
+         switch (args.PropertyName)
+         {
+            case nameof(Settings.Logging.LoggingVerbosity):
+               if (FormsHelper.GetOpenForm(out ErrorLogExplorer exp))
+                  exp.LoadLogType(Globals.Settings.Logging.LoggingVerbosity);
+               break;
+         }
       }
 
       private static void OnMiscSettingsChanged(object? sender, PropertyChangedEventArgs args)
