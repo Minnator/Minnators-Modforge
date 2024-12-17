@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Text;
+using Editor.DataClasses.Commands;
 using Editor.Forms.Feature.Crash_Reporter;
 using Editor.Saving;
 using Newtonsoft.Json;
@@ -50,10 +51,10 @@ namespace Editor.Helper
          sb.AppendLine("LastHistory:");
          try
          {
-            if (Globals.HistoryManager is not null && Globals.HistoryManager.Current is { } activeNode)
+            if (HistoryManager.Current is { } activeNode)
             {
 
-               var baseNode = Globals.HistoryManager.GetNodeAbove(activeNode, 10);
+               var baseNode = HistoryManager.GetNodeAbove(activeNode, 10);
                foreach (var (node, indent) in baseNode)
                {
                   if (node.Command is null)

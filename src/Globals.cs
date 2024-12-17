@@ -146,9 +146,6 @@ public static class Globals
 
    public static DescriptorData DescriptorData = new("-1", "none", [], [], [], "-1");
 
-   // History Manager
-   public static readonly HistoryManager HistoryManager = new(new CInitial());
-
    // Contains the current map mode
    public static MapModeManager MapModeManager = null!;
 

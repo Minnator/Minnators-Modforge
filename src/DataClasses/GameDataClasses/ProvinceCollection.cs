@@ -196,7 +196,7 @@ public abstract class ProvinceCollection<T> : ProvinceComposite where T : Provin
       command.Execute();
       if (tryAddEventToHistory && Globals.State == State.Running)
       {
-         Globals.HistoryManager.AddCommand(command);
+         HistoryManager.AddCommand(command);
       }
    }
 

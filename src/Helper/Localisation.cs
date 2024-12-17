@@ -197,17 +197,17 @@ public static class LocObjectModifications
 
    public static void ModifyLocObject(LocObject locObject, string newValue)
    {
-      Globals.HistoryManager.AddCommand(new CModifyLocalisation([locObject], newValue));
+      HistoryManager.AddCommand(new CModifyLocalisation([locObject], newValue));
    }
 
    public static void AddLocObject(string key, string value, bool add)
    {
-      Globals.HistoryManager.AddCommand(new CAddDelLocalisation(new (key, value), add));
+      HistoryManager.AddCommand(new CAddDelLocalisation(new (key, value), add));
    }
 
    public static void DeleteLocObject(LocObject locObject)
    {
-      Globals.HistoryManager.AddCommand(new CAddDelLocalisation(locObject, false));
+      HistoryManager.AddCommand(new CAddDelLocalisation(locObject, false));
    }
 
    public static void ModifyProvinceLocalisation(bool adjective, string newValue)

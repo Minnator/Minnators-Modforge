@@ -11,7 +11,7 @@ public class Deselection : ISelectionModifier
 
    public void Execute(ProvinceSource source, Operations operation, ProvinceEnumHelper.ProvAttrGet attr, object value)
    {
-      Globals.HistoryManager.AddCommand(new CCollectionSelection(GetProvinceViaOperation.GetProvinces(operation, attr, value, GetProvinceViaOperation.GetProvincesToCheck(source)), true));
+      HistoryManager.AddCommand(new CCollectionSelection(GetProvinceViaOperation.GetProvinces(operation, attr, value, GetProvinceViaOperation.GetProvincesToCheck(source)), true));
    }
 
 
@@ -24,7 +24,7 @@ public class Select : ISelectionModifier
    public void Execute(ProvinceSource source, Operations operation, ProvinceEnumHelper.ProvAttrGet attr, object value)
    {
 
-      Globals.HistoryManager.AddCommand(new CCollectionSelection(GetProvinceViaOperation.GetProvinces(operation, attr, value, GetProvinceViaOperation.GetProvincesToCheck(source))));
+      HistoryManager.AddCommand(new CCollectionSelection(GetProvinceViaOperation.GetProvinces(operation, attr, value, GetProvinceViaOperation.GetProvincesToCheck(source))));
    }
 }
 

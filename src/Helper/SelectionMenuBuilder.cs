@@ -38,7 +38,7 @@ namespace Editor.Helper
                return;
 
             if (Selection.LastHoveredProvince.GetArea() != Area.Empty)
-               Globals.HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.GetArea()), CommandHistoryType.ComplexSelection);
+               HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.GetArea()), CommandHistoryType.ComplexSelection);
             
          });
       }
@@ -52,7 +52,7 @@ namespace Editor.Helper
 
             if (Selection.LastHoveredProvince.GetArea() != Area.Empty)
                if (Selection.LastHoveredProvince.GetArea().Region != Region.Empty)
-                     Globals.HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.GetArea().Region.GetProvinces()), CommandHistoryType.ComplexSelection);
+                     HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.GetArea().Region.GetProvinces()), CommandHistoryType.ComplexSelection);
          });
       }
 
@@ -66,7 +66,7 @@ namespace Editor.Helper
             if (Selection.LastHoveredProvince.GetArea() != Area.Empty)
                if (Selection.LastHoveredProvince.GetArea().Region != Region.Empty)
                   if (Selection.LastHoveredProvince.GetArea().Region.SuperRegion != SuperRegion.Empty)
-                        Globals.HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.GetArea().Region.SuperRegion.GetProvinces()), CommandHistoryType.ComplexSelection);
+                        HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.GetArea().Region.SuperRegion.GetProvinces()), CommandHistoryType.ComplexSelection);
          });
       }
 
@@ -78,7 +78,7 @@ namespace Editor.Helper
                return;
 
             if (Selection.LastHoveredProvince.GetContinent() != Continent.Empty)
-                  Globals.HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.GetContinent()), CommandHistoryType.ComplexSelection);
+                  HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.GetContinent()), CommandHistoryType.ComplexSelection);
          });
       }
 
@@ -90,7 +90,7 @@ namespace Editor.Helper
                return;
 
             if (Globals.Countries.TryGetValue (Selection.LastHoveredProvince.Owner, out var country))
-                  Globals.HistoryManager.AddCommand(new CCollectionSelection(country), CommandHistoryType.ComplexSelection);
+                  HistoryManager.AddCommand(new CCollectionSelection(country), CommandHistoryType.ComplexSelection);
          });
       }
 
@@ -101,7 +101,7 @@ namespace Editor.Helper
             if (Selection.LastHoveredProvince == Province.Empty)
                return;
 
-            Globals.HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.GetProvincesWithSameCultureGroup()), CommandHistoryType.ComplexSelection);
+            HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.GetProvincesWithSameCultureGroup()), CommandHistoryType.ComplexSelection);
          });
       }
 
@@ -112,7 +112,7 @@ namespace Editor.Helper
             if (Selection.LastHoveredProvince == Province.Empty)
                return;
 
-            Globals.HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.GetProvincesWithSameCulture()), CommandHistoryType.ComplexSelection);
+            HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.GetProvincesWithSameCulture()), CommandHistoryType.ComplexSelection);
          });
       }
 
@@ -125,7 +125,7 @@ namespace Editor.Helper
                return;
 
             var node = TradeNodeHelper.GetTradeNodeByProvince(Selection.LastHoveredProvince);
-            Globals.HistoryManager.AddCommand(new CCollectionSelection([.. node.GetProvinces()]), CommandHistoryType.ComplexSelection);
+            HistoryManager.AddCommand(new CCollectionSelection([.. node.GetProvinces()]), CommandHistoryType.ComplexSelection);
          });
       }
    }

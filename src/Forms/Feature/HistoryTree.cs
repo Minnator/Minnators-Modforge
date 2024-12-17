@@ -71,7 +71,7 @@ namespace Editor.Forms.Feature
             Tag = history.Id
          };
 
-         if (Globals.HistoryManager.Current.Id == history.Id) 
+         if (HistoryManager.Current.Id == history.Id) 
             node.BackColor = Color.LightGreen;
 
          foreach (var child in history.Children)
@@ -96,10 +96,10 @@ namespace Editor.Forms.Feature
 
             lastAction = node;
 
-            if (Globals.HistoryManager.Current.Id == history.Id)
+            if (HistoryManager.Current.Id == history.Id)
                lastAction.BackColor = Color.LightGreen;
          }
-         else if (Globals.HistoryManager.Current.Id == history.Id)
+         else if (HistoryManager.Current.Id == history.Id)
             lastAction.BackColor = Color.Orange;
 
          foreach (var child in history.Children)
@@ -119,11 +119,11 @@ namespace Editor.Forms.Feature
       {
          if (ShowAllSelections.Checked)
          {
-            VisualizeFull(Globals.HistoryManager.Root);
+            VisualizeFull(HistoryManager.Root);
          }
          else
          {
-            Visualize(Globals.HistoryManager.Root);
+            Visualize(HistoryManager.Root);
          }
       }
    }

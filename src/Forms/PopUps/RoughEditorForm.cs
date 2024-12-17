@@ -119,7 +119,7 @@ namespace Editor.Forms.PopUps
       private void RoughEditorForm_FormClosing(object sender, FormClosingEventArgs e)
       {
          if (_revertable)
-            Globals.HistoryManager.AddCommand(new CAdvancedPropertiesEditing(_obj!, PropGrid.SelectedObject));
+            HistoryManager.AddCommand(new CAdvancedPropertiesEditing(_obj!, PropGrid.SelectedObject));
       }
    }
 }

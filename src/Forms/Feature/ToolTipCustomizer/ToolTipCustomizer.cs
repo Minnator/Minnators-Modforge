@@ -98,7 +98,7 @@ namespace Editor.Forms.Feature
          foreach (ListViewItem item in ToolTipPreview.Items) 
             str += item.Text + "\n";
 
-         Globals.HistoryManager.AddCommand(new CChangeToolTipText(Globals.Settings.ToolTip.ToolTipText, str));
+         HistoryManager.AddCommand(new CChangeToolTipText(Globals.Settings.ToolTip.ToolTipText, str));
       }
 
       private void CancelButton_Click(object sender, System.EventArgs e)

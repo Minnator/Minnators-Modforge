@@ -121,8 +121,8 @@ namespace Editor.Forms
 
          // MUST BE LAST in the loading sequence
          InitMapModes();
-         Globals.HistoryManager.UndoDepthChanged += UpdateUndoDepth!;
-         Globals.HistoryManager.RedoDepthChanged += UpdateRedoDepth!;
+         HistoryManager.UndoDepthChanged += UpdateUndoDepth!;
+         HistoryManager.RedoDepthChanged += UpdateRedoDepth!;
 
 
          //Needs to be after loading the game data to populate the gui with it
@@ -194,8 +194,8 @@ namespace Editor.Forms
       {
          InitializeComponent();
 
-         Globals.HistoryManager.UndoEvent += (sender, args) => UpdateGui();
-         Globals.HistoryManager.RedoEvent += (sender, args) => UpdateGui();
+         HistoryManager.UndoEvent += (sender, args) => UpdateGui();
+         HistoryManager.RedoEvent += (sender, args) => UpdateGui();
 
          Globals.ZoomControl = new(new(Globals.MapWidth, Globals.MapHeight))
          {
@@ -864,8 +864,8 @@ namespace Editor.Forms
 
       private void RevertInSelectionHistory(object sender, EventArgs e)
       {
-         var historyTreeView = new HistoryTree(Globals.HistoryManager.RevertTo);
-         historyTreeView.VisualizeFull(Globals.HistoryManager.Root);
+         var historyTreeView = new HistoryTree(HistoryManager.RevertTo);
+         historyTreeView.VisualizeFull(HistoryManager.Root);
          historyTreeView.ShowDialog();
       }
 
@@ -873,7 +873,7 @@ namespace Editor.Forms
       {
          var result = MessageBox.Show("Are you sure you want to delete the history?", "Delete History", MessageBoxButtons.OKCancel);
          if (result == DialogResult.OK)
-            Globals.HistoryManager.Clear();
+            HistoryManager.Clear();
       }
 
       #endregion
@@ -993,10 +993,10 @@ namespace Editor.Forms
                   Globals.SearchForm = FormHelper.OpenOrBringToFront(Globals.SearchForm);
                   break;
                case Keys.Z:
-                  Globals.HistoryManager.Undo();
+                  HistoryManager.Undo();
                   break;
                case Keys.Y:
-                  Globals.HistoryManager.Redo();
+                  HistoryManager.Redo();
                   e.SuppressKeyPress = true;
                   e.Handled = true;
                   break;

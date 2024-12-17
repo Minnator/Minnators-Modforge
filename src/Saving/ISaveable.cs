@@ -97,7 +97,7 @@ public abstract class Saveable : IDisposable
    {
       if (Globals.State == State.Running && !Suppressed)
       {
-         Globals.HistoryManager.AddCommand(new CModifyProperty<T>(propertyName, this, value, field));
+         HistoryManager.AddCommand(new CModifyProperty<T>(propertyName, this, value, field));
          OnPropertyChanged(propertyName);
       }
       field = value;

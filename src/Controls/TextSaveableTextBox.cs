@@ -123,7 +123,7 @@ namespace Editor.Controls
          {
             ICommand command = _factory.Create(_getSaveables.Invoke(), value);
             command.Execute();
-            Globals.HistoryManager.AddCommand(command);
+            HistoryManager.AddCommand(command);
          }
          else
          {
