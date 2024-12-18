@@ -625,19 +625,19 @@
          // infoToolStripMenuItem
          // 
          infoToolStripMenuItem.Name = "infoToolStripMenuItem";
-         infoToolStripMenuItem.Size = new Size(180, 22);
+         infoToolStripMenuItem.Size = new Size(172, 22);
          infoToolStripMenuItem.Text = "Info";
          infoToolStripMenuItem.Click += infoToolStripMenuItem_Click;
          // 
          // toolStripSeparator8
          // 
          toolStripSeparator8.Name = "toolStripSeparator8";
-         toolStripSeparator8.Size = new Size(177, 6);
+         toolStripSeparator8.Size = new Size(169, 6);
          // 
          // clearCrashLogsToolStripMenuItem
          // 
          clearCrashLogsToolStripMenuItem.Name = "clearCrashLogsToolStripMenuItem";
-         clearCrashLogsToolStripMenuItem.Size = new Size(180, 22);
+         clearCrashLogsToolStripMenuItem.Size = new Size(172, 22);
          clearCrashLogsToolStripMenuItem.Text = "Clear Crash Logs";
          clearCrashLogsToolStripMenuItem.Click += clearCrashLogsToolStripMenuItem_Click;
          // 
@@ -645,26 +645,26 @@
          // 
          viewErrorlogToolStripMenuItem.Name = "viewErrorlogToolStripMenuItem";
          viewErrorlogToolStripMenuItem.ShortcutKeys = Keys.F10;
-         viewErrorlogToolStripMenuItem.Size = new Size(180, 22);
+         viewErrorlogToolStripMenuItem.Size = new Size(172, 22);
          viewErrorlogToolStripMenuItem.Text = "View Error.log";
          viewErrorlogToolStripMenuItem.Click += viewErrorlogToolStripMenuItem_Click;
          // 
          // toolStripSeparator9
          // 
          toolStripSeparator9.Name = "toolStripSeparator9";
-         toolStripSeparator9.Size = new Size(177, 6);
+         toolStripSeparator9.Size = new Size(169, 6);
          // 
          // TutorialBrowser
          // 
          TutorialBrowser.Enabled = false;
          TutorialBrowser.Name = "TutorialBrowser";
-         TutorialBrowser.Size = new Size(180, 22);
+         TutorialBrowser.Size = new Size(172, 22);
          TutorialBrowser.Text = "Tutorial Browser";
          // 
          // gameOfLiveToolStripMenuItem
          // 
          gameOfLiveToolStripMenuItem.Name = "gameOfLiveToolStripMenuItem";
-         gameOfLiveToolStripMenuItem.Size = new Size(180, 22);
+         gameOfLiveToolStripMenuItem.Size = new Size(172, 22);
          gameOfLiveToolStripMenuItem.Text = "Game of live";
          gameOfLiveToolStripMenuItem.Click += gameOfLiveToolStripMenuItem_Click;
          // 
@@ -1022,6 +1022,7 @@
          // 
          CreateHistoryEntryCheckBox.AutoSize = true;
          CreateHistoryEntryCheckBox.Dock = DockStyle.Fill;
+         CreateHistoryEntryCheckBox.Enabled = false;
          CreateHistoryEntryCheckBox.Location = new Point(900, 1);
          CreateHistoryEntryCheckBox.Margin = new Padding(1);
          CreateHistoryEntryCheckBox.Name = "CreateHistoryEntryCheckBox";

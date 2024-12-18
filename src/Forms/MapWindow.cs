@@ -1585,8 +1585,7 @@ namespace Editor.Forms
             }
          }
       }
-
-
+      
       private void button2_Click(object sender, EventArgs e)
       {
          var editor = new RoughEditorForm(Selection.SelectedCountry, false);
@@ -1603,9 +1602,7 @@ namespace Editor.Forms
          }
          new RoughEditorForm(Selection.GetSelectedProvinces[0], false).ShowDialog();
       }
-
-
-
+      
       private void AddMonarchNamesToGui(List<MonarchName> names)
       {
          MonarchNamesFlowPanel.FlowDirection = FlowDirection.TopDown;

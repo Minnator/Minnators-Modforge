@@ -914,7 +914,7 @@ public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<P
             Claims.Remove(Tag.FromString(value));
             break;
          case ProvAttrSet.add_core:
-            Cores.Add(Tag.FromString(value));
+            Cores.Add(Tag.FromString(value.ToString()));
             break;
          case ProvAttrSet.remove_core:
             Cores.Remove(Tag.FromString(value));

@@ -160,7 +160,10 @@ public static class MapModeManager
 
    public static int GetColorForMapMode(Province p, MapModeType mapMode)
    {
-      return GetMapMode(mapMode).GetProvinceColor(p);
+      var mpMode = GetMapMode(mapMode);
+      if (mpMode.IsLandOnly && Globals.LandProvinces.Contains(p))
+         return mpMode.GetProvinceColor(p);
+      return mpMode.GetSeaProvinceColor(p);
    }
 
 }

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections;
+using System.Diagnostics;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.Forms.Feature;
@@ -1017,6 +1018,22 @@ public static class Selection
          var value = province.GetAttribute(attribute);
          if (result == null)
             result = value!;
+         else if (result is IList list)
+         {
+            if (value is IList valueList)
+            {
+               if (!list.Cast<object>().SequenceEqual(valueList.Cast<object>()))
+               {
+                  result = null;
+                  return false;
+               }
+            }
+            else
+            {
+               result = null;
+               return false;
+            }
+         }
          else if (!result.Equals(value))
          {
             result = null;

@@ -1,13 +1,8 @@
 ﻿using Editor.Controls;
-using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
-using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Misc;
 using Editor.DataClasses.Settings;
 using Editor.Forms;
-using Editor.Forms.Feature;
-using Editor.Forms.Feature.AdvancedSelections;
-using Editor.Forms.PopUps;
 using Editor.Helper;
 using Editor.Loading;
 using Region = Editor.DataClasses.GameDataClasses.Region;
@@ -120,16 +115,7 @@ public static class Globals
 
    // SETTINGS
    public static Settings Settings = new();
-   public static readonly ProvinceEditingStatus ProvinceEditingStatus = ProvinceEditingStatus.Selection;
 
-   // Date of history
-   public static Date Date
-   { 
-      get
-      {
-         return MapWindow.DateControl.Date;
-      }
-   }
    // Logs
    //public static readonly string DownloadsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
    public static readonly Log LoadingLog = new(Settings.Saving.LogLocation, "Loading");
@@ -209,8 +195,6 @@ public static class Globals
 
    // Modifiers
    public static Dictionary<string, EventModifier> EventModifiers = [];
-   public static Dictionary<string, Modifier> ProvinceTriggeredModifiers = [];
-   public static Dictionary<string, Modifier> TriggeredModifiers = [];
 
    // Trade
    public static Dictionary<string, TradeCompanyInvestment> TradeCompanyInvestments = [];
@@ -227,6 +211,9 @@ public static class Globals
 
    // ------------ Saving ------------ \\ 
 
+   /// <summary>
+   /// This sets the Astrix on the MapWindow Text if the file is not saved
+   /// </summary>
    public static SaveableType SaveableType
    {
       get => _saveableType;
@@ -343,18 +330,25 @@ public static class Globals
 //       - [x] Remove all buttons (with an empty to select?)
 //       - [x] TryAdd instead of add
 // - [x] Change all Saveable commands to NOT use SaveableHelper
-// - [ ] Demonstration Video
 // - [x] Fix Error sound playing on ReDo
 // - [x] Fix Revolutionary Color Command
 // - [x] Fix Command spamming in Natives interface
 // - [x] Fix Names Interface not being saved
 // - [x] Fix Capital box not saving on enter
-// - [ ] Fix all combo-boxes taking the input from the suggestion without the use ever using it (when both are empty)
 // - [x] Disable country GUI when selecting several countries or invalid after having selected a valid
 // - [x] Fix folder creation in root directory when folder is missing in mod
 // - [x] Fix log location and remove all dumps to download
 // - [x] Expose Setting to disable Discord Integration to settings menu
 // - [x] Added Support for Replace_Path
+
+
+// Update Alpha 1.0.1
+// - [ ] Fix all combo-boxes taking the input from the suggestion without the use ever using it (when both are empty)
+// - [ ] Demonstration Video
+// - [x] Add Explorable Error log which provides a possible solution, and a detailed cause
+// - [x] Generalized Window Handling
+// - [x] Improved MapMode management
+// - [x] Streamlined History management
 
 // TODO LIST Until Alpha 1.1
 // - [ ] Block Water provinces; should not be viable for countries

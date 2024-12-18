@@ -24,6 +24,7 @@ public readonly struct Tag(string tag) : IEquatable<Tag>, IComparable
       throw new ArgumentException("Tag must be 3 characters long");
    }
 
+
    public override bool Equals(object? obj)
    {
       return obj is Tag other && Equals(other);

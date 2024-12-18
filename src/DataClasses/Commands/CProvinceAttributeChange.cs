@@ -14,8 +14,10 @@ namespace Editor.DataClasses.Commands
       private readonly ProvAttrGet _attribute;
       private readonly ProvAttrSet _setter;
 
-      public CProvinceAttributeChange(List<Province> provinces, string value, ProvAttrGet pa, ProvAttrSet ps, bool executeOnInit = true) 
+      public CProvinceAttributeChange(List<Province> provinces, string value, ProvAttrGet pa, ProvAttrSet ps, bool executeOnInit = true)
       {
+         
+
          _provinces = provinces;
          _value = value;
          _attribute = pa;
@@ -55,6 +57,7 @@ namespace Editor.DataClasses.Commands
       public override void Undo()
       {
          base.Undo();
+
          for (var i = 0; i < _provinces.Count; i++)
             _provinces[i].SetAttribute(_setter, _oldValues[i]);
       }

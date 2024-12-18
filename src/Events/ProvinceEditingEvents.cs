@@ -19,6 +19,9 @@ namespace Editor.Events
          if (!Globals.AllowEditing || e?.Value == null)
             return;
          HistoryManager.AddCommand(new CProvinceAttributeChange(e.Provinces, e.Value.ToString()!, ProvAttrGet.owner, ProvAttrSet.owner));
+         HistoryManager.AddCommand(new CAddRemoveProvinceAttribute(e.Provinces, e.Value.ToString()!, ProvAttrGet.cores, ProvAttrSet.add_core, ProvAttrSet.remove_core, true));
+
+         Globals.MapWindow.LoadSelectedProvincesToGui();
       }
 
       public static void OnControllerChanged(object? sender, ProvinceEditedEventArgs e)
