@@ -1,4 +1,6 @@
-﻿namespace Editor.DataClasses.GameDataClasses;
+﻿using Editor.ErrorHandling;
+
+namespace Editor.DataClasses.GameDataClasses;
 
 public readonly struct Tag(string tag) : IEquatable<Tag>, IComparable
 {
@@ -71,6 +73,7 @@ public readonly struct Tag(string tag) : IEquatable<Tag>, IComparable
          return true;
       }
       outTag = Empty;
+      _ = new LogEntry(LogType.Warning, $"Tag with wrong length of chars detected: {str}");
       return false;
    }
 

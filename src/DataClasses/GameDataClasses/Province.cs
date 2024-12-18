@@ -93,12 +93,12 @@ public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<P
 
    public override KeyValuePair<string, bool> GetFileName()
    {
-      return new ($"{Id.ToString()} - {GetLocalisation()}", true);
+      return new ($"{Id.ToString()} - {TitleLocalisation}", true);
    }
 
    public override string SavingComment()
    {
-      return GetLocalisation();
+      return TitleLocalisation;
    }
 
    public override string GetSaveString(int tabs)
@@ -109,7 +109,7 @@ public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<P
 
    public override string GetSavePromptString()
    {
-      return $"Save province file {GetLocalisation()}";
+      return $"Save province file {TitleLocalisation}";
    }
 
    public DateTime LastModified { get; set; } = DateTime.MinValue;
@@ -846,7 +846,7 @@ public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<P
          ProvAttrGet.trade_good => TradeGood,
          ProvAttrGet.history => History,
          ProvAttrGet.id => Id,
-         ProvAttrGet.name => GetLocalisation(),
+         ProvAttrGet.name => TitleLocalisation,
          ProvAttrGet.revolt => HasRevolt, // Was changed from has_revolt to revolt no idea if this breaks stuff
          ProvAttrGet.is_occupied => IsNonRebelOccupied,      
          ProvAttrGet.devastation => Devastation,
@@ -1171,12 +1171,9 @@ public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<P
    public int GetTotalDevelopment() => BaseManpower + BaseTax + BaseProduction;
    public ICollection<Province> Neighbors => Globals.AdjacentProvinces[this];
 
-   public string GetLocalisation()
-   {
-      return Localisation.GetLoc(GetTitleKey());
-   }
+   public string TitleLocalisation => Localisation.GetLoc(TitleKey);
+   public string AdjectiveLocalisation => Localisation.GetLoc(AdjectiveKey);
 
-   
    public override int[] GetProvinceIds()
    {
       return [Id];
@@ -1239,7 +1236,7 @@ public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<P
 
    public string GetHistoryFilePath()
    {
-      var fileName = $"{Id}-{GetLocalisation()}.txt";
+      var fileName = $"{Id}-{TitleLocalisation}.txt";
       return System.IO.Path.Combine(Globals.ModPath, "history", "provinces", fileName);
    }
 
@@ -1289,7 +1286,7 @@ public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<P
 
    public override string ToString()
    {
-      return $"{Id} ({GetLocalisation()})";
+      return $"{Id} ({TitleLocalisation})";
    }
 
 
@@ -1315,13 +1312,7 @@ public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<P
    }
 
    public new static Province Empty  { get; } = new (-1, Color.Empty, ObjEditingStatus.Immutable);
-   public string GetTitleKey()
-   {
-      return $"PROV{ Id}";
-   }
+   public string TitleKey => $"PROV{Id}";
 
-   public string GetAdjectiveKey()
-   {
-      return $"PROV_ADJ{Id}";
-   }
+   public string AdjectiveKey => $"PROV_ADJ{Id}";
 }

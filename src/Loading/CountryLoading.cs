@@ -2,6 +2,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
 using Editor.DataClasses.GameDataClasses;
+using Editor.ErrorHandling;
 using Editor.Helper;
 using Editor.Parser;
 using Editor.Saving;
@@ -494,10 +495,9 @@ namespace Editor.Loading
 
             if (!Globals.Countries.TryGetValue(province.Owner, out var country))
             {
-               Globals.ErrorLog.Write($"Province {province.Id} has unknown country owner: {province.Owner}");
+               _ = new LogEntry(LogType.Warning, $"Province {province.Id} ({province.TitleLocalisation}) has an unknown TAG as owner: {province.Owner}");
                continue;
             }
-
             country.Add(province);
          }
       }

@@ -9,10 +9,7 @@ namespace Editor.Helper
 {
    public static class ProvColHelper
    {
-      public enum AdvancedPropertiesEditables
-      {
-         Country,
-      }
+
 
       public static ICollection<string> GetProvinceCollectionNames(SaveableType type)
       {

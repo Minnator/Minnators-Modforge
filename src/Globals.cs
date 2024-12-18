@@ -159,6 +159,9 @@ public static class Globals
    public static List<string> GraphicalCultures = [];
    public static HashSet<Unit> Units = [];
 
+   // Bookmarks
+   public static List<Bookmark> Bookmarks = [];
+
    // Contains the provinces and options to access them
    public static HashSet<Province> Provinces = [];
    public static Dictionary<int, Province> ProvinceIdToProvince = [];

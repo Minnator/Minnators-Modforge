@@ -66,29 +66,6 @@ namespace Editor.Events
          Globals.MapWindow.ClearCountryGui();
       }
 
-      public static void SetGuiEventHandlers()
-      {
-         Globals.Settings.Misc.PropertyChanged += (_, args) =>
-         {
-            if (args.PropertyName == nameof(Settings.Misc.Language))
-               LocalisationLoading.Load();
-         };
-
-         Globals.Settings.Gui.PropertyChanged += (_, args) =>
-         {
-            switch (args.PropertyName)
-            {
-               case nameof(GuiSettings.ShowCountryFlagInCE):
-                  Globals.MapWindow.CountryFlagLabel.Visible = Globals.Settings.Gui.ShowCountryFlagInCE;
-                  break;
-               case nameof(GuiSettings.MapModes):
-                  Globals.MapWindow.UpdateMapModeButtons(false);
-                  break;
-            }
-
-         };
-
-      }
 
       public static void GraphicalCultureBox_SelectedIndexChanged(object? sender, EventArgs e)
       {

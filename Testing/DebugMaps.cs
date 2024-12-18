@@ -27,7 +27,7 @@ public static class DebugMaps
          sb.Append(";");
          sb.Append(province.Color.B);
          sb.Append(";");
-         sb.Append(province.GetLocalisation());
+         sb.Append(province.GetTitleLocalisation());
          sb.Append(";");
          sb.Append("x");
          sb.Append(";\n");

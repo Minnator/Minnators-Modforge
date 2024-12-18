@@ -4,6 +4,7 @@ using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Settings;
 using Editor.ErrorHandling;
 using Editor.Forms.Feature;
+using Editor.Loading;
 
 namespace Editor.Helper
 {
@@ -20,6 +21,7 @@ namespace Editor.Helper
          Globals.Settings.Rendering.PropertyChanged += OnRenderSettingsChanged;
          Globals.Settings.Misc.PropertyChanged += OnMiscSettingsChanged;
          Globals.Settings.Logging.PropertyChanged += OnLoggingSettingsChanged;
+         Globals.Settings.Gui.PropertyChanged += OnGuiSettingsChanged;
       }
 
       private static void OnLoggingSettingsChanged(object? sender, PropertyChangedEventArgs args)
@@ -33,11 +35,26 @@ namespace Editor.Helper
          }
       }
 
+      private static void OnGuiSettingsChanged(object? sender, PropertyChangedEventArgs args)
+      {
+         switch (args.PropertyName)
+         {
+            case nameof(GuiSettings.ShowCountryFlagInCE):
+               Globals.MapWindow.CountryFlagLabel.Visible = Globals.Settings.Gui.ShowCountryFlagInCE;
+               break;
+            case nameof(GuiSettings.MapModes):
+               Globals.MapWindow.UpdateMapModeButtons(false);
+               break;
+         }
+      }
+
       private static void OnMiscSettingsChanged(object? sender, PropertyChangedEventArgs args)
       {
          switch (args.PropertyName)
          {
-
+            case nameof(Settings.Misc.Language):
+               LocalisationLoading.Load();
+               break;
          }
       }
 

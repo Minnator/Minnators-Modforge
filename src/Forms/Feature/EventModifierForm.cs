@@ -84,7 +84,7 @@ namespace Editor.Forms.Feature
              || !Globals.ModifierValueTypes.TryGetValue(comboBox.SelectedIndex, out var type))
             return;
 
-         _modifierPanel.SetComboBoxItems(FormHelper.GetCompletionSuggestion(type), DualSelectionFlowPanel.BoxType.Right, false);
+         _modifierPanel.SetComboBoxItems(FormsHelper.GetCompletionSuggestion(type), DualSelectionFlowPanel.BoxType.Right, false);
          _modifierPanel.RightComboBox.SelectedIndex = _modifierPanel.RightComboBox.Items.Count / 2;
       }
 

@@ -94,7 +94,7 @@ namespace Editor.DataClasses.Commands
       public override string GetDescription()
       {
          return _provinces.Count == 1
-            ? $"{(_increase ? "Increased" : "Decreased")} {_attribute} of {_provinces[0].Id} ({_provinces[0].GetLocalisation()}) by [{_value}]"
+            ? $"{(_increase ? "Increased" : "Decreased")} {_attribute} of {_provinces[0].Id} ({_provinces[0].TitleLocalisation}) by [{_value}]"
             : $"{(_increase ? "Increased" : "Decreased")} {_attribute} of [{_provinces.Count}] provinces by [{_value}]";
       }
 

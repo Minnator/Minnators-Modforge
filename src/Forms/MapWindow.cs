@@ -85,23 +85,22 @@ namespace Editor.Forms
       {
          Globals.State = State.Loading;
          Globals.MapWindow = this;
-
-         Localisation.Initialize();
          Globals.Random = new(Globals.Settings.Misc.RandomSeed);
 
+         // Load the game data
          RunLoadingScreen();
-         StartBWHeapThread();
+         ThreadHelper.StartBWHeapThread();
 
          Eu4Cursors.SetEu4CursorIfEnabled(Eu4CursorTypes.Normal, Cursors.Default, this);
 
          if (StartScreen != null)
          {
-            // Center the new form on the StartScreen; Cannot use StartPosition.CenterScreen because it centers on the current screen not the screen it was started on
             var screen = Globals.MapWindow.StartScreen;
             if (screen != null)
                Location = new(screen.Bounds.X + (screen.Bounds.Width - Width) / 2, screen.Bounds.Y + (screen.Bounds.Height - Height) / 2);
          }
 
+         //TODO: solve all the issues regarding this
          //DiscordActivityManager.ActivateActivity();
 
 #if DEBUG
@@ -123,7 +122,6 @@ namespace Editor.Forms
          InitMapModes();
          HistoryManager.UndoDepthChanged += UpdateUndoDepth!;
          HistoryManager.RedoDepthChanged += UpdateRedoDepth!;
-
 
          //Needs to be after loading the game data to populate the gui with it
          InitializeEditGui();
@@ -147,36 +145,9 @@ namespace Editor.Forms
          // Activate this window
          Activate();
          Globals.ZoomControl.Invalidate();
-         AfterLoad();
-
       }
 
-      private void StartBWHeapThread()
-      {
-         Thread backgroundThread = new(() =>
-         {
-            for (var i = 0; i < 30; i++)
-            {
-               Thread.Sleep(1000);
-               GC.Collect();
-               GC.WaitForPendingFinalizers();
-            }
-         })
-         {
-            IsBackground = true // Make it a background thread
-         };
-         backgroundThread.Start();
-      }
-
-      private void AfterLoad()
-      {
-         GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
-         GC.Collect();
-         GC.WaitForPendingFinalizers();
-
-      }
-
-      public void InitMapModes()
+      private void InitMapModes()
       {
          MapModeComboBox.Items.Clear();
          MapModeComboBox.Items.AddRange([.. Enum.GetNames<MapModeType>()]);
@@ -232,7 +203,7 @@ namespace Editor.Forms
                UpdateCountryTab();
                break;
             case 2:
-               UpdateProvinceCollectionTab();
+               //UpdateProvinceCollectionTab();
                break;
          }
       }
@@ -240,10 +211,6 @@ namespace Editor.Forms
       private void UpdateProvinceTab() => LoadSelectedProvincesToGui();
       private void UpdateCountryTab() => LoadCountryToGui(Selection.SelectedCountry);
 
-      private void UpdateProvinceCollectionTab()
-      {
-
-      }
 
       #region EditGui
       /// <summary>
@@ -343,7 +310,6 @@ namespace Editor.Forms
 
          FocusSelectionCheckBox.Checked = Globals.Settings.Gui.JumpToSelectedProvinceCollection;
       }
-
 
       private void InitializeProvinceEditGui()
       {
@@ -624,7 +590,6 @@ namespace Editor.Forms
          ProvinceCustomToolStripLayoutPanel.Paint += TableLayoutBorder_Paint;
       }
 
-      #endregion
 
       private void InitializeModifierTab()
       {
@@ -649,6 +614,7 @@ namespace Editor.Forms
       }
 
 
+      #endregion
 
 
       // ======================== Province GUI Update Methods ========================
@@ -725,10 +691,10 @@ namespace Editor.Forms
          if (Selection.GetSelectedProvinces.Count == 1)
          {
             AddAllModifiersToListView(Selection.GetSelectedProvinces[0]);
-            _localisationTextBox.Text = Selection.GetSelectedProvinces[0].GetLocalisation();
-            LocalisationLabel.Text = Selection.GetSelectedProvinces[0].GetTitleKey();
-            _provAdjTextBox.Text = Localisation.GetLoc(Selection.GetSelectedProvinces[0].GetAdjectiveKey());
-            ProvAdjLabel.Text = Selection.GetSelectedProvinces[0].GetAdjectiveKey();
+            _localisationTextBox.Text = Selection.GetSelectedProvinces[0].TitleLocalisation;
+            LocalisationLabel.Text = Selection.GetSelectedProvinces[0].TitleKey;
+            _provAdjTextBox.Text = Localisation.GetLoc(Selection.GetSelectedProvinces[0].AdjectiveKey);
+            ProvAdjLabel.Text = Selection.GetSelectedProvinces[0].AdjectiveKey;
          }
          ResumeLayout();
          Globals.EditingStatus = EditingStatus.Idle;
@@ -890,7 +856,7 @@ namespace Editor.Forms
       {
          _savingButtonsToolTip.SetToolTip(OpenProvinceFile,
             Selection.Count == 1
-               ? $"Open the selected province file ({Selection.GetSelectedProvinces[0].GetLocalisation()})"
+               ? $"Open the selected province file ({Selection.GetSelectedProvinces[0].TitleLocalisation})"
                : $"Open the selected province files ({Selection.Count})");
       }
 
@@ -908,7 +874,7 @@ namespace Editor.Forms
             OwnerCountryNameLabel.Text = "Owner: -";
             return;
          }
-         ProvinceNameLabel.Text = $"Province: {province.GetLocalisation()}";
+         ProvinceNameLabel.Text = $"Province: {province.TitleLocalisation}";
          OwnerCountryNameLabel.Text = $"Owner: {Localisation.GetLoc(province.Owner)}";
       }
 
@@ -979,7 +945,7 @@ namespace Editor.Forms
          var sb = new StringBuilder();
          foreach (var province in Globals.Provinces)
          {
-            sb.Append($"{province.GetLocalisation()}: ");
+            sb.Append($"{province.TitleLocalisation}: ");
             foreach (var building in province.Buildings)
             {
                sb.Append($"{building}, ");
@@ -1406,7 +1372,7 @@ namespace Editor.Forms
          var countries = Selection.GetSelectedProvinceOwners();
          _savingButtonsToolTip.SetToolTip(OpenCountryFileButton,
             countries.Count == 1
-               ? $"Open the file of {countries.First().Tag} ({countries.First().GetLocalisation()})"
+               ? $"Open the file of {countries.First().Tag} ({countries.First().TitleLocalisation})"
                : $"Open the files of {countries.Count} countries");
       }
 
@@ -1469,13 +1435,13 @@ namespace Editor.Forms
          if (Globals.Settings.Gui.ShowCountryFlagInCE)
          {
             CountryFlagLabel.SetCountry(country);
-            GeneralToolTip.SetToolTip(CountryFlagLabel, $"{country.GetLocalisation()} ({country.Tag})");
+            GeneralToolTip.SetToolTip(CountryFlagLabel, $"{country.TitleLocalisation} ({country.Tag})");
          }
-         CountryNameLabel.Text = $"{country.GetLocalisation()} ({country.Tag}) | (Total Dev: {country.GetDevelopment()})";
+         CountryNameLabel.Text = $"{country.TitleLocalisation} ({country.Tag}) | (Total Dev: {country.GetDevelopment()})";
          _countryColorPickerButton.BackColor = country.Color;
          _countryColorPickerButton.Text = $"({country.Color.R}/{country.Color.G}/{country.Color.B})";
-         CountryLoc.Text = country.GetLocalisation();
-         CountryADJLoc.Text = country.GetAdjectiveLocalisation();
+         CountryLoc.Text = country.TitleLocalisation;
+         CountryADJLoc.Text = country.AdjectiveLocalisation;
          RevolutionColorPickerButton.SetColorIndexes(country.CommonCountry.RevolutionaryColor.R, country.CommonCountry.RevolutionaryColor.G, country.CommonCountry.RevolutionaryColor.B);
          _graphicalCultureBox.Text = country.CommonCountry.GraphicalCulture;
          _unitTypeBox.Text = country.HistoryCountry.UnitType;
@@ -1835,6 +1801,11 @@ namespace Editor.Forms
       private void SaveAllCountries_Click(object sender, EventArgs e)
       {
          SaveMaster.SaveAllChanges(false, SaveableType.Country);
+      }
+
+      private void testToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         _ = new RoughEditorForm(new GlobalsDynamicWrapper(), false).ShowDialog();
       }
    }
 }

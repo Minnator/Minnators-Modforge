@@ -13,7 +13,7 @@ namespace Editor.Helper
          if (input.Length > 3)
             foreach (var province in Globals.Provinces)
             {
-               if (province.GetLocalisation().Contains(input, StringComparison.CurrentCultureIgnoreCase))
+               if (province.TitleLocalisation.Contains(input, StringComparison.CurrentCultureIgnoreCase))
                   result.Add(province);
             }
          if (int.TryParse(input, out var id))
@@ -33,7 +33,7 @@ namespace Editor.Helper
          if (input.Length > 3)
             foreach (var country in Globals.Countries.Values)
             {
-               if (country.GetLocalisation().Contains(input, StringComparison.OrdinalIgnoreCase))
+               if (country.TitleLocalisation.Contains(input, StringComparison.OrdinalIgnoreCase))
                   result.Add(country.Tag);
             }
          if (Globals.Countries.TryGetValue(input, out var country1))

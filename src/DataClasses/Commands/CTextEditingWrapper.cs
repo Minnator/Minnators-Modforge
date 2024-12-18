@@ -22,7 +22,7 @@ namespace Editor.DataClasses.Commands
             if (sav is not ITitleAdjProvider titleAdjProvider)
                throw new EvilActions("Illegal objects type in CLocObjFactory for command creation!");
 
-            if (Localisation.GetLocObject(isTitle ? titleAdjProvider.GetTitleKey() : titleAdjProvider.GetAdjectiveKey(), out var locObject))
+            if (Localisation.GetLocObject(isTitle ? titleAdjProvider.TitleKey : titleAdjProvider.AdjectiveKey, out var locObject))
                locs.Add(locObject!);
             else
             {

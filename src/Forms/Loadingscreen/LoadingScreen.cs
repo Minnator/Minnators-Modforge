@@ -27,6 +27,7 @@ namespace Editor.Forms.LoadingScreen
       private readonly List<Action> _loadingActions =
       [
          StartUpMetrics.StartMetrics,
+         BookMarksLoading.Load,
          SettingsHelper.LoadSettingsToComponents,
          FactionsLoading.Load,
          GovernmentMechanicsLoading.Load,

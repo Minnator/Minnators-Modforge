@@ -30,7 +30,7 @@ namespace Editor.DataClasses.MapModes
          {
             if (!Globals.Countries.TryGetValue(province.Owner, out var country))
                return "No Country to show diplomacy for";
-            tooltip = $"Diplomacy for {province.Owner} ({country.GetLocalisation()})";
+            tooltip = $"Diplomacy for {province.Owner} ({country.TitleLocalisation})";
             if (province.Claims.Contains(country.Tag))
                tooltip += $"\nClaims of {country.Tag}";
             if (province.Cores.Contains(country.Tag))

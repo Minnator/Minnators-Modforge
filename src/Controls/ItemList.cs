@@ -179,7 +179,7 @@ namespace Editor.Controls
             case ItemTypes.Id:
                if (int.TryParse(Item, out var id))
                   if (Globals.ProvinceIdToProvince.TryGetValue(id, out var prov))
-                     return $"{Item} ({prov.GetLocalisation()})";
+                     return $"{Item} ({prov.TitleLocalisation})";
                return Item;
             default:
                throw new ArgumentOutOfRangeException();

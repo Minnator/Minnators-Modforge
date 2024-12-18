@@ -46,7 +46,7 @@ public class FortMapMode : MapMode
    {
       if (Globals.Provinces.TryGetValue(provinceId, out var province))
          return $"Fort Level: {GetFortLevel(provinceId)}";
-      return $"No fort in {provinceId.GetLocalisation()}";
+      return $"No fort in {provinceId.TitleLocalisation}";
    }
 
 }

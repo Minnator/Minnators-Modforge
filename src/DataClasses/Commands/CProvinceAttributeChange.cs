@@ -72,7 +72,7 @@ namespace Editor.DataClasses.Commands
       public override string GetDescription()
       {
          return _provinces.Count == 1
-            ? $"Changed {_attribute} of {_provinces[0].Id} ({_provinces[0].GetLocalisation()}) to [{_value}]"
+            ? $"Changed {_attribute} of {_provinces[0].Id} ({_provinces[0].TitleLocalisation}) to [{_value}]"
             : $"Changed {_attribute} of [{_provinces.Count}] provinces to [{_value}]";
       }
 

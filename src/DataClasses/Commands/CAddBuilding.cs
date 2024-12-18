@@ -49,7 +49,7 @@ namespace Editor.DataClasses.Commands
       public override string GetDescription()
       {
          return _provinces.Count == 1
-            ? $"{(_add ? "Added" : "Removed")} {_building} from {_provinces[0].Id} ({_provinces[0].GetLocalisation()})"
+            ? $"{(_add ? "Added" : "Removed")} {_building} from {_provinces[0].Id} ({_provinces[0].TitleLocalisation})"
             : $"{(_add ? "Added" : "Removed")} {_building} from [{_provinces.Count}] provinces";
       }
 

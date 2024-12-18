@@ -21,7 +21,7 @@ namespace Editor.Forms.Feature
             return;
 
          ValueIdeaBox.Items.Clear();
-         ValueIdeaBox.Items.AddRange(FormHelper.GetCompletionSuggestion(type).ToArray());
+         ValueIdeaBox.Items.AddRange(FormsHelper.GetCompletionSuggestion(type).ToArray());
 
          ValueIdeaBox.SelectedIndex = rand.Next(0, ValueIdeaBox.Items.Count - 1);
       }

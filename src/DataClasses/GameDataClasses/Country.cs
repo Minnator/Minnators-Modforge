@@ -171,8 +171,8 @@ public class CommonCountry : Saveable, IGetSetProperty
    public override string[] GetDefaultFolderPath() => ["common", _country.CountryFilePath.FilePath];
    public override string GetFileEnding() => ".txt";
    public override KeyValuePair<string, bool> GetFileName() => new(_country.CountryFilePath.FileName, true);
-   public override string SavingComment() => $"{_country.Tag} ({_country.GetLocalisation()})";
-   public override string GetSavePromptString() => $"Save common country file for {_country.GetLocalisation()}";
+   public override string SavingComment() => $"{_country.Tag} ({_country.TitleLocalisation})";
+   public override string GetSavePromptString() => $"Save common country file for {_country.TitleLocalisation}";
    public override string GetSaveString(int tabs)
    {
       var sb = new StringBuilder();
@@ -413,8 +413,8 @@ public class HistoryCountry : Saveable, IGetSetProperty, IHistoryProvider<Countr
    public override SaveableType WhatAmI() => SaveableType.Country;
    public override string[] GetDefaultFolderPath() => ["history", "countries"];
    public override string GetFileEnding() => ".txt";
-   public override KeyValuePair<string, bool> GetFileName() => new($"{_country.Tag} - {_country.GetLocalisation()}", true);
-   public override string SavingComment() => $"{_country.Tag} ({_country.GetLocalisation()})";
+   public override KeyValuePair<string, bool> GetFileName() => new($"{_country.Tag} - {_country.TitleLocalisation}", true);
+   public override string SavingComment() => $"{_country.Tag} ({_country.TitleLocalisation})";
    public override string GetSaveString(int tabs)
    {
       var sb = new StringBuilder();
@@ -584,22 +584,6 @@ public class Country : ProvinceCollection<Province>, ITitleAdjProvider
       }
    }
 
-   public void SetProperty(string propName, object value)
-   {
-      var prop = GetType().GetProperty(propName);
-      if (prop == null)
-         return;
-      prop.SetValue(this, value);
-   }
-
-   public object? GetProperty(string propName)
-   {
-      var prop = GetType().GetProperty(propName);
-      if (prop == null)
-         return null;
-      return prop.GetValue(this);
-   }
-
    public override void OnPropertyChanged(string? propertyName = null) { }
 
    public override CAddProvinceCollectionGeneral<Province> GetAddCommand(ProvinceCollection<Province> collection, bool addToGlobal)
@@ -702,9 +686,9 @@ public class Country : ProvinceCollection<Province>, ITitleAdjProvider
 
    public bool Exists => SubCollection.Count > 0;
 
-   public string GetLocalisation() => Localisation.GetLoc(Tag);
-   public string GetAdjectiveLocalisation() => Localisation.GetLoc(GetAdjectiveKey());
-   public override string ToString() => $"{Tag.ToString()} ({GetLocalisation()})";
+   public string TitleLocalisation => Localisation.GetLoc(Tag);
+   public string AdjectiveLocalisation => Localisation.GetLoc(AdjectiveKey);
+   public override string ToString() => $"{Tag.ToString()} ({TitleLocalisation})";
    public override bool Equals(object? obj)
    {
       if (obj is Country other)
@@ -732,7 +716,7 @@ public class Country : ProvinceCollection<Province>, ITitleAdjProvider
       return new("modforge_country_tags", false);
    }
 
-   public override string SavingComment() => Localisation.GetLoc(GetTitleKey());
+   public override string SavingComment() => Localisation.GetLoc(TitleKey);
    public override string GetSaveString(int tabs)
    {
       throw new EvilActions("You should not do this! We need to fix the country mess!");
@@ -861,13 +845,7 @@ public class Country : ProvinceCollection<Province>, ITitleAdjProvider
       CountryCreated.Invoke(country, country);
    }
 
-   public string GetTitleKey()
-   {
-      return Tag;
-   }
+   public string TitleKey => Tag;
 
-   public string GetAdjectiveKey()
-   {
-      return $"{Tag}_ADJ";
-   }
+   public string AdjectiveKey => $"{Tag}_ADJ";
 }

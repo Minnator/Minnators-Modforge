@@ -693,7 +693,8 @@
          // 
          testToolStripMenuItem.Name = "testToolStripMenuItem";
          testToolStripMenuItem.Size = new Size(234, 22);
-         testToolStripMenuItem.Text = "Test";
+         testToolStripMenuItem.Text = "Browse Globals";
+         testToolStripMenuItem.Click += testToolStripMenuItem_Click;
          // 
          // telescopeToolStripMenuItem
          // 

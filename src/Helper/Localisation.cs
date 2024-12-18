@@ -48,16 +48,14 @@ public static class Localisation
       }
    }
 
-   public static void Initialize()
-   {
-      CountryGuiEvents.SetGuiEventHandlers();
-   }
 }
 
 public interface ITitleAdjProvider
 {
-   public string GetTitleKey();
-   public string GetAdjectiveKey();
+   public string TitleKey { get; }
+   public string TitleLocalisation { get; }
+   public string AdjectiveKey { get; }
+   public string AdjectiveLocalisation { get; }
 }
 
 
@@ -213,6 +211,6 @@ public static class LocObjectModifications
    public static void ModifyProvinceLocalisation(bool adjective, string newValue)
    {
       foreach (var province in Selection.GetSelectedProvinces) 
-         ModifyIfExistsOtherwiseAdd(adjective ? province.GetDescriptionLocKey : province.GetTitleKey(), newValue);
+         ModifyIfExistsOtherwiseAdd(adjective ? province.GetDescriptionLocKey : province.TitleKey, newValue);
    }
 }
