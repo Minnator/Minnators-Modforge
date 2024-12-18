@@ -112,6 +112,7 @@ public static class Globals
 
    public static MapWindow MapWindow = null!;
    public static ZoomControl ZoomControl = null!;
+   public static int EquatorY = 0;
 
    // SETTINGS
    public static Settings Settings = new();
@@ -193,11 +194,16 @@ public static class Globals
    public static HashSet<Province> LakeProvinces = [];
    public static HashSet<Province> CoastalProvinces = [];
    public static HashSet<Province> NonLandProvinces = [];
+   public static HashSet<Province> Impassable = [];
    public static Province[] LandProvinceIds = [];
    public static Dictionary<string, ColonialRegion> ColonialRegions = [];
 
    // Modifiers
    public static Dictionary<string, EventModifier> EventModifiers = [];
+
+   // Climate
+   public static Dictionary<string, Climate> Climates = [];
+   public static Dictionary<string, Climate> Weather = [];
 
    // Trade
    public static Dictionary<string, TradeCompanyInvestment> TradeCompanyInvestments = [];

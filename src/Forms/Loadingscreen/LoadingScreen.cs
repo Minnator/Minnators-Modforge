@@ -54,6 +54,7 @@ namespace Editor.Forms.LoadingScreen
          CultureLoading.Load,
          ProvinceParser.ParseAllUniqueProvinces,
          TerrainLoading.Load, // Requires Provinces
+         ClimateLoading.Load,
          AreaLoading.Load,
          TradeNodeLoading.Load,
          RegionLoading.Load,

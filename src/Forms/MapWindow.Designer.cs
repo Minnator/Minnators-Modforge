@@ -104,6 +104,7 @@
          provinceToolStripMenuItem = new ToolStripMenuItem();
          countryToolStripMenuItem = new ToolStripMenuItem();
          benchmarkMapModesToolStripMenuItem = new ToolStripMenuItem();
+         runNameGenToolStripMenuItem = new ToolStripMenuItem();
          ProvinceCollectionsLayoutPanel = new TableLayoutPanel();
          FocusSelectionCheckBox = new CheckBox();
          BottomToolStrip = new ToolStrip();
@@ -682,7 +683,7 @@
          // 
          // debugToolStripMenuItem
          // 
-         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem, jsonToolStripMenuItem, bugReportToolStripMenuItem, crashReportToolStripMenuItem, loadDDSFilesTestToolStripMenuItem, roughEditorToolStripMenuItem, newSavingToolStripMenuItem, toolStripMenuItem4, fileNamesToolStripMenuItem, emptyCOlorInCountryToolStripMenuItem, iMBTESTToolStripMenuItem, clearGUIToolStripMenuItem, benchmarkMapModesToolStripMenuItem });
+         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem, jsonToolStripMenuItem, bugReportToolStripMenuItem, crashReportToolStripMenuItem, loadDDSFilesTestToolStripMenuItem, roughEditorToolStripMenuItem, newSavingToolStripMenuItem, toolStripMenuItem4, fileNamesToolStripMenuItem, emptyCOlorInCountryToolStripMenuItem, iMBTESTToolStripMenuItem, clearGUIToolStripMenuItem, benchmarkMapModesToolStripMenuItem, runNameGenToolStripMenuItem });
          debugToolStripMenuItem.Enabled = false;
          debugToolStripMenuItem.Name = "debugToolStripMenuItem";
          debugToolStripMenuItem.Size = new Size(54, 23);
@@ -850,6 +851,13 @@
          benchmarkMapModesToolStripMenuItem.Size = new Size(234, 22);
          benchmarkMapModesToolStripMenuItem.Text = "Benchmark MapModes";
          benchmarkMapModesToolStripMenuItem.Click += benchmarkMapModesToolStripMenuItem_Click;
+         // 
+         // runNameGenToolStripMenuItem
+         // 
+         runNameGenToolStripMenuItem.Name = "runNameGenToolStripMenuItem";
+         runNameGenToolStripMenuItem.Size = new Size(234, 22);
+         runNameGenToolStripMenuItem.Text = "RunNameGen";
+         runNameGenToolStripMenuItem.Click += runNameGenToolStripMenuItem_Click;
          // 
          // ProvinceCollectionsLayoutPanel
          // 
@@ -2147,9 +2155,8 @@
          // 
          // ProvinceHistoryEntryToggleButton
          // 
-         ProvinceHistoryEntryToggleButton.BackColor = Color.Transparent;
+         ProvinceHistoryEntryToggleButton.BackColor = Color.DarkRed;
          ProvinceHistoryEntryToggleButton.Dock = DockStyle.Fill;
-         ProvinceHistoryEntryToggleButton.Image = Properties.Resources.HistoryEntriesDisabled;
          ProvinceHistoryEntryToggleButton.ImageOff = Properties.Resources.HistoryEntriesDisabled;
          ProvinceHistoryEntryToggleButton.ImageOn = Properties.Resources.HistoryEntriesEnabled;
          ProvinceHistoryEntryToggleButton.Location = new Point(122, 2);
@@ -2158,6 +2165,7 @@
          ProvinceHistoryEntryToggleButton.Size = new Size(40, 30);
          ProvinceHistoryEntryToggleButton.State = false;
          ProvinceHistoryEntryToggleButton.TabIndex = 6;
+         ProvinceHistoryEntryToggleButton.Text = "Off";
          GeneralToolTip.SetToolTip(ProvinceHistoryEntryToggleButton, "If enabled any changes in properties for province will be created as a history entry for the current date");
          ProvinceHistoryEntryToggleButton.UseVisualStyleBackColor = false;
          ProvinceHistoryEntryToggleButton.VsMode = Editor.Controls.ToggleButton.VisualMode.Image;
@@ -2880,8 +2888,7 @@
          // 
          // CountryHistoryEntryToggleButton
          // 
-         CountryHistoryEntryToggleButton.BackColor = Color.Transparent;
-         CountryHistoryEntryToggleButton.Image = Properties.Resources.HistoryEntriesDisabled;
+         CountryHistoryEntryToggleButton.BackColor = Color.DarkRed;
          CountryHistoryEntryToggleButton.ImageOff = Properties.Resources.HistoryEntriesDisabled;
          CountryHistoryEntryToggleButton.ImageOn = Properties.Resources.HistoryEntriesEnabled;
          CountryHistoryEntryToggleButton.Location = new Point(122, 2);
@@ -2890,6 +2897,7 @@
          CountryHistoryEntryToggleButton.Size = new Size(40, 30);
          CountryHistoryEntryToggleButton.State = false;
          CountryHistoryEntryToggleButton.TabIndex = 7;
+         CountryHistoryEntryToggleButton.Text = "Off";
          GeneralToolTip.SetToolTip(CountryHistoryEntryToggleButton, "If enabled any changes in properties for a country will be created as a history entry for the current date");
          CountryHistoryEntryToggleButton.UseVisualStyleBackColor = false;
          CountryHistoryEntryToggleButton.VsMode = Editor.Controls.ToggleButton.VisualMode.Image;
@@ -3403,6 +3411,7 @@
       private Button OpenCountryFolder;
       private Controls.ToggleButton ProvinceHistoryEntryToggleButton;
       private Controls.ToggleButton CountryHistoryEntryToggleButton;
+      private ToolStripMenuItem runNameGenToolStripMenuItem;
    }
 }
 

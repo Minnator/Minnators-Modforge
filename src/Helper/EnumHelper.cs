@@ -18,7 +18,8 @@ namespace Editor.Helper
       Country = 1 << 11,
       Province = 1 << 12,
       Terrain = 1 << 13,
-      All = SaveProvinces | Area | Region | TradeNode | TradeCompany | ColonialRegion | SuperRegion | Continent | ProvinceGroup | EventModifier | Localisation | Country | Province | Terrain,
+      Climate = 1 << 14,
+      All = SaveProvinces | Area | Region | TradeNode | TradeCompany | ColonialRegion | SuperRegion | Continent | ProvinceGroup | EventModifier | Localisation | Country | Province | Terrain | Climate,
    }
 
 

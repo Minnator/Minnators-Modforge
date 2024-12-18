@@ -33,6 +33,8 @@ public enum MapModeType
    TradeCompany,
    TradeGoods,
    TradeNode,
+   Climate,
+   Weather,
    GameOfLive,
    RGB,
    BadApple
@@ -90,6 +92,8 @@ public static class MapModeManager
       MapModes.Add(new DiplomaticMapMode());
       MapModes.Add(new TerrainOverrides());
       MapModes.Add(new TerrainMapMode());
+      MapModes.Add(new ClimateMapMode());
+      MapModes.Add(new WeatherMapMode());
       MapModes.Add(new GameOfLiveMapMode());
       MapModes.Add(new RGBMapMode());
       //MapModes.Add(new MemeMode());

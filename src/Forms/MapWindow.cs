@@ -15,6 +15,7 @@ using Editor.Forms.Feature.SavingClasses;
 using Editor.Forms.PopUps;
 using Editor.Helper;
 using Editor.Loading;
+using Editor.NameGenerator;
 using Editor.Saving;
 using Editor.src.Forms.GetUserInput;
 using Editor.src.Forms.PopUps;
@@ -1817,6 +1818,11 @@ namespace Editor.Forms
       {
          if (Globals.Settings.Gui.EnableDisableHistoryEntryCreationGlobally)
             CountryHistoryEntryToggleButton.State = ProvinceHistoryEntryToggleButton.State;
+      }
+
+      private void runNameGenToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         NameGenStarter.RunNameGen();
       }
    }
 }
