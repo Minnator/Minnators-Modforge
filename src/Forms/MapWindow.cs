@@ -2,7 +2,6 @@
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.Media;
-using System.Runtime;
 using System.Text;
 using Editor.Controls;
 using Editor.DataClasses.Commands;
@@ -1806,6 +1805,18 @@ namespace Editor.Forms
       private void testToolStripMenuItem_Click(object sender, EventArgs e)
       {
          _ = new RoughEditorForm(new GlobalsDynamicWrapper(), false).ShowDialog();
-      } 
+      }
+
+      private void CountryHistoryEntry_Toggle(object sender, EventArgs e)
+      {
+         if (Globals.Settings.Gui.EnableDisableHistoryEntryCreationGlobally)
+            ProvinceHistoryEntryToggleButton.State = CountryHistoryEntryToggleButton.State;
+      }
+
+      private void ProvinceHistoryEntryToggleButton_Click(object sender, EventArgs e)
+      {
+         if (Globals.Settings.Gui.EnableDisableHistoryEntryCreationGlobally)
+            CountryHistoryEntryToggleButton.State = ProvinceHistoryEntryToggleButton.State;
+      }
    }
 }

@@ -122,7 +122,6 @@
          ProvinceNameLabel = new Label();
          SelectionTypeBox = new ComboBox();
          label24 = new Label();
-         CreateHistoryEntryCheckBox = new CheckBox();
          tableLayoutPanel5 = new TableLayoutPanel();
          MagicWandTolerance = new NumericUpDown();
          MWAttirbuteCombobox = new ComboBox();
@@ -206,8 +205,9 @@
          OpenProvinceFolder = new Button();
          SaveCurrentSelectionButton = new Button();
          SaveAllProvincesButton = new Button();
+         ProvinceHistoryEntryToggleButton = new Controls.ToggleButton();
          CountryPage = new TabPage();
-         tableLayoutPanel7 = new TableLayoutPanel();
+         CountryMainTLP = new TableLayoutPanel();
          CountryScrollPanel = new Panel();
          CountryMainTableLayoutPanel = new TableLayoutPanel();
          groupBox8 = new GroupBox();
@@ -259,6 +259,7 @@
          CountryNameLabel = new Label();
          AddNewCountryButton = new Button();
          CountryCustomToolStripLayoutPanel = new TableLayoutPanel();
+         CountryHistoryEntryToggleButton = new Controls.ToggleButton();
          SaveSelectedCountriesButton = new Button();
          OpenCountryAdvancedEditor = new Button();
          OpenCountryFolder = new Button();
@@ -307,7 +308,7 @@
          MisProvinceData.SuspendLayout();
          ProvinceCustomToolStripLayoutPanel.SuspendLayout();
          CountryPage.SuspendLayout();
-         tableLayoutPanel7.SuspendLayout();
+         CountryMainTLP.SuspendLayout();
          CountryScrollPanel.SuspendLayout();
          CountryMainTableLayoutPanel.SuspendLayout();
          groupBox8.SuspendLayout();
@@ -975,7 +976,6 @@
          TopStripLayoutPanel.Controls.Add(ProvinceNameLabel, 3, 0);
          TopStripLayoutPanel.Controls.Add(SelectionTypeBox, 1, 0);
          TopStripLayoutPanel.Controls.Add(label24, 0, 0);
-         TopStripLayoutPanel.Controls.Add(CreateHistoryEntryCheckBox, 5, 0);
          TopStripLayoutPanel.Dock = DockStyle.Fill;
          TopStripLayoutPanel.Location = new Point(400, 0);
          TopStripLayoutPanel.Margin = new Padding(0);
@@ -1029,20 +1029,6 @@
          label24.TabIndex = 5;
          label24.Text = "Selection type";
          label24.TextAlign = ContentAlignment.MiddleCenter;
-         // 
-         // CreateHistoryEntryCheckBox
-         // 
-         CreateHistoryEntryCheckBox.AutoSize = true;
-         CreateHistoryEntryCheckBox.Dock = DockStyle.Fill;
-         CreateHistoryEntryCheckBox.Enabled = false;
-         CreateHistoryEntryCheckBox.Location = new Point(900, 1);
-         CreateHistoryEntryCheckBox.Margin = new Padding(1);
-         CreateHistoryEntryCheckBox.Name = "CreateHistoryEntryCheckBox";
-         CreateHistoryEntryCheckBox.Size = new Size(210, 24);
-         CreateHistoryEntryCheckBox.TabIndex = 6;
-         CreateHistoryEntryCheckBox.Text = "Create Historyentries";
-         GeneralToolTip.SetToolTip(CreateHistoryEntryCheckBox, "<TRUE> When editing a property of either a province or a country a history entry for the currently selected date and the modification is created\r\n<FALSE> Edit base values of provinces / countries");
-         CreateHistoryEntryCheckBox.UseVisualStyleBackColor = true;
          // 
          // tableLayoutPanel5
          // 
@@ -2087,6 +2073,7 @@
          ProvinceCustomToolStripLayoutPanel.Controls.Add(OpenProvinceFolder, 6, 0);
          ProvinceCustomToolStripLayoutPanel.Controls.Add(SaveCurrentSelectionButton, 1, 0);
          ProvinceCustomToolStripLayoutPanel.Controls.Add(SaveAllProvincesButton, 0, 0);
+         ProvinceCustomToolStripLayoutPanel.Controls.Add(ProvinceHistoryEntryToggleButton, 3, 0);
          ProvinceCustomToolStripLayoutPanel.Dock = DockStyle.Fill;
          ProvinceCustomToolStripLayoutPanel.Location = new Point(0, 782);
          ProvinceCustomToolStripLayoutPanel.Margin = new Padding(0);
@@ -2158,9 +2145,27 @@
          SaveAllProvincesButton.UseVisualStyleBackColor = true;
          SaveAllProvincesButton.Click += SaveAllProvincesButton_Click;
          // 
+         // ProvinceHistoryEntryToggleButton
+         // 
+         ProvinceHistoryEntryToggleButton.BackColor = Color.Transparent;
+         ProvinceHistoryEntryToggleButton.Dock = DockStyle.Fill;
+         ProvinceHistoryEntryToggleButton.Image = Properties.Resources.HistoryEntriesDisabled;
+         ProvinceHistoryEntryToggleButton.ImageOff = Properties.Resources.HistoryEntriesDisabled;
+         ProvinceHistoryEntryToggleButton.ImageOn = Properties.Resources.HistoryEntriesEnabled;
+         ProvinceHistoryEntryToggleButton.Location = new Point(122, 2);
+         ProvinceHistoryEntryToggleButton.Margin = new Padding(0);
+         ProvinceHistoryEntryToggleButton.Name = "ProvinceHistoryEntryToggleButton";
+         ProvinceHistoryEntryToggleButton.Size = new Size(40, 30);
+         ProvinceHistoryEntryToggleButton.State = false;
+         ProvinceHistoryEntryToggleButton.TabIndex = 6;
+         GeneralToolTip.SetToolTip(ProvinceHistoryEntryToggleButton, "If enabled any changes in properties for province will be created as a history entry for the current date");
+         ProvinceHistoryEntryToggleButton.UseVisualStyleBackColor = false;
+         ProvinceHistoryEntryToggleButton.VsMode = Editor.Controls.ToggleButton.VisualMode.Image;
+         ProvinceHistoryEntryToggleButton.Click += ProvinceHistoryEntryToggleButton_Click;
+         // 
          // CountryPage
          // 
-         CountryPage.Controls.Add(tableLayoutPanel7);
+         CountryPage.Controls.Add(CountryMainTLP);
          CountryPage.Location = new Point(4, 24);
          CountryPage.Name = "CountryPage";
          CountryPage.Padding = new Padding(3);
@@ -2170,21 +2175,21 @@
          GeneralToolTip.SetToolTip(CountryPage, "Country data editing\r\n(Ctrl + 2)");
          CountryPage.UseVisualStyleBackColor = true;
          // 
-         // tableLayoutPanel7
+         // CountryMainTLP
          // 
-         tableLayoutPanel7.ColumnCount = 1;
-         tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-         tableLayoutPanel7.Controls.Add(CountryScrollPanel, 0, 0);
-         tableLayoutPanel7.Controls.Add(CountryCustomToolStripLayoutPanel, 0, 1);
-         tableLayoutPanel7.Dock = DockStyle.Fill;
-         tableLayoutPanel7.Location = new Point(3, 3);
-         tableLayoutPanel7.Margin = new Padding(0);
-         tableLayoutPanel7.Name = "tableLayoutPanel7";
-         tableLayoutPanel7.RowCount = 2;
-         tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-         tableLayoutPanel7.Size = new Size(401, 810);
-         tableLayoutPanel7.TabIndex = 0;
+         CountryMainTLP.ColumnCount = 1;
+         CountryMainTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         CountryMainTLP.Controls.Add(CountryScrollPanel, 0, 0);
+         CountryMainTLP.Controls.Add(CountryCustomToolStripLayoutPanel, 0, 1);
+         CountryMainTLP.Dock = DockStyle.Fill;
+         CountryMainTLP.Location = new Point(3, 3);
+         CountryMainTLP.Margin = new Padding(0);
+         CountryMainTLP.Name = "CountryMainTLP";
+         CountryMainTLP.RowCount = 2;
+         CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 34F));
+         CountryMainTLP.Size = new Size(401, 810);
+         CountryMainTLP.TabIndex = 0;
          // 
          // CountryScrollPanel
          // 
@@ -2195,7 +2200,7 @@
          CountryScrollPanel.Location = new Point(0, 0);
          CountryScrollPanel.Margin = new Padding(0, 0, 0, 3);
          CountryScrollPanel.Name = "CountryScrollPanel";
-         CountryScrollPanel.Size = new Size(401, 777);
+         CountryScrollPanel.Size = new Size(401, 773);
          CountryScrollPanel.TabIndex = 6;
          // 
          // CountryMainTableLayoutPanel
@@ -2848,27 +2853,47 @@
          // CountryCustomToolStripLayoutPanel
          // 
          CountryCustomToolStripLayoutPanel.BackColor = Color.LightGray;
-         CountryCustomToolStripLayoutPanel.ColumnCount = 6;
+         CountryCustomToolStripLayoutPanel.ColumnCount = 8;
+         CountryCustomToolStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
+         CountryCustomToolStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
          CountryCustomToolStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
          CountryCustomToolStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
          CountryCustomToolStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
          CountryCustomToolStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
          CountryCustomToolStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
          CountryCustomToolStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
+         CountryCustomToolStripLayoutPanel.Controls.Add(CountryHistoryEntryToggleButton, 3, 0);
          CountryCustomToolStripLayoutPanel.Controls.Add(SaveSelectedCountriesButton, 1, 0);
-         CountryCustomToolStripLayoutPanel.Controls.Add(OpenCountryAdvancedEditor, 4, 0);
-         CountryCustomToolStripLayoutPanel.Controls.Add(OpenCountryFolder, 5, 0);
+         CountryCustomToolStripLayoutPanel.Controls.Add(OpenCountryAdvancedEditor, 6, 0);
+         CountryCustomToolStripLayoutPanel.Controls.Add(OpenCountryFolder, 7, 0);
          CountryCustomToolStripLayoutPanel.Controls.Add(SaveAllCountries, 0, 0);
          CountryCustomToolStripLayoutPanel.Controls.Add(OpenCountryFileButton, 2, 0);
          CountryCustomToolStripLayoutPanel.Dock = DockStyle.Fill;
-         CountryCustomToolStripLayoutPanel.Location = new Point(0, 780);
+         CountryCustomToolStripLayoutPanel.Location = new Point(0, 776);
          CountryCustomToolStripLayoutPanel.Margin = new Padding(0);
          CountryCustomToolStripLayoutPanel.Name = "CountryCustomToolStripLayoutPanel";
          CountryCustomToolStripLayoutPanel.Padding = new Padding(2);
          CountryCustomToolStripLayoutPanel.RowCount = 1;
          CountryCustomToolStripLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         CountryCustomToolStripLayoutPanel.Size = new Size(401, 30);
+         CountryCustomToolStripLayoutPanel.Size = new Size(401, 34);
          CountryCustomToolStripLayoutPanel.TabIndex = 7;
+         // 
+         // CountryHistoryEntryToggleButton
+         // 
+         CountryHistoryEntryToggleButton.BackColor = Color.Transparent;
+         CountryHistoryEntryToggleButton.Image = Properties.Resources.HistoryEntriesDisabled;
+         CountryHistoryEntryToggleButton.ImageOff = Properties.Resources.HistoryEntriesDisabled;
+         CountryHistoryEntryToggleButton.ImageOn = Properties.Resources.HistoryEntriesEnabled;
+         CountryHistoryEntryToggleButton.Location = new Point(122, 2);
+         CountryHistoryEntryToggleButton.Margin = new Padding(0);
+         CountryHistoryEntryToggleButton.Name = "CountryHistoryEntryToggleButton";
+         CountryHistoryEntryToggleButton.Size = new Size(40, 30);
+         CountryHistoryEntryToggleButton.State = false;
+         CountryHistoryEntryToggleButton.TabIndex = 7;
+         GeneralToolTip.SetToolTip(CountryHistoryEntryToggleButton, "If enabled any changes in properties for a country will be created as a history entry for the current date");
+         CountryHistoryEntryToggleButton.UseVisualStyleBackColor = false;
+         CountryHistoryEntryToggleButton.VsMode = Editor.Controls.ToggleButton.VisualMode.Image;
+         CountryHistoryEntryToggleButton.Click += CountryHistoryEntry_Toggle;
          // 
          // SaveSelectedCountriesButton
          // 
@@ -2877,7 +2902,7 @@
          SaveSelectedCountriesButton.Location = new Point(42, 2);
          SaveSelectedCountriesButton.Margin = new Padding(0);
          SaveSelectedCountriesButton.Name = "SaveSelectedCountriesButton";
-         SaveSelectedCountriesButton.Size = new Size(40, 26);
+         SaveSelectedCountriesButton.Size = new Size(40, 30);
          SaveSelectedCountriesButton.TabIndex = 7;
          SaveSelectedCountriesButton.UseVisualStyleBackColor = true;
          SaveSelectedCountriesButton.Click += SaveSelectedCountriesButton_Click;
@@ -2889,7 +2914,7 @@
          OpenCountryAdvancedEditor.Location = new Point(319, 2);
          OpenCountryAdvancedEditor.Margin = new Padding(0);
          OpenCountryAdvancedEditor.Name = "OpenCountryAdvancedEditor";
-         OpenCountryAdvancedEditor.Size = new Size(40, 26);
+         OpenCountryAdvancedEditor.Size = new Size(40, 30);
          OpenCountryAdvancedEditor.TabIndex = 5;
          GeneralToolTip.SetToolTip(OpenCountryAdvancedEditor, "Only edit properties in here if you know what you are doing.\r\nThere are no input validations or helps.");
          OpenCountryAdvancedEditor.UseVisualStyleBackColor = true;
@@ -2902,7 +2927,7 @@
          OpenCountryFolder.Location = new Point(359, 2);
          OpenCountryFolder.Margin = new Padding(0);
          OpenCountryFolder.Name = "OpenCountryFolder";
-         OpenCountryFolder.Size = new Size(40, 26);
+         OpenCountryFolder.Size = new Size(40, 30);
          OpenCountryFolder.TabIndex = 9;
          OpenCountryFolder.UseVisualStyleBackColor = true;
          OpenCountryFolder.Click += OpenCountryFolder_Click;
@@ -2914,7 +2939,7 @@
          SaveAllCountries.Location = new Point(2, 2);
          SaveAllCountries.Margin = new Padding(0);
          SaveAllCountries.Name = "SaveAllCountries";
-         SaveAllCountries.Size = new Size(40, 26);
+         SaveAllCountries.Size = new Size(40, 30);
          SaveAllCountries.TabIndex = 6;
          SaveAllCountries.UseVisualStyleBackColor = true;
          SaveAllCountries.Click += SaveAllCountries_Click;
@@ -2926,7 +2951,7 @@
          OpenCountryFileButton.Location = new Point(82, 2);
          OpenCountryFileButton.Margin = new Padding(0);
          OpenCountryFileButton.Name = "OpenCountryFileButton";
-         OpenCountryFileButton.Size = new Size(40, 26);
+         OpenCountryFileButton.Size = new Size(40, 30);
          OpenCountryFileButton.TabIndex = 8;
          OpenCountryFileButton.UseVisualStyleBackColor = true;
          OpenCountryFileButton.Click += OpenCountryFileButton_Click;
@@ -3093,7 +3118,7 @@
          MisProvinceData.PerformLayout();
          ProvinceCustomToolStripLayoutPanel.ResumeLayout(false);
          CountryPage.ResumeLayout(false);
-         tableLayoutPanel7.ResumeLayout(false);
+         CountryMainTLP.ResumeLayout(false);
          CountryScrollPanel.ResumeLayout(false);
          CountryScrollPanel.PerformLayout();
          CountryMainTableLayoutPanel.ResumeLayout(false);
@@ -3289,7 +3314,7 @@
       private Button OpenProvinceFolder;
       private ToolStripMenuItem roughEditorToolStripMenuItem;
       private Button AdvancedProvinceEditing;
-      private TableLayoutPanel tableLayoutPanel7;
+      private TableLayoutPanel CountryMainTLP;
       private TableLayoutPanel MapLayoutPanel;
       private TableLayoutPanel MMButtonsTLPanel;
       private ToolStripMenuItem newSavingToolStripMenuItem;
@@ -3316,7 +3341,6 @@
       private ToolStripMenuItem countryToolStripMenuItem;
       private ToolStripMenuItem gameOfLiveToolStripMenuItem;
       private ToolStripMenuItem benchmarkMapModesToolStripMenuItem;
-      private CheckBox CreateHistoryEntryCheckBox;
       private ToolStripMenuItem viewErrorlogToolStripMenuItem;
       private Panel ProvinceScrollPanel;
       private TableLayoutPanel ProvinceFooterMainTLP;
@@ -3377,6 +3401,8 @@
       private Button SaveSelectedCountriesButton;
       private Button SaveAllCountries;
       private Button OpenCountryFolder;
+      private Controls.ToggleButton ProvinceHistoryEntryToggleButton;
+      private Controls.ToggleButton CountryHistoryEntryToggleButton;
    }
 }
 

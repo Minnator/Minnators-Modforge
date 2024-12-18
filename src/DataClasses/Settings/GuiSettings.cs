@@ -8,6 +8,7 @@ namespace Editor.DataClasses.Settings
       private bool _showCountryFlagInCe = true;
       private bool _jumpToSelectedProvinceCollection = true;
       private MapModeType[] _mapModes = new MapModeType[10];
+      private bool _enableDisableHistoryEntryCreationGlobally;
 
       [Description("Determines if the country flag should be shown in the country editor.")]
       [CompareInEquals]
@@ -31,6 +32,14 @@ namespace Editor.DataClasses.Settings
       {
          get => _mapModes;
          set => SetField(ref _mapModes, value);
+      }
+
+      [Description("Determines if the history entry creation should be enabled or disabled globally.")]
+      [CompareInEquals]
+      public bool EnableDisableHistoryEntryCreationGlobally
+      {
+         get => _enableDisableHistoryEntryCreationGlobally;
+         set => SetField(ref _enableDisableHistoryEntryCreationGlobally, value);
       }
    }
 }

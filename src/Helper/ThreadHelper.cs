@@ -14,7 +14,7 @@ namespace Editor.Helper
                GC.Collect();
                GC.WaitForPendingFinalizers();
             }
-            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+            //GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
             GC.Collect();
             GC.WaitForPendingFinalizers();
          })
