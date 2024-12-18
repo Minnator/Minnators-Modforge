@@ -131,6 +131,16 @@ namespace Editor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap GearWrench {
+            get {
+                object obj = ResourceManager.GetObject("GearWrench", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap GreenPlusBg {
             get {
                 object obj = ResourceManager.GetObject("GreenPlusBg", resourceCulture);
@@ -164,6 +174,26 @@ namespace Editor.Properties {
         internal static System.Drawing.Bitmap map {
             get {
                 object obj = ResourceManager.GetObject("map", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap OpenCountryFile {
+            get {
+                object obj = ResourceManager.GetObject("OpenCountryFile", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap OpenProvinceFile {
+            get {
+                object obj = ResourceManager.GetObject("OpenProvinceFile", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -231,9 +261,49 @@ namespace Editor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Save {
+            get {
+                object obj = ResourceManager.GetObject("Save", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SaveSelection {
+            get {
+                object obj = ResourceManager.GetObject("SaveSelection", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ToolBoxIcon {
+            get {
+                object obj = ResourceManager.GetObject("ToolBoxIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Up {
             get {
                 object obj = ResourceManager.GetObject("Up", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Wrench {
+            get {
+                object obj = ResourceManager.GetObject("Wrench", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

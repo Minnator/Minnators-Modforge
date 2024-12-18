@@ -32,6 +32,16 @@ public class PathObj(string[] path, bool isModPathInit)
          , isModPath);
    }
 
+   public string GetPath()
+   {
+      return System.IO.Path.Combine(IsModPath ? Globals.ModPath : Globals.VanillaPath, System.IO.Path.Combine(Path));
+   }
+
+   public string GetFolderPath()
+   {
+      return System.IO.Path.Combine(IsModPath ? Globals.ModPath : Globals.VanillaPath, System.IO.Path.Combine(Path[..^1]));
+   }
+
    public string ToPath()
    {
       return System.IO.Path.Combine(Globals.ModPath, System.IO.Path.Combine(Path));

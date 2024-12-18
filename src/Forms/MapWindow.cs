@@ -411,6 +411,7 @@ namespace Editor.Forms
 
          SaveAllProvincesButton.MouseEnter += OnSavingAllEnter;
          SaveCurrentSelectionButton.MouseEnter += OnSavingSelectionEnter;
+         OpenProvinceFile.MouseEnter += OnOpenProvinceFileEnter;
 
          OwnerTagBox = ControlFactory.GetTagComboBox();
          OwnerTagBox.OnTagChanged += ProvinceEditingEvents.OnOwnerChanged;
@@ -619,8 +620,8 @@ namespace Editor.Forms
          // MODIFIERS TAB
          InitializeModifierTab();
 
-         // Localisation GroupBox
 
+         ProvinceCustomToolStripLayoutPanel.Paint += TableLayoutBorder_Paint;
       }
 
       #endregion
@@ -885,6 +886,14 @@ namespace Editor.Forms
       {
          _savingButtonsToolTip.SetToolTip(SaveCurrentSelectionButton, $"Save selection ({Selection.Count})");
       }
+      private void OnOpenProvinceFileEnter(object? sender, EventArgs e)
+      {
+         _savingButtonsToolTip.SetToolTip(OpenProvinceFile,
+            Selection.Count == 1
+               ? $"Open the selected province file ({Selection.GetSelectedProvinces[0].GetLocalisation()})"
+               : $"Open the selected province files ({Selection.Count})");
+      }
+
 
       private static void OnDateChanged(object? sender, Date date)
       {
@@ -1387,6 +1396,18 @@ namespace Editor.Forms
 
          AddNewMonarchNameButton.Click += CountryGuiEvents.AddMonarchName_Click;
 
+         CountryCustomToolStripLayoutPanel.Paint += TableLayoutBorder_Paint;
+         OpenCountryFileButton.Enter += SetSavingToolTipCountryFileButton;
+
+      }
+
+      private void SetSavingToolTipCountryFileButton(object? sender, EventArgs e)
+      {
+         var countries = Selection.GetSelectedProvinceOwners();
+         _savingButtonsToolTip.SetToolTip(OpenCountryFileButton,
+            countries.Count == 1
+               ? $"Open the file of {countries.First().Tag} ({countries.First().GetLocalisation()})"
+               : $"Open the files of {countries.Count} countries");
       }
 
       public void ClearCountryGui()
@@ -1566,27 +1587,7 @@ namespace Editor.Forms
          FormsHelper.ShowIfAnyOpen<SettingsWindow>();
       }
 
-      private void OpenProvinceFileButton_Click(object sender, EventArgs e)
-      {
-         foreach (var province in Selection.GetSelectedProvinces)
-         {
-            var path = province.GetHistoryFilePath();
-            if (File.Exists(path))
-            {
-               Process.Start(new ProcessStartInfo
-               {
-                  FileName = path,
-                  UseShellExecute = true
-               });
-            }
-            else
-            {
-               MessageBox.Show($"File not found: {path}");
-            }
-         }
-      }
-      
-      private void button2_Click(object sender, EventArgs e)
+      private void CountryAdvancedEditorButton_Click(object sender, EventArgs e)
       {
          var editor = new RoughEditorForm(Selection.SelectedCountry, false);
          editor.ExpandObjectsOfType(nameof(Country.HistoryCountry), nameof(Country.CommonCountry));
@@ -1602,7 +1603,7 @@ namespace Editor.Forms
          }
          new RoughEditorForm(Selection.GetSelectedProvinces[0], false).ShowDialog();
       }
-      
+
       private void AddMonarchNamesToGui(List<MonarchName> names)
       {
          MonarchNamesFlowPanel.FlowDirection = FlowDirection.TopDown;
@@ -1791,12 +1792,49 @@ namespace Editor.Forms
          System.Diagnostics.Debug.WriteLine($"Time: {sw.ElapsedMilliseconds / 1000 * 2}");
       }
 
-      private void viewErrorlogToolStripMenuItem_Click(object sender, EventArgs e)
+      private void ViewErrorLogToolStripMenuItem_Click(object sender, EventArgs e)
       {
          new ErrorLogExplorer()
          {
             StartPosition = FormStartPosition.CenterParent
          }.Show();
+      }
+
+      private void OpenProvinceFile_Click(object sender, EventArgs e)
+      {
+         FilesHelper.OpenSaveableFiles(Selection.GetSelectedProvincesAsSaveable());
+      }
+
+      private void OpenProvinceFolder_Click(object sender, EventArgs e)
+      {
+         FilesHelper.OpenSaveableFolders(Selection.GetSelectedProvincesAsSaveable());
+      }
+
+      private void TableLayoutBorder_Paint(object? sender, PaintEventArgs e)
+      {
+         var tableLayout = (TableLayoutPanel)sender!;
+         var pen = new Pen(Color.Black, 1);
+         e.Graphics.DrawRectangle(pen, 0, 0, tableLayout.Width - 1, tableLayout.Height - 1);
+      }
+
+      private void OpenCountryFolder_Click(object sender, EventArgs e)
+      {
+         FilesHelper.OpenSaveableFolders(Selection.GetSelectedProvinceOwnersAsSaveable());
+      }
+
+      private void OpenCountryFileButton_Click(object sender, EventArgs e)
+      {
+         FilesHelper.OpenSaveableFiles(Selection.GetSelectedProvinceOwnersAsSaveable());
+      }
+
+      private void SaveSelectedCountriesButton_Click(object sender, EventArgs e)
+      {
+         SaveMaster.SaveSaveables(Selection.GetSelectedProvinceOwnersAsSaveable(), onlyModified: false);
+      }
+
+      private void SaveAllCountries_Click(object sender, EventArgs e)
+      {
+         SaveMaster.SaveAllChanges(false, SaveableType.Country);
       }
    }
 }

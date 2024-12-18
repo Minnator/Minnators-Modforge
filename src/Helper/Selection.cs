@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Diagnostics;
+using System.Security.Policy;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.Forms.Feature;
@@ -125,6 +126,22 @@ public static class Selection
    public static ICollection<Saveable> GetCountryAsList()
    {
       return [SelectedCountry];
+   }
+
+   public static ICollection<Country> GetSelectedProvinceOwners()
+   {
+      HashSet<Country> owners = [];
+      foreach (var province in _selectedProvinces)
+      {
+         if (Globals.Countries.TryGetValue(province.Owner, out var country))
+            owners.Add(country);
+      }
+      return owners;
+   }
+
+   public static ICollection<Saveable> GetSelectedProvinceOwnersAsSaveable()
+   {
+      return GetSelectedProvinceOwners().Cast<Saveable>().ToList();
    }
 
    public static Country SelectedCountry

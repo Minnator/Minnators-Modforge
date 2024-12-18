@@ -218,6 +218,9 @@ namespace Editor.ErrorHandling
       }
    }
 
+   public class DebugError(string message, ErrorType type)
+      : ErrorObject(LogType.Debug, type, message);
+
    public class ErrorObject : LogEntry, IExtendedLogInformationProvider
    {
       private const string DEFAULT_INFORMATION = "N/A";
@@ -233,15 +236,18 @@ namespace Editor.ErrorHandling
 
       public ErrorObject(string message, ErrorType type) : base(LogType.Error, $"{Enum.GetName(type)}: " + message)
       {
-         var information = type.GetAttributeOfType<ErrorInformation>();
+         (Description, Resolution) = GetErrorInformation(type);
+      }
 
-         if (information is null)
-            Resolution = Description = DEFAULT_INFORMATION;
-         else
-         {
-            Resolution = information.Resolution;
-            Description = information.Description;
-         }
+      protected ErrorObject(LogType level, ErrorType type, string message) : base(level, message)
+      {
+         (Description, Resolution) = GetErrorInformation(type);
+      }
+
+      private static (string Description, string Resolution) GetErrorInformation(ErrorType type)
+      {
+         var information = type.GetAttributeOfType<ErrorInformation>();
+         return information is null ? (DEFAULT_INFORMATION, DEFAULT_INFORMATION) : (information.Description, information.Resolution);
       }
 
       public string GetDescription()

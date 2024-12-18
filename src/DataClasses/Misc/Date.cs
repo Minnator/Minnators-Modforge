@@ -165,14 +165,14 @@ namespace Editor.DataClasses.Misc
          if (string.IsNullOrWhiteSpace(str))
          {
             if (!asCheck)
-               new ErrorObject($"An empty string \"[{str}]\" can not be parsed to a date", ErrorType.IllegalDateFormat);
+               _ = new ErrorObject($"An empty string \"[{str}]\" can not be parsed to a date", ErrorType.IllegalDateFormat);
             return false;
          }
          var match = DateRegex.Match(str);
          if (!match.Success)
          {
             if (!asCheck)
-               new ErrorObject($"The string \"{str}\" does not match the date format <yyyy.mm.dd>", ErrorType.IllegalDateFormat);
+               _ = new ErrorObject($"The string \"{str}\" does not match the date format <yyyy.mm.dd>", ErrorType.IllegalDateFormat);
             return false;
          }
 
@@ -183,7 +183,7 @@ namespace Editor.DataClasses.Misc
 
          if (month < 1 || month > 12 || day < 1 || day > DaysInMonth(month))
          {
-            new ErrorObject($"The date {year}.{month}.{day} is not a valid date.", ErrorType.IllegalDate);
+            _ = new ErrorObject($"The date {year}.{month}.{day} is not a valid date.", ErrorType.IllegalDate);
             return false;
          }
 

@@ -1,7 +1,12 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using Editor.DataClasses.GameDataClasses;
+using Editor.ErrorHandling;
 using Editor.Parser;
+using Editor.Saving;
+using Editor.src.Forms.PopUps;
 
 namespace Editor.Helper;
 
@@ -13,6 +18,69 @@ public static partial class FilesHelper
 
    [GeneratedRegex(ID_FROM_FILE_NAME_PATTERN, RegexOptions.Compiled)]
    private static partial Regex IdFromString();
+
+   public static void OpenSaveableFolders(ICollection<Saveable> saveables)
+   {
+      HashSet<string> uniquePaths = [];
+      foreach (var prov in saveables)
+         uniquePaths.Add(prov.Path.GetFolderPath());
+
+      OpenFolders(uniquePaths);
+   }
+
+   public static void OpenFolder(Saveable saveable)
+   {
+      OpenFolder(saveable.Path.GetFolderPath());
+   }
+
+   private static void OpenFolders(ICollection<string> paths)
+   {
+      foreach (var path in paths)
+         OpenFolder(path);
+   }
+
+   private static void OpenFolder(string path)
+   {
+      if (Directory.Exists(path))
+         Process.Start(new ProcessStartInfo
+         {
+            FileName = path, 
+            UseShellExecute = true 
+         });
+      else
+      {
+         MessageBox.Show($"The path {path} can not be opened", "Folder can not be opened", MessageBoxButtons.OK,
+            MessageBoxIcon.Warning);
+         _ = new DebugError($"Could not open \"{path}\"", ErrorType.ExplorerCouldNotOpenFolder);
+      }
+   }
+
+   public static void OpenSaveableFiles(ICollection<Saveable> saveables)
+   {
+      foreach (var prov in saveables)
+         OpenFile(prov);
+   }
+
+   public static void OpenFile(Saveable saveable)
+   {
+      var filePath = saveable.Path.GetPath();
+      if (File.Exists(filePath))
+         Process.Start(new ProcessStartInfo
+         {
+            FileName = filePath,
+            UseShellExecute = true
+         });
+      else
+      {
+         {
+            MessageBox.Show($"The path {filePath} can not be opened", "File can not be opened", MessageBoxButtons.OK,
+            MessageBoxIcon.Warning);
+            _ = new DebugError($"Could not open \"{filePath}\"", ErrorType.ApplicationCouldNotOpenFile);
+         }
+      }
+   }
+
+   
    // Gets all files in a folder with a specific file ending in all subfolders of the folder
    public static List<string> GetAllFilesInFolder(string folderPath, string searchPattern)
    {
@@ -109,7 +177,6 @@ public static partial class FilesHelper
       return files.Count > 0;
    }
 
-   //TODO FIX
    public static bool GetModOrVanillaPath(out string filePath, out bool isModPath, params string[] internalPath)
    {
       var innerPath = Path.Combine(internalPath);
