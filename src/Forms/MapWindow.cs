@@ -1806,6 +1806,6 @@ namespace Editor.Forms
       private void testToolStripMenuItem_Click(object sender, EventArgs e)
       {
          _ = new RoughEditorForm(new GlobalsDynamicWrapper(), false).ShowDialog();
-      }
+      } 
    }
 }
