@@ -8,7 +8,7 @@ using Editor.DataClasses.Misc;
 namespace Editor.Parser;
 
 public class ParsingException(string message) : Exception(message);
-
+// antlr4 -Dlanguage=CSharp Grammar.g4
 public static partial class Parsing
 {
    #region Regexes

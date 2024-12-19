@@ -713,7 +713,7 @@ public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<P
    /// </summary>
    public void ResetHistory()
    {
-      GetArea().Add(this);
+      //GetArea().Add(this);
       Claims = ProvinceData.Claims;
       PermanentClaims = ProvinceData.PermanentClaims;
       Cores = ProvinceData.Cores;

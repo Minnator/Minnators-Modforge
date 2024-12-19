@@ -123,6 +123,7 @@
          ProvinceNameLabel = new Label();
          SelectionTypeBox = new ComboBox();
          label24 = new Label();
+         BookMarkComboBox = new ComboBox();
          tableLayoutPanel5 = new TableLayoutPanel();
          MagicWandTolerance = new NumericUpDown();
          MWAttirbuteCombobox = new ComboBox();
@@ -984,6 +985,7 @@
          TopStripLayoutPanel.Controls.Add(ProvinceNameLabel, 3, 0);
          TopStripLayoutPanel.Controls.Add(SelectionTypeBox, 1, 0);
          TopStripLayoutPanel.Controls.Add(label24, 0, 0);
+         TopStripLayoutPanel.Controls.Add(BookMarkComboBox, 5, 0);
          TopStripLayoutPanel.Dock = DockStyle.Fill;
          TopStripLayoutPanel.Location = new Point(400, 0);
          TopStripLayoutPanel.Margin = new Padding(0);
@@ -1037,6 +1039,17 @@
          label24.TabIndex = 5;
          label24.Text = "Selection type";
          label24.TextAlign = ContentAlignment.MiddleCenter;
+         // 
+         // BookMarkComboBox
+         // 
+         BookMarkComboBox.Dock = DockStyle.Fill;
+         BookMarkComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+         BookMarkComboBox.FormattingEnabled = true;
+         BookMarkComboBox.Location = new Point(902, 1);
+         BookMarkComboBox.Margin = new Padding(3, 1, 3, 1);
+         BookMarkComboBox.Name = "BookMarkComboBox";
+         BookMarkComboBox.Size = new Size(206, 23);
+         BookMarkComboBox.TabIndex = 6;
          // 
          // tableLayoutPanel5
          // 
@@ -3412,6 +3425,7 @@
       private Controls.ToggleButton ProvinceHistoryEntryToggleButton;
       private Controls.ToggleButton CountryHistoryEntryToggleButton;
       private ToolStripMenuItem runNameGenToolStripMenuItem;
+      private ComboBox BookMarkComboBox;
    }
 }
 

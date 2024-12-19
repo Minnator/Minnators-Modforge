@@ -187,8 +187,21 @@ namespace Editor.Forms
          SelectionTypeBox.Items.AddRange([.. Enum.GetNames<SelectionType>()]);
          SelectionTypeBox.SelectedIndex = 0;
 
+         BookMarkComboBox.Items.AddRange([.. Globals.Bookmarks]);
+         BookMarkComboBox.SelectedIndexChanged += OnBookMarkChanged;
+
+
          // Initalize Settings Events and Listeners
          SettingsHelper.InitializeEvent();
+      }
+
+      private void OnBookMarkChanged(object? sender, EventArgs e)
+      {
+         if (BookMarkComboBox.SelectedIndex == -1)
+            return;
+
+         var bookmark = Globals.Bookmarks[BookMarkComboBox.SelectedIndex];
+         DateControl.Date = bookmark.Date;
       }
 
       private void UpdateGui()
