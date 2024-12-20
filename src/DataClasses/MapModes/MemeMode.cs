@@ -8,7 +8,7 @@ namespace Editor.DataClasses.MapModes
    {
       private Timer _timer = new();
       private int _frameIndex = 0;
-      private readonly string _pathAndFile = $"{Path.Combine(Globals.AppDirectory, "BadApple")}";
+      private readonly string _pathAndFile = $"{Path.Combine(Globals.AppDirectory, "NeverGonnaGiveYouUp")}";
       private const string ending = "";
       private Bitmap[] frames;
       private Point _offset;

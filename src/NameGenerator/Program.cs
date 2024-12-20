@@ -17,7 +17,7 @@ namespace Editor.NameGenerator
          Debug.WriteLine($"Generator creation took: {stopwatch.ElapsedMilliseconds}ms");
          stopwatch.Restart();
          Debug.Assert(generator != null, nameof(generator) + " != null");
-         var task = generator.GenerateNames(150, 5, 15, 3, "chester", Globals.Random);
+         var task = generator.GenerateNames(150, 5, 15, 3, "chest", Globals.Random);
          stopwatch.Stop();
          Debug.WriteLine($"Name generation took: {stopwatch.ElapsedMilliseconds}ms");
 

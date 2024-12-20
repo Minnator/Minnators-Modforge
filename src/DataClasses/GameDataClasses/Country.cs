@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Editor.DataClasses.Commands;
@@ -582,6 +583,17 @@ public class Country : ProvinceCollection<Province>, ITitleAdjProvider
          if (Globals.State == State.Running)
             ColorInvoke(this);
       }
+   }
+
+   public int GetCountOfPropertyList(string propName)
+   {
+      var prop = GetType().GetProperty(propName);
+      if (prop == null)
+         return 0;
+      var value = prop.GetValue(this);
+      if (value is ICollection collection)
+         return collection.Count;
+      return 0;
    }
 
    public override void OnPropertyChanged(string? propertyName = null) { }

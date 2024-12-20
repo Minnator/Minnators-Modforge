@@ -1,5 +1,8 @@
 ﻿using Editor.Helper;
 using Editor.Saving;
+using Antlr4.Runtime;
+using Antlr4.Runtime.Tree;
+
 
 namespace Editor.ErrorHandling
 {
@@ -16,7 +19,7 @@ namespace Editor.ErrorHandling
          Color = ColorTranslator.FromHtml(backColor); // Convert HEX to Color
          BlackColor = blackColor;
       }
-      
+
    }
 
 
@@ -163,29 +166,29 @@ namespace Editor.ErrorHandling
                   ActiveEntries.Add(entry);
                   OnLogEntryAdded(entry);
                }
-            }  
-            
+            }
+
          }
       }
 
       public static LogEntry Inform(string message)
       {
-         return new (LogType.Information, message);
+         return new(LogType.Information, message);
       }
 
       public static LogEntry Warn(string message)
       {
-         return new (LogType.Warning, message);
+         return new(LogType.Warning, message);
       }
 
       public static LogEntry Error(string message)
       {
-         return new (LogType.Error, message);
+         return new(LogType.Error, message);
       }
 
       public static LogEntry Debug(string message)
       {
-         return new (LogType.Debug, message);
+         return new(LogType.Debug, message);
       }
 
       private static void OnLogEntryAdded(LogEntry e)
@@ -220,6 +223,33 @@ namespace Editor.ErrorHandling
 
    public class DebugError(string message, ErrorType type)
       : ErrorObject(LogType.Debug, type, message);
+
+
+   public class LoadingError : ErrorObject
+   {
+      public static string GetErrorMsg(string path, int line, int charPos, string msg) => $"Error in file \"{path}\" on line {line}|{charPos} : {msg}";
+
+      /// <summary>
+      /// Parsing Exception
+      /// </summary>
+      /// <param name="msg"></param>
+      /// <param name="path"></param>
+      /// <param name="line"></param>
+      /// <param name="charPos"></param>
+      /// <param name="type"></param>
+      public LoadingError(PathObj path, int line, int charPos, string msg, ErrorType type = ErrorType.SyntaxError) : base(GetErrorMsg(path.ToPath(), line, charPos, msg), type)
+      { }
+
+      /// <summary>
+      /// Object Construction Exception
+      /// </summary>
+      /// <param name="path"></param>
+      /// <param name="msg"></param>
+      /// <param name="type"></param>
+      /// <param name="context"></param>
+      public LoadingError(PathObj path, string msg, ErrorType type, ParserRuleContext context) : this(path, context.Start.Line, context.Start.Column, msg, type)
+      { }
+   }
 
    public class ErrorObject : LogEntry, IExtendedLogInformationProvider
    {

@@ -80,6 +80,21 @@ public static partial class FilesHelper
       }
    }
 
+   public static List<string> GetAllFilesInFolder(string searchPattern = ".*txt", params string[] internalPath)
+   {
+      var folderPath = Path.Combine(internalPath);
+      var modPath = Path.Combine(Globals.ModPath, folderPath);
+      var vanillaPath = Path.Combine(Globals.VanillaPath, folderPath);
+      
+      HashSet<string> uniqueFiles = [];
+      
+      var modFiles = GetFilesInPath(modPath, searchPattern, ref uniqueFiles);
+      
+      if (IsPathReplaced(internalPath))
+         return modFiles;
+      
+      return modFiles.Concat(GetFilesInPath(vanillaPath, searchPattern, ref uniqueFiles)).ToList();
+   }
    
    // Gets all files in a folder with a specific file ending in all subfolders of the folder
    public static List<string> GetAllFilesInFolder(string folderPath, string searchPattern)

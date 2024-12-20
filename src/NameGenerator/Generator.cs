@@ -31,7 +31,7 @@
 
          for (var i = 0; i < order; i++)
          {
-            _models.Add(new Model(trainingData, order - i, smoothing, domain.ToList()));
+            _models.Add(new (trainingData, order - i, smoothing, domain.ToList()));
          }
       }
 

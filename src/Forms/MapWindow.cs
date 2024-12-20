@@ -1264,7 +1264,10 @@ namespace Editor.Forms
          _techGroupBox.SelectedIndexChanged += CountryGuiEvents.TechGroupBox_SelectedIndexChanged;
          _governmentTypeBox = ControlFactory.GetListComboBox([.. Globals.GovernmentTypes.Keys], new(1, 1, 6, 1));
          _governmentTypeBox.SelectedIndexChanged += GovernmentTypeBox_SelectedIndexChanged;
-         _governmentRankBox = ControlFactory.GetListComboBox(["1", "2", "3"], new(1)); // TODO read in the defines to determine range
+         List<string> ranks = [];
+         for (var i = 1; i <= Globals.MaxGovRank; i++)
+            ranks.Add(i.ToString());
+         _governmentRankBox = ControlFactory.GetListComboBox(ranks, new(1)); // TODO read in the defines to determine range
          _governmentRankBox.SelectedIndexChanged += CountryGuiEvents.GovernmentRankBox_SelectedIndexChanged;
          _governmentReforms = ControlFactory.GetItemList(ItemTypes.FullWidth, [], "Government Reforms");
          _governmentReforms.Width = 117;
@@ -1836,6 +1839,11 @@ namespace Editor.Forms
       private void runNameGenToolStripMenuItem_Click(object sender, EventArgs e)
       {
          NameGenStarter.RunNameGen();
+      }
+
+      private void loadingToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         LoadTesting.DEBUG();
       }
    }
 }

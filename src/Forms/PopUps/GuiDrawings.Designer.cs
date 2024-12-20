@@ -36,7 +36,7 @@
          StraitsCheckBox = new CheckBox();
          CapitalsCheckBox = new CheckBox();
          RiversCheckBox = new CheckBox();
-         checkBox5 = new CheckBox();
+         EquatorCheckBox = new CheckBox();
          GuiDrawingsToolTip = new ToolTip(components);
          GuiDrawingsLayoutPanel.SuspendLayout();
          SuspendLayout();
@@ -50,7 +50,7 @@
          GuiDrawingsLayoutPanel.Controls.Add(StraitsCheckBox, 0, 2);
          GuiDrawingsLayoutPanel.Controls.Add(CapitalsCheckBox, 0, 3);
          GuiDrawingsLayoutPanel.Controls.Add(RiversCheckBox, 0, 4);
-         GuiDrawingsLayoutPanel.Controls.Add(checkBox5, 0, 5);
+         GuiDrawingsLayoutPanel.Controls.Add(EquatorCheckBox, 0, 5);
          GuiDrawingsLayoutPanel.Dock = DockStyle.Fill;
          GuiDrawingsLayoutPanel.Location = new Point(0, 0);
          GuiDrawingsLayoutPanel.Name = "GuiDrawingsLayoutPanel";
@@ -131,17 +131,17 @@
          RiversCheckBox.UseVisualStyleBackColor = true;
          RiversCheckBox.CheckedChanged += RiversCheckBox_CheckedChanged;
          // 
-         // checkBox5
+         // EquatorCheckBox
          // 
-         checkBox5.AutoSize = true;
-         checkBox5.Dock = DockStyle.Fill;
-         checkBox5.Location = new Point(9, 151);
-         checkBox5.Margin = new Padding(9, 3, 3, 3);
-         checkBox5.Name = "checkBox5";
-         checkBox5.Size = new Size(211, 19);
-         checkBox5.TabIndex = 5;
-         checkBox5.Text = "checkBox5";
-         checkBox5.UseVisualStyleBackColor = true;
+         EquatorCheckBox.AutoSize = true;
+         EquatorCheckBox.Dock = DockStyle.Fill;
+         EquatorCheckBox.Location = new Point(9, 151);
+         EquatorCheckBox.Margin = new Padding(9, 3, 3, 3);
+         EquatorCheckBox.Name = "EquatorCheckBox";
+         EquatorCheckBox.Size = new Size(211, 19);
+         EquatorCheckBox.TabIndex = 5;
+         EquatorCheckBox.Text = "Equator";
+         EquatorCheckBox.UseVisualStyleBackColor = true;
          // 
          // GuiDrawings
          // 
@@ -166,6 +166,6 @@
       private CheckBox StraitsCheckBox;
       private CheckBox CapitalsCheckBox;
       private CheckBox RiversCheckBox;
-      private CheckBox checkBox5;
+      private CheckBox EquatorCheckBox;
    }
 }

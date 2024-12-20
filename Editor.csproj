@@ -53,6 +53,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.13.1" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
@@ -64,6 +65,8 @@
   <ItemGroup>
     <Folder Include="src\Controls\Initialisation\" />
     <Folder Include="src\Formatters\" />
+    <Folder Include="src\Loading\TreeClasses\" />
+    <Folder Include="src\ParadoxLanguage\ANTLR\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="DirectXTexNetImpl">

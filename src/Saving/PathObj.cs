@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Editor.Saving;
 
@@ -36,6 +37,8 @@ public class PathObj(string[] path, bool isModPathInit)
    {
       return System.IO.Path.Combine(IsModPath ? Globals.ModPath : Globals.VanillaPath, System.IO.Path.Combine(Path));
    }
+
+   public string GetInternalPath() => System.IO.Path.Combine(Path);
 
    public string GetFolderPath()
    {

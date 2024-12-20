@@ -105,6 +105,7 @@
          countryToolStripMenuItem = new ToolStripMenuItem();
          benchmarkMapModesToolStripMenuItem = new ToolStripMenuItem();
          runNameGenToolStripMenuItem = new ToolStripMenuItem();
+         loadingToolStripMenuItem = new ToolStripMenuItem();
          ProvinceCollectionsLayoutPanel = new TableLayoutPanel();
          FocusSelectionCheckBox = new CheckBox();
          BottomToolStrip = new ToolStrip();
@@ -684,7 +685,7 @@
          // 
          // debugToolStripMenuItem
          // 
-         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem, jsonToolStripMenuItem, bugReportToolStripMenuItem, crashReportToolStripMenuItem, loadDDSFilesTestToolStripMenuItem, roughEditorToolStripMenuItem, newSavingToolStripMenuItem, toolStripMenuItem4, fileNamesToolStripMenuItem, emptyCOlorInCountryToolStripMenuItem, iMBTESTToolStripMenuItem, clearGUIToolStripMenuItem, benchmarkMapModesToolStripMenuItem, runNameGenToolStripMenuItem });
+         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem, jsonToolStripMenuItem, bugReportToolStripMenuItem, crashReportToolStripMenuItem, loadDDSFilesTestToolStripMenuItem, roughEditorToolStripMenuItem, newSavingToolStripMenuItem, toolStripMenuItem4, fileNamesToolStripMenuItem, emptyCOlorInCountryToolStripMenuItem, iMBTESTToolStripMenuItem, clearGUIToolStripMenuItem, benchmarkMapModesToolStripMenuItem, runNameGenToolStripMenuItem, loadingToolStripMenuItem });
          debugToolStripMenuItem.Enabled = false;
          debugToolStripMenuItem.Name = "debugToolStripMenuItem";
          debugToolStripMenuItem.Size = new Size(54, 23);
@@ -859,6 +860,13 @@
          runNameGenToolStripMenuItem.Size = new Size(234, 22);
          runNameGenToolStripMenuItem.Text = "RunNameGen";
          runNameGenToolStripMenuItem.Click += runNameGenToolStripMenuItem_Click;
+         // 
+         // loadingToolStripMenuItem
+         // 
+         loadingToolStripMenuItem.Name = "loadingToolStripMenuItem";
+         loadingToolStripMenuItem.Size = new Size(234, 22);
+         loadingToolStripMenuItem.Text = "Loading";
+         loadingToolStripMenuItem.Click += loadingToolStripMenuItem_Click;
          // 
          // ProvinceCollectionsLayoutPanel
          // 
@@ -3426,6 +3434,7 @@
       private Controls.ToggleButton CountryHistoryEntryToggleButton;
       private ToolStripMenuItem runNameGenToolStripMenuItem;
       private ComboBox BookMarkComboBox;
+      private ToolStripMenuItem loadingToolStripMenuItem;
    }
 }
 

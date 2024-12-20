@@ -114,6 +114,8 @@ public static class Globals
    public static ZoomControl ZoomControl = null!;
    public static int EquatorY = 0;
 
+   public static int MaxGovRank = 3;
+
    // SETTINGS
    public static Settings Settings = new();
 
@@ -352,12 +354,21 @@ public static class Globals
 
 
 // Update Alpha 1.0.1
-// - [ ] Fix all combo-boxes taking the input from the suggestion without the use ever using it (when both are empty)
-// - [ ] Demonstration Video
 // - [x] Add Explorable Error log which provides a possible solution, and a detailed cause
 // - [x] Generalized Window Handling
 // - [x] Improved MapMode management
 // - [x] Streamlined History management
+
+// Update Alpha 1.0.2
+// - [ ] Fix all combo-boxes taking the input from the suggestion without the use ever using it (when both are empty)
+// - [ ] Demonstration Video
+// - [x] Fix Going back and forth in history causing provinces being in illegal states
+// - [x] Added Icons and improved Custom toolbar
+// - [x] Added Bookmark Support and selection in GUI
+// - [x] Added Parsing of climate.txt
+// - [x] Added Weather mapmode
+// - [x] Added Climate mapmode
+// - [x] Allow deselecting using modifier key
 
 // TODO LIST Until Alpha 1.1
 // - [ ] Block Water provinces; should not be viable for countries

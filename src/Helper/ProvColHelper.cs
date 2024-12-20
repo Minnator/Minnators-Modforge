@@ -199,5 +199,12 @@ namespace Editor.Helper
          return provinces;
       }
 
+      public static int CountListItemsOfAllCountries(string property)
+      {
+         var count = 0;
+         foreach (var country in Globals.Countries.Values) 
+            count += country.GetCountOfPropertyList(property);
+         return count;
+      }
    }
 }
