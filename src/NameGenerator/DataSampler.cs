@@ -1,6 +1,8 @@
-﻿using Editor.DataClasses.GameDataClasses;
+﻿using System.Collections.Generic;
+using Editor.DataClasses.GameDataClasses;
 using Editor.ErrorHandling;
 using Editor.Helper;
+using Editor.Parser;
 using Editor.Saving;
 
 namespace Editor.NameGenerator
@@ -27,17 +29,16 @@ namespace Editor.NameGenerator
             case NameGenSource.ProvinceNames:
                return SampleArray(GetLocProviderLocValues(Globals.Provinces.Cast<ITitleAdjProvider>().ToList()), count, true);
             case NameGenSource.CustomByUser:
-               // The user can provide a file path to a .txt file with a list of names separated by commas or new lines which will be used as the source
-               break;
+               if (!IO.Exists(Globals.Settings.Saving.CustomWordsLocation) || !IO.ReadAllInANSI(Globals.Settings.Saving.CustomWordsLocation, out var content))
+                  return [];
+               return SampleArray(Parsing.GetStringListWithoutQuotes(content), count, true);
             case NameGenSource.MonarchNames:
-
+               return SampleArray(GetMonarchNames(), count, true);
             case NameGenSource.LocWords:
-               break;
+               return SampleLocalisation(count);
             default:
                throw new ArgumentOutOfRangeException(nameof(source), source, null);
          }
-         return [];
-         
       }
 
       private static string[] SampleFromSelection(NameGenSource source, int count)
@@ -112,7 +113,34 @@ namespace Editor.NameGenerator
          return totalNames;
       }
 
-      
+      private static string[] SampleLocalisation(int count)
+      {
+         var locs = new string[count];
+         if (count > Globals.Localisation.Count)
+         {
+            _ = new LogEntry(LogType.Warning, "too little Localisation array for string generator. Sampling will have duplicate strings!");
+            Array.Copy(Globals.Localisation.ToArray(), locs, count);
+            while (count > Globals.Localisation.Count)
+               Array.Copy(Globals.Localisation.ToArray(), 0, locs, Globals.Localisation.Count, count - Globals.Localisation.Count);
+            return locs;
+         }
+
+         var resultCount = 0;
+         foreach (var item in Globals.Localisation)
+         {
+            // Probability of selecting an item depends on remaining capacity and elements
+            var remainingSlots = count - resultCount;
+
+            // Select item if within probability bounds
+            if (Globals.Random.Next(Globals.Localisation.Count - resultCount) < remainingSlots) 
+               locs[resultCount++] = item.Value;
+
+            if (resultCount == count)
+               break;
+         }
+
+         return locs;
+      }
 
    }
 }

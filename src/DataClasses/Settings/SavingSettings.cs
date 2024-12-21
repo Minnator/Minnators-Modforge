@@ -13,6 +13,7 @@ namespace Editor.DataClasses.Settings
       private bool _addModifiedCommentToFilesWhenSaving = true;
       private bool _addCommentAboveObjectsInFiles = true;
       private string _logLocation = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs");
+      private string _customWordsLocation = string.Empty;
 
       [Description(
          "<true> Asks for a filename or location beofre creating a new file\n<false> creates files with default names")]
@@ -70,6 +71,14 @@ namespace Editor.DataClasses.Settings
       {
          get => _logLocation;
          set => SetField(ref _logLocation, value);
+      }
+
+      [Description("The location of the custom words file (ANSI). This file is used to generate random but context fitting words for naming or localisation.")]
+      [CompareInEquals]
+      public string CustomWordsLocation
+      {
+         get => _customWordsLocation;
+         set => SetField(ref _customWordsLocation, value);
       }
    }
 }

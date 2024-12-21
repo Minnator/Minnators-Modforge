@@ -13,10 +13,10 @@ public class Consts
    // Crash Mod
    //public const string MOD_PATH = @"S:\SteamLibrary\steamapps\workshop\content\236850\3268852078";
    // Voltaire's Nightmare
-   //public const string MOD_PATH = @"S:\SteamLibrary\steamapps\workshop\content\236850\2415582296";
+   public const string MOD_PATH = @"S:\SteamLibrary\steamapps\workshop\content\236850\2415582296";
 
    //public const string MOD_PATH = @"O:\Users\david\Documents\Paradox Interactive\Europa Universalis V\mod\zombH";
-   public const string MOD_PATH = @"C:\Users\david\Dokumente\Paradox Interactive\Europa Universalis IV\mod\FUCK";
+   //public const string MOD_PATH = @"C:\Users\david\Dokumente\Paradox Interactive\Europa Universalis IV\mod\FUCK";
    //public const string MOD_PATH = @"C:\Users\david\Dokumente\Paradox Interactive\Europa Universalis IV\mod\GLP";
    //public const string MOD_PATH = @"C:\Users\david\Dokumente\Paradox Interactive\Europa Universalis IV\mod\The Intitute of Quality";
    public const string VANILLA_PATH = @"S:\SteamLibrary\steamapps\common\Europa Universalis IV";

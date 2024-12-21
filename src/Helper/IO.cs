@@ -174,5 +174,6 @@ internal static class IO
       streamWriter.Close();
       return true;
    }
-
+   
+   public static bool Exists(string path) => !string.IsNullOrEmpty(path) && File.Exists(path);
 }

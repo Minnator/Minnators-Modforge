@@ -383,13 +383,11 @@ public static partial class Parsing
       return GetStringList(ref value);
    }
 
-   public static List<string> GetStringListWithoutQuotes(string value)
+   public static string[] GetStringListWithoutQuotes(string value)
    {
-      List<string> strList = [];
-
       var matches = StringListRegex.Matches(value);
-      foreach (Match match in matches)
-         strList.Add(match.ToString().Trim().TrimQuotes());
+      var strList = new string[matches.Count];
+      for (var i = 0; i < matches.Count; i++) strList[i] = matches[i].ToString().Trim().TrimQuotes();
       return strList;
    }
 
