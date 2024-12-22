@@ -9,6 +9,7 @@ namespace Editor.DataClasses.Settings
       private bool _jumpToSelectedProvinceCollection = true;
       private MapModeType[] _mapModes = new MapModeType[10];
       private bool _enableDisableHistoryEntryCreationGlobally;
+      private bool _selectionDrawerAlwaysOnTop = true;
 
       [Description("Determines if the country flag should be shown in the country editor.")]
       [CompareInEquals]
@@ -40,6 +41,14 @@ namespace Editor.DataClasses.Settings
       {
          get => _enableDisableHistoryEntryCreationGlobally;
          set => SetField(ref _enableDisableHistoryEntryCreationGlobally, value);
+      }
+
+      [Description("Determines if the selection drawer should always be on top.")]
+      [CompareInEquals]
+      public bool SelectionDrawerAlwaysOnTop
+      {
+         get => _selectionDrawerAlwaysOnTop;
+         set => SetField(ref _selectionDrawerAlwaysOnTop, value);
       }
    }
 }

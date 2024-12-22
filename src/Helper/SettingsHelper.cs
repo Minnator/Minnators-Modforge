@@ -45,6 +45,10 @@ namespace Editor.Helper
             case nameof(GuiSettings.MapModes):
                Globals.MapWindow.UpdateMapModeButtons(false);
                break;
+            case nameof(GuiSettings.SelectionDrawerAlwaysOnTop):
+               if (FormsHelper.GetOpenForm<SelectionDrawerForm>(out var form))
+                  form.TopMost = Globals.Settings.Gui.SelectionDrawerAlwaysOnTop;
+               break;
          }
       }
 

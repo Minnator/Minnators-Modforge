@@ -21,12 +21,28 @@ namespace Editor.Forms.Feature
          ExportSettingsPropertyGrid.PropertyValueChanged += ExportSettingsPropertyChanged;
          ExportSettingsPropertyGrid.SelectedObject = ExportSettings;
 
-         MapModeManager.MapModeChanged += (s, e) => RenderImage();
-         Selection.OnProvinceGroupDeselected += (s, e) =>
-         {
-            RenderImage();
-         };
-         Selection.OnProvinceGroupSelected += (s, e) => RenderImage();
+         MapModeManager.MapModeChanged += OnMapModeChanged;
+         Selection.OnProvinceGroupDeselected += RenderOnEvent;
+         Selection.OnProvinceGroupSelected += RenderOnEvent;
+
+         if (Globals.Settings.Gui.SelectionDrawerAlwaysOnTop)
+            TopMost = true;
+
+         FormClosing += OnFormClose;
+      }
+      
+      private void OnMapModeChanged(object? s, MapMode e) => RenderImage();
+      private void RenderOnEvent(object? s, List<Province> e) => RenderImage();
+
+      private void OnFormClose(object? sender, EventArgs e)
+      {
+         ExportSettingsPropertyGrid.PropertyValueChanged -= ExportSettingsPropertyChanged;
+         ExportSettingsPropertyGrid.SelectedObject = null;
+
+         Selection.OnProvinceGroupDeselected -= RenderOnEvent;
+         Selection.OnProvinceGroupSelected -= RenderOnEvent;
+
+         MapModeManager.MapModeChanged -= OnMapModeChanged;
       }
 
       private void ExportSettingsPropertyChanged(object? s, PropertyValueChangedEventArgs e)
@@ -149,7 +165,7 @@ namespace Editor.Forms.Feature
          }
       }
 
-      private void SelectionDrawerForm_FormClosing(object sender, FormClosingEventArgs e)
+      private void SelectionDrawerForm_FormClosing(object? sender, FormClosingEventArgs e)
       {
          ZoomControl.Dispose();
       }
