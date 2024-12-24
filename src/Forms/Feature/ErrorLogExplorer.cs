@@ -7,6 +7,13 @@ namespace Editor.Forms.Feature
 {
    public partial class ErrorLogExplorer : Form
    {
+      public enum SearchType
+      {
+         TextSearch,
+         ErrorType,
+         ErrorLevel,
+      }
+
       private bool _loading = false;
 
       public ErrorLogExplorer()
@@ -17,6 +24,7 @@ namespace Editor.Forms.Feature
          InfoCheckBox.CheckedChanged += OnVerbosityChanged;
          DebugCheckBox.CheckedChanged += OnVerbosityChanged;
          ErrorView.MouseClick += BuildContextMenu;
+         SearchButton.MouseDown += SearchButton_Click;
 
          ErrorView.DoubleClick += (sender, args) =>
          {
@@ -33,7 +41,7 @@ namespace Editor.Forms.Feature
             var form = new LogEntryViewer(provider);
             form.ShowDialog();
          };
-         
+
          LogManager.LogEntryAdded += (_, a) =>
          {
             AddLogEntry(a, true);
@@ -41,6 +49,7 @@ namespace Editor.Forms.Feature
                SizeHeadersAndColumns();
          };
 
+         SearchTypeBox.DataSource = Enum.GetValues(typeof(SearchType));
 
          LoadLogType(Globals.Settings.Logging.LoggingVerbosity);
 
@@ -140,7 +149,7 @@ namespace Editor.Forms.Feature
 
       public void AddLogEntries(ICollection<LogEntry> entries)
       {
-         foreach (var entry in entries) 
+         foreach (var entry in entries)
             AddLogEntry(entry, false);
       }
 
@@ -216,5 +225,77 @@ namespace Editor.Forms.Feature
             }
          };
       }
+
+      private void ErrorLogExplorer_KeyPress(object sender, KeyPressEventArgs e)
+      {
+         // if Ctrl + F is pressed focus SearchTextBox
+         if (e.KeyChar == (char)6)
+         {
+            SearchTextBox.Focus();
+            SearchTextBox.SelectAll();
+            e.Handled = true;
+         }
+      }
+
+      private void SearchTextBox_KeyPress(object sender, KeyPressEventArgs e)
+      {
+         // if Esc is pressed clear SearchTextBox 
+         if (e.KeyChar == (char)27)
+         {
+            SearchTextBox.Clear();
+            SearchTypeBox.Focus();
+            e.Handled = true;
+         }
+         // Search if Enter is pressed
+         else if (e.KeyChar == (char)13)
+         {
+            SearchFor((SearchType?)SearchTypeBox.SelectedItem, SearchTextBox.Text);
+            e.Handled = true;
+         }
+      }
+
+      private void SearchButton_Click(object? sender, MouseEventArgs e)
+      {
+         // if RMB clear all previous search results
+         if (e.Button == MouseButtons.Right)
+         {
+            SearchTextBox.Clear();
+            ClearSearchResults();
+            return;
+         }
+
+         SearchFor((SearchType?)SearchTypeBox.SelectedItem, SearchTextBox.Text);
+      }
+
+      private void ClearSearchResults()
+      {
+         ErrorView.Items.Clear();
+         LoadLogType(Globals.Settings.Logging.LoggingVerbosity);
+      }
+
+      private void SearchFor(SearchType? searchType, string searchString)
+      {
+         if (searchType == null || string.IsNullOrWhiteSpace(searchString))
+            return;
+
+         var entries = SearchSource.Checked ? LogManager.GetAlLogEntries : LogManager.ActiveEntries;
+
+         switch (searchType.Value)
+         {
+            case SearchType.ErrorType:
+               entries = entries.Where(e => e is ErrorObject er && er.ErrorType.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
+               break;
+            case SearchType.ErrorLevel:
+               entries = entries.Where(e => e.Level.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
+               break;
+            case SearchType.TextSearch:
+               entries = entries.Where(e => e.Message.Contains(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
+               break;
+         }
+
+         ErrorView.Items.Clear();
+         AddLogEntries(entries);
+      }
+
    }
 }

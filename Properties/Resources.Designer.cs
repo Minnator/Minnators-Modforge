@@ -301,6 +301,16 @@ namespace Editor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Search {
+            get {
+                object obj = ResourceManager.GetObject("Search", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ToolBoxIcon {
             get {
                 object obj = ResourceManager.GetObject("ToolBoxIcon", resourceCulture);

@@ -28,6 +28,7 @@
       /// </summary>
       private void InitializeComponent()
       {
+         components = new System.ComponentModel.Container();
          System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ErrorLogExplorer));
          MainTLP = new TableLayoutPanel();
          TopTLP = new TableLayoutPanel();
@@ -35,14 +36,21 @@
          WarningCheckBox = new CheckBox();
          InfoCheckBox = new CheckBox();
          DebugCheckBox = new CheckBox();
+         tableLayoutPanel1 = new TableLayoutPanel();
+         SearchButton = new Button();
+         SearchTextBox = new TextBox();
+         SearchTypeBox = new ComboBox();
+         SearchSource = new CheckBox();
          ErrorView = new ListView();
          IndexHeader = new ColumnHeader();
          TimeHeader = new ColumnHeader();
          VerbocityHeader = new ColumnHeader();
          MessageHeader = new ColumnHeader();
          label1 = new Label();
+         ErrorToolTip = new ToolTip(components);
          MainTLP.SuspendLayout();
          TopTLP.SuspendLayout();
+         tableLayoutPanel1.SuspendLayout();
          SuspendLayout();
          // 
          // MainTLP
@@ -65,15 +73,19 @@
          // 
          // TopTLP
          // 
-         TopTLP.ColumnCount = 4;
-         TopTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-         TopTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-         TopTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-         TopTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+         TopTLP.ColumnCount = 6;
+         TopTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.9277534F));
+         TopTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.9277534F));
+         TopTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.9277534F));
+         TopTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.9277534F));
+         TopTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 9.329845F));
+         TopTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30.959137F));
          TopTLP.Controls.Add(ErrorCheckBox, 0, 0);
          TopTLP.Controls.Add(WarningCheckBox, 1, 0);
          TopTLP.Controls.Add(InfoCheckBox, 2, 0);
          TopTLP.Controls.Add(DebugCheckBox, 3, 0);
+         TopTLP.Controls.Add(tableLayoutPanel1, 5, 0);
+         TopTLP.Controls.Add(SearchSource, 4, 0);
          TopTLP.Dock = DockStyle.Fill;
          TopTLP.Location = new Point(0, 0);
          TopTLP.Margin = new Padding(0);
@@ -87,7 +99,7 @@
          // 
          ErrorCheckBox.Anchor = AnchorStyles.None;
          ErrorCheckBox.AutoSize = true;
-         ErrorCheckBox.Location = new Point(113, 5);
+         ErrorCheckBox.Location = new Point(56, 5);
          ErrorCheckBox.Name = "ErrorCheckBox";
          ErrorCheckBox.Size = new Size(56, 19);
          ErrorCheckBox.TabIndex = 0;
@@ -98,7 +110,7 @@
          // 
          WarningCheckBox.Anchor = AnchorStyles.None;
          WarningCheckBox.AutoSize = true;
-         WarningCheckBox.Location = new Point(385, 5);
+         WarningCheckBox.Location = new Point(214, 5);
          WarningCheckBox.Name = "WarningCheckBox";
          WarningCheckBox.Size = new Size(76, 19);
          WarningCheckBox.TabIndex = 1;
@@ -109,7 +121,7 @@
          // 
          InfoCheckBox.Anchor = AnchorStyles.None;
          InfoCheckBox.AutoSize = true;
-         InfoCheckBox.Location = new Point(660, 5);
+         InfoCheckBox.Location = new Point(375, 5);
          InfoCheckBox.Name = "InfoCheckBox";
          InfoCheckBox.Size = new Size(89, 19);
          InfoCheckBox.TabIndex = 2;
@@ -120,12 +132,78 @@
          // 
          DebugCheckBox.Anchor = AnchorStyles.None;
          DebugCheckBox.AutoSize = true;
-         DebugCheckBox.Location = new Point(957, 5);
+         DebugCheckBox.Location = new Point(557, 5);
          DebugCheckBox.Name = "DebugCheckBox";
          DebugCheckBox.Size = new Size(61, 19);
          DebugCheckBox.TabIndex = 3;
          DebugCheckBox.Text = "Debug";
          DebugCheckBox.UseVisualStyleBackColor = true;
+         // 
+         // tableLayoutPanel1
+         // 
+         tableLayoutPanel1.ColumnCount = 3;
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100F));
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 30F));
+         tableLayoutPanel1.Controls.Add(SearchButton, 2, 0);
+         tableLayoutPanel1.Controls.Add(SearchTextBox, 1, 0);
+         tableLayoutPanel1.Controls.Add(SearchTypeBox, 0, 0);
+         tableLayoutPanel1.Dock = DockStyle.Fill;
+         tableLayoutPanel1.Location = new Point(777, 0);
+         tableLayoutPanel1.Margin = new Padding(0);
+         tableLayoutPanel1.Name = "tableLayoutPanel1";
+         tableLayoutPanel1.RowCount = 1;
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         tableLayoutPanel1.Size = new Size(352, 30);
+         tableLayoutPanel1.TabIndex = 4;
+         // 
+         // SearchButton
+         // 
+         SearchButton.Dock = DockStyle.Fill;
+         SearchButton.Image = Properties.Resources.Search;
+         SearchButton.Location = new Point(323, 1);
+         SearchButton.Margin = new Padding(1);
+         SearchButton.Name = "SearchButton";
+         SearchButton.Size = new Size(28, 28);
+         SearchButton.TabIndex = 0;
+         ErrorToolTip.SetToolTip(SearchButton, "RMB to clear all search results");
+         SearchButton.UseVisualStyleBackColor = true;
+         SearchButton.MouseClick += SearchButton_Click;
+         // 
+         // SearchTextBox
+         // 
+         SearchTextBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+         SearchTextBox.Dock = DockStyle.Fill;
+         SearchTextBox.Location = new Point(101, 3);
+         SearchTextBox.Margin = new Padding(1, 3, 1, 4);
+         SearchTextBox.Name = "SearchTextBox";
+         SearchTextBox.PlaceholderText = "Search";
+         SearchTextBox.Size = new Size(220, 23);
+         SearchTextBox.TabIndex = 1;
+         ErrorToolTip.SetToolTip(SearchTextBox, "All items no matter chich checkboxes are checked will be searched.");
+         SearchTextBox.KeyPress += SearchTextBox_KeyPress;
+         // 
+         // SearchTypeBox
+         // 
+         SearchTypeBox.Dock = DockStyle.Fill;
+         SearchTypeBox.DropDownStyle = ComboBoxStyle.DropDownList;
+         SearchTypeBox.FormattingEnabled = true;
+         SearchTypeBox.Location = new Point(1, 3);
+         SearchTypeBox.Margin = new Padding(1, 3, 1, 4);
+         SearchTypeBox.Name = "SearchTypeBox";
+         SearchTypeBox.Size = new Size(98, 23);
+         SearchTypeBox.TabIndex = 2;
+         // 
+         // SearchSource
+         // 
+         SearchSource.Anchor = AnchorStyles.None;
+         SearchSource.AutoSize = true;
+         SearchSource.Location = new Point(685, 5);
+         SearchSource.Name = "SearchSource";
+         SearchSource.Size = new Size(78, 19);
+         SearchSource.TabIndex = 5;
+         SearchSource.Text = "Search All";
+         SearchSource.UseVisualStyleBackColor = true;
          // 
          // ErrorView
          // 
@@ -176,12 +254,16 @@
          ClientSize = new Size(1129, 450);
          Controls.Add(MainTLP);
          Icon = (Icon)resources.GetObject("$this.Icon");
+         KeyPreview = true;
          Name = "ErrorLogExplorer";
          Text = "Error Log Explorer";
+         KeyPress += ErrorLogExplorer_KeyPress;
          MainTLP.ResumeLayout(false);
          MainTLP.PerformLayout();
          TopTLP.ResumeLayout(false);
          TopTLP.PerformLayout();
+         tableLayoutPanel1.ResumeLayout(false);
+         tableLayoutPanel1.PerformLayout();
          ResumeLayout(false);
       }
 
@@ -199,5 +281,11 @@
       private CheckBox DebugCheckBox;
       private Label label1;
       private ColumnHeader IndexHeader;
+      private TableLayoutPanel tableLayoutPanel1;
+      private Button SearchButton;
+      private TextBox SearchTextBox;
+      private ComboBox SearchTypeBox;
+      private ToolTip ErrorToolTip;
+      private CheckBox SearchSource;
    }
 }

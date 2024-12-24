@@ -53,6 +53,8 @@ namespace Editor.ErrorHandling
 
       public static event EventHandler<LogEntry>? LogEntryAdded;
 
+      public static List<LogEntry> GetAlLogEntries => [..Informations, ..Warnings, ..Errors, ..Debugs];
+
       public static void AddLogEntries(List<LogEntry> list)
       {
          lock (ActiveEntries)
@@ -280,6 +282,7 @@ namespace Editor.ErrorHandling
 
       private readonly string Description;
       private readonly string Resolution;
+      public ErrorType ErrorType { get; init; }
 
       public ErrorObject(string message, string resolution, string description) : base(LogType.Error, message, string.Empty)
       {
@@ -290,11 +293,13 @@ namespace Editor.ErrorHandling
       public ErrorObject(string message, ErrorType type) : base(LogType.Error, $"{Enum.GetName(type)}: " + message, string.Empty)
       {
          (Description, Resolution) = GetErrorInformation(type);
+         ErrorType = type;
       }
 
       protected ErrorObject(LogType level, ErrorType type, string message, string path) : base(level, message, path)
       {
          (Description, Resolution) = GetErrorInformation(type);
+         ErrorType = type;
       }
 
       private static (string Description, string Resolution) GetErrorInformation(ErrorType type)

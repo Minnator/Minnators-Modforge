@@ -83,5 +83,9 @@ namespace Editor.Helper
          return form;
       }
 
+      public static void FocusParentForm(this Control control)
+      {
+         control.FindForm()?.Focus();
+      }
    }
 }
