@@ -65,6 +65,7 @@ namespace Editor.Forms.LoadingScreen
          TradeCompanyLoading.Load,
          ColonialRegionsLoading.Load,
          CountryLoading.Load,
+         CustomProvinceNames.Load,
          AdjacenciesLoading.Load,
          UnitTypeLoading.Load,
          IdeasLoading.Load,

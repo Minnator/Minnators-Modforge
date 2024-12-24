@@ -245,6 +245,7 @@ public static class Globals
 
    // ------------ Localisation ------------ \\
    public static HashSet<LocObject> Localisation = [];
+   public static Dictionary<Province, CultProvLocContainer> CustomProvinceNames = [];
    public static HashSet<LocObject> LocalisationCollisions { get; set; } = [];
    
    public static HashSet<string> ScriptedEffectNames {get; set; } = [];

@@ -131,6 +131,12 @@ public static partial class FilesHelper
       return ImageReader.ReadImage(Path.Combine(Globals.VanillaPath, "gfx", "flags", "REB.tga"));
    }
 
+   /// <summary>
+   /// First list is the mod files the 2nd the vanilla files
+   /// </summary>
+   /// <param name="searchPattern"></param>
+   /// <param name="internalPath"></param>
+   /// <returns></returns>
    public static (List<string>, List<string>) GetFilesFromModAndVanillaUniquelySeparated(string searchPattern, params string[] internalPath)
    {
       var folderPath = Path.Combine(internalPath);

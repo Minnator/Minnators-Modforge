@@ -1,4 +1,5 @@
 ﻿using Editor.DataClasses.Commands;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Events;
 using Editor.Saving;
 
@@ -20,6 +21,13 @@ public static class Localisation
    {
       SearchLoc.Key = key;
       return Globals.Localisation.TryGetValue(SearchLoc, out locObject);
+   }
+
+   public static string GetDynamicProvinceLoc(Province p)
+   {
+      if (Globals.CustomProvinceNames.TryGetValue(p, out var names))
+         return names.GetLoc(p);
+      return GetLoc(p.TitleKey);
    }
 
    /// <summary>
@@ -165,6 +173,99 @@ public class LocObject : Saveable
       return Key.Equals(locObject.Key);
    }
 }
+
+public enum CustomProvLocType
+{
+   None = -1,
+   CultureGroup,
+   Culture,
+   Tag,
+}
+
+public class CultProvLocObject(
+   CustomProvLocType type,
+   string key,
+   string value,
+   ObjEditingStatus status = ObjEditingStatus.Modified)
+   : LocObject(key, value, status)
+{
+   public readonly CustomProvLocType Type = type;
+   public string Capital = string.Empty;
+
+   public CultProvLocObject(CustomProvLocType type, string key, string value, string capital, ObjEditingStatus status = ObjEditingStatus.Modified)
+      : this(type, key, value, status)
+   {
+      Capital = capital;
+   }
+
+   public bool IsOfType(ref CustomProvLocType type) => Type == type;
+
+   public override int GetHashCode() => Type.GetHashCode() ^ Key.GetHashCode();
+   public override bool Equals(object? obj)
+   {
+      if (obj is not CultProvLocObject cultProvLocObject)
+         return false;
+      return Type == cultProvLocObject.Type && Key.Equals(cultProvLocObject.Key);
+   }
+
+   public override string ToString() => $"{Type} : {Key} : {Value}";
+
+   public override string GetSaveString(int tabs)
+   {
+      if (Capital.Equals(string.Empty)) // We have no capital defined
+         return $"{Key} = \"{Value}\"";
+      return $"{Key} = {{ \"{Value}\" \"{Capital}\" }}"; // We have a capital defined
+   }
+}
+
+public class CultProvLocContainer
+{
+   private List<CultProvLocObject> _tagObjects = [];
+   private List<CultProvLocObject> _cultureObjects = [];
+   private List<CultProvLocObject> _cultureGroupObjects = [];
+
+   public void AddList(ICollection<CultProvLocObject> objs)
+   {
+      foreach (var obj in objs)
+         Add(obj);
+   }
+
+   public void Add(CultProvLocObject obj)
+   {
+      switch (obj.Type)
+      {
+         case CustomProvLocType.Tag:
+            _tagObjects.Add(obj);
+            break;
+         case CustomProvLocType.Culture:
+            _cultureObjects.Add(obj);
+            break;
+         case CustomProvLocType.CultureGroup:
+            _cultureGroupObjects.Add(obj);
+            break;
+      }
+   }
+
+   public string GetLoc(Province p)
+   {
+      // if we have a tag object, we will return the value
+      var result = _tagObjects.FirstOrDefault(x => x.Key == p.Owner);
+      if (result != null)
+         return result.Value;
+
+      // if we have a culture object, we will return the value
+      result = _cultureObjects.FirstOrDefault(x => x.Key == p.Culture);
+      if (result != null)
+         return result.Value;
+
+      // if we have a culture group object, we will return the value
+      if (!Globals.CultureGroups.TryGetValue(p.Culture, out var group))
+         return Localisation.GetLoc(p.TitleKey);
+      result = _cultureGroupObjects.FirstOrDefault(x => x.Key == group.Name);
+      return result?.Value ?? Localisation.GetLoc(p.TitleKey);
+   }
+}
+
 
 public class LocEventArgs : EventArgs
 {

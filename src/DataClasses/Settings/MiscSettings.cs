@@ -19,6 +19,7 @@ namespace Editor.DataClasses.Settings
       private int _historicRivalsFriendsGenerationAmount = 3;
       private bool _useEu4Cursor = true;
       private bool _useDiscordRichPresence = true;
+      private bool _useDynamicProvinceNames = true;
 
       [Description("The language in which the localisation will be shown")]
       [CompareInEquals]
@@ -122,6 +123,14 @@ namespace Editor.DataClasses.Settings
       {
          get => _useDiscordRichPresence;
          set => SetField(ref _useDiscordRichPresence, value);
+      }
+
+      [Description("Determines if dynamic province names should be used")]
+      [CompareInEquals]
+      public bool UseDynamicProvinceNames
+      {
+         get => _useDynamicProvinceNames;
+         set => SetField(ref _useDynamicProvinceNames, value);
       }
    }
 }

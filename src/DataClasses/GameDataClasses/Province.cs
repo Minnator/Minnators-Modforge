@@ -1171,7 +1171,16 @@ public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<P
    public int GetTotalDevelopment() => BaseManpower + BaseTax + BaseProduction;
    public ICollection<Province> Neighbors => Globals.AdjacentProvinces[this];
 
-   public string TitleLocalisation => Localisation.GetLoc(TitleKey);
+   public string TitleLocalisation
+   {
+      get
+      {
+         if (Globals.Settings.Misc.UseDynamicProvinceNames)
+            return Localisation.GetDynamicProvinceLoc(this);
+         return Localisation.GetLoc(TitleKey);
+      }
+   }
+
    public string AdjectiveLocalisation => Localisation.GetLoc(AdjectiveKey);
 
    public override int[] GetProvinceIds()
