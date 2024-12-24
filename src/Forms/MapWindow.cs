@@ -1784,12 +1784,12 @@ namespace Editor.Forms
 
       private void OpenProvinceFile_Click(object sender, EventArgs e)
       {
-         FilesHelper.OpenSaveableFiles(Selection.GetSelectedProvincesAsSaveable());
+         ProcessHelper.OpenSaveableFiles(Selection.GetSelectedProvincesAsSaveable());
       }
 
       private void OpenProvinceFolder_Click(object sender, EventArgs e)
       {
-         FilesHelper.OpenSaveableFolders(Selection.GetSelectedProvincesAsSaveable());
+         ProcessHelper.OpenSaveableFolders(Selection.GetSelectedProvincesAsSaveable());
       }
 
       private void TableLayoutBorder_Paint(object? sender, PaintEventArgs e)
@@ -1801,12 +1801,12 @@ namespace Editor.Forms
 
       private void OpenCountryFolder_Click(object sender, EventArgs e)
       {
-         FilesHelper.OpenSaveableFolders(Selection.GetSelectedProvinceOwnersAsSaveable());
+         ProcessHelper.OpenSaveableFolders(Selection.GetSelectedProvinceOwnersAsSaveable());
       }
 
       private void OpenCountryFileButton_Click(object sender, EventArgs e)
       {
-         FilesHelper.OpenSaveableFiles(Selection.GetSelectedProvinceOwnersAsSaveable());
+         ProcessHelper.OpenSaveableFiles(Selection.GetSelectedProvinceOwnersAsSaveable());
       }
 
       private void SaveSelectedCountriesButton_Click(object sender, EventArgs e)

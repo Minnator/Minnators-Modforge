@@ -16,6 +16,7 @@ namespace Editor.Forms.Feature
          WarningCheckBox.CheckedChanged += OnVerbosityChanged;
          InfoCheckBox.CheckedChanged += OnVerbosityChanged;
          DebugCheckBox.CheckedChanged += OnVerbosityChanged;
+         ErrorView.MouseClick += BuildContextMenu;
 
          ErrorView.DoubleClick += (sender, args) =>
          {
@@ -46,7 +47,42 @@ namespace Editor.Forms.Feature
          CustomDrawing();
          SizeHeadersAndColumns();
       }
-      
+
+      private void BuildContextMenu(object? sender, MouseEventArgs e)
+      {
+         // if its not RMB return
+         if (e is not { Button: MouseButtons.Right })
+            return;
+
+         var convPoint = ErrorView.PointToClient(Cursor.Position);
+         var clickedElement = ErrorView.GetItemAt(convPoint.X, convPoint.Y);
+         if (clickedElement == null)
+            return;
+
+         if (clickedElement.Tag is not FileRefLogEntry entry)
+            return;
+
+         var contextMenu = new ContextMenuStrip();
+         var openFile = new ToolStripMenuItem("Open File");
+         var openFolderOfFile = new ToolStripMenuItem("Open Folder of File");
+         var openFolder = new ToolStripMenuItem("Open Folder");
+
+         openFile.Click += (_, args) => ProcessHelper.OpenFile(entry.Path);
+         openFolder.Click += (_, args) => ProcessHelper.OpenFolder(entry.Path);
+         openFolderOfFile.Click += (_, args) =>
+         {
+            var fPath = Path.GetDirectoryName(entry.Path);
+            if (fPath != null)
+               ProcessHelper.OpenFolder(fPath);
+         };
+
+         contextMenu.Items.Add(openFile);
+         contextMenu.Items.Add(openFolderOfFile);
+         contextMenu.Items.Add(openFolder);
+
+         contextMenu.Show(ErrorView, convPoint);
+      }
+
       public void LoadLogType(LogType type)
       {
          _loading = true;

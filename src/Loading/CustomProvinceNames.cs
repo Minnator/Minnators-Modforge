@@ -93,14 +93,14 @@ namespace Editor.Loading
             var kvp = RawLineRegex.Match(line);
             if (!kvp.Success)
             {
-               _ = new LogEntry(LogType.Warning, $"Failed to parse province_names: {line} in file {file}");
+               _ = new FileRefLogEntry(LogType.Warning, $"Failed to parse province_names: {line} in file {file}", file);
                continue;
             }
 
             var id = kvp.Groups["province"].Value;
             if (!Globals.ProvinceIdToProvince.TryGetValue(int.Parse(id), out var province))
             {
-               _ = new LogEntry(LogType.Warning, $"Province {id} is used but never defined as a province in province_names! {file}");
+               _ = new FileRefLogEntry(LogType.Warning, $"Province {id} is used but never defined as a province in province_names! {file}", file);
                continue;
             }
 
@@ -110,20 +110,20 @@ namespace Editor.Loading
                var match = CultLocLineRegex.Match(value);
                if (!match.Success)
                {
-                  _ = new LogEntry(LogType.Warning, $"Failed to parse complex province_names: {value} in file {file}");
+                  _ = new FileRefLogEntry(LogType.Warning, $"Failed to parse complex province_names: {value} in file {file}", file);
                   continue;
                }
 
                var provName = match.Groups["value"].Value;
                var capitalName = match.Groups["capital"].Value;
                if (!results.TryAdd(province, [new CultProvLocObject(type, typeValue, provName, capitalName, ObjEditingStatus.Unchanged)]))
-                  _ = new LogEntry(LogType.Warning, $"Duplicate province_names definition for {province} in {file}");
+                  _ = new FileRefLogEntry(LogType.Warning, $"Duplicate province_names definition for {province} in {file}", file);
                continue;
             }
 
             value = value.TrimQuotes();
             if (!results.TryAdd(province, [new CultProvLocObject(type, typeValue, value, ObjEditingStatus.Unchanged)]))
-               _ = new LogEntry(LogType.Warning, $"Duplicate province_names definition for {province} in {file}");
+               _ = new FileRefLogEntry(LogType.Warning, $"Duplicate province_names definition for {province} in {file}", file);
          }
 
          if (isMod) //@MelonCoaster why do we only add when mod?

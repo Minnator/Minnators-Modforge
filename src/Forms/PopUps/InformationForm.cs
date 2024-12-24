@@ -18,12 +18,12 @@ namespace Editor.Forms.PopUps
 
       private void OpenGitButton_Click(object sender, EventArgs e)
       {
-         LinkHelper.OpenLink(Globals.GITHUB_LINK);
+         ProcessHelper.OpenLink(Globals.GITHUB_LINK);
       }
 
       private void OpenDiscordButton_Click(object sender, EventArgs e)
       {
-         LinkHelper.OpenLink(Globals.DISCORD_INVITATION_LINK);
+         ProcessHelper.OpenLink(Globals.DISCORD_INVITATION_LINK);
       }
    }
 }

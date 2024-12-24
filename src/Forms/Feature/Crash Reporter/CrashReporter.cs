@@ -23,7 +23,7 @@ namespace Editor.Forms.Feature.Crash_Reporter
 
       private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
       {
-         LinkHelper.OpenDiscordLinkIfDiscordRunning(BUG_REPORT_FORUM_LINK);
+         ProcessHelper.OpenDiscordLinkIfDiscordRunning(BUG_REPORT_FORUM_LINK);
       }
 
       private void SaveButton_Click(object sender, EventArgs e)

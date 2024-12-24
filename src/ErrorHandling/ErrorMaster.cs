@@ -2,6 +2,7 @@
 using Editor.Saving;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
+using Editor.src.Forms.PopUps;
 
 
 namespace Editor.ErrorHandling
@@ -222,8 +223,30 @@ namespace Editor.ErrorHandling
    }
 
    public class DebugError(string message, ErrorType type)
-      : ErrorObject(LogType.Debug, type, message);
+      : ErrorObject(LogType.Debug, type, message, string.Empty);
 
+   public class FileRefLogEntry : LogEntry
+   {
+      public string Path { get; }
+      public FileRefLogEntry(LogType level, string message, string path) : base(level, message)
+      {
+         Path = path;
+      }
+
+      public void OpenPath()
+      {
+         if (!ProcessHelper.OpenPathIfFileOrFolder(Path))
+         {
+            _ = new DebugError($"Could not open \"{Path}\"", ErrorType.ApplicationCouldNotOpenFile);
+            ImprovedMessageBox.Show("Unable to open path as file or folder!", "Could not open file", ref Globals.Settings.PopUps.NotifyIfErrorFileCanNotBeOpenedRef, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+         }
+      }
+
+      public override string ToString()
+      {
+         return $"[{Timestamp:yyyy-MM-dd HH:mm:ss}] [{Level}] {Message}";
+      }
+   }
 
    public class LoadingError : ErrorObject
    {
@@ -251,25 +274,25 @@ namespace Editor.ErrorHandling
       { }
    }
 
-   public class ErrorObject : LogEntry, IExtendedLogInformationProvider
+   public class ErrorObject : FileRefLogEntry, IExtendedLogInformationProvider
    {
       private const string DEFAULT_INFORMATION = "N/A";
 
       private readonly string Description;
       private readonly string Resolution;
 
-      public ErrorObject(string message, string resolution, string description) : base(LogType.Error, message)
+      public ErrorObject(string message, string resolution, string description) : base(LogType.Error, message, string.Empty)
       {
          Description = description;
          Resolution = resolution;
       }
 
-      public ErrorObject(string message, ErrorType type) : base(LogType.Error, $"{Enum.GetName(type)}: " + message)
+      public ErrorObject(string message, ErrorType type) : base(LogType.Error, $"{Enum.GetName(type)}: " + message, string.Empty)
       {
          (Description, Resolution) = GetErrorInformation(type);
       }
 
-      protected ErrorObject(LogType level, ErrorType type, string message) : base(level, message)
+      protected ErrorObject(LogType level, ErrorType type, string message, string path) : base(level, message, path)
       {
          (Description, Resolution) = GetErrorInformation(type);
       }
