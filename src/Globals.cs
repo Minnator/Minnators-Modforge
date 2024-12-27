@@ -273,6 +273,8 @@ public static class Globals
    private static SaveableType _saveableType = 0;
 }
 
+#region ALPHA 1.0
+
 // TODO LIST Until Alpha 1.0
 // - [x] Add a way to change the language of the application
 // - [x] Rework the Rendering of the map to be more efficient and using GDIP32
@@ -353,6 +355,7 @@ public static class Globals
 // - [x] Expose Setting to disable Discord Integration to settings menu
 // - [x] Added Support for Replace_Path
 
+#endregion
 
 // Update Alpha 1.0.1
 // - [x] Add Explorable Error log which provides a possible solution, and a detailed cause
@@ -367,9 +370,17 @@ public static class Globals
 // - [x] Added Icons and improved Custom toolbar
 // - [x] Added Bookmark Support and selection in GUI
 // - [x] Added Parsing of climate.txt
-// - [x] Added Weather mapmode
-// - [x] Added Climate mapmode
-// - [x] Allow deselecting using modifier key
+// - [x] Added Weather map mode
+// - [x] Added Climate map mode
+// - [ ] Allow deselecting using modifier key
+// - [x] Added Search Engine to the ErrorBrowsing
+// - [x] Added a setting how unsaved changes should be handled when closing the application
+// - [x] Added Context Menu to open file/folder of files in ErrorBrowsing
+// - [x] Added Support for DynamicProvinceNames
+// - [x] Fixed CTD after closing SelectionDrawerInterface
+// - [x] Added a nameGenerator which generates random names for provinces, monarchs and anything.
+//     - [x] Allowed the NameGenerator to sample provinces/countries/monarchs from the selection to generate context fitting names
+// - [x] Added Climate and Weather map modes
 
 // TODO LIST Until Alpha 1.1
 // - [ ] Block Water provinces; should not be viable for countries
@@ -382,6 +393,7 @@ public static class Globals
 // - [ ] In Depth deleting with pop up to show what objects are related to the one being deleted
 // - [ ] Radial Menu for Map Modes
 // - [ ] Trade fix   //UI
+// - [ ] Implement Shaders for the map
 // - [ ] Generalize Loading
 // - [ ] Add Prefix ignoring in search boxes
 // - [ ] Straits editing and creation
@@ -392,7 +404,8 @@ public static class Globals
 // - [ ] Add a tradegoods creation and editing menu
 // - [ ] Ideas making via drag and drop
 // - [ ] Province Creation and editing
-// - [ ] File syncing
+// - [ ] File syncing/hotreloading
+// - [ ] Heat map for history entries in editor for them when selecting dates?
 
 // TODO LIST Until Alpha 1.2
 // - [ ] Fix tooltip preventing MouseWheel event

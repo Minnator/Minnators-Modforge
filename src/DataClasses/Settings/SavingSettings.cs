@@ -6,6 +6,13 @@ namespace Editor.DataClasses.Settings
    [SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
    public class SavingSettings : SubSettings
    {
+      public enum SaveOnExitType
+      {
+         Discard,
+         AskToSave,
+         Save
+      }
+
       private bool _alwaysAskBeforeCreatingFiles = true;
       private FileSavingMode _fileSavingMode = FileSavingMode.AskOnce;
       private bool _playCrashSound = true;
@@ -14,6 +21,7 @@ namespace Editor.DataClasses.Settings
       private bool _addCommentAboveObjectsInFiles = true;
       private string _logLocation = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs");
       private string _customWordsLocation = string.Empty;
+      private SaveOnExitType _saveOnExit = SaveOnExitType.AskToSave;
 
       [Description(
          "<true> Asks for a filename or location beofre creating a new file\n<false> creates files with default names")]
@@ -79,6 +87,14 @@ namespace Editor.DataClasses.Settings
       {
          get => _customWordsLocation;
          set => SetField(ref _customWordsLocation, value);
+      }
+
+      [Description("Defines what should happen to unsaved changes, when the application is closed.")]
+      [CompareInEquals]
+      public SaveOnExitType SaveOnExit
+      {
+         get => _saveOnExit;
+         set => SetField(ref _saveOnExit, value);
       }
    }
 }

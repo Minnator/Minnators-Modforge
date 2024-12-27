@@ -264,10 +264,11 @@
          CountryCustomToolStripLayoutPanel = new TableLayoutPanel();
          CountryHistoryEntryToggleButton = new Controls.ToggleButton();
          SaveSelectedCountriesButton = new Button();
-         OpenCountryAdvancedEditor = new Button();
-         OpenCountryFolder = new Button();
+         OpenCommonCountryFolder = new Button();
          SaveAllCountries = new Button();
          OpenCountryFileButton = new Button();
+         OpenCountryAdvancedEditor = new Button();
+         OpenHistoryCountryFolder = new Button();
          ProvinceGroupsPage = new TabPage();
          ProvinceCollectionsPanel = new Panel();
          ProvinceCollectionsTab = new TableLayoutPanel();
@@ -2882,7 +2883,7 @@
          // CountryCustomToolStripLayoutPanel
          // 
          CountryCustomToolStripLayoutPanel.BackColor = Color.LightGray;
-         CountryCustomToolStripLayoutPanel.ColumnCount = 8;
+         CountryCustomToolStripLayoutPanel.ColumnCount = 9;
          CountryCustomToolStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
          CountryCustomToolStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
          CountryCustomToolStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
@@ -2891,12 +2892,14 @@
          CountryCustomToolStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
          CountryCustomToolStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
          CountryCustomToolStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
+         CountryCustomToolStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
          CountryCustomToolStripLayoutPanel.Controls.Add(CountryHistoryEntryToggleButton, 3, 0);
          CountryCustomToolStripLayoutPanel.Controls.Add(SaveSelectedCountriesButton, 1, 0);
-         CountryCustomToolStripLayoutPanel.Controls.Add(OpenCountryAdvancedEditor, 6, 0);
-         CountryCustomToolStripLayoutPanel.Controls.Add(OpenCountryFolder, 7, 0);
+         CountryCustomToolStripLayoutPanel.Controls.Add(OpenCommonCountryFolder, 8, 0);
          CountryCustomToolStripLayoutPanel.Controls.Add(SaveAllCountries, 0, 0);
          CountryCustomToolStripLayoutPanel.Controls.Add(OpenCountryFileButton, 2, 0);
+         CountryCustomToolStripLayoutPanel.Controls.Add(OpenCountryAdvancedEditor, 6, 0);
+         CountryCustomToolStripLayoutPanel.Controls.Add(OpenHistoryCountryFolder, 7, 0);
          CountryCustomToolStripLayoutPanel.Dock = DockStyle.Fill;
          CountryCustomToolStripLayoutPanel.Location = new Point(0, 776);
          CountryCustomToolStripLayoutPanel.Margin = new Padding(0);
@@ -2909,7 +2912,8 @@
          // 
          // CountryHistoryEntryToggleButton
          // 
-         CountryHistoryEntryToggleButton.BackColor = Color.DarkRed;
+         CountryHistoryEntryToggleButton.BackColor = Color.Transparent;
+         CountryHistoryEntryToggleButton.Image = Properties.Resources.HistoryEntriesDisabled;
          CountryHistoryEntryToggleButton.ImageOff = Properties.Resources.HistoryEntriesDisabled;
          CountryHistoryEntryToggleButton.ImageOn = Properties.Resources.HistoryEntriesEnabled;
          CountryHistoryEntryToggleButton.Location = new Point(122, 2);
@@ -2918,7 +2922,6 @@
          CountryHistoryEntryToggleButton.Size = new Size(40, 30);
          CountryHistoryEntryToggleButton.State = false;
          CountryHistoryEntryToggleButton.TabIndex = 7;
-         CountryHistoryEntryToggleButton.Text = "Off";
          GeneralToolTip.SetToolTip(CountryHistoryEntryToggleButton, "If enabled any changes in properties for a country will be created as a history entry for the current date");
          CountryHistoryEntryToggleButton.UseVisualStyleBackColor = false;
          CountryHistoryEntryToggleButton.VsMode = Editor.Controls.ToggleButton.VisualMode.Image;
@@ -2936,30 +2939,16 @@
          SaveSelectedCountriesButton.UseVisualStyleBackColor = true;
          SaveSelectedCountriesButton.Click += SaveSelectedCountriesButton_Click;
          // 
-         // OpenCountryAdvancedEditor
+         // OpenCommonCountryFolder
          // 
-         OpenCountryAdvancedEditor.Dock = DockStyle.Fill;
-         OpenCountryAdvancedEditor.Image = Properties.Resources.Wrench;
-         OpenCountryAdvancedEditor.Location = new Point(319, 2);
-         OpenCountryAdvancedEditor.Margin = new Padding(0);
-         OpenCountryAdvancedEditor.Name = "OpenCountryAdvancedEditor";
-         OpenCountryAdvancedEditor.Size = new Size(40, 30);
-         OpenCountryAdvancedEditor.TabIndex = 5;
-         GeneralToolTip.SetToolTip(OpenCountryAdvancedEditor, "Only edit properties in here if you know what you are doing.\r\nThere are no input validations or helps.");
-         OpenCountryAdvancedEditor.UseVisualStyleBackColor = true;
-         OpenCountryAdvancedEditor.Click += CountryAdvancedEditorButton_Click;
-         // 
-         // OpenCountryFolder
-         // 
-         OpenCountryFolder.Dock = DockStyle.Fill;
-         OpenCountryFolder.Image = Properties.Resources.FolderIcon;
-         OpenCountryFolder.Location = new Point(359, 2);
-         OpenCountryFolder.Margin = new Padding(0);
-         OpenCountryFolder.Name = "OpenCountryFolder";
-         OpenCountryFolder.Size = new Size(40, 30);
-         OpenCountryFolder.TabIndex = 9;
-         OpenCountryFolder.UseVisualStyleBackColor = true;
-         OpenCountryFolder.Click += OpenCountryFolder_Click;
+         OpenCommonCountryFolder.Image = Properties.Resources.CommonCountryFolderIcon;
+         OpenCommonCountryFolder.Location = new Point(359, 2);
+         OpenCommonCountryFolder.Margin = new Padding(0);
+         OpenCommonCountryFolder.Name = "OpenCommonCountryFolder";
+         OpenCommonCountryFolder.Size = new Size(40, 30);
+         OpenCommonCountryFolder.TabIndex = 9;
+         OpenCommonCountryFolder.UseVisualStyleBackColor = true;
+         OpenCommonCountryFolder.Click += OpenCountryFolder_Click;
          // 
          // SaveAllCountries
          // 
@@ -2982,8 +2971,32 @@
          OpenCountryFileButton.Name = "OpenCountryFileButton";
          OpenCountryFileButton.Size = new Size(40, 30);
          OpenCountryFileButton.TabIndex = 8;
+         GeneralToolTip.SetToolTip(OpenCountryFileButton, "LMB: Open Common file\r\nRMB: Open History file");
          OpenCountryFileButton.UseVisualStyleBackColor = true;
-         OpenCountryFileButton.Click += OpenCountryFileButton_Click;
+         OpenCountryFileButton.MouseDown += OpenCountryFileButton_Click;
+         // 
+         // OpenCountryAdvancedEditor
+         // 
+         OpenCountryAdvancedEditor.Image = Properties.Resources.Wrench;
+         OpenCountryAdvancedEditor.Location = new Point(279, 2);
+         OpenCountryAdvancedEditor.Margin = new Padding(0);
+         OpenCountryAdvancedEditor.Name = "OpenCountryAdvancedEditor";
+         OpenCountryAdvancedEditor.Size = new Size(40, 30);
+         OpenCountryAdvancedEditor.TabIndex = 5;
+         GeneralToolTip.SetToolTip(OpenCountryAdvancedEditor, "Only edit properties in here if you know what you are doing.\r\nThere are no input validations or helps.");
+         OpenCountryAdvancedEditor.UseVisualStyleBackColor = true;
+         OpenCountryAdvancedEditor.Click += CountryAdvancedEditorButton_Click;
+         // 
+         // OpenHistoryCountryFolder
+         // 
+         OpenHistoryCountryFolder.Image = Properties.Resources.CountryHistoryFolderIcon;
+         OpenHistoryCountryFolder.Location = new Point(319, 2);
+         OpenHistoryCountryFolder.Margin = new Padding(0);
+         OpenHistoryCountryFolder.Name = "OpenHistoryCountryFolder";
+         OpenHistoryCountryFolder.Size = new Size(40, 30);
+         OpenHistoryCountryFolder.TabIndex = 10;
+         OpenHistoryCountryFolder.UseVisualStyleBackColor = true;
+         OpenHistoryCountryFolder.Click += OpenCountryHistoryFolder;
          // 
          // ProvinceGroupsPage
          // 
@@ -3429,12 +3442,13 @@
       private Button OpenCountryFileButton;
       private Button SaveSelectedCountriesButton;
       private Button SaveAllCountries;
-      private Button OpenCountryFolder;
+      private Button OpenCommonCountryFolder;
       private Controls.ToggleButton ProvinceHistoryEntryToggleButton;
       private Controls.ToggleButton CountryHistoryEntryToggleButton;
       private ToolStripMenuItem runNameGenToolStripMenuItem;
       private ComboBox BookMarkComboBox;
       private ToolStripMenuItem loadingToolStripMenuItem;
+      private Button OpenHistoryCountryFolder;
    }
 }
 

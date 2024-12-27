@@ -28,5 +28,7 @@ public enum ErrorType
    [ErrorInformation("This occurs because your file is not in the correct format and thus can not be parse by the modforge", "Verify that your mod file is formatted correctly and if so contact a developer!")]
    // Misc Error 300-399
    TempParsingError = 1000,
+   [ErrorInformation("This occurs because the error is not yet implemented!", "Implement the error! :)")]
+   TODO_ERROR = 9999,
 }
 

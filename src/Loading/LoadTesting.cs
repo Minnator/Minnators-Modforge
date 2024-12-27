@@ -6,26 +6,27 @@ using Antlr4.Runtime.Tree;
 using Antlr4.Runtime;
 using Editor.Forms.PopUps;
 using Editor.Loading.TreeClasses;
+using System.IO;
 
 namespace Editor.Loading
 {
-   public class DummyLoader(PathObj path)
+   public class AreaFileListener(PathObj path) : PDXLanguageParserBaseListener
    {
+      private readonly List<Area> _areas = [];
       private PathObj _path = path;
 
-      public List<Area> VisitAreaFile(PDXLanguageParser.AreaFileContext context)
+      public List<Area> GetAreas() => _areas;
+
+      public override void ExitArea(PDXLanguageParser.AreaContext context)
       {
-         List<Area> areas = [];
-         foreach (var areaContext in context.area())
-         {
-            Area area = new(areaContext.IDENTIFIER().GetText(), TreeToObjHelper.GetColorFromContext(areaContext.color()));
-            area.AddRange(TreeToObjHelper.GetProvincesFromContext(areaContext.intList()));
-            area.SetPath(ref _path);
-            areas.Add(area);
-         }
-         return areas;
+         // Extract provinces and color from the area context
+         var (provinces, color) = TreeToObjHelper.GetProvincesFromContext(context.intList());
+
+         // Create a new Area object and add it to the list
+         _areas.Add(new Area(context.IDENTIFIER().GetText(), color, ref _path, provinces));
       }
    }
+
 
    public class LoadTesting
    {
@@ -59,27 +60,26 @@ namespace Editor.Loading
          IO.ReadAllInANSI(path, out var newContent);
          var pathObj = PathObj.FromPath(path, isModPath);
 
+         var sw = Stopwatch.StartNew();
          var stream = CharStreams.fromString(newContent);
          ITokenSource lexer = new PDXLanguageTokens(stream);
          ITokenStream tokens = new CommonTokenStream(lexer);
-         var parser = new PDXLanguageParser(tokens);
+         var parser = new PDXLanguageParser(tokens)
+         {
+            BuildParseTree = false
+         };
 
-         parser.RemoveErrorListeners();
 
          // Add the custom error listener
+         parser.RemoveErrorListeners();
          parser.AddErrorListener(new MyErrorListener(ref pathObj));
-
-
-         var loader = new DummyLoader(pathObj);
-
-         for (int i = 0; i < 10; i++)
-         {
-            var sw = Stopwatch.StartNew();
-            IParseTree tree = parser.areaFile();
-            sw.Stop();
-            var areas = loader.VisitAreaFile((PDXLanguageParser.AreaFileContext)tree);
-            Debug.WriteLine(sw.ElapsedMilliseconds);
-         }
+         var listener = new AreaFileListener(pathObj);
+         parser.AddParseListener(listener);
+         parser.areaFile();
+         //ParseTreeWalker.Default.Walk(listener, parser.areaFile());
+         var areas = listener.GetAreas();
+         sw.Stop();
+         Debug.WriteLine($"{sw.ElapsedMilliseconds} : {areas.Count}");
 
          //new RoughEditorForm(areas, false).ShowDialog();
       }

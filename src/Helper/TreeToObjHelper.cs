@@ -3,6 +3,7 @@ using Editor.DataClasses.GameDataClasses;
 using Editor.ErrorHandling;
 using Editor.Saving;
 using static Editor.Helper.TreeContextHelper;
+using static PDXLanguageParser;
 
 namespace Editor.Helper
 {
@@ -24,23 +25,36 @@ namespace Editor.Helper
 
 
 
-      public static List<Province> GetProvincesFromContext(params PDXLanguageParser.IntListContext[] ic)
+      public static (List<Province>, Color) GetProvincesFromContext(IntListContext? ic)
       {
+         if (ic == null)
+            return ([], Color.Empty);
          var provinces = new List<Province>();
-         foreach (var intListContext in ic)
+         var color = Color.Empty;
+
+         if (ic.INT() != null)
          {
-            var ints = GetIntFromContext(intListContext.INT());
+            var ints = GetIntFromContext(ic.INT());
             for (var i = 0; i < ints.Length; i += 3)
             {
                if (!Globals.ProvinceIdToProvince.TryGetValue(ints[i], out var prov))
                {
-                  _ = new LoadingError(PathObj.Empty, "Can not resolve province id!", ErrorType.SyntaxError, intListContext);
+                  _ = new LoadingError(PathObj.Empty, "Can not resolve province id!", ErrorType.SyntaxError, ic);
                   continue;
                }
                provinces.Add(prov);
             }
          }
-         return provinces;
+         else
+         {
+            var col = ic.color();
+            if (col == null)
+               return (provinces, color);
+            if (col.Length > 1) 
+               _ = new LoadingError(PathObj.Empty, "Color already set in area!", ErrorType.TODO_ERROR, ic);
+            color = GetColorFromContext(col[0]);
+         }
+         return (provinces, color);
       }
 
    }

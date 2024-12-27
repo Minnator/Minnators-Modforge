@@ -127,6 +127,12 @@
   <data name="clearIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\src\Resources\clearIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="CommonCountryFolderIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\src\Resources\CommonCountryFolderIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CountryHistoryFolderIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\src\Resources\CountryHistoryFolderIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="CrashSound" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\src\Resources\CrashSound.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

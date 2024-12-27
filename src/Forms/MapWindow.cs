@@ -8,6 +8,7 @@ using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Misc;
+using Editor.DataClasses.Settings;
 using Editor.Events;
 using Editor.Forms.Feature;
 using Editor.Forms.Feature.Crash_Reporter;
@@ -836,7 +837,8 @@ namespace Editor.Forms
 
       private void MapWindow_FormClosing(object sender, FormClosingEventArgs e)
       {
-         ResourceUsageHelper.Dispose();
+         if (!ShutDownMaster.DoWeShutDown())
+            e.Cancel = true;
       }
 
       #region History interface interactions
@@ -1801,12 +1803,19 @@ namespace Editor.Forms
 
       private void OpenCountryFolder_Click(object sender, EventArgs e)
       {
-         ProcessHelper.OpenSaveableFolders(Selection.GetSelectedProvinceOwnersAsSaveable());
+         ProcessHelper.OpenSaveableFolders(Selection.GetSelectedProvinceOwners().Select(c => c.CommonCountry).Cast<Saveable>().ToList());
       }
 
-      private void OpenCountryFileButton_Click(object sender, EventArgs e)
+      private void OpenCountryHistoryFolder(object? sender, EventArgs e)
       {
-         ProcessHelper.OpenSaveableFiles(Selection.GetSelectedProvinceOwnersAsSaveable());
+         ProcessHelper.OpenSaveableFolders(Selection.GetSelectedProvinceOwners().Select(c => c.HistoryCountry).Cast<Saveable>().ToList());
+      }
+
+      private void OpenCountryFileButton_Click(object sender, MouseEventArgs e)
+      {
+         ProcessHelper.OpenSaveableFiles(e.Button == MouseButtons.Left
+            ? Selection.GetSelectedProvinceOwners().Select(c => c.CommonCountry).Cast<Saveable>().ToList()
+            : Selection.GetSelectedProvinceOwners().Select(c => c.HistoryCountry).Cast<Saveable>().ToList());
       }
 
       private void SaveSelectedCountriesButton_Click(object sender, EventArgs e)
