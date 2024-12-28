@@ -100,10 +100,11 @@ namespace Editor.Helper
       {
          if (File.Exists(path))
          {
+            // TODO open file at line number
             Process.Start(new ProcessStartInfo
             {
                FileName = path,
-               UseShellExecute = true
+               UseShellExecute = true,
             });
             return true;
          }

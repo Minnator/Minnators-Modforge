@@ -12,6 +12,8 @@ public class ModifiableStack<T>
 
    public int Count { get; private set; }
 
+   public bool IsEmpty => Count == 0;
+
    public void Push(T item)
    {
       if (Count >= Capacity)
@@ -72,6 +74,7 @@ public class ModifiableStack<T>
       if (Count < Capacity)
          Array.Resize(ref _items, Count);
    }
+
 
 
 }
