@@ -20,6 +20,8 @@ namespace Editor.Loading.Enhanced
       public List<IEnhancedElement> Elements { get; set; } = [];
       public bool IsBlock => true;
       public int StartLine { get; } = startLine;
+      public List<EnhancedContent> ContentElements => Elements.Where(e => !e.IsBlock).Select(e => e as EnhancedContent).ToList()!;
+      public List<EnhancedBlock> SubBlocks => Elements.Where(e => e.IsBlock).Select(e => e as EnhancedBlock).ToList()!;
 
       public EnhancedBlock() : this(string.Empty, 1)
       {
@@ -51,11 +53,7 @@ namespace Editor.Loading.Enhanced
          AppendContent(tabs, sb);
          SavingUtil.CloseBlock(ref tabs, ref sb);
       }
-
-      public IEnumerator<IEnhancedElement> GetElements() => Elements.GetEnumerator();
-      public IEnumerator<IEnhancedElement> GetContentElements() => Elements.Where(e => !e.IsBlock).GetEnumerator();
-      public IEnumerator<IEnhancedElement> GetBLockElements() => Elements.Where(e => e.IsBlock).GetEnumerator();
-
+      
       public override string ToString()
       {
          return Name;
@@ -83,25 +81,29 @@ namespace Editor.Loading.Enhanced
 
       public void AppendFormattedContent(int tabs, ref StringBuilder sb)
       {
-         var enumerator = GetContentEnumerator(PathObj.Empty, false);
-         while (enumerator.MoveNext())
+         var enumerator = GetLineKvpEnumerator(PathObj.Empty, false);
+         foreach (var kvp in enumerator) 
+            SavingUtil.AddString(tabs, kvp.Value, kvp.Key, ref sb);
+      }
+
+      public IEnumerable<(string, int)> GetLineEnumerator(PathObj pathObj, bool showError = true) 
+      {
+         var lines = Value.Split('\n');
+         var lineNum = StartLine;
+         foreach (var line in lines)
          {
-            var lkvp = enumerator.Current;
-            SavingUtil.AddString(tabs, lkvp.Value, lkvp.Key, ref sb);
+            lineNum++;
+            if (string.IsNullOrWhiteSpace(line))
+               continue;
+            yield return (line, lineNum);
          }
       }
 
-      public IEnumerator<LineKvp<string, string>> GetContentEnumerator(PathObj pathObj, bool showError = true)
+      public IEnumerable<LineKvp<string, string>> GetLineKvpEnumerator(PathObj pathObj, bool showError = true)
       {
-         return GetLineKvps(Value, pathObj, StartLine, showError).GetEnumerator();
-      }
 
-
-      private static List<LineKvp<string, string>> GetLineKvps(string str, PathObj pathObj, int startingLine, bool showError)
-      {
-         var lines = str.Split('\n');
-         List<LineKvp<string, string>> lineKvps = [];
-         var lineNum = startingLine;
+         var lines = Value.Split('\n');
+         var lineNum = StartLine;
          foreach (var line in lines)
          {
             lineNum++;
@@ -111,12 +113,11 @@ namespace Editor.Loading.Enhanced
             if (split.Length != 2)
             {
                if (showError)
-                  _ = new LoadingError(pathObj, lineNum, 0, "Expected a key value pair but got only one value");
+                  _ = new LoadingError(pathObj, "Expected a key value pair but got only one value", lineNum, 0);
                continue;
             }
-            lineKvps.Add(new(split[0].Trim(), split[1].TrimQuotes(), lineNum));
+            yield return new(split[0].Trim(), split[1].TrimQuotes(), lineNum);
          }
-         return lineKvps;
       }
 
       public override string ToString()

@@ -1,4 +1,5 @@
-﻿using Editor.Helper;
+﻿using System.Text;
+using Editor.Helper;
 using Editor.Saving;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
@@ -40,6 +41,9 @@ namespace Editor.ErrorHandling
 
       [LogColor("#DE00AD", true)] // Pink for Debug
       Debug = 8,
+
+      [LogColor("#B000B0", true)]
+      Critical = 16,
    }
 
    public static class LogManager
@@ -49,11 +53,12 @@ namespace Editor.ErrorHandling
       public static List<LogEntry> Warnings = [];
       public static List<LogEntry> Errors = [];
       public static List<LogEntry> Debugs = [];
+      public static List<LogEntry> Criticals = [];
       private static LogType _currentLogType = LogType.None;
 
       public static event EventHandler<LogEntry>? LogEntryAdded;
 
-      public static List<LogEntry> GetAlLogEntries => [..Informations, ..Warnings, ..Errors, ..Debugs];
+      public static List<LogEntry> GetAlLogEntries => [..Informations, ..Warnings, ..Errors, ..Debugs, ..Criticals];
 
       public static void AddLogEntries(List<LogEntry> list)
       {
@@ -124,11 +129,39 @@ namespace Editor.ErrorHandling
          _currentLogType = logType;
 
 
-
+         AddOrRemoveLogEntries(LogType.Critical, delta, logType);
          AddOrRemoveLogEntries(LogType.Error, delta, logType);
          AddOrRemoveLogEntries(LogType.Warning, delta, logType);
          AddOrRemoveLogEntries(LogType.Information, delta, logType);
          AddOrRemoveLogEntries(LogType.Debug, delta, logType);
+      }
+
+      public static void SaveLogToFile()
+      {
+         var file = Path.Combine(Globals.Settings.Saving.LogLocation, "LoadingLog.txt");
+         var sb = new StringBuilder();
+         foreach (var entry in GetAlLogEntries) 
+            sb.AppendLine(entry.ToString());
+
+         IO.WriteAllInANSI(file, sb.ToString(), false);
+      }
+
+      public static void SaveLogAsCsv()
+      {
+         var file = Path.Combine(Globals.Settings.Saving.LogLocation, "LoadingLog.csv");
+         var sb = new StringBuilder();
+         sb.AppendLine("Timestamp,Level,type,Message,source");
+         foreach (var entry in GetAlLogEntries)
+         {
+            if (entry is ErrorObject error)
+               sb.AppendLine($"{entry.Timestamp:yyyy-MM-dd HH:mm:ss},{error.Level},{error.ErrorType},{error.Message},{error.Path}");
+            else if (entry is FileRefLogEntry fileRef)
+               sb.AppendLine($"{entry.Timestamp:yyyy-MM-dd HH:mm:ss},{fileRef.Level},,{fileRef.Message},{fileRef.Path}");
+            else
+               sb.AppendLine($"{entry.Timestamp:yyyy-MM-dd HH:mm:ss},{entry.Level},,{entry.Message},");
+         }
+
+         IO.WriteAllInANSI(file, sb.ToString(), false);
       }
 
       private static List<LogEntry> GetListForType(LogType type)
@@ -143,6 +176,8 @@ namespace Editor.ErrorHandling
                return Informations;
             case LogType.Debug:
                return Debugs;
+            case LogType.Critical:
+               return Criticals;
             default:
                return [];
          }
@@ -192,6 +227,11 @@ namespace Editor.ErrorHandling
       public static LogEntry Debug(string message)
       {
          return new(LogType.Debug, message);
+      }
+
+      public static LogEntry Critical(string message)
+      {
+         return new(LogType.Critical, message);
       }
 
       private static void OnLogEntryAdded(LogEntry e)
@@ -252,17 +292,22 @@ namespace Editor.ErrorHandling
 
    public class LoadingError : ErrorObject
    {
-      public static string GetErrorMsg(string path, int line, int charPos, string msg) => $"Error in file \"{path}\" on line {line}|{charPos} : {msg}";
+      public static string GetErrorMsg(string path, int line, int charPos, string msg)
+      {
+         return line != -1 ? (charPos != -1 ? $"Error in file \"{path}\" on line {line}|{charPos} : {msg}" : $"Error in file \"{path}\" in line {line} : {msg}") : $"Error in file \"{path}\" : {msg}";
+      }
 
       /// <summary>
       /// Parsing Exception
       /// </summary>
-      /// <param name="msg"></param>
       /// <param name="path"></param>
+      /// <param name="msg"></param>
       /// <param name="line"></param>
       /// <param name="charPos"></param>
       /// <param name="type"></param>
-      public LoadingError(PathObj path, int line, int charPos, string msg, ErrorType type = ErrorType.SyntaxError) : base(GetErrorMsg(path.ToPath(), line, charPos, msg), type)
+      /// <param name="level"></param>
+      public LoadingError(PathObj path, string msg, int line = -1, int charPos = -1, ErrorType type = ErrorType.SyntaxError,
+         LogType level = LogType.Error) : base(level, type, GetErrorMsg(path.ToPath(), line, charPos, msg))
       { }
 
       /// <summary>
@@ -272,7 +317,7 @@ namespace Editor.ErrorHandling
       /// <param name="msg"></param>
       /// <param name="type"></param>
       /// <param name="context"></param>
-      public LoadingError(PathObj path, string msg, ErrorType type, ParserRuleContext context) : this(path, context.Start.Line, context.Start.Column, msg, type)
+      public LoadingError(PathObj path, string msg, ErrorType type, ParserRuleContext context) : this(path, msg, context.Start.Line, context.Start.Column, type)
       { }
    }
 
@@ -284,19 +329,17 @@ namespace Editor.ErrorHandling
       private readonly string Resolution;
       public ErrorType ErrorType { get; init; }
 
-      public ErrorObject(string message, string resolution, string description) : base(LogType.Error, message, string.Empty)
+      public ErrorObject(string message, string resolution, string description, string path = "") : base(LogType.Error, message, path)
       {
          Description = description;
          Resolution = resolution;
       }
 
-      public ErrorObject(string message, ErrorType type) : base(LogType.Error, $"{Enum.GetName(type)}: " + message, string.Empty)
+      public ErrorObject(string message, ErrorType type, string path = "") : this(LogType.Error, type, message, path)
       {
-         (Description, Resolution) = GetErrorInformation(type);
-         ErrorType = type;
       }
 
-      protected ErrorObject(LogType level, ErrorType type, string message, string path) : base(level, message, path)
+      protected ErrorObject(LogType level, ErrorType type, string message, string path = "") : base(level, $"{Enum.GetName(type)}: " + message, path)
       {
          (Description, Resolution) = GetErrorInformation(type);
          ErrorType = type;

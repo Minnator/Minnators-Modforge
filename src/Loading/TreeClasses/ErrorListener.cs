@@ -19,7 +19,7 @@ namespace Editor.Loading.TreeClasses
       {
          lock (this)
          {
-            _ = new LoadingError(Path, line, charPositionInLine, msg);
+            _ = new LoadingError(Path, msg, line, charPositionInLine);
          }
       }
 

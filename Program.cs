@@ -19,8 +19,8 @@ namespace Editor
       {
          Application.EnableVisualStyles();
          Application.SetCompatibleTextRenderingDefault(false);
-
-         var po = new PathObj("S:\\SteamLibrary\\steamapps\\common\\Europa Universalis IV\\history\\provinces\\4-Bergslagen.txt".Split("\""), false);
+         /*
+         var po = new PathObj("S:\\SteamLibrary\\steamapps\\common\\Europa Universalis IV\\history\\provinces\\area.txt".Split("\""), false);
          IO.ReadAllInANSI(po.GetPath(), out var content);
          var sw = Stopwatch.StartNew();
          var elements = EnhancedParser.GetElements(ref po, content);
@@ -31,15 +31,10 @@ namespace Editor
          BindingList<EnhancedBlock> blocks = new ();
          foreach (var block in blks)
             blocks.Add((EnhancedBlock)block);
-         var conts = elements.Where(x => !x.IsBlock).ToList();
-         BindingList<EnhancedContent> contents = new ();
-         foreach (var contentElement in conts)
-            contents.Add((EnhancedContent)contentElement);
          Application.Run(new ObjectCollectionEditor<EnhancedBlock>(blocks));
-         Application.Run(new ObjectCollectionEditor<EnhancedContent>(contents));
 
          return;
-
+         */
          Application.Run(new EnterPathForm());
          if (Globals.VanillaPath != string.Empty && Globals.ModPath != string.Empty)
          {

@@ -4,6 +4,7 @@ using System.Media;
 using Editor.Controls;
 using Editor.Helper;
 using Editor.Loading;
+using Editor.Loading.Enhanced;
 using Editor.Parser;
 
 namespace Editor.Forms.LoadingScreen
@@ -56,7 +57,7 @@ namespace Editor.Forms.LoadingScreen
          ProvinceParser.ParseAllUniqueProvinces,
          TerrainLoading.Load, // Requires Provinces
          ClimateLoading.Load,
-         AreaLoading.Load,
+         AreaParsing.Load,
          TradeNodeLoading.Load,
          RegionLoading.Load,
          SuperRegionLoading.Load,

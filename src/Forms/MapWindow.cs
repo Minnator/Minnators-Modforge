@@ -9,6 +9,7 @@ using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Misc;
 using Editor.DataClasses.Settings;
+using Editor.ErrorHandling;
 using Editor.Events;
 using Editor.Forms.Feature;
 using Editor.Forms.Feature.Crash_Reporter;
@@ -1853,6 +1854,16 @@ namespace Editor.Forms
       private void loadingToolStripMenuItem_Click(object sender, EventArgs e)
       {
          LoadTesting.DEBUG();
+      }
+
+      private void saveErrorLogsToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         LogManager.SaveLogToFile();
+      }
+
+      private void saveErrorLogAscsvToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         LogManager.SaveLogAsCsv();
       }
    }
 }

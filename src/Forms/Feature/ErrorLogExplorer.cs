@@ -23,8 +23,10 @@ namespace Editor.Forms.Feature
          WarningCheckBox.CheckedChanged += OnVerbosityChanged;
          InfoCheckBox.CheckedChanged += OnVerbosityChanged;
          DebugCheckBox.CheckedChanged += OnVerbosityChanged;
+         CriticalCheckbox.CheckedChanged += OnVerbosityChanged;
          ErrorView.MouseClick += BuildContextMenu;
          SearchButton.MouseDown += SearchButton_Click;
+
 
          ErrorView.DoubleClick += (sender, args) =>
          {
@@ -103,6 +105,8 @@ namespace Editor.Forms.Feature
          InfoCheckBox.Enabled = InfoCheckBox.Checked;
          DebugCheckBox.Checked = type.HasFlag(LogType.Debug);
          DebugCheckBox.Enabled = DebugCheckBox.Checked;
+         CriticalCheckbox.Checked = type.HasFlag(LogType.Critical);
+         CriticalCheckbox.Enabled = CriticalCheckbox.Checked;
          _loading = false;
          UpdateListView();
       }
@@ -179,6 +183,8 @@ namespace Editor.Forms.Feature
             type |= LogType.Information;
          if (DebugCheckBox.Checked)
             type |= LogType.Debug;
+         if (CriticalCheckbox.Checked)
+            type |= LogType.Critical;
          return type;
       }
 
@@ -297,5 +303,10 @@ namespace Editor.Forms.Feature
          AddLogEntries(entries);
       }
 
+      private void SaveLogsButton_Click(object sender, EventArgs e)
+      {
+          LogManager.SaveLogAsCsv();
+          LogManager.SaveLogToFile();
+      }
    }
 }

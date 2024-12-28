@@ -1,17 +1,33 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using Editor.DataClasses.Misc;
-using Editor.Parser;
+using Editor.ErrorHandling;
+using Editor.Helper;
 using Editor.Saving;
 
 namespace Editor.Loading.Enhanced
 {
-   public class EnhancedParsingException(string message, int line, int index) : Exception($"Error at line {line} | {index}: {message}");
-
    public static class EnhancedParser
    {
+      public static (List<IEnhancedElement>, PathObj) GetElements(params string[] internalPath)
+      {
+         if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, internalPath))
+         {
+            _ = new LoadingError(new(internalPath, isModPath), "File not found", type:ErrorType.FileNotFound, level:LogType.Critical);
+            return ([], PathObj.Empty);
+         }
+         var pathObj = PathObj.FromPath(path, isModPath);
+         return (GetElements(pathObj), pathObj);
+      }
 
-      public static unsafe List<IEnhancedElement> GetElements(ref PathObj pathObj, string input)
+
+      public static List<IEnhancedElement> GetElements(this PathObj pathObj)
+      {
+         if (IO.ReadAllInANSI(pathObj.GetPath(), out var content))
+            return GetElements(pathObj, content);
+         return [];
+      }
+
+      private static unsafe List<IEnhancedElement> GetElements(PathObj pathObj, string input)
       {
 
          var lines = input.Split('\n');
@@ -21,6 +37,7 @@ namespace Editor.Loading.Enhanced
 
          var isInQuotes = false;
          var isInWord = false;
+         var isInWhiteSpace = false;
 
          for (var i = 0; i < lines.Length; i++)
          {
@@ -28,9 +45,10 @@ namespace Editor.Loading.Enhanced
             var charIndex = 0;
             char c;
 
-            var wordStart = 0;
-            var wordEnd = 0;
+            var wordStart = -1;
+            var wordEnd = -1;
             isInWord = false;
+            isInWhiteSpace = false;
 
             while (charIndex < length)
             {
@@ -46,19 +64,30 @@ namespace Editor.Loading.Enhanced
 
                      var nameLength = wordEnd - wordStart;
                      if (currentContent.Length < 1)
-                        throw new EnhancedParsingException("Block name cannot be empty", i, charIndex); // we cannot recover from this
+                     {
+                        _ = new LoadingError(pathObj, "Block name cannot be empty", i, charIndex, level: LogType.Critical);
+                        return [];
+                     }
+
+                     if (wordEnd < 0 || wordStart < 0)
+                     {
+                        _ = new LoadingError(pathObj, "Block name cannot be empty", i, charIndex, level: LogType.Critical);
+                        return [];
+                     }
 
                      Span<char> charSpan = stackalloc char[nameLength];
                      currentContent.CopyTo(wordStart, charSpan, nameLength); // We copy the name of the block from the sb
                      currentContent.Remove(wordStart, currentContent.Length - wordStart); // we remove anything after the name start
                      var newBlock = new EnhancedBlock(new (charSpan), i); // we create a new block
+
+                     wordStart = -1;
                      wordEnd = -1;
-                     wordStart = -1; // We reset the word start and end
 
-
-                     if (currentContent.Length > 0) // We have remaining content in the currentContent which we need to add to the previous block element
+                     var trimmed = currentContent.ToString().Trim();
+ 
+                     if (trimmed.Length > 0) // We have remaining content in the currentContent which we need to add to the previous block element
                      {
-                        var content = new EnhancedContent(currentContent.ToString(), i); // We create a new content element as there is no block element on the stack
+                        var content = new EnhancedContent(trimmed, i); // We create a new content element as there is no block element on the stack
                         if (blocks.IsEmpty)
                         {
                            result.Add(content);
@@ -69,8 +98,8 @@ namespace Editor.Loading.Enhanced
                            var currentBlock = blocks.PeekRef();
                            currentBlock->Elements.Add(content);
                            currentBlock->Elements.Add(newBlock);
+                           
                         }
-
                         currentContent.Clear();
                      }
                      else  // No Content to be added, only add the new Block which was started
@@ -89,11 +118,16 @@ namespace Editor.Loading.Enhanced
                         goto default;
 
                      if (blocks.IsEmpty)
-                        throw new EnhancedParsingException("Unmatched closing brace", i, charIndex); // We cannot recover from this
-
-                     if (currentContent.Length > 0) // We have remaining content in the currentContent which we need to add to the previous block element
                      {
-                        var content = new EnhancedContent(currentContent.ToString(), i); // We create a new content element as there is no block element on the stack
+                        _ = new LoadingError(pathObj, "Unmatched closing brace", i + 1, charIndex, level: LogType.Critical);
+                        return [];
+                     }
+                     
+                     var trimmedClosing = currentContent.ToString().Trim();
+
+                     if (trimmedClosing.Length > 0)  // We have remaining content in the currentContent which we need to add to the previous block element
+                     {
+                        var content = new EnhancedContent(trimmedClosing, i); // We create a new content element as there is no block element on the stack
                         blocks.PeekRef()->Elements.Add(content);
                         currentContent.Clear();
                      }
@@ -113,10 +147,16 @@ namespace Editor.Loading.Enhanced
                      {
                         if (char.IsWhiteSpace(c))
                         {
-                           isInWord = false;
-                           currentContent.Append(' ');
+                           if (!isInWhiteSpace)
+                           {
+                              isInWhiteSpace = true;
+                              isInWord = false;
+                              if (wordStart != -1)
+                                 currentContent.Append(' ');
+                           }
                            break;
                         }
+                        isInWhiteSpace = false;
                         if (c != '=')
                         {
                            if (!isInWord)
@@ -137,12 +177,17 @@ namespace Editor.Loading.Enhanced
                }
                charIndex++;
             }
+
+            if (currentContent.Length >= 1 && char.IsWhiteSpace(currentContent[^1]))
+               currentContent.Remove(currentContent.Length - 1, 1);
+
             currentContent.Append('\n');
          }
 
          if (!blocks.IsEmpty)
          {
-            throw new EnhancedParsingException("Unmatched opening brace", blocks.PeekRef()->StartLine, 0);
+            _ = new LoadingError(pathObj, "Unmatched opening brace",blocks.PeekRef()->StartLine + 1, 0, level: LogType.Critical);
+            return [];
          }
          
          return result;

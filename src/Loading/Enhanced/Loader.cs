@@ -2,6 +2,6 @@
 {
    public abstract class Loader
    {
-      public abstract bool Load();
+      public abstract void Load();
    }
 }

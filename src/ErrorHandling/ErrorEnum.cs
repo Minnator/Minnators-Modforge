@@ -23,6 +23,16 @@ public enum ErrorType
    IllegalDate = 100, // Parsing errors 100-299
    [ErrorInformation("This occurs because the syntax of the file is not correct.", "Check the file for any typos. The message contains the location of the issue and possible solutions!")]
    SyntaxError = 101,
+   [ErrorInformation("This occurs because a reference to a province could not be resolved!", "Is the given province defined in definition.csv?")]
+   UnresolveableProvinceReference = 102,
+   [ErrorInformation("This occurs because more content elements where found than allowed.", "Are there any bracket mistakes in the file?")]
+   UnexpectedContentElement = 103,
+   [ErrorInformation("This occurs because more block elements where found than allowed.", "Are there any bracket mistakes in the file?")]
+   UnexpectedBlockElement = 104,
+   [ErrorInformation("This occurs because the block name is not valid in the context of its usage!", "Check the block name for typos, and the surrounding blocks for bracket mistakes")]
+   IllegalBlockName = 105,
+   [ErrorInformation("This occurs because the data type is not expected in its context!", "Check the data type and correct it.")]
+   UnexpectedDataType = 106,
    [ErrorInformation("This occurs because an date is not in a valid format!", "Check the date format and correct it!")]
    IllegalDateFormat = 101,
    [ErrorInformation("This occurs because your file is not in the correct format and thus can not be parse by the modforge", "Verify that your mod file is formatted correctly and if so contact a developer!")]
