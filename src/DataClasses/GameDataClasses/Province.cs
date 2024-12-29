@@ -138,6 +138,25 @@ public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<P
       set => _borders = value;
    }
 
+   public Dictionary<Province, Memory<Point>> ProvinceBorders
+   {
+      get => _provinceBorders;
+      set => _provinceBorders = value;
+   }
+
+   public void TempBorderFix()
+   {
+      var totalLength = _provinceBorders.Values.Sum(list => list.Length);
+      var borderArray = new Point[totalLength];
+      var offset = 0;
+      foreach (var memory in _provinceBorders.Values)
+      {
+         memory.Span.CopyTo(borderArray.AsSpan(offset));
+         offset += memory.Length;
+      }
+      Borders = new(borderArray);
+   }
+
    #endregion
 
    // Events for the ProvinceValues will only be raised if the State is Running otherwise they will be suppressed to improve performance when loading
@@ -1309,6 +1328,7 @@ public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<P
 
    private Memory<Point> _pixels;
    private Memory<Point> _borders;
+   private Dictionary<Province, Memory<Point>> _provinceBorders = new();
 
    public override void ColorInvoke(ProvinceComposite composite)
    {

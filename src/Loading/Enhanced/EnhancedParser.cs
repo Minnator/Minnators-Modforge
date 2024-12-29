@@ -9,35 +9,59 @@ namespace Editor.Loading.Enhanced
 {
    public static class EnhancedParser
    {
-      public static List<IEnhancedElement> GetElements(out PathObj pathObj, params string[] internalPath)
+      public static T ParseBlock<T>(string blockName, EnhancedBlock block, PathObj po, ref int limit, Func<EnhancedBlock, PathObj, T> evaluator, Func<T> fallback)
       {
-         if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, internalPath))
+         if (!block.GetSubBlockByName(blockName, out var subBlock))
+            return fallback();
+
+         limit++;
+         return evaluator(subBlock, po);
+      }
+
+      public static bool CheckLimit(EnhancedBlock block, int limit, PathObj po)
+      {
+         if (block.SubBlocks.Count > limit)
          {
-            _ = new LoadingError(new(internalPath, isModPath), "File not found", type:ErrorType.FileNotFound, level:LogType.Critical);
-            pathObj = PathObj.Empty;
-            return [];
+            _ = new LoadingError(po, $"Unexpected block element in block \"{block.Name}\"! Expected {limit} but got {block.SubBlocks.Count}", block.StartLine, type: ErrorType.UnexpectedBlockElement);
+            return false;
          }
-         pathObj = PathObj.FromPath(path, isModPath);
+         return true;
+      }
+
+      public static (List<EnhancedBlock>, List<EnhancedContent>) GetElements(out PathObj pathObj, params string[] internalPath)
+      {
+         if (!GetModOrVanillaPath(out pathObj, internalPath))
+            return ([], []);
          return GetElements(pathObj);
       }
 
-
-      public static List<IEnhancedElement> GetElements(this PathObj pathObj)
+      public static bool GetModOrVanillaPath(out PathObj pathObj, params string[] internalPath)
       {
-         if (!IO.ReadAllInANSI(pathObj.GetPath(), out var content)) 
-            return [];
+         if (FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, internalPath))
+         {
+            pathObj = PathObj.FromPath(path, isModPath);
+            return true;
+         }
+         _ = new LoadingError(new(internalPath, isModPath), "File not found", type: ErrorType.FileNotFound, level: LogType.Critical);
+         pathObj = PathObj.Empty;
+         return false;
+      }
+      
+      public static (List<EnhancedBlock>, List<EnhancedContent>) GetElements(this PathObj pathObj)
+      {
+         if (!IO.ReadAllInANSI(pathObj, out var content))
+            return ([], []);
          return GetElements(pathObj, content);
       }
 
-      private static unsafe List<IEnhancedElement> GetElements(PathObj pathObj, string input)
+      private static unsafe (List<EnhancedBlock>, List<EnhancedContent>) GetElements(PathObj pathObj, string input)
       {
-
          var lines = input.Split('\n');
-         var result = new List<IEnhancedElement>();
+         var contents = new List<EnhancedContent>();
+         var blocks = new List<EnhancedBlock>();
          StringBuilder currentContent = new();
-         ModifiableStack<EnhancedBlock> blocks = new();
+         ModifiableStack<EnhancedBlock> blockStack = new();
 
-         var isExcaping = false;
          var isInQuotes = false;
          var isInWord = false;
          var isInWhiteSpace = false;
@@ -46,98 +70,111 @@ namespace Editor.Loading.Enhanced
          {
             var length = lines[i].Length;
             var charIndex = 0;
-            char c;
 
             var wordStart = -1;
             var wordEnd = -1;
             isInWord = false;
             isInWhiteSpace = false;
-
+            var line = lines[i].ToCharArray();
             while (charIndex < length)
             {
-               c = lines[i][charIndex];
+               var c = line[charIndex];
                switch (c)
                {
-                  case '\\': //TODO: Implement escaping
+                  case '\\':
+                     if (isInQuotes)
+                     {
+                        charIndex++;
+                        if (line.Length > charIndex)
+                           currentContent.Append(line[charIndex]);
+                     }
+                     else
+                        currentContent.Append(c);
                      break;
                   case '"':
                      isInQuotes = !isInQuotes;
                      break;
                   case '{':
                      if (isInQuotes)
-                        goto default;
+                     {
+                        currentContent.Append(c);
+                        break;
+                     }
+
 
                      var nameLength = wordEnd - wordStart;
                      if (currentContent.Length < 1)
                      {
                         _ = new LoadingError(pathObj, "Block name cannot be empty", i, charIndex, level: LogType.Critical);
-                        return [];
+                        return ([], []);
                      }
 
                      if (wordEnd < 0 || wordStart < 0)
                      {
                         _ = new LoadingError(pathObj, "Block name cannot be empty", i, charIndex, level: LogType.Critical);
-                        return [];
+                        return ([], []);
                      }
 
                      Span<char> charSpan = stackalloc char[nameLength];
                      currentContent.CopyTo(wordStart, charSpan, nameLength); // We copy the name of the block from the sb
                      currentContent.Remove(wordStart, currentContent.Length - wordStart); // we remove anything after the name start
-                     var newBlock = new EnhancedBlock(new (charSpan), i); // we create a new block
+                     var newBlock = new EnhancedBlock(new(charSpan), i); // we create a new block
 
                      wordStart = -1;
                      wordEnd = -1;
 
                      var trimmed = currentContent.ToString().Trim();
- 
+
                      if (trimmed.Length > 0) // We have remaining content in the currentContent which we need to add to the previous block element
                      {
                         var content = new EnhancedContent(trimmed, i); // We create a new content element as there is no block element on the stack
-                        if (blocks.IsEmpty)
+                        if (blockStack.IsEmpty)
                         {
-                           result.Add(content);
-                           result.Add(newBlock);
+                           contents.Add(content);
+                           blocks.Add(newBlock);
                         }
                         else // We add the content to the previous block element
                         {
-                           var currentBlock = blocks.PeekRef();
-                           currentBlock->Elements.Add(content);
-                           currentBlock->Elements.Add(newBlock);
-                           
+                           var currentBlock = blockStack.PeekRef();
+                           currentBlock->ContentElements.Add(content);
+                           currentBlock->SubBlocks.Add(newBlock);
+
                         }
                         currentContent.Clear();
                      }
                      else  // No Content to be added, only add the new Block which was started
                      {
-                        if (blocks.IsEmpty)
-                           result.Add(newBlock);
+                        if (blockStack.IsEmpty)
+                           blocks.Add(newBlock);
                         else
-                           blocks.PeekRef()->Elements.Add(newBlock);
+                           blockStack.PeekRef()->SubBlocks.Add(newBlock);
                      }
 
-                     blocks.Push(newBlock);
+                     blockStack.Push(newBlock);
 
                      break;
                   case '}':
                      if (isInQuotes)
-                        goto default;
-
-                     if (blocks.IsEmpty)
+                     {
+                        currentContent.Append(c);
+                        break;
+                     }
+                     if (blockStack.IsEmpty)
                      {
                         _ = new LoadingError(pathObj, "Unmatched closing brace", i + 1, charIndex, level: LogType.Critical);
-                        return [];
+                        return ([], []);
                      }
-                     
+
                      var trimmedClosing = currentContent.ToString().Trim();
 
                      if (trimmedClosing.Length > 0)  // We have remaining content in the currentContent which we need to add to the previous block element
                      {
                         var content = new EnhancedContent(trimmedClosing, i); // We create a new content element as there is no block element on the stack
-                        blocks.PeekRef()->Elements.Add(content);
+                        blockStack.PeekRef()->ContentElements.Add(content);
                         currentContent.Clear();
                      }
 
-                     blocks.Pop();
+                     blockStack.Pop();
                      break;
                   case '#':
                      if (!isInQuotes) // # is in quotes and thus allowed
@@ -146,7 +183,8 @@ namespace Editor.Loading.Enhanced
                         break;
                      }
 
-                     goto default;
+                     currentContent.Append(c);
+                     break;
                   default:
                      if (!isInQuotes) // We only add whitespace if we are in quotes
                      {
@@ -189,16 +227,45 @@ namespace Editor.Loading.Enhanced
             currentContent.Append('\n');
          }
 
-         if (!blocks.IsEmpty)
+         if (!blockStack.IsEmpty)
          {
-            _ = new LoadingError(pathObj, "Unmatched opening brace",blocks.PeekRef()->StartLine + 1, 0, level: LogType.Critical);
-            return [];
+            _ = new LoadingError(pathObj, "Unmatched opening brace", blockStack.PeekRef()->StartLine + 1, 0, level: LogType.Critical);
+            return ([], []);
          }
-         return result;
+
+         return (blocks, contents);
       }
 
-   }
+      public enum FileContentAllowed
+      {
+         Both,
+         BlocksOnly,
+         ContentOnly
+      }
 
+      public static (List<EnhancedBlock>, List<EnhancedContent>) LoadBase(FileContentAllowed fca, out PathObj po, params string[] internalPath)
+      {
+         var elements = GetElements(out po, internalPath);
+         var (blocks, contents) = elements;
+
+         switch (fca)
+         {
+            case FileContentAllowed.Both:
+               break;
+            case FileContentAllowed.BlocksOnly:
+               if (contents.Count != 0)
+                  _ = new LoadingError(po, "Detected content in a file where only blocks are allowed!", type: ErrorType.UnexpectedContentElement, level: LogType.Error);
+               break;
+            case FileContentAllowed.ContentOnly:
+               if (blocks.Count != 0)
+                  _ = new LoadingError(po, "Detected blocks in a file where only content is allowed!", type: ErrorType.UnexpectedBlockElement, level: LogType.Error);
+               break;
+            default:
+               throw new ArgumentOutOfRangeException(nameof(fca), fca, null);
+         }
+         return elements;
+      }
+   }
    public readonly struct LineKvp<T, TQ>
    {
       public LineKvp(T key, TQ value, int line)

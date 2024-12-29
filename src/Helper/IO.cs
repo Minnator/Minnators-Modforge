@@ -1,4 +1,7 @@
 ﻿using System.Text;
+using Editor.ErrorHandling;
+using Editor.Saving;
+
 // ReSharper disable InconsistentNaming
 
 namespace Editor.Helper;
@@ -68,6 +71,7 @@ internal static class IO
       }
       catch (IOException)
       {
+         _ = new ErrorObject($"Could not open or read file {path}", ErrorType.ApplicationCouldNotOpenFile, path);
          return false;
       }
    }
@@ -84,8 +88,19 @@ internal static class IO
       }
       catch (IOException)
       {
+         _ = new ErrorObject($"Could not open or read file {path}", ErrorType.ApplicationCouldNotOpenFile, path);
          return false;
       }
+   }
+
+   public static bool ReadAllInANSI(PathObj po, out string data)
+   {
+      return ReadAllInANSI(po.GetPath(), out data);
+   }
+
+   public static bool ReadAllLinesANSI(PathObj po, out string[] data)
+   {
+      return ReadAllLinesANSI(po.GetPath(), out data);
    }
 
    public static string ReadAllInUTF8(string path)
@@ -98,8 +113,19 @@ internal static class IO
       }
       catch (IOException)
       {
+         _ = new ErrorObject($"Could not open or read file {path}", ErrorType.ApplicationCouldNotOpenFile, path);
          return string.Empty;
       }
+   }
+
+   public static string[] ReadAllLinesInUTF8(PathObj po)
+   {
+      return ReadAllLinesInUTF8(po.GetPath());
+   }
+
+   public static string ReadAllInUTF8(PathObj po)
+   {
+      return ReadAllInUTF8(po.GetPath());
    }
 
    public static string[] ReadAllLinesInUTF8(string path)
@@ -112,6 +138,7 @@ internal static class IO
       }
       catch (IOException)
       {
+         _ = new ErrorObject($"Could not open or read file {path}", ErrorType.ApplicationCouldNotOpenFile, path);
          return [];
       }
    }

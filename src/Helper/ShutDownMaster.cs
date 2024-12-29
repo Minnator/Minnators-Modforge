@@ -25,9 +25,15 @@ namespace Editor.Helper
                return true;
                break;
             case SavingSettings.SaveOnExitType.AskToSave:
+               var num = SaveMaster.GetNumOfModifiedObjects();
+               if (num == 0)
+               {
+                  ShutDownInternal();
+                  return true;
+               }
                switch (
                   MessageBox.Show(
-                     $"You have {SaveMaster.GetNumOfModifiedObjects()} unsaved changes!\nDo you want to save them?", 
+                     $"You have {num} unsaved changes!\nDo you want to save them?", 
                      "Save changes", 
                      MessageBoxButtons.YesNoCancel, 
                      MessageBoxIcon.Warning)

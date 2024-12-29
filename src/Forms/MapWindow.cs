@@ -25,6 +25,7 @@ using Editor.src.Forms.PopUps;
 using Editor.Testing;
 using static Editor.Helper.ProvinceEnumHelper;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
+using MapLoading = Editor.Loading.Enhanced.MapLoading;
 using MethodInvoker = System.Windows.Forms.MethodInvoker;
 using Region = Editor.DataClasses.GameDataClasses.Region;
 
@@ -1854,10 +1855,7 @@ namespace Editor.Forms
 
       private void loadingToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         AreaParsing.Load();
-         for (int i = 0; i < 5; i++)
-         {
-         }
+         MapLoading.Load();
       }
 
       private void saveErrorLogsToolStripMenuItem_Click(object sender, EventArgs e)

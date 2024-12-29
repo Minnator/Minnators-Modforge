@@ -60,14 +60,14 @@ namespace Editor.Loading.Enhanced
          return results;
       }
 
+      /// <summary>
+      /// Only put in a block with the name "color"
+      /// </summary>
+      /// <param name="block"></param>
+      /// <param name="po"></param>
+      /// <returns></returns>
       public static Color GetColorFromBlock(EnhancedBlock block, PathObj po)
       {
-         if (!block.Name.Equals("color"))
-         {
-            _ = new LoadingError(po, $"Expected block name \"color\" but got \"{block.Name}\"!", block.StartLine, 0, ErrorType.IllegalBlockName);
-            return Color.Empty;
-         }
-
          var contentElements = block.ContentElements;
          if (contentElements.Count != 1)
          {
@@ -86,6 +86,14 @@ namespace Editor.Loading.Enhanced
          }
 
          return Color.FromArgb(ints[0], ints[1], ints[2]);
+      }
+
+      public static List<Province> GetProvincesFromContent(List<EnhancedContent> contents, PathObj po)
+      {
+         List<Province> provinces = [];
+         foreach (var contE in contents)
+            provinces.AddRange(GetProvincesFromString(contE, po));
+         return provinces;
       }
    }
 }

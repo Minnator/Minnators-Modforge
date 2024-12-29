@@ -13,6 +13,8 @@ public enum ErrorType
 {
    [ErrorInformation("This occurs because an file was not found but referenced elsewhere!", "Create the file missing file!")]
    FileNotFound = 1, // File errors 1-99
+   [ErrorInformation("This occurs because an file could not be opened or read!", "Check the file path and permissions! Also make sure the file is not used by another process")]
+   FileCouldNotBeOpened = 2,
    [ErrorInformation("This occurs because an file could not be opened in Explorer!", $"Is {nameof(PathObj)} returning an invalid path?")]
    ExplorerCouldNotOpenFolder = 2,
    [ErrorInformation("This occurs because an file could not be opened by the default application!", $"Is {nameof(PathObj)} returning an invalid path?\nIs the Process started correctly?")]
@@ -35,6 +37,8 @@ public enum ErrorType
    UnexpectedDataType = 106,
    [ErrorInformation("This occurs because an element is already defined and can not be defined again!", "Check the file for duplicate elements and remove or rename them!")]
    DuplicateElement = 107,
+   [ErrorInformation("This occurs because a province is defined multiple times or its color is not unique!", "Check the file for duplicate province definitions or color definitions and remove or rename them!")]
+   ProvinceDefinitionError = 108,
    [ErrorInformation("This occurs because an date is not in a valid format!", "Check the date format and correct it!")]
    IllegalDateFormat = 101,
    [ErrorInformation("This occurs because your file is not in the correct format and thus can not be parse by the modforge", "Verify that your mod file is formatted correctly and if so contact a developer!")]

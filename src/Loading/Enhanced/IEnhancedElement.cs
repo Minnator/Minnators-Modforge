@@ -17,11 +17,10 @@ namespace Editor.Loading.Enhanced
    public class EnhancedBlock(string name, int startLine) : IEnhancedElement
    {
       public string Name { get; set; } = name;
-      public List<IEnhancedElement> Elements { get; set; } = [];
       public bool IsBlock => true;
       public int StartLine { get; } = startLine;
-      public List<EnhancedContent> ContentElements => Elements.Where(e => !e.IsBlock).Select(e => e as EnhancedContent).ToList()!;
-      public List<EnhancedBlock> SubBlocks => Elements.Where(e => e.IsBlock).Select(e => e as EnhancedBlock).ToList()!;
+      public List<EnhancedContent> ContentElements { get; set; } = [];
+      public List<EnhancedBlock> SubBlocks { get; set; } = [];
 
       public EnhancedBlock() : this(string.Empty, 1)
       {
@@ -30,7 +29,9 @@ namespace Editor.Loading.Enhanced
 
       protected void AppendContent(int tabs, StringBuilder sb)
       {
-         foreach (var element in Elements)
+         foreach (var block in SubBlocks)
+            block.GetFormattedString(tabs + 1, ref sb);
+         foreach (var element in ContentElements)
             element.GetFormattedString(tabs + 1, ref sb);
       }
 
@@ -53,12 +54,35 @@ namespace Editor.Loading.Enhanced
          AppendContent(tabs, sb);
          SavingUtil.CloseBlock(ref tabs, ref sb);
       }
-      
+
+      public bool GetSubBlockByName(string name, out EnhancedBlock block)
+      {
+         return GetBlockByName(name, SubBlocks, out block);
+      }
+
+      public static bool GetBlockByName(string name, ICollection<EnhancedBlock> blocks, out EnhancedBlock result)
+      {
+         result = blocks.FirstOrDefault(b => b.Name == name)!;
+         return result is not null;
+      }
+
+      public bool GetSubBlocksByName(string name, out List<EnhancedBlock> blocks)
+      {
+         return GetBlocksByName(name, SubBlocks, out blocks);
+      }
+
+      public static bool GetBlocksByName(string name, ICollection<EnhancedBlock> blocks, out List<EnhancedBlock> result)
+      {
+         result = blocks.Where(b => b.Name == name).ToList();
+         return result.Count > 0;
+      }
+
       public override string ToString()
       {
          return Name;
       }
    }
+
 
    public class EnhancedContent(string value, int startLine) : IEnhancedElement
    {

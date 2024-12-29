@@ -6,6 +6,7 @@ using Editor.Helper;
 using Editor.Loading;
 using Editor.Loading.Enhanced;
 using Editor.Parser;
+using MapLoading = Editor.Loading.Enhanced.MapLoading;
 
 namespace Editor.Forms.LoadingScreen
 {

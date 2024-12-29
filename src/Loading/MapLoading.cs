@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Drawing.Imaging;
 using Editor.Helper;
 using Editor.Parser;
@@ -9,32 +10,37 @@ public static class MapLoading
 {
    internal static void Load()
    {
-      if (!FilesHelper.GetFilePathUniquely(out var definitionPath, "map", "definition.csv"))
-         throw new FileNotFoundException("Could not find definition.csv in mod or vanilla folder");
-
       if (!FilesHelper.GetFilePathUniquely(out var mapPath, "map", "provinces.bmp"))
          throw new FileNotFoundException("Could not find \"provinces.bmp\" in mod or vanilla folder");
 
       Globals.MapPath = mapPath;
-      var provinces = DefinitionLoading.LoadDefinition([.. File.ReadAllLines(definitionPath)]);
+      var sw = Stopwatch.StartNew();
+      DefinitionLoading.LoadDefinition();
+      sw.Stop();
+      Debug.WriteLine($"Load definition: {sw.ElapsedMilliseconds} ms {sw.ElapsedTicks} ticks");
 
-      //Get the size of the image at Globals.MapPath
-      using var stream = new FileStream(Globals.MapPath, FileMode.Open, FileAccess.Read);
-      using var image = Image.FromStream(stream, useEmbeddedColorManagement: false, validateImageData: false);
-      Globals.MapHeight = image.Size.Height;
-      Globals.MapWidth = image.Size.Width;
-
+      sw.Restart();
+      // colorToProvId, colorToBorder, adjacency
       var (colorToProvId, colorToBorder, adjacency) = LoadMap(Globals.MapPath);
 
-      Optimizer.OptimizeProvinces(ref provinces, colorToProvId, colorToBorder, image.Width * image.Height);
+      sw.Stop();
+      Debug.WriteLine($"Load map: {sw.ElapsedMilliseconds} ms {sw.ElapsedTicks} ticks");
+      sw.Restart();
+
+      Optimizer.OptimizeProvinces(ref Globals.Provinces, colorToProvId, colorToBorder, Globals.MapWidth * Globals.MapHeight);
+      sw.Stop();
+      Debug.WriteLine($"Optimize provinces: {sw.ElapsedMilliseconds} ms {sw.ElapsedTicks} ticks");
+      sw.Restart();
 
       Optimizer.OptimizeAdjacencies(adjacency); 
+      sw.Stop();
+      Debug.WriteLine($"Optimize adjacencies: {sw.ElapsedMilliseconds} ms {sw.ElapsedTicks} ticks");
    }
 
    private static (ConcurrentDictionary<int, List<Point>>, ConcurrentDictionary<int, List<Point>>, ConcurrentDictionary<int, HashSet<int>>) LoadMap(string path)
    {
       using var bmp = new Bitmap(path);
-      var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
+      var bmpData = bmp.LockBits(new (0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
       var width = bmp.Width;
       var height = bmp.Height;
       var stride = bmpData.Stride;
@@ -58,8 +64,8 @@ public static class MapLoading
             var localColorToBorder = new Dictionary<int, List<Point>>();
             var localColorToAdj = new Dictionary<int, HashSet<int>>();
             var xTimesThree = x * 3;
-            var westOffset = (x - 1) * 3;
-            var eastOffset = (x + 1) * 3;
+            var westOffset = xTimesThree - 3;
+            var eastOffset = xTimesThree + 3;
 
             for (var y = 0; y < height; y++)
             {

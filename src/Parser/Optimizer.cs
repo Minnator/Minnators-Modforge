@@ -9,18 +9,18 @@ public static class Optimizer
    // Optimizes the provinces by copying the pixels and borders to one large array each and only saving pointers in the provinces
    // to where their points start and end. Also calculates the bounds of the provinces.
    // This allows for duplicate points in the BorderPixels array but increases performance.
-   public static void OptimizeProvinces(ref Province[] provinces, ConcurrentDictionary<int, List<Point>> colorToProvId, ConcurrentDictionary<int, List<Point>> colorToBorder, int pixelCount)
+   public static void OptimizeProvinces(ref HashSet<Province> provinces, ConcurrentDictionary<int, List<Point>> colorToProvId, ConcurrentDictionary<int, List<Point>> colorToBorder, int pixelCount)
    {
       Memory<Point> pixels = new(new Point[pixelCount]);
       Memory<Point> borders = new(new Point[colorToBorder.Values.Sum(list => list.Count)]);
-      var dic = new Dictionary<int, Province>(provinces.Length);
-      var dictionary = new Dictionary<int, Province>(provinces.Length);
-      var provs = new HashSet<Province>(provinces.Length);
+      var dic = new Dictionary<int, Province>(provinces.Count);
+      var dictionary = new Dictionary<int, Province>(provinces.Count);
+      var provs = new HashSet<Province>(provinces.Count);
 
       var pixelPtr = 0;
       var borderPtr = 0;
       
-      foreach (var province in provinces.AsSpan())
+      foreach (var province in provinces.ToArray().AsSpan())
       {
          var color = Color.FromArgb(province.Color.R, province.Color.G, province.Color.B).ToArgb();
          dic[color] = province;
