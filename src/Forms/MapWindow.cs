@@ -17,6 +17,7 @@ using Editor.Forms.Feature.SavingClasses;
 using Editor.Forms.PopUps;
 using Editor.Helper;
 using Editor.Loading;
+using Editor.Loading.Enhanced;
 using Editor.NameGenerator;
 using Editor.Saving;
 using Editor.src.Forms.GetUserInput;
@@ -1853,7 +1854,10 @@ namespace Editor.Forms
 
       private void loadingToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         LoadTesting.DEBUG();
+         AreaParsing.Load();
+         for (int i = 0; i < 5; i++)
+         {
+         }
       }
 
       private void saveErrorLogsToolStripMenuItem_Click(object sender, EventArgs e)

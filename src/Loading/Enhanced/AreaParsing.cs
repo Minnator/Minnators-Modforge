@@ -8,7 +8,7 @@ namespace Editor.Loading.Enhanced
    {
       public static void Load()
       {
-         var (elements, po)= EnhancedParser.GetElements("map", "area.txt");
+         var elements = EnhancedParser.GetElements(out var po, "map", "area.txt");
 
          var blocks = elements.Where(e => e.IsBlock).Select(e => e as EnhancedBlock).ToList();
          if (blocks.Count != elements.Count)
@@ -16,7 +16,8 @@ namespace Editor.Loading.Enhanced
             _ = new LoadingError(po, "Detected content in a file where only blocks are allowed!", type:ErrorType.UnexpectedContentElement, level:LogType.Critical);
             return;
          }
-         
+
+         Globals.Areas.Clear();
          foreach (var block in blocks)
          {
             var contentElements = block!.ContentElements;
@@ -41,7 +42,12 @@ namespace Editor.Loading.Enhanced
                color = Globals.ColorProvider.GetRandomColor();
 
             var area = new Area(block.Name, color, ref po, provinces);
-            Globals.Areas.Add(block.Name, area);
+            
+            lock (Globals.Areas)
+            {
+              if (!Globals.Areas.TryAdd(area.Name, area))
+               _ = new LoadingError(po, $"Area \"{block.Name}\" already exists!", block.StartLine, type: ErrorType.DuplicateElement); 
+            }
          }
       }
    }

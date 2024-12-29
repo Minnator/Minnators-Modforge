@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 using Editor.DataClasses.Misc;
 using Editor.ErrorHandling;
 using Editor.Helper;
@@ -8,23 +9,24 @@ namespace Editor.Loading.Enhanced
 {
    public static class EnhancedParser
    {
-      public static (List<IEnhancedElement>, PathObj) GetElements(params string[] internalPath)
+      public static List<IEnhancedElement> GetElements(out PathObj pathObj, params string[] internalPath)
       {
          if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, internalPath))
          {
             _ = new LoadingError(new(internalPath, isModPath), "File not found", type:ErrorType.FileNotFound, level:LogType.Critical);
-            return ([], PathObj.Empty);
+            pathObj = PathObj.Empty;
+            return [];
          }
-         var pathObj = PathObj.FromPath(path, isModPath);
-         return (GetElements(pathObj), pathObj);
+         pathObj = PathObj.FromPath(path, isModPath);
+         return GetElements(pathObj);
       }
 
 
       public static List<IEnhancedElement> GetElements(this PathObj pathObj)
       {
-         if (IO.ReadAllInANSI(pathObj.GetPath(), out var content))
-            return GetElements(pathObj, content);
-         return [];
+         if (!IO.ReadAllInANSI(pathObj.GetPath(), out var content)) 
+            return [];
+         return GetElements(pathObj, content);
       }
 
       private static unsafe List<IEnhancedElement> GetElements(PathObj pathObj, string input)
@@ -35,6 +37,7 @@ namespace Editor.Loading.Enhanced
          StringBuilder currentContent = new();
          ModifiableStack<EnhancedBlock> blocks = new();
 
+         var isExcaping = false;
          var isInQuotes = false;
          var isInWord = false;
          var isInWhiteSpace = false;
@@ -55,6 +58,8 @@ namespace Editor.Loading.Enhanced
                c = lines[i][charIndex];
                switch (c)
                {
+                  case '\\': //TODO: Implement escaping
+                     break;
                   case '"':
                      isInQuotes = !isInQuotes;
                      break;
@@ -189,7 +194,6 @@ namespace Editor.Loading.Enhanced
             _ = new LoadingError(pathObj, "Unmatched opening brace",blocks.PeekRef()->StartLine + 1, 0, level: LogType.Critical);
             return [];
          }
-         
          return result;
       }
 

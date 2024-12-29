@@ -33,6 +33,8 @@ public enum ErrorType
    IllegalBlockName = 105,
    [ErrorInformation("This occurs because the data type is not expected in its context!", "Check the data type and correct it.")]
    UnexpectedDataType = 106,
+   [ErrorInformation("This occurs because an element is already defined and can not be defined again!", "Check the file for duplicate elements and remove or rename them!")]
+   DuplicateElement = 107,
    [ErrorInformation("This occurs because an date is not in a valid format!", "Check the date format and correct it!")]
    IllegalDateFormat = 101,
    [ErrorInformation("This occurs because your file is not in the correct format and thus can not be parse by the modforge", "Verify that your mod file is formatted correctly and if so contact a developer!")]
