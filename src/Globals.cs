@@ -216,7 +216,7 @@ public static class Globals
    public static Dictionary<string, Area> Areas = [];
    public static Dictionary<string, Region> Regions { get; set; } = [];
 
-   public static readonly Dictionary<string, SuperRegion> SuperRegions = [];
+   public static Dictionary<string, SuperRegion> SuperRegions = [];
    public static Dictionary<string, Continent> Continents { get; set; } = [];
 
 

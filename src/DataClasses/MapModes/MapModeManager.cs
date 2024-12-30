@@ -6,6 +6,9 @@ namespace Editor.DataClasses.MapModes;
 public enum MapModeType
 {
    None = 0,
+#if DEBUG
+   DEBUG = 999,
+#endif
    Area,
    Autonomy,
    CenterOfTrade,
@@ -66,6 +69,9 @@ public static class MapModeManager
 
    public static void InitializeAllMapModes()
    {
+#if DEBUG
+      MapModes.Add(new DebugMapMode());
+#endif
       MapModes.Add(new ProvinceMapMode());
       MapModes.Add(new AreaMapMode());
       MapModes.Add(new RegionsMapMode());

@@ -20,6 +20,8 @@ namespace Editor.DataClasses.Settings
       private int _gameOfLiveGenerations = 100;
       private bool _gameOfLiveUseRandomCellChanges = false;
       private bool _allowAnimatedMapModes = true;
+      private bool _mergeBorders = true;
+      private bool _showSeaProvinceBordersIfNotForced = false;
 
       [Description("The direction of occupation stripes on the map")]
       [CompareInEquals]
@@ -116,6 +118,22 @@ namespace Editor.DataClasses.Settings
       {
          get => _allowAnimatedMapModes;
          set => SetField(ref _allowAnimatedMapModes, value);
+      }
+
+      [Description("If borders of provinces will be merged")]
+      [CompareInEquals]
+      public bool MergeBorders
+      {
+         get => _mergeBorders;
+         set => SetField(ref _mergeBorders, value);
+      }
+
+      [Description("If sea province borders will be shown if not forced by the mapmode")]
+      [CompareInEquals]
+      public bool ShowSeaProvinceBordersIfNotForced
+      {
+         get => _showSeaProvinceBordersIfNotForced;
+         set => SetField(ref _showSeaProvinceBordersIfNotForced, value);
       }
    }
 }

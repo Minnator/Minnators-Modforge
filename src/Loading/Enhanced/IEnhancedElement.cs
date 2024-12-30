@@ -19,8 +19,30 @@ namespace Editor.Loading.Enhanced
       public string Name { get; set; } = name;
       public bool IsBlock => true;
       public int StartLine { get; } = startLine;
+
       public List<EnhancedContent> ContentElements { get; set; } = [];
       public List<EnhancedBlock> SubBlocks { get; set; } = [];
+      public int SubBlockCount => SubBlocks.Count;
+      public int ContentElementCount => ContentElements.Count;
+
+
+      public List<EnhancedBlock> GetSubBlocks(bool onlyBlocks, PathObj po)
+      {
+         if (onlyBlocks && ContentElements.Count > 0)
+         {
+            _ = new LoadingError(po, $"Expected no content in block: {Name}!", StartLine, 0, ErrorType.UnexpectedContentElement);
+         }
+         return SubBlocks;
+      }
+
+      public List<EnhancedContent> GetContentElements(bool onlyContent, PathObj po)
+      {
+         if (onlyContent && SubBlocks.Count > 0)
+         {
+            _ = new LoadingError(po, $"Expected no subBlocks in block: {Name}!", StartLine, 0, ErrorType.UnexpectedBlockElement);
+         }
+         return ContentElements;
+      }
 
       public EnhancedBlock() : this(string.Empty, 1)
       {

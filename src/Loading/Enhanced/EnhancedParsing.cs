@@ -18,7 +18,7 @@ namespace Editor.Loading.Enhanced
 
       public static Monsoon? GetMonsoonFromBlock(EnhancedBlock block, PathObj po)
       {
-         var contentElements = block.ContentElements;
+         var contentElements = block.GetContentElements(true, po);
          if (contentElements.Count != 1)
          {
             _ = new LoadingError(po, $"Expected 1 content element but got {contentElements.Count}!",
@@ -63,7 +63,7 @@ namespace Editor.Loading.Enhanced
       {
          List<Area> areas = [];
          List<string> areaStrings = [];
-         foreach (var content in block.ContentElements) 
+         foreach (var content in block.GetContentElements(false, po)) 
             areaStrings.AddRange(GetStringListFromContent(content, po));
 
          foreach (var areaString in areaStrings)
@@ -133,7 +133,7 @@ namespace Editor.Loading.Enhanced
       /// <returns></returns>
       public static Color GetColorFromBlock(EnhancedBlock block, PathObj po)
       {
-         var contentElements = block.ContentElements;
+         var contentElements = block.GetContentElements(true, po);
          if (contentElements.Count != 1)
          {
             _ = new LoadingError(po, $"Expected 1 content element but got {contentElements.Count}!",

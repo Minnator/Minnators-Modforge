@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using Editor.Controls;
+using Editor.DataClasses.MapModes;
 
 namespace Editor.Helper;
 using System;
@@ -40,7 +41,10 @@ public static class MapDrawing
                   DrawPixels(province.Pixels, func(province), zoomControl);
                   break;
                case PixelsOrBorders.Borders:
-                  DrawPixels(province.Borders, func(province), zoomControl);
+                  if (Globals.Settings.Rendering.MergeBorders)
+                     DrawPixelsMerged(province, func.Invoke(province), zoomControl);
+                  else
+                     DrawPixels(province.Borders, func.Invoke(province), zoomControl);
                   break;
                case PixelsOrBorders.Both:
                   DrawPixels(province.Pixels, func(province), zoomControl);
@@ -64,7 +68,10 @@ public static class MapDrawing
                   DrawPixels(province.Pixels, color, zoomControl);
                   break;
                case PixelsOrBorders.Borders:
-                  DrawPixels(province.Borders, color, zoomControl);
+                  if (Globals.Settings.Rendering.MergeBorders)
+                     DrawPixelsMerged(province, color, zoomControl);
+                  else
+                     DrawPixels(province.Borders, color, zoomControl);
                   break;
                case PixelsOrBorders.Both:
                   DrawPixels(province.Pixels, color, zoomControl);
@@ -81,7 +88,10 @@ public static class MapDrawing
             DrawPixels(province.Pixels, color, zoomControl);
             break;
          case PixelsOrBorders.Borders:
-            DrawPixels(province.Borders, color, zoomControl);
+            if (Globals.Settings.Rendering.MergeBorders)
+               DrawPixelsMerged(province, color, zoomControl);
+            else
+               DrawPixels(province.Borders, color, zoomControl);
             break;
          case PixelsOrBorders.Both:
             DrawPixels(province.Pixels, color, zoomControl);
@@ -112,7 +122,10 @@ public static class MapDrawing
                DrawPixels(province.Pixels, func.Invoke(province), zoomControl);
                break;
             case PixelsOrBorders.Borders:
-               DrawPixels(province.Borders, func.Invoke(province), zoomControl);
+               if (Globals.Settings.Rendering.MergeBorders)
+                  DrawPixelsMerged(province, func.Invoke(province), zoomControl);
+               else
+                  DrawPixels(province.Borders, func.Invoke(province), zoomControl);
                break;
             case PixelsOrBorders.Both:
                DrawPixels(province.Pixels, func.Invoke(province), zoomControl);
@@ -132,7 +145,10 @@ public static class MapDrawing
                DrawPixels(province.Pixels, color, zoomControl);
                break;
             case PixelsOrBorders.Borders:
-               DrawPixels(province.Borders, color, zoomControl);
+               if (Globals.Settings.Rendering.MergeBorders)
+                  DrawPixelsMerged(province, color, zoomControl);
+               else
+                  DrawPixels(province.Borders, color, zoomControl);
                break;
             case PixelsOrBorders.Both:
                DrawPixels(province.Pixels, color, zoomControl);
@@ -140,6 +156,18 @@ public static class MapDrawing
                break;
          }
       });
+   }
+
+   /// EXPERIMENTAL
+   private static void DrawPixelsMerged(Province province, int color, ZoomControl zoomControl)
+   {
+      var ownColor = MapModeManager.CurrentMapMode.GetProvinceColor(province);
+      foreach (var neighbours in province.ProvinceBorders)
+      {
+         var nColor = MapModeManager.CurrentMapMode.GetProvinceColor(neighbours.Key);
+         if (ownColor != nColor)
+            DrawPixels(neighbours.Value, color, zoomControl);
+      }
    }
 
 

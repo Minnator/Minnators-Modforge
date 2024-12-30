@@ -1,12 +1,5 @@
-﻿using System.Collections.Concurrent;
-using System.Diagnostics;
-using System.Drawing.Imaging;
-using System.Text;
-using Editor.DataClasses.GameDataClasses;
+﻿using System.Drawing.Imaging;
 using Editor.ErrorHandling;
-using Editor.Helper;
-using Editor.Parser;
-using Editor.Saving;
 
 namespace Editor.Loading.Enhanced
 {
@@ -29,20 +22,28 @@ namespace Editor.Loading.Enhanced
       private static void OptimizeBordersAndAdjacency(Dictionary<int, Dictionary<int, List<Point>>> borders)
       {
          Globals.AdjacentProvinces = new (borders.Count);
-         foreach (var (color, bDict) in borders)
+
+         foreach (var province in Globals.Provinces)
          {
-            var province = Globals.ColorToProvId[color];
-            
+            var color = province.Color.ToArgb();
+            if (!borders.TryGetValue(color, out var bDict))
+            {
+               Globals.AdjacentProvinces.Add(province, []);
+               province.TempBorderFix();
+               province.SetBounds();
+               province.Center = new(province.Bounds.X + province.Bounds.Width / 2, province.Bounds.Y + province.Bounds.Height / 2);
+               continue;
+            }
             foreach (var (adjacent, borderPixels) in bDict)
             {
                var adjProv = Globals.ColorToProvId[adjacent];
-               province.ProvinceBorders.Add(adjProv, new (borderPixels.ToArray()));
+               province.ProvinceBorders.Add(adjProv, new(borderPixels.ToArray()));
             }
-
             Globals.AdjacentProvinces.Add(province, province.ProvinceBorders.Keys.ToArray());
 
             province.TempBorderFix();
             province.SetBounds();
+            province.Center = new(province.Bounds.X + province.Bounds.Width / 2, province.Bounds.Y + province.Bounds.Height / 2);
          }
       }
 
@@ -118,8 +119,7 @@ namespace Editor.Loading.Enhanced
                }
             }
          });
-
-         bmp.UnlockBits(bmpData);
+         
 
          // We merge the local dictionaries into the global dictionaries
          var totalProvToId = new Dictionary<int, List<Point>>();
@@ -158,7 +158,69 @@ namespace Editor.Loading.Enhanced
                }
             }
          }
+         
+         // Analyze the last row
+         var lastRow = (byte*)scan0 + (height - 1) * stride;
+         var lastRowColor = CurrentColor(lastRow, 0);
+         var lastRowPixel = new Point(0, height - 1);
+         for (var x = 0; x < internalWidth; x++)
+         {
+            var xTimesThree = x * 3;
+            var currentPixel = lastRowPixel;
+            var currentColor = lastRowColor;
 
+            if (!totalProvToId.TryGetValue(currentColor, out var provPoints))
+            {
+               provPoints = [];
+               totalProvToId[currentColor] = provPoints;
+            }
+            provPoints.Add(currentPixel);
+
+            lastRowColor = CurrentColor(lastRow, xTimesThree + 3);
+            lastRowPixel = new(x + 1, height - 1);
+            AddToBorder(currentColor, lastRowColor, ref currentPixel, ref lastRowPixel, totalColorToBorder);
+         }
+         
+         // We analyze the last column
+         var nextRow = (byte*)scan0 + stride;
+         var xTimesThreeN = (width - 1) * 3;
+         var nextColor = CurrentColor(nextRow, xTimesThreeN);
+         var nextPixel = new Point(width - 1, 0);
+         for (var y = 0; y < height - 1; y++)
+         {
+            var currentPixel = nextPixel;
+            var currentColor = nextColor;
+
+            var rightPixel = new Point(0, y);
+            var rightColor = CurrentColor(nextRow, 0);
+            AddToBorder(currentColor, rightColor, ref currentPixel, ref rightPixel, totalColorToBorder);
+            if (!totalProvToId.TryGetValue(currentColor, out var provPoints))
+            {
+               provPoints = [];
+               totalProvToId[currentColor] = provPoints;
+            }
+            provPoints.Add(currentPixel);
+
+            nextRow = (byte*)scan0 + (y + 1) * stride;
+            nextColor = CurrentColor(nextRow, xTimesThreeN);
+            nextPixel = new (width - 1, y + 1);
+            AddToBorder(currentColor, nextColor, ref currentPixel, ref nextPixel, totalColorToBorder);
+         }
+
+         // last pixel at height - 1, width - 1
+         var lastPixel = new Point(width - 1, height - 1);
+         if (!totalProvToId.TryGetValue(nextColor, out var lastProvPoints))
+         {
+            lastProvPoints = [];
+            totalProvToId[nextColor] = lastProvPoints;
+         }
+         lastProvPoints.Add(lastPixel); 
+         var rightPixelL = new Point(0, height - 1);
+         var rightColorL = CurrentColor(nextRow, 0);
+         AddToBorder(nextColor, rightColorL, ref lastPixel, ref rightPixelL, totalColorToBorder);
+
+
+         bmp.UnlockBits(bmpData);
          return (totalProvToId, totalColorToBorder);
       }
 

@@ -15,7 +15,9 @@ namespace Editor.Loading.Enhanced
             var color = EnhancedParser.ParseBlock("color", block, po, ref limit, EnhancedParsing.GetColorFromBlock, Globals.ColorProvider.GetRandomColor);
             EnhancedParser.CheckLimit(block, limit, po);
 
-            if (!Globals.Areas.TryAdd(block.Name, new (block.Name, color, ref po, EnhancedParsing.GetProvincesFromContent(block.ContentElements, po))))
+            var content = block.GetContentElements(true, po);
+
+            if (!Globals.Areas.TryAdd(block.Name, new (block.Name, color, ref po, EnhancedParsing.GetProvincesFromContent(content, po))))
                _ = new LoadingError(po, $"Area \"{block.Name}\" already exists!", block.StartLine, type: ErrorType.DuplicateElement);
          }
       }

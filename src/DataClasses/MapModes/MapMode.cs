@@ -9,7 +9,6 @@ public abstract class MapMode
    public Bitmap Bitmap { get; set; } = null!;
    public virtual bool IsLandOnly => false;
    public virtual bool ShowOccupation => false;
-   public virtual bool IsProvinceMapMode => true;
    public virtual Bitmap? Icon { get; protected set; }
    public virtual string IconFileName { get; } = null!;
    public virtual bool IsCollectionMapMode => false;

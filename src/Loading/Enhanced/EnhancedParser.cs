@@ -37,9 +37,9 @@ namespace Editor.Loading.Enhanced
 
       public static bool CheckLimit(EnhancedBlock block, int limit, PathObj po)
       {
-         if (block.SubBlocks.Count > limit)
+         if (block.SubBlockCount > limit)
          {
-            _ = new LoadingError(po, $"Unexpected block element in block \"{block.Name}\"! Expected {limit} but got {block.SubBlocks.Count}", block.StartLine, type: ErrorType.UnexpectedBlockElement);
+            _ = new LoadingError(po, $"Unexpected block element in block \"{block.Name}\"! Expected {limit} but got {block.SubBlockCount}", block.StartLine, type: ErrorType.UnexpectedBlockElement);
             return false;
          }
          return true;

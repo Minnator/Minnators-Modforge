@@ -6,6 +6,7 @@ using Editor.Saving;
 namespace Editor.DataClasses.GameDataClasses;
 public class SuperRegion : ProvinceCollection<Region>
 {
+   public bool RestrictCharter { get; set; } = false;
    public SuperRegion(string name, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(name, color, status)
    {
    }
