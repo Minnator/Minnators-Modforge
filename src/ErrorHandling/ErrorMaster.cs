@@ -242,11 +242,12 @@ namespace Editor.ErrorHandling
 
    public class LogEntry
    {
-      public LogEntry(LogType level, string message)
+      public LogEntry(LogType level, string message, bool addToManager = true)
       {
          Level = level;
          Message = message;
-         LogManager.AddLogEntry(this);
+         if (addToManager)
+            LogManager.AddLogEntry(this);
       }
 
       public DateTime Timestamp { get; } = DateTime.Now;
@@ -270,7 +271,7 @@ namespace Editor.ErrorHandling
    public class FileRefLogEntry : LogEntry
    {
       public string Path { get; }
-      public FileRefLogEntry(LogType level, string message, string path) : base(level, message)
+      public FileRefLogEntry(LogType level, string message, string path, bool addToManager = true) : base(level, message, addToManager)
       {
          Path = path;
       }
@@ -290,8 +291,11 @@ namespace Editor.ErrorHandling
       }
    }
 
-   public class LoadingError : ErrorObject
+   public class LoadingError : ErrorObject // TODO remove FileRefLogEntry
    {
+      public readonly int Line;
+      public readonly int CharPos;
+      public readonly string Path;
       public static string GetErrorMsg(string path, int line, int charPos, string msg)
       {
          return line != -1 ? (charPos != -1 ? $"Error in file \"{path}\" on line {line}|{charPos} : {msg}" : $"Error in file \"{path}\" in line {line} : {msg}") : $"Error in file \"{path}\" : {msg}";
@@ -306,9 +310,14 @@ namespace Editor.ErrorHandling
       /// <param name="charPos"></param>
       /// <param name="type"></param>
       /// <param name="level"></param>
-      public LoadingError(PathObj path, string msg, int line = -1, int charPos = -1, ErrorType type = ErrorType.SyntaxError,
+      public LoadingError(PathObj path, string msg, int line = -1, int charPos = -1,
+         ErrorType type = ErrorType.SyntaxError,
          LogType level = LogType.Error) : base(level, type, GetErrorMsg(path.ToPath(), line, charPos, msg))
-      { }
+      {
+         Line = line;
+         CharPos = charPos;
+         Path = path.GetPath();
+      }
 
       /// <summary>
       /// Object Construction Exception
@@ -318,29 +327,41 @@ namespace Editor.ErrorHandling
       /// <param name="type"></param>
       /// <param name="context"></param>
       public LoadingError(PathObj path, string msg, ErrorType type, ParserRuleContext context) : this(path, msg, context.Start.Line, context.Start.Column, type)
-      { }
+      {
+      }
+
    }
 
-   public class ErrorObject : FileRefLogEntry, IExtendedLogInformationProvider
+   public interface IErrorHandle
+   {
+      public bool Ignore();
+      public bool Log();
+      public bool Then(Action<ErrorObject> action);
+   }
+
+   public class ErrorObject : FileRefLogEntry, IExtendedLogInformationProvider, IErrorHandle
    {
       private const string DEFAULT_INFORMATION = "N/A";
 
       private readonly string Description;
       private readonly string Resolution;
+      private bool IsErrorHandled;
       public ErrorType ErrorType { get; init; }
 
-      public ErrorObject(string message, string resolution, string description, string path = "") : base(LogType.Error, message, path)
+      public ErrorObject(string message, string resolution, string description, string path = "", bool addToManager = true) : base(LogType.Error, message, path, addToManager)
       {
+         IsErrorHandled = addToManager;
          Description = description;
          Resolution = resolution;
       }
 
-      public ErrorObject(string message, ErrorType type, string path = "") : this(LogType.Error, type, message, path)
+      public ErrorObject(string message, ErrorType type, string path = "", bool addToManager = true) : this(LogType.Error, type, message, path, addToManager)
       {
       }
 
-      protected ErrorObject(LogType level, ErrorType type, string message, string path = "") : base(level, $"{Enum.GetName(type)}: " + message, path)
+      protected ErrorObject(LogType level, ErrorType type, string message, string path = "", bool addToManager = true) : base(level, $"{Enum.GetName(type)}: " + message, path, addToManager)
       {
+         IsErrorHandled = addToManager;
          (Description, Resolution) = GetErrorInformation(type);
          ErrorType = type;
       }
@@ -364,6 +385,60 @@ namespace Editor.ErrorHandling
       public string GetMessage()
       {
          return Message;
+      }
+
+      public bool Ignore()
+      {
+         return false;
+      }
+
+      public bool Log()
+      {
+         if (IsErrorHandled)
+            return false;
+         IsErrorHandled = true;
+         LogManager.AddLogEntry(this);
+         return false;
+      }
+
+      public bool Then(Action<ErrorObject> action)
+      {
+         action(this);
+         return false;
+      }
+
+      public void ConvertToLoadingError(PathObj path, string msg, int line = -1, int charPos = -1, ErrorType? type = null,
+         LogType? level = null)
+      {
+         string newMsg;
+         if (!string.IsNullOrEmpty(msg))
+            newMsg = msg + '{' + Message + '}';
+         else
+            newMsg = '{' + Message + '}';
+         _ = new LoadingError(path, newMsg, line, charPos, type ?? ErrorType, level ?? Level);
+      }
+   }
+
+   public class ErrorHandle : IErrorHandle
+   {
+      
+      private ErrorHandle() { }
+
+      public static ErrorHandle Sucess = new ();
+
+      public bool Ignore()
+      {
+         return true;
+      }
+
+      public bool Log()
+      {
+         return true;
+      }
+
+      public bool Then(Action<ErrorObject> action)
+      {
+         return true;
       }
    }
 

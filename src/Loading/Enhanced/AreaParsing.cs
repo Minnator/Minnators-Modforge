@@ -8,7 +8,7 @@ namespace Editor.Loading.Enhanced
       {
          var (blocks, _) = EnhancedParser.LoadBase(EnhancedParser.FileContentAllowed.BlocksOnly, out var po, "map", "area.txt");
 
-         Globals.Areas.Clear();
+         Globals.Areas = new (blocks.Count);
          foreach (var block in blocks)
          {
             var limit = 0;         

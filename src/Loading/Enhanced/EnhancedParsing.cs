@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.Misc;
 using Editor.ErrorHandling;
 using Editor.Saving;
 
@@ -14,6 +15,70 @@ namespace Editor.Loading.Enhanced
       private static partial Regex IntListRegexGenerate();
 
       #endregion
+
+      public static Monsoon? GetMonsoonFromBlock(EnhancedBlock block, PathObj po)
+      {
+         var contentElements = block.ContentElements;
+         if (contentElements.Count != 1)
+         {
+            _ = new LoadingError(po, $"Expected 1 content element but got {contentElements.Count}!",
+               block.StartLine, 0, ErrorType.UnexpectedContentElement);
+            return null;
+         }
+
+         var lines = GetStringListFromContent(contentElements[0], po);
+         if (lines.Count != 2)
+         {
+            _ = new LoadingError(po, $"Expected 2 dates but got {lines.Count}!", block.StartLine, 0, ErrorType.UnexpectedContentElement);
+            return null;
+         }
+
+         if (!Date.TryParse(lines[0], out var start).Then((error) => error.ConvertToLoadingError(po, string.Empty, contentElements[0].StartLine)))
+            return null;
+
+         if (!Date.TryParse(lines[1], out var end).Then((error) => error.ConvertToLoadingError(po, string.Empty, contentElements[0].StartLine + 1)))
+            return null;
+         
+         return new (start, end);
+      }
+
+
+      public static List<string> GetStringListFromContent(EnhancedContent content, PathObj po)
+      {
+         var strings = new List<string>();
+
+         foreach (var (line, num) in content.GetLineEnumerator(po))
+         {
+            var lineElements = line.Split(' ');
+
+            foreach (var element in lineElements)
+            {
+               strings.Add(element);
+            }
+         }
+         return strings;
+      }
+
+      public static List<Area> GetAreasFromBlock(EnhancedBlock block, PathObj po)
+      {
+         List<Area> areas = [];
+         List<string> areaStrings = [];
+         foreach (var content in block.ContentElements) 
+            areaStrings.AddRange(GetStringListFromContent(content, po));
+
+         foreach (var areaString in areaStrings)
+         {
+            if (Globals.Areas.TryGetValue(areaString, out var area))
+               areas.Add(area);
+            else
+               _ = new LoadingError(po, $"Area \"{areaString}\" not found!", block.StartLine, 0, ErrorType.UnresolveableAreaReference);
+         }
+
+         return areas;
+         
+         
+      }
+
 
       public static List<Province> GetProvincesFromString(EnhancedContent content, PathObj po)
       {

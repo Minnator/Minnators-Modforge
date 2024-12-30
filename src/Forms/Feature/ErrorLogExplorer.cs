@@ -74,11 +74,17 @@ namespace Editor.Forms.Feature
             return;
 
          var contextMenu = new ContextMenuStrip();
-         var openFile = new ToolStripMenuItem("Open File");
-         var openFolderOfFile = new ToolStripMenuItem("Open Folder of File");
-         var openFolder = new ToolStripMenuItem("Open Folder");
+         var openFile = new ToolStripMenuItem("Open file");
+         var openFolderOfFile = new ToolStripMenuItem("Open folder of file");
+         var openFolder = new ToolStripMenuItem("Open folder");
+         var openFileAtLocation = new ToolStripMenuItem("Open File at error location");
 
          openFile.Click += (_, args) => ProcessHelper.OpenFile(entry.Path);
+         openFileAtLocation.Click += (_, args) =>
+         {
+            if (entry is LoadingError lError) 
+               ProcessHelper.OpenFileAtLine(lError.Path, lError.Line - 1, lError.CharPos);
+         };
          openFolder.Click += (_, args) => ProcessHelper.OpenFolder(entry.Path);
          openFolderOfFile.Click += (_, args) =>
          {
@@ -88,6 +94,7 @@ namespace Editor.Forms.Feature
          };
 
          contextMenu.Items.Add(openFile);
+         contextMenu.Items.Add(openFileAtLocation);
          contextMenu.Items.Add(openFolderOfFile);
          contextMenu.Items.Add(openFolder);
 

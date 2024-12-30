@@ -3,7 +3,15 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Editor.DataClasses.Settings
 {
-   [SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
+   public enum PreferredEditor
+   {
+      VSCode,
+      NotepadPlusPlus,
+      Other
+   }
+
+
+[SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
    public sealed class MiscSettings : SubSettings
    {
       private Language _language = Language.english;
@@ -20,6 +28,7 @@ namespace Editor.DataClasses.Settings
       private bool _useEu4Cursor = true;
       private bool _useDiscordRichPresence = true;
       private bool _useDynamicProvinceNames = true;
+      private PreferredEditor _preferredEditor = PreferredEditor.VSCode;
 
       [Description("The language in which the localisation will be shown")]
       [CompareInEquals]
@@ -131,6 +140,12 @@ namespace Editor.DataClasses.Settings
       {
          get => _useDynamicProvinceNames;
          set => SetField(ref _useDynamicProvinceNames, value);
+      }
+
+      public PreferredEditor PreferredEditor
+      {
+         get => _preferredEditor;
+         set => SetField(ref _preferredEditor, value);
       }
    }
 }

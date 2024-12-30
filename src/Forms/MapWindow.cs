@@ -959,20 +959,7 @@ namespace Editor.Forms
 
       private void telescopeToolStripMenuItem_Click(object sender, EventArgs e)
       {
-#if DEBUG
-         var sb = new StringBuilder();
-         foreach (var province in Globals.Provinces)
-         {
-            sb.Append($"{province.TitleLocalisation}: ");
-            foreach (var building in province.Buildings)
-            {
-               sb.Append($"{building}, ");
-            }
-            sb.AppendLine();
-         }
-         File.WriteAllText(Path.Combine(Globals.DebugPath, "buildings.txt"), sb.ToString());
-#endif
-
+         ProcessHelper.OpenFile("S:\\SteamLibrary\\steamapps\\common\\Europa Universalis IV\\map\\area.txt");
       }
 
       private void MapWindow_KeyDown(object sender, KeyEventArgs e)

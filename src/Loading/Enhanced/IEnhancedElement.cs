@@ -60,10 +60,21 @@ namespace Editor.Loading.Enhanced
          return GetBlockByName(name, SubBlocks, out block);
       }
 
+      public bool GetAllSubBlockByName(string name, out List<EnhancedBlock> blocks)
+      {
+         return GetAllBlockByName(name, SubBlocks, out blocks);
+      }
+
       public static bool GetBlockByName(string name, ICollection<EnhancedBlock> blocks, out EnhancedBlock result)
       {
-         result = blocks.FirstOrDefault(b => b.Name == name)!;
+         result = blocks.FirstOrDefault(b => b.Name.Equals(name))!;
          return result is not null;
+      }
+
+      public static bool GetAllBlockByName(string name, ICollection<EnhancedBlock> blocks, out List<EnhancedBlock> result)
+      {
+         result = blocks.Where(b => b.Name.Equals(name)).ToList()!;
+         return result.Count > 0;
       }
 
       public bool GetSubBlocksByName(string name, out List<EnhancedBlock> blocks)

@@ -18,6 +18,23 @@ namespace Editor.Loading.Enhanced
          return evaluator(subBlock, po);
       }
 
+      public static List<T> ParseBlockMultiple<T>(string blockName, EnhancedBlock block, PathObj po, ref int limit, Func<EnhancedBlock, PathObj, T?> evaluator)
+      {
+         List<T> result = [];
+         if (!block.GetAllSubBlockByName(blockName, out var subBlocks))
+            return [];
+
+         limit += subBlocks.Count;
+         foreach (var subBlock in subBlocks)
+         {
+            var value = evaluator(subBlock, po);
+            if (value != null)
+               result.Add(value);
+         }
+
+         return result;
+      }
+
       public static bool CheckLimit(EnhancedBlock block, int limit, PathObj po)
       {
          if (block.SubBlocks.Count > limit)

@@ -1,11 +1,70 @@
 ﻿using System.Diagnostics;
+using Editor.DataClasses.Settings;
 using Editor.ErrorHandling;
 using Editor.Saving;
+using Microsoft.Win32;
 
 namespace Editor.Helper
 {
    public static class ProcessHelper
    {
+      // open the file in notepad++ at the given line
+      public static bool OpenNotePadPlusPlusAtLineOfFile(string path, int line)
+      {
+         try
+         {
+            // see if notepad++ is installed on user's machine
+            var nppDir = (string?)Registry.GetValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Notepad++", null, null);
+            if (nppDir != null)
+            {
+               var nppExePath = Path.Combine(nppDir, "Notepad++.exe");
+               Process.Start(nppExePath, $"\"{path}\" -n{line}");
+            }
+         }
+         catch (Exception e)
+         {
+            MessageBox.Show($"Failed to open file in Notepad++: {e.Message}{Environment.NewLine}Please open the url yourself {path}");
+            return false;
+         }
+         return true;
+      }
+
+      public static bool OpenVSCodeAtLineOfFile(string path, int line, int charIndex)
+      {
+         try
+         {
+
+            Process.Start(new ProcessStartInfo
+            {
+               UseShellExecute = true,
+               FileName = $"vscode://file/{path}:{line}:{charIndex}",
+            });
+            return true;
+         }
+         catch (Exception ex)
+         {
+            MessageBox.Show($"Failed to open file in VS-Code: {ex.Message}{Environment.NewLine}Please open the url yourself {path}");
+            return false;
+         }
+      }
+
+      public static void OpenFileAtLine(string path, int line, int charIndex)
+      {
+         switch (Globals.Settings.Misc.PreferredEditor)
+         {
+            case PreferredEditor.VSCode:
+               OpenVSCodeAtLineOfFile(path, line, charIndex);
+               break;
+            case PreferredEditor.NotepadPlusPlus:
+               OpenNotePadPlusPlusAtLineOfFile(path, line);
+               break;
+            case PreferredEditor.Other:
+               OpenFile(path);
+               break;
+            default:
+               throw new ArgumentOutOfRangeException();
+         }
+      }
 
       public static bool OpenDiscordLinkIfDiscordRunning(string link)
       {
@@ -52,12 +111,7 @@ namespace Editor.Helper
          myProcess.StartInfo.CreateNoWindow = newWindow;
          myProcess.Start();
       }
-
-      public static void OpenVsCode(string filePath, bool newWindow)
-      {
-         Open("code", filePath, newWindow);
-      }
-
+      
       public static void OpenSaveableFolders(ICollection<Saveable> saveables)
       {
          HashSet<string> uniquePaths = [];
@@ -100,7 +154,6 @@ namespace Editor.Helper
       {
          if (File.Exists(path))
          {
-            // TODO open file at line number
             Process.Start(new ProcessStartInfo
             {
                FileName = path,

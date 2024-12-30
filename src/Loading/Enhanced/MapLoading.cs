@@ -42,6 +42,7 @@ namespace Editor.Loading.Enhanced
             Globals.AdjacentProvinces.Add(province, province.ProvinceBorders.Keys.ToArray());
 
             province.TempBorderFix();
+            province.SetBounds();
          }
       }
 
@@ -54,7 +55,6 @@ namespace Editor.Loading.Enhanced
                province.Pixels = new(provPixels.ToArray());
             else
                _ = new LogEntry(LogType.Warning, $"Province {province.Id} has no pixels on the map");
-            province.SetBounds();
          }
       }
 

@@ -39,6 +39,10 @@ public enum ErrorType
    DuplicateElement = 107,
    [ErrorInformation("This occurs because a province is defined multiple times or its color is not unique!", "Check the file for duplicate province definitions or color definitions and remove or rename them!")]
    ProvinceDefinitionError = 108,
+   [ErrorInformation("This occurs because a reference to an area could not be resolved!", "Is the given area defined in area.txt?")]
+   UnresolveableAreaReference = 109,
+   [ErrorInformation("This occurs because an object is defined multiple times!", "Check the file for duplicate object definitions and remove or rename them!")]
+   DuplicateObjectDefinition = 110,
    [ErrorInformation("This occurs because an date is not in a valid format!", "Check the date format and correct it!")]
    IllegalDateFormat = 101,
    [ErrorInformation("This occurs because your file is not in the correct format and thus can not be parse by the modforge", "Verify that your mod file is formatted correctly and if so contact a developer!")]

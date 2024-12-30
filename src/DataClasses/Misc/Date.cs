@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Editor.ErrorHandling;
+using Editor.Saving;
 
 namespace Editor.DataClasses.Misc
 {
@@ -11,7 +12,7 @@ namespace Editor.DataClasses.Misc
       private static readonly Regex DateRegex = DateRegexGeneration();
       private int _timeStamp;
 
-      [GeneratedRegex(@"(?<year>-?\d{1,4}).(?<month>\d{1,2}).(?<day>\d{1,2})")]
+      [GeneratedRegex(@"(?<year>-?\d{1,4})\.(?<month>\d{1,2})\.(?<day>\d{1,2})")]
       private static partial Regex DateRegexGeneration();
 
       /// <summary>
@@ -159,36 +160,27 @@ namespace Editor.DataClasses.Misc
          };
       }
 
-      public static bool TryParse(string str, out Date date, bool asCheck = false)
+      public static IErrorHandle TryParse(string str, out Date date)
       {
          date = MinValue;
          if (string.IsNullOrWhiteSpace(str))
          {
-            if (!asCheck)
-               _ = new ErrorObject($"An empty string \"[{str}]\" can not be parsed to a date", ErrorType.IllegalDateFormat);
-            return false;
+            return new ErrorObject($"An empty string \"[{str}]\" can not be parsed to a date", ErrorType.IllegalDateFormat, addToManager: false);
          }
          var match = DateRegex.Match(str);
          if (!match.Success)
-         {
-            if (!asCheck)
-               _ = new ErrorObject($"The string \"{str}\" does not match the date format <yyyy.mm.dd>", ErrorType.IllegalDateFormat);
-            return false;
-         }
+            return new ErrorObject($"The string \"{str}\" does not match the date format <yyyy.mm.dd>", ErrorType.IllegalDateFormat, addToManager: false);
 
          if (!short.TryParse(match.Groups["year"].Value, out var year) ||
              !byte.TryParse(match.Groups["month"].Value, out var month) ||
              !byte.TryParse(match.Groups["day"].Value, out var day))
-            return false;
+            return new ErrorObject($"The date {match} is not a valid date.", ErrorType.IllegalDate, addToManager: false);
 
          if (month < 1 || month > 12 || day < 1 || day > DaysInMonth(month))
-         {
-            _ = new ErrorObject($"The date {year}.{month}.{day} is not a valid date.", ErrorType.IllegalDate);
-            return false;
-         }
+            return new ErrorObject($"The date {year}.{month}.{day} is not a valid date.", ErrorType.IllegalDate, addToManager: false);
 
          date = new(year, month, day);
-         return true;
+         return ErrorHandle.Sucess;
       }
 
       public override string ToString() => $"{Year}.{Month}.{Day}";
