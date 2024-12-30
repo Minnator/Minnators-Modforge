@@ -38,4 +38,9 @@ public sealed class RegionsMapMode : MapMode
             return $"Region: {province.GetArea().Region.Name} ({Localisation.GetLoc(province.GetArea().Region.Name)})";
       return "Region: [Unknown]";
    }
+
+   public override bool ShouldProvincesMerge(Province p1, Province p2)
+   {
+      return p1.GetArea().Region == p2.GetArea().Region;
+   }
 }

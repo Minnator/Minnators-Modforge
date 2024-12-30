@@ -21,7 +21,7 @@ namespace Editor.DataClasses.MapModes
                return cr.Color.ToArgb();
          return Color.DimGray.ToArgb();
       }
-
+      
       public override MapModeType MapModeType => MapModeType.ColonialRegions;
 
       public override string GetSpecificToolTip(Province provinceId)
@@ -30,6 +30,14 @@ namespace Editor.DataClasses.MapModes
             if (cr.GetProvinces().Contains(provinceId))
                return $"Colonial region: {cr.Name} ({Localisation.GetLoc(cr.Name)})";
          return "Colonial region: [Unknown]";
+      }
+
+      public override bool ShouldProvincesMerge(Province p1, Province p2)
+      {
+         foreach (var cr in Globals.ColonialRegions.Values)
+            if (cr.GetProvinces().Contains(p1) && cr.GetProvinces().Contains(p2)) 
+               return true;
+         return false;
       }
    }
 }

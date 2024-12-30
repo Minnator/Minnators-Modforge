@@ -49,4 +49,8 @@ public class FortMapMode : MapMode
       return $"No fort in {provinceId.TitleLocalisation}";
    }
 
+   public override bool ShouldProvincesMerge(Province p1, Province p2)
+   {
+      return GetFortLevel(p1) == GetFortLevel(p2);
+   }
 }

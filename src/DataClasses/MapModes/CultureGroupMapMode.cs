@@ -1,4 +1,5 @@
-﻿using Editor.DataClasses.GameDataClasses;
+﻿using System.Linq;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Events;
 using Editor.Helper;
 
@@ -30,5 +31,13 @@ public class CultureGroupMapMode : MapMode
          if (Globals.CultureGroups.TryGetValue(culture.CultureGroup, out var group))
             return $"Culture Group: {group.Name} ({Localisation.GetLoc(group.Name)})";
       return "Culture Group: [Unknown]";
+   }
+
+   public override bool ShouldProvincesMerge(Province p1, Province p2)
+   {
+      foreach (var cultureGroup in Globals.CultureGroups.Values)
+         if (cultureGroup.HasCultureWithName(p1.Culture) && cultureGroup.HasCultureWithName(p2.Culture))
+            return true;
+      return false;
    }
 }

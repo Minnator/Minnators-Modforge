@@ -28,4 +28,11 @@ public sealed class ContinentMapMode : MapMode
             return $"Continent: {province.GetContinent().Name} ({Localisation.GetLoc(province.GetContinent().Name)})";
       return "Continent: [Unknown]";
    }
+
+   public override bool ShouldProvincesMerge(Province p1, Province p2)
+   {
+      if (Globals.Provinces.TryGetValue(p1, out var province1) && Globals.Provinces.TryGetValue(p2, out var province2))
+         return province1.GetContinent() == province2.GetContinent();
+      return false;
+   }
 }

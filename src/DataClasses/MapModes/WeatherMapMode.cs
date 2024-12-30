@@ -26,5 +26,13 @@ namespace Editor.DataClasses.MapModes
          }
          return "No unusual Weather";
       }
+
+      public override bool ShouldProvincesMerge(Province p1, Province p2)
+      {
+         foreach (var weather in Globals.Weather)
+            if (weather.Value.SubCollection.Contains(p1) && weather.Value.SubCollection.Contains(p2))
+               return true;
+         return false;
+      }
    }
 }

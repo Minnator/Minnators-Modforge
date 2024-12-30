@@ -27,4 +27,9 @@ public sealed class AreaMapMode : MapMode
             return $"Area: {province.GetArea().Name} ({Localisation.GetLoc(province.GetArea().Name)})";
       return "Area: [Unknown]";
    }
+
+   public override bool ShouldProvincesMerge(Province p1, Province p2)
+   {
+      return p1.GetArea() == p2.GetArea();
+   }
 }

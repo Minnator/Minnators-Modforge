@@ -85,4 +85,9 @@ public class DevelopmentMapMode : MapMode
          return $"Total Development: {province.GetTotalDevelopment()}\nBaseTax: {province.BaseTax}\nBaseProduction: {province.BaseProduction}\nBaseManpower: {province.BaseManpower}";
       return "Total Development: Unknown";
    }
+
+   public override bool ShouldProvincesMerge(Province p1, Province p2)
+   {
+      return p1.GetTotalDevelopment() == p2.GetTotalDevelopment();
+   }
 }

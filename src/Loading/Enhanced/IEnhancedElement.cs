@@ -143,16 +143,31 @@ namespace Editor.Loading.Enhanced
             SavingUtil.AddString(tabs, kvp.Value, kvp.Key, ref sb);
       }
 
-      public IEnumerable<(string, int)> GetLineEnumerator(PathObj pathObj, bool showError = true) 
+      public IEnumerable<(string, int)> GetLineEnumerator() 
       {
          var lines = Value.Split('\n');
          var lineNum = StartLine;
          foreach (var line in lines)
          {
-            lineNum++;
             if (string.IsNullOrWhiteSpace(line))
                continue;
             yield return (line, lineNum);
+            lineNum++;
+         }
+      }
+
+      public IEnumerable<(string, int)> GetStringListEnumerator()
+      {
+         var lines = Value.Split('\n');
+         var lineNum = StartLine;
+         foreach (var line in lines)
+         {
+            if (string.IsNullOrWhiteSpace(line))
+               continue;
+            var strings = line.Split(' ');
+            foreach (var str in strings)
+               yield return (str, lineNum);
+            lineNum++;
          }
       }
 
@@ -163,7 +178,6 @@ namespace Editor.Loading.Enhanced
          var lineNum = StartLine;
          foreach (var line in lines)
          {
-            lineNum++;
             if (string.IsNullOrWhiteSpace(line))
                continue;
             var split = line.Split('=');
@@ -174,6 +188,7 @@ namespace Editor.Loading.Enhanced
                continue;
             }
             yield return new(split[0].Trim(), split[1].TrimQuotes(), lineNum);
+            lineNum++;
          }
       }
 

@@ -67,5 +67,12 @@ namespace Editor.DataClasses.MapModes
       public override void SetInactive()
       {
       }
+
+      public override bool ShouldProvincesMerge(Province p1, Province p2)
+      {
+         var node1 = TradeNodeHelper.GetTradeNodeByProvince(p1);
+         var node2 = TradeNodeHelper.GetTradeNodeByProvince(p2);
+         return Equals(node1, node2);
+      }
    }
 }

@@ -177,5 +177,10 @@ namespace Editor.DataClasses.MapModes
       {
          return "Debug Map Mode";
       }
+
+      public override bool ShouldProvincesMerge(Province p1, Province p2)
+      {
+         return false;
+      }
    }
 }

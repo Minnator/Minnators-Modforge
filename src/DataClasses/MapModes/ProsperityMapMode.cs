@@ -28,5 +28,10 @@ namespace Editor.DataClasses.MapModes
             return id.Color.ToArgb();
          return Globals.ColorProvider.GetColorOnGreenRedShade(0, 100, id.Prosperity).ToArgb();
       }
+
+      public override bool ShouldProvincesMerge(Province p1, Province p2)
+      {
+         return Math.Abs(p1.Prosperity - p2.Prosperity) < 0.001;
+      }
    }
 }

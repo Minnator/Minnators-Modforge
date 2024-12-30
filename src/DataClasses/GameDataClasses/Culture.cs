@@ -40,6 +40,10 @@ public class CultureGroup(string name)
    public int FemaleNamesCount => FemaleNames.Length;
    public int DynastyNamesCount => DynastyNames.Length;
    public int TotalNameCount => MaleNamesCount + FemaleNamesCount + DynastyNamesCount;
+   public bool HasCultureWithName(string name)    
+   {
+      return Cultures.Any(culture => culture.Name == name);
+   }
    public override string ToString()
    {
       return Name;

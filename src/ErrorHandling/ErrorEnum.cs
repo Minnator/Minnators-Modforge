@@ -43,6 +43,8 @@ public enum ErrorType
    UnresolveableAreaReference = 109,
    [ErrorInformation("This occurs because an object is defined multiple times!", "Check the file for duplicate object definitions and remove or rename them!")]
    DuplicateObjectDefinition = 110,
+   [ErrorInformation("This occurs because a reference to a region could not be resolved!", "Is the given region defined in region.txt?")]
+   UnresolveableRegionReference = 111,
    [ErrorInformation("This occurs because an date is not in a valid format!", "Check the date format and correct it!")]
    IllegalDateFormat = 101,
    [ErrorInformation("This occurs because your file is not in the correct format and thus can not be parse by the modforge", "Verify that your mod file is formatted correctly and if so contact a developer!")]

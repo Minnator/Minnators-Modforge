@@ -30,5 +30,10 @@ namespace Editor.DataClasses.MapModes
          }
          return $"Trade Good: Unknown";
       }
+
+      public override bool ShouldProvincesMerge(Province p1, Province p2)
+      {
+         return p1.TradeGood == p2.TradeGood;
+      }
    }
 }

@@ -30,4 +30,9 @@ public class AutonomyMapMode : MapMode
          return $"Autonomy: [{province.LocalAutonomy}%]";
       return "Autonomy: [Unknown]";
    }
+
+   public override bool ShouldProvincesMerge(Province p1, Province p2)
+   {
+      return Math.Abs(p1.LocalAutonomy - p2.LocalAutonomy) < 0.001;
+   }
 }

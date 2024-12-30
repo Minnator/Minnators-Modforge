@@ -15,4 +15,9 @@ public sealed class ProvinceIdMapMode : MapMode
    {
       return $"{provinceId.Id} ({provinceId.TitleLocalisation})";
    }
+
+   public override bool ShouldProvincesMerge(Province p1, Province p2)
+   {
+      return false;
+   }
 }

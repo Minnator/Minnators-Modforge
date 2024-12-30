@@ -27,5 +27,13 @@ namespace Editor.DataClasses.MapModes
          }
          return "Climate: Temperate";
       }
+
+      public override bool ShouldProvincesMerge(Province p1, Province p2)
+      {
+         foreach (var climate in Globals.Climates)
+            if (climate.Value.SubCollection.Contains(p1) && climate.Value.SubCollection.Contains(p2))
+               return true;
+         return false;
+      }
    }
 }

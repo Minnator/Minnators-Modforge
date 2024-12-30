@@ -20,22 +20,22 @@ public abstract class MapMode
       {
          if (MapModeManager.PreviousLandOnly)
          {
-            MapDrawing.DrawOnMap(Globals.LandProvinces, GetProvinceColor, Globals.ZoomControl, PixelsOrBorders.Pixels);
+            MapDrawing.DrawOnMap(Globals.LandProvinces, GetProvinceColor, Globals.ZoomControl, PixelsOrBorders.Pixels, ShouldProvincesMerge);
          }
          else
          {
-            MapDrawing.DrawOnMap(Globals.LandProvinces, GetProvinceColor, Globals.ZoomControl, PixelsOrBorders.Pixels);
-            MapDrawing.DrawOnMap(Globals.NonLandProvinces, GetSeaProvinceColor, Globals.ZoomControl, PixelsOrBorders.Pixels);
+            MapDrawing.DrawOnMap(Globals.LandProvinces, GetProvinceColor, Globals.ZoomControl, PixelsOrBorders.Pixels, ShouldProvincesMerge);
+            MapDrawing.DrawOnMap(Globals.NonLandProvinces, GetSeaProvinceColor, Globals.ZoomControl, PixelsOrBorders.Pixels, ShouldProvincesMerge);
          }
       }
       else
       {
-         MapDrawing.DrawOnMap(Globals.Provinces, method, Globals.ZoomControl, PixelsOrBorders.Pixels);
+         MapDrawing.DrawOnMap(Globals.Provinces, method, Globals.ZoomControl, PixelsOrBorders.Pixels, ShouldProvincesMerge);
       }
       if (ShowOccupation)
          MapDrawing.DrawOccupations(false, Globals.ZoomControl);
 
-      MapDrawing.DrawAllBorders(Color.Black.ToArgb(), Globals.ZoomControl);
+      MapDrawing.DrawAllBorders(Color.Black.ToArgb(), Globals.ZoomControl, ShouldProvincesMerge);
       Selection.RePaintSelection();
       Globals.ZoomControl.Invalidate();
       MapModeManager.PreviousLandOnly = IsLandOnly;
@@ -109,7 +109,7 @@ public abstract class MapMode
 
    public virtual void Update(Province province, bool invalidate = true)
    {
-      MapDrawing.DrawOnMap(province, GetProvinceColor(province), Globals.ZoomControl, PixelsOrBorders.Pixels);
+      MapDrawing.DrawOnMap(province, GetProvinceColor(province), Globals.ZoomControl, PixelsOrBorders.Pixels, ShouldProvincesMerge);
       if (ShowOccupation)
          MapDrawing.DrawOccupation(province, false, Globals.ZoomControl);
       if (invalidate) 
@@ -128,4 +128,6 @@ public abstract class MapMode
    {
 
    }
+
+   public abstract bool ShouldProvincesMerge(Province p1, Province p2);
 }

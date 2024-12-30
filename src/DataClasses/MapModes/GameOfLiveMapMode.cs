@@ -17,6 +17,11 @@ namespace Editor.DataClasses.MapModes
          GameOfLive.Stop();
       }
 
+      public override bool ShouldProvincesMerge(Province p1, Province p2)
+      {
+         return false;
+      }
+
       public override int GetProvinceColor(Province id)
       {
          if (GameOfLive.Rules == GameOfLive.SurvivalRules.PopulationDynamics)

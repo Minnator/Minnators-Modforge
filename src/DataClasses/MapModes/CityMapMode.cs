@@ -27,5 +27,10 @@ namespace Editor.DataClasses.MapModes
             return province.IsCity ? "Is City" : "colonial";
          return string.Empty;
       }
+
+      public override bool ShouldProvincesMerge(Province p1, Province p2)
+      {
+         return p1.IsCity == p2.IsCity;
+      }
    }
 }

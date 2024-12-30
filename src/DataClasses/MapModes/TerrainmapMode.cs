@@ -29,5 +29,10 @@ namespace Editor.DataClasses.MapModes
             return $"Terrain (Auto): {Localisation.GetLoc(provinceId.AutoTerrain.Name)} ({provinceId.AutoTerrain.Name})";
          return $"Terrain: {Localisation.GetLoc(provinceId.Terrain.Name)} ({provinceId.Terrain.Name})";
       }
+
+      public override bool ShouldProvincesMerge(Province p1, Province p2)
+      {
+         return p1.Terrain == p2.Terrain;
+      }
    }
 }

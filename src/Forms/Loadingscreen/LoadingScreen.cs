@@ -8,7 +8,7 @@ using Editor.Loading.Enhanced;
 using Editor.Parser;
 using MapLoading = Editor.Loading.Enhanced.MapLoading;
 using RegionLoading = Editor.Loading.Enhanced.RegionLoading;
-using SuperRegionLoading = Editor.Loading.SuperRegionLoading;
+using SuperRegionLoading = Editor.Loading.Enhanced.SuperRegionLoading;
 using TradeNodeLoading = Editor.Loading.TradeNodeLoading;
 
 namespace Editor.Forms.LoadingScreen

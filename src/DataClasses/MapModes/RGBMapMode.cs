@@ -41,6 +41,11 @@ namespace Editor.DataClasses.MapModes
          Globals.Settings.ToolTip.ShowToolTip = true;
       }
 
+      public override bool ShouldProvincesMerge(Province p1, Province p2)
+      {
+         return true;
+      }
+
       private void Timer_Tick(object? sender, EventArgs e)
       {
          _totalRunTime += _timer.Interval;

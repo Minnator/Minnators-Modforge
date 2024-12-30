@@ -18,7 +18,7 @@ namespace Editor.DataClasses.MapModes
                {
                   var color = collection.Color.ToArgb();
                   foreach (var province in collection.GetProvinces())
-                     MapDrawing.DrawOnMap(province, color, Globals.ZoomControl, PixelsOrBorders.Pixels);
+                     MapDrawing.DrawOnMap(province, color, Globals.ZoomControl, PixelsOrBorders.Pixels, ShouldProvincesMerge);
                }
             }
             else
@@ -27,9 +27,9 @@ namespace Editor.DataClasses.MapModes
                {
                   var color = collection.Color.ToArgb();
                   foreach (var province in collection.GetProvinces())
-                     MapDrawing.DrawOnMap(province, color, Globals.ZoomControl, PixelsOrBorders.Pixels);
+                     MapDrawing.DrawOnMap(province, color, Globals.ZoomControl, PixelsOrBorders.Pixels, ShouldProvincesMerge);
                }
-               MapDrawing.DrawOnMap(Globals.NonLandProvinces, GetSeaProvinceColor, Globals.ZoomControl, PixelsOrBorders.Pixels);
+               MapDrawing.DrawOnMap(Globals.NonLandProvinces, GetSeaProvinceColor, Globals.ZoomControl, PixelsOrBorders.Pixels, ShouldProvincesMerge);
             }
          }
          else
@@ -41,13 +41,13 @@ namespace Editor.DataClasses.MapModes
                var color = node.Color.ToArgb();
                foreach (var province in node.GetProvinces())
                {
-                  MapDrawing.DrawOnMap(province, color, Globals.ZoomControl, PixelsOrBorders.Pixels);
+                  MapDrawing.DrawOnMap(province, color, Globals.ZoomControl, PixelsOrBorders.Pixels, ShouldProvincesMerge);
                   drawnProvinces.Remove(province);
                }
             }
 
             foreach (var province in drawnProvinces)
-               MapDrawing.DrawOnMap(province, Color.DimGray.ToArgb(), Globals.ZoomControl, PixelsOrBorders.Pixels);
+               MapDrawing.DrawOnMap(province, Color.DimGray.ToArgb(), Globals.ZoomControl, PixelsOrBorders.Pixels, ShouldProvincesMerge);
          }
          if (ShowOccupation)
             MapDrawing.DrawOccupations(false, Globals.ZoomControl);

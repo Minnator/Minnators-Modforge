@@ -3,6 +3,7 @@ using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
 using Editor.ErrorHandling;
 using Editor.Saving;
+using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor.Loading.Enhanced
 {
@@ -47,7 +48,7 @@ namespace Editor.Loading.Enhanced
       {
          var strings = new List<string>();
 
-         foreach (var (line, num) in content.GetLineEnumerator(po))
+         foreach (var (line, num) in content.GetLineEnumerator())
          {
             var lineElements = line.Split(' ');
 
@@ -79,12 +80,20 @@ namespace Editor.Loading.Enhanced
          
       }
 
+      public static bool GetRegionFromString(string str, PathObj po, int startLine, out Region region)
+      {
+
+         if (Globals.Regions.TryGetValue(str, out region!))
+            return true;
+         _ = new LoadingError(po, $"Region \"{str}\" not found!", startLine, 0, ErrorType.UnresolveableRegionReference);
+         return false;
+      }
 
       public static List<Province> GetProvincesFromString(EnhancedContent content, PathObj po)
       {
          var provinces = new List<Province>();
 
-         foreach (var (line, num) in content.GetLineEnumerator(po))
+         foreach (var (line, num) in content.GetLineEnumerator())
          {
             var lineElements = line.Split(' ', '\n');
 

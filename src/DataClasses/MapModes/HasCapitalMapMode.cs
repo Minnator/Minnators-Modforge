@@ -27,5 +27,10 @@ namespace Editor.DataClasses.MapModes
             return province.Capital != string.Empty ? province.Capital : "No Capital name";
          return string.Empty;
       }
+
+      public override bool ShouldProvincesMerge(Province p1, Province p2)
+      {
+         return p1.Capital != string.Empty && p2.Capital != string.Empty;
+      }
    }
 }

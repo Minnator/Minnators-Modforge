@@ -28,5 +28,10 @@ namespace Editor.DataClasses.MapModes
             return $"Religion: {religion.Name} ({Localisation.GetLoc(religion.Name)})";
          return "Religion: [Unknown]";
       }
+
+      public override bool ShouldProvincesMerge(Province p1, Province p2)
+      {
+         return p1.Religion == p2.Religion;
+      }
    }
 }
