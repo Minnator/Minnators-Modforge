@@ -242,7 +242,7 @@ namespace Editor.ErrorHandling
 
    public class LogEntry
    {
-      public LogEntry(LogType level, string message, bool addToManager = true)
+      public LogEntry(LogType level, string message, bool addToManager = true, bool isVanilla = false)
       {
          Level = level;
          Message = message;
@@ -253,6 +253,8 @@ namespace Editor.ErrorHandling
       public DateTime Timestamp { get; } = DateTime.Now;
       public LogType Level { get; }
       public string Message { get; }
+      public bool IsVanilla { get; } = false;
+
 
       public override string ToString()
       {

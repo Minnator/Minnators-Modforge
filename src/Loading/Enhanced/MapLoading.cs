@@ -14,7 +14,7 @@ namespace Editor.Loading.Enhanced
          if (!EnhancedParser.GetModOrVanillaPath(out var po, "map", "provinces.bmp"))
             return;
          Globals.MapPath = po.GetPath();
-         DefinitionLoading.LoadDefinition();
+         //DefinitionLoading.LoadDefinition();
          // colorToProvId, colorToBorder
          var (colorToProvId, colorToBorder) = LoadProvinces();
          OptimizeProvincePixels(colorToProvId);
@@ -40,7 +40,7 @@ namespace Editor.Loading.Enhanced
             {
                if (!Globals.ColorToProvId.TryGetValue(adjacent, out var adjProv))
                {
-                  // throw new IllegalMapDefinitionException("");
+                  // throw new IllegalMapDefinitionException(""); we dont want to throw an exception here as we can survive this 
                   _ = new ErrorObject($"Province {Color.FromArgb(adjacent)} ({adjacent}) has no pixels on the map!", ErrorType.ProvinceDefinitionError, "A province has no pixels in provinces.bmp. Either remove it from definition.csv or give it pixels.");
                   continue;
                }
@@ -61,7 +61,7 @@ namespace Editor.Loading.Enhanced
             var color = province.Color.ToArgb();
             if (pixels.TryGetValue(color, out var provPixels)) 
                province.Pixels = new(provPixels.ToArray());
-            else
+            else if (!Globals.RNWProvinces.Contains(province))
                _ = new LogEntry(LogType.Warning, $"Province {province.Id} has no pixels on the map");
          }
       }

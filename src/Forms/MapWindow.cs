@@ -864,7 +864,7 @@ namespace Editor.Forms
 
       private void OnSavingAllEnter(object? sender, EventArgs e)
       {
-         _savingButtonsToolTip.SetToolTip(SaveAllProvincesButton, $"Save all provinces ({Globals.LandProvinceIds.Length})");
+         _savingButtonsToolTip.SetToolTip(SaveAllProvincesButton, $"Save all provinces ({Globals.Provinces.Count})");
       }
       private void OnSavingSelectionEnter(object? sender, EventArgs e)
       {

@@ -32,8 +32,8 @@
       public static void GenerateRuntimeScopes()
       {
          RuntimeScopes = new(Globals.LandProvinces.Count + Globals.Countries.Count); //Prevent too many resizes of the HashSet
-         foreach (var id in Globals.LandProvinceIds)
-            RuntimeScopes.Add(id.ToString());
+         foreach (var id in Globals.Provinces)
+            RuntimeScopes.Add(id.Id.ToString());
          
          foreach (var area in Globals.Areas.Keys)
             RuntimeScopes.Add(area);

@@ -9,6 +9,39 @@ namespace Editor.Loading.Enhanced
 {
    public static class EnhancedParser
    {
+      /// <summary>
+      /// Can convert a string to a type T (int, float, bool, string)
+      /// Generates a LoadingError if the conversion fails
+      /// </summary>
+      /// <typeparam name="T"></typeparam>
+      /// <param name="str"></param>
+      /// <param name="po"></param>
+      /// <returns></returns>
+      public static T? Convert<T>(string? str, PathObj po)
+      {
+         if (typeof(T) == typeof(int))
+         {
+            if (int.TryParse(str, out var result))
+               return (T)(object)result;
+            _ = new LoadingError(po, $"Failed to parse \"{str}\" as int when expecting an int", type: ErrorType.TypeConversionError);
+         }
+         else if (typeof(T) == typeof(float))
+         {
+            if (float.TryParse(str, out var result))
+               return (T)(object)result;
+            _ = new LoadingError(po, $"Failed to parse \"{str}\" as float when expecting a float", type: ErrorType.TypeConversionError);
+         }
+         else if (typeof(T) == typeof(bool))
+         {
+            if (bool.TryParse(str, out var result))
+               return (T)(object)result;
+            _ = new LoadingError(po, $"Failed to parse \"{str}\" as bool when expecting a boolean", type: ErrorType.TypeConversionError);
+         }
+         else if (typeof(T) == typeof(string))
+            return (T)(object)str!;
+         return default;
+      }
+
       public static T ParseBlock<T>(string blockName, EnhancedBlock block, PathObj po, ref int limit, Func<EnhancedBlock, PathObj, T> evaluator, Func<T> fallback)
       {
          if (!block.GetSubBlockByName(blockName, out var subBlock))

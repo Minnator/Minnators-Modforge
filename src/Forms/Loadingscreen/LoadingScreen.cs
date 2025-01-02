@@ -6,6 +6,7 @@ using Editor.Helper;
 using Editor.Loading;
 using Editor.Loading.Enhanced;
 using Editor.Parser;
+using DefaultMapLoading = Editor.Loading.Enhanced.DefaultMapLoading;
 using MapLoading = Editor.Loading.Enhanced.MapLoading;
 using RegionLoading = Editor.Loading.Enhanced.RegionLoading;
 using SuperRegionLoading = Editor.Loading.Enhanced.SuperRegionLoading;
@@ -54,8 +55,9 @@ namespace Editor.Forms.LoadingScreen
          BuildingsLoading.Load,
          TradeCompanyInvestmentsLoading.Load,
          ReligionLoading.Load,
-         MapLoading.Load,
+         DefinitionLoading.LoadDefinition,
          DefaultMapLoading.Load,
+         MapLoading.Load,
          PositionsLoading.Load,
          CultureLoading.Load,
          ProvinceParser.ParseAllUniqueProvinces,

@@ -89,9 +89,9 @@ namespace Editor.Loading.Enhanced
          return false;
       }
 
-      public static List<Province> GetProvincesFromString(EnhancedContent content, PathObj po)
+      public static HashSet<Province> GetProvincesFromString(EnhancedContent content, PathObj po)
       {
-         var provinces = new List<Province>();
+         var provinces = new HashSet<Province>();
 
          foreach (var (line, num) in content.GetLineEnumerator())
          {
@@ -109,6 +109,61 @@ namespace Editor.Loading.Enhanced
             }
          }
          return provinces;
+      }
+
+      /// <summary>
+      ///  Returns the attributes in the order of attributeName if there are any. If an attribute is not found it will be null.
+      /// </summary>
+      /// <param name="content"></param>
+      /// <param name="po"></param>
+      /// <param name="attributeName"></param>
+      /// <returns></returns>
+      public static string?[] GetAttributesFromContent(EnhancedContent content, PathObj po, params string[] attributeName)
+      {
+         var attributes = new string[attributeName.Length];
+
+         foreach (var line in content.GetLineKvpEnumerator(po))
+         {
+            // find the index of the attribute in attributeName and set the value in attributes
+            for (var i = 0; i < attributeName.Length; i++)
+            {
+               if (!line.Key.Equals(attributeName[i]))
+                  continue;
+
+               attributes[i] = line.Value;
+               break;
+            }
+         }
+         
+         return attributes;
+      }
+
+      public static string?[] GetAttributesFromContentElements(List<EnhancedContent> contents, PathObj po,
+         params string[] attributeName)
+      {
+         var attributes = new string?[attributeName.Length];
+
+         foreach (var content in contents)
+         {
+            var tempAttributes = GetAttributesFromContent(content, po, attributeName);
+
+            for (var i = 0; i < attributeName.Length; i++)
+            {
+               if (tempAttributes[i] is null)
+                  continue;
+
+               if (!string.IsNullOrEmpty(attributes[i]))
+               {
+                  _ = new LoadingError(po, $"Attribute \"{attributeName[i]}\" was defined multiple times in file: {po.GetPath()}!",
+                     content.StartLine, 0, ErrorType.DuplicateAttributeDefinition);
+                  continue;
+               }
+
+               attributes[i] = tempAttributes[i];
+            }
+         }
+
+         return attributes;
       }
 
       public static bool GetIntFromString(string str, int lineNum, PathObj po, out int result)
@@ -173,11 +228,11 @@ namespace Editor.Loading.Enhanced
          return Color.FromArgb(ints[0], ints[1], ints[2]);
       }
 
-      public static List<Province> GetProvincesFromContent(List<EnhancedContent> contents, PathObj po)
+      public static HashSet<Province> GetProvincesFromContent(List<EnhancedContent> contents, PathObj po)
       {
-         List<Province> provinces = [];
+         HashSet<Province> provinces = [];
          foreach (var contE in contents)
-            provinces.AddRange(GetProvincesFromString(contE, po));
+            provinces.UnionWith(GetProvincesFromString(contE, po));
          return provinces;
       }
    }

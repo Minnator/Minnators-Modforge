@@ -27,7 +27,7 @@ public static class DefaultMapLoading
       HashSet<Province> coastal = [];
 
       List<Province> nonLandProvinces = [];
-      List<Province> landProvinces = [];
+      //List<Province> landProvinces = [];
 
       var match = Regex.Match(content, pattern);
 
@@ -46,7 +46,7 @@ public static class DefaultMapLoading
          if ( rnv.Contains(p) || coastal.Contains(p))
             continue;
          land.Add(p);
-         landProvinces.Add(p);
+         //landProvinces.Add(p);
       }
 
       foreach (var p in rnv)
@@ -62,7 +62,7 @@ public static class DefaultMapLoading
       Globals.LakeProvinces = lake;
       Globals.CoastalProvinces = coastal;
       Globals.NonLandProvinces = [.. nonLandProvinces];
-      Globals.LandProvinceIds = [.. landProvinces];
+      // RMV Globals.LandProvinceIds = [.. landProvinces];
    }
 
    private static void AddProvincesToDictionary(string provinceList, HashSet<Province> hashSet)

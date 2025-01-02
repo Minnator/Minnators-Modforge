@@ -45,6 +45,14 @@ public enum ErrorType
    DuplicateObjectDefinition = 110,
    [ErrorInformation("This occurs because a reference to a region could not be resolved!", "Is the given region defined in region.txt?")]
    UnresolveableRegionReference = 111,
+   [ErrorInformation("This occurs because an attribute is defined multiple times!", "Check the file for duplicate attribute definitions and ensure they are defined uniquely!")]
+   DuplicateAttributeDefinition = 112,
+   [ErrorInformation("This occurs because a value could not be converted to the expected type!", "Check the value and correct it!")]
+   TypeConversionError = 113,
+   [ErrorInformation("This occurs because the map size is not valid!", "Are the size defined in default.map and the provinces.bmp file the same?")]
+   InvalidMapSize = 114,
+   [ErrorInformation("This occurs because a province id is higher than the max_provinces value in default.map or less than 1!", "Check the province id and correct it!")]
+   InvalidProvinceId = 115,
    [ErrorInformation("This occurs because an date is not in a valid format!", "Check the date format and correct it!")]
    IllegalDateFormat = 101,
    [ErrorInformation("This occurs because your file is not in the correct format and thus can not be parse by the modforge", "Verify that your mod file is formatted correctly and if so contact a developer!")]
