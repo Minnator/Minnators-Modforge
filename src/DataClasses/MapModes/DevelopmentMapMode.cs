@@ -27,7 +27,7 @@ public class DevelopmentMapMode : MapMode
 
       if (MapModeManager.CurrentMapMode != this)
          return;
-      RenderMapMode(GetProvinceColor);
+      RenderMapMode();
    }
 
    /// <summary>
@@ -61,10 +61,10 @@ public class DevelopmentMapMode : MapMode
       return newMaxFound;
    }
 
-   public override void RenderMapMode(Func<Province, int> method)
+   public override void RenderMapMode()
    {
       CalculateMinMax();
-      base.RenderMapMode(method);
+      base.RenderMapMode();
    }
 
    public override int GetProvinceColor(Province id)
@@ -86,8 +86,4 @@ public class DevelopmentMapMode : MapMode
       return "Total Development: Unknown";
    }
 
-   public override bool ShouldProvincesMerge(Province p1, Province p2)
-   {
-      return p1.GetTotalDevelopment() == p2.GetTotalDevelopment();
-   }
 }

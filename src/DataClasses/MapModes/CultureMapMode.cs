@@ -29,8 +29,4 @@ public class CultureMapMode : MapMode
       return "Culture: [Unknown]";
    }
 
-   public override bool ShouldProvincesMerge(Province p1, Province p2)
-   {
-      return p1.Culture == p2.Culture;
-   }
 }

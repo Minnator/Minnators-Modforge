@@ -54,6 +54,7 @@ public static class MapModeManager
    public static int AverageMapModeTime => MapModeTimes.Count == 0 ? 0 : _totalMapModeTime / MapModeTimes.Count;
    public static int LasMapModeTime => MapModeTimes.Count == 0 ? 0 : MapModeTimes[^1];
 
+   public static Dictionary<Province, int> ColorCache = new(Globals.Provinces.Count);
 
    private static List<MapMode> MapModes { get; } = [];
    public static MapMode CurrentMapMode { get; set; } = null!;
@@ -108,12 +109,38 @@ public static class MapModeManager
       {
          Bitmap = new(Globals.MapPath)
       };
+
+      foreach (var province in Globals.Provinces) 
+         ColorCache.Add(province, 0);
    }
-   
+
+   public static void UpdateCache(Province p, int color)
+   {
+      ColorCache[p] = color;
+   }
 
    public static void RenderCurrent()
    {
-      CurrentMapMode.RenderMapMode(CurrentMapMode.GetProvinceColor);
+      ConstructCache();
+      CurrentMapMode.RenderMapMode();
+   }
+
+   public static void ConstructCache()
+   {
+      if (CurrentMapMode.IsLandOnly)
+      {
+         foreach (var landProvince in Globals.LandProvinces) 
+            ColorCache[landProvince] = CurrentMapMode.GetProvinceColor(landProvince);
+
+         foreach (var seaProvince in Globals.SeaProvinces) 
+            ColorCache[seaProvince] = CurrentMapMode.GetSeaProvinceColor(seaProvince);
+
+         foreach (var lake in Globals.LakeProvinces)
+            ColorCache[lake] = CurrentMapMode.GetSeaProvinceColor(lake);
+      }
+      else
+         foreach (var province in Globals.Provinces)
+            ColorCache[province] = CurrentMapMode.GetProvinceColor(province);
    }
 
    public static MapMode GetMapMode(MapModeType type)

@@ -8,6 +8,13 @@ namespace Editor.DataClasses.Settings
    [SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
    public class RenderingSettings : SubSettings
    {
+      public enum BorderMergeType
+      {
+         None,
+         Merge,
+         MergeAndLight
+      }
+
       private StripesDirection _stripesDirection = StripesDirection.DiagonalLbRt;
       private bool _showMapBorder = true;
       private Color _mapBorderColor = Color.Black;
@@ -20,8 +27,9 @@ namespace Editor.DataClasses.Settings
       private int _gameOfLiveGenerations = 100;
       private bool _gameOfLiveUseRandomCellChanges = false;
       private bool _allowAnimatedMapModes = true;
-      private bool _mergeBorders = true;
-      private bool _showSeaProvinceBordersIfNotForced = false;
+      private BorderMergeType _mergeBorders = BorderMergeType.Merge;
+      private  BorderMergeType _selectionMerging = BorderMergeType.MergeAndLight;
+      private BorderMergeType _selectionPreviewMerging = BorderMergeType.MergeAndLight;
 
       [Description("The direction of occupation stripes on the map")]
       [CompareInEquals]
@@ -122,18 +130,26 @@ namespace Editor.DataClasses.Settings
 
       [Description("If borders of provinces will be merged")]
       [CompareInEquals]
-      public bool MergeBorders
+      public BorderMergeType MergeBorders
       {
          get => _mergeBorders;
          set => SetField(ref _mergeBorders, value);
       }
 
-      [Description("If sea province borders will be shown if not forced by the mapmode")]
+      [Description("How borders of provinces will be merged when selecting provinces")]
       [CompareInEquals]
-      public bool ShowSeaProvinceBordersIfNotForced
+      public BorderMergeType SelectionMerging
       {
-         get => _showSeaProvinceBordersIfNotForced;
-         set => SetField(ref _showSeaProvinceBordersIfNotForced, value);
+         get => _selectionMerging;
+         set => SetField(ref _selectionMerging, value);
+      }
+
+      [Description("How borders of provinces will be merged when previewing the selection of provinces")]
+      [CompareInEquals]
+      public BorderMergeType SelectionPreviewMerging
+      {
+         get => _selectionPreviewMerging;
+         set => SetField(ref _selectionPreviewMerging, value);
       }
    }
 }

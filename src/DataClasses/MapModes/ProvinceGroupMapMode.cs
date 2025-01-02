@@ -33,15 +33,5 @@ namespace Editor.DataClasses.MapModes
          return "No province group";
       }
 
-      public override bool ShouldProvincesMerge(Province p1, Province p2)
-      {
-         foreach (var provinceGroup in Globals.ProvinceGroups.Values)
-         {
-            if (provinceGroup.GetProvinceIds().Contains(p1.Id) && provinceGroup.GetProvinceIds().Contains(p2.Id))
-               return true;
-         }
-
-         return false;
-      }
    }
 }

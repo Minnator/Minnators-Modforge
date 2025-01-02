@@ -13,29 +13,18 @@ public abstract class MapMode
    public virtual string IconFileName { get; } = null!;
    public virtual bool IsCollectionMapMode => false;
 
-   public virtual void RenderMapMode(Func<Province, int> method)
+   public virtual void RenderMapMode()
    {
       // TODO optimize this method
-      if (IsLandOnly)
-      {
-         if (MapModeManager.PreviousLandOnly)
-         {
-            MapDrawing.DrawOnMap(Globals.LandProvinces, GetProvinceColor, Globals.ZoomControl, PixelsOrBorders.Pixels, ShouldProvincesMerge);
-         }
-         else
-         {
-            MapDrawing.DrawOnMap(Globals.LandProvinces, GetProvinceColor, Globals.ZoomControl, PixelsOrBorders.Pixels, ShouldProvincesMerge);
-            MapDrawing.DrawOnMap(Globals.NonLandProvinces, GetSeaProvinceColor, Globals.ZoomControl, PixelsOrBorders.Pixels, ShouldProvincesMerge);
-         }
-      }
+      if (IsLandOnly && MapModeManager.PreviousLandOnly)
+         MapDrawing.DrawOnMap(Globals.LandProvinces, Globals.ZoomControl, PixelsOrBorders.Pixels);
       else
-      {
-         MapDrawing.DrawOnMap(Globals.Provinces, method, Globals.ZoomControl, PixelsOrBorders.Pixels, ShouldProvincesMerge);
-      }
+         MapDrawing.DrawOnMap(Globals.Provinces, Globals.ZoomControl, PixelsOrBorders.Pixels);
+      
       if (ShowOccupation)
          MapDrawing.DrawOccupations(false, Globals.ZoomControl);
 
-      MapDrawing.DrawAllBorders(Color.Black.ToArgb(), Globals.ZoomControl, ShouldProvincesMerge);
+      MapDrawing.DrawAllBorders(Color.Black.ToArgb(), Globals.ZoomControl);
       Selection.RePaintSelection();
       Globals.ZoomControl.Invalidate();
       MapModeManager.PreviousLandOnly = IsLandOnly;
@@ -109,11 +98,15 @@ public abstract class MapMode
 
    public virtual void Update(Province province, bool invalidate = true)
    {
-      MapDrawing.DrawOnMap(province, GetProvinceColor(province), Globals.ZoomControl, PixelsOrBorders.Pixels, ShouldProvincesMerge);
+      var color = GetProvinceColor(province);
+      MapModeManager.UpdateCache(province, color);
+      MapDrawing.DrawOnMap(province, color, Globals.ZoomControl, PixelsOrBorders.Pixels);
+
       if (ShowOccupation)
          MapDrawing.DrawOccupation(province, false, Globals.ZoomControl);
       if (invalidate) 
          Globals.ZoomControl.Invalidate();
+
       Selection.RePaintSelection();
    }
 
@@ -129,5 +122,4 @@ public abstract class MapMode
 
    }
 
-   public abstract bool ShouldProvincesMerge(Province p1, Province p2);
 }

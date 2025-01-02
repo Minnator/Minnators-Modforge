@@ -200,6 +200,7 @@ namespace Editor.Helper
          _timer.Tick += (sender, args) =>
          {
             NextGeneration();
+            MapModeManager.ConstructCache();
             MapModeManager.RenderCurrent();
             iterations--;
             if (iterations == 0)

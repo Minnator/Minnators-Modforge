@@ -42,7 +42,7 @@ namespace Editor.Forms.Feature
          Selection.OnProvinceGroupDeselected -= RenderOnEvent;
          Selection.OnProvinceGroupSelected -= RenderOnEvent;
 
-         MapModeManager.MapModeChanged -= OnMapModeChanged;
+         MapModeManager.MapModeChanged -= OnMapModeChanged!;
       }
 
       private void ExportSettingsPropertyChanged(object? s, PropertyValueChangedEventArgs e)
@@ -59,19 +59,19 @@ namespace Editor.Forms.Feature
 
       private void RenderImage()
       {
-         MapDrawing.Clear(ZoomControl, Color.DimGray, MapModeManager.CurrentMapMode.ShouldProvincesMerge);
+         MapDrawing.Clear(ZoomControl, Color.DimGray);
          switch (ExportSettings.PrimaryProvinceDrawing)
          {
             case PrimaryProvinceDrawing.None:
                break;
             case PrimaryProvinceDrawing.Selection:
-               MapDrawing.DrawOnMap(Selection.GetSelectedProvinces, MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both, MapModeManager.CurrentMapMode.ShouldProvincesMerge);
+               MapDrawing.DrawOnMap(Selection.GetSelectedProvinces, ZoomControl, PixelsOrBorders.Both);
                break;
             case PrimaryProvinceDrawing.Land:
-               MapDrawing.DrawOnMap(Globals.LandProvinces, MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both, MapModeManager.CurrentMapMode.ShouldProvincesMerge);
+               MapDrawing.DrawOnMap(Globals.LandProvinces, ZoomControl, PixelsOrBorders.Both);
                break;
             case PrimaryProvinceDrawing.All:
-               MapDrawing.DrawOnMap(Globals.Provinces, MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both, MapModeManager.CurrentMapMode.ShouldProvincesMerge);
+               MapDrawing.DrawOnMap(Globals.Provinces, ZoomControl, PixelsOrBorders.Both);
                break;
          }
 
@@ -84,10 +84,10 @@ namespace Editor.Forms.Feature
             case BorderDrawing.None:
                break;
             case BorderDrawing.Selection:
-               MapDrawing.DrawOnMap(Selection.GetSelectedProvinces, Color.Black.ToArgb(), ZoomControl, PixelsOrBorders.Borders, MapModeManager.CurrentMapMode.ShouldProvincesMerge);
+               MapDrawing.DrawOnMap(Selection.GetSelectedProvinces, ZoomControl, PixelsOrBorders.Borders);
                break;
             case BorderDrawing.All:
-               MapDrawing.DrawAllBorders(Color.Black.ToArgb(), ZoomControl, MapModeManager.CurrentMapMode.ShouldProvincesMerge);
+               MapDrawing.DrawAllBorders(Color.Black.ToArgb(), ZoomControl);
                break;
          }
 
@@ -106,7 +106,7 @@ namespace Editor.Forms.Feature
                break;
             case SecondaryProvinceDrawing.NeighboringProvinces:
                var neighboringProvinces = Geometry.GetAllNeighboringProvinces(Selection.GetSelectedProvinces);
-               MapDrawing.DrawOnMap(neighboringProvinces, MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both, MapModeManager.CurrentMapMode.ShouldProvincesMerge);
+               MapDrawing.DrawOnMap(neighboringProvinces, MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
                break;
             case SecondaryProvinceDrawing.NeighboringCountries:
                var neighboringCountries = Geometry.GetAllNeighboringCountries(Selection.GetSelectedProvinces);
@@ -117,7 +117,7 @@ namespace Editor.Forms.Feature
                   foreach (var province in provinces)
                      allCountryProvinces.Add(province);
                }
-               MapDrawing.DrawOnMap(allCountryProvinces, MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both, MapModeManager.CurrentMapMode.ShouldProvincesMerge);
+               MapDrawing.DrawOnMap(allCountryProvinces, MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
                break;
             case SecondaryProvinceDrawing.CoastalOutline:
                HashSet<Province> coastalProvinces = [];
@@ -132,13 +132,13 @@ namespace Editor.Forms.Feature
                      }
                   }
                }
-               MapDrawing.DrawOnMap(coastalProvinces, MapModeManager.GetMapMode(MapModeType.Province).GetSeaProvinceColor, ZoomControl, PixelsOrBorders.Both, MapModeManager.CurrentMapMode.ShouldProvincesMerge);
+               MapDrawing.DrawOnMap(coastalProvinces, MapModeManager.GetMapMode(MapModeType.Province).GetSeaProvinceColor, ZoomControl, PixelsOrBorders.Both);
                break;
             case SecondaryProvinceDrawing.SeaProvinces:
-               MapDrawing.DrawOnMap(Globals.SeaProvinces, MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both, MapModeManager.CurrentMapMode.ShouldProvincesMerge);
+               MapDrawing.DrawOnMap(Globals.SeaProvinces, MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
                break;
             case SecondaryProvinceDrawing.All:
-               MapDrawing.DrawOnMap(Globals.Provinces, MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both, MapModeManager.CurrentMapMode.ShouldProvincesMerge);
+               MapDrawing.DrawOnMap(Globals.Provinces, MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
                break;
          }
       }

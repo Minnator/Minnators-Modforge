@@ -41,11 +41,6 @@ namespace Editor.DataClasses.MapModes
          Globals.Settings.ToolTip.ShowToolTip = true;
       }
 
-      public override bool ShouldProvincesMerge(Province p1, Province p2)
-      {
-         return false;
-      }
-
       public override MapModeType MapModeType => MapModeType.BadApple;
 
       private void Timer_Tick(object? sender, EventArgs e)
@@ -60,7 +55,7 @@ namespace Editor.DataClasses.MapModes
          else
             _offset = new(0, (int)((Globals.MapHeight / _scale - frames[0].Height) / 2f));
 
-         RenderMapMode(GetProvinceColor);
+         RenderMapMode();
 
 
          _frameIndex++;

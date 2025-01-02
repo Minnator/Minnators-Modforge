@@ -39,8 +39,4 @@ public sealed class RegionsMapMode : MapMode
       return "Region: [Unknown]";
    }
 
-   public override bool ShouldProvincesMerge(Province p1, Province p2)
-   {
-      return p1.GetArea().Region == p2.GetArea().Region;
-   }
 }

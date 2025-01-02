@@ -22,11 +22,6 @@ namespace Editor.DataClasses.MapModes
          return "Devastation: -";
       }
 
-      public override bool ShouldProvincesMerge(Province p1, Province p2)
-      {
-         return Math.Abs(p1.Devastation - p2.Devastation) < 0.001;
-      }
-
       public override int GetProvinceColor(Province id)
       {
          if (Globals.SeaProvinces.Contains(id))

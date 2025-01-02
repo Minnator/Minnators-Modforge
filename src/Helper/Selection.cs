@@ -3,12 +3,16 @@ using System.Diagnostics;
 using System.Security.Policy;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
+using Editor.DataClasses.Settings;
 using Editor.Forms.Feature;
 using Editor.Forms.Feature.AdvancedSelections;
 using Editor.Saving;
 using static Editor.Helper.ProvinceEnumHelper;
 
 namespace Editor.Helper;
+
+// Border Merging
+// less visible merged borders 
 
 // Could be expanded further with more features
 public enum SelectionType
@@ -165,9 +169,11 @@ public static class Selection
 
    // Colors
    private static readonly int _hoverColor = Color.FromArgb(255, 0, 255, 255).ToArgb();
-   private static readonly int _selectedColor = Color.FromArgb(255, 185, 235, 235).ToArgb();
-   public static readonly int _borderColor = Color.FromArgb(255, 0, 0, 0).ToArgb();
-   private static readonly int _previewSelectionColor = Color.FromArgb(255, 255, 0, 0).ToArgb();
+   private static readonly int _selectedColor = Color.FromArgb(255, 210, 247, 238).ToArgb();
+   private static readonly int _lightSelectedColor = Color.FromArgb(255, 87, 107, 107).ToArgb();
+   private static readonly int _borderColor = Color.FromArgb(255, 0, 0, 0).ToArgb();
+   private static readonly int _previewSelectionColor = Color.FromArgb(255, 200, 0, 0).ToArgb();
+   private static readonly int _lightPreviewSelectionColor = Color.FromArgb(255, 235, 148, 148).ToArgb();
    private static readonly int _highlightColor = Color.FromArgb(255, 0, 255, 0).ToArgb();
 
    // Selection State
@@ -222,20 +228,122 @@ public static class Selection
 
    public static void RePaintSelection()
    {
-      foreach (var province in _selectedProvinces)
-         RedrawSelection(province);
+      SelectBorders(_selectedProvinces);
    }
+
+   public static void DrawMulticolorBorder(ICollection<Province> provinces, HashSet<Province> source, int outerColor, int innerColor)
+   {
+
+      List<Memory<Point>> inners = [];
+
+      List<Memory<Point>> outers = [];
+
+      foreach (var prov in provinces)
+      {
+         foreach (var (neighbour, border)in prov.ProvinceBorders)
+         {
+            if (!source.Contains(neighbour))
+            {
+               outers.Add(border);
+            }
+            else
+            {
+               inners.Add(border);
+               foreach (var (nneighbour, nborder) in neighbour.ProvinceBorders)
+               {
+                  if (!source.Contains(nneighbour))
+                     outers.Add(nborder);
+                  else
+                     inners.Add(nborder);
+               }
+            }
+         }
+      }
+
+      foreach(var inner in inners)
+         MapDrawing.DrawOnMap(inner, innerColor, Globals.ZoomControl);
+      foreach (var outer in outers)
+         MapDrawing.DrawOnMap(outer, outerColor, Globals.ZoomControl);
+
+   }
+
+   public static void DrawOuterBorder(ICollection<Province> provinces, HashSet<Province> source, int outerColor, bool remove)
+   {
+      List<Province> innerChange = [];
+
+      List<Memory<Point>> outers = [];
+
+      foreach (var prov in provinces)
+      {
+         var color = MapModeManager.ColorCache[prov];
+         innerChange.Add(prov);
+         foreach (var (neighbour, border) in prov.ProvinceBorders)
+         {
+            innerChange.Add(neighbour);
+            if (!source.Contains(neighbour))
+            {
+               outers.Add(border);
+            }
+            else
+            {
+               foreach (var (nneighbour, nborder) in neighbour.ProvinceBorders)
+               {
+                  if (!source.Contains(nneighbour))
+                     outers.Add(nborder);
+               }
+            }
+         }
+      }
+
+      MapDrawing.DrawOnMap(innerChange, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
+      foreach (var outer in outers)
+         MapDrawing.DrawOnMap(outer, outerColor, Globals.ZoomControl);
+   }
+
+   public static void DrawBorder(ICollection<Province> provinces, int color)
+   {
+      MapDrawing.DrawBordersWithoutMerge(provinces, color, Globals.ZoomControl);
+   }
+
+   public static void DrawBorder(ICollection<Province> provinces, HashSet<Province> source, int color, int lightColor, RenderingSettings.BorderMergeType mergeType)
+   {
+      switch (mergeType)
+      {
+         case RenderingSettings.BorderMergeType.None:
+            DrawBorder(provinces, color);
+            break;
+         case RenderingSettings.BorderMergeType.Merge:
+            DrawOuterBorder(provinces, source, color, false);
+            break;
+         case RenderingSettings.BorderMergeType.MergeAndLight:
+            DrawMulticolorBorder(provinces, source, color, lightColor);
+            break;
+         default:
+            throw new ArgumentOutOfRangeException();
+      }
+   }
+
+   public static void SelectBorders(ICollection<Province> provinces)
+   {
+      DrawBorder(provinces, _selectedProvinces, _selectedColor, _lightSelectedColor, Globals.Settings.Rendering.SelectionMerging);
+   }
+
+   public static void PreviewBorders(ICollection<Province> provinces)
+   {
+      DrawBorder(provinces, _selectionPreview, _previewSelectionColor, _lightPreviewSelectionColor, Globals.Settings.Rendering.SelectionPreviewMerging);
+   }
+
 
    public static void RedrawSelection(Province province)
    {
-      MapDrawing.DrawOnMap(province, _selectedColor, Globals.ZoomControl, PixelsOrBorders.Borders, ShouldSelectionMerge);
+      SelectBorders([province]);
    }
 
    public static void ClearSelection(bool onProvinceSelectionChange = true)
    {
       if (_highlightedProvinces.Count > 0)
          ClearHighlightedProvinces();
-      MapDrawing.DrawOnMap(_selectedProvinces, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders, ShouldSelectionMerge);
+      MapDrawing.DrawOnMap(_selectedProvinces, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
       OnProvinceGroupDeselected(Globals.ZoomControl, [.. _selectedProvinces]);
       _selectedProvinces.Clear();
       if (onProvinceSelectionChange)
@@ -245,7 +353,7 @@ public static class Selection
    public static void RemoveProvincesFromSelection(ICollection<Province> provinces)
    {
       _selectedProvinces.ExceptWith(provinces);
-      MapDrawing.DrawOnMap(provinces, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders, ShouldSelectionMerge);
+      DrawOuterBorder(provinces, _selectedProvinces, _borderColor, true);
       OnProvinceGroupDeselected(Globals.ZoomControl, provinces.ToList());
       OnProvinceSelectionChange.Invoke(Globals.ZoomControl, _selectedProvinces.Count);
    }
@@ -262,7 +370,8 @@ public static class Selection
       else
       {
          _selectedProvinces.UnionWith(provinces);
-         MapDrawing.DrawOnMap(provinces, _selectedColor, Globals.ZoomControl, PixelsOrBorders.Borders, ShouldSelectionMerge);
+         if (Globals.Settings.Rendering.MergeBorders != RenderingSettings.BorderMergeType.None)
+            SelectBorders(provinces);
       }
 
       OnProvinceGroupSelected(Globals.ZoomControl, provinces.ToList());
@@ -374,39 +483,28 @@ public static class Selection
 
    public static bool ShouldHighlightedMerge(Province p1, Province p2) => _highlightedProvinces.Contains(p1) && _highlightedProvinces.Contains(p2);
 
-   public static void HighlightProvinces(List<Province> provinces)
-   {
-      MapDrawing.DrawOnMap(provinces, _highlightColor, Globals.ZoomControl, PixelsOrBorders.Borders, ShouldHighlightedMerge);
-      _highlightedProvinces.UnionWith(provinces);
-   }
-
-   public static void UnhighlightProvinces(List<Province> provinces)
-   {
-      MapDrawing.DrawOnMap(provinces, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders, ShouldHighlightedMerge);
-      _highlightedProvinces.ExceptWith(provinces);
-   }
 
    public static void HighlightProvince(Province province)
    {
-      MapDrawing.DrawOnMap(province, _highlightColor, Globals.ZoomControl, PixelsOrBorders.Borders, ShouldHighlightedMerge);
+      DrawBorder([province], _highlightColor);
       _highlightedProvinces.Add(province);
    }
 
    public static void HighlightCountry(Country country)
    {
-      MapDrawing.DrawOnMap(country.GetProvinces(), _highlightColor, Globals.ZoomControl, PixelsOrBorders.Borders, ShouldHighlightedMerge);
+      DrawBorder(country.GetProvinces(), _highlightColor);
       _highlightedProvinces.UnionWith(country.GetProvinces());
    }
 
    public static void UnhighlightProvince(Province province)
    {
-      MapDrawing.DrawOnMap(province, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders, ShouldHighlightedMerge);
+      MapDrawing.DrawOnMap(province, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
       _highlightedProvinces.Remove(province);
    }
 
    public static void ClearHighlightedProvinces()
    {
-      MapDrawing.DrawOnMap(_highlightedProvinces, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders, ShouldHighlightedMerge);
+      MapDrawing.DrawOnMap(_highlightedProvinces, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
       _highlightedProvinces.Clear();
    }
 
@@ -420,31 +518,37 @@ public static class Selection
 
    public static void PreviewProvinces(List<Province> provinces)
    {
-      MapDrawing.DrawOnMap(provinces, _previewSelectionColor, Globals.ZoomControl, PixelsOrBorders.Borders, ShouldPreviewMerge);
+      PreviewBorders(provinces);
       _selectionPreview.UnionWith(provinces);
    }
 
    public static void UnPreviewProvinces(List<Province> provinces)
    {
-      MapDrawing.DrawOnMap(provinces, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders, ShouldPreviewMerge);
+      MapDrawing.DrawOnMap(provinces, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
       _selectionPreview.ExceptWith(provinces);
    }
 
    public static void PreviewProvince(Province province)
    {
-      MapDrawing.DrawOnMap(province, _previewSelectionColor, Globals.ZoomControl, PixelsOrBorders.Borders, ShouldPreviewMerge);
       _selectionPreview.Add(province);
+      PreviewBorders([province]);
    }
 
    public static void UnPreviewProvince(Province province)
    {
-      MapDrawing.DrawOnMap(province, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders, ShouldPreviewMerge);
+      MapDrawing.DrawOnMap(province, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
+
+      foreach (var (neighbour, _) in province.ProvinceBorders)
+      {
+         if (_selectionPreview.Contains(neighbour))
+            MapDrawing.DrawOnMap(neighbour.ProvinceBorders[province], _previewSelectionColor, Globals.ZoomControl);
+      }
       _selectionPreview.Remove(province);
    }
 
    public static void ClearPreview()
    {
-      MapDrawing.DrawOnMap(_selectionPreview, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders, ShouldPreviewMerge);
+      MapDrawing.DrawOnMap(_selectionPreview, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
       _selectionPreview.Clear();
    }
 
@@ -462,7 +566,7 @@ public static class Selection
    /// <param name="province"></param>
    public static void HoverProvince(Province province)
    {
-      MapDrawing.DrawOnMap(province, _hoverColor, Globals.ZoomControl, PixelsOrBorders.Borders, ShouldHoverMerge, true);
+      MapDrawing.DrawBordersWithoutMerge(province, _hoverColor, Globals.ZoomControl);
       LastHoveredProvince = province;
    }
 
@@ -472,8 +576,8 @@ public static class Selection
          return;
 
       ClearHoverCollection();
-      MapDrawing.DrawOnMap(provinces, _hoverColor, Globals.ZoomControl, PixelsOrBorders.Borders, ShouldHoverMerge);
       _hoveredCollection.UnionWith(provinces);
+      DrawBorder(provinces, _hoverColor);
       LastHoveredProvince = province;
    }
 
@@ -482,9 +586,7 @@ public static class Selection
       if (_hoveredCollection.Count == 0)
          return;
 
-      if (Globals.Settings.Rendering.MergeBorders)
-         MapDrawing.DrawOnMap(_hoveredCollection, MapModeManager.GetMapModeColor, Globals.ZoomControl, PixelsOrBorders.Borders, ShouldHoverMerge, true);
-      MapDrawing.DrawOnMap(_hoveredCollection, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders, ShouldHoverMerge);
+      MapDrawing.DrawOnMap(_hoveredCollection, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
 
       RePaintSelection();
       _hoveredCollection.Clear();
@@ -501,9 +603,7 @@ public static class Selection
          HighlightProvince(LastHoveredProvince);
       else
       {
-         if (Globals.Settings.Rendering.MergeBorders)
-            MapDrawing.DrawOnMap(LastHoveredProvince, MapModeManager.GetMapModeColor(LastHoveredProvince), Globals.ZoomControl, PixelsOrBorders.Borders, ShouldHoverMerge, true);
-         MapDrawing.DrawOnMap(LastHoveredProvince, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders, ShouldHoverMerge);
+         MapDrawing.DrawOnMap(LastHoveredProvince, _borderColor, Globals.ZoomControl, PixelsOrBorders.Borders);
       }
 
       LastHoveredProvince = Province.Empty;
@@ -517,7 +617,7 @@ public static class Selection
          return;
 
       ClearHover();
-      MapDrawing.DrawOnMap(provinces, _hoverColor, Globals.ZoomControl, PixelsOrBorders.Borders, ShouldHoverMerge);
+      DrawBorder(provinces, _hoverColor);
       _hoveredCollection.UnionWith(provinces);
    }
 

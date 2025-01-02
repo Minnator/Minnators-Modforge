@@ -35,9 +35,5 @@ namespace Editor.DataClasses.MapModes
          return "No province";
       }
 
-      public override bool ShouldProvincesMerge(Province p1, Province p2)
-      {
-         return p1.IsHre == p2.IsHre;
-      }
    }
 }

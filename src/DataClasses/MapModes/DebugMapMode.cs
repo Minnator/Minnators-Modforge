@@ -8,7 +8,7 @@ namespace Editor.DataClasses.MapModes
    {
       public override MapModeType MapModeType { get; } = MapModeType.DEBUG;
 
-      public override void RenderMapMode(Func<Province, int> method)
+      public override void RenderMapMode()
       {
          var centers = new List<Point>();
          var lines = new HashSet<Point>();
@@ -178,9 +178,5 @@ namespace Editor.DataClasses.MapModes
          return "Debug Map Mode";
       }
 
-      public override bool ShouldProvincesMerge(Province p1, Province p2)
-      {
-         return false;
-      }
    }
 }

@@ -40,10 +40,6 @@ namespace Editor.DataClasses.MapModes
          return "Trade company: [Unknown]";
       }
 
-      public override bool ShouldProvincesMerge(Province p1, Province p2)
-      {
-         return p1.GetTradeCompany == p2.GetTradeCompany;
-      }
    }
 
 }

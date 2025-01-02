@@ -33,11 +33,4 @@ public class CultureGroupMapMode : MapMode
       return "Culture Group: [Unknown]";
    }
 
-   public override bool ShouldProvincesMerge(Province p1, Province p2)
-   {
-      foreach (var cultureGroup in Globals.CultureGroups.Values)
-         if (cultureGroup.HasCultureWithName(p1.Culture) && cultureGroup.HasCultureWithName(p2.Culture))
-            return true;
-      return false;
-   }
 }

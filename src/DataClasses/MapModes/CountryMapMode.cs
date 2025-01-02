@@ -41,10 +41,5 @@ namespace Editor.DataClasses.MapModes
          }
          return "Country: [Unknown]";
       }
-
-      public override bool ShouldProvincesMerge(Province p1, Province p2)
-      {
-         return p1.Owner == p2.Owner;
-      }
    }
 }

@@ -36,15 +36,5 @@ namespace Editor.DataClasses.MapModes
          return "No Terrain Override";
       }
 
-      public override bool ShouldProvincesMerge(Province p1, Province p2)
-      {
-         foreach (var terrain in Globals.Terrains)
-         {
-            if (terrain.SubCollection.Contains(p1) && terrain.SubCollection.Contains(p2))
-               return true;
-         }
-
-         return false;
-      }
    }
 }

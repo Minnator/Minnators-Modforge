@@ -3,6 +3,8 @@ using Editor.ErrorHandling;
 
 namespace Editor.Loading.Enhanced
 {
+   public class IllegalMapDefinitionException(string message) : Exception(message);
+
    public static class MapLoading
    {
       private const int ALPHA = 255 << 24;
@@ -36,7 +38,12 @@ namespace Editor.Loading.Enhanced
             }
             foreach (var (adjacent, borderPixels) in bDict)
             {
-               var adjProv = Globals.ColorToProvId[adjacent];
+               if (!Globals.ColorToProvId.TryGetValue(adjacent, out var adjProv))
+               {
+                  // throw new IllegalMapDefinitionException("");
+                  _ = new ErrorObject($"Province {Color.FromArgb(adjacent)} ({adjacent}) has no pixels on the map!", ErrorType.ProvinceDefinitionError, "A province has no pixels in provinces.bmp. Either remove it from definition.csv or give it pixels.");
+                  continue;
+               }
                province.ProvinceBorders.Add(adjProv, new(borderPixels.ToArray()));
             }
             Globals.AdjacentProvinces.Add(province, province.ProvinceBorders.Keys.ToArray());
@@ -47,7 +54,7 @@ namespace Editor.Loading.Enhanced
          }
       }
 
-      private static void OptimizeProvincePixels(Dictionary<int, List<Point>> pixels)
+      private static void OptimizeProvincePixels(Dictionary<int, List<Point>> pixels) // remove assigned pixels from the dictionary to see if there are any left overs
       {  
          foreach (var province in Globals.Provinces)//.ToArray().AsSpan())
          {
@@ -114,6 +121,7 @@ namespace Editor.Loading.Enhanced
                   nextPixel = new (x + 1, y);
                   var southColor = CurrentColor(nextRow, xTimesThree);
                   var southPixel = new Point(x, y + 1);
+
                   AddToBorder(currentColor, nextColor, ref currentPixel, ref nextPixel, localColorToBorder);
                   AddToBorder(currentColor, southColor, ref currentPixel, ref southPixel, localColorToBorder);
                }
@@ -224,11 +232,11 @@ namespace Editor.Loading.Enhanced
          return (totalProvToId, totalColorToBorder);
       }
 
-      private static void AddToBorder(int current, int neighbour, ref Point pixel, ref Point neighbourPixel, Dictionary<int, Dictionary<int, List<Point>>> borderDict)
+      private static bool AddToBorder(int current, int neighbour, ref Point pixel, ref Point neighbourPixel, Dictionary<int, Dictionary<int, List<Point>>> borderDict)
       {
          // We don't want to add a border to itself
          if (current == neighbour)
-            return;
+            return false;
 
          // We add the pixel to the border of the current province
          
@@ -257,7 +265,7 @@ namespace Editor.Loading.Enhanced
             borders[current] = borderPixels;
          }
          borderPixels.Add(neighbourPixel);
-
+         return true;
       }
 
       private static unsafe int CurrentColor(byte* row, int xTimesThree)

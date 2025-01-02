@@ -31,8 +31,4 @@ public sealed class SuperRegionMapMode : MapMode
       return "Super Region: [Unknown]";
    }
 
-   public override bool ShouldProvincesMerge(Province p1, Province p2)
-   {
-      return p1.GetArea().Region.SuperRegion == p2.GetArea().Region.SuperRegion;
-   }
 }

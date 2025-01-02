@@ -39,12 +39,7 @@ namespace Editor.DataClasses.MapModes
 
          return tooltip;
       }
-
-      public override bool ShouldProvincesMerge(Province p1, Province p2)
-      {
-         return p1.Owner == p2.Owner;
-      }
-
+      
       public override int GetProvinceColor(Province id)
       {
          if (Globals.Provinces.TryGetValue(id, out var province))
@@ -54,9 +49,9 @@ namespace Editor.DataClasses.MapModes
          return Color.DimGray.ToArgb();
       }
 
-      public override void RenderMapMode(Func<Province, int> method)
+      public override void RenderMapMode()
       {
-         base.RenderMapMode(method);
+         base.RenderMapMode();
          if (ClearPreviousCoresClaims)
             return;
          RenderClaimsAndCores();

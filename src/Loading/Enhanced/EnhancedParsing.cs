@@ -159,6 +159,17 @@ namespace Editor.Loading.Enhanced
             return Color.Empty;
          }
 
+         var r = ints[0];
+         var g = ints[1];
+         var b = ints[2];
+
+         if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
+         {
+            _ = new LoadingError(po, $"Color values must be between 0 and 255 but got {r}, {g}, {b}!",
+               block.StartLine, 0, ErrorType.UnexpectedDataType);
+            return Color.Empty;
+         }
+
          return Color.FromArgb(ints[0], ints[1], ints[2]);
       }
 

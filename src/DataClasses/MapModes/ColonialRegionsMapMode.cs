@@ -32,12 +32,5 @@ namespace Editor.DataClasses.MapModes
          return "Colonial region: [Unknown]";
       }
 
-      public override bool ShouldProvincesMerge(Province p1, Province p2)
-      {
-         foreach (var cr in Globals.ColonialRegions.Values)
-            if (cr.GetProvinces().Contains(p1) && cr.GetProvinces().Contains(p2)) 
-               return true;
-         return false;
-      }
    }
 }
