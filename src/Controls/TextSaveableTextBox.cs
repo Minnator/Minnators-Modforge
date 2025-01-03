@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Editor.DataClasses.Commands;
+using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Saving;
 
@@ -37,6 +38,7 @@ namespace Editor.Controls
 
       public TextSaveableTextBox(Func<ICollection<Saveable>> getSaveables, CTextEditingFactory<C, T> factory)
       {
+
          _getSaveables = getSaveables;
          _factory = factory;
          LostFocus += OnFocusLost;

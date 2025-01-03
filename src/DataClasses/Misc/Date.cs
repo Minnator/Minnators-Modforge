@@ -6,7 +6,7 @@ using Editor.Saving;
 
 namespace Editor.DataClasses.Misc
 {
-   public partial class Date
+   public partial class Date : IComparable<Date>
    {
       // Errorcodes: 
       private static readonly Regex DateRegex = DateRegexGeneration();
@@ -197,9 +197,9 @@ namespace Editor.DataClasses.Misc
          return TimeStamp;
       }
 
-      public int CompareTo(Date other)
+      public int CompareTo(Date? other)
       {
-         return TimeStamp.CompareTo(other.TimeStamp);
+         return TimeStamp.CompareTo(other?.TimeStamp);
       }
 
       public static bool operator ==(Date left, Date right)

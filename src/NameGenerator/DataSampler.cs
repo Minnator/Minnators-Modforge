@@ -104,7 +104,7 @@ namespace Editor.NameGenerator
          var cnt = 0;
          foreach (var country in Globals.Countries.Values)
          {
-            var names = country.GetProperty(nameof(country.CommonCountry.MonarchNames));
+            var names = country.GetPropertyInfo(nameof(country.CommonCountry.MonarchNames));
             if (names == null || names.GetValue(country) is not ICollection<MonarchName> mNames)
                continue;
             foreach (var name in mNames)

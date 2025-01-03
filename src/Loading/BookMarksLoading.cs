@@ -75,7 +75,7 @@ namespace Editor.Loading
                bookMarks.Add(new (name, desc, date, countryTags));
             }
          }
-
+         bookMarks.Sort((a, b) => a.Date.CompareTo(b.Date));
          Globals.Bookmarks = bookMarks;
       }
    }

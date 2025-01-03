@@ -75,6 +75,8 @@ namespace Editor.Loading
             if (!localDict.TryAdd(region.Name, region)) 
                Globals.ErrorLog.Write($"Error: Colonial Region {region.Name} already exists!");
          }
+         if (localDict.Count == 0)
+            return;
          SaveMaster.AddRangeToDictionary(pathObj, localDict.Values);
          
          foreach (var region in localDict.Values)

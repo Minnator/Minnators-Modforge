@@ -12,6 +12,7 @@ public abstract class MapMode
    public virtual Bitmap? Icon { get; protected set; }
    public virtual string IconFileName { get; } = null!;
    public virtual bool IsCollectionMapMode => false;
+   public bool IsCurrent => MapModeManager.CurrentMapMode == this;
 
    public virtual void RenderMapMode()
    {

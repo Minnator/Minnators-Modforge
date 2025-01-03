@@ -119,6 +119,13 @@ public static class MapModeManager
       ColorCache[p] = color;
    }
 
+   public static void UpdateMapMode(MapModeType type)
+   {
+      if (CurrentMapMode.MapModeType != type)
+         return;
+      RenderCurrent();
+   }
+
    public static void RenderCurrent()
    {
       ConstructCache();

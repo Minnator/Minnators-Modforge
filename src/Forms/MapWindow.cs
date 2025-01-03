@@ -8,7 +8,6 @@ using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Misc;
-using Editor.DataClasses.Settings;
 using Editor.ErrorHandling;
 using Editor.Events;
 using Editor.Forms.Feature;
@@ -17,7 +16,6 @@ using Editor.Forms.Feature.SavingClasses;
 using Editor.Forms.PopUps;
 using Editor.Helper;
 using Editor.Loading;
-using Editor.Loading.Enhanced;
 using Editor.NameGenerator;
 using Editor.Saving;
 using Editor.src.Forms.GetUserInput;
@@ -1359,6 +1357,7 @@ namespace Editor.Forms
             Dock = DockStyle.Fill,
             Margin = new(1),
          };
+         
          TagAndColorTLP.Controls.Add(CountryLoc, 1, 1);
 
          CountryADJLoc = new(Selection.GetCountryAsList, new CLocObjFactory(false))

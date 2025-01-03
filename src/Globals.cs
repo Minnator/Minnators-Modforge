@@ -408,6 +408,11 @@ public static class Globals
 // - [ ] Province Creation and editing
 // - [ ] File syncing/hotreloading
 // - [ ] Heat map for history entries in editor for them when selecting dates?
+// - [ ] Fix Country Color not live updating
+
+
+// Create command which takes an action which updates the map mode and the UI elements
+// Implement Method to determine whether a control is physically visible
 
 // TODO LIST Until Alpha 1.2
 // - [ ] Fix tooltip preventing MouseWheel event

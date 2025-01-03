@@ -2193,8 +2193,9 @@
          // 
          // ProvinceHistoryEntryToggleButton
          // 
-         ProvinceHistoryEntryToggleButton.BackColor = Color.DarkRed;
+         ProvinceHistoryEntryToggleButton.BackColor = Color.Transparent;
          ProvinceHistoryEntryToggleButton.Dock = DockStyle.Fill;
+         ProvinceHistoryEntryToggleButton.Image = Properties.Resources.HistoryEntriesDisabled;
          ProvinceHistoryEntryToggleButton.ImageOff = Properties.Resources.HistoryEntriesDisabled;
          ProvinceHistoryEntryToggleButton.ImageOn = Properties.Resources.HistoryEntriesEnabled;
          ProvinceHistoryEntryToggleButton.Location = new Point(122, 2);
@@ -2203,7 +2204,6 @@
          ProvinceHistoryEntryToggleButton.Size = new Size(40, 30);
          ProvinceHistoryEntryToggleButton.State = false;
          ProvinceHistoryEntryToggleButton.TabIndex = 6;
-         ProvinceHistoryEntryToggleButton.Text = "Off";
          GeneralToolTip.SetToolTip(ProvinceHistoryEntryToggleButton, "If enabled any changes in properties for province will be created as a history entry for the current date");
          ProvinceHistoryEntryToggleButton.UseVisualStyleBackColor = false;
          ProvinceHistoryEntryToggleButton.VsMode = Editor.Controls.ToggleButton.VisualMode.Image;
@@ -2928,7 +2928,8 @@
          // 
          // CountryHistoryEntryToggleButton
          // 
-         CountryHistoryEntryToggleButton.BackColor = Color.DarkRed;
+         CountryHistoryEntryToggleButton.BackColor = Color.Transparent;
+         CountryHistoryEntryToggleButton.Image = Properties.Resources.HistoryEntriesDisabled;
          CountryHistoryEntryToggleButton.ImageOff = Properties.Resources.HistoryEntriesDisabled;
          CountryHistoryEntryToggleButton.ImageOn = Properties.Resources.HistoryEntriesEnabled;
          CountryHistoryEntryToggleButton.Location = new Point(122, 2);
@@ -2937,7 +2938,6 @@
          CountryHistoryEntryToggleButton.Size = new Size(40, 30);
          CountryHistoryEntryToggleButton.State = false;
          CountryHistoryEntryToggleButton.TabIndex = 7;
-         CountryHistoryEntryToggleButton.Text = "Off";
          GeneralToolTip.SetToolTip(CountryHistoryEntryToggleButton, "If enabled any changes in properties for a country will be created as a history entry for the current date");
          CountryHistoryEntryToggleButton.UseVisualStyleBackColor = false;
          CountryHistoryEntryToggleButton.VsMode = Editor.Controls.ToggleButton.VisualMode.Image;

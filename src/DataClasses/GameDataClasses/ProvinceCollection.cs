@@ -258,7 +258,6 @@ public abstract class ProvinceComposite(string name, Color color) : Saveable// P
       return Empty;
    }
 
-
    public override bool Equals(object? obj)
    {
       if (obj is ProvinceComposite other)

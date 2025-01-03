@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Editor.DataClasses.Commands;
-using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Newtonsoft.Json;
 
@@ -55,7 +54,12 @@ public abstract class Saveable : IDisposable
          _editingStatus = value;
       }
    }
+
+
+
    public abstract void OnPropertyChanged([CallerMemberName] string? propertyName = null);
+   public abstract void AddToPropertyChanged(EventHandler<string> handler);
+   public abstract void RemoveFromPropertyChanged(EventHandler<string> handler);
 
    public bool SetIfModifiedEnumerable<T, Q>(ref T field, T value, [CallerMemberName] string? propertyName = null) where T: IEnumerable<Q>
    {
@@ -70,9 +74,21 @@ public abstract class Saveable : IDisposable
       GetProperty(propertyName)!.SetValue(this, value);
    }
 
+   public void SetProperty<T>(PropertyInfo propInfo, T value)
+   {
+      Debug.Assert(propInfo != null, $"Property {propInfo.Name} not found in {GetType().Name}");
+      propInfo.SetValue(this, value);
+   }
+
    public PropertyInfo? GetProperty(string propertyName)
    {
       return GetType().GetProperty(propertyName);
+   }
+
+   public T GetProperty<T>(PropertyInfo info)
+   {
+      Debug.Assert(info != null, "info != null");
+      return (T)info.GetValue(this)!;
    }
    
    public void SetFieldSilent<T> (string propertyName, T value)
@@ -163,8 +179,5 @@ public abstract class Saveable : IDisposable
    /// <summary>
    /// If overwritten also call base.Dispose() to remove the object from the dictionary in SaveMaster
    /// </summary>
-   public virtual void Dispose()
-   {
-      SaveMaster.RemoveFromDictionary(this);
-   }
+   public virtual void Dispose() => SaveMaster.RemoveFromDictionary(this);
 }
