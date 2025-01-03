@@ -93,6 +93,8 @@ public static class Globals
 #endif
    }
 
+   public const string TOOL_NAME = "Minnator's Modforge";
+
    public const string DISCORD_INVITATION_LINK = "https://discord.gg/22AhD5qkme";
    public const string GITHUB_LINK = "https://github.com/Minnator/Editor.git";
 

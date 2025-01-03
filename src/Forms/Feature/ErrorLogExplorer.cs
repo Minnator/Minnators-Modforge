@@ -19,11 +19,17 @@ namespace Editor.Forms.Feature
       public ErrorLogExplorer()
       {
          InitializeComponent();
+
+#if DEBUG
+         ErrorView.Columns.Add("Source");
+#endif
+
          ErrorCheckBox.CheckedChanged += OnVerbosityChanged;
          WarningCheckBox.CheckedChanged += OnVerbosityChanged;
          InfoCheckBox.CheckedChanged += OnVerbosityChanged;
          DebugCheckBox.CheckedChanged += OnVerbosityChanged;
          CriticalCheckbox.CheckedChanged += OnVerbosityChanged;
+         IsVanillaEntryCheckBox.CheckedChanged += OnVerbosityChanged;
          ErrorView.MouseClick += BuildContextMenu;
          SearchButton.MouseDown += SearchButton_Click;
 
@@ -70,7 +76,7 @@ namespace Editor.Forms.Feature
          if (clickedElement == null)
             return;
 
-         if (clickedElement.Tag is not FileRefLogEntry entry)
+         if (clickedElement.Tag is not LoadingError entry)
             return;
 
          var contextMenu = new ContextMenuStrip();
@@ -82,7 +88,7 @@ namespace Editor.Forms.Feature
          openFile.Click += (_, args) => ProcessHelper.OpenFile(entry.Path);
          openFileAtLocation.Click += (_, args) =>
          {
-            if (entry is LoadingError lError) 
+            if (entry is { } lError) 
                ProcessHelper.OpenFileAtLine(lError.Path, lError.Line - 1, lError.CharPos);
          };
          openFolder.Click += (_, args) => ProcessHelper.OpenFolder(entry.Path);
@@ -132,9 +138,9 @@ namespace Editor.Forms.Feature
 
       public void AddLogEntry(LogEntry entry, bool events)
       {
-         var backColor = entry is IExtendedLogInformationProvider ? Color.DarkKhaki : SystemColors.Window;
+         var backColor = entry is IExtendedLogInformationProvider ? Color.Silver : Color.Gray;
 
-         var item = new ListViewItem((ErrorView.Items.Count + 1).ToString());
+         var item = new ListViewItem((ErrorView.Items.Count + 1).ToString()){BackColor = backColor};
          ListViewItem.ListViewSubItem timeItem = new()
          {
             Text = entry.Timestamp.ToString("yyyy-MM-dd HH:mm:ss"),
@@ -151,10 +157,20 @@ namespace Editor.Forms.Feature
             Text = entry.Message,
             BackColor = backColor,
          };
+
+
          item.SubItems.Add(timeItem);
          item.SubItems.Add(levelItem);
          item.SubItems.Add(messageItem);
          item.Tag = entry;
+#if DEBUG
+         var sourceItem = new ListViewItem.ListViewSubItem
+         {
+            Text = entry.DebugInformation,
+            BackColor = Color.CadetBlue,
+         };
+         item.SubItems.Add(sourceItem);
+#endif
          ErrorView.Items.Add(item);
       }
 
@@ -176,7 +192,10 @@ namespace Editor.Forms.Feature
             return;
          LogManager.ChangeVerbosity(GetLogType());
          ErrorView.Items.Clear();
-         AddLogEntries(LogManager.ActiveEntries);
+         if (IsVanillaEntryCheckBox.Checked)
+            AddLogEntries(LogManager.ActiveEntries);
+         else
+            AddLogEntries(LogManager.ActiveEntries.Where(x => x.IsVanilla == false).ToList());
       }
 
       public LogType GetLogType()

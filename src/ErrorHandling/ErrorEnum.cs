@@ -11,6 +11,7 @@ public class ErrorInformation(string description, string resolution) : Attribute
 
 public enum ErrorType
 {
+   None = 0,
    [ErrorInformation("This occurs because an file was not found but referenced elsewhere!", "Create the file missing file!")]
    FileNotFound = 1, // File errors 1-99
    [ErrorInformation("This occurs because an file could not be opened or read!", "Check the file path and permissions! Also make sure the file is not used by another process")]
@@ -37,7 +38,7 @@ public enum ErrorType
    UnexpectedDataType = 106,
    [ErrorInformation("This occurs because an element is already defined and can not be defined again!", "Check the file for duplicate elements and remove or rename them!")]
    DuplicateElement = 107,
-   [ErrorInformation("This occurs because a province is defined multiple times or its color is not unique!", "Check the file for duplicate province definitions or color definitions and remove or rename them!")]
+   [ErrorInformation("This occurs because a province is defined multiple times or its color is not unique!", "A province has no pixels in provinces.bmp. Either remove it from definition.csv or give it pixels.")]
    ProvinceDefinitionError = 108,
    [ErrorInformation("This occurs because a reference to an area could not be resolved!", "Is the given area defined in area.txt?")]
    UnresolveableAreaReference = 109,
@@ -53,6 +54,8 @@ public enum ErrorType
    InvalidMapSize = 114,
    [ErrorInformation("This occurs because a province id is higher than the max_provinces value in default.map or less than 1!", "Check the province id and correct it!")]
    InvalidProvinceId = 115,
+   [ErrorInformation("This occurs because a country tag is used but never defined!", "Check the country tag definition and usages of the affected tag!")]
+   UndefinedCountryTag = 116,
    [ErrorInformation("This occurs because an date is not in a valid format!", "Check the date format and correct it!")]
    IllegalDateFormat = 101,
    [ErrorInformation("This occurs because your file is not in the correct format and thus can not be parse by the modforge", "Verify that your mod file is formatted correctly and if so contact a developer!")]

@@ -11,5 +11,6 @@ namespace Editor.Forms.PopUps
          DescriptionLabel.Text = provider.GetDescription();
          ResolutionLabel.Text = provider.GetResolution();
       }
+
    }
 }

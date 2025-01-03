@@ -165,19 +165,19 @@ namespace Editor.DataClasses.Misc
          date = MinValue;
          if (string.IsNullOrWhiteSpace(str))
          {
-            return new ErrorObject($"An empty string \"[{str}]\" can not be parsed to a date", ErrorType.IllegalDateFormat, addToManager: false);
+            return new ErrorObject(ErrorType.IllegalDateFormat, $"An empty string \"[{str}]\" can not be parsed to a date", addToManager: false);
          }
          var match = DateRegex.Match(str);
          if (!match.Success)
-            return new ErrorObject($"The string \"{str}\" does not match the date format <yyyy.mm.dd>", ErrorType.IllegalDateFormat, addToManager: false);
+            return new ErrorObject(ErrorType.IllegalDateFormat, $"The string \"{str}\" does not match the date format <yyyy.mm.dd>", addToManager: false);
 
          if (!short.TryParse(match.Groups["year"].Value, out var year) ||
              !byte.TryParse(match.Groups["month"].Value, out var month) ||
              !byte.TryParse(match.Groups["day"].Value, out var day))
-            return new ErrorObject($"The date {match} is not a valid date.", ErrorType.IllegalDate, addToManager: false);
+            return new ErrorObject(ErrorType.IllegalDate, $"The date {match} is not a valid date.", addToManager: false);
 
          if (month < 1 || month > 12 || day < 1 || day > DaysInMonth(month))
-            return new ErrorObject($"The date {year}.{month}.{day} is not a valid date.", ErrorType.IllegalDate, addToManager: false);
+            return new ErrorObject(ErrorType.IllegalDate, $"The date {year}.{month}.{day} is not a valid date.", addToManager: false);
 
          date = new(year, month, day);
          return ErrorHandle.Sucess;

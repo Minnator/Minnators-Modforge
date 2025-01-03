@@ -19,7 +19,7 @@ namespace Editor.Loading
          {
             if (!FilesHelper.GetFilePathUniquely(out var path, "common", "defines", "defines.lua"))
             {
-               _ = new ErrorObject("Can not locate 00_defines.txt", ErrorType.RequiredFileNotFound);
+               _ = new ErrorObject(ErrorType.RequiredFileNotFound, "Can not locate 00_defines.txt");
                return;
             }
             files.Add(path);
@@ -36,7 +36,7 @@ namespace Editor.Loading
 
          if (!string.IsNullOrWhiteSpace(result))
          {
-            _ = new ErrorObject("Can not locate \"MAX_GOVERNMENT_RANK\" in 00_defines.txt", ErrorType.RequiredFileNotFound);
+            _ = new ErrorObject(ErrorType.RequiredFileNotFound, "Can not locate \"MAX_GOVERNMENT_RANK\" in 00_defines.txt");
             return;
          }
          Globals.MaxGovRank = int.Parse(result);

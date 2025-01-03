@@ -1,5 +1,6 @@
 ﻿using System.Drawing.Imaging;
 using Editor.ErrorHandling;
+using Editor.Saving;
 
 namespace Editor.Loading.Enhanced
 {
@@ -16,12 +17,12 @@ namespace Editor.Loading.Enhanced
          Globals.MapPath = po.GetPath();
          //DefinitionLoading.LoadDefinition();
          // colorToProvId, colorToBorder
-         var (colorToProvId, colorToBorder) = LoadProvinces();
-         OptimizeProvincePixels(colorToProvId);
-         OptimizeBordersAndAdjacency(colorToBorder);
+         var (colorToProvId, colorToBorder) = LoadProvinces(po);
+         OptimizeProvincePixels(colorToProvId, po);
+         OptimizeBordersAndAdjacency(colorToBorder, po);
       }
 
-      private static void OptimizeBordersAndAdjacency(Dictionary<int, Dictionary<int, List<Point>>> borders)
+      private static void OptimizeBordersAndAdjacency(Dictionary<int, Dictionary<int, List<Point>>> borders, PathObj po)
       {
          Globals.AdjacentProvinces = new (borders.Count);
 
@@ -40,8 +41,7 @@ namespace Editor.Loading.Enhanced
             {
                if (!Globals.ColorToProvId.TryGetValue(adjacent, out var adjProv))
                {
-                  // throw new IllegalMapDefinitionException(""); we dont want to throw an exception here as we can survive this 
-                  _ = new ErrorObject($"Province {Color.FromArgb(adjacent)} ({adjacent}) has no pixels on the map!", ErrorType.ProvinceDefinitionError, "A province has no pixels in provinces.bmp. Either remove it from definition.csv or give it pixels.");
+                  _ = new LoadingError(po, $"Color {Color.FromArgb(adjacent)} ({string.Join(", ", borderPixels.Select(x => $"X:{x.X}|Y:{x.Y}"))}) has pixels on provinces.bmp but is not defined in definition.csv!", type:ErrorType.ProvinceDefinitionError);
                   continue;
                }
                province.ProvinceBorders.Add(adjProv, new(borderPixels.ToArray()));
@@ -54,7 +54,7 @@ namespace Editor.Loading.Enhanced
          }
       }
 
-      private static void OptimizeProvincePixels(Dictionary<int, List<Point>> pixels) // remove assigned pixels from the dictionary to see if there are any left overs
+      private static void OptimizeProvincePixels(Dictionary<int, List<Point>> pixels, PathObj po) // remove assigned pixels from the dictionary to see if there are any left overs
       {  
          foreach (var province in Globals.Provinces)//.ToArray().AsSpan())
          {
@@ -62,18 +62,28 @@ namespace Editor.Loading.Enhanced
             if (pixels.TryGetValue(color, out var provPixels)) 
                province.Pixels = new(provPixels.ToArray());
             else if (!Globals.RNWProvinces.Contains(province))
-               _ = new LogEntry(LogType.Warning, $"Province {province.Id} has no pixels on the map");
+               _ = new LoadingError(po, $"Province {province.Id} has no pixels on the map", level: LogType.Warning);
          }
       }
 
-      private static unsafe (Dictionary<int, List<Point>>, Dictionary<int, Dictionary<int, List<Point>>>) LoadProvinces()
+      private static unsafe (Dictionary<int, List<Point>>, Dictionary<int, Dictionary<int, List<Point>>>) LoadProvinces(PathObj po)
       {
          using var bmp = new Bitmap(Globals.MapPath);
          var bmpData = bmp.LockBits(new(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
-         var width = Globals.MapWidth = bmp.Width;
-         var height = Globals.MapHeight = bmp.Height;
+
+
+         var width = bmp.Width;
+         var height = bmp.Height;
          var stride = bmpData.Stride;
          var scan0 = bmpData.Scan0;
+
+         if (width != Globals.MapWidth || height != Globals.MapHeight)
+         {
+            _ = new LoadingError(po, $"Map size \"{width}x{height}\" in default.map does not match the provinces.bmp file: \"{Globals.MapWidth}x{Globals.MapHeight}\"!", 0, 0, ErrorType.InvalidMapSize);
+            Globals.MapHeight = height;
+            Globals.MapWidth = width;
+         }
+
 
          var numThreads = Math.Min(Environment.ProcessorCount, (height - 1));
          var heightPerThread = (height - 1) / numThreads;

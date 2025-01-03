@@ -146,7 +146,7 @@ namespace Editor.Helper
 
          MessageBox.Show($"The path {path} can not be opened", "Folder can not be opened", MessageBoxButtons.OK,
             MessageBoxIcon.Warning);
-         _ = new DebugError($"Could not open \"{path}\"", ErrorType.ExplorerCouldNotOpenFolder);
+         _ = new ErrorObject(ErrorType.FileCouldNotBeOpened, $"Could not open \"{path}\"", LogType.Debug);
          return false;
       }
 
@@ -164,7 +164,7 @@ namespace Editor.Helper
 
          MessageBox.Show($"The path {path} can not be opened", "File can not be opened", MessageBoxButtons.OK,
             MessageBoxIcon.Warning);
-         _ = new DebugError($"Could not open \"{path}\"", ErrorType.ApplicationCouldNotOpenFile);
+         _ = new ErrorObject(ErrorType.FileCouldNotBeOpened, $"Could not open \"{path}\"", LogType.Debug);
          return false;
       }
 
@@ -185,7 +185,7 @@ namespace Editor.Helper
             return true;
          if (OpenFolder(path))
             return true;
-         _ = new DebugError($"Could not open \"{path}\"", ErrorType.ApplicationCouldNotOpenFile);
+         _ = new ErrorObject(ErrorType.FileCouldNotBeOpened, $"Could not open \"{path}\"", LogType.Debug);
          return false;
       }
    }

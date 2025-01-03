@@ -11,13 +11,8 @@ namespace Editor.Loading.Enhanced
          var attributes = EnhancedParsing.GetAttributesFromContentElements(elements, po, "max_provinces", "width", "height");
 
          var maxProvinces = EnhancedParser.Convert<int>(attributes[0], po);
-         var width = EnhancedParser.Convert<int>(attributes[1], po);
-         var height = EnhancedParser.Convert<int>(attributes[2], po);
-
-         if (width != Globals.MapWidth || height != Globals.MapHeight) 
-         {
-            _ = new LoadingError(po, $"Map size \"{width}x{height}\" in default.map does not match the provinces.bmp file: \"{Globals.MapWidth}x{Globals.MapHeight}\"!", 0, 0, ErrorType.InvalidMapSize);
-         }
+         Globals.MapWidth = EnhancedParser.Convert<int>(attributes[1], po);
+         Globals.MapHeight = EnhancedParser.Convert<int>(attributes[2], po);
 
          foreach (var province in Globals.Provinces)
          {

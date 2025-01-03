@@ -69,12 +69,6 @@
     <Folder Include="src\ParadoxLanguage\ANTLR\" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="DirectXTexNetImpl">
-      <HintPath>bin\Debug\net8.0-windows10.0.17763.0\DirectXTexNetImpl.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

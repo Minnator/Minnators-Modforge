@@ -84,23 +84,24 @@ namespace Editor.Loading
          IO.ReadAllInANSI(file, out var data);
          Parsing.RemoveCommentFromMultilineString(ref data, out var content);
          var lines = Parsing.GetLinesOfString(ref content);
-         var (type, typeValue) = GetCustomProvLocType(file);
-         Dictionary <Province, HashSet<CultProvLocObject>> results = [];
          var pathObj = PathObj.FromPath(file, isMod);
+         var (type, typeValue) = GetCustomProvLocType(file, pathObj);
+         Dictionary <Province, HashSet<CultProvLocObject>> results = [];
 
+         var lineNum = 0;
          foreach (var line in lines)
          {
             var kvp = RawLineRegex.Match(line);
             if (!kvp.Success)
             {
-               _ = new FileRefLogEntry(LogType.Warning, $"Failed to parse province_names: {line} in file {file}", file);
+               _ = new LoadingError(pathObj, $"Failed to parse province_names", lineNum, -1, ErrorType.UnexpectedDataType);
                continue;
             }
 
             var id = kvp.Groups["province"].Value;
             if (!Globals.ProvinceIdToProvince.TryGetValue(int.Parse(id), out var province))
             {
-               _ = new FileRefLogEntry(LogType.Warning, $"Province {id} is used but never defined as a province in province_names! {file}", file);
+               _ = new LoadingError(pathObj, $"Province {id} is used but never defined as a province in province_names! {file}", lineNum, -1, ErrorType.InvalidProvinceId);
                continue;
             }
 
@@ -110,20 +111,22 @@ namespace Editor.Loading
                var match = CultLocLineRegex.Match(value);
                if (!match.Success)
                {
-                  _ = new FileRefLogEntry(LogType.Warning, $"Failed to parse complex province_names: {value} in file {file}", file);
+                  _ = new LoadingError(pathObj, $"Failed to parse complex province_names: {value} in file {file}", lineNum, -1, ErrorType.UnexpectedDataType);
                   continue;
                }
 
                var provName = match.Groups["value"].Value;
                var capitalName = match.Groups["capital"].Value;
                if (!results.TryAdd(province, [new CultProvLocObject(type, typeValue, provName, capitalName, ObjEditingStatus.Unchanged)]))
-                  _ = new FileRefLogEntry(LogType.Warning, $"Duplicate province_names definition for {province} in {file}", file);
+                  _ = new LoadingError(pathObj, $"Duplicate province_names definition for {province} in {file}", lineNum, -1, ErrorType.DuplicateObjectDefinition);
                continue;
             }
 
             value = value.TrimQuotes();
             if (!results.TryAdd(province, [new CultProvLocObject(type, typeValue, value, ObjEditingStatus.Unchanged)]))
-               _ = new FileRefLogEntry(LogType.Warning, $"Duplicate province_names definition for {province} in {file}", file);
+               _ = new LoadingError(pathObj, $"Duplicate province_names definition for {province} in {file}", lineNum, -1, ErrorType.DuplicateObjectDefinition);
+
+            lineNum++;
          }
 
          if (isMod) //@MelonCoaster why do we only add when mod?
@@ -137,16 +140,15 @@ namespace Editor.Loading
          return results;
       }
 
-      private static (CustomProvLocType, string) GetCustomProvLocType(string path)
+      private static (CustomProvLocType, string) GetCustomProvLocType(string path, PathObj po)
       {
          var fileName = Path.GetFileNameWithoutExtension(path);
          
-         if (Tag.TryParse(fileName, out var tag))
+         if (Tag.TryParse(fileName.ToUpper(), out var tag))
             if (Globals.Countries.Contains(tag))
                return (CustomProvLocType.Tag, fileName);
             else
-               _ = new LogEntry(LogType.Warning,
-                  $"Country tag {tag} referenced in {fileName} (province_names) with no country attached to it!");
+               _ = new LoadingError(po, $"Country tag {tag} referenced in {fileName} (province_names) with no country attached to it!", level:LogType.Warning, type:ErrorType.UndefinedCountryTag);
 
          if (Globals.Cultures.ContainsKey(fileName))
             return (CustomProvLocType.Culture, fileName);

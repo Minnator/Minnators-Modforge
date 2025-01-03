@@ -71,7 +71,7 @@ internal static class IO
       }
       catch (IOException)
       {
-         _ = new ErrorObject($"Could not open or read file {path}", ErrorType.ApplicationCouldNotOpenFile, path);
+         _ = new ErrorObject(ErrorType.ApplicationCouldNotOpenFile, $"Could not open or read file {path}");
          return false;
       }
    }
@@ -88,7 +88,7 @@ internal static class IO
       }
       catch (IOException)
       {
-         _ = new ErrorObject($"Could not open or read file {path}", ErrorType.ApplicationCouldNotOpenFile, path);
+         _ = new ErrorObject(ErrorType.ApplicationCouldNotOpenFile, $"Could not open or read file {path}");
          return false;
       }
    }
@@ -113,7 +113,7 @@ internal static class IO
       }
       catch (IOException)
       {
-         _ = new ErrorObject($"Could not open or read file {path}", ErrorType.ApplicationCouldNotOpenFile, path);
+         _ = new ErrorObject(ErrorType.ApplicationCouldNotOpenFile, $"Could not open or read file {path}");
          return string.Empty;
       }
    }
@@ -138,7 +138,7 @@ internal static class IO
       }
       catch (IOException)
       {
-         _ = new ErrorObject($"Could not open or read file {path}", ErrorType.ApplicationCouldNotOpenFile, path);
+         _ = new ErrorObject(ErrorType.ApplicationCouldNotOpenFile, $"Could not open or read file {path}");
          return [];
       }
    }

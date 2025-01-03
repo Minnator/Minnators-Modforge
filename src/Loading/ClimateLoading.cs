@@ -13,7 +13,7 @@ namespace Editor.Loading
       {
          if (!FilesHelper.GetFilePathUniquely(out var path, "map", "climate.txt"))
          {
-            _ = new ErrorObject("Can not locate climate.txt", ErrorType.RequiredFileNotFound);
+            _ = new ErrorObject(ErrorType.RequiredFileNotFound, "Can not locate climate.txt");
             return;
          }
 
@@ -30,13 +30,13 @@ namespace Editor.Loading
                var kvp = Parsing.GetKeyValueList(((Content)element).Value);
                if (kvp.Count != 1)
                {
-                  _ = new ErrorObject("Climate Loading Error", ErrorType.TempParsingError);
+                  _ = new ErrorObject(ErrorType.TempParsingError, "Climate Loading Error");
                   return;
                }
                if (kvp[0].Key == "equator_y_on_province_image" && int.TryParse(kvp[0].Value.Trim(), out var equator))
                   Globals.EquatorY = equator;
                else
-                  _ = new ErrorObject($"Forbidden Content or mis formed equator {kvp[0].Key} - {kvp[0].Key}", ErrorType.TempParsingError);
+                  _ = new ErrorObject(ErrorType.TempParsingError, $"Forbidden Content or mis formed equator {kvp[0].Key} - {kvp[0].Key}");
             }
             else
             {

@@ -1,9 +1,8 @@
-﻿using System.Text;
+﻿using System.Runtime.CompilerServices;
+using System.Text;
+using Antlr4.Runtime;
 using Editor.Helper;
 using Editor.Saving;
-using Antlr4.Runtime;
-using Antlr4.Runtime.Tree;
-using Editor.src.Forms.PopUps;
 
 
 namespace Editor.ErrorHandling
@@ -150,15 +149,15 @@ namespace Editor.ErrorHandling
       {
          var file = Path.Combine(Globals.Settings.Saving.LogLocation, "LoadingLog.csv");
          var sb = new StringBuilder();
-         sb.AppendLine("Timestamp,Level,type,Message,source");
+         sb.AppendLine("Timestamp,Level,type,Message,source,CallerInfo");
          foreach (var entry in GetAlLogEntries)
          {
             if (entry is ErrorObject error)
-               sb.AppendLine($"{entry.Timestamp:yyyy-MM-dd HH:mm:ss},{error.Level},{error.ErrorType},{error.Message},{error.Path}");
-            else if (entry is FileRefLogEntry fileRef)
-               sb.AppendLine($"{entry.Timestamp:yyyy-MM-dd HH:mm:ss},{fileRef.Level},,{fileRef.Message},{fileRef.Path}");
+               sb.AppendLine($"{entry.Timestamp:yyyy-MM-dd HH:mm:ss},{error.Level},{error.ErrorType},{error.Message},,{error.DebugInformation}");
+            else if (entry is LoadingError loadingError)
+               sb.AppendLine($"{entry.Timestamp:yyyy-MM-dd HH:mm:ss},{loadingError.Level},{loadingError.ErrorType},{loadingError.Message},{loadingError.Path},{loadingError.DebugInformation}");
             else
-               sb.AppendLine($"{entry.Timestamp:yyyy-MM-dd HH:mm:ss},{entry.Level},,{entry.Message},");
+               sb.AppendLine($"{entry.Timestamp:yyyy-MM-dd HH:mm:ss},{entry.Level},,{entry.Message},,{entry.DebugInformation}");
          }
 
          IO.WriteAllInANSI(file, sb.ToString(), false);
@@ -242,10 +241,12 @@ namespace Editor.ErrorHandling
 
    public class LogEntry
    {
-      public LogEntry(LogType level, string message, bool addToManager = true, bool isVanilla = false)
+      public LogEntry(LogType level, string message, string debugInformation = "", bool addToManager = true, bool isVanilla = false)
       {
          Level = level;
          Message = message;
+         IsVanilla = isVanilla;
+         DebugInformation = debugInformation;
          if (addToManager)
             LogManager.AddLogEntry(this);
       }
@@ -254,7 +255,7 @@ namespace Editor.ErrorHandling
       public LogType Level { get; }
       public string Message { get; }
       public bool IsVanilla { get; } = false;
-
+      public string DebugInformation { get; } = "";
 
       public override string ToString()
       {
@@ -264,32 +265,6 @@ namespace Editor.ErrorHandling
       public int CompareTo(LogEntry logEntry)
       {
          return Timestamp.CompareTo(logEntry.Timestamp);
-      }
-   }
-
-   public class DebugError(string message, ErrorType type)
-      : ErrorObject(LogType.Debug, type, message, string.Empty);
-
-   public class FileRefLogEntry : LogEntry
-   {
-      public string Path { get; }
-      public FileRefLogEntry(LogType level, string message, string path, bool addToManager = true) : base(level, message, addToManager)
-      {
-         Path = path;
-      }
-
-      public void OpenPath()
-      {
-         if (!ProcessHelper.OpenPathIfFileOrFolder(Path))
-         {
-            _ = new DebugError($"Could not open \"{Path}\"", ErrorType.ApplicationCouldNotOpenFile);
-            ImprovedMessageBox.Show("Unable to open path as file or folder!", "Could not open file", ref Globals.Settings.PopUps.NotifyIfErrorFileCanNotBeOpenedRef, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-         }
-      }
-
-      public override string ToString()
-      {
-         return $"[{Timestamp:yyyy-MM-dd HH:mm:ss}] [{Level}] {Message}";
       }
    }
 
@@ -306,15 +281,17 @@ namespace Editor.ErrorHandling
       /// <summary>
       /// Parsing Exception
       /// </summary>
-      /// <param name="path"></param>
-      /// <param name="msg"></param>
-      /// <param name="line"></param>
-      /// <param name="charPos"></param>
-      /// <param name="type"></param>
-      /// <param name="level"></param>
-      public LoadingError(PathObj path, string msg, int line = -1, int charPos = -1,
-         ErrorType type = ErrorType.SyntaxError,
-         LogType level = LogType.Error) : base(level, type, GetErrorMsg(path.ToPath(), line, charPos, msg))
+      public LoadingError(PathObj path,
+                          string msg,
+                          int line = -1,
+                          int charPos = -1,
+                          ErrorType type = ErrorType.SyntaxError,
+                          LogType level = LogType.Error,
+                          bool addToManager = true,
+                          [CallerMemberName] string memberName = "",
+                          [CallerFilePath] string callerPath = "",
+                          [CallerLineNumber] int lineNumber = 0) 
+         : base(type, GetErrorMsg(path.ToPath(), line, charPos, msg), level, addToManager, !path.IsModPath, memberName, callerPath, lineNumber)
       {
          Line = line;
          CharPos = charPos;
@@ -328,7 +305,12 @@ namespace Editor.ErrorHandling
       /// <param name="msg"></param>
       /// <param name="type"></param>
       /// <param name="context"></param>
-      public LoadingError(PathObj path, string msg, ErrorType type, ParserRuleContext context) : this(path, msg, context.Start.Line, context.Start.Column, type)
+      public LoadingError(PathObj path,
+                          string msg,
+                          ErrorType type,
+                          ParserRuleContext context,
+                          [CallerMemberName] string memberName = "",
+                          [CallerFilePath] string callerPath = "") : this(path, msg, context.Start.Line, context.Start.Column, type, memberName: memberName, callerPath: callerPath)
       {
       }
 
@@ -341,31 +323,49 @@ namespace Editor.ErrorHandling
       public bool Then(Action<ErrorObject> action);
    }
 
-   public class ErrorObject : FileRefLogEntry, IExtendedLogInformationProvider, IErrorHandle
+   public class ErrorObject : LogEntry, IExtendedLogInformationProvider, IErrorHandle
    {
       private const string DEFAULT_INFORMATION = "N/A";
-
       private readonly string Description;
       private readonly string Resolution;
       private bool IsErrorHandled;
       public ErrorType ErrorType { get; init; }
 
-      public ErrorObject(string message, string resolution, string description, string path = "", bool addToManager = true) : base(LogType.Error, message, path, addToManager)
+      private ErrorObject(string message,
+                          string resolution,
+                          string description,
+                          LogType level = LogType.Error,
+                          bool addToManager = true,
+                          bool isVanilla = false,
+                          [CallerMemberName] string memberName = "",
+                          [CallerFilePath] string callerPath = "",
+                          [CallerLineNumber] int lineNumber = 0) :
+         base(level, message, GetDebugInformationWithLocation(memberName, callerPath, lineNumber), addToManager, isVanilla)
       {
          IsErrorHandled = addToManager;
          Description = description;
          Resolution = resolution;
+         ErrorType = ErrorType.None;
       }
 
-      public ErrorObject(string message, ErrorType type, string path = "", bool addToManager = true) : this(LogType.Error, type, message, path, addToManager)
-      {
-      }
-
-      protected ErrorObject(LogType level, ErrorType type, string message, string path = "", bool addToManager = true) : base(level, $"{Enum.GetName(type)}: " + message, path, addToManager)
+         public ErrorObject(ErrorType type,
+                            string message,
+                            LogType level = LogType.Error,
+                            bool addToManager = true,
+                            bool isVanilla = false,
+                            [CallerMemberName] string memberName = "",
+                            [CallerFilePath] string callerPath = "",
+                            [CallerLineNumber] int lineNumber = 0) :
+         base(level, $"{Enum.GetName(type)}: " + message, GetDebugInformationWithLocation(memberName, callerPath, lineNumber), addToManager, isVanilla)
       {
          IsErrorHandled = addToManager;
          (Description, Resolution) = GetErrorInformation(type);
          ErrorType = type;
+      }
+
+      public static string GetDebugInformationWithLocation(string memberName = "", string filePath = "", int lineNumber = 0)
+      {
+         return $"[{filePath}:{lineNumber}] {memberName}";
       }
 
       private static (string Description, string Resolution) GetErrorInformation(ErrorType type)
@@ -373,35 +373,7 @@ namespace Editor.ErrorHandling
          var information = type.GetAttributeOfType<ErrorInformation>();
          return information is null ? (DEFAULT_INFORMATION, DEFAULT_INFORMATION) : (information.Description, information.Resolution);
       }
-
-      public string GetDescription()
-      {
-         return Description;
-      }
-
-      public string GetResolution()
-      {
-         return Resolution;
-      }
-
-      public string GetMessage()
-      {
-         return Message;
-      }
-
-      public bool Ignore()
-      {
-         return false;
-      }
-
-      public bool Log()
-      {
-         if (IsErrorHandled)
-            return false;
-         IsErrorHandled = true;
-         LogManager.AddLogEntry(this);
-         return false;
-      }
+      
 
       public bool Then(Action<ErrorObject> action)
       {
@@ -418,6 +390,18 @@ namespace Editor.ErrorHandling
          else
             newMsg = '{' + Message + '}';
          _ = new LoadingError(path, newMsg, line, charPos, type ?? ErrorType, level ?? Level);
+      }
+      public string GetDescription() => Description;
+      public string GetResolution() => Resolution;
+      public string GetMessage() => Message;
+      public bool Ignore() => false;
+      public bool Log()
+      {
+         if (IsErrorHandled)
+            return false;
+         IsErrorHandled = true;
+         LogManager.AddLogEntry(this);
+         return false;
       }
    }
 
