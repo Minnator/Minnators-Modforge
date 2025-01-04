@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Reflection;
 using Editor.Saving;
 
 namespace Editor.DataClasses.Commands
@@ -7,18 +8,31 @@ namespace Editor.DataClasses.Commands
    {
       private T _newValue;
       private readonly string _property;
-      private readonly Saveable _target;
-      private readonly T _oldValue;
+      private readonly List<Saveable> _targets;
+      private readonly List<T> _oldValue;
+      private readonly PropertyInfo propInfo;
+
+      public CModifyProperty(string property, List<Saveable> targets, T newValue, bool executeOnInit = true)
+      {
+         propInfo = targets.First().GetPropertyInfo(property)!;
+         _property = property;
+         _targets = targets;
+         _oldValue = targets.Select(saveable => (T)propInfo?.GetValue(saveable)!).ToList();
+         _newValue = newValue;
+         if (executeOnInit)
+            Execute();
+      }
 
       public CModifyProperty(string property,
-         Saveable target,
+         Saveable targets,
          T newValue,
          T oldValue,
          bool executeOnInit = true)
       {
+         propInfo = targets.GetPropertyInfo(property)!;
          _property = property;
-         _target = target;
-         _oldValue = oldValue;
+         _targets = [targets];
+         _oldValue = [oldValue];
          _newValue = newValue;
          if (executeOnInit)
             Execute();
@@ -31,19 +45,20 @@ namespace Editor.DataClasses.Commands
 
       public override void Execute()
       {
-         base.Execute([_target]);
+         base.Execute(_targets);
          InternalExecute();
       }
 
       private void InternalExecute()
       {
-         _target.SetFieldSilent(_property, _newValue);
+         _targets.ForEach(target => target.SetFieldSilent(propInfo, _newValue));
       }
 
       public override void Undo()
       {
          base.Undo();
-         _target.SetFieldSilent(_property, _oldValue);
+         for (var i = 0; i < _targets.Count; i++) 
+            _targets[i].SetFieldSilent(propInfo, _oldValue[i]);
       }
 
       public override void Redo()
@@ -62,14 +77,14 @@ namespace Editor.DataClasses.Commands
 
       public override string GetDescription()
       {
-         return _newValue is not List<string> list ? $"Modify property {_property} of {_target} to {_newValue}" : $"Modify property {_property} of {_target} to {string.Join(", ", GetDiff())}";
+         return _newValue is not List<string> list ? $"Modify property {_property} of {_targets} to {_newValue}" : $"Modify property {_property} of {_targets} to {string.Join(", ", GetDiff())}";
       }
 
       public override string GetDebugInformation(int indent)
       {
          if (_newValue is not IList list)
-            return $"Changed {_property} from {_oldValue} to {_newValue} in {_target.WhatAmI()} object ({_target})";
-         return $"Changed {_property} from {_oldValue} to {string.Join(", ", GetDiff())} in {_target.WhatAmI()} object ({_target})";
+            return $"Changed {_property} from {_oldValue} to {_newValue} in {_targets.First().WhatAmI()} object ({_targets})";
+         return $"Changed {_property} from {_oldValue} to {string.Join(", ", GetDiff())} in {_targets.First().WhatAmI()} object ({_targets})";
       }
    }
 }

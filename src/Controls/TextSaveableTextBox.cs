@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Diagnostics;
+using System.Text.RegularExpressions;
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
@@ -33,19 +34,35 @@ namespace Editor.Controls
       private Func<ICollection<Saveable>> _getSaveables;
       private readonly CTextEditingFactory<C, T> _factory;
 
+      private bool _silentSet = false;
 
       public InputType Input { get; set; } = InputType.Text;
 
       public TextSaveableTextBox(Func<ICollection<Saveable>> getSaveables, CTextEditingFactory<C, T> factory)
       {
-
-         _getSaveables = getSaveables;
+        _getSaveables = getSaveables;
          _factory = factory;
          LostFocus += OnFocusLost;
          KeyDown += OnKeyDown;
          Enter += OnFocusGained;
          TextChanged += OnTextChanged;
          KeyPress += OnKeyPress;
+      }
+
+      private void SaveableChanged(object o, string name)
+      {
+         if (_silentSet)
+            return;
+         Debug.Assert(o is Saveable, "o is not Saveable");
+         if (_factory is CCountryPropertyChangeFactory<T> tempFactory) // TODO Remove after new province implementation
+            if (tempFactory.PropName.Equals(name) || _getSaveables.Invoke().Contains(o))
+            {
+               var value = ((Saveable)o).GetProperty<T>(tempFactory.PropName)?.ToString();
+               if (string.Equals(Text, value))
+               {
+                  Text = string.Empty;
+               }
+            }
       }
 
       private void OnKeyPress(object? sender, KeyPressEventArgs e)
@@ -124,7 +141,9 @@ namespace Editor.Controls
          if (_factory is not CCountryPropertyChangeFactory<T> ccfactory)
          {
             ICommand command = _factory.Create(_getSaveables.Invoke(), value);
+            _silentSet = true;
             command.Execute();
+            _silentSet = false;
             HistoryManager.AddCommand(command);
          }
          else

@@ -8,7 +8,7 @@ public class CultureMapMode : MapMode
 {
    public CultureMapMode()
    {
-      ProvinceEventHandler.OnProvinceCultureChanged += UpdateProvince;
+      // TODO FIX MAP MODE UPDATES ProvinceEventHandler.OnProvinceCultureChanged += UpdateProvince;
    }
 
    public override bool IsLandOnly => true;

@@ -172,11 +172,9 @@
          DevastationLabel = new Label();
          groupBox6 = new GroupBox();
          TradePanel = new TableLayoutPanel();
-         TradeGoodsComboBox = new ComboBox();
          label11 = new Label();
          label12 = new Label();
          label13 = new Label();
-         TradeCenterComboBox = new ComboBox();
          LocalisationGroupBox = new GroupBox();
          LocTableLayoutPanel = new TableLayoutPanel();
          label39 = new Label();
@@ -1687,11 +1685,9 @@
          TradePanel.ColumnCount = 2;
          TradePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
          TradePanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-         TradePanel.Controls.Add(TradeGoodsComboBox, 1, 1);
          TradePanel.Controls.Add(label11, 0, 2);
          TradePanel.Controls.Add(label12, 0, 0);
          TradePanel.Controls.Add(label13, 0, 1);
-         TradePanel.Controls.Add(TradeCenterComboBox, 1, 0);
          TradePanel.Dock = DockStyle.Fill;
          TradePanel.Location = new Point(0, 16);
          TradePanel.Margin = new Padding(0, 3, 0, 0);
@@ -1702,17 +1698,6 @@
          TradePanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
          TradePanel.Size = new Size(188, 74);
          TradePanel.TabIndex = 2;
-         // 
-         // TradeGoodsComboBox
-         // 
-         TradeGoodsComboBox.Dock = DockStyle.Fill;
-         TradeGoodsComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-         TradeGoodsComboBox.FormattingEnabled = true;
-         TradeGoodsComboBox.Location = new Point(97, 26);
-         TradeGoodsComboBox.Margin = new Padding(3, 1, 3, 3);
-         TradeGoodsComboBox.Name = "TradeGoodsComboBox";
-         TradeGoodsComboBox.Size = new Size(88, 23);
-         TradeGoodsComboBox.TabIndex = 4;
          // 
          // label11
          // 
@@ -1746,18 +1731,6 @@
          label13.TabIndex = 1;
          label13.Text = "Tradegoods";
          label13.TextAlign = ContentAlignment.MiddleLeft;
-         // 
-         // TradeCenterComboBox
-         // 
-         TradeCenterComboBox.Dock = DockStyle.Fill;
-         TradeCenterComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-         TradeCenterComboBox.FormattingEnabled = true;
-         TradeCenterComboBox.Items.AddRange(new object[] { "0", "1", "2", "3" });
-         TradeCenterComboBox.Location = new Point(97, 1);
-         TradeCenterComboBox.Margin = new Padding(3, 1, 3, 3);
-         TradeCenterComboBox.Name = "TradeCenterComboBox";
-         TradeCenterComboBox.Size = new Size(88, 23);
-         TradeCenterComboBox.TabIndex = 3;
          // 
          // LocalisationGroupBox
          // 
@@ -2928,8 +2901,7 @@
          // 
          // CountryHistoryEntryToggleButton
          // 
-         CountryHistoryEntryToggleButton.BackColor = Color.Transparent;
-         CountryHistoryEntryToggleButton.Image = Properties.Resources.HistoryEntriesDisabled;
+         CountryHistoryEntryToggleButton.BackColor = Color.DarkRed;
          CountryHistoryEntryToggleButton.ImageOff = Properties.Resources.HistoryEntriesDisabled;
          CountryHistoryEntryToggleButton.ImageOn = Properties.Resources.HistoryEntriesEnabled;
          CountryHistoryEntryToggleButton.Location = new Point(122, 2);
@@ -2938,6 +2910,7 @@
          CountryHistoryEntryToggleButton.Size = new Size(40, 30);
          CountryHistoryEntryToggleButton.State = false;
          CountryHistoryEntryToggleButton.TabIndex = 7;
+         CountryHistoryEntryToggleButton.Text = "Off";
          GeneralToolTip.SetToolTip(CountryHistoryEntryToggleButton, "If enabled any changes in properties for a country will be created as a history entry for the current date");
          CountryHistoryEntryToggleButton.UseVisualStyleBackColor = false;
          CountryHistoryEntryToggleButton.VsMode = Editor.Controls.ToggleButton.VisualMode.Image;
@@ -3250,11 +3223,9 @@
       private GroupBox CoresGroupBox;
       private GroupBox groupBox6;
       private TableLayoutPanel TradePanel;
-      private ComboBox TradeGoodsComboBox;
       private Label label11;
       private Label label12;
       private Label label13;
-      private ComboBox TradeCenterComboBox;
       private Label label1;
       private Label label2;
       private Label label5;

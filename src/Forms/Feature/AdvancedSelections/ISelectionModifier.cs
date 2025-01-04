@@ -30,6 +30,6 @@ public enum ProvinceSource
 public interface ISelectionModifier
 {
    public string Name { get; set; }
-   public void Execute(ProvinceSource source, Operations operation, ProvinceEnumHelper.ProvAttrGet attr, object value);
+   public void Execute(ProvinceSource source, Operations operation, string attr, object value);
 }
 

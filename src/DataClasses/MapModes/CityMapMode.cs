@@ -9,7 +9,7 @@ namespace Editor.DataClasses.MapModes
 
       public CityMapMode()
       {
-         ProvinceEventHandler.OnProvinceIsCityChanged += UpdateProvince!;
+         // TODO FIX MAP MODE UPDATESProvinceEventHandler.OnProvinceIsCityChanged += UpdateProvince!;
       }
 
       public override int GetProvinceColor(Province id)

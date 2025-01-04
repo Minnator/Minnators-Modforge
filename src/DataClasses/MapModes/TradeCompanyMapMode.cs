@@ -17,11 +17,7 @@ namespace Editor.DataClasses.MapModes
       public override int GetProvinceColor(Province id)
       {
          if (Globals.Provinces.TryGetValue(id, out var province))
-         {
-            var company = province.GetTradeCompany;
-            if (company != string.Empty)
-               return Globals.TradeCompanies[company].Color.ToArgb();
-         }
+            return province.TradeCompany.Color.ToArgb();
          return Color.DimGray.ToArgb();
       }
 
@@ -31,11 +27,11 @@ namespace Editor.DataClasses.MapModes
       {
          if (Globals.Provinces.TryGetValue(provinceId, out var province))
          {
-            var companyName = province.GetTradeCompany;
-            if (companyName == string.Empty)
+            var tc = province.TradeCompany;
+            if (tc == TradeCompany.Empty)
                return "Trade company: [Unknown]";
-            if (Globals.TradeCompanies.TryGetValue(companyName, out var company))
-               return $"Trade company: {company.Name} ({company.GetLocalisation()})";
+            else
+               return $"Trade company: {tc.Name} ({tc.GetLocalisation()})";
          }
          return "Trade company: [Unknown]";
       }

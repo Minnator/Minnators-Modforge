@@ -16,16 +16,16 @@ public sealed class ContinentMapMode : MapMode
    public override int GetProvinceColor(Province id)
    {
       if (Globals.Provinces.TryGetValue(id, out var province))
-         if (province.GetContinent() != Continent.Empty)
-            return province.GetContinent().Color.ToArgb();
+         if (province.Continent != Continent.Empty)
+            return province.Continent.Color.ToArgb();
       return Color.DarkGray.ToArgb();
    }
 
    public override string GetSpecificToolTip(Province provinceId)
    {
       if (Globals.Provinces.TryGetValue(provinceId, out var province))
-         if (province.GetContinent() != Continent.Empty)
-            return $"Continent: {province.GetContinent().Name} ({Localisation.GetLoc(province.GetContinent().Name)})";
+         if (province.Continent != Continent.Empty)
+            return $"Continent: {province.Continent.Name} ({Localisation.GetLoc(province.Continent.Name)})";
       return "Continent: [Unknown]";
    }
 

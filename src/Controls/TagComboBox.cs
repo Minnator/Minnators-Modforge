@@ -8,8 +8,11 @@ namespace Editor.Controls
    {
       public EventHandler<ProvinceEditedEventArgs>? OnTagChanged = delegate { };
       public bool IgnoreEmpty { get; set; } = false;
-      public TagComboBox()
+      public readonly string PropertyName;
+      public TagComboBox(string propName)
       {
+         PropertyName = propName;
+
          Dock = DockStyle.Fill;
          Height = 21;
          

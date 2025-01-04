@@ -9,7 +9,7 @@ namespace Editor.DataClasses.MapModes
 
       public ParliamentSeatMapMode()
       {
-         ProvinceEventHandler.OnProvinceIsSeatInParliamentChanged += UpdateProvince!;
+         // TODO FIX MAP MODE UPDATES ProvinceEventHandler.OnProvinceIsSeatInParliamentChanged += UpdateProvince!;
       }
 
       public override int GetProvinceColor(Province id)

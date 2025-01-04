@@ -15,8 +15,8 @@ namespace Editor.DataClasses.MapModes
 
       public DiplomaticMapMode()
       {
-         ProvinceEventHandler.OnProvinceClaimsChanged += UpdateProvince!;
-         ProvinceEventHandler.OnProvinceCoresChanged += UpdateProvince!;
+         // TODO FIX MAP MODE UPDATES ProvinceEventHandler.OnProvinceClaimsChanged += UpdateProvince!;
+         // TODO FIX MAP MODE UPDATESProvinceEventHandler.OnProvinceCoresChanged += UpdateProvince!;
          //TODO add permanent claims
       }
 

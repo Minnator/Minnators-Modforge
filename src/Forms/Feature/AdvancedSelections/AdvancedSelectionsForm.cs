@@ -63,7 +63,7 @@ namespace Editor.Forms.Feature.AdvancedSelections
          if (ActionTypeComboBox.SelectedIndex == -1 || AttributeSelectionComboBox.SelectedIndex == -1 || AttributeValueInput.Text == string.Empty || OperationComboBox.SelectedIndex == -1)
             return;
 
-         GetSelectionModifier().Execute(GetSource(), GetOperation(), GetAttribute(), GetAttributeValue());
+         GetSelectionModifier().Execute(GetSource(), GetOperation(), AttributeSelectionComboBox.SelectedText, GetAttributeValue());
          Globals.ZoomControl.Invalidate();
       }
 

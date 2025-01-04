@@ -12,7 +12,7 @@ public class CenterOfTradeMapMode : MapMode
    public CenterOfTradeMapMode()
    {
       // Subscribe to events to update the min and max values when a province's development changes
-      ProvinceEventHandler.OnProvinceCenterOfTradeLevelChanged += UpdateProvince;
+      // TODO FIX MAP MODE UPDATES ProvinceEventHandler.OnProvinceCenterOfTradeLevelChanged += UpdateProvince;
    }
 
    public override int GetProvinceColor(Province id)

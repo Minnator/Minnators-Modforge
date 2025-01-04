@@ -10,7 +10,7 @@ public class CultureGroupMapMode : MapMode
    public CultureGroupMapMode()
    {
       // Subscribe to events to update the min and max values when a province's development changes
-      ProvinceEventHandler.OnProvinceCultureChanged += UpdateProvince;
+      // TODO FIX MAP MODE UPDATES ProvinceEventHandler.OnProvinceCultureChanged += UpdateProvince;
    }
 
    public override bool IsLandOnly => true;

@@ -6,8 +6,7 @@ namespace Editor.Helper
 
    public static class Converter
    {
-      
-      public static bool Convert<T>(string value, out T output)
+      public static bool Convert<T>(string value, out T output) 
       {
          output = default!;
          var conversionType = typeof(T);
@@ -22,9 +21,13 @@ namespace Editor.Helper
 
             if (ReferenceEquals(conversionType, typeof(Province)))
             {
-               var returnVal = Province.ConvertToGameObject(value, out var pOutput);
-               output = (T)(object)pOutput;
-               return returnVal;
+               if (int.TryParse(value, out var id))
+                  if (Globals.ProvinceIdToProvince.TryGetValue(id, out var province))
+                  {
+                     output = (T)(object)province;
+                     return true;
+                  }
+               return false;
             }
 
 

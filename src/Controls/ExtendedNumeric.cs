@@ -13,12 +13,14 @@ namespace Editor.Controls
       public event EventHandler<ProvinceEditedEventArgs> DownButtonPressedMedium = delegate { };
       public event EventHandler<ProvinceEditedEventArgs> UpButtonPressedLarge = delegate { };
       public event EventHandler<ProvinceEditedEventArgs> DownButtonPressedLarge = delegate { };
-      public event EventHandler<ProvinceEditedEventArgs> OnTextValueChanged = delegate { };
+      public new event EventHandler<int> OnValueChanged = delegate { }; 
 
       private readonly TextBox _textBox;
+      public readonly string PropertyName;
 
-      public ExtendedNumeric()
+      public ExtendedNumeric(string propName)
       {
+         PropertyName = propName;
          Dock = DockStyle.Fill;
          Height = 21;
 
@@ -42,13 +44,13 @@ namespace Editor.Controls
          if (e.KeyCode == Keys.Enter)
          {
             e.SuppressKeyPress = true;
-            OnTextValueChanged?.Invoke(this, new(Selection.GetSelectedProvinces, Value));
+            OnValueChanged.Invoke(this, int.Parse(Text));
          }
       }
 
       private void OnFocusLost(object? sender, EventArgs e)
       {
-         OnTextValueChanged?.Invoke(this, new (Selection.GetSelectedProvinces, Value));
+         OnValueChanged.Invoke(this, int.Parse(Text));
       }
 
       public override void UpButton()
@@ -68,6 +70,7 @@ namespace Editor.Controls
          { 
             UpButtonPressedSmall.Invoke(this, new (Selection.GetSelectedProvinces, Value));
          }
+         OnValueChanged.Invoke(this, int.Parse(Text));
       }
 
       public override void DownButton()
@@ -87,6 +90,7 @@ namespace Editor.Controls
          {
             DownButtonPressedSmall.Invoke(this, new (Selection.GetSelectedProvinces, Value));
          }
+         OnValueChanged.Invoke(this, int.Parse(Text));
       }
    }
 }

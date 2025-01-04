@@ -25,9 +25,9 @@ public sealed class SuperRegionMapMode : MapMode
 
    public override string GetSpecificToolTip(Province province)
    {
-      if (province.GetArea() != Area.Empty)
-         if (province.GetArea().Region != Region.Empty)
-            return $"Super Region: {province.GetArea().Region.SuperRegion.Name} ({Localisation.GetLoc(province.GetArea().Region.SuperRegion.Name)})";
+      if (province.Area != Area.Empty)
+         if (province.Area.Region != Region.Empty)
+            return $"Super Region: {province.Area.Region.SuperRegion.Name} ({Localisation.GetLoc(province.Area.Region.SuperRegion.Name)})";
       return "Super Region: [Unknown]";
    }
 

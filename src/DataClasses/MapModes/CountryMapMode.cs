@@ -7,8 +7,8 @@ namespace Editor.DataClasses.MapModes
    {
       public CountryMapMode()
       {
-         ProvinceEventHandler.OnProvinceOwnerChanged += UpdateProvince;
-         ProvinceEventHandler.OnProvinceControllerChanged += UpdateProvince;
+         // TODO FIX MAP MODE UPDATES ProvinceEventHandler.OnProvinceOwnerChanged += UpdateProvince;
+         // TODO FIX MAP MODE UPDATES ProvinceEventHandler.OnProvinceControllerChanged += UpdateProvince;
          Country.ItemsModified += UpdateProvinceCollection;
          Country.ColorChanged += UpdateComposite<Province>;
       }

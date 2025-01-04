@@ -40,6 +40,8 @@ namespace Editor.Forms
       private ItemList _discoveredBy = null!;
 
       private ExtendedComboBox _religionComboBox = null!;
+      private ExtendedComboBox _tradeCenterComboBox = null!;
+      private ExtendedComboBox _tradeGoodsComboBox = null!;
       private ExtendedComboBox _cultureComboBox = null!;
       public ExtendedComboBox ModifierComboBox = null!;
       private ExtendedComboBox _modifierTypeComboBox = null!;
@@ -394,31 +396,29 @@ namespace Editor.Forms
          SaveCurrentSelectionButton.MouseEnter += OnSavingSelectionEnter;
          OpenProvinceFile.MouseEnter += OnOpenProvinceFileEnter;
 
-         OwnerTagBox = ControlFactory.GetTagComboBox();
-         OwnerTagBox.OnTagChanged += ProvinceEditingEvents.OnOwnerChanged;
-         ControllerTagBox = ControlFactory.GetTagComboBox();
-         ControllerTagBox.OnTagChanged += ProvinceEditingEvents.OnControllerChanged;
+         OwnerTagBox = ControlFactory.GetTagComboBox(nameof(Province.Owner));
+         OwnerTagBox.OnTagChanged += ProvinceEditingEvents.OnTagComboBoxSelectedIndexChanged;
+         ControllerTagBox = ControlFactory.GetTagComboBox(nameof(Province.Controller));
+         ControllerTagBox.OnTagChanged += ProvinceEditingEvents.OnTagComboBoxSelectedIndexChanged;
          MisProvinceData.Controls.Add(OwnerTagBox, 1, 0);
          MisProvinceData.Controls.Add(ControllerTagBox, 1, 1);
 
-         _cores = ControlFactory.GetItemList(ItemTypes.Tag, [], "Cores");
-         _cores.OnItemAdded += ProvinceEditingEvents.OnCoreAdded;
-         _cores.OnItemRemoved += ProvinceEditingEvents.OnCoreRemoved;
-         _claims = ControlFactory.GetItemList(ItemTypes.Tag, [], "Regular");
-         _claims.OnItemAdded += ProvinceEditingEvents.OnClaimAdded;
-         _claims.OnItemRemoved += ProvinceEditingEvents.OnClaimRemoved;
-         _permanentClaims = ControlFactory.GetItemList(ItemTypes.Tag, [], "Permanent");
-         _permanentClaims.OnItemAdded += ProvinceEditingEvents.OnPermanentClaimAdded;
-         _permanentClaims.OnItemRemoved += ProvinceEditingEvents.OnPermanentClaimRemoved;
+         _cores = ControlFactory.GetItemList(nameof(Province.Cores), ItemTypes.Tag, [], "Cores");
+         _cores.OnItemAdded += ProvinceEditingEvents.OnItemAddedModified;
+         _cores.OnItemRemoved += ProvinceEditingEvents.OnItemRemoveModified;
+         _claims = ControlFactory.GetItemList(nameof(Province.Claims), ItemTypes.Tag, [], "Regular");
+         _claims.OnItemAdded += ProvinceEditingEvents.OnItemAddedModified;
+         _claims.OnItemRemoved += ProvinceEditingEvents.OnItemRemoveModified;
+         _permanentClaims = ControlFactory.GetItemList(nameof(Province.PermanentClaims), ItemTypes.Tag, [], "Permanent");
+         _permanentClaims.OnItemAdded += ProvinceEditingEvents.OnItemAddedModified;
+         _permanentClaims.OnItemRemoved += ProvinceEditingEvents.OnItemRemoveModified;
 
-         _buildings = ControlFactory.GetItemListObjects(ItemTypes.String, [.. Globals.Buildings], "Building");
-         _buildings.OnItemAdded += ProvinceEditingEvents.OnBuildingAdded;
-         _buildings.OnItemRemoved += ProvinceEditingEvents.OnBuildingRemoved;
-         _discoveredBy = ControlFactory.GetItemList(ItemTypes.String, [.. Globals.TechnologyGroups.Keys], "TechGroup");
-         _discoveredBy.OnItemAdded += ProvinceEditingEvents.OnDiscoveredByAdded;
-         _discoveredBy.OnItemRemoved += ProvinceEditingEvents.OnDiscoveredByRemoved;
-
-         TradeCenterComboBox.SelectedIndexChanged += ProvinceEditingEvents.OnTradeCenterChanged;
+         _buildings = ControlFactory.GetItemListObjects(nameof(Province.Buildings), ItemTypes.String, [.. Globals.Buildings], "Building");
+         _buildings.OnItemAdded += ProvinceEditingEvents.OnItemAddedModified;
+         _buildings.OnItemRemoved += ProvinceEditingEvents.OnItemRemoveModified;
+         _discoveredBy = ControlFactory.GetItemList(nameof(Province.DiscoveredBy), ItemTypes.String, [.. Globals.TechnologyGroups.Keys], "TechGroup");
+         _discoveredBy.OnItemAdded += ProvinceEditingEvents.OnItemAddedModified;
+         _discoveredBy.OnItemRemoved += ProvinceEditingEvents.OnItemRemoveModified;
 
          CoresAndClaimLayoutPanel.Controls.Add(_permanentClaims, 0, 0);
          CoresAndClaimLayoutPanel.Controls.Add(_claims, 1, 0);
@@ -429,29 +429,38 @@ namespace Editor.Forms
          DiscoveredByGroupBox.Controls.Add(_discoveredBy);
          _discoveredBy.Location = new(0, 18);
 
+         _tradeCenterComboBox = ControlFactory.GetExtendedComboBox(nameof(Province.CenterOfTrade));
+         _tradeCenterComboBox.Items.AddRange(["0", "1", "2", "3"]);
+         _tradeCenterComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+         _tradeCenterComboBox.SelectedIndexChanged += ProvinceEditingEvents.OnExtendedComboBoxSelectedIndexChanged;
+         TradePanel.Controls.Add(_tradeCenterComboBox, 1, 0);
+
          List<string> tradeGoodsString = [.. Globals.TradeGoods.Keys];
          tradeGoodsString.Sort();
-         TradeGoodsComboBox.Items.AddRange([.. tradeGoodsString]);
-         TradeGoodsComboBox.SelectedIndexChanged += ProvinceEditingEvents.OnTradeGoodChanged;
+         _tradeGoodsComboBox = ControlFactory.GetExtendedComboBox(nameof(Province.TradeGood));
+         _tradeGoodsComboBox.Items.AddRange([.. tradeGoodsString]);
+         _tradeGoodsComboBox.SelectedIndexChanged += ProvinceEditingEvents.OnExtendedComboBoxSelectedIndexChanged;
+         TradePanel.Controls.Add(_tradeGoodsComboBox, 1, 1);
 
          List<string> culturesString = [.. Globals.Cultures.Keys];
          culturesString.Sort();
-         _cultureComboBox = ControlFactory.GetExtendedComboBox();
+         _cultureComboBox = ControlFactory.GetExtendedComboBox(nameof(Province.Culture));
          MisProvinceData.Controls.Add(_cultureComboBox, 1, 3);
          _cultureComboBox.Items.AddRange([.. culturesString]);
-         _cultureComboBox.OnDataChanged += ProvinceEditingEvents.OnCultureChanged;
+         _cultureComboBox.OnDataChanged += ProvinceEditingEvents.OnExtendedComboBoxSelectedIndexChanged;
 
          List<string> religionsString = [.. Globals.Religions.Keys];
          religionsString.Sort();
-         _religionComboBox = ControlFactory.GetExtendedComboBox();
+         _religionComboBox = ControlFactory.GetExtendedComboBox(nameof(Province.Religion));
          MisProvinceData.Controls.Add(_religionComboBox, 1, 2);
          _religionComboBox.Items.AddRange([.. religionsString]);
-         _religionComboBox.OnDataChanged += ProvinceEditingEvents.OnReligionChanged;
+         _religionComboBox.OnDataChanged += ProvinceEditingEvents.OnExtendedComboBoxSelectedIndexChanged;
 
          List<string> terrainString = [string.Empty];
          terrainString.AddRange([.. Globals.Terrains.Select(x => x.Name).ToList()]);
          terrainString.Sort();
-         _terrainComboBox = ControlFactory.GetExtendedComboBox();
+         // TODO GEDANKEN MACHEN Wie man das hier am besten macht
+         _terrainComboBox = ControlFactory.GetExtendedComboBox(nameof(Terrain.SubCollection));
          _terrainComboBox.Items.AddRange([.. terrainString]);
          _terrainComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
          _terrainComboBox.OnDataChanged += (_, args) =>
@@ -470,88 +479,46 @@ namespace Editor.Forms
          };
          MisProvinceData.Controls.Add(_terrainComboBox, 1, 5);
 
-         _taxNumeric = ControlFactory.GetExtendedNumeric();
+         _taxNumeric = ControlFactory.GetExtendedNumeric(nameof(Province.BaseTax));
          _taxNumeric.Minimum = 0;
          _taxNumeric.Maximum = 1000;
-         _taxNumeric.OnTextValueChanged += ProvinceEditingEvents.OnTextBaseTaxChanged;
-         _taxNumeric.UpButtonPressedSmall += ProvinceEditingEvents.OnUpBaseTaxChanged;
-         _taxNumeric.UpButtonPressedMedium += ProvinceEditingEvents.OnUpTaxButtonButtonPressedMedium;
-         _taxNumeric.UpButtonPressedLarge += ProvinceEditingEvents.OnUpBaseTaxButtonPressedLarge;
-         _taxNumeric.DownButtonPressedSmall += ProvinceEditingEvents.OnDownBaseTaxChanged;
-         _taxNumeric.DownButtonPressedMedium += ProvinceEditingEvents.OnDownBaseTaxButtonPressedMedium;
-         _taxNumeric.DownButtonPressedLarge += ProvinceEditingEvents.OnDownBaseTaxButtonPressedLarge;
+         _taxNumeric.OnValueChanged += ProvinceEditingEvents.OnExtendedNumericValueChanged;
          MisProvinceData.Controls.Add(_taxNumeric, 3, 0);
 
-         _prdNumeric = ControlFactory.GetExtendedNumeric();
+         _prdNumeric = ControlFactory.GetExtendedNumeric(nameof(Province.BaseProduction));
          _prdNumeric.Minimum = 0;
          _prdNumeric.Maximum = 1000;
-         _prdNumeric.OnTextValueChanged += ProvinceEditingEvents.OnTextBaseProductionChanged;
-         _prdNumeric.UpButtonPressedSmall += ProvinceEditingEvents.OnUpBaseProductionChanged;
-         _prdNumeric.UpButtonPressedMedium += ProvinceEditingEvents.OnUpButtonPressedMediumProduction;
-         _prdNumeric.UpButtonPressedLarge += ProvinceEditingEvents.OnUpButtonPressedLargeProduction;
-         _prdNumeric.DownButtonPressedSmall += ProvinceEditingEvents.OnDownBaseProductionChanged;
-         _prdNumeric.DownButtonPressedMedium += ProvinceEditingEvents.OnDownButtonPressedMediumProduction;
-         _prdNumeric.DownButtonPressedLarge += ProvinceEditingEvents.OnDownButtonPressedLargeProduction;
+         _prdNumeric.OnValueChanged += ProvinceEditingEvents.OnExtendedNumericValueChanged;
          MisProvinceData.Controls.Add(_prdNumeric, 3, 1);
 
-         _mnpNumeric = ControlFactory.GetExtendedNumeric();
+         _mnpNumeric = ControlFactory.GetExtendedNumeric(nameof(Province.BaseManpower));
          _mnpNumeric.Minimum = 0;
          _mnpNumeric.Maximum = 1000;
-         _mnpNumeric.OnTextValueChanged += ProvinceEditingEvents.OnTextBaseManpowerChanged;
-         _mnpNumeric.UpButtonPressedSmall += ProvinceEditingEvents.OnUpBaseManpowerChanged;
-         _mnpNumeric.UpButtonPressedMedium += ProvinceEditingEvents.OnUpButtonPressedMediumManpower;
-         _mnpNumeric.UpButtonPressedLarge += ProvinceEditingEvents.OnUpButtonPressedLargeManpower;
-         _mnpNumeric.DownButtonPressedSmall += ProvinceEditingEvents.OnDownBaseManpowerChanged;
-         _mnpNumeric.DownButtonPressedMedium += ProvinceEditingEvents.OnDownButtonPressedMediumManpower;
-         _mnpNumeric.DownButtonPressedLarge += ProvinceEditingEvents.OnDownButtonPressedLargeManpower;
+         _mnpNumeric.OnValueChanged += ProvinceEditingEvents.OnExtendedNumericValueChanged;
          MisProvinceData.Controls.Add(_mnpNumeric, 3, 2);
 
-         _autonomyNumeric = ControlFactory.GetExtendedNumeric();
+         _autonomyNumeric = ControlFactory.GetExtendedNumeric(nameof(Province.LocalAutonomy));
          _autonomyNumeric.Minimum = 0;
          _autonomyNumeric.Maximum = 100;
-         _autonomyNumeric.OnTextValueChanged += ProvinceEditingEvents.OnTextLocalAutonomyChanged;
-         _autonomyNumeric.UpButtonPressedSmall += ProvinceEditingEvents.OnUpLocalAutonomyChanged;
-         _autonomyNumeric.UpButtonPressedMedium += ProvinceEditingEvents.OnUpButtonPressedMediumLocalAutonomy;
-         _autonomyNumeric.UpButtonPressedLarge += ProvinceEditingEvents.OnUpButtonPressedLargeLocalAutonomy;
-         _autonomyNumeric.DownButtonPressedSmall += ProvinceEditingEvents.OnDownLocalAutonomyChanged;
-         _autonomyNumeric.DownButtonPressedMedium += ProvinceEditingEvents.OnDownButtonPressedMediumLocalAutonomy;
-         _autonomyNumeric.DownButtonPressedLarge += ProvinceEditingEvents.OnDownButtonPressedLargeLocalAutonomy;
+         _autonomyNumeric.OnValueChanged += ProvinceEditingEvents.OnExtendedNumericValueChanged;
          FloatLayoutPanel.Controls.Add(_autonomyNumeric, 1, 0);
 
-         _devastationNumeric = ControlFactory.GetExtendedNumeric();
+         _devastationNumeric = ControlFactory.GetExtendedNumeric(nameof(Province.Devastation));
          _devastationNumeric.Minimum = 0;
          _devastationNumeric.Maximum = 100;
-         _devastationNumeric.OnTextValueChanged += ProvinceEditingEvents.OnTextDevastationChanged;
-         _devastationNumeric.UpButtonPressedSmall += ProvinceEditingEvents.OnUpDevastationChanged;
-         _devastationNumeric.UpButtonPressedMedium += ProvinceEditingEvents.OnUpButtonPressedMediumDevastation;
-         _devastationNumeric.UpButtonPressedLarge += ProvinceEditingEvents.OnUpButtonPressedLargeDevastation;
-         _devastationNumeric.DownButtonPressedSmall += ProvinceEditingEvents.OnDownDevastationChanged;
-         _devastationNumeric.DownButtonPressedMedium += ProvinceEditingEvents.OnDownButtonPressedMediumDevastation;
-         _devastationNumeric.DownButtonPressedLarge += ProvinceEditingEvents.OnDownButtonPressedLargeDevastation;
+         _devastationNumeric.OnValueChanged += ProvinceEditingEvents.OnExtendedNumericValueChanged;
          FloatLayoutPanel.Controls.Add(_devastationNumeric, 1, 1);
 
-         _prosperityNumeric = ControlFactory.GetExtendedNumeric();
+         _prosperityNumeric = ControlFactory.GetExtendedNumeric(nameof(Province.Prosperity));
          _prosperityNumeric.Minimum = 0;
          _prosperityNumeric.Maximum = 100;
-         _prosperityNumeric.OnTextValueChanged += ProvinceEditingEvents.OnTextProsperityChanged;
-         _prosperityNumeric.UpButtonPressedSmall += ProvinceEditingEvents.OnUpProsperityChanged;
-         _prosperityNumeric.UpButtonPressedMedium += ProvinceEditingEvents.OnUpButtonPressedMediumProsperity;
-         _prosperityNumeric.UpButtonPressedLarge += ProvinceEditingEvents.OnUpButtonPressedLargeProsperity;
-         _prosperityNumeric.DownButtonPressedSmall += ProvinceEditingEvents.OnDownProsperityChanged;
-         _prosperityNumeric.DownButtonPressedMedium += ProvinceEditingEvents.OnDownButtonPressedMediumProsperity;
-         _prosperityNumeric.DownButtonPressedLarge += ProvinceEditingEvents.OnDownButtonPressedLargeProsperity;
+         _prosperityNumeric.OnValueChanged += ProvinceEditingEvents.OnExtendedNumericValueChanged;
          FloatLayoutPanel.Controls.Add(_prosperityNumeric, 1, 2);
 
-         _extraCostNumeric = ControlFactory.GetExtendedNumeric();
+         _extraCostNumeric = ControlFactory.GetExtendedNumeric(nameof(Province.ExtraCost));
          _extraCostNumeric.Minimum = 0;
          _extraCostNumeric.Maximum = 1000;
-         _extraCostNumeric.OnTextValueChanged += ProvinceEditingEvents.OnTextExtraCostChanged;
-         _extraCostNumeric.UpButtonPressedSmall += ProvinceEditingEvents.OnUpExtraCostChanged;
-         _extraCostNumeric.UpButtonPressedMedium += ProvinceEditingEvents.OnUpButtonPressedMediumExtraCost;
-         _extraCostNumeric.UpButtonPressedLarge += ProvinceEditingEvents.OnUpButtonPressedLargeExtraCost;
-         _extraCostNumeric.DownButtonPressedSmall += ProvinceEditingEvents.OnDownExtraCostChanged;
-         _extraCostNumeric.DownButtonPressedMedium += ProvinceEditingEvents.OnDownButtonPressedMediumExtraCost;
-         _extraCostNumeric.DownButtonPressedLarge += ProvinceEditingEvents.OnDownButtonPressedLargeExtraCost;
+         _extraCostNumeric.OnValueChanged += ProvinceEditingEvents.OnExtendedNumericValueChanged;
          TradePanel.Controls.Add(_extraCostNumeric, 1, 2);
 
          _capitalNameTextBox = new(Selection.GetSelectedProvincesAsSaveable, new CProvinceAttributeFactory(ProvAttrGet.capital, ProvAttrSet.capital))
@@ -685,7 +652,7 @@ namespace Editor.Forms
          if (Selection.GetSharedAttribute(ProvAttrGet.prosperity, out result) && result is float prosperity)
             _prosperityNumeric.Value = (int)prosperity;
          if (Selection.GetSharedAttribute(ProvAttrGet.trade_good, out result) && result is string tradeGood)
-            TradeGoodsComboBox.Text = tradeGood;
+            _tradeGoodsComboBox.Text = tradeGood;
          if (Selection.GetSharedAttribute(ProvAttrGet.center_of_trade, out result) && result is int centerOfTrade)
             TradeCenterComboBox.Text = centerOfTrade.ToString();
          if (Selection.GetSharedAttribute(ProvAttrGet.extra_cost, out result) && result is int extraCost)
@@ -741,7 +708,7 @@ namespace Editor.Forms
          _autonomyNumeric.Value = (int)province.LocalAutonomy;
          _devastationNumeric.Value = (int)province.Devastation;
          _prosperityNumeric.Value = (int)province.Prosperity;
-         TradeGoodsComboBox.Text = province.TradeGood;
+         _tradeGoodsComboBox.Text = province.TradeGood;
          TradeCenterComboBox.Text = province.CenterOfTrade.ToString();
          _extraCostNumeric.Value = province.ExtraCost;
          _tribalOwner.Text = province.TribalOwner;
@@ -777,7 +744,7 @@ namespace Editor.Forms
          _autonomyNumeric.Value = 0;
          _devastationNumeric.Value = 0;
          _prosperityNumeric.Value = 0;
-         TradeGoodsComboBox.Clear();
+         _tradeGoodsComboBox.Clear();
          TradeCenterComboBox.Clear();
          _extraCostNumeric.Value = 0;
          _tribalOwner.Clear();

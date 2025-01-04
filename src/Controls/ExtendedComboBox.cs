@@ -13,9 +13,11 @@ namespace Editor.Controls
       public EventHandler<ProvinceEditedEventArgs>? OnDataChanged = delegate { };
       public EventHandler<ProvinceCollectionEventArgs>? OnCollectionDataChanged = delegate { };
       private static bool _allowEvents = true;
+      public readonly string PropertyName;
 
-      public ExtendedComboBox()
+      public ExtendedComboBox(string propName)
       {
+         PropertyName = propName;
          AutoCompleteMode = AutoCompleteMode.SuggestAppend;
          AutoCompleteSource = AutoCompleteSource.ListItems; 
          Dock = DockStyle.Fill;

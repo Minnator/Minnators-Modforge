@@ -10,7 +10,7 @@ namespace Editor.DataClasses.MapModes
       public DevastationMapMode()
       {
          // Subscribe to events to update the min and max values when a province's development changes
-         ProvinceEventHandler.OnProvinceDevastationChanged += UpdateProvince;
+         // TODO FIX MAP MODE UPDATES ProvinceEventHandler.OnProvinceDevastationChanged += UpdateProvince;
       }
 
       public override MapModeType MapModeType => MapModeType.Devastation;

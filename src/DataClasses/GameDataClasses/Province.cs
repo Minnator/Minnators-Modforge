@@ -58,7 +58,7 @@ public class ProvinceData()
    public List<TradeModifier> TradeModifiers = [];  
 }
 
-public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<ProvinceHistoryEntry>
+public class ProvinceFUUUUUCK : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<ProvinceHistoryEntry>
 {
    public Province(int id, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(id.ToString(), color)
    {
@@ -837,7 +837,7 @@ public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<P
          ProvAttrGet.base_manpower => BaseManpower,
          ProvAttrGet.base_tax => BaseTax,
          ProvAttrGet.base_production => BaseProduction,
-         ProvAttrGet.total_development => GetTotalDevelopment(),
+         ProvAttrGet.total_development => TotalDevelopment,
          ProvAttrGet.area => GetArea(), 
          ProvAttrGet.continent => GetContinent(),
          ProvAttrGet.claims => Claims,
@@ -1187,7 +1187,7 @@ public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<P
       }
    }
 
-   public int GetTotalDevelopment() => BaseManpower + BaseTax + BaseProduction;
+   public int TotalDevelopment => BaseManpower + BaseTax + BaseProduction;
    public ICollection<Province> Neighbors => Globals.AdjacentProvinces[this];
 
    public string TitleLocalisation
@@ -1221,7 +1221,7 @@ public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<P
    {
       return [this];
    }
-
+   /*
    public List<Province> GetProvincesWithSameCulture()
    {
       List<Province> provinces = [];
@@ -1249,7 +1249,7 @@ public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<P
 
       return provinces;
    }
-
+   */
 
 
    public void DumpHistory(string path)

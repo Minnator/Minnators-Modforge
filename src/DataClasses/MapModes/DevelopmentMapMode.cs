@@ -12,15 +12,15 @@ public class DevelopmentMapMode : MapMode
    public DevelopmentMapMode()
    {
       // Subscribe to events to update the min and max values when a province's development changes
-      ProvinceEventHandler.OnProvinceBaseManpowerChanged += UpdateMinMax;
-      ProvinceEventHandler.OnProvinceBaseManpowerChanged += UpdateProvince;
-      ProvinceEventHandler.OnProvinceBaseTaxChanged += UpdateMinMax;
-      ProvinceEventHandler.OnProvinceBaseTaxChanged += UpdateProvince;
-      ProvinceEventHandler.OnProvinceBaseProductionChanged += UpdateMinMax;
-      ProvinceEventHandler.OnProvinceBaseProductionChanged += UpdateProvince;
+      // TODO FIX MAP MODE UPDATES ProvinceEventHandler.OnProvinceBaseManpowerChanged += UpdateMinMax;
+      // TODO FIX MAP MODE UPDATES ProvinceEventHandler.OnProvinceBaseManpowerChanged += UpdateProvince;
+      // TODO FIX MAP MODE UPDATES ProvinceEventHandler.OnProvinceBaseTaxChanged += UpdateMinMax;
+      // TODO FIX MAP MODE UPDATES ProvinceEventHandler.OnProvinceBaseTaxChanged += UpdateProvince;
+      // TODO FIX MAP MODE UPDATESProvinceEventHandler.OnProvinceBaseProductionChanged += UpdateMinMax;
+      // TODO FIX MAP MODE UPDATES ProvinceEventHandler.OnProvinceBaseProductionChanged += UpdateProvince;
    }
 
-   private void UpdateMinMax(object? sender, ProvinceEventHandler.ProvinceDataChangedEventArgs e)
+   private void UpdateMinMax(object? sender, EventArgs e)
    {
       if (!CalculateMinMax())
          return;
@@ -40,7 +40,7 @@ public class DevelopmentMapMode : MapMode
       var newMax = int.MinValue;
       foreach (var province in Globals.Provinces)
       {
-         var totalDev = province.GetTotalDevelopment();
+         var totalDev = province.TotalDevelopment;
          if (totalDev > newMax)
          {
             newMax = totalDev;
@@ -72,7 +72,7 @@ public class DevelopmentMapMode : MapMode
       if (!Globals.LandProvinces.Contains(id))
          return id.Color.ToArgb();
 
-      var totalDev = id.GetTotalDevelopment();
+      var totalDev = id.TotalDevelopment;
       return Globals.ColorProvider.GetColorOnGreenRedShade(0, _max, totalDev).ToArgb();
    }
 
@@ -82,7 +82,7 @@ public class DevelopmentMapMode : MapMode
    public override string GetSpecificToolTip(Province provinceId)
    {
       if (Globals.Provinces.TryGetValue(provinceId, out var province))
-         return $"Total Development: {province.GetTotalDevelopment()}\nBaseTax: {province.BaseTax}\nBaseProduction: {province.BaseProduction}\nBaseManpower: {province.BaseManpower}";
+         return $"Total Development: {province.TotalDevelopment}\nBaseTax: {province.BaseTax}\nBaseProduction: {province.BaseProduction}\nBaseManpower: {province.BaseManpower}";
       return "Total Development: Unknown";
    }
 

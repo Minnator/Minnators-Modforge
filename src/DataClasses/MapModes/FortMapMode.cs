@@ -12,7 +12,7 @@ public class FortMapMode : MapMode
    public FortMapMode()
    {
       // Subscribe to events to update the min and max values when a province's development changes
-      ProvinceEventHandler.OnProvinceBuildingsChanged += UpdateProvince!;
+      // TODO FIX MAP MODE UPDATES ProvinceEventHandler.OnProvinceBuildingsChanged += UpdateProvince!;
    }
 
    public override int GetProvinceColor(Province id)

@@ -10,9 +10,7 @@ public class AutonomyMapMode : MapMode
 
    public AutonomyMapMode()
    {
-      // Subscribe to events to update the min and max values when a province's development changes
-      ProvinceEventHandler.OnProvinceLocalAutonomyChanged += UpdateProvince;
-      base.CropAndSetIcon();
+      // TODO FIX MAP MODE UPDATES  ProvinceEventHandler.OnProvinceLocalAutonomyChanged += UpdateProvince;
    }
 
    public override int GetProvinceColor(Province id)

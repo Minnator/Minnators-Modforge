@@ -10,7 +10,7 @@ namespace Editor.DataClasses.MapModes
       public ProsperityMapMode()
       {
          // Subscribe to events to update the min and max values when a province's development changes
-         ProvinceEventHandler.OnProvinceProsperityChanged += UpdateProvince;
+         // TODO FIX MAP MODE UPDATES ProvinceEventHandler.OnProvinceProsperityChanged += UpdateProvince;
       }
 
       public override MapModeType MapModeType => MapModeType.Prosperity;

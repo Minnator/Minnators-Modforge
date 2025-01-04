@@ -66,9 +66,9 @@ public static class ControlFactory
       return new ();
    }
 
-   public static ExtendedComboBox GetExtendedComboBox(List<string> content, int selectedIndex = -1)
+   public static ExtendedComboBox GetExtendedComboBox(string propName, List<string> content, int selectedIndex = -1)
    {
-      var ec = new ExtendedComboBox();
+      var ec = new ExtendedComboBox(propName);
       if (content.Count == 0)
          return ec;
       ec.Items.AddRange([..content]);
@@ -96,9 +96,9 @@ public static class ControlFactory
       };
    }
 
-   public static TagComboBox GetTagComboBox(bool ignoreEmpty = false)
+   public static TagComboBox GetTagComboBox(string propName, bool ignoreEmpty = false)
    {
-      return new ()
+      return new (propName)
       {
          Margin = new(3, 1, 3, 3),
          Dock = DockStyle.Fill,
@@ -106,10 +106,10 @@ public static class ControlFactory
       };
    }
 
-   public static ItemList GetItemList(ItemTypes itemType, List<string> items, string title)
+   public static ItemList GetItemList(string propName, ItemTypes itemType, List<string> items, string title)
    {
-      ComboBox box = itemType == ItemTypes.Tag ? GetTagComboBox(true) : GetExtendedComboBox(items);
-      var list = new ItemList(itemType, box);
+      ComboBox box = itemType == ItemTypes.Tag ? GetTagComboBox("", true) : GetExtendedComboBox(items);
+      var list = new ItemList(propName, itemType, box);
       if (itemType != ItemTypes.Tag)
          list.InitializeItems(items);
       list.SetTitle(title);
@@ -118,7 +118,7 @@ public static class ControlFactory
       return list;
    }
 
-   public static ItemList GetItemListObjects(ItemTypes itemType, List<object> items, string title)
+   public static ItemList GetItemListObjects(string propName, ItemTypes itemType, List<object> items, string title)
    {
       List<string> strings = [];
 
@@ -130,8 +130,8 @@ public static class ControlFactory
       }
 
       if (strings.Count > 1)
-         return GetItemList(itemType, strings, title);
-      return new (itemType, GetTagComboBox(true));
+         return GetItemList(propName, itemType, strings, title);
+      return new (propName, itemType, GetTagComboBox(string.Empty, true));
    }
 
    public static ItemButton GetItemButton(string item, ItemTypes type)
@@ -159,14 +159,14 @@ public static class ControlFactory
       return new (item, type){Width = 75, Height = 25};
    }
 
-   public static ExtendedComboBox GetExtendedComboBox(bool def = true)
+   public static ExtendedComboBox GetExtendedComboBox(string propName, bool def = true)
    {
       if (def)
-         return new ()
+         return new (propName)
          {
             Margin = new(3, 1, 3, 3)
          };
-      return new ();
+      return new (propName);
    }
 
    public static ComboBox GetListComboBox(List<string> items, Padding margin, bool hasEmptyItemAt0 = true)
@@ -183,9 +183,9 @@ public static class ControlFactory
       return cb;
    }
 
-   public static ExtendedNumeric GetExtendedNumeric()
+   public static ExtendedNumeric GetExtendedNumeric(string propName)
    {
-      return new ()
+      return new (propName)
       {
          Margin = new(3,1,3,3)
       };

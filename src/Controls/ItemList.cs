@@ -19,10 +19,11 @@ namespace Editor.Controls
       public event EventHandler<ProvinceEditedEventArgs> OnItemRemoved = delegate { };
       private ItemTypes ItemType { get; set; }
       public bool Initializing = false;
+      public readonly string PropertyName;
 
-
-      public ItemList(ItemTypes type, ComboBox box)
+      public ItemList(string propName, ItemTypes type, ComboBox box)
       {
+         PropertyName = propName;
          Initializing = true;
          _itemsComboBox = box;
          InitializeComponent();

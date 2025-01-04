@@ -1,6 +1,6 @@
-﻿using Editor.DataClasses.Commands;
+﻿using System.Diagnostics;
+using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
-using Editor.DataClasses.Misc;
 using Editor.Helper;
 
 namespace Editor.Forms.Feature.AdvancedSelections;
@@ -9,7 +9,7 @@ public class Deselection : ISelectionModifier
 {
    public string Name { get; set; } = "Deselection";
 
-   public void Execute(ProvinceSource source, Operations operation, ProvinceEnumHelper.ProvAttrGet attr, object value)
+   public void Execute(ProvinceSource source, Operations operation, string attr, object value)
    {
       HistoryManager.AddCommand(new CCollectionSelection(GetProvinceViaOperation.GetProvinces(operation, attr, value, GetProvinceViaOperation.GetProvincesToCheck(source)), true));
    }
@@ -21,7 +21,7 @@ public class Select : ISelectionModifier
 {
    public string Name { get; set; } = "Selection";
 
-   public void Execute(ProvinceSource source, Operations operation, ProvinceEnumHelper.ProvAttrGet attr, object value)
+   public void Execute(ProvinceSource source, Operations operation, string attr, object value)
    {
 
       HistoryManager.AddCommand(new CCollectionSelection(GetProvinceViaOperation.GetProvinces(operation, attr, value, GetProvinceViaOperation.GetProvincesToCheck(source))));
@@ -114,11 +114,14 @@ public static class GetProvinceViaOperation
       }
    }
 
-   public static List<Province> GetProvinces(Operations operation, ProvinceEnumHelper.ProvAttrGet attr, object value, ICollection<Province> provincesToCheck)
+   public static List<Province> GetProvinces(Operations operation, string propName, object value, ICollection<Province> provincesToCheck)
    {
-      if (!int.TryParse(value.ToString(), out var intValue) && attr.GetAttributeType() == ProvinceEnumHelper.ProvAttrType.Int)
+      var provInfo = provincesToCheck.First().GetPropertyInfo(propName);
+      Debug.Assert(provInfo != null, "provInfo != null");
+      
+      if (!int.TryParse(value.ToString(), out var intValue) && provInfo.PropertyType != typeof(int))
          return [];
-      if (!float.TryParse(value.ToString(), out var floatValue) && attr.GetAttributeType() == ProvinceEnumHelper.ProvAttrType.Float)
+      if (!float.TryParse(value.ToString(), out var floatValue) && provInfo.PropertyType != typeof(float))
          return [];
       List<Province> provinces = [];
       foreach (var prov in provincesToCheck)
@@ -126,65 +129,65 @@ public static class GetProvinceViaOperation
          switch (operation)
          {
             case Operations.Equal:
-               if (prov.GetAttribute(attr).Equals(value))
+               if (provInfo.GetValue(prov)!.Equals(value))
                   provinces.Add(prov);
                break;
             case Operations.NotEqual:
-               if (!prov.GetAttribute(attr).Equals(value))
+               if (!provInfo.GetValue(prov)!.Equals(value))
                   provinces.Add(prov);
                break;
             case Operations.LessThan:
-               if (attr.GetAttributeType() == ProvinceEnumHelper.ProvAttrType.Int)
+               if (provInfo.PropertyType == typeof(int))
                {
-                  if (int.TryParse(prov.GetAttribute(attr).ToString(), out var compareTo))
+                  if (int.TryParse(provInfo.GetValue(prov)!.ToString(), out var compareTo))
                      if (compareTo < intValue)
                         provinces.Add(prov);
                }
-               else if (attr.GetAttributeType() == ProvinceEnumHelper.ProvAttrType.Float)
+               else if (provInfo.PropertyType == typeof(float))
                {
-                  if (float.TryParse(prov.GetAttribute(attr).ToString(), out var compareTo1))
+                  if (float.TryParse(provInfo.GetValue(prov)!.ToString(), out var compareTo1))
                      if (compareTo1 < floatValue)
                         provinces.Add(prov);
                }
                break;
             case Operations.GreaterThan:
-               if (attr.GetAttributeType() == ProvinceEnumHelper.ProvAttrType.Int)
+               if (provInfo.PropertyType == typeof(int))
                {
-                  if (int.TryParse(prov.GetAttribute(attr).ToString(), out var compareTo2))
+                  if (int.TryParse(provInfo.GetValue(prov)!.ToString(), out var compareTo2))
                      if (compareTo2 > intValue)
                         provinces.Add(prov);
                }
-               else if (attr.GetAttributeType() == ProvinceEnumHelper.ProvAttrType.Float)
+               else if (provInfo.PropertyType == typeof(float))
                {
-                  if (float.TryParse(prov.GetAttribute(attr).ToString(), out var compareTo3))
+                  if (float.TryParse(provInfo.GetValue(prov)!.ToString(), out var compareTo3))
                      if (compareTo3 > floatValue)
                         provinces.Add(prov);
                }
                break;
             case Operations.GreaterThanOrEqual:
-               if (attr.GetAttributeType() == ProvinceEnumHelper.ProvAttrType.Int)
+               if (provInfo.PropertyType == typeof(int))
                {
-                  if (int.TryParse(prov.GetAttribute(attr).ToString(), out var compareTo4))
+                  if (int.TryParse(provInfo.GetValue(prov)!.ToString(), out var compareTo4))
                      if (compareTo4 >= intValue)
                         provinces.Add(prov);
                }
-               else if (attr.GetAttributeType() == ProvinceEnumHelper.ProvAttrType.Float)
+               else if (provInfo.PropertyType == typeof(float))
                {
-                  if (float.TryParse(prov.GetAttribute(attr).ToString(), out var compareTo5))
+                  if (float.TryParse(provInfo.GetValue(prov)!.ToString(), out var compareTo5))
                      if (compareTo5 >= floatValue)
                         provinces.Add(prov);
                }
                break;
             case Operations.LessThanOrEqual:
-               if (attr.GetAttributeType() == ProvinceEnumHelper.ProvAttrType.Int)
+               if (provInfo.PropertyType == typeof(int))
                {
-                  if (int.TryParse(prov.GetAttribute(attr).ToString(), out var compareTo6))
+                  if (int.TryParse(provInfo.GetValue(prov)!.ToString(), out var compareTo6))
                      if (compareTo6 <= intValue)
                         provinces.Add(prov);
                }
-               else if (attr.GetAttributeType() == ProvinceEnumHelper.ProvAttrType.Float)
+               else if (provInfo.PropertyType == typeof(float))
                {
-                  if (float.TryParse(prov.GetAttribute(attr).ToString(), out var compareTo7))
+                  if (float.TryParse(provInfo.GetValue(prov)!.ToString(), out var compareTo7))
                      if (compareTo7 <= floatValue)
                         provinces.Add(prov);
                }

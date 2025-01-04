@@ -71,7 +71,7 @@ public abstract class MapMode
       Globals.ZoomControl.Invalidate();
    }
 
-   public virtual void UpdateProvince(object? sender, ProvinceEventHandler.ProvinceDataChangedEventArgs e)
+   public virtual void UpdateProvince(object? sender, EventArgs e)
    {
       if (MapModeManager.CurrentMapMode != this)
          return;

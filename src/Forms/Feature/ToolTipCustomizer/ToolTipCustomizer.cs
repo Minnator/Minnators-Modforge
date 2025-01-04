@@ -95,7 +95,7 @@ namespace Editor.Forms.Feature
       private void ConfirmButton_Click(object sender, System.EventArgs e)
       {
          var str = string.Empty;
-         foreach (ListViewItem item in ToolTipPreview.Items) 
+         foreach (ListViewItem item in ToolTipPreview.Items)
             str += item.Text + "\n";
 
          HistoryManager.AddCommand(new CChangeToolTipText(Globals.Settings.ToolTip.ToolTipText, str));
@@ -106,6 +106,19 @@ namespace Editor.Forms.Feature
          Dispose();
       }
 
+      private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+      {
 
+      }
+
+      private void ShowAttributes_Click(object sender, EventArgs e)
+      {
+         // Interface to show all attributes
+      }
+
+      private void AttributeListBox_MouseDoubleClick(object sender, MouseEventArgs e)
+      {
+
+      }
    }
 }

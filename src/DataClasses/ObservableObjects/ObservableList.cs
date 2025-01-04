@@ -22,17 +22,17 @@ namespace Editor.DataClasses.ObservableObjects
 
       public ObservableList()
       {
-         _list = new List<T>();
+         _list = [];
       }
 
       public ObservableList(IEnumerable<T> collection)
       {
-         _list = new List<T>(collection);
+         _list = [..collection];
       }
 
       public ObservableList(int capacity)
       {
-         _list = new List<T>(capacity);
+         _list = new(capacity);
       }
 
       public void Add(T item)

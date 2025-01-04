@@ -8,7 +8,7 @@ namespace Editor.DataClasses.MapModes
    {
       public ReligionMapMode()
       {
-         ProvinceEventHandler.OnProvinceReligionChanged += UpdateProvince;
+         // TODO FIX MAP MODE UPDATES ProvinceEventHandler.OnProvinceReligionChanged += UpdateProvince;
       }
 
       public override bool IsLandOnly => true;

@@ -10,7 +10,7 @@ namespace Editor.DataClasses.MapModes
 
       public TradeGoodsMapMode()
       {
-         ProvinceEventHandler.OnProvinceTradeGoodChanged += UpdateProvince;
+         // TODO FIX MAP MODE UPDATES ProvinceEventHandler.OnProvinceTradeGoodChanged += UpdateProvince;
       }
 
       public override int GetProvinceColor(Province province)

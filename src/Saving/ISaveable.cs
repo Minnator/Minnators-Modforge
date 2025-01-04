@@ -58,8 +58,8 @@ public abstract class Saveable : IDisposable
 
 
    public abstract void OnPropertyChanged([CallerMemberName] string? propertyName = null);
-   public abstract void AddToPropertyChanged(EventHandler<string> handler);
-   public abstract void RemoveFromPropertyChanged(EventHandler<string> handler);
+   //public abstract void AddToPropertyChanged(EventHandler<string> handler);
+   //public abstract void RemoveFromPropertyChanged(EventHandler<string> handler);
 
    public bool SetIfModifiedEnumerable<T, Q>(ref T field, T value, [CallerMemberName] string? propertyName = null) where T: IEnumerable<Q>
    {
@@ -70,8 +70,8 @@ public abstract class Saveable : IDisposable
 
    public void SetProperty<T>(string propertyName, T value)
    {
-      Debug.Assert(GetProperty(propertyName) != null, $"Property {propertyName} not found in {GetType().Name}");
-      GetProperty(propertyName)!.SetValue(this, value);
+      Debug.Assert(GetPropertyInfo(propertyName) != null, $"Property {propertyName} not found in {GetType().Name}");
+      GetPropertyInfo(propertyName)!.SetValue(this, value);
    }
 
    public void SetProperty<T>(PropertyInfo propInfo, T value)
@@ -80,7 +80,7 @@ public abstract class Saveable : IDisposable
       propInfo.SetValue(this, value);
    }
 
-   public PropertyInfo? GetProperty(string propertyName)
+   public PropertyInfo? GetPropertyInfo(string propertyName)
    {
       return GetType().GetProperty(propertyName);
    }
@@ -90,14 +90,38 @@ public abstract class Saveable : IDisposable
       Debug.Assert(info != null, "info != null");
       return (T)info.GetValue(this)!;
    }
+
+   public T GetProperty<T>(string propertyName)
+   {
+      Debug.Assert(GetPropertyInfo(propertyName) != null, $"Property {propertyName} not found in {GetType().Name}");
+      return (T)GetPropertyInfo(propertyName)!.GetValue(this)!;
+   }
    
    public void SetFieldSilent<T> (string propertyName, T value)
    {
-      Debug.Assert(GetProperty(propertyName) != null, $"Property {propertyName} not found in {GetType().Name}");
+      Debug.Assert(GetPropertyInfo(propertyName) != null, $"Property {propertyName} not found in {GetType().Name}");
       lock (this)
       {
          Suppressed = true;
-         GetProperty(propertyName)!.SetValue(this, value);
+         GetPropertyInfo(propertyName)!.SetValue(this, value);
+         Suppressed = false;
+      }
+   }
+
+   public static void SetFieldMultiple<T>(ICollection<Saveable> targets, T value, string propertyName)
+   {
+      if (Globals.State == State.Running) 
+         HistoryManager.AddCommand(new CModifyProperty<T>(propertyName, [..targets], value));
+      foreach(var target in targets)
+         target.OnPropertyChanged(propertyName);
+   }
+
+   public void SetFieldSilent<T>(PropertyInfo info, T value)
+   {
+      lock (this)
+      {
+         Suppressed = true;
+         info.SetValue(this, value);
          Suppressed = false;
       }
    }

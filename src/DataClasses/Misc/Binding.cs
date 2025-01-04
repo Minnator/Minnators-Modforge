@@ -5,11 +5,12 @@ using Editor.Saving;
 
 namespace Editor.DataClasses.Misc
 {
+   /*
    public class RefBinding<T> : BaseBinding<T>
    {
       private T _data;
 
-      public RefBinding(ref T data, EventHandler handler, Saveable saveable, string propertyName) : base(handler, saveable, propertyName)
+      public RefBinding(ref T data, Saveable saveable, string propertyName) : base(saveable, propertyName)
       {
          _data = data;
       }
@@ -27,7 +28,7 @@ namespace Editor.DataClasses.Misc
       private readonly Action<Control, T> _set;
       private Control _control;
 
-      public FuncBinding(Control control, Func<Control, T> get, Action<Control, T> set, EventHandler handler, Saveable saveable, string propertyName) : base(handler, saveable, propertyName)
+      public FuncBinding(Control control, Action<Control, T> set, Saveable saveable, string propertyName) : base(saveable, propertyName)
       {
          _get = get;
          _set = set;
@@ -71,23 +72,12 @@ namespace Editor.DataClasses.Misc
 
       public virtual void Disable()
       {
-         Handler -= OnControlChange;
         _saveable.AddToPropertyChanged(OnPropertyChanged);
       }
 
       public virtual void Enable()
       {
-         Handler += OnControlChange;
-      }
-
-      public virtual void OnControlChange(object? sender, EventArgs? e)
-      {
-         if (!_isUpdating)
-         {
-            _isUpdating = true;
-            _saveable.SetProperty(_propertyInfo, Data);
-            _isUpdating = false;
-         }
+         _saveable.AddToPropertyChanged(OnPropertyChanged);
       }
 
       public virtual void OnPropertyChanged(object? saveable, string propertyName)
@@ -99,4 +89,5 @@ namespace Editor.DataClasses.Misc
          _isUpdating = false;
       }
    }
+   */
 }

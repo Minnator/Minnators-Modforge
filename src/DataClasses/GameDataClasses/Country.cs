@@ -65,13 +65,13 @@ public class CommonCountry : Saveable, IGetSetProperty
    public List<string> HistoricIdeas  
    {
       get => _historicIdeas;
-      set => SetField(ref _historicIdeas, value);
+      set => SetIfModifiedEnumerable<List<string>, string>(ref _historicIdeas, value);
    }
 
    public List<string> HistoricUnits
    {
       get => _historicUnits;
-      set => SetField(ref _historicUnits, value);
+      set => SetIfModifiedEnumerable<List<string>, string>(ref _historicUnits, value);
    }
 
    public List<string> ShipNames
@@ -634,7 +634,7 @@ public class Country : ProvinceCollection<Province>, ITitleAdjProvider
    {
       var sum = 0;
       foreach (var province in GetProvinces())
-         sum += province.GetTotalDevelopment();
+         sum += province.TotalDevelopment;
       return sum;
    }
 
