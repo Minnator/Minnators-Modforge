@@ -76,6 +76,17 @@ public readonly struct Tag(string tag) : IEquatable<Tag>, IComparable
       return false;
    }
 
+   public static IErrorHandle GeneralParse(string value, out object result)
+   {
+      if (Tag.TryParse(value, out var outTag))
+      {
+         result = outTag;
+         return ErrorHandle.Sucess;
+      }
+      result = Tag.Empty;
+      return new ErrorObject(ErrorType.TypeConversionError, "Could not parse Tag!", addToManager: false);
+   }
+
    public bool IsValid()
    {
       return Globals.Countries.ContainsKey(this);

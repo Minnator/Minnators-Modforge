@@ -254,12 +254,12 @@ public class CultProvLocContainer
          return result.Value;
 
       // if we have a culture object, we will return the value
-      result = _cultureObjects.FirstOrDefault(x => x.Key == p.Culture);
+      result = _cultureObjects.FirstOrDefault(x => x.Key == p.Culture.Name);
       if (result != null)
          return result.Value;
 
       // if we have a culture group object, we will return the value
-      if (!Globals.CultureGroups.TryGetValue(p.Culture, out var group))
+      if (!Globals.CultureGroups.TryGetValue(p.Culture.Name, out var group))
          return Localisation.GetLoc(p.TitleKey);
       result = _cultureGroupObjects.FirstOrDefault(x => x.Key == group.Name);
       return result?.Value ?? Localisation.GetLoc(p.TitleKey);

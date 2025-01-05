@@ -10,19 +10,19 @@ public class Culture(string name)
    public string[] DynastyNames = [];
    public List<Tag> Primaries = [];
    public Color Color = Color.Empty;
-   public string CultureGroup = string.Empty;
+   public CultureGroup CultureGroup = CultureGroup.Empty;
 
    public int MaleNamesCount => MaleNames.Length;
    public int FemaleNamesCount => FemaleNames.Length;
    public int DynastyNamesCount => DynastyNames.Length;
    public int TotalNameCount => MaleNamesCount + FemaleNamesCount + DynastyNamesCount;
-
+   public static Culture Empty { get; } = new ("unknown") { Color = Color.DimGray };
    public List<Province> GetProvinces()
    {
       List<Province> provinces = [];
       foreach (var prov in Globals.LandProvinces)
       {
-         if (prov.Culture == Name)
+         if (prov.Culture == this)
             provinces.Add(prov);
       }
 
@@ -53,15 +53,15 @@ public class CultureGroup(string name)
    public int DynastyNamesCount => DynastyNames.Length;
    public int TotalNameCount => MaleNamesCount + FemaleNamesCount + DynastyNamesCount;
 
+   public static CultureGroup Empty { get; }= new ("unknown"){ Color = Color.DimGray };
+
    public List<Province> GetProvinces()
    {
       List<Province> provinces = [];
       foreach (var prov in Globals.LandProvinces)
       {
-         if (Globals.Cultures.TryGetValue(prov.Culture, out var culture))
-            if (Globals.CultureGroups.TryGetValue(culture.CultureGroup, out var cultureGroup))
-               if (cultureGroup.Name == Name)
-                  provinces.Add(prov);
+         if (prov.Culture.CultureGroup == this)
+            provinces.Add(prov);
       }
 
       return provinces;

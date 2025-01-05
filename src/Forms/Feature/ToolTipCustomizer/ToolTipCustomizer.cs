@@ -31,6 +31,8 @@ namespace Editor.Forms.Feature
          // Size columns to fit
          ToolTipPreview.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
          ToolTipPreview.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+
+         AttributeListBox.Items.AddRange([ToolTipBuilder.propertyInfo.SelectMany(x => x.Name)]);
       }
 
       private void AddButton_Click(object sender, System.EventArgs e)
@@ -118,7 +120,14 @@ namespace Editor.Forms.Feature
 
       private void AttributeListBox_MouseDoubleClick(object sender, MouseEventArgs e)
       {
-
+         object selectedItem = AttributeListBox.SelectedItem;
+         if (selectedItem == null)
+            return;
+         int selectionStart = InputTextBox.SelectionStart;
+         string str = selectedItem.ToString();
+         InputTextBox.Text = InputTextBox.Text.Insert(selectionStart, str);
+         InputTextBox.SelectionStart = checked(selectionStart + str.Length);
+         InputTextBox.Focus();
       }
    }
 }

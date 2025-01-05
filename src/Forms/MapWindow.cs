@@ -691,7 +691,7 @@ namespace Editor.Forms
          OwnerTagBox.Text = province.Owner;
          ControllerTagBox.Text = province.Controller;
          _religionComboBox.Text = province.Religion;
-         _cultureComboBox.Text = province.Culture;
+         _cultureComboBox.Text = province.Culture.Name;
          _capitalNameTextBox.Text = province.Capital;
          _isCityCheckBox.Checked = province.IsCity;
          _isHreCheckBox.Checked = province.IsHre;

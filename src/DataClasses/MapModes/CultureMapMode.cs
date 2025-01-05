@@ -1,4 +1,5 @@
-﻿using Editor.DataClasses.GameDataClasses;
+﻿using System.Text.RegularExpressions;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Events;
 using Editor.Helper;
 
@@ -15,18 +16,14 @@ public class CultureMapMode : MapMode
 
    public override int GetProvinceColor(Province id)
    {
-      if (Globals.Cultures.TryGetValue(id.Culture, out var culture))
-         return culture.Color.ToArgb();
-      return Color.DimGray.ToArgb();
+      return id.Culture.Color.ToArgb();
    }
 
    public override MapModeType MapModeType => MapModeType.Culture;
 
    public override string GetSpecificToolTip(Province id)
    {
-      if (Globals.Cultures.TryGetValue(id.Culture, out var culture))
-         return $"Culture: {culture.Name} ({Localisation.GetLoc(culture.Name)})";
-      return "Culture: [Unknown]";
+      return $"Culture: {id.Culture.Name} ({Localisation.GetLoc(id.Culture.Name)})";
    }
 
 }

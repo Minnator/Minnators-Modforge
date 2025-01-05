@@ -32,10 +32,9 @@ namespace Editor.Analyzers
       private void AnalyzeCulture(Province id, out AnalyzerFeeback feeback)
       {
          feeback = new BaseAnalyzerFeedback();
-         var culture = Globals.Cultures[id.Culture];
-         var provincesWithCulture = GetProvincesWithCulture(culture.Name);
+         var provincesWithCulture = GetProvincesWithCulture(id.Culture.Name);
          feeback.KeyValuePairs.Add($"[{provincesWithCulture.Count}] Provinces with Culture", provincesWithCulture);
-         feeback.KeyValuePairs.Add("maleNames", [GetNameStats(culture.MaleNames, "maleNames")]);
+         feeback.KeyValuePairs.Add("maleNames", [GetNameStats(id.Culture.MaleNames, "maleNames")]);
       }
 
       private string GetNameStats(string[] names, string namesType)

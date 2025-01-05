@@ -21,31 +21,27 @@ public static class ToolTipBuilder
 
    public static string BuildToolTip(string rawToolTip, Province province)
    {
-      // TODO improve and adept to new system of propNames
-      
-      var match = TooltipAttributeRegex.Match(rawToolTip);
-      
+      Match match = TooltipAttributeRegex.Match(rawToolTip);
       while (match.Success)
       {
-         var str = string.Empty;
+         string empty = string.Empty;
+         string str;
          if (match.Groups["attrName"].Value == "MAPMODE_SPECIFIC")
          {
             str = MapModeManager.CurrentMapMode.GetSpecificToolTip(province);
          }
          else
          {
-            bool useLoc = match.Groups["useLoc"].Value.Contains("%L");
-            var value = province.GetPropertyInfo(match.Groups["attrName"].Value)?.GetValue(province); // TODO fix
-            if (value == null! || string.IsNullOrEmpty(value.ToString()))
+            bool flag = match.Groups["useLoc"].Value.Contains("%L");
+            object values = province.GetPropertyInfo(match.Groups["attrName"].Value)?.GetValue((object)province);
+            if (values == null || string.IsNullOrEmpty(values.ToString()))
             {
+               match = match.NextMatch();
                continue;
             }
-            str = value.GetType() == typeof(ICollection<>)
-               ? string.Join(", ", (ICollection<string>)value)
-               : useLoc ? Localisation.GetLoc(value.ToString()!) : value.ToString();
+            str = values.GetType() == typeof(ICollection<>) ? string.Join(", ", (IEnumerable<string>)values) : (flag ? Localisation.GetLoc(values.ToString()) : values.ToString());
          }
-         // Replace the match with the value
-         rawToolTip = rawToolTip.Remove(match.Index, match.Length).Insert(match.Index, str!);
+         rawToolTip = rawToolTip.Remove(match.Index, match.Length).Insert(match.Index, str);
          match = match.NextMatch();
       }
       return rawToolTip;

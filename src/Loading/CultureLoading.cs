@@ -48,7 +48,7 @@ public static class CultureLoading
                Culture culture = new(cult.Name)
                {
                   Color = colorProvider.GetRandomColor(),
-                  CultureGroup = group.Name
+                  CultureGroup = group
                };
                SetCultureAttributes(ref culture, cult.GetBlockElements);
                SetCultureContent(ref culture, cult.GetContentElements);

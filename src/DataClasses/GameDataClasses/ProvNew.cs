@@ -32,7 +32,7 @@ namespace Editor.DataClasses.GameDataClasses
       private bool _hasRevolt;                                   
       private bool _isSeatInParliament;                          
       private string _capital = string.Empty;                    
-      private string _culture = string.Empty;                   
+      private Culture _culture = Culture.Empty;                   
       private string _religion = string.Empty;                   
       private string _tradeGood = string.Empty;                   
       private string _latentTradeGood = string.Empty;           
@@ -206,7 +206,7 @@ namespace Editor.DataClasses.GameDataClasses
          set => SetField(ref _capital, value);
       }
 
-      public string Culture
+      public Culture Culture
       {
          get => _culture;
          set => SetField(ref _culture, value);

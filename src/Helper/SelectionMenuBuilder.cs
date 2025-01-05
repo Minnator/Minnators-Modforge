@@ -101,7 +101,7 @@ namespace Editor.Helper
             if (Selection.LastHoveredProvince == Province.Empty)
                return;
 
-            HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.GetProvincesWithSameCultureGroup()), CommandHistoryType.ComplexSelection);
+            HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.Culture.CultureGroup.GetProvinces()), CommandHistoryType.ComplexSelection);
          });
       }
 
@@ -112,7 +112,7 @@ namespace Editor.Helper
             if (Selection.LastHoveredProvince == Province.Empty)
                return;
 
-            HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.GetProvincesWithSameCulture()), CommandHistoryType.ComplexSelection);
+            HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.Culture.GetProvinces()), CommandHistoryType.ComplexSelection);
          });
       }
 

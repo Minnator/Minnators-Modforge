@@ -17,20 +17,14 @@ public class CultureGroupMapMode : MapMode
 
    public override int GetProvinceColor(Province id)
    {
-      if (Globals.Cultures.TryGetValue(id.Culture, out var culture))
-         if (Globals.CultureGroups.TryGetValue(culture.CultureGroup, out var group))
-            return group.Color.ToArgb();
-      return Color.DimGray.ToArgb();
+      return id.Culture.CultureGroup.Color.ToArgb();
    }
 
    public override MapModeType MapModeType => MapModeType.CultureGroup;
 
    public override string GetSpecificToolTip(Province provinceId)
    {
-      if (Globals.Cultures.TryGetValue(provinceId.Culture, out var culture))
-         if (Globals.CultureGroups.TryGetValue(culture.CultureGroup, out var group))
-            return $"Culture Group: {group.Name} ({Localisation.GetLoc(group.Name)})";
-      return "Culture Group: [Unknown]";
+      return $"Culture Group: {provinceId.Culture.CultureGroup.Name} ({Localisation.GetLoc(provinceId.Culture.CultureGroup.Name)})";
    }
 
 }
