@@ -76,6 +76,9 @@
          infoToolStripMenuItem = new ToolStripMenuItem();
          toolStripSeparator8 = new ToolStripSeparator();
          clearCrashLogsToolStripMenuItem = new ToolStripMenuItem();
+         clearCrashLogsToolStripMenuItem1 = new ToolStripMenuItem();
+         openCrashLogFolderToolStripMenuItem = new ToolStripMenuItem();
+         openLastCrashLogsToolStripMenuItem = new ToolStripMenuItem();
          viewErrorlogToolStripMenuItem = new ToolStripMenuItem();
          saveErrorLogsToolStripMenuItem = new ToolStripMenuItem();
          saveErrorLogAscsvToolStripMenuItem = new ToolStripMenuItem();
@@ -648,10 +651,31 @@
          // 
          // clearCrashLogsToolStripMenuItem
          // 
+         clearCrashLogsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { clearCrashLogsToolStripMenuItem1, openCrashLogFolderToolStripMenuItem, openLastCrashLogsToolStripMenuItem });
          clearCrashLogsToolStripMenuItem.Name = "clearCrashLogsToolStripMenuItem";
          clearCrashLogsToolStripMenuItem.Size = new Size(183, 22);
          clearCrashLogsToolStripMenuItem.Text = "Clear Crash Logs";
-         clearCrashLogsToolStripMenuItem.Click += clearCrashLogsToolStripMenuItem_Click;
+         // 
+         // clearCrashLogsToolStripMenuItem1
+         // 
+         clearCrashLogsToolStripMenuItem1.Name = "clearCrashLogsToolStripMenuItem1";
+         clearCrashLogsToolStripMenuItem1.Size = new Size(195, 22);
+         clearCrashLogsToolStripMenuItem1.Text = "Clear Crash-Logs";
+         clearCrashLogsToolStripMenuItem1.Click += clearCrashLogsToolStripMenuItem1_Click;
+         // 
+         // openCrashLogFolderToolStripMenuItem
+         // 
+         openCrashLogFolderToolStripMenuItem.Name = "openCrashLogFolderToolStripMenuItem";
+         openCrashLogFolderToolStripMenuItem.Size = new Size(195, 22);
+         openCrashLogFolderToolStripMenuItem.Text = "Open Crash Log Folder";
+         openCrashLogFolderToolStripMenuItem.Click += openCrashLogFolderToolStripMenuItem_Click;
+         // 
+         // openLastCrashLogsToolStripMenuItem
+         // 
+         openLastCrashLogsToolStripMenuItem.Name = "openLastCrashLogsToolStripMenuItem";
+         openLastCrashLogsToolStripMenuItem.Size = new Size(195, 22);
+         openLastCrashLogsToolStripMenuItem.Text = "Open Last Crash Log";
+         openLastCrashLogsToolStripMenuItem.Click += openLastCrashLogsToolStripMenuItem_Click;
          // 
          // viewErrorlogToolStripMenuItem
          // 
@@ -2114,8 +2138,9 @@
          // 
          // ProvinceHistoryEntryToggleButton
          // 
-         ProvinceHistoryEntryToggleButton.BackColor = Color.DarkRed;
+         ProvinceHistoryEntryToggleButton.BackColor = Color.Transparent;
          ProvinceHistoryEntryToggleButton.Dock = DockStyle.Fill;
+         ProvinceHistoryEntryToggleButton.Image = Properties.Resources.HistoryEntriesDisabled;
          ProvinceHistoryEntryToggleButton.ImageOff = Properties.Resources.HistoryEntriesDisabled;
          ProvinceHistoryEntryToggleButton.ImageOn = Properties.Resources.HistoryEntriesEnabled;
          ProvinceHistoryEntryToggleButton.Location = new Point(122, 2);
@@ -2124,7 +2149,6 @@
          ProvinceHistoryEntryToggleButton.Size = new Size(40, 30);
          ProvinceHistoryEntryToggleButton.State = false;
          ProvinceHistoryEntryToggleButton.TabIndex = 6;
-         ProvinceHistoryEntryToggleButton.Text = "Off";
          GeneralToolTip.SetToolTip(ProvinceHistoryEntryToggleButton, "If enabled any changes in properties for province will be created as a history entry for the current date");
          ProvinceHistoryEntryToggleButton.UseVisualStyleBackColor = false;
          ProvinceHistoryEntryToggleButton.VsMode = Editor.Controls.ToggleButton.VisualMode.Image;
@@ -3382,6 +3406,9 @@
       private Button OpenHistoryCountryFolder;
       private ToolStripMenuItem saveErrorLogsToolStripMenuItem;
       private ToolStripMenuItem saveErrorLogAscsvToolStripMenuItem;
+      private ToolStripMenuItem clearCrashLogsToolStripMenuItem1;
+      private ToolStripMenuItem openCrashLogFolderToolStripMenuItem;
+      private ToolStripMenuItem openLastCrashLogsToolStripMenuItem;
    }
 }
 

@@ -91,7 +91,7 @@ public static class ProvinceParser
       Debug.Assert(propertyInfo.GetValue(saveable) is ICollection<T>, $"{propertyInfo.Name} ({propertyInfo.PropertyType}) is not type ICollection<{typeof(T)}>");
       if (!Converter.Convert<T>(value, out T obj).Then((obj) => obj.ConvertToLoadingError(po, $"Could not convert value \"{value}\" to {typeof(T)}", lineNum)))
          return;
-      ((ICollection<T>)propertyInfo.GetValue(saveable))!.Remove(obj);
+      ((ICollection<T>)propertyInfo.GetValue(saveable)!).Remove(obj);
    }
 
    private static void Set<T>(Saveable saveable, PropertyInfo propertyInfo, string value, PathObj po, int lineNum)
@@ -107,9 +107,9 @@ public static class ProvinceParser
    {
       var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "history", "provinces");
       var po = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 };
-      //Parallel.ForEach(files, po, ProcessProvinceFile);
-      foreach (var file in files)
-         ProcessProvinceFile(file);
+      Parallel.ForEach(files, po, ProcessProvinceFile);
+      //foreach (var file in files)
+      //   ProcessProvinceFile(file);
    }
 
    private static void ProcessProvinceFile(string path)

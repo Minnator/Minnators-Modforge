@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using System.Text;
 using Editor.DataClasses.Commands;
 using Editor.Forms.Feature.Crash_Reporter;
@@ -13,7 +14,7 @@ namespace Editor.Helper
       //                                  He has a crash on you
       // --------------------------------------------------------------------------------------------
 
-      private static string LogFolder;
+      public static string LogFolder;
       public const string LOG_FILE_ENDING = "fuck";
 
       static CrashManager()
@@ -90,6 +91,19 @@ namespace Editor.Helper
 
          foreach (var file in files) 
             File.Delete(file);
+      }
+
+      public static void OpenLastCrashLogs()
+      {
+         var files = Directory.GetFiles(LogFolder, $"*.{LOG_FILE_ENDING}");
+         if (files.Length == 0)
+         {
+            MessageBox.Show("No crash logs found", "No Crash Logs", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return;
+         }
+
+         var lastFile = files.OrderByDescending(f => new FileInfo(f).LastWriteTime).First();
+         ProcessHelper.OpenFile(lastFile);
       }
    }
 }

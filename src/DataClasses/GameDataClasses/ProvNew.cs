@@ -52,7 +52,8 @@ namespace Editor.DataClasses.GameDataClasses
 
 
       // ##################### Complex setter #####################
-      
+
+      [ToolTippable]
       public Tag Owner
       {
          get => _owner;
@@ -393,8 +394,11 @@ namespace Editor.DataClasses.GameDataClasses
 
       public new static Province Empty { get; } = new(-1, Color.Empty, ObjEditingStatus.Immutable);
 
+      [ToolTippable]
       public string TitleKey => $"PROV{Id}";
+      [ToolTippable]
       public string AdjectiveKey => $"PROV_ADJ{Id}";
+      [ToolTippable]
       public string TitleLocalisation
       {
          get
@@ -404,6 +408,7 @@ namespace Editor.DataClasses.GameDataClasses
             return Localisation.GetLoc(TitleKey);
          }
       }
+      [ToolTippable]
       public string AdjectiveLocalisation => Localisation.GetLoc(AdjectiveKey);
 
       // Events 
@@ -442,6 +447,7 @@ namespace Editor.DataClasses.GameDataClasses
       public TradeCompany TradeCompany => GetFirstParentOfType(SaveableType.TradeCompany) as TradeCompany ?? TradeCompany.Empty;
 
       // Map Concerns
+      [ToolTippable]
       public bool IsNonRebelOccupied => Owner != Controller && Controller != "REB";
       public int OccupantColor
       {
@@ -458,7 +464,9 @@ namespace Editor.DataClasses.GameDataClasses
          }
       }
 
-      public Terrain AutoTerrain = Terrain.Empty;
+      [ToolTippable]
+      public Terrain AutoTerrain { get; set; } = Terrain.Empty;
+      [ToolTippable]
       public Terrain Terrain => GetFirstParentOfType(SaveableType.Terrain) as Terrain ?? Terrain.Empty;
 
 

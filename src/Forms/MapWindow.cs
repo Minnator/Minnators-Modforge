@@ -596,7 +596,7 @@ namespace Editor.Forms
          // No data changed here as they are added via the "Add" button
          ModifiersLayoutPanel.Controls.Add(ModifierComboBox, 1, 1);
 
-         _modifierTypeComboBox = ControlFactory.GetExtendedComboBox("",["CountryModifier", "ProvinceModifier"]);
+         _modifierTypeComboBox = ControlFactory.GetExtendedComboBox("", ["CountryModifier", "ProvinceModifier"]);
          _modifierTypeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
          _modifierTypeComboBox.Margin = new(2, 1, 2, 0);
          ModTypeSubLayout.Controls.Add(_modifierTypeComboBox, 0, 0);
@@ -1335,7 +1335,7 @@ namespace Editor.Forms
             Dock = DockStyle.Fill,
             Margin = new(1),
          };
-         
+
          TagAndColorTLP.Controls.Add(CountryLoc, 1, 1);
 
          CountryADJLoc = new(Selection.GetCountryAsList, new CLocObjFactory(false))
@@ -1624,11 +1624,6 @@ namespace Editor.Forms
          new InformationForm().ShowDialog();
       }
 
-      private void clearCrashLogsToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-         CrashManager.ClearCrashLogs();
-      }
-
       private void toolStripMenuItem4_Click(object sender, EventArgs e)
       {
 #if DEBUG
@@ -1830,6 +1825,21 @@ namespace Editor.Forms
       private void saveErrorLogAscsvToolStripMenuItem_Click(object sender, EventArgs e)
       {
          LogManager.SaveLogAsCsv();
+      }
+
+      private void clearCrashLogsToolStripMenuItem1_Click(object sender, EventArgs e)
+      {
+         CrashManager.ClearCrashLogs();
+      }
+
+      private void openCrashLogFolderToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         ProcessHelper.OpenFolder(CrashManager.LogFolder);
+      }
+
+      private void openLastCrashLogsToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         CrashManager.OpenLastCrashLogs();
       }
    }
 }
