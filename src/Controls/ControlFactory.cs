@@ -18,6 +18,14 @@ public static class ControlFactory
 
    #endregion
 
+   public static ExtendedCheckBox GetExtendedCheckBox(string propName)
+   {
+      return new (propName)
+      {
+         Margin = new(1)
+      };
+   }
+
    public static FlagLabel GetFlagLabel()
    {
       return new(Country.Empty);

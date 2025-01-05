@@ -39,6 +39,10 @@ namespace Editor.Helper
          {
             typeof(Province),
             Province.GeneralParse
+         },
+         {
+            typeof(Culture),
+            Culture.GeneralParse
          }
       };
 

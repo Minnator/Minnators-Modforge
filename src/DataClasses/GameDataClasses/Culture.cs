@@ -1,4 +1,6 @@
-﻿namespace Editor.DataClasses.GameDataClasses;
+﻿using Editor.ErrorHandling;
+
+namespace Editor.DataClasses.GameDataClasses;
 
 public class Culture(string name)
 {
@@ -27,6 +29,31 @@ public class Culture(string name)
       }
 
       return provinces;
+   }
+
+   public static IErrorHandle GeneralParse(string? str, out object result)
+   {
+      var handle = TryParse(str, out var culture);
+      result = culture;
+      return handle;       
+   }
+
+   public static IErrorHandle TryParse(string input, out Culture culture)
+   {
+      if (string.IsNullOrEmpty(input))
+      {
+         culture = Empty;
+         return new ErrorObject(ErrorType.TypeConversionError, "Could not parse culture!", addToManager: false);
+      }
+
+      if (!Globals.Cultures.TryGetValue(input, out culture))
+      {
+         culture = Empty;
+         return new ErrorObject(ErrorType.TODO_ERROR, $"Culture \"{input}\" is already defined!",
+            addToManager: false);
+      }
+
+      return ErrorHandle.Sucess;
    }
 
    public override string ToString()

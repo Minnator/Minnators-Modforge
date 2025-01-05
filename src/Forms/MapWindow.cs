@@ -534,10 +534,21 @@ namespace Editor.Forms
          };
          MisProvinceData.Controls.Add(_capitalNameTextBox, 1, 4);
 
+         _isCityCheckBox = ControlFactory.GetExtendedCheckBox(nameof(Province.IsCity));
          _isCityCheckBox.CheckedChanged += ProvinceEditingEvents.OnExtendedCheckBoxCheckedChanged;
+         MisProvinceData.Controls.Add(_isCityCheckBox, 3, 3);
+
+         _isHreCheckBox = ControlFactory.GetExtendedCheckBox(nameof(Province.IsHre));
          _isHreCheckBox.CheckedChanged += ProvinceEditingEvents.OnExtendedCheckBoxCheckedChanged;
+         MisProvinceData.Controls.Add(_isHreCheckBox, 3, 4);
+
+         _isParliamentSeatCheckbox = ControlFactory.GetExtendedCheckBox(nameof(Province.IsSeatInParliament));
          _isParliamentSeatCheckbox.CheckedChanged += ProvinceEditingEvents.OnExtendedCheckBoxCheckedChanged;
+         MisProvinceData.Controls.Add(_isParliamentSeatCheckbox, 3, 5);
+
+         _hasRevoltCheckBox = ControlFactory.GetExtendedCheckBox(nameof(Province.HasRevolt));
          _hasRevoltCheckBox.CheckedChanged += ProvinceEditingEvents.OnExtendedCheckBoxCheckedChanged;
+         MisProvinceData.Controls.Add(_hasRevoltCheckBox, 3, 6);
 
          MWAttirbuteCombobox.Items.AddRange([.. Enum.GetNames<ProvAttrGet>()]);
 

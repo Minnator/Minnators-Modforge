@@ -78,12 +78,12 @@ public readonly struct Tag(string tag) : IEquatable<Tag>, IComparable
 
    public static IErrorHandle GeneralParse(string value, out object result)
    {
-      if (Tag.TryParse(value, out var outTag))
+      if (TryParse(value, out var outTag))
       {
          result = outTag;
          return ErrorHandle.Sucess;
       }
-      result = Tag.Empty;
+      result = Empty;
       return new ErrorObject(ErrorType.TypeConversionError, "Could not parse Tag!", addToManager: false);
    }
 

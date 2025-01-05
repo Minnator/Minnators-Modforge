@@ -49,7 +49,7 @@ public static class ProvinceParser
      { "center_of_trade",                    (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.CenterOfTrade))!) },
      { "citysize",                           (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.CitySize))!) },
      { "controller",                         (Set<Tag>,                    Province.Empty.GetPropertyInfo(nameof(Province.Controller))!) },
-     { "culture",                            (Set<string>,                 Province.Empty.GetPropertyInfo(nameof(Province.Culture))!) },
+     { "culture",                            (Set<Culture>,                Province.Empty.GetPropertyInfo(nameof(Province.Culture))!) },
      { "devastation",                        (Set<float>,                  Province.Empty.GetPropertyInfo(nameof(Province.Devastation))!) },
      { "discovered_by",                      (Add<string>,                 Province.Empty.GetPropertyInfo(nameof(Province.DiscoveredBy))!) },
      { "extra_cost",                         (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.ExtraCost))!) },
@@ -97,8 +97,9 @@ public static class ProvinceParser
    private static void Set<T>(Saveable saveable, PropertyInfo propertyInfo, string value, PathObj po, int lineNum)
    {
       Debug.Assert(propertyInfo.GetValue(saveable) is T, $"{propertyInfo.Name} ({propertyInfo.PropertyType}) is not type {typeof(T)}");
-      if (!Converter.Convert<T>(value, out T obj).Then((obj) => obj.ConvertToLoadingError(po, $"Could not convert value \"{value}\" to {typeof(T)}", lineNum)))
-         propertyInfo.SetValue(saveable, obj);
+      Converter.Convert(value, out T obj).Then((obj) => obj.ConvertToLoadingError(po, $"Could not convert value \"{value}\" to {typeof(T)}", lineNum));
+      
+      propertyInfo.SetValue(saveable, obj);
    }
 
 
@@ -106,7 +107,9 @@ public static class ProvinceParser
    {
       var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "history", "provinces");
       var po = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 };
-      Parallel.ForEach(files, po, ProcessProvinceFile);
+      //Parallel.ForEach(files, po, ProcessProvinceFile);
+      foreach (var file in files)
+         ProcessProvinceFile(file);
    }
 
    private static void ProcessProvinceFile(string path)
@@ -151,24 +154,15 @@ public static class ProvinceParser
       SaveMaster.AddToDictionary(ref pathObj, province);
    }
 
-   private static void Eu4ProvAttributeRouting(
-      Province province,
-      string attribute,
-      string value,
-      PathObj po,
-      int lineNum)
+   private static void Eu4ProvAttributeRouting(Province province, string attribute, string value, PathObj po, int lineNum)
    {
       if (string.IsNullOrEmpty(attribute) || string.IsNullOrEmpty(value))
-      {
-         LoadingError loadingError = new LoadingError(po, "Either key or value for an attribute setter is null or empty!");
-      }
+         _ = new LoadingError(po, "Either key or value for an attribute setter is null or empty!");
       else
       {
-         string lower = attribute.ToLower();
-         (Action<Saveable, PropertyInfo, string, PathObj, int>, PropertyInfo) tuple;
-         if (!ProvinceActionsAndProperties.TryGetValue(lower, out tuple))
+         if (!ProvinceActionsAndProperties.TryGetValue(attribute.ToLower(), out var tuple))
             return;
-         (Action<Saveable, PropertyInfo, string, PathObj, int> action, PropertyInfo propertyInfo) = tuple;
+         var (action, propertyInfo) = tuple;
          action(province, propertyInfo, value, po, lineNum);
       }
    }

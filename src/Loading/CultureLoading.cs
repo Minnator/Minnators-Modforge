@@ -55,11 +55,8 @@ public static class CultureLoading
                group.Cultures.Add(culture);
                lock (cultureDict)
                {
-                  if (!cultureDict.TryAdd(culture.Name, culture))
-                  {
-                     Globals.ErrorLog.Write($"Duplicate culture name: {culture.Name}, used later appearance");
+                  if (!cultureDict.TryAdd(culture.Name, culture)) 
                      cultureDict[culture.Name] = culture;
-                  }
                }
             }
          }

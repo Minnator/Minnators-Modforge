@@ -32,7 +32,7 @@ namespace Editor.Forms.Feature
          ToolTipPreview.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
          ToolTipPreview.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 
-         AttributeListBox.Items.AddRange([ToolTipBuilder.propertyInfo.SelectMany(x => x.Name)]);
+         AttributeListBox.Items.AddRange([.. ToolTipBuilder.PropertyInfo.Select(x => (object)x.Name)]);
       }
 
       private void AddButton_Click(object sender, System.EventArgs e)
@@ -124,7 +124,7 @@ namespace Editor.Forms.Feature
          if (selectedItem == null)
             return;
          int selectionStart = InputTextBox.SelectionStart;
-         string str = selectedItem.ToString();
+         string str = $"${selectedItem}$";
          InputTextBox.Text = InputTextBox.Text.Insert(selectionStart, str);
          InputTextBox.SelectionStart = checked(selectionStart + str.Length);
          InputTextBox.Focus();

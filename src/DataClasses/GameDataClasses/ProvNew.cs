@@ -4,6 +4,7 @@ using Editor.Helper;
 using Editor.Parser;
 using Editor.Saving;
 using Editor.ErrorHandling;
+using Editor.Forms.Feature;
 
 namespace Editor.DataClasses.GameDataClasses
 {
@@ -97,97 +98,112 @@ namespace Editor.DataClasses.GameDataClasses
          get => _cores;
          set => SetIfModifiedEnumerable<List<Tag>, Tag>(ref _cores, value);
       }
-
+      [ToolTippable]
       public Tag Controller
       {
          get => _controller;
          set => SetField(ref _controller, value);
       }
 
+      [ToolTippable]
       public Tag TribalOwner
       {
          get => _tribalOwner;
          set => SetField(ref _tribalOwner, value);
       }
 
+      [ToolTippable]
       public int BaseManpower
       {
          get => _baseManpower;
          set => SetField(ref _baseManpower, Math.Max(0, value));
       }
 
+      [ToolTippable]
       public int BaseTax
       {
          get => _baseTax;
          set => SetField(ref _baseTax, Math.Max(0, value));
       }
 
+      [ToolTippable]
       public int BaseProduction
       {
          get => _baseProduction;
          set => SetField(ref _baseProduction, Math.Max(0, value));
       }
 
+      [ToolTippable]
       public int CenterOfTrade
       {
          get => _centerOfTrade;
          set => SetField(ref _centerOfTrade, Math.Max(0, value));
       }
 
+      [ToolTippable]
       public int ExtraCost
       {
          get => _extraCost;
          set => SetField(ref _extraCost, Math.Max(0, value));
       }
 
+      [ToolTippable]
       public float NativeFerocity
       {
          get => _nativeFerocity;
          set => SetField(ref _nativeFerocity, value);
       }
 
+      [ToolTippable]
       public int NativeHostileness
       {
          get => _nativeHostileness;
          set => SetField(ref _nativeHostileness, value);
       }
 
+      [ToolTippable]
       public int NativeSize
       {
          get => _nativeSize;
          set => SetField(ref _nativeSize, value);
       }
 
+      [ToolTippable]
       public int RevoltRisk
       {
          get => _revoltRisk;
          set => SetField(ref _revoltRisk, value);
       }
 
+      [ToolTippable]
       public int CitySize
       {
          get => _citySize;
          set => SetField(ref _citySize, value);
       }
 
+      [ToolTippable]
       public int Nationalism
       {
          get => _nationalism;
          set => SetField(ref _nationalism, value);
       }
 
+      [ToolTippable]
       public float LocalAutonomy
       {
          get => _localAutonomy;
          set => SetField(ref _localAutonomy, value);
       }
 
+      [ToolTippable]
       public float Devastation
       {
          get => _devastation;
          set => SetField(ref _devastation, value);
       }
 
+      [ToolTippable]
       public float Prosperity
       {
          get => _prosperity;
@@ -200,18 +216,21 @@ namespace Editor.DataClasses.GameDataClasses
          set => SetIfModifiedEnumerable<List<string>, string>(ref _discoveredBy, value);
       }
 
+      [ToolTippable]
       public string Capital
       {
          get => _capital;
          set => SetField(ref _capital, value);
       }
 
+      [ToolTippable]
       public Culture Culture
       {
          get => _culture;
          set => SetField(ref _culture, value);
       }
 
+      [ToolTippable]
       public string Religion
       {
          get => _religion;
@@ -224,42 +243,49 @@ namespace Editor.DataClasses.GameDataClasses
          set => SetIfModifiedEnumerable<List<string>, string>(ref _buildings, value);
       }
 
+      [ToolTippable]
       public bool IsHre
       {
          get => _isHre;
          set => SetField(ref _isHre, value);
       }
 
+      [ToolTippable]
       public bool IsCity
       {
          get => _isCity;
          set => SetField(ref _isCity, value);
       }
 
+      [ToolTippable]
       public bool IsSeatInParliament
       {
          get => _isSeatInParliament;
          set => SetField(ref _isSeatInParliament, value);
       }
 
+      [ToolTippable]
       public string TradeGood
       {
          get => _tradeGood;
          set => SetField(ref _tradeGood, value);
       }
 
+      [ToolTippable]
       public string LatentTradeGood
       {
          get => _latentTradeGood;
          set => SetField(ref _latentTradeGood, value);
       }
 
+      [ToolTippable]
       public bool HasRevolt
       {
          get => _hasRevolt;
          set => SetField(ref _hasRevolt, value);
       }
 
+      [ToolTippable]
       public string ReformationCenter
       {
          get => _reformationCenter;
@@ -310,6 +336,7 @@ namespace Editor.DataClasses.GameDataClasses
 
       #region MMF Data
       public int TotalDevelopment => _baseManpower + _baseTax + _baseProduction;
+      [ToolTippable]
       public int Id { get; init; }
       public Positions Positions { get; set; } = new();
       public Point Center { get; set; }
@@ -407,8 +434,11 @@ namespace Editor.DataClasses.GameDataClasses
 
       // ######################### Utility #########################
       // Collections
+      [ToolTippable]
       public Area Area => GetFirstParentOfType(SaveableType.Area) as Area ?? Area.Empty;
+      [ToolTippable]
       public Continent Continent => GetFirstParentOfType(SaveableType.Continent) as Continent ?? Continent.Empty;
+      [ToolTippable]
       public TradeCompany TradeCompany => GetFirstParentOfType(SaveableType.TradeCompany) as TradeCompany ?? TradeCompany.Empty;
 
       // Map Concerns
