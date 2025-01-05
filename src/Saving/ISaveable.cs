@@ -76,7 +76,7 @@ public abstract class Saveable : IDisposable
 
    public void SetProperty<T>(PropertyInfo propInfo, T value)
    {
-      Debug.Assert(propInfo != null, $"Property {propInfo.Name} not found in {GetType().Name}");
+      Debug.Assert(propInfo != null, $"Property {propInfo!.Name} not found in {GetType().Name}");
       propInfo.SetValue(this, value);
    }
 
@@ -85,18 +85,29 @@ public abstract class Saveable : IDisposable
       return GetType().GetProperty(propertyName);
    }
 
+   public object GetProperty(PropertyInfo? info)
+   {
+      Debug.Assert(info != null, "info != null");
+      return info.GetValue(this);
+   }
+
    public T GetProperty<T>(PropertyInfo info)
    {
       Debug.Assert(info != null, "info != null");
-      return (T)info.GetValue(this)!;
+      return (T)info.GetValue(this);
    }
 
    public T GetProperty<T>(string propertyName)
    {
       Debug.Assert(GetPropertyInfo(propertyName) != null, $"Property {propertyName} not found in {GetType().Name}");
-      return (T)GetPropertyInfo(propertyName)!.GetValue(this)!;
+      return (T)GetProperty(GetPropertyInfo(propertyName)!);
    }
-   
+
+   public object GetPropertyValue(string propName)
+   {
+      return GetType().GetProperty(propName)?.GetValue(this) ?? string.Empty;
+   }
+
    public void SetFieldSilent<T> (string propertyName, T value)
    {
       Debug.Assert(GetPropertyInfo(propertyName) != null, $"Property {propertyName} not found in {GetType().Name}");

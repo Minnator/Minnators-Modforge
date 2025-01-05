@@ -403,7 +403,7 @@ public static class MapDrawing
       if (!Geometry.GetIfHasStripePixels(province, rebelsOnly, out var stripePixels))
          return;
 
-      DrawOnMap(stripePixels, province.GetOccupantColor, zoomControl);
+      DrawOnMap(stripePixels, province.OccupantColor, zoomControl);
    }
 
 }

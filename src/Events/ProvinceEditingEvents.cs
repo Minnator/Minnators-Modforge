@@ -44,6 +44,13 @@ namespace Editor.Events
          if (sender is ExtendedNumeric numeric)
             Saveable.SetFieldMultiple(Selection.GetSelectedProvincesAsSaveable(), value, numeric.PropertyName);
       }
+
+      public static void OnExtendedCheckBoxCheckedChanged(object? sender, EventArgs e)
+      {
+         if (!(sender is ExtendedCheckBox extendedCheckBox))
+            return;
+         Saveable.SetFieldMultiple(Selection.GetSelectedProvincesAsSaveable(), extendedCheckBox.Checked, extendedCheckBox.PropertyName);
+      }
    }
 
 }

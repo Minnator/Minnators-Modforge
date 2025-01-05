@@ -24,6 +24,7 @@ namespace Editor.Controls
       private static partial Regex DecimalNumberRegex();
       [GeneratedRegex(@"^(?:0|[1-9]\d*)$", RegexOptions.Compiled)]
       private static partial Regex NumberRegex();
+
       [GeneratedRegex(@"^[-+]?(?:0|[1-9]\d*)$", RegexOptions.Compiled)]
       private static partial Regex SignedNumberRegex();
 
@@ -133,11 +134,9 @@ namespace Editor.Controls
 
       private bool ExecuteCommand()
       {
-         if (_newText.Length == 0 || _oldText.Equals(_newText) || !CheckText(Text))
+         if (_newText.Length == 0 || _oldText.Equals(_newText) || !CheckText(Text) || !Converter.Convert<T>(_newText, out T value).Log())
             return false;
 
-         if (!Converter.Convert<T>(_newText, out var value))
-            return false;
          if (_factory is not CCountryPropertyChangeFactory<T> ccfactory)
          {
             ICommand command = _factory.Create(_getSaveables.Invoke(), value);

@@ -7,6 +7,7 @@ namespace Editor.Helper
    {
       private static Date LastDate = Date.MinValue;
 
+      /* TODO REWORK
       public static void LoadDate(Date date)
       {
          Globals.EditingStatus = EditingStatus.LoadingInterface;
@@ -17,6 +18,6 @@ namespace Editor.Helper
             province.LoadHistoryForDate(date);
          LastDate = LastDate.Copy(date);
          Globals.EditingStatus = EditingStatus.Idle;
-      }
+      }*/
    }
 }

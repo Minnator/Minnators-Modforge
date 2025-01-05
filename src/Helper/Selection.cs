@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Diagnostics;
+using System.Reflection;
 using System.Security.Policy;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
@@ -179,7 +180,7 @@ public static class Selection
    // Selection State
    private static SelectionToolType _selectionToolType = SelectionToolType.Single;
    private static SelectionType _selectionType = SelectionType.Province;
-   private static ProvAttrGet _mwComparisionAttribute = ProvAttrGet.id;
+   private static string _mwCompPropName = string.Empty;
    private static ProvAttrType _mwAttributeType = ProvAttrType.String;
 
    // ------------ Getters ------------ \\
@@ -985,13 +986,13 @@ public static class Selection
          case SelectionType.Province:
             return [province];
          case SelectionType.Area:
-            if (province.GetArea() != Area.Empty)
-               return province.GetArea().GetProvinces();
+            if (province.Area != Area.Empty)
+               return province.Area.GetProvinces();
             break;
          case SelectionType.Region:
-            if (province.GetArea() != Area.Empty)
-               if (province.GetArea().Region != DataClasses.GameDataClasses.Region.Empty)
-                  return province.GetArea().Region.GetProvinces();
+            if (province.Area != Area.Empty)
+               if (province.Area.Region != DataClasses.GameDataClasses.Region.Empty)
+                  return province.Area.Region.GetProvinces();
             break;
          case SelectionType.Country:
             if (Globals.Countries.TryGetValue(province.Owner, out var country))
@@ -1033,67 +1034,56 @@ public static class Selection
 
    private static List<Province> GetProvincesForMagicWand(Province province)
    {
-      
-      var provinces = new List<Province>();
-      var queue = new Queue<Province>();
-      var visited = new HashSet<Province>(); // Track visited provinces
-      queue.Enqueue(province);
-      visited.Add(province);
-      
-      var originalValue = province.GetAttribute(_mwComparisionAttribute);
+      List<Province> provincesForMagicWand = new();
+      Queue<Province> provinceQueue = new();
+      HashSet<Province> provinceSet = new();
+      provinceQueue.Enqueue(province);
+      provinceSet.Add(province);
+      var propertyInfo = Province.Empty.GetPropertyInfo(_mwCompPropName);
+      var property = province.GetProperty(propertyInfo);
       var tolerance = Globals.MapWindow.MagicWandTolerance.Value;
-
-      while (queue.Count > 0)
+      Func<object, object, bool> func;
+      switch (property)
       {
-         var current = queue.Dequeue();
-         provinces.Add(current);
-
-         foreach (var neighbour in Globals.AdjacentProvinces[current])
+         case int _:
+            func = (o1, o2) => Math.Abs(checked((int)o1 - (int)o2)) <= (int)tolerance;
+            break;
+         case float _:
+            func = (o1, o2) => Math.Abs((float)o1 - (float)o2) <= (double)(float)tolerance;
+            break;
+         default:
+            func = (o1, o2) => o1.Equals(o2);
+            break;
+      }
+      Debug.Assert(propertyInfo != null, "propInfo != null");
+      while (provinceQueue.Count > 0)
+      {
+         Province key = provinceQueue.Dequeue();
+         provincesForMagicWand.Add(key);
+         foreach (Province province1 in Globals.AdjacentProvinces[key])
          {
-            if (visited.Contains(neighbour) || Globals.NonLandProvinces.Contains(neighbour))
-               continue;
-
-            var neighborValue = neighbour.GetAttribute(_mwComparisionAttribute);
-            bool shouldEnqueue = false;
-
-            switch (_mwAttributeType)
+            if (!provinceSet.Contains(province1) && !Globals.NonLandProvinces.Contains(province1))
             {
-               case ProvAttrType.Int:
-                  shouldEnqueue = Math.Abs((int)originalValue - (int)neighborValue) <= (int)tolerance;
-                  break;
-               case ProvAttrType.Float:
-                  shouldEnqueue = Math.Abs((float)originalValue - (float)neighborValue) <= (float)tolerance;
-                  break;
-               case ProvAttrType.String:
-               case ProvAttrType.Bool:
-               case ProvAttrType.Tag:
-                  shouldEnqueue = originalValue.Equals(neighborValue);
-                  break;
-               case ProvAttrType.List:
-                  break;
-            }
-
-            if (shouldEnqueue)
-            {
-               queue.Enqueue(neighbour);
-               visited.Add(neighbour);
+               object propertyValue = province1.GetPropertyValue(_mwCompPropName);
+               if (func(property, propertyValue))
+               {
+                  provinceQueue.Enqueue(province1);
+                  provinceSet.Add(province1);
+               }
             }
          }
       }
-
-      return provinces;
+      return provincesForMagicWand;
    }
 
 
 
    private static void OnSelectedAttributeIndexChanged(object? sender, EventArgs e)
    {
-      if (sender is not ComboBox comboBox || !Enum.TryParse(comboBox.SelectedItem?.ToString(), out _mwComparisionAttribute))
+      if (!(sender is ComboBox comboBox))
          return;
-
-      // Enable the tolerance if the type is float or int
-      _mwAttributeType = _mwComparisionAttribute.GetAttributeType();
-      Globals.MapWindow.MagicWandTolerance.Enabled = _mwAttributeType is ProvAttrType.Float or ProvAttrType.Int;
+      var propertyType = Province.Empty.GetPropertyInfo(comboBox.Text)!.PropertyType;
+      Globals.MapWindow.MagicWandTolerance.Enabled = propertyType == typeof(int) || propertyType == typeof(float);
    }
 
    #endregion
@@ -1141,13 +1131,13 @@ public static class Selection
    /// <param name="attribute"></param>
    /// <param name="result"></param>
    /// <returns></returns>
-   public static bool GetSharedAttribute(ProvAttrGet attribute, out object? result)
+   public static bool GetSharedAttribute(string attrPropName, out object? result)
    {
       result = null;
 
       foreach (var province in _selectedProvinces)
       {
-         var value = province.GetAttribute(attribute);
+         var value = province.GetPropertyValue(attrPropName);
          if (result == null)
             result = value!;
          else if (result is IList list)

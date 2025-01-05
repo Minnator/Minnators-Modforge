@@ -1,6 +1,11 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using Editor.DataClasses.GameDataClasses;
+using Editor.ErrorHandling;
 using Editor.Helper;
+using Editor.Loading.Enhanced;
 using Editor.Saving;
 
 namespace Editor.Parser;
@@ -19,6 +24,82 @@ public static class ProvinceParser
    internal static readonly Regex IdRegex = new(ID_FROM_FILE_NAME_PATTERN, RegexOptions.Compiled);
    private static readonly Regex AttributeRegex = new(ATTRIBUTE_PATTERN, RegexOptions.Compiled);
    private static readonly Regex MultilineAttributeRegex = new(MULTILINE_ATTRIBUTE_PATTERN, RegexOptions.Compiled);
+
+
+   private static readonly Dictionary<string, (Action<Saveable, PropertyInfo, string, PathObj, int>, PropertyInfo)>
+ ProvinceActionsAndProperties = new()
+ {
+     { "add_base_manpower",                  (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.BaseManpower))!) },
+     { "add_base_production",                (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.BaseProduction))!) },
+     { "add_base_tax",                       (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.BaseTax))!) },
+     { "add_claim",                          (Add<Tag>,                    Province.Empty.GetPropertyInfo(nameof(Province.Claims))!) },
+     { "add_core",                           (Add<Tag>,                    Province.Empty.GetPropertyInfo(nameof(Province.Cores))!) },
+     { "add_local_autonomy",                 (Set<float>,                  Province.Empty.GetPropertyInfo(nameof(Province.LocalAutonomy))!) },
+     { "add_nationalism",                    (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.Nationalism))!) },
+     { "add_permanent_claim",                (Add<Tag>,                    Province.Empty.GetPropertyInfo(nameof(Province.PermanentClaims))!) },
+     { "add_permanent_province_modifier",    (Add<ApplicableModifier>,     Province.Empty.GetPropertyInfo(nameof(Province.PermanentProvinceModifiers))!) },
+     { "add_province_modifier",              (Add<ApplicableModifier>,     Province.Empty.GetPropertyInfo(nameof(Province.ProvinceModifiers))!) },
+     { "add_province_triggered_modifier",    (Add<string>,                 Province.Empty.GetPropertyInfo(nameof(Province.ProvinceTriggeredModifiers))!) },
+     { "add_to_trade_company",               (Set<TradeCompany>,           Province.Empty.GetPropertyInfo(nameof(Province.TradeCompany))!) },
+     { "add_trade_company_investment",       (Add<string>,                 Province.Empty.GetPropertyInfo(nameof(Province.TradeCompanyInvestments))!) },
+     { "base_manpower",                      (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.BaseManpower))!) },
+     { "base_production",                    (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.BaseProduction))!) },
+     { "base_tax",                           (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.BaseTax))!) },
+     { "capital",                            (Set<string>,                 Province.Empty.GetPropertyInfo(nameof(Province.Capital))!) },
+     { "center_of_trade",                    (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.CenterOfTrade))!) },
+     { "citysize",                           (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.CitySize))!) },
+     { "controller",                         (Set<Tag>,                    Province.Empty.GetPropertyInfo(nameof(Province.Controller))!) },
+     { "culture",                            (Set<string>,                 Province.Empty.GetPropertyInfo(nameof(Province.Culture))!) },
+     { "devastation",                        (Set<float>,                  Province.Empty.GetPropertyInfo(nameof(Province.Devastation))!) },
+     { "discovered_by",                      (Add<string>,                 Province.Empty.GetPropertyInfo(nameof(Province.DiscoveredBy))!) },
+     { "extra_cost",                         (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.ExtraCost))!) },
+     { "hre",                                (Set<bool>,                   Province.Empty.GetPropertyInfo(nameof(Province.IsHre))!) },
+     { "is_city",                            (Set<bool>,                   Province.Empty.GetPropertyInfo(nameof(Province.IsCity))!) },
+     { "native_ferocity",                    (Set<float>,                  Province.Empty.GetPropertyInfo(nameof(Province.NativeFerocity))!) },
+     { "native_hostileness",                 (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.NativeHostileness))!) },
+     { "native_size",                        (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.NativeSize))!) },
+     { "owner",                              (Set<Tag>,                    Province.Empty.GetPropertyInfo(nameof(Province.Owner))!) },
+     { "prosperity",                         (Set<float>,                  Province.Empty.GetPropertyInfo(nameof(Province.Prosperity))!) },
+     { "reformation_center",                 (Set<string>,                 Province.Empty.GetPropertyInfo(nameof(Province.ReformationCenter))!) },
+     { "religion",                           (Set<string>,                 Province.Empty.GetPropertyInfo(nameof(Province.Religion))!) },
+     { "remove_claim",                       (Remove<Tag>,                 Province.Empty.GetPropertyInfo(nameof(Province.Claims))!) },
+     { "remove_core",                        (Remove<Tag>,                 Province.Empty.GetPropertyInfo(nameof(Province.Cores))!) },
+     { "remove_discovered_by",               (Remove<string>,              Province.Empty.GetPropertyInfo(nameof(Province.DiscoveredBy))!) },
+     { "remove_permanent_claim",             (Remove<Tag>,                 Province.Empty.GetPropertyInfo(nameof(Province.PermanentClaims))!) },
+     { "remove_permanent_province_modifier", (Remove<ApplicableModifier>,  Province.Empty.GetPropertyInfo(nameof(Province.PermanentProvinceModifiers))!) },
+     { "remove_province_modifier",           (Remove<ApplicableModifier>,  Province.Empty.GetPropertyInfo(nameof(Province.ProvinceModifiers))!) },
+     { "remove_province_triggered_modifier", (Remove<string>,              Province.Empty.GetPropertyInfo(nameof(Province.ProvinceTriggeredModifiers))!) },
+     { "revolt",                             (Set<bool>,                   Province.Empty.GetPropertyInfo(nameof(Province.HasRevolt))!) },
+     { "revolt_risk",                        (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.RevoltRisk))!) },
+     { "seat_in_parliament",                 (Set<bool>,                   Province.Empty.GetPropertyInfo(nameof(Province.IsSeatInParliament))!) },
+     { "trade_goods",                        (Set<string>,                 Province.Empty.GetPropertyInfo(nameof(Province.TradeGood))!) },
+     { "tribal_owner",                       (Set<Tag>,                    Province.Empty.GetPropertyInfo(nameof(Province.TribalOwner))!) },
+     { "unrest",                             (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.RevoltRisk))!) }
+ };
+
+
+   private static void Add<T>(Saveable saveable, PropertyInfo propertyInfo, string value, PathObj po, int lineNum)
+   {
+      Debug.Assert(propertyInfo.GetValue(saveable) is ICollection<T>, $"{propertyInfo.Name} ({propertyInfo.PropertyType}) is not type ICollection<{typeof(T)}>");
+      if (!Converter.Convert<T>(value, out T obj).Then((obj) => obj.ConvertToLoadingError(po, $"Could not convert value \"{value}\" to {typeof(T)}", lineNum)))
+         return;
+      ((ICollection<T>)propertyInfo.GetValue(saveable))!.Add(obj);
+   }
+
+   private static void Remove<T>(Saveable saveable, PropertyInfo propertyInfo, string value, PathObj po, int lineNum)
+   {
+      Debug.Assert(propertyInfo.GetValue(saveable) is ICollection<T>, $"{propertyInfo.Name} ({propertyInfo.PropertyType}) is not type ICollection<{typeof(T)}>");
+      if (!Converter.Convert<T>(value, out T obj).Then((obj) => obj.ConvertToLoadingError(po, $"Could not convert value \"{value}\" to {typeof(T)}", lineNum)))
+         return;
+      ((ICollection<T>)propertyInfo.GetValue(saveable))!.Remove(obj);
+   }
+
+   private static void Set<T>(Saveable saveable, PropertyInfo propertyInfo, string value, PathObj po, int lineNum)
+   {
+      Debug.Assert(propertyInfo.GetValue(saveable) is T, $"{propertyInfo.Name} ({propertyInfo.PropertyType}) is not type {typeof(T)}");
+      if (!Converter.Convert<T>(value, out T obj).Then((obj) => obj.ConvertToLoadingError(po, $"Could not convert value \"{value}\" to {typeof(T)}", lineNum)))
+         propertyInfo.SetValue(saveable, obj);
+   }
 
 
    public static void ParseAllUniqueProvinces()
@@ -61,16 +142,35 @@ public static class ProvinceParser
       }
       foreach (var block in blocks)
          if (block is Content content)
-            foreach (var att in Parsing.GetKeyValueListWithoutQuotes(content.Value))
-               province.SetAttribute(att.Key, att.Value);
+            foreach (KeyValuePair<string, string> listWithoutQuote in Parsing.GetKeyValueListWithoutQuotes(content.Value))
+               Eu4ProvAttributeRouting(province, listWithoutQuote.Key, listWithoutQuote.Value, pathObj, -1);
          else
             // Parse the block, aka the history entries and some special cases
             ParseProvinceBlockBlock(ref province, (Block)block);
 
-      // Copy the initial attributes to the ProvinceData to be able to revert to the initial state
-      province.InitializeInitial();
-
       SaveMaster.AddToDictionary(ref pathObj, province);
+   }
+
+   private static void Eu4ProvAttributeRouting(
+      Province province,
+      string attribute,
+      string value,
+      PathObj po,
+      int lineNum)
+   {
+      if (string.IsNullOrEmpty(attribute) || string.IsNullOrEmpty(value))
+      {
+         LoadingError loadingError = new LoadingError(po, "Either key or value for an attribute setter is null or empty!");
+      }
+      else
+      {
+         string lower = attribute.ToLower();
+         (Action<Saveable, PropertyInfo, string, PathObj, int>, PropertyInfo) tuple;
+         if (!ProvinceActionsAndProperties.TryGetValue(lower, out tuple))
+            return;
+         (Action<Saveable, PropertyInfo, string, PathObj, int> action, PropertyInfo propertyInfo) = tuple;
+         action(province, propertyInfo, value, po, lineNum);
+      }
    }
 
    private static void ParseProvinceBlockBlock(ref Province province, Block block)
@@ -106,8 +206,8 @@ public static class ProvinceParser
                   province.TradeModifiers.Add(tradeMod);
                return;
             case "spawn_rebels":
-               province.Effects.Add(block);
                /*
+               province.Effects.Add(block);
                if (EffectParser.ParseSpawnRebels(block.GetContent, out var rebelsEffect))
                   province.Effects.Add(rebelsEffect);
                */

@@ -62,19 +62,12 @@ namespace Editor.DataClasses.ConsoleCommands
             }
             if (Directory.Exists(args[3]))
             {
-               if (Globals.ProvinceIdToProvince.TryGetValue(id, out var province))
-               {
-                  province.DumpHistory(args[3]);
-               }
                Output.WriteGoodFeedback($"Dumped to {args[2]}");
             }
             else
             {
                Output.WriteError($"Invalid path [{args[3]}]; Dumping to default: {defaultPath}\n");
-               if (Globals.ProvinceIdToProvince.TryGetValue(id, out var province))
-               {
-                  province.DumpHistory(defaultPath);
-               }
+               
                Output.WriteGoodFeedback($"Dumped to {defaultPath}");
             }
          }

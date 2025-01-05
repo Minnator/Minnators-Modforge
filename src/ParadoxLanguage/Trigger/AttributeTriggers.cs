@@ -4,6 +4,7 @@ using static Editor.Helper.ProvinceEnumHelper;
 
 namespace Editor.ParadoxLanguage.Trigger
 {
+   /* TODO REWORK
    public class IntAttributeTrigger(ProvAttrGet attribute, Func<int, bool> condition) : Trigger
    {
       public ProvAttrGet Attribute { get; } = attribute;
@@ -53,5 +54,6 @@ namespace Editor.ParadoxLanguage.Trigger
          return false;
       }
    }
+   */
 
 }

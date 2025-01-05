@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using Editor.Helper;
 using Editor.Parser;
 using Editor.Saving;
+using Editor.ErrorHandling;
 
 namespace Editor.DataClasses.GameDataClasses
 {
@@ -492,6 +493,26 @@ namespace Editor.DataClasses.GameDataClasses
       }
       #endregion
 
+      public static IErrorHandle TryParse(string value, out Province province)
+      {
+         if (int.TryParse(value, out var result))
+         {
+            if (Globals.ProvinceIdToProvince.TryGetValue(result, out province))
+               return ErrorHandle.Sucess;
+
+            province = Empty;
+            return new ErrorObject(ErrorType.TypeConversionError, "Could not parse \"" + value + "\" to a province ID!", addToManager: false);
+         }
+         province = Empty;
+         return new ErrorObject(ErrorType.TypeConversionError, $"Province ID \"{result}\" not found!", addToManager: false);
+      }
+
+      public static IErrorHandle GeneralParse(string value, out object province)
+      {
+         IErrorHandle errorHandle = TryParse(value, out var prov);
+         province = prov;
+         return errorHandle;
+      }
 
       #region Operators / Equals
 

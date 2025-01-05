@@ -194,10 +194,6 @@
          label3 = new Label();
          label1 = new Label();
          label47 = new Label();
-         IsCityCheckBox = new CheckBox();
-         IsHreCheckBox = new CheckBox();
-         IsParlimentSeatCheckbox = new CheckBox();
-         HasRevoltCheckBox = new CheckBox();
          label48 = new Label();
          label49 = new Label();
          label50 = new Label();
@@ -1865,10 +1861,6 @@
          MisProvinceData.Controls.Add(label3, 0, 2);
          MisProvinceData.Controls.Add(label1, 0, 0);
          MisProvinceData.Controls.Add(label47, 0, 5);
-         MisProvinceData.Controls.Add(IsCityCheckBox, 3, 3);
-         MisProvinceData.Controls.Add(IsHreCheckBox, 3, 4);
-         MisProvinceData.Controls.Add(IsParlimentSeatCheckbox, 3, 5);
-         MisProvinceData.Controls.Add(HasRevoltCheckBox, 3, 6);
          MisProvinceData.Controls.Add(label48, 2, 3);
          MisProvinceData.Controls.Add(label49, 2, 4);
          MisProvinceData.Controls.Add(label50, 2, 5);
@@ -1986,50 +1978,6 @@
          label47.TabIndex = 6;
          label47.Text = "Terrain";
          label47.TextAlign = ContentAlignment.MiddleLeft;
-         // 
-         // IsCityCheckBox
-         // 
-         IsCityCheckBox.AutoSize = true;
-         IsCityCheckBox.Cursor = Cursors.Hand;
-         IsCityCheckBox.Location = new Point(285, 78);
-         IsCityCheckBox.Name = "IsCityCheckBox";
-         IsCityCheckBox.Size = new Size(29, 19);
-         IsCityCheckBox.TabIndex = 0;
-         IsCityCheckBox.Text = " ";
-         IsCityCheckBox.UseVisualStyleBackColor = true;
-         // 
-         // IsHreCheckBox
-         // 
-         IsHreCheckBox.AutoSize = true;
-         IsHreCheckBox.Cursor = Cursors.Hand;
-         IsHreCheckBox.Location = new Point(285, 103);
-         IsHreCheckBox.Name = "IsHreCheckBox";
-         IsHreCheckBox.Size = new Size(29, 19);
-         IsHreCheckBox.TabIndex = 1;
-         IsHreCheckBox.Text = " ";
-         IsHreCheckBox.UseVisualStyleBackColor = true;
-         // 
-         // IsParlimentSeatCheckbox
-         // 
-         IsParlimentSeatCheckbox.AutoSize = true;
-         IsParlimentSeatCheckbox.Cursor = Cursors.Hand;
-         IsParlimentSeatCheckbox.Location = new Point(285, 128);
-         IsParlimentSeatCheckbox.Name = "IsParlimentSeatCheckbox";
-         IsParlimentSeatCheckbox.Size = new Size(29, 19);
-         IsParlimentSeatCheckbox.TabIndex = 2;
-         IsParlimentSeatCheckbox.Text = " ";
-         IsParlimentSeatCheckbox.UseVisualStyleBackColor = true;
-         // 
-         // HasRevoltCheckBox
-         // 
-         HasRevoltCheckBox.AutoSize = true;
-         HasRevoltCheckBox.Cursor = Cursors.Hand;
-         HasRevoltCheckBox.Location = new Point(285, 153);
-         HasRevoltCheckBox.Name = "HasRevoltCheckBox";
-         HasRevoltCheckBox.Size = new Size(29, 19);
-         HasRevoltCheckBox.TabIndex = 3;
-         HasRevoltCheckBox.Text = " ";
-         HasRevoltCheckBox.UseVisualStyleBackColor = true;
          // 
          // label48
          // 
@@ -2166,9 +2114,8 @@
          // 
          // ProvinceHistoryEntryToggleButton
          // 
-         ProvinceHistoryEntryToggleButton.BackColor = Color.Transparent;
+         ProvinceHistoryEntryToggleButton.BackColor = Color.DarkRed;
          ProvinceHistoryEntryToggleButton.Dock = DockStyle.Fill;
-         ProvinceHistoryEntryToggleButton.Image = Properties.Resources.HistoryEntriesDisabled;
          ProvinceHistoryEntryToggleButton.ImageOff = Properties.Resources.HistoryEntriesDisabled;
          ProvinceHistoryEntryToggleButton.ImageOn = Properties.Resources.HistoryEntriesEnabled;
          ProvinceHistoryEntryToggleButton.Location = new Point(122, 2);
@@ -2177,6 +2124,7 @@
          ProvinceHistoryEntryToggleButton.Size = new Size(40, 30);
          ProvinceHistoryEntryToggleButton.State = false;
          ProvinceHistoryEntryToggleButton.TabIndex = 6;
+         ProvinceHistoryEntryToggleButton.Text = "Off";
          GeneralToolTip.SetToolTip(ProvinceHistoryEntryToggleButton, "If enabled any changes in properties for province will be created as a history entry for the current date");
          ProvinceHistoryEntryToggleButton.UseVisualStyleBackColor = false;
          ProvinceHistoryEntryToggleButton.VsMode = Editor.Controls.ToggleButton.VisualMode.Image;
@@ -3234,10 +3182,6 @@
       private Label label6;
       private Label label7;
       private Label label8;
-      private CheckBox IsCityCheckBox;
-      private CheckBox IsHreCheckBox;
-      private CheckBox IsParlimentSeatCheckbox;
-      private CheckBox HasRevoltCheckBox;
       private GroupBox CoresAndClaimsBox;
       private TableLayoutPanel CoresAndClaimLayoutPanel;
       private TabControl OptionalsTabControl;

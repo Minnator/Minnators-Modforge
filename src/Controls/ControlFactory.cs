@@ -108,7 +108,7 @@ public static class ControlFactory
 
    public static ItemList GetItemList(string propName, ItemTypes itemType, List<string> items, string title)
    {
-      ComboBox box = itemType == ItemTypes.Tag ? GetTagComboBox("", true) : GetExtendedComboBox(items);
+      ComboBox box = itemType == ItemTypes.Tag ? GetTagComboBox("", true) : GetExtendedComboBox(propName, items);
       var list = new ItemList(propName, itemType, box);
       if (itemType != ItemTypes.Tag)
          list.InitializeItems(items);

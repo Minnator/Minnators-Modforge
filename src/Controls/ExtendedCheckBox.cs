@@ -11,7 +11,6 @@
          Height = 21;
          AutoSize = true;
          TextAlign = ContentAlignment.MiddleLeft;
-         CheckedChanged += CheckBox_CheckedChanged;
       }
    }
 }

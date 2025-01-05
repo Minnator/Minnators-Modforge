@@ -50,45 +50,43 @@ namespace Editor.Saving
       /// <param name="p"></param>
       private static void SaveDefinitionValues(ref StringBuilder sb, Province p)
       {
-         AddCollection("add_core", p.GetAttribute(ProvAttrGet.cores), ref sb);
-         AddItem("owner", p.GetAttribute(ProvAttrGet.owner), ref sb);
-         AddItem("controller", p.GetAttribute(ProvAttrGet.controller), ref sb);
-         AddItem("base_tax", p.GetAttribute(ProvAttrGet.base_tax), ref sb);
-         AddItem("base_production", p.GetAttribute(ProvAttrGet.base_production), ref sb);
-         AddItem("base_manpower", p.GetAttribute(ProvAttrGet.base_manpower), ref sb);
+         AddCollection("add_core", p.GetPropertyValue("Cores"), ref sb);
+         AddItem("owner", p.GetPropertyValue("Owner"), ref sb);
+         AddItem("controller", p.GetPropertyValue("Controller"), ref sb);
+         AddItem("base_tax", p.GetPropertyValue("BaseTax"), ref sb);
+         AddItem("base_production", p.GetPropertyValue("BaseProduction"), ref sb);
+         AddItem("base_manpower", p.GetPropertyValue("BaseManpower"), ref sb);
          sb.AppendLine();
-         AddItem("center_of_trade", p.GetAttribute(ProvAttrGet.center_of_trade), ref sb);
-         AddItem("trade_goods", p.GetAttribute(ProvAttrGet.trade_good), ref sb);
-         AddItem("extra_cost", p.GetAttribute(ProvAttrGet.extra_cost), ref sb);
+         AddItem("center_of_trade", p.GetPropertyValue("CenterOfTrade"), ref sb);
+         AddItem("trade_goods", p.GetPropertyValue("TradeGood"), ref sb);
+         AddItem("extra_cost", p.GetPropertyValue("ExtraCost"), ref sb);
          sb.AppendLine();
-         AddItem("culture", p.GetAttribute(ProvAttrGet.culture), ref sb);
-         AddItem("religion", p.GetAttribute(ProvAttrGet.religion), ref sb);
-         SavingUtil.AddQuotedString(0, p.GetAttribute(ProvAttrGet.capital).ToString()!, "capital", ref sb);
+         AddItem("culture", p.GetPropertyValue("Culture"), ref sb);
+         AddItem("religion", p.GetPropertyValue("Religion"), ref sb);
+         SavingUtil.AddQuotedString(0, p.GetPropertyValue("Capital").ToString(), "capital", ref sb);
          sb.AppendLine();
-         AddItem("hre", p.GetAttribute(ProvAttrGet.hre), ref sb);
-         AddItem("is_city", p.GetAttribute(ProvAttrGet.is_city), ref sb);
-         AddItem("citysize", p.GetAttribute(ProvAttrGet.citysize), ref sb);
-         AddItem("seat_in_parliament", p.GetAttribute(ProvAttrGet.seat_in_parliament), ref sb);
-         AddItem("add_local_autonomy", p.GetAttribute(ProvAttrGet.local_autonomy), ref sb);
-         AddItem("add_devastation", p.GetAttribute(ProvAttrGet.devastation), ref sb);
-         AddItem("add_prosperity", p.GetAttribute(ProvAttrGet.prosperity), ref sb);
-         AddItem("add_nationalism", p.GetAttribute(ProvAttrGet.nationalism), ref sb);
-         AddItem("native_size", p.GetAttribute(ProvAttrGet.native_size), ref sb);
-         AddItem("native_ferocity", p.GetAttribute(ProvAttrGet.native_ferocity), ref sb);
-         AddItem("native_hostileness", p.GetAttribute(ProvAttrGet.native_hostileness), ref sb);
-         AddItem("tribal_owner", p.GetAttribute(ProvAttrGet.tribal_owner), ref sb);
-         foreach (var building in p.Buildings)
+         AddItem("hre", p.GetPropertyValue("IsHre"), ref sb);
+         AddItem("is_city", p.GetPropertyValue("IsCity"), ref sb);
+         AddItem("citysize", p.GetPropertyValue("CitySize"), ref sb);
+         AddItem("seat_in_parliament", p.GetPropertyValue("IsSeatInParliament"), ref sb);
+         AddItem("add_local_autonomy", p.GetPropertyValue("LocalAutonomy"), ref sb);
+         AddItem("add_devastation", p.GetPropertyValue("Devastation"), ref sb);
+         AddItem("add_prosperity", p.GetPropertyValue("Prosperity"), ref sb);
+         AddItem("add_nationalism", p.GetPropertyValue("Nationalism"), ref sb);
+         AddItem("native_size", p.GetPropertyValue("NativeSize"), ref sb);
+         AddItem("native_ferocity", p.GetPropertyValue("NativeFerocity"), ref sb);
+         AddItem("native_hostileness", p.GetPropertyValue("NativeHostileness"), ref sb);
+         AddItem("tribal_owner", p.GetPropertyValue("TribalOwner"), ref sb);
+         foreach (string building in p.Buildings)
             AddItem(building, "yes", ref sb);
-         AddCollection("add_claim", p.GetAttribute(ProvAttrGet.claims), ref sb);
-         AddCollection("add_permanent_claim", p.GetAttribute(ProvAttrGet.permanent_claims), ref sb);
+         AddCollection("add_claim", p.GetPropertyValue("Claims"), ref sb);
+         AddCollection("add_permanent_claim", p.GetPropertyValue("PermanentClaims"), ref sb);
          sb.AppendLine();
-         AddCollection("discovered_by", p.GetAttribute(ProvAttrGet.discovered_by), ref sb);
+         AddCollection("discovered_by", p.GetPropertyValue("DiscoveredBy"), ref sb);
          sb.AppendLine();
-         AddCollection("add_province_triggered_modifier", p.ProvinceTriggeredModifiers, ref sb);
+         AddCollection("add_province_triggered_modifier", (object)p.ProvinceTriggeredModifiers, ref sb);
          sb.AppendLine();
          AddEffects(p, ref sb);
-         // TODO complete complexer saving
-         // TradeCompanyInvestments
       }
 
       /// <summary>
@@ -96,7 +94,7 @@ namespace Editor.Saving
       /// </summary>
       private static void AddEffects(Province p, ref StringBuilder sb)
       {
-         SavingUtil.AddElements(0, p.Effects, ref sb);
+         //SavingUtil.AddElements(0, p.Effects, ref sb);
       }
 
       /// <summary>
@@ -107,7 +105,7 @@ namespace Editor.Saving
       private static void SaveAnythingElse(ref StringBuilder sb, Province province)
       {
          // latent_trade_goods
-         var latentTradeGoods = province.GetAttribute(ProvAttrGet.latent_trade_good) as string;
+         var latentTradeGoods = province.GetPropertyValue("LatentTradeGood") as string;
          if (!string.IsNullOrEmpty(latentTradeGoods))
          {
             sb.AppendLine("latent_trade_goods = {")

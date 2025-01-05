@@ -1,10 +1,9 @@
-﻿using System.Text;
+﻿/*using System.Text;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Parser;
 using Editor.Saving;
 using Newtonsoft.Json;
-using static Editor.Events.ProvinceEventHandler;
 using static Editor.Helper.ProvinceEnumHelper;
 using Parsing = Editor.Parser.Parsing;
 
@@ -164,9 +163,9 @@ public class ProvinceFUUUUUCK : ProvinceComposite, ITitleAdjProvider, IHistoryPr
    #region Globals from the game
 
    // Globals from the Game
-   public Area GetArea() => GetFirstParentOfType(SaveableType.Area) as Area ?? Area.Empty;
+   public Area Area => GetFirstParentOfType(SaveableType.Area) as Area ?? Area.Empty;
 
-   public Continent GetContinent() => GetFirstParentOfType(SaveableType.Continent) as Continent ?? Continent.Empty;
+   public Continent Continent => GetFirstParentOfType(SaveableType.Continent) as Continent ?? Continent.Empty;
 
    #endregion
 
@@ -732,7 +731,7 @@ public class ProvinceFUUUUUCK : ProvinceComposite, ITitleAdjProvider, IHistoryPr
    /// </summary>
    public void ResetHistory()
    {
-      //GetArea().Add(this);
+      //Area.Add(this);
       Claims = ProvinceData.Claims;
       PermanentClaims = ProvinceData.PermanentClaims;
       Cores = ProvinceData.Cores;
@@ -808,7 +807,7 @@ public class ProvinceFUUUUUCK : ProvinceComposite, ITitleAdjProvider, IHistoryPr
          EditingStatus = ObjEditingStatus.Modified;
          LastModified = DateTime.Now;
       }
-      */
+      #1#
    }
 
    public object GetAttribute(ProvAttrGet key)
@@ -838,8 +837,8 @@ public class ProvinceFUUUUUCK : ProvinceComposite, ITitleAdjProvider, IHistoryPr
          ProvAttrGet.base_tax => BaseTax,
          ProvAttrGet.base_production => BaseProduction,
          ProvAttrGet.total_development => TotalDevelopment,
-         ProvAttrGet.area => GetArea(), 
-         ProvAttrGet.continent => GetContinent(),
+         ProvAttrGet.area => Area, 
+         ProvAttrGet.continent => Continent,
          ProvAttrGet.claims => Claims,
          ProvAttrGet.permanent_claims => PermanentClaims,
          ProvAttrGet.cores => Cores,
@@ -920,7 +919,7 @@ public class ProvinceFUUUUUCK : ProvinceComposite, ITitleAdjProvider, IHistoryPr
             return;
          }
          Globals.ErrorLog.Write($"Could not parse {name} to set attribute for province id {Id}");
-         */
+         #1#
          return;
       }
 
@@ -1249,7 +1248,7 @@ public class ProvinceFUUUUUCK : ProvinceComposite, ITitleAdjProvider, IHistoryPr
 
       return provinces;
    }
-   */
+   #1#
 
 
    public void DumpHistory(string path)
@@ -1344,4 +1343,4 @@ public class ProvinceFUUUUUCK : ProvinceComposite, ITitleAdjProvider, IHistoryPr
    public string TitleKey => $"PROV{Id}";
 
    public string AdjectiveKey => $"PROV_ADJ{Id}";
-}
+}*/

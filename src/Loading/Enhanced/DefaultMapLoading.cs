@@ -1,4 +1,6 @@
-﻿using Editor.ErrorHandling;
+﻿using System;
+using Editor.ErrorHandling;
+using Editor.Helper;
 
 namespace Editor.Loading.Enhanced
 {
@@ -10,9 +12,9 @@ namespace Editor.Loading.Enhanced
 
          var attributes = EnhancedParsing.GetAttributesFromContentElements(elements, po, "max_provinces", "width", "height");
 
-         var maxProvinces = EnhancedParser.Convert<int>(attributes[0], po);
-         Globals.MapWidth = EnhancedParser.Convert<int>(attributes[1], po);
-         Globals.MapHeight = EnhancedParser.Convert<int>(attributes[2], po);
+         Converter.Convert<int>(attributes[0], out int maxProvinces);
+         Converter.Convert<int>(attributes[1], out Globals.MapWidth);
+         Converter.Convert<int>(attributes[2], out Globals.MapHeight);
 
          foreach (var province in Globals.Provinces)
          {

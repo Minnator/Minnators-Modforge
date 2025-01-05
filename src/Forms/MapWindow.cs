@@ -8,6 +8,7 @@ using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Misc;
+using Editor.DiscordGame_SDK;
 using Editor.ErrorHandling;
 using Editor.Events;
 using Editor.Forms.Feature;
@@ -49,23 +50,27 @@ namespace Editor.Forms
       private ExtendedNumeric _taxNumeric = null!;
       private ExtendedNumeric _prdNumeric = null!;
       private ExtendedNumeric _mnpNumeric = null!;
-
       private ExtendedNumeric _autonomyNumeric = null!;
       private ExtendedNumeric _devastationNumeric = null!;
       private ExtendedNumeric _prosperityNumeric = null!;
       private ExtendedNumeric _extraCostNumeric = null!;
 
+      private ExtendedCheckBox _isCityCheckBox;
+      private ExtendedCheckBox _isHreCheckBox;
+      private ExtendedCheckBox _isParliamentSeatCheckbox;
+      private ExtendedCheckBox _hasRevoltCheckBox;
+
       private TagComboBox _tribalOwner = null!;
       private ExtendedComboBox _tradeCompanyInvestments = null!;
       private ExtendedComboBox _terrainComboBox = null!;
 
-      private TextSaveableTextBox<string, CProvinceAttributeChange> _nativesSizeTextBox = null!;
-      private TextSaveableTextBox<string, CProvinceAttributeChange> _nativeFerocityTextBox = null!;
-      private TextSaveableTextBox<string, CProvinceAttributeChange> _nativeHostilityTextBox = null!;
+      private TextSaveableTextBox<string, CModifyProperty<string>> _nativesSizeTextBox = null!;
+      private TextSaveableTextBox<string, CModifyProperty<string>> _nativeFerocityTextBox = null!;
+      private TextSaveableTextBox<string, CModifyProperty<string>> _nativeHostilityTextBox = null!;
 
       private TextSaveableTextBox<string, CModifyLocalisation> _localisationTextBox = null!;
       private TextSaveableTextBox<string, CModifyLocalisation> _provAdjTextBox = null!;
-      private TextSaveableTextBox<string, CProvinceAttributeChange> _capitalNameTextBox = null!;
+      private TextSaveableTextBox<string, CModifyProperty<string>> _capitalNameTextBox = null!;
 
       private ToolTip _savingButtonsToolTip = null!;
 
@@ -521,7 +526,7 @@ namespace Editor.Forms
          _extraCostNumeric.OnValueChanged += ProvinceEditingEvents.OnExtendedNumericValueChanged;
          TradePanel.Controls.Add(_extraCostNumeric, 1, 2);
 
-         _capitalNameTextBox = new(Selection.GetSelectedProvincesAsSaveable, new CProvinceAttributeFactory(ProvAttrGet.capital, ProvAttrSet.capital))
+         _capitalNameTextBox = new(Selection.GetSelectedProvincesAsSaveable, new CCountryPropertyChangeFactory<string>(nameof(Province.Capital)))
          {
             Dock = DockStyle.Fill,
             Margin = new(3, 1, 3, 3),
@@ -529,40 +534,40 @@ namespace Editor.Forms
          };
          MisProvinceData.Controls.Add(_capitalNameTextBox, 1, 4);
 
-         IsCityCheckBox.CheckedChanged += ProvinceEditingEvents.OnIsCityChanged;
-         IsHreCheckBox.CheckedChanged += ProvinceEditingEvents.OnIsHreChanged;
-         IsParlimentSeatCheckbox.CheckedChanged += ProvinceEditingEvents.OnIsSeatInParliamentChanged;
-         HasRevoltCheckBox.CheckedChanged += ProvinceEditingEvents.OnHasRevoltChanged;
+         _isCityCheckBox.CheckedChanged += ProvinceEditingEvents.OnExtendedCheckBoxCheckedChanged;
+         _isHreCheckBox.CheckedChanged += ProvinceEditingEvents.OnExtendedCheckBoxCheckedChanged;
+         _isParliamentSeatCheckbox.CheckedChanged += ProvinceEditingEvents.OnExtendedCheckBoxCheckedChanged;
+         _hasRevoltCheckBox.CheckedChanged += ProvinceEditingEvents.OnExtendedCheckBoxCheckedChanged;
 
          MWAttirbuteCombobox.Items.AddRange([.. Enum.GetNames<ProvAttrGet>()]);
 
          // NATIVES TAB
-         _tribalOwner = ControlFactory.GetTagComboBox();
-         _tribalOwner.OnTagChanged += ProvinceEditingEvents.OnTribalOwnerChanged;
+         _tribalOwner = ControlFactory.GetTagComboBox(nameof(Province.TribalOwner));
+         _tribalOwner.OnTagChanged += ProvinceEditingEvents.OnTagComboBoxSelectedIndexChanged;
          NativesLayoutPanel.Controls.Add(_tribalOwner, 1, 0);
 
-         _nativesSizeTextBox = new(Selection.GetSelectedProvincesAsSaveable, new CProvinceAttributeFactory(ProvAttrGet.native_size, ProvAttrSet.native_size))
+         _nativesSizeTextBox = new(Selection.GetSelectedProvincesAsSaveable, new CCountryPropertyChangeFactory<string>(nameof(Province.NativeSize)))
          {
             Input = InputType.UnsignedNumber
          };
          NativesLayoutPanel.Controls.Add(_nativesSizeTextBox, 1, 1);
 
-         _nativeFerocityTextBox = new(Selection.GetSelectedProvincesAsSaveable, new CProvinceAttributeFactory(ProvAttrGet.native_ferocity, ProvAttrSet.native_ferocity))
+         _nativeFerocityTextBox = new(Selection.GetSelectedProvincesAsSaveable, new CCountryPropertyChangeFactory<string>(nameof(Province.NativeFerocity)))
          {
             Input = InputType.DecimalNumber
          };
          NativesLayoutPanel.Controls.Add(_nativeFerocityTextBox, 1, 3);
 
-         _nativeHostilityTextBox = new(Selection.GetSelectedProvincesAsSaveable, new CProvinceAttributeFactory(ProvAttrGet.native_hostileness, ProvAttrSet.native_hostileness))
+         _nativeHostilityTextBox = new(Selection.GetSelectedProvincesAsSaveable, new CCountryPropertyChangeFactory<string>(nameof(Province.NativeHostileness)))
          {
             Input = InputType.UnsignedNumber
          };
          NativesLayoutPanel.Controls.Add(_nativeHostilityTextBox, 1, 2);
 
          // TRADE_COMPANIES TAB
-         _tradeCompanyInvestments = ControlFactory.GetExtendedComboBox();
+         _tradeCompanyInvestments = ControlFactory.GetExtendedComboBox(nameof(Province.TradeCompanyInvestments));
          _tradeCompanyInvestments.Items.AddRange([.. Globals.TradeCompanyInvestments.Keys]);
-         _tradeCompanyInvestments.OnDataChanged += ProvinceEditingEvents.OnTradeCompanyInvestmentChanged;
+         _tradeCompanyInvestments.OnDataChanged += ProvinceEditingEvents.OnExtendedComboBoxSelectedIndexChanged;
          TradeCompaniesLayoutPanel.Controls.Add(_tradeCompanyInvestments, 1, 0);
 
          // MODIFIERS TAB
@@ -575,12 +580,12 @@ namespace Editor.Forms
 
       private void InitializeModifierTab()
       {
-         ModifierComboBox = ControlFactory.GetExtendedComboBox();
+         ModifierComboBox = ControlFactory.GetExtendedComboBox(nameof(Province.ProvinceModifiers));
          ModifierComboBox.Items.AddRange([.. Globals.EventModifiers.Keys]);
          // No data changed here as they are added via the "Add" button
          ModifiersLayoutPanel.Controls.Add(ModifierComboBox, 1, 1);
 
-         _modifierTypeComboBox = ControlFactory.GetExtendedComboBox(["CountryModifier", "ProvinceModifier"]);
+         _modifierTypeComboBox = ControlFactory.GetExtendedComboBox("",["CountryModifier", "ProvinceModifier"]);
          _modifierTypeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
          _modifierTypeComboBox.Margin = new(2, 1, 2, 0);
          ModTypeSubLayout.Controls.Add(_modifierTypeComboBox, 0, 0);
@@ -611,61 +616,56 @@ namespace Editor.Forms
          SuspendLayout();
          ClearProvinceGui();
          ExtendedComboBox.AllowEvents = false;
-         if (Selection.GetSharedAttribute(ProvAttrGet.claims, out var result) && result is List<Tag> tags)
-            _claims.AddItemsUnique([.. tags]);
-         if (Selection.GetSharedAttribute(ProvAttrGet.permanent_claims, out result) && result is List<Tag> permanentTags)
-            _permanentClaims.AddItemsUnique([.. permanentTags]);
-         if (Selection.GetSharedAttribute(ProvAttrGet.cores, out result) && result is List<Tag> coreTags)
-            _cores.AddItemsUnique([.. coreTags]);
-         if (Selection.GetSharedAttribute(ProvAttrGet.buildings, out result) && result is List<string> buildings)
-            _buildings.AddItemsUnique(buildings);
-         if (Selection.GetSharedAttribute(ProvAttrGet.discovered_by, out result) && result is List<string> techGroups)
-            _discoveredBy.AddItemsUnique(techGroups);
-         if (Selection.GetSharedAttribute(ProvAttrGet.owner, out result) && result is Tag owner)
-            OwnerTagBox.Text = owner;
-         if (Selection.GetSharedAttribute(ProvAttrGet.controller, out result) && result is Tag controller)
-            ControllerTagBox.Text = controller;
-         if (Selection.GetSharedAttribute(ProvAttrGet.religion, out result) && result is string religion)
-            _religionComboBox.Text = religion;
-         if (Selection.GetSharedAttribute(ProvAttrGet.culture, out result) && result is string culture)
-            _cultureComboBox.Text = culture;
-         if (Selection.GetSharedAttribute(ProvAttrGet.capital, out result) && result is string capital)
-            _capitalNameTextBox.Text = capital;
-         if (Selection.GetSharedAttribute(ProvAttrGet.is_city, out result) && result is bool isCity)
-            IsCityCheckBox.Checked = isCity;
-         if (Selection.GetSharedAttribute(ProvAttrGet.hre, out result) && result is bool isHre)
-            IsHreCheckBox.Checked = isHre;
-         if (Selection.GetSharedAttribute(ProvAttrGet.seat_in_parliament, out result) && result is bool isSeatInParliament)
-            IsParlimentSeatCheckbox.Checked = isSeatInParliament;
-         if (Selection.GetSharedAttribute(ProvAttrGet.revolt, out result) && result is bool hasRevolt)
-            HasRevoltCheckBox.Checked = hasRevolt;
-         if (Selection.GetSharedAttribute(ProvAttrGet.base_tax, out result) && result is int baseTax)
-            _taxNumeric.Value = baseTax;
-         if (Selection.GetSharedAttribute(ProvAttrGet.base_production, out result) && result is int baseProduction)
-            _prdNumeric.Value = baseProduction;
-         if (Selection.GetSharedAttribute(ProvAttrGet.base_manpower, out result) && result is int baseManpower)
-            _mnpNumeric.Value = baseManpower;
-         if (Selection.GetSharedAttribute(ProvAttrGet.local_autonomy, out result) && result is float localAutonomy)
-            _autonomyNumeric.Value = (int)localAutonomy;
-         if (Selection.GetSharedAttribute(ProvAttrGet.devastation, out result) && result is float devastation)
-            _devastationNumeric.Value = (int)devastation;
-         if (Selection.GetSharedAttribute(ProvAttrGet.prosperity, out result) && result is float prosperity)
-            _prosperityNumeric.Value = (int)prosperity;
-         if (Selection.GetSharedAttribute(ProvAttrGet.trade_good, out result) && result is string tradeGood)
-            _tradeGoodsComboBox.Text = tradeGood;
-         if (Selection.GetSharedAttribute(ProvAttrGet.center_of_trade, out result) && result is int centerOfTrade)
-            TradeCenterComboBox.Text = centerOfTrade.ToString();
-         if (Selection.GetSharedAttribute(ProvAttrGet.extra_cost, out result) && result is int extraCost)
-            _extraCostNumeric.Value = extraCost;
-         if (Selection.GetSharedAttribute(ProvAttrGet.tribal_owner, out result) && result is Tag tribalOwner)
-            _tribalOwner.Text = tribalOwner;
-         if (Selection.GetSharedAttribute(ProvAttrGet.native_size, out result) && result is int nativeSize)
-            _nativesSizeTextBox.Text = nativeSize.ToString();
-         if (Selection.GetSharedAttribute(ProvAttrGet.native_ferocity, out result) && result is float nativeFerocity)
-            _nativeFerocityTextBox.Text = nativeFerocity.ToString(CultureInfo.InvariantCulture);
-         if (Selection.GetSharedAttribute(ProvAttrGet.native_hostileness, out result) && result is float nativeHostileness)
-            _nativeHostilityTextBox.Text = nativeHostileness.ToString(CultureInfo.InvariantCulture);
-         if (Selection.GetSharedAttribute(ProvAttrGet.terrain, out result) && result is Terrain terrain)
+         object result;
+         if (Selection.GetSharedAttribute("Buildings", out result) && result is List<string> items1)
+            _buildings.AddItemsUnique(items1);
+         if (Selection.GetSharedAttribute("DiscoveredBy", out result) && result is List<string> items2)
+            _discoveredBy.AddItemsUnique(items2);
+         if (Selection.GetSharedAttribute("Owner", out result) && result is Tag tag1)
+            OwnerTagBox.Text = tag1;
+         if (Selection.GetSharedAttribute("Controller", out result) && result is Tag tag2)
+            ControllerTagBox.Text = tag2;
+         if (Selection.GetSharedAttribute("Religion", out result) && result is string str1)
+            _religionComboBox.Text = str1;
+         if (Selection.GetSharedAttribute("Culture", out result) && result is string str2)
+            _cultureComboBox.Text = str2;
+         if (Selection.GetSharedAttribute("Capital", out result) && result is string str3)
+            _capitalNameTextBox.Text = str3;
+         if (Selection.GetSharedAttribute("IsCity", out result) && result is bool flag1)
+            _isCityCheckBox.Checked = flag1;
+         if (Selection.GetSharedAttribute("IsHre", out result) && result is bool flag2)
+            _isHreCheckBox.Checked = flag2;
+         if (Selection.GetSharedAttribute("IsSeatInParliament", out result) && result is bool flag3)
+            _isParliamentSeatCheckbox.Checked = flag3;
+         if (Selection.GetSharedAttribute("HasRevolt", out result) && result is bool flag4)
+            _hasRevoltCheckBox.Checked = flag4;
+         if (Selection.GetSharedAttribute("BaseTax", out result) && result is int num1)
+            _taxNumeric.Value = num1;
+         if (Selection.GetSharedAttribute("BaseProduction", out result) && result is int num2)
+            _prdNumeric.Value = num2;
+         if (Selection.GetSharedAttribute("BaseManpower", out result) && result is int num3)
+            _mnpNumeric.Value = num3;
+         if (Selection.GetSharedAttribute("LocalAutonomy", out result) && result is float num4)
+            _autonomyNumeric.Value = checked((int)num4);
+         if (Selection.GetSharedAttribute("Devastation", out result) && result is float num5)
+            _devastationNumeric.Value = checked((int)num5);
+         if (Selection.GetSharedAttribute("Prosperity", out result) && result is float num6)
+            _prosperityNumeric.Value = checked((int)num6);
+         if (Selection.GetSharedAttribute("TradeGood", out result) && result is string str4)
+            _tradeGoodsComboBox.Text = str4;
+         if (Selection.GetSharedAttribute("CenterOfTrade", out result) && result is int num7)
+            _tradeCenterComboBox.Text = num7.ToString();
+         if (Selection.GetSharedAttribute("ExtraCost", out result) && result is int num8)
+            _extraCostNumeric.Value = num8;
+         if (Selection.GetSharedAttribute("TribalOwner", out result) && result is Tag tag3)
+            _tribalOwner.Text = tag3;
+         if (Selection.GetSharedAttribute("NativeSize", out result) && result is int num9)
+            _nativesSizeTextBox.Text = num9.ToString();
+         if (Selection.GetSharedAttribute("NativeFerocity", out result) && result is float num10)
+            _nativeFerocityTextBox.Text = num10.ToString(CultureInfo.InvariantCulture);
+         if (Selection.GetSharedAttribute("NativeHostileness", out result) && result is float num11)
+            _nativeHostilityTextBox.Text = num11.ToString(CultureInfo.InvariantCulture);
+         if (Selection.GetSharedAttribute(nameof(Province.Terrain), out result) && result is Terrain terrain)
             _terrainComboBox.Text = terrain.Name;
          // TODO The Gui needs to be able to represent several trade company investments
          //if (Selection.GetSharedAttribute(ProvAttrGet.trade_company_investment, out result) && result is string tradeCompanyInvestments)
@@ -693,10 +693,10 @@ namespace Editor.Forms
          _religionComboBox.Text = province.Religion;
          _cultureComboBox.Text = province.Culture;
          _capitalNameTextBox.Text = province.Capital;
-         IsCityCheckBox.Checked = province.IsCity;
-         IsHreCheckBox.Checked = province.IsHre;
-         IsParlimentSeatCheckbox.Checked = province.IsSeatInParliament;
-         HasRevoltCheckBox.Checked = province.HasRevolt;
+         _isCityCheckBox.Checked = province.IsCity;
+         _isHreCheckBox.Checked = province.IsHre;
+         _isParliamentSeatCheckbox.Checked = province.IsSeatInParliament;
+         _hasRevoltCheckBox.Checked = province.HasRevolt;
          _taxNumeric.Value = province.BaseTax;
          _prdNumeric.Value = province.BaseProduction;
          _mnpNumeric.Value = province.BaseManpower;
@@ -709,7 +709,7 @@ namespace Editor.Forms
          _devastationNumeric.Value = (int)province.Devastation;
          _prosperityNumeric.Value = (int)province.Prosperity;
          _tradeGoodsComboBox.Text = province.TradeGood;
-         TradeCenterComboBox.Text = province.CenterOfTrade.ToString();
+         _tradeCenterComboBox.Text = province.CenterOfTrade.ToString();
          _extraCostNumeric.Value = province.ExtraCost;
          _tribalOwner.Text = province.TribalOwner;
          _nativesSizeTextBox.Text = province.NativeSize.ToString();
@@ -729,10 +729,10 @@ namespace Editor.Forms
          _religionComboBox.Clear();
          _cultureComboBox.Clear();
          _capitalNameTextBox.Clear();
-         IsCityCheckBox.Checked = false;
-         IsHreCheckBox.Checked = false;
-         IsParlimentSeatCheckbox.Checked = false;
-         HasRevoltCheckBox.Checked = false;
+         _isCityCheckBox.Checked = false;
+         _isHreCheckBox.Checked = false;
+         _isParliamentSeatCheckbox.Checked = false;
+         _hasRevoltCheckBox.Checked = false;
          _taxNumeric.Value = 1;
          _prdNumeric.Value = 1;
          _mnpNumeric.Value = 1;
@@ -745,7 +745,7 @@ namespace Editor.Forms
          _devastationNumeric.Value = 0;
          _prosperityNumeric.Value = 0;
          _tradeGoodsComboBox.Clear();
-         TradeCenterComboBox.Clear();
+         _tradeCenterComboBox.Clear();
          _extraCostNumeric.Value = 0;
          _tribalOwner.Clear();
          _nativesSizeTextBox.Clear();
@@ -846,7 +846,7 @@ namespace Editor.Forms
 
       private static void OnDateChanged(object? sender, Date date)
       {
-         ProvinceHistoryManager.LoadDate(date);
+         //ProvinceHistoryManager.LoadDate(date);
       }
 
       public void UpdateHoveredInfo(Province? province)
@@ -1060,7 +1060,7 @@ namespace Editor.Forms
 
          var mod = new ApplicableModifier(ModifierComboBox.Text, duration);
          var type = Enum.Parse<ModifierType>(_modifierTypeComboBox.Text);
-         ProvinceEditingEvents.OnModifierAdded(mod, type);
+         //TODO  ProvinceEditingEvents.OnModifierAdded(mod, type);
          AddModifiersToList(mod, type);
       }
 
@@ -1077,7 +1077,7 @@ namespace Editor.Forms
          if (!Globals.EventModifiers.TryGetValue(modifierName, out _))
             return;
 
-         ProvinceEditingEvents.OnModifierRemoved(new ApplicableModifier(modifierName, duration), type);
+         // TODO  ProvinceEditingEvents.OnModifierRemoved(new ApplicableModifier(modifierName, duration), type);
          ModifiersListView.Items.Remove(item);
       }
 
@@ -1198,7 +1198,7 @@ namespace Editor.Forms
       {
          Selection.OnCountrySelected += CountryGuiEvents.OnCountrySelected;
          Selection.OnCountryDeselected += CountryGuiEvents.OnCountryDeselected;
-         _tagSelectionBox = new()
+         _tagSelectionBox = new("")
          {
             Margin = new(1),
             Height = 25,
@@ -1226,7 +1226,7 @@ namespace Editor.Forms
             ranks.Add(i.ToString());
          _governmentRankBox = ControlFactory.GetListComboBox(ranks, new(1)); // TODO read in the defines to determine range
          _governmentRankBox.SelectedIndexChanged += CountryGuiEvents.GovernmentRankBox_SelectedIndexChanged;
-         _governmentReforms = ControlFactory.GetItemList(ItemTypes.FullWidth, [], "Government Reforms");
+         _governmentReforms = ControlFactory.GetItemList(nameof(Country.HistoryCountry.GovernmentReforms), ItemTypes.FullWidth, [], "Government Reforms");
          _governmentReforms.Width = 117;
          _governmentReforms.OnItemAdded += CountryGuiEvents.GovernmentReforms_OnItemAdded;
          _governmentReforms.OnItemRemoved += CountryGuiEvents.GovernmentReforms_OnItemRemoved;
@@ -1270,7 +1270,7 @@ namespace Editor.Forms
          _primaryCultureBox = new() { Dock = DockStyle.Fill };
          _primaryCultureBox.Items.AddRange([.. Globals.Cultures.Keys]);
          _primaryCultureBox.Margin = new(1, 1, 6, 1);
-         _acceptedCultures = ControlFactory.GetItemList(ItemTypes.FullWidth, [.. Globals.Cultures.Keys], "Accepted Cultures");
+         _acceptedCultures = ControlFactory.GetItemList(nameof(HistoryCountry.AcceptedCultures), ItemTypes.FullWidth, [.. Globals.Cultures.Keys], "Accepted Cultures");
          _acceptedCultures.OnItemAdded += CountryGuiEvents.AcceptedCultures_OnItemAdded;
          _acceptedCultures.OnItemRemoved += CountryGuiEvents.AcceptedCultures_OnItemRemoved;
 
@@ -1279,7 +1279,7 @@ namespace Editor.Forms
          CulturesTLP.SetColumnSpan(_acceptedCultures, 2);
 
          // Development
-         _countryDevelopmentNumeric = ControlFactory.GetExtendedNumeric();
+         _countryDevelopmentNumeric = ControlFactory.GetExtendedNumeric("");
          _countryDevelopmentNumeric.Minimum = 0;
          _countryDevelopmentNumeric.Maximum = 100000;
          _countryDevelopmentNumeric.UpButtonPressedSmall += (_, _) => AddDevToSelectedCountryIfValid(1);
@@ -1288,7 +1288,7 @@ namespace Editor.Forms
          _countryDevelopmentNumeric.DownButtonPressedSmall += (_, _) => AddDevToSelectedCountryIfValid(-1);
          _countryDevelopmentNumeric.DownButtonPressedMedium += (_, _) => AddDevToSelectedCountryIfValid(-5);
          _countryDevelopmentNumeric.DownButtonPressedLarge += (_, _) => AddDevToSelectedCountryIfValid(-10);
-         _countryDevelopmentNumeric.OnTextValueChanged += (_, _) => SpreadDevInSelectedCountryIfValid((int)_countryDevelopmentNumeric.Value);
+         _countryDevelopmentNumeric.OnValueChanged += (_, _) => SpreadDevInSelectedCountryIfValid((int)_countryDevelopmentNumeric.Value);
          DevelopmenTLP.Controls.Add(_countryDevelopmentNumeric, 1, 0);
          GeneralToolTip.SetToolTip(_countryDevelopmentNumeric, "LMB = +- 1\nSHIFT + LMB = +- 5\nCTRL + LMB = +-10\nThe development is only added to one random province in the selected country per click.");
 

@@ -124,17 +124,17 @@ namespace Editor.DataClasses.GameDataClasses
 
       public virtual bool ExecuteProvince(Province province)
       {
-         if (EffectParser.IsAnyEffect(name) || Globals.Buildings.Contains(new (name)) || Globals.UniqueAttributeKeys.Contains(name))
-         {
-            if (name.Equals("city"))
-            {
-               province.SetAttribute(ProvAttrSet.is_city, Value);
-               return true;
-            }
-            province.SetAttribute(Name, Value);
-            return true;
-         }
-         Globals.ErrorLog.Write($"Could not execute effect: {Name}");
+         // if (EffectParser.IsAnyEffect(name) || Globals.Buildings.Contains(new (name)) || Globals.UniqueAttributeKeys.Contains(name))
+         // {
+         //    if (name.Equals("city"))
+         //    {
+         //       province.SetAttribute(ProvAttrSet.is_city, Value);
+         //       return true;
+         //    }
+         //    province.SetAttribute(Name, Value);
+         //    return true;
+         // }
+         // Globals.ErrorLog.Write($"Could not execute effect: {Name}");
          return false;
       }
 

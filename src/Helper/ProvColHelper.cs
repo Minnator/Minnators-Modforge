@@ -173,20 +173,20 @@ namespace Editor.Helper
          return provinces;
       }
 
-      private static bool HasAttribute(Province province, string attribute, object value)
+      private static bool HasAttribute(Province province, string propName, object value)
       {
-         var attr = province.GetAttribute(attribute)!;
-         var val = value.ToString();
-         if (attr is IList list)
+         object propertyValue = province.GetPropertyValue(propName);
+         string str = value.ToString();
+         if (propertyValue is IList list)
          {
-            foreach (var item in list)
-               if (item is not null && item.ToString()!.Equals(val))
+            foreach (object obj in (IEnumerable)list)
+            {
+               if (obj != null && obj.ToString().Equals(str))
                   return true;
+            }
          }
-         else if (attr.ToString()!.Equals(val))
-         {
+         else if (propertyValue != null && propertyValue.ToString().Equals(str))
             return true;
-         }
          return false;
       }
 

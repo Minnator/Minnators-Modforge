@@ -88,7 +88,7 @@ namespace Editor.Controls
          var mapModeButton = ControlFactory.GetImageButton(ControlFactory.ImageButtonType.Map, "Switch to the according map mode");
          mapModeButton.MouseUp += SwitchToMapMode;
 
-         _extendedComboBox = new()
+         _extendedComboBox = new("")
          {
             Margin = new(1, 5, 1, 1),
             Dock = DockStyle.Fill,

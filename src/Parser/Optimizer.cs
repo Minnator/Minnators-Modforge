@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+﻿/*using System.Collections.Concurrent;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 
@@ -110,4 +110,4 @@ public static class Optimizer
       colorToAdj.Clear();
    }
 
-}
+}*/

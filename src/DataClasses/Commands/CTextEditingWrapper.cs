@@ -33,15 +33,6 @@ namespace Editor.DataClasses.Commands
          return new(locs, newValue, false);
       }
    }
-
-   public class CProvinceAttributeFactory(ProvinceEnumHelper.ProvAttrGet pa, ProvinceEnumHelper.ProvAttrSet ps) : CTextEditingFactory<CProvinceAttributeChange, string>
-   {
-      public override CProvinceAttributeChange Create(ICollection<Saveable> saveables, string newValue)
-      {
-         return new(saveables.Cast<Province>().ToList(), newValue, pa ,ps, false);
-      }
-   }
-
    
    public class CCountryPropertyChangeFactory<T> : CTextEditingFactory<CModifyProperty<T>, T>
    {

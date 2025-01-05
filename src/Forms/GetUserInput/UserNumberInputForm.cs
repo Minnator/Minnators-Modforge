@@ -81,7 +81,7 @@ namespace Editor.src.Forms.GetUserInput
          }
          else
          {
-            numericInput = new()
+            numericInput = new("")
             {
                Dock = DockStyle.Fill,
                Margin = new(3),
