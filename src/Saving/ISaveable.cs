@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Editor.DataClasses.Commands;
+using Editor.Events;
 using Editor.Helper;
 using Newtonsoft.Json;
 
@@ -61,25 +62,6 @@ public abstract class Saveable : IDisposable
    //public abstract void AddToPropertyChanged(EventHandler<string> handler);
    //public abstract void RemoveFromPropertyChanged(EventHandler<string> handler);
 
-   public bool SetIfModifiedEnumerable<T, Q>(ref T field, T value, [CallerMemberName] string? propertyName = null) where T: IEnumerable<Q>
-   {
-      if (field is null || value is null || field.SequenceEqual(value))
-         return false;
-      return InternalFieldSet(ref field, value, propertyName);
-   }
-
-   public void SetProperty<T>(string propertyName, T value)
-   {
-      Debug.Assert(GetPropertyInfo(propertyName) != null, $"Property {propertyName} not found in {GetType().Name}");
-      GetPropertyInfo(propertyName)!.SetValue(this, value);
-   }
-
-   public void SetProperty<T>(PropertyInfo propInfo, T value)
-   {
-      Debug.Assert(propInfo != null, $"Property {propInfo!.Name} not found in {GetType().Name}");
-      propInfo.SetValue(this, value);
-   }
-
    public PropertyInfo? GetPropertyInfo(string propertyName)
    {
       return GetType().GetProperty(propertyName);
@@ -108,25 +90,49 @@ public abstract class Saveable : IDisposable
       return GetType().GetProperty(propName)?.GetValue(this) ?? string.Empty;
    }
 
+   /// <summary>
+   /// TEMP used to set collections as we have not yet implemented proper usage of observable collections
+   /// </summary>
+   /// <typeparam name="T"></typeparam>
+   /// <typeparam name="Q"></typeparam>
+   /// <param name="field"></param>
+   /// <param name="value"></param>
+   /// <param name="propertyName"></param>
+   /// <returns></returns>
+   public bool SetIfModifiedEnumerable<T, Q>(ref T field, T value, [CallerMemberName] string? propertyName = null) where T : IEnumerable<Q>
+   {
+      Debug.Assert(field is not null && value is not null, "field is not null && value is not null in SetIfModifiedEnumerable");
+      if (field.SequenceEqual(value))
+         return false;
+      return InternalFieldSet(ref field, value, propertyName);
+   }
+
+   /// <summary>
+   /// 
+   /// </summary>
+   /// <typeparam name="T"></typeparam>
+   /// <param name="propertyName"></param>
+   /// <param name="value"></param>
    public void SetFieldSilent<T> (string propertyName, T value)
    {
       Debug.Assert(GetPropertyInfo(propertyName) != null, $"Property {propertyName} not found in {GetType().Name}");
+      PropertyInfo info;
       lock (this)
       {
          Suppressed = true;
-         GetPropertyInfo(propertyName)!.SetValue(this, value);
+         info = GetPropertyInfo(propertyName)!;
+         info.SetValue(this, value);
          Suppressed = false;
       }
+      LoadGuiEvents.TriggerGuiUpdate(GetType(), info);
    }
 
-   public static void SetFieldMultiple<T>(ICollection<Saveable> targets, T value, string propertyName)
-   {
-      if (Globals.State == State.Running) 
-         HistoryManager.AddCommand(new CModifyProperty<T>(propertyName, [..targets], value));
-      foreach(var target in targets)
-         target.OnPropertyChanged(propertyName);
-   }
-
+   /// <summary>
+   /// 
+   /// </summary>
+   /// <typeparam name="T"></typeparam>
+   /// <param name="info"></param>
+   /// <param name="value"></param>
    public void SetFieldSilent<T>(PropertyInfo info, T value)
    {
       lock (this)
@@ -135,8 +141,35 @@ public abstract class Saveable : IDisposable
          info.SetValue(this, value);
          Suppressed = false;
       }
+      LoadGuiEvents.TriggerGuiUpdate(GetType(), info);
    }
 
+   /// <summary>
+   /// 
+   /// </summary>
+   /// <typeparam name="TS"></typeparam>
+   /// <typeparam name="T"></typeparam>
+   /// <param name="targets"></param>
+   /// <param name="value"></param>
+   /// <param name="propertyName"></param>
+   public static void SetFieldMultiple<TS, T>(ICollection<TS> targets, T value, string propertyName) where TS : Saveable
+   {
+      if (Globals.State == State.Running) 
+         HistoryManager.AddCommand(new CModifyProperty<T>(propertyName, [..targets], value));
+      foreach(var target in targets)
+         target.OnPropertyChanged(propertyName);
+      
+      LoadGuiEvents.TriggerGuiUpdate(typeof(TS), );
+   }
+
+   /// <summary>
+   /// Is always called when a value in a saveable is changed (If the property calls SetField)
+   /// </summary>
+   /// <typeparam name="T"></typeparam>
+   /// <param name="field"></param>
+   /// <param name="value"></param>
+   /// <param name="propertyName"></param>
+   /// <returns></returns>
    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
    {
       if (EqualityComparer<T>.Default.Equals(field, value)) 
@@ -144,6 +177,15 @@ public abstract class Saveable : IDisposable
       return InternalFieldSet(ref field, value, propertyName);
    }
 
+   /// <summary>
+   /// Is always called when a value in a saveable is changed (If the property calls SetField)
+   /// Will call OnPropertyChange if it is not suppresed
+   /// </summary>
+   /// <typeparam name="T"></typeparam>
+   /// <param name="field"></param>
+   /// <param name="value"></param>
+   /// <param name="propertyName"></param>
+   /// <returns></returns>
    private bool InternalFieldSet<T>(ref T field, T value, string? propertyName)
    {
       if (Globals.State == State.Running && !Suppressed)

@@ -1128,7 +1128,7 @@ public static class Selection
    /// <summary>
    /// Returns true if the attribute is the same across all selected provinces
    /// </summary>
-   /// <param name="attribute"></param>
+   /// <param name="attrPropName"></param>
    /// <param name="result"></param>
    /// <returns></returns>
    public static bool GetSharedAttribute(string attrPropName, out object? result)
@@ -1139,7 +1139,12 @@ public static class Selection
       {
          var value = province.GetPropertyValue(attrPropName);
          if (result == null)
-            result = value!;
+            result = value;
+         else if (!result.Equals(value))
+         {
+            result = null;
+            return false;
+         }
          else if (result is IList list)
          {
             if (value is IList valueList)
@@ -1155,11 +1160,6 @@ public static class Selection
                result = null;
                return false;
             }
-         }
-         else if (!result.Equals(value))
-         {
-            result = null;
-            return false;
          }
       }
       return result != null;

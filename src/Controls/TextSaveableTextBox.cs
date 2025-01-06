@@ -41,7 +41,8 @@ namespace Editor.Controls
 
       public TextSaveableTextBox(Func<ICollection<Saveable>> getSaveables, CTextEditingFactory<C, T> factory)
       {
-        _getSaveables = getSaveables;
+
+         _getSaveables = getSaveables;
          _factory = factory;
          LostFocus += OnFocusLost;
          KeyDown += OnKeyDown;

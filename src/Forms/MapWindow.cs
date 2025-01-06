@@ -990,13 +990,7 @@ namespace Editor.Forms
       private void provDiffToolStripMenuItem_Click(object sender, EventArgs e)
       {
 #if DEBUG
-         var sb = new StringBuilder();
-         foreach (var collision in Globals.LocalisationCollisions)
-         {
-            sb.AppendLine($"{collision.Key} : {collision.Value}");
-         }
-
-         File.WriteAllText(Path.Combine(Globals.DebugPath, "localisationCollisions.txt"), sb.ToString());
+         Theory.TestTheory();
 #endif
       }
 

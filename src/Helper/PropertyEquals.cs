@@ -38,4 +38,5 @@ namespace Editor.Helper
       public object? GetProperty(string propertyName);
       public void SetProperty(string propertyName, object value);
    }
+
 }

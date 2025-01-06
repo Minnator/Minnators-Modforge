@@ -4,8 +4,6 @@ using Editor.Saving;
 
 namespace Editor.DataClasses.Commands
 {
-
-
    public abstract class CTextEditingFactory<C, T> where C : ICommand
    {
       public abstract C Create(ICollection<Saveable> saveables, T newValue);
