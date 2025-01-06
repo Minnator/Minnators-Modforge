@@ -42,7 +42,7 @@ namespace Editor.Forms
       private ItemList _discoveredBy = null!;
 
       private ExtendedComboBox _religionComboBox = null!;
-      private ExtendedComboBox _tradeCenterComboBox = null!;
+      private PropertyComboBox<Province, int> _tradeCenterComboBox = null!;
       private ExtendedComboBox _tradeGoodsComboBox = null!;
       private ExtendedComboBox _cultureComboBox = null!;
       public ExtendedComboBox ModifierComboBox = null!;
@@ -441,7 +441,7 @@ namespace Editor.Forms
          DiscoveredByGroupBox.Controls.Add(_discoveredBy);
          _discoveredBy.Location = new(0, 18);
 
-         _tradeCenterComboBox = ControlFactory.GetExtendedComboBox(nameof(Province.CenterOfTrade));
+         _tradeCenterComboBox = ControlFactory.SimpleComboBoxProvince<int>(typeof(Province).GetProperty(nameof(Province.CenterOfTrade))!);
          _tradeCenterComboBox.Items.AddRange(["0", "1", "2", "3"]);
          _tradeCenterComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
          _tradeCenterComboBox.SelectedIndexChanged += ProvinceEditingEvents.OnExtendedComboBoxSelectedIndexChanged;

@@ -65,7 +65,8 @@ public static class MapModeManager
 
    private static readonly Dictionary<string, MapModeType> PropertyRouting = new()
    {
-      { nameof(Province.IsCity), MapModeType.City }
+      { nameof(Province.IsCity), MapModeType.City },
+      { nameof(Province.CenterOfTrade), MapModeType.CenterOfTrade },
    };
 
    static MapModeManager()

@@ -180,6 +180,16 @@ public static class ControlFactory
       return new (item, type){Width = 75, Height = 25};
    }
 
+   public static PropertyComboBox<Province, TProperty> SimpleComboBoxProvince<TProperty>(PropertyInfo propertyInfo, bool useDefaultMargin = true)
+   {
+      if (useDefaultMargin)
+         return new(propertyInfo, ref LoadGuiEvents.ProvLoadAction, () => Selection.GetSelectedProvinces)
+         {
+            Margin = new(3, 1, 3, 3)
+         };
+      return new(propertyInfo, ref LoadGuiEvents.ProvLoadAction, () => Selection.GetSelectedProvinces);
+   }
+
    public static ExtendedComboBox GetExtendedComboBox(string propName, bool def = true)
    {
       if (def)

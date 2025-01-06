@@ -8,13 +8,13 @@ namespace Editor.Controls.NewControls
    {
       public PropertyInfo PropertyInfo { get; init; }
 
-      public bool GetFromGui();
       public void SetFromGui();
       public void SetDefault();
    }
 
    public interface IPropertyControl<T, Q> : IPropertyControl where T : Saveable
    {
+      public Q GetFromGui();
       public void LoadToGui(List<T> list, PropertyInfo propInfo, bool force)
       {
          if (force || PropertyInfo.Equals(propInfo))

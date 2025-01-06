@@ -9,18 +9,46 @@ public class BindingDictionary<TKey, TValue> : BindingList<TKey>, IDictionary<TK
    private readonly List<ComboBox> _boundControls = [];
    private readonly List<TKey> _internalList;
    private readonly IComparer<TKey> _keyComparer;
+   private KeyValuePair<TKey, TValue> _emptyItem = new(default!, default!);
 
-   private BindingDictionary(List<TKey> list, IComparer<TKey>? comparer) : base(list) 
+   public bool HasEmpty { get; init; } = true;
+
+   private BindingDictionary(List<TKey> list, KeyValuePair<TKey, TValue>? emptyItem, IComparer<TKey>? comparer) : base(list) 
    {
+      HasEmpty = emptyItem.HasValue;
+      if (HasEmpty)
+      {
+         _emptyItem = emptyItem!.Value;
+         SetEmpty();
+      }
       _keyComparer = comparer ?? Comparer<TKey>.Default;
       _internalList = list;
    }
    
-   public BindingDictionary(IComparer<TKey>? comparer = null) : this([], comparer) {  }
+   public BindingDictionary(KeyValuePair<TKey, TValue>? emptyItem = null, IComparer<TKey>? comparer = null) : this([], emptyItem, comparer) {  }
 
    public void Sort()
    {
       _internalList.Sort();
+   }
+
+   private void SetEmpty()
+   {
+      if (HasEmpty)
+      {
+         base.InsertItem(0, _emptyItem.Key);
+         _internalDictionary.Add(_emptyItem.Key, _emptyItem.Value);
+      }
+   }
+
+   public new void Clear()
+   {
+      BeginUpdate();
+      _internalDictionary.Clear();
+      _internalList.Clear();
+      base.Clear();
+      SetEmpty();
+      EndUpdate();
    }
 
 
@@ -29,6 +57,8 @@ public class BindingDictionary<TKey, TValue> : BindingList<TKey>, IDictionary<TK
    {
       var index = _internalList.BinarySearch(item, _keyComparer);
       index = index >= 0 ? index : ~index;
+      if (HasEmpty && index == 0)
+         index = 1;
       base.InsertItem(index, item);
    }
 

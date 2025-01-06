@@ -182,7 +182,7 @@ public static class Globals
    public static Dictionary<string, GovernmentReform> GovernmentReforms = [];
 
    // Country Groups
-   public static BindingDictionary<Tag, Country> Countries = [];
+   public static BindingDictionary<Tag, Country> Countries = new(new(Tag.Empty, Country.Empty));
 
    // Province Groups
    public static HashSet<Province> LandProvinces = [];
