@@ -104,7 +104,19 @@ public abstract class Saveable : IDisposable
       Debug.Assert(field is not null && value is not null, "field is not null && value is not null in SetIfModifiedEnumerable");
       if (field.SequenceEqual(value))
          return false;
-      return InternalFieldSet(ref field, value, propertyName);
+      return InternalFieldSet(ref field, value, GetPropertyInfo(propertyName!)!);
+   }
+
+   public void SetProperty<T>(string propertyName, T value)
+   {
+      Debug.Assert(GetPropertyInfo(propertyName) != null, $"Property {propertyName} not found in {GetType().Name}");
+      PropertyInfo info;
+      lock (this)
+      {
+         info = GetPropertyInfo(propertyName)!;
+         info.SetValue(this, value);
+      }
+      LoadGuiEvents.TriggerGuiUpdate(GetType(), info);
    }
 
    /// <summary>
@@ -152,14 +164,14 @@ public abstract class Saveable : IDisposable
    /// <param name="targets"></param>
    /// <param name="value"></param>
    /// <param name="propertyName"></param>
-   public static void SetFieldMultiple<TS, T>(ICollection<TS> targets, T value, string propertyName) where TS : Saveable
+   public static void SetFieldMultiple<TS, T>(ICollection<TS> targets, T value, PropertyInfo property) where TS : Saveable
    {
       if (Globals.State == State.Running) 
-         HistoryManager.AddCommand(new CModifyProperty<T>(propertyName, [..targets], value));
+         HistoryManager.AddCommand(new CModifyProperty<T>(property, [..targets], value));
       foreach(var target in targets)
-         target.OnPropertyChanged(propertyName);
+         target.OnPropertyChanged(property.Name);
       
-      LoadGuiEvents.TriggerGuiUpdate(typeof(TS), );
+      LoadGuiEvents.TriggerGuiUpdate(typeof(TS), property);
    }
 
    /// <summary>
@@ -174,7 +186,7 @@ public abstract class Saveable : IDisposable
    {
       if (EqualityComparer<T>.Default.Equals(field, value)) 
          return false;
-      return InternalFieldSet(ref field, value, propertyName);
+      return InternalFieldSet(ref field, value, GetPropertyInfo(propertyName!)!);
    }
 
    /// <summary>
@@ -186,12 +198,12 @@ public abstract class Saveable : IDisposable
    /// <param name="value"></param>
    /// <param name="propertyName"></param>
    /// <returns></returns>
-   private bool InternalFieldSet<T>(ref T field, T value, string? propertyName)
+   private bool InternalFieldSet<T>(ref T field, T value, PropertyInfo property)
    {
       if (Globals.State == State.Running && !Suppressed)
       {
-         HistoryManager.AddCommand(new CModifyProperty<T>(propertyName, this, value, field));
-         OnPropertyChanged(propertyName);
+         HistoryManager.AddCommand(new CModifyProperty<T>(property, this, value, field));
+         OnPropertyChanged(property.Name);
       }
       field = value;
       return true;
@@ -257,4 +269,5 @@ public abstract class Saveable : IDisposable
    /// If overwritten also call base.Dispose() to remove the object from the dictionary in SaveMaster
    /// </summary>
    public virtual void Dispose() => SaveMaster.RemoveFromDictionary(this);
+
 }

@@ -7,15 +7,13 @@ namespace Editor.DataClasses.Commands
    public class CModifyProperty<T> : SaveableCommandBasic
    {
       private T _newValue;
-      private readonly string _property;
       private readonly List<Saveable> _targets;
       private readonly List<T> _oldValue;
       private readonly PropertyInfo propInfo;
 
-      public CModifyProperty(string property, List<Saveable> targets, T newValue, bool executeOnInit = true)
+      public CModifyProperty(PropertyInfo property, List<Saveable> targets, T newValue, bool executeOnInit = true)
       {
-         propInfo = targets.First().GetPropertyInfo(property)!;
-         _property = property;
+         propInfo = property;
          _targets = targets;
          _oldValue = targets.Select(saveable => (T)propInfo?.GetValue(saveable)!).ToList();
          _newValue = newValue;
@@ -23,15 +21,10 @@ namespace Editor.DataClasses.Commands
             Execute();
       }
 
-      public CModifyProperty(string property,
-         Saveable targets,
-         T newValue,
-         T oldValue,
-         bool executeOnInit = true)
+      public CModifyProperty(PropertyInfo property, Saveable target, T newValue, T oldValue, bool executeOnInit = true)
       {
-         propInfo = targets.GetPropertyInfo(property)!;
-         _property = property;
-         _targets = [targets];
+         propInfo = property;
+         _targets = [target];
          _oldValue = [oldValue];
          _newValue = newValue;
          if (executeOnInit)
@@ -77,14 +70,14 @@ namespace Editor.DataClasses.Commands
 
       public override string GetDescription()
       {
-         return _newValue is not List<string> list ? $"Modify property {_property} of {_targets} to {_newValue}" : $"Modify property {_property} of {_targets} to {string.Join(", ", GetDiff())}";
+         return _newValue is not List<string> list ? $"Modify property {propInfo.Name} of {_targets} to {_newValue}" : $"Modify property {propInfo.Name} of {_targets} to {string.Join(", ", GetDiff())}";
       }
 
       public override string GetDebugInformation(int indent)
       {
          if (_newValue is not IList list)
-            return $"Changed {_property} from {_oldValue} to {_newValue} in {_targets.First().WhatAmI()} object ({_targets})";
-         return $"Changed {_property} from {_oldValue} to {string.Join(", ", GetDiff())} in {_targets.First().WhatAmI()} object ({_targets})";
+            return $"Changed {propInfo.Name} from {_oldValue} to {_newValue} in {_targets.First().WhatAmI()} object ({_targets})";
+         return $"Changed {propInfo.Name} from {_oldValue} to {string.Join(", ", GetDiff())} in {_targets.First().WhatAmI()} object ({_targets})";
       }
    }
 }

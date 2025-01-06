@@ -1203,7 +1203,7 @@ namespace Editor.Forms
       {
          Selection.OnCountrySelected += CountryGuiEvents.OnCountrySelected;
          Selection.OnCountryDeselected += CountryGuiEvents.OnCountryDeselected;
-         _tagSelectionBox = new("")
+         _tagSelectionBox = new(null!)
          {
             Margin = new(1),
             Height = 25,

@@ -44,7 +44,7 @@ namespace Editor.DataClasses.Commands
       public override CModifyProperty<T> Create(ICollection<Saveable> saveables, T newValue)
       {
          var country = saveables.First();
-         return new(PropName, country, newValue, (T)country.GetType().GetProperty(PropName)!.GetValue(country)!);
+         return new(country.GetPropertyInfo(PropName)!, [country], newValue);
       }
    }
 }
