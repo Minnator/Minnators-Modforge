@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
+using Editor.DataClasses.Misc;
+using Editor.ErrorHandling;
 using Editor.Events;
 using Editor.Helper;
 using Editor.Saving;
@@ -21,11 +23,9 @@ namespace Editor.Controls.NewControls
          loadHandle += ((IPropertyControl<TSaveable, TProperty>)this).LoadToGui;
       }
 
-      public TProperty GetFromGui()
+      public virtual IErrorHandle GetFromGui(out TProperty value)
       {
-         if (Converter.Convert(Text, PropertyInfo, out TProperty value).Log())
-            return value;
-         return default!;
+         return Converter.Convert(Text, out value);
       }
 
       protected override void OnSelectedIndexChanged(EventArgs e)
@@ -43,7 +43,7 @@ namespace Editor.Controls.NewControls
 
       public void SetFromGui()
       {
-         if (Globals.State == State.Running && Converter.Convert(Text, PropertyInfo, out TProperty value).Log())
+         if (Globals.State == State.Running && GetFromGui(out var value).Log())
             Saveable.SetFieldMultiple(_getSaveables.Invoke(), value, PropertyInfo);
       }
 
@@ -58,6 +58,42 @@ namespace Editor.Controls.NewControls
       {
          Debug.Assert(value != null, "value is null but must never be null");
          Text = value.ToString();
+      }
+   }
+
+   public class BindablePropertyComboBox<TSaveable, TProperty, TKey> : PropertyComboBox<TSaveable, TProperty> where TSaveable : Saveable
+   {
+      private readonly BindingDictionary<TKey, TProperty> _items;
+
+      public BindablePropertyComboBox(PropertyInfo? propertyInfo,
+                                      ref LoadGuiEvents.LoadAction<TSaveable> loadHandle,
+                                      Func<List<TSaveable>> getSaveables,
+                                      BindingDictionary<TKey, TProperty> items) : base(propertyInfo, ref loadHandle, getSaveables)
+      {
+         _items = items;
+         DataSource = new BindingSource
+         {
+            DataSource = _items
+         };
+         _items.AddControl(this);
+      }
+
+      ~BindablePropertyComboBox()
+      {
+         _items.RemoveControl(this);
+      }
+
+      public override IErrorHandle GetFromGui(out TProperty value)
+      {
+         var handle = Converter.Convert(Text, out TKey key);
+         if (!handle.Ignore())
+         {
+            value = default!;
+            return handle;
+         }
+         if (_items.TryGetValue(key, out value!))
+            return handle;
+         return new ErrorObject(ErrorType.INTERNAL_KeyNotFound, "Key not found in dictionary", LogType.Critical);
       }
    }
 }

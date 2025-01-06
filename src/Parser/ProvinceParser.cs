@@ -61,7 +61,7 @@ public static class ProvinceParser
      { "owner",                              (Set<Tag>,                    Province.Empty.GetPropertyInfo(nameof(Province.Owner))!) },
      { "prosperity",                         (Set<float>,                  Province.Empty.GetPropertyInfo(nameof(Province.Prosperity))!) },
      { "reformation_center",                 (Set<string>,                 Province.Empty.GetPropertyInfo(nameof(Province.ReformationCenter))!) },
-     { "religion",                           (Set<string>,                 Province.Empty.GetPropertyInfo(nameof(Province.Religion))!) },
+     { "religion",                           (Set<Religion>,               Province.Empty.GetPropertyInfo(nameof(Province.Religion))!) },
      { "remove_claim",                       (Remove<Tag>,                 Province.Empty.GetPropertyInfo(nameof(Province.Claims))!) },
      { "remove_core",                        (Remove<Tag>,                 Province.Empty.GetPropertyInfo(nameof(Province.Cores))!) },
      { "remove_discovered_by",               (Remove<string>,              Province.Empty.GetPropertyInfo(nameof(Province.DiscoveredBy))!) },

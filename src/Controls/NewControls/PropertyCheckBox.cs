@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
+using Editor.ErrorHandling;
 using Editor.Events;
 using Editor.Saving;
 
@@ -21,9 +22,10 @@ namespace Editor.Controls.NewControls
       
       public PropertyCheckBox(string propName, ref LoadGuiEvents.LoadAction<T> loadHandle, Func<List<T>> getSaveables) : this(typeof(T).GetProperty(propName), ref loadHandle, getSaveables) { }
 
-      public bool GetFromGui()
+      public IErrorHandle GetFromGui(out bool value)
       {
-         return Checked;
+         value = Checked;
+         return ErrorHandle.Sucess;
       }
 
       protected override void OnCheckedChanged(EventArgs e)

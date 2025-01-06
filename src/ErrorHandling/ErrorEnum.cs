@@ -56,10 +56,15 @@ public enum ErrorType
    InvalidProvinceId = 115,
    [ErrorInformation("This occurs because a country tag is used but never defined!", "Check the country tag definition and usages of the affected tag!")]
    UndefinedCountryTag = 116,
+   [ErrorInformation("This occurs because a religion is used but never defined!", "Check the religion definition and usages of the affected religion!")]
+   UnresolveableReligionReference = 117,
    [ErrorInformation("This occurs because an date is not in a valid format!", "Check the date format and correct it!")]
    IllegalDateFormat = 101,
+   // ObjectInteraction Error
+   [ErrorInformation("This occurs because a key was not found in a dictionary!", "Contact a developer with the latest log exported as a .csv")]
+   INTERNAL_KeyNotFound = 300, // ObjectInteraction Error 300-399
    [ErrorInformation("This occurs because your file is not in the correct format and thus can not be parse by the modforge", "Verify that your mod file is formatted correctly and if so contact a developer!")]
-   // Misc Error 300-399
+   // Misc Error 400-599
    TempParsingError = 1000,
    [ErrorInformation("This occurs because the error is not yet implemented!", "Implement the error! :)")]
    TODO_ERROR = 9999,

@@ -34,7 +34,7 @@ namespace Editor.DataClasses.GameDataClasses
       private bool _isSeatInParliament;                          
       private string _capital = string.Empty;                    
       private Culture _culture = Culture.Empty;                   
-      private string _religion = string.Empty;                   
+      private Religion _religion = GameDataClasses.Religion.Empty;                   
       private string _tradeGood = string.Empty;                   
       private string _latentTradeGood = string.Empty;           
       private string _reformationCenter = string.Empty;         
@@ -232,7 +232,7 @@ namespace Editor.DataClasses.GameDataClasses
       }
 
       [ToolTippable]
-      public string Religion
+      public Religion Religion
       {
          get => _religion;
          set => SetField(ref _religion, value);

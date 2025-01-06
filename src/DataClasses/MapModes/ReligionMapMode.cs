@@ -15,18 +15,17 @@ namespace Editor.DataClasses.MapModes
 
       public override int GetProvinceColor(Province id)
       {
-         if (Globals.Religions.TryGetValue(id.Religion, out var religion))
-            return religion.Color.ToArgb();
-         return Color.DimGray.ToArgb();
+         return id.Religion.Color.ToArgb();
       }
 
       public override MapModeType MapModeType => MapModeType.Religion;
 
       public override string GetSpecificToolTip(Province provinceId)
       {
-         if (Globals.Religions.TryGetValue(provinceId.Religion, out var religion))
-            return $"Religion: {religion.Name} ({Localisation.GetLoc(religion.Name)})";
-         return "Religion: [Unknown]";
+         if (provinceId.Religion == Religion.Empty)
+            return "Religion: [Unknown]";
+         
+         return $"Religion: {provinceId.Religion.Name} ({Localisation.GetLoc(provinceId.Religion.Name)})";
       }
 
    }

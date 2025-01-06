@@ -43,6 +43,10 @@ namespace Editor.Helper
          {
             typeof(Culture),
             Culture.GeneralParse
+         },
+         {
+            typeof(Religion),
+            Religion.GeneralParse
          }
       };
 

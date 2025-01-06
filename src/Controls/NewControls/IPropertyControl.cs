@@ -1,6 +1,7 @@
 ﻿using Editor.Helper;
 using Editor.Saving;
 using System.Reflection;
+using Editor.ErrorHandling;
 
 namespace Editor.Controls.NewControls
 {
@@ -14,7 +15,7 @@ namespace Editor.Controls.NewControls
 
    public interface IPropertyControl<T, Q> : IPropertyControl where T : Saveable
    {
-      public Q GetFromGui();
+      public IErrorHandle GetFromGui(out Q value);
       public void LoadToGui(List<T> list, PropertyInfo propInfo, bool force)
       {
          if (force || PropertyInfo.Equals(propInfo))

@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Editor.Controls.NewControls;
 using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.Misc;
 using Editor.Events;
 using Editor.Helper;
 using Editor.Saving;
@@ -188,6 +189,14 @@ public static class ControlFactory
             Margin = new(3, 1, 3, 3)
          };
       return new(propertyInfo, ref LoadGuiEvents.ProvLoadAction, () => Selection.GetSelectedProvinces);
+   }
+
+   public static BindablePropertyComboBox<Province, TProperty, TKey> GetBindablePropertyComboBox<TProperty, TKey>(PropertyInfo propInfo, BindingDictionary<TKey, TProperty> items, bool hasEmptyItemAt0 = true) where TKey : notnull
+   {
+      return new (propInfo, ref LoadGuiEvents.ProvLoadAction, () => Selection.GetSelectedProvinces, items)
+      {
+         Margin = new(3, 1, 3, 3)
+      };
    }
 
    public static ExtendedComboBox GetExtendedComboBox(string propName, bool def = true)

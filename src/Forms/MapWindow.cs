@@ -41,7 +41,7 @@ namespace Editor.Forms
       private ItemList _buildings = null!;
       private ItemList _discoveredBy = null!;
 
-      private ExtendedComboBox _religionComboBox = null!;
+      private BindablePropertyComboBox<Province, Religion, string> _religionComboBox = null!;
       private PropertyComboBox<Province, int> _tradeCenterComboBox = null!;
       private ExtendedComboBox _tradeGoodsComboBox = null!;
       private ExtendedComboBox _cultureComboBox = null!;
@@ -461,12 +461,8 @@ namespace Editor.Forms
          _cultureComboBox.Items.AddRange([.. culturesString]);
          _cultureComboBox.OnDataChanged += ProvinceEditingEvents.OnExtendedComboBoxSelectedIndexChanged;
 
-         List<string> religionsString = [.. Globals.Religions.Keys];
-         religionsString.Sort();
-         _religionComboBox = ControlFactory.GetExtendedComboBox(nameof(Province.Religion));
+         _religionComboBox = ControlFactory.GetBindablePropertyComboBox<Religion, string>(typeof(Province).GetProperty(nameof(Province.Religion))!, Globals.Religions);
          MisProvinceData.Controls.Add(_religionComboBox, 1, 2);
-         _religionComboBox.Items.AddRange([.. religionsString]);
-         _religionComboBox.OnDataChanged += ProvinceEditingEvents.OnExtendedComboBoxSelectedIndexChanged;
 
          List<string> terrainString = [string.Empty];
          terrainString.AddRange([.. Globals.Terrains.Select(x => x.Name).ToList()]);
@@ -708,7 +704,7 @@ namespace Editor.Forms
          ClearProvinceGui();
          OwnerTagBox.Text = province.Owner;
          ControllerTagBox.Text = province.Controller;
-         _religionComboBox.Text = province.Religion;
+         _religionComboBox.Text = province.Religion.Name;
          _cultureComboBox.Text = province.Culture.Name;
          _capitalNameTextBox.Text = province.Capital;
          _isCityCheckBox.Checked = province.IsCity;

@@ -171,7 +171,7 @@ public static class Globals
 
    // Religion Stuff
    public static List<ReligiousGroup> ReligionGroups = [];
-   public static readonly Dictionary<string, Religion> Religions = [];
+   public static readonly BindingDictionary<string, Religion> Religions = new (new (string.Empty, Religion.Empty));
 
    // Revolutionary Colors
    public static readonly Dictionary<int, Color> RevolutionaryColors = [];
