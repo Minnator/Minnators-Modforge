@@ -81,7 +81,7 @@ namespace Editor.Controls
 
       private void OnTextChanged(object? sender, EventArgs e)
       {
-         if (_oldText.Equals(Text) || Globals.EditingStatus == EditingStatus.LoadingInterface)
+         if (_oldText.Equals(Text) || Globals.State == State.Loading)
             return;
 
          _newText = Text;

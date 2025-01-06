@@ -15,41 +15,50 @@ namespace Editor.Events
    {
       public static void OnTagComboBoxSelectedIndexChanged(object? sender, EventArgs e)
       {
-         if (sender is TagComboBox { SelectedItem: not null } box)
-            Saveable.SetFieldMultiple(Selection.GetSelectedProvincesAsSaveable(), box.SelectedItem.ToString(),
-               box.PropertyName);
+         if (Globals.State == State.Running)
+            if (sender is TagComboBox { SelectedItem: not null } box)
+               Saveable.SetFieldMultiple(Selection.GetSelectedProvincesAsSaveable(), box.SelectedItem.ToString(),
+                  box.PropertyName);
       }
 
       public static void OnExtendedComboBoxSelectedIndexChanged(object? sender, EventArgs e)
       {
-         if (sender is ExtendedComboBox { SelectedItem: not null } box)
-            Saveable.SetFieldMultiple(Selection.GetSelectedProvincesAsSaveable(), box.SelectedItem.ToString(),
+         if (Globals.State == State.Running)
+            if (sender is ExtendedComboBox { SelectedItem: not null } box)
+             Saveable.SetFieldMultiple(Selection.GetSelectedProvincesAsSaveable(), box.SelectedItem.ToString(),
                box.PropertyName);
       }
 
       public static void OnItemAddedModified(object? sender, EventArgs e)
       {
-         if (sender is ItemList list)
-            Saveable.SetFieldMultiple(Selection.GetSelectedProvincesAsSaveable(), list.GetItems(), list.PropertyName);
+         if (Globals.State == State.Running)
+            if (sender is ItemList list)
+               Saveable.SetFieldMultiple(Selection.GetSelectedProvincesAsSaveable(), list.GetItems(), list.PropertyName);
       }
 
       public static void OnItemRemoveModified(object? sender, EventArgs e)
       {
-         if (sender is ItemList list)
-            Saveable.SetFieldMultiple(Selection.GetSelectedProvincesAsSaveable(), list.GetItems(), list.PropertyName);
+         if (Globals.State == State.Running)
+            if (sender is ItemList list)
+               Saveable.SetFieldMultiple(Selection.GetSelectedProvincesAsSaveable(), list.GetItems(), list.PropertyName);
       }
 
       public static void OnExtendedNumericValueChanged(object? sender, int value)
       {
-         if (sender is ExtendedNumeric numeric)
-            Saveable.SetFieldMultiple(Selection.GetSelectedProvincesAsSaveable(), value, numeric.PropertyName);
+         if (Globals.State == State.Running)
+            if (sender is ExtendedNumeric numeric)
+               Saveable.SetFieldMultiple(Selection.GetSelectedProvincesAsSaveable(), value, numeric.PropertyName);
       }
 
       public static void OnExtendedCheckBoxCheckedChanged(object? sender, EventArgs e)
       {
-         if (!(sender is ExtendedCheckBox extendedCheckBox))
-            return;
-         Saveable.SetFieldMultiple(Selection.GetSelectedProvincesAsSaveable(), extendedCheckBox.Checked, extendedCheckBox.PropertyName);
+         if (Globals.State == State.Running)
+         {
+            if (!(sender is ExtendedCheckBox extendedCheckBox))
+               return;
+            Saveable.SetFieldMultiple(Selection.GetSelectedProvincesAsSaveable(), extendedCheckBox.Checked,
+               extendedCheckBox.PropertyName);
+         }
       }
    }
 

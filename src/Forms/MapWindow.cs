@@ -344,9 +344,9 @@ namespace Editor.Forms
             if (i == 0)
             {
                DataTabPanel.TabPages[0].SuspendLayout();
-               Globals.EditingStatus = EditingStatus.LoadingInterface;
+               Globals.State = State.Loading;
                ClearProvinceGui();
-               Globals.EditingStatus = EditingStatus.Idle;
+               Globals.State = State.Running;
                DataTabPanel.TabPages[0].Enabled = false;
                DataTabPanel.TabPages[0].ResumeLayout();
             }
@@ -363,9 +363,9 @@ namespace Editor.Forms
             if (Selection.SelectedCountry == Country.Empty)
             {
                DataTabPanel.TabPages[1].SuspendLayout();
-               Globals.EditingStatus = EditingStatus.LoadingInterface;
+               Globals.State = State.Loading;
                ClearCountryGui();
-               Globals.EditingStatus = EditingStatus.Idle;
+               Globals.State = State.Running;
                DataTabPanel.TabPages[1].Enabled = false;
                DataTabPanel.TabPages[1].ResumeLayout();
             }
@@ -623,7 +623,7 @@ namespace Editor.Forms
       /// </summary>
       public void LoadSelectedProvincesToGui()
       {
-         Globals.EditingStatus = EditingStatus.LoadingInterface;
+         Globals.State = State.Loading;
          SuspendLayout();
          ClearProvinceGui();
          ExtendedComboBox.AllowEvents = false;
@@ -638,8 +638,8 @@ namespace Editor.Forms
             ControllerTagBox.Text = tag2;
          if (Selection.GetSharedAttribute("Religion", out result) && result is string str1)
             _religionComboBox.Text = str1;
-         if (Selection.GetSharedAttribute("Culture", out result) && result is string str2)
-            _cultureComboBox.Text = str2;
+         if (Selection.GetSharedAttribute("Culture", out result) && result is Culture str2)
+            _cultureComboBox.Text = str2.Name;
          if (Selection.GetSharedAttribute("Capital", out result) && result is string str3)
             _capitalNameTextBox.Text = str3;
          if (Selection.GetSharedAttribute("IsCity", out result) && result is bool flag1)
@@ -690,13 +690,13 @@ namespace Editor.Forms
             ProvAdjLabel.Text = Selection.GetSelectedProvinces[0].AdjectiveKey;
          }
          ResumeLayout();
-         Globals.EditingStatus = EditingStatus.Idle;
+         Globals.State = State.Running;
          ExtendedComboBox.AllowEvents = true;
       }
 
       public void LoadProvinceToGui(Province province)
       {
-         Globals.EditingStatus = EditingStatus.LoadingInterface;
+         Globals.State = State.Loading;
          SuspendLayout();
          ClearProvinceGui();
          OwnerTagBox.Text = province.Owner;
@@ -729,7 +729,7 @@ namespace Editor.Forms
          _terrainComboBox.Text = province.Terrain.Name;
          AddAllModifiersToListView(province);
          ResumeLayout();
-         Globals.EditingStatus = EditingStatus.Idle;
+         Globals.State = State.Running;
       }
 
       public void ClearProvinceGui()
@@ -1363,7 +1363,7 @@ namespace Editor.Forms
 
       public void ClearCountryGui()
       {
-         Globals.EditingStatus = EditingStatus.LoadingInterface;
+         Globals.State = State.Loading;
          // Flag
          CountryFlagLabel.SetCountry(Country.Empty);
 
@@ -1407,12 +1407,12 @@ namespace Editor.Forms
          _historicFriends.Clear();
          _estatePrivileges.Clear();
 
-         Globals.EditingStatus = EditingStatus.Idle;
+         Globals.State = State.Running;
       }
 
       internal void LoadCountryToGui(Country country)
       {
-         Globals.EditingStatus = EditingStatus.LoadingInterface;
+         Globals.State = State.Loading;
          if (country == Country.Empty)
             return;
          SuspendLayout();
@@ -1474,7 +1474,7 @@ namespace Editor.Forms
          _estatePrivileges.UpdateCountry(country.HistoryCountry);
 
 
-         Globals.EditingStatus = EditingStatus.Idle;
+         Globals.State = State.Running;
       }
 
       private void GovernmentTypeBox_SelectedIndexChanged(object? sender, EventArgs e)
@@ -1701,16 +1701,16 @@ namespace Editor.Forms
 
       private void provinceToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         Globals.EditingStatus = EditingStatus.LoadingInterface;
+         Globals.State = State.Loading;
          ClearProvinceGui();
-         Globals.EditingStatus = EditingStatus.Idle;
+         Globals.State = State.Running;
       }
 
       private void countryToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         Globals.EditingStatus = EditingStatus.LoadingInterface;
+         Globals.State = State.Loading;
          ClearCountryGui();
-         Globals.EditingStatus = EditingStatus.Idle;
+         Globals.State = State.Running;
       }
 
 

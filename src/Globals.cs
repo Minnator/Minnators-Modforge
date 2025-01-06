@@ -40,13 +40,7 @@ public enum Mana
    MIL,
    NONE
 }
-public enum EditingStatus
-{
-   LoadingInterface,
-   Idle,
-   Saving,
-   Interrupted
-}
+
 public enum Language
 {
    english,
@@ -128,8 +122,6 @@ public static class Globals
 
    // Contains the current state of the application
    public static State State = State.Loading;
-   public static EditingStatus EditingStatus = EditingStatus.Idle;
-   public static bool AllowEditing => EditingStatus == EditingStatus.Idle;
 
    public static DescriptorData DescriptorData = new("-1", "none", [], [], [], "-1");
 

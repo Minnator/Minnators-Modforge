@@ -207,7 +207,6 @@
          OpenProvinceFolder = new Button();
          SaveCurrentSelectionButton = new Button();
          SaveAllProvincesButton = new Button();
-         ProvinceHistoryEntryToggleButton = new Controls.ToggleButton();
          CountryPage = new TabPage();
          CountryMainTLP = new TableLayoutPanel();
          CountryScrollPanel = new Panel();
@@ -261,7 +260,6 @@
          CountryNameLabel = new Label();
          AddNewCountryButton = new Button();
          CountryCustomToolStripLayoutPanel = new TableLayoutPanel();
-         CountryHistoryEntryToggleButton = new Controls.ToggleButton();
          SaveSelectedCountriesButton = new Button();
          OpenCommonCountryFolder = new Button();
          SaveAllCountries = new Button();
@@ -2064,7 +2062,6 @@
          ProvinceCustomToolStripLayoutPanel.Controls.Add(OpenProvinceFolder, 6, 0);
          ProvinceCustomToolStripLayoutPanel.Controls.Add(SaveCurrentSelectionButton, 1, 0);
          ProvinceCustomToolStripLayoutPanel.Controls.Add(SaveAllProvincesButton, 0, 0);
-         ProvinceCustomToolStripLayoutPanel.Controls.Add(ProvinceHistoryEntryToggleButton, 3, 0);
          ProvinceCustomToolStripLayoutPanel.Dock = DockStyle.Fill;
          ProvinceCustomToolStripLayoutPanel.Location = new Point(0, 782);
          ProvinceCustomToolStripLayoutPanel.Margin = new Padding(0);
@@ -2135,24 +2132,6 @@
          SaveAllProvincesButton.TabIndex = 0;
          SaveAllProvincesButton.UseVisualStyleBackColor = true;
          SaveAllProvincesButton.Click += SaveAllProvincesButton_Click;
-         // 
-         // ProvinceHistoryEntryToggleButton
-         // 
-         ProvinceHistoryEntryToggleButton.BackColor = Color.Transparent;
-         ProvinceHistoryEntryToggleButton.Dock = DockStyle.Fill;
-         ProvinceHistoryEntryToggleButton.Image = Properties.Resources.HistoryEntriesDisabled;
-         ProvinceHistoryEntryToggleButton.ImageOff = Properties.Resources.HistoryEntriesDisabled;
-         ProvinceHistoryEntryToggleButton.ImageOn = Properties.Resources.HistoryEntriesEnabled;
-         ProvinceHistoryEntryToggleButton.Location = new Point(122, 2);
-         ProvinceHistoryEntryToggleButton.Margin = new Padding(0);
-         ProvinceHistoryEntryToggleButton.Name = "ProvinceHistoryEntryToggleButton";
-         ProvinceHistoryEntryToggleButton.Size = new Size(40, 30);
-         ProvinceHistoryEntryToggleButton.State = false;
-         ProvinceHistoryEntryToggleButton.TabIndex = 6;
-         GeneralToolTip.SetToolTip(ProvinceHistoryEntryToggleButton, "If enabled any changes in properties for province will be created as a history entry for the current date");
-         ProvinceHistoryEntryToggleButton.UseVisualStyleBackColor = false;
-         ProvinceHistoryEntryToggleButton.VsMode = Editor.Controls.ToggleButton.VisualMode.Image;
-         ProvinceHistoryEntryToggleButton.Click += ProvinceHistoryEntryToggleButton_Click;
          // 
          // CountryPage
          // 
@@ -2854,7 +2833,6 @@
          CountryCustomToolStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
          CountryCustomToolStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
          CountryCustomToolStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
-         CountryCustomToolStripLayoutPanel.Controls.Add(CountryHistoryEntryToggleButton, 3, 0);
          CountryCustomToolStripLayoutPanel.Controls.Add(SaveSelectedCountriesButton, 1, 0);
          CountryCustomToolStripLayoutPanel.Controls.Add(OpenCommonCountryFolder, 8, 0);
          CountryCustomToolStripLayoutPanel.Controls.Add(SaveAllCountries, 0, 0);
@@ -2870,23 +2848,6 @@
          CountryCustomToolStripLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
          CountryCustomToolStripLayoutPanel.Size = new Size(401, 34);
          CountryCustomToolStripLayoutPanel.TabIndex = 7;
-         // 
-         // CountryHistoryEntryToggleButton
-         // 
-         CountryHistoryEntryToggleButton.BackColor = Color.DarkRed;
-         CountryHistoryEntryToggleButton.ImageOff = Properties.Resources.HistoryEntriesDisabled;
-         CountryHistoryEntryToggleButton.ImageOn = Properties.Resources.HistoryEntriesEnabled;
-         CountryHistoryEntryToggleButton.Location = new Point(122, 2);
-         CountryHistoryEntryToggleButton.Margin = new Padding(0);
-         CountryHistoryEntryToggleButton.Name = "CountryHistoryEntryToggleButton";
-         CountryHistoryEntryToggleButton.Size = new Size(40, 30);
-         CountryHistoryEntryToggleButton.State = false;
-         CountryHistoryEntryToggleButton.TabIndex = 7;
-         CountryHistoryEntryToggleButton.Text = "Off";
-         GeneralToolTip.SetToolTip(CountryHistoryEntryToggleButton, "If enabled any changes in properties for a country will be created as a history entry for the current date");
-         CountryHistoryEntryToggleButton.UseVisualStyleBackColor = false;
-         CountryHistoryEntryToggleButton.VsMode = Editor.Controls.ToggleButton.VisualMode.Image;
-         CountryHistoryEntryToggleButton.Click += CountryHistoryEntry_Toggle;
          // 
          // SaveSelectedCountriesButton
          // 
