@@ -1,4 +1,9 @@
-﻿using Editor.DataClasses.GameDataClasses;
+﻿using System.Reflection;
+using Editor.Controls.NewControls;
+using Editor.DataClasses.GameDataClasses;
+using Editor.Events;
+using Editor.Helper;
+using Editor.Saving;
 using Button = System.Windows.Forms.Button;
 
 namespace Editor.Controls;
@@ -18,9 +23,17 @@ public static class ControlFactory
 
    #endregion
 
-   public static ExtendedCheckBox GetExtendedCheckBox(string propName)
+   public static PropertyCheckBox<Province> GetExtendedCheckBoxProvince(PropertyInfo propInfo)
    {
-      return new (propName)
+      return new(propInfo, ref LoadGuiEvents.ProvLoadAction, () => Selection.GetSelectedProvinces)
+      {
+         Margin = new(1)
+      };
+   }
+
+   public static PropertyCheckBox<Country> GetExtendedCheckBoxCountry(PropertyInfo propInfo)
+   {
+      return new(propInfo, ref LoadGuiEvents.CountryLoadAction, () => [Selection.SelectedCountry])
       {
          Margin = new(1)
       };

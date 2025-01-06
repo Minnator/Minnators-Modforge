@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Media;
 using System.Text;
 using Editor.Controls;
+using Editor.Controls.NewControls;
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
@@ -55,10 +56,10 @@ namespace Editor.Forms
       private ExtendedNumeric _prosperityNumeric = null!;
       private ExtendedNumeric _extraCostNumeric = null!;
 
-      private ExtendedCheckBox _isCityCheckBox;
-      private ExtendedCheckBox _isHreCheckBox;
-      private ExtendedCheckBox _isParliamentSeatCheckbox;
-      private ExtendedCheckBox _hasRevoltCheckBox;
+      private PropertyCheckBox<Province> _isCityCheckBox;
+      private PropertyCheckBox<Province> _isHreCheckBox;
+      private PropertyCheckBox<Province> _isParliamentSeatCheckbox;
+      private PropertyCheckBox<Province> _hasRevoltCheckBox;
 
       private TagComboBox _tribalOwner = null!;
       private ExtendedComboBox _tradeCompanyInvestments = null!;
@@ -230,7 +231,12 @@ namespace Editor.Forms
          }
       }
 
-      private void UpdateProvinceTab() => LoadSelectedProvincesToGui();
+      private void UpdateProvinceTab()
+      {
+         //LoadSelectedProvincesToGui();
+         LoadGuiEvents.ReloadProvinces();
+      }
+
       private void UpdateCountryTab() => LoadCountryToGui(Selection.SelectedCountry);
 
 
@@ -353,7 +359,8 @@ namespace Editor.Forms
             else
             {
                DataTabPanel.TabPages[0].Enabled = true;
-               LoadSelectedProvincesToGui();
+               //LoadSelectedProvincesToGui();
+               LoadGuiEvents.ReloadProvinces();
             }
          };
 
@@ -534,19 +541,19 @@ namespace Editor.Forms
          };
          MisProvinceData.Controls.Add(_capitalNameTextBox, 1, 4);
 
-         _isCityCheckBox = ControlFactory.GetExtendedCheckBox(nameof(Province.IsCity));
+         _isCityCheckBox = ControlFactory.GetExtendedCheckBoxProvince(typeof(Province).GetProperty(nameof(Province.IsCity))!);
          _isCityCheckBox.CheckedChanged += ProvinceEditingEvents.OnExtendedCheckBoxCheckedChanged;
          MisProvinceData.Controls.Add(_isCityCheckBox, 3, 3);
 
-         _isHreCheckBox = ControlFactory.GetExtendedCheckBox(nameof(Province.IsHre));
+         _isHreCheckBox = ControlFactory.GetExtendedCheckBoxProvince(typeof(Province).GetProperty(nameof(Province.IsHre))!);
          _isHreCheckBox.CheckedChanged += ProvinceEditingEvents.OnExtendedCheckBoxCheckedChanged;
          MisProvinceData.Controls.Add(_isHreCheckBox, 3, 4);
 
-         _isParliamentSeatCheckbox = ControlFactory.GetExtendedCheckBox(nameof(Province.IsSeatInParliament));
+         _isParliamentSeatCheckbox = ControlFactory.GetExtendedCheckBoxProvince(typeof(Province).GetProperty(nameof(Province.IsSeatInParliament))!);
          _isParliamentSeatCheckbox.CheckedChanged += ProvinceEditingEvents.OnExtendedCheckBoxCheckedChanged;
          MisProvinceData.Controls.Add(_isParliamentSeatCheckbox, 3, 5);
 
-         _hasRevoltCheckBox = ControlFactory.GetExtendedCheckBox(nameof(Province.HasRevolt));
+         _hasRevoltCheckBox = ControlFactory.GetExtendedCheckBoxProvince(typeof(Province).GetProperty(nameof(Province.HasRevolt))!);
          _hasRevoltCheckBox.CheckedChanged += ProvinceEditingEvents.OnExtendedCheckBoxCheckedChanged;
          MisProvinceData.Controls.Add(_hasRevoltCheckBox, 3, 6);
 
@@ -642,14 +649,14 @@ namespace Editor.Forms
             _cultureComboBox.Text = str2.Name;
          if (Selection.GetSharedAttribute("Capital", out result) && result is string str3)
             _capitalNameTextBox.Text = str3;
-         if (Selection.GetSharedAttribute("IsCity", out result) && result is bool flag1)
+         /*if (Selection.GetSharedAttribute("IsCity", out result) && result is bool flag1)
             _isCityCheckBox.Checked = flag1;
          if (Selection.GetSharedAttribute("IsHre", out result) && result is bool flag2)
             _isHreCheckBox.Checked = flag2;
          if (Selection.GetSharedAttribute("IsSeatInParliament", out result) && result is bool flag3)
             _isParliamentSeatCheckbox.Checked = flag3;
          if (Selection.GetSharedAttribute("HasRevolt", out result) && result is bool flag4)
-            _hasRevoltCheckBox.Checked = flag4;
+            _hasRevoltCheckBox.Checked = flag4;*/
          if (Selection.GetSharedAttribute("BaseTax", out result) && result is int num1)
             _taxNumeric.Value = num1;
          if (Selection.GetSharedAttribute("BaseProduction", out result) && result is int num2)
