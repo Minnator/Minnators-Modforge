@@ -3,9 +3,11 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Editor.DataClasses.Commands;
+using Editor.DataClasses.MapModes;
 using Editor.Events;
 using Editor.Helper;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Editor.Saving;
 
@@ -116,7 +118,6 @@ public abstract class Saveable : IDisposable
          info = GetPropertyInfo(propertyName)!;
          info.SetValue(this, value);
       }
-      LoadGuiEvents.TriggerGuiUpdate(GetType(), info);
    }
 
    /// <summary>
@@ -145,7 +146,7 @@ public abstract class Saveable : IDisposable
    /// <typeparam name="T"></typeparam>
    /// <param name="info"></param>
    /// <param name="value"></param>
-   public void SetFieldSilent<T>(PropertyInfo info, T value)
+   private void SetFieldSilent<T>(PropertyInfo info, T value, bool update = true)
    {
       lock (this)
       {
@@ -153,7 +154,8 @@ public abstract class Saveable : IDisposable
          info.SetValue(this, value);
          Suppressed = false;
       }
-      LoadGuiEvents.TriggerGuiUpdate(GetType(), info);
+      if (update)
+         LoadGuiEvents.TriggerGuiUpdate(GetType(), info);
    }
 
    /// <summary>
@@ -163,16 +165,46 @@ public abstract class Saveable : IDisposable
    /// <typeparam name="T"></typeparam>
    /// <param name="targets"></param>
    /// <param name="value"></param>
-   /// <param name="propertyName"></param>
+   /// <param name="property"></param>
    public static void SetFieldMultiple<TS, T>(ICollection<TS> targets, T value, PropertyInfo property) where TS : Saveable
    {
       if (Globals.State == State.Running) 
          HistoryManager.AddCommand(new CModifyProperty<T>(property, [..targets], value));
       foreach(var target in targets)
          target.OnPropertyChanged(property.Name);
-      
+   }
+
+   public static void SetFieldMultipleSilent<TS, T>(ICollection<TS> targets, T value, PropertyInfo property) where TS : Saveable
+   {
+      foreach (var target in targets)
+      {
+         lock (target)
+         {
+            target.Suppressed = true;
+            property.SetValue(target, value);
+            target.Suppressed = false;
+         }
+      }
       LoadGuiEvents.TriggerGuiUpdate(typeof(TS), property);
    }
+
+   public static void SetFieldMultipleDifferentSilent<TS, T>(ICollection<TS> targets, List<T> values, PropertyInfo property)
+      where TS : Saveable
+   {
+      Debug.Assert(targets.Count == values.Count, $"targets and values must have the same amount of values but are: ({targets.Count}|{values.Count})!");
+      var cnt = 0;
+      foreach (var target in targets)
+      {
+         lock (target)
+         {
+            target.Suppressed = true;
+            property.SetValue(target, values[cnt++]);
+            target.Suppressed = false;
+         }
+      }
+      LoadGuiEvents.TriggerGuiUpdate(typeof(TS), property);
+   }
+
 
    /// <summary>
    /// Is always called when a value in a saveable is changed (If the property calls SetField)
@@ -196,7 +228,7 @@ public abstract class Saveable : IDisposable
    /// <typeparam name="T"></typeparam>
    /// <param name="field"></param>
    /// <param name="value"></param>
-   /// <param name="propertyName"></param>
+   /// <param name="property"></param>
    /// <returns></returns>
    private bool InternalFieldSet<T>(ref T field, T value, PropertyInfo property)
    {

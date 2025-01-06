@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Reflection;
 using Editor.DataClasses.GameDataClasses;
 
 namespace Editor.DataClasses.MapModes;
@@ -53,7 +54,6 @@ public static class MapModeManager
    private static readonly Stopwatch Stopwatch = new();
    public static int AverageMapModeTime => MapModeTimes.Count == 0 ? 0 : _totalMapModeTime / MapModeTimes.Count;
    public static int LasMapModeTime => MapModeTimes.Count == 0 ? 0 : MapModeTimes[^1];
-
    public static Dictionary<Province, int> ColorCache = new(Globals.Provinces.Count);
 
    private static List<MapMode> MapModes { get; } = [];
@@ -62,6 +62,11 @@ public static class MapModeManager
    public static bool PreviousLandOnly { get; set; }
 
    public static EventHandler<MapMode> MapModeChanged = delegate { };
+
+   private static readonly Dictionary<string, MapModeType> PropertyRouting = new()
+   {
+      { nameof(Province.IsCity), MapModeType.City }
+   };
 
    static MapModeManager()
    {
@@ -150,6 +155,12 @@ public static class MapModeManager
             ColorCache[province] = CurrentMapMode.GetProvinceColor(province);
    }
 
+   public static void RenderMapMode(PropertyInfo propInfo)
+   {
+      if (PropertyRouting.TryGetValue(propInfo.Name, out var type))
+         UpdateMapMode(type);
+   }
+
    public static MapMode GetMapMode(MapModeType type)
    {
       return MapModes.Find(mode => mode.MapModeType == type) ?? IdMapMode;
@@ -209,5 +220,6 @@ public static class MapModeManager
          return mpMode.GetProvinceColor(p);
       return mpMode.GetSeaProvinceColor(p);
    }
+
 
 }

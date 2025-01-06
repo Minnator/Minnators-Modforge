@@ -44,14 +44,13 @@ namespace Editor.DataClasses.Commands
 
       private void InternalExecute()
       {
-         _targets.ForEach(target => target.SetFieldSilent(propInfo, _newValue));
+         Saveable.SetFieldMultipleSilent(_targets, _newValue, propInfo);
       }
 
       public override void Undo()
       {
          base.Undo();
-         for (var i = 0; i < _targets.Count; i++) 
-            _targets[i].SetFieldSilent(propInfo, _oldValue[i]);
+         Saveable.SetFieldMultipleDifferentSilent(_targets, _oldValue, propInfo);
       }
 
       public override void Redo()
