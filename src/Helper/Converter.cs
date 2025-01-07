@@ -47,6 +47,14 @@ namespace Editor.Helper
          {
             typeof(Religion),
             Religion.GeneralParse
+         },
+         {
+            typeof(TradeGood),
+            TradeGood.GeneralParse
+         },
+         {
+            typeof(Terrain),
+            Terrain.GeneralParse
          }
       };
 

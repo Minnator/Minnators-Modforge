@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
+using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
 using Editor.ErrorHandling;
 using Editor.Events;
@@ -11,7 +12,7 @@ namespace Editor.Controls.NewControls
    public class PropertyComboBox<TSaveable, TProperty> : ComboBox, IPropertyControl<TSaveable, TProperty> where TSaveable : Saveable 
    {
       public PropertyInfo PropertyInfo { get; init; }
-      private readonly Func<List<TSaveable>> _getSaveables;
+      protected readonly Func<List<TSaveable>> _getSaveables;
 
       public PropertyComboBox(PropertyInfo? propertyInfo, ref LoadGuiEvents.LoadAction<TSaveable> loadHandle, Func<List<TSaveable>> getSaveables)
       {
@@ -41,7 +42,7 @@ namespace Editor.Controls.NewControls
          base.OnKeyPress(e);
       }
 
-      public void SetFromGui()
+      public virtual void SetFromGui()
       {
          if (Globals.State == State.Running && GetFromGui(out var value).Log())
             Saveable.SetFieldMultiple(_getSaveables.Invoke(), value, PropertyInfo);
@@ -61,7 +62,7 @@ namespace Editor.Controls.NewControls
       }
    }
 
-   public class BindablePropertyComboBox<TSaveable, TProperty, TKey> : PropertyComboBox<TSaveable, TProperty> where TSaveable : Saveable
+   public class BindablePropertyComboBox<TSaveable, TProperty, TKey> : PropertyComboBox<TSaveable, TProperty> where TSaveable : Saveable where TProperty : notnull where TKey : notnull
    {
       private readonly BindingDictionary<TKey, TProperty> _items;
 
@@ -70,11 +71,10 @@ namespace Editor.Controls.NewControls
                                       Func<List<TSaveable>> getSaveables,
                                       BindingDictionary<TKey, TProperty> items) : base(propertyInfo, ref loadHandle, getSaveables)
       {
+
          _items = items;
-         DataSource = new BindingSource
-         {
-            DataSource = _items
-         };
+         DataSource = _items;
+
          _items.AddControl(this);
       }
 
@@ -93,7 +93,24 @@ namespace Editor.Controls.NewControls
          }
          if (_items.TryGetValue(key, out value!))
             return handle;
-         return new ErrorObject(ErrorType.INTERNAL_KeyNotFound, "Key not found in dictionary", LogType.Critical);
+         return new ErrorObject(ErrorType.INTERNAL_KeyNotFound, "Key not found in dictionary", LogType.Critical, addToManager:false);
       }
+   }
+
+   public class BindableFakePropertyComboBox<TSaveable, TProperty, TKey> : BindablePropertyComboBox<TSaveable, TProperty, TKey> where TSaveable : ProvinceComposite where TProperty : ProvinceCollection<TSaveable> where TKey : notnull
+   {
+      public BindableFakePropertyComboBox(PropertyInfo? propertyInfo,
+                                      ref LoadGuiEvents.LoadAction<TSaveable> loadHandle,
+                                      Func<List<TSaveable>> getSaveables,
+                                      BindingDictionary<TKey, TProperty> items) : base(propertyInfo, ref loadHandle, getSaveables, items)
+      {
+      }
+
+      public override void SetFromGui()
+      {
+         if (Globals.State == State.Running && GetFromGui(out var value).Log())
+            Saveable.SetFieldMultipleCollection(_getSaveables.Invoke(), value, PropertyInfo);
+      }
+
    }
 }

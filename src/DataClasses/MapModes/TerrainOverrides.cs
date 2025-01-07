@@ -16,24 +16,15 @@ namespace Editor.DataClasses.MapModes
 
       public override int GetProvinceColor(Province id)
       {
-         foreach (var terrain in Globals.Terrains)
-         {
-            if (terrain.SubCollection.Contains(id))
-               return terrain.Color.ToArgb();
-         }
-
-         return Color.DimGray.ToArgb();
+         return id.Terrain.Color.ToArgb();
       }
 
       public override string GetSpecificToolTip(Province provinceId)
       {
-         foreach (var terrain in Globals.Terrains)
-         {
-            if (terrain.SubCollection.Contains(provinceId))
-               return $"{Localisation.GetLoc(terrain.Name)} ({terrain.Name})";
-         }
-
-         return "No Terrain Override";
+         var terrain = provinceId.Terrain;
+         if (terrain == Terrain.Empty)
+            return "No Terrain Override";
+         return $"{terrain.Name} ({Localisation.GetLoc(terrain.Name)})";
       }
 
    }

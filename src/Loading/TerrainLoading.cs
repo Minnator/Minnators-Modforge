@@ -1,4 +1,5 @@
 ﻿using Editor.DataClasses.GameDataClasses;
+using Editor.ErrorHandling;
 using Editor.Helper;
 using Editor.Parser;
 using Editor.Saving;
@@ -31,7 +32,7 @@ public static class TerrainLoading
          switch (block.Name)
          {
             case "categories":
-               ParseCategoriesBlock(block, ref Globals.Terrains, ref pathObj);
+               ParseCategoriesBlock(block, ref pathObj);
                break;
             case "terrain":
                ParseTerrainBlock(block, ref Globals.TerrainDefinitions);
@@ -46,7 +47,7 @@ public static class TerrainLoading
       }
    }
 
-   private static void ParseCategoriesBlock(Block block, ref List<Terrain> terrains, ref PathObj path)
+   private static void ParseCategoriesBlock(Block block, ref PathObj path)
    {
       foreach (var blk in block.GetBlockElements)
       {
@@ -73,15 +74,21 @@ public static class TerrainLoading
                         Globals.ErrorLog.Write($"Failed to find province: {id} in {terrain.Name} in terrain_override");
                         continue;
                      }
+                     if (province.Terrain != Terrain.Empty)
+                     {
+                        _ = new LoadingError(path, "Province is assigned to more than one terrain_override!");
+                        continue;
+                     }
                      terrain.Add(province);
+                     province.Terrain = terrain;
                   }
                   break;
             }
          }
 
-         terrains.Add(terrain);
+         Globals.Terrains.Add(terrain.Name, terrain);
       }
-      SaveMaster.AddRangeToDictionary(path, terrains);
+      SaveMaster.AddRangeToDictionary(path, Globals.Terrains.Values);
    }
 
    private static void ParseTerrainContent(string content, ref Terrain terrain)
@@ -184,7 +191,11 @@ public static class TerrainLoading
 
          colorIndex = Parsing.GetByteListFromString(blk.GetBlockElements[0].GetContent).ToArray();
          // find the terrain with equal name
-         treeDefinitions.AddDefinition(name, Globals.Terrains.Find(x => x.Name.Equals(terrain)) ?? Terrain.Empty, colorIndex);
+         if (!Globals.Terrains.TryGetValue(terrain, out var ter))
+            ter = Terrain.Empty;
+         
+         treeDefinitions.AddDefinition(name, ter, colorIndex);
+
 
       }
    }
@@ -225,7 +236,10 @@ public static class TerrainLoading
             continue;
          }
 
-         terrainDefinitions.AddDefinition(name, Globals.Terrains.Find(x => x.Name.Equals(type)) ?? Terrain.Empty, colorIndex);
+         if (!Globals.Terrains.TryGetValue(type, out var ter))
+            ter = Terrain.Empty;
+
+         terrainDefinitions.AddDefinition(name, ter, colorIndex);
       }
    }
 }

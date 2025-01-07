@@ -134,7 +134,7 @@ public static class Globals
    public static string MapPath = null!;
 
    // Terrain
-   public static List<Terrain> Terrains = [];
+   public static BindingDictionary<string, Terrain> Terrains = new(new(string.Empty, Terrain.Empty));
    public static TerrainDefinitions TerrainDefinitions = new();
    public static TreeDefinitions TreeDefinitions = new();
 
@@ -145,12 +145,12 @@ public static class Globals
    public static List<Idea> Ideas = [];
 
    // Maps the name of TradeGoods to the TradeGood object
-   public static readonly Dictionary<string, TradeGood> TradeGoods = [];
+   public static readonly BindingDictionary<string, TradeGood> TradeGoods = new(new (string.Empty, TradeGood.Empty));
    public static readonly Dictionary<string, TradeNode> TradeNodes = [];
 
    // Culture Groups and Cultures
    public static Dictionary<string, CultureGroup> CultureGroups = [];
-   public static Dictionary<string, Culture> Cultures = [];
+   public static BindingDictionary<string, Culture> Cultures = new (new (string.Empty, Culture.Empty));
 
    // Unit Types and GFX
    public static List<string> GraphicalCultures = [];

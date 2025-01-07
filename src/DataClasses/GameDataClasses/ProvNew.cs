@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Editor.Helper;
 using Editor.Parser;
@@ -35,7 +36,7 @@ namespace Editor.DataClasses.GameDataClasses
       private string _capital = string.Empty;                    
       private Culture _culture = Culture.Empty;                   
       private Religion _religion = GameDataClasses.Religion.Empty;                   
-      private string _tradeGood = string.Empty;                   
+      private TradeGood _tradeGood = TradeGood.Empty;                   
       private string _latentTradeGood = string.Empty;           
       private string _reformationCenter = string.Empty;         
       private List<Tag> _claims = [];                            
@@ -78,6 +79,7 @@ namespace Editor.DataClasses.GameDataClasses
             }
          }
       }
+
 
       #endregion
 
@@ -266,7 +268,7 @@ namespace Editor.DataClasses.GameDataClasses
       }
 
       [ToolTippable]
-      public string TradeGood
+      public TradeGood TradeGood
       {
          get => _tradeGood;
          set => SetField(ref _tradeGood, value);
@@ -346,6 +348,7 @@ namespace Editor.DataClasses.GameDataClasses
       private Memory<Point> _pixels;
       private Memory<Point> _borders;
       private Dictionary<Province, Memory<Point>> _provinceBorders = new();
+
       public Memory<Point> Pixels
       {
          get => _pixels;
@@ -446,6 +449,17 @@ namespace Editor.DataClasses.GameDataClasses
       [ToolTippable]
       public TradeCompany TradeCompany => GetFirstParentOfType(SaveableType.TradeCompany) as TradeCompany ?? TradeCompany.Empty;
 
+      [ToolTippable]
+      public Terrain Terrain
+      {
+         get => GetFirstParentOfType(SaveableType.Terrain) as Terrain ?? Terrain.Empty;
+         set {
+           // Debug.WriteLine("TODO");
+         }
+      }
+
+
+
       // Map Concerns
       [ToolTippable]
       public bool IsNonRebelOccupied => Owner != Controller && Controller != "REB";
@@ -466,8 +480,7 @@ namespace Editor.DataClasses.GameDataClasses
 
       [ToolTippable]
       public Terrain AutoTerrain { get; set; } = Terrain.Empty;
-      [ToolTippable]
-      public Terrain Terrain => GetFirstParentOfType(SaveableType.Terrain) as Terrain ?? Terrain.Empty;
+
 
 
       #region History

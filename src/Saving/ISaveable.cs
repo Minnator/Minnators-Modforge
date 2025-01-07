@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Editor.DataClasses.Commands;
+using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.Events;
 using Editor.Helper;
@@ -156,6 +157,14 @@ public abstract class Saveable : IDisposable
       }
       if (update)
          LoadGuiEvents.TriggerGuiUpdate(GetType(), info);
+   }
+
+   public static void SetFieldMultipleCollection<TS, T>(ICollection<TS> targets, T value, PropertyInfo property) where TS : ProvinceComposite where T : ProvinceCollection<TS>
+   {
+      if (Globals.State == State.Running)
+         value.NewAddRange(targets);
+      foreach (var target in targets)
+         target.OnPropertyChanged(property.Name);
    }
 
    /// <summary>

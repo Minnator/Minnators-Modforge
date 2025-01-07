@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
-using Editor.DataClasses.Misc;
+using Editor.ErrorHandling;
 using Editor.Helper;
 using Editor.Saving;
 using static Editor.Saving.SavingUtil;
@@ -44,11 +44,6 @@ public class Terrain : ProvinceCollection<Province>, INotifyPropertyChanged
    public float NationDesignerCostMultiplier = 1.0f;
 
    public List<ISaveModifier> Modifiers = [];
-
-   public static Terrain GetTerrainFroString(string val)
-   {
-      return Globals.Terrains.First(ter => ter.Name.Equals(val));
-   }
 
    public override bool GetSaveStringIndividually => false;
 
@@ -161,7 +156,7 @@ public class Terrain : ProvinceCollection<Province>, INotifyPropertyChanged
       return "##################################################################\r\n### Terrain Categories\r\n###\r\n### Terrain types: plains, mountains, hills, desert, artic, forest, jungle, marsh, pti\r\n### Types are used by the game to apply certain bonuses/maluses on movement/combat etc.\r\n###\r\n### Sound types: plains, forest, desert, sea, jungle, mountains\r\n";
    }
 
-   public new static Terrain Empty  { get; } = new("undefined", System.Drawing.Color.Empty, ObjEditingStatus.Immutable);
+   public new static Terrain Empty  { get; } = new("undefined", Color.Empty, ObjEditingStatus.Immutable){Color = Color.DimGray};
 
    public void SetOverride(ICollection<Province> p)
    {
@@ -171,16 +166,6 @@ public class Terrain : ProvinceCollection<Province>, INotifyPropertyChanged
          OnTerrainChanged.Invoke(this, province);
    }
    
-   public static void RemoveFromAll(ICollection<Province> p)
-   {
-      foreach (var ter in Globals.Terrains) // TODO: Remove curse from this code
-         ter.NewRemoveRange(p);
-
-      foreach (var province in p)
-         OnTerrainChanged.Invoke(null, province);
-   }
-
-
    public override bool Equals(object? obj)
    {
       if (obj is Terrain terrain)
@@ -219,12 +204,37 @@ public class Terrain : ProvinceCollection<Province>, INotifyPropertyChanged
 
    public override void RemoveGlobal()
    {
-      Globals.Terrains.Remove(this);
+      Globals.Terrains.Remove(this.Name);
    }
 
    public override void AddGlobal()
    {
-      Globals.Terrains.Add(this);   
+      Globals.Terrains.Add(this.Name, this);   
+   }
+
+   public static IErrorHandle GeneralParse(string? str, out object result)
+   {
+      var handle = TryParse(str, out var terrain);
+      result = terrain;
+      return handle;
+   }
+
+   public static IErrorHandle TryParse(string input, out Terrain terrain)
+   {
+      if (string.IsNullOrEmpty(input))
+      {
+         terrain = Empty;
+         return new ErrorObject(ErrorType.TypeConversionError, "Could not parse Terrain!", addToManager: false);
+      }
+
+      if (!Globals.Terrains.TryGetValue(input, out terrain!))
+      {
+         terrain = Empty;
+         return new ErrorObject(ErrorType.TODO_ERROR, $"Terrain \"{input}\" was not defined!",
+            addToManager: false);
+      }
+
+      return ErrorHandle.Sucess;
    }
 }
 

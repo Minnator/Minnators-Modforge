@@ -68,7 +68,7 @@
          // SelectVanillaPathButton
          // 
          SelectVanillaPathButton.Dock = DockStyle.Fill;
-         SelectVanillaPathButton.Image = (Image)resources.GetObject("SelectVanillaPathButton.Image");
+         SelectVanillaPathButton.Image = Properties.Resources.FolderIcon;
          SelectVanillaPathButton.Location = new Point(714, 1);
          SelectVanillaPathButton.Margin = new Padding(1);
          SelectVanillaPathButton.Name = "SelectVanillaPathButton";
@@ -80,7 +80,7 @@
          // SelectModPathButton
          // 
          SelectModPathButton.Dock = DockStyle.Fill;
-         SelectModPathButton.Image = (Image)resources.GetObject("SelectModPathButton.Image");
+         SelectModPathButton.Image = Properties.Resources.FolderIcon;
          SelectModPathButton.Location = new Point(714, 29);
          SelectModPathButton.Margin = new Padding(1);
          SelectModPathButton.Name = "SelectModPathButton";

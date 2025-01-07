@@ -43,8 +43,8 @@ namespace Editor.Forms
 
       private BindablePropertyComboBox<Province, Religion, string> _religionComboBox = null!;
       private PropertyComboBox<Province, int> _tradeCenterComboBox = null!;
-      private ExtendedComboBox _tradeGoodsComboBox = null!;
-      private ExtendedComboBox _cultureComboBox = null!;
+      private BindablePropertyComboBox<Province, TradeGood, string> _tradeGoodsComboBox = null!;
+      private BindablePropertyComboBox<Province, Culture, string> _cultureComboBox = null!;
       public ExtendedComboBox ModifierComboBox = null!;
       private ExtendedComboBox _modifierTypeComboBox = null!;
 
@@ -63,7 +63,7 @@ namespace Editor.Forms
 
       private TagComboBox _tribalOwner = null!;
       private ExtendedComboBox _tradeCompanyInvestments = null!;
-      private ExtendedComboBox _terrainComboBox = null!;
+      private BindableFakePropertyComboBox<Province, Terrain, string> _terrainComboBox = null!;
 
       private TextSaveableTextBox<string, CModifyProperty<string>> _nativesSizeTextBox = null!;
       private TextSaveableTextBox<string, CModifyProperty<string>> _nativeFerocityTextBox = null!;
@@ -444,47 +444,20 @@ namespace Editor.Forms
          _tradeCenterComboBox = ControlFactory.SimpleComboBoxProvince<int>(typeof(Province).GetProperty(nameof(Province.CenterOfTrade))!);
          _tradeCenterComboBox.Items.AddRange(["0", "1", "2", "3"]);
          _tradeCenterComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-         _tradeCenterComboBox.SelectedIndexChanged += ProvinceEditingEvents.OnExtendedComboBoxSelectedIndexChanged;
          TradePanel.Controls.Add(_tradeCenterComboBox, 1, 0);
 
-         List<string> tradeGoodsString = [.. Globals.TradeGoods.Keys];
-         tradeGoodsString.Sort();
-         _tradeGoodsComboBox = ControlFactory.GetExtendedComboBox(nameof(Province.TradeGood));
-         _tradeGoodsComboBox.Items.AddRange([.. tradeGoodsString]);
-         _tradeGoodsComboBox.SelectedIndexChanged += ProvinceEditingEvents.OnExtendedComboBoxSelectedIndexChanged;
+         _tradeGoodsComboBox = ControlFactory.GetBindablePropertyComboBox(typeof(Province).GetProperty(nameof(Province.TradeGood))!, Globals.TradeGoods);
          TradePanel.Controls.Add(_tradeGoodsComboBox, 1, 1);
 
-         List<string> culturesString = [.. Globals.Cultures.Keys];
-         culturesString.Sort();
-         _cultureComboBox = ControlFactory.GetExtendedComboBox(nameof(Province.Culture));
+         _cultureComboBox = ControlFactory.GetBindablePropertyComboBox(typeof(Province).GetProperty(nameof(Province.Culture))!, Globals.Cultures);
          MisProvinceData.Controls.Add(_cultureComboBox, 1, 3);
-         _cultureComboBox.Items.AddRange([.. culturesString]);
-         _cultureComboBox.OnDataChanged += ProvinceEditingEvents.OnExtendedComboBoxSelectedIndexChanged;
 
-         _religionComboBox = ControlFactory.GetBindablePropertyComboBox<Religion, string>(typeof(Province).GetProperty(nameof(Province.Religion))!, Globals.Religions);
+         _religionComboBox = ControlFactory.GetBindablePropertyComboBox(typeof(Province).GetProperty(nameof(Province.Religion))!, Globals.Religions);
          MisProvinceData.Controls.Add(_religionComboBox, 1, 2);
 
-         List<string> terrainString = [string.Empty];
-         terrainString.AddRange([.. Globals.Terrains.Select(x => x.Name).ToList()]);
-         terrainString.Sort();
          // TODO GEDANKEN MACHEN Wie man das hier am besten macht
-         _terrainComboBox = ControlFactory.GetExtendedComboBox(nameof(Terrain.SubCollection));
-         _terrainComboBox.Items.AddRange([.. terrainString]);
+         _terrainComboBox = ControlFactory.GetBindableFakePropertyComboBox(typeof(Province).GetProperty(nameof(Province.Terrain))!, Globals.Terrains);
          _terrainComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-         _terrainComboBox.OnDataChanged += (_, args) =>
-         {
-            if (args.Value is not string val)
-               return;
-
-            if (val.Equals(string.Empty))
-            {
-               Terrain.RemoveFromAll(args.Provinces);
-            }
-            else
-            {
-               Terrain.GetTerrainFroString(val).SetOverride(args.Provinces);
-            }
-         };
          MisProvinceData.Controls.Add(_terrainComboBox, 1, 5);
 
          _taxNumeric = ControlFactory.GetExtendedNumeric(nameof(Province.BaseTax));
@@ -621,119 +594,6 @@ namespace Editor.Forms
       // ======================== Province GUI Update Methods ========================
       #region Province Gui
 
-      /// <summary>
-      /// This will only load the province attributes to the gui which are shared by all provinces
-      /// </summary>
-      public void LoadSelectedProvincesToGui()
-      {
-         Globals.State = State.Loading;
-         SuspendLayout();
-         ClearProvinceGui();
-         ExtendedComboBox.AllowEvents = false;
-         object result;
-         if (Selection.GetSharedAttribute("Buildings", out result) && result is List<string> items1)
-            _buildings.AddItemsUnique(items1);
-         if (Selection.GetSharedAttribute("DiscoveredBy", out result) && result is List<string> items2)
-            _discoveredBy.AddItemsUnique(items2);
-         if (Selection.GetSharedAttribute("Owner", out result) && result is Tag tag1)
-            OwnerTagBox.Text = tag1;
-         if (Selection.GetSharedAttribute("Controller", out result) && result is Tag tag2)
-            ControllerTagBox.Text = tag2;
-         if (Selection.GetSharedAttribute("Religion", out result) && result is string str1)
-            _religionComboBox.Text = str1;
-         if (Selection.GetSharedAttribute("Culture", out result) && result is Culture str2)
-            _cultureComboBox.Text = str2.Name;
-         if (Selection.GetSharedAttribute("Capital", out result) && result is string str3)
-            _capitalNameTextBox.Text = str3;
-         /*if (Selection.GetSharedAttribute("IsCity", out result) && result is bool flag1)
-            _isCityCheckBox.Checked = flag1;
-         if (Selection.GetSharedAttribute("IsHre", out result) && result is bool flag2)
-            _isHreCheckBox.Checked = flag2;
-         if (Selection.GetSharedAttribute("IsSeatInParliament", out result) && result is bool flag3)
-            _isParliamentSeatCheckbox.Checked = flag3;
-         if (Selection.GetSharedAttribute("HasRevolt", out result) && result is bool flag4)
-            _hasRevoltCheckBox.Checked = flag4;*/
-         if (Selection.GetSharedAttribute("BaseTax", out result) && result is int num1)
-            _taxNumeric.Value = num1;
-         if (Selection.GetSharedAttribute("BaseProduction", out result) && result is int num2)
-            _prdNumeric.Value = num2;
-         if (Selection.GetSharedAttribute("BaseManpower", out result) && result is int num3)
-            _mnpNumeric.Value = num3;
-         if (Selection.GetSharedAttribute("LocalAutonomy", out result) && result is float num4)
-            _autonomyNumeric.Value = checked((int)num4);
-         if (Selection.GetSharedAttribute("Devastation", out result) && result is float num5)
-            _devastationNumeric.Value = checked((int)num5);
-         if (Selection.GetSharedAttribute("Prosperity", out result) && result is float num6)
-            _prosperityNumeric.Value = checked((int)num6);
-         if (Selection.GetSharedAttribute("TradeGood", out result) && result is string str4)
-            _tradeGoodsComboBox.Text = str4;
-         if (Selection.GetSharedAttribute("CenterOfTrade", out result) && result is int num7)
-            _tradeCenterComboBox.Text = num7.ToString();
-         if (Selection.GetSharedAttribute("ExtraCost", out result) && result is int num8)
-            _extraCostNumeric.Value = num8;
-         if (Selection.GetSharedAttribute("TribalOwner", out result) && result is Tag tag3)
-            _tribalOwner.Text = tag3;
-         if (Selection.GetSharedAttribute("NativeSize", out result) && result is int num9)
-            _nativesSizeTextBox.Text = num9.ToString();
-         if (Selection.GetSharedAttribute("NativeFerocity", out result) && result is float num10)
-            _nativeFerocityTextBox.Text = num10.ToString(CultureInfo.InvariantCulture);
-         if (Selection.GetSharedAttribute("NativeHostileness", out result) && result is float num11)
-            _nativeHostilityTextBox.Text = num11.ToString(CultureInfo.InvariantCulture);
-         if (Selection.GetSharedAttribute(nameof(Province.Terrain), out result) && result is Terrain terrain)
-            _terrainComboBox.Text = terrain.Name;
-         // TODO The Gui needs to be able to represent several trade company investments
-         //if (Selection.GetSharedAttribute(ProvAttrGet.trade_company_investment, out result) && result is string tradeCompanyInvestments)
-         //   _tradeCompanyInvestments.Text = tradeCompanyInvestments;
-         if (Selection.GetSelectedProvinces.Count == 1)
-         {
-            AddAllModifiersToListView(Selection.GetSelectedProvinces[0]);
-            _localisationTextBox.Text = Selection.GetSelectedProvinces[0].TitleLocalisation;
-            LocalisationLabel.Text = Selection.GetSelectedProvinces[0].TitleKey;
-            _provAdjTextBox.Text = Localisation.GetLoc(Selection.GetSelectedProvinces[0].AdjectiveKey);
-            ProvAdjLabel.Text = Selection.GetSelectedProvinces[0].AdjectiveKey;
-         }
-         ResumeLayout();
-         Globals.State = State.Running;
-         ExtendedComboBox.AllowEvents = true;
-      }
-
-      public void LoadProvinceToGui(Province province)
-      {
-         Globals.State = State.Loading;
-         SuspendLayout();
-         ClearProvinceGui();
-         OwnerTagBox.Text = province.Owner;
-         ControllerTagBox.Text = province.Controller;
-         _religionComboBox.Text = province.Religion.Name;
-         _cultureComboBox.Text = province.Culture.Name;
-         _capitalNameTextBox.Text = province.Capital;
-         _isCityCheckBox.Checked = province.IsCity;
-         _isHreCheckBox.Checked = province.IsHre;
-         _isParliamentSeatCheckbox.Checked = province.IsSeatInParliament;
-         _hasRevoltCheckBox.Checked = province.HasRevolt;
-         _taxNumeric.Value = province.BaseTax;
-         _prdNumeric.Value = province.BaseProduction;
-         _mnpNumeric.Value = province.BaseManpower;
-         _claims.AddItemsUnique([.. province.Claims]);
-         _permanentClaims.AddItemsUnique([]);
-         _cores.AddItemsUnique([.. province.Cores]);
-         _buildings.AddItemsUnique(province.Buildings);
-         _discoveredBy.AddItemsUnique(province.DiscoveredBy);
-         _autonomyNumeric.Value = (int)province.LocalAutonomy;
-         _devastationNumeric.Value = (int)province.Devastation;
-         _prosperityNumeric.Value = (int)province.Prosperity;
-         _tradeGoodsComboBox.Text = province.TradeGood;
-         _tradeCenterComboBox.Text = province.CenterOfTrade.ToString();
-         _extraCostNumeric.Value = province.ExtraCost;
-         _tribalOwner.Text = province.TribalOwner;
-         _nativesSizeTextBox.Text = province.NativeSize.ToString();
-         _nativeFerocityTextBox.Text = province.NativeFerocity.ToString(CultureInfo.InvariantCulture);
-         _nativeHostilityTextBox.Text = province.NativeHostileness.ToString(CultureInfo.InvariantCulture);
-         _terrainComboBox.Text = province.Terrain.Name;
-         AddAllModifiersToListView(province);
-         ResumeLayout();
-         Globals.State = State.Running;
-      }
 
       public void ClearProvinceGui()
       {
@@ -1625,7 +1485,7 @@ namespace Editor.Forms
       {
 #if DEBUG
          var sb = new StringBuilder();
-         foreach (var terrain in Globals.Terrains)
+         foreach (var terrain in Globals.Terrains.Values)
          {
             sb.AppendLine($"{terrain.Name} : {terrain.SubCollection.Count}");
             foreach (var or in terrain.SubCollection)

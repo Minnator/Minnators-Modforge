@@ -299,3 +299,5 @@ public abstract class ProvinceComposite(string name, Color color) : Saveable// P
 // Province > TradeCompany
 // Province > Continent
 // Province > ProvinceGroup
+// Province > Country
+// Province > Terrain

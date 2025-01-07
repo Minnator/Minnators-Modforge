@@ -199,6 +199,14 @@ public static class ControlFactory
       };
    }
 
+   public static BindableFakePropertyComboBox<Province, TProperty, TKey> GetBindableFakePropertyComboBox<TProperty, TKey>(PropertyInfo propInfo, BindingDictionary<TKey, TProperty> items) where TKey : notnull where TProperty : ProvinceCollection<Province>
+   {
+      return new (propInfo, ref LoadGuiEvents.ProvLoadAction, () => Selection.GetSelectedProvinces, items)
+      {
+         Margin = new(3, 1, 3, 3)
+      };
+   }
+
    public static ExtendedComboBox GetExtendedComboBox(string propName, bool def = true)
    {
       if (def)

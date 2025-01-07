@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Editor.ErrorHandling;
 
 namespace Editor.DataClasses.GameDataClasses;
 
@@ -23,9 +24,48 @@ public class TradeGood(string name, Color color)
       return Name.GetHashCode();
    }
 
+   public static bool operator ==(TradeGood left, TradeGood right)
+   {
+      if (left is null)
+         return right is null;
+      return left.Equals(right);
+   }
+
+   public static bool operator !=(TradeGood left, TradeGood right)
+   {
+      if (left is null)
+         return !(right is null);
+      return !left.Equals(right);
+   }
+
    public override string ToString()
    {
-      return $"{Name} -> {Price} - {Color}";
+      return Name;
+   }
+
+   public static IErrorHandle GeneralParse(string? str, out object result)
+   {
+      var handle = TryParse(str, out var tradeGood);
+      result = tradeGood;
+      return handle;
+   }
+
+   public static IErrorHandle TryParse(string input, out TradeGood tradeGood)
+   {
+      if (string.IsNullOrEmpty(input))
+      {
+         tradeGood = Empty;
+         return new ErrorObject(ErrorType.TypeConversionError, "Could not parse tradegood!", addToManager: false);
+      }
+
+      if (!Globals.TradeGoods.TryGetValue(input, out tradeGood))
+      {
+         tradeGood = Empty;
+         return new ErrorObject(ErrorType.TODO_ERROR, $"Tradegood \"{input}\" is already defined!",
+            addToManager: false);
+      }
+
+      return ErrorHandle.Sucess;
    }
 }
 

@@ -48,7 +48,7 @@ namespace Editor.Loading
 
 
          HashSet<int> waterColors = [];
-         foreach (var ter in Globals.Terrains)
+         foreach (var ter in Globals.Terrains.Values)
          {
             if (ter.IsWater || ter.IsInlandSea)
                waterColors.Add(ter.Color.ToArgb());

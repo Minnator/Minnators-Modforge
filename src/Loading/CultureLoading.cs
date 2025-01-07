@@ -1,4 +1,5 @@
 ﻿using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Parser;
 using Parsing = Editor.Parser.Parsing;
@@ -21,9 +22,9 @@ public static class CultureLoading
       Globals.Cultures = cultures;
    }
 
-   private static (Dictionary<string, CultureGroup>, Dictionary<string, Culture>) GetCultureGroups(ref List<IElement> blocks, ColorProviderRgb colorProvider)
+   private static (Dictionary<string, CultureGroup>, BindingDictionary<string, Culture>) GetCultureGroups(ref List<IElement> blocks, ColorProviderRgb colorProvider)
    {
-      Dictionary<string, Culture> cultureDict = [];
+      BindingDictionary<string, Culture> cultureDict = [];
       Dictionary<string, CultureGroup> cultureGroupDict = [];
       
       Parallel.ForEach(blocks, element =>
