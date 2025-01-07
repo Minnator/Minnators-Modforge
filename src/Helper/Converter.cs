@@ -55,6 +55,10 @@ namespace Editor.Helper
          {
             typeof(Terrain),
             Terrain.GeneralParse
+         },
+         {
+            typeof(Country),
+            Country.GeneralParse
          }
       };
 

@@ -12,8 +12,8 @@ namespace Editor.DataClasses.GameDataClasses
    public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<ProvinceHistoryEntry>
    {
       #region Data
-      private Tag _controller = Tag.Empty;                       
-      private Tag _owner = Tag.Empty;                            
+      private Country _controller = Country.Empty;                       
+      private Country _owner = Country.Empty;                            
       private Tag _tribalOwner = Tag.Empty;                        
       private int _baseManpower;                                
       private int _baseTax;                                      
@@ -55,7 +55,7 @@ namespace Editor.DataClasses.GameDataClasses
       // ##################### Complex setter #####################
 
       [ToolTippable]
-      public Tag Owner
+      public Country Owner
       {
          get => _owner;
          set
@@ -102,7 +102,7 @@ namespace Editor.DataClasses.GameDataClasses
          set => SetIfModifiedEnumerable<List<Tag>, Tag>(ref _cores, value);
       }
       [ToolTippable]
-      public Tag Controller
+      public Country Controller
       {
          get => _controller;
          set => SetField(ref _controller, value);
@@ -454,7 +454,7 @@ namespace Editor.DataClasses.GameDataClasses
       {
          get => GetFirstParentOfType(SaveableType.Terrain) as Terrain ?? Terrain.Empty;
          set {
-           // Debug.WriteLine("TODO");
+            Debug.WriteLine("TODO");
          }
       }
 
@@ -462,7 +462,7 @@ namespace Editor.DataClasses.GameDataClasses
 
       // Map Concerns
       [ToolTippable]
-      public bool IsNonRebelOccupied => Owner != Controller && Controller != "REB";
+      public bool IsNonRebelOccupied => Owner != Controller && Controller.Tag != "REB";
       public int OccupantColor
       {
          get

@@ -26,7 +26,7 @@ namespace Editor.DataClasses.MapModes
       {
          var tooltip = string.Empty;
 
-         if (province.Owner != Tag.Empty)
+         if (province.Owner != Country.Empty)
          {
             if (!Globals.Countries.TryGetValue(province.Owner, out var country))
                return "No Country to show diplomacy for";
@@ -43,7 +43,7 @@ namespace Editor.DataClasses.MapModes
       public override int GetProvinceColor(Province id)
       {
          if (Globals.Provinces.TryGetValue(id, out var province))
-            if (province.Owner != Tag.Empty)
+            if (province.Owner != Country.Empty)
                if (Globals.Countries.TryGetValue(province.Owner, out var country))
                   return country.Color.ToArgb();
          return Color.DimGray.ToArgb();
@@ -89,13 +89,13 @@ namespace Editor.DataClasses.MapModes
 
          for (var i = claims.Count - 1; i >= 0; i--)
          {
-            if (claims[i].Owner == Selection.SelectedCountry.Tag)
+            if (claims[i].Owner == Selection.SelectedCountry)
                claims.RemoveAt(i);
          }
 
          for (var i = cores.Count - 1; i >= 0; i--)
          {
-            if (cores[i].Owner == Selection.SelectedCountry.Tag)
+            if (cores[i].Owner == Selection.SelectedCountry)
                cores.RemoveAt(i);
          }
 

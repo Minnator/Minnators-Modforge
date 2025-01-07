@@ -120,12 +120,30 @@ public static class ControlFactory
 
    public static TagComboBox GetTagComboBox(string propName, bool ignoreEmpty = false)
    {
-      return new (propName)
+      return new(propName)
       {
          Margin = new(3, 1, 3, 3),
          Dock = DockStyle.Fill,
          IgnoreEmpty = ignoreEmpty
       };
+   }
+
+   public static BindablePropertyComboBox<Province, TProperty, TKey> GetTagComboBox<TProperty, TKey>(PropertyInfo propInfo, BindingDictionary<TKey, TProperty> items, bool hasEmptyItemAt0 = true) where TKey : notnull where TProperty : ProvinceCollection<Province>
+   {
+      var box = GetBindablePropertyComboBox(propInfo, items, hasEmptyItemAt0);
+      box.Margin = new(3, 1, 3, 3);
+
+      box.KeyPress += (sender, e) =>
+      {
+         if (box.Text.Length >= 3)
+         {
+            e.Handled = true;
+            return;
+         }
+         e.KeyChar = char.ToUpper(e.KeyChar);
+      };
+      
+      return box;
    }
 
    public static ItemList GetItemList(string propName, ItemTypes itemType, List<string> items, string title)
@@ -191,7 +209,7 @@ public static class ControlFactory
       return new(propertyInfo, ref LoadGuiEvents.ProvLoadAction, () => Selection.GetSelectedProvinces);
    }
 
-   public static BindablePropertyComboBox<Province, TProperty, TKey> GetBindablePropertyComboBox<TProperty, TKey>(PropertyInfo propInfo, BindingDictionary<TKey, TProperty> items, bool hasEmptyItemAt0 = true) where TKey : notnull
+   public static BindablePropertyComboBox<Province, TProperty, TKey> GetBindablePropertyComboBox<TProperty, TKey>(PropertyInfo propInfo, BindingDictionary<TKey, TProperty> items, bool hasEmptyItemAt0 = true) where TKey : notnull where TProperty : notnull
    {
       return new (propInfo, ref LoadGuiEvents.ProvLoadAction, () => Selection.GetSelectedProvinces, items)
       {

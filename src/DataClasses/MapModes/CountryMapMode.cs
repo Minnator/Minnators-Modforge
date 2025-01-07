@@ -20,7 +20,7 @@ namespace Editor.DataClasses.MapModes
       {
          if (Globals.Provinces.TryGetValue(id, out var province))
          {
-            if (province.Owner == Tag.Empty)
+            if (province.Owner == Country.Empty)
                return Color.DimGray.ToArgb();
             if (Globals.Countries.TryGetValue(province.Owner, out var country))
                return country.Color.ToArgb();
@@ -34,7 +34,7 @@ namespace Editor.DataClasses.MapModes
       {
          if (Globals.Provinces.TryGetValue(provinceId, out var province))
          {
-            if (province.Owner == Tag.Empty)
+            if (province.Owner == Country.Empty)
                return "Country: [Unknown]";
             if (Globals.Countries.TryGetValue(province.Owner, out var country))
                return $"Country: {country.Tag} ({country.TitleLocalisation})";

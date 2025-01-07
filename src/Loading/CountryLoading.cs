@@ -489,7 +489,7 @@ namespace Editor.Loading
       {
          foreach (var province in Globals.Provinces)
          {
-            if (province.Owner == Tag.Empty)
+            if (province.Owner == Country.Empty)
                continue;
 
             if (!Globals.Countries.TryGetValue(province.Owner, out var country))

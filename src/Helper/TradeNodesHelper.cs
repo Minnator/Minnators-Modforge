@@ -98,7 +98,7 @@ namespace Editor.Helper
          var node = Globals.TradeNodes[nodeName];
          var countries = new List<Tag>();
          foreach (var province in node.GetProvinces())
-               if (province.Owner != Tag.Empty)
+               if (province.Owner != Country.Empty)
                   countries.Add(province.Owner);
          return countries;
       }

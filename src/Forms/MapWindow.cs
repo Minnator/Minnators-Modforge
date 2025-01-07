@@ -84,6 +84,9 @@ namespace Editor.Forms
       private CollectionEditor2<ProvinceGroup, Province> _provinceGroupsEditingGui = null!;
       private CollectionEditor2<ColonialRegion, Province> _colonialRegionEditingGui = null!;
 
+      private BindablePropertyComboBox<Province, Country, Tag> OwnerTagBox = null!;
+      private BindablePropertyComboBox<Province, Country, Tag> ControllerTagBox = null!;
+
       public Screen? StartScreen = null;
 
       #endregion
@@ -408,11 +411,9 @@ namespace Editor.Forms
          SaveCurrentSelectionButton.MouseEnter += OnSavingSelectionEnter;
          OpenProvinceFile.MouseEnter += OnOpenProvinceFileEnter;
 
-         OwnerTagBox = ControlFactory.GetTagComboBox(nameof(Province.Owner));
-         OwnerTagBox.OnTagChanged += ProvinceEditingEvents.OnTagComboBoxSelectedIndexChanged;
-         ControllerTagBox = ControlFactory.GetTagComboBox(nameof(Province.Controller));
-         ControllerTagBox.OnTagChanged += ProvinceEditingEvents.OnTagComboBoxSelectedIndexChanged;
+         OwnerTagBox = ControlFactory.GetTagComboBox(typeof(Province).GetProperty(nameof(Province.Owner))!, Globals.Countries);
          MisProvinceData.Controls.Add(OwnerTagBox, 1, 0);
+         ControllerTagBox = ControlFactory.GetTagComboBox(typeof(Province).GetProperty(nameof(Province.Controller))!, Globals.Countries);
          MisProvinceData.Controls.Add(ControllerTagBox, 1, 1);
 
          _cores = ControlFactory.GetItemList(nameof(Province.Cores), ItemTypes.Tag, [], "Cores");
@@ -598,8 +599,8 @@ namespace Editor.Forms
       public void ClearProvinceGui()
       {
          ExtendedComboBox.AllowEvents = false;
-         OwnerTagBox.Clear();
-         ControllerTagBox.Clear();
+         //OwnerTagBox.Clear();
+         //ControllerTagBox.Clear();
          _religionComboBox.Clear();
          _cultureComboBox.Clear();
          _capitalNameTextBox.Clear();
@@ -732,7 +733,7 @@ namespace Editor.Forms
             return;
          }
          ProvinceNameLabel.Text = $"Province: {province.TitleLocalisation}";
-         OwnerCountryNameLabel.Text = $"Owner: {Localisation.GetLoc(province.Owner)}";
+         OwnerCountryNameLabel.Text = $"Owner: {Localisation.GetLoc(province.Owner.TitleKey)}";
       }
 
       private void AddModifiersToList(ModifierAbstract modifier, ModifierType type)

@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.Misc;
+using Editor.ErrorHandling;
 using Editor.Helper;
 using Editor.Parser;
 using Editor.Saving;
@@ -700,7 +701,7 @@ public class Country : ProvinceCollection<Province>, ITitleAdjProvider
 
    public string TitleLocalisation => Localisation.GetLoc(Tag);
    public string AdjectiveLocalisation => Localisation.GetLoc(AdjectiveKey);
-   public override string ToString() => $"{Tag.ToString()} ({TitleLocalisation})";
+   public override string ToString() => Tag.ToString();
    public override bool Equals(object? obj)
    {
       if (obj is Country other)
@@ -756,7 +757,7 @@ public class Country : ProvinceCollection<Province>, ITitleAdjProvider
       List<Country> neighbours = [];
       foreach (var province in GetProvinces())
          foreach (var neighbour in Globals.AdjacentProvinces[province])
-               if (neighbour.Owner != Tag.Empty && !neighbours.Contains(neighbour.Owner) && neighbour.Owner != Tag)
+               if (neighbour.Owner != Empty && !neighbours.Contains(neighbour.Owner) && neighbour.Owner.Tag != Tag)
                   neighbours.Add(neighbour.Owner);
       return neighbours;
    }
@@ -860,4 +861,21 @@ public class Country : ProvinceCollection<Province>, ITitleAdjProvider
    public string TitleKey => Tag;
 
    public string AdjectiveKey => $"{Tag}_ADJ";
+
+
+   public static IErrorHandle TryParse(string value, out Country country)
+   {
+      if (Tag.TryParse(value, out var tag))
+         if (Globals.Countries.TryGetValue(tag, out country!))
+            return ErrorHandle.Sucess;
+      country = Empty;
+      return new ErrorObject(ErrorType.TypeConversionError, "Could not parse Tag!", addToManager: false);
+   }
+
+   public static IErrorHandle GeneralParse(string value, out object result)
+   {
+      var handle = TryParse(value, out var country);
+      result = country;
+      return handle;
+   }
 }

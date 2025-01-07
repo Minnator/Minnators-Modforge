@@ -249,7 +249,7 @@ public class CultProvLocContainer
    public string GetLoc(Province p)
    {
       // if we have a tag object, we will return the value
-      var result = _tagObjects.FirstOrDefault(x => x.Key == p.Owner);
+      var result = _tagObjects.FirstOrDefault(x => x.Key == p.Owner.Tag);
       if (result != null)
          return result.Value;
 

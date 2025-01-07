@@ -370,7 +370,7 @@ public static class Geometry
    {
       if (onlyRebels)
       {
-         if (province.Controller != "REB")
+         if (province.Controller.Tag != "REB")
          {
             stripe = [];
             return false;
@@ -379,7 +379,7 @@ public static class Geometry
          return true;
       }
 
-      if (province is { IsNonRebelOccupied: false} && province.Controller != "REB")
+      if (province is { IsNonRebelOccupied: false} && province.Controller.Tag != "REB")
       {
          stripe = [];
          return false;

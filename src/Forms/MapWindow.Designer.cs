@@ -3150,8 +3150,6 @@
       private TabPage ProvincePage;
       private TabPage CountryPage;
       private TabPage ProvinceGroupsPage;
-      private Controls.TagComboBox OwnerTagBox;
-      private Controls.TagComboBox ControllerTagBox;
       private TableLayoutPanel ProvinceEditingLayout;
       private GroupBox CoresGroupBox;
       private GroupBox groupBox6;
