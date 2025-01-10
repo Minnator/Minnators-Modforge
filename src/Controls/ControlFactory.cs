@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Numerics;
+using System.Reflection;
 using Editor.Controls.NewControls;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
@@ -227,7 +228,7 @@ public static class ControlFactory
    }
 
 
-   public static PropertyNumeric<Province> GetPropertyNumeric<TSaveable>(PropertyInfo? propertyInfo, int defaultValue = 0) where TSaveable : Saveable
+   public static PropertyNumeric<Province, TProperty> GetPropertyNumeric<TProperty>(PropertyInfo? propertyInfo, TProperty defaultValue) where TProperty : INumber<TProperty>
    {
       return new(propertyInfo, ref LoadGuiEvents.ProvLoadAction, () => Selection.GetSelectedProvinces)
       {

@@ -49,13 +49,13 @@ namespace Editor.Forms
       public ExtendedComboBox ModifierComboBox = null!;
       private ExtendedComboBox _modifierTypeComboBox = null!;
 
-      private PropertyNumeric<Province> _taxNumeric = null!;
-      private PropertyNumeric<Province> _prdNumeric = null!;
-      private PropertyNumeric<Province> _mnpNumeric = null!;
-      private ExtendedNumeric _autonomyNumeric = null!;
-      private ExtendedNumeric _devastationNumeric = null!;
-      private ExtendedNumeric _prosperityNumeric = null!;
-      private ExtendedNumeric _extraCostNumeric = null!;
+      private PropertyNumeric<Province, int> _taxNumeric = null!;
+      private PropertyNumeric<Province, int> _prdNumeric = null!;
+      private PropertyNumeric<Province, int> _mnpNumeric = null!;
+      private PropertyNumeric<Province, float> _autonomyNumeric = null!;
+      private PropertyNumeric<Province, float> _devastationNumeric = null!;
+      private PropertyNumeric<Province, float> _prosperityNumeric = null!;
+      private PropertyNumeric<Province, int> _extraCostNumeric = null!;
 
       private PropertyCheckBox<Province> _isCityCheckBox = null!;
       private PropertyCheckBox<Province> _isHreCheckBox = null!;
@@ -463,43 +463,39 @@ namespace Editor.Forms
          MisProvinceData.Controls.Add(_terrainComboBox, 1, 5);
 
 
-         _taxNumeric = ControlFactory.GetPropertyNumeric<Province>(typeof(Province).GetProperty(nameof(Province.BaseTax)));
+         _taxNumeric = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.BaseTax)), 0);
          _taxNumeric.Minimum = 0;
          _taxNumeric.Maximum = 1000;
          MisProvinceData.Controls.Add(_taxNumeric, 3, 0);
 
-         _prdNumeric = ControlFactory.GetPropertyNumeric<Province>(typeof(Province).GetProperty(nameof(Province.BaseProduction)));
+         _prdNumeric = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.BaseProduction)), 0);
          _prdNumeric.Minimum = 0;
          _prdNumeric.Maximum = 1000;
          MisProvinceData.Controls.Add(_prdNumeric, 3, 1);
 
-         _mnpNumeric = ControlFactory.GetPropertyNumeric<Province>(typeof(Province).GetProperty(nameof(Province.BaseManpower)));
+         _mnpNumeric = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.BaseManpower)), 0);
          _mnpNumeric.Minimum = 0;
          _mnpNumeric.Maximum = 1000;
          MisProvinceData.Controls.Add(_mnpNumeric, 3, 2);
 
-         _autonomyNumeric = ControlFactory.GetExtendedNumeric(nameof(Province.LocalAutonomy));
+         _autonomyNumeric = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.LocalAutonomy)), 0.0f);
          _autonomyNumeric.Minimum = 0;
          _autonomyNumeric.Maximum = 100;
-         _autonomyNumeric.OnValueChanged += ProvinceEditingEvents.OnExtendedNumericValueChanged;
          FloatLayoutPanel.Controls.Add(_autonomyNumeric, 1, 0);
 
-         _devastationNumeric = ControlFactory.GetExtendedNumeric(nameof(Province.Devastation));
+         _devastationNumeric = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.Devastation)), 0.0f);
          _devastationNumeric.Minimum = 0;
          _devastationNumeric.Maximum = 100;
-         _devastationNumeric.OnValueChanged += ProvinceEditingEvents.OnExtendedNumericValueChanged;
          FloatLayoutPanel.Controls.Add(_devastationNumeric, 1, 1);
 
-         _prosperityNumeric = ControlFactory.GetExtendedNumeric(nameof(Province.Prosperity));
+         _prosperityNumeric = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.Prosperity)), 0.0f);
          _prosperityNumeric.Minimum = 0;
          _prosperityNumeric.Maximum = 100;
-         _prosperityNumeric.OnValueChanged += ProvinceEditingEvents.OnExtendedNumericValueChanged;
          FloatLayoutPanel.Controls.Add(_prosperityNumeric, 1, 2);
 
-         _extraCostNumeric = ControlFactory.GetExtendedNumeric(nameof(Province.ExtraCost));
+         _extraCostNumeric = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.ExtraCost)), 0);
          _extraCostNumeric.Minimum = 0;
          _extraCostNumeric.Maximum = 1000;
-         _extraCostNumeric.OnValueChanged += ProvinceEditingEvents.OnExtendedNumericValueChanged;
          TradePanel.Controls.Add(_extraCostNumeric, 1, 2);
 
          _capitalNameTextBox = new(Selection.GetSelectedProvincesAsSaveable, new CCountryPropertyChangeFactory<string>(nameof(Province.Capital)))
