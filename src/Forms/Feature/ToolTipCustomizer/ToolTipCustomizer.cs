@@ -4,6 +4,8 @@ namespace Editor.Forms.Feature
 {
    public partial class ToolTipCustomizer : Form
    {
+      private int _lastSelectedIndex = -1;
+
       public ToolTipCustomizer()
       {
          InitGui();
@@ -39,8 +41,13 @@ namespace Editor.Forms.Feature
       {
          if (InputTextBox.Text.Length == 0 || !IsValidToolTipString(InputTextBox.Text))
             return;
-         ToolTipPreview.Items.Add(InputTextBox.Text);
+         // insert at last selected index
+         if (_lastSelectedIndex == -1)
+            ToolTipPreview.Items.Add(InputTextBox.Text);
+         else
+            ToolTipPreview.Items.Insert(_lastSelectedIndex, InputTextBox.Text);
          InputTextBox.Text = string.Empty;
+         _lastSelectedIndex = -1;
       }
 
       private static bool IsValidToolTipString(string text)
@@ -128,6 +135,16 @@ namespace Editor.Forms.Feature
          InputTextBox.Text = InputTextBox.Text.Insert(selectionStart, str);
          InputTextBox.SelectionStart = checked(selectionStart + str.Length);
          InputTextBox.Focus();
+      }
+
+      private void ToolTipPreview_DoubleClick(object sender, EventArgs e)
+      {
+         var item = ToolTipPreview.SelectedItems[0];
+         if (item == null)
+            return;
+         InputTextBox.Text = item.Text;
+         _lastSelectedIndex = ToolTipPreview.SelectedIndices[0];
+         ToolTipPreview.Items.Remove(item);
       }
    }
 }

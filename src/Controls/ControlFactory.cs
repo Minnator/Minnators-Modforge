@@ -128,6 +128,14 @@ public static class ControlFactory
       };
    }
 
+   public static BindablePropertyComboBox<Province, TProperty, TKey> GetBindablePropertyComboBox<TProperty, TKey>(PropertyInfo propInfo, BindingDictionary<TKey, TProperty> items, bool hasEmptyItemAt0 = true) where TKey : notnull where TProperty : notnull
+   {
+      return new(propInfo, ref LoadGuiEvents.ProvLoadAction, () => Selection.GetSelectedProvinces, items)
+      {
+         Margin = new(3, 1, 3, 3)
+      };
+   }
+
    public static BindablePropertyComboBox<Province, TProperty, TKey> GetTagComboBox<TProperty, TKey>(PropertyInfo propInfo, BindingDictionary<TKey, TProperty> items, bool hasEmptyItemAt0 = true) where TKey : notnull where TProperty : ProvinceCollection<Province>
    {
       var box = GetBindablePropertyComboBox(propInfo, items, hasEmptyItemAt0);
@@ -145,6 +153,15 @@ public static class ControlFactory
       
       return box;
    }
+
+   public static BindableFakePropertyComboBox<Province, TProperty, TKey> GetBindableFakePropertyComboBox<TProperty, TKey>(PropertyInfo propInfo, BindingDictionary<TKey, TProperty> items) where TKey : notnull where TProperty : ProvinceCollection<Province>
+   {
+      return new(propInfo, ref LoadGuiEvents.ProvLoadAction, () => Selection.GetSelectedProvinces, items)
+      {
+         Margin = new(3, 1, 3, 3)
+      };
+   }
+
 
    public static ItemList GetItemList(string propName, ItemTypes itemType, List<string> items, string title)
    {
@@ -207,22 +224,6 @@ public static class ControlFactory
             Margin = new(3, 1, 3, 3)
          };
       return new(propertyInfo, ref LoadGuiEvents.ProvLoadAction, () => Selection.GetSelectedProvinces);
-   }
-
-   public static BindablePropertyComboBox<Province, TProperty, TKey> GetBindablePropertyComboBox<TProperty, TKey>(PropertyInfo propInfo, BindingDictionary<TKey, TProperty> items, bool hasEmptyItemAt0 = true) where TKey : notnull where TProperty : notnull
-   {
-      return new (propInfo, ref LoadGuiEvents.ProvLoadAction, () => Selection.GetSelectedProvinces, items)
-      {
-         Margin = new(3, 1, 3, 3)
-      };
-   }
-
-   public static BindableFakePropertyComboBox<Province, TProperty, TKey> GetBindableFakePropertyComboBox<TProperty, TKey>(PropertyInfo propInfo, BindingDictionary<TKey, TProperty> items) where TKey : notnull where TProperty : ProvinceCollection<Province>
-   {
-      return new (propInfo, ref LoadGuiEvents.ProvLoadAction, () => Selection.GetSelectedProvinces, items)
-      {
-         Margin = new(3, 1, 3, 3)
-      };
    }
 
    public static ExtendedComboBox GetExtendedComboBox(string propName, bool def = true)

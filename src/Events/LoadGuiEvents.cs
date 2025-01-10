@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.Helper;
@@ -44,6 +45,13 @@ namespace Editor.Events
       public static void TestTheory()
       {
          
+      }
+
+      public static void OneGBRamUsage()
+      {
+         var list = new List<int>(1_000_000_000 / 4);
+         for (var i = 0; i < 1_000_000_000 / 4; i++)
+            list.Add(i);
       }
    }
 }

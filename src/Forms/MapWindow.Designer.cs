@@ -88,29 +88,6 @@
          debugToolStripMenuItem = new ToolStripMenuItem();
          testToolStripMenuItem = new ToolStripMenuItem();
          telescopeToolStripMenuItem = new ToolStripMenuItem();
-         refStackToolStripMenuItem = new ToolStripMenuItem();
-         bestPointsToolStripMenuItem = new ToolStripMenuItem();
-         provDiffToolStripMenuItem = new ToolStripMenuItem();
-         yoloToolStripMenuItem = new ToolStripMenuItem();
-         saveAllProvincesToolStripMenuItem = new ToolStripMenuItem();
-         save1ToolStripMenuItem = new ToolStripMenuItem();
-         saveEuropeToolStripMenuItem = new ToolStripMenuItem();
-         jsonToolStripMenuItem = new ToolStripMenuItem();
-         bugReportToolStripMenuItem = new ToolStripMenuItem();
-         crashReportToolStripMenuItem = new ToolStripMenuItem();
-         loadDDSFilesTestToolStripMenuItem = new ToolStripMenuItem();
-         roughEditorToolStripMenuItem = new ToolStripMenuItem();
-         newSavingToolStripMenuItem = new ToolStripMenuItem();
-         toolStripMenuItem4 = new ToolStripMenuItem();
-         fileNamesToolStripMenuItem = new ToolStripMenuItem();
-         emptyCOlorInCountryToolStripMenuItem = new ToolStripMenuItem();
-         iMBTESTToolStripMenuItem = new ToolStripMenuItem();
-         clearGUIToolStripMenuItem = new ToolStripMenuItem();
-         provinceToolStripMenuItem = new ToolStripMenuItem();
-         countryToolStripMenuItem = new ToolStripMenuItem();
-         benchmarkMapModesToolStripMenuItem = new ToolStripMenuItem();
-         runNameGenToolStripMenuItem = new ToolStripMenuItem();
-         loadingToolStripMenuItem = new ToolStripMenuItem();
          ProvinceCollectionsLayoutPanel = new TableLayoutPanel();
          FocusSelectionCheckBox = new CheckBox();
          BottomToolStrip = new ToolStrip();
@@ -718,7 +695,7 @@
          // 
          // debugToolStripMenuItem
          // 
-         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, refStackToolStripMenuItem, bestPointsToolStripMenuItem, provDiffToolStripMenuItem, yoloToolStripMenuItem, saveAllProvincesToolStripMenuItem, save1ToolStripMenuItem, saveEuropeToolStripMenuItem, jsonToolStripMenuItem, bugReportToolStripMenuItem, crashReportToolStripMenuItem, loadDDSFilesTestToolStripMenuItem, roughEditorToolStripMenuItem, newSavingToolStripMenuItem, toolStripMenuItem4, fileNamesToolStripMenuItem, emptyCOlorInCountryToolStripMenuItem, iMBTESTToolStripMenuItem, clearGUIToolStripMenuItem, benchmarkMapModesToolStripMenuItem, runNameGenToolStripMenuItem, loadingToolStripMenuItem });
+         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem });
          debugToolStripMenuItem.Enabled = false;
          debugToolStripMenuItem.Name = "debugToolStripMenuItem";
          debugToolStripMenuItem.Size = new Size(54, 23);
@@ -729,177 +706,16 @@
          // testToolStripMenuItem
          // 
          testToolStripMenuItem.Name = "testToolStripMenuItem";
-         testToolStripMenuItem.Size = new Size(234, 22);
+         testToolStripMenuItem.Size = new Size(180, 22);
          testToolStripMenuItem.Text = "Browse Globals";
          testToolStripMenuItem.Click += testToolStripMenuItem_Click;
          // 
          // telescopeToolStripMenuItem
          // 
          telescopeToolStripMenuItem.Name = "telescopeToolStripMenuItem";
-         telescopeToolStripMenuItem.Size = new Size(234, 22);
-         telescopeToolStripMenuItem.Text = "Telescope";
-         telescopeToolStripMenuItem.Click += telescopeToolStripMenuItem_Click;
-         // 
-         // refStackToolStripMenuItem
-         // 
-         refStackToolStripMenuItem.Name = "refStackToolStripMenuItem";
-         refStackToolStripMenuItem.Size = new Size(234, 22);
-         refStackToolStripMenuItem.Text = "All Custom Country Attributes";
-         refStackToolStripMenuItem.Click += refStackToolStripMenuItem_Click;
-         // 
-         // bestPointsToolStripMenuItem
-         // 
-         bestPointsToolStripMenuItem.Name = "bestPointsToolStripMenuItem";
-         bestPointsToolStripMenuItem.Size = new Size(234, 22);
-         bestPointsToolStripMenuItem.Text = "Topological Sort verification";
-         bestPointsToolStripMenuItem.Click += bestPointsToolStripMenuItem_Click;
-         // 
-         // provDiffToolStripMenuItem
-         // 
-         provDiffToolStripMenuItem.Name = "provDiffToolStripMenuItem";
-         provDiffToolStripMenuItem.Size = new Size(234, 22);
-         provDiffToolStripMenuItem.Text = "Collisions";
-         provDiffToolStripMenuItem.Click += provDiffToolStripMenuItem_Click;
-         // 
-         // yoloToolStripMenuItem
-         // 
-         yoloToolStripMenuItem.Name = "yoloToolStripMenuItem";
-         yoloToolStripMenuItem.Size = new Size(234, 22);
-         yoloToolStripMenuItem.Text = "Loc Test";
-         yoloToolStripMenuItem.Click += yoloToolStripMenuItem_Click;
-         // 
-         // saveAllProvincesToolStripMenuItem
-         // 
-         saveAllProvincesToolStripMenuItem.Name = "saveAllProvincesToolStripMenuItem";
-         saveAllProvincesToolStripMenuItem.Size = new Size(234, 22);
-         saveAllProvincesToolStripMenuItem.Text = "Save all provinces";
-         saveAllProvincesToolStripMenuItem.Click += saveAllProvincesToolStripMenuItem_Click;
-         // 
-         // save1ToolStripMenuItem
-         // 
-         save1ToolStripMenuItem.Name = "save1ToolStripMenuItem";
-         save1ToolStripMenuItem.Size = new Size(234, 22);
-         save1ToolStripMenuItem.Text = "Save 1";
-         save1ToolStripMenuItem.Click += save1ToolStripMenuItem_Click;
-         // 
-         // saveEuropeToolStripMenuItem
-         // 
-         saveEuropeToolStripMenuItem.Name = "saveEuropeToolStripMenuItem";
-         saveEuropeToolStripMenuItem.Size = new Size(234, 22);
-         saveEuropeToolStripMenuItem.Text = "Test File Dialog feedback";
-         saveEuropeToolStripMenuItem.Click += saveEuropeToolStripMenuItem_Click;
-         // 
-         // jsonToolStripMenuItem
-         // 
-         jsonToolStripMenuItem.Name = "jsonToolStripMenuItem";
-         jsonToolStripMenuItem.Size = new Size(234, 22);
-         jsonToolStripMenuItem.Text = "SaveableObj Debug";
-         jsonToolStripMenuItem.Click += IsaveableClick;
-         // 
-         // bugReportToolStripMenuItem
-         // 
-         bugReportToolStripMenuItem.Name = "bugReportToolStripMenuItem";
-         bugReportToolStripMenuItem.Size = new Size(234, 22);
-         bugReportToolStripMenuItem.Text = "BugReport";
-         bugReportToolStripMenuItem.Click += bugReportToolStripMenuItem_Click;
-         // 
-         // crashReportToolStripMenuItem
-         // 
-         crashReportToolStripMenuItem.Name = "crashReportToolStripMenuItem";
-         crashReportToolStripMenuItem.Size = new Size(234, 22);
-         crashReportToolStripMenuItem.Text = "Crash Report";
-         crashReportToolStripMenuItem.Click += crashReportToolStripMenuItem_Click;
-         // 
-         // loadDDSFilesTestToolStripMenuItem
-         // 
-         loadDDSFilesTestToolStripMenuItem.Name = "loadDDSFilesTestToolStripMenuItem";
-         loadDDSFilesTestToolStripMenuItem.Size = new Size(234, 22);
-         loadDDSFilesTestToolStripMenuItem.Text = "Load DDS files test";
-         loadDDSFilesTestToolStripMenuItem.Click += loadDDSFilesTestToolStripMenuItem_Click;
-         // 
-         // roughEditorToolStripMenuItem
-         // 
-         roughEditorToolStripMenuItem.Name = "roughEditorToolStripMenuItem";
-         roughEditorToolStripMenuItem.Size = new Size(234, 22);
-         roughEditorToolStripMenuItem.Text = "Rough Editor";
-         roughEditorToolStripMenuItem.Click += roughEditorToolStripMenuItem_Click;
-         // 
-         // newSavingToolStripMenuItem
-         // 
-         newSavingToolStripMenuItem.Name = "newSavingToolStripMenuItem";
-         newSavingToolStripMenuItem.Size = new Size(234, 22);
-         newSavingToolStripMenuItem.Text = "New Saving";
-         newSavingToolStripMenuItem.Click += newSavingToolStripMenuItem_Click;
-         // 
-         // toolStripMenuItem4
-         // 
-         toolStripMenuItem4.Name = "toolStripMenuItem4";
-         toolStripMenuItem4.Size = new Size(234, 22);
-         toolStripMenuItem4.Text = "Terrain";
-         toolStripMenuItem4.Click += toolStripMenuItem4_Click;
-         // 
-         // fileNamesToolStripMenuItem
-         // 
-         fileNamesToolStripMenuItem.Name = "fileNamesToolStripMenuItem";
-         fileNamesToolStripMenuItem.Size = new Size(234, 22);
-         fileNamesToolStripMenuItem.Text = "FileNames";
-         fileNamesToolStripMenuItem.Click += fileNamesToolStripMenuItem_Click;
-         // 
-         // emptyCOlorInCountryToolStripMenuItem
-         // 
-         emptyCOlorInCountryToolStripMenuItem.Name = "emptyCOlorInCountryToolStripMenuItem";
-         emptyCOlorInCountryToolStripMenuItem.Size = new Size(234, 22);
-         emptyCOlorInCountryToolStripMenuItem.Text = "Empty COlor in Country";
-         emptyCOlorInCountryToolStripMenuItem.Click += emptyCOlorInCountryToolStripMenuItem_Click;
-         // 
-         // iMBTESTToolStripMenuItem
-         // 
-         iMBTESTToolStripMenuItem.Name = "iMBTESTToolStripMenuItem";
-         iMBTESTToolStripMenuItem.Size = new Size(234, 22);
-         iMBTESTToolStripMenuItem.Text = "IMB_TEST";
-         iMBTESTToolStripMenuItem.Click += iMBTESTToolStripMenuItem_Click;
-         // 
-         // clearGUIToolStripMenuItem
-         // 
-         clearGUIToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { provinceToolStripMenuItem, countryToolStripMenuItem });
-         clearGUIToolStripMenuItem.Name = "clearGUIToolStripMenuItem";
-         clearGUIToolStripMenuItem.Size = new Size(234, 22);
-         clearGUIToolStripMenuItem.Text = "Clear GUI";
-         // 
-         // provinceToolStripMenuItem
-         // 
-         provinceToolStripMenuItem.Name = "provinceToolStripMenuItem";
-         provinceToolStripMenuItem.Size = new Size(120, 22);
-         provinceToolStripMenuItem.Text = "Province";
-         provinceToolStripMenuItem.Click += provinceToolStripMenuItem_Click;
-         // 
-         // countryToolStripMenuItem
-         // 
-         countryToolStripMenuItem.Name = "countryToolStripMenuItem";
-         countryToolStripMenuItem.Size = new Size(120, 22);
-         countryToolStripMenuItem.Text = "Country";
-         countryToolStripMenuItem.Click += countryToolStripMenuItem_Click;
-         // 
-         // benchmarkMapModesToolStripMenuItem
-         // 
-         benchmarkMapModesToolStripMenuItem.Name = "benchmarkMapModesToolStripMenuItem";
-         benchmarkMapModesToolStripMenuItem.Size = new Size(234, 22);
-         benchmarkMapModesToolStripMenuItem.Text = "Benchmark MapModes";
-         benchmarkMapModesToolStripMenuItem.Click += benchmarkMapModesToolStripMenuItem_Click;
-         // 
-         // runNameGenToolStripMenuItem
-         // 
-         runNameGenToolStripMenuItem.Name = "runNameGenToolStripMenuItem";
-         runNameGenToolStripMenuItem.Size = new Size(234, 22);
-         runNameGenToolStripMenuItem.Text = "RunNameGen";
-         runNameGenToolStripMenuItem.Click += runNameGenToolStripMenuItem_Click;
-         // 
-         // loadingToolStripMenuItem
-         // 
-         loadingToolStripMenuItem.Name = "loadingToolStripMenuItem";
-         loadingToolStripMenuItem.Size = new Size(234, 22);
-         loadingToolStripMenuItem.Text = "Loading";
-         loadingToolStripMenuItem.Click += loadingToolStripMenuItem_Click;
+         telescopeToolStripMenuItem.Size = new Size(180, 22);
+         telescopeToolStripMenuItem.Text = "1 GB RAM";
+         telescopeToolStripMenuItem.Click += OneGBRAM;
          // 
          // ProvinceCollectionsLayoutPanel
          // 
@@ -3248,14 +3064,6 @@
       private ToolStripMenuItem debugToolStripMenuItem;
       private ToolStripMenuItem testToolStripMenuItem;
       private ToolStripMenuItem telescopeToolStripMenuItem;
-      private ToolStripMenuItem refStackToolStripMenuItem;
-      private ToolStripMenuItem bestPointsToolStripMenuItem;
-      private ToolStripMenuItem provDiffToolStripMenuItem;
-      private ToolStripMenuItem yoloToolStripMenuItem;
-      private ToolStripMenuItem saveAllProvincesToolStripMenuItem;
-      private ToolStripMenuItem save1ToolStripMenuItem;
-      private ToolStripMenuItem saveEuropeToolStripMenuItem;
-      private ToolStripMenuItem jsonToolStripMenuItem;
       private ToolStripMenuItem randomModifierToolStripMenuItem;
       private ToolStripSeparator toolStripSeparator3;
       private ToolStripMenuItem CreateFilesByDefault;
@@ -3264,22 +3072,16 @@
       private Label ProvAdjLabel;
       private ToolStripSeparator toolStripSeparator7;
       private ToolStripLabel MapModeTimesInfo;
-      private ToolStripMenuItem bugReportToolStripMenuItem;
-      private ToolStripMenuItem crashReportToolStripMenuItem;
-      private ToolStripMenuItem loadDDSFilesTestToolStripMenuItem;
       private Button OpenProvinceFolder;
-      private ToolStripMenuItem roughEditorToolStripMenuItem;
       private Button AdvancedProvinceEditing;
       private TableLayoutPanel CountryMainTLP;
       private TableLayoutPanel MapLayoutPanel;
       private TableLayoutPanel MMButtonsTLPanel;
-      private ToolStripMenuItem newSavingToolStripMenuItem;
       private ToolStripMenuItem infoToolStripMenuItem;
       private ToolStripMenuItem clearCrashLogsToolStripMenuItem;
       private TableLayoutPanel MisProvinceData;
       private Label label47;
       private GroupBox MiscProvGroupBox;
-      private ToolStripMenuItem toolStripMenuItem4;
       private ToolStripMenuItem deleteProvinceHistoryEntriesToolStripMenuItem;
       private Label label48;
       private Label label49;
@@ -3288,15 +3090,8 @@
       private ToolStripSeparator toolStripSeparator8;
       private ToolStripSeparator toolStripSeparator9;
       private ToolStripMenuItem TutorialBrowser;
-      private ToolStripMenuItem fileNamesToolStripMenuItem;
-      private ToolStripMenuItem emptyCOlorInCountryToolStripMenuItem;
-      private ToolStripMenuItem iMBTESTToolStripMenuItem;
       private ToolStripMenuItem browseEditedObjectsToolStripMenuItem;
-      private ToolStripMenuItem clearGUIToolStripMenuItem;
-      private ToolStripMenuItem provinceToolStripMenuItem;
-      private ToolStripMenuItem countryToolStripMenuItem;
       private ToolStripMenuItem gameOfLiveToolStripMenuItem;
-      private ToolStripMenuItem benchmarkMapModesToolStripMenuItem;
       private ToolStripMenuItem viewErrorlogToolStripMenuItem;
       private Panel ProvinceScrollPanel;
       private TableLayoutPanel ProvinceFooterMainTLP;
@@ -3359,9 +3154,7 @@
       private Button OpenCommonCountryFolder;
       private Controls.ToggleButton ProvinceHistoryEntryToggleButton;
       private Controls.ToggleButton CountryHistoryEntryToggleButton;
-      private ToolStripMenuItem runNameGenToolStripMenuItem;
       private ComboBox BookMarkComboBox;
-      private ToolStripMenuItem loadingToolStripMenuItem;
       private Button OpenHistoryCountryFolder;
       private ToolStripMenuItem saveErrorLogsToolStripMenuItem;
       private ToolStripMenuItem saveErrorLogAscsvToolStripMenuItem;

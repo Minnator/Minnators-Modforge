@@ -56,10 +56,10 @@ namespace Editor.Forms
       private ExtendedNumeric _prosperityNumeric = null!;
       private ExtendedNumeric _extraCostNumeric = null!;
 
-      private PropertyCheckBox<Province> _isCityCheckBox;
-      private PropertyCheckBox<Province> _isHreCheckBox;
-      private PropertyCheckBox<Province> _isParliamentSeatCheckbox;
-      private PropertyCheckBox<Province> _hasRevoltCheckBox;
+      private PropertyCheckBox<Province> _isCityCheckBox = null!;
+      private PropertyCheckBox<Province> _isHreCheckBox = null!;
+      private PropertyCheckBox<Province> _isParliamentSeatCheckbox = null!;
+      private PropertyCheckBox<Province> _hasRevoltCheckBox = null!;
 
       private TagComboBox _tribalOwner = null!;
       private ExtendedComboBox _tradeCompanyInvestments = null!;
@@ -661,11 +661,17 @@ namespace Editor.Forms
 
       public void UpdateMemoryUsage(float memoryUsage)
       {
-         if (InvokeRequired) Invoke(new MethodInvoker(delegate { RamUsageStrip.Text = $"RAM: [{Math.Round(memoryUsage)} MB]"; }));
+         if (IsDisposed || Disposing) return;
+         if (InvokeRequired)
+            Invoke(new MethodInvoker(delegate
+            {
+               RamUsageStrip.Text = memoryUsage > 1024 ? $"RAM: [{Math.Round(memoryUsage / 1024, 2):F2} GB]" : $"RAM: [{Math.Round(memoryUsage)} MB]";
+            }));
       }
 
       public void UpdateCpuUsage(float cpuUsage)
       {
+         if (IsDisposed || Disposing) return;
          if (InvokeRequired) Invoke(new MethodInvoker(delegate { CpuUsageStrip.Text = $"CPU: [{Math.Round(cpuUsage, 2):F2}%]"; }));
       }
 
@@ -797,9 +803,9 @@ namespace Editor.Forms
          Selection.ShowToolTip = ShowToolTipMenuItem.Checked;
       }
 
-      private void telescopeToolStripMenuItem_Click(object sender, EventArgs e)
+      private void OneGBRAM(object sender, EventArgs e)
       {
-         ProcessHelper.OpenFile("S:\\SteamLibrary\\steamapps\\common\\Europa Universalis IV\\map\\area.txt");
+         Theory.OneGBRamUsage();
       }
 
       private void MapWindow_KeyDown(object sender, KeyEventArgs e)

@@ -41,8 +41,8 @@
          CancelButton = new Button();
          InputTextBox = new TextBox();
          ConfirmButton = new Button();
-         toolTip1 = new ToolTip(components);
          AttributeListBox = new ListBox();
+         toolTip1 = new ToolTip(components);
          tableLayoutPanel1.SuspendLayout();
          tableLayoutPanel2.SuspendLayout();
          SuspendLayout();
@@ -97,6 +97,7 @@
          ToolTipPreview.Size = new Size(530, 175);
          ToolTipPreview.TabIndex = 3;
          ToolTipPreview.UseCompatibleStateImageBehavior = false;
+         ToolTipPreview.DoubleClick += ToolTipPreview_DoubleClick;
          // 
          // tableLayoutPanel2
          // 

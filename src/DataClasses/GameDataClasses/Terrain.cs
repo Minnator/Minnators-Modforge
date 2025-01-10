@@ -8,7 +8,7 @@ using static Editor.Saving.SavingUtil;
 
 namespace Editor.DataClasses.GameDataClasses;
 
-public class Terrain : ProvinceCollection<Province>, INotifyPropertyChanged
+public class Terrain : ProvinceCollection<Province>
 {
 
    public Terrain(string name, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(name, color, status)
@@ -169,7 +169,7 @@ public class Terrain : ProvinceCollection<Province>, INotifyPropertyChanged
    public override bool Equals(object? obj)
    {
       if (obj is Terrain terrain)
-         return Name == terrain.Name;
+         return Name.Equals(Name);
 
       return false;
    }
