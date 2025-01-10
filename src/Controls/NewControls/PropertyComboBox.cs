@@ -72,7 +72,6 @@ namespace Editor.Controls.NewControls
                                       BindingDictionary<TKey, TProperty> items) : base(propertyInfo, ref loadHandle, getSaveables)
       {
          _items = items;
-         Debug.WriteLine($"Items: {_items.GetType()}");
          DataSource = new BindingSource(_items, null);
          _items.AddControl(this);
       }

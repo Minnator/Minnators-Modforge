@@ -454,7 +454,7 @@ namespace Editor.DataClasses.GameDataClasses
       {
          get => GetFirstParentOfType(SaveableType.Terrain) as Terrain ?? Terrain.Empty;
          set {
-            Debug.WriteLine("TODO");
+            value.SubCollection.Add(this);
          }
       }
 

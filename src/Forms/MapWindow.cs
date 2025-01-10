@@ -84,8 +84,8 @@ namespace Editor.Forms
       private CollectionEditor2<ProvinceGroup, Province> _provinceGroupsEditingGui = null!;
       private CollectionEditor2<ColonialRegion, Province> _colonialRegionEditingGui = null!;
 
-      private BindablePropertyComboBox<Province, Country, Tag> OwnerTagBox = null!;
-      private BindablePropertyComboBox<Province, Country, Tag> ControllerTagBox = null!;
+      private BindablePropertyComboBox<Province, Country, Tag> _ownerTagBox = null!;
+      private BindablePropertyComboBox<Province, Country, Tag> _controllerTagBox = null!;
 
       public Screen? StartScreen = null;
 
@@ -411,10 +411,10 @@ namespace Editor.Forms
          SaveCurrentSelectionButton.MouseEnter += OnSavingSelectionEnter;
          OpenProvinceFile.MouseEnter += OnOpenProvinceFileEnter;
 
-         OwnerTagBox = ControlFactory.GetTagComboBox(typeof(Province).GetProperty(nameof(Province.Owner))!, Globals.Countries);
-         MisProvinceData.Controls.Add(OwnerTagBox, 1, 0);
-         ControllerTagBox = ControlFactory.GetTagComboBox(typeof(Province).GetProperty(nameof(Province.Controller))!, Globals.Countries);
-         MisProvinceData.Controls.Add(ControllerTagBox, 1, 1);
+         _ownerTagBox = ControlFactory.GetTagComboBox(typeof(Province).GetProperty(nameof(Province.Owner))!, Globals.Countries);
+         MisProvinceData.Controls.Add(_ownerTagBox, 1, 0);
+         _controllerTagBox = ControlFactory.GetTagComboBox(typeof(Province).GetProperty(nameof(Province.Controller))!, Globals.Countries);
+         MisProvinceData.Controls.Add(_controllerTagBox, 1, 1);
 
          _cores = ControlFactory.GetItemList(nameof(Province.Cores), ItemTypes.Tag, [], "Cores");
          _cores.OnItemAdded += ProvinceEditingEvents.OnItemAddedModified;

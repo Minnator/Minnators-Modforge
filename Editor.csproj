@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
     <OutputType>WinExe</OutputType>
-    <AssemblyName>Minnator's Modforge (Alpha 1.0.0)</AssemblyName>
+    <AssemblyName>Minnators Modforge (Alpha 1.0.2)</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
