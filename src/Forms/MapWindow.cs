@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Drawing.Imaging;
-using System.Globalization;
 using System.Media;
 using System.Runtime;
 using System.Text;
@@ -10,7 +9,6 @@ using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Misc;
-using Editor.DiscordGame_SDK;
 using Editor.ErrorHandling;
 using Editor.Events;
 using Editor.Forms.Feature;
@@ -62,17 +60,17 @@ namespace Editor.Forms
       private PropertyCheckBox<Province> _isParliamentSeatCheckbox = null!;
       private PropertyCheckBox<Province> _hasRevoltCheckBox = null!;
 
-      private TagComboBox _tribalOwner = null!;
+      private BindablePropertyComboBox<Province, Country, Tag> _tribalOwner = null!;
       private ExtendedComboBox _tradeCompanyInvestments = null!;
       private BindableFakePropertyComboBox<Province, Terrain, string> _terrainComboBox = null!;
 
-      private TextSaveableTextBox<string, CModifyProperty<string>> _nativesSizeTextBox = null!;
-      private TextSaveableTextBox<string, CModifyProperty<string>> _nativeFerocityTextBox = null!;
-      private TextSaveableTextBox<string, CModifyProperty<string>> _nativeHostilityTextBox = null!;
+      private PropertyNumeric<Province, int> _nativesSizeTextBox = null!;
+      private PropertyNumeric<Province, float> _nativeFerocityTextBox = null!;
+      private PropertyNumeric<Province, int> _nativeHostilityTextBox = null!;
 
-      private TextSaveableTextBox<string, CModifyLocalisation> _localisationTextBox = null!;
-      private TextSaveableTextBox<string, CModifyLocalisation> _provAdjTextBox = null!;
-      private TextSaveableTextBox<string, CModifyProperty<string>> _capitalNameTextBox = null!;
+      private PropertyTextBox<Province> _localisationTextBox = null!;
+      private PropertyTextBox<Province> _provAdjTextBox = null!;
+      private PropertyTextBox<Province> _capitalNameTextBox = null!;
 
       private ToolTip _savingButtonsToolTip = null!;
 
@@ -87,6 +85,9 @@ namespace Editor.Forms
 
       private BindablePropertyComboBox<Province, Country, Tag> _ownerTagBox = null!;
       private BindablePropertyComboBox<Province, Country, Tag> _controllerTagBox = null!;
+
+      private PropertyLabel<Province> LocalisationLabel = null!;
+      private PropertyLabel<Province> ProvAdjLabel = null!;
 
       public Screen? StartScreen = null;
 
@@ -388,19 +389,17 @@ namespace Editor.Forms
          };
 
          // CustomTextBox
-         _localisationTextBox = new(Selection.GetSelectedProvincesAsSaveable, new CLocObjFactory(true))
-         {
-            Margin = new(3, 1, 3, 3),
-            Dock = DockStyle.Fill
-         };
+         _localisationTextBox = ControlFactory.GetPropertyTextBox(typeof(Province).GetProperty(nameof(Province.TitleLocalisation)));
          LocTableLayoutPanel.Controls.Add(_localisationTextBox, 1, 1);
 
-         _provAdjTextBox = new(Selection.GetSelectedProvincesAsSaveable, new CLocObjFactory(false))
-         {
-            Margin = new(3, 1, 3, 3),
-            Dock = DockStyle.Fill
-         };
+         _provAdjTextBox = ControlFactory.GetPropertyTextBox(typeof(Province).GetProperty(nameof(Province.AdjectiveLocalisation)));
          LocTableLayoutPanel.Controls.Add(_provAdjTextBox, 1, 3);
+
+         LocalisationLabel = ControlFactory.GetPropertyLabel(typeof(Province).GetProperty(nameof(Province.TitleKey)));
+         LocTableLayoutPanel.Controls.Add(LocalisationLabel, 1, 0);
+
+         ProvAdjLabel = ControlFactory.GetPropertyLabel(typeof(Province).GetProperty(nameof(Province.AdjectiveKey)));
+         LocTableLayoutPanel.Controls.Add(ProvAdjLabel, 1, 2);
 
          // Tooltips for saving Buttons
          _savingButtonsToolTip = new();
@@ -498,12 +497,7 @@ namespace Editor.Forms
          _extraCostNumeric.Maximum = 1000;
          TradePanel.Controls.Add(_extraCostNumeric, 1, 2);
 
-         _capitalNameTextBox = new(Selection.GetSelectedProvincesAsSaveable, new CCountryPropertyChangeFactory<string>(nameof(Province.Capital)))
-         {
-            Dock = DockStyle.Fill,
-            Margin = new(3, 1, 3, 3),
-            Input = InputType.Text,
-         };
+         _capitalNameTextBox = ControlFactory.GetPropertyTextBox(typeof(Province).GetProperty(nameof(Province.Capital)));
          MisProvinceData.Controls.Add(_capitalNameTextBox, 1, 4);
 
          _isCityCheckBox = ControlFactory.GetExtendedCheckBoxProvince(typeof(Province).GetProperty(nameof(Province.IsCity))!);
@@ -525,26 +519,19 @@ namespace Editor.Forms
          MWAttirbuteCombobox.Items.AddRange([.. Enum.GetNames<ProvAttrGet>()]);
 
          // NATIVES TAB
-         _tribalOwner = ControlFactory.GetTagComboBox(nameof(Province.TribalOwner));
-         _tribalOwner.OnTagChanged += ProvinceEditingEvents.OnTagComboBoxSelectedIndexChanged;
+         _tribalOwner = ControlFactory.GetTagComboBox(typeof(Province).GetProperty(nameof(Province.TribalOwner))!, Globals.Countries);
          NativesLayoutPanel.Controls.Add(_tribalOwner, 1, 0);
 
-         _nativesSizeTextBox = new(Selection.GetSelectedProvincesAsSaveable, new CCountryPropertyChangeFactory<string>(nameof(Province.NativeSize)))
-         {
-            Input = InputType.UnsignedNumber
-         };
+         _nativesSizeTextBox = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.NativeSize)), 0, 100);
+         _nativesSizeTextBox.Maximum = 10000;
          NativesLayoutPanel.Controls.Add(_nativesSizeTextBox, 1, 1);
 
-         _nativeFerocityTextBox = new(Selection.GetSelectedProvincesAsSaveable, new CCountryPropertyChangeFactory<string>(nameof(Province.NativeFerocity)))
-         {
-            Input = InputType.DecimalNumber
-         };
+         _nativeFerocityTextBox = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.NativeFerocity)), 0f, 100);
+         _nativeFerocityTextBox.Maximum = 10000;
          NativesLayoutPanel.Controls.Add(_nativeFerocityTextBox, 1, 3);
 
-         _nativeHostilityTextBox = new(Selection.GetSelectedProvincesAsSaveable, new CCountryPropertyChangeFactory<string>(nameof(Province.NativeHostileness)))
-         {
-            Input = InputType.UnsignedNumber
-         };
+         _nativeHostilityTextBox = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.NativeHostileness)), 0, 100);
+         _nativeHostilityTextBox.Maximum = 10000;
          NativesLayoutPanel.Controls.Add(_nativeHostilityTextBox, 1, 2);
 
          // TRADE_COMPANIES TAB
@@ -594,41 +581,41 @@ namespace Editor.Forms
       public void ClearProvinceGui()
       {
          ExtendedComboBox.AllowEvents = false;
-         //OwnerTagBox.Clear();
-         //ControllerTagBox.Clear();
-         _religionComboBox.Clear();
-         _cultureComboBox.Clear();
-         _capitalNameTextBox.Clear();
+         _ownerTagBox.SetDefault();
+         _controllerTagBox.SetDefault();
+         _religionComboBox.SetDefault();
+         _cultureComboBox.SetDefault();
+         _capitalNameTextBox.SetDefault();
          _isCityCheckBox.Checked = false;
          _isHreCheckBox.Checked = false;
          _isParliamentSeatCheckbox.Checked = false;
          _hasRevoltCheckBox.Checked = false;
-         _taxNumeric.Value = 1;
-         _prdNumeric.Value = 1;
-         _mnpNumeric.Value = 1;
+         _taxNumeric.SetDefault();
+         _prdNumeric.SetDefault();
+         _mnpNumeric.SetDefault();
          _claims.Clear();
          _permanentClaims.Clear();
          _cores.Clear();
          _buildings.Clear();
          _discoveredBy.Clear();
-         _autonomyNumeric.Value = 0;
-         _devastationNumeric.Value = 0;
-         _prosperityNumeric.Value = 0;
-         _tradeGoodsComboBox.Clear();
-         _tradeCenterComboBox.Clear();
-         _extraCostNumeric.Value = 0;
+         _autonomyNumeric.SetDefault();
+         _devastationNumeric.SetDefault();
+         _prosperityNumeric.SetDefault();
+         _tradeGoodsComboBox.SetDefault();
+         _tradeCenterComboBox.SetDefault();
+         _extraCostNumeric.SetDefault();
          _tribalOwner.Clear();
-         _nativesSizeTextBox.Clear();
-         _nativeFerocityTextBox.Clear();
-         _nativeHostilityTextBox.Clear();
+         _nativesSizeTextBox.SetDefault();
+         _nativeFerocityTextBox.SetDefault();
+         _nativeHostilityTextBox.SetDefault();
          ModifierComboBox.Text = string.Empty;
          ModifiersListView.Items.Clear();
          DurationTextBox.Text = string.Empty;
          _tradeCompanyInvestments.Text = string.Empty;
-         _localisationTextBox.Clear();
-         LocalisationLabel.Text = string.Empty;
-         _provAdjTextBox.Clear();
-         ProvAdjLabel.Text = string.Empty;
+         _localisationTextBox.SetDefault();
+         LocalisationLabel.SetDefault();
+         _provAdjTextBox.SetDefault();
+         ProvAdjLabel.SetDefault();
          _terrainComboBox.SelectedItem = string.Empty;
          ExtendedComboBox.AllowEvents = true;
       }

@@ -16,21 +16,21 @@ namespace Editor.Controls.NewControls
       protected readonly Func<List<TSaveable>> GetSaveables;
       public TProperty DefaultValue { get; init; }
       private TProperty _oldValue;
+      private decimal _multiplier;
 
       private Timer _timer = new ();
 
-      public PropertyNumeric(PropertyInfo? propertyInfo, ref LoadGuiEvents.LoadAction<TSaveable> loadHandle, Func<List<TSaveable>> getSaveables)
+      public PropertyNumeric(PropertyInfo? propertyInfo, ref LoadGuiEvents.LoadAction<TSaveable> loadHandle, Func<List<TSaveable>> getSaveables, decimal multiplier)
       {
          Debug.Assert(propertyInfo is not null && propertyInfo.DeclaringType == typeof(TSaveable), $"PropInfo: {propertyInfo} declaring type is not of type {typeof(TSaveable)} but of type {propertyInfo.DeclaringType}");
          Debug.Assert(propertyInfo.PropertyType == typeof(int) || propertyInfo.PropertyType == typeof(float), $"PropInfo: {propertyInfo} is not of type {typeof(int)}/{typeof(float)} but of type {propertyInfo.PropertyType}");
-
+         Debug.Assert(!(propertyInfo.PropertyType == typeof(int) && Math.Floor(multiplier) != multiplier), "Multiplier is not a multiple of 1");
          if (propertyInfo.PropertyType == typeof(float)) 
             DecimalPlaces = 2;
-
          PropertyInfo = propertyInfo;
          loadHandle += ((IPropertyControl<TSaveable, TProperty>)this).LoadToGui;
          GetSaveables = getSaveables;
-
+         _multiplier = multiplier;
          KeyPress += TextBox_KeyPress;
          KeyDown += TextBox_KeyDown;
          Leave += OnFocusLost;
@@ -46,7 +46,12 @@ namespace Editor.Controls.NewControls
             Saveable.SetFieldMultiple(GetSaveables.Invoke(), value, PropertyInfo);
       }
 
-      public void SetDefault() => Text = DefaultValue.ToString();
+      public void SetDefault()
+      {
+         _timer.Stop();
+         Text = DefaultValue.ToString();
+      }
+
       public IErrorHandle GetFromGui(out TProperty value) => Converter.Convert(Text, out value);
 
 
@@ -85,11 +90,11 @@ namespace Editor.Controls.NewControls
 
       public override void UpButton()
       {
-         var newValue = Math.Min(Value + 1, Maximum);
+         var newValue = Math.Min(Value + _multiplier, Maximum);
          if (ModifierKeys.HasFlag(Keys.Control))
-            newValue = Math.Min(Value + 10, Maximum);
+            newValue = Math.Min(Value + 10 * _multiplier, Maximum);
          else if (ModifierKeys.HasFlag(Keys.Shift)) 
-            newValue = Math.Min(Value + 5, Maximum);
+            newValue = Math.Min(Value + 5 * _multiplier, Maximum);
 
          Value = newValue;
          _timer.Stop();
@@ -98,15 +103,21 @@ namespace Editor.Controls.NewControls
 
       public override void DownButton()
       {
-         var newValue = Math.Max(Value - 1, Minimum);
+         var newValue = Math.Max(Value - _multiplier, Minimum);
          if (ModifierKeys.HasFlag(Keys.Control))
-            newValue = Math.Max(Value - 10, Minimum);
+            newValue = Math.Max(Value - 10 * _multiplier, Minimum);
          else if (ModifierKeys.HasFlag(Keys.Shift)) 
-            newValue = Math.Max(Value - 5, Minimum);
+            newValue = Math.Max(Value - 5 * _multiplier, Minimum);
 
          Value = newValue;
          _timer.Stop();
          _timer.Start();
+      }
+
+      public void Clear()
+      {
+         _timer.Stop();
+         SetDefault();
       }
    }
 }

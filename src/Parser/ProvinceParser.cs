@@ -73,7 +73,7 @@ public static class ProvinceParser
      { "revolt_risk",                        (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.RevoltRisk))!) },
      { "seat_in_parliament",                 (Set<bool>,                   Province.Empty.GetPropertyInfo(nameof(Province.IsSeatInParliament))!) },
      { "trade_goods",                        (Set<TradeGood>,              Province.Empty.GetPropertyInfo(nameof(Province.TradeGood))!) },
-     { "tribal_owner",                       (Set<Tag>,                    Province.Empty.GetPropertyInfo(nameof(Province.TribalOwner))!) },
+     { "tribal_owner",                       (Set<Country>,                    Province.Empty.GetPropertyInfo(nameof(Province.TribalOwner))!) },
      { "unrest",                             (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.RevoltRisk))!) }
  };
 

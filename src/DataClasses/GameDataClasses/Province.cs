@@ -14,7 +14,7 @@ namespace Editor.DataClasses.GameDataClasses
       #region Data
       private Country _controller = Country.Empty;                       
       private Country _owner = Country.Empty;                            
-      private Tag _tribalOwner = Tag.Empty;                        
+      private Country _tribalOwner = Country.Empty;                        
       private int _baseManpower;                                
       private int _baseTax;                                      
       private int _baseProduction;                              
@@ -109,7 +109,7 @@ namespace Editor.DataClasses.GameDataClasses
       }
 
       [ToolTippable]
-      public Tag TribalOwner
+      public Country TribalOwner
       {
          get => _tribalOwner;
          set => SetField(ref _tribalOwner, value);
@@ -410,9 +410,23 @@ namespace Editor.DataClasses.GameDataClasses
                return Localisation.GetDynamicProvinceLoc(this);
             return Localisation.GetLoc(TitleKey);
          }
+         set
+         {
+            Localisation.AddOrModifyLocObject(TitleKey, value);
+         }
       }
       [ToolTippable]
-      public string AdjectiveLocalisation => Localisation.GetLoc(AdjectiveKey);
+      public string AdjectiveLocalisation
+      {
+         get
+         {
+            return Localisation.GetLoc(AdjectiveKey);
+         }
+         set
+         {
+            Localisation.AddOrModifyLocObject(AdjectiveKey, value);
+         }
+      }
 
       // Events 
       public static event EventHandler<ProvinceComposite>? ColorChanged;

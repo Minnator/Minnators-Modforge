@@ -6,6 +6,7 @@ using Editor.DataClasses.Misc;
 using Editor.Events;
 using Editor.Helper;
 using Editor.Saving;
+using Newtonsoft.Json.Linq;
 using Button = System.Windows.Forms.Button;
 
 namespace Editor.Controls;
@@ -228,16 +229,34 @@ public static class ControlFactory
    }
 
 
-   public static PropertyNumeric<Province, TProperty> GetPropertyNumeric<TProperty>(PropertyInfo? propertyInfo, TProperty defaultValue) where TProperty : INumber<TProperty>
+   public static PropertyNumeric<Province, TProperty> GetPropertyNumeric<TProperty>(PropertyInfo? propertyInfo, TProperty defaultValue, decimal multiplier = 1) where TProperty : INumber<TProperty>
+   {
+      return new(propertyInfo, ref LoadGuiEvents.ProvLoadAction, () => Selection.GetSelectedProvinces, multiplier)
+      {
+         Margin = new(3, 1, 3, 3),
+         Dock = DockStyle.Fill,
+         DefaultValue = defaultValue,
+      };
+   }
+   
+   public static PropertyTextBox<Province> GetPropertyTextBox(PropertyInfo? propertyInfo)
    {
       return new(propertyInfo, ref LoadGuiEvents.ProvLoadAction, () => Selection.GetSelectedProvinces)
       {
          Margin = new(3, 1, 3, 3),
-         Dock = DockStyle.Fill,
-         DefaultValue = defaultValue
+         Dock = DockStyle.Fill
       };
    }
 
+   public static PropertyLabel<Province> GetPropertyLabel(PropertyInfo? propertyInfo)
+   {
+      return new(propertyInfo, ref LoadGuiEvents.ProvLoadAction)
+      {
+         Margin = new(3, 1, 3, 3),
+         Dock = DockStyle.Fill,
+         TextAlign = ContentAlignment.MiddleLeft
+      };
+   }
 
    public static ExtendedComboBox GetExtendedComboBox(string propName, bool def = true)
    {

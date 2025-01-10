@@ -158,11 +158,9 @@
          LocalisationGroupBox = new GroupBox();
          LocTableLayoutPanel = new TableLayoutPanel();
          label39 = new Label();
-         LocalisationLabel = new Label();
          label25 = new Label();
          label26 = new Label();
          label37 = new Label();
-         ProvAdjLabel = new Label();
          MiscProvGroupBox = new GroupBox();
          MisProvinceData = new TableLayoutPanel();
          label6 = new Label();
@@ -1585,11 +1583,9 @@
          LocTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
          LocTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
          LocTableLayoutPanel.Controls.Add(label39, 0, 3);
-         LocTableLayoutPanel.Controls.Add(LocalisationLabel, 1, 0);
          LocTableLayoutPanel.Controls.Add(label25, 0, 0);
          LocTableLayoutPanel.Controls.Add(label26, 0, 1);
          LocTableLayoutPanel.Controls.Add(label37, 0, 2);
-         LocTableLayoutPanel.Controls.Add(ProvAdjLabel, 1, 2);
          LocTableLayoutPanel.Dock = DockStyle.Fill;
          LocTableLayoutPanel.Location = new Point(0, 16);
          LocTableLayoutPanel.Margin = new Padding(0);
@@ -1613,18 +1609,6 @@
          label39.TabIndex = 5;
          label39.Text = "Value";
          label39.TextAlign = ContentAlignment.MiddleLeft;
-         // 
-         // LocalisationLabel
-         // 
-         LocalisationLabel.AutoSize = true;
-         LocalisationLabel.Dock = DockStyle.Fill;
-         LocalisationLabel.Location = new Point(57, 1);
-         LocalisationLabel.Margin = new Padding(1);
-         LocalisationLabel.Name = "LocalisationLabel";
-         LocalisationLabel.Size = new Size(130, 22);
-         LocalisationLabel.TabIndex = 0;
-         LocalisationLabel.Text = "-";
-         LocalisationLabel.TextAlign = ContentAlignment.MiddleLeft;
          // 
          // label25
          // 
@@ -1658,17 +1642,6 @@
          label37.TabIndex = 4;
          label37.Text = "Adj";
          label37.TextAlign = ContentAlignment.MiddleLeft;
-         // 
-         // ProvAdjLabel
-         // 
-         ProvAdjLabel.AutoSize = true;
-         ProvAdjLabel.Dock = DockStyle.Fill;
-         ProvAdjLabel.Location = new Point(57, 49);
-         ProvAdjLabel.Margin = new Padding(1);
-         ProvAdjLabel.Name = "ProvAdjLabel";
-         ProvAdjLabel.Size = new Size(130, 22);
-         ProvAdjLabel.TabIndex = 8;
-         ProvAdjLabel.Text = "-";
          // 
          // MiscProvGroupBox
          // 
@@ -3032,7 +3005,6 @@
       private ToolStripMenuItem mapModeHotkeysToolStripMenuItem;
       private GroupBox LocalisationGroupBox;
       private TableLayoutPanel LocTableLayoutPanel;
-      private Label LocalisationLabel;
       private Label label25;
       private Label label26;
       private TableLayoutPanel ModTypeSubLayout;
@@ -3069,7 +3041,6 @@
       private ToolStripMenuItem CreateFilesByDefault;
       private Label label39;
       private Label label37;
-      private Label ProvAdjLabel;
       private ToolStripSeparator toolStripSeparator7;
       private ToolStripLabel MapModeTimesInfo;
       private Button OpenProvinceFolder;
