@@ -1,4 +1,5 @@
-﻿using System.Runtime;
+﻿
+using System.Runtime;
 
 namespace Editor.Helper
 {
@@ -14,7 +15,7 @@ namespace Editor.Helper
                GC.Collect();
                GC.WaitForPendingFinalizers();
             }
-            //GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
             GC.Collect();
             GC.WaitForPendingFinalizers();
          })

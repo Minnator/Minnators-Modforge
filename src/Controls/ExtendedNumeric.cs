@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using Editor.Events;
 using Editor.Helper;
 
@@ -50,7 +51,7 @@ namespace Editor.Controls
 
       private void OnFocusLost(object? sender, EventArgs e)
       {
-         OnValueChanged.Invoke(this, int.Parse(Text));
+         Debug.WriteLine("FocusLost!");
       }
 
       public override void UpButton()

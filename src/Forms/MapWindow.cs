@@ -2,6 +2,7 @@
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.Media;
+using System.Runtime;
 using System.Text;
 using Editor.Controls;
 using Editor.Controls.NewControls;
@@ -48,9 +49,9 @@ namespace Editor.Forms
       public ExtendedComboBox ModifierComboBox = null!;
       private ExtendedComboBox _modifierTypeComboBox = null!;
 
-      private ExtendedNumeric _taxNumeric = null!;
-      private ExtendedNumeric _prdNumeric = null!;
-      private ExtendedNumeric _mnpNumeric = null!;
+      private PropertyNumeric<Province> _taxNumeric = null!;
+      private PropertyNumeric<Province> _prdNumeric = null!;
+      private PropertyNumeric<Province> _mnpNumeric = null!;
       private ExtendedNumeric _autonomyNumeric = null!;
       private ExtendedNumeric _devastationNumeric = null!;
       private ExtendedNumeric _prosperityNumeric = null!;
@@ -461,22 +462,20 @@ namespace Editor.Forms
          _terrainComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
          MisProvinceData.Controls.Add(_terrainComboBox, 1, 5);
 
-         _taxNumeric = ControlFactory.GetExtendedNumeric(nameof(Province.BaseTax));
+
+         _taxNumeric = ControlFactory.GetPropertyNumeric<Province>(typeof(Province).GetProperty(nameof(Province.BaseTax)));
          _taxNumeric.Minimum = 0;
          _taxNumeric.Maximum = 1000;
-         _taxNumeric.OnValueChanged += ProvinceEditingEvents.OnExtendedNumericValueChanged;
          MisProvinceData.Controls.Add(_taxNumeric, 3, 0);
 
-         _prdNumeric = ControlFactory.GetExtendedNumeric(nameof(Province.BaseProduction));
+         _prdNumeric = ControlFactory.GetPropertyNumeric<Province>(typeof(Province).GetProperty(nameof(Province.BaseProduction)));
          _prdNumeric.Minimum = 0;
          _prdNumeric.Maximum = 1000;
-         _prdNumeric.OnValueChanged += ProvinceEditingEvents.OnExtendedNumericValueChanged;
          MisProvinceData.Controls.Add(_prdNumeric, 3, 1);
 
-         _mnpNumeric = ControlFactory.GetExtendedNumeric(nameof(Province.BaseManpower));
+         _mnpNumeric = ControlFactory.GetPropertyNumeric<Province>(typeof(Province).GetProperty(nameof(Province.BaseManpower)));
          _mnpNumeric.Minimum = 0;
          _mnpNumeric.Maximum = 1000;
-         _mnpNumeric.OnValueChanged += ProvinceEditingEvents.OnExtendedNumericValueChanged;
          MisProvinceData.Controls.Add(_mnpNumeric, 3, 2);
 
          _autonomyNumeric = ControlFactory.GetExtendedNumeric(nameof(Province.LocalAutonomy));
@@ -775,6 +774,7 @@ namespace Editor.Forms
 
       private void gCToolStripMenuItem_Click(object sender, EventArgs e)
       {
+         GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
          GC.Collect();
       }
 

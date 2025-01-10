@@ -706,14 +706,14 @@
          // testToolStripMenuItem
          // 
          testToolStripMenuItem.Name = "testToolStripMenuItem";
-         testToolStripMenuItem.Size = new Size(180, 22);
+         testToolStripMenuItem.Size = new Size(154, 22);
          testToolStripMenuItem.Text = "Browse Globals";
          testToolStripMenuItem.Click += testToolStripMenuItem_Click;
          // 
          // telescopeToolStripMenuItem
          // 
          telescopeToolStripMenuItem.Name = "telescopeToolStripMenuItem";
-         telescopeToolStripMenuItem.Size = new Size(180, 22);
+         telescopeToolStripMenuItem.Size = new Size(154, 22);
          telescopeToolStripMenuItem.Text = "1 GB RAM";
          telescopeToolStripMenuItem.Click += OneGBRAM;
          // 

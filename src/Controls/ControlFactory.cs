@@ -226,6 +226,18 @@ public static class ControlFactory
       return new(propertyInfo, ref LoadGuiEvents.ProvLoadAction, () => Selection.GetSelectedProvinces);
    }
 
+
+   public static PropertyNumeric<Province> GetPropertyNumeric<TSaveable>(PropertyInfo? propertyInfo, int defaultValue = 0) where TSaveable : Saveable
+   {
+      return new(propertyInfo, ref LoadGuiEvents.ProvLoadAction, () => Selection.GetSelectedProvinces)
+      {
+         Margin = new(3, 1, 3, 3),
+         Dock = DockStyle.Fill,
+         DefaultValue = defaultValue
+      };
+   }
+
+
    public static ExtendedComboBox GetExtendedComboBox(string propName, bool def = true)
    {
       if (def)
