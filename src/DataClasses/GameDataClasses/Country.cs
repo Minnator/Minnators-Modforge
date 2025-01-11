@@ -364,6 +364,8 @@ public class HistoryCountry : Saveable, IGetSetProperty, IHistoryProvider<Countr
       set => SetField(ref _capital, value);
    }
 
+   public string GetCapitalLoc => _capital.TitleLocalisation;
+
    public List<Tag> HistoricalRivals
    {
       get => _historicalRivals;

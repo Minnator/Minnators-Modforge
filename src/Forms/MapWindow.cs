@@ -221,8 +221,14 @@ namespace Editor.Forms
 
       private void UpdateGui()
       {
-         var currentTab = DataTabPanel.SelectedIndex;
-         switch (currentTab)
+         UpdateTabIfSelected(DataTabPanel.SelectedIndex);
+      }
+
+      private void UpdateTabIfSelected(int i)
+      {
+         if (DataTabPanel.SelectedIndex != i)
+            return;
+         switch (i)
          {
             case 0:
                UpdateProvinceTab();
@@ -238,11 +244,47 @@ namespace Editor.Forms
 
       private void UpdateProvinceTab()
       {
-         //LoadSelectedProvincesToGui();
-         LoadGuiEvents.ReloadProvinces();
+         if (DataTabPanel.SelectedIndex != 0)
+            return;
+
+         if (Selection.Count == 0)
+         {
+            DataTabPanel.TabPages[0].SuspendLayout();
+            Globals.State = State.Loading;
+            ClearProvinceGui();
+            Globals.State = State.Running;
+            DataTabPanel.TabPages[0].Enabled = false;
+            DataTabPanel.TabPages[0].ResumeLayout();
+         }
+         else
+         {
+            DataTabPanel.TabPages[0].Enabled = true;
+            //LoadSelectedProvincesToGui();
+            LoadGuiEvents.ReloadProvinces();
+         }
       }
 
-      private void UpdateCountryTab() => LoadCountryToGui(Selection.SelectedCountry);
+      private void UpdateCountryTab()
+      {
+         if (DataTabPanel.SelectedIndex != 1)
+            return;
+
+         if (Selection.SelectedCountry == Country.Empty)
+         {
+            DataTabPanel.TabPages[1].SuspendLayout();
+            Globals.State = State.Loading;
+            ClearCountryGui();
+            Globals.State = State.Running;
+            DataTabPanel.TabPages[1].Enabled = false;
+            DataTabPanel.TabPages[1].ResumeLayout();
+         }
+         else
+         {
+            DataTabPanel.TabPages[1].Enabled = true;
+            //LoadCountryToGui(Selection.SelectedCountry);
+            LoadGuiEvents.ReloadCountry();
+         }
+      }
 
 
       #region EditGui
@@ -346,47 +388,13 @@ namespace Editor.Forms
 
       private void InitializeProvinceEditGui()
       {
-
          DataTabPanel.TabPages[0].Enabled = false;
-         Selection.OnProvinceSelectionChange += (sender, i) =>
-         {
-
-
-            if (i == 0)
-            {
-               DataTabPanel.TabPages[0].SuspendLayout();
-               Globals.State = State.Loading;
-               ClearProvinceGui();
-               Globals.State = State.Running;
-               DataTabPanel.TabPages[0].Enabled = false;
-               DataTabPanel.TabPages[0].ResumeLayout();
-            }
-            else
-            {
-               DataTabPanel.TabPages[0].Enabled = true;
-               //LoadSelectedProvincesToGui();
-               LoadGuiEvents.ReloadProvinces();
-            }
-         };
-
          DataTabPanel.TabPages[1].Enabled = false;
-         Selection.OnCountrySelectionChange += (_, _) =>
-         {
-            if (Selection.SelectedCountry == Country.Empty)
-            {
-               DataTabPanel.TabPages[1].SuspendLayout();
-               Globals.State = State.Loading;
-               ClearCountryGui();
-               Globals.State = State.Running;
-               DataTabPanel.TabPages[1].Enabled = false;
-               DataTabPanel.TabPages[1].ResumeLayout();
-            }
-            else
-            {
-               DataTabPanel.TabPages[1].Enabled = true;
-               LoadCountryToGui(Selection.SelectedCountry);
-            }
-         };
+         Selection.OnProvinceSelectionChange += (sender, i) => UpdateTabIfSelected(0);
+         Selection.OnCountrySelectionChange += (sender, i) => UpdateTabIfSelected(1);
+
+         DataTabPanel.SelectedIndexChanged += (sender, args) => UpdateGui();
+
 
          // CustomTextBox
          _localisationTextBox = ControlFactory.GetPropertyTextBox(typeof(Province).GetProperty(nameof(Province.TitleLocalisation)));
@@ -1039,7 +1047,7 @@ namespace Editor.Forms
       private NamesEditor _armyEditor = null!;
       private NamesEditor _fleetEditor = null!;
 
-      //TODO private PropertyTextBox<HistoryCountry> _capitalTextBox = null!;
+      private PropertyLabel<HistoryCountry> _capitalTextBox = null!;
 
       private ExtendedNumeric _countryDevelopmentNumeric = null!;
 
@@ -1087,7 +1095,7 @@ namespace Editor.Forms
          _governmentReforms.Width = 117;
          _governmentReforms.OnItemAdded += CountryGuiEvents.GovernmentReforms_OnItemAdded;
          _governmentReforms.OnItemRemoved += CountryGuiEvents.GovernmentReforms_OnItemRemoved;
-         //_capitalTextBox = ControlFactory.GetPropertyTextBoxHistoryCountry(typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.Capital)));
+         _capitalTextBox = ControlFactory.GetPropertyLabelHistoryCountry(typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.GetCapitalLoc)));
 
          _focusComboBox = ControlFactory.GetListComboBox([.. Enum.GetNames<Mana>()], new(1), false);
          _focusComboBox.SelectedIndexChanged += CountryGuiEvents.FocusComboBox_SelectedIndexChanged;
@@ -1098,7 +1106,7 @@ namespace Editor.Forms
          TagAndColorTLP.Controls.Add(_graphicalCultureBox, 1, 2);
          TagAndColorTLP.Controls.Add(_unitTypeBox, 3, 2);
          TagAndColorTLP.Controls.Add(_techGroupBox, 1, 3);
-        // CapitalTLP.Controls.Add(_capitalTextBox, 0, 0);
+         CapitalTLP.Controls.Add(_capitalTextBox, 0, 0);
          TagAndColorTLP.Controls.Add(_focusComboBox, 1, 4);
          CountryHeaderTLP.Controls.Add(CountryFlagLabel, 0, 0);
 
@@ -1272,7 +1280,6 @@ namespace Editor.Forms
          _graphicalCultureBox.Text = country.CommonCountry.GraphicalCulture;
          _unitTypeBox.Text = country.HistoryCountry.UnitType;
          _techGroupBox.Text = country.HistoryCountry.TechnologyGroup.Name;
-         //_capitalTextBox.Text = country.HistoryCountry.Capital.Id.ToString();
          _focusComboBox.Text = country.HistoryCountry.NationalFocus.ToString();
 
          // Names
@@ -1440,8 +1447,8 @@ namespace Editor.Forms
          if (Selection.Count != 1)
             return;
 
-         //_capitalTextBox.Text = Selection.GetSelectedProvinces[0].Id.ToString();
-        // _capitalTextBox.Focus();
+         _capitalTextBox.Text = Selection.GetSelectedProvinces[0].Id.ToString();
+         _capitalTextBox.Focus();
       }
 
 

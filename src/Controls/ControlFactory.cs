@@ -265,6 +265,15 @@ public static class ControlFactory
          TextAlign = ContentAlignment.MiddleLeft
       };
    }
+   public static PropertyLabel<HistoryCountry> GetPropertyLabelHistoryCountry(PropertyInfo? propertyInfo)
+   {
+      return new(propertyInfo, ref LoadGuiEvents.HistoryCountryLoadAction)
+      {
+         Margin = new(3, 1, 3, 3),
+         Dock = DockStyle.Fill,
+         TextAlign = ContentAlignment.MiddleLeft
+      };
+   }
 
    public static ExtendedComboBox GetExtendedComboBox(string propName, bool def = true)
    {

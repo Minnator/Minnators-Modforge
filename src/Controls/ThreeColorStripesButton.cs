@@ -81,6 +81,7 @@ namespace Editor.Controls
             var index3 = Globals.Random.Next(max);
 
             SetColorIndexes(index1, index2, index3);
+            SetFromGui();
             return;
          }
 

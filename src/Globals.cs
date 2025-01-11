@@ -379,8 +379,8 @@ public static class Globals
 // TODO LIST Until Alpha 1.1
 // - [ ] Block Water provinces; should not be viable for countries
 // - [ ] Loosing hover when selecting and deselecting a province
-// - [ ] Smart Gui reloading
-// - [ ] Rewrite Province.cs, Province Command and Gui
+// - [█████████▒▒▒] Smart Gui reloading
+// - [x] Rewrite Province.cs, Province Command and Gui
 // - [ ] Sounds for buttons and actions
 // - [ ] UnitType loading optimization
 // - [ ] Loading bar when saving using threads
@@ -388,10 +388,10 @@ public static class Globals
 // - [ ] Radial Menu for Map Modes
 // - [ ] Trade fix   //UI
 // - [ ] Implement Shaders for the map
-// - [ ] Generalize Loading
 // - [ ] Add Prefix ignoring in search boxes
 // - [ ] Straits editing and creation
-// - [ ] PDX language support
+// - [██▒▒▒▒▒▒▒▒▒▒] Generalize Loading
+// - [█▒▒▒▒▒▒▒▒▒▒▒] PDX language support
 // - [ ] Item scaling on Graphics (Trade arrows, straits, capitals, text)
 // - [ ] FPS count for map rendering
 // - [ ] Add a way to create custom map modes
@@ -400,7 +400,16 @@ public static class Globals
 // - [ ] Province Creation and editing
 // - [ ] File syncing/hotreloading
 // - [ ] Heat map for history entries in editor for them when selecting dates?
-// - [ ] Fix Country Color not live updating
+// - [x] Fix Country Color not live updating
+
+// Next Up in what shall happen:
+// - [ ] Update Localisation Implementation
+// - [ ] Create List command
+// - [ ] Improve and create List GUI interface / elements
+// - [ ] Compacting command
+// - [ ] Finish Loading overhaul
+// - [ ] Fix border drawing
+
 
 
 // Create command which takes an action which updates the map mode and the UI elements

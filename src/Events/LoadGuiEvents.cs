@@ -25,6 +25,17 @@ namespace Editor.Events
          Globals.State = State.Running;
       }
 
+      public static void ReloadCountry()
+      {
+         var country = Selection.SelectedCountry;
+         if (country == Country.Empty) 
+            return;
+         Globals.State = State.Loading;
+         HistoryCountryLoadAction.Invoke([country.HistoryCountry], null!, true);
+         CommonCountryLoadAction.Invoke([country.CommonCountry], null!, true);
+         Globals.State = State.Running;
+      }
+
       public static void TriggerGuiUpdate(Type type, PropertyInfo info)
       {
          if (type == typeof(Province))
