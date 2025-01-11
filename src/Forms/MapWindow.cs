@@ -124,6 +124,8 @@ namespace Editor.Forms
 #endif
       }
 
+      #region Initialize Application and Loadingscreen
+
       public void Initialize()
       {
          Hide();
@@ -162,11 +164,6 @@ namespace Editor.Forms
          Globals.ZoomControl.Invalidate();
       }
 
-      private void InitMapModes()
-      {
-         MapModeComboBox.Items.Clear();
-         MapModeComboBox.Items.AddRange([.. Enum.GetNames<MapModeType>()]);
-      }
 
       private void RunLoadingScreen()
       {
@@ -175,6 +172,8 @@ namespace Editor.Forms
          _ls.ShowDialog();
       }
 
+      #endregion
+      #region MapWindow GUI Init
       private void InitGui()
       {
          InitializeComponent();
@@ -218,6 +217,9 @@ namespace Editor.Forms
          var bookmark = Globals.Bookmarks[BookMarkComboBox.SelectedIndex];
          DateControl.Date = bookmark.Date;
       }
+      #endregion
+      #region GUI Updates
+
 
       private void UpdateGui()
       {
@@ -286,7 +288,7 @@ namespace Editor.Forms
          }
       }
 
-
+      #endregion
       #region EditGui
       /// <summary>
       /// Initializes all Tabs of the EditGui
@@ -580,12 +582,7 @@ namespace Editor.Forms
 
 
       #endregion
-
-
-      // ======================== Province GUI Update Methods ========================
       #region Province Gui
-
-
       public void ClearProvinceGui()
       {
          ExtendedComboBox.AllowEvents = false;
@@ -628,6 +625,7 @@ namespace Editor.Forms
          ExtendedComboBox.AllowEvents = true;
       }
       #endregion
+      #region MapMode Init / Update
 
       public void UpdateMapModeButtons(bool buttonInv = true)
       {
@@ -640,14 +638,23 @@ namespace Editor.Forms
          }
       }
 
+      private void InitMapModes()
+      {
+         MapModeComboBox.Items.Clear();
+         MapModeComboBox.Items.AddRange([.. Enum.GetNames<MapModeType>()]);
+      }
+      private void MapModeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+      {
+         MapModeManager.SetCurrentMapMode(Enum.Parse<MapModeType>(MapModeComboBox.SelectedItem?.ToString() ?? string.Empty));
+      }
 
-      #region ToolStrip update methods
+      #endregion
+      #region Resource Updater MethodInvokation
       public void SetSelectedProvinceSum(int sum)
       {
          SelectedProvinceSum.Text = $"ProvSum: [{sum}]";
       }
 
-      #region Resource Updater MethodInvokation
 
       public void UpdateMemoryUsage(float memoryUsage)
       {
@@ -666,20 +673,11 @@ namespace Editor.Forms
       }
 
       #endregion
-
       #region HistoryManager Event Handlers
 
       private void UpdateRedoDepth(object sender, int e) => RedoDepthLabel.Text = $"Redos [{e}]";
       private void UpdateUndoDepth(object sender, int e) => UndoDepthLabel.Text = $"Undos [{e}]";
       #endregion
-      #endregion
-
-      private void MapWindow_FormClosing(object sender, FormClosingEventArgs e)
-      {
-         if (!ShutDownMaster.DoWeShutDown())
-            e.Cancel = true;
-      }
-
       #region History interface interactions
 
       private void RevertInSelectionHistory(object sender, EventArgs e)
@@ -697,70 +695,25 @@ namespace Editor.Forms
       }
 
       #endregion
+      #region Toolstrip Interactions
 
-      private void OnSavingAllEnter(object? sender, EventArgs e)
+      private void OneGBRAM(object sender, EventArgs e)
       {
-         _savingButtonsToolTip.SetToolTip(SaveAllProvincesButton, $"Save all provinces ({Globals.Provinces.Count})");
+         Theory.OneGBRamUsage();
       }
-      private void OnSavingSelectionEnter(object? sender, EventArgs e)
+      private void searchToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         _savingButtonsToolTip.SetToolTip(SaveCurrentSelectionButton, $"Save selection ({Selection.Count})");
+         FormsHelper.ShowIfAnyOpen<Search>();
       }
-      private void OnOpenProvinceFileEnter(object? sender, EventArgs e)
+      private void openCustomizerToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         _savingButtonsToolTip.SetToolTip(OpenProvinceFile,
-            Selection.Count == 1
-               ? $"Open the selected province file ({Selection.GetSelectedProvinces[0].TitleLocalisation})"
-               : $"Open the selected province files ({Selection.Count})");
-      }
-
-
-      private static void OnDateChanged(object? sender, Date date)
-      {
-         //ProvinceHistoryManager.LoadDate(date);
+         var toolTipCustomizer = new ToolTipCustomizer();
+         toolTipCustomizer.Show();
       }
 
-      public void UpdateHoveredInfo(Province? province)
+      private void ShowToolTipMenuItem_Click(object sender, EventArgs e)
       {
-         if (province == null)
-         {
-            ProvinceNameLabel.Text = "Province: -";
-            OwnerCountryNameLabel.Text = "Owner: -";
-            return;
-         }
-         ProvinceNameLabel.Text = $"Province: {province.TitleLocalisation}";
-         OwnerCountryNameLabel.Text = $"Owner: {Localisation.GetLoc(province.Owner.TitleKey)}";
-      }
-
-      private void AddModifiersToList(ModifierAbstract modifier, ModifierType type)
-      {
-         var item = new ListViewItem(modifier.Name);
-         item.SubItems.Add(modifier.Duration.ToString());
-         item.SubItems.Add(type.ToString());
-         ModifiersListView.Items.Add(item);
-
-         ModifiersListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-         ModifiersListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-      }
-
-      private void AddAllModifiersToListView(Province province)
-      {
-         ModifiersListView.Items.Clear();
-
-         foreach (var modifier in province.ProvinceModifiers)
-            AddModifiersToList(modifier, ModifierType.ProvinceModifier);
-
-         foreach (var modifier in province.PermanentProvinceModifiers)
-            AddModifiersToList(modifier, ModifierType.PermanentProvinceModifier);
-      }
-
-      private void debugToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-      }
-
-      private void MapModeComboBox_SelectedIndexChanged(object sender, EventArgs e)
-      {
-         MapModeManager.SetCurrentMapMode(Enum.Parse<MapModeType>(MapModeComboBox.SelectedItem?.ToString() ?? string.Empty));
+         Selection.ShowToolTip = ShowToolTipMenuItem.Checked;
       }
 
       private void gCToolStripMenuItem_Click(object sender, EventArgs e)
@@ -782,131 +735,51 @@ namespace Editor.Forms
             bmp.Save(form.NewPath, ImageFormat.Png);
          }
       }
-
-      private void openCustomizerToolStripMenuItem_Click(object sender, EventArgs e)
+      private void graphicalElementsManagerToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         var toolTipCustomizer = new ToolTipCustomizer();
-         toolTipCustomizer.Show();
+         FormsHelper.ShowIfAnyOpen<GuiDrawings>();
       }
-
-      private void ShowToolTipMenuItem_Click(object sender, EventArgs e)
+      private void saveManualToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         Selection.ShowToolTip = ShowToolTipMenuItem.Checked;
+         new ManualSaving().ShowDialog();
       }
-
-      private void OneGBRAM(object sender, EventArgs e)
+      private void checkForCyclesInTradenodesToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         Theory.OneGBRamUsage();
-      }
-
-      private void MapWindow_KeyDown(object sender, KeyEventArgs e)
-      {
-         if (ModifierKeys == Keys.Control)
+         var result = TradeNodeHelper.FindCycle(Globals.TradeNodes.Values.ToList());
+         if (result.Count == 0)
+            MessageBox.Show("TradeNodes does not contain a cycle", "No Cycle Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+         else
          {
-            switch (e.KeyCode)
+            var sb = new StringBuilder();
+            foreach (var tradeNode in result)
             {
-               case Keys.F:
-                  FormsHelper.ShowIfAnyOpen<Search>();
-                  break;
-               case Keys.Z:
-                  HistoryManager.Undo();
-                  break;
-               case Keys.Y:
-                  HistoryManager.Redo();
-                  e.SuppressKeyPress = true;
-                  e.Handled = true;
-                  break;
-               // Tabs
-               case Keys.D1:
-                  DataTabPanel.SelectedIndex = 0;
-                  break;
-               case Keys.D2:
-                  DataTabPanel.SelectedIndex = 1;
-                  break;
-               case Keys.D3:
-                  DataTabPanel.SelectedIndex = 2;
-                  break;
+               sb.AppendLine($"-> {tradeNode.Name}");
             }
-         }
-
-         switch (e.KeyCode)
-         {
-            case Keys.F1:
-               FormsHelper.ShowIfAnyOpen<ConsoleForm>();
-               break;
+            MessageBox.Show(sb.ToString(), "Cycle Found", MessageBoxButtons.OK, MessageBoxIcon.Information);
          }
       }
-
-      private void searchToolStripMenuItem_Click(object sender, EventArgs e)
+      private void randomModifierToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         FormsHelper.ShowIfAnyOpen<Search>();
-      }
-
-      private void bestPointsToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-         var tnsSortedTopological = TradeNodeHelper.TopologicalSort(Globals.TradeNodes.Values.ToList());
-         DebugPrints.VerifyTopologicalSort(tnsSortedTopological);
-      }
-
-      private void provDiffToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-#if DEBUG
-         Theory.TestTheory();
-#endif
-      }
-
-      private void saveAllProvincesToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-         SaveMaster.SaveSaveables([.. Globals.LandProvinces]);
-      }
-
-      // PE Button saves all changes
-      private void SaveAllModifiedButton_Click(object sender, EventArgs e)
-      {
-         SaveMaster.SaveSaveables([.. Globals.Provinces], onlyModified: true);
-      }
-
-      // Menu item saves all changes
-      private void SaveAllMenuItemClick(object sender, EventArgs e)
-      {
-         var numOfChanges = SaveMaster.GetNumOfModifiedObjects();
-         if (numOfChanges == 0)
-         {
-            MessageBox.Show("No changes to save", "No Changes", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            return;
-         }
-
-         var result = ImprovedMessageBox.Show($"Are you sure you want to save all {numOfChanges} modified objects?", "Confirm Saving", ref Globals.Settings.PopUps.AskWhenSavingAllChangesRef, MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
-         if (result == DialogResult.OK)
-            SaveMaster.SaveAllChanges();
-      }
-
-      private void saveSelectionToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-         new SelectionDrawerForm().Show();
-      }
-
-      private void SaveCurrentSelectionButton_Click(object sender, EventArgs e)
-      {
-         SaveMaster.SaveSaveables([.. Selection.GetSelectedProvinces]);
+         new ModifierSuggestion().ShowDialog();
       }
 
 
-      private void SaveAllProvincesButton_Click(object sender, EventArgs e)
+      #endregion
+      #region Modifiers
+
+      private void OpenAddModifierForm_Click(object sender, EventArgs e)
       {
-         SaveMaster.SaveSaveables([.. Globals.LandProvinces]);
+         new EventModifierForm().ShowDialog();
       }
-
-      private void saveEuropeToolStripMenuItem_Click(object sender, EventArgs e)
+      private void AddModifiersToList(ModifierAbstract modifier, ModifierType type)
       {
-         var inputForm = new GetSavingFileForm(Globals.ModPath, "Please enter your input:", ".txt");
-         if (inputForm.ShowDialog() == DialogResult.OK)
-         {
-            string userInput = inputForm.NewPath;
-            System.Diagnostics.Debug.WriteLine($"Selected path: {userInput}");
-            MessageBox.Show("You entered: " + userInput);
-         }
+         var item = new ListViewItem(modifier.Name);
+         item.SubItems.Add(modifier.Duration.ToString());
+         item.SubItems.Add(type.ToString());
+         ModifiersListView.Items.Add(item);
 
+         ModifiersListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+         ModifiersListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
       }
       private void AddModifierButton_Click(object sender, EventArgs e)
       {
@@ -947,78 +820,77 @@ namespace Editor.Forms
          ModifiersListView.Items.Remove(item);
       }
 
-      private void IsaveableClick(object sender, EventArgs e)
+      #endregion
+
+      private void OnSavingAllEnter(object? sender, EventArgs e) => _savingButtonsToolTip.SetToolTip(SaveAllProvincesButton, $"Save all provinces ({Globals.Provinces.Count})");
+      private void OnSavingSelectionEnter(object? sender, EventArgs e) => _savingButtonsToolTip.SetToolTip(SaveCurrentSelectionButton, $"Save selection ({Selection.Count})");
+
+      private void OnOpenProvinceFileEnter(object? sender, EventArgs e)
       {
+         _savingButtonsToolTip.SetToolTip(OpenProvinceFile,
+            Selection.Count == 1
+               ? $"Open the selected province file ({Selection.GetSelectedProvinces[0].TitleLocalisation})"
+               : $"Open the selected province files ({Selection.Count})");
       }
-      private void yoloToolStripMenuItem_Click(object sender, EventArgs e)
+      
+      private static void OnDateChanged(object? sender, Date date)
       {
-         var sw = Stopwatch.StartNew();
-         for (var i = 0; i < 100; i++)
+         //ProvinceHistoryManager.LoadDate(date);
+      }
+
+      public void UpdateHoveredInfo(Province? province)
+      {
+         if (province == null)
          {
-            LocalisationLoading.Load();
+            ProvinceNameLabel.Text = "Province: -";
+            OwnerCountryNameLabel.Text = "Owner: -";
+            return;
          }
-         sw.Stop();
-         System.Diagnostics.Debug.WriteLine($"Time: {sw.ElapsedMilliseconds / 100}");
+         ProvinceNameLabel.Text = $"Province: {province.TitleLocalisation}";
+         OwnerCountryNameLabel.Text = $"Owner: {Localisation.GetLoc(province.Owner.TitleKey)}";
       }
 
-      private void graphicalElementsManagerToolStripMenuItem_Click(object sender, EventArgs e)
+      private void MapWindow_KeyDown(object sender, KeyEventArgs e)
       {
-         FormsHelper.ShowIfAnyOpen<GuiDrawings>();
-      }
-
-      private void OpenAddModifierForm_Click(object sender, EventArgs e)
-      {
-         new EventModifierForm().ShowDialog();
-      }
-
-
-      private void saveManualToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-         new ManualSaving().ShowDialog();
-      }
-
-      private void checkForCyclesInTradenodesToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-         var result = TradeNodeHelper.FindCycle(Globals.TradeNodes.Values.ToList());
-         if (result.Count == 0)
-            MessageBox.Show("TradeNodes does not contain a cycle", "No Cycle Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
-         else
+         if (ModifierKeys == Keys.Control)
          {
-            var sb = new StringBuilder();
-            foreach (var tradeNode in result)
+            switch (e.KeyCode)
             {
-               sb.AppendLine($"-> {tradeNode.Name}");
+               case Keys.F:
+                  FormsHelper.ShowIfAnyOpen<Search>();
+                  break;
+               case Keys.Z:
+                  HistoryManager.Undo();
+                  break;
+               case Keys.Y:
+                  HistoryManager.Redo();
+                  e.SuppressKeyPress = true;
+                  e.Handled = true;
+                  break;
+               // Tabs
+               case Keys.D1:
+                  DataTabPanel.SelectedIndex = 0;
+                  break;
+               case Keys.D2:
+                  DataTabPanel.SelectedIndex = 1;
+                  break;
+               case Keys.D3:
+                  DataTabPanel.SelectedIndex = 2;
+                  break;
             }
-            MessageBox.Show(sb.ToString(), "Cycle Found", MessageBoxButtons.OK, MessageBoxIcon.Information);
+         }
+
+         switch (e.KeyCode)
+         {
+            case Keys.F1:
+               FormsHelper.ShowIfAnyOpen<ConsoleForm>();
+               break;
          }
       }
-
-      private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+      private void MapWindow_FormClosing(object sender, FormClosingEventArgs e)
       {
-      }
-
-      private void randomModifierToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-         new ModifierSuggestion().ShowDialog();
-      }
-      private void crashReportToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-         CrashManager.EnterCrashHandler(new());
-      }
-
-      private void loadDDSFilesTestToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-#if DEBUG
-         var path = @"S:\SteamLibrary\steamapps\common\Europa Universalis IV\gfx\interface\mapmode_military_access.dds";
-         var bmp = ImageReader.ReadImage(path);
-
-         bmp.Save(Globals.DebugPath + "\\dds_test.png", ImageFormat.Png);
-#endif
-      }
-
-      private void roughEditorToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-         new RoughEditorForm(Globals.Countries["TUR"]).ShowDialog();
+         if (!ShutDownMaster.DoWeShutDown())
+            e.Cancel = true;
       }
 
 

@@ -371,7 +371,6 @@
          saveSelectionToolStripMenuItem.ShortcutKeys = Keys.F3;
          saveSelectionToolStripMenuItem.Size = new Size(268, 22);
          saveSelectionToolStripMenuItem.Text = "Save selection to image";
-         saveSelectionToolStripMenuItem.Click += saveSelectionToolStripMenuItem_Click;
          // 
          // toolStripSeparator4
          // 
@@ -384,7 +383,6 @@
          toolStripMenuItem1.ShortcutKeys = Keys.Control | Keys.S;
          toolStripMenuItem1.Size = new Size(268, 22);
          toolStripMenuItem1.Text = "Save All";
-         toolStripMenuItem1.Click += SaveAllMenuItemClick;
          // 
          // saveManualToolStripMenuItem
          // 
@@ -608,7 +606,6 @@
          helpToolStripMenuItem.Name = "helpToolStripMenuItem";
          helpToolStripMenuItem.Size = new Size(76, 23);
          helpToolStripMenuItem.Text = "Help / Info";
-         helpToolStripMenuItem.Click += helpToolStripMenuItem_Click;
          // 
          // infoToolStripMenuItem
          // 
@@ -699,7 +696,6 @@
          debugToolStripMenuItem.Size = new Size(54, 23);
          debugToolStripMenuItem.Text = "Debug";
          debugToolStripMenuItem.Visible = false;
-         debugToolStripMenuItem.Click += debugToolStripMenuItem_Click;
          // 
          // testToolStripMenuItem
          // 
@@ -1908,7 +1904,6 @@
          SaveCurrentSelectionButton.Size = new Size(40, 30);
          SaveCurrentSelectionButton.TabIndex = 2;
          SaveCurrentSelectionButton.UseVisualStyleBackColor = true;
-         SaveCurrentSelectionButton.Click += SaveCurrentSelectionButton_Click;
          // 
          // SaveAllProvincesButton
          // 
@@ -1920,7 +1915,6 @@
          SaveAllProvincesButton.Size = new Size(40, 30);
          SaveAllProvincesButton.TabIndex = 0;
          SaveAllProvincesButton.UseVisualStyleBackColor = true;
-         SaveAllProvincesButton.Click += SaveAllProvincesButton_Click;
          // 
          // CountryPage
          // 
