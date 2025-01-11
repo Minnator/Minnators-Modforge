@@ -91,6 +91,7 @@ public static class MapModeManager
       //{ nameof(Province.Diplomatic), MapModeType.Diplomatic },
       { nameof(Province.Terrain), MapModeType.Terrain },
       { nameof(Province.AutoTerrain), MapModeType.TerrainOverrides },
+      { nameof(CommonCountry.Color), MapModeType.Country},
       //{ nameof(Province.Climate), MapModeType.Climate },
       //{ nameof(Province.Weather), MapModeType.Weather },
    };

@@ -31,20 +31,4 @@ namespace Editor.DataClasses.Commands
          return new(locs, newValue, false);
       }
    }
-   
-   public class CCountryPropertyChangeFactory<T> : CTextEditingFactory<CModifyProperty<T>, T>
-   {
-      public readonly string PropName;
-
-      public CCountryPropertyChangeFactory(string propName)
-      {
-         PropName = propName;
-      }
-
-      public override CModifyProperty<T> Create(ICollection<Saveable> saveables, T newValue)
-      {
-         var country = saveables.First();
-         return new(country.GetPropertyInfo(PropName)!, [country], newValue);
-      }
-   }
 }

@@ -1,17 +1,65 @@
-﻿namespace Editor.Controls
+﻿using System;
+using System.Diagnostics;
+using System.Reflection;
+using Editor.Controls.NewControls;
+using Editor.DataClasses.GameDataClasses;
+using Editor.ErrorHandling;
+using Editor.Events;
+using Editor.Forms.Feature;
+using Editor.Helper;
+using Editor.Saving;
+
+namespace Editor.Controls
 {
-   public class ThreeColorStripesButton : Button
+   public class ThreeColorStripesButton : Button, IPropertyControl<CommonCountry, Color>
    {
       public int ColorIndex1 { get; set; }
       public int ColorIndex2 { get; set; }
       public int ColorIndex3 { get; set; }
+      public PropertyInfo PropertyInfo { get; init; }
+      private readonly Func<List<CommonCountry>> _getSaveables;
 
       public ThreeColorStripesButton()
+      {
+         PropertyInfo = typeof(CommonCountry).GetProperty(nameof(CommonCountry.RevolutionaryColor))!;
+         Debug.Assert(PropertyInfo is not null && PropertyInfo.DeclaringType == typeof(CommonCountry), $"PropInfo: {PropertyInfo} declaring type is not of type {typeof(CommonCountry)} but of type {PropertyInfo.DeclaringType}");
+         Debug.Assert(PropertyInfo.PropertyType == typeof(Color), $"PropInfo: {PropertyInfo} is not of type {typeof(Color)} but of type {PropertyInfo.PropertyType}");
+         
+         LoadGuiEvents.CommonCountryLoadAction += ((IPropertyControl<CommonCountry, Color>)this).LoadToGui;
+
+         base.ForeColor = Color.Black;
+         SetDefault();
+         _getSaveables = () => [Selection.SelectedCountry.CommonCountry];
+         MouseUp += OnMouseUp;
+      }
+
+
+      public void SetFromGui()
+      {
+         GetFromGui(out var value);
+         PropertyInfo.SetValue(_getSaveables.Invoke().First(), value);
+      }
+
+      public void SetDefault()
       {
          ColorIndex1 = 0;
          ColorIndex2 = 0;
          ColorIndex3 = 0;
-         base.ForeColor = Color.Black;
+         Invalidate();
+      }
+
+      public IErrorHandle GetFromGui(out Color value)
+      {
+         value = Color.FromArgb(ColorIndex1, ColorIndex2, ColorIndex3);
+         return ErrorHandle.Sucess;
+      }
+
+      public void SetValue(Color value)
+      {
+         ColorIndex1 = value.R;
+         ColorIndex2 = value.G;
+         ColorIndex3 = value.B;
+         Invalidate();
       }
 
       public void SetColorIndexes(int one, int two, int three)
@@ -22,14 +70,33 @@
          Invalidate();
       }
 
-      public void Clear()
+      private void OnMouseUp(object? sender, MouseEventArgs e)
       {
-         ColorIndex1 = 0;
-         ColorIndex2 = 0;
-         ColorIndex3 = 0;
-         Invalidate();
-      }
+         // Right click to reset the color
+         if (e.Button == MouseButtons.Right)
+         {
+            var max = Globals.RevolutionaryColors.Count;
+            var index1 = Globals.Random.Next(max);
+            var index2 = Globals.Random.Next(max);
+            var index3 = Globals.Random.Next(max);
 
+            SetColorIndexes(index1, index2, index3);
+            return;
+         }
+
+         var revColorPicker = new RevolutionaryColorPicker();
+         revColorPicker.SetIndexes(Selection.SelectedCountry.CommonCountry.RevolutionaryColor.R, Selection.SelectedCountry.CommonCountry.RevolutionaryColor.G, Selection.SelectedCountry.CommonCountry.RevolutionaryColor.B);
+         revColorPicker.OnColorsChanged += (o, tuple) =>
+         {
+            SetColorIndexes(tuple.Item1, tuple.Item2, tuple.Item3);
+         };
+         if (revColorPicker.ShowDialog() == DialogResult.OK) 
+            SetFromGui();
+         else
+         {
+            ((IPropertyControl<CommonCountry, Color>)this).LoadToGui(_getSaveables.Invoke(), PropertyInfo, true);
+         }
+      }
       protected override void OnPaint(PaintEventArgs e)
       {
          base.OnPaint(e);

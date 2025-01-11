@@ -12,7 +12,8 @@ namespace Editor.Events
       public delegate void LoadAction<T>(List<T> objects, PropertyInfo propertyInfo, bool force) where T : Saveable;
 
       public static LoadAction<Province> ProvLoadAction = delegate { };
-      public static LoadAction<Country> CountryLoadAction = delegate { };
+      public static LoadAction<HistoryCountry> HistoryCountryLoadAction = delegate { };
+      public static LoadAction<CommonCountry> CommonCountryLoadAction = delegate { };
 
       public static void ReloadProvinces()
       {
@@ -30,8 +31,10 @@ namespace Editor.Events
          {
             ProvLoadAction.Invoke(Selection.GetSelectedProvinces, info, false);
          }
-         else if (type == typeof(Country))
-            CountryLoadAction.Invoke([Selection.SelectedCountry], info, false);
+         else if (type == typeof(HistoryCountry))
+            HistoryCountryLoadAction.Invoke([Selection.SelectedCountry.HistoryCountry], info, false);
+         else if (type == typeof(CommonCountry))
+            CommonCountryLoadAction.Invoke([Selection.SelectedCountry.CommonCountry], info, false);
 
 
 

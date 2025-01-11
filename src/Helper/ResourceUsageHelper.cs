@@ -55,7 +55,11 @@ namespace Editor.Helper
 
             // If the window is disposed, stop updating
             if (_mapWindow.Disposing || _mapWindow.IsDisposed)
+            {
                Updater.Dispose();
+               return;
+            }
+
 
             _mapWindow.UpdateMemoryUsage(_memoryUsage);
             _mapWindow.UpdateCpuUsage(_cpuUsage);

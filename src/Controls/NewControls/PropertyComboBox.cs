@@ -12,14 +12,14 @@ namespace Editor.Controls.NewControls
    public class PropertyComboBox<TSaveable, TProperty> : ComboBox, IPropertyControl<TSaveable, TProperty> where TSaveable : Saveable 
    {
       public PropertyInfo PropertyInfo { get; init; }
-      protected readonly Func<List<TSaveable>> _getSaveables;
+      protected readonly Func<List<TSaveable>> GetSaveables;
 
       public PropertyComboBox(PropertyInfo? propertyInfo, ref LoadGuiEvents.LoadAction<TSaveable> loadHandle, Func<List<TSaveable>> getSaveables)
       {
          Debug.Assert(propertyInfo is not null && propertyInfo.DeclaringType == typeof(TSaveable), $"PropInfo: {propertyInfo} declaring type is not of type {typeof(TSaveable)} but of type {propertyInfo.DeclaringType}");
          Debug.Assert(propertyInfo.PropertyType == typeof(TProperty), $"PropInfo: {propertyInfo} is not of type {typeof(TProperty)} but of type {propertyInfo.PropertyType}");
 
-         _getSaveables = getSaveables;
+         GetSaveables = getSaveables;
          PropertyInfo = propertyInfo;
          loadHandle += ((IPropertyControl<TSaveable, TProperty>)this).LoadToGui;
       }
@@ -45,7 +45,7 @@ namespace Editor.Controls.NewControls
       public virtual void SetFromGui()
       {
          if (Globals.State == State.Running && GetFromGui(out var value).Log())
-            Saveable.SetFieldMultiple(_getSaveables.Invoke(), value, PropertyInfo);
+            Saveable.SetFieldMultiple(GetSaveables.Invoke(), value, PropertyInfo);
       }
 
       public void SetDefault()
@@ -107,7 +107,7 @@ namespace Editor.Controls.NewControls
       public override void SetFromGui()
       {
          if (Globals.State == State.Running && GetFromGui(out var value).Log())
-            Saveable.SetFieldMultipleCollection(_getSaveables.Invoke(), value, PropertyInfo);
+            Saveable.SetFieldMultipleCollection(GetSaveables.Invoke(), value, PropertyInfo);
       }
 
    }

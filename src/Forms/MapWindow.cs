@@ -1028,7 +1028,7 @@ namespace Editor.Forms
       private ComboBox _primaryCultureBox = null!;
       private ComboBox _focusComboBox = null!;
 
-      private ColorPickerButton _countryColorPickerButton = null!;
+      private PropertyColorButton<CommonCountry> _countryColorPickerButton = null!;
       public ThreeColorStripesButton RevolutionColorPickerButton = null!;
 
       private ItemList _governmentReforms = null!;
@@ -1039,7 +1039,7 @@ namespace Editor.Forms
       private NamesEditor _armyEditor = null!;
       private NamesEditor _fleetEditor = null!;
 
-      private TextSaveableTextBox<Province, CModifyProperty<Province>> _capitalTextBox = null!;
+      //TODO private PropertyTextBox<HistoryCountry> _capitalTextBox = null!;
 
       private ExtendedNumeric _countryDevelopmentNumeric = null!;
 
@@ -1063,12 +1063,11 @@ namespace Editor.Forms
          };
          CountryFlagLabel = ControlFactory.GetFlagLabel();
          _tagSelectionBox.OnTagChanged += CountryGuiEvents.TagSelectionBox_OnTagChanged;
-         _countryColorPickerButton = ControlFactory.GetColorPickerButton();
+         _countryColorPickerButton = ControlFactory.GetColorPickerButtonCommonCountry(typeof(CommonCountry).GetProperty(nameof(CommonCountry.Color)));
          _countryColorPickerButton.Click += CountryGuiEvents.CountryColorPickerButton_Click;
          GeneralToolTip.SetToolTip(_countryColorPickerButton, "Set the <color> of the selected country");
          RevolutionColorPickerButton = ControlFactory.GetThreeColorsButton();
          RevolutionColorPickerButton.Margin = new(0);
-         RevolutionColorPickerButton.MouseUp += CountryGuiEvents.RevolutionColorPickerButton_Click;
 
          GeneralToolTip.SetToolTip(RevolutionColorPickerButton, "LMB: Set the <revolutionary_color> of the selected country\nRMB: randomize");
          _graphicalCultureBox = ControlFactory.GetListComboBox(Globals.GraphicalCultures, new(1));
@@ -1088,12 +1087,7 @@ namespace Editor.Forms
          _governmentReforms.Width = 117;
          _governmentReforms.OnItemAdded += CountryGuiEvents.GovernmentReforms_OnItemAdded;
          _governmentReforms.OnItemRemoved += CountryGuiEvents.GovernmentReforms_OnItemRemoved;
-         _capitalTextBox = new(Selection.GetHistoryCountryAsList, new CCountryPropertyChangeFactory<Province>(nameof(HistoryCountry.Capital)))
-         {
-            Margin = new(1),
-            Dock = DockStyle.Fill,
-            Input = InputType.UnsignedNumber
-         };
+         //_capitalTextBox = ControlFactory.GetPropertyTextBoxHistoryCountry(typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.Capital)));
 
          _focusComboBox = ControlFactory.GetListComboBox([.. Enum.GetNames<Mana>()], new(1), false);
          _focusComboBox.SelectedIndexChanged += CountryGuiEvents.FocusComboBox_SelectedIndexChanged;
@@ -1104,7 +1098,7 @@ namespace Editor.Forms
          TagAndColorTLP.Controls.Add(_graphicalCultureBox, 1, 2);
          TagAndColorTLP.Controls.Add(_unitTypeBox, 3, 2);
          TagAndColorTLP.Controls.Add(_techGroupBox, 1, 3);
-         CapitalTLP.Controls.Add(_capitalTextBox, 0, 0);
+        // CapitalTLP.Controls.Add(_capitalTextBox, 0, 0);
          TagAndColorTLP.Controls.Add(_focusComboBox, 1, 4);
          CountryHeaderTLP.Controls.Add(CountryFlagLabel, 0, 0);
 
@@ -1221,12 +1215,12 @@ namespace Editor.Forms
          _countryColorPickerButton.Text = "(//)";
          CountryADJLoc.Clear();
          CountryLoc.Clear();
-         RevolutionColorPickerButton.Clear();
+         RevolutionColorPickerButton.SetDefault();
          _graphicalCultureBox.SelectedIndex = 0;
          _unitTypeBox.SelectedIndex = 0;
          _techGroupBox.SelectedIndex = 0;
          _focusComboBox.SelectedIndex = 0;
-         _capitalTextBox.Clear();
+         //_capitalTextBox.Clear();
 
          // Names
          _leaderEditor.Clear();
@@ -1278,7 +1272,7 @@ namespace Editor.Forms
          _graphicalCultureBox.Text = country.CommonCountry.GraphicalCulture;
          _unitTypeBox.Text = country.HistoryCountry.UnitType;
          _techGroupBox.Text = country.HistoryCountry.TechnologyGroup.Name;
-         _capitalTextBox.Text = country.HistoryCountry.Capital.Id.ToString();
+         //_capitalTextBox.Text = country.HistoryCountry.Capital.Id.ToString();
          _focusComboBox.Text = country.HistoryCountry.NationalFocus.ToString();
 
          // Names
@@ -1446,8 +1440,8 @@ namespace Editor.Forms
          if (Selection.Count != 1)
             return;
 
-         _capitalTextBox.Text = Selection.GetSelectedProvinces[0].Id.ToString();
-         _capitalTextBox.Focus();
+         //_capitalTextBox.Text = Selection.GetSelectedProvinces[0].Id.ToString();
+        // _capitalTextBox.Focus();
       }
 
 

@@ -34,9 +34,9 @@ public static class ControlFactory
       };
    }
 
-   public static PropertyCheckBox<Country> GetExtendedCheckBoxCountry(PropertyInfo propInfo)
+   public static PropertyCheckBox<HistoryCountry> GetExtendedCheckBoxCountry(PropertyInfo propInfo)
    {
-      return new(propInfo, ref LoadGuiEvents.CountryLoadAction, () => [Selection.SelectedCountry])
+      return new(propInfo, ref LoadGuiEvents.HistoryCountryLoadAction, () => [Selection.SelectedCountry.HistoryCountry])
       {
          Margin = new(1)
       };
@@ -247,6 +247,14 @@ public static class ControlFactory
          Dock = DockStyle.Fill
       };
    }
+   public static PropertyTextBox<HistoryCountry> GetPropertyTextBoxHistoryCountry(PropertyInfo? propertyInfo)
+   {
+      return new(propertyInfo, ref LoadGuiEvents.HistoryCountryLoadAction, () => [Selection.SelectedCountry.HistoryCountry])
+      {
+         Margin = new(3, 1, 3, 3),
+         Dock = DockStyle.Fill
+      };
+   }
 
    public static PropertyLabel<Province> GetPropertyLabel(PropertyInfo? propertyInfo)
    {
@@ -290,11 +298,21 @@ public static class ControlFactory
       };
    }
 
+   public static PropertyColorButton<CommonCountry> GetColorPickerButtonCommonCountry(PropertyInfo? propertyInfo)
+   {
+      return new(propertyInfo, ref LoadGuiEvents.CommonCountryLoadAction,
+         () => [Selection.SelectedCountry.CommonCountry])
+      {
+         Margin = new(1),
+         Dock = DockStyle.Fill
+      };
+   }
+
    public static ColorPickerButton GetColorPickerButton()
    {
-      return new ()
+      return new()
       {
-         Margin = new (1),
+         Margin = new(1),
          Dock = DockStyle.Fill
       };
    }

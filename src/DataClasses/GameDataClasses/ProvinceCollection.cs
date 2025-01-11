@@ -156,13 +156,16 @@ public abstract class ProvinceCollection<T> : ProvinceComposite where T : Provin
    public void NewAddRange(ICollection<T> composites, bool addToGlobal = false, bool tryAddEventToHistory = true)
    {
       var command = GetAddCommand(this, addToGlobal);
+      int count = composites.Count;
       foreach (var composite in composites)
       {
          if (_subCollection.Contains(composite))
-            continue;
-         command.AddNewComposite(composite);
+            count--;
+         else   
+            command.AddNewComposite(composite);
       }
-      ExecuteAndAdd(command, tryAddEventToHistory);
+      if (count != 0)
+         ExecuteAndAdd(command, tryAddEventToHistory);
    }
 
    public void NewRemove(T composite, bool removeFromGlobal = false, bool tryAddEventToHistory = true)

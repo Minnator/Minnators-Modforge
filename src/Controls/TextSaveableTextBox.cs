@@ -51,22 +51,6 @@ namespace Editor.Controls
          KeyPress += OnKeyPress;
       }
 
-      private void SaveableChanged(object o, string name)
-      {
-         if (_silentSet)
-            return;
-         Debug.Assert(o is Saveable, "o is not Saveable");
-         if (_factory is CCountryPropertyChangeFactory<T> tempFactory) // TODO Remove after new province implementation
-            if (tempFactory.PropName.Equals(name) || _getSaveables.Invoke().Contains(o))
-            {
-               var value = ((Saveable)o).GetProperty<T>(tempFactory.PropName)?.ToString();
-               if (string.Equals(Text, value))
-               {
-                  Text = string.Empty;
-               }
-            }
-      }
-
       private void OnKeyPress(object? sender, KeyPressEventArgs e)
       {
          var keyChar = e.KeyChar;
@@ -135,22 +119,6 @@ namespace Editor.Controls
 
       private bool ExecuteCommand()
       {
-         if (_newText.Length == 0 || _oldText.Equals(_newText) || !CheckText(Text) || !Converter.Convert<T>(_newText, out T value).Log())
-            return false;
-
-         if (_factory is not CCountryPropertyChangeFactory<T> ccfactory)
-         {
-            ICommand command = _factory.Create(_getSaveables.Invoke(), value);
-            _silentSet = true;
-            command.Execute();
-            _silentSet = false;
-            HistoryManager.AddCommand(command);
-         }
-         else
-         {
-            var newObject = _getSaveables.Invoke().First();
-            newObject.SetProperty(ccfactory.PropName, value);
-         }
          
          _oldText = _newText;
          return true;

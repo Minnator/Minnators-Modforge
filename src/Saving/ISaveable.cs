@@ -177,8 +177,12 @@ public abstract class Saveable : IDisposable
    /// <param name="property"></param>
    public static void SetFieldMultiple<TS, T>(ICollection<TS> targets, T value, PropertyInfo property) where TS : Saveable
    {
-      if (Globals.State == State.Running) 
-         HistoryManager.AddCommand(new CModifyProperty<T>(property, [..targets], value));
+      if (Globals.State == State.Running)
+      {
+         var command = new CModifyProperty<T>(property, [.. targets], value, out var change);
+         if (change)
+            HistoryManager.AddCommand(command);
+      }
       foreach(var target in targets)
          target.OnPropertyChanged(property.Name);
    }

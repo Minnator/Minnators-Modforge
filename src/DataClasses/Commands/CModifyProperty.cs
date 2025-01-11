@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Reflection;
 using Editor.Saving;
+using Newtonsoft.Json.Linq;
 
 namespace Editor.DataClasses.Commands
 {
@@ -9,21 +10,31 @@ namespace Editor.DataClasses.Commands
       private T _newValue;
       private readonly List<Saveable> _targets;
       private readonly List<T> _oldValue;
-      private readonly PropertyInfo propInfo;
+      private readonly PropertyInfo _propInfo;
 
-      public CModifyProperty(PropertyInfo property, List<Saveable> targets, T newValue, bool executeOnInit = true)
+      public CModifyProperty(PropertyInfo property, List<Saveable> targets, T newValue, out bool change, bool executeOnInit = true)
       {
-         propInfo = property;
+         _propInfo = property;
          _targets = targets;
-         _oldValue = targets.Select(saveable => (T)propInfo?.GetValue(saveable)!).ToList();
+
+         _oldValue = new(targets.Count);
+         for (var i = _targets.Count - 1; i >= 0; i--)
+         {
+            if (_targets[i].GetProperty<T>(property)!.Equals(newValue))
+               _targets.RemoveAt(i);
+            else
+               _oldValue.Insert(0, (T)_propInfo?.GetValue(_targets[i])!); 
+         }
+         change = _targets.Count > 0;
          _newValue = newValue;
-         if (executeOnInit)
+
+         if (executeOnInit && change)
             Execute();
       }
 
       public CModifyProperty(PropertyInfo property, Saveable target, T newValue, T oldValue, bool executeOnInit = true)
       {
-         propInfo = property;
+         _propInfo = property;
          _targets = [target];
          _oldValue = [oldValue];
          _newValue = newValue;
@@ -44,13 +55,13 @@ namespace Editor.DataClasses.Commands
 
       private void InternalExecute()
       {
-         Saveable.SetFieldMultipleSilent(_targets, _newValue, propInfo);
+         Saveable.SetFieldMultipleSilent(_targets, _newValue, _propInfo);
       }
 
       public override void Undo()
       {
          base.Undo();
-         Saveable.SetFieldMultipleDifferentSilent(_targets, _oldValue, propInfo);
+         Saveable.SetFieldMultipleDifferentSilent(_targets, _oldValue, _propInfo);
       }
 
       public override void Redo()
@@ -69,14 +80,15 @@ namespace Editor.DataClasses.Commands
 
       public override string GetDescription()
       {
-         return _newValue is not List<string> list ? $"Modify property {propInfo.Name} of {_targets} to {_newValue}" : $"Modify property {propInfo.Name} of {_targets} to {string.Join(", ", GetDiff())}";
+         var text = _targets.Count < 5 ? string.Join(", ", _targets) : $"[{_targets.Count}...]";
+         return _newValue is not List<string> list ? $"Modify property {_propInfo.Name} of {text} to {_newValue}" : $"Modify property {_propInfo.Name} of {_targets} to {string.Join(", ", GetDiff())}";
       }
 
       public override string GetDebugInformation(int indent)
       {
          if (_newValue is not IList list)
-            return $"Changed {propInfo.Name} from {_oldValue} to {_newValue} in {_targets.First().WhatAmI()} object ({_targets})";
-         return $"Changed {propInfo.Name} from {_oldValue} to {string.Join(", ", GetDiff())} in {_targets.First().WhatAmI()} object ({_targets})";
+            return $"Changed {_propInfo.Name} from {_oldValue} to {_newValue} in {_targets.First().WhatAmI()} object ({_targets})";
+         return $"Changed {_propInfo.Name} from {_oldValue} to {string.Join(", ", GetDiff())} in {_targets.First().WhatAmI()} object ({_targets})";
       }
    }
 }
