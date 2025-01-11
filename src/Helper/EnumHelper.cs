@@ -1,4 +1,6 @@
 ﻿
+using Editor.ErrorHandling;
+
 namespace Editor.Helper
 {
    [Flags]
@@ -43,6 +45,17 @@ namespace Editor.Helper
          if (!enumType.IsEnum)
             throw new ArgumentException("The type must be an enum.", nameof(enumType));
          return Enum.GetNames(enumType).Except(excludedNames, StringComparer.OrdinalIgnoreCase).ToList();
+      }
+
+      public static IErrorHandle ManaParseGeneral(string? value, out object mana)
+      {
+         if (Enum.TryParse<Mana>(value, out var manaMana))
+         {
+            mana = manaMana;
+            return ErrorHandle.Sucess;
+         }
+         mana = Mana.NONE;
+         return new ErrorObject(ErrorType.TypeConversionError, $"Could not parse {value} to {typeof(Mana)}");
       }
    }
 }

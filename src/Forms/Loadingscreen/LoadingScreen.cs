@@ -33,6 +33,7 @@ namespace Editor.Forms.LoadingScreen
       private readonly List<Action> _loadingActions =
       [
          StartUpMetrics.StartMetrics,
+         UnitTypeLoading.Load,
          DefinesLoading.Load,
          BookMarksLoading.Load,
          SettingsHelper.LoadSettingsToComponents,
@@ -56,11 +57,11 @@ namespace Editor.Forms.LoadingScreen
          TradeCompanyInvestmentsLoading.Load,
          ReligionLoading.Load,
          DefinitionLoading.LoadDefinition,
+         CultureLoading.Load,
          CountryLoading.Load,
          DefaultMapLoading.Load,
          MapLoading.Load,
          PositionsLoading.Load,
-         CultureLoading.Load,
          ProvinceParser.ParseAllUniqueProvinces,
          TerrainLoading.Load, // Requires Provinces
          ClimateLoading.Load,
@@ -74,7 +75,6 @@ namespace Editor.Forms.LoadingScreen
          ColonialRegionsLoading.Load,
          CustomProvinceNames.Load,
          AdjacenciesLoading.Load,
-         UnitTypeLoading.Load,
          IdeasLoading.Load,
          AutoTerrainCalculations.Load,
          HeightMapLoading.Load,

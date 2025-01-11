@@ -219,8 +219,6 @@ namespace Editor.Forms
       }
       #endregion
       #region GUI Updates
-
-
       private void UpdateGui()
       {
          UpdateTabIfSelected(DataTabPanel.SelectedIndex);
@@ -900,13 +898,13 @@ namespace Editor.Forms
 
       internal FlagLabel CountryFlagLabel = null!;
 
-      private ComboBox _graphicalCultureBox = null!;
-      private ComboBox _unitTypeBox = null!;
-      private ComboBox _techGroupBox = null!;
+      private BindableListPropertyComboBox<CommonCountry, string> _graphicalCultureBox = null!;
+      private BindablePropertyComboBox<HistoryCountry, TechnologyGroup, string> _unitTypeBox = null!;
+      private BindablePropertyComboBox<HistoryCountry, TechnologyGroup, string> _techGroupBox = null!;
       private ComboBox _governmentTypeBox = null!;
-      private ComboBox _governmentRankBox = null!;
-      private ComboBox _primaryCultureBox = null!;
-      private ComboBox _focusComboBox = null!;
+      private ListPropertyComboBox<HistoryCountry, int> _governmentRankBox = null!;
+      private BindablePropertyComboBox<HistoryCountry, Culture, string> _primaryCultureBox = null!;
+      private ListPropertyComboBox<HistoryCountry, Mana> _focusComboBox = null!;
 
       private PropertyColorButton<CommonCountry> _countryColorPickerButton = null!;
       public ThreeColorStripesButton RevolutionColorPickerButton = null!;
@@ -929,8 +927,8 @@ namespace Editor.Forms
       private QuickAssignControl<Tag> _historicFriends = null!;
       private QuickAssignControl<string> _estatePrivileges = null!;
 
-      private TextSaveableTextBox<string, CModifyLocalisation> CountryLoc = null!;
-      private TextSaveableTextBox<string, CModifyLocalisation> CountryADJLoc = null!;
+      private PropertyTextBox<Country> CountryLoc = null!;
+      private PropertyTextBox<Country> CountryADJLoc = null!;
 
       private void InitializeCountryEditGui()
       {
@@ -950,27 +948,36 @@ namespace Editor.Forms
          RevolutionColorPickerButton.Margin = new(0);
 
          GeneralToolTip.SetToolTip(RevolutionColorPickerButton, "LMB: Set the <revolutionary_color> of the selected country\nRMB: randomize");
-         _graphicalCultureBox = ControlFactory.GetListComboBox(Globals.GraphicalCultures, new(1));
-         _graphicalCultureBox.SelectedIndexChanged += CountryGuiEvents.GraphicalCultureBox_SelectedIndexChanged;
-         _unitTypeBox = ControlFactory.GetListComboBox([.. Globals.TechnologyGroups.Keys], new(1));
-         _unitTypeBox.SelectedIndexChanged += CountryGuiEvents.UnitTypeBox_SelectedIndexChanged;
-         _techGroupBox = ControlFactory.GetListComboBox([.. Globals.TechnologyGroups.Keys], new(1));
-         _techGroupBox.SelectedIndexChanged += CountryGuiEvents.TechGroupBox_SelectedIndexChanged;
+         _graphicalCultureBox = ControlFactory.GetBindableListPropertyComboBox(typeof(CommonCountry).GetProperty(nameof(CommonCountry.GraphicalCulture))!,
+                                                                               Globals.GraphicalCultures,
+                                                                               ControlFactory.DefaultMarginType.Slim);
+         
+         _unitTypeBox = ControlFactory.GetBindablePropertyComboBoxHistoryCountry(typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.UnitType))!,
+                                                                                 Globals.TechnologyGroups,
+                                                                                 margin: ControlFactory.DefaultMarginType.Slim);
+         
+         _techGroupBox = ControlFactory.GetBindablePropertyComboBoxHistoryCountry(typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.TechnologyGroup))!,
+                                                                                  Globals.TechnologyGroups,
+                                                                                  margin: ControlFactory.DefaultMarginType.Slim);
+         
          _governmentTypeBox = ControlFactory.GetListComboBox([.. Globals.GovernmentTypes.Keys], new(1, 1, 6, 1));
          _governmentTypeBox.SelectedIndexChanged += GovernmentTypeBox_SelectedIndexChanged;
-         List<string> ranks = [];
-         for (var i = 1; i <= Globals.MaxGovRank; i++)
-            ranks.Add(i.ToString());
-         _governmentRankBox = ControlFactory.GetListComboBox(ranks, new(1)); // TODO read in the defines to determine range
-         _governmentRankBox.SelectedIndexChanged += CountryGuiEvents.GovernmentRankBox_SelectedIndexChanged;
+
+         _governmentRankBox = ControlFactory.GetListPropertyComboBoxHistoryCountry(typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.GovernmentRank))!,
+                                                                                   Enumerable.Range(1, Globals.MaxGovRank).Select(i => i).ToList(),
+                                                                                   ControlFactory.DefaultMarginType.Slim);
+         _governmentRankBox.DropDownStyle = ComboBoxStyle.DropDownList;
+
          _governmentReforms = ControlFactory.GetItemList(nameof(Country.HistoryCountry.GovernmentReforms), ItemTypes.FullWidth, [], "Government Reforms");
          _governmentReforms.Width = 117;
          _governmentReforms.OnItemAdded += CountryGuiEvents.GovernmentReforms_OnItemAdded;
          _governmentReforms.OnItemRemoved += CountryGuiEvents.GovernmentReforms_OnItemRemoved;
          _capitalTextBox = ControlFactory.GetPropertyLabelHistoryCountry(typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.GetCapitalLoc)));
 
-         _focusComboBox = ControlFactory.GetListComboBox([.. Enum.GetNames<Mana>()], new(1), false);
-         _focusComboBox.SelectedIndexChanged += CountryGuiEvents.FocusComboBox_SelectedIndexChanged;
+         _focusComboBox = ControlFactory.GetListPropertyComboBoxHistoryCountry(typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.NationalFocus))!,
+                                                                               [.. Enum.GetValues<Mana>()], 
+                                                                               ControlFactory.DefaultMarginType.Slim);
+         _focusComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 
          TagAndColorTLP.Controls.Add(_tagSelectionBox, 1, 0);
          TagAndColorTLP.Controls.Add(_countryColorPickerButton, 3, 0);
@@ -999,8 +1006,9 @@ namespace Editor.Forms
          FleetNamesTab.Controls.Add(_fleetEditor);
 
          // Cultures
-         _primaryCultureBox = new() { Dock = DockStyle.Fill };
-         _primaryCultureBox.Items.AddRange([.. Globals.Cultures.Keys]);
+         _primaryCultureBox = ControlFactory.GetBindablePropertyComboBoxHistoryCountry(typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.PrimaryCulture))!,
+                                                                                       Globals.Cultures,
+                                                                                       margin: ControlFactory.DefaultMarginType.Slim);
          _primaryCultureBox.Margin = new(1, 1, 6, 1);
          _acceptedCultures = ControlFactory.GetItemList(nameof(HistoryCountry.AcceptedCultures), ItemTypes.FullWidth, [.. Globals.Cultures.Keys], "Accepted Cultures");
          _acceptedCultures.OnItemAdded += CountryGuiEvents.AcceptedCultures_OnItemAdded;
@@ -1025,10 +1033,7 @@ namespace Editor.Forms
          GeneralToolTip.SetToolTip(_countryDevelopmentNumeric, "LMB = +- 1\nSHIFT + LMB = +- 5\nCTRL + LMB = +-10\nThe development is only added to one random province in the selected country per click.");
 
          // Quick Assign
-         List<string> unitsList = [];
-         foreach (var unit in Globals.Units)
-            unitsList.Add(unit.UnitName);
-         _historicalUnits = new(unitsList, CommonCountry.Empty, nameof(CommonCountry.HistoricUnits), "Historic Units", -1);
+         _historicalUnits = new(Globals.Units.Keys, CommonCountry.Empty, nameof(CommonCountry.HistoricUnits), "Historic Units", -1);
          _historicalUnits.SetAutoSelectFunc(LandUnit.AutoSelectFuncUnits);
 
          List<string> ideaGroups = [];
@@ -1051,26 +1056,16 @@ namespace Editor.Forms
          MiscTLP.Controls.Add(_historicFriends, 0, 4);
          MiscTLP.Controls.Add(_estatePrivileges, 0, 5);
 
-         CountryLoc = new(Selection.GetCountryAsList, new CLocObjFactory(true))
-         {
-            Dock = DockStyle.Fill,
-            Margin = new(1),
-         };
-
+         CountryLoc = ControlFactory.GetPropertyTextBoxCountry(typeof(Country).GetProperty(nameof(Country.TitleLocalisation)), ControlFactory.DefaultMarginType.Slim);
          TagAndColorTLP.Controls.Add(CountryLoc, 1, 1);
 
-         CountryADJLoc = new(Selection.GetCountryAsList, new CLocObjFactory(false))
-         {
-            Dock = DockStyle.Fill,
-            Margin = new(1),
-         };
+         CountryADJLoc = ControlFactory.GetPropertyTextBoxCountry(typeof(Country).GetProperty(nameof(Country.AdjectiveLocalisation)), ControlFactory.DefaultMarginType.Slim);
          TagAndColorTLP.Controls.Add(CountryADJLoc, 3, 1);
 
          AddNewMonarchNameButton.Click += CountryGuiEvents.AddMonarchName_Click;
 
          CountryCustomToolStripLayoutPanel.Paint += TableLayoutBorder_Paint;
          OpenCountryFileButton.Enter += SetSavingToolTipCountryFileButton;
-
       }
 
       private void SetSavingToolTipCountryFileButton(object? sender, EventArgs e)
@@ -1096,10 +1091,10 @@ namespace Editor.Forms
          CountryADJLoc.Clear();
          CountryLoc.Clear();
          RevolutionColorPickerButton.SetDefault();
-         _graphicalCultureBox.SelectedIndex = 0;
-         _unitTypeBox.SelectedIndex = 0;
-         _techGroupBox.SelectedIndex = 0;
-         _focusComboBox.SelectedIndex = 0;
+         _graphicalCultureBox.SetDefault();
+         _unitTypeBox.SetDefault();
+         _techGroupBox.SetDefault();
+         _focusComboBox.SetDefault();
          //_capitalTextBox.Clear();
 
          // Names
@@ -1110,12 +1105,12 @@ namespace Editor.Forms
          MonarchNamesFlowPanel.Controls.Clear();
 
          // Cultures
-         _primaryCultureBox.SelectedIndex = -1;
+         _primaryCultureBox.SetDefault();
          _acceptedCultures.Clear();
 
          // Government
          _governmentTypeBox.SelectedIndex = 0;
-         _governmentRankBox.SelectedIndex = 0;
+         _governmentRankBox.SetDefault();
          _governmentReforms.Clear();
 
          // Development
@@ -1130,73 +1125,7 @@ namespace Editor.Forms
 
          Globals.State = State.Running;
       }
-
-      internal void LoadCountryToGui(Country country)
-      {
-         Globals.State = State.Loading;
-         if (country == Country.Empty)
-            return;
-         SuspendLayout();
-         _tagSelectionBox.SelectedItem = country.Tag;
-         if (Globals.Settings.Gui.ShowCountryFlagInCE)
-         {
-            CountryFlagLabel.SetCountry(country);
-            GeneralToolTip.SetToolTip(CountryFlagLabel, $"{country.TitleLocalisation} ({country.Tag})");
-         }
-         CountryNameLabel.Text = $"{country.TitleLocalisation} ({country.Tag}) | (Total Dev: {country.GetDevelopment()})";
-         _countryColorPickerButton.BackColor = country.Color;
-         _countryColorPickerButton.Text = $"({country.Color.R}/{country.Color.G}/{country.Color.B})";
-         CountryLoc.Text = country.TitleLocalisation;
-         CountryADJLoc.Text = country.AdjectiveLocalisation;
-         RevolutionColorPickerButton.SetColorIndexes(country.CommonCountry.RevolutionaryColor.R, country.CommonCountry.RevolutionaryColor.G, country.CommonCountry.RevolutionaryColor.B);
-         _graphicalCultureBox.Text = country.CommonCountry.GraphicalCulture;
-         _unitTypeBox.Text = country.HistoryCountry.UnitType;
-         _techGroupBox.Text = country.HistoryCountry.TechnologyGroup.Name;
-         _focusComboBox.Text = country.HistoryCountry.NationalFocus.ToString();
-
-         // Names
-         _leaderEditor.SetNames(country.CommonCountry.LeaderNames);
-         _leaderEditor.TextBox.ContentModified += CountryGuiEvents.LeaderNames_ContentModified;
-         _shipEditor.SetNames(country.CommonCountry.ShipNames);
-         _shipEditor.TextBox.ContentModified += CountryGuiEvents.ShipNames_ContentModified;
-         _armyEditor.SetNames(country.CommonCountry.ArmyNames);
-         _armyEditor.TextBox.ContentModified += CountryGuiEvents.ArmyNames_ContentModified;
-         _fleetEditor.SetNames(country.CommonCountry.FleetNames);
-         _fleetEditor.TextBox.ContentModified += CountryGuiEvents.FleetNames_ContentModified;
-         if (ShowMonachrNamesCB.Checked)
-            AddMonarchNamesToGui(country.CommonCountry.MonarchNames);
-         ResumeLayout();
-
-         // Government
-         _governmentTypeBox.SelectedItem = country.HistoryCountry.Government;
-         _governmentRankBox.SelectedItem = country.HistoryCountry.GovernmentRank.ToString();
-         if (Globals.GovernmentTypes.TryGetValue(country.HistoryCountry.Government, out var government))
-            _governmentReforms.InitializeItems([.. government.AllReformNames]);
-
-         _governmentReforms.Clear();
-         _governmentReforms.Initializing = true;// we dont want to fire events that modify this collection when adding stuff as we are not editing it just loading.
-         _governmentReforms.AddItemsUnique(country.HistoryCountry.GovernmentReforms);
-         _governmentReforms.Initializing = false;
-
-         // Cultures
-         _primaryCultureBox.SelectedItem = country.HistoryCountry.PrimaryCulture;
-         _acceptedCultures.Clear();
-         foreach (var cult in country.HistoryCountry.AcceptedCultures)
-            _acceptedCultures.AddItem(cult);
-
-         // Development
-         _countryDevelopmentNumeric.Value = country.GetDevelopment();
-
-         _historicalUnits.UpdateCountry(country.CommonCountry);
-         _historicalIdeas.UpdateCountry(country.CommonCountry);
-         _historicRivals.UpdateCountry(country.HistoryCountry);
-         _historicFriends.UpdateCountry(country.HistoryCountry);
-         _estatePrivileges.UpdateCountry(country.HistoryCountry);
-
-
-         Globals.State = State.Running;
-      }
-
+      
       private void GovernmentTypeBox_SelectedIndexChanged(object? sender, EventArgs e)
       {
          if (_governmentTypeBox.SelectedItem == null)

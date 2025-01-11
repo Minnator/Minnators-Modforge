@@ -229,10 +229,10 @@ public class HistoryCountry : Saveable, IGetSetProperty, IHistoryProvider<Countr
    private int _governmentRank = 0; //
    private string _secondaryReligion = string.Empty; //
    private string _government = string.Empty; //
-   private string _primaryCulture = string.Empty; //
+   private Culture _primaryCulture = Culture.Empty; //
    private string _religion = string.Empty; //
    private string _religiousSchool = string.Empty; //
-   private string _unitType = string.Empty; //
+   private TechnologyGroup _unitType = TechnologyGroup.Empty; //
    private List<string> _governmentReforms = []; //
    private List<string> _acceptedCultures = []; //
    private List<string> _unlockedCults = []; //
@@ -316,7 +316,7 @@ public class HistoryCountry : Saveable, IGetSetProperty, IHistoryProvider<Countr
       set => SetField(ref _government, value);
    }
 
-   public string PrimaryCulture
+   public Culture PrimaryCulture
    {
       get => _primaryCulture;
       set => SetField(ref _primaryCulture, value);
@@ -340,7 +340,7 @@ public class HistoryCountry : Saveable, IGetSetProperty, IHistoryProvider<Countr
       set => SetField(ref _religiousSchool, value);
    }
 
-   public string UnitType
+   public TechnologyGroup UnitType
    {
       get => _unitType;
       set => SetField(ref _unitType, value);
@@ -425,12 +425,12 @@ public class HistoryCountry : Saveable, IGetSetProperty, IHistoryProvider<Countr
       AddString(0, Government, "government", ref sb);
       AddStringList(0, "add_government_reform", GovernmentReforms, ref sb);
       AddInt(0, GovernmentRank, "government_rank", ref sb);
-      AddString(0, PrimaryCulture, "primary_culture", ref sb);
+      AddString(0, PrimaryCulture.Name, "primary_culture", ref sb);
       AddStringList(0, "add_accepted_culture", AcceptedCultures, ref sb);
       AddString(0, Religion, "religion", ref sb);
       AddString(0, SecondaryReligion, "secondary_religion", ref sb);
       AddString(0, TechnologyGroup.ToString(), "technology_group", ref sb);
-      AddString(0, UnitType, "unit_type", ref sb);
+      AddString(0, UnitType.Name, "unit_type", ref sb);
       if (Capital != Province.Empty)
          AddInt(0, Capital.Id, "capital", ref sb);
       if (FixedCapital != -1)
@@ -701,8 +701,18 @@ public class Country : ProvinceCollection<Province>, ITitleAdjProvider
 
    public bool Exists => SubCollection.Count > 0;
 
-   public string TitleLocalisation => Localisation.GetLoc(Tag);
-   public string AdjectiveLocalisation => Localisation.GetLoc(AdjectiveKey);
+   public string TitleLocalisation
+   {
+      get => Localisation.GetLoc(Tag);
+      set => Localisation.AddOrModifyLocObject(TitleKey, value);
+   }
+
+   public string AdjectiveLocalisation
+   {
+      get => Localisation.GetLoc(AdjectiveKey);
+      set => Localisation.AddOrModifyLocObject(AdjectiveKey, value);
+   }
+
    public override string ToString() => Tag.ToString();
    public override bool Equals(object? obj)
    {

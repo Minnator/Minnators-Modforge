@@ -1,4 +1,5 @@
-﻿using Editor.Controls;
+﻿using System.ComponentModel;
+using Editor.Controls;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
 using Editor.DataClasses.Settings;
@@ -153,8 +154,8 @@ public static class Globals
    public static BindingDictionary<string, Culture> Cultures = new (new (string.Empty, Culture.Empty));
 
    // Unit Types and GFX
-   public static List<string> GraphicalCultures = [];
-   public static HashSet<Unit> Units = [];
+   public static BindingList<string> GraphicalCultures = [];
+   public static BindingDictionary<string, Unit> Units = new(new(string.Empty, Unit.Empty));
 
    // Bookmarks
    public static List<Bookmark> Bookmarks = [];
@@ -167,7 +168,7 @@ public static class Globals
    public static HashSet<Strait> Straits = [];
 
    // TechnologyGroups
-   public static readonly Dictionary<string, TechnologyGroup> TechnologyGroups = [];
+   public static readonly BindingDictionary<string, TechnologyGroup> TechnologyGroups = new(new(string.Empty, TechnologyGroup.Empty));
 
    // Religion Stuff
    public static List<ReligiousGroup> ReligionGroups = [];

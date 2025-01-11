@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.ComponentModel;
+using System.Numerics;
 using System.Reflection;
 using Editor.Controls.NewControls;
 using Editor.DataClasses.GameDataClasses;
@@ -22,6 +23,12 @@ public static class ControlFactory
       OrangePlus,
       RedX,
       Map
+   }
+
+   public enum DefaultMarginType
+   {
+      Default,
+      Slim
    }
 
    #endregion
@@ -134,8 +141,76 @@ public static class ControlFactory
    {
       return new(propInfo, ref LoadGuiEvents.ProvLoadAction, () => Selection.GetSelectedProvinces, items)
       {
-         Margin = new(3, 1, 3, 3)
+         Margin = new(3, 1, 3, 3),
+         Dock = DockStyle.Fill,
+         AutoCompleteSource = AutoCompleteSource.ListItems,
+         AutoCompleteMode = AutoCompleteMode.SuggestAppend
       };
+   }   
+   public static BindablePropertyComboBox<CommonCountry, TProperty, TKey> GetBindablePropertyComboBoxCommonCountry<TProperty, TKey>(PropertyInfo propInfo, BindingDictionary<TKey, TProperty> items, bool hasEmptyItemAt0 = true) where TKey : notnull where TProperty : notnull
+   {
+      return new(propInfo, ref LoadGuiEvents.CommonCountryLoadAction, () => [Selection.SelectedCountry.CommonCountry], items)
+      {
+         Margin = new(3, 1, 3, 3),
+         Dock = DockStyle.Fill,
+         AutoCompleteSource = AutoCompleteSource.ListItems,
+         AutoCompleteMode = AutoCompleteMode.SuggestAppend
+      };
+   }   
+   public static BindablePropertyComboBox<HistoryCountry, TProperty, TKey> GetBindablePropertyComboBoxHistoryCountry<TProperty, TKey>(PropertyInfo propInfo,
+      BindingDictionary<TKey, TProperty> items,
+      bool hasEmptyItemAt0 = true,
+      DefaultMarginType margin = DefaultMarginType.Default) where TKey : notnull where TProperty : notnull
+   {
+      BindablePropertyComboBox<HistoryCountry, TProperty, TKey> box = new(propInfo, ref LoadGuiEvents.HistoryCountryLoadAction, () => [Selection.SelectedCountry.HistoryCountry], items)
+      {
+         Margin = new(3, 1, 3, 3),
+         Dock = DockStyle.Fill,
+         AutoCompleteSource = AutoCompleteSource.ListItems,
+         AutoCompleteMode = AutoCompleteMode.SuggestAppend
+      };
+      if (margin == DefaultMarginType.Slim)
+         box.Margin = new(1);
+      return box;
+   }
+   public static BindableListPropertyComboBox<CommonCountry, TProperty> GetBindableListPropertyComboBox<TProperty>(PropertyInfo propInfo,
+                                                                                                                   BindingList<TProperty> items,
+                                                                                                                   DefaultMarginType margin = DefaultMarginType.Default) where TProperty : notnull
+   {
+      BindableListPropertyComboBox<CommonCountry, TProperty> box =
+         new(propInfo,
+             ref LoadGuiEvents.CommonCountryLoadAction,
+             () => [Selection.SelectedCountry.CommonCountry],
+             items)
+         {
+            Margin = new(3, 1, 3, 3),
+            Dock = DockStyle.Fill,
+            AutoCompleteSource = AutoCompleteSource.ListItems,
+            AutoCompleteMode = AutoCompleteMode.SuggestAppend
+         };
+      if (margin == DefaultMarginType.Slim)
+         box.Margin = new(1);
+      return box;
+   }
+
+   public static ListPropertyComboBox<HistoryCountry, TProperty> GetListPropertyComboBoxHistoryCountry<TProperty>(PropertyInfo propInfo,
+                                                                                                                   List<TProperty> items,
+                                                                                                                   DefaultMarginType margin = DefaultMarginType.Default) where TProperty : notnull
+   {
+      ListPropertyComboBox<HistoryCountry, TProperty> box =
+         new(propInfo,
+             ref LoadGuiEvents.HistoryCountryLoadAction,
+             () => [Selection.SelectedCountry.HistoryCountry],
+             items)
+         {
+            Margin = new(3, 1, 3, 3),
+            Dock = DockStyle.Fill,
+            AutoCompleteSource = AutoCompleteSource.ListItems,
+            AutoCompleteMode = AutoCompleteMode.SuggestAppend
+         };
+      if (margin == DefaultMarginType.Slim)
+         box.Margin = new(1);
+      return box;
    }
 
    public static BindablePropertyComboBox<Province, TProperty, TKey> GetTagComboBox<TProperty, TKey>(PropertyInfo propInfo, BindingDictionary<TKey, TProperty> items, bool hasEmptyItemAt0 = true) where TKey : notnull where TProperty : ProvinceCollection<Province>
@@ -246,6 +321,17 @@ public static class ControlFactory
          Margin = new(3, 1, 3, 3),
          Dock = DockStyle.Fill
       };
+   }
+   public static PropertyTextBox<Country> GetPropertyTextBoxCountry(PropertyInfo? propertyInfo, DefaultMarginType margin = DefaultMarginType.Default)
+   {
+      PropertyTextBox<Country> box = new(propertyInfo, ref LoadGuiEvents.CountryLoadAction, () => [Selection.SelectedCountry])
+      {
+         Margin = new(3, 1, 3, 3),
+         Dock = DockStyle.Fill
+      };
+      if (margin == DefaultMarginType.Slim)
+         box.Margin = new(1);
+      return box;
    }
    public static PropertyTextBox<HistoryCountry> GetPropertyTextBoxHistoryCountry(PropertyInfo? propertyInfo)
    {

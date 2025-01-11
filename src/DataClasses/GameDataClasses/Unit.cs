@@ -52,7 +52,7 @@ namespace Editor.DataClasses.GameDataClasses
       }
       public override string ToString()
       {
-         return $"{UnitName} ({Type})";
+         return $"{UnitName}";
       }
 
       public static List<string> AutoSelectFuncUnits(int max)
@@ -62,7 +62,7 @@ namespace Editor.DataClasses.GameDataClasses
 
          List<LandUnit> landUnits = [];
 
-         foreach (var unit in Globals.Units)
+         foreach (var unit in Globals.Units.Values)
             if (unit is LandUnit landUnit)
                if (Equals(landUnit.TechnologyGroup, Selection.SelectedCountry.HistoryCountry.TechnologyGroup))
                   landUnits.Add(landUnit);

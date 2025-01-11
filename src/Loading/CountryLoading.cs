@@ -163,7 +163,8 @@ namespace Editor.Loading
                   country.HistoryCountry.SecondaryReligion = val;
                   break;
                case "unit_type":
-                  country.HistoryCountry.UnitType = val;
+                  if (Globals.TechnologyGroups.TryGetValue(val,out var unit))
+                     country.HistoryCountry.UnitType = unit;
                   break;
                case "capital":
                   if (int.TryParse(val, out var value))
@@ -184,7 +185,8 @@ namespace Editor.Loading
                      Globals.ErrorLog.Write($"Invalid government rank in {country.Tag}: {val}");
                   break;
                case "primary_culture":
-                  country.HistoryCountry.PrimaryCulture = val;
+                  if (Globals.Cultures.TryGetValue(val, out var primCult))
+                     country.HistoryCountry.PrimaryCulture = primCult;
                   break;
                case "fixed_capital":
                   if (int.TryParse(val, out var capProv))

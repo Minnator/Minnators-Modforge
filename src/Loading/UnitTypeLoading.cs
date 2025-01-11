@@ -62,7 +62,7 @@ namespace Editor.Loading
          else
             AddParamsToLandUnit((LandUnit)unit, kvps);
 
-         Globals.Units.Add(unit);
+         Globals.Units.Add(unit.UnitName, unit);
       }
 
       private static void AddParamsToShipUnit(ShipUnit unit, List<KeyValuePair<string, string>> param)

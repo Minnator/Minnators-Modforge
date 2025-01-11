@@ -59,6 +59,10 @@ namespace Editor.Helper
          {
             typeof(Country),
             Country.GeneralParse
+         },
+         {
+            typeof(Mana),
+            EnumHelper.ManaParseGeneral
          }
       };
 

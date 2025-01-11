@@ -14,6 +14,7 @@ namespace Editor.Events
       public static LoadAction<Province> ProvLoadAction = delegate { };
       public static LoadAction<HistoryCountry> HistoryCountryLoadAction = delegate { };
       public static LoadAction<CommonCountry> CommonCountryLoadAction = delegate { };
+      public static LoadAction<Country> CountryLoadAction = delegate { };
 
       public static void ReloadProvinces()
       {
@@ -33,20 +34,20 @@ namespace Editor.Events
          Globals.State = State.Loading;
          HistoryCountryLoadAction.Invoke([country.HistoryCountry], null!, true);
          CommonCountryLoadAction.Invoke([country.CommonCountry], null!, true);
+         CountryLoadAction.Invoke([country], null!, true);
          Globals.State = State.Running;
       }
 
       public static void TriggerGuiUpdate(Type type, PropertyInfo info)
       {
          if (type == typeof(Province))
-         {
             ProvLoadAction.Invoke(Selection.GetSelectedProvinces, info, false);
-         }
          else if (type == typeof(HistoryCountry))
             HistoryCountryLoadAction.Invoke([Selection.SelectedCountry.HistoryCountry], info, false);
          else if (type == typeof(CommonCountry))
             CommonCountryLoadAction.Invoke([Selection.SelectedCountry.CommonCountry], info, false);
-
+         else if (type == typeof(Country))
+            CountryLoadAction.Invoke([Selection.SelectedCountry], info, false);
 
 
          MapModeManager.RenderMapMode(info);
