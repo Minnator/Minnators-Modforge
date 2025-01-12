@@ -89,6 +89,7 @@
          testToolStripMenuItem = new ToolStripMenuItem();
          telescopeToolStripMenuItem = new ToolStripMenuItem();
          collectionSelectorBaseToolStripMenuItem = new ToolStripMenuItem();
+         propertyCollectionSelectorToolStripMenuItem = new ToolStripMenuItem();
          ProvinceCollectionsLayoutPanel = new TableLayoutPanel();
          FocusSelectionCheckBox = new CheckBox();
          BottomToolStrip = new ToolStrip();
@@ -120,7 +121,6 @@
          ProvinceScrollPanel = new Panel();
          ProvinceEditingLayout = new TableLayoutPanel();
          DiscoveredByGroupBox = new GroupBox();
-         BuildingsGroupBox = new GroupBox();
          CoresGroupBox = new GroupBox();
          CoresAndClaimsBox = new GroupBox();
          CoresAndClaimLayoutPanel = new TableLayoutPanel();
@@ -691,7 +691,7 @@
          // 
          // debugToolStripMenuItem
          // 
-         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, collectionSelectorBaseToolStripMenuItem });
+         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, collectionSelectorBaseToolStripMenuItem, propertyCollectionSelectorToolStripMenuItem });
          debugToolStripMenuItem.Enabled = false;
          debugToolStripMenuItem.Name = "debugToolStripMenuItem";
          debugToolStripMenuItem.Size = new Size(54, 23);
@@ -701,23 +701,30 @@
          // testToolStripMenuItem
          // 
          testToolStripMenuItem.Name = "testToolStripMenuItem";
-         testToolStripMenuItem.Size = new Size(200, 22);
+         testToolStripMenuItem.Size = new Size(221, 22);
          testToolStripMenuItem.Text = "Browse Globals";
          testToolStripMenuItem.Click += testToolStripMenuItem_Click;
          // 
          // telescopeToolStripMenuItem
          // 
          telescopeToolStripMenuItem.Name = "telescopeToolStripMenuItem";
-         telescopeToolStripMenuItem.Size = new Size(200, 22);
+         telescopeToolStripMenuItem.Size = new Size(221, 22);
          telescopeToolStripMenuItem.Text = "1 GB RAM";
          telescopeToolStripMenuItem.Click += OneGBRAM;
          // 
          // collectionSelectorBaseToolStripMenuItem
          // 
          collectionSelectorBaseToolStripMenuItem.Name = "collectionSelectorBaseToolStripMenuItem";
-         collectionSelectorBaseToolStripMenuItem.Size = new Size(200, 22);
+         collectionSelectorBaseToolStripMenuItem.Size = new Size(221, 22);
          collectionSelectorBaseToolStripMenuItem.Text = "Collection Selector Base";
          collectionSelectorBaseToolStripMenuItem.Click += collectionSelectorBaseToolStripMenuItem_Click;
+         // 
+         // propertyCollectionSelectorToolStripMenuItem
+         // 
+         propertyCollectionSelectorToolStripMenuItem.Name = "propertyCollectionSelectorToolStripMenuItem";
+         propertyCollectionSelectorToolStripMenuItem.Size = new Size(221, 22);
+         propertyCollectionSelectorToolStripMenuItem.Text = "Property Collection Selector";
+         propertyCollectionSelectorToolStripMenuItem.Click += propertyCollectionSelectorToolStripMenuItem_Click;
          // 
          // ProvinceCollectionsLayoutPanel
          // 
@@ -1055,7 +1062,6 @@
          ProvinceEditingLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
          ProvinceEditingLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
          ProvinceEditingLayout.Controls.Add(DiscoveredByGroupBox, 0, 4);
-         ProvinceEditingLayout.Controls.Add(BuildingsGroupBox, 1, 2);
          ProvinceEditingLayout.Controls.Add(CoresGroupBox, 0, 2);
          ProvinceEditingLayout.Controls.Add(CoresAndClaimsBox, 0, 1);
          ProvinceEditingLayout.Controls.Add(OptionalsTabControl, 0, 5);
@@ -1091,18 +1097,6 @@
          DiscoveredByGroupBox.TabIndex = 9;
          DiscoveredByGroupBox.TabStop = false;
          DiscoveredByGroupBox.Text = "DiscoveredBy";
-         // 
-         // BuildingsGroupBox
-         // 
-         BuildingsGroupBox.Dock = DockStyle.Fill;
-         BuildingsGroupBox.Location = new Point(197, 307);
-         BuildingsGroupBox.Margin = new Padding(3, 0, 3, 0);
-         BuildingsGroupBox.Name = "BuildingsGroupBox";
-         BuildingsGroupBox.Padding = new Padding(0);
-         BuildingsGroupBox.Size = new Size(188, 112);
-         BuildingsGroupBox.TabIndex = 9;
-         BuildingsGroupBox.TabStop = false;
-         BuildingsGroupBox.Text = "Buildings";
          // 
          // CoresGroupBox
          // 
@@ -2967,7 +2961,6 @@
       private Label label9;
       private Label label10;
       private Label DevastationLabel;
-      private GroupBox BuildingsGroupBox;
       private GroupBox DiscoveredByGroupBox;
       private Label label14;
       private Label label15;
@@ -3135,6 +3128,7 @@
       private ToolStripMenuItem openCrashLogFolderToolStripMenuItem;
       private ToolStripMenuItem openLastCrashLogsToolStripMenuItem;
       private ToolStripMenuItem collectionSelectorBaseToolStripMenuItem;
+      private ToolStripMenuItem propertyCollectionSelectorToolStripMenuItem;
    }
 }
 

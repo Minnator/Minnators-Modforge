@@ -43,7 +43,7 @@ namespace Editor.DataClasses.GameDataClasses
       private List<Tag> _permanentClaims = [];                  
       private List<Tag> _cores = [];                            
       private List<string> _discoveredBy = [];                  
-      private List<string> _buildings = [];                      
+      private List<Building> _buildings = [];                      
       private List<string> _tradeCompanyInvestments = [];        
       private List<ApplicableModifier> _permanentProvinceModifiers = []; 
       private List<ApplicableModifier> _provinceModifiers = [];           
@@ -240,10 +240,10 @@ namespace Editor.DataClasses.GameDataClasses
          set => SetField(ref _religion, value);
       }
 
-      public List<string> Buildings
+      public List<Building> Buildings
       {
          get => _buildings;
-         set => SetIfModifiedEnumerable<List<string>, string>(ref _buildings, value);
+         set => SetIfModifiedEnumerable<List<Building>, Building>(ref _buildings, value);
       }
 
       [ToolTippable]

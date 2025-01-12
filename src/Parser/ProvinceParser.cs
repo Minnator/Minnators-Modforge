@@ -161,7 +161,14 @@ public static class ProvinceParser
       else
       {
          if (!ProvinceActionsAndProperties.TryGetValue(attribute.ToLower(), out var tuple))
+         {
+            var building = Globals.Buildings.Find(x => x.Name.Equals(attribute.ToLower()));
+            if (building != null)
+               province.Buildings.Add(building);
+            else
+               _ = new LoadingError(po, $"Could not find attribute {attribute} in province attribute list");
             return;
+         }
          var (action, propertyInfo) = tuple;
          action(province, propertyInfo, value, po, lineNum);
       }

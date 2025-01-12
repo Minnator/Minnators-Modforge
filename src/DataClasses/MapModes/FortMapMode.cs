@@ -26,13 +26,13 @@ public class FortMapMode : MapMode
    private int GetFortLevel(Province id)
    {
       var level = 0;
-      if (id.Buildings.Contains("fort_15th"))
+      if (id.Buildings.Any(x => x.Name.Equals("fort_15th")))
          level += 2;
-      if (id.Buildings.Contains("fort_16th"))
+      if (id.Buildings.Any(x => x.Name.Equals("fort_16th")))
          level += 4;
-      if (id.Buildings.Contains("fort_17th"))
+      if (id.Buildings.Any(x => x.Name.Equals("fort_17th")))
          level += 6;
-      if (id.Buildings.Contains("fort_18th"))
+      if (id.Buildings.Any(x => x.Name.Equals("fort_18th")))
          level += 8;
 
       if (Globals.Countries.TryGetValue(id.Owner, out var owner) && owner.HistoryCountry.Capital == id)

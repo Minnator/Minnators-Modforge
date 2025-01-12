@@ -63,6 +63,10 @@ namespace Editor.Helper
          {
             typeof(Mana),
             EnumHelper.ManaParseGeneral
+         },
+         {
+            typeof(Building),
+            Building.GeneralParse
          }
       };
 

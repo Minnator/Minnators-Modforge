@@ -19,6 +19,12 @@ namespace Editor.Helper
       public static bool GetSharedAttributeList<T, Q, R>(PropertyInfo propertyInfo, out Q value, ICollection<T> objects) where Q : ICollection<R> where R : notnull
       {
          List<Q> lists = [];
+         if (objects.Count < 1)
+         {
+            value = default!;
+            return false;
+         }
+
          foreach (var obj in objects)
             lists.Add((Q)propertyInfo.GetValue(obj)!);
 

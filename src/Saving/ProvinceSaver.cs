@@ -77,8 +77,8 @@ namespace Editor.Saving
          AddItem("native_ferocity", p.GetPropertyValue("NativeFerocity"), ref sb);
          AddItem("native_hostileness", p.GetPropertyValue("NativeHostileness"), ref sb);
          AddItem("tribal_owner", p.GetPropertyValue("TribalOwner"), ref sb);
-         foreach (string building in p.Buildings)
-            AddItem(building, "yes", ref sb);
+         foreach (var building in p.Buildings)
+            AddItem(building.Name, "yes", ref sb);
          AddCollection("add_claim", p.GetPropertyValue("Claims"), ref sb);
          AddCollection("add_permanent_claim", p.GetPropertyValue("PermanentClaims"), ref sb);
          sb.AppendLine();

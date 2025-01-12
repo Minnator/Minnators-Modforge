@@ -29,7 +29,7 @@ namespace Editor.Controls.NewControls
 
    public interface IPropertyControlList<T, Q, R> : IPropertyControl where T : Saveable where Q : ICollection<R> where R : notnull
    {
-      protected void LoadToGui(List<T> list, PropertyInfo propInfo, bool force)
+      public void LoadToGui(List<T> list, PropertyInfo propInfo, bool force)
       {
          if (force || propInfo.Equals(PropertyInfo))
             if (AttributeComparer.GetSharedAttributeList<T, Q, R>(PropertyInfo, out Q value, list))

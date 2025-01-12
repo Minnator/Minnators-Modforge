@@ -114,6 +114,7 @@
          SourceListView.Dock = DockStyle.Fill;
          SourceListView.FullRowSelect = true;
          SourceListView.HeaderStyle = ColumnHeaderStyle.None;
+         SourceListView.HotTracking = true;
          SourceListView.HoverSelection = true;
          SourceListView.Location = new Point(277, 52);
          SourceListView.Name = "SourceListView";
@@ -123,6 +124,7 @@
          SourceListView.TabIndex = 4;
          SourceListView.UseCompatibleStateImageBehavior = false;
          SourceListView.View = View.Details;
+         SourceListView.DoubleClick += SourceListView_DoubleClick;
          // 
          // Items
          // 
@@ -269,6 +271,7 @@
          SelectedListView.Dock = DockStyle.Fill;
          SelectedListView.FullRowSelect = true;
          SelectedListView.HeaderStyle = ColumnHeaderStyle.None;
+         SelectedListView.HotTracking = true;
          SelectedListView.HoverSelection = true;
          SelectedListView.Location = new Point(3, 52);
          SelectedListView.Name = "SelectedListView";
@@ -277,6 +280,7 @@
          SelectedListView.TabIndex = 3;
          SelectedListView.UseCompatibleStateImageBehavior = false;
          SelectedListView.View = View.Details;
+         SelectedListView.DoubleClick += RemoveButton_Click;
          // 
          // columnHeader1
          // 

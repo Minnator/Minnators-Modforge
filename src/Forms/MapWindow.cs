@@ -90,6 +90,8 @@ namespace Editor.Forms
       private PropertyLabel<Province> LocalisationLabel = null!;
       private PropertyLabel<Province> ProvAdjLabel = null!;
 
+      private PropertyCollectionSelector<Province, List<Building>, Building> _buildingsSelector = null!;
+
       public Screen? StartScreen = null;
 
       #endregion
@@ -446,7 +448,18 @@ namespace Editor.Forms
          CoresAndClaimLayoutPanel.Controls.Add(_claims, 1, 0);
          CoresGroupBox.Controls.Add(_cores);
          _cores.Location = new(0, 18);
-         BuildingsGroupBox.Controls.Add(_buildings);
+
+         _buildingsSelector = new(typeof(Province).GetProperty(nameof(Province.Buildings)),
+                                  ref LoadGuiEvents.ProvLoadAction,
+                                  () => Selection.GetSelectedProvinces,
+                                  Globals.Buildings,
+                                  typeof(Building).GetProperty(nameof(Building.Name))!)
+         {
+            Dock = DockStyle.Fill,
+            Margin = new(1),
+         };
+         ProvinceEditingLayout.Controls.Add(_buildingsSelector, 1, 2);
+
          _buildings.Location = new(0, 18);
          DiscoveredByGroupBox.Controls.Add(_discoveredBy);
          _discoveredBy.Location = new(0, 18);
@@ -1497,7 +1510,11 @@ namespace Editor.Forms
 
       private void collectionSelectorBaseToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         new CollectionSelectorBase([..Globals.Cultures.Keys], []).ShowDialog();
+         new CollectionSelectorBase([.. Globals.Cultures.Keys]).ShowDialog();
+      }
+
+      private void propertyCollectionSelectorToolStripMenuItem_Click(object sender, EventArgs e)
+      {
       }
    }
 }

@@ -6,31 +6,27 @@ namespace Editor.src.Forms.Feature
    public partial class CollectionSelectorBase : Form
    {
       private const string UNSELECTABLE = "UNSELECTABLE";
-      private readonly BindingList<string> _sourceItems = [];
-      private readonly BindingList<string> _selectedItems = [];
+      private readonly List<string> _sourceItems = [];
+      private readonly List<string> _selectedItems = [];
+      private readonly List<string> _sourceItemsConst;
 
-      private Timer _searchTimer = new ();
+      private Timer _searchTimer = new();
 
-      public CollectionSelectorBase()
+      public CollectionSelectorBase(List<string> sourceItems)
       {
          InitializeComponent();
-      }
+         _sourceItemsConst = [.. sourceItems];
 
-      public CollectionSelectorBase(List<string> sourceItems, List<string> selectedItems)
-      {
-         InitializeComponent();
-         SetSourceItems(sourceItems);
-         SetSelectedItems(selectedItems);
-
+         SetSourceItems();
 
          SearchTextBox.AutoCompleteMode = AutoCompleteMode.None;
          SearchTextBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
-         SearchTextBox.AutoCompleteCustomSource = new ();
+         SearchTextBox.AutoCompleteCustomSource = new();
          SearchTextBox.AutoCompleteCustomSource.AddRange(_sourceItems.ToArray());
 
          SelectedSearchTextBox.AutoCompleteMode = AutoCompleteMode.None;
          SelectedSearchTextBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
-         SelectedSearchTextBox.AutoCompleteCustomSource = new ();
+         SelectedSearchTextBox.AutoCompleteCustomSource = new();
          SelectedSearchTextBox.AutoCompleteCustomSource.AddRange(_selectedItems.ToArray());
 
          _searchTimer.Interval = 300;
@@ -43,33 +39,43 @@ namespace Editor.src.Forms.Feature
             else if (SelectedSearchTextBox.Focused)
                BrowseListView(SelectedSearchTextBox.Text, SelectedListView, _selectedItems);
          };
+
+         SourceListView.Columns[0].Width = SourceListView.ClientSize.Width - 16;
+         SelectedListView.Columns[0].Width = SelectedListView.ClientSize.Width - 16;
+      }
+      
+      public new void ShowDialog()
+      {
+         SetSourceItems();
+         base.ShowDialog();
       }
 
-      public void SetSourceItems(List<string> items)
+      private void SetSourceItems()
       {
          _sourceItems.Clear();
          SourceListView.Items.Clear();
-         foreach (var item in items)
+         foreach (var item in _sourceItemsConst)
          {
+            if (_selectedItems.Contains(item))
+               continue;
             SourceListView.Items.Add(new ListViewItem(item));
             _sourceItems.Add(item);
          }
 
-         SourceListView.Columns[0].Width = SourceListView.ClientSize.Width - 16;
       }
 
-      public void SetSelectedItems(List<string> items)
+      internal void SetSelectedItems(List<string> items)
       {
          _selectedItems.Clear();
          SelectedListView.Items.Clear();
          foreach (var item in items)
          {
             SelectedListView.Items.Add(new ListViewItem(item));
-            _sourceItems.Remove(item);
+            
             _selectedItems.Add(item);
          }
 
-         SelectedListView.Columns[0].Width = SelectedListView.ClientSize.Width - 16;
+         SetSourceItems();
       }
 
       private void AddButton_Click(object? sender, EventArgs e)
@@ -96,6 +102,7 @@ namespace Editor.src.Forms.Feature
          foreach (ListViewItem item in SelectedListView.SelectedItems)
          {
             SelectedListView.Items.Remove(item);
+            _sourceItems.Add(item.Text);
             SourceListView.Items.Add(item);
             _selectedItems.Remove(item.Text);
 
@@ -152,10 +159,10 @@ namespace Editor.src.Forms.Feature
          return items;
       }
 
-      private void BrowseListView(string searchString, ListView view, BindingList<string> items)
+      private void BrowseListView(string searchString, ListView view, List<string> items)
       {
          view.Items.Clear();
-         foreach (var item in items)
+         foreach (var item in items)  
             if (item.Contains(searchString))
                view.Items.Add(new ListViewItem(item));
 
@@ -172,7 +179,7 @@ namespace Editor.src.Forms.Feature
             SourceListView.Items.Clear();
             foreach (var item in _sourceItems)
                SourceListView.Items.Add(item);
-            
+
             SearchTextBox.Clear();
          }
       }
@@ -207,6 +214,11 @@ namespace Editor.src.Forms.Feature
       {
          _searchTimer.Stop();
          _searchTimer.Start();
+      }
+
+      private void SourceListView_DoubleClick(object sender, EventArgs e)
+      {
+         AddButton_Click(sender, e);
       }
    }
 }
