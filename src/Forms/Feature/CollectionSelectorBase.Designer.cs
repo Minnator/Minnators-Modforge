@@ -237,6 +237,7 @@
          SearchTextBox.Name = "SearchTextBox";
          SearchTextBox.Size = new Size(206, 23);
          SearchTextBox.TabIndex = 1;
+         SearchTextBox.TextChanged += AnySearchTextBox_TextChanged;
          SearchTextBox.KeyDown += SearchTextBox_KeyDown;
          // 
          // ConfirmButton
@@ -317,6 +318,7 @@
          SelectedSearchTextBox.Name = "SelectedSearchTextBox";
          SelectedSearchTextBox.Size = new Size(205, 23);
          SelectedSearchTextBox.TabIndex = 1;
+         SelectedSearchTextBox.TextChanged += AnySearchTextBox_TextChanged;
          SelectedSearchTextBox.KeyDown += SelectedSearchTextBox_KeyDown;
          // 
          // CollectionSelectorBase

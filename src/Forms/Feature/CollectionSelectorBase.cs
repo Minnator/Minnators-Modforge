@@ -1,10 +1,16 @@
-﻿namespace Editor.src.Forms.Feature
+﻿using System.ComponentModel;
+using Timer = System.Windows.Forms.Timer;
+
+namespace Editor.src.Forms.Feature
 {
    public partial class CollectionSelectorBase : Form
    {
       private const string UNSELECTABLE = "UNSELECTABLE";
-      private readonly List<string> _sourceItems = [];
-      private readonly List<string> _selectedItems = [];
+      private readonly BindingList<string> _sourceItems = [];
+      private readonly BindingList<string> _selectedItems = [];
+
+      private Timer _searchTimer = new ();
+
       public CollectionSelectorBase()
       {
          InitializeComponent();
@@ -15,25 +21,53 @@
          InitializeComponent();
          SetSourceItems(sourceItems);
          SetSelectedItems(selectedItems);
+
+
+         SearchTextBox.AutoCompleteMode = AutoCompleteMode.None;
+         SearchTextBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+         SearchTextBox.AutoCompleteCustomSource = new ();
+         SearchTextBox.AutoCompleteCustomSource.AddRange(_sourceItems.ToArray());
+
+         SelectedSearchTextBox.AutoCompleteMode = AutoCompleteMode.None;
+         SelectedSearchTextBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+         SelectedSearchTextBox.AutoCompleteCustomSource = new ();
+         SelectedSearchTextBox.AutoCompleteCustomSource.AddRange(_selectedItems.ToArray());
+
+         _searchTimer.Interval = 300;
+         _searchTimer.Tick += (sender, e) =>
+         {
+            _searchTimer.Stop();
+            // check which textbox has Focus
+            if (SearchTextBox.Focused)
+               BrowseListView(SearchTextBox.Text, SourceListView, _sourceItems);
+            else if (SelectedSearchTextBox.Focused)
+               BrowseListView(SelectedSearchTextBox.Text, SelectedListView, _selectedItems);
+         };
       }
 
       public void SetSourceItems(List<string> items)
       {
          _sourceItems.Clear();
-         _sourceItems.AddRange(items);
          SourceListView.Items.Clear();
-         foreach (var item in items) 
+         foreach (var item in items)
+         {
             SourceListView.Items.Add(new ListViewItem(item));
+            _sourceItems.Add(item);
+         }
+
          SourceListView.Columns[0].Width = SourceListView.ClientSize.Width - 16;
       }
 
       public void SetSelectedItems(List<string> items)
       {
          _selectedItems.Clear();
-         _selectedItems.AddRange(items);
          SelectedListView.Items.Clear();
          foreach (var item in items)
+         {
             SelectedListView.Items.Add(new ListViewItem(item));
+            _sourceItems.Remove(item);
+            _selectedItems.Add(item);
+         }
 
          SelectedListView.Columns[0].Width = SelectedListView.ClientSize.Width - 16;
       }
@@ -49,6 +83,9 @@
             SourceListView.Items.Remove(item);
             SelectedListView.Items.Add(item);
             _selectedItems.Add(item.Text);
+
+            SelectedSearchTextBox.AutoCompleteCustomSource.Add(item.Text);
+            SearchTextBox.AutoCompleteCustomSource.Remove(item.Text);
          }
       }
 
@@ -61,6 +98,9 @@
             SelectedListView.Items.Remove(item);
             SourceListView.Items.Add(item);
             _selectedItems.Remove(item.Text);
+
+            SelectedSearchTextBox.AutoCompleteCustomSource.Remove(item.Text);
+            SearchTextBox.AutoCompleteCustomSource.Add(item.Text);
          }
       }
 
@@ -112,7 +152,7 @@
          return items;
       }
 
-      private void BrowseListView(string searchString, ListView view, List<string> items)
+      private void BrowseListView(string searchString, ListView view, BindingList<string> items)
       {
          view.Items.Clear();
          foreach (var item in items)
@@ -161,6 +201,12 @@
 
             SelectedSearchTextBox.Clear();
          }
+      }
+
+      private void AnySearchTextBox_TextChanged(object? sender, EventArgs e)
+      {
+         _searchTimer.Stop();
+         _searchTimer.Start();
       }
    }
 }
