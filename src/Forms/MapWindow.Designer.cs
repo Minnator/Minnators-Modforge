@@ -88,6 +88,7 @@
          debugToolStripMenuItem = new ToolStripMenuItem();
          testToolStripMenuItem = new ToolStripMenuItem();
          telescopeToolStripMenuItem = new ToolStripMenuItem();
+         collectionSelectorBaseToolStripMenuItem = new ToolStripMenuItem();
          ProvinceCollectionsLayoutPanel = new TableLayoutPanel();
          FocusSelectionCheckBox = new CheckBox();
          BottomToolStrip = new ToolStrip();
@@ -690,7 +691,7 @@
          // 
          // debugToolStripMenuItem
          // 
-         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem });
+         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, collectionSelectorBaseToolStripMenuItem });
          debugToolStripMenuItem.Enabled = false;
          debugToolStripMenuItem.Name = "debugToolStripMenuItem";
          debugToolStripMenuItem.Size = new Size(54, 23);
@@ -700,16 +701,23 @@
          // testToolStripMenuItem
          // 
          testToolStripMenuItem.Name = "testToolStripMenuItem";
-         testToolStripMenuItem.Size = new Size(154, 22);
+         testToolStripMenuItem.Size = new Size(200, 22);
          testToolStripMenuItem.Text = "Browse Globals";
          testToolStripMenuItem.Click += testToolStripMenuItem_Click;
          // 
          // telescopeToolStripMenuItem
          // 
          telescopeToolStripMenuItem.Name = "telescopeToolStripMenuItem";
-         telescopeToolStripMenuItem.Size = new Size(154, 22);
+         telescopeToolStripMenuItem.Size = new Size(200, 22);
          telescopeToolStripMenuItem.Text = "1 GB RAM";
          telescopeToolStripMenuItem.Click += OneGBRAM;
+         // 
+         // collectionSelectorBaseToolStripMenuItem
+         // 
+         collectionSelectorBaseToolStripMenuItem.Name = "collectionSelectorBaseToolStripMenuItem";
+         collectionSelectorBaseToolStripMenuItem.Size = new Size(200, 22);
+         collectionSelectorBaseToolStripMenuItem.Text = "Collection Selector Base";
+         collectionSelectorBaseToolStripMenuItem.Click += collectionSelectorBaseToolStripMenuItem_Click;
          // 
          // ProvinceCollectionsLayoutPanel
          // 
@@ -3126,6 +3134,7 @@
       private ToolStripMenuItem clearCrashLogsToolStripMenuItem1;
       private ToolStripMenuItem openCrashLogFolderToolStripMenuItem;
       private ToolStripMenuItem openLastCrashLogsToolStripMenuItem;
+      private ToolStripMenuItem collectionSelectorBaseToolStripMenuItem;
    }
 }
 

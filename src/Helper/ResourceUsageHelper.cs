@@ -59,8 +59,7 @@ namespace Editor.Helper
                Updater.Dispose();
                return;
             }
-
-
+            
             _mapWindow.UpdateMemoryUsage(_memoryUsage);
             _mapWindow.UpdateCpuUsage(_cpuUsage);
          });

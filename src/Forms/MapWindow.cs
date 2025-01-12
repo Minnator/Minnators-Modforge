@@ -19,6 +19,7 @@ using Editor.Helper;
 using Editor.Loading;
 using Editor.NameGenerator;
 using Editor.Saving;
+using Editor.src.Forms.Feature;
 using Editor.src.Forms.GetUserInput;
 using Editor.src.Forms.PopUps;
 using Editor.Testing;
@@ -830,7 +831,7 @@ namespace Editor.Forms
                ? $"Open the selected province file ({Selection.GetSelectedProvinces[0].TitleLocalisation})"
                : $"Open the selected province files ({Selection.Count})");
       }
-      
+
       private static void OnDateChanged(object? sender, Date date)
       {
          //ProvinceHistoryManager.LoadDate(date);
@@ -889,6 +890,9 @@ namespace Editor.Forms
       {
          if (!ShutDownMaster.DoWeShutDown())
             e.Cancel = true;
+
+         // Terminate ResourceUsageHelper
+         ResourceUsageHelper.Dispose();
       }
 
 
@@ -951,15 +955,15 @@ namespace Editor.Forms
          _graphicalCultureBox = ControlFactory.GetBindableListPropertyComboBox(typeof(CommonCountry).GetProperty(nameof(CommonCountry.GraphicalCulture))!,
                                                                                Globals.GraphicalCultures,
                                                                                ControlFactory.DefaultMarginType.Slim);
-         
+
          _unitTypeBox = ControlFactory.GetBindablePropertyComboBoxHistoryCountry(typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.UnitType))!,
                                                                                  Globals.TechnologyGroups,
                                                                                  margin: ControlFactory.DefaultMarginType.Slim);
-         
+
          _techGroupBox = ControlFactory.GetBindablePropertyComboBoxHistoryCountry(typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.TechnologyGroup))!,
                                                                                   Globals.TechnologyGroups,
                                                                                   margin: ControlFactory.DefaultMarginType.Slim);
-         
+
          _governmentTypeBox = ControlFactory.GetListComboBox([.. Globals.GovernmentTypes.Keys], new(1, 1, 6, 1));
          _governmentTypeBox.SelectedIndexChanged += GovernmentTypeBox_SelectedIndexChanged;
 
@@ -975,7 +979,7 @@ namespace Editor.Forms
          _capitalTextBox = ControlFactory.GetPropertyLabelHistoryCountry(typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.GetCapitalLoc)));
 
          _focusComboBox = ControlFactory.GetListPropertyComboBoxHistoryCountry(typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.NationalFocus))!,
-                                                                               [.. Enum.GetValues<Mana>()], 
+                                                                               [.. Enum.GetValues<Mana>()],
                                                                                ControlFactory.DefaultMarginType.Slim);
          _focusComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 
@@ -1125,7 +1129,7 @@ namespace Editor.Forms
 
          Globals.State = State.Running;
       }
-      
+
       private void GovernmentTypeBox_SelectedIndexChanged(object? sender, EventArgs e)
       {
          if (_governmentTypeBox.SelectedItem == null)
@@ -1489,6 +1493,11 @@ namespace Editor.Forms
       private void openLastCrashLogsToolStripMenuItem_Click(object sender, EventArgs e)
       {
          CrashManager.OpenLastCrashLogs();
+      }
+
+      private void collectionSelectorBaseToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         new CollectionSelectorBase([..Globals.Cultures.Keys], []).ShowDialog();
       }
    }
 }
