@@ -79,7 +79,7 @@ namespace Editor.Forms.LoadingScreen
          AutoTerrainCalculations.Load,
          HeightMapLoading.Load,
          ProvinceGroupsLoading.Load,
-         GameIcon.Initialize,
+         GameIconDefinition.Initialize,
          Eu4Cursors.LoadCursors,
 
 
@@ -191,7 +191,7 @@ namespace Editor.Forms.LoadingScreen
          }
          catch (Exception exception)
          {
-            CrashManager.EnterCrashHandler(exception);
+            CrashManager.EnterCrashHandler(exception, $"Crashed during {_loadingActions[progress]}");
             throw;
          }
       }

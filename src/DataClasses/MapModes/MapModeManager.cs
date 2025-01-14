@@ -94,6 +94,7 @@ public static class MapModeManager
       { nameof(CommonCountry.Color), MapModeType.Country},
       //{ nameof(Province.Climate), MapModeType.Climate },
       //{ nameof(Province.Weather), MapModeType.Weather },
+      { nameof(Province.Buildings), MapModeType.Fort},
    };
 
    static MapModeManager()

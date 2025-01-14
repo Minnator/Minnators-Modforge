@@ -168,7 +168,7 @@ namespace Editor.Forms.PopUps
 
       public void SetOk(bool ok)
       {
-         AvailabilityLabel.Image = GameIcon.GetIcon(ok ? GameIcons.Yes : GameIcons.No);
+         AvailabilityLabel.Image = GameIconDefinition.GetIcon(ok ? GameIcons.Yes : GameIcons.No);
       }
    }
 }

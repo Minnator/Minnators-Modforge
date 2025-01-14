@@ -62,6 +62,4 @@ public static class ToolTipBuilder
 }
 
 [AttributeUsage(AttributeTargets.Property)]
-public class ToolTippable(bool isList = false) : Attribute
-{
-}
+public class ToolTippable(bool isList = false) : Attribute;

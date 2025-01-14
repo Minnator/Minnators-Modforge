@@ -167,6 +167,17 @@ public abstract class Saveable : IDisposable
          target.OnPropertyChanged(property.Name);
    }
 
+   public static void SetFieldEditCollection<TSaveable, TProperty, TItem>(ICollection<TSaveable> targets, HashSet<TItem> add, HashSet<TItem> remove, PropertyInfo property) where TSaveable : Saveable where TProperty : ICollection<TItem>
+   {
+      if (Globals.State != State.Running)
+         return;
+      var command = new CModifyListProperty<TSaveable, TProperty, TItem>(property, [.. targets], add, remove, out var change);
+      if (change)
+         HistoryManager.AddCommand(command);
+      foreach (var target in targets)
+         target.OnPropertyChanged(property.Name);
+   }
+
    /// <summary>
    /// 
    /// </summary>

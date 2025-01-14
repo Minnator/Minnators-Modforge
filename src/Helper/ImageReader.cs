@@ -14,6 +14,8 @@ namespace Editor.Helper
       /// <returns></returns>
       public static Bitmap ReadImage(string filePath)
       {
+         if (!File.Exists(filePath))
+            return new (1, 1);
          using var image = Pfimage.FromFile(filePath);
          PixelFormat format;
 

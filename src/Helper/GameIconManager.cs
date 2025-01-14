@@ -1,18 +1,29 @@
 ﻿
+using Editor.ErrorHandling;
 using Editor.Saving;
 
 namespace Editor.Helper
 {
+
+   [AttributeUsage(AttributeTargets.Property)]
+   public class GameIcon(GameIcons icon, bool showNumber = false) : Attribute
+   {
+      public GameIcons Icon { get; set; } = icon;
+      public bool ShowNumber {get; set; } = showNumber;
+   }
+
    public enum GameIcons
    {
+      None = -1,
       Yes,
       No,
+      Building,
    }
 
 
-   public class GameIcon
+   public class GameIconDefinition
    {
-      public static Dictionary<GameIcons, GameIcon> Icons { get; set; } = new();
+      public static Dictionary<GameIcons, GameIconDefinition> Icons { get; set; } = new();
       
       public string[] IconPath { get; set; }
       public Bitmap Icon { get; set; }
@@ -22,9 +33,11 @@ namespace Editor.Helper
       {
          FromIconStrip(GameIcons.Yes, 0, 2, "gfx", "interface", "eligible_noneligible_strip.dds");
          FromIconStrip(GameIcons.No, 1, 2, "gfx", "interface", "eligible_noneligible_strip.dds");
+         FromPath(GameIcons.None, "gfx", "interface", "default_fallback_texture.dds");
+         FromPath(GameIcons.Building, "gfx", "interface", "technologyView_show_buildings.dds");
       }
 
-      public GameIcon(GameIcons iconEnum)
+      public GameIconDefinition(GameIcons iconEnum)
       {
          IconPath = [];
          IconType = iconEnum;
@@ -38,16 +51,19 @@ namespace Editor.Helper
       {
          if (Icons.TryGetValue(iconEnum, out var icon))
             return icon.Icon;
-         throw new EvilActions($"Trying to access a non existing game icon! {icon}");
+         _ = new ErrorObject(ErrorType.INTERNAL_KeyNotFound, $"Trying to access a non existing game icon! {icon}", LogType.Critical);
+         if (Icons.TryGetValue(GameIcons.None, out icon))
+            return icon.Icon;
+         throw new EvilActions($"Trying to access a non existing game icon! {icon}. FALLBACK icon not defined");
       }
 
-      public static GameIcon FromPath(GameIcons iconEnum, params string[] path)
+      public static GameIconDefinition FromPath(GameIcons iconEnum, params string[] path)
       {
          if (!VerifyInputs(path, iconEnum))
             return null!;
          return new (iconEnum)
          {
-            Icon = ReadImage(Path.Combine(path)),
+            Icon = ReadImage(Path.Combine(Globals.VanillaPath, Path.Combine(path))),
             IconPath = path
          };
       }
@@ -83,7 +99,7 @@ namespace Editor.Helper
          using var graphics = Graphics.FromImage(icon);
          graphics.DrawImage(rawImage, new Rectangle(0, 0, icon.Width, icon.Height), new (index * icon.Width, 0, icon.Width, icon.Height), GraphicsUnit.Pixel);
 
-         GameIcon iconN = new (iconEnum)
+         GameIconDefinition _ = new (iconEnum)
          {
             Icon = icon,
             IconPath = path

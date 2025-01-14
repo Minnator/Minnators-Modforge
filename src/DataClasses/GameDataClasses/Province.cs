@@ -9,6 +9,8 @@ using Editor.Forms.Feature;
 
 namespace Editor.DataClasses.GameDataClasses
 {
+
+
    public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<ProvinceHistoryEntry>
    {
       #region Data
@@ -240,6 +242,7 @@ namespace Editor.DataClasses.GameDataClasses
          set => SetField(ref _religion, value);
       }
 
+      [GameIcon(GameIcons.Building, false)]
       public List<Building> Buildings
       {
          get => _buildings;

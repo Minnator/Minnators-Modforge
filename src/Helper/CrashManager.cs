@@ -24,13 +24,18 @@ namespace Editor.Helper
             Directory.CreateDirectory(LogFolder);
       }
 
-      public static void EnterCrashHandler(Exception e)
+      public static void EnterCrashHandler(Exception e, string additionalInfo = "")
       {
          var window = new CrashReporter();
          window.ShowDialog();
          var sb = new StringBuilder();
          sb.AppendLine("Source:").AppendLine(e.Source);
          sb.AppendLine();
+         if (!string.IsNullOrEmpty(additionalInfo))
+         {
+            sb.AppendLine($"Additional Info: {additionalInfo}");
+            sb.AppendLine();
+         }
          sb.AppendLine("Message:").AppendLine(e.Message);
          sb.AppendLine();
          sb.AppendLine("StackTrace:").AppendLine(e.StackTrace);

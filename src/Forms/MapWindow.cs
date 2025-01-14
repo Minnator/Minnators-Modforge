@@ -21,8 +21,6 @@ using Editor.NameGenerator;
 using Editor.Saving;
 using Editor.src.Forms.Feature;
 using Editor.src.Forms.GetUserInput;
-using Editor.src.Forms.PopUps;
-using Editor.Testing;
 using static Editor.Helper.ProvinceEnumHelper;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 using MapLoading = Editor.Loading.Enhanced.MapLoading;
@@ -448,6 +446,7 @@ namespace Editor.Forms
          CoresAndClaimLayoutPanel.Controls.Add(_claims, 1, 0);
          CoresGroupBox.Controls.Add(_cores);
          _cores.Location = new(0, 18);
+
 
          _buildingsSelector = new(typeof(Province).GetProperty(nameof(Province.Buildings)),
                                   ref LoadGuiEvents.ProvLoadAction,

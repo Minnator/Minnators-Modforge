@@ -63,6 +63,8 @@ public enum ErrorType
    // ObjectInteraction Error
    [ErrorInformation("This occurs because a key was not found in a dictionary!", "Contact a developer with the latest log exported as a .csv")]
    INTERNAL_KeyNotFound = 300, // ObjectInteraction Error 300-399
+   [ErrorInformation("An uninitialized object is being referenced!", "Create the object before using it!")]
+   INTERNAL_UsageOfUndefinedObject = 301,
    [ErrorInformation("This occurs because your file is not in the correct format and thus can not be parse by the modforge", "Verify that your mod file is formatted correctly and if so contact a developer!")]
    // Misc Error 400-599
    TempParsingError = 1000,
