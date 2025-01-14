@@ -2,19 +2,24 @@
 
 namespace Editor.DataClasses.GameDataClasses;
 
-public readonly struct Tag(string tag) : IEquatable<Tag>, IComparable
+public readonly struct Tag : IEquatable<Tag>, IComparable
 {
-   public string _tag { get; init; } = tag;
+   public Tag(string tagValue)
+   {
+      TagValue = tagValue;
+   }
+
+   public string TagValue { get; }
 
    public override string ToString()
    {
-      return _tag;
+      return TagValue;
    }
 
    public int CompareTo(object? obj)
    {
       if (obj is Tag other)
-         return string.Compare(_tag, other._tag, StringComparison.Ordinal);
+         return string.Compare(TagValue, other.TagValue, StringComparison.Ordinal);
       throw new ArgumentException("Object is not a Tag");
    }
 
@@ -34,12 +39,12 @@ public readonly struct Tag(string tag) : IEquatable<Tag>, IComparable
 
    public override int GetHashCode()
    {
-      return _tag.GetHashCode();
+      return TagValue.GetHashCode();
    }
 
    public static implicit operator string(Tag tag)
    {
-      return tag._tag;
+      return tag.TagValue;
    }
 
    public static implicit operator Tag(string tag)
@@ -49,12 +54,12 @@ public readonly struct Tag(string tag) : IEquatable<Tag>, IComparable
    
    public static bool operator ==(Tag a, Tag b)
    {
-      return a._tag == b._tag;
+      return a.TagValue == b.TagValue;
    }
 
    public static bool operator !=(Tag a, Tag b)
    {
-      return a._tag != b._tag;
+      return a.TagValue != b.TagValue;
    }
 
    // Add an empty state to the Tag struct
@@ -94,6 +99,6 @@ public readonly struct Tag(string tag) : IEquatable<Tag>, IComparable
 
    public bool Equals(Tag other)
    {
-      return _tag == other._tag;
+      return TagValue == other.TagValue;
    }
 }

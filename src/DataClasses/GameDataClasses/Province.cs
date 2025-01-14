@@ -87,17 +87,21 @@ namespace Editor.DataClasses.GameDataClasses
 
       // ##################### Simple setter #####################
       # region SimpleSetter
+
+      [GameIcon(GameIcons.Claim)]
       public List<Tag> Claims
       {
          get => _claims;
          set => SetIfModifiedEnumerable<List<Tag>, Tag>(ref _claims, value);
       }
 
+      [GameIcon(GameIcons.Claim)]
       public List<Tag> PermanentClaims
       {
          get => _permanentClaims;
          set => SetIfModifiedEnumerable<List<Tag>, Tag>(ref _permanentClaims, value);
       }
+      [GameIcon(GameIcons.Core, false)]
       public List<Tag> Cores
       {
          get => _cores;

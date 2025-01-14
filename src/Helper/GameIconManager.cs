@@ -18,6 +18,8 @@ namespace Editor.Helper
       Yes,
       No,
       Building,
+      Core,
+      Claim,
    }
 
 
@@ -35,6 +37,8 @@ namespace Editor.Helper
          FromIconStrip(GameIcons.No, 1, 2, "gfx", "interface", "eligible_noneligible_strip.dds");
          FromPath(GameIcons.None, "gfx", "interface", "default_fallback_texture.dds");
          FromPath(GameIcons.Building, "gfx", "interface", "technologyView_show_buildings.dds");
+         FromPath(GameIcons.Core, "gfx", "interface", "core_icon.dds");
+         FromPath(GameIcons.Claim, "gfx", "interface", "ideas_EU4", "fabricate_claims_cost.dds");
       }
 
       public GameIconDefinition(GameIcons iconEnum)

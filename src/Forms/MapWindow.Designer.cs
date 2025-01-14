@@ -121,9 +121,6 @@
          ProvinceScrollPanel = new Panel();
          ProvinceEditingLayout = new TableLayoutPanel();
          DiscoveredByGroupBox = new GroupBox();
-         CoresGroupBox = new GroupBox();
-         CoresAndClaimsBox = new GroupBox();
-         CoresAndClaimLayoutPanel = new TableLayoutPanel();
          OptionalsTabControl = new TabControl();
          NativesTab = new TabPage();
          NativesLayoutPanel = new TableLayoutPanel();
@@ -265,7 +262,6 @@
          ProvinceFooterMainTLP.SuspendLayout();
          ProvinceScrollPanel.SuspendLayout();
          ProvinceEditingLayout.SuspendLayout();
-         CoresAndClaimsBox.SuspendLayout();
          OptionalsTabControl.SuspendLayout();
          NativesTab.SuspendLayout();
          NativesLayoutPanel.SuspendLayout();
@@ -1062,8 +1058,6 @@
          ProvinceEditingLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
          ProvinceEditingLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
          ProvinceEditingLayout.Controls.Add(DiscoveredByGroupBox, 0, 4);
-         ProvinceEditingLayout.Controls.Add(CoresGroupBox, 0, 2);
-         ProvinceEditingLayout.Controls.Add(CoresAndClaimsBox, 0, 1);
          ProvinceEditingLayout.Controls.Add(OptionalsTabControl, 0, 5);
          ProvinceEditingLayout.Controls.Add(groupBox5, 0, 3);
          ProvinceEditingLayout.Controls.Add(groupBox6, 1, 3);
@@ -1097,46 +1091,6 @@
          DiscoveredByGroupBox.TabIndex = 9;
          DiscoveredByGroupBox.TabStop = false;
          DiscoveredByGroupBox.Text = "DiscoveredBy";
-         // 
-         // CoresGroupBox
-         // 
-         CoresGroupBox.Dock = DockStyle.Fill;
-         CoresGroupBox.Location = new Point(3, 307);
-         CoresGroupBox.Margin = new Padding(3, 0, 3, 0);
-         CoresGroupBox.Name = "CoresGroupBox";
-         CoresGroupBox.Padding = new Padding(0);
-         CoresGroupBox.Size = new Size(188, 112);
-         CoresGroupBox.TabIndex = 8;
-         CoresGroupBox.TabStop = false;
-         CoresGroupBox.Text = "Cores";
-         // 
-         // CoresAndClaimsBox
-         // 
-         ProvinceEditingLayout.SetColumnSpan(CoresAndClaimsBox, 2);
-         CoresAndClaimsBox.Controls.Add(CoresAndClaimLayoutPanel);
-         CoresAndClaimsBox.Dock = DockStyle.Fill;
-         CoresAndClaimsBox.Location = new Point(3, 195);
-         CoresAndClaimsBox.Margin = new Padding(3, 0, 3, 0);
-         CoresAndClaimsBox.Name = "CoresAndClaimsBox";
-         CoresAndClaimsBox.Padding = new Padding(0);
-         CoresAndClaimsBox.Size = new Size(382, 112);
-         CoresAndClaimsBox.TabIndex = 4;
-         CoresAndClaimsBox.TabStop = false;
-         CoresAndClaimsBox.Text = "Claims";
-         // 
-         // CoresAndClaimLayoutPanel
-         // 
-         CoresAndClaimLayoutPanel.ColumnCount = 2;
-         CoresAndClaimLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-         CoresAndClaimLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-         CoresAndClaimLayoutPanel.Dock = DockStyle.Fill;
-         CoresAndClaimLayoutPanel.Location = new Point(0, 16);
-         CoresAndClaimLayoutPanel.Margin = new Padding(0);
-         CoresAndClaimLayoutPanel.Name = "CoresAndClaimLayoutPanel";
-         CoresAndClaimLayoutPanel.RowCount = 1;
-         CoresAndClaimLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-         CoresAndClaimLayoutPanel.Size = new Size(382, 96);
-         CoresAndClaimLayoutPanel.TabIndex = 0;
          // 
          // OptionalsTabControl
          // 
@@ -2839,7 +2793,6 @@
          ProvinceScrollPanel.ResumeLayout(false);
          ProvinceScrollPanel.PerformLayout();
          ProvinceEditingLayout.ResumeLayout(false);
-         CoresAndClaimsBox.ResumeLayout(false);
          OptionalsTabControl.ResumeLayout(false);
          NativesTab.ResumeLayout(false);
          NativesLayoutPanel.ResumeLayout(false);
@@ -2936,7 +2889,6 @@
       private TabPage CountryPage;
       private TabPage ProvinceGroupsPage;
       private TableLayoutPanel ProvinceEditingLayout;
-      private GroupBox CoresGroupBox;
       private GroupBox groupBox6;
       private TableLayoutPanel TradePanel;
       private Label label11;
@@ -2950,8 +2902,6 @@
       private Label label6;
       private Label label7;
       private Label label8;
-      private GroupBox CoresAndClaimsBox;
-      private TableLayoutPanel CoresAndClaimLayoutPanel;
       private TabControl OptionalsTabControl;
       private TabPage NativesTab;
       private TabPage TradeCompanyTab;

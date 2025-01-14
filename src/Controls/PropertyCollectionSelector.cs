@@ -74,7 +74,7 @@ namespace Editor.Controls
             ColumnCount = 2,
             RowStyles =
             {
-               new (SizeType.Absolute, 27),
+               new (SizeType.Absolute, 40),
                new (SizeType.Percent, 100),
                new (SizeType.Absolute, 27),
             },
@@ -89,9 +89,10 @@ namespace Editor.Controls
          {
             Dock = DockStyle.Fill,
             TextAlign = ContentAlignment.MiddleLeft,
-            Text = PropertyInfo.Name,
+            Text = AttributeHelper.GetStringWithoutCamelCase(PropertyInfo.Name),
             Margin = new(2, 2, 1, 1),
             BorderStyle = BorderStyle.FixedSingle,
+            Font = new("Arial", 8, FontStyle.Bold)
          };
 
          _modifyButton = new()

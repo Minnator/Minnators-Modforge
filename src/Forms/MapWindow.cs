@@ -33,10 +33,6 @@ namespace Editor.Forms
    {
       #region CustomEditingControls
 
-      private ItemList _claims = null!;
-      private ItemList _permanentClaims = null!;
-      private ItemList _cores = null!;
-      private ItemList _buildings = null!;
       private ItemList _discoveredBy = null!;
 
       private BindablePropertyComboBox<Province, Religion, string> _religionComboBox = null!;
@@ -89,6 +85,9 @@ namespace Editor.Forms
       private PropertyLabel<Province> ProvAdjLabel = null!;
 
       private PropertyCollectionSelector<Province, List<Building>, Building> _buildingsSelector = null!;
+      private PropertyCollectionSelector<Province, List<Tag>, Tag> _coreSelector = null!;
+      private PropertyCollectionSelector<Province, List<Tag>, Tag> _claimSelector = null!;
+      private PropertyCollectionSelector<Province, List<Tag>, Tag> _permaClaimSelector = null!;
 
       public Screen? StartScreen = null;
 
@@ -425,27 +424,20 @@ namespace Editor.Forms
          _controllerTagBox = ControlFactory.GetTagComboBox(typeof(Province).GetProperty(nameof(Province.Controller))!, Globals.Countries);
          MisProvinceData.Controls.Add(_controllerTagBox, 1, 1);
 
-         _cores = ControlFactory.GetItemList(nameof(Province.Cores), ItemTypes.Tag, [], "Cores");
-         _cores.OnItemAdded += ProvinceEditingEvents.OnItemAddedModified;
-         _cores.OnItemRemoved += ProvinceEditingEvents.OnItemRemoveModified;
-         _claims = ControlFactory.GetItemList(nameof(Province.Claims), ItemTypes.Tag, [], "Regular");
-         _claims.OnItemAdded += ProvinceEditingEvents.OnItemAddedModified;
-         _claims.OnItemRemoved += ProvinceEditingEvents.OnItemRemoveModified;
-         _permanentClaims = ControlFactory.GetItemList(nameof(Province.PermanentClaims), ItemTypes.Tag, [], "Permanent");
-         _permanentClaims.OnItemAdded += ProvinceEditingEvents.OnItemAddedModified;
-         _permanentClaims.OnItemRemoved += ProvinceEditingEvents.OnItemRemoveModified;
+         _coreSelector = new(typeof(Province).GetProperty(nameof(Province.Cores)),
+                             ref LoadGuiEvents.ProvLoadAction,
+                             () => Selection.GetSelectedProvinces,
+                             Globals.Countries.Keys.ToList(),
+                             typeof(Tag).GetProperty("TagValue")!)
+         {
+            Dock = DockStyle.Fill,
+            Margin = new(1),
+         };
+         ProvinceEditingLayout.Controls.Add(_coreSelector, 0, 2);
 
-         _buildings = ControlFactory.GetItemListObjects(nameof(Province.Buildings), ItemTypes.String, [.. Globals.Buildings], "Building");
-         _buildings.OnItemAdded += ProvinceEditingEvents.OnItemAddedModified;
-         _buildings.OnItemRemoved += ProvinceEditingEvents.OnItemRemoveModified;
          _discoveredBy = ControlFactory.GetItemList(nameof(Province.DiscoveredBy), ItemTypes.String, [.. Globals.TechnologyGroups.Keys], "TechGroup");
          _discoveredBy.OnItemAdded += ProvinceEditingEvents.OnItemAddedModified;
          _discoveredBy.OnItemRemoved += ProvinceEditingEvents.OnItemRemoveModified;
-
-         CoresAndClaimLayoutPanel.Controls.Add(_permanentClaims, 0, 0);
-         CoresAndClaimLayoutPanel.Controls.Add(_claims, 1, 0);
-         CoresGroupBox.Controls.Add(_cores);
-         _cores.Location = new(0, 18);
 
 
          _buildingsSelector = new(typeof(Province).GetProperty(nameof(Province.Buildings)),
@@ -459,7 +451,29 @@ namespace Editor.Forms
          };
          ProvinceEditingLayout.Controls.Add(_buildingsSelector, 1, 2);
 
-         _buildings.Location = new(0, 18);
+         _claimSelector = new(typeof(Province).GetProperty(nameof(Province.Claims)),
+                              ref LoadGuiEvents.ProvLoadAction,
+                              () => Selection.GetSelectedProvinces,
+                              Globals.Countries.Keys.ToList(),
+                              typeof(Tag).GetProperty("TagValue")!)
+         {
+            Dock = DockStyle.Fill,
+            Margin = new(1),
+         };
+         ProvinceEditingLayout.Controls.Add(_claimSelector, 0, 1);
+
+         _permaClaimSelector = new(typeof(Province).GetProperty(nameof(Province.PermanentClaims)),
+                                   ref LoadGuiEvents.ProvLoadAction,
+                                   () => Selection.GetSelectedProvinces,
+                                   Globals.Countries.Keys.ToList(),
+                                   typeof(Tag).GetProperty("TagValue")!)
+         {
+            Dock = DockStyle.Fill,
+            Margin = new(1),
+         };
+         ProvinceEditingLayout.Controls.Add(_permaClaimSelector, 1, 1);
+
+
          DiscoveredByGroupBox.Controls.Add(_discoveredBy);
          _discoveredBy.Location = new(0, 18);
 
@@ -609,10 +623,10 @@ namespace Editor.Forms
          _taxNumeric.SetDefault();
          _prdNumeric.SetDefault();
          _mnpNumeric.SetDefault();
-         _claims.Clear();
-         _permanentClaims.Clear();
-         _cores.Clear();
-         _buildings.Clear();
+         _claimSelector.SetDefault();
+         _permaClaimSelector.SetDefault();
+         _coreSelector.SetDefault();
+         _buildingsSelector.SetDefault();
          _discoveredBy.Clear();
          _autonomyNumeric.SetDefault();
          _devastationNumeric.SetDefault();

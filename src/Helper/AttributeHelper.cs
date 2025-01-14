@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
+using System.Text;
 
 namespace Editor.Helper
 {
@@ -153,6 +154,22 @@ namespace Editor.Helper
                return false;
 
          return true;
+      }
+
+      public static string GetStringWithoutCamelCase(string camelString)
+      {
+         var sb = new StringBuilder();
+         var first = true;
+         foreach (var c in camelString)
+         {
+            if (char.IsUpper(c))
+               if (!first)
+                  sb.Append(' ');
+               else
+                  first = false;
+            sb.Append(c);
+         }
+         return sb.ToString();
       }
    }
 }
