@@ -120,7 +120,6 @@
          ProvinceFooterMainTLP = new TableLayoutPanel();
          ProvinceScrollPanel = new Panel();
          ProvinceEditingLayout = new TableLayoutPanel();
-         DiscoveredByGroupBox = new GroupBox();
          OptionalsTabControl = new TabControl();
          NativesTab = new TabPage();
          NativesLayoutPanel = new TableLayoutPanel();
@@ -1057,7 +1056,6 @@
          ProvinceEditingLayout.ColumnCount = 2;
          ProvinceEditingLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
          ProvinceEditingLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-         ProvinceEditingLayout.Controls.Add(DiscoveredByGroupBox, 0, 4);
          ProvinceEditingLayout.Controls.Add(OptionalsTabControl, 0, 5);
          ProvinceEditingLayout.Controls.Add(groupBox5, 0, 3);
          ProvinceEditingLayout.Controls.Add(groupBox6, 1, 3);
@@ -1068,29 +1066,15 @@
          ProvinceEditingLayout.Margin = new Padding(0);
          ProvinceEditingLayout.Name = "ProvinceEditingLayout";
          ProvinceEditingLayout.RowCount = 7;
-         ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 195F));
-         ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 112F));
-         ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 112F));
+         ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 200F));
+         ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 110F));
+         ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 110F));
          ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 90F));
          ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 112F));
          ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 200F));
          ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-         ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-         ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-         ProvinceEditingLayout.Size = new Size(388, 861);
+         ProvinceEditingLayout.Size = new Size(388, 862);
          ProvinceEditingLayout.TabIndex = 0;
-         // 
-         // DiscoveredByGroupBox
-         // 
-         DiscoveredByGroupBox.Dock = DockStyle.Fill;
-         DiscoveredByGroupBox.Location = new Point(3, 509);
-         DiscoveredByGroupBox.Margin = new Padding(3, 0, 3, 0);
-         DiscoveredByGroupBox.Name = "DiscoveredByGroupBox";
-         DiscoveredByGroupBox.Padding = new Padding(0);
-         DiscoveredByGroupBox.Size = new Size(188, 112);
-         DiscoveredByGroupBox.TabIndex = 9;
-         DiscoveredByGroupBox.TabStop = false;
-         DiscoveredByGroupBox.Text = "DiscoveredBy";
          // 
          // OptionalsTabControl
          // 
@@ -1099,7 +1083,7 @@
          OptionalsTabControl.Controls.Add(TradeCompanyTab);
          OptionalsTabControl.Controls.Add(ModifiersTab);
          OptionalsTabControl.Dock = DockStyle.Fill;
-         OptionalsTabControl.Location = new Point(3, 624);
+         OptionalsTabControl.Location = new Point(3, 625);
          OptionalsTabControl.Name = "OptionalsTabControl";
          OptionalsTabControl.SelectedIndex = 0;
          OptionalsTabControl.Size = new Size(382, 194);
@@ -1390,7 +1374,7 @@
          // 
          groupBox5.Controls.Add(FloatLayoutPanel);
          groupBox5.Dock = DockStyle.Fill;
-         groupBox5.Location = new Point(3, 419);
+         groupBox5.Location = new Point(3, 420);
          groupBox5.Margin = new Padding(3, 0, 3, 0);
          groupBox5.Name = "groupBox5";
          groupBox5.Padding = new Padding(0);
@@ -1455,7 +1439,7 @@
          // 
          groupBox6.Controls.Add(TradePanel);
          groupBox6.Dock = DockStyle.Fill;
-         groupBox6.Location = new Point(197, 419);
+         groupBox6.Location = new Point(197, 420);
          groupBox6.Margin = new Padding(3, 0, 3, 0);
          groupBox6.Name = "groupBox6";
          groupBox6.Padding = new Padding(0);
@@ -1520,7 +1504,7 @@
          // 
          LocalisationGroupBox.Controls.Add(LocTableLayoutPanel);
          LocalisationGroupBox.Dock = DockStyle.Fill;
-         LocalisationGroupBox.Location = new Point(197, 509);
+         LocalisationGroupBox.Location = new Point(197, 510);
          LocalisationGroupBox.Margin = new Padding(3, 0, 3, 0);
          LocalisationGroupBox.Name = "LocalisationGroupBox";
          LocalisationGroupBox.Padding = new Padding(0);
@@ -1603,7 +1587,7 @@
          MiscProvGroupBox.Location = new Point(3, 3);
          MiscProvGroupBox.Name = "MiscProvGroupBox";
          MiscProvGroupBox.Padding = new Padding(3, 0, 3, 0);
-         MiscProvGroupBox.Size = new Size(382, 189);
+         MiscProvGroupBox.Size = new Size(382, 194);
          MiscProvGroupBox.TabIndex = 12;
          MiscProvGroupBox.TabStop = false;
          MiscProvGroupBox.Text = "Misc Province Data";
@@ -1640,7 +1624,7 @@
          MisProvinceData.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
          MisProvinceData.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
          MisProvinceData.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-         MisProvinceData.Size = new Size(376, 173);
+         MisProvinceData.Size = new Size(376, 178);
          MisProvinceData.TabIndex = 12;
          // 
          // label6
@@ -1768,11 +1752,12 @@
          // 
          label50.AutoSize = true;
          label50.Dock = DockStyle.Fill;
+         label50.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
          label50.Location = new Point(191, 125);
          label50.Name = "label50";
          label50.Size = new Size(88, 25);
          label50.TabIndex = 9;
-         label50.Text = "Praliament Seat";
+         label50.Text = "Parliament Seat";
          label50.TextAlign = ContentAlignment.MiddleLeft;
          // 
          // label51
@@ -1781,7 +1766,7 @@
          label51.Dock = DockStyle.Fill;
          label51.Location = new Point(191, 150);
          label51.Name = "label51";
-         label51.Size = new Size(88, 25);
+         label51.Size = new Size(88, 28);
          label51.TabIndex = 10;
          label51.Text = "Has Revolt";
          label51.TextAlign = ContentAlignment.MiddleLeft;
@@ -2911,7 +2896,6 @@
       private Label label9;
       private Label label10;
       private Label DevastationLabel;
-      private GroupBox DiscoveredByGroupBox;
       private Label label14;
       private Label label15;
       private ToolStripMenuItem saveSelectionToolStripMenuItem;

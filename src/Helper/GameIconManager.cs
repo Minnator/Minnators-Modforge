@@ -20,6 +20,7 @@ namespace Editor.Helper
       Building,
       Core,
       Claim,
+      DiscoverAchievement,
    }
 
 
@@ -39,6 +40,7 @@ namespace Editor.Helper
          FromPath(GameIcons.Building, "gfx", "interface", "technologyView_show_buildings.dds");
          FromPath(GameIcons.Core, "gfx", "interface", "core_icon.dds");
          FromPath(GameIcons.Claim, "gfx", "interface", "ideas_EU4", "fabricate_claims_cost.dds");
+         FromPath(GameIcons.DiscoverAchievement, "gfx", "interface", "achievements", "achievement_world_discoverer.dds");
       }
 
       public GameIconDefinition(GameIcons iconEnum)

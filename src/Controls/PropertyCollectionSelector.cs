@@ -16,7 +16,7 @@ namespace Editor.Controls
       public PropertyInfo PropertyInfo { get; init; }
       private readonly Func<List<TSaveable>> _getSaveables;
       private CollectionSelectorBase _collectionSelectorBase;
-      private PropertyInfo _displayMember;
+      private PropertyInfo? _displayMember;
       private List<TPropertyItem> _startList = [];
       private Bitmap? _image = null;
 
@@ -27,24 +27,37 @@ namespace Editor.Controls
       private ListBox _previewList;
       private PictureBox _iconBox;
 
+      private bool _rawStringMode;
+
       public PropertyCollectionSelector(PropertyInfo? propertyInfo, ref LoadGuiEvents.LoadAction<TSaveable> loadHandle, Func<List<TSaveable>> getSaveables,
-                                        List<TPropertyItem> sourceItems, PropertyInfo displayMember)
+                                        List<TPropertyItem> sourceItems, PropertyInfo? displayMember)
       {
          Debug.Assert(propertyInfo is not null && propertyInfo.DeclaringType == typeof(TSaveable),
                       $"PropInfo: {propertyInfo} declaring type is not of type {typeof(TSaveable)} but of type {propertyInfo.DeclaringType}");
          Debug.Assert(propertyInfo.PropertyType == typeof(TProperty),
                       $"PropInfo: {propertyInfo} is not of type {typeof(TProperty)} but of type {propertyInfo.PropertyType}");
          if (sourceItems.Count >= 1)
-            Debug.Assert(displayMember != null && displayMember.GetValue(sourceItems[0]) != null, $"{typeof(TPropertyItem)} does not define a display member {displayMember}");
+            if (displayMember == null && typeof(TPropertyItem) == typeof(string))
+               _rawStringMode = true;
+            else
+               Debug.Assert(displayMember != null && displayMember.GetValue(sourceItems[0]) != null, $"{typeof(TPropertyItem)} does not define a display member {displayMember}");
 
          PropertyInfo = propertyInfo;
          _getSaveables = getSaveables;
          loadHandle += ((IPropertyControlList<TSaveable, TProperty, TPropertyItem>)this).LoadToGui;
          _displayMember = displayMember;
 
-         _collectionSelectorBase = new(GetDisplayMember(sourceItems, displayMember));
+         if (!_rawStringMode)
+            _collectionSelectorBase = new(GetDisplayMember(sourceItems, displayMember));
+         else
+            _collectionSelectorBase = new([..sourceItems.Cast<string>()]);
+
+
          if (AttributeHelper.GetSharedAttributeList<TSaveable, TProperty, TPropertyItem>(PropertyInfo, out var items, getSaveables.Invoke()))
-            _collectionSelectorBase.SetSelectedItems(GetDisplayMember(items, displayMember));
+            if (_rawStringMode)
+               _collectionSelectorBase.SetSelectedItems([..items.Cast<string>()]);
+            else
+               _collectionSelectorBase.SetSelectedItems(GetDisplayMember(items, displayMember));
 
          Text = "Modify";
 
@@ -168,8 +181,10 @@ namespace Editor.Controls
             var remove = _startList.Except(value).ToHashSet();
             var add = value.Except(_startList).ToHashSet();
             Saveable.SetFieldEditCollection<TSaveable, TProperty, TPropertyItem>(_getSaveables.Invoke(), add, remove, PropertyInfo);
-
-            SetPreview(GetDisplayMember(value, _displayMember));
+            if (!_rawStringMode)
+               SetPreview(GetDisplayMember(value, _displayMember));
+            else
+               SetPreview(value.Cast<string>().ToList());
          }
       }
 
@@ -193,7 +208,7 @@ namespace Editor.Controls
 
       public void SetValue(TProperty value)
       {
-         var values = GetDisplayMember(value, _displayMember);
+         var values = _rawStringMode ? value.Cast<string>().ToList() : GetDisplayMember(value, _displayMember);
          _collectionSelectorBase.SetSelectedItems(values);
          SetPreview(values);
       }

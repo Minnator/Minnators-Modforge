@@ -219,6 +219,7 @@ namespace Editor.DataClasses.GameDataClasses
          set => SetField(ref _prosperity, value);
       }
 
+      [GameIcon(GameIcons.DiscoverAchievement)]
       public List<string> DiscoveredBy
       {
          get => _discoveredBy;

@@ -33,8 +33,6 @@ namespace Editor.Forms
    {
       #region CustomEditingControls
 
-      private ItemList _discoveredBy = null!;
-
       private BindablePropertyComboBox<Province, Religion, string> _religionComboBox = null!;
       private PropertyComboBox<Province, int> _tradeCenterComboBox = null!;
       private BindablePropertyComboBox<Province, TradeGood, string> _tradeGoodsComboBox = null!;
@@ -88,6 +86,7 @@ namespace Editor.Forms
       private PropertyCollectionSelector<Province, List<Tag>, Tag> _coreSelector = null!;
       private PropertyCollectionSelector<Province, List<Tag>, Tag> _claimSelector = null!;
       private PropertyCollectionSelector<Province, List<Tag>, Tag> _permaClaimSelector = null!;
+      private PropertyCollectionSelector<Province, List<string>, string> _discoveredBy = null!;
 
       public Screen? StartScreen = null;
 
@@ -435,9 +434,16 @@ namespace Editor.Forms
          };
          ProvinceEditingLayout.Controls.Add(_coreSelector, 0, 2);
 
-         _discoveredBy = ControlFactory.GetItemList(nameof(Province.DiscoveredBy), ItemTypes.String, [.. Globals.TechnologyGroups.Keys], "TechGroup");
-         _discoveredBy.OnItemAdded += ProvinceEditingEvents.OnItemAddedModified;
-         _discoveredBy.OnItemRemoved += ProvinceEditingEvents.OnItemRemoveModified;
+         _discoveredBy = new(typeof(Province).GetProperty(nameof(Province.DiscoveredBy)),
+                             ref LoadGuiEvents.ProvLoadAction,
+                             () => Selection.GetSelectedProvinces,
+                             [..Globals.Countries.Keys.Select(x => x.TagValue).ToList(), ..Globals.TechnologyGroups.Keys],
+                             null!)
+         {
+            Dock = DockStyle.Fill,
+            Margin = new(1),
+         };
+         ProvinceEditingLayout.Controls.Add(_discoveredBy, 0, 4);
 
 
          _buildingsSelector = new(typeof(Province).GetProperty(nameof(Province.Buildings)),
@@ -474,7 +480,6 @@ namespace Editor.Forms
          ProvinceEditingLayout.Controls.Add(_permaClaimSelector, 1, 1);
 
 
-         DiscoveredByGroupBox.Controls.Add(_discoveredBy);
          _discoveredBy.Location = new(0, 18);
 
          _tradeCenterComboBox = ControlFactory.SimpleComboBoxProvince<int>(typeof(Province).GetProperty(nameof(Province.CenterOfTrade))!);
@@ -627,7 +632,7 @@ namespace Editor.Forms
          _permaClaimSelector.SetDefault();
          _coreSelector.SetDefault();
          _buildingsSelector.SetDefault();
-         _discoveredBy.Clear();
+         _discoveredBy.SetDefault();
          _autonomyNumeric.SetDefault();
          _devastationNumeric.SetDefault();
          _prosperityNumeric.SetDefault();
