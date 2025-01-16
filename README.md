@@ -4,7 +4,7 @@ This is a tool created for visual editing of the EU4 map and its contents.
 It is still in development but is making steady progress.
 
 ## Official Discord Server
-Here you can find more information and help with issues, or report bugs:
+Here you can find Alpha-releases, more information and help with issues, or report bugs:
 [Discord Server](https://discord.gg/22AhD5qkme)
 
 ## Current capabilities:
