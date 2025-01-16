@@ -437,7 +437,7 @@ namespace Editor.Forms
          _discoveredBy = new(typeof(Province).GetProperty(nameof(Province.DiscoveredBy)),
                              ref LoadGuiEvents.ProvLoadAction,
                              () => Selection.GetSelectedProvinces,
-                             [..Globals.Countries.Keys.Select(x => x.TagValue).ToList(), ..Globals.TechnologyGroups.Keys],
+                             [.. Globals.Countries.Keys.Select(x => x.TagValue).ToList(), .. Globals.TechnologyGroups.Keys],
                              null!)
          {
             Dock = DockStyle.Fill,
@@ -1053,7 +1053,7 @@ namespace Editor.Forms
                                  () => [Selection.SelectedCountry.HistoryCountry],
                                  Globals.Cultures.Values.ToList(),
                                  typeof(Culture).GetProperty("Name"));
-         
+
 
          CulturesTLP.Controls.Add(_primaryCultureBox, 0, 1);
          CulturesTLP.Controls.Add(_acceptedCultures, 1, 0);
@@ -1539,6 +1539,14 @@ namespace Editor.Forms
 
       private void propertyCollectionSelectorToolStripMenuItem_Click(object sender, EventArgs e)
       {
+      }
+
+      private void generateTextureAtlasPacedToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         var path = Path.Combine(Globals.DebugPath, "atlas.png");
+         GameIconDefinition.CreateSpriteSheetPacked(GameIconDefinition.Icons.Select(x => x.Value.Icon).ToList(), path);
+
+
       }
    }
 }

@@ -90,6 +90,7 @@
          telescopeToolStripMenuItem = new ToolStripMenuItem();
          collectionSelectorBaseToolStripMenuItem = new ToolStripMenuItem();
          propertyCollectionSelectorToolStripMenuItem = new ToolStripMenuItem();
+         generateTextureAtlasPacedToolStripMenuItem = new ToolStripMenuItem();
          ProvinceCollectionsLayoutPanel = new TableLayoutPanel();
          FocusSelectionCheckBox = new CheckBox();
          BottomToolStrip = new ToolStrip();
@@ -686,7 +687,7 @@
          // 
          // debugToolStripMenuItem
          // 
-         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, collectionSelectorBaseToolStripMenuItem, propertyCollectionSelectorToolStripMenuItem });
+         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, collectionSelectorBaseToolStripMenuItem, propertyCollectionSelectorToolStripMenuItem, generateTextureAtlasPacedToolStripMenuItem });
          debugToolStripMenuItem.Enabled = false;
          debugToolStripMenuItem.Name = "debugToolStripMenuItem";
          debugToolStripMenuItem.Size = new Size(54, 23);
@@ -720,6 +721,13 @@
          propertyCollectionSelectorToolStripMenuItem.Size = new Size(221, 22);
          propertyCollectionSelectorToolStripMenuItem.Text = "Property Collection Selector";
          propertyCollectionSelectorToolStripMenuItem.Click += propertyCollectionSelectorToolStripMenuItem_Click;
+         // 
+         // generateTextureAtlasPacedToolStripMenuItem
+         // 
+         generateTextureAtlasPacedToolStripMenuItem.Name = "generateTextureAtlasPacedToolStripMenuItem";
+         generateTextureAtlasPacedToolStripMenuItem.Size = new Size(221, 22);
+         generateTextureAtlasPacedToolStripMenuItem.Text = "GenerateTextureAtlasPaced";
+         generateTextureAtlasPacedToolStripMenuItem.Click += generateTextureAtlasPacedToolStripMenuItem_Click;
          // 
          // ProvinceCollectionsLayoutPanel
          // 
@@ -3063,6 +3071,7 @@
       private ToolStripMenuItem collectionSelectorBaseToolStripMenuItem;
       private ToolStripMenuItem propertyCollectionSelectorToolStripMenuItem;
       private GroupBox HistoryCountryCultures;
+      private ToolStripMenuItem generateTextureAtlasPacedToolStripMenuItem;
    }
 }
 

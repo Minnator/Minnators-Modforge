@@ -66,6 +66,64 @@ namespace Editor.Helper
             Globals.ErrorLog.Write($"Error: Icon {iconEnum} already exists in Icon Dictionary!");
       }
 
+      public static void CreateSpriteSheetPacked(List<Bitmap> icons, string outputPath)
+      {
+         if (icons == null || icons.Count == 0)
+            throw new ArgumentException("The icons list is empty.", nameof(icons));
+
+         // Packing layout variables
+         const int spacing = 0;
+         var currentX = 0;
+         var rowHeight = 0;
+
+         int maxWidth = 0, totalHeight = 0;
+
+         foreach (var icon in icons)
+         {
+            if (currentX + icon.Width > maxWidth)
+            {
+               // Move to next row
+               totalHeight += rowHeight + spacing;
+               currentX = 0;
+               rowHeight = 0;
+            }
+
+            rowHeight = Math.Max(rowHeight, icon.Height);
+            currentX += icon.Width + spacing;
+            maxWidth = Math.Max(maxWidth, currentX);
+         }
+
+         totalHeight += rowHeight; // Add height of the last row
+
+         // Create the sprite sheet
+         using var spriteSheet = new Bitmap(maxWidth, totalHeight, PixelFormat.Format32bppArgb);
+         using (var g = Graphics.FromImage(spriteSheet))
+         {
+            g.Clear(Color.Transparent);
+
+            currentX = 0;
+            var currentY = 0;
+            rowHeight = 0;
+
+            // Draw each icon
+            foreach (var icon in icons)
+            {
+               if (currentX + icon.Width > maxWidth)
+               {
+                  currentY += rowHeight + spacing;
+                  currentX = 0;
+                  rowHeight = 0;
+               }
+
+               g.DrawImage(icon, currentX, currentY, icon.Width, icon.Height);
+               currentX += icon.Width + spacing;
+               rowHeight = Math.Max(rowHeight, icon.Height);
+            }
+         }
+         spriteSheet.Save(outputPath, ImageFormat.Png);
+      }
+
+
       public static void UpdatePaddings()
       {
          foreach (var icon in Icons.Values)

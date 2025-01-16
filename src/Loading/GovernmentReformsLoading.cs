@@ -15,21 +15,7 @@ namespace Editor.Loading
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "government_reforms");
 
          //TODO parallelize
-         foreach (var file in files)
-         {
-            ParseGovernmentReformsFile(file);
-         }
-
-#if DEBUG
-         var sb = new StringBuilder();
-         sb.AppendLine("Government Reforms:");
-         foreach (var reform in Globals.GovernmentReforms.Values)
-         {
-            sb.AppendLine(reform.ToString());
-         }
-         File.WriteAllText(Path.Combine(Globals.DebugPath, "government_reforms.txt"), sb.ToString());
-#endif
-
+         Parallel.ForEach(files, ParseGovernmentReformsFile);
       }
 
       private static void ParseGovernmentReformsFile(string path)
@@ -48,11 +34,13 @@ namespace Editor.Loading
             var reform = new GovernmentReform(reformBlock.Name);
             ParseReformBlocks(reformBlock.GetBlockElements, ref reform);
             ParseReformContent(reformBlock.GetContent, ref reform);
-
-            if (!Globals.GovernmentReforms.TryAdd(reform.Name, reform))
+            lock (Globals.GovernmentReforms)
             {
-               Globals.ErrorLog.Write($"Duplicate government reform in file {path}: {reform.Name} already exists");
-               continue;
+               if (!Globals.GovernmentReforms.TryAdd(reform.Name, reform))
+               {
+                  Globals.ErrorLog.Write($"Duplicate government reform in file {path}: {reform.Name} already exists");
+                  continue;
+               }
             }
          }
       }
