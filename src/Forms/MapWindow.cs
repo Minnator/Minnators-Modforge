@@ -945,7 +945,7 @@ namespace Editor.Forms
       public ThreeColorStripesButton RevolutionColorPickerButton = null!;
 
       private ItemList _governmentReforms = null!;
-      private ItemList _acceptedCultures = null!;
+      private PropertyCollectionSelector<HistoryCountry, List<Culture>, Culture> _acceptedCultures = null!;
 
       private NamesEditor _leaderEditor = null!;
       private NamesEditor _shipEditor = null!;
@@ -1044,14 +1044,20 @@ namespace Editor.Forms
          _primaryCultureBox = ControlFactory.GetBindablePropertyComboBoxHistoryCountry(typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.PrimaryCulture))!,
                                                                                        Globals.Cultures,
                                                                                        margin: ControlFactory.DefaultMarginType.Slim);
-         _primaryCultureBox.Margin = new(1, 1, 6, 1);
-         _acceptedCultures = ControlFactory.GetItemList(nameof(HistoryCountry.AcceptedCultures), ItemTypes.FullWidth, [.. Globals.Cultures.Keys], "Accepted Cultures");
-         _acceptedCultures.OnItemAdded += CountryGuiEvents.AcceptedCultures_OnItemAdded;
-         _acceptedCultures.OnItemRemoved += CountryGuiEvents.AcceptedCultures_OnItemRemoved;
+         _primaryCultureBox.Dock = DockStyle.None;
+         _primaryCultureBox.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
+         _primaryCultureBox.Margin = new(3);
 
-         CulturesTLP.Controls.Add(_primaryCultureBox, 1, 0);
-         CulturesTLP.Controls.Add(_acceptedCultures, 0, 1);
-         CulturesTLP.SetColumnSpan(_acceptedCultures, 2);
+         _acceptedCultures = new(typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.AcceptedCultures)),
+                                 ref LoadGuiEvents.HistoryCountryLoadAction,
+                                 () => [Selection.SelectedCountry.HistoryCountry],
+                                 Globals.Cultures.Values.ToList(),
+                                 typeof(Culture).GetProperty("Name"));
+         
+
+         CulturesTLP.Controls.Add(_primaryCultureBox, 0, 1);
+         CulturesTLP.Controls.Add(_acceptedCultures, 1, 0);
+         CulturesTLP.SetRowSpan(_acceptedCultures, 2);
 
          // Development
          _countryDevelopmentNumeric = ControlFactory.GetExtendedNumeric("");
@@ -1141,7 +1147,7 @@ namespace Editor.Forms
 
          // Cultures
          _primaryCultureBox.SetDefault();
-         _acceptedCultures.Clear();
+         _acceptedCultures.SetDefault();
 
          // Government
          _governmentTypeBox.SelectedIndex = 0;

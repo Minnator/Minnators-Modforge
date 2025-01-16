@@ -109,26 +109,6 @@ namespace Editor.Events
             Selection.SelectedCountry.HistoryCountry.GovernmentRank = rank;
       }
 
-      public static void AcceptedCultures_OnItemRemoved(object? sender, ProvinceEditedEventArgs e)
-      {
-         if (Selection.SelectedCountry == Country.Empty)
-            return;
-         if (e.Value is not string reform) 
-            return;
-         var items = new List<string>(Selection.SelectedCountry.HistoryCountry.AcceptedCultures);
-         items.Remove(reform);
-         Selection.SelectedCountry.HistoryCountry.AcceptedCultures = items;
-      }
-
-      public static void AcceptedCultures_OnItemAdded(object? sender, ProvinceEditedEventArgs e)
-      {
-         if (Selection.SelectedCountry == Country.Empty)
-            return;
-         if (e.Value is not string reform || Selection.SelectedCountry.HistoryCountry.AcceptedCultures.Contains(e.Value))
-            return;
-         var items = new List<string>(Selection.SelectedCountry.HistoryCountry.AcceptedCultures) { reform };
-         Selection.SelectedCountry.HistoryCountry.AcceptedCultures = items;
-      }
 
       public static void ShipNames_ContentModified(object? sender, string s)
       {

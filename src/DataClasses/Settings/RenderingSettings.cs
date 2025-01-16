@@ -30,6 +30,7 @@ namespace Editor.DataClasses.Settings
       private BorderMergeType _mergeBorders = BorderMergeType.Merge;
       private  BorderMergeType _selectionMerging = BorderMergeType.MergeAndLight;
       private BorderMergeType _selectionPreviewMerging = BorderMergeType.MergeAndLight;
+      private int _iconTransparencyPadding = 3;
 
       [Description("The direction of occupation stripes on the map")]
       [CompareInEquals]
@@ -150,6 +151,14 @@ namespace Editor.DataClasses.Settings
       {
          get => _selectionPreviewMerging;
          set => SetField(ref _selectionPreviewMerging, value);
+      }
+
+      [Description("The padding in pixels for all icons to have. Only applied after restart")]
+      [CompareInEquals]
+      public int IconTransparencyPadding
+      {
+         get => _iconTransparencyPadding;
+         set => SetField(ref _iconTransparencyPadding, value);
       }
    }
 }

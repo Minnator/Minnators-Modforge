@@ -199,9 +199,6 @@
          ArmyNamesTab = new TabPage();
          FleetNamesTab = new TabPage();
          LeaderNamesTab = new TabPage();
-         groupBox9 = new GroupBox();
-         CulturesTLP = new TableLayoutPanel();
-         label43 = new Label();
          GovernmentGroupBox = new GroupBox();
          GovernmentLayoutPanel = new TableLayoutPanel();
          label36 = new Label();
@@ -231,6 +228,9 @@
          CountryHeaderTLP = new TableLayoutPanel();
          CountryNameLabel = new Label();
          AddNewCountryButton = new Button();
+         HistoryCountryCultures = new GroupBox();
+         CulturesTLP = new TableLayoutPanel();
+         label43 = new Label();
          CountryCustomToolStripLayoutPanel = new TableLayoutPanel();
          SaveSelectedCountriesButton = new Button();
          OpenCommonCountryFolder = new Button();
@@ -288,8 +288,6 @@
          MonarchNamesTab.SuspendLayout();
          MonarchNamesTLP.SuspendLayout();
          tableLayoutPanel6.SuspendLayout();
-         groupBox9.SuspendLayout();
-         CulturesTLP.SuspendLayout();
          GovernmentGroupBox.SuspendLayout();
          GovernmentLayoutPanel.SuspendLayout();
          groupBox7.SuspendLayout();
@@ -300,6 +298,8 @@
          MiscTLP.SuspendLayout();
          DevelopmenTLP.SuspendLayout();
          CountryHeaderTLP.SuspendLayout();
+         HistoryCountryCultures.SuspendLayout();
+         CulturesTLP.SuspendLayout();
          CountryCustomToolStripLayoutPanel.SuspendLayout();
          ProvinceGroupsPage.SuspendLayout();
          ProvinceCollectionsPanel.SuspendLayout();
@@ -1905,12 +1905,12 @@
          CountryMainTableLayoutPanel.ColumnCount = 1;
          CountryMainTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
          CountryMainTableLayoutPanel.Controls.Add(groupBox8, 0, 5);
-         CountryMainTableLayoutPanel.Controls.Add(groupBox9, 0, 4);
          CountryMainTableLayoutPanel.Controls.Add(GovernmentGroupBox, 0, 3);
          CountryMainTableLayoutPanel.Controls.Add(groupBox7, 0, 1);
          CountryMainTableLayoutPanel.Controls.Add(tableLayoutPanel1, 0, 2);
          CountryMainTableLayoutPanel.Controls.Add(groupBox10, 0, 6);
          CountryMainTableLayoutPanel.Controls.Add(CountryHeaderTLP, 0, 0);
+         CountryMainTableLayoutPanel.Controls.Add(HistoryCountryCultures, 0, 4);
          CountryMainTableLayoutPanel.Dock = DockStyle.Top;
          CountryMainTableLayoutPanel.Location = new Point(0, 0);
          CountryMainTableLayoutPanel.Margin = new Padding(0, 0, 0, 3);
@@ -1920,17 +1920,17 @@
          CountryMainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 149F));
          CountryMainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
          CountryMainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 151F));
-         CountryMainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 121F));
+         CountryMainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 138F));
          CountryMainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 243F));
          CountryMainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 204F));
-         CountryMainTableLayoutPanel.Size = new Size(382, 923);
+         CountryMainTableLayoutPanel.Size = new Size(382, 940);
          CountryMainTableLayoutPanel.TabIndex = 1;
          // 
          // groupBox8
          // 
          groupBox8.Controls.Add(NamesTabControl);
          groupBox8.Dock = DockStyle.Fill;
-         groupBox8.Location = new Point(3, 479);
+         groupBox8.Location = new Point(3, 496);
          groupBox8.Name = "groupBox8";
          groupBox8.Size = new Size(376, 237);
          groupBox8.TabIndex = 7;
@@ -2120,44 +2120,6 @@
          LeaderNamesTab.TabIndex = 4;
          LeaderNamesTab.Text = "Leaders";
          LeaderNamesTab.UseVisualStyleBackColor = true;
-         // 
-         // groupBox9
-         // 
-         groupBox9.Controls.Add(CulturesTLP);
-         groupBox9.Dock = DockStyle.Fill;
-         groupBox9.Location = new Point(3, 358);
-         groupBox9.Name = "groupBox9";
-         groupBox9.Size = new Size(376, 115);
-         groupBox9.TabIndex = 8;
-         groupBox9.TabStop = false;
-         groupBox9.Text = "Cultures";
-         // 
-         // CulturesTLP
-         // 
-         CulturesTLP.ColumnCount = 2;
-         CulturesTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-         CulturesTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-         CulturesTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-         CulturesTLP.Controls.Add(label43, 0, 0);
-         CulturesTLP.Dock = DockStyle.Fill;
-         CulturesTLP.Location = new Point(3, 19);
-         CulturesTLP.Name = "CulturesTLP";
-         CulturesTLP.RowCount = 2;
-         CulturesTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-         CulturesTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         CulturesTLP.Size = new Size(370, 93);
-         CulturesTLP.TabIndex = 0;
-         // 
-         // label43
-         // 
-         label43.AutoSize = true;
-         label43.Dock = DockStyle.Fill;
-         label43.Location = new Point(3, 0);
-         label43.Name = "label43";
-         label43.Size = new Size(179, 25);
-         label43.TabIndex = 0;
-         label43.Text = "Primary Culture";
-         label43.TextAlign = ContentAlignment.MiddleLeft;
          // 
          // GovernmentGroupBox
          // 
@@ -2435,7 +2397,7 @@
          // 
          groupBox10.Controls.Add(MiscTLP);
          groupBox10.Dock = DockStyle.Fill;
-         groupBox10.Location = new Point(3, 722);
+         groupBox10.Location = new Point(3, 739);
          groupBox10.Name = "groupBox10";
          groupBox10.Size = new Size(376, 198);
          groupBox10.TabIndex = 9;
@@ -2543,6 +2505,44 @@
          GeneralToolTip.SetToolTip(AddNewCountryButton, "Add new Country");
          AddNewCountryButton.UseVisualStyleBackColor = true;
          AddNewCountryButton.Click += AddNewCountryButton_Click;
+         // 
+         // HistoryCountryCultures
+         // 
+         HistoryCountryCultures.Controls.Add(CulturesTLP);
+         HistoryCountryCultures.Dock = DockStyle.Fill;
+         HistoryCountryCultures.Location = new Point(3, 358);
+         HistoryCountryCultures.Name = "HistoryCountryCultures";
+         HistoryCountryCultures.Size = new Size(376, 132);
+         HistoryCountryCultures.TabIndex = 11;
+         HistoryCountryCultures.TabStop = false;
+         HistoryCountryCultures.Text = "Cultures";
+         // 
+         // CulturesTLP
+         // 
+         CulturesTLP.ColumnCount = 2;
+         CulturesTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
+         CulturesTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
+         CulturesTLP.Controls.Add(label43, 0, 0);
+         CulturesTLP.Dock = DockStyle.Fill;
+         CulturesTLP.Location = new Point(3, 19);
+         CulturesTLP.Margin = new Padding(0);
+         CulturesTLP.Name = "CulturesTLP";
+         CulturesTLP.RowCount = 2;
+         CulturesTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+         CulturesTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         CulturesTLP.Size = new Size(370, 110);
+         CulturesTLP.TabIndex = 0;
+         // 
+         // label43
+         // 
+         label43.AutoSize = true;
+         label43.Dock = DockStyle.Fill;
+         label43.Location = new Point(3, 0);
+         label43.Name = "label43";
+         label43.Size = new Size(142, 25);
+         label43.TabIndex = 0;
+         label43.Text = "Primary Culture";
+         label43.TextAlign = ContentAlignment.MiddleLeft;
          // 
          // CountryCustomToolStripLayoutPanel
          // 
@@ -2815,9 +2815,6 @@
          MonarchNamesTLP.ResumeLayout(false);
          tableLayoutPanel6.ResumeLayout(false);
          tableLayoutPanel6.PerformLayout();
-         groupBox9.ResumeLayout(false);
-         CulturesTLP.ResumeLayout(false);
-         CulturesTLP.PerformLayout();
          GovernmentGroupBox.ResumeLayout(false);
          GovernmentLayoutPanel.ResumeLayout(false);
          GovernmentLayoutPanel.PerformLayout();
@@ -2832,6 +2829,9 @@
          DevelopmenTLP.PerformLayout();
          CountryHeaderTLP.ResumeLayout(false);
          CountryHeaderTLP.PerformLayout();
+         HistoryCountryCultures.ResumeLayout(false);
+         CulturesTLP.ResumeLayout(false);
+         CulturesTLP.PerformLayout();
          CountryCustomToolStripLayoutPanel.ResumeLayout(false);
          ProvinceGroupsPage.ResumeLayout(false);
          ProvinceCollectionsPanel.ResumeLayout(false);
@@ -3014,7 +3014,6 @@
       private TabPage ArmyNamesTab;
       private TabPage FleetNamesTab;
       private TabPage LeaderNamesTab;
-      private GroupBox groupBox9;
       private TableLayoutPanel CulturesTLP;
       private Label label43;
       private GroupBox GovernmentGroupBox;
@@ -3063,6 +3062,7 @@
       private ToolStripMenuItem openLastCrashLogsToolStripMenuItem;
       private ToolStripMenuItem collectionSelectorBaseToolStripMenuItem;
       private ToolStripMenuItem propertyCollectionSelectorToolStripMenuItem;
+      private GroupBox HistoryCountryCultures;
    }
 }
 

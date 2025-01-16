@@ -26,20 +26,19 @@ public enum CommandHistoryType
    Action,
    SaveableAction
 }
+
 public enum State
 {
    Loading,
    Running,
-   Initializing,
-   LoadingHistory,
-   Waiting
 }
+
 public enum Mana
 {
+   NONE = -1,
    ADM,
    DIP,
    MIL,
-   NONE
 }
 
 public enum Language

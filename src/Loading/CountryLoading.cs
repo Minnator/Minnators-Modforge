@@ -176,7 +176,8 @@ namespace Editor.Loading
                   country.HistoryCountry.GovernmentReforms.Add(val);
                   break;
                case "add_accepted_culture":
-                  country.HistoryCountry.AcceptedCultures.Add(val);
+                  if (Globals.Cultures.TryGetValue(val, out var culture))
+                     country.HistoryCountry.AcceptedCultures.Add(culture);
                   break;
                case "government_rank":
                   if (int.TryParse(val, out var rank))

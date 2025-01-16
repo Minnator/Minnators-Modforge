@@ -234,7 +234,7 @@ public class HistoryCountry : Saveable, IGetSetProperty, IHistoryProvider<Countr
    private string _religiousSchool = string.Empty; //
    private TechnologyGroup _unitType = TechnologyGroup.Empty; //
    private List<string> _governmentReforms = []; //
-   private List<string> _acceptedCultures = []; //
+   private List<Culture> _acceptedCultures = []; //
    private List<string> _unlockedCults = []; //
    private List<string> _estatePrivileges = []; //
    private List<string> _harmonizedReligions = []; //
@@ -280,10 +280,11 @@ public class HistoryCountry : Saveable, IGetSetProperty, IHistoryProvider<Countr
       set => SetIfModifiedEnumerable<List<string>, string>(ref _governmentReforms, value);
    }
 
-   public List<string> AcceptedCultures
+   [GameIcon(GameIcons.AcceptedCultures)]
+   public List<Culture> AcceptedCultures
    {
       get => _acceptedCultures;
-      set => SetIfModifiedEnumerable<List<string>, string>(ref _acceptedCultures, value);
+      set => SetIfModifiedEnumerable<List<Culture>, Culture>(ref _acceptedCultures, value);
    }
 
    public List<string> UnlockedCults
@@ -426,7 +427,7 @@ public class HistoryCountry : Saveable, IGetSetProperty, IHistoryProvider<Countr
       AddStringList(0, "add_government_reform", GovernmentReforms, ref sb);
       AddInt(0, GovernmentRank, "government_rank", ref sb);
       AddString(0, PrimaryCulture.Name, "primary_culture", ref sb);
-      AddStringList(0, "add_accepted_culture", AcceptedCultures, ref sb);
+      AddStringList(0, "add_accepted_culture", AcceptedCultures.Select(x => x.Name).ToList(), ref sb);
       AddString(0, Religion, "religion", ref sb);
       AddString(0, SecondaryReligion, "secondary_religion", ref sb);
       AddString(0, TechnologyGroup.ToString(), "technology_group", ref sb);

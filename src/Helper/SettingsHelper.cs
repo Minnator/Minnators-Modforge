@@ -95,6 +95,9 @@ namespace Editor.Helper
                else
                   MapModeManager.CurrentMapMode.SetInactive();
                break;
+            case nameof(Settings.Rendering.IconTransparencyPadding):
+               GameIconDefinition.UpdatePaddings();
+               break;
          }
          Globals.ZoomControl.Invalidate();
       }

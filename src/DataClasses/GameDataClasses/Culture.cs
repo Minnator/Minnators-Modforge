@@ -6,7 +6,7 @@ public class Culture(string name)
 {
    public List<KeyValuePair<string, string>> CountryModifiers = [];
    public List<KeyValuePair<string, string>> ProvinceModifiers = [];
-   public string Name = name;
+   public string Name { get; set; } = name;
    public string[] MaleNames = [];
    public string[] FemaleNames = [];
    public string[] DynastyNames = [];

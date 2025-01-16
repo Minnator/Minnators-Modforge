@@ -41,7 +41,7 @@ namespace Editor.Controls
             if (displayMember == null && typeof(TPropertyItem) == typeof(string))
                _rawStringMode = true;
             else
-               Debug.Assert(displayMember != null && displayMember.GetValue(sourceItems[0]) != null, $"{typeof(TPropertyItem)} does not define a display member {displayMember}");
+               Debug.Assert(displayMember != null && displayMember.GetValue(sourceItems[0]) != null, $"{typeof(TPropertyItem)} does not define a display member \"{displayMember}\"");
 
          PropertyInfo = propertyInfo;
          _getSaveables = getSaveables;
