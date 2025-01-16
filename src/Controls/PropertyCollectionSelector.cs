@@ -26,6 +26,7 @@ namespace Editor.Controls
       private Button _modifyButton;
       private ListBox _previewList;
       private PictureBox _iconBox;
+      private ToolTip _toolTip;
 
       private bool _rawStringMode;
 
@@ -66,6 +67,24 @@ namespace Editor.Controls
          InitializeGui();
       }
 
+      private void ListBoxOnMouseMove(object? sender, MouseEventArgs mouseEventArgs)
+      {
+         var listbox = sender as ListBox;
+         if (listbox == null) return;
+
+         // set tool tip for listbox
+         var strTip = string.Empty;
+         var index = listbox.IndexFromPoint(mouseEventArgs.Location);
+
+         if ((index >= 0) && (index < listbox.Items.Count))
+            strTip = listbox.Items[index].ToString();
+
+         if (_toolTip.GetToolTip(listbox) != strTip)
+         {
+            _toolTip.SetToolTip(listbox, strTip);
+         }
+      }
+
       private void SetImageIcon()
       {
          var attr = AttributeHelper.GetAttribute<GameIcon>(PropertyInfo);
@@ -78,6 +97,14 @@ namespace Editor.Controls
          Dock = DockStyle.Fill;
          Margin = Padding.Empty;
          MinimumSize = new(90, 90);
+
+         _toolTip = new ()
+         {
+            AutoPopDelay = 5000,
+            InitialDelay = 1000,
+            ReshowDelay = 500,
+            ShowAlways = true
+         };
 
          _tableLayoutPanel = new()
          {
@@ -121,8 +148,9 @@ namespace Editor.Controls
             Dock = DockStyle.Fill,
             Margin = new(1, 2, 2, 2),
             BorderStyle = BorderStyle.FixedSingle,
-            IntegralHeight = false
+            IntegralHeight = false,
          };
+         _previewList.MouseMove += ListBoxOnMouseMove;
 
          _iconBox = new()
          {
