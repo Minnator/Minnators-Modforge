@@ -20,6 +20,8 @@ namespace Editor.Controls
       
       #endregion
 
+      public bool AllowSeaTiles { get; init; } = true;
+
       private readonly ItemTypes _itemTypes;
       private readonly MapModeType _mapModeType;
       private readonly SaveableType _saveableType;
@@ -156,14 +158,16 @@ namespace Editor.Controls
          ProvinceCollection<Q> collection;
          if (e.Button == MouseButtons.Right)
          {
+            var provincesToAdd = Selection.GetSelectedProvinces.Where(Globals.LandProvinces.Contains).ToList();
             collection = ProvColHelper.CreateNewObject<T>(SavingUtil.ApplyModPrefix(item), Globals.ColorProvider.GetRandomColor(), _saveableType);
-            collection.NewAddRange(ProvColHelper.GetProvinceCollectionOfTypeForProvinces<Q>(Selection.GetSelectedProvinces, _saveableSubType), true);
+            collection.NewAddRange(ProvColHelper.GetProvinceCollectionOfTypeForProvinces<Q>(provincesToAdd, _saveableSubType), true);
          }
          else
          {
             if (!ProvColHelper.GetProvinceCollectionForTypeAndName(_saveableType, item, out collection))
                return;
-            collection.NewAddRange(ProvColHelper.GetProvinceCollectionOfTypeForProvinces<Q>(Selection.GetSelectedProvinces, _saveableSubType));
+            var provincesToAdd = Selection.GetSelectedProvinces.Where(Globals.LandProvinces.Contains).ToList();
+            collection.NewAddRange(ProvColHelper.GetProvinceCollectionOfTypeForProvinces<Q>(provincesToAdd, _saveableSubType));
          }
       }
 

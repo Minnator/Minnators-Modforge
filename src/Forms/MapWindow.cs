@@ -343,11 +343,11 @@ namespace Editor.Forms
 
       private void InitializeProvinceCollectionEditGui()
       {
-         _countryEditingGui = new(ItemTypes.Id, SaveableType.Country, SaveableType.Province, MapModeType.Country);
+         _countryEditingGui = new(ItemTypes.Id, SaveableType.Country, SaveableType.Province, MapModeType.Country){AllowSeaTiles = false};
          Country.ItemsModified += _countryEditingGui.OnCorrespondingDataChange;
          _countryEditingGui._extendedComboBox.DataSource = new BindingSource
          {
-            DataSource = Globals.Countries
+            DataSource = Globals.Countries,
          };
          _countryEditingGui._extendedComboBox.DisplayMember = "Key";
          _countryEditingGui._extendedComboBox.ValueMember = "Value";

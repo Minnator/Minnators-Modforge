@@ -377,7 +377,7 @@ public static class Globals
 // - [x] Added Climate and Weather map modes
 
 // TODO LIST Until Alpha 1.1
-// - [ ] Block Water provinces; should not be viable for countries
+// - [x] Block Water provinces; should not be viable for countries
 // - [ ] Loosing hover when selecting and deselecting a province
 // - [███████████▒] Smart Gui reloading
 // - [x] Rewrite Province.cs, Province Command and Gui
@@ -401,6 +401,7 @@ public static class Globals
 // - [ ] File syncing/hotreloading
 // - [ ] Heat map for history entries in editor for them when selecting dates?
 // - [x] Fix Country Color not live updating
+// - [x] Fix Search not finding country tags
 
 // Next Up in what shall happen:
 // - [ ] Update Localisation Implementation
