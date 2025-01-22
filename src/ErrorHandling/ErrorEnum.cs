@@ -65,8 +65,10 @@ public enum ErrorType
    INTERNAL_KeyNotFound = 300, // ObjectInteraction Error 300-399
    [ErrorInformation("An uninitialized object is being referenced!", "Create the object before using it!")]
    INTERNAL_UsageOfUndefinedObject = 301,
-   [ErrorInformation("This occurs because your file is not in the correct format and thus can not be parse by the modforge", "Verify that your mod file is formatted correctly and if so contact a developer!")]
    // Misc Error 400-599
+   [ErrorInformation("This occurs because given file has an unsupported file ending", "Choose a different file.")]
+   NotSupportedAudioExtension = 600, // Audio Error 600-649
+   [ErrorInformation("This occurs because your file is not in the correct format and thus can not be parse by the modforge", "Verify that your mod file is formatted correctly and if so contact a developer!")]
    TempParsingError = 1000,
    [ErrorInformation("This occurs because the error is not yet implemented!", "Implement the error! :)")]
    TODO_ERROR = 9999,

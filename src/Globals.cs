@@ -178,7 +178,7 @@ public static class Globals
    public static readonly HashSet<Color> CustomCountryColors = [];
 
    // Government Reforms and Government Types
-   public static Dictionary<string, Government> GovernmentTypes = [];
+   public static BindingDictionary<string, Government> GovernmentTypes = new(new(string.Empty, Government.Empty));
    public static Dictionary<string, GovernmentReform> GovernmentReforms = [];
 
    // Country Groups
@@ -379,7 +379,7 @@ public static class Globals
 // TODO LIST Until Alpha 1.1
 // - [ ] Block Water provinces; should not be viable for countries
 // - [ ] Loosing hover when selecting and deselecting a province
-// - [█████████▒▒▒] Smart Gui reloading
+// - [███████████▒] Smart Gui reloading
 // - [x] Rewrite Province.cs, Province Command and Gui
 // - [ ] Sounds for buttons and actions
 // - [ ] UnitType loading optimization

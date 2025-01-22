@@ -246,5 +246,10 @@ namespace Editor.Controls
          _previewList.Items.Clear();
          _previewList.Items.AddRange([.. values]);
       }
+
+      public void SetItems(List<string> newItems)
+      {
+         _collectionSelectorBase.SetConstSourceItems(newItems);
+      }
    }
 }

@@ -62,42 +62,6 @@ namespace Editor.Events
          Selection.SelectedCountry.HistoryCountry.NationalFocus = Enum.Parse<Mana>(box.SelectedItem.ToString()!);
       }
 
-      public static void CapitalTextBox_LostFocus(object? sender, EventArgs e)
-      {
-         if (sender is not TextBox box)
-            return;
-         if (Selection.SelectedCountry == Country.Empty)
-            return;
-         if (int.TryParse(box.Text, out var capital) && Globals.ProvinceIdToProvince.TryGetValue(capital, out var cap))
-            Selection.SelectedCountry.HistoryCountry.Capital = cap;
-      }
-
-      public static void OnlyNumbers_KeyPress(object? sender, KeyPressEventArgs e)
-      {
-         if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            e.Handled = true;
-      }
-
-      public static void GovernmentReforms_OnItemAdded(object? sender, ProvinceEditedEventArgs e)
-      {
-         if (Selection.SelectedCountry == Country.Empty)
-            return;
-         if (e.Value is not string reform || !Globals.GovernmentReforms.ContainsKey(reform))
-            return;
-         var items = new List<string>(Selection.SelectedCountry.HistoryCountry.GovernmentReforms) { reform };
-         Selection.SelectedCountry.HistoryCountry.GovernmentReforms = items;
-      }
-
-      public static void GovernmentReforms_OnItemRemoved(object? sender, ProvinceEditedEventArgs e)
-      {
-         if (Selection.SelectedCountry == Country.Empty)
-            return;
-         if (e.Value is not string reform) // we dont check if it is a valid reform to allow broken stuff being fixed
-            return;
-         var items = new List<string>(Selection.SelectedCountry.HistoryCountry.GovernmentReforms);
-         items.Remove(reform);
-         Selection.SelectedCountry.HistoryCountry.GovernmentReforms = items;
-      }
 
       public static void GovernmentRankBox_SelectedIndexChanged(object? sender, EventArgs e)
       {

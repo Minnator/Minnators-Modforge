@@ -24,6 +24,7 @@ namespace Editor.Helper
       Claim,
       DiscoverAchievement,
       AcceptedCultures,
+      GovernmentReform,
    }
 
 
@@ -54,6 +55,7 @@ namespace Editor.Helper
          FromPath(GameIcons.Building, "gfx", "interface", "technologyView_show_buildings.dds");
          FromPath(GameIcons.Core, "gfx", "interface", "core_icon.dds");
          FromPath(GameIcons.Claim, "gfx", "interface", "ideas_EU4", "fabricate_claims_cost.dds");
+         FromPath(GameIcons.GovernmentReform, "gfx", "interface", "ideas_EU4", "reform_progress_growth.dds");
          FromPath(GameIcons.AcceptedCultures, "gfx", "interface", "accepted_cultures.dds");
       }
 

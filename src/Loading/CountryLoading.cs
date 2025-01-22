@@ -131,7 +131,8 @@ namespace Editor.Loading
             switch (kvp.Key)
             {
                case "government":
-                  country.HistoryCountry.Government = val;
+                  if (Globals.GovernmentTypes.TryGetValue(val, out var government))
+                     country.HistoryCountry.Government = government;
                   break;
                case "religion":
                   country.HistoryCountry.Religion = val;
@@ -173,7 +174,8 @@ namespace Editor.Loading
                      Globals.ErrorLog.Write($"Invalid capital in {country.Tag}: {val}");
                   break;
                case "add_government_reform":
-                  country.HistoryCountry.GovernmentReforms.Add(val);
+                  if (Globals.GovernmentReforms.TryGetValue(val, out var reform))
+                     country.HistoryCountry.GovernmentReforms.Add(reform);
                   break;
                case "add_accepted_culture":
                   if (Globals.Cultures.TryGetValue(val, out var culture))

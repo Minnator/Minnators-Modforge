@@ -5,7 +5,7 @@ namespace Editor.DataClasses.Settings
    [SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
    public class ToolTipSettings : SubSettings
    {
-      private string _toolTipText = $"$MAPMODE_SPECIFIC$\n------------------\nId:   $id$\nName: $name$\nOwner: $owner$ ($owner%L$)\nArea: $area$ ($area%L$)";
+      private string _toolTipText = $"$MAPMODE_SPECIFIC$\n------------------\nId:   $Id$\nName: $TitleLocalisation$\nOwner: $Owner$ ($Owner%L$)\nArea: $Area$ ($Area%L$)";
       private bool _showToolTip = true;
 
       [Description("The text that will be shown in the tooltip")]

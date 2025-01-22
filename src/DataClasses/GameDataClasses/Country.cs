@@ -228,12 +228,12 @@ public class HistoryCountry : Saveable, IGetSetProperty, IHistoryProvider<Countr
    private int _fixedCapital = -1;//
    private int _governmentRank = 0; //
    private string _secondaryReligion = string.Empty; //
-   private string _government = string.Empty; //
+   private Government _government = Government.Empty; //
    private Culture _primaryCulture = Culture.Empty; //
    private string _religion = string.Empty; //
    private string _religiousSchool = string.Empty; //
    private TechnologyGroup _unitType = TechnologyGroup.Empty; //
-   private List<string> _governmentReforms = []; //
+   private List<GovernmentReform> _governmentReforms = []; //
    private List<Culture> _acceptedCultures = []; //
    private List<string> _unlockedCults = []; //
    private List<string> _estatePrivileges = []; //
@@ -274,10 +274,11 @@ public class HistoryCountry : Saveable, IGetSetProperty, IHistoryProvider<Countr
       set => SetField(ref _initialEffects, value);
    }
 
-   public List<string> GovernmentReforms
+   [GameIcon(GameIcons.GovernmentReform)]
+   public List<GovernmentReform> GovernmentReforms
    {
       get => _governmentReforms;
-      set => SetIfModifiedEnumerable<List<string>, string>(ref _governmentReforms, value);
+      set => SetIfModifiedEnumerable<List<GovernmentReform>, GovernmentReform>(ref _governmentReforms, value);
    }
 
    [GameIcon(GameIcons.AcceptedCultures)]
@@ -311,7 +312,7 @@ public class HistoryCountry : Saveable, IGetSetProperty, IHistoryProvider<Countr
       set => SetField(ref _secondaryReligion, value);
    }
 
-   public string Government
+   public Government Government
    {
       get => _government;
       set => SetField(ref _government, value);
@@ -423,8 +424,8 @@ public class HistoryCountry : Saveable, IGetSetProperty, IHistoryProvider<Countr
    public override string GetSaveString(int tabs)
    {
       var sb = new StringBuilder();
-      AddString(0, Government, "government", ref sb);
-      AddStringList(0, "add_government_reform", GovernmentReforms, ref sb);
+      AddString(0, Government.Name, "government", ref sb);
+      AddStringList(0, "add_government_reform", GovernmentReforms.Select(x => x.Name).ToList(), ref sb);
       AddInt(0, GovernmentRank, "government_rank", ref sb);
       AddString(0, PrimaryCulture.Name, "primary_culture", ref sb);
       AddStringList(0, "add_accepted_culture", AcceptedCultures.Select(x => x.Name).ToList(), ref sb);

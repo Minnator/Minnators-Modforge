@@ -50,7 +50,7 @@ namespace Editor.src.Forms.Feature
          base.ShowDialog();
       }
 
-      private void SetSourceItems()
+      public void SetSourceItems()
       {
          _sourceItems.Clear();
          SourceListView.Items.Clear();
@@ -61,7 +61,13 @@ namespace Editor.src.Forms.Feature
             SourceListView.Items.Add(new ListViewItem(item));
             _sourceItems.Add(item);
          }
+      }
 
+      public void SetConstSourceItems(List<string> newItems)
+      {
+         _sourceItemsConst.Clear();
+         _sourceItemsConst.AddRange(newItems);
+         SetSourceItems();
       }
 
       internal void SetSelectedItems(List<string> items)

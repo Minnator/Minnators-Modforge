@@ -936,7 +936,7 @@ namespace Editor.Forms
       private BindableListPropertyComboBox<CommonCountry, string> _graphicalCultureBox = null!;
       private BindablePropertyComboBox<HistoryCountry, TechnologyGroup, string> _unitTypeBox = null!;
       private BindablePropertyComboBox<HistoryCountry, TechnologyGroup, string> _techGroupBox = null!;
-      private ComboBox _governmentTypeBox = null!;
+      private BindablePropertyComboBox<HistoryCountry, Government, string> _governmentTypeBox = null!;
       private ListPropertyComboBox<HistoryCountry, int> _governmentRankBox = null!;
       private BindablePropertyComboBox<HistoryCountry, Culture, string> _primaryCultureBox = null!;
       private ListPropertyComboBox<HistoryCountry, Mana> _focusComboBox = null!;
@@ -944,7 +944,7 @@ namespace Editor.Forms
       private PropertyColorButton<CommonCountry> _countryColorPickerButton = null!;
       public ThreeColorStripesButton RevolutionColorPickerButton = null!;
 
-      private ItemList _governmentReforms = null!;
+      private PropertyCollectionSelector<HistoryCountry, List<GovernmentReform>, GovernmentReform> _governmentReforms = null!;
       private PropertyCollectionSelector<HistoryCountry, List<Culture>, Culture> _acceptedCultures = null!;
 
       private NamesEditor _leaderEditor = null!;
@@ -995,18 +995,30 @@ namespace Editor.Forms
                                                                                   Globals.TechnologyGroups,
                                                                                   margin: ControlFactory.DefaultMarginType.Slim);
 
-         _governmentTypeBox = ControlFactory.GetListComboBox([.. Globals.GovernmentTypes.Keys], new(1, 1, 6, 1));
-         _governmentTypeBox.SelectedIndexChanged += GovernmentTypeBox_SelectedIndexChanged;
+         _governmentTypeBox = ControlFactory.GetBindablePropertyComboBoxHistoryCountry(typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.Government))!,
+                                                                                       Globals.GovernmentTypes,
+                                                                                       margin: ControlFactory.DefaultMarginType.Default,
+                                                                                       hasEmptyItemAt0: false);
+         _governmentTypeBox.DropDownStyle = ComboBoxStyle.DropDownList;
+         _governmentTypeBox.SelectedIndexChanged += (_, _) =>
+         {
+            if (!Globals.GovernmentTypes.TryGetValue(_governmentTypeBox.Text, out var government))
+               _governmentReforms.SetItems([]);
+            _governmentReforms.SetItems(government.AllReforms.Select(x => x.Name).ToList());
+         };
+
 
          _governmentRankBox = ControlFactory.GetListPropertyComboBoxHistoryCountry(typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.GovernmentRank))!,
-                                                                                   Enumerable.Range(1, Globals.MaxGovRank).Select(i => i).ToList(),
-                                                                                   ControlFactory.DefaultMarginType.Slim);
+                                                                                   Enumerable.Range(1, Globals.MaxGovRank).Select(i => i).ToList());
+         _governmentRankBox.Margin = new(3, 0, 3, 2);
          _governmentRankBox.DropDownStyle = ComboBoxStyle.DropDownList;
 
-         _governmentReforms = ControlFactory.GetItemList(nameof(Country.HistoryCountry.GovernmentReforms), ItemTypes.FullWidth, [], "Government Reforms");
-         _governmentReforms.Width = 117;
-         _governmentReforms.OnItemAdded += CountryGuiEvents.GovernmentReforms_OnItemAdded;
-         _governmentReforms.OnItemRemoved += CountryGuiEvents.GovernmentReforms_OnItemRemoved;
+         _governmentReforms = new(typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.GovernmentReforms))!,
+                                  ref LoadGuiEvents.HistoryCountryLoadAction,
+                                  () => [Selection.SelectedCountry.HistoryCountry],
+                                  Globals.GovernmentReforms.Values.ToList(),
+                                  typeof(GovernmentReform).GetProperty(nameof(GovernmentReform.Name)));
+
          _capitalTextBox = ControlFactory.GetPropertyLabelHistoryCountry(typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.GetCapitalLoc)));
 
          _focusComboBox = ControlFactory.GetListPropertyComboBoxHistoryCountry(typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.NationalFocus))!,
@@ -1024,10 +1036,10 @@ namespace Editor.Forms
          TagAndColorTLP.Controls.Add(_focusComboBox, 1, 4);
          CountryHeaderTLP.Controls.Add(CountryFlagLabel, 0, 0);
 
-         GovernmentLayoutPanel.Controls.Add(_governmentTypeBox, 3, 0);
-         GovernmentLayoutPanel.Controls.Add(_governmentRankBox, 1, 0);
-         GovernmentLayoutPanel.Controls.Add(_governmentReforms, 0, 1);
-         GovernmentLayoutPanel.SetColumnSpan(_governmentReforms, 4);
+         GovernmentLayoutPanel.Controls.Add(_governmentTypeBox, 0, 1);
+         GovernmentLayoutPanel.Controls.Add(_governmentRankBox, 0, 4);
+         GovernmentLayoutPanel.Controls.Add(_governmentReforms, 1, 0);
+         GovernmentLayoutPanel.SetRowSpan(_governmentReforms, 5);
 
          // Names
          _leaderEditor = new([], "Add / Remove any names, separate with \",\"");
@@ -1152,7 +1164,7 @@ namespace Editor.Forms
          // Government
          _governmentTypeBox.SelectedIndex = 0;
          _governmentRankBox.SetDefault();
-         _governmentReforms.Clear();
+         _governmentReforms.SetDefault();
 
          // Development
          _countryDevelopmentNumeric.Value = 3;
@@ -1165,18 +1177,6 @@ namespace Editor.Forms
          _estatePrivileges.Clear();
 
          Globals.State = State.Running;
-      }
-
-      private void GovernmentTypeBox_SelectedIndexChanged(object? sender, EventArgs e)
-      {
-         if (_governmentTypeBox.SelectedItem == null)
-            return;
-         if (Globals.GovernmentTypes.TryGetValue(_governmentTypeBox.SelectedItem?.ToString()!, out var government))
-         {
-            _governmentReforms.InitializeItems([.. government.AllReformNames]);
-            if (Selection.SelectedCountry != Country.Empty)
-               Selection.SelectedCountry.HistoryCountry.Government = _governmentTypeBox.SelectedItem!.ToString()!;
-         }
       }
 
       private void AddDevToSelectedCountryIfValid(int dev)
@@ -1547,6 +1547,12 @@ namespace Editor.Forms
          GameIconDefinition.CreateSpriteSheetPacked(GameIconDefinition.Icons.Select(x => x.Value.Icon).ToList(), path);
 
 
+      }
+
+      private void audioTestToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         //SoundManager.StartPanning("C:\\Users\\david\\Downloads\\run-130bpm-190419.wav");
+         SoundManager.PlayAllSoundsOnce();
       }
    }
 }

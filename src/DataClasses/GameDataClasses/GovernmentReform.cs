@@ -1,4 +1,5 @@
-﻿using Editor.ParadoxLanguage.Trigger;
+﻿using Editor.ErrorHandling;
+using Editor.ParadoxLanguage.Trigger;
 
 namespace Editor.DataClasses.GameDataClasses
 {
@@ -32,6 +33,25 @@ namespace Editor.DataClasses.GameDataClasses
       public override int GetHashCode()
       {
          return Name.GetHashCode();
+      }
+
+      public static bool TryParse(string value, out GovernmentReform result)
+      {
+         if (Globals.GovernmentReforms.TryGetValue(value, out result!))
+            return true;
+         result = Empty;
+         return false;
+      }
+
+      public static IErrorHandle GeneralParse(string value, out object result)
+      {
+         if (TryParse(value, out var reform))
+         {
+            result = reform;
+            return ErrorHandle.Sucess;
+         }
+         result = Empty;
+         return new ErrorObject(ErrorType.TypeConversionError, $"Could not parse GovernmentReform from \"{value}\"");
       }
    }
 

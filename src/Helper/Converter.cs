@@ -67,6 +67,10 @@ namespace Editor.Helper
          {
             typeof(Building),
             Building.GeneralParse
+         },
+         {
+            typeof(GovernmentReform),
+            GovernmentReform.GeneralParse
          }
       };
 
