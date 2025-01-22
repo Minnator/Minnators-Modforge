@@ -381,7 +381,7 @@ public static class Globals
 // - [ ] Loosing hover when selecting and deselecting a province
 // - [███████████▒] Smart Gui reloading
 // - [x] Rewrite Province.cs, Province Command and Gui
-// - [ ] Sounds for buttons and actions
+// - [-] Sounds for buttons and actions
 // - [ ] UnitType loading optimization
 // - [ ] Loading bar when saving using threads
 // - [ ] In Depth deleting with pop up to show what objects are related to the one being deleted

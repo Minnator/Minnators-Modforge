@@ -63,11 +63,11 @@
          // 
          // SearchResultsPanel
          // 
+         SearchResultsPanel.BorderStyle = BorderStyle.FixedSingle;
          SearchResultsPanel.FlowDirection = FlowDirection.TopDown;
-         SearchResultsPanel.Location = new Point(0, 29);
-         SearchResultsPanel.Margin = new Padding(0);
+         SearchResultsPanel.Location = new Point(3, 32);
          SearchResultsPanel.Name = "SearchResultsPanel";
-         SearchResultsPanel.Size = new Size(200, 300);
+         SearchResultsPanel.Size = new Size(194, 295);
          SearchResultsPanel.TabIndex = 1;
          // 
          // Search

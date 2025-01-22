@@ -36,8 +36,10 @@ namespace Editor.Helper
                if (country.TitleLocalisation.Contains(input, StringComparison.OrdinalIgnoreCase))
                   result.Add(country.Tag);
             }
-         if (Globals.Countries.TryGetValue(input, out var country1))
-            result.Add(country1.Tag);
+         
+         if (input.Length == 3)
+            if (Globals.Countries.TryGetValue(input.ToUpper(), out var country))
+               result.Add(country.Tag);
 
          return result;
       }

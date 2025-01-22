@@ -118,7 +118,7 @@ public static class ControlFactory
       return new ()
       {
          Margin = new (3),
-         Width = 194,
+         Width = 188,
          Text = isProvince ? id.TitleLocalisation : Globals.Countries[tag].TitleLocalisation,
          Visible = true,
          IsProvince = isProvince,
