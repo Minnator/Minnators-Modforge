@@ -21,7 +21,9 @@ namespace Editor.Helper
       Province = 1 << 12,
       Terrain = 1 << 13,
       Climate = 1 << 14,
-      All = SaveProvinces | Area | Region | TradeNode | TradeCompany | ColonialRegion | SuperRegion | Continent | ProvinceGroup | EventModifier | Localisation | Country | Province | Terrain | Climate,
+      Price = 1 << 15,
+      TradeGood = 1 << 16,
+      All = SaveProvinces | Area | Region | TradeNode | TradeCompany | ColonialRegion | SuperRegion | Continent | ProvinceGroup | EventModifier | Localisation | Country | Province | Terrain | Climate | TradeGood | Price
    }
 
 

@@ -1,14 +1,81 @@
 ﻿using System.Text;
 using Editor.ErrorHandling;
+using Editor.Helper;
+using Editor.Loading.Enhanced;
+using Editor.Parser;
+using Editor.Saving;
 
 namespace Editor.DataClasses.GameDataClasses;
 
-public class TradeGood(string name, Color color)
+public class Price(float price) : Saveable
 {
+   private TradeGood _tradeGood = TradeGood.Empty;
+
+   public TradeGood TradeGood
+   {
+      get => _tradeGood;
+      set
+      {
+         _tradeGood = value;
+         _tradeGood.Price = this;
+      }
+   }
+
+   public float Value { get; set; } = price;
+
+   public static Price Empty { get; } = new (-1f);
+
+   public override void OnPropertyChanged(string? propertyName = null) { }
+
+   public override SaveableType WhatAmI() => SaveableType.Price;
+
+   public override string[] GetDefaultFolderPath() => ["common", "prices"];
+
+   public override string GetFileEnding() => ".txt";
+   public override KeyValuePair<string, bool> GetFileName() => new("00_prices", false);
+
+   public override string SavingComment() => Localisation.GetLoc(_tradeGood.Name);
+
+   public override string GetSaveString(int tabs)
+   {
+      var sb = new StringBuilder();
+      SavingUtil.OpenBlock(ref tabs, _tradeGood.Name, ref sb);
+      SavingUtil.AddFloat(tabs, Value, "base_price", ref sb);
+      SavingUtil.CloseBlock(ref tabs, ref sb);
+      return sb.ToString();
+   }
+
+   public override string GetSavePromptString()
+   {
+      return $"Save price for: {_tradeGood.Name}";
+   }
+}
+
+public class TradeGood(string name, Color color) : Saveable
+{
+   private Price _price = Price.Empty;
    public string Name { get; } = name;
-   public float Price { get; set; } = 0;
-   public float BasePrice { get; set; } = 0;
+
+   public Price Price
+   {
+      get => _price;
+      set
+      {
+         _price = value;
+         _price.TradeGood = this;
+      }
+   }
+
    public Color Color { get; set; } = color;
+   public bool IsLatent { get; set; } = false;
+   public bool IsValuable { get; set; } = false;
+   public int RNWLatentChance { get; set; } = -1;
+
+   public List<KeyValuePair<string, string>> Modifier { get; set; } = [];
+   public List<KeyValuePair<string, string>> ProvinceModifier { get; set; } = [];
+   public EnhancedBlock? Trigger { get; set; } = null;
+   public EnhancedBlock? Chance { get; set; } = null;
+
    public static TradeGood Empty { get; } = new ("", Color.Empty);
 
 
@@ -67,15 +134,46 @@ public class TradeGood(string name, Color color)
 
       return ErrorHandle.Sucess;
    }
+
+   public override void OnPropertyChanged(string? propertyName = null) { }
+
+   public override SaveableType WhatAmI() => SaveableType.TradeGood;
+
+   public override string[] GetDefaultFolderPath() => ["common", "tradegoods"];
+
+   public override string GetFileEnding() => ".txt";
+
+   public override KeyValuePair<string, bool> GetFileName() => new("00_tradegoods", false);
+
+   public override string SavingComment() => Localisation.GetLoc(Name);
+
+   public override string GetSaveString(int tabs)
+   {
+      var sb = new StringBuilder();
+      SavingUtil.OpenBlock(ref tabs, Name, ref sb);
+      SavingUtil.AddColor(tabs, Color, ref sb);
+      SavingUtil.AddBoolIfYes(tabs, IsLatent, "is_latent", ref sb);
+      SavingUtil.AddBoolIfYes(tabs, IsValuable, "is_valuable", ref sb);
+      if (RNWLatentChance > 0)
+         SavingUtil.AddInt(tabs, RNWLatentChance, "rnw_latent_chance", ref sb);
+      SavingUtil.AddFormattedStringList("modifier", Modifier.Select(x => $"{x.Key} = {x.Value}").ToList(), tabs + 1, ref sb);
+      SavingUtil.AddFormattedStringList("province", ProvinceModifier.Select(x => $"{x.Key} = {x.Value}").ToList(), tabs + 1, ref sb);
+      if (Trigger != null)
+         sb.AppendLine(Trigger.GetFormattedString(tabs + 1, ref sb));
+      if (Chance != null)
+         sb.AppendLine(Chance.GetFormattedString(tabs + 1, ref sb));
+      SavingUtil.CloseBlock(ref tabs, ref sb);
+      return sb.ToString();
+   }
+
+   public override string GetSavePromptString()
+   {
+      return $"Save tradegood: {Name}";
+   }
 }
 
 public static class TradeGoodHelper
 {
-   public static bool IsTradeGood(string str)
-   {
-      return Globals.TradeGoods.ContainsKey(str);
-   }
-
    public static TradeGood StringToTradeGood(string str)
    {
       if (Globals.TradeGoods.TryGetValue(str, out var tradeGood))
