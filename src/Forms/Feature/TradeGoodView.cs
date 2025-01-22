@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using Editor.DataClasses.GameDataClasses;
+using Editor.Helper;
 
 namespace Editor.src.Forms.Feature
 {
@@ -9,6 +10,15 @@ namespace Editor.src.Forms.Feature
       {
          InitializeComponent();
          CustomDrawing();
+
+         TradeGoodListView.View = View.Details;
+         TradeGoodListView.Columns.Clear();
+         TradeGoodListView.Columns.Add("Name", -2);
+         TradeGoodListView.Columns.Add("Icon", -2);
+         TradeGoodListView.Columns.Add("Color", -2);
+         TradeGoodListView.Columns.Add("Price", -2);
+         TradeGoodListView.Columns.Add("Modifier", -2);
+         TradeGoodListView.Columns.Add("Province", -2);
          PopulateListViewWithTradeGoods();
       }
 
@@ -16,18 +26,18 @@ namespace Editor.src.Forms.Feature
       {
          TradeGoodListView.Items.Clear();
          TradeGoodListView.BeginUpdate();
-         TradeGoodListView.View = View.Details;
-         TradeGoodListView.Columns.Clear();
-         TradeGoodListView.Columns.Add("Name", -2);
-         TradeGoodListView.Columns.Add("Color", -2);
-         TradeGoodListView.Columns.Add("Price", -2);
-         TradeGoodListView.Columns.Add("Modifier", -2);
-         TradeGoodListView.Columns.Add("Province Modifier", -2);
 
+         var cnt = 0;
          foreach (var tradeGood in Globals.TradeGoods.Values)
          {
             if (tradeGood == TradeGood.Empty)
                continue;
+
+            var icon = new ListViewItem.ListViewSubItem
+            {
+               Tag = cnt
+            };
+
             var color = new ListViewItem.ListViewSubItem
             {
                Text = $"{tradeGood.Color.R}/{tradeGood.Color.G}/{tradeGood.Color.B}",
@@ -54,13 +64,15 @@ namespace Editor.src.Forms.Feature
                Text = tradeGood.Name,
                Tag = tradeGood,
             };
+
+            item.SubItems.Add(icon);
             item.SubItems.Add(color);
             item.SubItems.Add(price);
             item.SubItems.Add(modifier);
             item.SubItems.Add(province);
 
             TradeGoodListView.Items.Add(item);
-
+            cnt++;
          }
 
          TradeGoodListView.EndUpdate();
@@ -83,7 +95,7 @@ namespace Editor.src.Forms.Feature
 
          TradeGoodListView.DrawItem += (sender, e) =>
          {
-
+            
          };
 
 
@@ -109,7 +121,50 @@ namespace Editor.src.Forms.Feature
             {
                ControlPaint.DrawFocusRectangle(e.Graphics, e.Bounds);
             }
+
+            if (e.Item.Tag is not int index)
+               return;
+
+            var strip = GameIconDefinition.GetIconDefinition(GameIcons.TradeGoods) as GameIconStrip;
+            var icon = strip.IconStrip[index];
+
+            e.Graphics.DrawImage(
+                                 icon,
+                                 e.Bounds.Left + 2,
+                                 e.Bounds.Top + 2,
+                                 16,
+                                 16
+                                );
          };
+      }
+
+      private void TradeGoodListView_MouseDoubleClick(object sender, MouseEventArgs e)
+      {
+         var mousePosition = TradeGoodListView.PointToClient(Control.MousePosition);
+         var hit = TradeGoodListView.HitTest(mousePosition);
+         var columnIndex = hit?.Item?.SubItems.IndexOf(hit.SubItem);
+
+         var item = TradeGoodListView.GetItemAt(e.X, e.Y);
+         if (item == null)
+            return;
+
+         var tradeGood = item.Tag as TradeGood;
+
+         switch (columnIndex)
+         {
+            case 1:
+               var colorDialog = new ColorDialog
+               {
+                  Color = tradeGood.Color
+               };
+               if (colorDialog.ShowDialog() == DialogResult.OK)
+               {
+                  tradeGood.Color = colorDialog.Color;
+                  PopulateListViewWithTradeGoods();
+               }
+               break;
+         }
+         
       }
    }
 }

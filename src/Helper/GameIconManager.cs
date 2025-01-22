@@ -1,5 +1,7 @@
 ﻿
+using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Drawing.Imaging;
 using Editor.ErrorHandling;
 using Editor.Saving;
@@ -25,16 +27,50 @@ namespace Editor.Helper
       DiscoverAchievement,
       AcceptedCultures,
       GovernmentReform,
+      TradeGoods,
    }
 
+   public class GameIconStrip : GameIconDefinition
+   {
+      public GameIconStrip(GameIcons iconEnum, int numOfFrames) : base(iconEnum, false)
+      {
+         IconStrip = new Bitmap[numOfFrames];
+         if (!Icons.TryAdd(iconEnum, this))
+            Globals.ErrorLog.Write($"Error: Icon {iconEnum} already exists in Icon Dictionary!");
+      }
 
+      public Bitmap[] IconStrip { get; set; }
+
+      public static void FromPath(GameIcons iconEnum, string[] path, bool widthByHeightCount)
+      {
+         if(!VerifyInputs(path, iconEnum))
+            return;
+         FilesHelper.GetVanillaPath(out var vPath, path);
+
+         var rawImage = ReadImage(vPath);
+         var numOfFrames = rawImage.Width/ rawImage.Height;
+
+         var icons = new Bitmap[numOfFrames];
+         
+         for (var i = 0; i < numOfFrames; i++)
+         {
+            var icon = new Bitmap(rawImage.Width / numOfFrames, rawImage.Height);
+            using var graphics = Graphics.FromImage(icon);
+            graphics.DrawImage(rawImage, new Rectangle(0, 0, icon.Width, icon.Height), new(i * icon.Width, 0, icon.Width, icon.Height), GraphicsUnit.Pixel);
+            icons[i] = icon;
+         }
+         GameIconStrip _ = new(iconEnum, numOfFrames)
+         {
+            IconStrip = icons,
+            IconPath = path
+         };
+      }
+   }
    public class GameIconDefinition
    {
       private Bitmap _icon;
       public static Dictionary<GameIcons, GameIconDefinition> Icons { get; set; } = new();
-      
       public string[] IconPath { get; set; }
-
       public Bitmap Icon
       {
          get => _icon;
@@ -43,7 +79,6 @@ namespace Editor.Helper
             _icon = ForcePadding(value, Globals.Settings.Rendering.IconTransparencyPadding);
          }
       }
-
       public GameIcons IconType { get; }
 
       public static void Initialize()
@@ -57,15 +92,17 @@ namespace Editor.Helper
          FromPath(GameIcons.Claim, "gfx", "interface", "ideas_EU4", "fabricate_claims_cost.dds");
          FromPath(GameIcons.GovernmentReform, "gfx", "interface", "ideas_EU4", "reform_progress_growth.dds");
          FromPath(GameIcons.AcceptedCultures, "gfx", "interface", "accepted_cultures.dds");
+         GameIconStrip.FromPath(GameIcons.TradeGoods, ["gfx", "interface", "resources.dds"], true);
       }
 
-      public GameIconDefinition(GameIcons iconEnum)
+      public GameIconDefinition(GameIcons iconEnum, bool add = true)
       {
          IconPath = [];
          IconType = iconEnum;
 
-         if (!Icons.TryAdd(iconEnum, this))
-            Globals.ErrorLog.Write($"Error: Icon {iconEnum} already exists in Icon Dictionary!");
+         if (add)
+            if (!Icons.TryAdd(iconEnum, this))
+               Globals.ErrorLog.Write($"Error: Icon {iconEnum} already exists in Icon Dictionary!");
       }
 
       public static void CreateSpriteSheetPacked(List<Bitmap> icons, string outputPath)
@@ -286,6 +323,16 @@ namespace Editor.Helper
          throw new EvilActions($"Trying to access a non existing game icon! {icon}. FALLBACK icon not defined");
       }
 
+      public static GameIconDefinition GetIconDefinition(GameIcons iconEnum)
+      {
+         if (Icons.TryGetValue(iconEnum, out var icon))
+            return icon;
+         _ = new ErrorObject(ErrorType.INTERNAL_KeyNotFound, $"Trying to access a non existing game icon! {icon}", LogType.Critical);
+         if (Icons.TryGetValue(GameIcons.None, out icon))
+            return icon;
+         throw new EvilActions($"Trying to access a non existing game icon! {icon}. FALLBACK icon not defined");
+      }
+
       private static GameIconDefinition FromPath(GameIcons iconEnum, params string[] path)
       {
          if (!VerifyInputs(path, iconEnum))
@@ -297,9 +344,9 @@ namespace Editor.Helper
          };
       }
 
-      private static Bitmap ReadImage(string path) => ImageReader.ReadImage(path);
+      protected static Bitmap ReadImage(string path) => ImageReader.ReadImage(path);
 
-      private static bool VerifyInputs(string[] path, GameIcons iconEnum)
+      protected static bool VerifyInputs(string[] path, GameIcons iconEnum)
       {
          if (path.Length == 0)
          {

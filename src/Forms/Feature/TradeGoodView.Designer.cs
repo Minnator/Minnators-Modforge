@@ -60,6 +60,7 @@
          TradeGoodListView.Sorting = SortOrder.Ascending;
          TradeGoodListView.TabIndex = 0;
          TradeGoodListView.UseCompatibleStateImageBehavior = false;
+         TradeGoodListView.MouseDoubleClick += TradeGoodListView_MouseDoubleClick;
          // 
          // TradeGoodView
          // 
