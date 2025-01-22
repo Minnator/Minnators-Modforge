@@ -70,6 +70,7 @@
          checkForCyclesInTradenodesToolStripMenuItem = new ToolStripMenuItem();
          randomModifierToolStripMenuItem = new ToolStripMenuItem();
          deleteProvinceHistoryEntriesToolStripMenuItem = new ToolStripMenuItem();
+         tradegoodEditorToolStripMenuItem = new ToolStripMenuItem();
          MapModeComboBox = new ToolStripComboBox();
          searchToolStripMenuItem = new ToolStripMenuItem();
          helpToolStripMenuItem = new ToolStripMenuItem();
@@ -557,7 +558,7 @@
          // 
          // additionalToolsToolStripMenuItem
          // 
-         additionalToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { checkForCyclesInTradenodesToolStripMenuItem, randomModifierToolStripMenuItem, deleteProvinceHistoryEntriesToolStripMenuItem });
+         additionalToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { checkForCyclesInTradenodesToolStripMenuItem, randomModifierToolStripMenuItem, deleteProvinceHistoryEntriesToolStripMenuItem, tradegoodEditorToolStripMenuItem });
          additionalToolsToolStripMenuItem.Name = "additionalToolsToolStripMenuItem";
          additionalToolsToolStripMenuItem.Size = new Size(103, 23);
          additionalToolsToolStripMenuItem.Text = "Additional tools";
@@ -582,6 +583,13 @@
          deleteProvinceHistoryEntriesToolStripMenuItem.Size = new Size(236, 22);
          deleteProvinceHistoryEntriesToolStripMenuItem.Text = "Delete Province history entries";
          deleteProvinceHistoryEntriesToolStripMenuItem.Click += deleteProvinceHistoryEntriesToolStripMenuItem_Click;
+         // 
+         // tradegoodEditorToolStripMenuItem
+         // 
+         tradegoodEditorToolStripMenuItem.Name = "tradegoodEditorToolStripMenuItem";
+         tradegoodEditorToolStripMenuItem.Size = new Size(236, 22);
+         tradegoodEditorToolStripMenuItem.Text = "Tradegood Editor";
+         tradegoodEditorToolStripMenuItem.Click += tradegoodEditorToolStripMenuItem_Click;
          // 
          // MapModeComboBox
          // 
@@ -3083,6 +3091,7 @@
       private GroupBox HistoryCountryCultures;
       private ToolStripMenuItem generateTextureAtlasPacedToolStripMenuItem;
       private ToolStripMenuItem audioTestToolStripMenuItem;
+      private ToolStripMenuItem tradegoodEditorToolStripMenuItem;
    }
 }
 

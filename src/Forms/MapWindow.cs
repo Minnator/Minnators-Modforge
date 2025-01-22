@@ -343,7 +343,7 @@ namespace Editor.Forms
 
       private void InitializeProvinceCollectionEditGui()
       {
-         _countryEditingGui = new(ItemTypes.Id, SaveableType.Country, SaveableType.Province, MapModeType.Country){AllowSeaTiles = false};
+         _countryEditingGui = new(ItemTypes.Id, SaveableType.Country, SaveableType.Province, MapModeType.Country) { AllowSeaTiles = false };
          Country.ItemsModified += _countryEditingGui.OnCorrespondingDataChange;
          _countryEditingGui._extendedComboBox.DataSource = new BindingSource
          {
@@ -1553,6 +1553,11 @@ namespace Editor.Forms
       {
          //SoundManager.StartPanning("C:\\Users\\david\\Downloads\\run-130bpm-190419.wav");
          SoundManager.PlayAllSoundsOnce();
+      }
+
+      private void tradegoodEditorToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         new TradeGoodView().Show();
       }
    }
 }
