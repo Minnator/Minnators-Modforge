@@ -1,5 +1,6 @@
 ﻿using Editor.Controls;
 using Editor.DataClasses.Commands;
+using Editor.Forms.PopUps;
 
 namespace Editor.Forms.Feature
 {
@@ -56,14 +57,14 @@ namespace Editor.Forms.Feature
 
          return count;
       }
-      
+
       public void VisualizeFull(HistoryNode rootNode)
       {
          HistoryTreeView.Nodes.Clear();
          HistoryTreeView.Nodes.Add(AddToNodeFull(rootNode));
          HistoryTreeView.ExpandAll();
       }
-      
+
       private static TreeNode AddToNodeFull(HistoryNode history)
       {
          var node = new HistoryTreeNode(history.Command.GetDescription(), history.Type)
@@ -71,7 +72,7 @@ namespace Editor.Forms.Feature
             Tag = history.Id
          };
 
-         if (HistoryManager.Current.Id == history.Id) 
+         if (HistoryManager.Current.Id == history.Id)
             node.BackColor = Color.LightGreen;
 
          foreach (var child in history.Children)
@@ -124,6 +125,18 @@ namespace Editor.Forms.Feature
          else
          {
             Visualize(HistoryManager.Root);
+         }
+      }
+
+      private void HistoryTreeView_MouseClick(object sender, MouseEventArgs e)
+      {
+         if (e.Button == MouseButtons.Right)
+         {
+            var node = HistoryTreeView.SelectedNode;
+            if (node is null)
+               return;
+
+            new RoughEditorForm(HistoryManager.GetNodeWithId((int)node.Tag), false).ShowDialog();
          }
       }
    }

@@ -29,6 +29,8 @@ namespace Editor.DataClasses.Settings
       private bool _useDiscordRichPresence = true;
       private bool _useDynamicProvinceNames = true;
       private PreferredEditor _preferredEditor = PreferredEditor.VSCode;
+      private int _maxCompactingSize = 500;
+      private int _minNumForCompacting = 5;
 
       [Description("The language in which the localisation will be shown")]
       [CompareInEquals]
@@ -142,10 +144,28 @@ namespace Editor.DataClasses.Settings
          set => SetField(ref _useDynamicProvinceNames, value);
       }
 
+      [Description("The preferred editor for opening files")]
+      [CompareInEquals]
       public PreferredEditor PreferredEditor
       {
          get => _preferredEditor;
          set => SetField(ref _preferredEditor, value);
+      }
+
+      [Description("The maximum number of commands which will be compacted")]
+      [CompareInEquals]
+      public int MaxCompactingSize
+      {
+         get => _maxCompactingSize;
+         set => SetField(ref _maxCompactingSize, value);
+      }
+
+      [Description("The minimum number of commands which will be compacted if applicable")]
+      [CompareInEquals]
+      public int MinNumForCompacting
+      {
+         get => _minNumForCompacting;
+         set => SetField(ref _minNumForCompacting, value);
       }
    }
 }

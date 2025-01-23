@@ -32,6 +32,10 @@ namespace Editor.DataClasses.Commands
             Execute();
       }
 
+      public override List<Saveable> GetTargets()
+      {
+         return _targets;
+      }
       public CModifyProperty(PropertyInfo property, Saveable target, T newValue, T oldValue, bool executeOnInit = true)
       {
          _propInfo = property;

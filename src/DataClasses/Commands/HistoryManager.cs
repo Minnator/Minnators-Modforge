@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Diagnostics;
+using Editor.Saving;
 
 namespace Editor.DataClasses.Commands;
 
@@ -207,6 +209,56 @@ public static class HistoryManager
       return current;
    }
 
+   public static HistoryNode GetNodeWithId(int id)
+   {
+      return GetNodeWithId(_root, id);
+   }
+
+   private static HistoryNode GetNodeWithId(HistoryNode node, int id)
+   {
+      if (node.Id == id)
+         return node;
+
+      foreach (var child in node.Children)
+      {
+         var result = GetNodeWithId(child, id);
+         if (result != null!)
+            return result;
+      }
+
+      return null!;
+   }
+
+   public static bool EnsureLinearity(HistoryNode startId, HistoryNode endId, int timeout = 500)
+   {
+      Debug.Assert(startId.Id < endId.Id, $"{startId} must be smaller than {endId} to test for linearity!");
+
+      var node = startId;
+      var cnt = 1;
+      while (node.Id < endId.Id)
+      {
+         if (node.Children.Count == 0)
+            return false;
+         node = node.Children[0];
+         if (node.Id != startId.Id + cnt)
+            return false;
+
+         if (timeout == cnt)
+            return false;
+         cnt++;
+      }
+      return true;
+   }
+
+   public static void DetectCompactingOptions()
+   {
+      HistoryNode? startNode;
+      List<KeyValuePair<HistoryNode, HistoryNode>> options = [];
+      List<Saveable> currentTargets = [];
+
+
+
+   }
 }
 
 

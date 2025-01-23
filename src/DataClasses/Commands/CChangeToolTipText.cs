@@ -1,4 +1,6 @@
-﻿namespace Editor.DataClasses.Commands;
+﻿using Editor.Saving;
+
+namespace Editor.DataClasses.Commands;
 
 public class CChangeToolTipText : ICommand
 {
@@ -28,6 +30,7 @@ public class CChangeToolTipText : ICommand
    {
       Execute();
    }
+   public List<Saveable> GetTargets() => [];
 
    public string GetDescription()
    {

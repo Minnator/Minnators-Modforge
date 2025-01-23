@@ -41,6 +41,11 @@ namespace Editor.DataClasses.Commands
             Execute();
       }
 
+      public override List<Saveable> GetTargets()
+      {
+         return [.. _targets];
+      }
+
       public void InternalExecute()
       {
          for (var i = 0; i < _targets.Length; i++)

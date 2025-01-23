@@ -25,6 +25,7 @@ namespace Editor.DataClasses.Commands
          if (executeOnInit)
             Execute();
       }
+      public List<Saveable> GetTargets() => _selectionDelta.Cast<Saveable>().ToList();
 
       public void Execute()
       {

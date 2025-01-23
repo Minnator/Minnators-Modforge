@@ -1,4 +1,5 @@
 ﻿using Editor.Helper;
+using Editor.Saving;
 
 namespace Editor.DataClasses.Commands
 {
@@ -19,6 +20,10 @@ namespace Editor.DataClasses.Commands
       }
 
 
+      public override List<Saveable> GetTargets()
+      {
+         return [.. _locObjects];
+      }
       public override void Execute()
       {
          base.Execute([.. _locObjects]);
@@ -77,6 +82,10 @@ namespace Editor.DataClasses.Commands
             Execute();
       }
 
+      public override List<Saveable> GetTargets()
+      {
+         return [_locObject];
+      }
       public override void Execute()
       {
          base.Execute([_locObject]);

@@ -1,4 +1,5 @@
 ﻿using Editor.Helper;
+using Editor.Saving;
 
 namespace Editor.DataClasses.Commands
 {
@@ -18,6 +19,8 @@ namespace Editor.DataClasses.Commands
       {
          ProvColHelper.SetObjectInCollectionIfExists(postEditing);
       }
+
+      public List<Saveable> GetTargets() => [];
 
       public string GetDescription()
       {

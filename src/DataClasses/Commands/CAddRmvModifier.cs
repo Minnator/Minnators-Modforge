@@ -48,6 +48,8 @@ namespace Editor.DataClasses.Commands
          Execute();
       }
 
+      public List<Saveable> GetTargets() => _provinces.Cast<Saveable>().ToList();
+
       public string GetDescription()
       {
          return $"Add {_modifier.Name} to {_provinces.Count} provinces";

@@ -46,6 +46,7 @@
          HistoryTreeView.Name = "HistoryTreeView";
          HistoryTreeView.Size = new Size(901, 556);
          HistoryTreeView.TabIndex = 0;
+         HistoryTreeView.MouseClick += HistoryTreeView_MouseClick;
          // 
          // tableLayoutPanel1
          // 

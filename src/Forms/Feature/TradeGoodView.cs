@@ -103,17 +103,14 @@ namespace Editor.src.Forms.Feature
          TradeGoodListView.DrawSubItem += (sender, e) =>
          {
             // Draw the background for the subitem
-            e.Graphics.FillRectangle(
-                                     new SolidBrush(e.SubItem?.BackColor ?? SystemColors.Window),
-                                     e.Bounds
-                                    );
+            e.Graphics.FillRectangle(new SolidBrush(e.SubItem?.BackColor ?? SystemColors.Window), e.Bounds);
 
             // Create a StringFormat for centering text
             var stringFormat = new StringFormat
             {
-               Alignment = StringAlignment.Center, // Horizontal center
-               LineAlignment = StringAlignment.Center, // Vertical center
-               Trimming = StringTrimming.EllipsisCharacter // Handle long text
+               Alignment = StringAlignment.Center, 
+               LineAlignment = StringAlignment.Center,
+               Trimming = StringTrimming.EllipsisCharacter 
             };
 
             // Draw the subitem text centered
