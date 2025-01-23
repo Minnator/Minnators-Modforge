@@ -51,7 +51,7 @@ public class Price(float price) : Saveable
    }
 }
 
-public class TradeGood(string name, Color color) : Saveable
+public class TradeGood(string name) : Saveable
 {
    private Price _price = Price.Empty;
    public string Name { get; } = name;
@@ -62,11 +62,10 @@ public class TradeGood(string name, Color color) : Saveable
       set
       {
          _price = value;
-         _price.TradeGood = this;
       }
    }
 
-   public Color Color { get; set; } = color;
+   public Color Color { get; set; }
    public bool IsLatent { get; set; } = false;
    public bool IsValuable { get; set; } = false;
    public int RNWLatentChance { get; set; } = -1;
@@ -76,7 +75,7 @@ public class TradeGood(string name, Color color) : Saveable
    public EnhancedBlock? Trigger { get; set; } = null;
    public EnhancedBlock? Chance { get; set; } = null;
 
-   public static TradeGood Empty { get; } = new ("", Color.Empty);
+   public static TradeGood Empty { get; } = new ("UNDEFINED");
 
 
    public override bool Equals(object? obj)

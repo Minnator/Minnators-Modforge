@@ -282,6 +282,29 @@ namespace Editor.Loading.Enhanced
          }
          return elements;
       }
+
+      public static (List<EnhancedBlock>, List<EnhancedContent>) LoadBase(this PathObj po, FileContentAllowed fca)
+      {
+         var (blocks, contents) = GetElements(po);
+
+         switch (fca)
+         {
+            case FileContentAllowed.Both:
+               break;
+            case FileContentAllowed.BlocksOnly:
+               if (contents.Count != 0)
+                  _ = new LoadingError(po, "Detected content in a file where only blocks are allowed!", type: ErrorType.UnexpectedContentElement, level: LogType.Error);
+               break;
+            case FileContentAllowed.ContentOnly:
+               if (blocks.Count != 0)
+                  _ = new LoadingError(po, "Detected blocks in a file where only content is allowed!", type: ErrorType.UnexpectedBlockElement, level: LogType.Error);
+               break;
+            default:
+               throw new ArgumentOutOfRangeException(nameof(fca), fca, null);
+         }
+         return (blocks, contents);
+      
+      }
    }
    public readonly struct LineKvp<T, TQ>
    {

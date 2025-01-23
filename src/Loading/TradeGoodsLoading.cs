@@ -1,6 +1,9 @@
 ﻿using Editor.DataClasses.GameDataClasses;
+using Editor.ErrorHandling;
 using Editor.Helper;
+using Editor.Loading.Enhanced;
 using Editor.Parser;
+using Editor.Saving;
 using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
@@ -17,37 +20,39 @@ namespace Editor.Loading
       {
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "tradegoods");
 
+         foreach (var file in files) 
+            EnhancedTradeGoodParse(file);
+
+         files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "prices");
+
          foreach (var file in files)
-         {
-            ParseTradeGoodsFromFile(IO.ReadAllInUTF8(file));
-         }
+            EnhancedPriceParse(file);
       }
 
-      private static void ParseTradeGoodsFromFile(string content)
+      private static void EnhancedPriceParse(string fileName)
       {
-         Parsing.RemoveCommentFromMultilineString(content, out var removed);
-         var elements = Parsing.GetElements(0, removed);
+         var po = PathObj.FromPath(fileName);
+         var (blocks, _) = po.LoadBase(EnhancedParser.FileContentAllowed.BlocksOnly);
 
-         foreach (var element in elements)
+         foreach (var block in blocks)
          {
-            if (element is not Block block)
-            {
-               Globals.ErrorLog.Write($"Cant parse Tradegood: Element is not a block: {((Content)element)}");
-               continue;
-            }
-            
-            var color = block.GetBlockWithName("color");
-            if (color is null)
-            {
-               Globals.ErrorLog.Write($"Color is missing in Tradegood: {block.Name}");
-               continue;
-            }
-
-            var tradeGood = new TradeGood(block.Name, Parsing.ParseColorPercentile(color.GetContent));
-            if (!Globals.TradeGoods.TryAdd(tradeGood.Name, tradeGood))
-               Globals.ErrorLog.Write($"TradeGood already exists: {tradeGood.Name}");
+            var price = EnhancedParsing.GetPriceFromBlock(block, po);
+            price.SetPath(ref po);
          }
       }
 
+      private static void EnhancedTradeGoodParse(string filePath)
+      {
+         var po = PathObj.FromPath(filePath);
+         var (blocks, _) = po.LoadBase(EnhancedParser.FileContentAllowed.BlocksOnly);
+
+         foreach (var block in blocks)
+         {
+            var tg = EnhancedParsing.GetTradeGoodFromBlock(block, po);
+            tg.SetPath(ref po);
+            if (!Globals.TradeGoods.TryAdd(tg.Name, tg)) 
+               _ = new LoadingError(po, $"TradeGood \"{tg.Name}\" already exists!", block.StartLine, type: ErrorType.DuplicateObjectDefinition);
+         }
+      }
    }
 }

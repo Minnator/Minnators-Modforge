@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Drawing.Imaging;
+using System.Globalization;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 
@@ -107,13 +108,22 @@ namespace Editor.src.Forms.Feature
                                      e.Bounds
                                     );
 
-            // Draw subitem text
+            // Create a StringFormat for centering text
+            var stringFormat = new StringFormat
+            {
+               Alignment = StringAlignment.Center, // Horizontal center
+               LineAlignment = StringAlignment.Center, // Vertical center
+               Trimming = StringTrimming.EllipsisCharacter // Handle long text
+            };
+
+            // Draw the subitem text centered
             using var textBrush = new SolidBrush(e.SubItem?.ForeColor ?? SystemColors.ControlText);
             e.Graphics.DrawString(
                                   e.SubItem?.Text ?? string.Empty,
                                   e.SubItem?.Font ?? SystemFonts.DefaultFont,
                                   textBrush,
-                                  e.Bounds
+                                  e.Bounds,
+                                  stringFormat
                                  );
 
             // Draw focus rectangle for selected state
@@ -122,18 +132,20 @@ namespace Editor.src.Forms.Feature
                ControlPaint.DrawFocusRectangle(e.Graphics, e.Bounds);
             }
 
-            if (e.Item.Tag is not int index)
+            if (e.ColumnIndex != 1)
                return;
 
+            if (e.SubItem!.Tag is not int index)
+               return;
+            
             var strip = GameIconDefinition.GetIconDefinition(GameIcons.TradeGoods) as GameIconStrip;
-            var icon = strip.IconStrip[index];
 
             e.Graphics.DrawImage(
-                                 icon,
-                                 e.Bounds.Left + 2,
-                                 e.Bounds.Top + 2,
-                                 16,
-                                 16
+                                 strip.IconStrip[index],
+                                 e.Bounds.Left,
+                                 e.Bounds.Top,
+                                 18,
+                                 18
                                 );
          };
       }

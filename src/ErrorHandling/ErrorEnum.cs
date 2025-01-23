@@ -58,6 +58,10 @@ public enum ErrorType
    UndefinedCountryTag = 116,
    [ErrorInformation("This occurs because a religion is used but never defined!", "Check the religion definition and usages of the affected religion!")]
    UnresolveableReligionReference = 117,
+   [ErrorInformation("An attribute is found, where it is not recognized!", "Check the object and make sure all its attributes are valid")]
+   UnexpectedAttribute = 118,
+   [ErrorInformation("This occurs because a trade good is used but never defined!", "Check the trade good definition and usages of the affected trade good!")]
+   UnresolveableTradeGoodReference = 119,
    [ErrorInformation("This occurs because an date is not in a valid format!", "Check the date format and correct it!")]
    IllegalDateFormat = 101,
    // ObjectInteraction Error
