@@ -171,5 +171,10 @@ namespace Editor.Helper
          }
          return sb.ToString();
       }
+
+      public static int HashKeyValuePair<T, Q>(this KeyValuePair<T, Q> pair) where T : notnull where Q : notnull
+      {
+         return pair.Key.GetHashCode() ^ pair.Value.GetHashCode();
+      }
    }
 }

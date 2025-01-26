@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using Editor;
 using Editor.Forms.Feature;
 using Editor.Helper;
 
@@ -126,9 +127,12 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
 [AttributeUsage(AttributeTargets.Property)]
 public class CompareInEquals : Attribute;
 
-public abstract class SubSettings : PropertyEquals, INotifyPropertyChanged
+public abstract class SubSettings : PropertySettings;
+
+public abstract class PropertySettings : PropertyEquals, INotifyPropertyChanged
 {
    public event PropertyChangedEventHandler? PropertyChanged;
+
    private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
    {
       if (Globals.State != State.Running)

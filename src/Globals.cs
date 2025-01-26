@@ -21,10 +21,9 @@ public enum Eu4CursorTypes
 
 public enum CommandHistoryType
 {
-   SimpleSelection,
    ComplexSelection,
    Action,
-   SaveableAction
+   Compacting
 }
 
 public enum State
@@ -402,6 +401,15 @@ public static class Globals
 // - [ ] Heat map for history entries in editor for them when selecting dates?
 // - [x] Fix Country Color not live updating
 // - [x] Fix Search not finding country tags
+
+// - [ ] Grid for pixels
+// - [ ] Tools:
+      // - [ ] Pen
+      // - [ ] Eraser
+      // - [ ] Bucket
+      // - [ ] Select/Move
+      // - [ ] Magic Wand
+// - [ ] Overlays (several)
 
 // Next Up in what shall happen:
 // - [ ] Update Localisation Implementation

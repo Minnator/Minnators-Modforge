@@ -1,6 +1,10 @@
 ﻿using System.Collections;
 using System.Diagnostics;
+using System.Xml.Linq;
+using Editor.Forms.PopUps;
+using Editor.Helper;
 using Editor.Saving;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace Editor.DataClasses.Commands;
 
@@ -37,37 +41,79 @@ public static class HistoryManager
    }
 
    // Check if there are any commands to undo or redo
-   public static bool CanUndo => Current.Parent != null!;
+   public static bool CanUndo => Current.Parent != null! || Current is CompactHistoryNode { HasStepUndo: true };
 
    // Check if there are any commands to redo
-   public static bool CanRedo => Current.Children.Count > 0;
+   public static bool CanRedo => Current.Children.Count > 0 || Current is CompactHistoryNode { HasStepRedo: true };
    public static HistoryNode Current { get; private set; }
 
    // Undo the last command
-   public static void Undo()
+   public static void Undo(bool stepUndo)
    {
       if (CanUndo)
       {
-         Current.Command.Undo();
-         Current = Current.Parent;
+         if (Current.Type == CommandHistoryType.Compacting && Current is CompactHistoryNode compNode)
+         {
+            if (!compNode.HasStepUndo)
+            {
+               Current = Current.Parent;
+               Undo(true); // we have no more StepUndos left so we go up one node
+               return;
+            }
+            if (stepUndo)
+            {
+               compNode.StepUndo();
+            }
+            else
+            {
+               compNode.FullUndo();
+               Current = Current.Parent;
+            }
+         }
+         else
+         {
+            Current.Command.Undo();
+            Current = Current.Parent;
+         }
+
       }
 
       UndoDepthChanged?.Invoke(null, GetUndoDepth());
       UndoEvent.Invoke(null, EventArgs.Empty);
    }
 
-   public static void Redo(int childIndex = -1)
+   public static void Redo(bool stepRedo, int childIndex = -1)
    {
       if (childIndex == -1)
          childIndex += Current.Children.Count;
       if (CanRedo && childIndex < Current.Children.Count)
       {
-         Current = Current.Children[childIndex];
-         Current.Command.Redo();
+         if (Current is CompactHistoryNode compNode)
+         {
+            if (!compNode.HasStepRedo)
+            {
+               Current = Current.Children[childIndex];
+               Redo(true, childIndex); // we have no more StepRedos left so we go up one node
+               return;
+            }
+            if (stepRedo)
+               compNode.StepRedo();
+            else
+               compNode.FullRedo();
+         }
+         else
+         {
+            Current = Current.Children[childIndex];
+            if (Current is CompactHistoryNode compact)
+               compact.FullRedo();
+            else
+               Current.Command.Redo();
+         }
+
+         RedoDepthChanged?.Invoke(null, GetRedoDepth());
+         RedoEvent.Invoke(null, EventArgs.Empty);
       }
 
-      RedoDepthChanged?.Invoke(null, GetRedoDepth());
-      RedoEvent.Invoke(null, EventArgs.Empty);
    }
 
    public static void RevertTo(int id)
@@ -81,10 +127,20 @@ public static class HistoryManager
    private static void RestoreState(List<HistoryNode> undo, List<HistoryNode> redo)
    {
       foreach (var node in undo) 
-         node.Command.Undo(); // Cant use Undo() because it would change the current node
+      {
+         if (node is CompactHistoryNode compNode)
+            compNode.FullUndo();
+         else
+            node.Command.Undo(); // Cant use Undo() because it would change the current node
+      }
 
       foreach (var node in redo)
-         node.Command.Redo(); // Cant use Redo() because it would change the current node
+      {
+         if (node is CompactHistoryNode compNode)
+            compNode.FullRedo();
+         else
+            node.Command.Redo(); // Cant use Redo() because it would change the current node
+      }
       
       Current = redo[^1];
 
@@ -229,38 +285,186 @@ public static class HistoryManager
       return null!;
    }
 
-   public static bool EnsureLinearity(HistoryNode startId, HistoryNode endId, int timeout = 500)
+   // ----------------------------------------- Compacting ----------------------------------------- \\
+
+   public static void Compact()
    {
-      Debug.Assert(startId.Id < endId.Id, $"{startId} must be smaller than {endId} to test for linearity!");
+      var groups = FindGroups(_root);
+      var compGroups = FindCompactableGroups(groups);
 
-      var node = startId;
-      var cnt = 1;
-      while (node.Id < endId.Id)
+      foreach (var group in compGroups)
       {
-         if (node.Children.Count == 0)
-            return false;
-         node = node.Children[0];
-         if (node.Id != startId.Id + cnt)
-            return false;
+         if (group.Count < Globals.Settings.Misc.CompactingSettings.MinNumForCompacting)
+            continue;
 
-         if (timeout == cnt)
-            return false;
-         cnt++;
+         var node = new CompactHistoryNode(_nodeId++, group);
+         node.InsertInTree();
+         if (Current == group[^1])
+            Current = node;
       }
-      return true;
+
+
    }
 
-   public static void DetectCompactingOptions()
+   private static List<List<HistoryNode>> FindCompactableGroups(Dictionary<List<int>, List<HistoryNode>> groups)
    {
-      HistoryNode? startNode;
-      List<KeyValuePair<HistoryNode, HistoryNode>> options = [];
-      List<Saveable> currentTargets = [];
+      var compGroups = new List<List<HistoryNode>>();
+
+      foreach (var group in groups.Values)
+      {
+         // Sort nodes by ID for consistent order
+         var sortedNodes = group.OrderBy(node => node.Id).ToList();
+
+         List<HistoryNode> currentGroup = [];
+
+         for (var i = 0; i < sortedNodes.Count; i++)
+         {
+            var currentNode = sortedNodes[i];
+
+            // Check if the current group is linear
+            if (currentGroup.Count > 0)
+            {
+               var lastNode = currentGroup[^1];
+               if (lastNode.Children.Count != 1 || lastNode.Children[0] != currentNode)
+               {
+                  // Linearity breaks, finalize the current group
+                  if (currentGroup.Count > 1) 
+                     compGroups.Add(currentGroup);
+                  currentGroup.Clear();
+               }
+            }
+
+            // Add the current node to the current group
+            currentGroup.Add(currentNode);
+
+            // Handle the last node in the list
+            if (i == sortedNodes.Count - 1 && currentGroup.Count > 1)
+               compGroups.Add([..currentGroup]);
+         }
+      }
+
+      return compGroups;
+   }
 
 
+   private static Dictionary<List<int>, List<HistoryNode>> FindGroups(HistoryNode root)
+   {
+      var groups = new Dictionary<List<int>, List<HistoryNode>>(new ListComparer<int>());
+      TraverseTree(root, node =>
+      {
+         if (node.IsCompacted) return;
 
+         // Add the node to the dictionary based on its targets
+         if (!groups.TryGetValue(node.Command.GetTargetHash(), out var nodeList))
+         {
+            nodeList = [];
+            groups[node.Command.GetTargetHash()] = nodeList;
+         }
+         nodeList.Add(node);
+      });
+      return groups;
+   }
+
+   private static void TraverseTree(HistoryNode node, Action<HistoryNode> action)
+   {
+      if (node == null!) 
+         return;
+
+      action(node);
+      foreach (var child in node.Children) 
+         TraverseTree(child, action);
    }
 }
 
+
+public class CompactHistoryNode : HistoryNode
+{
+   public List<HistoryNode> CompactedNodes { get; }
+   private int current;
+
+   public CompactHistoryNode(int id, List<HistoryNode> compactedNodes) : base(id, null!, CommandHistoryType.Compacting, compactedNodes[0].Parent)
+   {
+      CompactedNodes = compactedNodes;
+      current = CompactedNodes.Count - 1;
+   }
+
+   public void InsertInTree()
+   {
+      // remove the compacted nodes from the tree
+      CompactedNodes[0].Parent.Children.Remove(CompactedNodes[0]);
+      CompactedNodes[0].Parent = null!;
+
+      foreach (var endChild in CompactedNodes[^1].Children)
+      {
+         endChild.Parent = this;
+         Children.Add(endChild);
+      }
+
+      CompactedNodes[^1].Children.Clear();
+
+      // insert the node into the tree
+      Parent.Children.Add(this);
+   }
+
+   public void UnCompact()
+   {
+      // remove the compacted nodes from the tree
+      Parent.Children.Remove(this);
+
+      foreach (var endChild in Children)
+      {
+         endChild.Parent = CompactedNodes[^1];
+         CompactedNodes[^1].Children.Add(endChild);
+      }
+
+      Children.Clear();
+
+      // insert the node into the tree
+      CompactedNodes[0].Parent.Children.Add(CompactedNodes[0]);
+      CompactedNodes[0].Parent = CompactedNodes[0];
+
+      // remove the compacted node from the tree
+      Parent.Children.Remove(this);
+   }
+
+   public void StepUndo()
+   {
+      current--;
+      Debug.Assert(current >= 0, $"False invocation of \"{nameof(StepUndo)}\" without checking availability first!");
+
+      CompactedNodes[current].Command.Undo();
+   }
+
+   public void StepRedo()
+   {
+      current++;
+      Debug.Assert(current < CompactedNodes.Count, $"False invocation of \"{nameof(StepRedo)}\" without checking availability first!");
+
+      CompactedNodes[current].Command.Redo();
+   }
+
+   public void FullUndo()
+   {
+      List<HistoryNode> invertedNodes = new(CompactedNodes);
+      invertedNodes.Reverse();
+      foreach (var node in invertedNodes)
+         node.Command.Undo();
+   }
+
+   public void FullRedo()
+   {
+      foreach (var node in CompactedNodes)
+         node.Command.Redo();
+   }
+
+   public bool HasStepUndo => current > 0;
+   public bool HasStepRedo => current < CompactedNodes.Count - 1;
+
+   public string GetDescription()
+   {
+      return $"Compacting {CompactedNodes.Count} Nodes";
+   }
+}
 
 //============================================================
 // A Node for the HistoryManager to store the history of commands for undo/redo
@@ -269,9 +473,10 @@ public class HistoryNode(int id, ICommand command, CommandHistoryType type, Hist
 {
    public int Id { get; } = id;
    public ICommand Command { get; } = command;
-   public HistoryNode Parent { get; } = parent;
+   public HistoryNode Parent { get; set; } = parent;
    public CommandHistoryType Type { get; } = type;
-   public List<HistoryNode> Children { get; } = [];
+   public List<HistoryNode> Children { get; init; } = [];
+   public bool IsCompacted { get; set; } = false;
 
    public HistoryNode GetChildWithId(int id)
    {
@@ -299,5 +504,4 @@ public class HistoryNode(int id, ICommand command, CommandHistoryType type, Hist
          foreach (var descendant in Traverse(child, level + 1))
             yield return descendant;
    }
-
 }

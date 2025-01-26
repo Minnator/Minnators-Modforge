@@ -20,10 +20,7 @@ namespace Editor.DataClasses.Commands
       }
 
 
-      public override List<Saveable> GetTargets()
-      {
-         return [.. _locObjects];
-      }
+      public override List<int> GetTargetHash() => [.. _locObjects.Select(x => x.GetHashCode())];
       public override void Execute()
       {
          base.Execute([.. _locObjects]);
@@ -82,10 +79,7 @@ namespace Editor.DataClasses.Commands
             Execute();
       }
 
-      public override List<Saveable> GetTargets()
-      {
-         return [_locObject];
-      }
+      public override List<int> GetTargetHash() => [_locObject.GetHashCode()];
       public override void Execute()
       {
          base.Execute([_locObject]);

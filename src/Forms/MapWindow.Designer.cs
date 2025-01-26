@@ -93,6 +93,7 @@
          propertyCollectionSelectorToolStripMenuItem = new ToolStripMenuItem();
          generateTextureAtlasPacedToolStripMenuItem = new ToolStripMenuItem();
          audioTestToolStripMenuItem = new ToolStripMenuItem();
+         compactHistoryToolStripMenuItem = new ToolStripMenuItem();
          ProvinceCollectionsLayoutPanel = new TableLayoutPanel();
          FocusSelectionCheckBox = new CheckBox();
          BottomToolStrip = new ToolStrip();
@@ -249,6 +250,7 @@
          MMButtonsTLPanel = new TableLayoutPanel();
          GeneralToolTip = new ToolTip(components);
          toolTip1 = new ToolTip(components);
+         compactHistoryToolStripMenuItem1 = new ToolStripMenuItem();
          MapMenuStrip.SuspendLayout();
          BottomToolStrip.SuspendLayout();
          MainLayoutPanel.SuspendLayout();
@@ -500,7 +502,7 @@
          // 
          // historyToolStripMenuItem
          // 
-         historyToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { selectionHistoryToolStripMenuItem, toolStripSeparator3, DeleteHistoryToolStripMenuItem });
+         historyToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { selectionHistoryToolStripMenuItem, toolStripSeparator3, compactHistoryToolStripMenuItem1, DeleteHistoryToolStripMenuItem });
          historyToolStripMenuItem.Name = "historyToolStripMenuItem";
          historyToolStripMenuItem.Size = new Size(57, 23);
          historyToolStripMenuItem.Text = "History";
@@ -522,7 +524,7 @@
          // 
          DeleteHistoryToolStripMenuItem.Name = "DeleteHistoryToolStripMenuItem";
          DeleteHistoryToolStripMenuItem.Size = new Size(290, 22);
-         DeleteHistoryToolStripMenuItem.Text = "Delete History";
+         DeleteHistoryToolStripMenuItem.Text = "Delete history";
          DeleteHistoryToolStripMenuItem.Click += DeleteHistoryToolStripMenuItem_Click;
          // 
          // toolTipCustomizerToolStripMenuItem
@@ -696,7 +698,7 @@
          // 
          // debugToolStripMenuItem
          // 
-         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, collectionSelectorBaseToolStripMenuItem, propertyCollectionSelectorToolStripMenuItem, generateTextureAtlasPacedToolStripMenuItem, audioTestToolStripMenuItem });
+         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, collectionSelectorBaseToolStripMenuItem, propertyCollectionSelectorToolStripMenuItem, generateTextureAtlasPacedToolStripMenuItem, audioTestToolStripMenuItem, compactHistoryToolStripMenuItem });
          debugToolStripMenuItem.Enabled = false;
          debugToolStripMenuItem.Name = "debugToolStripMenuItem";
          debugToolStripMenuItem.Size = new Size(54, 23);
@@ -744,6 +746,13 @@
          audioTestToolStripMenuItem.Size = new Size(221, 22);
          audioTestToolStripMenuItem.Text = "Audio test";
          audioTestToolStripMenuItem.Click += audioTestToolStripMenuItem_Click;
+         // 
+         // compactHistoryToolStripMenuItem
+         // 
+         compactHistoryToolStripMenuItem.Name = "compactHistoryToolStripMenuItem";
+         compactHistoryToolStripMenuItem.Size = new Size(221, 22);
+         compactHistoryToolStripMenuItem.Text = "Compact History";
+         compactHistoryToolStripMenuItem.Click += compactHistoryToolStripMenuItem_Click;
          // 
          // ProvinceCollectionsLayoutPanel
          // 
@@ -2765,6 +2774,13 @@
          MMButtonsTLPanel.Size = new Size(1086, 30);
          MMButtonsTLPanel.TabIndex = 0;
          // 
+         // compactHistoryToolStripMenuItem1
+         // 
+         compactHistoryToolStripMenuItem1.Name = "compactHistoryToolStripMenuItem1";
+         compactHistoryToolStripMenuItem1.Size = new Size(290, 22);
+         compactHistoryToolStripMenuItem1.Text = "Compact history";
+         compactHistoryToolStripMenuItem1.Click += compactHistoryToolStripMenuItem1_Click;
+         // 
          // MapWindow
          // 
          AutoScaleDimensions = new SizeF(7F, 15F);
@@ -3092,6 +3108,8 @@
       private ToolStripMenuItem generateTextureAtlasPacedToolStripMenuItem;
       private ToolStripMenuItem audioTestToolStripMenuItem;
       private ToolStripMenuItem tradegoodEditorToolStripMenuItem;
+      private ToolStripMenuItem compactHistoryToolStripMenuItem;
+      private ToolStripMenuItem compactHistoryToolStripMenuItem1;
    }
 }
 

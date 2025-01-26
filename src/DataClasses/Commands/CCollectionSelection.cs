@@ -25,7 +25,6 @@ namespace Editor.DataClasses.Commands
          if (executeOnInit)
             Execute();
       }
-      public List<Saveable> GetTargets() => _selectionDelta.Cast<Saveable>().ToList();
 
       public void Execute()
       {
@@ -49,6 +48,11 @@ namespace Editor.DataClasses.Commands
             Execute();
          else
             Undo();
+      }
+
+      public List<int> GetTargetHash()
+      {
+         return _selectionDelta.Select(province => province.GetHashCode()).ToList();
       }
 
       public string GetDescription()

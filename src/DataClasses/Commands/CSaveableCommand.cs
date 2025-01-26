@@ -19,7 +19,6 @@ namespace Editor.DataClasses.Commands
          SaveMaster.Saving += (_, _) => SaveTest();
       }
 
-      public abstract List<Saveable> GetTargets();
 
       protected static int globalState = 0;
 
@@ -44,6 +43,9 @@ namespace Editor.DataClasses.Commands
       {
          ReasignStates(true);
       }
+
+      public abstract List<int> GetTargetHash();
+
       public abstract string GetDescription();
       public abstract string GetDebugInformation(int indent);
 

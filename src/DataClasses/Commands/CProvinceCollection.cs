@@ -1,4 +1,5 @@
 ﻿using Editor.DataClasses.GameDataClasses;
+using Editor.Helper;
 using Editor.Saving;
 
 namespace Editor.DataClasses.Commands
@@ -17,7 +18,7 @@ namespace Editor.DataClasses.Commands
    {
       public override void Execute() => base.Execute([.. NewComposites.Select(x => x.Key)]);
 
-      public override List<Saveable> GetTargets() => NewComposites.Select(x => x.Key).Cast<Saveable>().ToList();
+      public override List<int> GetTargetHash() => [.. NewComposites.Select(x => x.HashKeyValuePair())];
    }
 
    public class CAddProvinceCollection<T>(ProvinceCollection<T> newParent, bool add)
@@ -31,7 +32,7 @@ namespace Editor.DataClasses.Commands
          else
             base.Execute([.. OldParentsNotNull, NewParent], SaveableOperation.Default);
       }
-      public override List<Saveable> GetTargets() => NewComposites.Select(x => x.Key).Cast<Saveable>().ToList();
+      public override List<int> GetTargetHash() => [.. NewComposites.Select(x => x.HashKeyValuePair())];
    }
 
    public class CRemoveCountryProvinceCollection(ProvinceCollection<Province> oldParent, bool remove)
@@ -41,8 +42,7 @@ namespace Editor.DataClasses.Commands
       {
          base.Execute([.. Composites]);
       }
-
-      public override List<Saveable> GetTargets() => Composites.Cast<Saveable>().ToList();
+      public override List<int> GetTargetHash() => [.. Composites.Select(x => x.GetHashCode())];
    }
 
    public class CRemoveProvinceCollection<T>(ProvinceCollection<T> oldParent, bool remove)
@@ -50,7 +50,7 @@ namespace Editor.DataClasses.Commands
       where T : ProvinceComposite
    {
       public override void Execute() => base.Execute([OldParent], RemoveFromGlobal ? SaveableOperation.Deleted : SaveableOperation.Default);
-      public override List<Saveable> GetTargets() => [OldParent];
+      public override List<int> GetTargetHash() => [OldParent.GetHashCode()];
    }
 
    public abstract class CAddProvinceCollectionGeneral<T>(ProvinceCollection<T> newParent, bool add)

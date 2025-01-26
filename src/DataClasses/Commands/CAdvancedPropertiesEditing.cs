@@ -20,7 +20,10 @@ namespace Editor.DataClasses.Commands
          ProvColHelper.SetObjectInCollectionIfExists(postEditing);
       }
 
-      public List<Saveable> GetTargets() => [];
+      public List<int> GetTargetHash()
+      {
+         return [preEditing.GetHashCode()];
+      }
 
       public string GetDescription()
       {

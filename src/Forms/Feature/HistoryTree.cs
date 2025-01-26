@@ -67,10 +67,19 @@ namespace Editor.Forms.Feature
 
       private static TreeNode AddToNodeFull(HistoryNode history)
       {
-         var node = new HistoryTreeNode(history.Command.GetDescription(), history.Type)
-         {
-            Tag = history.Id
-         };
+         TreeNode node;
+
+         if (history is CompactHistoryNode compNode)
+            node = new HistoryTreeNode(compNode.GetDescription(), compNode.Type)
+            {
+               Tag = compNode.Id,
+               BackColor = Color.Coral
+            };
+         else
+            node = new HistoryTreeNode(history.Command.GetDescription(), history.Type)
+            {
+               Tag = history.Id
+            };
 
          if (HistoryManager.Current.Id == history.Id)
             node.BackColor = Color.LightGreen;
@@ -135,8 +144,11 @@ namespace Editor.Forms.Feature
             var node = HistoryTreeView.SelectedNode;
             if (node is null)
                return;
-
-            new RoughEditorForm(HistoryManager.GetNodeWithId((int)node.Tag), false).ShowDialog();
+            var historyNode = HistoryManager.GetNodeWithId((int)node.Tag);
+            if (historyNode is CompactHistoryNode compNode)
+               new RoughEditorForm(compNode, false).ShowDialog();
+            else
+               new RoughEditorForm(historyNode, false).ShowDialog();
          }
       }
    }

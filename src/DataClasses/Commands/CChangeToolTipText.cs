@@ -30,7 +30,11 @@ public class CChangeToolTipText : ICommand
    {
       Execute();
    }
-   public List<Saveable> GetTargets() => [];
+
+   public List<int> GetTargetHash()
+   {
+      return [Globals.Settings.ToolTip.GetHashCode()];
+   }
 
    public string GetDescription()
    {

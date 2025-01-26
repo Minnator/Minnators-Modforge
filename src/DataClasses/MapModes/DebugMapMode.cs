@@ -6,7 +6,11 @@ namespace Editor.DataClasses.MapModes
 {
    public class DebugMapMode : MapMode
    {
+#if DEBUG
       public override MapModeType MapModeType { get; } = MapModeType.DEBUG;
+#else
+      public override MapModeType MapModeType { get; } = MapModeType.Area;
+#endif
 
       public override void RenderMapMode()
       {

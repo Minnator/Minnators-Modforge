@@ -882,32 +882,45 @@ namespace Editor.Forms
 
       private void MapWindow_KeyDown(object sender, KeyEventArgs e)
       {
-         if (ModifierKeys == Keys.Control)
+         if ((ModifierKeys & Keys.Control) == Keys.Control)
          {
-            switch (e.KeyCode)
-            {
-               case Keys.F:
-                  FormsHelper.ShowIfAnyOpen<Search>();
-                  break;
-               case Keys.Z:
-                  HistoryManager.Undo();
-                  break;
-               case Keys.Y:
-                  HistoryManager.Redo();
-                  e.SuppressKeyPress = true;
-                  e.Handled = true;
-                  break;
-               // Tabs
-               case Keys.D1:
-                  DataTabPanel.SelectedIndex = 0;
-                  break;
-               case Keys.D2:
-                  DataTabPanel.SelectedIndex = 1;
-                  break;
-               case Keys.D3:
-                  DataTabPanel.SelectedIndex = 2;
-                  break;
-            }
+            if ((ModifierKeys & Keys.Alt) == Keys.Alt)
+               switch (e.KeyCode)
+               {
+                  case Keys.Z:
+                     HistoryManager.Undo(true);
+                     break;
+                  case Keys.Y:
+                     HistoryManager.Redo(true);
+                     e.SuppressKeyPress = true;
+                     e.Handled = true;
+                     break;
+               }
+            else
+               switch (e.KeyCode)
+               {
+                  case Keys.F:
+                     FormsHelper.ShowIfAnyOpen<Search>();
+                     break;
+                  case Keys.Z:
+                     HistoryManager.Undo(false);
+                     break;
+                  case Keys.Y:
+                     HistoryManager.Redo(false);
+                     e.SuppressKeyPress = true;
+                     e.Handled = true;
+                     break;
+                  // Tabs
+                  case Keys.D1:
+                     DataTabPanel.SelectedIndex = 0;
+                     break;
+                  case Keys.D2:
+                     DataTabPanel.SelectedIndex = 1;
+                     break;
+                  case Keys.D3:
+                     DataTabPanel.SelectedIndex = 2;
+                     break;
+               }
          }
 
          switch (e.KeyCode)
@@ -1543,8 +1556,8 @@ namespace Editor.Forms
 
       private void generateTextureAtlasPacedToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         var path = Path.Combine(Globals.DebugPath, "atlas.png");
-         GameIconDefinition.CreateSpriteSheetPacked(GameIconDefinition.Icons.Select(x => x.Value.Icon).ToList(), path);
+         //var path = Path.Combine(Globals.DebugPath, "atlas.png");
+         //GameIconDefinition.CreateSpriteSheetPacked(GameIconDefinition.Icons.Select(x => x.Value.Icon).ToList(), path);
 
 
       }
@@ -1558,6 +1571,16 @@ namespace Editor.Forms
       private void tradegoodEditorToolStripMenuItem_Click(object sender, EventArgs e)
       {
          new TradeGoodView().Show();
+      }
+
+      private void compactHistoryToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         HistoryManager.Compact();
+      }
+
+      private void compactHistoryToolStripMenuItem1_Click(object sender, EventArgs e)
+      {
+         HistoryManager.Compact();
       }
    }
 }

@@ -32,10 +32,7 @@ namespace Editor.DataClasses.Commands
             Execute();
       }
 
-      public override List<Saveable> GetTargets()
-      {
-         return _targets;
-      }
+      public override List<int> GetTargetHash() => [.. _targets.Select(x => x.GetHashCode())];
       public CModifyProperty(PropertyInfo property, Saveable target, T newValue, T oldValue, bool executeOnInit = true)
       {
          _propInfo = property;
