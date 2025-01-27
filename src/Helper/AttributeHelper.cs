@@ -174,6 +174,7 @@ namespace Editor.Helper
 
       public static int HashKeyValuePair<T, Q>(this KeyValuePair<T, Q> pair) where T : notnull where Q : notnull
       {
+         Debug.Assert(pair.Key != null && pair.Value != null, "pair.Key != null && pair.Value != null");
          return pair.Key.GetHashCode() ^ pair.Value.GetHashCode();
       }
    }

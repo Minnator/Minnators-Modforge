@@ -486,6 +486,7 @@ public class CompactHistoryNode : HistoryNode
    {
       // remove the compacted nodes from the tree
       Debug.Assert(CompactedNodes[0].Parent != null, "Parent must never be null when inserting a compacted node into the tree");
+
       CompactedNodes[0].Parent.Children.Remove(CompactedNodes[0]);
       CompactedNodes[0].Parent = null!;
 

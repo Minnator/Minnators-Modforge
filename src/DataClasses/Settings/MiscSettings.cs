@@ -171,7 +171,7 @@ namespace Editor.DataClasses.Settings
 
       private int _maxCompactingSize = 500;
       private int _minNumForCompacting = 5;
-      private AutoCompStrategy _autoCompactingStrategy = AutoCompStrategy.EveryXMinutes;
+      private AutoCompStrategy _autoCompactingStrategy = AutoCompStrategy.AfterXSize;
       private int _autoCompactingMinSize = 100;
       private int _autoCompactingDelay = 5;
 

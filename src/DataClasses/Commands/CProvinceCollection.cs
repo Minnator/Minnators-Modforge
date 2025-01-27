@@ -18,7 +18,7 @@ namespace Editor.DataClasses.Commands
    {
       public override void Execute() => base.Execute([.. NewComposites.Select(x => x.Key)]);
 
-      public override List<int> GetTargetHash() => [.. NewComposites.Select(x => x.HashKeyValuePair())];
+      public override List<int> GetTargetHash() => [newParent.GetHashCode()];
    }
 
    public class CAddProvinceCollection<T>(ProvinceCollection<T> newParent, bool add)
@@ -32,7 +32,7 @@ namespace Editor.DataClasses.Commands
          else
             base.Execute([.. OldParentsNotNull, NewParent], SaveableOperation.Default);
       }
-      public override List<int> GetTargetHash() => [.. NewComposites.Select(x => x.HashKeyValuePair())];
+      public override List<int> GetTargetHash() => [newParent.GetHashCode()];
    }
 
    public class CRemoveCountryProvinceCollection(ProvinceCollection<Province> oldParent, bool remove)
@@ -42,7 +42,7 @@ namespace Editor.DataClasses.Commands
       {
          base.Execute([.. Composites]);
       }
-      public override List<int> GetTargetHash() => [.. Composites.Select(x => x.GetHashCode())];
+      public override List<int> GetTargetHash() => [oldParent.GetHashCode()];
    }
 
    public class CRemoveProvinceCollection<T>(ProvinceCollection<T> oldParent, bool remove)

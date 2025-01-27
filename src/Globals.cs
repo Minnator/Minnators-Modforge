@@ -64,15 +64,6 @@ public enum FileSavingMode
    Automatic,
 }
 
-// When several provinces are selected only attributes that are the same across all selected provinces are shown.
-// Other attributes e.g. development will be increased per province or set per province: 
-// All province's tax will be increased by 1, all province's manpower will be set to 100.
-public enum ProvinceEditingStatus
-{
-   PreviewOnly, // Province is only previewed to the gui, no editing is allowed
-   PreviewUntilSelection, // Province is previewed until a selection is made then the selected province(s) are previewed and editing is allowed
-   Selection // Province is only previewd when selected and editing is allowed
-}
 #endregion
 
 //contains all required and used data across the application and instances of forms.
@@ -357,7 +348,7 @@ public static class Globals
 // - [x] Streamlined History management
 
 // Update Alpha 1.0.2
-// - [ ] Fix all combo-boxes taking the input from the suggestion without the use ever using it (when both are empty)
+// - [x] Fix all combo-boxes taking the input from the suggestion without the use ever using it (when both are empty)
 // - [ ] Demonstration Video
 // - [x] Fix Going back and forth in history causing provinces being in illegal states
 // - [x] Added Icons and improved Custom toolbar
@@ -376,6 +367,7 @@ public static class Globals
 // - [x] Added Climate and Weather map modes
 
 // TODO LIST Until Alpha 1.1
+// - [x] Add history compacting
 // - [x] Block Water provinces; should not be viable for countries
 // - [ ] Loosing hover when selecting and deselecting a province
 // - [███████████▒] Smart Gui reloading
@@ -394,7 +386,7 @@ public static class Globals
 // - [ ] Item scaling on Graphics (Trade arrows, straits, capitals, text)
 // - [ ] FPS count for map rendering
 // - [ ] Add a way to create custom map modes
-// - [ ] Add a tradegoods creation and editing menu
+// - [-] Add a tradegoods creation and editing menu
 // - [ ] Ideas making via drag and drop
 // - [ ] Province Creation and editing
 // - [ ] File syncing/hotreloading
@@ -412,10 +404,10 @@ public static class Globals
 // - [ ] Overlays (several)
 
 // Next Up in what shall happen:
-// - [ ] Update Localisation Implementation
-// - [ ] Create List command
-// - [ ] Improve and create List GUI interface / elements
-// - [ ] Compacting command
+// - [x] Update Localisation Implementation
+// - [x] Create List command
+// - [x] Improve and create List GUI interface / elements
+// - [x] Compacting command
 // - [ ] Finish Loading overhaul
 // - [ ] Fix border drawing
 
