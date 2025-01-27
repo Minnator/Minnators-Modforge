@@ -217,7 +217,10 @@ public static class Globals
          if (value == 0)
          {
             if (MapWindow.Text.EndsWith('*'))
-               MapWindow.Text = MapWindow.Text[..^1];
+               if (MapWindow.InvokeRequired)
+                  MapWindow.Invoke(new(() => MapWindow.Text = MapWindow.Text[..^1]));
+               else
+                  MapWindow.Text = MapWindow.Text[..^1];
          }
          else if(_saveableType == 0)
             MapWindow.Text += "*";

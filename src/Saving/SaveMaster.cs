@@ -2,6 +2,7 @@
 using System.Text;
 using Editor.DataClasses.Misc;
 using Editor.Forms.Feature.SavingClasses;
+using Editor.Forms.PopUps;
 using Editor.Helper;
 using static Editor.Saving.ObjEditingStatus;
 
@@ -97,9 +98,26 @@ namespace Editor.Saving
 
       public static void SavePaths(ref HashSet<PathObj> localToBeHandled, SaveableType saveableType = SaveableType.All)
       {
-         if (localToBeHandled.Contains(PathObj.Empty))
-            AddNewSaveables(saveableType, ref localToBeHandled);
-         foreach (var path in localToBeHandled)
+         var progressPopUp = ProgressBarPopUp.GetProgressBar(localToBeHandled.Count);
+         progressPopUp.DescriptionLabel.Text = "Saving files...";
+         var localPaths = localToBeHandled;
+
+         progressPopUp.Load += (_, _) =>
+         {
+            Task.Run(() => ProcessSavePaths(progressPopUp, ref localPaths, saveableType));
+         };
+
+         progressPopUp.ShowDialog();
+
+         localToBeHandled = localPaths;
+      }
+
+      private static void ProcessSavePaths(ProgressBarPopUp progressPopUp, ref HashSet<PathObj> pathsToHandle, SaveableType saveableType)
+      {
+         if (pathsToHandle.Contains(PathObj.Empty))
+            AddNewSaveables(saveableType, ref pathsToHandle);
+
+         foreach (var path in pathsToHandle)
          {
             var singleModData = AllSaveableFiles[path][0].WhatAmI();
             if ((saveableType & singleModData) == 0)
@@ -109,16 +127,23 @@ namespace Editor.Saving
                SaveVanillaToMod(path);
             else
                SaveFile(path);
-            // Remove the saved type from the still to save types
+
             NeedsToBeHandled.Remove(path);
             if (Cache[singleModData] == 0)
-            {
                Globals.SaveableType &= ~singleModData;
-            }
-            // The cache has to be always above 0
             else if (Cache[singleModData] < 0)
-               throw new EvilActions("The cache value is below 0 this should never happen!");
+               throw new EvilActions("The cache value is below 0; this should never happen!");
+
+            progressPopUp.Invoke(() => progressPopUp.UpdateProgress());
+#if DEBUG
+            // Simulated heavy computation (for demonstration)
+            for (var i = 0; i < 100000000; i += 2)
+            {
+               i--;
+            }
+#endif
          }
+         progressPopUp.Invoke(progressPopUp.Close);
       }
 
       public static void AddNewSaveables(SaveableType saveableType, ref HashSet<PathObj> localToBeHandled)
