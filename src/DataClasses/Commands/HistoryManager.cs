@@ -192,7 +192,7 @@ public static class HistoryManager
       while (node.Children.Count > 0)
       {
          depth++;
-         if (node is CompactHistoryNode compNode)
+         if (node.Children[0] is CompactHistoryNode compNode)
             total += compNode.CompactedNodes.Count;
          else
             total++;
@@ -485,6 +485,7 @@ public class CompactHistoryNode : HistoryNode
    public void InsertInTree()
    {
       // remove the compacted nodes from the tree
+      Debug.Assert(CompactedNodes[0].Parent != null, "Parent must never be null when inserting a compacted node into the tree");
       CompactedNodes[0].Parent.Children.Remove(CompactedNodes[0]);
       CompactedNodes[0].Parent = null!;
 
