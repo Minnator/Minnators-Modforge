@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Diagnostics;
 using System.Xml.Linq;
 using Editor.Forms.PopUps;
@@ -21,8 +22,8 @@ public static class HistoryManager
 
 
    // Events for when the undo/redo depth changes
-   public static event EventHandler<int>? UndoDepthChanged;
-   public static event EventHandler<int>? RedoDepthChanged;
+   public static event EventHandler<(int, int)>? UndoDepthChanged;
+   public static event EventHandler<(int, int)>? RedoDepthChanged;
 
    public static EventHandler UndoEvent = delegate { };
    public static EventHandler RedoEvent = delegate { };
@@ -46,6 +47,12 @@ public static class HistoryManager
    // Check if there are any commands to redo
    public static bool CanRedo => Current.Children.Count > 0 || Current is CompactHistoryNode { HasStepRedo: true };
    public static HistoryNode Current { get; private set; }
+
+   public static void UpdateToolStrip()
+   {
+      UndoDepthChanged?.Invoke(null, GetUndoDepth());
+      RedoDepthChanged?.Invoke(null, GetRedoDepth());
+   }
 
    // Undo the last command
    public static void Undo(bool stepUndo)
@@ -78,7 +85,7 @@ public static class HistoryManager
 
       }
 
-      UndoDepthChanged?.Invoke(null, GetUndoDepth());
+      UpdateToolStrip();
       UndoEvent.Invoke(null, EventArgs.Empty);
    }
 
@@ -93,8 +100,11 @@ public static class HistoryManager
             if (!compNode.HasStepRedo)
             {
                Current = Current.Children[childIndex];
-               Redo(true, childIndex); // we have no more StepRedos left so we go up one node
-               return;
+               if (Current is CompactHistoryNode compact)
+                  compact.FullRedo();
+               else
+                  Current.Command.Redo();
+               goto end;
             }
             if (stepRedo)
                compNode.StepRedo();
@@ -109,8 +119,8 @@ public static class HistoryManager
             else
                Current.Command.Redo();
          }
-
-         RedoDepthChanged?.Invoke(null, GetRedoDepth());
+         end:
+         UpdateToolStrip();
          RedoEvent.Invoke(null, EventArgs.Empty);
       }
 
@@ -144,34 +154,43 @@ public static class HistoryManager
       
       Current = redo[^1];
 
-      UndoDepthChanged?.Invoke(null, GetUndoDepth());
-      RedoDepthChanged?.Invoke(null, GetRedoDepth());
+      UpdateToolStrip();
    }
 
-   public static int GetUndoDepth()
+   public static (int, int) GetUndoDepth()
    {
       var depth = 0;
+      var total = 0;
       var node = Current;
       while (node.Parent != null!)
       {
          depth++;
+         if (node is CompactHistoryNode compNode)
+            total += compNode.CompactedNodes.Count;
+         else
+            total++;
          node = node.Parent;
       }
 
-      return depth;
+      return (depth, total);
    }
 
-   public static int GetRedoDepth()
+   public static (int, int) GetRedoDepth()
    {
       var depth = 0;
+      var total = 0;
       var node = Current;
       while (node.Children.Count > 0)
       {
          depth++;
+         if (node is CompactHistoryNode compNode)
+            total += compNode.CompactedNodes.Count;
+         else
+            total++;
          node = node.Children[0];
       }
 
-      return depth;
+      return (depth, total);
    }
    
    public static (List<HistoryNode>, List<HistoryNode>) GetPathBetweenNodes(int from, int to)
@@ -287,8 +306,21 @@ public static class HistoryManager
 
    // ----------------------------------------- Compacting ----------------------------------------- \\
 
+   public static void Uncompact(HistoryNode node)
+   {
+      for (var i = node.Children.Count - 1; i >= 0; i--)
+      {
+         Uncompact(node.Children[i]);
+         if (node.Children[i] is CompactHistoryNode compNode)
+            compNode.UnCompact();
+      }
+   }
+
    public static void Compact()
    {
+      // We need to uncompact the tree first so that we can find all optimal groups
+      Uncompact(_root);
+
       var groups = FindGroups(_root);
       var compGroups = FindCompactableGroups(groups);
 
@@ -303,7 +335,7 @@ public static class HistoryManager
             Current = node;
       }
 
-
+      UpdateToolStrip();
    }
 
    private static List<List<HistoryNode>> FindCompactableGroups(Dictionary<List<int>, List<HistoryNode>> groups)
@@ -371,8 +403,8 @@ public static class HistoryManager
          return;
 
       action(node);
-      foreach (var child in node.Children) 
-         TraverseTree(child, action);
+      for (var i = node.Children.Count - 1; i >= 0; i--) 
+         TraverseTree(node.Children[i], action);
    }
 }
 
@@ -420,11 +452,8 @@ public class CompactHistoryNode : HistoryNode
       Children.Clear();
 
       // insert the node into the tree
-      CompactedNodes[0].Parent.Children.Add(CompactedNodes[0]);
-      CompactedNodes[0].Parent = CompactedNodes[0];
-
-      // remove the compacted node from the tree
-      Parent.Children.Remove(this);
+      CompactedNodes[0].Parent = Parent;
+      Parent.Children.Add(CompactedNodes[0]);
    }
 
    public void StepUndo()

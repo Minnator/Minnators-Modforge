@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Media;
 using System.Runtime;
@@ -145,6 +146,8 @@ namespace Editor.Forms
          // Enable the Application
          Globals.LoadingLog.Close();
          ResourceUsageHelper.Initialize(this);
+         HistoryManager.UpdateToolStrip();
+         SetSelectedProvinceSum(0);
 
          // ALL LOADING COMPLETE - Set the application to running
 
@@ -308,16 +311,15 @@ namespace Editor.Forms
          MapModeTimesInfo.ToolTipText =
             "Time only counts in the time it takes the Rendering Pipeline to render the map and Invalidate the control.\nOther GUI updates are not included.";
          RamUsageStrip.ToolTipText = "Current RAM usage of the application\nThis is inflated by HeapAllocation from the GC and will free memory if your PC needs some.";
-         UndoDepthLabel.ToolTipText = "Undo stack depth\nThis is the amount of actions you can undo/redo";
-         RedoDepthLabel.ToolTipText = "Redo stack depth\nThis is the amount of actions you can redo/undo";
+         UndoDepthLabel.ToolTipText = "Undo tree depth\nCompacted \'undos\'(CTRL+Z) / Uncompacted \'undos\'(CTRL+ALT+Z)";
+         RedoDepthLabel.ToolTipText = "Redo tree depth\nCompacted \'redos\'(CTRL+Y) / Uncompacted \'redos\'(CTRL+ALT+Y)";
          CpuUsageStrip.ToolTipText = "Current CPU usage of the application";
-         SelectedProvinceSum.ToolTipText = "Sum of selected provinces";
+         SelectedProvinceSum.ToolTipText = "Sum of currently selected provinces";
       }
 
       private void InitializeMapModeButtons()
       {
          var button01 = ControlFactory.GetMapModeButton('q', 0);
-         button01.Margin = new(0, 0, 3, 0);
          var button21 = ControlFactory.GetMapModeButton('w', 1);
          var button31 = ControlFactory.GetMapModeButton('e', 2);
          var button41 = ControlFactory.GetMapModeButton('r', 3);
@@ -327,6 +329,7 @@ namespace Editor.Forms
          var button8 = ControlFactory.GetMapModeButton('i', 7);
          var button9 = ControlFactory.GetMapModeButton('o', 8);
          var button10 = ControlFactory.GetMapModeButton('p', 9);
+         button01.Margin = new(0, 0, 3, 0);
          button10.Margin = new(3, 0, 0, 0);
          MMButtonsTLPanel.Controls.Add(button01, 0, 0);
          MMButtonsTLPanel.Controls.Add(button21, 1, 0);
@@ -682,7 +685,7 @@ namespace Editor.Forms
       #region Resource Updater MethodInvokation
       public void SetSelectedProvinceSum(int sum)
       {
-         SelectedProvinceSum.Text = $"ProvSum: [{sum}]";
+         SelectedProvinceSum.Text = $"Selected: {sum}";
       }
 
 
@@ -705,8 +708,16 @@ namespace Editor.Forms
       #endregion
       #region HistoryManager Event Handlers
 
-      private void UpdateRedoDepth(object sender, int e) => RedoDepthLabel.Text = $"Redos [{e}]";
-      private void UpdateUndoDepth(object sender, int e) => UndoDepthLabel.Text = $"Undos [{e}]";
+      private void UpdateRedoDepth(object sender, (int, int) valueTuple)
+      {
+         RedoDepthLabel.Text = $"Redos [{valueTuple.Item1}/{valueTuple.Item2}]";
+      }
+
+      private void UpdateUndoDepth(object? sender, (int, int) valueTuple)
+      {
+         UndoDepthLabel.Text = $"Undos [{valueTuple.Item1}/{valueTuple.Item2}]";
+      }
+
       #endregion
       #region History interface interactions
 
@@ -1575,7 +1586,7 @@ namespace Editor.Forms
 
       private void compactHistoryToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         HistoryManager.Compact();
+         HistoryManager.Uncompact(HistoryManager.Root);
       }
 
       private void compactHistoryToolStripMenuItem1_Click(object sender, EventArgs e)

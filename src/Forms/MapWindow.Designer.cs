@@ -61,6 +61,7 @@
          historyToolStripMenuItem = new ToolStripMenuItem();
          selectionHistoryToolStripMenuItem = new ToolStripMenuItem();
          toolStripSeparator3 = new ToolStripSeparator();
+         compactHistoryToolStripMenuItem1 = new ToolStripMenuItem();
          DeleteHistoryToolStripMenuItem = new ToolStripMenuItem();
          toolTipCustomizerToolStripMenuItem = new ToolStripMenuItem();
          openCustomizerToolStripMenuItem = new ToolStripMenuItem();
@@ -250,7 +251,6 @@
          MMButtonsTLPanel = new TableLayoutPanel();
          GeneralToolTip = new ToolTip(components);
          toolTip1 = new ToolTip(components);
-         compactHistoryToolStripMenuItem1 = new ToolStripMenuItem();
          MapMenuStrip.SuspendLayout();
          BottomToolStrip.SuspendLayout();
          MainLayoutPanel.SuspendLayout();
@@ -519,6 +519,13 @@
          // 
          toolStripSeparator3.Name = "toolStripSeparator3";
          toolStripSeparator3.Size = new Size(287, 6);
+         // 
+         // compactHistoryToolStripMenuItem1
+         // 
+         compactHistoryToolStripMenuItem1.Name = "compactHistoryToolStripMenuItem1";
+         compactHistoryToolStripMenuItem1.Size = new Size(290, 22);
+         compactHistoryToolStripMenuItem1.Text = "Compact history";
+         compactHistoryToolStripMenuItem1.Click += compactHistoryToolStripMenuItem1_Click;
          // 
          // DeleteHistoryToolStripMenuItem
          // 
@@ -793,7 +800,7 @@
          BottomToolStrip.Items.AddRange(new ToolStripItem[] { RamUsageStrip, CpuUsageStrip, toolStripSeparator1, UndoDepthLabel, RedoDepthLabel, toolStripSeparator2, SelectedProvinceSum, toolStripSeparator7, MapModeTimesInfo });
          BottomToolStrip.Location = new Point(0, 876);
          BottomToolStrip.Name = "BottomToolStrip";
-         BottomToolStrip.Size = new Size(568, 24);
+         BottomToolStrip.Size = new Size(599, 24);
          BottomToolStrip.TabIndex = 0;
          // 
          // RamUsageStrip
@@ -2773,13 +2780,6 @@
          MMButtonsTLPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
          MMButtonsTLPanel.Size = new Size(1086, 30);
          MMButtonsTLPanel.TabIndex = 0;
-         // 
-         // compactHistoryToolStripMenuItem1
-         // 
-         compactHistoryToolStripMenuItem1.Name = "compactHistoryToolStripMenuItem1";
-         compactHistoryToolStripMenuItem1.Size = new Size(290, 22);
-         compactHistoryToolStripMenuItem1.Text = "Compact history";
-         compactHistoryToolStripMenuItem1.Click += compactHistoryToolStripMenuItem1_Click;
          // 
          // MapWindow
          // 
