@@ -103,6 +103,7 @@
          toolStripSeparator1 = new ToolStripSeparator();
          UndoDepthLabel = new ToolStripLabel();
          RedoDepthLabel = new ToolStripLabel();
+         CompactionToolStrip = new ToolStripLabel();
          toolStripSeparator2 = new ToolStripSeparator();
          SelectedProvinceSum = new ToolStripLabel();
          toolStripSeparator7 = new ToolStripSeparator();
@@ -797,10 +798,10 @@
          // 
          MainLayoutPanel.SetColumnSpan(BottomToolStrip, 2);
          BottomToolStrip.Dock = DockStyle.None;
-         BottomToolStrip.Items.AddRange(new ToolStripItem[] { RamUsageStrip, CpuUsageStrip, toolStripSeparator1, UndoDepthLabel, RedoDepthLabel, toolStripSeparator2, SelectedProvinceSum, toolStripSeparator7, MapModeTimesInfo });
+         BottomToolStrip.Items.AddRange(new ToolStripItem[] { RamUsageStrip, CpuUsageStrip, toolStripSeparator1, UndoDepthLabel, RedoDepthLabel, CompactionToolStrip, toolStripSeparator2, SelectedProvinceSum, toolStripSeparator7, MapModeTimesInfo });
          BottomToolStrip.Location = new Point(0, 876);
          BottomToolStrip.Name = "BottomToolStrip";
-         BottomToolStrip.Size = new Size(599, 24);
+         BottomToolStrip.Size = new Size(665, 24);
          BottomToolStrip.TabIndex = 0;
          // 
          // RamUsageStrip
@@ -831,6 +832,12 @@
          RedoDepthLabel.Name = "RedoDepthLabel";
          RedoDepthLabel.Size = new Size(66, 21);
          RedoDepthLabel.Text = "RedoDepth";
+         // 
+         // CompactionToolStrip
+         // 
+         CompactionToolStrip.Name = "CompactionToolStrip";
+         CompactionToolStrip.Size = new Size(66, 21);
+         CompactionToolStrip.Text = "CompTime";
          // 
          // toolStripSeparator2
          // 
@@ -2891,8 +2898,8 @@
       private System.Windows.Forms.ToolStripMenuItem filesToolStripMenuItem;
       private System.Windows.Forms.ToolStrip BottomToolStrip;
       private System.Windows.Forms.ToolStripLabel SelectedProvinceSum;
-      private System.Windows.Forms.ToolStripLabel RamUsageStrip;
-      private System.Windows.Forms.ToolStripLabel CpuUsageStrip;
+      internal System.Windows.Forms.ToolStripLabel RamUsageStrip;
+      internal System.Windows.Forms.ToolStripLabel CpuUsageStrip;
       private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
       private System.Windows.Forms.ToolStripLabel UndoDepthLabel;
       private System.Windows.Forms.ToolStripLabel RedoDepthLabel;
@@ -3110,6 +3117,7 @@
       private ToolStripMenuItem tradegoodEditorToolStripMenuItem;
       private ToolStripMenuItem compactHistoryToolStripMenuItem;
       private ToolStripMenuItem compactHistoryToolStripMenuItem1;
+      public ToolStripLabel CompactionToolStrip;
    }
 }
 

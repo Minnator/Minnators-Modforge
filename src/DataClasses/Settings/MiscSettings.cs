@@ -163,8 +163,17 @@ namespace Editor.DataClasses.Settings
 
    public class CompactingSettings : PropertySettings
    {
+      public enum AutoCompStrategy {
+         None,
+         AfterXSize,
+         EveryXMinutes
+      }
+
       private int _maxCompactingSize = 500;
       private int _minNumForCompacting = 5;
+      private AutoCompStrategy _autoCompactingStrategy = AutoCompStrategy.EveryXMinutes;
+      private int _autoCompactingMinSize = 100;
+      private int _autoCompactingDelay = 5;
 
       [Description("The maximum number of commands which will be compacted into a compacting command")]
       [CompareInEquals]
@@ -182,6 +191,28 @@ namespace Editor.DataClasses.Settings
          set => SetField(ref _minNumForCompacting, value);
       }
 
+      [Description("The strategy for auto compacting")]
+      [CompareInEquals]
+      public AutoCompStrategy AutoCompactingStrategy
+      {
+         get => _autoCompactingStrategy;
+         set => SetField(ref _autoCompactingStrategy, value);
+      }
 
+      [Description("The minimum size for auto compacting to trigger")]
+      [CompareInEquals]
+      public int AutoCompactingMinSize
+      {
+         get => _autoCompactingMinSize;
+         set => SetField(ref _autoCompactingMinSize, value);
+      }
+
+      [Description("The delay in minutes for auto compacting to trigger")]
+      [CompareInEquals]
+      public int AutoCompactingDelay
+      {
+         get => _autoCompactingDelay;
+         set => SetField(ref _autoCompactingDelay, value);
+      }
    }
 }

@@ -1,4 +1,5 @@
-﻿using Editor.DataClasses.Settings;
+﻿using Editor.DataClasses.Commands;
+using Editor.DataClasses.Settings;
 using Editor.Saving;
 
 namespace Editor.Helper
@@ -63,6 +64,7 @@ namespace Editor.Helper
       private static void ShutDownInternal()
       {
          ResourceUsageHelper.Dispose();
+         HistoryManager.StopTimers();
       }
    }
 }

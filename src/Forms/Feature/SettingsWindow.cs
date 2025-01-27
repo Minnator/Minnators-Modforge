@@ -30,6 +30,7 @@ namespace Editor.Forms.Feature
                Dock = DockStyle.Fill,
                SelectedObject = prop.GetValue(Globals.Settings)
             };
+            propertyGrid.ExpandAllGridItems();
 
             tabPage.Controls.Add(propertyGrid);
 

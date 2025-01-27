@@ -688,34 +688,24 @@ namespace Editor.Forms
          SelectedProvinceSum.Text = $"Selected: {sum}";
       }
 
-
-      public void UpdateMemoryUsage(float memoryUsage)
+      public void UpdateCompactionToolStripTime(TimeSpan time)
       {
-         if (IsDisposed || Disposing) return;
-         if (InvokeRequired)
-            Invoke(new MethodInvoker(delegate
-            {
-               RamUsageStrip.Text = memoryUsage > 1024 ? $"RAM: [{Math.Round(memoryUsage / 1024, 2):F2} GB]" : $"RAM: [{Math.Round(memoryUsage)} MB]";
-            }));
+         CompactionToolStrip.Text = $"Compaction in: {time:mm\\:ss}";
       }
-
-      public void UpdateCpuUsage(float cpuUsage)
-      {
-         if (IsDisposed || Disposing) return;
-         if (InvokeRequired) Invoke(new MethodInvoker(delegate { CpuUsageStrip.Text = $"CPU: [{Math.Round(cpuUsage, 2):F2}%]"; }));
-      }
-
+      
       #endregion
       #region HistoryManager Event Handlers
 
-      private void UpdateRedoDepth(object sender, (int, int) valueTuple)
+      private void UpdateRedoDepth(object sender, Func<(int, int)> valueTuple)
       {
-         RedoDepthLabel.Text = $"Redos [{valueTuple.Item1}/{valueTuple.Item2}]";
+         var (simple, full) = valueTuple();
+         RedoDepthLabel.Text = $"Redos [{simple}/{full}]";
       }
 
-      private void UpdateUndoDepth(object? sender, (int, int) valueTuple)
+      private void UpdateUndoDepth(object? sender, Func<(int, int)> valueTuple)
       {
-         UndoDepthLabel.Text = $"Undos [{valueTuple.Item1}/{valueTuple.Item2}]";
+         var (simple, full) = valueTuple();
+         UndoDepthLabel.Text = $"Undos [{simple}/{full}]";
       }
 
       #endregion

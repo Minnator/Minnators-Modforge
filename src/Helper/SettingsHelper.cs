@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.InteropServices.JavaScript;
+using Editor.DataClasses.Commands;
 using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Settings;
 using Editor.ErrorHandling;
@@ -58,6 +59,21 @@ namespace Editor.Helper
          {
             case nameof(Settings.Misc.Language):
                LocalisationLoading.Load();
+               break;
+            case nameof(Settings.Misc.CompactingSettings.AutoCompactingStrategy):
+               switch (Globals.Settings.Misc.CompactingSettings.AutoCompactingStrategy)
+               {
+                  case CompactingSettings.AutoCompStrategy.None:
+                     break;
+                  case CompactingSettings.AutoCompStrategy.AfterXSize:
+                     HistoryManager.TriggerCompaction(null, HistoryManager.GetUndoDepth);
+                     break;
+                  case CompactingSettings.AutoCompStrategy.EveryXMinutes:
+                     HistoryManager.InitializeTimers();
+                     break;
+                  default:
+                     throw new ArgumentOutOfRangeException();
+               }
                break;
          }
       }

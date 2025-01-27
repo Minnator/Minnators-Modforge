@@ -2,10 +2,12 @@
 using System.Collections;
 using System.Diagnostics;
 using System.Xml.Linq;
+using Editor.DataClasses.Settings;
 using Editor.Forms.PopUps;
 using Editor.Helper;
 using Editor.Saving;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
+using Timer = System.Windows.Forms.Timer;
 
 namespace Editor.DataClasses.Commands;
 
@@ -18,19 +20,26 @@ public static class HistoryManager
    {
       Current = new (_nodeId++, new CInitial(), CommandHistoryType.Action);
       _root = Current;
+
+      UndoDepthChanged += TriggerCompaction;
+      RedoDepthChanged += TriggerCompaction;
+
+      InitializeTimers();
    }
 
 
    // Events for when the undo/redo depth changes
-   public static event EventHandler<(int, int)>? UndoDepthChanged;
-   public static event EventHandler<(int, int)>? RedoDepthChanged;
+   public static event EventHandler<Func<(int, int)>>? UndoDepthChanged;
+   public static event EventHandler<Func<(int, int)>>? RedoDepthChanged;
 
    public static EventHandler UndoEvent = delegate { };
    public static EventHandler RedoEvent = delegate { };
 
+   private static int _lastCompactionDepth = 0;
+   private static Timer _autoCompactingTimer;
+   private static Timer _updateToolStripTimer;
+   private static DateTime _nextCompactionTime = DateTime.Now;
    
-   public static HistoryNode GetCurrent => Current;
-
    // Add a new command to the history
    public static void AddCommand(ICommand newCommand, CommandHistoryType type = CommandHistoryType.Action)
    {
@@ -38,7 +47,7 @@ public static class HistoryManager
       Current.Children.Add(newNode);
       Current = newNode;
 
-      UndoDepthChanged?.Invoke(null, GetUndoDepth());
+      UndoDepthChanged?.Invoke(null, GetUndoDepth);
    }
 
    // Check if there are any commands to undo or redo
@@ -50,8 +59,8 @@ public static class HistoryManager
 
    public static void UpdateToolStrip()
    {
-      UndoDepthChanged?.Invoke(null, GetUndoDepth());
-      RedoDepthChanged?.Invoke(null, GetRedoDepth());
+      UndoDepthChanged?.Invoke(null, GetUndoDepth);
+      RedoDepthChanged?.Invoke(null, GetRedoDepth);
    }
 
    // Undo the last command
@@ -267,8 +276,8 @@ public static class HistoryManager
       _nodeId = 0;
       _root = Current = new HistoryNode(_nodeId++, new CInitial(), CommandHistoryType.Action);
       Current = _root;
-      UndoDepthChanged?.Invoke(null, GetUndoDepth());
-      RedoDepthChanged?.Invoke(null, GetRedoDepth());
+      UndoDepthChanged?.Invoke(null, GetUndoDepth);
+      RedoDepthChanged?.Invoke(null, GetRedoDepth);
    }
 
    public static HistoryNode GetNodeAbove(HistoryNode node, int n)
@@ -405,6 +414,59 @@ public static class HistoryManager
       action(node);
       for (var i = node.Children.Count - 1; i >= 0; i--) 
          TraverseTree(node.Children[i], action);
+   }
+
+   // ========================================= Auto compacting code ========================================= \\
+
+   public static void TriggerCompaction(object? sender, Func<(int, int)> _)
+   {
+      var (undoDepth, _) = GetUndoDepth();
+      switch (Globals.Settings.Misc.CompactingSettings.AutoCompactingStrategy)
+      {
+         case CompactingSettings.AutoCompStrategy.None:
+         case CompactingSettings.AutoCompStrategy.EveryXMinutes:
+            return;
+         case CompactingSettings.AutoCompStrategy.AfterXSize:
+            // We only compact if the undo depth is greater than the last compaction depth and the amount to trigger a compaction,
+            // to not end in a compaction loop ast compaction is an expensive operation
+            if (undoDepth >= Globals.Settings.Misc.CompactingSettings.AutoCompactingMinSize + _lastCompactionDepth)
+            {
+               Compact();
+               (_lastCompactionDepth, var _) = GetUndoDepth();
+            }
+
+            Globals.MapWindow.CompactionToolStrip.Text = $"Compacting in: {Globals.Settings.Misc.CompactingSettings.AutoCompactingMinSize + _lastCompactionDepth - undoDepth} changes";
+            break;
+      }
+   }
+
+   public static void InitializeTimers()
+   {
+      if (Globals.Settings.Misc.CompactingSettings.AutoCompactingStrategy != CompactingSettings.AutoCompStrategy.EveryXMinutes)
+         return;
+      StopTimers();
+      _nextCompactionTime = DateTime.Now + TimeSpan.FromMinutes(Globals.Settings.Misc.CompactingSettings.AutoCompactingDelay);
+      _autoCompactingTimer = new() {Interval = 60000 * Globals.Settings.Misc.CompactingSettings.AutoCompactingDelay};
+      _autoCompactingTimer.Tick += (_, _) =>
+      {
+         TriggerCompaction(null, GetUndoDepth);
+         Globals.MapWindow.UpdateCompactionToolStripTime(_nextCompactionTime - DateTime.Now);
+         _nextCompactionTime = DateTime.Now + TimeSpan.FromMinutes(Globals.Settings.Misc.CompactingSettings.AutoCompactingDelay);
+      };
+      _autoCompactingTimer.Start();
+      _updateToolStripTimer = new() {Interval = 5000};
+      _updateToolStripTimer.Tick += (_, _) =>
+      {
+         Globals.MapWindow.UpdateCompactionToolStripTime(_nextCompactionTime - DateTime.Now);
+      };
+      _updateToolStripTimer.Start();
+   }
+
+   public static void StopTimers()
+   {
+      _autoCompactingTimer?.Stop();
+      _updateToolStripTimer?.Stop();
+   
    }
 }
 

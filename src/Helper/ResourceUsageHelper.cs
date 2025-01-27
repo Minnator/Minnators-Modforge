@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using Editor.Forms;
-using Timer = System.Threading.Timer;
+using Timer = System.Windows.Forms.Timer;
 
 #nullable enable
 
@@ -11,7 +11,6 @@ namespace Editor.Helper
       private static float _memoryUsage;
       private static float _cpuUsage;
 
-      private static MapWindow _mapWindow = null!;
       private static PerformanceCounter? cpuUsage;
       private static PerformanceCounter? memoryUsage;
 
@@ -24,17 +23,15 @@ namespace Editor.Helper
       {
          _appName = Process.GetCurrentProcess().ProcessName;
 
-         _mapWindow = mapWindow;
-         Updater = new(OnTimerTick, null, 0, 1000);
-         //var sw = Stopwatch.StartNew();
+         Updater = new(){Interval = 1000 };
+         Updater.Tick += OnTimerTick;
          var initThread = new Thread(() =>
          {
             cpuUsage = new ("Process", "% Processor Time", _appName, true);
             memoryUsage = new ("Process", "Private Bytes", _appName, true);
          });
          initThread.Start();
-         //sw.Stop();
-         //Debug.WriteLine("ResourceUsageHelper took: " + sw.ElapsedMilliseconds + "ms");
+         Updater.Start();
       }
 
       // Update the CPU and memory usage
@@ -47,26 +44,18 @@ namespace Editor.Helper
          _memoryUsage = memoryUsage.NextValue() / 1024 / 1024; // Convert bytes to MB
       }
 
-      private static void OnTimerTick(object? state)
+      private static void OnTimerTick(object? state, EventArgs eventArgs)
       {
-         Task.Run(() =>
-         {
-            UpdateResources();
-
-            // If the window is disposed, stop updating
-            if (_mapWindow.Disposing || _mapWindow.IsDisposed)
-            {
-               Updater.Dispose();
-               return;
-            }
-            
-            _mapWindow.UpdateMemoryUsage(_memoryUsage);
-            _mapWindow.UpdateCpuUsage(_cpuUsage);
-         });
+         UpdateResources(); 
+         Globals.MapWindow.RamUsageStrip.Text = _memoryUsage > 1024 ? $"RAM: [{Math.Round(_memoryUsage / 1024, 2):F2} GB]" : $"RAM: [{Math.Round(_memoryUsage)} MB]";
+         Globals.MapWindow.CpuUsageStrip.Text = $"CPU: [{Math.Round(_cpuUsage, 2):F2}%]";
       }
 
       public static void Dispose()
       {
+         cpuUsage?.Dispose();
+         memoryUsage?.Dispose();
+         Updater?.Stop();
          Updater?.Dispose();
       }
    }
