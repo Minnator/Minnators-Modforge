@@ -201,6 +201,15 @@ namespace Editor.Saving
                   break;
                sb.AppendLine($"{name} = {c.Tag}");
                break;
+            case Religion r:
+               sb.AppendLine($"{name} = {r.Name}");
+               break;
+            case Culture c:
+               sb.AppendLine($"{name} = {c.Name}");
+               break;
+            case TradeGood tg:
+               sb.AppendLine($"{name} = {tg.Name}");
+               break;
          }
       }
 

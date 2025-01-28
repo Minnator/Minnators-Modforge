@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Media;
 using System.Runtime;
@@ -25,7 +24,6 @@ using Editor.src.Forms.GetUserInput;
 using static Editor.Helper.ProvinceEnumHelper;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 using MapLoading = Editor.Loading.Enhanced.MapLoading;
-using MethodInvoker = System.Windows.Forms.MethodInvoker;
 using Region = Editor.DataClasses.GameDataClasses.Region;
 
 namespace Editor.Forms
