@@ -18,7 +18,9 @@ using Editor.Forms.PopUps;
 using Editor.Helper;
 using Editor.Loading;
 using Editor.NameGenerator;
+using Editor.Parser;
 using Editor.Saving;
+using Editor.src.Controls.NewControls;
 using Editor.src.Forms.Feature;
 using Editor.src.Forms.GetUserInput;
 using static Editor.Helper.ProvinceEnumHelper;
@@ -652,7 +654,7 @@ namespace Editor.Forms
          LocalisationLabel.SetDefault();
          _provAdjTextBox.SetDefault();
          ProvAdjLabel.SetDefault();
-         _terrainComboBox.SelectedItem = string.Empty;
+         _terrainComboBox.SetDefault();
          ExtendedComboBox.AllowEvents = true;
       }
       #endregion
@@ -959,10 +961,10 @@ namespace Editor.Forms
       private PropertyCollectionSelector<HistoryCountry, List<GovernmentReform>, GovernmentReform> _governmentReforms = null!;
       private PropertyCollectionSelector<HistoryCountry, List<Culture>, Culture> _acceptedCultures = null!;
 
-      private NamesEditor _leaderEditor = null!;
-      private NamesEditor _shipEditor = null!;
-      private NamesEditor _armyEditor = null!;
-      private NamesEditor _fleetEditor = null!;
+      private PropertyNamesEditor<CommonCountry, List<string>> _leaderEditor = null!;
+      private PropertyNamesEditor<CommonCountry, List<string>> _shipEditor = null!;
+      private PropertyNamesEditor<CommonCountry, List<string>> _armyEditor = null!;
+      private PropertyNamesEditor<CommonCountry, List<string>> _fleetEditor = null!;
 
       private PropertyLabel<HistoryCountry> _capitalTextBox = null!;
 
@@ -976,6 +978,8 @@ namespace Editor.Forms
 
       private PropertyTextBox<Country> CountryLoc = null!;
       private PropertyTextBox<Country> CountryADJLoc = null!;
+
+      private PropertyMonarchNamesControl<CommonCountry, List<MonarchName>> _monarchNames = null!;
 
       private void InitializeCountryEditGui()
       {
@@ -1054,10 +1058,10 @@ namespace Editor.Forms
          GovernmentLayoutPanel.SetRowSpan(_governmentReforms, 5);
 
          // Names
-         _leaderEditor = new([], "Add / Remove any names, separate with \",\"");
-         _shipEditor = new([], "Add / Remove any names, separate with \",\"  $PROVINCE$ can be used here.");
-         _armyEditor = new([], "Add / Remove any names, separate with \",\"");
-         _fleetEditor = new([], "Add / Remove any names, separate with \",\"  $PROVINCE$ can be used here.");
+         _leaderEditor = ControlFactory.GetPropertyNamesEditorCommonCountry<CommonCountry, List<string>>(typeof(CommonCountry).GetProperty(nameof(CommonCountry.LeaderNames)), "Add / Remove any names, separate with \",\"");
+         _shipEditor = ControlFactory.GetPropertyNamesEditorCommonCountry<CommonCountry, List<string>>(typeof(CommonCountry).GetProperty(nameof(CommonCountry.ShipNames)), "Add / Remove any names, separate with \",\" $PROVINCE$ can be used here.");
+         _armyEditor = ControlFactory.GetPropertyNamesEditorCommonCountry<CommonCountry, List<string>>(typeof(CommonCountry).GetProperty(nameof(CommonCountry.ArmyNames)), "Add / Remove any names, separate with \",\"");
+         _fleetEditor = ControlFactory.GetPropertyNamesEditorCommonCountry<CommonCountry, List<string>>(typeof(CommonCountry).GetProperty(nameof(CommonCountry.FleetNames)), "Add / Remove any names, separate with \",\" $PROVINCE$ can be used here.");
 
          LeaderNamesTab.Controls.Add(_leaderEditor);
          ShipNamesTab.Controls.Add(_shipEditor);
@@ -1126,11 +1130,17 @@ namespace Editor.Forms
 
          CountryADJLoc = ControlFactory.GetPropertyTextBoxCountry(typeof(Country).GetProperty(nameof(Country.AdjectiveLocalisation)), ControlFactory.DefaultMarginType.Slim);
          TagAndColorTLP.Controls.Add(CountryADJLoc, 3, 1);
-
-         AddNewMonarchNameButton.Click += CountryGuiEvents.AddMonarchName_Click;
-
+         
          CountryCustomToolStripLayoutPanel.Paint += TableLayoutBorder_Paint;
          OpenCountryFileButton.Enter += SetSavingToolTipCountryFileButton;
+
+         _monarchNames = new(typeof(CommonCountry).GetProperty(nameof(CommonCountry.MonarchNames)), ref LoadGuiEvents.CommonCountryLoadAction, () => [Selection.SelectedCountry.CommonCountry])
+         {
+            Dock = DockStyle.Fill,
+            Margin = new(0),
+         };
+
+         MonarchNamesTLP.Controls.Add(_monarchNames, 0, 1);
       }
 
       private void SetSavingToolTipCountryFileButton(object? sender, EventArgs e)
@@ -1163,11 +1173,11 @@ namespace Editor.Forms
          //_capitalTextBox.Clear();
 
          // Names
-         _leaderEditor.Clear();
-         _shipEditor.Clear();
-         _armyEditor.Clear();
-         _fleetEditor.Clear();
-         MonarchNamesFlowPanel.Controls.Clear();
+         _leaderEditor.SetDefault();
+         _shipEditor.SetDefault();
+         _armyEditor.SetDefault();
+         _fleetEditor.SetDefault();
+         _monarchNames.SetDefault();
 
          // Cultures
          _primaryCultureBox.SetDefault();
@@ -1226,15 +1236,6 @@ namespace Editor.Forms
          Globals.Settings.Saving.AlwaysAskBeforeCreatingFiles = CreateFilesByDefault.Checked;
       }
 
-      private void save1ToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-      }
-
-      private void bugReportToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-         new CrashReporter().ShowDialog();
-      }
-
       private void quickSettingsToolStripMenuItem_Click(object sender, EventArgs e)
       {
          FormsHelper.ShowIfAnyOpen<SettingsWindow>();
@@ -1257,39 +1258,32 @@ namespace Editor.Forms
          new RoughEditorForm(Selection.GetSelectedProvinces[0], false).ShowDialog();
       }
 
-      private void AddMonarchNamesToGui(List<MonarchName> names)
+
+      private void AddNewMonarchNameButton_Click_1(object sender, EventArgs e)
       {
-         MonarchNamesFlowPanel.FlowDirection = FlowDirection.TopDown;
-         MonarchNamesFlowPanel.AutoScroll = true;
-         MonarchNamesFlowPanel.WrapContents = false;
-
-         MonarchNamesFlowPanel.Controls.Clear();
-         SuspendLayout();
-         foreach (var monName in names)
-            AddMonarchNameToGui(monName);
-         ResumeLayout();
+         var handle = Parsing.GetMonarchNameFromTextBoxes(NameTextBox, ChanceTextBox, out var mName);
+         if (!handle.Log())
+            return;
+         
+         _monarchNames.AddMonarchName(mName);
+         NameTextBox.Clear();
+         ChanceTextBox.Clear();
       }
-
-      internal void AddMonarchNameToGui(MonarchName monarchName)
-      {
-         MonarchNameControl monarchNameControl = new(monarchName, new(MonarchNamesFlowPanel.Width - 28, 29));
-         MonarchNamesFlowPanel.Controls.Add(monarchNameControl);
-      }
-
+      
       private void ShowMonarchNamesCB_CheckedChanged(object sender, EventArgs e)
       {
          if (Selection.SelectedCountry == Country.Empty)
             return;
          if (ShowMonachrNamesCB.Checked)
          {
-            AddMonarchNamesToGui(Selection.SelectedCountry.CommonCountry.MonarchNames);
+            _monarchNames.SetValue(Selection.SelectedCountry.CommonCountry.MonarchNames);
             NameTextBox.Enabled = true;
             AddNewMonarchNameButton.Enabled = true;
             ChanceTextBox.Enabled = true;
          }
          else
          {
-            MonarchNamesFlowPanel.Controls.Clear();
+            _monarchNames.SetDefault();
             NameTextBox.Enabled = false;
             AddNewMonarchNameButton.Enabled = false;
             ChanceTextBox.Enabled = false;
@@ -1371,73 +1365,17 @@ namespace Editor.Forms
          new CreateCountryForm().ShowDialog();
       }
 
-      private void fileNamesToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-         var sb = new StringBuilder();
-         foreach (var country in Globals.Countries.Values)
-         {
-            sb.AppendLine($"{country.Tag} : {country.CountryFilePath.FilePathArr.ToString()}");
-         }
-
-
-      }
-
-      private void emptyCOlorInCountryToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-         foreach (var country in Globals.Countries.Values)
-         {
-            if (country.Color == Color.Empty)
-               Debug.WriteLine(country.Tag);
-         }
-      }
-
-      private void iMBTESTToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-         SystemSounds.Question.Play();
-      }
 
       private void browseEditedObjectsToolStripMenuItem_Click(object sender, EventArgs e)
       {
          new EditedObjectsExplorer().Show();
       }
 
-      private void provinceToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-         Globals.State = State.Loading;
-         ClearProvinceGui();
-         Globals.State = State.Running;
-      }
 
-      private void countryToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-         Globals.State = State.Loading;
-         ClearCountryGui();
-         Globals.State = State.Running;
-      }
-
-
-      private void AddNewMonarchNameButton_Click_1(object sender, EventArgs e)
-      {
-         CountryGuiEvents.AddMonarchName_Click(sender, e);
-         NameTextBox.Clear();
-         ChanceTextBox.Clear();
-      }
 
       private void gameOfLiveToolStripMenuItem_Click(object sender, EventArgs e)
       {
          GameOfLive.RunGameOfLive(100);
-      }
-
-      private void benchmarkMapModesToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-         var sw = Stopwatch.StartNew();
-         for (var i = 0; i < 1000; i++)
-         {
-            MapModeManager.SetCurrentMapMode(MapModeType.Area);
-            MapModeManager.SetCurrentMapMode(MapModeType.Country);
-         }
-         sw.Stop();
-         System.Diagnostics.Debug.WriteLine($"Time: {sw.ElapsedMilliseconds / 1000 * 2}");
       }
 
       private void ViewErrorLogToolStripMenuItem_Click(object sender, EventArgs e)

@@ -10,6 +10,7 @@ namespace Editor.DataClasses.Settings
       private MapModeType[] _mapModes = new MapModeType[10];
       private bool _enableDisableHistoryEntryCreationGlobally;
       private bool _selectionDrawerAlwaysOnTop = true;
+      private int _textBoxCommandCreationInterval = 5000;
 
       [Description("Determines if the country flag should be shown in the country editor.")]
       [CompareInEquals]
@@ -49,6 +50,14 @@ namespace Editor.DataClasses.Settings
       {
          get => _selectionDrawerAlwaysOnTop;
          set => SetField(ref _selectionDrawerAlwaysOnTop, value);
+      }
+
+      [Description("The interval in which the command for the textboxes should be created after it's content was modified.")]
+      [CompareInEquals]
+      public int TextBoxCommandCreationInterval
+      {
+         get => _textBoxCommandCreationInterval;
+         set => SetField(ref _textBoxCommandCreationInterval, value);
       }
    }
 }

@@ -381,29 +381,32 @@ public static class Globals
 // - [ ] In Depth deleting with pop up to show what objects are related to the one being deleted
 // - [ ] Radial Menu for Map Modes
 // - [ ] Trade fix   //UI
-// - [ ] Implement Shaders for the map
+// - [-] Implement Shaders for the map
+//    - [ ] Province Creation and editing
 // - [ ] Add Prefix ignoring in search boxes
 // - [ ] Straits editing and creation
-// - [██▒▒▒▒▒▒▒▒▒▒] Generalize Loading
+// - [███▒▒▒▒▒▒▒▒▒] Generalize Loading
 // - [█▒▒▒▒▒▒▒▒▒▒▒] PDX language support
 // - [ ] Item scaling on Graphics (Trade arrows, straits, capitals, text)
 // - [ ] FPS count for map rendering
 // - [ ] Add a way to create custom map modes
 // - [-] Add a tradegoods creation and editing menu
 // - [ ] Ideas making via drag and drop
-// - [ ] Province Creation and editing
-// - [ ] File syncing/hotreloading
+// - [ ] File syncing/Hotreloading
 // - [ ] Heat map for history entries in editor for them when selecting dates?
 // - [x] Fix Country Color not live updating
 // - [x] Fix Search not finding country tags
+// - [ ] Fix TagComboBox behavior
+// - [ ] Fix TerrainOverrides Checkbox
+// - [ ] Local UnDo in ListView
 
 // - [ ] Grid for pixels
 // - [ ] Tools:
-      // - [ ] Pen
-      // - [ ] Eraser
-      // - [ ] Bucket
-      // - [ ] Select/Move
-      // - [ ] Magic Wand
+// - [ ] Pen
+// - [ ] Eraser
+// - [ ] Bucket
+// - [ ] Select/Move
+// - [ ] Magic Wand
 // - [ ] Overlays (several)
 
 // Next Up in what shall happen:
@@ -420,5 +423,22 @@ public static class Globals
 // Implement Method to determine whether a control is physically visible
 
 // TODO LIST Until Alpha 1.2
-// - [ ] Fix tooltip preventing MouseWheel event
-// - [ ] Resync files with project
+// - [ ] Resync files with project (binary, backwards compatible) 
+//    - [ ] Versioning system so that if something in parsing changes we can still load old files
+
+// ACHIEVEMENTS
+// - [ ] Per Achievement
+//    - [ ] Title, Description, Icon
+//    - [ ] Level (optional)
+//    - [ ] Icon: colored Piktogramm
+//    - [ ] Progress
+//    - [ ] DateTime of completion
+//    - [ ] IsHidden?
+// - [ ] PopUp like steam
+// - [ ] Overview of all Achievements
+// - [ ] Encrypted file to save achievements
+// - [ ] Achievement unlocked sound
+
+// - [ ] "Short Mode"
+// - [ ] Wide Linus Shader
+

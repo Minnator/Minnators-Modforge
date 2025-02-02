@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
+using Editor.DataClasses.Settings;
 using Editor.ErrorHandling;
 using Editor.Events;
 using Editor.Saving;
@@ -21,10 +22,16 @@ namespace Editor.Controls.NewControls
          loadHandle += ((IPropertyControl<TSaveable, string>)this).LoadToGui;
          GetSaveables = getSaveables;
 
-         _timer.Interval = 2500;
+         _timer.Interval = Globals.Settings.Gui.TextBoxCommandCreationInterval;
          _timer.Tick += (_, _) => SetFromGui();
          KeyPress += TextBox_KeyPress;
          Leave += (_, _) => SetFromGui();
+
+         Globals.Settings.Gui.PropertyChanged += (sender, prop) =>
+         {
+            if (prop.PropertyName?.Equals(nameof(GuiSettings.TextBoxCommandCreationInterval)) ?? false)
+               _timer.Interval = Globals.Settings.Gui.TextBoxCommandCreationInterval;
+         };
       }
 
       private void TextBox_KeyPress(object? sender, KeyPressEventArgs e)

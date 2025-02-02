@@ -200,7 +200,6 @@
          ChanceTextBox = new TextBox();
          AddNewMonarchNameButton = new Button();
          ShowMonachrNamesCB = new CheckBox();
-         MonarchNamesFlowPanel = new FlowLayoutPanel();
          ShipNamesTab = new TabPage();
          ArmyNamesTab = new TabPage();
          FleetNamesTab = new TabPage();
@@ -801,7 +800,7 @@
          BottomToolStrip.Items.AddRange(new ToolStripItem[] { RamUsageStrip, CpuUsageStrip, toolStripSeparator1, UndoDepthLabel, RedoDepthLabel, CompactionToolStrip, toolStripSeparator2, SelectedProvinceSum, toolStripSeparator7, MapModeTimesInfo });
          BottomToolStrip.Location = new Point(0, 876);
          BottomToolStrip.Name = "BottomToolStrip";
-         BottomToolStrip.Size = new Size(665, 24);
+         BottomToolStrip.Size = new Size(634, 24);
          BottomToolStrip.TabIndex = 0;
          // 
          // RamUsageStrip
@@ -2014,7 +2013,6 @@
          MonarchNamesTLP.ColumnCount = 1;
          MonarchNamesTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
          MonarchNamesTLP.Controls.Add(tableLayoutPanel6, 0, 0);
-         MonarchNamesTLP.Controls.Add(MonarchNamesFlowPanel, 0, 1);
          MonarchNamesTLP.Dock = DockStyle.Fill;
          MonarchNamesTLP.Location = new Point(3, 3);
          MonarchNamesTLP.Margin = new Padding(0);
@@ -2117,16 +2115,6 @@
          GeneralToolTip.SetToolTip(ShowMonachrNamesCB, "ShowMonarchNames");
          ShowMonachrNamesCB.UseVisualStyleBackColor = true;
          ShowMonachrNamesCB.CheckedChanged += ShowMonarchNamesCB_CheckedChanged;
-         // 
-         // MonarchNamesFlowPanel
-         // 
-         MonarchNamesFlowPanel.Dock = DockStyle.Fill;
-         MonarchNamesFlowPanel.FlowDirection = FlowDirection.TopDown;
-         MonarchNamesFlowPanel.Location = new Point(0, 45);
-         MonarchNamesFlowPanel.Margin = new Padding(0);
-         MonarchNamesFlowPanel.Name = "MonarchNamesFlowPanel";
-         MonarchNamesFlowPanel.Size = new Size(356, 136);
-         MonarchNamesFlowPanel.TabIndex = 1;
          // 
          // ShipNamesTab
          // 
@@ -3058,7 +3046,6 @@
       internal TextBox ChanceTextBox;
       private Button AddNewMonarchNameButton;
       private CheckBox ShowMonachrNamesCB;
-      public FlowLayoutPanel MonarchNamesFlowPanel;
       private TabPage ShipNamesTab;
       private TabPage ArmyNamesTab;
       private TabPage FleetNamesTab;

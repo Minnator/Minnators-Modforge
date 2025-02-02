@@ -62,6 +62,8 @@ public enum ErrorType
    UnexpectedAttribute = 118,
    [ErrorInformation("This occurs because a trade good is used but never defined!", "Check the trade good definition and usages of the affected trade good!")]
    UnresolveableTradeGoodReference = 119,
+   [ErrorInformation("This occurs because a monarch name is misformed!", "Is a regnal number defined?")]
+   MisformedMonarchName = 120,
    [ErrorInformation("This occurs because an date is not in a valid format!", "Check the date format and correct it!")]
    IllegalDateFormat = 101,
    // ObjectInteraction Error

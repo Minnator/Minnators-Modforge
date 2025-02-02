@@ -33,6 +33,15 @@ public static class ControlFactory
 
    #endregion
 
+   public static PropertyNamesEditor<CommonCountry, TProperty> GetPropertyNamesEditorCommonCountry<TSaveable, TProperty>(PropertyInfo? propertyInfo, string desc) where TSaveable : Saveable where TProperty : List<string>, new()
+   {
+      return new(propertyInfo, ref LoadGuiEvents.CommonCountryLoadAction, () => [Selection.SelectedCountry.CommonCountry], desc)
+      {
+         Dock = DockStyle.Fill,
+         Margin = new(0)
+      };
+   }
+
    public static PropertyCheckBox<Province> GetExtendedCheckBoxProvince(PropertyInfo propInfo)
    {
       return new(propInfo, ref LoadGuiEvents.ProvLoadAction, () => Selection.GetSelectedProvinces)

@@ -1,9 +1,11 @@
 ﻿using System.Diagnostics;
 using System.Globalization;
+using System.Net.Mime;
 using System.Text;
 using System.Text.RegularExpressions;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
+using Editor.ErrorHandling;
 
 namespace Editor.Parser;
 
@@ -24,7 +26,7 @@ public static partial class Parsing
    private static readonly Regex PointFRegex = PointFRegexGenerate();
    private static readonly Regex PointRegex = PointRegexGenerate();
    private static readonly Regex QuoteStringRegex = QuoteStringRegexGenerate();
-   private static readonly Regex RegnalRegex = RegnalRegexGenerate();
+   public static readonly Regex RegnalRegex = RegnalRegexGenerate();
 
    [GeneratedRegex(@"#(?<num>\d+)", RegexOptions.Compiled)]
    private static partial Regex RegnalRegexGenerate();
@@ -909,6 +911,36 @@ public static partial class Parsing
       }
       return int.MinValue;
    }
+
+   public static IErrorHandle ParseMonarchNameAndRegnal(string input, out string name, out int regnal)
+   {
+      var match = RegnalRegex.Match(input);
+      if (!match.Success)
+      {
+         name = string.Empty;
+         regnal = 0;
+         return new ErrorObject(ErrorType.MisformedMonarchName, "No valid regnal number found!");
+      }
+
+      regnal = int.Parse(match.Groups["num"].Value);
+      name = input[..match.Index].Trim();
+
+      return ErrorHandle.Sucess;
+   }
+
+   public static IErrorHandle GetMonarchNameFromTextBoxes(TextBox nameTextBox, TextBox chanceTextBox, out MonarchName mName)
+   {
+      var handle = Parsing.ParseMonarchNameAndRegnal(nameTextBox.Text, out var name, out var regnal);
+      if (!handle.Log())
+      {
+         mName = MonarchName.Empty;
+         return handle;
+      }
+
+      mName = new(name, regnal, int.Parse(chanceTextBox.Text));
+      return ErrorHandle.Sucess;
+   }
+
    [GeneratedRegex(@"\s*(\d+)")]
    private static partial Regex ByteListRegex();
    [GeneratedRegex(@"\s*(\d+)")]

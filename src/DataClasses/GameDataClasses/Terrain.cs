@@ -168,7 +168,7 @@ public class Terrain : ProvinceCollection<Province>
    
    public override bool Equals(object? obj)
    {
-      if (obj is Terrain terrain)
+      if (obj is Terrain)
          return Name.Equals(Name);
 
       return false;

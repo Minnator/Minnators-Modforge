@@ -8,7 +8,7 @@ using Editor.Helper;
 using Editor.Saving;
 using Editor.src.Forms.Feature;
 
-namespace Editor.Controls
+namespace Editor.src.Controls.NewControls
 {
    public sealed class PropertyCollectionSelector<TSaveable, TProperty, TPropertyItem> : Control, IPropertyControlList<TSaveable, TProperty, TPropertyItem>
       where TSaveable : Saveable where TProperty : List<TPropertyItem>, new() where TPropertyItem : notnull
@@ -51,19 +51,19 @@ namespace Editor.Controls
          if (!_rawStringMode)
             _collectionSelectorBase = new(GetDisplayMember(sourceItems, displayMember));
          else
-            _collectionSelectorBase = new([..sourceItems.Cast<string>()]);
+            _collectionSelectorBase = new([.. sourceItems.Cast<string>()]);
 
 
          if (AttributeHelper.GetSharedAttributeList<TSaveable, TProperty, TPropertyItem>(PropertyInfo, out var items, getSaveables.Invoke()))
             if (_rawStringMode)
-               _collectionSelectorBase.SetSelectedItems([..items.Cast<string>()]);
+               _collectionSelectorBase.SetSelectedItems([.. items.Cast<string>()]);
             else
                _collectionSelectorBase.SetSelectedItems(GetDisplayMember(items, displayMember));
 
          Text = "Modify";
 
          SetImageIcon();
-            
+
          InitializeGui();
       }
 
@@ -76,7 +76,7 @@ namespace Editor.Controls
          var strTip = string.Empty;
          var index = listbox.IndexFromPoint(mouseEventArgs.Location);
 
-         if ((index >= 0) && (index < listbox.Items.Count))
+         if (index >= 0 && index < listbox.Items.Count)
             strTip = listbox.Items[index].ToString();
 
          if (_toolTip.GetToolTip(listbox) != strTip)
@@ -98,7 +98,7 @@ namespace Editor.Controls
          Margin = Padding.Empty;
          MinimumSize = new(90, 90);
 
-         _toolTip = new ()
+         _toolTip = new()
          {
             AutoPopDelay = 5000,
             InitialDelay = 1000,
@@ -139,7 +139,7 @@ namespace Editor.Controls
          {
             Dock = DockStyle.Fill,
             TextAlign = ContentAlignment.MiddleCenter,
-            Margin = new(1, 1, 0 , 1),
+            Margin = new(1, 1, 0, 1),
             Text = "modify"
          };
 
@@ -175,7 +175,7 @@ namespace Editor.Controls
          _tableLayoutPanel.SetRowSpan(_previewList, 3);
 
          _propertyNameLabel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-         _modifyButton.Anchor = AnchorStyles.Top | AnchorStyles.Bottom |  AnchorStyles.Left | AnchorStyles.Right;
+         _modifyButton.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
          _previewList.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
          _iconBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 
@@ -225,7 +225,7 @@ namespace Editor.Controls
       {
          var strs = _collectionSelectorBase.GetSelectedItems();
          List<TPropertyItem> items = new(strs.Count);
-         
+
          foreach (var str in strs)
             if (Converter.Convert<TPropertyItem>(str, PropertyInfo, out var partValue).Log())
                items.Add(partValue);

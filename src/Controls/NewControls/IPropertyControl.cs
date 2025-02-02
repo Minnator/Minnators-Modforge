@@ -1,6 +1,8 @@
-﻿using Editor.Helper;
+﻿using System.Diagnostics;
+using Editor.Helper;
 using Editor.Saving;
 using System.Reflection;
+using Editor.DataClasses.GameDataClasses;
 using Editor.ErrorHandling;
 
 namespace Editor.Controls.NewControls
@@ -9,7 +11,7 @@ namespace Editor.Controls.NewControls
    {
       public PropertyInfo PropertyInfo { get; init; }
 
-      public void SetFromGui();
+      protected void SetFromGui();
       public void SetDefault();
    }
 

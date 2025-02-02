@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.InteropServices.JavaScript;
+using Editor.Controls.NewControls;
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Settings;
