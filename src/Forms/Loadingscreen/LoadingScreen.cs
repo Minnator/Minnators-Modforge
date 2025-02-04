@@ -33,7 +33,6 @@ namespace Editor.Forms.LoadingScreen
       private readonly List<Action> _loadingActions =
       [
          StartUpMetrics.StartMetrics,
-         UnitTypeLoading.Load,
          DefinesLoading.Load,
          BookMarksLoading.Load,
          SettingsHelper.LoadSettingsToComponents,
@@ -53,6 +52,7 @@ namespace Editor.Forms.LoadingScreen
          LocalisationLoading.Load,
          TradeGoodsLoading.Load,
          TechnologyGroupsLoading.Load,
+         UnitTypeLoading.Load,
          BuildingsLoading.Load,
          TradeCompanyInvestmentsLoading.Load,
          ReligionLoading.Load,

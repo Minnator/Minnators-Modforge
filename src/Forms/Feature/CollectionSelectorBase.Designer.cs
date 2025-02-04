@@ -114,8 +114,6 @@
          SourceListView.Dock = DockStyle.Fill;
          SourceListView.FullRowSelect = true;
          SourceListView.HeaderStyle = ColumnHeaderStyle.None;
-         SourceListView.HotTracking = true;
-         SourceListView.HoverSelection = true;
          SourceListView.Location = new Point(277, 52);
          SourceListView.Name = "SourceListView";
          SourceListView.ShowItemToolTips = true;
@@ -271,8 +269,6 @@
          SelectedListView.Dock = DockStyle.Fill;
          SelectedListView.FullRowSelect = true;
          SelectedListView.HeaderStyle = ColumnHeaderStyle.None;
-         SelectedListView.HotTracking = true;
-         SelectedListView.HoverSelection = true;
          SelectedListView.Location = new Point(3, 52);
          SelectedListView.Name = "SelectedListView";
          SelectedListView.ShowItemToolTips = true;

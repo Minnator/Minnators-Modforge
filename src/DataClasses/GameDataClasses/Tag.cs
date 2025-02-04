@@ -1,4 +1,5 @@
-﻿using Editor.ErrorHandling;
+﻿using System.Runtime.CompilerServices;
+using Editor.ErrorHandling;
 
 namespace Editor.DataClasses.GameDataClasses;
 
@@ -8,8 +9,9 @@ public readonly struct Tag : IEquatable<Tag>, IComparable
    {
       TagValue = tagValue;
    }
+   
+   public string TagValue { get;}
 
-   public string TagValue { get; }
 
    public override string ToString()
    {

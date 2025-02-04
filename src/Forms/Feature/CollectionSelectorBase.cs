@@ -11,9 +11,11 @@ namespace Editor.src.Forms.Feature
       private readonly List<string> _sourceItemsConst;
 
       private Timer _searchTimer = new();
+      private readonly int _maxItems = -1;
 
-      public CollectionSelectorBase(List<string> sourceItems)
+      public CollectionSelectorBase(List<string> sourceItems, int maxItems = -1)
       {
+         _maxItems = maxItems;
          InitializeComponent();
          _sourceItemsConst = [.. sourceItems];
 
@@ -43,7 +45,7 @@ namespace Editor.src.Forms.Feature
          SourceListView.Columns[0].Width = SourceListView.ClientSize.Width - 16;
          SelectedListView.Columns[0].Width = SelectedListView.ClientSize.Width - 16;
       }
-      
+
       public new void ShowDialog()
       {
          SetSourceItems();
@@ -88,8 +90,9 @@ namespace Editor.src.Forms.Feature
       {
          if (SourceListView.SelectedItems.Count == 0)
             return;
-         foreach (ListViewItem item in SourceListView.SelectedItems)
+         for (var i = 0; i < Math.Min(SourceListView.SelectedItems.Count, _maxItems - SelectedListView.Items.Count);)
          {
+            var item = SourceListView.SelectedItems[i];
             if (item.Tag?.Equals(UNSELECTABLE) ?? false)
                return;
             SourceListView.Items.Remove(item);

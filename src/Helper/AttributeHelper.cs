@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Drawing.Imaging;
 using System.Reflection;
 using System.Text;
 
@@ -177,5 +178,15 @@ namespace Editor.Helper
          Debug.Assert(pair.Key != null && pair.Value != null, "pair.Key != null && pair.Value != null");
          return pair.Key.GetHashCode() ^ pair.Value.GetHashCode();
       }
+
+
+      internal static List<string> GetDisplayMember<T>(List<T> items, PropertyInfo displayMember)
+      {
+         var displayMembers = new List<string>();
+         foreach (var item in items)
+            displayMembers.Add(displayMember.GetValue(item)!.ToString()!);
+         return displayMembers;
+      }
+
    }
 }

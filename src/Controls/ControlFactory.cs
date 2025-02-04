@@ -6,7 +6,6 @@ using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
 using Editor.Events;
 using Editor.Helper;
-using Editor.Saving;
 using Newtonsoft.Json.Linq;
 using Button = System.Windows.Forms.Button;
 
@@ -33,7 +32,43 @@ public static class ControlFactory
 
    #endregion
 
-   public static PropertyNamesEditor<CommonCountry, TProperty> GetPropertyNamesEditorCommonCountry<TSaveable, TProperty>(PropertyInfo? propertyInfo, string desc) where TSaveable : Saveable where TProperty : List<string>, new()
+   public static PropertyQuickAssignControl<CommonCountry, TProperty, TItem> GetPropertyQuickAssignControlCC<TProperty, TItem>(List<TItem> source,
+      PropertyInfo prop,
+      PropertyInfo? displayMember,
+      string description,
+      int maxItems,
+      Func<int, List<TItem>> autoSelect) where TItem : notnull where TProperty : List<TItem>, new()
+   {
+      return new(
+         source,
+         prop,
+         displayMember,
+         description,
+         maxItems,
+         autoSelect,
+         () => [Selection.SelectedCountry.CommonCountry],
+         ref LoadGuiEvents.CommonCountryLoadAction);
+   }
+
+   public static PropertyQuickAssignControl<HistoryCountry, TProperty, TItem> GetPropertyQuickAssignControlHC<TProperty, TItem>(List<TItem> source,
+      PropertyInfo prop,
+      PropertyInfo? displayMember,
+      string description,
+      int maxItems,
+      Func<int, List<TItem>> autoSelect) where TItem : notnull where TProperty : List<TItem>, new()
+   {
+      return new(
+         source,
+         prop,
+         displayMember,
+         description,
+         maxItems,
+         autoSelect,
+         () => [Selection.SelectedCountry.HistoryCountry],
+         ref LoadGuiEvents.HistoryCountryLoadAction);
+   }
+
+   public static PropertyNamesEditor<CommonCountry, TProperty> GetPropertyNamesEditorCommonCountry<TProperty>(PropertyInfo? propertyInfo, string desc) where TProperty : List<string>, new()
    {
       return new(propertyInfo, ref LoadGuiEvents.CommonCountryLoadAction, () => [Selection.SelectedCountry.CommonCountry], desc)
       {

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Media;
+using System.Reflection;
 using System.Runtime;
 using System.Text;
 using Editor.Controls;
@@ -970,11 +971,11 @@ namespace Editor.Forms
 
       private ExtendedNumeric _countryDevelopmentNumeric = null!;
 
-      private QuickAssignControl<string> _historicalUnits = null!;
-      private QuickAssignControl<string> _historicalIdeas = null!;
-      private QuickAssignControl<Tag> _historicRivals = null!;
-      private QuickAssignControl<Tag> _historicFriends = null!;
-      private QuickAssignControl<string> _estatePrivileges = null!;
+      private PropertyQuickAssignControl<CommonCountry, List<string>, string> _historicalUnits = null!;
+      private PropertyQuickAssignControl<CommonCountry, List<string>, string> _historicalIdeas = null!;
+      private PropertyQuickAssignControl<HistoryCountry, List<Tag>, Tag> _historicRivals = null!;
+      private PropertyQuickAssignControl<HistoryCountry, List<Tag>, Tag> _historicFriends = null!;
+      private PropertyQuickAssignControl<HistoryCountry, List<string>, string> _estatePrivileges = null!;
 
       private PropertyTextBox<Country> CountryLoc = null!;
       private PropertyTextBox<Country> CountryADJLoc = null!;
@@ -1058,10 +1059,10 @@ namespace Editor.Forms
          GovernmentLayoutPanel.SetRowSpan(_governmentReforms, 5);
 
          // Names
-         _leaderEditor = ControlFactory.GetPropertyNamesEditorCommonCountry<CommonCountry, List<string>>(typeof(CommonCountry).GetProperty(nameof(CommonCountry.LeaderNames)), "Add / Remove any names, separate with \",\"");
-         _shipEditor = ControlFactory.GetPropertyNamesEditorCommonCountry<CommonCountry, List<string>>(typeof(CommonCountry).GetProperty(nameof(CommonCountry.ShipNames)), "Add / Remove any names, separate with \",\" $PROVINCE$ can be used here.");
-         _armyEditor = ControlFactory.GetPropertyNamesEditorCommonCountry<CommonCountry, List<string>>(typeof(CommonCountry).GetProperty(nameof(CommonCountry.ArmyNames)), "Add / Remove any names, separate with \",\"");
-         _fleetEditor = ControlFactory.GetPropertyNamesEditorCommonCountry<CommonCountry, List<string>>(typeof(CommonCountry).GetProperty(nameof(CommonCountry.FleetNames)), "Add / Remove any names, separate with \",\" $PROVINCE$ can be used here.");
+         _leaderEditor = ControlFactory.GetPropertyNamesEditorCommonCountry<List<string>>(typeof(CommonCountry).GetProperty(nameof(CommonCountry.LeaderNames)), "Add / Remove any names, separate with \",\"");
+         _shipEditor = ControlFactory.GetPropertyNamesEditorCommonCountry<List<string>>(typeof(CommonCountry).GetProperty(nameof(CommonCountry.ShipNames)), "Add / Remove any names, separate with \",\" $PROVINCE$ can be used here.");
+         _armyEditor = ControlFactory.GetPropertyNamesEditorCommonCountry<List<string>>(typeof(CommonCountry).GetProperty(nameof(CommonCountry.ArmyNames)), "Add / Remove any names, separate with \",\"");
+         _fleetEditor = ControlFactory.GetPropertyNamesEditorCommonCountry<List<string>>(typeof(CommonCountry).GetProperty(nameof(CommonCountry.FleetNames)), "Add / Remove any names, separate with \",\" $PROVINCE$ can be used here.");
 
          LeaderNamesTab.Controls.Add(_leaderEditor);
          ShipNamesTab.Controls.Add(_shipEditor);
@@ -1102,21 +1103,15 @@ namespace Editor.Forms
          GeneralToolTip.SetToolTip(_countryDevelopmentNumeric, "LMB = +- 1\nSHIFT + LMB = +- 5\nCTRL + LMB = +-10\nThe development is only added to one random province in the selected country per click.");
 
          // Quick Assign
-         _historicalUnits = new(Globals.Units.Keys, CommonCountry.Empty, nameof(CommonCountry.HistoricUnits), "Historic Units", -1);
-         _historicalUnits.SetAutoSelectFunc(LandUnit.AutoSelectFuncUnits);
+         _historicalUnits = ControlFactory.GetPropertyQuickAssignControlCC<List<string>, string>([..Globals.Units.Keys], typeof(CommonCountry).GetProperty(nameof(CommonCountry.HistoricUnits))!, null, "Historic Units", -1, LandUnit.AutoSelectFuncUnits);
 
-         List<string> ideaGroups = [];
-         foreach (var idea in Globals.Ideas)
-            if (idea.Type == IdeaType.IdeaGroup)
-               ideaGroups.Add(idea.Name);
-         _historicalIdeas = new(ideaGroups, CommonCountry.Empty, nameof(CommonCountry.HistoricIdeas), "Historic Ideas", 8);
-         _historicalIdeas.SetAutoSelectFunc(IdeaGroup.GetAutoAssignment);
+         _historicalIdeas = ControlFactory.GetPropertyQuickAssignControlCC<List<string>, string>(Globals.Ideas.Select(x => x.Name).ToList(), typeof(CommonCountry).GetProperty(nameof(CommonCountry.HistoricIdeas))!, null, "Historic Ideas", 8, IdeaGroup.GetAutoAssignment);
 
-         _historicRivals = new([.. Globals.Countries.Keys], HistoryCountry.Empty, nameof(HistoryCountry.HistoricalRivals), "Historic Rivals", 8);
-         _historicRivals.SetAutoSelectFunc(Country.GetHistoricRivals);
-         _historicFriends = new([.. Globals.Countries.Keys], HistoryCountry.Empty, nameof(HistoryCountry.HistoricalFriends), "Historic Friends", 8);
-         _historicFriends.SetAutoSelectFunc(Country.GetHistoricFriends);
-         _estatePrivileges = new([], HistoryCountry.Empty, nameof(HistoryCountry.EstatePrivileges), "Estate Privileges", 8);
+         _historicRivals = ControlFactory.GetPropertyQuickAssignControlHC<List<Tag>, Tag>([.. Globals.Countries.Keys], typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.HistoricalRivals))!, typeof(Tag).GetProperty(nameof(DataClasses.GameDataClasses.Tag.TagValue)), "Historic Rivals", 3, Country.GetHistoricRivals);
+
+         _historicFriends = ControlFactory.GetPropertyQuickAssignControlHC<List<Tag>, Tag>([.. Globals.Countries.Keys], typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.HistoricalFriends))!, typeof(Tag).GetProperty(nameof(DataClasses.GameDataClasses.Tag.TagValue)), "Historic Friends", 3, Country.GetHistoricFriends);
+         
+         _estatePrivileges = ControlFactory.GetPropertyQuickAssignControlHC<List<string>, string>([], typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.EstatePrivileges))!, null, "Estate Privileges", 8, _ => []);
          _estatePrivileges.Enabled = false;
 
          MiscTLP.Controls.Add(_historicalUnits, 0, 1);
@@ -1192,11 +1187,11 @@ namespace Editor.Forms
          _countryDevelopmentNumeric.Value = 3;
 
          // Quick Assign
-         _historicalUnits.Clear();
-         _historicalIdeas.Clear();
-         _historicRivals.Clear();
-         _historicFriends.Clear();
-         _estatePrivileges.Clear();
+         _historicalUnits.SetDefault();
+         _historicalIdeas.SetDefault();
+         _historicRivals.SetDefault();
+         _historicFriends.SetDefault();
+         _estatePrivileges.SetDefault();
 
          Globals.State = State.Running;
       }

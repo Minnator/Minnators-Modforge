@@ -49,7 +49,7 @@ namespace Editor.src.Controls.NewControls
          _displayMember = displayMember;
 
          if (!_rawStringMode)
-            _collectionSelectorBase = new(GetDisplayMember(sourceItems, displayMember));
+            _collectionSelectorBase = new(AttributeHelper.GetDisplayMember(sourceItems, displayMember));
          else
             _collectionSelectorBase = new([.. sourceItems.Cast<string>()]);
 
@@ -58,7 +58,7 @@ namespace Editor.src.Controls.NewControls
             if (_rawStringMode)
                _collectionSelectorBase.SetSelectedItems([.. items.Cast<string>()]);
             else
-               _collectionSelectorBase.SetSelectedItems(GetDisplayMember(items, displayMember));
+               _collectionSelectorBase.SetSelectedItems(AttributeHelper.GetDisplayMember(items, displayMember));
 
          Text = "Modify";
 
@@ -182,21 +182,13 @@ namespace Editor.src.Controls.NewControls
          _modifyButton.Click += (sender, e) =>
          {
             _startList.Clear();
-            GetFromGui(out var startList);
+            GetFromGui(out var startList).Log();
             _startList = startList;
             _collectionSelectorBase.ShowDialog();
             SetFromGui();
          };
       }
 
-
-      private List<string> GetDisplayMember(List<TPropertyItem> items, PropertyInfo displayMember)
-      {
-         var displayMembers = new List<string>();
-         foreach (var item in items)
-            displayMembers.Add(displayMember.GetValue(item)!.ToString()!);
-         return displayMembers;
-      }
 
 
       public void SetFromGui()
@@ -210,7 +202,7 @@ namespace Editor.src.Controls.NewControls
             var add = value.Except(_startList).ToHashSet();
             Saveable.SetFieldEditCollection<TSaveable, TProperty, TPropertyItem>(_getSaveables.Invoke(), add, remove, PropertyInfo);
             if (!_rawStringMode)
-               SetPreview(GetDisplayMember(value, _displayMember));
+               SetPreview(AttributeHelper.GetDisplayMember(value, _displayMember));
             else
                SetPreview(value.Cast<string>().ToList());
          }
@@ -236,7 +228,7 @@ namespace Editor.src.Controls.NewControls
 
       public void SetValue(TProperty value)
       {
-         var values = _rawStringMode ? value.Cast<string>().ToList() : GetDisplayMember(value, _displayMember);
+         var values = _rawStringMode ? value.Cast<string>().ToList() : AttributeHelper.GetDisplayMember(value, _displayMember);
          _collectionSelectorBase.SetSelectedItems(values);
          SetPreview(values);
       }
