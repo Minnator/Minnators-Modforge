@@ -3045,7 +3045,6 @@
       internal TextBox NameTextBox;
       internal TextBox ChanceTextBox;
       private Button AddNewMonarchNameButton;
-      private CheckBox ShowMonachrNamesCB;
       private TabPage ShipNamesTab;
       private TabPage ArmyNamesTab;
       private TabPage FleetNamesTab;
@@ -3105,6 +3104,7 @@
       private ToolStripMenuItem compactHistoryToolStripMenuItem;
       private ToolStripMenuItem compactHistoryToolStripMenuItem1;
       public ToolStripLabel CompactionToolStrip;
+      public CheckBox ShowMonachrNamesCB;
    }
 }
 

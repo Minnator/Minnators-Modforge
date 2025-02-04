@@ -344,13 +344,13 @@ public static class Globals
 
 #endregion
 
-// Update Alpha 1.0.1
+// Update Alpha 1.1
 // - [x] Add Explorable Error log which provides a possible solution, and a detailed cause
 // - [x] Generalized Window Handling
 // - [x] Improved MapMode management
 // - [x] Streamlined History management
 
-// Update Alpha 1.0.2
+// Update Alpha 1.1
 // - [x] Fix all combo-boxes taking the input from the suggestion without the use ever using it (when both are empty)
 // - [ ] Demonstration Video
 // - [x] Fix Going back and forth in history causing provinces being in illegal states

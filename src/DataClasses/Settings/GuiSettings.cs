@@ -11,6 +11,7 @@ namespace Editor.DataClasses.Settings
       private bool _enableDisableHistoryEntryCreationGlobally;
       private bool _selectionDrawerAlwaysOnTop = true;
       private int _textBoxCommandCreationInterval = 5000;
+      private int _numOfPreloadedMonarchNameElements = 50;
 
       [Description("Determines if the country flag should be shown in the country editor.")]
       [CompareInEquals]
@@ -58,6 +59,14 @@ namespace Editor.DataClasses.Settings
       {
          get => _textBoxCommandCreationInterval;
          set => SetField(ref _textBoxCommandCreationInterval, value);
+      }
+
+      [Description("The number of monarch name GUI elements which will be kept alive to increase performance")]
+      [CompareInEquals]
+      public int NumOfPreloadedMonarchNameElements
+      {
+         get => _numOfPreloadedMonarchNameElements;
+         set => SetField(ref _numOfPreloadedMonarchNameElements, value);
       }
    }
 }

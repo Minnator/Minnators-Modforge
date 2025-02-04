@@ -930,14 +930,14 @@ public static partial class Parsing
 
    public static IErrorHandle GetMonarchNameFromTextBoxes(TextBox nameTextBox, TextBox chanceTextBox, out MonarchName mName)
    {
-      var handle = Parsing.ParseMonarchNameAndRegnal(nameTextBox.Text, out var name, out var regnal);
+      var handle = ParseMonarchNameAndRegnal(nameTextBox.Text, out _, out var regnal);
       if (!handle.Log())
       {
          mName = MonarchName.Empty;
          return handle;
       }
 
-      mName = new(name, regnal, int.Parse(chanceTextBox.Text));
+      mName = new(nameTextBox.Text, regnal, int.Parse(chanceTextBox.Text));
       return ErrorHandle.Sucess;
    }
 

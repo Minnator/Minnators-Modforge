@@ -51,6 +51,9 @@ namespace Editor.Helper
                if (FormsHelper.GetOpenForm<SelectionDrawerForm>(out var form))
                   form.TopMost = Globals.Settings.Gui.SelectionDrawerAlwaysOnTop;
                break;
+            case nameof(GuiSettings.NumOfPreloadedMonarchNameElements):
+               Globals.MapWindow._monarchNames.UpdateCache((int)typeof(GuiSettings).GetProperty(args.PropertyName)!.GetValue(Globals.Settings.Gui)!);
+               break;
          }
       }
 

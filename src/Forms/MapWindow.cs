@@ -979,7 +979,7 @@ namespace Editor.Forms
       private PropertyTextBox<Country> CountryLoc = null!;
       private PropertyTextBox<Country> CountryADJLoc = null!;
 
-      private PropertyMonarchNamesControl<CommonCountry, List<MonarchName>> _monarchNames = null!;
+      internal PropertyMonarchNamesControl<CommonCountry, List<MonarchName>> _monarchNames = null!;
 
       private void InitializeCountryEditGui()
       {
@@ -1305,15 +1305,6 @@ namespace Editor.Forms
          SpreadDevInSelectedCountryIfValid((int)_countryDevelopmentNumeric.Value);
       }
 
-      private void newSavingToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-         SaveMaster.SaveAllChanges();
-      }
-
-      private void refStackToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-
-      }
 
       private void infoToolStripMenuItem_Click(object sender, EventArgs e)
       {
@@ -1512,7 +1503,35 @@ namespace Editor.Forms
 
       private void compactHistoryToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         HistoryManager.Uncompact(HistoryManager.Root);
+         var min = int.MaxValue;
+         var max = int.MinValue;
+         var total = 0;
+
+         foreach (var country in Globals.Countries.Values)
+         {
+            if (country == Country.Empty)
+               continue;
+            var count = country.CommonCountry.MonarchNames.Count;
+            total += count;
+            if (count < min) 
+               min = count;
+            if (count > max)
+               max = count;
+         }
+
+         List<Tag> minCCs = [];
+         List<Tag> maxCCs = [];
+
+         foreach (var country in Globals.Countries.Values)
+         {
+            if (country.CommonCountry.MonarchNames.Count == min)
+               minCCs.Add(country.Tag);
+            if (country.CommonCountry.MonarchNames.Count == max)
+               maxCCs.Add(country.Tag);
+         }
+
+
+         MessageBox.Show($"Min: {min}\nMax: {max}\nTotal: {total}\nAverage: {total / Globals.Countries.Count}\nMinVal: {string.Join(", ", minCCs)}\nMaxVal: {string.Join(", ", maxCCs)}");
       }
 
       private void compactHistoryToolStripMenuItem1_Click(object sender, EventArgs e)
