@@ -216,8 +216,8 @@ namespace Editor.Saving
 
       public static string ApplyModPrefix(string str)
       {
-         if (!string.IsNullOrEmpty(Globals.Settings.Saving.ModPrefix))
-            return Globals.Settings.Saving.ModPrefix + "_" + str;
+         if (!string.IsNullOrEmpty(Globals.Settings.Saving.Formatting.ModPrefix))
+            return Globals.Settings.Saving.Formatting.ModPrefix + "_" + str;
          return str;
       }
 

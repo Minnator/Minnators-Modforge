@@ -414,7 +414,7 @@ namespace Editor.DataClasses.GameDataClasses
       {
          get
          {
-            if (Globals.Settings.Misc.UseDynamicProvinceNames)
+            if (Globals.Settings.Misc.CustomizationOptions.UseDynamicProvinceNames)
                return Localisation.GetDynamicProvinceLoc(this);
             return Localisation.GetLoc(TitleKey);
          }

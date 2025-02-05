@@ -101,7 +101,7 @@ namespace Editor.Forms
       {
          Globals.State = State.Loading;
          Globals.MapWindow = this;
-         Globals.Random = new(Globals.Settings.Misc.RandomSeed);
+         Globals.Random = new(Globals.Settings.Generator.RandomSeed);
 
          // Load the game data
          RunLoadingScreen();
@@ -186,10 +186,10 @@ namespace Editor.Forms
 
          Globals.ZoomControl = new(new(Globals.MapWidth, Globals.MapHeight))
          {
-            BorderWidth = Globals.Settings.Rendering.MapBorderWidth,
-            Border = Globals.Settings.Rendering.ShowMapBorder,
-            BorderColor = Globals.Settings.Rendering.MapBorderColor,
-            MinVisiblePixels = Globals.Settings.Rendering.MinVisiblePixels,
+            BorderWidth = Globals.Settings.Rendering.Map.MapBorderWidth,
+            Border = Globals.Settings.Rendering.Map.ShowMapBorder,
+            BorderColor = Globals.Settings.Rendering.Map.MapBorderColor.Value,
+            MinVisiblePixels = Globals.Settings.Rendering.Map.MinVisiblePixels,
             Dock = DockStyle.Fill,
             Margin = new(0),
          };
@@ -1208,14 +1208,14 @@ namespace Editor.Forms
          if (Selection.SelectedCountry == Country.Empty)
             return;
          var provinces = Selection.SelectedCountry.GetProvinces();
-         var pieces = MathHelper.SplitIntoNRandomPieces(provinces.Count, value, Globals.Settings.Misc.MinDevelopmentInGeneration, Globals.Settings.Misc.MaxDevelopmentInGeneration);
+         var pieces = MathHelper.SplitIntoNRandomPieces(provinces.Count, value, Globals.Settings.Generator.DevGeneratingSettings.MinDevelopmentInGeneration, Globals.Settings.Generator.DevGeneratingSettings.MaxDevelopmentInGeneration);
          if (pieces.Count != provinces.Count)
             return;
          var index = 0;
          foreach (var province in provinces)
          {
             var devParts = MathHelper.SplitIntoNRandomPieces(3, pieces[index], 1,
-               Globals.Settings.Misc.MaxDevelopmentInGeneration);
+               Globals.Settings.Generator.DevGeneratingSettings.MaxDevelopmentInGeneration);
 
             province.BaseTax = devParts[0];
             province.BaseProduction = devParts[1];

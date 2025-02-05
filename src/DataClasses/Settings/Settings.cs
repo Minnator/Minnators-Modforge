@@ -18,6 +18,7 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    private PopUpSettings _popUpSettings = new();
    private MetricDummySetting _metrics = new();
    private LoggingSettings _logging = new();
+   private GeneratorSettings _generator = new();
 
 
    public Settings()
@@ -31,12 +32,11 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
          }
       };
    }
-
-
-
+   
    [Description("Contains all settings regarding the misc settings.")]
    [TypeConverter(typeof(ExpandableObjectConverter))]
    [CompareInEquals]
+   [Category("Miscellaneous Settings")]
    public MiscSettings Misc
    {
       get => _miscSettings;
@@ -46,6 +46,7 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    [Description("Contains all settings regarding the saving of files.")]
    [TypeConverter(typeof(ExpandableObjectConverter))]
    [CompareInEquals]
+   [Category("Saving Settings")]
    public SavingSettings Saving
    {
       get => _savingSettings;
@@ -55,6 +56,7 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    [Description("Contains all settings regarding the rendering of the map.")]
    [TypeConverter(typeof(ExpandableObjectConverter))]
    [CompareInEquals]
+   [Category("Rendering Settings")]
    public RenderingSettings Rendering
    {
       get => _renderingSettings;
@@ -64,6 +66,7 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    [Description("Contains all settings regarding the map tooltip.")]
    [TypeConverter(typeof(ExpandableObjectConverter))]
    [CompareInEquals]
+   [Category("ToolTip Settings")]
    public ToolTipSettings ToolTip 
    {
       get => _toolTipSettings;
@@ -73,6 +76,7 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    [Description("Contains all settings regarding the GUI customisation")]
    [TypeConverter(typeof(ExpandableObjectConverter))]
    [CompareInEquals]
+   [Category("Gui Settings")]
    public GuiSettings Gui
    {
       get => _guiSettings;
@@ -82,6 +86,7 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    [Description("Contains all settings regarding Pop ups")]
    [TypeConverter(typeof(ExpandableObjectConverter))]
    [CompareInEquals]
+   [Category("PopUp Settings")]
    public PopUpSettings PopUps
    {
       get => _popUpSettings;
@@ -91,6 +96,7 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    [Description("Contains all settings regarding the start up metrics of the application")]
    [TypeConverter(typeof(ExpandableObjectConverter))]
    [CompareInEquals]
+   [Category("Metrics Settings")]
    public MetricDummySetting Metrics
    {
       get => _metrics;
@@ -100,10 +106,21 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    [Description("Contains all settings regarding the logging of the application")]
    [TypeConverter(typeof(ExpandableObjectConverter))]
    [CompareInEquals]
+   [Category("Logging Settings")]
    public LoggingSettings Logging
    {
       get => _logging;
       set => SetField(ref _logging, value);
+   }
+
+   [Description("Contains all settings regarding the generation of data")]
+   [TypeConverter(typeof(ExpandableObjectConverter))]
+   [CompareInEquals]
+   [Category("Generator Settings")]
+   public GeneratorSettings Generator
+   {
+      get => _generator;
+      set => SetField(ref _generator, value);
    }
 
    public event PropertyChangedEventHandler? PropertyChanged;
@@ -156,3 +173,7 @@ public abstract class PropertySettings : PropertyEquals, INotifyPropertyChanged
    }
 }
 
+public class ColorWrapper
+{
+   public System.Drawing.Color Value { get; set; }
+}

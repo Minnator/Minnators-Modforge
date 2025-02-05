@@ -40,7 +40,7 @@ namespace Editor.Helper
       {
          if (form == null)
             return;
-         if (Globals.Settings.Misc.UseEu4Cursor)
+         if (Globals.Settings.Misc.CustomizationOptions.UseEu4Cursor)
             SetCursor(eu4Type, form);
          else
             form.Cursor = generic;

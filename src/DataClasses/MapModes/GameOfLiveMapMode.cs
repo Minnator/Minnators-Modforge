@@ -9,7 +9,7 @@ namespace Editor.DataClasses.MapModes
 
       public override void SetActive()
       {
-         GameOfLive.RunGameOfLive(Globals.Settings.Rendering.GameOfLiveGenerations);
+         GameOfLive.RunGameOfLive(Globals.Settings.Rendering.EasterEggs.GameOfLiveGenerations);
       }
 
       public override void SetInactive()

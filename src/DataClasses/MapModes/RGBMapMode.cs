@@ -27,7 +27,7 @@ namespace Editor.DataClasses.MapModes
 
       public override void SetActive()
       {
-         _timer.Interval = Globals.Settings.Rendering.MsTimerIntervalMapModeTimer;
+         _timer.Interval = Globals.Settings.Rendering.EasterEggs.MsTimerIntervalMapModeTimer;
          _timer.Tick += Timer_Tick;
          _totalRunTime = 0;
          _timer.Start();
@@ -47,7 +47,7 @@ namespace Editor.DataClasses.MapModes
          _scaledTime = _totalRunTime / 3000f;
          MapModeManager.ConstructCache();
          RenderMapMode();
-         _timer.Interval = Globals.Settings.Rendering.MsTimerIntervalMapModeTimer;
+         _timer.Interval = Globals.Settings.Rendering.EasterEggs.MsTimerIntervalMapModeTimer;
       }
 
       public override MapModeType MapModeType => MapModeType.RGB;
@@ -55,7 +55,7 @@ namespace Editor.DataClasses.MapModes
       public override int GetProvinceColor(Province id)
       {
          var center = id.Center;
-         switch (Globals.Settings.Rendering.RGBMapModeType)
+         switch (Globals.Settings.Rendering.EasterEggs.RGBMapModeType)
          {
             case RGBMapModeType.Diagonal:
                return HSVToRGBSmooth((center.X + center.Y) / 6000f + _scaledTime, 1, 1);

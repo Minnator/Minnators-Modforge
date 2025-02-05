@@ -326,12 +326,12 @@ public static class Selection
 
    public static void SelectBorders(ICollection<Province> provinces)
    {
-      DrawBorder(provinces, _selectedProvinces, _selectedColor, _lightSelectedColor, Globals.Settings.Rendering.SelectionMerging);
+      DrawBorder(provinces, _selectedProvinces, _selectedColor, _lightSelectedColor, Globals.Settings.Rendering.Selection.SelectionMerging);
    }
 
    public static void PreviewBorders(ICollection<Province> provinces)
    {
-      DrawBorder(provinces, _selectionPreview, _previewSelectionColor, _lightPreviewSelectionColor, Globals.Settings.Rendering.SelectionPreviewMerging);
+      DrawBorder(provinces, _selectionPreview, _previewSelectionColor, _lightPreviewSelectionColor, Globals.Settings.Rendering.Selection.SelectionPreviewMerging);
    }
 
 
@@ -371,7 +371,7 @@ public static class Selection
       else
       {
          _selectedProvinces.UnionWith(provinces);
-         if (Globals.Settings.Rendering.MergeBorders != RenderingSettings.BorderMergeType.None)
+         if (Globals.Settings.Rendering.Map.MergeBorders != RenderingSettings.BorderMergeType.None)
             SelectBorders(provinces);
       }
 

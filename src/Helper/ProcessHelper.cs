@@ -50,7 +50,7 @@ namespace Editor.Helper
 
       public static void OpenFileAtLine(string path, int line, int charIndex)
       {
-         switch (Globals.Settings.Misc.PreferredEditor)
+         switch (Globals.Settings.Misc.CustomizationOptions.PreferredEditor)
          {
             case PreferredEditor.VSCode:
                OpenVSCodeAtLineOfFile(path, line, charIndex);

@@ -83,7 +83,7 @@ namespace Editor.Helper
                   throw new ArgumentOutOfRangeException();
             }
 
-            if (Globals.Settings.Rendering.GameOfLiveUseRandomCellChanges && Random.Next(0, 100) < 5)
+            if (Globals.Settings.Rendering.EasterEggs.GameOfLiveUseRandomCellChanges && Random.Next(0, 100) < 5)
                tempState[province] = tempState[province] == CellState.Alive ? CellState.Dead : CellState.Alive;
          }
 

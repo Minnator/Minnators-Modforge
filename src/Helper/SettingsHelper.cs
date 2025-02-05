@@ -86,36 +86,36 @@ namespace Editor.Helper
       {
          switch (args.PropertyName)
          {
-            case nameof(Settings.Rendering.MapBorderColor):
-               Globals.ZoomControl.BorderColor = Globals.Settings.Rendering.MapBorderColor;
+            case nameof(Settings.Rendering.Map.MapBorderColor):
+               Globals.ZoomControl.BorderColor = Globals.Settings.Rendering.Map.MapBorderColor.Value;
                Globals.ZoomControl.Invalidate();
                break;
-            case nameof(Settings.Rendering.MapBorderWidth):
-               Globals.ZoomControl.BorderWidth = Globals.Settings.Rendering.MapBorderWidth;
+            case nameof(Settings.Rendering.Map.MapBorderWidth):
+               Globals.ZoomControl.BorderWidth = Globals.Settings.Rendering.Map.MapBorderWidth;
                Globals.ZoomControl.Invalidate();
                break;
-            case nameof(Settings.Rendering.ShowMapBorder):
-               Globals.ZoomControl.Border = Globals.Settings.Rendering.ShowMapBorder;
+            case nameof(Settings.Rendering.Map.ShowMapBorder):
+               Globals.ZoomControl.Border = Globals.Settings.Rendering.Map.ShowMapBorder;
                Globals.ZoomControl.Invalidate();
                break;
-            case nameof(Settings.Rendering.MinVisiblePixels):
-               Globals.ZoomControl.MinVisiblePixels = Globals.Settings.Rendering.MinVisiblePixels;
+            case nameof(Settings.Rendering.Map.MinVisiblePixels):
+               Globals.ZoomControl.MinVisiblePixels = Globals.Settings.Rendering.Map.MinVisiblePixels;
                Globals.ZoomControl.ZoomingControl_Resize(null!, null!);
                break;
-            case nameof(Settings.Rendering.GameOfLiveSurvivalRules):
-               GameOfLive.Rules = Globals.Settings.Rendering.GameOfLiveSurvivalRules;
-               GameOfLive.RunGameOfLive(Globals.Settings.Rendering.GameOfLiveGenerations);
+            case nameof(Settings.Rendering.EasterEggs.GameOfLiveSurvivalRules):
+               GameOfLive.Rules = Globals.Settings.Rendering.EasterEggs.GameOfLiveSurvivalRules;
+               GameOfLive.RunGameOfLive(Globals.Settings.Rendering.EasterEggs.GameOfLiveGenerations);
                break;
-            case nameof(Settings.Rendering.GameOfLiveGenerations):
-               GameOfLive.RunGameOfLive(Globals.Settings.Rendering.GameOfLiveGenerations);
+            case nameof(Settings.Rendering.EasterEggs.GameOfLiveGenerations):
+               GameOfLive.RunGameOfLive(Globals.Settings.Rendering.EasterEggs.GameOfLiveGenerations);
                break;
-            case nameof(Settings.Rendering.AllowAnimatedMapModes):
-               if (Globals.Settings.Rendering.AllowAnimatedMapModes)
+            case nameof(Settings.Rendering.EasterEggs.AllowAnimatedMapModes):
+               if (Globals.Settings.Rendering.EasterEggs.AllowAnimatedMapModes)
                   MapModeManager.CurrentMapMode.SetActive();
                else
                   MapModeManager.CurrentMapMode.SetInactive();
                break;
-            case nameof(Settings.Rendering.IconTransparencyPadding):
+            case nameof(Settings.Rendering.Icons.IconTransparencyPadding):
                GameIconDefinition.UpdatePaddings();
                break;
          }

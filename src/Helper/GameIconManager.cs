@@ -76,7 +76,7 @@ namespace Editor.Helper
          get => _icon;
          set
          {
-            _icon = ForcePadding(value, Globals.Settings.Rendering.IconTransparencyPadding);
+            _icon = ForcePadding(value, Globals.Settings.Rendering.Icons.IconTransparencyPadding);
          }
       }
       public GameIcons IconType { get; }
@@ -167,7 +167,7 @@ namespace Editor.Helper
       {
          foreach (var icon in Icons.Values)
          {
-            icon.Icon = ForcePadding(icon.Icon, Globals.Settings.Rendering.IconTransparencyPadding);
+            icon.Icon = ForcePadding(icon.Icon, Globals.Settings.Rendering.Icons.IconTransparencyPadding);
          }
       }
 

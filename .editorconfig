@@ -34,6 +34,9 @@ csharp_prefer_static_local_function = true:suggestion
 csharp_style_conditional_delegate_call = true:suggestion
 csharp_style_pattern_matching_over_is_with_cast_check = true:suggestion
 
+# IDE0001: Simplify Names
+dotnet_diagnostic.IDE0001.severity = none
+
 [*.{cs,vb}]
 #### Naming styles ####
 

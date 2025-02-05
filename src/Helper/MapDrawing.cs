@@ -52,7 +52,7 @@ public static class MapDrawing
                   DrawPixels(province.Pixels, MapModeManager.ColorCache[province], zoomControl);
                   break;
                case PixelsOrBorders.Borders:
-                  if (Globals.Settings.Rendering.MergeBorders == RenderingSettings.BorderMergeType.None)
+                  if (Globals.Settings.Rendering.Map.MergeBorders == RenderingSettings.BorderMergeType.None)
                      DrawPixels(province.Borders, MapModeManager.ColorCache[province], zoomControl);
                   else
                      DrawPixelsMerged(province, MapModeManager.ColorCache[province], zoomControl);
@@ -79,7 +79,7 @@ public static class MapDrawing
                   DrawPixels(province.Pixels, color, zoomControl);
                   break;
                case PixelsOrBorders.Borders:
-                  if (Globals.Settings.Rendering.MergeBorders == RenderingSettings.BorderMergeType.None)
+                  if (Globals.Settings.Rendering.Map.MergeBorders == RenderingSettings.BorderMergeType.None)
                      DrawPixels(province.Borders, color, zoomControl);
                   else
                      DrawPixelsMerged(province, color, zoomControl);
@@ -99,7 +99,7 @@ public static class MapDrawing
             DrawPixels(province.Pixels, color, zoomControl);
             break;
          case PixelsOrBorders.Borders:
-            if (Globals.Settings.Rendering.MergeBorders == RenderingSettings.BorderMergeType.None)
+            if (Globals.Settings.Rendering.Map.MergeBorders == RenderingSettings.BorderMergeType.None)
                DrawPixels(province.Borders, color, zoomControl);
             else
                DrawPixelsMerged(province, color, zoomControl);
@@ -127,7 +127,7 @@ public static class MapDrawing
                   DrawPixels(province.Pixels, func.Invoke(province), zoomControl);
                   break;
                case PixelsOrBorders.Borders:
-                  if (Globals.Settings.Rendering.MergeBorders == RenderingSettings.BorderMergeType.None)
+                  if (Globals.Settings.Rendering.Map.MergeBorders == RenderingSettings.BorderMergeType.None)
                      DrawPixels(province.Borders, func.Invoke(province), zoomControl);
                   else
                      DrawPixelsMerged(province, func.Invoke(province), zoomControl);
@@ -172,7 +172,7 @@ public static class MapDrawing
                DrawPixels(province.Pixels, func.Invoke(province), zoomControl);
                break;
             case PixelsOrBorders.Borders:
-               if (Globals.Settings.Rendering.MergeBorders == RenderingSettings.BorderMergeType.None)
+               if (Globals.Settings.Rendering.Map.MergeBorders == RenderingSettings.BorderMergeType.None)
                   DrawPixels(province.Borders, func.Invoke(province), zoomControl);
                else
                   DrawPixelsMerged(province, func.Invoke(province), zoomControl);
@@ -209,7 +209,7 @@ public static class MapDrawing
                DrawPixels(province.Pixels, MapModeManager.ColorCache[province], zoomControl);
                break;
             case PixelsOrBorders.Borders:
-               if (Globals.Settings.Rendering.MergeBorders == RenderingSettings.BorderMergeType.None)
+               if (Globals.Settings.Rendering.Map.MergeBorders == RenderingSettings.BorderMergeType.None)
                   DrawPixels(province.Borders, MapModeManager.ColorCache[province], zoomControl);
                else
                   DrawPixelsMerged(province, MapModeManager.ColorCache[province], zoomControl);
@@ -232,7 +232,7 @@ public static class MapDrawing
                DrawPixels(province.Pixels, color, zoomControl);
                break;
             case PixelsOrBorders.Borders:
-               if (Globals.Settings.Rendering.MergeBorders == RenderingSettings.BorderMergeType.None)
+               if (Globals.Settings.Rendering.Map.MergeBorders == RenderingSettings.BorderMergeType.None)
                   DrawPixels(province.Borders, color, zoomControl);
                else
                   DrawPixelsMerged(province, color, zoomControl);

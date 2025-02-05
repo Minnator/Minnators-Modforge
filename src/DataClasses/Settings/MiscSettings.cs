@@ -17,19 +17,8 @@ namespace Editor.DataClasses.Settings
       private Language _language = Language.english;
       private string _lastModPath = string.Empty;
       private string _lastVanillaPath = string.Empty;
-      private int _minDevelopmentInGeneration = 3;
-      private int _maxDevelopmentInGeneration = 25;
-      private int _randomSeed = 1444;
-      private int _autoPropertiesCountBig = 8;
-      private int _autoPropertiesCountSmall = 3;
-      private int _maxProvinceDistanceForCountryWithSameSize = 5;
-      private int _maxCountryDevDifferenceForCountryWithSameSize = 75;
-      private int _historicRivalsFriendsGenerationAmount = 3;
-      private bool _useEu4Cursor = true;
-      private bool _useDiscordRichPresence = true;
-      private bool _useDynamicProvinceNames = true;
-      private PreferredEditor _preferredEditor = PreferredEditor.VSCode;
       private CompactingSettings _compactingSettings = new ();
+      private CustomizationOptions _customizationOptions = new();
 
       [Description("The language in which the localisation will be shown")]
       [CompareInEquals]
@@ -54,74 +43,37 @@ namespace Editor.DataClasses.Settings
          get => _lastVanillaPath;
          set => SetField(ref _lastVanillaPath, value);
       }
+      
 
-      [Description("The minimum development a province will have when development is spread randomly")]
+      [Description("Settings for compacting commands")]
       [CompareInEquals]
-      public int MinDevelopmentInGeneration
+      [TypeConverter(typeof(ExpandableObjectConverter))]
+      public CompactingSettings CompactingSettings
       {
-         get => _minDevelopmentInGeneration;
-         set => SetField(ref _minDevelopmentInGeneration, value);
+         get => _compactingSettings;
+         set => SetField(ref _compactingSettings, value);
       }
 
-      [Description("The maximum development a province will have when development is spread randomly")]
+      [Description("Settings for customization")]
       [CompareInEquals]
-      public int MaxDevelopmentInGeneration
+      [TypeConverter(typeof(ExpandableObjectConverter))]
+      public CustomizationOptions CustomizationOptions
       {
-         get => _maxDevelopmentInGeneration;
-         set => SetField(ref _maxDevelopmentInGeneration, value);
+         get => _customizationOptions;
+         set => SetField(ref _customizationOptions, value);
       }
+   }
 
-      [Description("The amount of properties that will be generated automatically\nHistoricUnits, HistoricIdeas")]
-      [CompareInEquals]
-      public int AutoPropertiesCountBig
-      {
-         get => _autoPropertiesCountBig;
-         set => SetField(ref _autoPropertiesCountBig, value);
-      }
-
-      [Description("The amount of properties that will be generated automatically\nHistoricRivals, HistoricFriends")]
-      [CompareInEquals]
-      public int AutoPropertiesCountSmall
-      {
-         get => _autoPropertiesCountSmall;
-         set => SetField(ref _autoPropertiesCountSmall, value);
-      }
-
-      [Description("The seed that will be used for random generation")]
-      [CompareInEquals]
-      public int RandomSeed
-      {
-         get => _randomSeed;
-         set => SetField(ref _randomSeed, value);
-      }
-
-      [Description("The maximum number of provinces to search for a country with the same size")]
-      [CompareInEquals]
-      public int MaxProvinceDistanceForCountryWithSameSize
-      {
-         get => _maxProvinceDistanceForCountryWithSameSize;
-         set => SetField(ref _maxProvinceDistanceForCountryWithSameSize, value);
-      }
-
-      [Description("The maximum development difference for a country to be considered of same size")]
-      [CompareInEquals]
-      public int MaxCountryDevDifferenceForCountryWithSameSize
-      {
-         get => _maxCountryDevDifferenceForCountryWithSameSize;
-         set => SetField(ref _maxCountryDevDifferenceForCountryWithSameSize, value);
-      }
-
-      [Description("The amount of historic rivals and friends that will be generated")]
-      [CompareInEquals]
-      public int HistoricRivalsFriendsGenerationAmount
-      {
-         get => _historicRivalsFriendsGenerationAmount;
-         set => SetField(ref _historicRivalsFriendsGenerationAmount, value);
-      }
+   public class CustomizationOptions : PropertySettings
+   {
+      private bool _useEu4Cursor = true;
+      private bool _useDiscordRichPresence = true;
+      private bool _useDynamicProvinceNames = true;
+      private PreferredEditor _preferredEditor = PreferredEditor.VSCode;
 
       [Description("Determines if the EU4 cursor should be used")]
       [CompareInEquals]
-      public bool UseEu4Cursor   
+      public bool UseEu4Cursor
       {
          get => _useEu4Cursor;
          set => SetField(ref _useEu4Cursor, value);
@@ -149,15 +101,6 @@ namespace Editor.DataClasses.Settings
       {
          get => _preferredEditor;
          set => SetField(ref _preferredEditor, value);
-      }
-
-      [Description("Settings for compacting commands")]
-      [CompareInEquals]
-      [TypeConverter(typeof(ExpandableObjectConverter))]
-      public CompactingSettings CompactingSettings
-      {
-         get => _compactingSettings;
-         set => SetField(ref _compactingSettings, value);
       }
    }
 

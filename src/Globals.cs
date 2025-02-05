@@ -371,6 +371,7 @@ public static class Globals
 
 // TODO LIST Until Alpha 1.1
 // - [x] Add history compacting
+// - [ ] Defines Parsing
 // - [x] Block Water provinces; should not be viable for countries
 // - [ ] Loosing hover when selecting and deselecting a province
 // - [███████████▒] Smart Gui reloading

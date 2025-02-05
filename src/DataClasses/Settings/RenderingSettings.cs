@@ -2,6 +2,8 @@
 using System.Diagnostics.CodeAnalysis;
 using Editor.DataClasses.MapModes;
 using Editor.Helper;
+using static Editor.DataClasses.MapModes.RGBMapMode;
+using static Editor.DataClasses.Settings.RenderingSettings;
 
 namespace Editor.DataClasses.Settings
 {
@@ -15,22 +17,58 @@ namespace Editor.DataClasses.Settings
          MergeAndLight
       }
 
+      private EasterEggsSettings _easterEggsSettings = new();
+      private IconsSettings _iconsSettings = new();
+      private MapSettings _mapSettings = new();
+      private MapModeSettings _mapMode = new();
+      private SelectionSettings _selection = new();
+
+
+      [CompareInEquals]
+      [TypeConverter(typeof(ExpandableObjectConverter))]
+      public MapSettings Map
+      {
+         get => _mapSettings;
+         set => SetField(ref _mapSettings, value);
+      }
+
+      [CompareInEquals]
+      [TypeConverter(typeof(ExpandableObjectConverter))]
+      public IconsSettings Icons
+      {
+         get => _iconsSettings;
+         set => SetField(ref _iconsSettings, value);
+      }
+
+      [CompareInEquals]
+      [TypeConverter(typeof(ExpandableObjectConverter))]
+      public EasterEggsSettings EasterEggs
+      {
+         get => _easterEggsSettings;
+         set => SetField(ref _easterEggsSettings, value);
+      }
+
+      [CompareInEquals]
+      [TypeConverter(typeof(ExpandableObjectConverter))]
+      public MapModeSettings MapMode
+      {
+         get => _mapMode;
+         set => SetField(ref _mapMode, value);
+      }
+
+      [CompareInEquals]
+      [TypeConverter(typeof(ExpandableObjectConverter))]
+      public SelectionSettings Selection
+      {
+         get => _selection;
+         set => SetField(ref _selection, value);
+      }
+   }
+
+   public class MapModeSettings : PropertySettings
+   {
       private StripesDirection _stripesDirection = StripesDirection.DiagonalLbRt;
-      private bool _showMapBorder = true;
-      private Color _mapBorderColor = Color.Black;
-      private int _mapBorderWidth = 2;
-      private int _minVisiblePixels = 80;
       private bool _showOceansAsGreyInTerrain = true;
-      private int _msTimerIntervalMapModeTimer = 17;
-      private RGBMapMode.RGBMapModeType _rgbMapModeType = RGBMapMode.RGBMapModeType.Rotating;
-      private GameOfLive.SurvivalRules _gameOfLiveSurvivalRules = GameOfLive.SurvivalRules.PopulationDynamics;
-      private int _gameOfLiveGenerations = 100;
-      private bool _gameOfLiveUseRandomCellChanges = false;
-      private bool _allowAnimatedMapModes = true;
-      private BorderMergeType _mergeBorders = BorderMergeType.Merge;
-      private  BorderMergeType _selectionMerging = BorderMergeType.MergeAndLight;
-      private BorderMergeType _selectionPreviewMerging = BorderMergeType.MergeAndLight;
-      private int _iconTransparencyPadding = 3;
 
       [Description("The direction of occupation stripes on the map")]
       [CompareInEquals]
@@ -39,6 +77,46 @@ namespace Editor.DataClasses.Settings
          get => _stripesDirection;
          set => SetField(ref _stripesDirection, value);
       }
+      
+      [Description("If the oceans will be shown as grey in the terrain map mode")]
+      [CompareInEquals]
+      public bool ShowOceansAsGreyInTerrain
+      {
+         get => _showOceansAsGreyInTerrain;
+         set => SetField(ref _showOceansAsGreyInTerrain, value);
+      }
+
+   }
+
+   public class SelectionSettings : PropertySettings
+   {
+      private BorderMergeType _selectionMerging = BorderMergeType.MergeAndLight;
+      private BorderMergeType _selectionPreviewMerging = BorderMergeType.MergeAndLight;
+
+      [Description("How borders of provinces will be merged when selecting provinces")]
+      [CompareInEquals]
+      public BorderMergeType SelectionMerging
+      {
+         get => _selectionMerging;
+         set => SetField(ref _selectionMerging, value);
+      }
+
+      [Description("How borders of provinces will be merged when previewing the selection of provinces")]
+      [CompareInEquals]
+      public BorderMergeType SelectionPreviewMerging
+      {
+         get => _selectionPreviewMerging;
+         set => SetField(ref _selectionPreviewMerging, value);
+      }
+   }
+
+   public class MapSettings : PropertySettings
+   {
+      private bool _showMapBorder = true;
+      private int _mapBorderWidth = 2;
+      private int _minVisiblePixels = 80;
+      private BorderMergeType _mergeBorders = BorderMergeType.Merge;
+      private ColorWrapper _mapBorderColor = new (){Value = Color.Black};
 
       [Description("If the map border will be shown")]
       [CompareInEquals]
@@ -50,10 +128,19 @@ namespace Editor.DataClasses.Settings
 
       [Description("The color of the map border")]
       [CompareInEquals]
-      public System.Drawing.Color MapBorderColor
+      [TypeConverter(typeof(ExpandableObjectConverter))]
+      public ColorWrapper MapBorderColor
       {
          get => _mapBorderColor;
          set => SetField(ref _mapBorderColor, value);
+      }
+
+      [Description("If borders of provinces will be merged")]
+      [CompareInEquals]
+      public BorderMergeType MergeBorders
+      {
+         get => _mergeBorders;
+         set => SetField(ref _mergeBorders, value);
       }
 
       [Description("The width of the map border")]
@@ -71,15 +158,29 @@ namespace Editor.DataClasses.Settings
          get => _minVisiblePixels;
          set => SetField(ref _minVisiblePixels, value);
       }
+   }
 
-      [Description("If the oceans will be shown as grey in the terrain map mode")]
+   public class IconsSettings : PropertySettings
+   {
+      private int _iconTransparencyPadding = 3;
+
+      [Description("The padding in pixels for all icons to have. Only applied after restart")]
       [CompareInEquals]
-      public bool ShowOceansAsGreyInTerrain
+      public int IconTransparencyPadding
       {
-         get => _showOceansAsGreyInTerrain;
-         set => SetField(ref _showOceansAsGreyInTerrain, value);
+         get => _iconTransparencyPadding;
+         set => SetField(ref _iconTransparencyPadding, value);
       }
+   }
 
+   public class EasterEggsSettings : PropertySettings
+   {
+      private int _msTimerIntervalMapModeTimer = 17;
+      private RGBMapMode.RGBMapModeType _rgbMapModeType = RGBMapMode.RGBMapModeType.Rotating;
+      private GameOfLive.SurvivalRules _gameOfLiveSurvivalRules = GameOfLive.SurvivalRules.PopulationDynamics;
+      private int _gameOfLiveGenerations = 100;
+      private bool _gameOfLiveUseRandomCellChanges = false;
+      private bool _allowAnimatedMapModes = true;
 
       [Description("The interval in milliseconds for the map mode timer (60 FPS is the base value)")]
       [CompareInEquals]
@@ -127,38 +228,6 @@ namespace Editor.DataClasses.Settings
       {
          get => _allowAnimatedMapModes;
          set => SetField(ref _allowAnimatedMapModes, value);
-      }
-
-      [Description("If borders of provinces will be merged")]
-      [CompareInEquals]
-      public BorderMergeType MergeBorders
-      {
-         get => _mergeBorders;
-         set => SetField(ref _mergeBorders, value);
-      }
-
-      [Description("How borders of provinces will be merged when selecting provinces")]
-      [CompareInEquals]
-      public BorderMergeType SelectionMerging
-      {
-         get => _selectionMerging;
-         set => SetField(ref _selectionMerging, value);
-      }
-
-      [Description("How borders of provinces will be merged when previewing the selection of provinces")]
-      [CompareInEquals]
-      public BorderMergeType SelectionPreviewMerging
-      {
-         get => _selectionPreviewMerging;
-         set => SetField(ref _selectionPreviewMerging, value);
-      }
-
-      [Description("The padding in pixels for all icons to have. Only applied after restart")]
-      [CompareInEquals]
-      public int IconTransparencyPadding
-      {
-         get => _iconTransparencyPadding;
-         set => SetField(ref _iconTransparencyPadding, value);
       }
    }
 }

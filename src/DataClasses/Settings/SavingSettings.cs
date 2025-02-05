@@ -16,16 +16,12 @@ namespace Editor.DataClasses.Settings
       private bool _alwaysAskBeforeCreatingFiles = true;
       private FileSavingMode _fileSavingMode = FileSavingMode.AskOnce;
       private bool _playCrashSound = true;
-      private string _modPrefix = "mmf";
-      private bool _addModifiedCommentToFilesWhenSaving = true;
-      private bool _addCommentAboveObjectsInFiles = true;
       private string _logLocation = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs");
       private string _customWordsLocation = string.Empty;
       private SaveOnExitType _saveOnExit = SaveOnExitType.AskToSave;
+      private FormattingSettings _formatting = new();
 
-      [Description(
-         "<true> Asks for a filename or location beofre creating a new file\n<false> creates files with default names")]
-      [TypeConverter(typeof(ExpandableObjectConverter))]
+      [Description("<true> Asks for a filename or location beofre creating a new file\n<false> creates files with default names")]
       [CompareInEquals]
       public bool AlwaysAskBeforeCreatingFiles
       {
@@ -49,29 +45,6 @@ namespace Editor.DataClasses.Settings
          set => SetField(ref _playCrashSound, value);
       }
 
-      [Description("The prefix which will be use in all created objects e.g. eventmodifier names, file names, etc...")]
-      [CompareInEquals]
-      public string ModPrefix
-      {
-         get => _modPrefix;
-         set => SetField(ref _modPrefix, value);
-      }
-
-      [Description("If true a comment is added above the modified elements in a file when it is being saved.")]
-      [CompareInEquals]
-      public bool AddModifiedCommentToFilesWhenSaving
-      {
-         get => _addModifiedCommentToFilesWhenSaving;
-         set => SetField(ref _addModifiedCommentToFilesWhenSaving, value);
-      }
-
-      [Description("If true a comment is added above the objects with it's localisation when it is being saved.")]
-      [CompareInEquals]
-      public bool AddCommentAboveObjectsInFiles
-      {
-         get => _addCommentAboveObjectsInFiles;
-         set => SetField(ref _addCommentAboveObjectsInFiles, value);
-      }
 
       [Description("The location where the log will be saved. Default is in the folder of the executable")]
       [CompareInEquals]
@@ -95,6 +68,46 @@ namespace Editor.DataClasses.Settings
       {
          get => _saveOnExit;
          set => SetField(ref _saveOnExit, value);
+      }
+
+      [CompareInEquals]
+      [Description("Settings for formatting files")]
+      [TypeConverter(typeof(ExpandableObjectConverter))]
+      public FormattingSettings Formatting
+      {
+         get => _formatting;
+         set => SetField(ref _formatting, value);
+      }
+   }
+
+   public class FormattingSettings : PropertySettings
+   {
+      private string _modPrefix = "mmf";
+      private bool _addModifiedCommentToFilesWhenSaving = true;
+      private bool _addCommentAboveObjectsInFiles = true;
+
+      [Description("The prefix which will be use in all created objects e.g. eventmodifier names, file names, etc...")]
+      [CompareInEquals]
+      public string ModPrefix
+      {
+         get => _modPrefix;
+         set => SetField(ref _modPrefix, value);
+      }
+
+      [Description("If true a comment is added above the modified elements in a file when it is being saved.")]
+      [CompareInEquals]
+      public bool AddModifiedCommentToFilesWhenSaving
+      {
+         get => _addModifiedCommentToFilesWhenSaving;
+         set => SetField(ref _addModifiedCommentToFilesWhenSaving, value);
+      }
+
+      [Description("If true a comment is added above the objects with it's localisation when it is being saved.")]
+      [CompareInEquals]
+      public bool AddCommentAboveObjectsInFiles
+      {
+         get => _addCommentAboveObjectsInFiles;
+         set => SetField(ref _addCommentAboveObjectsInFiles, value);
       }
    }
 }

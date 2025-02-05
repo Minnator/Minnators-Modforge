@@ -28,7 +28,7 @@ namespace Editor.DataClasses.MapModes
 
       public override void SetActive()
       {
-         _timer.Interval = Globals.Settings.Rendering.MsTimerIntervalMapModeTimer;
+         _timer.Interval = Globals.Settings.Rendering.EasterEggs.MsTimerIntervalMapModeTimer;
          _timer.Tick += Timer_Tick;
          _timer.Start();
          Globals.Settings.ToolTip.ShowToolTip = false;

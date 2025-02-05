@@ -39,12 +39,17 @@
          // 
          // SettingsTabs
          // 
+         SettingsTabs.Alignment = TabAlignment.Left;
          tableLayoutPanel1.SetColumnSpan(SettingsTabs, 3);
          SettingsTabs.Dock = DockStyle.Fill;
+         SettingsTabs.DrawMode = TabDrawMode.OwnerDrawFixed;
+         SettingsTabs.HotTrack = true;
          SettingsTabs.Location = new Point(3, 3);
+         SettingsTabs.Multiline = true;
          SettingsTabs.Name = "SettingsTabs";
          SettingsTabs.SelectedIndex = 0;
-         SettingsTabs.Size = new Size(442, 494);
+         SettingsTabs.Size = new Size(538, 494);
+         SettingsTabs.SizeMode = TabSizeMode.Fixed;
          SettingsTabs.TabIndex = 0;
          // 
          // tableLayoutPanel1
@@ -63,15 +68,15 @@
          tableLayoutPanel1.RowCount = 2;
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-         tableLayoutPanel1.Size = new Size(448, 530);
+         tableLayoutPanel1.Size = new Size(544, 530);
          tableLayoutPanel1.TabIndex = 1;
          // 
          // ResetButton
          // 
          ResetButton.Dock = DockStyle.Fill;
-         ResetButton.Location = new Point(152, 503);
+         ResetButton.Location = new Point(184, 503);
          ResetButton.Name = "ResetButton";
-         ResetButton.Size = new Size(143, 24);
+         ResetButton.Size = new Size(175, 24);
          ResetButton.TabIndex = 3;
          ResetButton.Text = "Reset";
          ResetButton.UseVisualStyleBackColor = true;
@@ -82,7 +87,7 @@
          CancelButton.Dock = DockStyle.Fill;
          CancelButton.Location = new Point(3, 503);
          CancelButton.Name = "CancelButton";
-         CancelButton.Size = new Size(143, 24);
+         CancelButton.Size = new Size(175, 24);
          CancelButton.TabIndex = 1;
          CancelButton.Text = "Reset All";
          CancelButton.UseVisualStyleBackColor = true;
@@ -91,9 +96,9 @@
          // SaveButton
          // 
          SaveButton.Dock = DockStyle.Fill;
-         SaveButton.Location = new Point(301, 503);
+         SaveButton.Location = new Point(365, 503);
          SaveButton.Name = "SaveButton";
-         SaveButton.Size = new Size(144, 24);
+         SaveButton.Size = new Size(176, 24);
          SaveButton.TabIndex = 2;
          SaveButton.Text = "Save";
          SaveButton.UseVisualStyleBackColor = true;
@@ -103,7 +108,7 @@
          // 
          AutoScaleDimensions = new SizeF(7F, 15F);
          AutoScaleMode = AutoScaleMode.Font;
-         ClientSize = new Size(448, 530);
+         ClientSize = new Size(544, 530);
          Controls.Add(tableLayoutPanel1);
          FormBorderStyle = FormBorderStyle.FixedSingle;
          Icon = (Icon)resources.GetObject("$this.Icon");

@@ -76,7 +76,7 @@ namespace Editor.DataClasses.GameDataClasses
             return landUnits.Select(x => x.UnitName).ToList();
 
          List<string> selectedUnits = [];
-         if (max == -1) max = Globals.Settings.Misc.AutoPropertiesCountBig;
+         if (max == -1) max = Globals.Settings.Generator.NumOfUnitsToSelect;
          for (var index = 0; index < max; index++)
          {
             var randomUnit = landUnits[Globals.Random.Next(landUnits.Count)];

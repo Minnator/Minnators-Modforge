@@ -8,8 +8,32 @@ namespace Editor.Forms.Feature
       public SettingsWindow()
       {
          InitializeComponent();
+         SettingsTabs.DrawItem += TabControl_DrawItem; 
          CreateTabsForSettings();
+
+         var maxTextWidth = 0;
+         foreach (TabPage tabPage in SettingsTabs.TabPages)
+         {
+            var sizeText = TextRenderer.MeasureText(tabPage.Text, SettingsTabs.Font);
+            if (sizeText.Width > maxTextWidth)
+               maxTextWidth = sizeText.Width;
+         }
+
+         SettingsTabs.ItemSize = new Size(28, maxTextWidth + 3);
       }
+
+      private void TabControl_DrawItem(object sender, DrawItemEventArgs e)
+      {
+         var g = e.Graphics;
+         var text = SettingsTabs.TabPages[e.Index].Text;
+         var sizeText = g.MeasureString(text, SettingsTabs.Font);
+
+         var x = e.Bounds.Left + 3;
+         var y = e.Bounds.Top + (e.Bounds.Height - sizeText.Height) / 2;
+
+         g.DrawString(text, SettingsTabs.Font, Brushes.Black, x, y);
+      }
+
 
       private void CreateTabsForSettings()
       {
@@ -31,7 +55,7 @@ namespace Editor.Forms.Feature
                SelectedObject = prop.GetValue(Globals.Settings)
             };
             propertyGrid.ExpandAllGridItems();
-
+            
             tabPage.Controls.Add(propertyGrid);
 
             SettingsTabs.TabPages.Add(tabPage);

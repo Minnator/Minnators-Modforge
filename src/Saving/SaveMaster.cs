@@ -387,7 +387,7 @@ namespace Editor.Saving
 
             // Save the unchanged first
             AddListToStringBuilder(ref sb, unchanged);
-            if (Globals.Settings.Saving.AddModifiedCommentToFilesWhenSaving)
+            if (Globals.Settings.Saving.Formatting.AddModifiedCommentToFilesWhenSaving)
                sb.AppendLine($"### Modified {DateTime.Now} ###");
             AddListToStringBuilder(ref sb, changed);
 
@@ -408,7 +408,7 @@ namespace Editor.Saving
       {
          foreach (var item in items)
          {
-            if (Globals.Settings.Saving.AddCommentAboveObjectsInFiles)
+            if (Globals.Settings.Saving.Formatting.AddCommentAboveObjectsInFiles)
             {
                var saveComment = item.SavingComment();
                if (!string.IsNullOrWhiteSpace(saveComment))

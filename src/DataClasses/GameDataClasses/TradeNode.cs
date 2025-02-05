@@ -79,7 +79,7 @@ namespace Editor.DataClasses.GameDataClasses
          var nodesSorted = TradeNodeHelper.TopologicalSort(Globals.TradeNodes.Values.ToList());
          foreach (var node in nodesSorted)
          {
-            if (Globals.Settings.Saving.AddCommentAboveObjectsInFiles)
+            if (Globals.Settings.Saving.Formatting.AddCommentAboveObjectsInFiles)
                sb.Append("# ").Append(node.SavingComment()).AppendLine();
             SaveTradeNodes.FormatTradeNode(node, ref sb);
          }

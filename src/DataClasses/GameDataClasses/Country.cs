@@ -691,8 +691,8 @@ public class Country : ProvinceCollection<Province>, ITitleAdjProvider
          return prov; 
       }
 
-      var devParts = MathHelper.SplitIntoNRandomPieces(3, dev, Globals.Settings.Misc.MinDevelopmentInGeneration,
-         Globals.Settings.Misc.MaxDevelopmentInGeneration);
+      var devParts = MathHelper.SplitIntoNRandomPieces(3, dev, Globals.Settings.Generator.DevGeneratingSettings.MinDevelopmentInGeneration,
+         Globals.Settings.Generator.DevGeneratingSettings.MaxDevelopmentInGeneration);
 
       prov.BaseTax += devParts[0];
       prov.BaseProduction += devParts[1];
@@ -792,8 +792,8 @@ public class Country : ProvinceCollection<Province>, ITitleAdjProvider
    }
    public List<Country> GetNeighboringCountriesWithSameSize()
    {
-      var maxProvinceDistance = Globals.Settings.Misc.MaxProvinceDistanceForCountryWithSameSize;
-      var maxDevDifference = Globals.Settings.Misc.MaxCountryDevDifferenceForCountryWithSameSize;
+      var maxProvinceDistance = Globals.Settings.Generator.DistanceSettings.MaxProvinceDistanceForCountryWithSameSize;
+      var maxDevDifference = Globals.Settings.Generator.DistanceSettings.MaxCountryDevDifferenceForCountryWithSameSize;
 
       List<Country> countries = [];
       List<Country> neighbours = [];
