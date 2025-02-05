@@ -66,6 +66,8 @@ namespace Editor.Forms.Feature
       {
          SettingsSaver.Save(Globals.Settings);
          Globals.Settings.Gui.Invalidate(nameof(GuiSettings.MapModes));
+         Globals.ZoomControl.BorderColor = Globals.Settings.Rendering.Map.MapBorderColor;
+         Globals.ZoomControl.Invalidate();
          Close();
       }
 

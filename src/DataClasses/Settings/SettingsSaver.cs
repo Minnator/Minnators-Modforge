@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 using Editor.Helper;
 
 namespace Editor.DataClasses.Settings
@@ -9,9 +10,26 @@ namespace Editor.DataClasses.Settings
 
       public static bool Save(Settings settings)
       {
-         var settingsJSON = JsonSerializer.Serialize(settings, options: new() { WriteIndented = true });
+         var settingsJSON = JsonSerializer.Serialize(settings, options: new() { 
+            WriteIndented = true,
+            Converters = { new ColorJsonConverter() }, });
          return IO.WriteToFile(Path.Combine(Globals.AppDirectory, SETTINGS_FILE_NAME), settingsJSON, false);
       }
 
+   }
+
+   public class ColorJsonConverter : JsonConverter<Color>
+   {
+      public override Color Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+      {
+         string colorString = reader.GetString()!;
+         return ColorTranslator.FromHtml(colorString); // Converts from "#RRGGBB" or named colors
+      }
+
+      public override void Write(Utf8JsonWriter writer, Color value, JsonSerializerOptions options)
+      {
+         string colorString = ColorTranslator.ToHtml(value); // Converts to "#RRGGBB" format
+         writer.WriteStringValue(colorString);
+      }
    }
 }

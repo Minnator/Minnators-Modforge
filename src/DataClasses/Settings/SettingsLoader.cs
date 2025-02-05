@@ -1,4 +1,5 @@
-﻿using Editor.Helper;
+﻿using System.Text.Json;
+using Editor.Helper;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Editor.DataClasses.Settings
@@ -12,7 +13,10 @@ namespace Editor.DataClasses.Settings
             return new ();
 
          var settingsJSON = IO.ReadAllLinesInUTF8(settingsPath);
-         return JsonSerializer.Deserialize<Settings>(string.Join('\n', settingsJSON)) ?? new Settings();
+         return JsonSerializer.Deserialize<Settings>(string.Join('\n', settingsJSON), new JsonSerializerOptions
+         {
+            Converters = { new ColorJsonConverter() },
+         }) ?? new Settings();
       }
    }
 

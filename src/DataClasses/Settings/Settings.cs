@@ -172,8 +172,3 @@ public abstract class PropertySettings : PropertyEquals, INotifyPropertyChanged
       return true;
    }
 }
-
-public class ColorWrapper
-{
-   public System.Drawing.Color Value { get; set; }
-}

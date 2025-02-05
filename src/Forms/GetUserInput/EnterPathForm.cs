@@ -13,7 +13,7 @@ namespace Editor.Forms.GetUserInput
          StartPosition = FormStartPosition.CenterScreen;
 
          Globals.Settings = SettingsLoader.Load();
-         Globals.Settings.Rendering.Map.MapBorderColor.Value = Color.FromArgb(Globals.Settings.Rendering.Map.MapBorderColor.Value.R, Globals.Settings.Rendering.Map.MapBorderColor.Value.G, Globals.Settings.Rendering.Map.MapBorderColor.Value.B);
+         Globals.Settings.Rendering.Map.MapBorderColor = Color.FromArgb(Globals.Settings.Rendering.Map.MapBorderColor.R, Globals.Settings.Rendering.Map.MapBorderColor.G, Globals.Settings.Rendering.Map.MapBorderColor.B);
 
          ModPathTextBox.Text = Globals.Settings.Misc.LastModPath;
          VanillaPathTextBox.Text = Globals.Settings.Misc.LastVanillaPath;

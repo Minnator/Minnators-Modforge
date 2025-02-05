@@ -87,7 +87,7 @@ namespace Editor.Helper
          switch (args.PropertyName)
          {
             case nameof(Settings.Rendering.Map.MapBorderColor):
-               Globals.ZoomControl.BorderColor = Globals.Settings.Rendering.Map.MapBorderColor.Value;
+               Globals.ZoomControl.BorderColor = Globals.Settings.Rendering.Map.MapBorderColor;
                Globals.ZoomControl.Invalidate();
                break;
             case nameof(Settings.Rendering.Map.MapBorderWidth):

@@ -188,7 +188,7 @@ namespace Editor.Forms
          {
             BorderWidth = Globals.Settings.Rendering.Map.MapBorderWidth,
             Border = Globals.Settings.Rendering.Map.ShowMapBorder,
-            BorderColor = Globals.Settings.Rendering.Map.MapBorderColor.Value,
+            BorderColor = Globals.Settings.Rendering.Map.MapBorderColor,
             MinVisiblePixels = Globals.Settings.Rendering.Map.MinVisiblePixels,
             Dock = DockStyle.Fill,
             Margin = new(0),

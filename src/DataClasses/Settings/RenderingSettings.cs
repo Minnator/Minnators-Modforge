@@ -116,7 +116,7 @@ namespace Editor.DataClasses.Settings
       private int _mapBorderWidth = 2;
       private int _minVisiblePixels = 80;
       private BorderMergeType _mergeBorders = BorderMergeType.Merge;
-      private ColorWrapper _mapBorderColor = new (){Value = Color.Black};
+      private Color _mapBorderColor = Color.Black;
 
       [Description("If the map border will be shown")]
       [CompareInEquals]
@@ -129,7 +129,7 @@ namespace Editor.DataClasses.Settings
       [Description("The color of the map border")]
       [CompareInEquals]
       [TypeConverter(typeof(ExpandableObjectConverter))]
-      public ColorWrapper MapBorderColor
+      public Color MapBorderColor
       {
          get => _mapBorderColor;
          set => SetField(ref _mapBorderColor, value);
