@@ -12,6 +12,8 @@ namespace Editor.Forms.GetUserInput
          InitializeComponent();
          StartPosition = FormStartPosition.CenterScreen;
 
+         SettingsSaver.Init();
+
          Globals.Settings = SettingsLoader.Load();
          Globals.Settings.Rendering.Map.MapBorderColor = Color.FromArgb(Globals.Settings.Rendering.Map.MapBorderColor.R, Globals.Settings.Rendering.Map.MapBorderColor.G, Globals.Settings.Rendering.Map.MapBorderColor.B);
 

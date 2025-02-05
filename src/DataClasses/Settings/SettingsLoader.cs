@@ -13,10 +13,7 @@ namespace Editor.DataClasses.Settings
             return new ();
 
          var settingsJSON = IO.ReadAllLinesInUTF8(settingsPath);
-         return JsonSerializer.Deserialize<Settings>(string.Join('\n', settingsJSON), new JsonSerializerOptions
-         {
-            Converters = { new ColorJsonConverter() },
-         }) ?? new Settings();
+         return JsonSerializer.Deserialize<Settings>(string.Join('\n', settingsJSON), SettingsSaver.options) ?? new Settings();
       }
    }
 

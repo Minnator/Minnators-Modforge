@@ -7,12 +7,21 @@ namespace Editor.DataClasses.Settings
    public static class SettingsSaver
    {
       public const string SETTINGS_FILE_NAME = "modforge_settings.json";
+      public static JsonSerializerOptions options;
+
+
+      public static void Init()
+      {
+         options = new ()
+         {
+            WriteIndented = true,
+            Converters = { new ColorJsonConverter() },
+         };
+      }
 
       public static bool Save(Settings settings)
       {
-         var settingsJSON = JsonSerializer.Serialize(settings, options: new() { 
-            WriteIndented = true,
-            Converters = { new ColorJsonConverter() }, });
+         var settingsJSON = JsonSerializer.Serialize(settings, options);
          return IO.WriteToFile(Path.Combine(Globals.AppDirectory, SETTINGS_FILE_NAME), settingsJSON, false);
       }
 

@@ -382,6 +382,7 @@ public static class Globals
 // - [ ] In Depth deleting with pop up to show what objects are related to the one being deleted
 // - [ ] Radial Menu for Map Modes
 // - [ ] Trade fix   //UI
+// - [x] Fixed Colors not being saved in the settings
 // - [-] Implement Shaders for the map
 //    - [ ] Province Creation and editing
 // - [ ] Add Prefix ignoring in search boxes
