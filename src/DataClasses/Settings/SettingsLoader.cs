@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using Editor.Helper;
+﻿using Editor.Helper;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Editor.DataClasses.Settings

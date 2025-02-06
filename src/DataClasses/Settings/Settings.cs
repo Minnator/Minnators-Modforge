@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using Editor;
 using Editor.Forms.Feature;
@@ -170,5 +171,22 @@ public abstract class PropertySettings : PropertyEquals, INotifyPropertyChanged
       field = value;
       OnPropertyChanged(propertyName);
       return true;
+   }
+}
+
+public class CEmptyStringConverter : ExpandableObjectConverter
+{
+   public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
+   {
+      return destinationType == typeof(string) || base.CanConvertTo(context, destinationType);
+   }
+
+   public override object ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
+   {
+      if (destinationType == typeof(string) && value is PropertySettings)
+      {
+         return string.Empty; 
+      }
+      return base.ConvertTo(context, culture, value, destinationType) ?? string.Empty;
    }
 }

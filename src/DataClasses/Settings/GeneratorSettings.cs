@@ -27,7 +27,7 @@ namespace Editor.DataClasses.Settings
 
 
       [CompareInEquals]
-      [TypeConverter(typeof(ExpandableObjectConverter))]
+      [TypeConverter(typeof(CEmptyStringConverter))]
       public DevGeneratingSettings DevGeneratingSettings
       {
          get => _devGeneratingSettings;
@@ -35,7 +35,7 @@ namespace Editor.DataClasses.Settings
       }
 
       [CompareInEquals]
-      [TypeConverter(typeof(ExpandableObjectConverter))]
+      [TypeConverter(typeof(CEmptyStringConverter))]
       public DistanceSettings DistanceSettings
       {
          get => _distanceSettings;

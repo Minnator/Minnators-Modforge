@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Drawing.Design;
+using System.Windows.Forms.Design;
 
 namespace Editor.DataClasses.Settings
 {
@@ -19,6 +21,9 @@ namespace Editor.DataClasses.Settings
       private string _lastVanillaPath = string.Empty;
       private CompactingSettings _compactingSettings = new ();
       private CustomizationOptions _customizationOptions = new();
+#if DEBUG
+      private TestSettings _testSettings = new();
+#endif
 
       [Description("The language in which the localisation will be shown")]
       [CompareInEquals]
@@ -47,7 +52,7 @@ namespace Editor.DataClasses.Settings
 
       [Description("Settings for compacting commands")]
       [CompareInEquals]
-      [TypeConverter(typeof(ExpandableObjectConverter))]
+      [TypeConverter(typeof(CEmptyStringConverter))]
       public CompactingSettings CompactingSettings
       {
          get => _compactingSettings;
@@ -56,14 +61,88 @@ namespace Editor.DataClasses.Settings
 
       [Description("Settings for customization")]
       [CompareInEquals]
-      [TypeConverter(typeof(ExpandableObjectConverter))]
+      [TypeConverter(typeof(CEmptyStringConverter))]
       public CustomizationOptions CustomizationOptions
       {
          get => _customizationOptions;
          set => SetField(ref _customizationOptions, value);
       }
+
+#if DEBUG
+      [Description("Settings for testing")]
+      [CompareInEquals]
+      //[TypeConverter(typeof(ExpandableObjectConverter))]
+      [Editor(typeof(CustomizationOptionsEditor), typeof(UITypeEditor))]
+      public TestSettings TestSettings
+      {
+         get => _testSettings;
+         set => SetField(ref _testSettings, value);
+      }
+#endif
    }
 
+#if DEBUG
+   public class CustomizationOptionsEditorForm : Form
+   {
+      private TestSettings _options;
+      public TestSettings EditedOptions => _options;
+
+      public CustomizationOptionsEditorForm(TestSettings options)
+      {
+         _options = options;
+         this.Text = "Edit Customization Options";
+         this.Width = 300;
+         this.Height = 200;
+
+         // Example UI
+         TextBox txtValue = new TextBox { Text = _options.FooBar, Dock = DockStyle.Top };
+         Button btnOK = new Button { Text = "OK", Dock = DockStyle.Bottom };
+         btnOK.Click += (s, e) => { _options.FooBar = txtValue.Text; this.DialogResult = DialogResult.OK; };
+
+         Controls.Add(txtValue);
+         Controls.Add(btnOK);
+      }
+   }
+
+   public class CustomizationOptionsEditor : UITypeEditor
+   {
+      public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+      {
+         // This enables a modal dialog (like the color picker)
+         return UITypeEditorEditStyle.Modal;
+      }
+
+      public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+      {
+         if (provider != null)
+         {
+            IWindowsFormsEditorService editorService = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
+            if (editorService != null)
+            {
+               // Open a custom form for editing
+               using (CustomizationOptionsEditorForm form = new CustomizationOptionsEditorForm(value as TestSettings))
+               {
+                  if (editorService.ShowDialog(form) == DialogResult.OK)
+                  {
+                     return form.EditedOptions; // Return the updated object
+                  }
+               }
+            }
+         }
+         return value;
+      }
+   }
+
+   public class TestSettings : PropertySettings
+   {
+      public string FooBar { get; set; } = "fooBar";
+
+      public override string ToString()
+      {
+         return "(Custom)"; // Ensures the editor is used instead of expanding properties
+      }
+   }
+#endif
    public class CustomizationOptions : PropertySettings
    {
       private bool _useEu4Cursor = true;

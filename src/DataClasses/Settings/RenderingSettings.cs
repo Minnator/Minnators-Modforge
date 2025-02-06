@@ -25,7 +25,7 @@ namespace Editor.DataClasses.Settings
 
 
       [CompareInEquals]
-      [TypeConverter(typeof(ExpandableObjectConverter))]
+      [TypeConverter(typeof(CEmptyStringConverter))]
       public MapSettings Map
       {
          get => _mapSettings;
@@ -33,7 +33,7 @@ namespace Editor.DataClasses.Settings
       }
 
       [CompareInEquals]
-      [TypeConverter(typeof(ExpandableObjectConverter))]
+      [TypeConverter(typeof(CEmptyStringConverter))]
       public IconsSettings Icons
       {
          get => _iconsSettings;
@@ -41,7 +41,7 @@ namespace Editor.DataClasses.Settings
       }
 
       [CompareInEquals]
-      [TypeConverter(typeof(ExpandableObjectConverter))]
+      [TypeConverter(typeof(CEmptyStringConverter))]
       public EasterEggsSettings EasterEggs
       {
          get => _easterEggsSettings;
@@ -49,7 +49,7 @@ namespace Editor.DataClasses.Settings
       }
 
       [CompareInEquals]
-      [TypeConverter(typeof(ExpandableObjectConverter))]
+      [TypeConverter(typeof(CEmptyStringConverter))]
       public MapModeSettings MapMode
       {
          get => _mapMode;
@@ -57,7 +57,7 @@ namespace Editor.DataClasses.Settings
       }
 
       [CompareInEquals]
-      [TypeConverter(typeof(ExpandableObjectConverter))]
+      [TypeConverter(typeof(CEmptyStringConverter))]
       public SelectionSettings Selection
       {
          get => _selection;
@@ -128,7 +128,7 @@ namespace Editor.DataClasses.Settings
 
       [Description("The color of the map border")]
       [CompareInEquals]
-      [TypeConverter(typeof(ExpandableObjectConverter))]
+      [TypeConverter(typeof(CEmptyStringConverter))]
       public Color MapBorderColor
       {
          get => _mapBorderColor;

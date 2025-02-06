@@ -72,7 +72,7 @@ namespace Editor.DataClasses.Settings
 
       [CompareInEquals]
       [Description("Settings for formatting files")]
-      [TypeConverter(typeof(ExpandableObjectConverter))]
+      [TypeConverter(typeof(CEmptyStringConverter))]
       public FormattingSettings Formatting
       {
          get => _formatting;
