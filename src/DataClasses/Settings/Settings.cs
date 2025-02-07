@@ -20,6 +20,7 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    private MetricDummySetting _metrics = new();
    private LoggingSettings _logging = new();
    private GeneratorSettings _generator = new();
+   private AchievementsSettings _achievements = new();
 
 
    public Settings()
@@ -28,16 +29,15 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
       {
          if (Form.ActiveForm?.GetType() != typeof(SettingsWindow))
          {
-            if(Globals.State == State.Running)
+            if (Globals.State == State.Running)
                SettingsSaver.Save(Globals.Settings);
          }
       };
    }
-   
+
    [Description("Contains all settings regarding the misc settings.")]
    [TypeConverter(typeof(ExpandableObjectConverter))]
    [CompareInEquals]
-   [Category("Miscellaneous Settings")]
    public MiscSettings Misc
    {
       get => _miscSettings;
@@ -47,7 +47,6 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    [Description("Contains all settings regarding the saving of files.")]
    [TypeConverter(typeof(ExpandableObjectConverter))]
    [CompareInEquals]
-   [Category("Saving Settings")]
    public SavingSettings Saving
    {
       get => _savingSettings;
@@ -57,7 +56,6 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    [Description("Contains all settings regarding the rendering of the map.")]
    [TypeConverter(typeof(ExpandableObjectConverter))]
    [CompareInEquals]
-   [Category("Rendering Settings")]
    public RenderingSettings Rendering
    {
       get => _renderingSettings;
@@ -67,8 +65,7 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    [Description("Contains all settings regarding the map tooltip.")]
    [TypeConverter(typeof(ExpandableObjectConverter))]
    [CompareInEquals]
-   [Category("ToolTip Settings")]
-   public ToolTipSettings ToolTip 
+   public ToolTipSettings ToolTip
    {
       get => _toolTipSettings;
       set => SetField(ref _toolTipSettings, value);
@@ -77,7 +74,6 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    [Description("Contains all settings regarding the GUI customisation")]
    [TypeConverter(typeof(ExpandableObjectConverter))]
    [CompareInEquals]
-   [Category("Gui Settings")]
    public GuiSettings Gui
    {
       get => _guiSettings;
@@ -87,7 +83,6 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    [Description("Contains all settings regarding Pop ups")]
    [TypeConverter(typeof(ExpandableObjectConverter))]
    [CompareInEquals]
-   [Category("PopUp Settings")]
    public PopUpSettings PopUps
    {
       get => _popUpSettings;
@@ -97,7 +92,6 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    [Description("Contains all settings regarding the start up metrics of the application")]
    [TypeConverter(typeof(ExpandableObjectConverter))]
    [CompareInEquals]
-   [Category("Metrics Settings")]
    public MetricDummySetting Metrics
    {
       get => _metrics;
@@ -107,7 +101,6 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    [Description("Contains all settings regarding the logging of the application")]
    [TypeConverter(typeof(ExpandableObjectConverter))]
    [CompareInEquals]
-   [Category("Logging Settings")]
    public LoggingSettings Logging
    {
       get => _logging;
@@ -117,18 +110,26 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
    [Description("Contains all settings regarding the generation of data")]
    [TypeConverter(typeof(ExpandableObjectConverter))]
    [CompareInEquals]
-   [Category("Generator Settings")]
    public GeneratorSettings Generator
    {
       get => _generator;
       set => SetField(ref _generator, value);
    }
 
+   [Description("Contains all settings regarding the achievements of the application")]
+   [TypeConverter(typeof(ExpandableObjectConverter))]
+   [CompareInEquals]
+   public AchievementsSettings Achievements
+   {
+      get => _achievements;
+      set => SetField(ref _achievements, value);
+   }
+
    public event PropertyChangedEventHandler? PropertyChanged;
 
    public void OnPropertyChanged([CallerMemberName] string? propertyName = null)
    {
-      PropertyChanged?.Invoke(this, new (propertyName));
+      PropertyChanged?.Invoke(this, new(propertyName));
    }
 
    private bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
@@ -138,14 +139,16 @@ public sealed class Settings : PropertyEquals, INotifyPropertyChanged
       OnPropertyChanged(propertyName);
       return true;
    }
-
-
 }
 
 [AttributeUsage(AttributeTargets.Property)]
 public class CompareInEquals : Attribute;
 
-public abstract class SubSettings : PropertySettings;
+public abstract class SubSettings : PropertySettings
+{
+   [Browsable(false)]
+   public bool IsAvailable { get; set; } = true;
+}
 
 public abstract class PropertySettings : PropertyEquals, INotifyPropertyChanged
 {

@@ -39,8 +39,13 @@ namespace Editor.Forms.Feature
       {
          SettingsTabs.TabPages.Clear();
          var settingsProperties = typeof(Settings)
-            .GetProperties()
-            .Where(prop => prop.PropertyType is { IsClass: true, Namespace: "Editor.DataClasses.Settings" });
+                .GetProperties()
+                .Where(prop => prop.PropertyType.IsSubclassOf(typeof(SubSettings)))
+                .Where(prop =>
+                {
+                   var instance = prop.GetValue(Globals.Settings) as SubSettings; 
+                   return instance is { IsAvailable: true }; 
+                });
 
          foreach (var prop in settingsProperties)
          {

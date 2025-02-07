@@ -79,6 +79,11 @@ namespace Editor.DataClasses.Settings
          set => SetField(ref _testSettings, value);
       }
 #endif
+
+      [Description("Determines if the achievement settings can be accessed")]
+      [CompareInEquals]
+      [Browsable(false)]
+      public bool CanAccessAchievementSettings { get; set; } = true;
    }
 
 #if DEBUG

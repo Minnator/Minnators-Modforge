@@ -31,19 +31,22 @@
    }
 
 
-   public class ProgressCondition(float goal) : IAchievementCondition
+   public class ProgressCondition(float goal, AchievementId id) : IAchievementCondition
    {
       private float _currentProgress;
+      private AchievementId _id = id;
 
-      public float CurrentProgress
-      {
-         get => _currentProgress;
-      }
+      public float CurrentProgress => _currentProgress;
 
       public float Goal { get; } = goal;
       public float GetProgress() => Math.Clamp(CurrentProgress / goal, 0f, 1f);
       public bool IsCompleted() => CurrentProgress >= goal;
-      public void IncreaseProgress(float amount) => _currentProgress += amount;
+      public void IncreaseProgress(float amount)
+      {
+         _currentProgress = Math.Min(Goal, _currentProgress += amount);
+         if (IsCompleted()) 
+            AchievementEvents.NotifyCompletion(id);
+      }
    }
 
 
