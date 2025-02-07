@@ -6,6 +6,7 @@ using System.Runtime;
 using System.Text;
 using Editor.Controls;
 using Editor.Controls.NewControls;
+using Editor.DataClasses.Achievements;
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
@@ -20,6 +21,7 @@ using Editor.Helper;
 using Editor.Loading;
 using Editor.NameGenerator;
 using Editor.Parser;
+using Editor.Properties;
 using Editor.Saving;
 using Editor.src.Controls.NewControls;
 using Editor.src.Forms.Feature;
@@ -1479,10 +1481,18 @@ namespace Editor.Forms
 
       private void generateTextureAtlasPacedToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         //var path = Path.Combine(Globals.DebugPath, "atlas.png");
-         //GameIconDefinition.CreateSpriteSheetPacked(GameIconDefinition.Icons.Select(x => x.Value.Icon).ToList(), path);
+#if DEBUG
+         var modAchievement = new Achievement(AchievementId.ExampleAchievement,
+                                              "Modding Master",
+                                              "Work on at least 20 different mods.",
+                                              new ProgressCondition(100),
+                                              Resources.AchievementExample,
+                                              level: 1);
 
+         AchievementManager.AddAchievement(modAchievement);
 
+         AchievementManager.DebugVisualize();
+#endif
       }
 
       private void audioTestToolStripMenuItem_Click(object sender, EventArgs e)
