@@ -51,6 +51,7 @@
          SettingsTabs.Size = new Size(538, 494);
          SettingsTabs.SizeMode = TabSizeMode.Fixed;
          SettingsTabs.TabIndex = 0;
+         SettingsTabs.SelectedIndexChanged += SettingsTabs_SelectedIndexChanged;
          // 
          // tableLayoutPanel1
          // 

@@ -695,7 +695,7 @@ namespace Editor.Forms
       {
          CompactionToolStrip.Text = $"Compaction in: {time:mm\\:ss}";
       }
-      
+
       #endregion
       #region HistoryManager Event Handlers
 
@@ -1105,14 +1105,14 @@ namespace Editor.Forms
          GeneralToolTip.SetToolTip(_countryDevelopmentNumeric, "LMB = +- 1\nSHIFT + LMB = +- 5\nCTRL + LMB = +-10\nThe development is only added to one random province in the selected country per click.");
 
          // Quick Assign
-         _historicalUnits = ControlFactory.GetPropertyQuickAssignControlCC<List<string>, string>([..Globals.Units.Keys], typeof(CommonCountry).GetProperty(nameof(CommonCountry.HistoricUnits))!, null, "Historic Units", -1, LandUnit.AutoSelectFuncUnits);
+         _historicalUnits = ControlFactory.GetPropertyQuickAssignControlCC<List<string>, string>([.. Globals.Units.Keys], typeof(CommonCountry).GetProperty(nameof(CommonCountry.HistoricUnits))!, null, "Historic Units", -1, LandUnit.AutoSelectFuncUnits);
 
          _historicalIdeas = ControlFactory.GetPropertyQuickAssignControlCC<List<string>, string>(Globals.Ideas.Select(x => x.Name).ToList(), typeof(CommonCountry).GetProperty(nameof(CommonCountry.HistoricIdeas))!, null, "Historic Ideas", 8, IdeaGroup.GetAutoAssignment);
 
          _historicRivals = ControlFactory.GetPropertyQuickAssignControlHC<List<Tag>, Tag>([.. Globals.Countries.Keys], typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.HistoricalRivals))!, typeof(Tag).GetProperty(nameof(DataClasses.GameDataClasses.Tag.TagValue)), "Historic Rivals", 3, Country.GetHistoricRivals);
 
          _historicFriends = ControlFactory.GetPropertyQuickAssignControlHC<List<Tag>, Tag>([.. Globals.Countries.Keys], typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.HistoricalFriends))!, typeof(Tag).GetProperty(nameof(DataClasses.GameDataClasses.Tag.TagValue)), "Historic Friends", 3, Country.GetHistoricFriends);
-         
+
          _estatePrivileges = ControlFactory.GetPropertyQuickAssignControlHC<List<string>, string>([], typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.EstatePrivileges))!, null, "Estate Privileges", 8, _ => []);
          _estatePrivileges.Enabled = false;
 
@@ -1127,7 +1127,7 @@ namespace Editor.Forms
 
          CountryADJLoc = ControlFactory.GetPropertyTextBoxCountry(typeof(Country).GetProperty(nameof(Country.AdjectiveLocalisation)), ControlFactory.DefaultMarginType.Slim);
          TagAndColorTLP.Controls.Add(CountryADJLoc, 3, 1);
-         
+
          CountryCustomToolStripLayoutPanel.Paint += TableLayoutBorder_Paint;
          OpenCountryFileButton.Enter += SetSavingToolTipCountryFileButton;
 
@@ -1261,12 +1261,12 @@ namespace Editor.Forms
          var handle = Parsing.GetMonarchNameFromTextBoxes(NameTextBox, ChanceTextBox, out var mName);
          if (!handle.Log())
             return;
-         
+
          _monarchNames.AddMonarchName(mName);
          NameTextBox.Clear();
          ChanceTextBox.Clear();
       }
-      
+
       private void ShowMonarchNamesCB_CheckedChanged(object sender, EventArgs e)
       {
          if (Selection.SelectedCountry == Country.Empty)
@@ -1491,9 +1491,12 @@ namespace Editor.Forms
 
          AchievementManager.AddAchievement(modAchievement);
          AchievementManager.IncreaseAchievementProgress(AchievementId.ExampleAchievement, 100);
-         AchievementManager.GetAchievement(AchievementId.ExampleAchievement)!.SetAchieved();
+         AchievementManager.GetAchievement(AchievementId.ExampleAchievement).SetAchieved();
 
          AchievementManager.DebugVisualize();
+
+         DateTime thisDate1 = new DateTime(2011, 6, 10);
+         Debug.WriteLine("Today is " + thisDate1.ToString("MMMM dd, yyyy") + ".");
 #endif
       }
 
@@ -1520,7 +1523,7 @@ namespace Editor.Forms
                continue;
             var count = country.CommonCountry.MonarchNames.Count;
             total += count;
-            if (count < min) 
+            if (count < min)
                min = count;
             if (count > max)
                max = count;
@@ -1544,6 +1547,11 @@ namespace Editor.Forms
       private void compactHistoryToolStripMenuItem1_Click(object sender, EventArgs e)
       {
          HistoryManager.Compact();
+      }
+
+      private void AchievementsToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         new AchievementsWindow().ShowDialog();
       }
    }
 }

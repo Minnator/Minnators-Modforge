@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Reflection;
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
@@ -9,7 +10,7 @@ public class Deselection : ISelectionModifier
 {
    public string Name { get; set; } = "Deselection";
 
-   public void Execute(ProvinceSource source, Operations operation, string attr, object value)
+   public void Execute(ProvinceSource source, Operations operation, PropertyInfo attr, object value)
    {
       HistoryManager.AddCommand(new CCollectionSelection(GetProvinceViaOperation.GetProvinces(operation, attr, value, GetProvinceViaOperation.GetProvincesToCheck(source)), true));
    }
@@ -21,7 +22,7 @@ public class Select : ISelectionModifier
 {
    public string Name { get; set; } = "Selection";
 
-   public void Execute(ProvinceSource source, Operations operation, string attr, object value)
+   public void Execute(ProvinceSource source, Operations operation, PropertyInfo attr, object value)
    {
 
       HistoryManager.AddCommand(new CCollectionSelection(GetProvinceViaOperation.GetProvinces(operation, attr, value, GetProvinceViaOperation.GetProvincesToCheck(source))));
@@ -114,80 +115,82 @@ public static class GetProvinceViaOperation
       }
    }
 
-   public static List<Province> GetProvinces(Operations operation, string propName, object value, ICollection<Province> provincesToCheck)
+   public static List<Province> GetProvinces(Operations operation, PropertyInfo propInfo, object value, ICollection<Province> provincesToCheck)
    {
-      var provInfo = provincesToCheck.First().GetPropertyInfo(propName);
-      Debug.Assert(provInfo != null, "provInfo != null");
+      Debug.Assert(propInfo != null, "provInfo != null");
       
-      if (!int.TryParse(value.ToString(), out var intValue) && provInfo.PropertyType != typeof(int))
+      if (!int.TryParse(value.ToString(), out var intValue) && propInfo.PropertyType != typeof(int))
          return [];
-      if (!float.TryParse(value.ToString(), out var floatValue) && provInfo.PropertyType != typeof(float))
+      if (!float.TryParse(value.ToString(), out var floatValue) && propInfo.PropertyType != typeof(float))
          return [];
+      if (propInfo.PropertyType == typeof(Tag)) 
+         value = new Tag(value.ToString()!);
+
       List<Province> provinces = [];
       foreach (var prov in provincesToCheck)
       {
          switch (operation)
          {
             case Operations.Equal:
-               if (provInfo.GetValue(prov)!.Equals(value))
+               if (propInfo.GetValue(prov)!.Equals(value))
                   provinces.Add(prov);
                break;
             case Operations.NotEqual:
-               if (!provInfo.GetValue(prov)!.Equals(value))
+               if (!propInfo.GetValue(prov)!.Equals(value))
                   provinces.Add(prov);
                break;
             case Operations.LessThan:
-               if (provInfo.PropertyType == typeof(int))
+               if (propInfo.PropertyType == typeof(int))
                {
-                  if (int.TryParse(provInfo.GetValue(prov)!.ToString(), out var compareTo))
+                  if (int.TryParse(propInfo.GetValue(prov)!.ToString(), out var compareTo))
                      if (compareTo < intValue)
                         provinces.Add(prov);
                }
-               else if (provInfo.PropertyType == typeof(float))
+               else if (propInfo.PropertyType == typeof(float))
                {
-                  if (float.TryParse(provInfo.GetValue(prov)!.ToString(), out var compareTo1))
+                  if (float.TryParse(propInfo.GetValue(prov)!.ToString(), out var compareTo1))
                      if (compareTo1 < floatValue)
                         provinces.Add(prov);
                }
                break;
             case Operations.GreaterThan:
-               if (provInfo.PropertyType == typeof(int))
+               if (propInfo.PropertyType == typeof(int))
                {
-                  if (int.TryParse(provInfo.GetValue(prov)!.ToString(), out var compareTo2))
+                  if (int.TryParse(propInfo.GetValue(prov)!.ToString(), out var compareTo2))
                      if (compareTo2 > intValue)
                         provinces.Add(prov);
                }
-               else if (provInfo.PropertyType == typeof(float))
+               else if (propInfo.PropertyType == typeof(float))
                {
-                  if (float.TryParse(provInfo.GetValue(prov)!.ToString(), out var compareTo3))
+                  if (float.TryParse(propInfo.GetValue(prov)!.ToString(), out var compareTo3))
                      if (compareTo3 > floatValue)
                         provinces.Add(prov);
                }
                break;
             case Operations.GreaterThanOrEqual:
-               if (provInfo.PropertyType == typeof(int))
+               if (propInfo.PropertyType == typeof(int))
                {
-                  if (int.TryParse(provInfo.GetValue(prov)!.ToString(), out var compareTo4))
+                  if (int.TryParse(propInfo.GetValue(prov)!.ToString(), out var compareTo4))
                      if (compareTo4 >= intValue)
                         provinces.Add(prov);
                }
-               else if (provInfo.PropertyType == typeof(float))
+               else if (propInfo.PropertyType == typeof(float))
                {
-                  if (float.TryParse(provInfo.GetValue(prov)!.ToString(), out var compareTo5))
+                  if (float.TryParse(propInfo.GetValue(prov)!.ToString(), out var compareTo5))
                      if (compareTo5 >= floatValue)
                         provinces.Add(prov);
                }
                break;
             case Operations.LessThanOrEqual:
-               if (provInfo.PropertyType == typeof(int))
+               if (propInfo.PropertyType == typeof(int))
                {
-                  if (int.TryParse(provInfo.GetValue(prov)!.ToString(), out var compareTo6))
+                  if (int.TryParse(propInfo.GetValue(prov)!.ToString(), out var compareTo6))
                      if (compareTo6 <= intValue)
                         provinces.Add(prov);
                }
-               else if (provInfo.PropertyType == typeof(float))
+               else if (propInfo.PropertyType == typeof(float))
                {
-                  if (float.TryParse(provInfo.GetValue(prov)!.ToString(), out var compareTo7))
+                  if (float.TryParse(propInfo.GetValue(prov)!.ToString(), out var compareTo7))
                      if (compareTo7 <= floatValue)
                         provinces.Add(prov);
                }

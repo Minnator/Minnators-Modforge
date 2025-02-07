@@ -41,7 +41,7 @@ namespace Editor.Controls
             var progressWidth = (int)(rect.Width * ((double)Value / Maximum));
 
             // Draw background (Rounded Rectangle)
-            using var backgroundPath = CreateRoundedRectanglePath(progressBarRect, CornerRadius);
+            using var backgroundPath = ControlHelper.CreateRoundedRectanglePath(progressBarRect, CornerRadius);
             using var backBrush = new SolidBrush(BackColor);
             g.FillPath(backBrush, backgroundPath);
 
@@ -49,40 +49,12 @@ namespace Editor.Controls
             if (progressWidth > 0)
             {
                var progressRect = new Rectangle(0, 0, progressWidth - 1, rect.Height - 1);
-               using var progressPath = CreateRoundedRectanglePath(progressRect, CornerRadius);
+               using var progressPath = ControlHelper.CreateRoundedRectanglePath(progressRect, CornerRadius);
                using var foreBrush = new SolidBrush(ForeColor);
                g.FillPath(foreBrush, progressPath);
             }
          }
       }
 
-      private GraphicsPath CreateRoundedRectanglePath(Rectangle rect, int radius)
-      {
-         var diameter = radius * 2;
-         var path = new GraphicsPath();
-
-         if (diameter > rect.Width) diameter = rect.Width;
-         if (diameter > rect.Height) diameter = rect.Height;
-
-         var arcRect = rect with { Width = diameter, Height = diameter };
-
-         // Top-left corner
-         path.AddArc(arcRect, 180, 90);
-
-         // Top-right corner
-         arcRect.X = rect.Right - diameter;
-         path.AddArc(arcRect, 270, 90);
-
-         // Bottom-right corner
-         arcRect.Y = rect.Bottom - diameter;
-         path.AddArc(arcRect, 0, 90);
-
-         // Bottom-left corner
-         arcRect.X = rect.Left;
-         path.AddArc(arcRect, 90, 90);
-
-         path.CloseFigure();
-         return path;
-      }
    }
 }

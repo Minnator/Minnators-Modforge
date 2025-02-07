@@ -90,18 +90,26 @@ namespace Editor.src.Forms.Feature
       {
          if (SourceListView.SelectedItems.Count == 0)
             return;
-         for (var i = 0; i < Math.Min(SourceListView.SelectedItems.Count, _maxItems - SelectedListView.Items.Count);)
-         {
-            var item = SourceListView.SelectedItems[i];
-            if (item.Tag?.Equals(UNSELECTABLE) ?? false)
-               return;
-            SourceListView.Items.Remove(item);
-            SelectedListView.Items.Add(item);
-            _selectedItems.Add(item.Text);
 
-            SelectedSearchTextBox.AutoCompleteCustomSource.Add(item.Text);
-            SearchTextBox.AutoCompleteCustomSource.Remove(item.Text);
-         }
+         if (_maxItems == -1) // no limit
+            for (var i = 0; i < SourceListView.SelectedItems.Count;)
+               InternalAdd(i);
+         else
+            for (var i = 0; i < Math.Min(SourceListView.SelectedItems.Count, _maxItems - SelectedListView.Items.Count);)
+               InternalAdd(i);
+      }
+
+      private void InternalAdd(int i)
+      {
+         var item = SourceListView.SelectedItems[i];
+         if (item.Tag?.Equals(UNSELECTABLE) ?? false)
+            return;
+         SourceListView.Items.Remove(item);
+         SelectedListView.Items.Add(item);
+         _selectedItems.Add(item.Text);
+
+         SelectedSearchTextBox.AutoCompleteCustomSource.Add(item.Text);
+         SearchTextBox.AutoCompleteCustomSource.Remove(item.Text);
       }
 
       private void RemoveButton_Click(object? sender, EventArgs e)

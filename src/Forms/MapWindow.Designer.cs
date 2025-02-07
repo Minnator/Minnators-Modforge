@@ -58,6 +58,7 @@
          terrainEditingToolStripMenuItem = new ToolStripMenuItem();
          positionsEditingToolStripMenuItem = new ToolStripMenuItem();
          CreateFilesByDefault = new ToolStripMenuItem();
+         toolStripSeparator10 = new ToolStripSeparator();
          historyToolStripMenuItem = new ToolStripMenuItem();
          selectionHistoryToolStripMenuItem = new ToolStripMenuItem();
          toolStripSeparator3 = new ToolStripSeparator();
@@ -87,6 +88,8 @@
          toolStripSeparator9 = new ToolStripSeparator();
          TutorialBrowser = new ToolStripMenuItem();
          gameOfLiveToolStripMenuItem = new ToolStripMenuItem();
+         toolStripMenuItem4 = new ToolStripMenuItem();
+         AchievementsToolStripMenuItem = new ToolStripMenuItem();
          debugToolStripMenuItem = new ToolStripMenuItem();
          testToolStripMenuItem = new ToolStripMenuItem();
          telescopeToolStripMenuItem = new ToolStripMenuItem();
@@ -315,7 +318,7 @@
          // 
          // MapMenuStrip
          // 
-         MapMenuStrip.Items.AddRange(new ToolStripItem[] { filesToolStripMenuItem, historyToolStripMenuItem, toolTipCustomizerToolStripMenuItem, toolStripMenuItem3, additionalToolsToolStripMenuItem, MapModeComboBox, searchToolStripMenuItem, helpToolStripMenuItem, debugToolStripMenuItem });
+         MapMenuStrip.Items.AddRange(new ToolStripItem[] { filesToolStripMenuItem, historyToolStripMenuItem, toolTipCustomizerToolStripMenuItem, toolStripMenuItem3, additionalToolsToolStripMenuItem, MapModeComboBox, searchToolStripMenuItem, helpToolStripMenuItem, toolStripMenuItem4, debugToolStripMenuItem });
          MapMenuStrip.Location = new Point(0, 0);
          MapMenuStrip.Name = "MapMenuStrip";
          MapMenuStrip.Padding = new Padding(7, 2, 0, 2);
@@ -325,7 +328,7 @@
          // 
          // filesToolStripMenuItem
          // 
-         filesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { gCToolStripMenuItem, graphicalElementsManagerToolStripMenuItem, quickSettingsToolStripMenuItem, toolStripSeparator5, saveCurrentMapModeToolStripMenuItem, saveSelectionToolStripMenuItem, toolStripSeparator4, toolStripMenuItem1, saveManualToolStripMenuItem, browseEditedObjectsToolStripMenuItem, toolStripSeparator6, mapModeHotkeysToolStripMenuItem, CreateFilesByDefault });
+         filesToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { gCToolStripMenuItem, graphicalElementsManagerToolStripMenuItem, quickSettingsToolStripMenuItem, toolStripSeparator5, saveCurrentMapModeToolStripMenuItem, saveSelectionToolStripMenuItem, toolStripSeparator4, toolStripMenuItem1, saveManualToolStripMenuItem, browseEditedObjectsToolStripMenuItem, toolStripSeparator6, mapModeHotkeysToolStripMenuItem, CreateFilesByDefault, toolStripSeparator10 });
          filesToolStripMenuItem.Name = "filesToolStripMenuItem";
          filesToolStripMenuItem.Size = new Size(42, 23);
          filesToolStripMenuItem.Text = "Files";
@@ -499,6 +502,11 @@
          CreateFilesByDefault.Size = new Size(268, 22);
          CreateFilesByDefault.Text = "Create files by default";
          CreateFilesByDefault.Click += CreateFilesByDefault_Click;
+         // 
+         // toolStripSeparator10
+         // 
+         toolStripSeparator10.Name = "toolStripSeparator10";
+         toolStripSeparator10.Size = new Size(265, 6);
          // 
          // historyToolStripMenuItem
          // 
@@ -702,6 +710,21 @@
          gameOfLiveToolStripMenuItem.Size = new Size(183, 22);
          gameOfLiveToolStripMenuItem.Text = "Game of live";
          gameOfLiveToolStripMenuItem.Click += gameOfLiveToolStripMenuItem_Click;
+         // 
+         // toolStripMenuItem4
+         // 
+         toolStripMenuItem4.DropDownItems.AddRange(new ToolStripItem[] { AchievementsToolStripMenuItem });
+         toolStripMenuItem4.Name = "toolStripMenuItem4";
+         toolStripMenuItem4.ShortcutKeys = Keys.Control | Keys.A;
+         toolStripMenuItem4.Size = new Size(121, 23);
+         toolStripMenuItem4.Text = "Additional Features";
+         // 
+         // AchievementsToolStripMenuItem
+         // 
+         AchievementsToolStripMenuItem.Name = "AchievementsToolStripMenuItem";
+         AchievementsToolStripMenuItem.Size = new Size(180, 22);
+         AchievementsToolStripMenuItem.Text = "Achievements";
+         AchievementsToolStripMenuItem.Click += AchievementsToolStripMenuItem_Click;
          // 
          // debugToolStripMenuItem
          // 
@@ -3105,6 +3128,9 @@
       private ToolStripMenuItem compactHistoryToolStripMenuItem1;
       public ToolStripLabel CompactionToolStrip;
       public CheckBox ShowMonachrNamesCB;
+      private ToolStripSeparator toolStripSeparator10;
+      private ToolStripMenuItem toolStripMenuItem4;
+      private ToolStripMenuItem AchievementsToolStripMenuItem;
    }
 }
 

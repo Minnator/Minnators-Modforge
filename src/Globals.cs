@@ -385,7 +385,7 @@ public static class Globals
 // - [x] Fixed Colors not being saved in the settings
 // - [-] Implement Shaders for the map
 //    - [ ] Province Creation and editing
-// - [ ] Add Prefix ignoring in search boxes
+// - [ ] Add Prefix ignoring in search boxes -> There currently is no checkbox which could use this lol
 // - [ ] Straits editing and creation
 // - [███▒▒▒▒▒▒▒▒▒] Generalize Loading
 // - [█▒▒▒▒▒▒▒▒▒▒▒] PDX language support
@@ -401,6 +401,9 @@ public static class Globals
 // - [ ] Fix TagComboBox behavior
 // - [ ] Fix TerrainOverrides Checkbox
 // - [ ] Local UnDo in ListView
+// - [x] Fix Ship names being slaughtered
+// - [x] Fix Advanced Selection Menu (should be reworked / improved again)
+// - [x] Fix CollectionSelectorBase
 
 // - [ ] Grid for pixels
 // - [ ] Tools:
@@ -429,15 +432,15 @@ public static class Globals
 //    - [ ] Versioning system so that if something in parsing changes we can still load old files
 
 // ACHIEVEMENTS
-// - [ ] Per Achievement
-//    - [ ] Title, Description, Icon
-//    - [ ] Level (optional)
-//    - [ ] Icon: colored Piktogramm
-//    - [ ] Progress
-//    - [ ] DateTime of completion
-//    - [ ] IsHidden?
+// - [x] Per Achievement
+//    - [x] Title, Description, Icon
+//    - [x] Level (optional)
+//    - [x] Icon: colored Piktogramm
+//    - [x] Progress
+//    - [x] DateTime of completion
+//    - [x] IsHidden?
 // - [ ] PopUp like steam
-// - [ ] Overview of all Achievements
+// - [x] Overview of all Achievements
 // - [ ] Encrypted file to save achievements
 // - [ ] Achievement unlocked sound
 

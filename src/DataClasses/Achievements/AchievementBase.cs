@@ -74,7 +74,7 @@
       public string Description { get; }
       public Bitmap Icon { get; }
       public int Level { get; }
-      public DateTime DateAchieved { get; private set; }
+      public DateTime DateAchieved { get; private set; } = DateTime.MinValue;
       public bool IsHidden { get; }
       public bool IsAchieved { get; private set; }
       public IAchievementCondition Condition { get; }
@@ -86,7 +86,7 @@
          if (!IsAchieved)
          {
             IsAchieved = true;
-            DateAchieved = DateTime.UtcNow;
+            DateAchieved = DateTime.Now;
             AchievementEvents.NotifyCompletion(Id);
          }
       }

@@ -35,8 +35,8 @@
          ActionTypeComboBox = new ComboBox();
          AttributeValueInput = new TextBox();
          OperationComboBox = new ComboBox();
-         AttributeSelectionComboBox = new ComboBox();
          SelectionSource = new ComboBox();
+         AttributeSelectionComboBox = new ComboBox();
          tableLayoutPanel1.SuspendLayout();
          SuspendLayout();
          // 
@@ -49,8 +49,8 @@
          tableLayoutPanel1.Controls.Add(CancelButton, 0, 5);
          tableLayoutPanel1.Controls.Add(ActionTypeComboBox, 0, 1);
          tableLayoutPanel1.Controls.Add(AttributeValueInput, 0, 4);
-         tableLayoutPanel1.Controls.Add(OperationComboBox, 0, 2);
-         tableLayoutPanel1.Controls.Add(AttributeSelectionComboBox, 0, 3);
+         tableLayoutPanel1.Controls.Add(OperationComboBox, 0, 3);
+         tableLayoutPanel1.Controls.Add(AttributeSelectionComboBox, 0, 2);
          tableLayoutPanel1.Controls.Add(SelectionSource, 0, 0);
          tableLayoutPanel1.Dock = DockStyle.Fill;
          tableLayoutPanel1.Location = new Point(0, 0);
@@ -63,6 +63,7 @@
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
          tableLayoutPanel1.Size = new Size(282, 176);
          tableLayoutPanel1.TabIndex = 0;
          // 
@@ -123,6 +124,17 @@
          OperationComboBox.Size = new Size(276, 23);
          OperationComboBox.TabIndex = 5;
          // 
+         // SelectionSource
+         // 
+         tableLayoutPanel1.SetColumnSpan(SelectionSource, 2);
+         SelectionSource.Dock = DockStyle.Fill;
+         SelectionSource.DropDownStyle = ComboBoxStyle.DropDownList;
+         SelectionSource.FormattingEnabled = true;
+         SelectionSource.Location = new Point(3, 3);
+         SelectionSource.Name = "SelectionSource";
+         SelectionSource.Size = new Size(276, 23);
+         SelectionSource.TabIndex = 6;
+         // 
          // AttributeSelectionComboBox
          // 
          tableLayoutPanel1.SetColumnSpan(AttributeSelectionComboBox, 2);
@@ -134,17 +146,6 @@
          AttributeSelectionComboBox.Name = "AttributeSelectionComboBox";
          AttributeSelectionComboBox.Size = new Size(274, 23);
          AttributeSelectionComboBox.TabIndex = 2;
-         // 
-         // SelectionSource
-         // 
-         tableLayoutPanel1.SetColumnSpan(SelectionSource, 2);
-         SelectionSource.Dock = DockStyle.Fill;
-         SelectionSource.DropDownStyle = ComboBoxStyle.DropDownList;
-         SelectionSource.FormattingEnabled = true;
-         SelectionSource.Location = new Point(3, 3);
-         SelectionSource.Name = "SelectionSource";
-         SelectionSource.Size = new Size(276, 23);
-         SelectionSource.TabIndex = 6;
          // 
          // AdvancedSelectionsForm
          // 
@@ -169,10 +170,10 @@
       private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
       private System.Windows.Forms.Button ConfirmButton;
       private System.Windows.Forms.Button CancelButton;
-      private System.Windows.Forms.ComboBox AttributeSelectionComboBox;
       private System.Windows.Forms.TextBox AttributeValueInput;
       private System.Windows.Forms.ComboBox ActionTypeComboBox;
       private ComboBox OperationComboBox;
       private ComboBox SelectionSource;
+      private ComboBox AttributeSelectionComboBox;
    }
 }

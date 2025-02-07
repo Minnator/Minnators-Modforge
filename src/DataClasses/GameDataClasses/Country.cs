@@ -192,10 +192,10 @@ public class CommonCountry : Saveable, IGetSetProperty
       sb.AppendLine();
       AddFormattedStringListOnePerRow("historical_idea_groups", HistoricIdeas, 0, ref sb);
       AddFormattedStringListOnePerRow("historical_units", HistoricUnits, 0, ref sb);
-      AddFormattedStringListOnePerRow("leader_names", LeaderNames, 0, ref sb);
-      AddFormattedStringListOnePerRow("army_names", ArmyNames, 0, ref sb);
-      AddFormattedStringListOnePerRow("fleet_names", FleetNames, 0, ref sb);
-      AddFormattedStringListOnePerRow("ship_names", ShipNames, 0, ref sb);
+      AddFormattedStringListAutoQuote("leader_names", LeaderNames, 0, ref sb);
+      AddFormattedStringListAutoQuote("army_names", ArmyNames, 0, ref sb);
+      AddFormattedStringListAutoQuote("fleet_names", FleetNames, 0, ref sb);
+      AddFormattedStringListAutoQuote("ship_names", ShipNames, 0, ref sb);
       AddFormattedStringListOnePerRow("monarch_names", MonarchNames.Select(x => x.ToString()).ToList(), 0, ref sb);
 
       return sb.ToString();

@@ -1,13 +1,17 @@
 ﻿#nullable enable
 
+using System.Diagnostics;
+using System.Reflection;
+using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
+using Editor.Saving;
 
 namespace Editor.Forms.Feature.AdvancedSelections
 {
    public partial class AdvancedSelectionsForm : Form
    {
       private List<ISelectionModifier> SelectionModifiers = [];
-      private ProvinceEnumHelper.ProvAttrType _lastAttrType = ProvinceEnumHelper.ProvAttrType.Int;
+      private PropertyInfo[] toolTippables;
 
       public AdvancedSelectionsForm()
       {
@@ -15,16 +19,14 @@ namespace Editor.Forms.Feature.AdvancedSelections
          SelectionModifiers.Add(new Deselection());
          SelectionModifiers.Add(new Select());
 
+         toolTippables = typeof(Province).GetProperties()
+                                         .Where(prop => Attribute.IsDefined(prop, typeof(ToolTippable))).ToArray();
+
          InitComboBoxes();
 
          AttributeSelectionComboBox.SelectedIndexChanged += (sender, e) =>
          {
-            var newAttrType = GetAttribute().GetAttributeType();
-            if (newAttrType != _lastAttrType)
-            {
-               AddValidOperations(newAttrType);
-               _lastAttrType = newAttrType;
-            }
+            AddValidOperations(GetAttribute());
          };
       }
 
@@ -34,28 +36,20 @@ namespace Editor.Forms.Feature.AdvancedSelections
             ActionTypeComboBox.Items.Add(selection.Name);
          ActionTypeComboBox.SelectedIndex = 0;
 
-         AttributeSelectionComboBox.Items.AddRange([.. Enum.GetNames<ProvinceEnumHelper.ProvAttrGet>()]);
-
-         AddValidOperations(ProvinceEnumHelper.ProvAttrType.Int);
-
+         AttributeSelectionComboBox.Items.AddRange(toolTippables.Select(x => x.Name).Cast<object>().ToArray());
+         
          SelectionSource.Items.AddRange([.. Enum.GetNames<ProvinceSource>()]);
       }
 
-      private void AddValidOperations(ProvinceEnumHelper.ProvAttrType type)
+      private void AddValidOperations(PropertyInfo info)
       {
+         Debug.Assert(info != null, "this info must not be null");
          OperationComboBox.Items.Clear();
-         switch (type)
-         {
-            case ProvinceEnumHelper.ProvAttrType.String:
-            case ProvinceEnumHelper.ProvAttrType.Bool:
-            case ProvinceEnumHelper.ProvAttrType.Tag:
-               OperationComboBox.Items.AddRange(["=", "!="]);  
-               break;
-            case ProvinceEnumHelper.ProvAttrType.Int:
-            case ProvinceEnumHelper.ProvAttrType.Float:
-               OperationComboBox.Items.AddRange(["=", "!=", "<", ">", ">=", "<="]);
-               break;
-         }
+
+         if (info.PropertyType == typeof(float) || info.PropertyType == typeof(int))
+            OperationComboBox.Items.AddRange(["=", "!=", "<", ">", ">=", "<="]);
+         else
+            OperationComboBox.Items.AddRange(["=", "!="]);  
       }
 
       private void ConfirmButton_Click(object sender, EventArgs e)
@@ -63,18 +57,15 @@ namespace Editor.Forms.Feature.AdvancedSelections
          if (ActionTypeComboBox.SelectedIndex == -1 || AttributeSelectionComboBox.SelectedIndex == -1 || AttributeValueInput.Text == string.Empty || OperationComboBox.SelectedIndex == -1)
             return;
 
-         GetSelectionModifier().Execute(GetSource(), GetOperation(), AttributeSelectionComboBox.SelectedText, GetAttributeValue());
+         GetSelectionModifier().Execute(GetSource(), GetOperation(), GetAttribute(), AttributeValueInput.Text);
          Globals.ZoomControl.Invalidate();
       }
 
-      private ProvinceEnumHelper.ProvAttrGet GetAttribute()
+      private PropertyInfo GetAttribute()
       {
-         return (ProvinceEnumHelper.ProvAttrGet)AttributeSelectionComboBox.SelectedIndex;
-      }
-
-      private object GetAttributeValue()
-      {
-         return AttributeValueInput.Text;
+         if (AttributeSelectionComboBox.SelectedIndex >= 0 && AttributeSelectionComboBox.SelectedIndex < toolTippables.Length)
+            return toolTippables[AttributeSelectionComboBox.SelectedIndex];
+         throw new EvilActions("There should never be this case of out of bounds!");
       }
 
       private Operations GetOperation()

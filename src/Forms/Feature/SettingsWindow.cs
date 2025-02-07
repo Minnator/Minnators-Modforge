@@ -8,7 +8,7 @@ namespace Editor.Forms.Feature
       public SettingsWindow()
       {
          InitializeComponent();
-         SettingsTabs.DrawItem += TabControl_DrawItem; 
+         SettingsTabs.DrawItem += TabControl_DrawItem;
          CreateTabsForSettings();
 
          var maxTextWidth = 0;
@@ -43,8 +43,8 @@ namespace Editor.Forms.Feature
                 .Where(prop => prop.PropertyType.IsSubclassOf(typeof(SubSettings)))
                 .Where(prop =>
                 {
-                   var instance = prop.GetValue(Globals.Settings) as SubSettings; 
-                   return instance is { IsAvailable: true }; 
+                   var instance = prop.GetValue(Globals.Settings) as SubSettings;
+                   return instance is { IsAvailable: true };
                 });
 
          foreach (var prop in settingsProperties)
@@ -60,7 +60,7 @@ namespace Editor.Forms.Feature
                SelectedObject = prop.GetValue(Globals.Settings)
             };
             propertyGrid.ExpandAllGridItems();
-            
+
             tabPage.Controls.Add(propertyGrid);
 
             SettingsTabs.TabPages.Add(tabPage);
@@ -103,6 +103,11 @@ namespace Editor.Forms.Feature
       private void SettingsWindow_FormClosing(object sender, FormClosingEventArgs e)
       {
          Globals.Settings.Gui.Invalidate(nameof(GuiSettings.MapModes));
+      }
+
+      private void SettingsTabs_SelectedIndexChanged(object sender, EventArgs e)
+      {
+
       }
    }
 }

@@ -71,6 +71,11 @@ namespace Editor.DataClasses.Achievements
          return _achievementColors[level];
       }
 
+      public static IEnumerable<Achievement> GetAchievements()
+      {
+         return _achievements.Values;
+      }
+
       public static void GenerateAchievements()
       {
          _achievements[AchievementId.Create10Countries] = new Achievement(

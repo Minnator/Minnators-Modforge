@@ -119,6 +119,44 @@ namespace Editor.Saving
          sb.AppendLine("}");
       }
 
+      public static void AddFormattedStringListAutoQuote(string blockName, List<string> strings, int tabCount, ref StringBuilder sb)
+      {
+         Dictionary<char, List<string>> groups = new (strings.Count);
+
+         // Single-pass grouping: iterate over the list and assign each word to its group.
+         foreach (string s in strings)
+         {
+            if (!string.IsNullOrEmpty(s))
+            {
+               // Convert the first character to uppercase using the invariant culture.
+               var key = char.ToUpper(s[0], CultureInfo.InvariantCulture);
+
+               if (!groups.TryGetValue(key, out List<string> list))
+               {
+                  list = new();
+                  groups.Add(key, list);
+               }
+               list.Add(s);
+            }
+         }
+
+
+         OpenBlock(ref tabCount, blockName, ref sb);
+         foreach (var group in groups.Values) {
+            group.Sort();
+            sb.AppendLine();
+            AddTabs(tabCount, ref sb);
+            foreach (var s in group)
+               if (s.IndexOf(' ') != -1)
+                  sb.Append('\"').Append($"{s}").Append('\"').Append(' ');
+               else
+                  sb.Append($"{s}").Append(' ');
+         }
+
+         sb.AppendLine();
+         CloseBlock(ref tabCount, ref sb);
+      }
+
       public static void AddFormattedStringList(string blockName, ICollection<string> strings, int tabCount, ref StringBuilder sb)
       {
          AddFormattedList(blockName, strings, tabCount, false, ref sb);

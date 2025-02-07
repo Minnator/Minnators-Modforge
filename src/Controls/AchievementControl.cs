@@ -50,7 +50,7 @@ namespace Editor.Controls
             ForeColor = Globals.Settings.Achievements.AchievementDescColor,
             Font = new("Arial", 10, FontStyle.Regular),
             Margin = new(1, MARGIN, 5, 1),
-            Anchor = AnchorStyles.Right | AnchorStyles.Bottom,
+            Anchor = AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left,
             Padding = new(0),
             TextAlign = ContentAlignment.BottomRight
          };
@@ -58,8 +58,15 @@ namespace Editor.Controls
 
          if (achievement.Condition is ProgressCondition pg)
          {
-            pg.IncreaseProgress(new Random().Next(0, (int)pg.Goal));
-            _progressLabel.Text = $"{pg.CurrentProgress}/{pg.Goal}";
+            if (achievement.IsAchieved && achievement.DateAchieved != DateTime.MinValue)
+            {
+               _progressLabel.Text = $"Unlocked {achievement.DateAchieved:MMM d, yyyy, hh:mm}";
+            }
+            else
+            {
+               pg.IncreaseProgress(new Random().Next(0, (int)pg.Goal));
+               _progressLabel.Text = $"{pg.CurrentProgress}/{pg.Goal}";
+            }
          }
          else
             _progressLabel.Text = string.Empty;
@@ -84,13 +91,13 @@ namespace Editor.Controls
             BackColor = Globals.Settings.Achievements.AchievementProgressBarBackColor,
             Maximum = 100,
             Value = (int)(achievement.GetProgress() * 100),
-            Width = 200,
+            Width = 220,
             Height = 8,
          };
 
          ColumnCount = 3;
          RowCount = 2;
-         Margin = new(5);
+         Margin = new(5, 0, 5, 5);
          Width = width;
          Height = 70;
          base.BackColor = Globals.Settings.Achievements.AchievementItemBackColor;
@@ -104,7 +111,7 @@ namespace Editor.Controls
 
          ColumnStyles.Add(new(SizeType.Absolute, 70));
          ColumnStyles.Add(new(SizeType.Percent, 100));
-         ColumnStyles.Add(new(SizeType.Absolute, 220));
+         ColumnStyles.Add(new(SizeType.Absolute, 240));
 
          RowStyles.Add(new(SizeType.Percent, 50));
          RowStyles.Add(new(SizeType.Percent, 50));
