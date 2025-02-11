@@ -24,6 +24,7 @@ namespace Editor.DataClasses.Settings
 #if DEBUG
       private TestSettings _testSettings = new();
 #endif
+      private EXT_ControlSettings _extControlSettings = new();
 
       [Description("The language in which the localisation will be shown")]
       [CompareInEquals]
@@ -84,6 +85,15 @@ namespace Editor.DataClasses.Settings
       [CompareInEquals]
       [Browsable(false)]
       public bool CanAccessAchievementSettings { get; set; } = true;
+
+      [Description("Settings for the EXT controls")]
+      [CompareInEquals]
+      [TypeConverter(typeof(CEmptyStringConverter))]
+      public EXT_ControlSettings EXT_ControlSettings
+      {
+         get => _extControlSettings;
+         set => SetField(ref _extControlSettings, value);
+      }
    }
 
 #if DEBUG
@@ -148,6 +158,20 @@ namespace Editor.DataClasses.Settings
       }
    }
 #endif
+
+   public class EXT_ControlSettings : PropertySettings
+   {
+      private int _textBoxEditConfirmationInterval = 1500;
+
+      [Description("The interval in milliseconds after which the text box will confirm the input")]
+      [CompareInEquals]
+      public int TextBoxEditConfirmationInterval
+      {
+         get => _textBoxEditConfirmationInterval;
+         set => SetField(ref _textBoxEditConfirmationInterval, value);
+      }
+   }
+
    public class CustomizationOptions : PropertySettings
    {
       private bool _useEu4Cursor = true;

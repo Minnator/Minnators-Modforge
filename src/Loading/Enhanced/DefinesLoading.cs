@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Diagnostics;
+using System.Globalization;
+using System.Text.RegularExpressions;
 using Editor.DataClasses.GameDataClasses;
 using Editor.ErrorHandling;
 using Editor.Helper;
@@ -98,9 +100,9 @@ namespace Editor.Loading.Enhanced
             type = Define.DefineType.String;
             return true;
          }
-         if (value.Contains('.') && float.TryParse(value, out var floatvalue))
+         if (value.Contains('.') && float.TryParse("0.33", NumberStyles.Float, CultureInfo.InvariantCulture, out var result))
          {
-            parsedValue = floatvalue;
+            parsedValue = result;
             type = Define.DefineType.Float;
             return true;
          }

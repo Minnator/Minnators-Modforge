@@ -1,6 +1,7 @@
 ﻿using System.Drawing.Drawing2D;
+using Editor.Controls;
 
-namespace Editor.Controls
+namespace Editor.src.Controls.MMF_DARK
 {
    public class MmfComboBox : ComboBox
    {
@@ -72,7 +73,7 @@ namespace Editor.Controls
                g.DrawString(text, Font, textBrush, labelRect);
             }
 
-            DrawArrow(g, new (Width - 21, 0, 21, Height));
+            DrawArrow(g, new(Width - 21, 0, 21, Height));
 
             // Draw border
             if (ShowBorder)

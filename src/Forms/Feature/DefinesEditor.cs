@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Windows.Security.Cryptography.Certificates;
+﻿using System.Globalization;
 using Editor.DataClasses.GameDataClasses;
-using static Editor.DataClasses.GameDataClasses.Define;
 
-namespace Editor.src.Forms.Feature
+namespace Editor.Forms.Feature
 {
    public partial class DefinesEditor : Form
    {
@@ -27,16 +17,14 @@ namespace Editor.src.Forms.Feature
          DefineNameComboBox.SelectedIndexChanged += SelectedIndexChanged;
          DefineNameComboBox.KeyDown += PreviewComboKeyDown;
 
-
-         DefinesListView.Columns.Add("Index");
-         DefinesListView.Columns.Add("Namespace");
-         DefinesListView.Columns.Add("Value");
+         //DefinesListView.ItemListView.Columns.Add("Index", -2, HorizontalAlignment.Center);
+         DefinesListView.ItemListView.Columns.Add("Namespace", -2, HorizontalAlignment.Center);
+         DefinesListView.ItemListView.Columns.Add("Value", -2, HorizontalAlignment.Center);
          PopulateListView();
-         DefinesListView.SelectedIndexChanged += ListViewSelectedIndexChange;
 
-         DefinesListView.Refresh();
+         DefinesListView.ItemListView.SelectedIndexChanged += ListViewSelectedIndexChange;
+         DefinesListView.SearchInputBox.TimerInterval = Globals.Settings.Misc.EXT_ControlSettings.TextBoxEditConfirmationInterval;
       }
-
 
       private void PreviewComboKeyDown(object? sender, KeyEventArgs e)
       {
@@ -106,7 +94,7 @@ namespace Editor.src.Forms.Feature
          if (Globals.Defines.TryGetValue(DefineNameComboBox.Text, out var define))
          {
             DefineValueTextBox.Enabled = true;
-            DefineValueTextBox.Text = define.Value.ToString()!;
+            DefineValueTextBox.Text = define.GetValueAsText;
          }
          else
          {
@@ -117,37 +105,31 @@ namespace Editor.src.Forms.Feature
 
       private void PopulateListView()
       {
-         DefinesListView.Items.Clear();
-         DefinesListView.BeginUpdate();
+         DefinesListView.ItemListView.Items.Clear();
+         DefinesListView.ItemListView.BeginUpdate();
 
          var index = 0;
          foreach (var define in Globals.Defines.Values)
          {
-            var item = new ListViewItem(index.ToString());
-            item.SubItems.Add(define.GetNameSpaceString());
-            item.SubItems.Add(define.Value.ToString());
+            var item = new ListViewItem(define.GetNameSpaceString());
+            item.SubItems.Add(define.GetValueAsText);
             item.Tag = define;
-            DefinesListView.Items.Add(item);
+            DefinesListView.ItemListView.Items.Add(item);
             index++;
          }
 
-         DefinesListView.EndUpdate();
-
-         DefinesListView.Columns[0].AutoResize(ColumnHeaderAutoResizeStyle.HeaderSize);
-         DefinesListView.Columns[1].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
-         if (DefinesListView.Columns[1].Width > 450)
-            DefinesListView.Columns[1].Width = 450;
-         DefinesListView.Columns[2].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+         DefinesListView.ItemListView.MaxColumnWidth = 500;
+         DefinesListView.ItemListView.EndUpdate();
       }
 
       private void ListViewSelectedIndexChange(object? sender, EventArgs e)
       {
-         if (DefinesListView.SelectedItems.Count == 0)
+         if (DefinesListView.ItemListView.SelectedItems.Count == 0)
             return;
 
-         var define = (Define)DefinesListView.SelectedItems[0].Tag!;
+         var define = (Define)DefinesListView.ItemListView.SelectedItems[0].Tag!;
          DefineNameComboBox.Text = define.GetNameSpaceString();
-         DefineValueTextBox.Text = define.Value.ToString();
+         DefineValueTextBox.Text = define.GetValueAsText;
       }
 
       private void SaveButton_Click(object sender, EventArgs e)
@@ -164,6 +146,22 @@ namespace Editor.src.Forms.Feature
       private void RestoreToSessionStart()
       {
          // TODO
+      }
+
+      private void DefineValueTextBox_KeyDown(object sender, KeyEventArgs e)
+      {
+         if (e.KeyCode == Keys.Enter)
+         {
+            var define = (Define)DefinesListView.ItemListView.SelectedItems[0].Tag!;
+            if (define.SetValue(DefineValueTextBox.Text))
+            {
+               var item = DefinesListView.ItemListView.SelectedItems[0];
+               item.SubItems[1].Text = DefineValueTextBox.Text;
+            }
+            else
+               MessageBox.Show($"The given value was not of type {define.Type} which the define has!", "Invalid value type", MessageBoxButtons.OK,
+                               MessageBoxIcon.Error);
+         }
       }
    }
 }

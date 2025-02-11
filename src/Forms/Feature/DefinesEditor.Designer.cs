@@ -1,4 +1,6 @@
-﻿namespace Editor.src.Forms.Feature
+﻿using Editor.src.Controls.EXT;
+
+namespace Editor.Forms.Feature
 {
    partial class DefinesEditor
    {
@@ -34,15 +36,15 @@
          DefineValueTextBox = new TextBox();
          SaveButton = new Button();
          CancelButton = new Button();
-         DefinesListView = new ListView();
+         DefinesListView = new EXT_ListViewSearch();
          tableLayoutPanel1.SuspendLayout();
          SuspendLayout();
          // 
          // tableLayoutPanel1
          // 
          tableLayoutPanel1.ColumnCount = 2;
-         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 75F));
-         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
          tableLayoutPanel1.Controls.Add(DefineNameComboBox, 0, 0);
          tableLayoutPanel1.Controls.Add(DefineValueTextBox, 1, 0);
          tableLayoutPanel1.Controls.Add(SaveButton, 1, 2);
@@ -50,6 +52,7 @@
          tableLayoutPanel1.Controls.Add(DefinesListView, 0, 1);
          tableLayoutPanel1.Dock = DockStyle.Fill;
          tableLayoutPanel1.Location = new Point(0, 0);
+         tableLayoutPanel1.Margin = new Padding(0);
          tableLayoutPanel1.Name = "tableLayoutPanel1";
          tableLayoutPanel1.RowCount = 3;
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
@@ -64,16 +67,17 @@
          DefineNameComboBox.FormattingEnabled = true;
          DefineNameComboBox.Location = new Point(3, 3);
          DefineNameComboBox.Name = "DefineNameComboBox";
-         DefineNameComboBox.Size = new Size(514, 23);
+         DefineNameComboBox.Size = new Size(479, 23);
          DefineNameComboBox.TabIndex = 0;
          // 
          // DefineValueTextBox
          // 
          DefineValueTextBox.Dock = DockStyle.Fill;
-         DefineValueTextBox.Location = new Point(523, 3);
+         DefineValueTextBox.Location = new Point(488, 3);
          DefineValueTextBox.Name = "DefineValueTextBox";
-         DefineValueTextBox.Size = new Size(168, 23);
+         DefineValueTextBox.Size = new Size(203, 23);
          DefineValueTextBox.TabIndex = 1;
+         DefineValueTextBox.KeyDown += DefineValueTextBox_KeyDown;
          // 
          // SaveButton
          // 
@@ -101,13 +105,12 @@
          // 
          tableLayoutPanel1.SetColumnSpan(DefinesListView, 2);
          DefinesListView.Dock = DockStyle.Fill;
-         DefinesListView.FullRowSelect = true;
-         DefinesListView.Location = new Point(3, 33);
+         DefinesListView.Location = new Point(0, 30);
+         DefinesListView.Margin = new Padding(0);
          DefinesListView.Name = "DefinesListView";
-         DefinesListView.Size = new Size(688, 586);
+         DefinesListView.SearchBarLocation = EXT_ListViewSearch.SearchBarLocationEnum.Top;
+         DefinesListView.Size = new Size(694, 592);
          DefinesListView.TabIndex = 5;
-         DefinesListView.UseCompatibleStateImageBehavior = false;
-         DefinesListView.View = View.Details;
          // 
          // DefinesEditor
          // 
@@ -131,6 +134,6 @@
       private TextBox DefineValueTextBox;
       private Button SaveButton;
       private Button CancelButton;
-      private ListView DefinesListView;
+      private EXT_ListViewSearch DefinesListView;
    }
 }
