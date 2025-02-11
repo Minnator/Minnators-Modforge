@@ -410,7 +410,7 @@ namespace Editor.ErrorHandling
       
       private ErrorHandle() { }
 
-      public static ErrorHandle Sucess = new ();
+      public static ErrorHandle Success = new ();
 
       public bool Ignore()
       {

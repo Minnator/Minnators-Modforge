@@ -32,6 +32,8 @@ public class BindingDictionary<TKey, TValue> : BindingList<TKey>, IDictionary<TK
       _internalList.Sort();
    }
 
+   internal KeyValuePair<TKey, TValue> EmptyItem => _emptyItem;
+
    private void SetEmpty()
    {
       if (HasEmpty)

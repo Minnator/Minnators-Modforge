@@ -925,7 +925,7 @@ public static partial class Parsing
       regnal = int.Parse(match.Groups["num"].Value);
       name = input[..match.Index].Trim();
 
-      return ErrorHandle.Sucess;
+      return ErrorHandle.Success;
    }
 
    public static IErrorHandle GetMonarchNameFromTextBoxes(TextBox nameTextBox, TextBox chanceTextBox, out MonarchName mName)
@@ -938,7 +938,7 @@ public static partial class Parsing
       }
 
       mName = new(nameTextBox.Text, regnal, int.Parse(chanceTextBox.Text));
-      return ErrorHandle.Sucess;
+      return ErrorHandle.Success;
    }
 
    [GeneratedRegex(@"\s*(\d+)")]

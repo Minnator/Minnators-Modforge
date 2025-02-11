@@ -223,7 +223,7 @@ namespace Editor.src.Controls.NewControls
                items.Add(partValue);
 
          value = (TProperty)items;
-         return ErrorHandle.Sucess;
+         return ErrorHandle.Success;
       }
 
       public void SetValue(TProperty value)

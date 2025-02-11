@@ -150,7 +150,10 @@ namespace Editor.Loading.Enhanced
          foreach (var line in lines)
          {
             if (string.IsNullOrWhiteSpace(line))
+            {
+               lineNum++;
                continue;
+            }
             yield return (line, lineNum);
             lineNum++;
          }
@@ -163,7 +166,10 @@ namespace Editor.Loading.Enhanced
          foreach (var line in lines)
          {
             if (string.IsNullOrWhiteSpace(line))
+            {
+               lineNum++;
                continue;
+            }
             var strings = line.Split(' ');
             foreach (var str in strings)
                yield return (str, lineNum);
@@ -171,7 +177,7 @@ namespace Editor.Loading.Enhanced
          }
       }
 
-      public IEnumerable<LineKvp<string, string>> GetLineKvpEnumerator(PathObj pathObj, bool showError = true)
+      public IEnumerable<LineKvp<string, string>> GetLineKvpEnumerator(PathObj pathObj, bool showError = true, bool trimQuotes = true)
       {
 
          var lines = Value.Split('\n');
@@ -179,15 +185,18 @@ namespace Editor.Loading.Enhanced
          foreach (var line in lines)
          {
             if (string.IsNullOrWhiteSpace(line))
+            {
+               lineNum++;
                continue;
+            }
             var split = line.Split('=');
             if (split.Length != 2)
             {
                if (showError)
-                  _ = new LoadingError(pathObj, "Expected a key value pair but got only one value", lineNum, 0);
+                  _ = new LoadingError(pathObj, "Expected a key value pair but got only one value", lineNum++, 0);
                continue;
             }
-            yield return new(split[0].Trim(), split[1].TrimQuotes(), lineNum);
+            yield return new(split[0].Trim(), trimQuotes ? split[1].TrimQuotes() : split[1].Trim(), lineNum);
             lineNum++;
          }
       }

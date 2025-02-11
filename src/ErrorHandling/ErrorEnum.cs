@@ -64,6 +64,10 @@ public enum ErrorType
    UnresolveableTradeGoodReference = 119,
    [ErrorInformation("This occurs because a monarch name is misformed!", "Is a regnal number defined?")]
    MisformedMonarchName = 120,
+   [ErrorInformation("This occurs because a file has an invalid structure!", "Check the file and it's structure and correct it!")]
+   InvalidFileStructure = 121,
+   [ErrorInformation("This occurs because a value is not in a valid range for the given target type!", "Check the value and correct it!")]
+   InvalidValue = 122,
    [ErrorInformation("This occurs because an date is not in a valid format!", "Check the date format and correct it!")]
    IllegalDateFormat = 101,
    // ObjectInteraction Error

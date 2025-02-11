@@ -82,6 +82,7 @@ namespace Editor.Loading.Enhanced
          var isInQuotes = false;
          var isInWord = false;
          var isInWhiteSpace = false;
+         var contentStart = 0;
 
          for (var i = 0; i < lines.Length; i++)
          {
@@ -92,7 +93,15 @@ namespace Editor.Loading.Enhanced
             var wordEnd = -1;
             isInWord = false;
             isInWhiteSpace = false;
+
+            if (lines[i].Length == 0)
+            {
+               currentContent.Append('\n');
+               continue;
+            }
+
             var line = lines[i].ToCharArray();
+
             while (charIndex < length)
             {
                var c = line[charIndex];
@@ -110,6 +119,7 @@ namespace Editor.Loading.Enhanced
                      break;
                   case '"':
                      isInQuotes = !isInQuotes;
+                     currentContent.Append(c);
                      break;
                   case '{':
                      if (isInQuotes)
@@ -144,7 +154,7 @@ namespace Editor.Loading.Enhanced
 
                      if (trimmed.Length > 0) // We have remaining content in the currentContent which we need to add to the previous block element
                      {
-                        var content = new EnhancedContent(trimmed, i); // We create a new content element as there is no block element on the stack
+                        var content = new EnhancedContent(trimmed, contentStart); // We create a new content element as there is no block element on the stack
                         if (blockStack.IsEmpty)
                         {
                            contents.Add(content);
@@ -156,18 +166,19 @@ namespace Editor.Loading.Enhanced
                            currentBlock->ContentElements.Add(content);
                            currentBlock->SubBlocks.Add(newBlock);
 
-                        }
-                        currentContent.Clear();
+                        }  
                      }
                      else  // No Content to be added, only add the new Block which was started
                      {
+                        
                         if (blockStack.IsEmpty)
                            blocks.Add(newBlock);
                         else
                            blockStack.PeekRef()->SubBlocks.Add(newBlock);
                      }
-
+                     currentContent.Clear();
                      blockStack.Push(newBlock);
+                     contentStart = i;
 
                      break;
                   case '}':
@@ -182,16 +193,18 @@ namespace Editor.Loading.Enhanced
                         return ([], []);
                      }
 
-                     var trimmedClosing = currentContent.ToString().Trim();
+                     var currentStr = currentContent.ToString();
+                     var trimmedClosing = currentStr.Trim();
 
                      if (trimmedClosing.Length > 0)  // We have remaining content in the currentContent which we need to add to the previous block element
                      {
-                        var content = new EnhancedContent(trimmedClosing, i); // We create a new content element as there is no block element on the stack
+                        var content = new EnhancedContent(trimmedClosing, currentStr[0] == '\n' ? contentStart + 1 : contentStart); // We create a new content element as there is no block element on the stack
                         blockStack.PeekRef()->ContentElements.Add(content);
                         currentContent.Clear();
                      }
 
                      blockStack.Pop();
+                     contentStart = i;
                      break;
                   case '#':
                      if (!isInQuotes) // # is in quotes and thus allowed
@@ -201,6 +214,9 @@ namespace Editor.Loading.Enhanced
                      }
 
                      currentContent.Append(c);
+                     break;
+                  case '\r':
+
                      break;
                   default:
                      if (!isInQuotes) // We only add whitespace if we are in quotes
@@ -238,7 +254,7 @@ namespace Editor.Loading.Enhanced
                charIndex++;
             }
 
-            if (currentContent.Length >= 1 && char.IsWhiteSpace(currentContent[^1]))
+            if (currentContent.Length >= 1 && char.IsWhiteSpace(currentContent[^1]) && currentContent[^1] != '\n')
                currentContent.Remove(currentContent.Length - 1, 1);
 
             currentContent.Append('\n');
@@ -305,6 +321,30 @@ namespace Editor.Loading.Enhanced
          return (blocks, contents);
       
       }
+
+      public static (List<EnhancedBlock>, List<EnhancedContent>) LoadBase(this PathObj po, FileContentAllowed fca, string input)
+      {
+         var (blocks, contents) = GetElements(po, input);
+
+         switch (fca)
+         {
+            case FileContentAllowed.Both:
+               break;
+            case FileContentAllowed.BlocksOnly:
+               if (contents.Count != 0)
+                  _ = new LoadingError(po, "Detected content in a file where only blocks are allowed!", type: ErrorType.UnexpectedContentElement, level: LogType.Error);
+               break;
+            case FileContentAllowed.ContentOnly:
+               if (blocks.Count != 0)
+                  _ = new LoadingError(po, "Detected blocks in a file where only content is allowed!", type: ErrorType.UnexpectedBlockElement, level: LogType.Error);
+               break;
+            default:
+               throw new ArgumentOutOfRangeException(nameof(fca), fca, null);
+         }
+         return (blocks, contents);
+
+      }
+
    }
    public readonly struct LineKvp<T, TQ>
    {

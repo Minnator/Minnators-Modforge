@@ -7,6 +7,7 @@ using Editor.Loading;
 using Editor.Loading.Enhanced;
 using Editor.Parser;
 using DefaultMapLoading = Editor.Loading.Enhanced.DefaultMapLoading;
+using DefinesLoading = Editor.Loading.Enhanced.DefinesLoading;
 using MapLoading = Editor.Loading.Enhanced.MapLoading;
 using RegionLoading = Editor.Loading.Enhanced.RegionLoading;
 using SuperRegionLoading = Editor.Loading.Enhanced.SuperRegionLoading;
@@ -33,9 +34,9 @@ namespace Editor.Forms.LoadingScreen
       private readonly List<Action> _loadingActions =
       [
          StartUpMetrics.StartMetrics,
+         SettingsHelper.LoadSettingsToComponents,
          DefinesLoading.Load,
          BookMarksLoading.Load,
-         SettingsHelper.LoadSettingsToComponents,
          FactionsLoading.Load,
          GovernmentMechanicsLoading.Load,
          LoadEstateModifiers.Load,

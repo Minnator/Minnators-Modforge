@@ -571,7 +571,7 @@ namespace Editor.DataClasses.GameDataClasses
          if (int.TryParse(value, out var result))
          {
             if (Globals.ProvinceIdToProvince.TryGetValue(result, out province))
-               return ErrorHandle.Sucess;
+               return ErrorHandle.Success;
 
             province = Empty;
             return new ErrorObject(ErrorType.TypeConversionError, "Could not parse \"" + value + "\" to a province ID!", addToManager: false);

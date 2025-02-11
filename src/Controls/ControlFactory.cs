@@ -7,7 +7,9 @@ using Editor.DataClasses.Misc;
 using Editor.Events;
 using Editor.Helper;
 using Newtonsoft.Json.Linq;
+using static System.Net.Mime.MediaTypeNames;
 using Button = System.Windows.Forms.Button;
+using Image = System.Drawing.Image;
 
 namespace Editor.Controls;
 
@@ -264,14 +266,40 @@ public static class ControlFactory
 
       box.KeyPress += (sender, e) =>
       {
-         if (box.Text.Length >= 3)
+         if (!char.IsLetter(e.KeyChar) && e.KeyChar != (char)Keys.Back)
+         {
+            e.Handled = true; // Ignore non-letter keys except backspace
+            return;
+         }
+
+         string newText;
+
+         if (e.KeyChar == (char)Keys.Back)
+         {
+            // Handle backspace: remove selected text or last character
+            if (box.SelectionLength > 0)
+               newText = box.Text.Remove(box.SelectionStart, box.SelectionLength);
+            else if (box.Text.Length > 0)
+               newText = box.Text[..^1];
+            else
+               newText = string.Empty;
+         }
+         else
+            newText = box.Text.Remove(box.SelectionStart, box.SelectionLength)
+                         .Insert(box.SelectionStart, char.ToUpper(e.KeyChar).ToString());
+
+         // Enforce max length of 3
+         if (newText.Length > 3)
          {
             e.Handled = true;
             return;
          }
-         e.KeyChar = char.ToUpper(e.KeyChar);
+
+         box.Text = newText;
+         box.SelectionStart = box.Text.Length;
+         box.SelectionLength = 0;
+         e.Handled = true; 
       };
-      
       return box;
    }
 
@@ -351,6 +379,16 @@ public static class ControlFactory
    public static PropertyNumeric<Province, TProperty> GetPropertyNumeric<TProperty>(PropertyInfo? propertyInfo, TProperty defaultValue, decimal multiplier = 1) where TProperty : INumber<TProperty>
    {
       return new(propertyInfo, ref LoadGuiEvents.ProvLoadAction, () => Selection.GetSelectedProvinces, multiplier)
+      {
+         Margin = new(3, 1, 3, 3),
+         Dock = DockStyle.Fill,
+         DefaultValue = defaultValue,
+      };
+   }
+
+   public static PropertyNumeric<Country, TProperty> GetPropertyNumericCountry<TProperty>(PropertyInfo? propertyInfo, TProperty defaultValue, decimal multiplier = 1) where TProperty : INumber<TProperty>
+   {
+      return new(propertyInfo, ref LoadGuiEvents.CountryLoadAction, () => [Selection.SelectedCountry], multiplier)
       {
          Margin = new(3, 1, 3, 3),
          Dock = DockStyle.Fill,

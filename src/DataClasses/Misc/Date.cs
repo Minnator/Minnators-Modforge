@@ -180,7 +180,7 @@ namespace Editor.DataClasses.Misc
             return new ErrorObject(ErrorType.IllegalDate, $"The date {year}.{month}.{day} is not a valid date.", addToManager: false);
 
          date = new(year, month, day);
-         return ErrorHandle.Sucess;
+         return ErrorHandle.Success;
       }
 
       public override string ToString() => $"{Year}.{Month}.{Day}";

@@ -198,7 +198,7 @@ namespace Editor.Controls.NewControls
                items.Add(partValue);
 
          value = (TProperty)items;
-         return ErrorHandle.Sucess;
+         return ErrorHandle.Success;
       }
 
       public void SetFromGui()

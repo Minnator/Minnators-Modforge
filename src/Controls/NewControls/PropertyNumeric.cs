@@ -18,7 +18,28 @@ namespace Editor.Controls.NewControls
       private TProperty _oldValue;
       private decimal _multiplier;
 
+      public bool UseTimer
+      {
+         get => _useTimer;
+         set
+         {
+            _useTimer = value;
+            if (!_useTimer)
+               _timer.Stop();
+            else
+               _timer.Start();
+         }
+      }
+
+      public bool IsSilent
+      {
+         get => _isSilent;
+         set => _isSilent = value;
+      }
+
       private Timer _timer = new ();
+      private bool _useTimer = true;
+      private bool _isSilent;
 
       public PropertyNumeric(PropertyInfo? propertyInfo, ref LoadGuiEvents.LoadAction<TSaveable> loadHandle, Func<List<TSaveable>> getSaveables, decimal multiplier)
       {
@@ -43,7 +64,10 @@ namespace Editor.Controls.NewControls
       {
          _timer.Stop();
          if (Globals.State == State.Running && GetFromGui(out var value).Log() && value != _oldValue)
-            Saveable.SetFieldMultiple(GetSaveables.Invoke(), value, PropertyInfo);
+            if (IsSilent)
+               Saveable.SetFieldMultipleSilent(GetSaveables.Invoke(), value, PropertyInfo);
+            else
+               Saveable.SetFieldMultiple(GetSaveables.Invoke(), value, PropertyInfo);
       }
 
       public void SetDefault()
@@ -67,10 +91,16 @@ namespace Editor.Controls.NewControls
          if (!char.IsDigit(e.KeyChar) && e.KeyChar != '\b' && e.KeyChar != (char)Keys.Enter)
             e.Handled = true;
          else
-         {
-            _timer.Stop();
+            SetOrUpdateTimer();
+      }
+
+      private void SetOrUpdateTimer()
+      {
+         _timer.Stop();
+         if (UseTimer)
             _timer.Start();
-         }
+         else
+            SetFromGui();
       }
 
       private void TextBox_KeyDown(object? sender, KeyEventArgs e)
@@ -97,8 +127,7 @@ namespace Editor.Controls.NewControls
             newValue = Math.Min(Value + 5 * _multiplier, Maximum);
 
          Value = newValue;
-         _timer.Stop();
-         _timer.Start();
+         SetOrUpdateTimer();
       }
 
       public override void DownButton()
@@ -110,8 +139,7 @@ namespace Editor.Controls.NewControls
             newValue = Math.Max(Value - 5 * _multiplier, Minimum);
 
          Value = newValue;
-         _timer.Stop();
-         _timer.Start();
+         SetOrUpdateTimer();
       }
 
       public void Clear()

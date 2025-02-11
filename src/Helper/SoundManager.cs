@@ -90,7 +90,7 @@ namespace Editor.Helper
          using var player = new System.Media.SoundPlayer(str);
          player.Play();
 
-         return ErrorHandle.Sucess;
+         return ErrorHandle.Success;
       }
 
       // Core Playback methods

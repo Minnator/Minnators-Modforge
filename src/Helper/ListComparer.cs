@@ -1,4 +1,6 @@
-﻿namespace Editor.Helper
+﻿using System.Collections.Generic;
+
+namespace Editor.Helper
 {
    public class ListComparer<T> : IEqualityComparer<List<T>>
    {
@@ -15,10 +17,13 @@
 
       public int GetHashCode(List<T> obj)
       {
-         var hash = 19;
-         foreach (var item in obj) 
-            hash = hash * 31 + (item == null ? 0 : item.GetHashCode());
-         return hash;
+         unchecked
+         {
+            var hash = 19;
+            foreach (var item in obj) 
+               hash = hash * 31 + (item != null ? item.GetHashCode() : 1);
+            return hash;
+         }
       }
    }
 }

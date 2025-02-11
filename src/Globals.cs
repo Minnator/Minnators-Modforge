@@ -123,8 +123,11 @@ public static class Globals
    public static int MapHeight;
    public static string MapPath = null!;
 
+   // Defines
+   public static BindingDictionary<string, Define> Defines = new(new(Define.Empty.Name, Define.Empty));
+
    // Terrain
-   public static BindingDictionary<string, Terrain> Terrains = new(new(string.Empty, Terrain.Empty));
+   public static BindingDictionary<string, Terrain> Terrains = new(new(Terrain.Empty.Name, Terrain.Empty));
    public static TerrainDefinitions TerrainDefinitions = new();
    public static TreeDefinitions TreeDefinitions = new();
 
@@ -135,16 +138,16 @@ public static class Globals
    public static List<Idea> Ideas = [];
 
    // Maps the name of TradeGoods to the TradeGood object
-   public static readonly BindingDictionary<string, TradeGood> TradeGoods = new(new (string.Empty, TradeGood.Empty));
+   public static readonly BindingDictionary<string, TradeGood> TradeGoods = new(new (TradeGood.Empty.Name, TradeGood.Empty));
    public static readonly Dictionary<string, TradeNode> TradeNodes = [];
 
    // Culture Groups and Cultures
    public static Dictionary<string, CultureGroup> CultureGroups = [];
-   public static BindingDictionary<string, Culture> Cultures = new (new (string.Empty, Culture.Empty));
+   public static BindingDictionary<string, Culture> Cultures = new (new (Culture.Empty.Name, Culture.Empty));
 
    // Unit Types and GFX
    public static BindingList<string> GraphicalCultures = [];
-   public static BindingDictionary<string, Unit> Units = new(new(string.Empty, Unit.Empty));
+   public static BindingDictionary<string, Unit> Units = new(new(Unit.Empty.UnitName, Unit.Empty));
 
    // Bookmarks
    public static List<Bookmark> Bookmarks = [];
@@ -157,18 +160,18 @@ public static class Globals
    public static HashSet<Strait> Straits = [];
 
    // TechnologyGroups
-   public static readonly BindingDictionary<string, TechnologyGroup> TechnologyGroups = new(new(string.Empty, TechnologyGroup.Empty));
+   public static readonly BindingDictionary<string, TechnologyGroup> TechnologyGroups = new(new(TechnologyGroup.Empty.Name, TechnologyGroup.Empty));
 
    // Religion Stuff
    public static List<ReligiousGroup> ReligionGroups = [];
-   public static readonly BindingDictionary<string, Religion> Religions = new (new (string.Empty, Religion.Empty));
+   public static readonly BindingDictionary<string, Religion> Religions = new (new (Region.Empty.Name, Religion.Empty));
 
    // Revolutionary Colors
    public static readonly Dictionary<int, Color> RevolutionaryColors = [];
    public static readonly HashSet<Color> CustomCountryColors = [];
 
    // Government Reforms and Government Types
-   public static BindingDictionary<string, Government> GovernmentTypes = new(new(string.Empty, Government.Empty));
+   public static BindingDictionary<string, Government> GovernmentTypes = new(new(Government.Empty.Name, Government.Empty));
    public static Dictionary<string, GovernmentReform> GovernmentReforms = [];
 
    // Country Groups
@@ -374,36 +377,39 @@ public static class Globals
 // - [ ] Defines Parsing
 // - [x] Block Water provinces; should not be viable for countries
 // - [ ] Loosing hover when selecting and deselecting a province
-// - [███████████▒] Smart Gui reloading
+// - [████████████] Smart Gui reloading
 // - [x] Rewrite Province.cs, Province Command and Gui
 // - [-] Sounds for buttons and actions
-// - [ ] UnitType loading optimization
+// - [x] UnitType loading optimization
 // - [x] Loading bar when saving using threads
+// - [x] Fixed Colors not being saved in the settings
+// - [███▒▒▒▒▒▒▒▒▒] Generalize Loading
+// - [█▒▒▒▒▒▒▒▒▒▒▒] PDX language support
+// - [x] Fix Country Color not live updating
+// - [x] Fix Search not finding country tags
+// - [x] Fix TagComboBox behavior
+// - [x] Fix TerrainOverrides Checkbox
+// - [ ] (Optional) Local UnDo in ListView
+// - [x] Fix Ship names being slaughtered
+// - [x] Fix Advanced Selection Menu (should be reworked / improved again)
+// - [x] Fix CollectionSelectorBase
+// - [ ] Fix 'Crashing' when autocompacting after only doing redestribute
+
+// TODO Update Alpha 1.2 SHADERS
 // - [ ] In Depth deleting with pop up to show what objects are related to the one being deleted
 // - [ ] Radial Menu for Map Modes
 // - [ ] Trade fix   //UI
-// - [x] Fixed Colors not being saved in the settings
 // - [-] Implement Shaders for the map
 //    - [ ] Province Creation and editing
 // - [ ] Add Prefix ignoring in search boxes -> There currently is no checkbox which could use this lol
 // - [ ] Straits editing and creation
-// - [███▒▒▒▒▒▒▒▒▒] Generalize Loading
-// - [█▒▒▒▒▒▒▒▒▒▒▒] PDX language support
 // - [ ] Item scaling on Graphics (Trade arrows, straits, capitals, text)
 // - [ ] FPS count for map rendering
 // - [ ] Add a way to create custom map modes
-// - [-] Add a tradegoods creation and editing menu
-// - [ ] Ideas making via drag and drop
 // - [ ] File syncing/Hotreloading
+// - [ ] Ideas making via drag and drop
 // - [ ] Heat map for history entries in editor for them when selecting dates?
-// - [x] Fix Country Color not live updating
-// - [x] Fix Search not finding country tags
-// - [ ] Fix TagComboBox behavior
-// - [ ] Fix TerrainOverrides Checkbox
-// - [ ] Local UnDo in ListView
-// - [x] Fix Ship names being slaughtered
-// - [x] Fix Advanced Selection Menu (should be reworked / improved again)
-// - [x] Fix CollectionSelectorBase
+// - [-] Add a tradegoods creation and editing menu
 
 // - [ ] Grid for pixels
 // - [ ] Tools:

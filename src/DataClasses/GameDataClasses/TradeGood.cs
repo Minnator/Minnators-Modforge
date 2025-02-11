@@ -131,7 +131,7 @@ public class TradeGood(string name) : Saveable
             addToManager: false);
       }
 
-      return ErrorHandle.Sucess;
+      return ErrorHandle.Success;
    }
 
    public override void OnPropertyChanged(string? propertyName = null) { }

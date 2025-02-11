@@ -51,7 +51,7 @@ namespace Editor.Controls
       public IErrorHandle GetFromGui(out Color value)
       {
          value = Color.FromArgb(ColorIndex1, ColorIndex2, ColorIndex3);
-         return ErrorHandle.Sucess;
+         return ErrorHandle.Success;
       }
 
       public void SetValue(Color value)

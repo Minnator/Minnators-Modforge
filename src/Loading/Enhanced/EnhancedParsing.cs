@@ -202,8 +202,6 @@ namespace Editor.Loading.Enhanced
          }
 
          return areas;
-         
-         
       }
 
       public static bool GetRegionFromString(string str, PathObj po, int startLine, out Region region)

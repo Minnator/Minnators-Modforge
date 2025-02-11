@@ -1,4 +1,5 @@
 ﻿using Editor.DataClasses.Settings;
+using Editor.ErrorHandling;
 using Editor.Forms.PopUps;
 using Editor.Helper;
 using Editor.Testing;
@@ -15,8 +16,7 @@ namespace Editor.Forms.GetUserInput
          SettingsSaver.Init();
 
          Globals.Settings = SettingsLoader.Load();
-         Globals.Settings.Rendering.Map.MapBorderColor = Color.FromArgb(Globals.Settings.Rendering.Map.MapBorderColor.R, Globals.Settings.Rendering.Map.MapBorderColor.G, Globals.Settings.Rendering.Map.MapBorderColor.B);
-
+         
          ModPathTextBox.Text = Globals.Settings.Misc.LastModPath;
          VanillaPathTextBox.Text = Globals.Settings.Misc.LastVanillaPath;
 #if DEBUG

@@ -971,7 +971,7 @@ namespace Editor.Forms
 
       private PropertyLabel<HistoryCountry> _capitalTextBox = null!;
 
-      private ExtendedNumeric _countryDevelopmentNumeric = null!;
+      private PropertyNumeric<Country, int> _countryDevelopmentNumeric = null!;
 
       private PropertyQuickAssignControl<CommonCountry, List<string>, string> _historicalUnits = null!;
       private PropertyQuickAssignControl<CommonCountry, List<string>, string> _historicalIdeas = null!;
@@ -1091,16 +1091,12 @@ namespace Editor.Forms
          CulturesTLP.SetRowSpan(_acceptedCultures, 2);
 
          // Development
-         _countryDevelopmentNumeric = ControlFactory.GetExtendedNumeric("");
+         _countryDevelopmentNumeric = ControlFactory.GetPropertyNumericCountry(typeof(Country).GetProperty(nameof(Country.Development)), 0);
          _countryDevelopmentNumeric.Minimum = 0;
          _countryDevelopmentNumeric.Maximum = 100000;
-         _countryDevelopmentNumeric.UpButtonPressedSmall += (_, _) => AddDevToSelectedCountryIfValid(1);
-         _countryDevelopmentNumeric.UpButtonPressedMedium += (_, _) => AddDevToSelectedCountryIfValid(5);
-         _countryDevelopmentNumeric.UpButtonPressedLarge += (_, _) => AddDevToSelectedCountryIfValid(10);
-         _countryDevelopmentNumeric.DownButtonPressedSmall += (_, _) => AddDevToSelectedCountryIfValid(-1);
-         _countryDevelopmentNumeric.DownButtonPressedMedium += (_, _) => AddDevToSelectedCountryIfValid(-5);
-         _countryDevelopmentNumeric.DownButtonPressedLarge += (_, _) => AddDevToSelectedCountryIfValid(-10);
-         _countryDevelopmentNumeric.OnValueChanged += (_, _) => SpreadDevInSelectedCountryIfValid((int)_countryDevelopmentNumeric.Value);
+         _countryDevelopmentNumeric.UseTimer = false;
+         _countryDevelopmentNumeric.IsSilent = true;
+
          DevelopmenTLP.Controls.Add(_countryDevelopmentNumeric, 1, 0);
          GeneralToolTip.SetToolTip(_countryDevelopmentNumeric, "LMB = +- 1\nSHIFT + LMB = +- 5\nCTRL + LMB = +-10\nThe development is only added to one random province in the selected country per click.");
 
@@ -1186,7 +1182,7 @@ namespace Editor.Forms
          _governmentReforms.SetDefault();
 
          // Development
-         _countryDevelopmentNumeric.Value = 3;
+         _countryDevelopmentNumeric.SetDefault();
 
          // Quick Assign
          _historicalUnits.SetDefault();
@@ -1198,34 +1194,6 @@ namespace Editor.Forms
          Globals.State = State.Running;
       }
 
-      private void AddDevToSelectedCountryIfValid(int dev)
-      {
-         if (Selection.SelectedCountry == Country.Empty)
-            return;
-         Selection.SelectedCountry.AddDevToRandomProvince(dev);
-      }
-
-      private void SpreadDevInSelectedCountryIfValid(int value)
-      {
-         if (Selection.SelectedCountry == Country.Empty)
-            return;
-         var provinces = Selection.SelectedCountry.GetProvinces();
-         var pieces = MathHelper.SplitIntoNRandomPieces(provinces.Count, value, Globals.Settings.Generator.DevGeneratingSettings.MinDevelopmentInGeneration, Globals.Settings.Generator.DevGeneratingSettings.MaxDevelopmentInGeneration);
-         if (pieces.Count != provinces.Count)
-            return;
-         var index = 0;
-         foreach (var province in provinces)
-         {
-            var devParts = MathHelper.SplitIntoNRandomPieces(3, pieces[index], 1,
-               Globals.Settings.Generator.DevGeneratingSettings.MaxDevelopmentInGeneration);
-
-            province.BaseTax = devParts[0];
-            province.BaseProduction = devParts[1];
-            province.BaseManpower = devParts[2];
-
-            index++;
-         }
-      }
 
       private void CreateFilesByDefault_Click(object sender, EventArgs e)
       {
@@ -1299,7 +1267,7 @@ namespace Editor.Forms
 
       private void RedistributeDev_Click(object sender, EventArgs e)
       {
-         SpreadDevInSelectedCountryIfValid((int)_countryDevelopmentNumeric.Value);
+         Selection.SelectedCountry.SpreadDevInSelectedCountryIfValid((int)_countryDevelopmentNumeric.Value);
       }
 
 
@@ -1502,8 +1470,8 @@ namespace Editor.Forms
 
       private void audioTestToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         //SoundManager.StartPanning("C:\\Users\\david\\Downloads\\run-130bpm-190419.wav");
-         SoundManager.PlayAllSoundsOnce();
+         var totalBorders = Globals.Provinces.Sum(p => p.Neighbors.Count);
+         MessageBox.Show($"Total borders: {totalBorders}");
       }
 
       private void tradegoodEditorToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1552,6 +1520,11 @@ namespace Editor.Forms
       private void AchievementsToolStripMenuItem_Click(object sender, EventArgs e)
       {
          new AchievementsWindow().ShowDialog();
+      }
+
+      private void definesEditorToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+
       }
    }
 }

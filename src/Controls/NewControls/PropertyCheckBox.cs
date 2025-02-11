@@ -25,7 +25,7 @@ namespace Editor.Controls.NewControls
       public IErrorHandle GetFromGui(out bool value)
       {
          value = Checked;
-         return ErrorHandle.Sucess;
+         return ErrorHandle.Success;
       }
 
       protected override void OnCheckedChanged(EventArgs e)

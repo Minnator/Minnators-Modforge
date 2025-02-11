@@ -45,7 +45,7 @@ namespace Editor.Controls.NewControls
       public IErrorHandle GetFromGui(out Color value)
       {
          value = BackColor;
-         return ErrorHandle.Sucess;
+         return ErrorHandle.Success;
       }
 
       public void SetValue(Color value)

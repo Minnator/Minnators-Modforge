@@ -97,7 +97,7 @@ namespace Editor.Controls.NewControls
          value = _textBox.Text.Split([','], StringSplitOptions.RemoveEmptyEntries)
                         .Select(name => name.Trim())
                         .ToList();
-         return ErrorHandle.Sucess;
+         return ErrorHandle.Success;
       }
 
       public void SetDefault()

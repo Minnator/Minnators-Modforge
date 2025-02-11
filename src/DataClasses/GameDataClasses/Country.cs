@@ -635,12 +635,45 @@ public class Country : ProvinceCollection<Province>, ITitleAdjProvider
       return HistoryCountry.History.OrderBy(h => h.Date).FirstOrDefault(h => h.Date > date);
    }
 
-   public int GetDevelopment()
+   public int Development
    {
-      var sum = 0;
-      foreach (var province in GetProvinces())
-         sum += province.TotalDevelopment;
-      return sum;
+      get
+      {
+         var sum = 0;
+         foreach (var province in GetProvinces())
+            sum += province.TotalDevelopment;
+         return sum;
+      }
+      set
+      {
+         AddDevToRandomProvince(value - Development);
+      }
+   }
+
+
+   internal void SpreadDevInSelectedCountryIfValid(int value)
+   {
+      if (Selection.SelectedCountry == Country.Empty)
+         return;
+      var provinces = Selection.SelectedCountry.GetProvinces();
+      var pieces = MathHelper.SplitIntoNRandomPieces(provinces.Count, value, Globals.Settings.Generator.DevGeneratingSettings.MinDevelopmentInGeneration, Globals.Settings.Generator.DevGeneratingSettings.MaxDevelopmentInGeneration);
+      if (pieces.Count != provinces.Count)
+         return;
+
+      var devPartsOut = new List<int>[] { [], [], [] };
+
+      for (var i = 0; i < provinces.Count; i++)
+      {
+         var devParts = MathHelper.SplitIntoNRandomPieces(3, pieces[i], 1, Globals.Settings.Generator.DevGeneratingSettings.MaxDevelopmentInGeneration);
+         devPartsOut[0].Add(devParts[0]);
+         devPartsOut[1].Add(devParts[1]);
+         devPartsOut[2].Add(devParts[2]);
+      }
+
+      SetFieldMultiple(provinces, devPartsOut[0], typeof(Province).GetProperty(nameof(Province.BaseTax))!);
+      SetFieldMultiple(provinces, devPartsOut[1], typeof(Province).GetProperty(nameof(Province.BaseProduction))!);
+      SetFieldMultiple(provinces, devPartsOut[2], typeof(Province).GetProperty(nameof(Province.BaseManpower))!);
+
    }
 
    public ICollection<Province> GetCoreProvinces()
@@ -801,7 +834,7 @@ public class Country : ProvinceCollection<Province>, ITitleAdjProvider
       GetNeighboursInDistanceRecursive(maxProvinceDistance, neighbours);
 
       foreach (var neighbour in GetNeighbours())
-         if (Math.Abs(neighbour.GetDevelopment() - GetDevelopment()) <= maxDevDifference)
+         if (Math.Abs(neighbour.Development - Development) <= maxDevDifference)
             countries.Add(neighbour);
 
       return countries;
@@ -881,7 +914,7 @@ public class Country : ProvinceCollection<Province>, ITitleAdjProvider
    {
       if (Tag.TryParse(value, out var tag))
          if (Globals.Countries.TryGetValue(tag, out country!))
-            return ErrorHandle.Sucess;
+            return ErrorHandle.Success;
       country = Empty;
       return new ErrorObject(ErrorType.TypeConversionError, "Could not parse Tag!", addToManager: false);
    }

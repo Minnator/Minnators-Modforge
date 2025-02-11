@@ -84,7 +84,7 @@ namespace Editor.Helper
          }
 
          result = result1;
-         return ErrorHandle.Sucess;
+         return ErrorHandle.Success;
       }
 
       private static IErrorHandle ParseFloat(string value, out object result)
@@ -98,7 +98,7 @@ namespace Editor.Helper
          }
 
          result = result1;
-         return ErrorHandle.Sucess;
+         return ErrorHandle.Success;
       }
 
       private static IErrorHandle ParseDouble(string value, out object result)
@@ -112,7 +112,7 @@ namespace Editor.Helper
          }
 
          result = result1;
-         return ErrorHandle.Sucess;
+         return ErrorHandle.Success;
       }
 
       private static IErrorHandle ParseBool(string value, out object result)
@@ -124,10 +124,10 @@ namespace Editor.Helper
             {
                case "yes":
                   result = true;
-                  return ErrorHandle.Sucess;
+                  return ErrorHandle.Success;
                case "no":
                   result = false;
-                  return ErrorHandle.Sucess;
+                  return ErrorHandle.Success;
                default:
                   result = false;
                   return new ErrorObject(ErrorType.TypeConversionError, "Could not parse bool!",
@@ -137,14 +137,14 @@ namespace Editor.Helper
          else
          {
             result = result1;
-            return ErrorHandle.Sucess;
+            return ErrorHandle.Success;
          }
       }
 
       private static IErrorHandle ParseString(string value, out object result)
       {
          result = value;
-         return ErrorHandle.Sucess;
+         return ErrorHandle.Success;
       }
 
       public static IErrorHandle Convert<T>(string? str, out object value)

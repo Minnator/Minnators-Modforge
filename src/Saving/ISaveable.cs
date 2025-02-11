@@ -229,6 +229,17 @@ public abstract class Saveable : IDisposable
       LoadGuiEvents.TriggerGuiUpdate(typeof(TS), property);
    }
 
+   protected static void SetFieldMultiple<TS, T>(ICollection<TS> targets, List<T> value, PropertyInfo property) where TS : Saveable
+   {
+      if (Globals.State == State.Running)
+      {
+         var command = new CModifyPropertyMultiple<T>(property, [.. targets], value, out var change);
+         if (change)
+            HistoryManager.AddCommand(command);
+      }
+      foreach (var target in targets)
+         target.OnPropertyChanged(property.Name);
+   }
 
    /// <summary>
    /// Is always called when a value in a saveable is changed (If the property calls SetField)

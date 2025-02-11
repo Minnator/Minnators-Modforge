@@ -81,6 +81,14 @@ namespace Editor.Controls.NewControls
          _items.RemoveControl(this);
       }
 
+      public new void SetDefault()
+      {
+         var item = _items.EmptyItem.Key.ToString() ?? string.Empty;
+         SelectedText = item;
+         SelectedIndex = -1;
+         Text = item;
+      }
+
       public override IErrorHandle GetFromGui(out TProperty value)
       {
          var handle = Converter.Convert(Text, out TKey key);

@@ -88,7 +88,7 @@ public readonly struct Tag : IEquatable<Tag>, IComparable
       if (TryParse(value, out var outTag))
       {
          result = outTag;
-         return ErrorHandle.Sucess;
+         return ErrorHandle.Success;
       }
       result = Empty;
       return new ErrorObject(ErrorType.TypeConversionError, "Could not parse Tag!", addToManager: false);

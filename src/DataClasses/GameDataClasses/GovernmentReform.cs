@@ -48,7 +48,7 @@ namespace Editor.DataClasses.GameDataClasses
          if (TryParse(value, out var reform))
          {
             result = reform;
-            return ErrorHandle.Sucess;
+            return ErrorHandle.Success;
          }
          result = Empty;
          return new ErrorObject(ErrorType.TypeConversionError, $"Could not parse GovernmentReform from \"{value}\"");

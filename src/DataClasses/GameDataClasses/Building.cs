@@ -38,7 +38,7 @@ namespace Editor.DataClasses.GameDataClasses
          if (TryParse(str, out var res))
          {
             result = res;
-            return ErrorHandle.Sucess;
+            return ErrorHandle.Success;
          }
 
          result = Empty;

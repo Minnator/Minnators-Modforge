@@ -45,7 +45,7 @@ namespace Editor.DataClasses.GameDataClasses
                addToManager: false);
          }
 
-         return ErrorHandle.Sucess;
+         return ErrorHandle.Success;
       }
    }
 }

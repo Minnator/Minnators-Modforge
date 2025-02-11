@@ -234,7 +234,7 @@ public class Terrain : ProvinceCollection<Province>
             addToManager: false);
       }
 
-      return ErrorHandle.Sucess;
+      return ErrorHandle.Success;
    }
 }
 

@@ -89,7 +89,7 @@ namespace Editor.Forms.Feature
          openFileAtLocation.Click += (_, args) =>
          {
             if (entry is { } lError) 
-               ProcessHelper.OpenFileAtLine(lError.Path, lError.Line - 1, lError.CharPos);
+               ProcessHelper.OpenFileAtLine(lError.Path, lError.Line + 1, lError.CharPos);
          };
          openFolder.Click += (_, args) => ProcessHelper.OpenFolder(entry.Path);
          openFolderOfFile.Click += (_, args) =>

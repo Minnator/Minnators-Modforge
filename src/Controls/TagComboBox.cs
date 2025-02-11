@@ -46,6 +46,8 @@ namespace Editor.Controls
       {
          if (Text.Length >= 3)
          {
+            if (SelectionLength <= Text.Length)
+               Text = e.KeyChar.ToString();
             e.Handled = true;
             return;
          }

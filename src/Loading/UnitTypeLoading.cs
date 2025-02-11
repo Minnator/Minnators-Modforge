@@ -12,13 +12,11 @@ namespace Editor.Loading
       {
          var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "units");
 
-         foreach (var file in files)
+         Parallel.ForEach(files, (file) =>
          {
             Parsing.RemoveCommentFromMultilineString(IO.ReadAllInUTF8(file), out var content);
             LoadUnitType(file);
-         }
-
-         //PrintAllUnitsToFile();
+         });
       }
 
       private static void LoadUnitType(string path)

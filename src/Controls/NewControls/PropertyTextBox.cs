@@ -61,7 +61,7 @@ namespace Editor.Controls.NewControls
       public IErrorHandle GetFromGui(out string value)
       {
          value = Text;
-         return ErrorHandle.Sucess;
+         return ErrorHandle.Success;
       }
 
       public void SetValue(string value)

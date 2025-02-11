@@ -54,7 +54,7 @@ namespace Editor.Helper
          if (Enum.TryParse<Mana>(value, out var manaMana))
          {
             mana = manaMana;
-            return ErrorHandle.Sucess;
+            return ErrorHandle.Success;
          }
          mana = Mana.NONE;
          return new ErrorObject(ErrorType.TypeConversionError, $"Could not parse {value} to {typeof(Mana)}");

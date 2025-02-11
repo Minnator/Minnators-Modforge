@@ -73,6 +73,7 @@
          randomModifierToolStripMenuItem = new ToolStripMenuItem();
          deleteProvinceHistoryEntriesToolStripMenuItem = new ToolStripMenuItem();
          tradegoodEditorToolStripMenuItem = new ToolStripMenuItem();
+         definesEditorToolStripMenuItem = new ToolStripMenuItem();
          MapModeComboBox = new ToolStripComboBox();
          searchToolStripMenuItem = new ToolStripMenuItem();
          helpToolStripMenuItem = new ToolStripMenuItem();
@@ -575,7 +576,7 @@
          // 
          // additionalToolsToolStripMenuItem
          // 
-         additionalToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { checkForCyclesInTradenodesToolStripMenuItem, randomModifierToolStripMenuItem, deleteProvinceHistoryEntriesToolStripMenuItem, tradegoodEditorToolStripMenuItem });
+         additionalToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { checkForCyclesInTradenodesToolStripMenuItem, randomModifierToolStripMenuItem, deleteProvinceHistoryEntriesToolStripMenuItem, tradegoodEditorToolStripMenuItem, definesEditorToolStripMenuItem });
          additionalToolsToolStripMenuItem.Name = "additionalToolsToolStripMenuItem";
          additionalToolsToolStripMenuItem.Size = new Size(103, 23);
          additionalToolsToolStripMenuItem.Text = "Additional tools";
@@ -607,6 +608,13 @@
          tradegoodEditorToolStripMenuItem.Size = new Size(236, 22);
          tradegoodEditorToolStripMenuItem.Text = "Tradegood Editor";
          tradegoodEditorToolStripMenuItem.Click += tradegoodEditorToolStripMenuItem_Click;
+         // 
+         // definesEditorToolStripMenuItem
+         // 
+         definesEditorToolStripMenuItem.Name = "definesEditorToolStripMenuItem";
+         definesEditorToolStripMenuItem.Size = new Size(236, 22);
+         definesEditorToolStripMenuItem.Text = "Defines Editor";
+         definesEditorToolStripMenuItem.Click += definesEditorToolStripMenuItem_Click;
          // 
          // MapModeComboBox
          // 
@@ -722,7 +730,7 @@
          // AchievementsToolStripMenuItem
          // 
          AchievementsToolStripMenuItem.Name = "AchievementsToolStripMenuItem";
-         AchievementsToolStripMenuItem.Size = new Size(180, 22);
+         AchievementsToolStripMenuItem.Size = new Size(149, 22);
          AchievementsToolStripMenuItem.Text = "Achievements";
          AchievementsToolStripMenuItem.Click += AchievementsToolStripMenuItem_Click;
          // 
@@ -3131,6 +3139,7 @@
       private ToolStripSeparator toolStripSeparator10;
       private ToolStripMenuItem toolStripMenuItem4;
       private ToolStripMenuItem AchievementsToolStripMenuItem;
+      private ToolStripMenuItem definesEditorToolStripMenuItem;
    }
 }
 

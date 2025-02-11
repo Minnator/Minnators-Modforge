@@ -15,6 +15,8 @@ namespace Editor.Helper
       public static void LoadSettingsToComponents()
       {
          LogManager.ChangeVerbosity(Globals.Settings.Logging.LoggingVerbosity);
+
+         Globals.Settings.Rendering.Map.MapBorderColor = Color.FromArgb(Globals.Settings.Rendering.Map.MapBorderColor.R, Globals.Settings.Rendering.Map.MapBorderColor.G, Globals.Settings.Rendering.Map.MapBorderColor.B);
       }
 
 

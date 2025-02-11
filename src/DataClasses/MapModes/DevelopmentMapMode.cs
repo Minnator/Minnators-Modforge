@@ -60,13 +60,7 @@ public class DevelopmentMapMode : MapMode
       }
       return newMaxFound;
    }
-
-   public override void RenderMapMode()
-   {
-      CalculateMinMax();
-      base.RenderMapMode();
-   }
-
+   
    public override int GetProvinceColor(Province id)
    {
       if (!Globals.LandProvinces.Contains(id))
@@ -86,4 +80,9 @@ public class DevelopmentMapMode : MapMode
       return "Total Development: Unknown";
    }
 
+   public override void SetActive()
+   {
+      CalculateMinMax();
+      base.SetActive();
+   }
 }

@@ -53,7 +53,7 @@ public class Culture(string name)
             addToManager: false);
       }
 
-      return ErrorHandle.Sucess;
+      return ErrorHandle.Success;
    }
 
    public override string ToString()
