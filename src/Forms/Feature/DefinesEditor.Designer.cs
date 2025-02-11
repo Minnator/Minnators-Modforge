@@ -32,9 +32,9 @@
          tableLayoutPanel1 = new TableLayoutPanel();
          DefineNameComboBox = new ComboBox();
          DefineValueTextBox = new TextBox();
-         DefinesListBox = new ListBox();
          SaveButton = new Button();
          CancelButton = new Button();
+         DefinesListView = new ListView();
          tableLayoutPanel1.SuspendLayout();
          SuspendLayout();
          // 
@@ -45,9 +45,9 @@
          tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
          tableLayoutPanel1.Controls.Add(DefineNameComboBox, 0, 0);
          tableLayoutPanel1.Controls.Add(DefineValueTextBox, 1, 0);
-         tableLayoutPanel1.Controls.Add(DefinesListBox, 0, 1);
          tableLayoutPanel1.Controls.Add(SaveButton, 1, 2);
          tableLayoutPanel1.Controls.Add(CancelButton, 0, 2);
+         tableLayoutPanel1.Controls.Add(DefinesListView, 0, 1);
          tableLayoutPanel1.Dock = DockStyle.Fill;
          tableLayoutPanel1.Location = new Point(0, 0);
          tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -55,7 +55,7 @@
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-         tableLayoutPanel1.Size = new Size(514, 652);
+         tableLayoutPanel1.Size = new Size(694, 652);
          tableLayoutPanel1.TabIndex = 0;
          // 
          // DefineNameComboBox
@@ -64,37 +64,27 @@
          DefineNameComboBox.FormattingEnabled = true;
          DefineNameComboBox.Location = new Point(3, 3);
          DefineNameComboBox.Name = "DefineNameComboBox";
-         DefineNameComboBox.Size = new Size(379, 23);
+         DefineNameComboBox.Size = new Size(514, 23);
          DefineNameComboBox.TabIndex = 0;
          // 
          // DefineValueTextBox
          // 
          DefineValueTextBox.Dock = DockStyle.Fill;
-         DefineValueTextBox.Location = new Point(388, 3);
+         DefineValueTextBox.Location = new Point(523, 3);
          DefineValueTextBox.Name = "DefineValueTextBox";
-         DefineValueTextBox.Size = new Size(123, 23);
+         DefineValueTextBox.Size = new Size(168, 23);
          DefineValueTextBox.TabIndex = 1;
-         // 
-         // DefinesListBox
-         // 
-         tableLayoutPanel1.SetColumnSpan(DefinesListBox, 2);
-         DefinesListBox.Dock = DockStyle.Fill;
-         DefinesListBox.FormattingEnabled = true;
-         DefinesListBox.ItemHeight = 15;
-         DefinesListBox.Location = new Point(3, 33);
-         DefinesListBox.Name = "DefinesListBox";
-         DefinesListBox.Size = new Size(508, 586);
-         DefinesListBox.TabIndex = 2;
          // 
          // SaveButton
          // 
          SaveButton.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-         SaveButton.Location = new Point(436, 625);
+         SaveButton.Location = new Point(616, 625);
          SaveButton.Name = "SaveButton";
          SaveButton.Size = new Size(75, 24);
          SaveButton.TabIndex = 3;
          SaveButton.Text = "Save";
          SaveButton.UseVisualStyleBackColor = true;
+         SaveButton.Click += SaveButton_Click;
          // 
          // CancelButton
          // 
@@ -105,12 +95,25 @@
          CancelButton.TabIndex = 4;
          CancelButton.Text = "Cancel";
          CancelButton.UseVisualStyleBackColor = true;
+         CancelButton.Click += CancelButton_Click;
+         // 
+         // DefinesListView
+         // 
+         tableLayoutPanel1.SetColumnSpan(DefinesListView, 2);
+         DefinesListView.Dock = DockStyle.Fill;
+         DefinesListView.FullRowSelect = true;
+         DefinesListView.Location = new Point(3, 33);
+         DefinesListView.Name = "DefinesListView";
+         DefinesListView.Size = new Size(688, 586);
+         DefinesListView.TabIndex = 5;
+         DefinesListView.UseCompatibleStateImageBehavior = false;
+         DefinesListView.View = View.Details;
          // 
          // DefinesEditor
          // 
          AutoScaleDimensions = new SizeF(7F, 15F);
          AutoScaleMode = AutoScaleMode.Font;
-         ClientSize = new Size(514, 652);
+         ClientSize = new Size(694, 652);
          Controls.Add(tableLayoutPanel1);
          Icon = (Icon)resources.GetObject("$this.Icon");
          Name = "DefinesEditor";
@@ -126,8 +129,8 @@
       private TableLayoutPanel tableLayoutPanel1;
       private ComboBox DefineNameComboBox;
       private TextBox DefineValueTextBox;
-      private ListBox DefinesListBox;
       private Button SaveButton;
       private Button CancelButton;
+      private ListView DefinesListView;
    }
 }

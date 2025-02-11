@@ -23,7 +23,8 @@ namespace Editor.Helper
       Climate = 1 << 14,
       Price = 1 << 15,
       TradeGood = 1 << 16,
-      All = SaveProvinces | Area | Region | TradeNode | TradeCompany | ColonialRegion | SuperRegion | Continent | ProvinceGroup | EventModifier | Localisation | Country | Province | Terrain | Climate | TradeGood | Price
+      Define = 1 << 17,
+      All = SaveProvinces | Area | Region | TradeNode | TradeCompany | ColonialRegion | SuperRegion | Continent | ProvinceGroup | EventModifier | Localisation | Country | Province | Terrain | Climate | TradeGood | Price | Define
    }
 
 

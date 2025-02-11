@@ -124,7 +124,7 @@ public static class Globals
    public static string MapPath = null!;
 
    // Defines
-   public static BindingDictionary<string, Define> Defines = new(new(Define.Empty.Name, Define.Empty));
+   public static BindingDictionary<string, Define> Defines = new();
 
    // Terrain
    public static BindingDictionary<string, Terrain> Terrains = new(new(Terrain.Empty.Name, Terrain.Empty));

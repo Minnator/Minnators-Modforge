@@ -1524,7 +1524,7 @@ namespace Editor.Forms
 
       private void definesEditorToolStripMenuItem_Click(object sender, EventArgs e)
       {
-
+         new DefinesEditor().ShowDialog();
       }
    }
 }
