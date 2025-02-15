@@ -277,20 +277,19 @@ namespace Editor.Forms
 
          if (Selection.SelectedCountry == Country.Empty)
          {
-            if(!DataTabPanel.TabPages[1].Enabled)
+            if (!CountryMainTableLayoutPanel.Enabled)
                return;
             DataTabPanel.TabPages[1].SuspendLayout();
             ClearDecorationDataCountry();
             Globals.State = State.Loading;
             ClearCountryGui();
             Globals.State = State.Running;
-            DataTabPanel.TabPages[1].Enabled = false;
-            _tagSelectionBox.Enabled = true;
+            CountryMainTableLayoutPanel.Enabled = false;
             DataTabPanel.TabPages[1].ResumeLayout();
          }
          else
          {
-            DataTabPanel.TabPages[1].Enabled = true;
+            CountryMainTableLayoutPanel.Enabled = true;
             SetDecorationDataCountry(Selection.SelectedCountry);
             LoadGuiEvents.ReloadCountry();
          }
@@ -399,7 +398,6 @@ namespace Editor.Forms
       private void InitializeProvinceEditGui()
       {
          DataTabPanel.TabPages[0].Enabled = false;
-         DataTabPanel.TabPages[1].Enabled = false;
          Selection.OnProvinceSelectionChange += (sender, i) => UpdateTabIfSelected(0);
          Selection.OnCountrySelectionChange += (sender, i) => UpdateTabIfSelected(1);
 
@@ -995,11 +993,15 @@ namespace Editor.Forms
          Selection.OnCountryDeselected += CountryGuiEvents.OnCountryDeselected;
          _tagSelectionBox = new(null!)
          {
-            Margin = new(1),
-            Height = 25,
+            Margin = new(2),
+            Dock = DockStyle.Fill,
+            Font = new("Arial", 10, FontStyle.Bold),
          };
          CountryFlagLabel = ControlFactory.GetFlagLabel();
          _tagSelectionBox.OnTagChanged += CountryGuiEvents.TagSelectionBox_OnTagChanged;
+         CountryHeaderTLP.Controls.Add(_tagSelectionBox, 2, 0);
+         CountryHeaderTLP.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+
          _countryColorPickerButton = ControlFactory.GetColorPickerButtonCommonCountry(typeof(CommonCountry).GetProperty(nameof(CommonCountry.Color)));
          _countryColorPickerButton.Click += CountryGuiEvents.CountryColorPickerButton_Click;
          GeneralToolTip.SetToolTip(_countryColorPickerButton, "Set the <color> of the selected country");
@@ -1050,7 +1052,6 @@ namespace Editor.Forms
                                                                                ControlFactory.DefaultMarginType.Slim);
          _focusComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 
-         TagAndColorTLP.Controls.Add(_tagSelectionBox, 1, 0);
          TagAndColorTLP.Controls.Add(_countryColorPickerButton, 3, 0);
          TagAndColorTLP.Controls.Add(RevolutionColorPickerButton, 3, 3);
          TagAndColorTLP.Controls.Add(_graphicalCultureBox, 1, 2);
@@ -1124,10 +1125,10 @@ namespace Editor.Forms
          MiscTLP.Controls.Add(_estatePrivileges, 0, 5);
 
          CountryLoc = ControlFactory.GetPropertyTextBoxCountry(typeof(Country).GetProperty(nameof(Country.TitleLocalisation)), ControlFactory.DefaultMarginType.Slim);
-         TagAndColorTLP.Controls.Add(CountryLoc, 1, 1);
+         TagAndColorTLP.Controls.Add(CountryLoc, 1, 0);
 
          CountryADJLoc = ControlFactory.GetPropertyTextBoxCountry(typeof(Country).GetProperty(nameof(Country.AdjectiveLocalisation)), ControlFactory.DefaultMarginType.Slim);
-         TagAndColorTLP.Controls.Add(CountryADJLoc, 3, 1);
+         TagAndColorTLP.Controls.Add(CountryADJLoc, 1, 1);
 
          CountryCustomToolStripLayoutPanel.Paint += TableLayoutBorder_Paint;
          OpenCountryFileButton.Enter += SetSavingToolTipCountryFileButton;
@@ -1145,14 +1146,14 @@ namespace Editor.Forms
       {
          CountryFlagLabel.SetCountry(Country.Empty);
          _tagSelectionBox.SelectedItem = DataClasses.GameDataClasses.Tag.Empty;
-         CountryNameLabel.Text = "Country: -";
+         CountryNameLabel.Text = "-";
       }
 
       private void SetDecorationDataCountry(Country country)
       {
          CountryFlagLabel.SetCountry(country.Tag);
          _tagSelectionBox.SelectedItem = country.Tag;
-         CountryNameLabel.Text = $"Country: {country.TitleLocalisation} ({country.TitleKey})";
+         CountryNameLabel.Text = country.TitleLocalisation;
       }
 
       private void SetSavingToolTipCountryFileButton(object? sender, EventArgs e)

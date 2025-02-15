@@ -215,14 +215,13 @@
          groupBox7 = new GroupBox();
          TagAndColorTLP = new TableLayoutPanel();
          label34 = new Label();
-         label30 = new Label();
          label27 = new Label();
-         label28 = new Label();
-         label29 = new Label();
          label31 = new Label();
          label33 = new Label();
          label32 = new Label();
          label44 = new Label();
+         label30 = new Label();
+         label29 = new Label();
          label45 = new Label();
          CapitalTLP = new TableLayoutPanel();
          SetCapitalToSelected = new Button();
@@ -234,9 +233,6 @@
          DevelopmenTLP = new TableLayoutPanel();
          label46 = new Label();
          button4 = new Button();
-         CountryHeaderTLP = new TableLayoutPanel();
-         CountryNameLabel = new Label();
-         AddNewCountryButton = new Button();
          HistoryCountryCultures = new GroupBox();
          CulturesTLP = new TableLayoutPanel();
          label43 = new Label();
@@ -247,6 +243,9 @@
          OpenCountryFileButton = new Button();
          OpenCountryAdvancedEditor = new Button();
          OpenHistoryCountryFolder = new Button();
+         CountryHeaderTLP = new TableLayoutPanel();
+         CountryNameLabel = new Label();
+         AddNewCountryButton = new Button();
          ProvinceGroupsPage = new TabPage();
          ProvinceCollectionsPanel = new Panel();
          ProvinceCollectionsTab = new TableLayoutPanel();
@@ -306,10 +305,10 @@
          groupBox10.SuspendLayout();
          MiscTLP.SuspendLayout();
          DevelopmenTLP.SuspendLayout();
-         CountryHeaderTLP.SuspendLayout();
          HistoryCountryCultures.SuspendLayout();
          CulturesTLP.SuspendLayout();
          CountryCustomToolStripLayoutPanel.SuspendLayout();
+         CountryHeaderTLP.SuspendLayout();
          ProvinceGroupsPage.SuspendLayout();
          ProvinceCollectionsPanel.SuspendLayout();
          ProvinceCollectionsTab.SuspendLayout();
@@ -1950,13 +1949,15 @@
          // 
          CountryMainTLP.ColumnCount = 1;
          CountryMainTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-         CountryMainTLP.Controls.Add(CountryScrollPanel, 0, 0);
-         CountryMainTLP.Controls.Add(CountryCustomToolStripLayoutPanel, 0, 1);
+         CountryMainTLP.Controls.Add(CountryScrollPanel, 0, 1);
+         CountryMainTLP.Controls.Add(CountryCustomToolStripLayoutPanel, 0, 2);
+         CountryMainTLP.Controls.Add(CountryHeaderTLP, 0, 0);
          CountryMainTLP.Dock = DockStyle.Fill;
          CountryMainTLP.Location = new Point(3, 3);
          CountryMainTLP.Margin = new Padding(0);
          CountryMainTLP.Name = "CountryMainTLP";
-         CountryMainTLP.RowCount = 2;
+         CountryMainTLP.RowCount = 3;
+         CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
          CountryMainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 34F));
          CountryMainTLP.Size = new Size(401, 810);
@@ -1968,10 +1969,10 @@
          CountryScrollPanel.BorderStyle = BorderStyle.FixedSingle;
          CountryScrollPanel.Controls.Add(CountryMainTableLayoutPanel);
          CountryScrollPanel.Dock = DockStyle.Fill;
-         CountryScrollPanel.Location = new Point(0, 0);
+         CountryScrollPanel.Location = new Point(0, 30);
          CountryScrollPanel.Margin = new Padding(0, 0, 0, 3);
          CountryScrollPanel.Name = "CountryScrollPanel";
-         CountryScrollPanel.Size = new Size(401, 773);
+         CountryScrollPanel.Size = new Size(401, 743);
          CountryScrollPanel.TabIndex = 6;
          // 
          // CountryMainTableLayoutPanel
@@ -1981,33 +1982,32 @@
          CountryMainTableLayoutPanel.BackColor = Color.Transparent;
          CountryMainTableLayoutPanel.ColumnCount = 1;
          CountryMainTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-         CountryMainTableLayoutPanel.Controls.Add(groupBox8, 0, 5);
-         CountryMainTableLayoutPanel.Controls.Add(GovernmentGroupBox, 0, 3);
-         CountryMainTableLayoutPanel.Controls.Add(groupBox7, 0, 1);
-         CountryMainTableLayoutPanel.Controls.Add(tableLayoutPanel1, 0, 2);
-         CountryMainTableLayoutPanel.Controls.Add(groupBox10, 0, 6);
-         CountryMainTableLayoutPanel.Controls.Add(CountryHeaderTLP, 0, 0);
-         CountryMainTableLayoutPanel.Controls.Add(HistoryCountryCultures, 0, 4);
+         CountryMainTableLayoutPanel.Controls.Add(groupBox8, 0, 4);
+         CountryMainTableLayoutPanel.Controls.Add(GovernmentGroupBox, 0, 2);
+         CountryMainTableLayoutPanel.Controls.Add(groupBox7, 0, 0);
+         CountryMainTableLayoutPanel.Controls.Add(tableLayoutPanel1, 0, 1);
+         CountryMainTableLayoutPanel.Controls.Add(groupBox10, 0, 5);
+         CountryMainTableLayoutPanel.Controls.Add(HistoryCountryCultures, 0, 3);
          CountryMainTableLayoutPanel.Dock = DockStyle.Top;
          CountryMainTableLayoutPanel.Location = new Point(0, 0);
          CountryMainTableLayoutPanel.Margin = new Padding(0, 0, 0, 3);
          CountryMainTableLayoutPanel.Name = "CountryMainTableLayoutPanel";
-         CountryMainTableLayoutPanel.RowCount = 7;
-         CountryMainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         CountryMainTableLayoutPanel.RowCount = 6;
          CountryMainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 149F));
          CountryMainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
          CountryMainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 134F));
          CountryMainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 138F));
          CountryMainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 243F));
          CountryMainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 204F));
-         CountryMainTableLayoutPanel.Size = new Size(382, 923);
+         CountryMainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+         CountryMainTableLayoutPanel.Size = new Size(382, 893);
          CountryMainTableLayoutPanel.TabIndex = 1;
          // 
          // groupBox8
          // 
          groupBox8.Controls.Add(NamesTabControl);
          groupBox8.Dock = DockStyle.Fill;
-         groupBox8.Location = new Point(3, 479);
+         groupBox8.Location = new Point(3, 449);
          groupBox8.Name = "groupBox8";
          groupBox8.Size = new Size(376, 237);
          groupBox8.TabIndex = 7;
@@ -2191,7 +2191,7 @@
          // 
          GovernmentGroupBox.Controls.Add(GovernmentLayoutPanel);
          GovernmentGroupBox.Dock = DockStyle.Fill;
-         GovernmentGroupBox.Location = new Point(3, 207);
+         GovernmentGroupBox.Location = new Point(3, 177);
          GovernmentGroupBox.Name = "GovernmentGroupBox";
          GovernmentGroupBox.Padding = new Padding(1);
          GovernmentGroupBox.Size = new Size(376, 128);
@@ -2246,7 +2246,7 @@
          // 
          groupBox7.Controls.Add(TagAndColorTLP);
          groupBox7.Dock = DockStyle.Fill;
-         groupBox7.Location = new Point(3, 33);
+         groupBox7.Location = new Point(3, 3);
          groupBox7.Name = "groupBox7";
          groupBox7.Padding = new Padding(1);
          groupBox7.Size = new Size(376, 143);
@@ -2262,16 +2262,15 @@
          TagAndColorTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
          TagAndColorTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
          TagAndColorTLP.Controls.Add(label34, 0, 3);
-         TagAndColorTLP.Controls.Add(label30, 0, 1);
          TagAndColorTLP.Controls.Add(label27, 2, 0);
-         TagAndColorTLP.Controls.Add(label28, 0, 0);
-         TagAndColorTLP.Controls.Add(label29, 2, 1);
          TagAndColorTLP.Controls.Add(label31, 0, 2);
          TagAndColorTLP.Controls.Add(label33, 2, 2);
          TagAndColorTLP.Controls.Add(label32, 2, 3);
          TagAndColorTLP.Controls.Add(label44, 0, 4);
-         TagAndColorTLP.Controls.Add(label45, 2, 4);
-         TagAndColorTLP.Controls.Add(CapitalTLP, 3, 4);
+         TagAndColorTLP.Controls.Add(label30, 0, 0);
+         TagAndColorTLP.Controls.Add(label29, 0, 1);
+         TagAndColorTLP.Controls.Add(label45, 2, 1);
+         TagAndColorTLP.Controls.Add(CapitalTLP, 3, 1);
          TagAndColorTLP.Dock = DockStyle.Fill;
          TagAndColorTLP.Location = new Point(1, 17);
          TagAndColorTLP.Margin = new Padding(0);
@@ -2296,17 +2295,6 @@
          label34.Text = "Tech Group";
          label34.TextAlign = ContentAlignment.MiddleLeft;
          // 
-         // label30
-         // 
-         label30.AutoSize = true;
-         label30.Dock = DockStyle.Fill;
-         label30.Location = new Point(3, 25);
-         label30.Name = "label30";
-         label30.Size = new Size(87, 25);
-         label30.TabIndex = 4;
-         label30.Text = "Localisation";
-         label30.TextAlign = ContentAlignment.MiddleLeft;
-         // 
          // label27
          // 
          label27.AutoSize = true;
@@ -2317,28 +2305,6 @@
          label27.TabIndex = 1;
          label27.Text = "Country Color";
          label27.TextAlign = ContentAlignment.MiddleLeft;
-         // 
-         // label28
-         // 
-         label28.AutoSize = true;
-         label28.Dock = DockStyle.Fill;
-         label28.Location = new Point(3, 0);
-         label28.Name = "label28";
-         label28.Size = new Size(87, 25);
-         label28.TabIndex = 2;
-         label28.Text = "TAG";
-         label28.TextAlign = ContentAlignment.MiddleLeft;
-         // 
-         // label29
-         // 
-         label29.AutoSize = true;
-         label29.Dock = DockStyle.Fill;
-         label29.Location = new Point(189, 25);
-         label29.Name = "label29";
-         label29.Size = new Size(87, 25);
-         label29.TabIndex = 3;
-         label29.Text = "Loc ADJ";
-         label29.TextAlign = ContentAlignment.MiddleLeft;
          // 
          // label31
          // 
@@ -2384,11 +2350,33 @@
          label44.Text = "NationalFocus";
          label44.TextAlign = ContentAlignment.MiddleLeft;
          // 
+         // label30
+         // 
+         label30.AutoSize = true;
+         label30.Dock = DockStyle.Fill;
+         label30.Location = new Point(3, 0);
+         label30.Name = "label30";
+         label30.Size = new Size(87, 25);
+         label30.TabIndex = 4;
+         label30.Text = "Localisation";
+         label30.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // label29
+         // 
+         label29.AutoSize = true;
+         label29.Dock = DockStyle.Fill;
+         label29.Location = new Point(3, 25);
+         label29.Name = "label29";
+         label29.Size = new Size(87, 25);
+         label29.TabIndex = 3;
+         label29.Text = "Loc ADJ";
+         label29.TextAlign = ContentAlignment.MiddleLeft;
+         // 
          // label45
          // 
          label45.AutoSize = true;
          label45.Dock = DockStyle.Fill;
-         label45.Location = new Point(189, 100);
+         label45.Location = new Point(189, 25);
          label45.Name = "label45";
          label45.Size = new Size(87, 25);
          label45.TabIndex = 12;
@@ -2401,8 +2389,7 @@
          CapitalTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 75F));
          CapitalTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
          CapitalTLP.Controls.Add(SetCapitalToSelected, 1, 0);
-         CapitalTLP.Dock = DockStyle.Fill;
-         CapitalTLP.Location = new Point(279, 100);
+         CapitalTLP.Location = new Point(279, 25);
          CapitalTLP.Margin = new Padding(0);
          CapitalTLP.Name = "CapitalTLP";
          CapitalTLP.RowCount = 1;
@@ -2431,7 +2418,7 @@
          tableLayoutPanel1.Controls.Add(button1, 1, 0);
          tableLayoutPanel1.Controls.Add(label35, 0, 0);
          tableLayoutPanel1.Dock = DockStyle.Fill;
-         tableLayoutPanel1.Location = new Point(0, 179);
+         tableLayoutPanel1.Location = new Point(0, 149);
          tableLayoutPanel1.Margin = new Padding(0, 0, 4, 0);
          tableLayoutPanel1.Name = "tableLayoutPanel1";
          tableLayoutPanel1.RowCount = 1;
@@ -2465,7 +2452,7 @@
          // 
          groupBox10.Controls.Add(MiscTLP);
          groupBox10.Dock = DockStyle.Fill;
-         groupBox10.Location = new Point(3, 722);
+         groupBox10.Location = new Point(3, 692);
          groupBox10.Name = "groupBox10";
          groupBox10.Size = new Size(376, 198);
          groupBox10.TabIndex = 9;
@@ -2532,53 +2519,11 @@
          button4.UseVisualStyleBackColor = true;
          button4.Click += RedistributeDev_Click;
          // 
-         // CountryHeaderTLP
-         // 
-         CountryHeaderTLP.ColumnCount = 3;
-         CountryHeaderTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
-         CountryHeaderTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 90F));
-         CountryHeaderTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 28F));
-         CountryHeaderTLP.Controls.Add(CountryNameLabel, 1, 0);
-         CountryHeaderTLP.Controls.Add(AddNewCountryButton, 2, 0);
-         CountryHeaderTLP.Dock = DockStyle.Fill;
-         CountryHeaderTLP.Location = new Point(0, 0);
-         CountryHeaderTLP.Margin = new Padding(0);
-         CountryHeaderTLP.Name = "CountryHeaderTLP";
-         CountryHeaderTLP.RowCount = 1;
-         CountryHeaderTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         CountryHeaderTLP.Size = new Size(382, 30);
-         CountryHeaderTLP.TabIndex = 10;
-         // 
-         // CountryNameLabel
-         // 
-         CountryNameLabel.AutoSize = true;
-         CountryNameLabel.Dock = DockStyle.Fill;
-         CountryNameLabel.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-         CountryNameLabel.Location = new Point(38, 0);
-         CountryNameLabel.Name = "CountryNameLabel";
-         CountryNameLabel.Size = new Size(312, 30);
-         CountryNameLabel.TabIndex = 0;
-         CountryNameLabel.Text = "Tag.Empty";
-         CountryNameLabel.TextAlign = ContentAlignment.MiddleCenter;
-         // 
-         // AddNewCountryButton
-         // 
-         AddNewCountryButton.Dock = DockStyle.Fill;
-         AddNewCountryButton.Image = Properties.Resources.GreenPlusBg;
-         AddNewCountryButton.Location = new Point(354, 1);
-         AddNewCountryButton.Margin = new Padding(1);
-         AddNewCountryButton.Name = "AddNewCountryButton";
-         AddNewCountryButton.Size = new Size(27, 28);
-         AddNewCountryButton.TabIndex = 1;
-         GeneralToolTip.SetToolTip(AddNewCountryButton, "Add new Country");
-         AddNewCountryButton.UseVisualStyleBackColor = true;
-         AddNewCountryButton.Click += AddNewCountryButton_Click;
-         // 
          // HistoryCountryCultures
          // 
          HistoryCountryCultures.Controls.Add(CulturesTLP);
          HistoryCountryCultures.Dock = DockStyle.Fill;
-         HistoryCountryCultures.Location = new Point(3, 341);
+         HistoryCountryCultures.Location = new Point(3, 311);
          HistoryCountryCultures.Name = "HistoryCountryCultures";
          HistoryCountryCultures.Size = new Size(376, 132);
          HistoryCountryCultures.TabIndex = 11;
@@ -2711,6 +2656,49 @@
          OpenHistoryCountryFolder.TabIndex = 10;
          OpenHistoryCountryFolder.UseVisualStyleBackColor = true;
          OpenHistoryCountryFolder.Click += OpenCountryHistoryFolder;
+         // 
+         // CountryHeaderTLP
+         // 
+         CountryHeaderTLP.ColumnCount = 4;
+         CountryHeaderTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
+         CountryHeaderTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
+         CountryHeaderTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
+         CountryHeaderTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 28F));
+         CountryHeaderTLP.Controls.Add(CountryNameLabel, 1, 0);
+         CountryHeaderTLP.Controls.Add(AddNewCountryButton, 3, 0);
+         CountryHeaderTLP.Dock = DockStyle.Fill;
+         CountryHeaderTLP.Location = new Point(0, 0);
+         CountryHeaderTLP.Margin = new Padding(0);
+         CountryHeaderTLP.Name = "CountryHeaderTLP";
+         CountryHeaderTLP.RowCount = 1;
+         CountryHeaderTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         CountryHeaderTLP.Size = new Size(401, 30);
+         CountryHeaderTLP.TabIndex = 10;
+         // 
+         // CountryNameLabel
+         // 
+         CountryNameLabel.AutoSize = true;
+         CountryNameLabel.Dock = DockStyle.Fill;
+         CountryNameLabel.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+         CountryNameLabel.Location = new Point(40, 0);
+         CountryNameLabel.Name = "CountryNameLabel";
+         CountryNameLabel.Size = new Size(217, 30);
+         CountryNameLabel.TabIndex = 0;
+         CountryNameLabel.Text = "Tag.Empty";
+         CountryNameLabel.TextAlign = ContentAlignment.MiddleCenter;
+         // 
+         // AddNewCountryButton
+         // 
+         AddNewCountryButton.Dock = DockStyle.Fill;
+         AddNewCountryButton.Image = Properties.Resources.GreenPlusBg;
+         AddNewCountryButton.Location = new Point(372, 1);
+         AddNewCountryButton.Margin = new Padding(1);
+         AddNewCountryButton.Name = "AddNewCountryButton";
+         AddNewCountryButton.Size = new Size(28, 28);
+         AddNewCountryButton.TabIndex = 1;
+         GeneralToolTip.SetToolTip(AddNewCountryButton, "Add new Country");
+         AddNewCountryButton.UseVisualStyleBackColor = true;
+         AddNewCountryButton.Click += AddNewCountryButton_Click;
          // 
          // ProvinceGroupsPage
          // 
@@ -2895,12 +2883,12 @@
          MiscTLP.ResumeLayout(false);
          DevelopmenTLP.ResumeLayout(false);
          DevelopmenTLP.PerformLayout();
-         CountryHeaderTLP.ResumeLayout(false);
-         CountryHeaderTLP.PerformLayout();
          HistoryCountryCultures.ResumeLayout(false);
          CulturesTLP.ResumeLayout(false);
          CulturesTLP.PerformLayout();
          CountryCustomToolStripLayoutPanel.ResumeLayout(false);
+         CountryHeaderTLP.ResumeLayout(false);
+         CountryHeaderTLP.PerformLayout();
          ProvinceGroupsPage.ResumeLayout(false);
          ProvinceCollectionsPanel.ResumeLayout(false);
          ProvinceCollectionsTab.ResumeLayout(false);
@@ -3091,7 +3079,6 @@
       private Label label34;
       private Label label30;
       private Label label27;
-      private Label label28;
       private Label label29;
       private Label label31;
       private Label label33;

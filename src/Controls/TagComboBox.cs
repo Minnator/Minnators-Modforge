@@ -21,11 +21,8 @@ namespace Editor.Controls
             DataSource = Globals.Countries
          };
          Globals.Countries.AddControl(this);
-         //TODO broken https://stackoverflow.com/questions/11780558/c-sharp-winforms-combobox-dynamic-autocomplete
-         //AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-         //AutoCompleteSource = AutoCompleteSource.CustomSource;
-
-
+         AutoCompleteSource = AutoCompleteSource.ListItems;
+         AutoCompleteMode = AutoCompleteMode.SuggestAppend;
       }
 
       protected override void OnSelectedIndexChanged(EventArgs e)
@@ -44,15 +41,39 @@ namespace Editor.Controls
 
       protected override void OnKeyPress(KeyPressEventArgs e)
       {
-         if (Text.Length >= 3)
+         if (!char.IsLetter(e.KeyChar) && e.KeyChar != (char)Keys.Back)
          {
-            if (SelectionLength <= Text.Length)
-               Text = e.KeyChar.ToString();
+            e.Handled = true; // Ignore non-letter keys except backspace
+            return;
+         }
+
+         string newText;
+
+         if (e.KeyChar == (char)Keys.Back)
+         {
+            // Handle backspace: remove selected text or last character
+            if (SelectionLength > 0)
+               newText = Text.Remove(SelectionStart, SelectionLength);
+            else if (Text.Length > 0)
+               newText = Text[..^1];
+            else
+               newText = string.Empty;
+         }
+         else
+            newText = Text.Remove(SelectionStart, SelectionLength)
+                         .Insert(SelectionStart, char.ToUpper(e.KeyChar).ToString());
+
+         // Enforce max length of 3
+         if (newText.Length > 3)
+         {
             e.Handled = true;
             return;
          }
-         base.OnKeyPress(e);
-         e.KeyChar = char.ToUpper(e.KeyChar);
+
+         Text = newText;
+         SelectionStart = Text.Length;
+         SelectionLength = 0;
+         e.Handled = true;
       }
    }
    
