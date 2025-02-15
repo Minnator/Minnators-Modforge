@@ -127,12 +127,12 @@ public static class Globals
    public static BindingDictionary<string, Define> Defines = new();
 
    // Terrain
-   public static BindingDictionary<string, Terrain> Terrains = new(new(Terrain.Empty.Name, Terrain.Empty));
+   public static readonly BindingDictionary<string, Terrain> Terrains = new(new(Terrain.Empty.Name, Terrain.Empty));
    public static TerrainDefinitions TerrainDefinitions = new();
    public static TreeDefinitions TreeDefinitions = new();
 
    // Rivers
-   public static Dictionary<int, Point[]> Rivers = [];
+   public static readonly Dictionary<int, Point[]> Rivers = [];
 
    // Ideas
    public static List<Idea> Ideas = [];
@@ -374,9 +374,8 @@ public static class Globals
 
 // TODO LIST Until Alpha 1.1
 // - [x] Add history compacting
-// - [-] Defines Parsing
+// - [-] Defines Parsing and editing
 // - [x] Block Water provinces; should not be viable for countries
-// - [ ] Loosing hover when selecting and deselecting a province
 // - [████████████] Smart Gui reloading
 // - [x] Rewrite Province.cs, Province Command and Gui
 // - [-] Sounds for buttons and actions
@@ -394,6 +393,7 @@ public static class Globals
 // - [x] Fix Advanced Selection Menu (should be reworked / improved again)
 // - [x] Fix CollectionSelectorBase
 // - [ ] Fix 'Crashing' when autocompacting after only doing redestribute
+// - [ ] Fix province history stuff
 
 // TODO Update Alpha 1.2 SHADERS
 // - [ ] In Depth deleting with pop up to show what objects are related to the one being deleted
@@ -410,6 +410,7 @@ public static class Globals
 // - [ ] Ideas making via drag and drop
 // - [ ] Heat map for history entries in editor for them when selecting dates?
 // - [-] Add a tradegoods creation and editing menu
+// - [ ] Loosing hover when selecting and deselecting a province
 
 // - [ ] Grid for pixels
 // - [ ] Tools:

@@ -280,16 +280,18 @@ namespace Editor.Forms
             if(!DataTabPanel.TabPages[1].Enabled)
                return;
             DataTabPanel.TabPages[1].SuspendLayout();
+            ClearDecorationDataCountry();
             Globals.State = State.Loading;
             ClearCountryGui();
             Globals.State = State.Running;
             DataTabPanel.TabPages[1].Enabled = false;
+            _tagSelectionBox.Enabled = true;
             DataTabPanel.TabPages[1].ResumeLayout();
          }
          else
          {
             DataTabPanel.TabPages[1].Enabled = true;
-            //LoadCountryToGui(Selection.SelectedCountry);
+            SetDecorationDataCountry(Selection.SelectedCountry);
             LoadGuiEvents.ReloadCountry();
          }
       }
@@ -1139,6 +1141,20 @@ namespace Editor.Forms
          MonarchNamesTLP.Controls.Add(_monarchNames, 0, 1);
       }
 
+      private void ClearDecorationDataCountry()
+      {
+         CountryFlagLabel.SetCountry(Country.Empty);
+         _tagSelectionBox.SelectedItem = DataClasses.GameDataClasses.Tag.Empty;
+         CountryNameLabel.Text = "Country: -";
+      }
+
+      private void SetDecorationDataCountry(Country country)
+      {
+         CountryFlagLabel.SetCountry(country.Tag);
+         _tagSelectionBox.SelectedItem = country.Tag;
+         CountryNameLabel.Text = $"Country: {country.TitleLocalisation} ({country.TitleKey})";
+      }
+
       private void SetSavingToolTipCountryFileButton(object? sender, EventArgs e)
       {
          var countries = Selection.GetSelectedProvinceOwners();
@@ -1151,12 +1167,8 @@ namespace Editor.Forms
       public void ClearCountryGui()
       {
          Globals.State = State.Loading;
-         // Flag
-         CountryFlagLabel.SetCountry(Country.Empty);
 
          // Misc
-         _tagSelectionBox.SelectedItem = DataClasses.GameDataClasses.Tag.Empty;
-         CountryNameLabel.Text = "Country: -";
          _countryColorPickerButton.BackColor = Color.Empty;
          _countryColorPickerButton.Text = "(//)";
          CountryADJLoc.Clear();
@@ -1279,24 +1291,6 @@ namespace Editor.Forms
          new InformationForm().ShowDialog();
       }
 
-      private void toolStripMenuItem4_Click(object sender, EventArgs e)
-      {
-#if DEBUG
-         var sb = new StringBuilder();
-         foreach (var terrain in Globals.Terrains.Values)
-         {
-            sb.AppendLine($"{terrain.Name} : {terrain.SubCollection.Count}");
-            foreach (var or in terrain.SubCollection)
-            {
-               sb.Append($"{or.Id}, ");
-            }
-            sb.AppendLine();
-         }
-
-         File.WriteAllText(Path.Combine(Globals.DebugPath, "terrainOverrides.txt"), sb.ToString());
-#endif
-      }
-
       private void deleteProvinceHistoryEntriesToolStripMenuItem_Click(object sender, EventArgs e)
       {
          GetDateInput dateInputForm = new("Select the date:");
@@ -1394,27 +1388,6 @@ namespace Editor.Forms
          _ = new RoughEditorForm(new GlobalsDynamicWrapper(), false).ShowDialog();
       }
 
-      private void CountryHistoryEntry_Toggle(object sender, EventArgs e)
-      {
-         if (Globals.Settings.Gui.EnableDisableHistoryEntryCreationGlobally)
-            ProvinceHistoryEntryToggleButton.State = CountryHistoryEntryToggleButton.State;
-      }
-
-      private void ProvinceHistoryEntryToggleButton_Click(object sender, EventArgs e)
-      {
-         if (Globals.Settings.Gui.EnableDisableHistoryEntryCreationGlobally)
-            CountryHistoryEntryToggleButton.State = ProvinceHistoryEntryToggleButton.State;
-      }
-
-      private void runNameGenToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-         NameGenStarter.RunNameGen();
-      }
-
-      private void loadingToolStripMenuItem_Click(object sender, EventArgs e)
-      {
-         MapLoading.Load();
-      }
 
       private void saveErrorLogsToolStripMenuItem_Click(object sender, EventArgs e)
       {
