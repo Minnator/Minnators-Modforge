@@ -89,10 +89,28 @@ namespace Editor.Loading.Enhanced
             var po = PathObj.FromPath(file);
             if (!PreProcessDefines(po, out var value).Log())
                break;
+            var (_,content) = po.LoadBase(EnhancedParser.FileContentAllowed.ContentOnly, value);
+            
+            Debug.Assert(content.Count == 1, "There must only be one content element in a define.lua file in the mod part!");
+            
+            // Should be only one but in case of maleformed file recover by reading all contents
+            foreach(var contents in content){
+               foreach (var line in contents.GetLineKvpEnumerator(po, trimQuotes: false))
+               {
+                  if (!Globals.Defines.TryGetValue(line.Key.Trim(), out var define))
+                  {
+                     _ = new LoadingError(po, $"Define \"{line.Key}\" not found!", line.Line, -1, ErrorType.ObjectNotFound);
+                     continue;
+                  }
 
+                  if (!define.SetValue(line.Value)) 
+                     _ = new LoadingError(po, $"Failed to set value \"{line.Value}\" for define \"{line.Key}\". Value should be of type \"{define.Type}\"!", line.Line, -1, ErrorType.InvalidValue);
+               }
+            }
 
          }
       }
+
 
       private static IErrorHandle PreProcessDefines(PathObj po, out string value)
       {

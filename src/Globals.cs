@@ -99,9 +99,7 @@ public static class Globals
    public static MapWindow MapWindow = null!;
    public static ZoomControl ZoomControl = null!;
    public static int EquatorY = 0;
-
-   public static int MaxGovRank = 3;
-
+   
    // SETTINGS
    public static Settings Settings = new();
 
@@ -394,6 +392,7 @@ public static class Globals
 // - [x] Fix CollectionSelectorBase
 // - [ ] Fix 'Crashing' when autocompacting after only doing redestribute
 // - [ ] Fix province history stuff
+// - [x] Fix Country Decorator and description
 
 // TODO Update Alpha 1.2 SHADERS
 // - [ ] In Depth deleting with pop up to show what objects are related to the one being deleted

@@ -68,6 +68,8 @@ public enum ErrorType
    InvalidFileStructure = 121,
    [ErrorInformation("This occurs because a value is not in a valid range for the given target type!", "Check the value and correct it!")]
    InvalidValue = 122,
+   [ErrorInformation("This occurs because an object is not found!", "Check the object, its naming and references and correct it if necessary!")]
+   ObjectNotFound = 123,
    [ErrorInformation("This occurs because an date is not in a valid format!", "Check the date format and correct it!")]
    IllegalDateFormat = 101,
    // ObjectInteraction Error

@@ -266,6 +266,9 @@ namespace Editor.Loading.Enhanced
             return ([], []);
          }
 
+         if (currentContent.Length > 0) 
+            contents.Add(new (currentContent.ToString(), contentStart));
+
          return (blocks, contents);
       }
 

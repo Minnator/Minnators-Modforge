@@ -1035,7 +1035,7 @@ namespace Editor.Forms
 
 
          _governmentRankBox = ControlFactory.GetListPropertyComboBoxHistoryCountry(typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.GovernmentRank))!,
-                                                                                   Enumerable.Range(1, Globals.MaxGovRank).Select(i => i).ToList());
+                                                                                   Enumerable.Range(1, Define.GetValue<int>("NDefines.NCountry.MAX_GOV_RANK")).Select(i => i).ToList());
          _governmentRankBox.Margin = new(3, 0, 3, 2);
          _governmentRankBox.DropDownStyle = ComboBoxStyle.DropDownList;
 

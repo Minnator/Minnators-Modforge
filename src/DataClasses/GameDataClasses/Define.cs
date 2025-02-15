@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics;
+using System.Globalization;
 using Editor.Helper;
 using Editor.Saving;
 
@@ -81,6 +82,17 @@ namespace Editor.DataClasses.GameDataClasses
                return true;
          }
          return false;
+      }
+
+      public static T GetValue<T>(string defineName)
+      {
+         if (Globals.Defines.TryGetValue(defineName, out var define))
+         {
+            Debug.Assert(define.Value is T, "The requested type does not match the type of the define!");
+            return (T)define.Value;
+         }
+         Debug.Assert(false, "This should never be the case! Requesting a non existent Define");
+         return default!;
       }
 
       public override string ToPropertyString() => GetNameSpaceString();
