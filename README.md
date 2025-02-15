@@ -14,7 +14,9 @@ Here you can find Alpha-releases, more information and help with issues, or repo
 - Country Editing
 - Province Collection editing (Areas, Regions, SuperRegions, TradeNodes, TradeCompanies, ColonialRegions, Countries...)
 - (Statistics)
-- Modifiers management
+- Modifiers management and creation
+- Defines editor
+- In depth error log and navigation down to the faulty character in the files
 - File formatting and beautyfying
 - Timeline (Any date can bee viewed with the map live updating)
 - Automatic Tradenode topological sorting and cycle detection
