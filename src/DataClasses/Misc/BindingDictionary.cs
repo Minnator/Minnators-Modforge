@@ -9,7 +9,7 @@ public class BindingDictionary<TKey, TValue> : BindingList<TKey>, IDictionary<TK
    private readonly List<ComboBox> _boundControls = [];
    private readonly List<TKey> _internalList;
    private readonly IComparer<TKey> _keyComparer;
-   private KeyValuePair<TKey, TValue> _emptyItem = new(default!, default!);
+   private readonly KeyValuePair<TKey, TValue> _emptyItem = new(default!, default!);
 
    public bool HasEmpty { get; init; } = true;
 

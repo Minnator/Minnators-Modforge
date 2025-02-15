@@ -251,9 +251,11 @@ namespace Editor.Forms
       {
          if (DataTabPanel.SelectedIndex != 0)
             return;
-
+         
          if (Selection.Count == 0)
          {
+            if (!DataTabPanel.TabPages[0].Enabled)
+               return;
             DataTabPanel.TabPages[0].SuspendLayout();
             Globals.State = State.Loading;
             ClearProvinceGui();
@@ -264,7 +266,6 @@ namespace Editor.Forms
          else
          {
             DataTabPanel.TabPages[0].Enabled = true;
-            //LoadSelectedProvincesToGui();
             LoadGuiEvents.ReloadProvinces();
          }
       }
@@ -276,6 +277,8 @@ namespace Editor.Forms
 
          if (Selection.SelectedCountry == Country.Empty)
          {
+            if(!DataTabPanel.TabPages[1].Enabled)
+               return;
             DataTabPanel.TabPages[1].SuspendLayout();
             Globals.State = State.Loading;
             ClearCountryGui();

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Reflection;
+using Windows.Foundation.Collections;
 using Editor.Saving;
 using Newtonsoft.Json.Linq;
 
@@ -81,8 +82,8 @@ namespace Editor.DataClasses.Commands
 
       public override string GetDescription()
       {
-         var text = _targets.Count < 5 ? string.Join(", ", _targets) : $"[{_targets.Count}...]";
-         return _newValue is not List<string> list ? $"Modify property {_propInfo.Name} of {text} to {_newValue}" : $"Modify property {_propInfo.Name} of {_targets} to {string.Join(", ", GetDiff())}";
+         var text = _targets.Count < 5 ? string.Join(',', _targets.Select(x => x.ToPropertyString())) : $"[{_targets.Count}...]";
+         return _newValue is not List<string> ? $"Modify property {_propInfo.Name} of {text} to {_newValue}" : $"Modify property {_propInfo.Name} of {_targets} to {string.Join(", ", GetDiff())}";
       }
 
       public override string GetDebugInformation(int indent)

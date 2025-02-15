@@ -100,12 +100,10 @@ namespace Editor.src.Controls.EXT
             column.Width = -1;
 
          foreach (ColumnHeader column in Columns)
-         {
             if (column.Width > _maxColumnWidth)
                column.Width = _maxColumnWidth;
             else
                column.Width += 14;
-         }
          _isResizing = false;
       }
    }

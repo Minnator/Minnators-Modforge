@@ -1,6 +1,7 @@
 ﻿using System.Drawing.Drawing2D;
+using Editor.Controls;
 
-namespace Editor.Controls
+namespace Editor.src.Controls.MMF_DARK
 {
    public class SlimProgressBar : ProgressBar
    {

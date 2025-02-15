@@ -17,14 +17,12 @@ public static class CultureLoading
 
       var blocks = Parsing.GetElements(0, ref commentLessContent);
 
-      var (groups, cultures) = GetCultureGroups(ref blocks, Globals.ColorProvider);
+      var groups = GetCultureGroups(ref blocks, Globals.ColorProvider);
       Globals.CultureGroups = groups;
-      Globals.Cultures = cultures;
    }
 
-   private static (Dictionary<string, CultureGroup>, BindingDictionary<string, Culture>) GetCultureGroups(ref List<IElement> blocks, ColorProviderRgb colorProvider)
+   private static Dictionary<string, CultureGroup> GetCultureGroups(ref List<IElement> blocks, ColorProviderRgb colorProvider)
    {
-      BindingDictionary<string, Culture> cultureDict = [];
       Dictionary<string, CultureGroup> cultureGroupDict = [];
       
       Parallel.ForEach(blocks, element =>
@@ -54,10 +52,10 @@ public static class CultureLoading
                SetCultureAttributes(ref culture, cult.GetBlockElements);
                SetCultureContent(ref culture, cult.GetContentElements);
                group.Cultures.Add(culture);
-               lock (cultureDict)
+               lock (Globals.Cultures)
                {
-                  if (!cultureDict.TryAdd(culture.Name, culture)) 
-                     cultureDict[culture.Name] = culture;
+                  if (!Globals.Cultures.TryAdd(culture.Name, culture))
+                     Globals.Cultures[culture.Name] = culture;
                }
             }
          }
@@ -72,7 +70,7 @@ public static class CultureLoading
          }
       });
       
-      return (cultureGroupDict, cultureDict);
+      return cultureGroupDict;
    }
 
    private static void SetCultureContent(ref Culture culture, List<Content> cultGetContentElements)

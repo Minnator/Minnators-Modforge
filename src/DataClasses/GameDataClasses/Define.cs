@@ -83,6 +83,8 @@ namespace Editor.DataClasses.GameDataClasses
          return false;
       }
 
+      public override string ToPropertyString() => GetNameSpaceString();
+
       public override int GetHashCode()
       {
          var hashCode = new HashCode();

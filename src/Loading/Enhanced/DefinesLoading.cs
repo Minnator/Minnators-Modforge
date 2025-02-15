@@ -20,6 +20,7 @@ namespace Editor.Loading.Enhanced
       public static void Load()
       {
          LoadVanilla();
+         LoadMod();
       }
 
       private static bool LoadVanilla()
@@ -32,7 +33,6 @@ namespace Editor.Loading.Enhanced
          }
 
          var po = PathObj.FromPath(filepath);
-
          if (!PreProcessDefines(po, out var value).Log())
             return false;
 
@@ -55,8 +55,9 @@ namespace Editor.Loading.Enhanced
             if (contents.Count != 1)
                _ = new LoadingError(po, $"Namespace \"{block.Name}\" must contain exactly one content element.!", block.StartLine, -1, ErrorType.InvalidFileStructure);
             // We recover by only using the first block found.
-            
-            Define.NameSpaces.Add(current, block.Name.Trim());
+
+            if (!Define.NameSpaces.TryAdd(current, block.Name.Trim())) 
+               _ = new LoadingError(po, $"Namespace \"{block.Name}\" already exists!", block.StartLine, -1, ErrorType.DuplicateObjectDefinition);
 
             var content = contents[0];
             foreach (var kvp in content.GetLineKvpEnumerator(po, trimQuotes:false))
@@ -67,9 +68,10 @@ namespace Editor.Loading.Enhanced
                   continue;
                }  
                var define = new Define(type, current, kvp.Key, convValue);
-               if (!Globals.Defines.TryAdd(define.GetNameSpaceString(), define))
+               lock (Globals.Defines)
                {
-                  _ = new LoadingError(po, $"Define \"{define.GetNameSpaceString()}\" already exists!", kvp.Line, -1, ErrorType.DuplicateObjectDefinition);
+                  if (!Globals.Defines.TryAdd(define.GetNameSpaceString(), define)) 
+                     _ = new LoadingError(po, $"Define \"{define.GetNameSpaceString()}\" already exists!", kvp.Line, -1, ErrorType.DuplicateObjectDefinition);
                }
             }
 
@@ -80,7 +82,16 @@ namespace Editor.Loading.Enhanced
 
       private static void LoadMod()
       {
+         var files = FilesHelper.GetAllFilesInFolder(searchPattern:"*.lua", Globals.ModPath, "common", "defines");
 
+         foreach (var file in files)
+         {
+            var po = PathObj.FromPath(file);
+            if (!PreProcessDefines(po, out var value).Log())
+               break;
+
+
+         }
       }
 
       private static IErrorHandle PreProcessDefines(PathObj po, out string value)
@@ -100,7 +111,7 @@ namespace Editor.Loading.Enhanced
             type = Define.DefineType.String;
             return true;
          }
-         if (value.Contains('.') && float.TryParse("0.33", NumberStyles.Float, CultureInfo.InvariantCulture, out var result))
+         if (value.Contains('.') && float.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var result))
          {
             parsedValue = result;
             type = Define.DefineType.Float;

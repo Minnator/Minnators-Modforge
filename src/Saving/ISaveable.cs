@@ -337,4 +337,5 @@ public abstract class Saveable : IDisposable
    /// </summary>
    public virtual void Dispose() => SaveMaster.RemoveFromDictionary(this);
 
+   public virtual string ToPropertyString() => ToString() ?? string.Empty;
 }
