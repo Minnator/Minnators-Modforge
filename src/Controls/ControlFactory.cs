@@ -396,6 +396,15 @@ public static class ControlFactory
       };
    }
    
+   public static LocalisationTextBox<Province> GetProvinceLocBox(PropertyInfo? propertyInfo)
+   {
+      return new(propertyInfo, ref LoadGuiEvents.ProvLoadAction, () => Selection.GetSelectedProvinces)
+      {
+         Margin = new(3, 1, 3, 3),
+         Dock = DockStyle.Fill
+      };
+   }
+
    public static PropertyTextBox<Province> GetPropertyTextBox(PropertyInfo? propertyInfo)
    {
       return new(propertyInfo, ref LoadGuiEvents.ProvLoadAction, () => Selection.GetSelectedProvinces)

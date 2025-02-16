@@ -3,6 +3,7 @@ using System.Reflection;
 using Editor.DataClasses.Settings;
 using Editor.ErrorHandling;
 using Editor.Events;
+using Editor.Helper;
 using Editor.Saving;
 using Timer = System.Windows.Forms.Timer;
 
@@ -12,7 +13,7 @@ namespace Editor.Controls.NewControls
    {
       public PropertyInfo PropertyInfo { get; init; }
       protected readonly Func<List<TSaveable>> GetSaveables;
-      private Timer _timer = new ();
+      protected Timer _timer = new ();
 
       public PropertyTextBox(PropertyInfo? propertyInfo, ref LoadGuiEvents.LoadAction<TSaveable> loadHandle, Func<List<TSaveable>> getSaveables)
       {
@@ -45,7 +46,7 @@ namespace Editor.Controls.NewControls
             _timer.Start();
       }
 
-      public void SetFromGui()
+      public virtual void SetFromGui()
       {
          _timer.Stop();
          if (Globals.State == State.Running && GetFromGui(out var value).Log())
@@ -69,5 +70,20 @@ namespace Editor.Controls.NewControls
          Text = value;
       }
 
+   }
+
+   public class LocalisationTextBox<TSaveable> : PropertyTextBox<TSaveable> where TSaveable : Saveable
+   {
+      public LocalisationTextBox(PropertyInfo? propertyInfo, ref LoadGuiEvents.LoadAction<TSaveable> loadHandle, Func<List<TSaveable>> getSaveables) : base(propertyInfo, ref loadHandle, getSaveables)
+      {
+      }
+
+      public override void SetFromGui()
+      {
+         _timer.Stop();
+         // TODO: First get all the property values and then set them using the collection setters
+         if (Globals.State == State.Running && GetFromGui(out var value).Log())
+            Saveable.SetFieldMultipleSilent(GetSaveables.Invoke(), value, PropertyInfo);
+      }
    }
 }

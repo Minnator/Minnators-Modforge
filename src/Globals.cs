@@ -207,6 +207,7 @@ public static class Globals
 
    // ------------ Saving ------------ \\ 
 
+   private static SaveableType _saveableType = 0;
    /// <summary>
    /// This sets the Astrix on the MapWindow Text if the file is not saved
    /// </summary>
@@ -243,22 +244,12 @@ public static class Globals
    // Modifiers
    public static string[] ModifierKeys = new string[1];
    public static Dictionary<int, ModifierValueType> ModifierValueTypes = [];
-
-   // Is used in parsing province files as some keys differ from standard effect keys
-   public static readonly HashSet<string> UniqueAttributeKeys = [
-      "add_claim", "add_core", "add_local_autonomy", "add_nationalism", "base_manpower", "base_production", "base_tax", "capital", "center_of_trade", "controller", "culture", "discovered_by", "extra_cost", "hre", "city", "native_ferocity", "native_hostileness", "native_size", "owner", "religion", "seat_in_parliament", "trade_goods", "tribal_owner", "unrest", "shipyard", "revolt_risk", "is_city", "reformation_center", "citysize"
-   ];
-
-   public static List<string> ToolTippableAttributes = [ 
-      "base_manpower", "base_tax", "base_production",  "total_development", "area", "continent", "claims", "cores", "controller", "owner", "tribal_owner", "center_of_trade", "extra_cost", "native_ferocity", "native_hostileness", "native_size", "revolt_risk", ">local_autonomy", "nationalism", "discovered_by", "capital", "culture", "religion", "has_fort_15th", "is_hre", "is_city", "is_seat_in_parliament", "trade_good", "history", "multiline_attributes", "id", "name", "has_revolt", "is_occupied"
-   ];
-
+   
    public static readonly HashSet<string> CountryAttributes = 
    [
       "cannot_form_from_collapse_nation", "right_to_bear_arms", "all_your_core_are_belong_to_us", "random_nation_extra_size", 
    ];
 
-   private static SaveableType _saveableType = 0;
 }
 
 #region ALPHA 1.0
@@ -393,6 +384,8 @@ public static class Globals
 // - [ ] Fix 'Crashing' when autocompacting after only doing redestribute
 // - [ ] Fix province history stuff
 // - [x] Fix Country Decorator and description
+// - [ ] Fix Localisation editing causing EvilAction during saving of SaveableObjects
+// - [ ] Fix Terrain soudType saving
 
 // TODO Update Alpha 1.2 SHADERS
 // - [ ] In Depth deleting with pop up to show what objects are related to the one being deleted

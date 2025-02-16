@@ -87,8 +87,8 @@ public static class TerrainLoading
          }
 
          Globals.Terrains.Add(terrain.Name, terrain);
+         SaveMaster.AddToDictionary(ref path, terrain);
       }
-      SaveMaster.AddRangeToDictionary(path, Globals.Terrains.Values);
    }
 
    private static void ParseTerrainContent(string content, ref Terrain terrain)

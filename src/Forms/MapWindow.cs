@@ -405,10 +405,10 @@ namespace Editor.Forms
 
 
          // CustomTextBox
-         _localisationTextBox = ControlFactory.GetPropertyTextBox(typeof(Province).GetProperty(nameof(Province.TitleLocalisation)));
+         _localisationTextBox = ControlFactory.GetProvinceLocBox(typeof(Province).GetProperty(nameof(Province.TitleLocalisation)));
          LocTableLayoutPanel.Controls.Add(_localisationTextBox, 1, 1);
 
-         _provAdjTextBox = ControlFactory.GetPropertyTextBox(typeof(Province).GetProperty(nameof(Province.AdjectiveLocalisation)));
+         _provAdjTextBox = ControlFactory.GetProvinceLocBox(typeof(Province).GetProperty(nameof(Province.AdjectiveLocalisation)));
          LocTableLayoutPanel.Controls.Add(_provAdjTextBox, 1, 3);
 
          LocalisationLabel = ControlFactory.GetPropertyLabel(typeof(Province).GetProperty(nameof(Province.TitleKey)));

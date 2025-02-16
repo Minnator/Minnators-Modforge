@@ -25,7 +25,6 @@ namespace Editor.Forms.Feature
       private void InitGui()
       {
          InitializeComponent();
-         InputTextBox.AutoCompleteCustomSource.AddRange([.. Globals.ToolTippableAttributes]);
          ToolTipPreview.Columns.Add(new ColumnHeader("Tooltip Row"));
          ToolTipPreview.View = View.Details;
          ToolTipPreview.FullRowSelect = true;
