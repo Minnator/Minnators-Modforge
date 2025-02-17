@@ -360,6 +360,7 @@ public static class Globals
 // - [x] Added a nameGenerator which generates random names for provinces, monarchs and anything.
 //     - [x] Allowed the NameGenerator to sample provinces/countries/monarchs from the selection to generate context fitting names
 // - [x] Added Climate and Weather map modes
+// - [ ] Audio visualizer via ram usage graph
 
 // TODO LIST Until Alpha 1.1
 // - [x] Add history compacting
@@ -384,7 +385,7 @@ public static class Globals
 // - [ ] Fix 'Crashing' when autocompacting after only doing redestribute
 // - [ ] Fix province history stuff
 // - [x] Fix Country Decorator and description
-// - [ ] Fix Localisation editing causing EvilAction during saving of SaveableObjects
+// - [x] Fix Localisation editing causing EvilAction during saving of SaveableObjects
 // - [ ] Fix Terrain soudType saving
 
 // TODO Update Alpha 1.2 SHADERS

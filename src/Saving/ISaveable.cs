@@ -249,7 +249,7 @@ public abstract class Saveable : IDisposable
    /// <param name="value"></param>
    /// <param name="propertyName"></param>
    /// <returns></returns>
-   protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+   protected virtual bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
    {
       if (EqualityComparer<T>.Default.Equals(field, value)) 
          return false;
@@ -265,7 +265,7 @@ public abstract class Saveable : IDisposable
    /// <param name="value"></param>
    /// <param name="property"></param>
    /// <returns></returns>
-   private bool InternalFieldSet<T>(ref T field, T value, PropertyInfo property)
+   protected virtual bool InternalFieldSet<T>(ref T field, T value, PropertyInfo property)
    {
       if (Globals.State == State.Running && !Suppressed)
       {

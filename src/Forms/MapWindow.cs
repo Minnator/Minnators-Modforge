@@ -222,6 +222,7 @@ namespace Editor.Forms
          var bookmark = Globals.Bookmarks[BookMarkComboBox.SelectedIndex];
          DateControl.Date = bookmark.Date;
       }
+
       #endregion
       #region GUI Updates
       private void UpdateGui()
@@ -872,7 +873,7 @@ namespace Editor.Forms
 
       private static void OnDateChanged(object? sender, Date date)
       {
-         //ProvinceHistoryManager.LoadDate(date);
+         ProvinceHistoryManager.LoadDate(date);
       }
 
       public void UpdateHoveredInfo(Province? province)
@@ -1447,8 +1448,7 @@ namespace Editor.Forms
 
       private void audioTestToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         var totalBorders = Globals.Provinces.Sum(p => p.Neighbors.Count);
-         MessageBox.Show($"Total borders: {totalBorders}");
+
       }
 
       private void tradegoodEditorToolStripMenuItem_Click(object sender, EventArgs e)

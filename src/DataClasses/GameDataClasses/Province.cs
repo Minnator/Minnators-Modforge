@@ -6,6 +6,8 @@ using Editor.Parser;
 using Editor.Saving;
 using Editor.ErrorHandling;
 using Editor.Forms.Feature;
+using Editor.DataClasses.Commands;
+using System.Reflection;
 
 namespace Editor.DataClasses.GameDataClasses
 {
@@ -13,6 +15,12 @@ namespace Editor.DataClasses.GameDataClasses
 
    public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<ProvinceHistoryEntry>
    {
+      public enum modifiyingOperation
+      {
+         Base,
+         HistoryEntry,
+      }
+
       #region Data
       private Country _controller = Country.Empty;                       
       private Country _owner = Country.Empty;                            
@@ -585,6 +593,28 @@ namespace Editor.DataClasses.GameDataClasses
          IErrorHandle errorHandle = TryParse(value, out var prov);
          province = prov;
          return errorHandle;
+      }
+
+
+      /// <summary>
+      /// Is always called when a value in a saveable is changed (If the property calls SetField)
+      /// Will call OnPropertyChange if it is not suppresed
+      /// </summary>
+      /// <typeparam name="T"></typeparam>
+      /// <param name="field"></param>
+      /// <param name="value"></param>
+      /// <param name="property"></param>
+      /// <returns></returns>
+      protected override bool InternalFieldSet<T>(ref T field, T value, PropertyInfo property)
+      {
+         if (Globals.State == State.Running && !Suppressed)
+         {
+            // check if base or HE
+            HistoryManager.AddCommand(new CModifyProperty<T>(property, this, value, field));
+            OnPropertyChanged(property.Name);
+         }
+         field = value;
+         return true;
       }
 
       #region Operators / Equals
