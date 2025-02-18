@@ -83,6 +83,7 @@ namespace Editor.Loading.Enhanced
          var isInWord = false;
          var isInWhiteSpace = false;
          var contentStart = 0;
+         var elementIndex = 0;
 
          for (var i = 0; i < lines.Length; i++)
          {
@@ -145,7 +146,7 @@ namespace Editor.Loading.Enhanced
                      Span<char> charSpan = stackalloc char[nameLength];
                      currentContent.CopyTo(wordStart, charSpan, nameLength); // We copy the name of the block from the sb
                      currentContent.Remove(wordStart, currentContent.Length - wordStart); // we remove anything after the name start
-                     var newBlock = new EnhancedBlock(new(charSpan), i); // we create a new block
+                     var newBlock = new EnhancedBlock(new(charSpan), i, elementIndex++); // we create a new block
 
                      wordStart = -1;
                      wordEnd = -1;
@@ -154,7 +155,7 @@ namespace Editor.Loading.Enhanced
 
                      if (trimmed.Length > 0) // We have remaining content in the currentContent which we need to add to the previous block element
                      {
-                        var content = new EnhancedContent(trimmed, contentStart); // We create a new content element as there is no block element on the stack
+                        var content = new EnhancedContent(trimmed, contentStart, elementIndex++); // We create a new content element as there is no block element on the stack
                         if (blockStack.IsEmpty)
                         {
                            contents.Add(content);
@@ -198,7 +199,7 @@ namespace Editor.Loading.Enhanced
 
                      if (trimmedClosing.Length > 0)  // We have remaining content in the currentContent which we need to add to the previous block element
                      {
-                        var content = new EnhancedContent(trimmedClosing, currentStr[0] == '\n' ? contentStart + 1 : contentStart); // We create a new content element as there is no block element on the stack
+                        var content = new EnhancedContent(trimmedClosing, currentStr[0] == '\n' ? contentStart + 1 : contentStart, elementIndex++); // We create a new content element as there is no block element on the stack
                         blockStack.PeekRef()->ContentElements.Add(content);
                         currentContent.Clear();
                      }
@@ -267,7 +268,7 @@ namespace Editor.Loading.Enhanced
          }
 
          if (currentContent.Length > 0) 
-            contents.Add(new (currentContent.ToString(), contentStart));
+            contents.Add(new (currentContent.ToString(), contentStart, elementIndex++));
 
          return (blocks, contents);
       }
@@ -277,6 +278,65 @@ namespace Editor.Loading.Enhanced
          Both,
          BlocksOnly,
          ContentOnly
+      }
+
+      public static List<IEnhancedElement> LoadBaseOrder(FileContentAllowed fca, out PathObj po, params string[] internalPath)
+      {
+         List<EnhancedBlock> blocks = [];
+         List<EnhancedContent> contents = [];
+
+         switch (fca)
+         {
+            case FileContentAllowed.Both:
+               (blocks, contents) = GetElements(out po, internalPath);
+               break;
+            case FileContentAllowed.BlocksOnly:
+               (blocks, contents) = GetElements(out po, internalPath);
+               break;
+            case FileContentAllowed.ContentOnly:
+               (blocks, contents) = GetElements(out po, internalPath);
+               break;
+            default:
+               throw new ArgumentOutOfRangeException(nameof(fca), fca, null);
+         }
+
+         return MergeBlocksAndContent(blocks, contents).ToList();
+      }
+
+      public static IEnumerable<IEnhancedElement> MergeBlocksAndContent(List<EnhancedBlock> blocks, List<EnhancedContent> contents)
+      {
+         var indexBlocks = 0;
+         var indexContent = 0;
+         
+
+         // Traverse both lists
+         while (indexBlocks < blocks.Count && indexContent < contents.Count)
+         {
+            if (blocks[indexBlocks].Index < contents[indexContent].Index)
+            {
+               yield return blocks[indexBlocks];
+               indexBlocks++;
+            }
+            else
+            {
+               yield return contents[indexContent];
+               indexContent++;
+            }
+         }
+
+         // Copy remaining elements from list1
+         while (indexBlocks < blocks.Count)
+         {
+            yield return blocks[indexBlocks];
+            indexBlocks++;
+         }
+
+         // Copy remaining elements from list2
+         while (indexContent < contents.Count)
+         {
+            yield return contents[indexContent];
+            indexContent++;
+         }
       }
 
       public static (List<EnhancedBlock>, List<EnhancedContent>) LoadBase(FileContentAllowed fca, out PathObj po, params string[] internalPath)
@@ -347,6 +407,8 @@ namespace Editor.Loading.Enhanced
          return (blocks, contents);
 
       }
+
+
 
    }
    public readonly struct LineKvp<T, TQ>

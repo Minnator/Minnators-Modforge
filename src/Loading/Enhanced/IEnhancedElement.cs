@@ -9,16 +9,23 @@ namespace Editor.Loading.Enhanced
    {
       public bool IsBlock { get; }
       public int StartLine { get; }
+      public int Index { get; }
       public string GetContent();
       public string GetFormattedString(int tabs, ref StringBuilder sb);
       public void AppendFormattedContent(int tabs, ref StringBuilder sb);
+
+      public static bool operator < (IEnhancedElement a, IEnhancedElement b) => a.Index < b.Index;
+      public static bool operator > (IEnhancedElement a, IEnhancedElement b) => a.Index > b.Index;
+      public static bool operator <= (IEnhancedElement a, IEnhancedElement b) => a.Index <= b.Index;
+      public static bool operator >= (IEnhancedElement a, IEnhancedElement b) => a.Index >= b.Index;
    }
 
-   public class EnhancedBlock(string name, int startLine) : IEnhancedElement
+   public class EnhancedBlock(string name, int startLine, int index) : IEnhancedElement
    {
       public string Name { get; set; } = name;
       public bool IsBlock => true;
       public int StartLine { get; } = startLine;
+      public int Index { get; } = index;
 
       public List<EnhancedContent> ContentElements { get; set; } = [];
       public List<EnhancedBlock> SubBlocks { get; set; } = [];
@@ -42,11 +49,6 @@ namespace Editor.Loading.Enhanced
             _ = new LoadingError(po, $"Expected no subBlocks in block: {Name}!", StartLine, 0, ErrorType.UnexpectedBlockElement);
          }
          return ContentElements;
-      }
-
-      public EnhancedBlock() : this(string.Empty, 1)
-      {
-
       }
 
       protected void AppendContent(int tabs, StringBuilder sb)
@@ -87,6 +89,8 @@ namespace Editor.Loading.Enhanced
          return GetAllBlockByName(name, SubBlocks, out blocks);
       }
 
+      public IEnumerable<IEnhancedElement> GetElements() => EnhancedParser.MergeBlocksAndContent(SubBlocks, ContentElements);
+
       public static bool GetBlockByName(string name, ICollection<EnhancedBlock> blocks, out EnhancedBlock result)
       {
          result = blocks.FirstOrDefault(b => b.Name.Equals(name))!;
@@ -117,16 +121,12 @@ namespace Editor.Loading.Enhanced
    }
 
 
-   public class EnhancedContent(string value, int startLine) : IEnhancedElement
+   public class EnhancedContent(string value, int startLine, int index) : IEnhancedElement
    {
       public string Value { get; set; } = value;
       public bool IsBlock { get; } = false;
       public int StartLine { get; } = startLine;
-
-      public EnhancedContent() : this(string.Empty, 1)
-      {
-
-      }
+      public int Index { get; } = index;
 
       public string GetContent() => Value;
 
