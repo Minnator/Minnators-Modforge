@@ -16,6 +16,8 @@ public static class HistoryManager
    private static int _nodeId;
    private static HistoryNode _root;
 
+   private static bool _compacting = false;
+
    static HistoryManager()
    {
       Current = new (_nodeId++, new CInitial(), CommandHistoryType.Action);
@@ -327,6 +329,10 @@ public static class HistoryManager
 
    public static void Compact()
    {
+      if (_compacting)
+         return;
+
+      _compacting = true;
       // We need to uncompact the tree first so that we can find all optimal groups
       Uncompact(_root);
 
@@ -345,6 +351,8 @@ public static class HistoryManager
       }
 
       UpdateToolStrip();
+
+      _compacting = false;
    }
 
    private static List<List<HistoryNode>> FindCompactableGroups(Dictionary<List<int>, List<HistoryNode>> groups)

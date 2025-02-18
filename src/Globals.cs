@@ -359,6 +359,7 @@ public static class Globals
 // - [x] Fixed CTD after closing SelectionDrawerInterface
 // - [x] Added a nameGenerator which generates random names for provinces, monarchs and anything.
 //     - [x] Allowed the NameGenerator to sample provinces/countries/monarchs from the selection to generate context fitting names
+//     - [ ] Add UI for NameGenerator
 // - [x] Added Climate and Weather map modes
 
 
@@ -372,7 +373,7 @@ public static class Globals
 // - [x] UnitType loading optimization
 // - [x] Loading bar when saving using threads
 // - [x] Fixed Colors not being saved in the settings
-// - [███▒▒▒▒▒▒▒▒▒] Generalize Loading
+// - [████▒▒▒▒▒▒▒▒] Generalize Loading
 // - [█▒▒▒▒▒▒▒▒▒▒▒] PDX language support
 // - [x] Fix Country Color not live updating
 // - [x] Fix Search not finding country tags
