@@ -360,12 +360,11 @@ public static class Globals
 // - [x] Added a nameGenerator which generates random names for provinces, monarchs and anything.
 //     - [x] Allowed the NameGenerator to sample provinces/countries/monarchs from the selection to generate context fitting names
 //     - [ ] Add UI for NameGenerator
-// - [x] Added Climate and Weather map modes
 
 
-// TODO LIST Until Alpha 1.1
+// TODO LIST Until Alpha 1.2
 // - [x] Add history compacting
-// - [-] Defines Parsing and editing
+// - [x] Defines parsing, editing and saving
 // - [x] Block Water provinces; should not be viable for countries
 // - [████████████] Smart Gui reloading
 // - [x] Rewrite Province.cs, Province Command and Gui
@@ -388,8 +387,9 @@ public static class Globals
 // - [x] Fix Country Decorator and description
 // - [x] Fix Localisation editing causing EvilAction during saving of SaveableObjects
 // - [ ] Fix Terrain soudType saving
+// - [x] Fix Comment chars can now be defined for each SaveableType
 
-// TODO Update Alpha 1.2 SHADERS
+// TODO Update Alpha 1.3 SHADERS
 // - [ ] In Depth deleting with pop up to show what objects are related to the one being deleted
 // - [ ] Radial Menu for Map Modes
 // - [ ] Trade fix   //UI
