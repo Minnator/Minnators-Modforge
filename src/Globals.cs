@@ -383,7 +383,7 @@ public static class Globals
 // - [x] Fix Ship names being slaughtered
 // - [x] Fix Advanced Selection Menu (should be reworked / improved again)
 // - [x] Fix CollectionSelectorBase
-// - [ ] Fix 'Crashing' when autocompacting after only doing redestribute
+// - [x] Fix 'Crashing' when autocompacting after only doing redestribute
 // - [ ] Fix province history stuff
 // - [x] Fix Country Decorator and description
 // - [x] Fix Localisation editing causing EvilAction during saving of SaveableObjects

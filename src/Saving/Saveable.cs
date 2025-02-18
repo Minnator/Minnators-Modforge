@@ -59,7 +59,7 @@ public abstract class Saveable : IDisposable
       }
    }
 
-
+   public virtual char CommentChar { get; } = '#';
 
    public abstract void OnPropertyChanged([CallerMemberName] string? propertyName = null);
    //public abstract void AddToPropertyChanged(EventHandler<string> handler);

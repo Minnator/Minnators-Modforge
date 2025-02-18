@@ -35,11 +35,11 @@
          SaveSelectedButton = new Button();
          MarkAllModified = new Button();
          UnmarkAllSelected = new Button();
-         CheckboxesTLP = new TableLayoutPanel();
          tableLayoutPanel3 = new TableLayoutPanel();
          label2 = new Label();
          label3 = new Label();
          SaveOnlyModifiedCheckBox = new CheckBox();
+         CheckboxesTLP = new TableLayoutPanel();
          tableLayoutPanel1.SuspendLayout();
          tableLayoutPanel2.SuspendLayout();
          tableLayoutPanel3.SuspendLayout();
@@ -49,11 +49,12 @@
          // 
          tableLayoutPanel1.ColumnCount = 1;
          tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
          tableLayoutPanel1.Controls.Add(label1, 0, 0);
          tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 4);
-         tableLayoutPanel1.Controls.Add(CheckboxesTLP, 0, 2);
          tableLayoutPanel1.Controls.Add(tableLayoutPanel3, 0, 1);
          tableLayoutPanel1.Controls.Add(SaveOnlyModifiedCheckBox, 0, 3);
+         tableLayoutPanel1.Controls.Add(CheckboxesTLP, 0, 2);
          tableLayoutPanel1.Dock = DockStyle.Fill;
          tableLayoutPanel1.Location = new Point(0, 0);
          tableLayoutPanel1.Margin = new Padding(4, 3, 4, 3);
@@ -134,21 +135,6 @@
          UnmarkAllSelected.UseVisualStyleBackColor = true;
          UnmarkAllSelected.Click += UnmarkAllSelected_Click;
          // 
-         // CheckboxesTLP
-         // 
-         CheckboxesTLP.ColumnCount = 2;
-         CheckboxesTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 73F));
-         CheckboxesTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-         CheckboxesTLP.Dock = DockStyle.Fill;
-         CheckboxesTLP.Location = new Point(0, 64);
-         CheckboxesTLP.Margin = new Padding(0);
-         CheckboxesTLP.Name = "CheckboxesTLP";
-         CheckboxesTLP.RowCount = 1;
-         CheckboxesTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-         CheckboxesTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-         CheckboxesTLP.Size = new Size(223, 335);
-         CheckboxesTLP.TabIndex = 4;
-         // 
          // tableLayoutPanel3
          // 
          tableLayoutPanel3.ColumnCount = 2;
@@ -199,6 +185,22 @@
          SaveOnlyModifiedCheckBox.TabIndex = 6;
          SaveOnlyModifiedCheckBox.Text = "Only save modified objects";
          SaveOnlyModifiedCheckBox.UseVisualStyleBackColor = true;
+         // 
+         // CheckboxesTLP
+         // 
+         CheckboxesTLP.AutoScroll = true;
+         CheckboxesTLP.ColumnCount = 2;
+         CheckboxesTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 73F));
+         CheckboxesTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         CheckboxesTLP.Dock = DockStyle.Fill;
+         CheckboxesTLP.Location = new Point(0, 64);
+         CheckboxesTLP.Margin = new Padding(0);
+         CheckboxesTLP.Name = "CheckboxesTLP";
+         CheckboxesTLP.RowCount = 1;
+         CheckboxesTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+         CheckboxesTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+         CheckboxesTLP.Size = new Size(223, 335);
+         CheckboxesTLP.TabIndex = 4;
          // 
          // ManualSaving
          // 

@@ -48,6 +48,7 @@ namespace Editor.DataClasses.GameDataClasses
       public override string SavingComment() => string.Empty;
       public override string GetSaveString(int tabs) => $"{new ('\t', tabs)}{GetNameSpaceString()} = {Value}";
       public override string GetSavePromptString() => $"Define {Name} in {GetNameSpaceString()}";
+      public override char CommentChar { get; } = '-';
 
       public string GetValueAsText
       {
