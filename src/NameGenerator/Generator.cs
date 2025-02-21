@@ -22,17 +22,11 @@
          // Identify and sort the alphabet used in the training data
          SortedSet<char> domain = ['#'];
          foreach (var word in trainingData)
-         {
-            foreach (var c in word)
-            {
+            foreach (var c in word) 
                domain.Add(c);
-            }
-         }
 
-         for (var i = 0; i < order; i++)
-         {
+         for (var i = 0; i < order; i++) 
             _models.Add(new (trainingData, order - i, smoothing, domain.ToList()));
-         }
       }
 
       /// <summary>

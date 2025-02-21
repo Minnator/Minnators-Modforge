@@ -32,6 +32,18 @@ namespace Editor.DataClasses.GameDataClasses
 
       public static MonarchName Empty { get; } = new("", 0, 0);
 
+      public string PureName
+      {
+         get
+         {
+            var indexOf = Name.IndexOf('#');
+            if (indexOf > 0)
+               return Name[..indexOf];
+            return string.Empty;
+         }
+      }
+
+
       public override bool Equals([NotNullWhen(true)] object? obj)
       {
          if (obj is MonarchName other)

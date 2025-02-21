@@ -2,6 +2,7 @@
 
 namespace Editor.src.Loading.Enhanced.PCFL
 {
+   /*
    public interface PCFL_TargetProvider
    {
       List<ITarget> GetAllTargets(out PCFL_Scope newScope, ITarget currentTarget);
@@ -36,6 +37,7 @@ namespace Editor.src.Loading.Enhanced.PCFL
       }
    }
 
+   */
    public interface ITarget 
    {
 

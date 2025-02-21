@@ -32,6 +32,7 @@ namespace Editor.src.Loading.Enhanced.PCFL;
 
 
 // Paradox Clusterfuck Language Parser
+/*
 public static class PCFL_Parser
 {
    private class StackInfo(int index, PCFL_Scope scope, IEnhancedElement[] elements, List<ITarget> targets)
@@ -75,3 +76,4 @@ public static class PCFL_Parser
    }
 }
 
+*/

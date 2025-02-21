@@ -252,7 +252,7 @@ namespace Editor.Forms
       {
          if (DataTabPanel.SelectedIndex != 0)
             return;
-         
+
          if (Selection.Count == 0)
          {
             if (!DataTabPanel.TabPages[0].Enabled)
@@ -1502,6 +1502,11 @@ namespace Editor.Forms
       private void definesEditorToolStripMenuItem_Click(object sender, EventArgs e)
       {
          new DefinesEditor().ShowDialog();
+      }
+
+      private void namesGeneratorToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         FormsHelper.ShowIfAnyOpen<NameGeneratorForm>(Globals.Settings.Misc.NameGenConfig.NameGenConfig);
       }
    }
 }

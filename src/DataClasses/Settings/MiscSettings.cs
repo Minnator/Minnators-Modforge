@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using System.Windows.Forms.Design;
+using Editor.NameGenerator;
 
 namespace Editor.DataClasses.Settings
 {
@@ -25,6 +26,7 @@ namespace Editor.DataClasses.Settings
       private TestSettings _testSettings = new();
 #endif
       private EXT_ControlSettings _extControlSettings = new();
+      private NameGeneratorSettings _nameGenConfig = new();
 
       [Description("The language in which the localisation will be shown")]
       [CompareInEquals]
@@ -94,7 +96,41 @@ namespace Editor.DataClasses.Settings
          get => _extControlSettings;
          set => SetField(ref _extControlSettings, value);
       }
+
+      [Description("Settings for the name generator")]
+      [CompareInEquals]
+      [TypeConverter(typeof(CEmptyStringConverter))]
+      public NameGeneratorSettings NameGenConfig
+      {
+         get => _nameGenConfig;
+         set => SetField(ref _nameGenConfig, value);
+      }
    }
+
+   public class NameGeneratorSettings : PropertySettings
+   {
+      private NameGenConfig _nameGenConfig = new();
+      private string _customNamesFile = string.Empty;
+
+      [Description("Settings for the name generator")]
+      [CompareInEquals]
+      [TypeConverter(typeof(CEmptyStringConverter))]
+      public NameGenConfig NameGenConfig
+      {
+         get => _nameGenConfig;
+         set => SetField(ref _nameGenConfig, value);
+      }
+
+      [Description("The file containing custom names")]
+      [CompareInEquals]
+      [TypeConverter(typeof(CEmptyStringConverter))]
+      public string CustomNamesFile
+      {
+         get => _customNamesFile;
+         set => SetField(ref _customNamesFile, value);
+      }
+   }
+
 
 #if DEBUG
    public class CustomizationOptionsEditorForm : Form
@@ -118,6 +154,7 @@ namespace Editor.DataClasses.Settings
          Controls.Add(btnOK);
       }
    }
+
 
    public class CustomizationOptionsEditor : UITypeEditor
    {

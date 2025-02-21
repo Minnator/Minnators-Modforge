@@ -31,6 +31,26 @@ namespace Editor.Saving
             Cache.Add(Enum.Parse<SaveableType>(name), 0);
       }
 
+      public static List<Saveable> GetAllSaveablesWithPath(string path)
+      {
+         List<Saveable> saveables = [];
+         foreach (var kvp in AllSaveableFiles)
+         {
+            if (kvp.Key.GetInternalPath().Contains(path))
+               saveables.AddRange(kvp.Value);
+         }
+         return saveables;
+      }
+
+      public static List<LocObject> GetAllLocObjects()
+      {
+         List<LocObject> locObjects = [];
+         foreach (var kvp in AllSaveableFiles)
+            if (kvp.Value.Count > 0 && kvp.Value[0] is LocObject)
+               locObjects.AddRange(kvp.Value.Cast<LocObject>());
+         return locObjects;
+      }
+
       public static void SaveSaveables(ICollection<Saveable> saveables, SaveableType saveableType = SaveableType.All, bool onlyModified = false)
       {
          HashSet<PathObj> paths = [];

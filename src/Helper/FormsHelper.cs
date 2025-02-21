@@ -49,9 +49,26 @@ namespace Editor.Helper
          return new T();
       }
 
+      public static Form GetIfAnyOpen<T>(params object[] args) where T : Form
+      {
+         if (GetOpenForm(out T f))
+            return f;
+
+         return (T)Activator.CreateInstance(typeof(T), args)!;
+      }
+
+
       public static Form ShowIfAnyOpen<T>() where T : Form, new()
       {
          var form = GetIfAnyOpen<T>();
+         form.Show();
+         form.BringToFront();
+         return form;
+      }
+
+      public static Form ShowIfAnyOpen<T>(params object[] args) where T : Form
+      {
+         var form = GetIfAnyOpen<T>(args);
          form.Show();
          form.BringToFront();
          return form;

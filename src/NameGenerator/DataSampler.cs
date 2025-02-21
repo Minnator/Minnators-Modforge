@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
+using Windows.Foundation.Collections;
 using Editor.DataClasses.GameDataClasses;
 using Editor.ErrorHandling;
 using Editor.Helper;
@@ -46,9 +48,39 @@ namespace Editor.NameGenerator
          switch (source)
          {
             case NameGenSource.ProvinceNames:
+               var data = new List<string>();
+               foreach (var province in Selection.GetSelectedProvinces)
+               {
+                  if (Globals.RNWProvinces.Contains(province))
+                     continue;
+
+                  var value = province.TitleLocalisation;
+                  if (value.Contains("PROV"))
+                     continue;
+                  data.Add(value);
+               }
+               return SampleArray(data.ToArray(), count, true);
             case NameGenSource.CustomByUser:
+               if (!File.Exists(Globals.Settings.Misc.NameGenConfig.CustomNamesFile))
+                  return new string[count];
+               if (!IO.ReadAllInANSI(Globals.Settings.Misc.NameGenConfig.CustomNamesFile, out var content))
+                  return new string[count];
+               return SampleArray(Parsing.GetStringListWithoutQuotes(content), count, true);
             case NameGenSource.MonarchNames:
+               HashSet<Country> countriesFromProvinces = [];
+               foreach (var sp in Selection.GetSelectedProvinces)
+                  if (sp.Owner != Country.Empty)
+                     countriesFromProvinces.Add(sp.Owner);
+               List<string> monarchNames = [];
+               foreach (var country in countriesFromProvinces)
+                  monarchNames.AddRange(country.CommonCountry.MonarchNames.Select(x => x.PureName).Where(name => !name.Equals(string.Empty)));
+               return SampleArray(monarchNames.ToArray(), count, true);
             case NameGenSource.LocWords:
+               var allLocObjects = SaveMaster.GetAllLocObjects();
+               List<string> locs = [];
+               foreach (var locObject in allLocObjects) 
+                  locs.Add(locObject.Value);
+               return SampleArray(locs.ToArray(), count, true);
             default:
                throw new ArgumentOutOfRangeException(nameof(source), source, null);
          }
