@@ -244,6 +244,14 @@ namespace Editor.Saving
          sb.AppendLine($"{floatName} = {num.ToString("F2", CultureInfo.InvariantCulture)}");
       }
 
+      public static void AddFloatIfNotValue(int tabs, float num, string floatName, float val, ref StringBuilder sb)
+      {
+         if (num != val)
+         {
+            AddTabs(tabs, ref sb);
+            sb.AppendLine($"{floatName} = {num.ToString("F2", CultureInfo.InvariantCulture)}");
+         }
+      }
       public static void AddModifiers(int tabs, List<ISaveModifier> modifiers, ref StringBuilder sb)
       {
          if (modifiers.Count == 0)

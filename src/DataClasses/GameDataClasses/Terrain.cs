@@ -95,14 +95,16 @@ public class Terrain : ProvinceCollection<Province>
    public void AddCategoryString(StringBuilder sb, int tabs)
    {
       OpenBlock(ref tabs, Name, ref sb);
-      AddColor(tabs, Color, ref sb);
-      AddString(tabs, Type, "sound_type", ref sb);
+      if (Color != Color.Empty)
+         AddColor(tabs, Color, ref sb);
+      AddString(tabs, SoundType, "sound_type", ref sb);
+      AddString(tabs, Type, "type", ref sb);
       AddBoolIfYes(tabs, IsWater, "is_water", ref sb);
       AddBoolIfYes(tabs, IsInlandSea, "inland_sea", ref sb);
       AddInt(tabs, DefenceBonus, "defence", ref sb);
-      AddFloat(tabs, MovementCostMultiplier,"movement_cost", ref sb);
+      AddFloatIfNotValue(tabs, MovementCostMultiplier,"movement_cost", 1.0f, ref sb);
       AddModifiers(tabs, Modifiers, ref sb);
-      AddFloat(tabs, NationDesignerCostMultiplier, "nation_designer_cost_multiplier", ref sb);
+      AddFloatIfNotValue(tabs, NationDesignerCostMultiplier, "nation_designer_cost_multiplier", 1.0f, ref sb);
       AddFormattedProvinceList(tabs, SubCollection, "terrain_override", ref sb);
       CloseBlock(ref tabs, ref sb);
    }

@@ -1,4 +1,5 @@
-﻿using Editor.DataClasses.GameDataClasses;
+﻿using System.Globalization;
+using Editor.DataClasses.GameDataClasses;
 using Editor.ErrorHandling;
 using Editor.Helper;
 using Editor.Parser;
@@ -116,7 +117,7 @@ public static class TerrainLoading
                terrain.DefenceBonus = defence;
                break;
             case "movement_cost":
-               if (!float.TryParse(kvp.Value, out var movementCost))
+               if (!float.TryParse(kvp.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var movementCost))
                {
                   Globals.ErrorLog.Write($"Failed to parse movement_cost: {kvp.Value} in {terrain.Name}");
                   continue;

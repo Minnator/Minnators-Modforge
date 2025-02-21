@@ -386,7 +386,7 @@ public static class Globals
 // - [ ] Fix province history stuff
 // - [x] Fix Country Decorator and description
 // - [x] Fix Localisation editing causing EvilAction during saving of SaveableObjects
-// - [ ] Fix Terrain soudType saving
+// - [x] Fix Terrain soudType saving
 // - [x] Fix Comment chars can now be defined for each SaveableType
 
 // TODO Update Alpha 1.3 SHADERS
@@ -408,12 +408,12 @@ public static class Globals
 
 // - [ ] Grid for pixels
 // - [ ] Tools:
-// - [ ] Pen
-// - [ ] Eraser
-// - [ ] Bucket
-// - [ ] Select/Move
-// - [ ] Magic Wand
-// - [ ] Overlays (several)
+//    - [ ] Pen
+//    - [ ] Eraser
+//    - [ ] Bucket
+//    - [ ] Select/Move
+//    - [ ] Magic Wand
+//    - [ ] Overlays (several)
 
 // Next Up in what shall happen:
 // - [x] Update Localisation Implementation
