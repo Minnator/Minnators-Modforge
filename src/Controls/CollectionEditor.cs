@@ -1,5 +1,6 @@
 ﻿using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
+using Editor.DataClasses.Saveables;
 using Editor.Events;
 using Editor.Helper;
 

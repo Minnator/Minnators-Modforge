@@ -1,9 +1,4 @@
-﻿using System.Diagnostics;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using Editor.Saving;
-
-namespace Editor.DataClasses.Misc
+﻿namespace Editor.DataClasses.DataStructures
 {
    /*
    public class RefBinding<T> : BaseBinding<T>

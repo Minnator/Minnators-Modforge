@@ -6,7 +6,6 @@ using Editor.DataClasses.GameDataClasses;
 using Editor.ErrorHandling;
 using Editor.Parser;
 using Editor.Saving;
-using Editor.src.Forms.PopUps;
 
 namespace Editor.Helper;
 

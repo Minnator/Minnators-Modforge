@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Reflection;
-using Editor.Controls.NewControls;
+using Editor.Controls.PROPERTY;
 using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
 using Editor.Events;
 using Editor.Forms.Feature;

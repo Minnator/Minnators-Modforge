@@ -1,11 +1,12 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Parser;
 using static Editor.Saving.SavingUtil;
 
-namespace Editor.DataClasses.GameDataClasses
+namespace Editor.DataClasses.Saveables
 {
    public readonly struct MonarchName : IEquatable<MonarchName>
    {

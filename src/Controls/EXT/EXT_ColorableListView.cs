@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
-using System.Security.Cryptography.X509Certificates;
 
-namespace Editor.src.Controls.EXT
+namespace Editor.Controls.EXT
 {
    public class EXT_ColorableListView : ListView
    {

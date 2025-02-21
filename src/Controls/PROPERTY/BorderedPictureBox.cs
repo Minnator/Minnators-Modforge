@@ -1,4 +1,4 @@
-﻿namespace Editor.Controls.NewControls
+﻿namespace Editor.Controls.PROPERTY
 {
    public class BorderedPictureBox : PictureBox
    {

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Editor.DataClasses.Commands;
+using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
 using Editor.ErrorHandling;
 using Editor.Helper;
@@ -10,7 +11,7 @@ using Editor.Parser;
 using Editor.Saving;
 using static Editor.Saving.SavingUtil;
 
-namespace Editor.DataClasses.GameDataClasses;
+namespace Editor.DataClasses.Saveables;
 
 public class CommonCountry : Saveable, IGetSetProperty
 {

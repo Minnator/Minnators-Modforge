@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
 using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.Saveables;
 using Editor.Helper;
 using Editor.Saving;
 using Parsing = Editor.Parser.Parsing;

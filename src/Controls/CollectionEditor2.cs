@@ -2,6 +2,7 @@
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Misc;
+using Editor.DataClasses.Saveables;
 using Editor.Helper;
 using Editor.Saving;
 

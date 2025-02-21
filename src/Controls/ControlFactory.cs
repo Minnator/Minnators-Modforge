@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel;
 using System.Numerics;
 using System.Reflection;
-using Editor.Controls.NewControls;
+using Editor.Controls.PROPERTY;
+using Editor.DataClasses.DataStructures;
 using Editor.DataClasses.GameDataClasses;
-using Editor.DataClasses.Misc;
+using Editor.DataClasses.Saveables;
 using Editor.Events;
 using Editor.Helper;
 using Newtonsoft.Json.Linq;

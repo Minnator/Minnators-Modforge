@@ -8,12 +8,13 @@ using Editor.Loading.Enhanced;
 using Editor.Parser;
 using DefaultMapLoading = Editor.Loading.Enhanced.DefaultMapLoading;
 using DefinesLoading = Editor.Loading.Enhanced.DefinesLoading;
+using DefinitionLoading = Editor.Loading.Enhanced.DefinitionLoading;
 using MapLoading = Editor.Loading.Enhanced.MapLoading;
 using RegionLoading = Editor.Loading.Enhanced.RegionLoading;
 using SuperRegionLoading = Editor.Loading.Enhanced.SuperRegionLoading;
 using TradeNodeLoading = Editor.Loading.TradeNodeLoading;
 
-namespace Editor.Forms.LoadingScreen
+namespace Editor.Forms.Loadingscreen
 {
    public partial class LoadingScreen : Form
    {

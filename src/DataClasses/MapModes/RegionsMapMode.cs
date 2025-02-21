@@ -1,6 +1,7 @@
 ﻿using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.Saveables;
 using Editor.Helper;
-using Region = Editor.DataClasses.GameDataClasses.Region;
+using Region = Editor.DataClasses.Saveables.Region;
 
 namespace Editor.DataClasses.MapModes;
 

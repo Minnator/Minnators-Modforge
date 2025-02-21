@@ -3,11 +3,10 @@ using System.Reflection;
 using Editor.DataClasses.Settings;
 using Editor.ErrorHandling;
 using Editor.Events;
-using Editor.Helper;
 using Editor.Saving;
 using Timer = System.Windows.Forms.Timer;
 
-namespace Editor.Controls.NewControls
+namespace Editor.Controls.PROPERTY
 {
    public class PropertyTextBox<TSaveable> : TextBox, IPropertyControl<TSaveable, string> where TSaveable : Saveable
    {

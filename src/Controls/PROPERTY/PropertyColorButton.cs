@@ -4,7 +4,7 @@ using Editor.ErrorHandling;
 using Editor.Events;
 using Editor.Saving;
 
-namespace Editor.Controls.NewControls
+namespace Editor.Controls.PROPERTY
 {
    public class PropertyColorButton<TSaveable> : Button, IPropertyControl<TSaveable, Color> where TSaveable : Saveable
    {

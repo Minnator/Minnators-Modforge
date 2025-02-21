@@ -2,6 +2,7 @@
 using System.Text;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
+using Editor.DataClasses.Saveables;
 using Editor.Parser;
 
 namespace Editor.Saving

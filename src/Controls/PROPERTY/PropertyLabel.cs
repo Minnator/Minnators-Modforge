@@ -1,9 +1,10 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using Editor.ErrorHandling;
-using Editor.Saving;
 using Editor.Events;
-using System.Diagnostics;
-namespace Editor.Controls.NewControls
+using Editor.Saving;
+
+namespace Editor.Controls.PROPERTY
 {
    public class PropertyLabel<TSaveable> : Label, IPropertyControl<TSaveable, string> where TSaveable : Saveable
    {

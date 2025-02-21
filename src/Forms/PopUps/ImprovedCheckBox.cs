@@ -1,4 +1,4 @@
-﻿namespace Editor.src.Forms.PopUps
+﻿namespace Editor.Forms.PopUps
 {
    public sealed partial class ImprovedMessageBox : Form
    {

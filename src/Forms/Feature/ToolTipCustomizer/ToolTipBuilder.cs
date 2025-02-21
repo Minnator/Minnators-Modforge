@@ -2,6 +2,7 @@
 using System.Reflection;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
+using Editor.DataClasses.Saveables;
 using Editor.Helper;
 
 namespace Editor.Forms.Feature;

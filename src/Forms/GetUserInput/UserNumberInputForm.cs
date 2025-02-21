@@ -1,6 +1,6 @@
 ﻿using Editor.Controls;
 
-namespace Editor.src.Forms.GetUserInput
+namespace Editor.Forms.GetUserInput
 {
    public partial class UserNumberInputForm : Form
    {

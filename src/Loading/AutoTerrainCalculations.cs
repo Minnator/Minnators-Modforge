@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Drawing.Imaging;
 using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.Saveables;
 using Editor.Helper;
 
 namespace Editor.Loading

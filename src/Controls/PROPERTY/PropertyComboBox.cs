@@ -1,13 +1,13 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
-using Editor.DataClasses.GameDataClasses;
-using Editor.DataClasses.Misc;
+using Editor.DataClasses.DataStructures;
+using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
 using Editor.Events;
 using Editor.Helper;
 using Editor.Saving;
 
-namespace Editor.Controls.NewControls
+namespace Editor.Controls.PROPERTY
 {
    public class PropertyComboBox<TSaveable, TProperty> : ComboBox, IPropertyControl<TSaveable, TProperty> where TSaveable : Saveable 
    {

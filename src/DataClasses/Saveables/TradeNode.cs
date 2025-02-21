@@ -1,9 +1,8 @@
 ﻿using System.Text;
-using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Saving;
 
-namespace Editor.DataClasses.GameDataClasses
+namespace Editor.DataClasses.Saveables
 {
    public class TradeNode : ProvinceCollection<Province>
    {
@@ -24,7 +23,7 @@ namespace Editor.DataClasses.GameDataClasses
       public bool IsInland { get; set; } = false;
       public List<string> Incoming { get; set; } = [];
       public List<Outgoing> Outgoing { get; set; } = [];
-      public new static TradeNode Empty  { get; } = new (string.Empty, Color.Empty, ObjEditingStatus.Immutable);
+      public new static TradeNode Empty { get; } = new(string.Empty, Color.Empty, ObjEditingStatus.Immutable);
 
       public override string ToString()
       {
@@ -134,7 +133,7 @@ namespace Editor.DataClasses.GameDataClasses
 
       public void CalculateSplitIndex()
       {
-      
+
       }
 
       public (List<PointF>, List<PointF>) GetSplitRoutes;

@@ -2,10 +2,11 @@
 using System.Text.RegularExpressions;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
+using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
 using Editor.Parser;
 using Editor.Saving;
-using Region = Editor.DataClasses.GameDataClasses.Region;
+using Region = Editor.DataClasses.Saveables.Region;
 
 namespace Editor.Loading.Enhanced
 {

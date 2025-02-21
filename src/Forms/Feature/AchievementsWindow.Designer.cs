@@ -1,4 +1,6 @@
-﻿namespace Editor.Forms.Feature
+﻿using Editor.Controls.MMF_DARK;
+
+namespace Editor.Forms.Feature
 {
    partial class AchievementsWindow
    {
@@ -31,7 +33,7 @@
          System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AchievementsWindow));
          MainTLP = new TableLayoutPanel();
          AchievementFlowPanel = new FlowLayoutPanel();
-         SearchTextBox = new src.Controls.MmfTextBox();
+         SearchTextBox = new MmfTextBox();
          TitleLabel = new Label();
          MainTLP.SuspendLayout();
          SuspendLayout();
@@ -74,7 +76,7 @@
          SearchTextBox.BorderFocusColor = Color.FromArgb(26, 159, 255);
          SearchTextBox.BorderWidth = 1;
          SearchTextBox.CornerRadius = 3;
-         SearchTextBox.FocusMode = src.Controls.MmfTextBox.FocusModeEnum.Fade;
+         SearchTextBox.FocusMode = MmfTextBox.FocusModeEnum.Fade;
          SearchTextBox.Font = new Font("Microsoft Sans Serif", 9.5F, FontStyle.Regular, GraphicsUnit.Point, 0);
          SearchTextBox.ForeColor = Color.DimGray;
          SearchTextBox.Location = new Point(261, 4);
@@ -119,7 +121,7 @@
 
       private TableLayoutPanel MainTLP;
       private FlowLayoutPanel AchievementFlowPanel;
-      private src.Controls.MmfTextBox SearchTextBox;
+      private MmfTextBox SearchTextBox;
       private Label TitleLabel;
    }
 }

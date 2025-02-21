@@ -1,11 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System.Reflection;
+using Editor.ErrorHandling;
 using Editor.Helper;
 using Editor.Saving;
-using System.Reflection;
-using Editor.DataClasses.GameDataClasses;
-using Editor.ErrorHandling;
 
-namespace Editor.Controls.NewControls
+namespace Editor.Controls.PROPERTY
 {
    public interface IPropertyControl
    {

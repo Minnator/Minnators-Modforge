@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel;
 using Editor.DataClasses.Commands;
-using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Saving;
 
-namespace Editor.DataClasses.GameDataClasses;
+namespace Editor.DataClasses.Saveables;
 
 public class ProvinceCollectionEventArguments<T>(ProvinceCollectionType type, ICollection<T> composite)
 {

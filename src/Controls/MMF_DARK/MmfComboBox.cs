@@ -1,7 +1,6 @@
 ﻿using System.Drawing.Drawing2D;
-using Editor.Controls;
 
-namespace Editor.src.Controls.MMF_DARK
+namespace Editor.Controls.MMF_DARK
 {
    public class MmfComboBox : ComboBox
    {

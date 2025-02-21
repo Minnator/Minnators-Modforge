@@ -1,9 +1,8 @@
-﻿using Editor.DataClasses.Misc;
-using Editor.Helper;
+﻿using Editor.Helper;
 using Editor.Saving;
 using static Editor.Saving.SavingUtil;
 
-namespace Editor.DataClasses.GameDataClasses
+namespace Editor.DataClasses.Saveables
 {
    public class TradeCompany : ProvinceCollection<Province>
    {

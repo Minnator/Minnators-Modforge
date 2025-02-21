@@ -3,7 +3,7 @@ using System.Globalization;
 using Editor.Helper;
 using Editor.Saving;
 
-namespace Editor.DataClasses.GameDataClasses
+namespace Editor.DataClasses.Saveables
 {
    public class Define : Saveable
    {

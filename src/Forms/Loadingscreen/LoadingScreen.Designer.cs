@@ -1,4 +1,4 @@
-﻿namespace Editor.Forms.LoadingScreen
+﻿namespace Editor.Forms.Loadingscreen
 {
    partial class LoadingScreen
    {

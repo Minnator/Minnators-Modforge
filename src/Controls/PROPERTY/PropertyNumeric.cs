@@ -1,14 +1,13 @@
 ﻿using System.Diagnostics;
 using System.Numerics;
 using System.Reflection;
-using System.Windows.Forms;
 using Editor.ErrorHandling;
 using Editor.Events;
 using Editor.Helper;
 using Editor.Saving;
 using Timer = System.Windows.Forms.Timer;
 
-namespace Editor.Controls.NewControls
+namespace Editor.Controls.PROPERTY
 {
    public class PropertyNumeric<TSaveable, TProperty> : NumericUpDown, IPropertyControl<TSaveable, TProperty> where TSaveable : Saveable where TProperty : INumber<TProperty>
    {

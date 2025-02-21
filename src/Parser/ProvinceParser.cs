@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
 using Editor.Helper;
 using Editor.Loading.Enhanced;

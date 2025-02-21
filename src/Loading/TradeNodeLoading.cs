@@ -1,4 +1,4 @@
-﻿using Editor.DataClasses.GameDataClasses;
+﻿using Editor.DataClasses.Saveables;
 using Editor.Helper;
 using Editor.Parser;
 using Editor.Saving;
@@ -6,7 +6,7 @@ using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
 {
-   
+
    public static class TradeNodeLoading
    {
       public static void Load()

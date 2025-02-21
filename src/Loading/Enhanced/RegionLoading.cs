@@ -1,6 +1,6 @@
 ﻿using Editor.DataClasses.GameDataClasses;
 using Editor.ErrorHandling;
-using Region = Editor.DataClasses.GameDataClasses.Region;
+using Region = Editor.DataClasses.Saveables.Region;
 
 namespace Editor.Loading.Enhanced
 {

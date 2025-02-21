@@ -1,4 +1,4 @@
-﻿namespace Editor.src.Forms.Feature
+﻿namespace Editor.Forms.Feature
 {
    partial class CollectionSelectorBase
    {

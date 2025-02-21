@@ -5,6 +5,7 @@ using Editor.DataClasses.MapModes;
 using System.Runtime.InteropServices;
 using static Editor.Controls.GDIHelper;
 using Windows.Media.Devices;
+using Editor.DataClasses.Saveables;
 using Editor.DataClasses.Settings;
 using ZoomControl = Editor.Controls.ZoomControl;
 

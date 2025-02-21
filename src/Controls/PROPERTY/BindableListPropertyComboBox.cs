@@ -3,7 +3,7 @@ using System.Reflection;
 using Editor.Events;
 using Editor.Saving;
 
-namespace Editor.Controls.NewControls
+namespace Editor.Controls.PROPERTY
 {
    public class BindableListPropertyComboBox<TSaveable, TProperty> : PropertyComboBox<TSaveable, TProperty> where TSaveable : Saveable
    {

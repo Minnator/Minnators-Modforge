@@ -1,7 +1,7 @@
 ﻿using System.Drawing.Printing;
-using Editor.Controls.NewControls;
+using Editor.Controls.MMF_DARK;
+using Editor.Controls.PROPERTY;
 using Editor.DataClasses.Achievements;
-using Editor.src.Controls.MMF_DARK;
 
 namespace Editor.Controls
 {

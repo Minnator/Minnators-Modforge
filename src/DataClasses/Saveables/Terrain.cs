@@ -1,12 +1,13 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
+using Editor.DataClasses.GameDataClasses;
 using Editor.ErrorHandling;
 using Editor.Helper;
 using Editor.Saving;
 using static Editor.Saving.SavingUtil;
 
-namespace Editor.DataClasses.GameDataClasses;
+namespace Editor.DataClasses.Saveables;
 
 public class Terrain : ProvinceCollection<Province>
 {

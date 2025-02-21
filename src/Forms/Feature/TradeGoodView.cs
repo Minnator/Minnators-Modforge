@@ -1,9 +1,8 @@
-﻿using System.Drawing.Imaging;
-using System.Globalization;
+﻿using System.Globalization;
 using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
 
-namespace Editor.src.Forms.Feature
+namespace Editor.Forms.Feature
 {
    public partial class TradeGoodView : Form
    {

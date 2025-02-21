@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
+using Editor.DataClasses.Saveables;
 using Editor.Events;
 using Editor.Helper;
 using Newtonsoft.Json;

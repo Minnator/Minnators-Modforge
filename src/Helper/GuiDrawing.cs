@@ -2,6 +2,7 @@
 using System.Drawing.Drawing2D;
 using Editor.Controls;
 using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.Saveables;
 
 namespace Editor.Helper
 {

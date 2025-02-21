@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text;
-using Editor.DataClasses.Misc;
+using Editor.DataClasses.DataStructures;
 using Editor.ErrorHandling;
 using Editor.Helper;
 using Editor.Saving;

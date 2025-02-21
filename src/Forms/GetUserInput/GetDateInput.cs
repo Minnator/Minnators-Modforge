@@ -1,6 +1,6 @@
 ﻿using Editor.DataClasses.Misc;
 
-namespace Editor.src.Forms.GetUserInput
+namespace Editor.Forms.GetUserInput
 {
    public partial class GetDateInput : Form
    {

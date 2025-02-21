@@ -1,11 +1,10 @@
 ﻿using System.Text.RegularExpressions;
-using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
 using Editor.Helper;
-using Editor.Loading.Enhanced;
 using Editor.Saving;
 
-namespace Editor.Loading;
+namespace Editor.Loading.Enhanced;
 
 
 public static partial class DefinitionLoading

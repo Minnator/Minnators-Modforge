@@ -1,6 +1,6 @@
 ﻿using Editor.NameGenerator;
 
-namespace Editor.src.Forms.Feature
+namespace Editor.Forms.Feature
 {
    public partial class NameGeneratorForm : Form
    {

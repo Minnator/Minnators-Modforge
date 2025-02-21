@@ -1,4 +1,4 @@
-﻿namespace Editor.src.Forms.GetUserInput
+﻿namespace Editor.Forms.GetUserInput
 {
    partial class UserNumberInputForm
    {

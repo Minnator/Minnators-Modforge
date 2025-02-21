@@ -1,4 +1,4 @@
-﻿namespace Editor.DataClasses.Misc;
+﻿namespace Editor.DataClasses.DataStructures;
 
 public class ModifiableStack<T>
 {
@@ -23,29 +23,29 @@ public class ModifiableStack<T>
 
    public T Pop()
    {
-      if (Count == 0) 
+      if (Count == 0)
          throw new InvalidOperationException("The stack is empty");
       return _items[--Count];
    }
 
    public T Peek()
    {
-      if (Count == 0) 
+      if (Count == 0)
          throw new InvalidOperationException("The stack is empty");
       return _items[Count - 1];
    }
 
-   #pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
+#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
    public unsafe T* PeekRef() // This is a pointer to the last element in the stack so that it can be modified
    {
-      if (Count == 0) 
+      if (Count == 0)
          throw new InvalidOperationException("The stack is empty");
       fixed (T* ptr = &_items[Count - 1])
       {
          return ptr;
       }
    }
-   #pragma warning restore CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
+#pragma warning restore CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
 
    public void Clear()
    {
@@ -58,7 +58,7 @@ public class ModifiableStack<T>
       {
          if (_items == null)
             continue;
-         if (_items[i]!.Equals(item)) 
+         if (_items[i]!.Equals(item))
             return true;
       }
       return false;

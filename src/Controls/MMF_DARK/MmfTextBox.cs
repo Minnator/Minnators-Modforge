@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Drawing.Drawing2D;
-using Editor.Controls;
 
-namespace Editor.src.Controls
+namespace Editor.Controls.MMF_DARK
 {
    [DefaultEvent("_TextChanged")]
    public partial class MmfTextBox : UserControl

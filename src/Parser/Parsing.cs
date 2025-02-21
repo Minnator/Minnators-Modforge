@@ -3,8 +3,10 @@ using System.Globalization;
 using System.Net.Mime;
 using System.Text;
 using System.Text.RegularExpressions;
+using Editor.DataClasses.DataStructures;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
+using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
 
 namespace Editor.Parser;

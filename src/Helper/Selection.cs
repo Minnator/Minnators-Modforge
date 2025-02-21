@@ -4,11 +4,13 @@ using System.Reflection;
 using System.Security.Policy;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
+using Editor.DataClasses.Saveables;
 using Editor.DataClasses.Settings;
 using Editor.Forms.Feature;
 using Editor.Forms.Feature.AdvancedSelections;
 using Editor.Saving;
 using static Editor.Helper.ProvinceEnumHelper;
+using Region = Editor.DataClasses.Saveables.Region;
 
 namespace Editor.Helper;
 
@@ -991,7 +993,7 @@ public static class Selection
             break;
          case SelectionType.Region:
             if (province.Area != Area.Empty)
-               if (province.Area.Region != DataClasses.GameDataClasses.Region.Empty)
+               if (province.Area.Region != Region.Empty)
                   return province.Area.Region.GetProvinces();
             break;
          case SelectionType.Country:

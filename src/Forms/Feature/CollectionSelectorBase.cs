@@ -1,7 +1,6 @@
-﻿using System.ComponentModel;
-using Timer = System.Windows.Forms.Timer;
+﻿using Timer = System.Windows.Forms.Timer;
 
-namespace Editor.src.Forms.Feature
+namespace Editor.Forms.Feature
 {
    public partial class CollectionSelectorBase : Form
    {

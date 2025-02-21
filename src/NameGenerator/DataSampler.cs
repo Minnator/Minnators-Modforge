@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using Windows.Foundation.Collections;
 using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
 using Editor.Helper;
 using Editor.Parser;

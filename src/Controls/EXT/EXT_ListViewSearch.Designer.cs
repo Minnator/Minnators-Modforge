@@ -1,4 +1,4 @@
-﻿namespace Editor.src.Controls.EXT
+﻿namespace Editor.Controls.EXT
 {
    partial class EXT_ListViewSearch
    {

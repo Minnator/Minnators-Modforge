@@ -1,4 +1,4 @@
-﻿namespace Editor.src.Loading.Enhanced.PCFL
+﻿namespace Editor.Loading.Enhanced.PCFL
 {
    public class PCFL_Scope<TTarget> where TTarget : ITarget
    {

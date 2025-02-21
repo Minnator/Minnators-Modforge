@@ -1,14 +1,12 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
-using Windows.System.UserProfile;
-using Editor.Controls.NewControls;
 using Editor.ErrorHandling;
 using Editor.Events;
+using Editor.Forms.Feature;
 using Editor.Helper;
 using Editor.Saving;
-using Editor.src.Forms.Feature;
 
-namespace Editor.src.Controls.NewControls
+namespace Editor.Controls.PROPERTY
 {
    public sealed class PropertyCollectionSelector<TSaveable, TProperty, TPropertyItem> : Control, IPropertyControlList<TSaveable, TProperty, TPropertyItem>
       where TSaveable : Saveable where TProperty : List<TPropertyItem>, new() where TPropertyItem : notnull

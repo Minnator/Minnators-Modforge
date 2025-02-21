@@ -5,17 +5,20 @@ using System.Reflection;
 using System.Runtime;
 using System.Text;
 using Editor.Controls;
-using Editor.Controls.NewControls;
+using Editor.Controls.PROPERTY;
 using Editor.DataClasses.Achievements;
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Misc;
+using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
 using Editor.Events;
 using Editor.Forms.Feature;
 using Editor.Forms.Feature.Crash_Reporter;
 using Editor.Forms.Feature.SavingClasses;
+using Editor.Forms.GetUserInput;
+using Editor.Forms.Loadingscreen;
 using Editor.Forms.PopUps;
 using Editor.Helper;
 using Editor.Loading;
@@ -23,13 +26,10 @@ using Editor.NameGenerator;
 using Editor.Parser;
 using Editor.Properties;
 using Editor.Saving;
-using Editor.src.Controls.NewControls;
-using Editor.src.Forms.Feature;
-using Editor.src.Forms.GetUserInput;
 using static Editor.Helper.ProvinceEnumHelper;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 using MapLoading = Editor.Loading.Enhanced.MapLoading;
-using Region = Editor.DataClasses.GameDataClasses.Region;
+using Region = Editor.DataClasses.Saveables.Region;
 
 namespace Editor.Forms
 {
@@ -97,7 +97,7 @@ namespace Editor.Forms
       #endregion
 
       public readonly DateControl DateControl = new(Date.MinValue, DateControlLayout.Horizontal);
-      private LoadingScreen.LoadingScreen _ls = null!;
+      private LoadingScreen _ls = null!;
 
       public MapWindow()
       {
@@ -367,7 +367,7 @@ namespace Editor.Forms
          Area.ItemsModified += _areaEditingGui.OnCorrespondingDataChange;
 
          _regionEditingGui = new(ItemTypes.String, SaveableType.Region, SaveableType.Area, MapModeType.Regions);
-         DataClasses.GameDataClasses.Region.ItemsModified += _regionEditingGui.OnCorrespondingDataChange;
+         DataClasses.Saveables.Region.ItemsModified += _regionEditingGui.OnCorrespondingDataChange;
 
          _superRegionEditingGui = new(ItemTypes.String, SaveableType.SuperRegion, SaveableType.Region, MapModeType.SuperRegion);
          SuperRegion.ItemsModified += _superRegionEditingGui.OnCorrespondingDataChange;

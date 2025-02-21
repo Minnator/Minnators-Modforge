@@ -1,11 +1,10 @@
 ﻿using System.Text;
-using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Parser;
 using Editor.Saving;
 using static Editor.Saving.SavingUtil;
 
-namespace Editor.DataClasses.GameDataClasses
+namespace Editor.DataClasses.Saveables
 {
    public class ColonialRegion : ProvinceCollection<Province>
    {

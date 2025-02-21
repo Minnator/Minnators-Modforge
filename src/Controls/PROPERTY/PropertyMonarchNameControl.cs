@@ -1,14 +1,13 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
-using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
 using Editor.Events;
-using Editor.Helper;
 using Editor.Parser;
 using Editor.Properties;
 using Editor.Saving;
 
-namespace Editor.Controls.NewControls
+namespace Editor.Controls.PROPERTY
 {
    public sealed class PropertyMonarchNamesControl<TSaveable, TProperty> : FlowLayoutPanel, IPropertyControlList<TSaveable, TProperty, MonarchName> where TSaveable : Saveable where TProperty : List<MonarchName>, new()
    {

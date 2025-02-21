@@ -1,7 +1,8 @@
 ﻿using Editor.Controls;
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
-using Region = Editor.DataClasses.GameDataClasses.Region;
+using Editor.DataClasses.Saveables;
+using Region = Editor.DataClasses.Saveables.Region;
 
 namespace Editor.Helper
 {

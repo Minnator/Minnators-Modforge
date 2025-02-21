@@ -2,8 +2,9 @@
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Misc;
+using Editor.DataClasses.Saveables;
 using static Editor.Helper.ProvinceEnumHelper;
-using Region = Editor.DataClasses.GameDataClasses.Region;
+using Region = Editor.DataClasses.Saveables.Region;
 
 namespace Editor.Helper
 {

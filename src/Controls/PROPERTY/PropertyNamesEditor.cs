@@ -6,7 +6,7 @@ using Editor.Helper;
 using Editor.Saving;
 using Timer = System.Windows.Forms.Timer;
 
-namespace Editor.Controls.NewControls
+namespace Editor.Controls.PROPERTY
 {
    public sealed class PropertyNamesEditor<TSaveable, TProperty> : TableLayoutPanel, IPropertyControlList<TSaveable, TProperty, string> where TSaveable : Saveable where TProperty : List<string>, new ()
    {

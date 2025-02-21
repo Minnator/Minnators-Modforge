@@ -3,12 +3,11 @@ using System.Reflection;
 using Editor.DataClasses.GameDataClasses;
 using Editor.ErrorHandling;
 using Editor.Events;
-using Editor.Forms.PopUps;
+using Editor.Forms.Feature;
 using Editor.Helper;
 using Editor.Saving;
-using Editor.src.Forms.Feature;
 
-namespace Editor.Controls.NewControls
+namespace Editor.Controls.PROPERTY
 {
    public class PropertyQuickAssignControl<TSaveable, TProperty, TItem> : TableLayoutPanel, IPropertyControlList<TSaveable, TProperty, TItem> where TSaveable : Saveable where TProperty : List<TItem>, new() where TItem : notnull
    {

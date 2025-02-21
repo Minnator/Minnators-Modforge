@@ -1,9 +1,8 @@
 ﻿using System.Text;
-using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Saving;
 
-namespace Editor.DataClasses.GameDataClasses
+namespace Editor.DataClasses.Saveables
 {
    public class ProvinceGroup : ProvinceCollection<Province>
    {

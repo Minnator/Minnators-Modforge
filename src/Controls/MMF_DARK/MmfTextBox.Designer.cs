@@ -1,4 +1,4 @@
-﻿namespace Editor.src.Controls
+﻿namespace Editor.Controls.MMF_DARK
 {
    partial class MmfTextBox
    {

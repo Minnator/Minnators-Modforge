@@ -1,12 +1,14 @@
 ﻿using System.ComponentModel;
 using Editor.Controls;
+using Editor.DataClasses.DataStructures;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
+using Editor.DataClasses.Saveables;
 using Editor.DataClasses.Settings;
 using Editor.Forms;
 using Editor.Helper;
 using Editor.Loading;
-using Region = Editor.DataClasses.GameDataClasses.Region;
+using Region = Editor.DataClasses.Saveables.Region;
 
 namespace Editor;
 
@@ -384,6 +386,11 @@ public static class Globals
 // - [x] Fix CollectionSelectorBase
 // - [x] Fix 'Crashing' when autocompacting after only doing redestribute
 // - [ ] Fix province history stuff
+//    - [ ] Implement Scopes
+//    - [ ] Implement Effects
+//    - [ ] Implement Triggers
+//    - [ ] Implement Effect execution
+//    - [ ] Implement Trigger verification
 // - [x] Fix Country Decorator and description
 // - [x] Fix Localisation editing causing EvilAction during saving of SaveableObjects
 // - [x] Fix Terrain soudType saving

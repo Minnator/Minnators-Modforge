@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Editor.DataClasses.Misc;
+namespace Editor.DataClasses.DataStructures;
 
 public class BindingDictionary<TKey, TValue> : BindingList<TKey>, IDictionary<TKey, TValue> where TKey : notnull
 {
@@ -13,7 +13,7 @@ public class BindingDictionary<TKey, TValue> : BindingList<TKey>, IDictionary<TK
 
    public bool HasEmpty { get; init; } = true;
 
-   private BindingDictionary(List<TKey> list, KeyValuePair<TKey, TValue>? emptyItem, IComparer<TKey>? comparer) : base(list) 
+   private BindingDictionary(List<TKey> list, KeyValuePair<TKey, TValue>? emptyItem, IComparer<TKey>? comparer) : base(list)
    {
       HasEmpty = emptyItem.HasValue;
       if (HasEmpty)
@@ -24,8 +24,8 @@ public class BindingDictionary<TKey, TValue> : BindingList<TKey>, IDictionary<TK
       _keyComparer = comparer ?? Comparer<TKey>.Default;
       _internalList = list;
    }
-   
-   public BindingDictionary(KeyValuePair<TKey, TValue>? emptyItem = null, IComparer<TKey>? comparer = null) : this([], emptyItem, comparer) {  }
+
+   public BindingDictionary(KeyValuePair<TKey, TValue>? emptyItem = null, IComparer<TKey>? comparer = null) : this([], emptyItem, comparer) { }
 
    public void Sort()
    {
@@ -93,7 +93,7 @@ public class BindingDictionary<TKey, TValue> : BindingList<TKey>, IDictionary<TK
       InsertItemSorted(key);
       EndUpdate();
    }
-   
+
    public new bool Remove(TKey key)
    {
       BeginUpdate();
@@ -104,7 +104,7 @@ public class BindingDictionary<TKey, TValue> : BindingList<TKey>, IDictionary<TK
       return true;
 
    }
-   
+
    public bool ContainsKey(TKey key)
    {
       return _internalDictionary.ContainsKey(key);

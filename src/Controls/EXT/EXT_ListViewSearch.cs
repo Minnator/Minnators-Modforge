@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Editor.Controls.EXT;
+﻿using System.ComponentModel;
 
-namespace Editor.src.Controls.EXT
+namespace Editor.Controls.EXT
 {
    public partial class EXT_ListViewSearch : UserControl
    {

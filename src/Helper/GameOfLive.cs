@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
+using Editor.DataClasses.Saveables;
 using Timer = System.Windows.Forms.Timer;
 
 namespace Editor.Helper
