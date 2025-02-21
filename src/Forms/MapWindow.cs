@@ -1427,23 +1427,6 @@ namespace Editor.Forms
 
       private void generateTextureAtlasPacedToolStripMenuItem_Click(object sender, EventArgs e)
       {
-#if DEBUG
-         var modAchievement = new Achievement(AchievementId.ExampleAchievement,
-                                              "Modding Master",
-                                              "Work on at least 20 different mods. Work on at least 20 different mods. Work on at least 20 different mods. Work on at least 20 different mods. Work on at least 20 different mods.",
-                                              new ProgressCondition(100, AchievementId.ExampleAchievement),
-                                              Resources.AchievementExample,
-                                              level: 1);
-
-         AchievementManager.AddAchievement(modAchievement);
-         AchievementManager.IncreaseAchievementProgress(AchievementId.ExampleAchievement, 100);
-         AchievementManager.GetAchievement(AchievementId.ExampleAchievement).SetAchieved();
-
-         AchievementManager.DebugVisualize();
-
-         DateTime thisDate1 = new DateTime(2011, 6, 10);
-         Debug.WriteLine("Today is " + thisDate1.ToString("MMMM dd, yyyy") + ".");
-#endif
       }
 
       private void audioTestToolStripMenuItem_Click(object sender, EventArgs e)

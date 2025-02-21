@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Media;
 using Editor.Controls;
+using Editor.DataClasses.Achievements;
 using Editor.Helper;
 using Editor.Loading;
 using Editor.Loading.Enhanced;
@@ -34,8 +35,11 @@ namespace Editor.Forms.Loadingscreen
       public EventHandler<int> LoadingStageChanged = delegate{};
       private readonly List<Action> _loadingActions =
       [
+         // Application critical loading starts here
          StartUpMetrics.StartMetrics,
          SettingsHelper.LoadSettingsToComponents,
+         AchievementManager.LoadAchievements,
+         // Game loading starts here
          DefinesLoading.Load,
          BookMarksLoading.Load,
          FactionsLoading.Load,

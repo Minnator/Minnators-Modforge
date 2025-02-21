@@ -393,7 +393,7 @@ public static class Globals
 //    - [ ] Implement Trigger verification
 // - [x] Fix Country Decorator and description
 // - [x] Fix Localisation editing causing EvilAction during saving of SaveableObjects
-// - [x] Fix Terrain soudType saving
+// - [x] Fix Terrain soundType saving
 // - [x] Fix Comment chars can now be defined for each SaveableType
 
 // TODO Update Alpha 1.3 SHADERS

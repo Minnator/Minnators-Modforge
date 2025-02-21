@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using Editor.Properties;
 
 namespace Editor.DataClasses.Achievements
 {
@@ -9,11 +10,14 @@ namespace Editor.DataClasses.Achievements
       /// <summary>
       /// Replaces all black Pixels in the Bitmap with the given color.
       /// </summary>
-      /// <param name="bmp"></param>
+      /// <param name="image"></param>
       /// <param name="color"></param>
       /// <returns></returns>
-      public static Bitmap ColorMask(Bitmap bmp, Color color)
+      public static Bitmap ColorMask(AchievementImage image, Color color)
       {
+         if (!AchievementManager.GetImage(image, out var bmp))
+            return Resources.AchievementExample;
+
          var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
          var bitmapData = bmp.LockBits(rect, ImageLockMode.ReadWrite, bmp.PixelFormat);
          

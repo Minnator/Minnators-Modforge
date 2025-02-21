@@ -1,4 +1,5 @@
-﻿using Editor.DataClasses.Commands;
+﻿using Editor.DataClasses.Achievements;
+using Editor.DataClasses.Commands;
 using Editor.DataClasses.Settings;
 using Editor.Saving;
 
@@ -65,6 +66,7 @@ namespace Editor.Helper
       {
          ResourceUsageHelper.Dispose();
          HistoryManager.StopTimers();
+         AchievementManager.SaveAchievements();
       }
    }
 }

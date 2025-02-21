@@ -65,7 +65,7 @@ namespace Editor.Controls
             }
             else
             {
-               pg.IncreaseProgress(new Random().Next(0, (int)pg.Goal));
+               //pg.IncreaseProgress(new Random().Next(0, (int)pg.Goal));
                _progressLabel.Text = $"{pg.CurrentProgress}/{pg.Goal}";
             }
          }
