@@ -41,10 +41,11 @@ namespace Editor.DataClasses.Achievements
 
       public float CurrentProgress => _currentProgress;
 
+      [JsonIgnore]
       public float Goal { get; } = goal;
 
+      [JsonIgnore]
       public AchievementId Id => _id;
-
       public float GetProgress() => Math.Clamp(CurrentProgress / goal, 0f, 1f);
       public bool IsCompleted() => CurrentProgress >= goal;
       public void IncreaseProgress(float amount)
@@ -77,17 +78,21 @@ namespace Editor.DataClasses.Achievements
       }
 
       public AchievementId Id { get; set; }
+      [JsonIgnore]
       public string Name { get; }
+      [JsonIgnore]
       public string Description { get; }
       [JsonIgnore]
       public Bitmap Icon { get; }
+      [JsonIgnore]
       public int Level { get; }
-      public DateTime DateAchieved { get; private set; } = DateTime.MinValue;
+      public DateTime DateAchieved { get; internal set; } = DateTime.MinValue;
+      [JsonIgnore]
       public bool IsHidden { get; }
-      public bool IsAchieved { get; private set; }
+      public bool IsAchieved { get; internal set; }
+      [JsonIgnore]
       public AchievementImage Image { get; }
 
-      [JsonConverter(typeof(AchievementConditionConverter))]
       public IAchievementCondition Condition { get; }
 
       public bool CheckCondition() => Condition.IsCompleted();
@@ -113,49 +118,12 @@ namespace Editor.DataClasses.Achievements
       {
          return Icon;
       }
-   }
 
-   public class AchievementConditionConverter : JsonConverter<IAchievementCondition>
-   {
-      public override void WriteJson(JsonWriter writer, IAchievementCondition value, JsonSerializer serializer)
+      public void LoadProgress(float progress)
       {
-         if (value is ProgressCondition progressCondition)
-         {
-            writer.WriteStartObject();
-
-            writer.WritePropertyName("goal");
-            writer.WriteValue(progressCondition!.Goal);
-
-            writer.WritePropertyName("currentProgress");
-            writer.WriteValue(progressCondition.CurrentProgress);
-
-            writer.WritePropertyName("id");
-            serializer.Serialize(writer, progressCondition.Id);
-
-            writer.WriteEndObject();
-         }
-         else
-         {
-            throw new JsonSerializationException("Unknown IAchievementCondition type");
-         }
-      }
-
-      public override IAchievementCondition ReadJson(JsonReader reader, Type objectType, IAchievementCondition existingValue, bool hasExistingValue, JsonSerializer serializer)
-      {
-         var jsonObject = JObject.Load(reader);
-
-         if (jsonObject["goal"] != null) // Identify ProgressCondition by its fields
-         {
-            var goal = jsonObject["goal"]!.Value<float>();
-            var currentProgress = jsonObject["currentProgress"]!.Value<float>();
-            var id = jsonObject["id"]!.ToObject<AchievementId>(serializer);
-
-            var condition = new ProgressCondition(goal, id);
-            condition.IncreaseProgress(currentProgress);
-            return condition;
-         }
-
-         throw new JsonSerializationException("Unknown IAchievementCondition type");
+         Condition.IncreaseProgress(progress);
+         if (CheckCondition()) 
+            IsAchieved = true;
       }
    }
    

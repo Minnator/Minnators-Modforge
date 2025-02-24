@@ -26,6 +26,7 @@ using Editor.NameGenerator;
 using Editor.Parser;
 using Editor.Properties;
 using Editor.Saving;
+using Editor.src.Forms.Console;
 using static Editor.Helper.ProvinceEnumHelper;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 using MapLoading = Editor.Loading.Enhanced.MapLoading;

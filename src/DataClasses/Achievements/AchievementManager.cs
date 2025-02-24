@@ -183,10 +183,8 @@ namespace Editor.DataClasses.Achievements
 
       public static void SaveAchievements()
       {
-         AchievementData data = new()
-         {
-            Achievements = _achievements.Values.ToList()
-         };
+         AchievementData data = new();
+         data.SetAchievements(_achievements.Values.ToList());
          
          var settings = new JsonSerializerSettings
          {
@@ -237,13 +235,17 @@ namespace Editor.DataClasses.Achievements
             return;
          }
 
-         foreach (var achievement in secureData.Achievements) 
-            _achievements[achievement.Id] = achievement;
+         foreach (var achievement in secureData.Achievements)
+         {
+            var local = _achievements[achievement.Id];
+            local.LoadProgress(achievement.Progress);
+            local.DateAchieved = achievement.DateAchieved;
+         }
       }
 
       private static List<JsonConverter> GetConverters()
       {
-         return [new AchievementConditionConverter()];
+         return [];
       }
    
 
@@ -310,8 +312,28 @@ namespace Editor.DataClasses.Achievements
 
    public class AchievementData
    {
-      public List<Achievement> Achievements { get; set; } = new();
+      public void SetAchievements(List<Achievement> achievements)
+      {
+         foreach (var achievement in achievements)
+         {
+            Achievements.Add(new AchievementInfo
+            {
+               Id = achievement.Id,
+               Progress = achievement.GetProgress(),
+               DateAchieved = achievement.DateAchieved
+            });
+         }
+      }
+
+      public List<AchievementInfo> Achievements { get; set; } = new();
       public string HMAC { get; set; } = string.Empty;
+   }
+
+   public class AchievementInfo
+   {
+      public AchievementId Id { get; set; }
+      public float Progress { get; set; }
+      public DateTime DateAchieved { get; set; }
    }
 
 }
