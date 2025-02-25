@@ -75,7 +75,7 @@ namespace Editor.Helper
          }
       };
 
-      private static IErrorHandle ParseInt(string value, out object result)
+      internal static IErrorHandle ParseInt(string value, out object result)
       {
          int result1;
          if (!int.TryParse(value, out result1))
@@ -88,7 +88,7 @@ namespace Editor.Helper
          return ErrorHandle.Success;
       }
 
-      private static IErrorHandle ParseFloat(string value, out object result)
+      internal static IErrorHandle ParseFloat(string value, out object result)
       {
          float result1;
          if (!float.TryParse(value, out result1))
@@ -102,7 +102,7 @@ namespace Editor.Helper
          return ErrorHandle.Success;
       }
 
-      private static IErrorHandle ParseDouble(string value, out object result)
+      internal static IErrorHandle ParseDouble(string value, out object result)
       {
          double result1;
          if (!double.TryParse(value, out result1))
@@ -116,7 +116,7 @@ namespace Editor.Helper
          return ErrorHandle.Success;
       }
 
-      private static IErrorHandle ParseBool(string value, out object result)
+      internal static IErrorHandle ParseBool(string value, out object result)
       {
          bool result1;
          if (!bool.TryParse(value, out result1))
@@ -142,7 +142,7 @@ namespace Editor.Helper
          }
       }
 
-      private static IErrorHandle ParseString(string value, out object result)
+      internal static IErrorHandle ParseString(string value, out object result)
       {
          result = value;
          return ErrorHandle.Success;

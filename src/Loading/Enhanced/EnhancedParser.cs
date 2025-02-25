@@ -408,7 +408,23 @@ namespace Editor.Loading.Enhanced
 
       }
 
+      public static IErrorHandle IsValidString(string value, out string result)
+      {
+         result = value;
 
+         var startsWith = value.StartsWith('\"');
+         var endsWith = value.EndsWith('\"');
+
+         if (startsWith && endsWith)
+         {
+            result = value[1..^1];
+            return ErrorHandle.Success;
+         }
+
+         if ((startsWith && !endsWith) || (!startsWith && endsWith))
+            return new ErrorObject(ErrorType.TempParsingError, "Invalid string value. Must start and end with \" or have non at all", addToManager: false);
+         return ErrorHandle.Success;
+      }
 
    }
    public readonly struct LineKvp<T, TQ>

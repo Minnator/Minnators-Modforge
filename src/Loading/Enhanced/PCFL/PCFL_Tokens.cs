@@ -116,6 +116,12 @@ namespace Editor.Loading.Enhanced.PCFL
       }
    }
 
+   /*
+    * Value<T> get T 
+    * BoolValue<bool> get T
+    * ReplaceValue<bool> get bool Dictionary mit nem name
+    */ 
+
    public class TargetDummy : ITarget
    {
 
