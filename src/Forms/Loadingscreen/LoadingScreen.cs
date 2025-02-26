@@ -40,6 +40,7 @@ namespace Editor.Forms.Loadingscreen
          StartUpMetrics.StartMetrics,
          SettingsHelper.LoadSettingsToComponents,
          CommandHandler.LoadMacros,
+         CommandHandler.LoadHistory,
          AchievementManager.LoadAchievements,
          // Game loading starts here
          DefinesLoading.Load,

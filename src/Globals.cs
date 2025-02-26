@@ -79,6 +79,8 @@ public static class Globals
 #endif
    }
 
+   public const string API_TOKEN = "Go touch some grass."; //ChatGpt API Token, don't touch this
+
    public const string TOOL_NAME = "Minnator's Modforge";
 
    public const string DISCORD_INVITATION_LINK = "https://discord.gg/22AhD5qkme";

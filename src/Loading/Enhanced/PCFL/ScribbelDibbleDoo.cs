@@ -5,8 +5,29 @@ using Editor.Saving;
 namespace Editor.Loading.Enhanced.PCFL.Scribbel
 {
 
-   public class Trigger
+   public abstract class Trigger
    {
+      public abstract bool Evaluate(ITarget target);
+
+      public virtual bool ParseWithReplacement(ScriptedTriggerSource parent, EnhancedBlock block, PathObj po)
+      {
+         throw new NotImplementedException();
+      }
+
+      public virtual bool ParseWithReplacement(ScriptedTriggerSource parent, LineKvp<string, string> command, PathObj po)
+      {
+         throw new NotImplementedException();
+      }
+
+      public virtual bool Parse(EnhancedBlock block, PathObj po)
+      {
+         throw new NotImplementedException();
+      }
+
+      public virtual bool Parse(LineKvp<string, string> command, PathObj po)
+      {
+         throw new NotImplementedException();
+      }
    }
 
    public enum PCFL_Type
@@ -126,52 +147,30 @@ namespace Editor.Loading.Enhanced.PCFL.Scribbel
       }
 
    }
-
-   public class BaseTrigger : Trigger
-   {
-      public virtual void ParseWithReplacement(ScriptedTrigger parent, EnhancedBlock block, PathObj po)
-      {
-         throw new NotImplementedException();
-      }
-
-      public virtual void ParseWithReplacement(ScriptedTrigger parent, LineKvp<string, string> command, PathObj po)
-      {
-         throw new NotImplementedException();
-      }
-
-      public virtual void Parse(EnhancedBlock block, PathObj po)
-      {
-         throw new NotImplementedException();
-      }
-
-      public virtual void Parse( LineKvp<string, string> command, PathObj po)
-      {
-         throw new NotImplementedException();
-      }
-   }
    
-   public class BaseTriggerBool : BaseTrigger
+   public class BaseTriggerBool : Trigger
    {
       private Value<bool> _boolValue = null!;
 
-      public override void Parse(LineKvp<string, string> command, PathObj po)
+      public override bool Parse(LineKvp<string, string> command, PathObj po)
       {
-         if (!PCFL_TriggerParser.ParseTrigger(command.Value, out bool parsedBool)
+         if (!PCFL_TriggerParser.ParseTriggerOfValue(command.Value, out bool parsedBool)
             .Then(o => o.ConvertToLoadingError(po, "Failed parsing scripted Trigger", command.Line)))
-            return;
+            return false;
          _boolValue = new(parsedBool);
+         return true;
       }
 
-      public override void ParseWithReplacement(ScriptedTrigger parent, LineKvp<string, string> command, PathObj po)
+      public override bool ParseWithReplacement(ScriptedTriggerSource parent, LineKvp<string, string> command, PathObj po)
       {
-         if (!PCFL_TriggerParser.ParseTriggerReplace(command.Value, out var isReplace, out bool parsedBool, out var parsedReplace)
+         if (!PCFL_TriggerParser.ParseTriggerOfValueReplace(command.Value, out var isReplace, out bool parsedBool, out var parsedReplace)
             .Then(o => o.ConvertToLoadingError(po, "Failed parsing scripted Trigger", command.Line)))
-            return;
+            return false;
 
          if (!isReplace)
          {
             _boolValue = new(parsedBool);
-            return;
+            return true;
          }
          // in case of replace
          if (parent.replacements.TryGetValue(parsedReplace!, out var value))
@@ -179,7 +178,7 @@ namespace Editor.Loading.Enhanced.PCFL.Scribbel
             if (value.Type != PCFL_Type.Bool)
             {
                _ = new LoadingError(po, "msg", command.Line, addToManager: false);
-               return;
+               return false;
             }
             _boolValue = (Value<bool>)value;
          }
@@ -188,30 +187,129 @@ namespace Editor.Loading.Enhanced.PCFL.Scribbel
             _boolValue = new(false); // default value as we do not have one yet
             parent.replacements.Add(parsedReplace!, _boolValue);
          }
+
+         return true;
       }
+
+      public override bool Evaluate(ITarget target)
+      {
+         return false;
+      }
+
    }
 
-   public class CalledTrigger(ScriptedTrigger trigger) : Trigger
+   public class CalledTrigger(ScriptedTriggerSource triggerSource, Dictionary<string, Value> values) : Trigger
    {
-      public Dictionary<string, Value> values;
+      public Dictionary<string, Value> _values = values;
       public void Activate() {
-         foreach (var kv in values)
+         foreach (var kv in _values)
          {
-            kv.Value.CopyTo(trigger.replacements[kv.Key]);
+            kv.Value.CopyTo(triggerSource.replacements[kv.Key]);
          }
       }
+
+      public override bool Evaluate(ITarget target)
+      {
+         return false;
+      }
+
    }
 
+   public class BooleanOperation(Operation op, List<Trigger> triggers) : Trigger// AND, OR, NOT
+   {
+
+
+      List<Trigger> Triggers = triggers;
+
+      public override bool Evaluate(ITarget target)
+      {
+         return op switch
+         {
+            Operation.AND => Triggers.All(t => t.Evaluate(target)),
+            Operation.OR => Triggers.Any(t => t.Evaluate(target)),
+            Operation.NOT => !Triggers.All(t => t.Evaluate(target)),
+            _ => throw new EvilActions("WTF is this operation? We don't do quantum stuff yet!")
+         };
+      }
+   }
 
    // ex (TAX) <- Scripted
    // hehe (hello) -> ex(hello) <- CalledTrigger with parameter
    // ^^^ Scripted
    // Todo optimize dicts with arrays / lists
-   public class ScriptedTrigger
+   public class ScriptedTriggerSource
    {
       public Dictionary<string, Value> replacements = [];
-      Trigger trigger = new();
+      Trigger trigger;
 
+      public ScriptedTriggerSource(EnhancedBlock block, PathObj po)
+      {
+         trigger = null!;
+         //TODO call default Parse Trigger but with unknown scope
+
+         InferScopeFromUsage();
+      }
+
+      public void InferScopeFromUsage()
+      {
+         // TODO
+      }
+
+      public Trigger CreateCallInstance(EnhancedBlock block, PathObj po)
+      {
+         Dictionary<string, Value> values = new(replacements);
+         var content = block.GetContentElements(true, po)[0]; //maybe recover from multiple contents
+         foreach (var line in content.GetLineKvpEnumerator(po))
+         {
+            if (!replacements.TryGetValue(line.Key, out var value))
+            {
+               _ = new LoadingError(po, $"Unknown attribute definition in scripted trigger call '{block.Name}' valid are: <{string.Join(',', replacements.Values)}>", type:ErrorType.PCFL_TriggerValidationError);
+               continue;
+            }
+            if (PCFL_TriggerParser.ParseTriggerValues(line.Value, value.Type, out var outValue)
+               .Then(o => o.ConvertToLoadingError(po, $"Failed to parse argument '{line.Key}' of '{block.Name}. Should be '{value.Type}'.", line.Line, type: ErrorType.PCFL_TriggerValidationError)))
+            {
+               continue;
+            }
+            
+            if (!values.ContainsKey(line.Key)) // Done??? >>> Maybe not use key from line but instead from dictionary then Value needs to save the string
+            {
+               _ = new LoadingError(po, $"Multiple definitions of '{line.Key}' in scripted trigger call '{block.Name}'", type:ErrorType.PCFL_TriggerValidationError, level:LogType.Warning);
+               // multiple same keys
+               continue;
+            }
+            values[line.Key] = outValue;
+         }
+         if (values.Count != replacements.Count)
+         {
+            // missing parameters
+            _ = new LoadingError(po, $"Missing parameters for scripted effect '{block.Name}'. Expected <{replacements.Count}> but got <{values.Count}>!", type:ErrorType.PCFL_TriggerValidationError);
+            return null!;
+         }
+         return new CalledTrigger(this, values);
+      }
+      
+      public Trigger CreateInstance(LineKvp<string, string> command, PathObj po)
+      {
+         if (replacements.Count != 0)
+         {
+            _ = new LoadingError(po, $"Scripted trigger '{command.Key}' called without attributes but expected '{replacements.Count}'", type:ErrorType.PCFL_TriggerValidationError);
+            // TODO how to recover
+            return null!;
+         }
+         if (!PCFL_TriggerParser.ParseTriggerOfValue(command.Value, out bool parsedBool)
+                               .Then(o => o.ConvertToLoadingError(po, $"Failed to create instance of scripted Trigger '{command.Key}'.", command.Line, type:ErrorType.PCFL_TriggerValidationError)))
+            return null!;
+
+         if (!parsedBool)
+         {
+            return new BooleanOperation(Operation.NOT, [trigger]);
+         }
+         return trigger;
+      }
+
+      
 
    }
+
 }

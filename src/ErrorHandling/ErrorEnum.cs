@@ -70,6 +70,8 @@ public enum ErrorType
    InvalidValue = 122,
    [ErrorInformation("This occurs because an object is not found!", "Check the object, its naming and references and correct it if necessary!")]
    ObjectNotFound = 123,
+   [ErrorInformation("This occurs as some trigger has been called or created with illegal arguments", "Verify trigger attributes and usage")]
+   PCFL_TriggerValidationError,
    [ErrorInformation("This occurs because an date is not in a valid format!", "Check the date format and correct it!")]
    IllegalDateFormat = 101,
    // ObjectInteraction Error

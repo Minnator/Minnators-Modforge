@@ -62,6 +62,8 @@ namespace Editor.Loading.Enhanced.PCFL
    public abstract class Trigger<T> where T : ITarget // can only contain PCFL_Tokens which are scope switches, flow controls or triggers
    {
       public abstract bool Evaluate(T target);
+
+
    }
 
    public class TriggerScopeSwitch<T> : Trigger<T> where T : ITarget// all_ and any_

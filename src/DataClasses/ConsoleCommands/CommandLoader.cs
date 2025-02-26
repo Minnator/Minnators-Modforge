@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Reflection.Metadata;
+using Editor.Helper;
+using Editor.Loading.Enhanced.PCFL;
 
 namespace Editor.DataClasses.ConsoleCommands
 {
@@ -17,6 +19,44 @@ namespace Editor.DataClasses.ConsoleCommands
       {
          SetUtilityCommands();
          SetProvinceCommands();
+         RunFiles();
+      }
+
+      private void RunFiles()
+      {
+         var runFileUsage = "Usage: run <file1(relative to .exe)> -p|-c";
+         _handler.RegisterCommand(new("run", runFileUsage, args =>
+         {
+            if (args.Length != 2)
+               return [runFileUsage];
+
+            if (args[1].Equals("-c")) // Execute on Country Scope
+            {
+               var path = args[0];
+               if (!File.Exists(Path.Combine(Globals.AppDirectory, path)))
+                  return [$"File '{path}' not found"];
+
+               var file = IO.ReadAllInUTF8(path);
+
+               return [];
+            }
+
+            if (args[1].Equals("-p")) // Execute on Province Scope
+            {
+               var path = args[0];
+               if (!File.Exists(Path.Combine(Globals.AppDirectory, path)))
+                  return [$"File '{path}' not found"];
+
+               var file = IO.ReadAllInUTF8(path);
+               
+
+               return [];
+            }
+
+            // TODO call the parser
+
+            return [];
+         }, ClearanceLevel.User));
       }
 
       private void SetProvinceCommands()

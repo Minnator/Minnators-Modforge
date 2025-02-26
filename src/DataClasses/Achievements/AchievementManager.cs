@@ -254,8 +254,6 @@ namespace Editor.DataClasses.Achievements
          };
          form.Controls.Add(panel);
 
-         const int margin = 1;
-
          foreach (var achievement in _achievements.Values) 
             panel.Controls.Add(new AchievementControl(achievement, panel.Width - 30));
 

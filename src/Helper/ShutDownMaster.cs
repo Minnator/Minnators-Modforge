@@ -69,6 +69,7 @@ namespace Editor.Helper
          HistoryManager.StopTimers();
          AchievementManager.SaveAchievements();
          CommandHandler.SaveMacros();
+         CommandHandler.SaveHistory();
       }
    }
 }

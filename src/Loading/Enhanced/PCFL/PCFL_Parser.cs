@@ -1,4 +1,5 @@
-﻿using Editor.ErrorHandling;
+﻿using System.Diagnostics;
+using Editor.ErrorHandling;
 using Editor.Helper;
 using Editor.Loading.Enhanced.PCFL.Scribbel;
 using Editor.Saving;
@@ -7,21 +8,23 @@ namespace Editor.Loading.Enhanced.PCFL;
 
 public static class PCFL_TriggerParser
 {
+   #region ValuesParsing
+
    // Boolean Methods
-   public static IErrorHandle ParseTriggerReplace(string value, out bool isReplace, out bool outType, out string? outReplace)
+   public static IErrorHandle ParseTriggerOfValueReplace(string value, out bool isReplace, out bool outType, out string? outReplace)
    {
       outReplace = null;
       isReplace = false;
       outType = false;
-      
+
       var error = IsValueReplaceable(value, out isReplace, out outReplace);
       if (!error.Ignore())
          return error;
 
-      return ParseTrigger(value, out outType);
+      return ParseTriggerOfValue(value, out outType);
    }
 
-   public static IErrorHandle ParseTrigger(string value, out bool outType)
+   public static IErrorHandle ParseTriggerOfValue(string value, out bool outType)
    {
       var handle = Converter.ParseBool(value, out var boolObj);
       outType = (bool)boolObj;
@@ -29,20 +32,48 @@ public static class PCFL_TriggerParser
    }
 
    // Integer Methods
-   public static IErrorHandle ParseTriggerReplace(string value, out bool isReplace, out int outType, out string? outReplace)
+   public static IErrorHandle ParseTriggerOfValueReplace(string value, out bool isReplace, out int outType, out string? outReplace)
    {
       outReplace = null;
       isReplace = false;
       outType = 0;
-      
+
       var error = IsValueReplaceable(value, out isReplace, out outReplace);
       if (!error.Ignore())
          return error;
 
-      return ParseTrigger(value, out outType);
+      return ParseTriggerOfValue(value, out outType);
    }
 
-   public static IErrorHandle ParseTrigger(string value, out int outType)
+   public static IErrorHandle ParseTriggerValues(string value, PCFL_Type type, out Value outValue)
+   {
+      IErrorHandle handle;
+      switch (type)
+      {
+         case PCFL_Type.Int:
+            handle = ParseTriggerOfValue(value, out int intObj);
+            outValue = new Value<int>(intObj);
+            break;
+         case PCFL_Type.Float:
+            handle = ParseTriggerOfValue(value, out float floatObj);
+            outValue = new Value<float>(floatObj);
+            break;
+         case PCFL_Type.String:
+            handle = ParseTriggerOfValue(value, out string stringObj);
+            outValue = new Value<string>(stringObj);
+            break;
+         case PCFL_Type.Bool:
+            handle = ParseTriggerOfValue(value, out bool boolObj);
+            outValue = new Value<bool>(boolObj);
+            break;
+         default:
+            throw new ArgumentOutOfRangeException(nameof(type), type, null);
+      }
+
+      return handle;
+   }
+   
+   public static IErrorHandle ParseTriggerOfValue(string value, out int outType)
    {
       var handle = Converter.ParseInt(value, out var intObj);
       outType = (int)intObj;
@@ -50,20 +81,20 @@ public static class PCFL_TriggerParser
    }
 
    // Float Methods
-   public static IErrorHandle ParseTriggerReplace(string value, out bool isReplace, out float outType, out string? outReplace)
+   public static IErrorHandle ParseTriggerOfValueReplace(string value, out bool isReplace, out float outType, out string? outReplace)
    {
       outReplace = null;
       isReplace = false;
       outType = 0f;
-      
+
       var error = IsValueReplaceable(value, out isReplace, out outReplace);
       if (!error.Ignore())
          return error;
 
-      return ParseTrigger(value, out outType);
+      return ParseTriggerOfValue(value, out outType);
    }
 
-   public static IErrorHandle ParseTrigger(string value, out float outType)
+   public static IErrorHandle ParseTriggerOfValue(string value, out float outType)
    {
       var handle = Converter.ParseFloat(value, out var floatObj);
       outType = (float)floatObj;
@@ -71,20 +102,20 @@ public static class PCFL_TriggerParser
    }
 
    // String Methods
-   public static IErrorHandle ParseTriggerReplace(string value, out bool isReplace, out string outType, out string? outReplace)
+   public static IErrorHandle ParseTriggerOfValueReplace(string value, out bool isReplace, out string outType, out string? outReplace)
    {
       outReplace = null;
       isReplace = false;
       outType = string.Empty;
-      
+
       var error = IsValueReplaceable(value, out isReplace, out outReplace);
       if (!error.Ignore())
          return error;
 
-      return ParseTrigger(value, out outType);
+      return ParseTriggerOfValue(value, out outType);
    }
 
-   public static IErrorHandle ParseTrigger(string value, out string outType)
+   public static IErrorHandle ParseTriggerOfValue(string value, out string outType)
    {
       return EnhancedParser.IsValidString(value, out outType);
    }
@@ -103,7 +134,99 @@ public static class PCFL_TriggerParser
          outReplace = value[1..^1];
          isReplace = true;
       }
+
       return ErrorHandle.Success;
+   }
+
+   #endregion
+
+   public static List<PCFL_Token> ParseSomeFile(LineKvp<string, string> input, PCFL_Scope scope)
+   {
+      /*
+       * how do we know what do to?
+       * Determine if Trigger / Effect
+       * if we are trigger => all sub elements are triggers
+       * if we are effect we call us again bc we like recursion
+       */
+
+
+
+
+      return [];
+   }
+
+   // Ragequit -> Escalates errors
+   public static bool ParseTrigger(LineKvp<string, string> input, PCFL_Scope scope, PathObj po, out Trigger trigger)
+   {
+      trigger = null!;
+      if (!scope.IsValidTrigger(input.Key, out var creator))
+      {
+         _ = new LoadingError(po, $"Invalid Trigger: {input.Key}", line:input.Line, type: ErrorType.PCFL_TriggerValidationError);
+         return false;
+      }
+      trigger = creator(null, input, scope, po)!;
+      return trigger is not null;
+   }
+
+   // Mod -> Recovers from errors
+   public static bool ParseTrigger(EnhancedBlock block, PCFL_Scope scope, PathObj po, out Trigger trigger)
+   {
+      trigger = null!;
+      // TODO check if boolean trigger 
+      // TODO Method to ONLY take care of a block's content for occurrences like limit, AND, OR, NOT
+      if (!scope.IsValidTrigger(block.Name, out var creator))
+      {
+         _ = new LoadingError(po, $"Invalid Trigger: {block.Name}", line:block.StartLine, type: ErrorType.PCFL_TriggerValidationError);
+         return false;
+      }
+      trigger = creator(block, null, scope, po)!;
+      return trigger is not null;
+   }
+
+   public static bool ParseSingleTriggerValue(ref Value<int> inValue, LineKvp<string, string> command, PathObj po, string triggerName)
+   {
+      Debug.Assert(command.Key.Equals(triggerName), $"'{triggerName}' must be the trigger name of a {triggerName} trigger");
+      if (!ParseTriggerOfValue(command.Value, out int parsedValue).Then(o => o.ConvertToLoadingError(po, $"Failed parsing {command.Key} Trigger", command.Line)))
+         return false;
+      inValue.Val = parsedValue;
+      return true;
+   }
+
+   public static bool ParseSingleTriggerReplaceValue(ScriptedTriggerSource parent, ref Value<int> inValue, LineKvp<string, string> command, PathObj po, string triggerName)
+   {
+      Debug.Assert(command.Key.Equals(triggerName), $"'{triggerName}' must be the trigger name of a {triggerName} trigger");
+      var error = ParseTriggerOfValueReplace(command.Value, out var isReplace, out int parsedValue, out var parsedReplace);
+      if (!error.Ignore())
+      {
+         ((ErrorObject)error).ConvertToLoadingError(po, "Failed parsing Integer", command.Line);
+         return false;
+      }
+      if (!ParseSingleTriggerValueGeneral(parent, isReplace, parsedReplace!, parsedValue, ref inValue))
+      {
+         _ = new LoadingError(po, $"Value of type 'int' is of wrong for trigger <{triggerName}>: expected type '{inValue.Type}'", type: ErrorType.PCFL_TriggerValidationError);
+         return false;
+      }
+      return true;
+   }
+
+   public static bool ParseSingleTriggerValueGeneral<T>(ScriptedTriggerSource parent, bool isReplace, string parsedReplace, T parsedValue, ref Value<T> inValue) 
+   {
+      if (!isReplace)
+      {
+         inValue.Val = parsedValue;
+         return true;
+      }
+      // in case of replace
+      if (parent.replacements.TryGetValue(parsedReplace!, out var value))
+      {
+         if (value.Type != inValue.Type)
+            return false;
+         inValue = (Value<T>)value;
+      }
+      else
+         parent.replacements.Add(parsedReplace!, inValue);
+
+      return true;
    }
 }
 
@@ -135,50 +258,3 @@ public static class PCFL_TriggerParser
 
  */
 
-
-// Paradox Clusterfuck Language Parser
-/*
-public static class PCFL_Parser
-{
-   private class StackInfo(int index, PCFL_Scope scope, IEnhancedElement[] elements, List<ITarget> targets)
-   {
-      public StackInfo(int index, PCFL_Scope scope, IEnhancedElement[] elements) : this(index, scope, elements, [])
-      {
-      }
-
-      public int Index { get; set; } = index;
-      public PCFL_Scope Scope { get; } = scope;
-      public List<ITarget> Targets { get; set; } = targets;
-      public IEnhancedElement[] Elements { get;} = elements;
-   }
-
-   public static List<PCFL_EffectBase> EffectsFromElements(IEnumerable<IEnhancedElement> inElements, PCFL_Scope initScope)
-   {
-      var elements = inElements.ToArray();
-
-      var stack = new Stack<StackInfo>();
-      stack.Push(new(0, initScope, elements));
-
-
-
-      while (stack.Count > 0)
-      {
-         var info = stack.Peek();
-
-         var currentElement = elements[info.Index++];
-
-         // resolve scope if needed
-
-
-         // we have no more elements to work through so we go back to base
-         if (info.Index >= elements.Length)
-         {
-            info.Index = 0;
-         }
-      }
-
-      return new();
-   }
-}
-
-*/

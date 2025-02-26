@@ -6,6 +6,7 @@ using Editor.DataClasses.GameDataClasses;
 using Editor.ErrorHandling;
 using Editor.Forms.Feature;
 using Editor.Helper;
+using Editor.Loading.Enhanced.PCFL;
 using Editor.Parser;
 using Editor.Saving;
 
@@ -13,7 +14,7 @@ namespace Editor.DataClasses.Saveables
 {
 
 
-   public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<ProvinceHistoryEntry>
+   public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<ProvinceHistoryEntry>, ITarget
    {
       public enum modifiyingOperation
       {

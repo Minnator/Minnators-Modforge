@@ -24,17 +24,18 @@ public class CommandHandler
 {
    // The string is the console Identifier
    private static readonly Dictionary<string, Dictionary<string, string>> _macros = [];
+   public static readonly Dictionary<string, List<string>> _histories = [];
 
    public static Dictionary<string, string> GetMacros(string identifier) => _macros[identifier];
 
    private readonly Dictionary<string, Command> _commands = new();
    private ClearanceLevel _currentClearance = ClearanceLevel.User;
 
-   private readonly List<string> _history = [];
    private int _historyIndex = 0;
    public bool TrimQuotesOnArguments { get; } = true;
    private const int HISTORY_CAPACITY = 100;
    private const string MACRO_FILE = "macros.json";
+   private const string HISTORY_FILE = "consoleHistory.json";
 
    public string Identifier { get; }
 
@@ -44,7 +45,7 @@ public class CommandHandler
       set => _historyIndex = value;
    }
 
-   internal List<string> History => _history;
+   internal List<string> History => _histories[Identifier];
 
    private RichTextBox OutputBox { get; }
 
@@ -52,7 +53,7 @@ public class CommandHandler
    {
       OutputBox = output;
       Identifier = identifier;
-      CommandHandler.Register(this);
+      Register(this);
       
       var loader = new CommandLoader(this, output);
       loader.Load();
@@ -76,6 +77,14 @@ public class CommandHandler
       if (JSONWrapper.LoadFromModforgeData<Dictionary<string, Dictionary<string, string>>>(MACRO_FILE, out var macros))
          foreach (var (key, value) in macros)
             _macros.Add(key, value);
+   }
+
+   public static void SaveHistory() => JSONWrapper.SaveToModforgeData(_histories, HISTORY_FILE);
+   public static void LoadHistory()
+   {
+      if (JSONWrapper.LoadFromModforgeData<Dictionary<string,List<string>>>(HISTORY_FILE, out var history))
+         foreach (var entry in history)
+            _histories.Add(entry.Key, entry.Value);
    }
 
    public bool SetAlias(string alias, string command)
@@ -102,6 +111,12 @@ public class CommandHandler
    {
       if (!_macros.ContainsKey(handler.Identifier))
          _macros[handler.Identifier] = [];
+
+      if (!_histories.ContainsKey(handler.Identifier))
+         _histories[handler.Identifier] = [];
+      else
+         handler._historyIndex = handler.History.Count;
+
    }
 
    public bool AddMacro(string key, string value)
@@ -232,9 +247,11 @@ public class CommandHandler
 
    internal void AddToHistory(string cmd)
    {
-      _history.Add(cmd);
-      if (_history.Count > HISTORY_CAPACITY)
-         _history.RemoveAt(0);
-      _historyIndex = _history.Count;
+      // only add if not the same as before
+      if (_histories[Identifier].Count > 0 && !_histories[Identifier][^1].Equals(cmd))
+         _histories[Identifier].Add(cmd);
+      if (_histories[Identifier].Count > HISTORY_CAPACITY)
+         _histories[Identifier].RemoveAt(0);
+      _historyIndex = _histories[Identifier].Count;
    }
 }
