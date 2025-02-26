@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Media;
 using Editor.Controls;
 using Editor.DataClasses.Achievements;
+using Editor.DataClasses.ConsoleCommands;
 using Editor.Helper;
 using Editor.Loading;
 using Editor.Loading.Enhanced;
@@ -38,6 +39,7 @@ namespace Editor.Forms.Loadingscreen
          // Application critical loading starts here
          StartUpMetrics.StartMetrics,
          SettingsHelper.LoadSettingsToComponents,
+         CommandHandler.LoadMacros,
          AchievementManager.LoadAchievements,
          // Game loading starts here
          DefinesLoading.Load,

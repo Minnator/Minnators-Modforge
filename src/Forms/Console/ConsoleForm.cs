@@ -9,7 +9,7 @@ namespace Editor.src.Forms.Console
       public ConsoleForm()
       {
          InitializeComponent();
-         CommandHandler = new (OutputBox);
+         CommandHandler = new (OutputBox, "MAIN_CONSOLE");
 
          OutputBox.TabIndex = 2;
          //keydown on input TextBox

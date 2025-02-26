@@ -1,4 +1,5 @@
-﻿using System.Reflection.Metadata;
+﻿using System.Diagnostics;
+using System.Reflection.Metadata;
 
 namespace Editor.DataClasses.ConsoleCommands
 {
@@ -112,6 +113,11 @@ namespace Editor.DataClasses.ConsoleCommands
          {
             if (args.Length == 1)
             {
+               if (args[0].Equals("-l"))
+               {
+                  var macros = CommandHandler.GetMacros(_handler.Identifier);
+                  return macros.Count > 0 ? ["Macros: ", .. macros.Select(x => $"{x.Key} - {x.Value}").ToArray()] : ["No macros"];
+               }
                if (_handler.RunMacro(args[0], out var value))
                   return value;
                return [$"Macro '{args[0]}' not found"];
@@ -132,6 +138,9 @@ namespace Editor.DataClasses.ConsoleCommands
             {
                var macroName = args[0].ToLower();
                var value = args[1];
+               if (!(value.StartsWith('\"') && value.EndsWith('\"')) && value.Length < 3)
+                  return [macroUsage];
+               value = value[1..^1];
                if (args[2].Equals("-a"))
                {
                   _handler.AddMacro(macroName, value);
@@ -161,10 +170,9 @@ namespace Editor.DataClasses.ConsoleCommands
          {
             var names = _handler.GetCommands();
             names.Sort((a, b) => string.Compare(a.Name, b.Name, StringComparison.Ordinal));
-            var maxnameWidth = 0;
-            foreach (var name in names)
-               maxnameWidth = Math.Max(maxnameWidth, name.Name.Length);
-            return ["Available Commands:", .. names.Select(x => $"{x.Name.PadRight(maxnameWidth)} - {x.Usage}").ToArray()];
+
+            var list = WriteFormattedColumns(names.Select(x => x.Name).ToArray(), names.Select(x => x.Usage).ToArray());
+            return ["Available Commands:", .. list];
          }, ClearanceLevel.User));
 
          // execution directory
@@ -185,6 +193,14 @@ namespace Editor.DataClasses.ConsoleCommands
             return _handler.History.Count > 0 ? ["History: ", .. _handler.History.ToArray()] : ["No commands in history"];
          }, ClearanceLevel.User));
 
+         _handler.RegisterCommand(new("table", "Usage: table <val1,val2,val3...> <column2> ...", args =>
+         {
+            if (args.Length < 2)
+               return ["Usage: table <column1> <column2> ..."];
+
+            var columns = args.Select(x => CommandHandler.SplitStringQuotes(x, ',')).ToArray();
+            return DrawTable('|', columns);
+         }, ClearanceLevel.User));
       }
 
 
@@ -205,5 +221,35 @@ namespace Editor.DataClasses.ConsoleCommands
             lines[^1] = "> ";
          outputBox.Lines = lines.ToArray();
       }
+
+      private static string[] WriteFormattedColumns(IReadOnlyList<string> col1, IReadOnlyList<string> col2, char separator = '-')
+      {
+         Debug.Assert(col1.Count == col2.Count, "Both lists must be of even length!");
+
+         var output = new string[col1.Count];
+         var col1MaxWidth = col1.Max(x => x.Length);
+
+         for (var i = 0; i < col1.Count; i++)
+            output[i] = $"{col1[i].PadRight(col1MaxWidth)} {separator} {col2[i]}";
+
+         return output;
+      }
+
+      private static string[] DrawTable(char separator = '|', params string[][] columns)
+      {
+         Debug.Assert(columns.Length > 0, "At least one column must be provided.");
+         var rowCount = columns[0].Length;
+
+         Debug.Assert(columns.All(col => col.Length == rowCount), "All columns must have the same number of rows.");
+
+         var colWidths = columns.Select(col => col.Max(cell => cell.Length)).ToArray();
+         var output = new string[rowCount];
+         
+         for (var row = 0; row < rowCount; row++) 
+            output[row] = string.Join($" {separator} ", columns.Select((col, i) => col[row].PadRight(colWidths[i])));
+
+         return output;
+      }
+
    }
 }

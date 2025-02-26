@@ -10,9 +10,7 @@ namespace Editor.DataClasses.Settings
          var settingsPath = Path.Combine(Globals.AppDirectory, SettingsSaver.SETTINGS_FILE_NAME);
          if (!File.Exists(settingsPath))
             return new ();
-
-         var settingsJSON = IO.ReadAllLinesInUTF8(settingsPath);
-         return JsonSerializer.Deserialize<Settings>(string.Join('\n', settingsJSON), SettingsSaver.options) ?? new Settings();
+         return JSONWrapper.Load<Settings>(settingsPath);
       }
    }
 

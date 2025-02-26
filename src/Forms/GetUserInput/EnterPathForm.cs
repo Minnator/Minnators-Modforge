@@ -12,9 +12,7 @@ namespace Editor.Forms.GetUserInput
       {
          InitializeComponent();
          StartPosition = FormStartPosition.CenterScreen;
-
-         SettingsSaver.Init();
-
+         
          Globals.Settings = SettingsLoader.Load();
          
          ModPathTextBox.Text = Globals.Settings.Misc.LastModPath;

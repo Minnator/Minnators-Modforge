@@ -1,4 +1,5 @@
 ﻿using System.Reflection.Metadata;
+using Editor.Helper;
 
 namespace Editor.DataClasses.ConsoleCommands;
 
@@ -20,13 +21,21 @@ public class Command(string name, string usage, Func<string[], string[]> execute
 
 public class CommandHandler
 {
+   // The string is the console Identifier
+   private static readonly Dictionary<string, Dictionary<string, string>> _macros = [];
+
+   public static Dictionary<string, string> GetMacros(string identifier) => _macros[identifier];
+
    private readonly Dictionary<string, Command> _commands = new();
    private ClearanceLevel _currentClearance = ClearanceLevel.User;
-   private readonly Dictionary<string, string> _macros = [];
 
    private readonly List<string> _history = [];
    private int _historyIndex = 0;
-   private const int HistoryCapacity = 100;
+   public bool TrimQuotesOnArguments { get; } = true;
+   private const int HISTORY_CAPACITY = 100;
+   private const string MACRO_FILE = "macros.json";
+
+   public string Identifier { get; }
 
    internal int HistoryIndex
    {
@@ -38,10 +47,12 @@ public class CommandHandler
 
    private RichTextBox OutputBox { get; }
 
-   public CommandHandler(RichTextBox output)
+   public CommandHandler(RichTextBox output, string identifier)
    {
       OutputBox = output;
-
+      Identifier = identifier;
+      CommandHandler.Register(this);
+      
       var loader = new CommandLoader(this, output);
       loader.Load();
    }
@@ -58,7 +69,17 @@ public class CommandHandler
 
    internal List<Command> GetCommands() => _commands.Values.Distinct().ToList();
 
-   public void SetClearance(ClearanceLevel level) => _currentClearance = level;
+   public static void SaveMacros() => JSONWrapper.Save(_macros, Path.Combine(Globals.AppDirectory, MACRO_FILE));
+   public static void LoadMacros()
+   {
+      var path = Path.Combine(Globals.AppDirectory, MACRO_FILE);
+      if (File.Exists(path))
+      {
+         var macros = JSONWrapper.Load<Dictionary<string, Dictionary<string, string>>>(path);
+         foreach (var (key, value) in macros)
+            _macros.Add(key, value);
+      }
+   }
 
    public bool SetAlias(string alias, string command)
    {
@@ -80,18 +101,23 @@ public class CommandHandler
       return false;
    }
 
+   public static void Register(CommandHandler handler)
+   {
+      _macros[handler.Identifier] = [];
+   }
+
    public bool AddMacro(string key, string value)
    {
-      if (!_macros.TryAdd(key, value))
+      if (!_macros[Identifier].TryAdd(key, value))
          return false;
       return true;
    }
 
    public bool RemoveMacro(string key)
    {
-      if (_macros.ContainsKey(key))
+      if (_macros[Identifier].ContainsKey(key))
       {
-         _macros.Remove(key);
+         _macros[Identifier].Remove(key);
          return true;
       }
       return false;
@@ -99,7 +125,7 @@ public class CommandHandler
 
    public bool RunMacro(string key, out string[] value)
    {
-      if (_macros.TryGetValue(key, out var macro))
+      if (_macros[Identifier].TryGetValue(key, out var macro))
       {
          value = ExecuteCommandInternal(macro);
          return true;
@@ -118,7 +144,7 @@ public class CommandHandler
    private string[] ExecuteCommandInternal(string input)
    {
       List<string> output = [];
-      var parts = SplitCmd(input);
+      var parts = SplitStringQuotes(input, trimQutoes:false);
       if (parts.Length == 0)
          return [.. output];
 
@@ -140,23 +166,24 @@ public class CommandHandler
       return [.. output];
    }
 
-   private string[] SplitCmd(string cmd)
+   public static string[] SplitStringQuotes(string cmd, char splitChar = ' ', char quoteChar = '"', bool trimQutoes = true)
    {
       List<string> parts = [];
       var inQuotes = false;
-      var current = "";
+      var current = string.Empty;
       foreach (var c in cmd)
       {
-         if (c == '"')
+         if (c == quoteChar)
          {
             inQuotes = !inQuotes;
-            continue;
+            if (trimQutoes)
+               continue;
          }
-         if (c == ' ' && !inQuotes)
+         if (c == splitChar && !inQuotes)
          {
             if (!string.IsNullOrEmpty(current))
                parts.Add(current);
-            current = "";
+            current = string.Empty;
             continue;
          }
          current += c;
@@ -208,7 +235,7 @@ public class CommandHandler
    internal void AddToHistory(string cmd)
    {
       _history.Add(cmd);
-      if (_history.Count > HistoryCapacity)
+      if (_history.Count > HISTORY_CAPACITY)
          _history.RemoveAt(0);
       _historyIndex = _history.Count;
    }

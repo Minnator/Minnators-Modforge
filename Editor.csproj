@@ -64,7 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\Controls\Initialisation\" />
-    <Folder Include="src\DataClasses\ConsoleCommands\" />
     <Folder Include="src\Formatters\" />
     <Folder Include="src\Loading\TreeClasses\" />
     <Folder Include="src\ParadoxLanguage\ANTLR\" />
