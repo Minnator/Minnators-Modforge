@@ -1,5 +1,6 @@
 ﻿
 using System.Text.Json;
+using Windows.Storage.Provider;
 
 namespace Editor.Helper
 {
@@ -12,10 +13,28 @@ namespace Editor.Helper
       };
 
       public static string Serialize<T>(T obj) => JsonSerializer.Serialize(obj, _options);
-      public static T Deserialize<T>(string json) => JsonSerializer.Deserialize<T>(json, _options)!;
-      public static T Clone<T>(T obj) => Deserialize<T>(Serialize(obj));
-      public static void Save<T>(T obj, string path) => IO.WriteToFile(path, Serialize(obj), false);
-      public static T Load<T>(string path) => Deserialize<T>(IO.ReadAllInUTF8(path));
+      public static bool Deserialize<T>(string json, out T value)
+      {
+         value = default!;
+         if (string.IsNullOrWhiteSpace(json))
+            return false;
+         value = JsonSerializer.Deserialize<T>(json, _options)!;
+         return true;
+      }
+
+      public static void Save<T>(T obj, string path, bool append = false) => IO.WriteToFile(path, Serialize(obj), append);
+      public static void SaveToModforgeData<T>(T obj, string internalPath) => Save(obj, Path.Combine(Globals.AppDataPath, internalPath));
+      public static bool Load<T>(string path, out T readValue)
+      {
+         readValue = default!;
+         var json = IO.ReadAllInUTF8(path);
+         if (string.IsNullOrWhiteSpace(json))
+            return false;
+         return Deserialize(json, out readValue);
+      }
+
+      public static bool LoadFromModforgeData<T>(string internalPath, out T readValue) => Load(Path.Combine(Globals.AppDataPath, internalPath), out readValue);
+
    }
 
 

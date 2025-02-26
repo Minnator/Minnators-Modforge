@@ -87,6 +87,7 @@ public static class Globals
    public static string VanillaPath = string.Empty;
    public static string ModPath = string.Empty;
    public static readonly string AppDirectory = AppDomain.CurrentDomain.BaseDirectory;
+   public static readonly string AppDataPath = Path.Combine(AppDirectory, "ModforgeData");
 
 #if DEBUG
    public static readonly string DebugPath = Path.Combine(AppDirectory, "Debug");
@@ -106,7 +107,6 @@ public static class Globals
    public static Settings Settings = new();
 
    // Logs
-   //public static readonly string DownloadsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
    public static readonly Log LoadingLog = new(Settings.Saving.LogLocation, "Loading");
    public static readonly Log ErrorLog = new(Settings.Saving.LogLocation, "Error");
 

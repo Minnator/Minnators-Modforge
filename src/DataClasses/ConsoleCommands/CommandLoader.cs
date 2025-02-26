@@ -108,7 +108,7 @@ namespace Editor.DataClasses.ConsoleCommands
 
          }, ClearanceLevel.User));
 
-         var macroUsage = "Macro: macro <name> \"<value>\" [-r, -a]";
+         var macroUsage = "Macro: macro [-l, -c] <name> \"<value>\" [-r, -a]";
          _handler.RegisterCommand(new("macro", macroUsage, args =>
          {
             if (args.Length == 1)
@@ -117,6 +117,11 @@ namespace Editor.DataClasses.ConsoleCommands
                {
                   var macros = CommandHandler.GetMacros(_handler.Identifier);
                   return macros.Count > 0 ? ["Macros: ", .. macros.Select(x => $"{x.Key} - {x.Value}").ToArray()] : ["No macros"];
+               }
+               if (args[0].Equals("-c"))
+               {
+                  _handler.ClearMacros();
+                  return ["Macros cleared"];
                }
                if (_handler.RunMacro(args[0], out var value))
                   return value;

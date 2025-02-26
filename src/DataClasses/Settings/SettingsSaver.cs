@@ -10,7 +10,7 @@ namespace Editor.DataClasses.Settings
       
       public static void Save(Settings settings)
       {
-         JSONWrapper.Save(settings, Path.Combine(Globals.AppDirectory, SETTINGS_FILE_NAME));
+         JSONWrapper.SaveToModforgeData(settings, SETTINGS_FILE_NAME);
       }
    }
 

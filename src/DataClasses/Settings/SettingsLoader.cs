@@ -1,18 +1,12 @@
 ﻿using Editor.Helper;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Editor.DataClasses.Settings
 {
    public static class SettingsLoader
    {
-      public static Settings Load() 
+      public static Settings Load()
       {
-         var settingsPath = Path.Combine(Globals.AppDirectory, SettingsSaver.SETTINGS_FILE_NAME);
-         if (!File.Exists(settingsPath))
-            return new ();
-         return JSONWrapper.Load<Settings>(settingsPath);
+         return JSONWrapper.LoadFromModforgeData<Settings>(SettingsSaver.SETTINGS_FILE_NAME, out var settings) ? settings : new ();
       }
    }
-
-   
 }

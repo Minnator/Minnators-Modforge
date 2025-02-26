@@ -6,6 +6,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Editor.Controls;
 using Editor.ErrorHandling;
+using Editor.Helper;
 using Editor.Properties;
 using Editor.Saving;
 using Microsoft.Extensions.Logging;
@@ -52,7 +53,7 @@ namespace Editor.DataClasses.Achievements
          [AchievementImage.Default] = Resources.AchievementExample,
       };
 
-      private static string FilePath => Path.Combine(Globals.AppDirectory, "achievements.json");
+      private const string ACHIEVEMENT_FILE_NAME = "achievements.json";
 
       static AchievementManager()
       {
@@ -185,38 +186,19 @@ namespace Editor.DataClasses.Achievements
       {
          AchievementData data = new();
          data.SetAchievements(_achievements.Values.ToList());
-         
-         var settings = new JsonSerializerSettings
-         {
-            Converters = GetConverters(),
-            Formatting = Formatting.Indented
-         };
-
-         data.HMAC = GenerateHMAC(JsonConvert.SerializeObject(data, Formatting.Indented), HMAC_KEY);
-
-         File.WriteAllText(FilePath, JsonConvert.SerializeObject(data, settings));
+         data.HMAC = GenerateHMAC(JSONWrapper.Serialize(data), HMAC_KEY);
+         JSONWrapper.SaveToModforgeData(data, ACHIEVEMENT_FILE_NAME);
       }
 
       public static void LoadAchievements()
       {
-         if (!File.Exists(FilePath))
+         if (!JSONWrapper.LoadFromModforgeData<AchievementData>(ACHIEVEMENT_FILE_NAME, out var secureData))
          {
-            _ = new LoadingError(PathObj.Empty, "No valid achievement file found!");
             GenerateAchievements();
             return;
          }
-
-
-         var settings = new JsonSerializerSettings
-         {
-            Converters = GetConverters(),
-            Formatting = Formatting.Indented
-         };
-
-         var json = File.ReadAllText(FilePath);
-         var secureData = JsonConvert.DeserializeObject<AchievementData>(json, settings);
-
-         if (secureData == null || secureData.HMAC == null!)
+         
+         if (secureData.HMAC == null!)
          {
             _ = new LoadingError(PathObj.Empty, "No valid achievement file found!");
             GenerateAchievements();
@@ -225,9 +207,8 @@ namespace Editor.DataClasses.Achievements
 
          var savedHmac = secureData.HMAC;
          secureData.HMAC = string.Empty; 
-         var recomputedHmac = GenerateHMAC(JsonConvert.SerializeObject(secureData, Formatting.Indented), HMAC_KEY);
 
-         if (savedHmac != recomputedHmac)
+         if (savedHmac != GenerateHMAC(JSONWrapper.Serialize(secureData), HMAC_KEY))
          {
             _ = new LoadingError(PathObj.Empty, "Achievement file has been tampered with!", level:LogType.Error);
             MessageBox.Show("The achievements file is either corrupted or has been tampered with.\nAll achievements are reset!", "Achievements Reset!");
@@ -242,20 +223,13 @@ namespace Editor.DataClasses.Achievements
             local.DateAchieved = achievement.DateAchieved;
          }
       }
-
-      private static List<JsonConverter> GetConverters()
-      {
-         return [];
-      }
-   
-
+      
       private static string GenerateHMAC(string data, string key)
       {
          using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(key));
          var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(data));
          return Convert.ToBase64String(hash);
       }
-
 
 
 #if DEBUG

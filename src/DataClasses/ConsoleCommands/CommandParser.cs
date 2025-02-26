@@ -1,4 +1,5 @@
-﻿using System.Reflection.Metadata;
+﻿using System.IO;
+using System.Reflection.Metadata;
 using Editor.Helper;
 
 namespace Editor.DataClasses.ConsoleCommands;
@@ -69,16 +70,12 @@ public class CommandHandler
 
    internal List<Command> GetCommands() => _commands.Values.Distinct().ToList();
 
-   public static void SaveMacros() => JSONWrapper.Save(_macros, Path.Combine(Globals.AppDirectory, MACRO_FILE));
+   public static void SaveMacros() => JSONWrapper.SaveToModforgeData(_macros, MACRO_FILE);
    public static void LoadMacros()
    {
-      var path = Path.Combine(Globals.AppDirectory, MACRO_FILE);
-      if (File.Exists(path))
-      {
-         var macros = JSONWrapper.Load<Dictionary<string, Dictionary<string, string>>>(path);
+      if (JSONWrapper.LoadFromModforgeData<Dictionary<string, Dictionary<string, string>>>(MACRO_FILE, out var macros))
          foreach (var (key, value) in macros)
             _macros.Add(key, value);
-      }
    }
 
    public bool SetAlias(string alias, string command)
@@ -103,14 +100,13 @@ public class CommandHandler
 
    public static void Register(CommandHandler handler)
    {
-      _macros[handler.Identifier] = [];
+      if (!_macros.ContainsKey(handler.Identifier))
+         _macros[handler.Identifier] = [];
    }
 
    public bool AddMacro(string key, string value)
    {
-      if (!_macros[Identifier].TryAdd(key, value))
-         return false;
-      return true;
+      return _macros[Identifier].TryAdd(key, value);
    }
 
    public bool RemoveMacro(string key)
@@ -133,6 +129,8 @@ public class CommandHandler
       value = [];
       return false;
    }
+
+   public void ClearMacros() => _macros[Identifier].Clear();
 
    public void RegisterCommand(Command command)
    {
