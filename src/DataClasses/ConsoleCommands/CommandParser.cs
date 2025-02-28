@@ -6,9 +6,9 @@ namespace Editor.DataClasses.ConsoleCommands;
 
 public enum ClearanceLevel
 {
-   Debug,
    User,
-   Admin // Higher than User but should not be important until project files are added
+   Admin, // Higher than User but should not be important until project files are added
+   Debug,
 }
 
 public class Command(string name, string usage, Func<string[], string[]> execute, ClearanceLevel clearance, params string[] aliases)
@@ -29,7 +29,12 @@ public class CommandHandler
    public static Dictionary<string, string> GetMacros(string identifier) => _macros[identifier];
 
    private readonly Dictionary<string, Command> _commands = new();
-   private ClearanceLevel _currentClearance = ClearanceLevel.User;
+   private ClearanceLevel _currentClearance =
+#if DEBUG
+      ClearanceLevel.Debug;
+#else
+      ClearanceLevel.User;
+#endif
 
    private int _historyIndex = 0;
    public bool TrimQuotesOnArguments { get; } = true;

@@ -100,7 +100,7 @@ namespace Editor.Controls
          RowCount = 2;
          Margin = new(5, 0, 5, 5);
          Width = width;
-         Height = 70;
+         Height = 73;
          base.BackColor = Globals.Settings.Achievements.AchievementItemBackColor;
 
 
@@ -110,7 +110,7 @@ namespace Editor.Controls
             args.Graphics.DrawRectangle(p, 0, 0, Width - 1, Height - 1);
          };
 
-         ColumnStyles.Add(new(SizeType.Absolute, 70));
+         ColumnStyles.Add(new(SizeType.Absolute, 73));
          ColumnStyles.Add(new(SizeType.Percent, 100));
          ColumnStyles.Add(new(SizeType.Absolute, 240));
 

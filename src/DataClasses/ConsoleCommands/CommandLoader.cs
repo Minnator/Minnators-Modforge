@@ -1,5 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Reflection.Metadata;
+using Windows.Media.Devices;
+using Editor.DataClasses.Achievements;
+using Editor.Forms.PopUps;
 using Editor.Helper;
 using Editor.Loading.Enhanced.PCFL;
 
@@ -20,7 +23,31 @@ namespace Editor.DataClasses.ConsoleCommands
          SetUtilityCommands();
          SetProvinceCommands();
          RunFiles();
+#if DEBUG
+         DebugCommands();
+#endif
       }
+
+#if DEBUG
+      private void DebugCommands()
+      {
+         _handler.RegisterCommand(new("ach_popup", "Usage: ach_popup", args =>
+         {
+            var achievement = AchievementManager.GetAchievement(AchievementId.UseForTheFirstTime);
+            if (achievement is null)
+               return ["Achievement not found"];
+            AchievementPopup.Show(achievement);
+            AchievementPopup.Show(achievement);
+            AchievementPopup.Show(achievement);
+            AchievementPopup.Show(achievement);
+            AchievementPopup.Show(achievement);
+            AchievementPopup.Show(achievement);
+            AchievementPopup.Show(achievement);
+            return [$"Showing achievement popup for {achievement.Name}"];
+         }, ClearanceLevel.Debug));
+      }
+
+#endif
 
       private void RunFiles()
       {

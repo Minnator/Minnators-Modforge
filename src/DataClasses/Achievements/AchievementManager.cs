@@ -20,19 +20,13 @@ namespace Editor.DataClasses.Achievements
 #if DEBUG
       ExampleAchievement,
 #endif
-      Create10Countries,
-      Create50Countries,
-      Create100Countries,
-      Create250Countries,
-      Edit100Provinces,
-      Edit500Provinces,
-      Edit1000Provinces,
-      Edit5000Provinces,
+      UseForTheFirstTime,
    }
 
    public enum AchievementImage
    {
       Default,
+      UseForTheFirstTime,
    }
 
    public static class AchievementManager
@@ -51,6 +45,7 @@ namespace Editor.DataClasses.Achievements
       private static readonly Dictionary<AchievementImage, Bitmap> _achievementImages = new()
       {
          [AchievementImage.Default] = Resources.AchievementExample,
+         [AchievementImage.UseForTheFirstTime] = Resources.UseForTheFirstTime,
       };
 
       private const string ACHIEVEMENT_FILE_NAME = "achievements.json";
@@ -107,79 +102,15 @@ namespace Editor.DataClasses.Achievements
 
       public static void GenerateAchievements()
       {
-         _achievements[AchievementId.Create10Countries] = new(
-                                                              AchievementId.Create10Countries,
-                                                              "Create 10 Countries",
-                                                              "Create 10 countries in the editor.",
-                                                              new ProgressCondition(10, AchievementId.Create10Countries),
-                                                              AchievementImage.Default,
+         _achievements[AchievementId.UseForTheFirstTime] = new(
+                                                              AchievementId.UseForTheFirstTime,
+                                                              "Swing the hammer",
+                                                              "Use Minnator's Modforge for the first time",
+                                                              new ProgressCondition(1, AchievementId.UseForTheFirstTime),
+                                                              AchievementImage.UseForTheFirstTime,
                                                               level: 0
                                                              );
 
-         return;
-
-         _achievements[AchievementId.Create50Countries] = new(
-                                                              AchievementId.Create50Countries,
-                                                              "Create 50 Countries",
-                                                              "Create 50 countries in the editor.",
-                                                              new ProgressCondition(50, AchievementId.Create50Countries),
-                                                              AchievementImage.Default,
-                                                              level: 1
-                                                             );
-
-         _achievements[AchievementId.Create100Countries] = new(
-                                                               AchievementId.Create100Countries,
-                                                               "Create 100 Countries",
-                                                               "Create 100 countries in the editor.",
-                                                               new ProgressCondition(100, AchievementId.Create100Countries),
-                                                               AchievementImage.Default,
-                                                               level: 2
-                                                              );
-
-         _achievements[AchievementId.Create250Countries] = new(
-                                                               AchievementId.Create250Countries,
-                                                               "Create 250 Countries",
-                                                               "Create 250 countries in the editor.",
-                                                               new ProgressCondition(250, AchievementId.Create250Countries),
-                                                               AchievementImage.Default,
-                                                               level: 3
-                                                              );
-
-         _achievements[AchievementId.Edit100Provinces] = new(
-                                                             AchievementId.Edit100Provinces,
-                                                             "Edit 100 Provinces",
-                                                             "Edit 100 provinces in the editor.",
-                                                             new ProgressCondition(100, AchievementId.Edit100Provinces),
-                                                             AchievementImage.Default,
-                                                             level: 0
-                                                            );
-
-         _achievements[AchievementId.Edit500Provinces] = new(
-                                                             AchievementId.Edit500Provinces,
-                                                             "Edit 500 Provinces",
-                                                             "Edit 500 provinces in the editor.",
-                                                             new ProgressCondition(500, AchievementId.Edit500Provinces),
-                                                             AchievementImage.Default,
-                                                             level: 1
-                                                            );
-
-         _achievements[AchievementId.Edit1000Provinces] = new(
-                                                              AchievementId.Edit1000Provinces,
-                                                              "Edit 1000 Provinces",
-                                                              "Edit 1000 provinces in the editor.",
-                                                              new ProgressCondition(1000, AchievementId.Edit1000Provinces),
-                                                              AchievementImage.Default,
-                                                              level: 2
-                                                             );
-
-         _achievements[AchievementId.Edit5000Provinces] = new(
-                                                              AchievementId.Edit5000Provinces,
-                                                              "Edit 5000 Provinces",
-                                                              "Edit 5000 provinces in the editor.",
-                                                              new ProgressCondition(5000, AchievementId.Edit500Provinces),
-                                                              AchievementImage.Default,
-                                                              level: 3
-                                                             );
       }
 
       public static void SaveAchievements()

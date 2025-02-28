@@ -103,6 +103,7 @@ namespace Editor.DataClasses.Achievements
          {
             IsAchieved = true;
             DateAchieved = DateTime.Now;
+            Condition.IncreaseProgress(float.MaxValue);
             AchievementEvents.NotifyCompletion(Id);
          }
       }

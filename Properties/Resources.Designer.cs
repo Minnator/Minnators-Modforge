@@ -361,6 +361,16 @@ namespace Editor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap UseForTheFirstTime {
+            get {
+                object obj = ResourceManager.GetObject("UseForTheFirstTime", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Wrench {
             get {
                 object obj = ResourceManager.GetObject("Wrench", resourceCulture);
