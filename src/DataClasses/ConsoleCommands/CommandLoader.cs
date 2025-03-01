@@ -45,10 +45,74 @@ namespace Editor.DataClasses.ConsoleCommands
             AchievementPopup.Show(achievement);
             return [$"Showing achievement popup for {achievement.Name}"];
          }, ClearanceLevel.Debug));
+
+         // achievement debug command 
+         var achievementUsage = "Usage: achievement <id> [-set, -reset, -get, --add <value>]";
+         _handler.RegisterCommand(new("achievement", achievementUsage, args =>
+         {
+            if (args.Length == 0)
+               return [achievementUsage];
+
+            var achievement = AchievementManager.GetAchievementFromIdName(args[0]);
+            if (achievement is null)
+               return [$"Achievement <{args[0]}> not found"];
+
+            if (args.Length == 1)
+               return [achievement.Name, achievement.Description];
+
+            if (args.Length == 2)
+            {
+               if (args[1].Equals("-set"))
+               {
+                  achievement.SetAchieved();
+                  return [$"Achievement '{achievement.Name}' completed."];
+               }
+               if (args[1].Equals("-reset"))
+               {
+                  achievement.Reset();
+                  return [$"Achievement '{achievement.Name}' reset."];
+               }
+               if (args[1].Equals("-get"))
+                  if (achievement.Condition is ProgressCondition condition)
+                     return [$"Achievement '{achievement.Name}' progress: {condition.GetProgress()}/{condition.Goal} ({GetPercentage(condition.CurrentProgress, condition.Goal):0.00}%)"];
+                  else
+                     return [$"Achievement '{achievement.Name}' progress: {achievement.Condition.GetProgress()}"];
+            }
+
+            if (args.Length == 3)
+            {
+               if (args[1].Equals("--add") && float.TryParse(args[2], out var value))
+               {
+                  achievement.Condition.IncreaseProgress(value);
+                  return [$"Achievement '{achievement.Name}' progress increased by {value}"];
+               }
+            }
+
+            return [achievementUsage];
+         }, ClearanceLevel.Debug));
+
+         // achievements clear and list commands
+         var achievementClearUsage = "Usage: achievements [-c] [-l]";
+         _handler.RegisterCommand(new("achievements", achievementClearUsage, args =>
+         {
+            if (args is ["-c"])
+            {
+               AchievementManager.ResetAchievements();
+               return ["Achievements cleared"];
+            }
+
+            if (args is ["-l"])
+            {
+               return ["Achievements: ", .. Enum.GetNames<AchievementId>()];
+            }
+
+            return [achievementClearUsage];
+         }, ClearanceLevel.Debug));
       }
 
-#endif
 
+#endif
+      
       private void RunFiles()
       {
          var runFileUsage = "Usage: run <file1(relative to .exe)> -p|-c";
@@ -134,8 +198,6 @@ namespace Editor.DataClasses.ConsoleCommands
                return [echoUsage]; // Use the captured variable
             return [string.Join(" ", args)];
          }, ClearanceLevel.User, "say"));
-
-
          // help
          _handler.RegisterCommand(new("help", "", args =>
          {
@@ -143,7 +205,6 @@ namespace Editor.DataClasses.ConsoleCommands
             cmds.Sort();
             return [.. cmds];
          }, ClearanceLevel.User));
-
          // Aliases
          _handler.RegisterCommand(new("aliases", "", args =>
          {
@@ -151,7 +212,7 @@ namespace Editor.DataClasses.ConsoleCommands
             cmds.Sort();
             return [.. cmds];
          }, ClearanceLevel.User));
-
+         // alias
          var aliasUsage = "Usage: alias <name> <command> [-r]";
          _handler.RegisterCommand(new("alias", aliasUsage, args =>
          {
@@ -174,7 +235,7 @@ namespace Editor.DataClasses.ConsoleCommands
             return [aliasUsage];
 
          }, ClearanceLevel.User));
-
+         // macro
          var macroUsage = "Macro: macro [-l, -c] <name> \"<value>\" [-r, -a]";
          _handler.RegisterCommand(new("macro", macroUsage, args =>
          {
@@ -221,7 +282,6 @@ namespace Editor.DataClasses.ConsoleCommands
             }
             return [macroUsage];
          }, ClearanceLevel.User));
-
          // clear
          var clearUsage = "Usage: clear [--l <lines>]";
          _handler.RegisterCommand(new("clear", clearUsage, args =>
@@ -236,24 +296,36 @@ namespace Editor.DataClasses.ConsoleCommands
             _outputBox.Clear();
             return [];
          }, ClearanceLevel.User));
-
          // list
          _handler.RegisterCommand(new("list", "", args =>
          {
-            var names = _handler.GetCommands();
+            var names = _handler.GetCommands().Where(x => x.Clearance <= _handler.Clearance).ToList();
             names.Sort((a, b) => string.Compare(a.Name, b.Name, StringComparison.Ordinal));
 
             var list = WriteFormattedColumns(names.Select(x => x.Name).ToArray(), names.Select(x => x.Usage).ToArray());
+
+            var clearanceArray = names.Select(x =>
+            {
+               return x.Clearance switch
+               {
+                  ClearanceLevel.Debug => "[D]",
+                  ClearanceLevel.User => "[U]",
+                  ClearanceLevel.Admin => "[A]",
+                  _ => "[-]"
+               };
+            }).ToList();
+
+            for (var i = 0; i < list.Length; i++)
+               list[i] = $"{clearanceArray[i]} {list[i]}";
+
             return ["Available Commands:", .. list];
          }, ClearanceLevel.User));
-
          // execution directory
          _handler.RegisterCommand(new("directory", "", args =>
          {
             return ["Executing directory:", Directory.GetCurrentDirectory()];
          }, ClearanceLevel.User, "dir", "pwd"));
-
-
+         // history
          _handler.RegisterCommand(new("history", "Usage: history [-c]", args =>
          {
             if (args is ["-c"])
@@ -264,7 +336,7 @@ namespace Editor.DataClasses.ConsoleCommands
 
             return _handler.History.Count > 0 ? ["History: ", .. _handler.History.ToArray()] : ["No commands in history"];
          }, ClearanceLevel.User));
-
+         // table
          _handler.RegisterCommand(new("table", "Usage: table <val1,val2,val3...> <column2> ...", args =>
          {
             if (args.Length < 2)
@@ -275,6 +347,7 @@ namespace Editor.DataClasses.ConsoleCommands
          }, ClearanceLevel.User));
       }
 
+      private float GetPercentage(float value, float max) => Math.Clamp(value / max * 100, 0, 100);
 
       private static void RemoveLastLines(RichTextBox outputBox, int lineCount)
       {

@@ -24,6 +24,7 @@ namespace Editor.DataClasses.Achievements
       internal float GetProgress();
       internal bool CheckCondition();
       internal Bitmap GetIcon();
+      internal void Reset();
    }
 
    public interface IAchievementCondition
@@ -31,6 +32,7 @@ namespace Editor.DataClasses.Achievements
       float GetProgress();
       bool IsCompleted();
       void IncreaseProgress(float amount);
+      void Reset();
    }
 
 
@@ -50,10 +52,14 @@ namespace Editor.DataClasses.Achievements
       public bool IsCompleted() => CurrentProgress >= goal;
       public void IncreaseProgress(float amount)
       {
+         if (IsCompleted()) 
+            return;
          _currentProgress = Math.Min(Goal, _currentProgress += amount);
          if (IsCompleted()) 
-            AchievementEvents.NotifyCompletion(_id);
+            AchievementManager.GetAchievement(Id).SetAchieved();
       }
+
+      public void Reset() => _currentProgress = 0;
    }
 
 
@@ -125,6 +131,13 @@ namespace Editor.DataClasses.Achievements
          Condition.IncreaseProgress(progress);
          if (CheckCondition()) 
             IsAchieved = true;
+      }
+
+      public void Reset()
+      {
+         IsAchieved = false;
+         DateAchieved = DateTime.MinValue;
+         Condition.Reset();
       }
    }
    

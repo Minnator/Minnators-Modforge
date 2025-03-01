@@ -126,6 +126,8 @@ namespace Editor.Forms
          debugToolStripMenuItem.Enabled = true;
          debugToolStripMenuItem.Visible = true;
 #endif
+
+         AchievementManager.IncreaseAchievementProgress(1, AchievementId.UseForTheFirstTime);
       }
 
       #region Initialize Application and Loadingscreen

@@ -59,6 +59,7 @@ public class AchievementPopup : Form
       Opacity = 0; // Start invisible
       Size = new(250, 60);
       TopMost = false;
+      ShowInTaskbar = false;
 
       Location = new(Screen.PrimaryScreen!.WorkingArea.Width - Width - PADDING, Screen.PrimaryScreen.WorkingArea.Height);
       _targetY = Screen.PrimaryScreen.WorkingArea.Height - Height - PADDING;

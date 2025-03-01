@@ -6,6 +6,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Editor.Controls;
 using Editor.ErrorHandling;
+using Editor.Forms.PopUps;
 using Editor.Helper;
 using Editor.Properties;
 using Editor.Saving;
@@ -54,8 +55,8 @@ namespace Editor.DataClasses.Achievements
       {
          AchievementEvents.OnAchievementCompleted += id =>
          {
-            if (_achievements.TryGetValue(id, out var achievement)) 
-               Debug.WriteLine($"🎉 Achievement Unlocked: {achievement.Name}");
+            if (_achievements.TryGetValue(id, out var achievement))
+               AchievementPopup.Show(achievement);
             else
                throw new EvilActions($"Achievement {achievement} does not exist in the Manager. This is an illegal state.");
          };
@@ -73,19 +74,20 @@ namespace Editor.DataClasses.Achievements
          _achievements[achievement.Id] = achievement;
       }
 
-      public static Achievement GetAchievement(AchievementId id)
+      public static Achievement? GetAchievement(AchievementId id)
       {
          if (_achievements.TryGetValue(id, out var achievement)) 
             return achievement;
          throw new EvilActions($"Achievement {achievement} does not exist in the Manager. This is an illegal state.");
       }
-
-      public static void IncreaseAchievementProgress(AchievementId id, float amount)
+      
+      public static void IncreaseAchievementProgress(float amount, params AchievementId[] id)
       {
-         if (_achievements.TryGetValue(id, out var achievement)) 
-            achievement.IncreaseProgress(amount);
-         else
-            throw new EvilActions($"Achievement {achievement} does not exist in the Manager. This is an illegal state.");
+         foreach (var aId in id)
+            if (_achievements.TryGetValue(aId, out var achievement))
+               achievement.IncreaseProgress(amount);
+            else
+               throw new EvilActions($"Achievement {achievement} does not exist in the Manager. This is an illegal state.");
       }
 
       public static Color GetAchievementColor(int level)
@@ -98,6 +100,12 @@ namespace Editor.DataClasses.Achievements
       public static IEnumerable<Achievement> GetAchievements()
       {
          return _achievements.Values;
+      }
+
+      public static void ResetAchievements()
+      {
+         foreach (var achievement in _achievements.Values)
+            achievement.Reset();
       }
 
       public static void GenerateAchievements()
@@ -162,6 +170,7 @@ namespace Editor.DataClasses.Achievements
          return Convert.ToBase64String(hash);
       }
 
+      public static Achievement? GetAchievementFromIdName(string name) => _achievements.Values.FirstOrDefault(a => a.Id.ToString().Equals(name));
 
 #if DEBUG
       public static void DebugVisualize()

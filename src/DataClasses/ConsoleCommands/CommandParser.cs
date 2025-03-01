@@ -50,6 +50,8 @@ public class CommandHandler
       set => _historyIndex = value;
    }
 
+   public ClearanceLevel Clearance => _currentClearance;
+
    internal List<string> History => _histories[Identifier];
 
    private RichTextBox OutputBox { get; }
