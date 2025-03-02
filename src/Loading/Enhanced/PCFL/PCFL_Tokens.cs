@@ -59,88 +59,6 @@ namespace Editor.Loading.Enhanced.PCFL
     * limits are not positional, and all must be true for several limits in one effect/scope/trigger
     */
 
-   public class Effect
-   {
-      public List<PCFL_Token> Tokens = [];
-   }
-
-   public class ScopeSwitch : Effect // every_ and random_
-   {
-
-   }
-
-
-
-   public abstract class Trigger<T> where T : ITarget // can only contain PCFL_Tokens which are scope switches, flow controls or triggers
-   {
-      public abstract bool Evaluate(T target);
-
-
-   }
-
-   public class TriggerScopeSwitch<T> : Trigger<T> where T : ITarget// all_ and any_
-   {
-      public override bool Evaluate(T target)
-      {
-         throw new NotImplementedException();
-      }
-   }
-
-   public class BaseTrigger<T>(object[] values, Func<T, BaseTrigger<T>, bool> function) : Trigger<T> where T : ITarget
-   {
-      public override bool Evaluate(T target)
-      {
-         return function(target, this);
-      }
-   }
-
-
-   // Parse -> Evalute Scripted: Define Blueprint -> Parse Blueprint to Trigger -> Evaluate
-   // Scripted Triggers will be populated with values during Evaluation from a dictionary
-   public class ScriptedTrigger
-   {
-
-   }
-
-   public class PCFL_ComplexTrigger<T>(string[] options) where T : ITarget
-   {
-
-      public Func<T, BaseTrigger<T>, bool> TestFunc { get; init; }
-      // checks for validity of the trigger and returns the values
-      public Func<List<KeyValuePair<string, string>>, object[]> GetFunc { get; init; }
-
-      public BaseTrigger<T> ConstructTrigger(List<KeyValuePair<string, string>> kvps)
-      {
-         return new(GetFunc(kvps), TestFunc);
-      }
-
-
-      public static void Test()
-      {
-         Func<T, BaseTrigger<T>, bool> function = (b, t) => { return true; };
-         var estate_influence = new PCFL_ComplexTrigger<T>(["estate", "influence"])
-         {
-            TestFunc = function,
-            GetFunc = (b) => { return [];}
-         };
-
-
-
-
-      }
-   }
-
-   /*
-    * Value<T> get T 
-    * BoolValue<bool> get T
-    * ReplaceValue<bool> get bool Dictionary mit nem name
-    */ 
-
-   public class TargetDummy : ITarget
-   {
-
-   }
-
    /*
       estate_influence = {
           estate = estate_church
@@ -165,21 +83,4 @@ namespace Editor.Loading.Enhanced.PCFL
       NOT
    }
 
-   public class BooleanOperation<T>(Operation op) : Trigger<T> where T : ITarget // AND, OR, NOT
-   {
-
-      
-      List<Trigger<T>> Triggers = [];
-
-      public override bool Evaluate(T target)
-      {
-         return op switch
-         {
-            Operation.AND => Triggers.All(t => t.Evaluate(target)),
-            Operation.OR => Triggers.Any(t => t.Evaluate(target)),
-            Operation.NOT => !Triggers.All(t => t.Evaluate(target)),
-            _ => throw new EvilActions("WTF is this operation? We don't do quantum stuff yet!")
-         };
-      }
-   }
 }

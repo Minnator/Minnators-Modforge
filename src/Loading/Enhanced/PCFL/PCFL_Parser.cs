@@ -8,14 +8,6 @@ namespace Editor.Loading.Enhanced.PCFL;
 
 public static class PCFL_TriggerParser
 {
-   public static readonly HashSet<string> ForbiddenKeyWords =
-   [
-      "limit",
-      "AND",
-      "OR",
-      "NOT"
-   ];
-
    #region ValuesParsing
 
    // Boolean Methods
@@ -193,7 +185,7 @@ public static class PCFL_TriggerParser
          {
             foreach (var kvp in ((EnhancedContent)element).GetLineKvpEnumerator(po))
             {
-
+               // TODO : Parse Effects
             }
          }
       }
@@ -342,32 +334,4 @@ public static class PCFL_TriggerParser
       return true;
    }
 }
-
-
-
-/*
-  Hirachie:
-  EffectOberKlasse EOK: Spezifische Effekte oder Trigger oder generalisierte ScopeSwitches
-  
-  Trigger(List<EOK>)
-  ScopeSwitch(List<EOK>)
-
-  scope country: all_owned_provinces
-
-
-
-  ScopeSwitch Province
-      TriggerObj ([TriggerIsCore(TUR)])
-         EffectObj add_x value = 4
-
-
-   
-   every_owned_province = {
-   	limit = {
-   		is_core = TUR
-   	}
-      add_x
-   }
-
- */
 

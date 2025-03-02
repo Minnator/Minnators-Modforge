@@ -3,9 +3,6 @@ using Editor.Loading.Enhanced.PCFL.Scribbel;
 
 namespace Editor.Loading.Enhanced.PCFL
 {
-
-
-
    // can also be used in triggers
    public class IfFLowControl : PCFL_Token
    {
