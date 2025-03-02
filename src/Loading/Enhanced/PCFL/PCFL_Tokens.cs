@@ -1,11 +1,23 @@
-﻿using Editor.Saving;
+﻿using Editor.DataClasses.GameDataClasses;
+using Editor.Saving;
 
 namespace Editor.Loading.Enhanced.PCFL
 {
+
+   // Only used for ScopeSwitches, Actions and FlowControls
    public abstract class PCFL_Token
    {
-      
+      public abstract void Activate(Scope scope, ITarget target);
    }
+
+   /*
+    * One Superclass to handle Scope switches, Actions, FlowControls
+    * -> All of them have an Activate
+    *
+    * Triggers have scope switches
+    * -> All of them have an Evaluate
+    *
+    */
 
    /*
     *

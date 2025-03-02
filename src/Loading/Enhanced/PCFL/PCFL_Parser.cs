@@ -8,6 +8,14 @@ namespace Editor.Loading.Enhanced.PCFL;
 
 public static class PCFL_TriggerParser
 {
+   public static readonly HashSet<string> ForbiddenKeyWords =
+   [
+      "limit",
+      "AND",
+      "OR",
+      "NOT"
+   ];
+
    #region ValuesParsing
 
    // Boolean Methods
@@ -140,7 +148,8 @@ public static class PCFL_TriggerParser
 
    #endregion
 
-   public static List<PCFL_Token> ParseSomeFile(LineKvp<string, string> input, PCFL_Scope scope)
+   // Parses a file as an effect
+   public static List<PCFL_Token> ParseSomeFile(string content, PCFL_Scope scope, PathObj po)
    {
       /*
        * how do we know what do to?
@@ -149,11 +158,99 @@ public static class PCFL_TriggerParser
        * if we are effect we call us again bc we like recursion
        */
 
+      var orderedElement = EnhancedParser.LoadBaseOrder(content, po);
 
+      List<PCFL_Token> program = [];
+
+      var limitIfFlowControl = new IfFLowControl(Trigger.Empty, []);
+
+      foreach (var element in orderedElement)
+      {
+         if (element.IsBlock)
+         {
+            var block = (EnhancedBlock)element;
+            if (block.Name.Equals("limit"))
+            {
+               List<Trigger> triggers = [];
+
+               if (block.ParseTriggerBlock(scope, po, triggers))
+               {
+                  if (limitIfFlowControl.Trigger == Trigger.Empty) 
+                     limitIfFlowControl.Trigger = triggers[0];
+                  else if (limitIfFlowControl.Trigger is BooleanOperation { Operation: Operation.AND } operation)
+                     operation.Triggers.AddRange(triggers);
+                  else
+                     limitIfFlowControl.Trigger = new BooleanOperation(Operation.AND, [..triggers, limitIfFlowControl.Trigger]);
+               }
+               else
+                  _ = new ErrorObject(ErrorType.EmptyLimitBlock,
+                                      $"Block '{block.Name}' has an empty 'limit' which can be removed as it is always true.",
+                                      level: LogType.Information);
+            }
+
+         }
+         else
+         {
+            foreach (var kvp in ((EnhancedContent)element).GetLineKvpEnumerator(po))
+            {
+
+            }
+         }
+
+         if (limitIfFlowControl.Trigger != Trigger.Empty) // a trigger in a scope is interpreted as a simple 'if'
+         {
+            limitIfFlowControl.SubTokens = program;
+            return [limitIfFlowControl];
+         }
+         return program;
+      }
 
 
       return [];
    }
+
+   // used for limit, AND, NOT, OR, 
+   public static bool ParseTriggerBlock(this EnhancedBlock block, PCFL_Scope scope, PathObj po, List<Trigger> trigger)
+   {
+      foreach (var triggerElement in block.GetElements())
+      {
+         if (triggerElement.IsBlock)
+         {
+            ParseTrigger((EnhancedBlock)triggerElement, scope, po, out var newTrigger);
+            trigger.Add(newTrigger);
+         }
+         else
+         {
+            foreach (var kvp in ((EnhancedContent)triggerElement).GetLineKvpEnumerator(po))
+            {
+               ParseTrigger(kvp, scope, po, out var newTrigger);
+               trigger.Add(newTrigger);
+            }
+         }
+      }
+      
+      return trigger.Count > 0;
+   }
+
+   public static bool ParseTriggerBlockToAnd(this EnhancedBlock block, PCFL_Scope scope, PathObj po, out Trigger trigger)
+   {
+      List<Trigger> triggers = [];
+      if (!block.ParseTriggerBlock(scope, po, triggers))
+      {
+         trigger = Trigger.Empty;
+         return false;
+      }
+
+      if (triggers.Count == 1)
+      {
+         trigger = triggers[0];
+         return true;
+      }
+
+      trigger = new BooleanOperation(Operation.AND, triggers);
+      return true;
+   }
+
 
    // Ragequit -> Escalates errors
    public static bool ParseTrigger(LineKvp<string, string> input, PCFL_Scope scope, PathObj po, out Trigger trigger)
@@ -169,11 +266,31 @@ public static class PCFL_TriggerParser
    }
 
    // Mod -> Recovers from errors
-   public static bool ParseTrigger(EnhancedBlock block, PCFL_Scope scope, PathObj po, out Trigger trigger)
+   public static bool ParseTrigger(EnhancedBlock block, PCFL_Scope scope, PathObj po, out Trigger? trigger)
    {
       trigger = null!;
-      // TODO check if boolean trigger 
-      // TODO Method to ONLY take care of a block's content for occurrences like limit, AND, OR, NOT
+      switch (block.Name.ToUpper())
+      {
+         case "NOT":
+            trigger = BooleanOperation.Parse(block, scope, po, Operation.NOT);
+            return true;
+         case "AND":
+            trigger = BooleanOperation.Parse(block, scope, po, Operation.AND);
+            return true;
+         case "OR":
+            trigger = BooleanOperation.Parse(block, scope, po, Operation.OR);
+            return true;
+      }
+      
+      // parse trigger scopeSwitches
+      /*
+       * Check if block.Name is trigger-ScopeSwitch
+       * if so:
+       *    parse as one
+       * if not
+       *    what is it doing here
+      */
+
       if (!scope.IsValidTrigger(block.Name, out var creator))
       {
          _ = new LoadingError(po, $"Invalid Trigger: {block.Name}", line:block.StartLine, type: ErrorType.PCFL_TriggerValidationError);

@@ -12,7 +12,7 @@ namespace Editor.Loading.Enhanced.PCFL
       private const string TRIGGER_DESCRIPTION = "Returns true if the base manpower of the province is at least X.";
       private const string TRIGGER_EXAMPLE = "base_manpower = 3";
       private const ScopeType TRIGGER_SCOPE = ScopeType.Province;
-      
+
       private Value<int> _baseManpower = new(0); // Default value and type of int
 
 
@@ -75,4 +75,5 @@ namespace Editor.Loading.Enhanced.PCFL
          return ((Province)target).BaseTax >= _baseTax.Val;
       }
    }
+
 }

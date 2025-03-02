@@ -1,13 +1,15 @@
-﻿using Editor.ErrorHandling;
+﻿using Windows.Devices.Spi;
+using Editor.ErrorHandling;
 using Editor.Forms.Loadingscreen;
 using Editor.Saving;
 
 namespace Editor.Loading.Enhanced.PCFL.Scribbel
 {
 
-   public abstract class Trigger
+   public class Trigger
    {
-      public abstract bool Evaluate(ITarget target);
+      public static Trigger Empty { get; } = new();
+      public virtual bool Evaluate(ITarget target) => true;
 
       public virtual bool ParseWithReplacement(ScriptedTriggerSource parent, EnhancedBlock block, PathObj po)
       {
@@ -19,6 +21,7 @@ namespace Editor.Loading.Enhanced.PCFL.Scribbel
          throw new NotImplementedException();
       }
 
+      // TODO scope?
       public virtual bool Parse(EnhancedBlock block, PathObj po)
       {
          throw new NotImplementedException();
@@ -217,13 +220,13 @@ namespace Editor.Loading.Enhanced.PCFL.Scribbel
 
    public class BooleanOperation(Operation op, List<Trigger> triggers) : Trigger// AND, OR, NOT
    {
+      public Operation Operation { get; init; } = op;
 
-
-      List<Trigger> Triggers = triggers;
+      public List<Trigger> Triggers = triggers;
 
       public override bool Evaluate(ITarget target)
       {
-         return op switch
+         return Operation switch
          {
             Operation.AND => Triggers.All(t => t.Evaluate(target)),
             Operation.OR => Triggers.Any(t => t.Evaluate(target)),
@@ -231,7 +234,25 @@ namespace Editor.Loading.Enhanced.PCFL.Scribbel
             _ => throw new EvilActions("WTF is this operation? We don't do quantum stuff yet!")
          };
       }
+
+
+      public static Trigger Parse(EnhancedBlock block, PCFL_Scope scope, PathObj po, Operation op)
+      {
+         List<Trigger> triggers = [];
+         if (!block.ParseTriggerBlock(scope, po, triggers))
+            return Empty;
+
+         // if there is one element anyway just simplify
+         if (triggers.Count == 1 && op != Operation.NOT)
+         {
+            _ = new LoadingError(po, "Omitted an unnecessary 'AND' or 'OR' statement", line: block.StartLine, level: LogType.Information);
+            return triggers[0];
+         }
+
+         return new BooleanOperation(op, triggers);
+      }
    }
+
 
    // ex (TAX) <- Scripted
    // hehe (hello) -> ex(hello) <- CalledTrigger with parameter

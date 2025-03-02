@@ -1,4 +1,5 @@
-﻿using Editor.DataClasses.Saveables;
+﻿using System.Diagnostics;
+using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
 using Editor.Loading.Enhanced.PCFL.Scribbel;
 using Editor.Saving;
@@ -20,7 +21,7 @@ namespace Editor.Loading.Enhanced.PCFL
    {
       Country,
       Province,
-      Tradenode,
+      TradeNode,
       Ruler,
       Heir,
       Consort,
@@ -49,14 +50,87 @@ namespace Editor.Loading.Enhanced.PCFL
       private Dictionary<string, PCFL_EffectBase> Effects;
       */
 
-
+      
    }
 
-   public static class ScriptExecutionTest
+   public abstract class All_ScopeSwitch(Trigger trigger) : Trigger
+   {
+      public readonly Trigger Trigger = trigger;
+
+      public abstract List<ITarget> GetTargets(ITarget target);
+
+      public bool EvaluateIfMoreOrEqualThan(ITarget target, int n)
+      {
+         var counter = 0;
+         foreach (var innerTarget in GetTargets(target))
+            if (Trigger.Evaluate(innerTarget))
+               if (++counter >= n)
+                  return true;
+         return false;
+      }
+
+      public override bool Evaluate(ITarget target)
+      {
+         foreach (var innerTarget in GetTargets(target))
+         {
+            if (!Trigger.Evaluate(innerTarget))
+               return false;
+         }
+         return true;
+      }
+   }
+
+   public abstract class Any_ScopeSwitch(Trigger trigger) : Trigger
+   {
+      public readonly Trigger Trigger = trigger;
+      public abstract List<ITarget> GetTargets(ITarget target);
+
+      public bool EvaluateIfMoreOrEqualThan(ITarget target, int n)
+      {
+         _ = new ErrorInformation("Any scope used in 'calc_true_if'", "don't.");
+         return false;
+      }
+
+      public override bool Evaluate(ITarget target)
+      {
+         foreach (var innerTarget in GetTargets(target))
+         {
+            if (Trigger.Evaluate(innerTarget))
+               return true;
+         }
+         return false;
+      }
+   }
+
+   public class AllProvince_Scope(Trigger trigger) : All_ScopeSwitch(trigger)
+   {
+      public const string TRIGGER_NAME = "all_province";
+      public override List<ITarget> GetTargets(ITarget target) //TODO resolve via ref or enumerable to reduce ram in case of deep nesting
+      {
+         return Globals.Provinces.Cast<ITarget>().ToList();
+      }
+
+      public static Trigger CreateTrigger(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+      {
+         Debug.Assert(block is not null, "At this point the block must not be null. This must be filtered earlier in the pipeline");
+         
+         if (block.ParseTriggerBlockToAnd(MagicMister.ProvinceScope, po, out var trigger))
+            return new AllProvince_Scope(trigger);
+         return Empty;
+      }
+   }
+
+
+   public static class MagicMister
    {
       public static PCFL_Scope ProvinceScope = new (new()
       {
-         [BaseManpowerTrigger.TRIGGER_NAME] = BaseManpowerTrigger.CreateTrigger
+         [BaseManpowerTrigger.TRIGGER_NAME] = BaseManpowerTrigger.CreateTrigger,
+      });
+
+      public static PCFL_Scope CountryScope = new(new()
+      {
+         [AllProvince_Scope.TRIGGER_NAME] = AllProvince_Scope.CreateTrigger,
       });
    }
 

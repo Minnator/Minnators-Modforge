@@ -9,7 +9,8 @@ namespace Editor.Loading.Enhanced
 {
    public static class EnhancedParser
    {
-      public static T ParseBlock<T>(string blockName, EnhancedBlock block, PathObj po, ref int limit, Func<EnhancedBlock, PathObj, T> evaluator, Func<T> fallback)
+      public static T ParseBlock<T>(string blockName, EnhancedBlock block, PathObj po, ref int limit, Func<EnhancedBlock, PathObj, T> evaluator,
+                                    Func<T> fallback)
       {
          if (!block.GetSubBlockByName(blockName, out var subBlock))
             return fallback();
@@ -39,9 +40,11 @@ namespace Editor.Loading.Enhanced
       {
          if (block.SubBlockCount > limit)
          {
-            _ = new LoadingError(po, $"Unexpected block element in block \"{block.Name}\"! Expected {limit} but got {block.SubBlockCount}", block.StartLine, type: ErrorType.UnexpectedBlockElement);
+            _ = new LoadingError(po, $"Unexpected block element in block \"{block.Name}\"! Expected {limit} but got {block.SubBlockCount}", block.StartLine,
+                                 type: ErrorType.UnexpectedBlockElement);
             return false;
          }
+
          return true;
       }
 
@@ -59,11 +62,12 @@ namespace Editor.Loading.Enhanced
             pathObj = PathObj.FromPath(path, isModPath);
             return true;
          }
+
          _ = new LoadingError(new(internalPath, isModPath), "File not found", type: ErrorType.FileNotFound, level: LogType.Critical);
          pathObj = PathObj.Empty;
          return false;
       }
-      
+
       public static (List<EnhancedBlock>, List<EnhancedContent>) GetElements(this PathObj pathObj)
       {
          if (!IO.ReadAllInANSI(pathObj, out var content))
@@ -117,6 +121,7 @@ namespace Editor.Loading.Enhanced
                      }
                      else
                         currentContent.Append(c);
+
                      break;
                   case '"':
                      isInQuotes = !isInQuotes;
@@ -155,7 +160,8 @@ namespace Editor.Loading.Enhanced
 
                      if (trimmed.Length > 0) // We have remaining content in the currentContent which we need to add to the previous block element
                      {
-                        var content = new EnhancedContent(trimmed, contentStart, elementIndex++); // We create a new content element as there is no block element on the stack
+                        var content = new EnhancedContent(trimmed, contentStart,
+                                                          elementIndex++); // We create a new content element as there is no block element on the stack
                         if (blockStack.IsEmpty)
                         {
                            contents.Add(content);
@@ -167,16 +173,17 @@ namespace Editor.Loading.Enhanced
                            currentBlock->ContentElements.Add(content);
                            currentBlock->SubBlocks.Add(newBlock);
 
-                        }  
+                        }
                      }
-                     else  // No Content to be added, only add the new Block which was started
+                     else // No Content to be added, only add the new Block which was started
                      {
-                        
+
                         if (blockStack.IsEmpty)
                            blocks.Add(newBlock);
                         else
                            blockStack.PeekRef()->SubBlocks.Add(newBlock);
                      }
+
                      currentContent.Clear();
                      blockStack.Push(newBlock);
                      contentStart = i;
@@ -188,6 +195,7 @@ namespace Editor.Loading.Enhanced
                         currentContent.Append(c);
                         break;
                      }
+
                      if (blockStack.IsEmpty)
                      {
                         _ = new LoadingError(pathObj, "Unmatched closing brace", i + 1, charIndex, level: LogType.Critical);
@@ -197,9 +205,10 @@ namespace Editor.Loading.Enhanced
                      var currentStr = currentContent.ToString();
                      var trimmedClosing = currentStr.Trim();
 
-                     if (trimmedClosing.Length > 0)  // We have remaining content in the currentContent which we need to add to the previous block element
+                     if (trimmedClosing.Length > 0) // We have remaining content in the currentContent which we need to add to the previous block element
                      {
-                        var content = new EnhancedContent(trimmedClosing, currentStr[0] == '\n' ? contentStart + 1 : contentStart, elementIndex++); // We create a new content element as there is no block element on the stack
+                        var content = new EnhancedContent(trimmedClosing, currentStr[0] == '\n' ? contentStart + 1 : contentStart,
+                                                          elementIndex++); // We create a new content element as there is no block element on the stack
                         blockStack.PeekRef()->ContentElements.Add(content);
                         currentContent.Clear();
                      }
@@ -231,8 +240,10 @@ namespace Editor.Loading.Enhanced
                               if (wordStart != -1)
                                  currentContent.Append(' ');
                            }
+
                            break;
                         }
+
                         isInWhiteSpace = false;
                         if (c != '=')
                         {
@@ -252,6 +263,7 @@ namespace Editor.Loading.Enhanced
                      currentContent.Append(c);
                      break;
                }
+
                charIndex++;
             }
 
@@ -267,8 +279,8 @@ namespace Editor.Loading.Enhanced
             return ([], []);
          }
 
-         if (currentContent.Length > 0) 
-            contents.Add(new (currentContent.ToString(), contentStart, elementIndex++));
+         if (currentContent.Length > 0)
+            contents.Add(new(currentContent.ToString(), contentStart, elementIndex++));
 
          return (blocks, contents);
       }
@@ -288,11 +300,7 @@ namespace Editor.Loading.Enhanced
          switch (fca)
          {
             case FileContentAllowed.Both:
-               (blocks, contents) = GetElements(out po, internalPath);
-               break;
             case FileContentAllowed.BlocksOnly:
-               (blocks, contents) = GetElements(out po, internalPath);
-               break;
             case FileContentAllowed.ContentOnly:
                (blocks, contents) = GetElements(out po, internalPath);
                break;
@@ -302,6 +310,13 @@ namespace Editor.Loading.Enhanced
 
          return MergeBlocksAndContent(blocks, contents).ToList();
       }
+
+      public static List<IEnhancedElement> LoadBaseOrder(string content, PathObj po)
+      {
+         var (blocks, contents) = GetElements(po, content);
+         return MergeBlocksAndContent(blocks, contents).ToList();
+      }
+
 
       public static IEnumerable<IEnhancedElement> MergeBlocksAndContent(List<EnhancedBlock> blocks, List<EnhancedContent> contents)
       {
