@@ -196,17 +196,13 @@ public static class PCFL_TriggerParser
 
             }
          }
-
-         if (limitIfFlowControl.Trigger != Trigger.Empty) // a trigger in a scope is interpreted as a simple 'if'
-         {
-            limitIfFlowControl.SubTokens = program;
-            return [limitIfFlowControl];
-         }
-         return program;
       }
-
-
-      return [];
+      if (limitIfFlowControl.Trigger != Trigger.Empty) // a trigger in a scope is interpreted as a simple 'if'
+      {
+         limitIfFlowControl.SubTokens = program;
+         return [limitIfFlowControl];
+      }
+      return program;
    }
 
    // used for limit, AND, NOT, OR, 

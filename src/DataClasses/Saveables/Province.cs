@@ -14,7 +14,7 @@ namespace Editor.DataClasses.Saveables
 {
 
 
-   public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<ProvinceHistoryEntry>, ITarget
+   public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<ProvinceHistoryEntry>, ITarget, IComparable
    {
       public enum modifiyingOperation
       {
@@ -26,9 +26,9 @@ namespace Editor.DataClasses.Saveables
       private Country _controller = Country.Empty;                       
       private Country _owner = Country.Empty;                            
       private Country _tribalOwner = Country.Empty;                        
-      private int _baseManpower;                                
-      private int _baseTax;                                      
-      private int _baseProduction;                              
+      private int _baseManpower = 1;                                
+      private int _baseTax = 1;                                      
+      private int _baseProduction = 1;                              
       private int _centerOfTrade;                               
       private int _extraCost;                                    
       private int _nativeHostileness;                           
@@ -134,7 +134,7 @@ namespace Editor.DataClasses.Saveables
       public int BaseManpower
       {
          get => _baseManpower;
-         set => SetField(ref _baseManpower, Math.Max(0, value));
+         set => SetField(ref _baseManpower, Math.Max(1, value));
       }
 
       [ToolTippable]
@@ -620,6 +620,13 @@ namespace Editor.DataClasses.Saveables
 
       #region Operators / Equals
 
+      public int CompareTo(Province? other)
+      {
+         if (other is null)
+            return 1;
+         return Id.CompareTo(other.Id);
+      }
+
       public override bool Equals(object? obj)
       {
          if (obj is Province other)
@@ -658,6 +665,13 @@ namespace Editor.DataClasses.Saveables
       public override string ToString()
       {
          return $"{Id} ({TitleLocalisation})";
+      }
+
+      public int CompareTo(object? obj)
+      {
+         if (obj is Province other)
+            return Id.CompareTo(other.Id);
+         return 1;
       }
 
       #endregion

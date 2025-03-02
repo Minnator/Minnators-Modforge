@@ -1494,5 +1494,12 @@ namespace Editor.Forms
       {
          FormsHelper.ShowIfAnyOpen<NameGeneratorForm>(Globals.Settings.Misc.NameGenConfig.NameGenConfig);
       }
+
+      private void testTriggerToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         foreach (var province in Globals.Provinces)
+            if (province.BaseManpower < 1)
+               Debug.WriteLine(province.Id);
+      }
    }
 }

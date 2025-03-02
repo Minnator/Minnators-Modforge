@@ -124,10 +124,11 @@ namespace Editor.DataClasses.ConsoleCommands
             if (args[1].Equals("-c")) // Execute on Country Scope
             {
                var path = args[0];
-               if (!File.Exists(Path.Combine(Globals.AppDirectory, path)))
+               path = Path.Combine(Globals.AppDirectory, path);
+               if (!File.Exists(path))
                   return [$"File '{path}' not found"];
 
-               var file = IO.ReadAllInUTF8(path);
+               MagicMister.ExecuteFile(path);
 
                return [];
             }

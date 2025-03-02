@@ -100,6 +100,7 @@
          generateTextureAtlasPacedToolStripMenuItem = new ToolStripMenuItem();
          audioTestToolStripMenuItem = new ToolStripMenuItem();
          compactHistoryToolStripMenuItem = new ToolStripMenuItem();
+         testTriggerToolStripMenuItem = new ToolStripMenuItem();
          ProvinceCollectionsLayoutPanel = new TableLayoutPanel();
          FocusSelectionCheckBox = new CheckBox();
          BottomToolStrip = new ToolStrip();
@@ -743,7 +744,7 @@
          // 
          // debugToolStripMenuItem
          // 
-         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, collectionSelectorBaseToolStripMenuItem, propertyCollectionSelectorToolStripMenuItem, generateTextureAtlasPacedToolStripMenuItem, audioTestToolStripMenuItem, compactHistoryToolStripMenuItem });
+         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, collectionSelectorBaseToolStripMenuItem, propertyCollectionSelectorToolStripMenuItem, generateTextureAtlasPacedToolStripMenuItem, audioTestToolStripMenuItem, compactHistoryToolStripMenuItem, testTriggerToolStripMenuItem });
          debugToolStripMenuItem.Enabled = false;
          debugToolStripMenuItem.Name = "debugToolStripMenuItem";
          debugToolStripMenuItem.Size = new Size(54, 23);
@@ -798,6 +799,13 @@
          compactHistoryToolStripMenuItem.Size = new Size(221, 22);
          compactHistoryToolStripMenuItem.Text = "Compact History";
          compactHistoryToolStripMenuItem.Click += compactHistoryToolStripMenuItem_Click;
+         // 
+         // testTriggerToolStripMenuItem
+         // 
+         testTriggerToolStripMenuItem.Name = "testTriggerToolStripMenuItem";
+         testTriggerToolStripMenuItem.Size = new Size(221, 22);
+         testTriggerToolStripMenuItem.Text = "Test Trigger";
+         testTriggerToolStripMenuItem.Click += testTriggerToolStripMenuItem_Click;
          // 
          // ProvinceCollectionsLayoutPanel
          // 
@@ -3136,6 +3144,7 @@
       private ToolStripMenuItem AchievementsToolStripMenuItem;
       private ToolStripMenuItem definesEditorToolStripMenuItem;
       private ToolStripMenuItem namesGeneratorToolStripMenuItem;
+      private ToolStripMenuItem testTriggerToolStripMenuItem;
    }
 }
 

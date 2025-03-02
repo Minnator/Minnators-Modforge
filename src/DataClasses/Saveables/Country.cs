@@ -7,6 +7,7 @@ using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
 using Editor.ErrorHandling;
 using Editor.Helper;
+using Editor.Loading.Enhanced.PCFL;
 using Editor.Parser;
 using Editor.Saving;
 using static Editor.Saving.SavingUtil;
@@ -556,7 +557,7 @@ public class CountryFilePath : Saveable
    }
 }
 
-public class Country : ProvinceCollection<Province>, ITitleAdjProvider
+public class Country : ProvinceCollection<Province>, ITitleAdjProvider, ITarget
 {
    public Country(Tag tag, CountryFilePath fileName, Color color, ObjEditingStatus status = ObjEditingStatus.Immutable) : base(tag.ToString(), color, status)
    {

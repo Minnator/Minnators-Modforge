@@ -7,7 +7,7 @@ namespace Editor.Loading.Enhanced.PCFL
    // Only used for ScopeSwitches, Actions and FlowControls
    public abstract class PCFL_Token
    {
-      public abstract void Activate(Scope scope, ITarget target);
+      public abstract void Activate(ITarget target);
    }
 
    /*

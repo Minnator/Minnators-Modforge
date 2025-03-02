@@ -19,14 +19,14 @@ namespace Editor.Loading.Enhanced.PCFL
       }
 
       // Targets must be sorted alphanumerically
-      public override void Activate(Scope scope, ITarget target)
+      public override void Activate(ITarget target)
       {
-         if (SubTokens.Count == 0)
-            return;
+         //if (SubTokens.Count == 0)
+         //   return;
 
          if (Trigger.Evaluate(target))
             foreach (var token in SubTokens)
-               token.Activate(scope, target);
+               token.Activate(target);
 
       }
    }

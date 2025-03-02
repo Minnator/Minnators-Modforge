@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
+using Editor.Helper;
 using Editor.Loading.Enhanced.PCFL.Scribbel;
 using Editor.Saving;
 using static Editor.Loading.Enhanced.PCFL.PCFL_Scope;
@@ -105,9 +106,11 @@ namespace Editor.Loading.Enhanced.PCFL
    public class AllProvince_Scope(Trigger trigger) : All_ScopeSwitch(trigger)
    {
       public const string TRIGGER_NAME = "all_province";
-      public override List<ITarget> GetTargets(ITarget target) //TODO resolve via ref or enumerable to reduce ram in case of deep nesting
+      public override List<ITarget> GetTargets(ITarget target) //TODO resolve via ref or enumerable to reduce ram in case of deep nesting and sorting needs fixing IMPORTANT
       {
-         return Globals.Provinces.Cast<ITarget>().ToList();
+         var list = Globals.Provinces.Cast<ITarget>().ToList();
+         list.Sort();
+         return list;
       }
 
       public static Trigger CreateTrigger(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
@@ -132,6 +135,22 @@ namespace Editor.Loading.Enhanced.PCFL
       {
          [AllProvince_Scope.TRIGGER_NAME] = AllProvince_Scope.CreateTrigger,
       });
+
+      public static void ExecuteFile(string filePath)
+      {
+         var po = PathObj.FromPath(filePath, false);
+         var content = IO.ReadAllInUTF8(filePath);
+
+         var tokens = PCFL_TriggerParser.ParseSomeFile(content, CountryScope, po);
+
+         ITarget target = Globals.Countries["TUR"];
+
+         foreach (var token in tokens) {
+            token.Activate(target);
+         }
+
+
+      }
    }
 
 
