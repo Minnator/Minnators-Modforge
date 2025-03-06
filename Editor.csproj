@@ -38,7 +38,17 @@
     <None Remove="src\Forms\Feature\ToolTipCustomizer\.vshistory\**" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="src\Loading\Enhanced\PCFL\Implementation\Parser.cs" />
+    <Compile Remove="src\Loading\Enhanced\PCFL\Implementation\Scope.cs" />
+    <Compile Remove="src\Loading\Enhanced\PCFL\Implementation\Trigger.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="ProjectOverview\NewFile1.txt" />
+    <None Remove="src\Loading\Enhanced\PCFL\Implementation\CountryScope\NewFile1.txt" />
+    <None Remove="src\Loading\Enhanced\PCFL\Implementation\NewFile1.txt" />
+    <None Remove="src\Loading\Enhanced\PCFL\Implementation\NewFile2.txt" />
+    <None Remove="src\Loading\Enhanced\PCFL\Implementation\ParseTrigger.c" />
+    <None Remove="src\Loading\Enhanced\PCFL\Implementation\Trigger" />
     <None Remove="src\Loading\Enhanced\PCFL\NewFile1.txt" />
   </ItemGroup>
   <ItemGroup>
