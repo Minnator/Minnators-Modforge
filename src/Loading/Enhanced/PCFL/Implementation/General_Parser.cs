@@ -6,7 +6,7 @@ namespace Editor.Loading.Enhanced.PCFL.Implementation;
 
 public static class GeneralFileParser
 {
-   public static List<PCFL_Token> ParseSomeFile(string content, PCFL_Scope scope, PathObj po)
+   public static List<IToken> ParseSomeFile(string content, PCFL_Scope scope, PathObj po)
    {
       /*
        * how do we know what do to?
@@ -17,9 +17,9 @@ public static class GeneralFileParser
 
       var orderedElement = EnhancedParser.LoadBaseOrder(content, po);
 
-      List<PCFL_Token> program = [];
+      List<IToken> program = [];
 
-      var limitIfFlowControl = new IfFLowControl(Trigger.Empty, []);
+      var limitIfFlowControl = new IfFLowControl(ITrigger.Empty, []);
 
       foreach (var element in orderedElement)
       {
@@ -28,11 +28,11 @@ public static class GeneralFileParser
             var block = (EnhancedBlock)element;
             if (block.Name.Equals("limit"))
             {
-               List<Trigger> triggers = [];
+               List<ITrigger> triggers = [];
 
                if (block.ParseTriggerBlock(scope, po, triggers))
                {
-                  if (limitIfFlowControl.Trigger == Trigger.Empty)
+                  if (limitIfFlowControl.Trigger == ITrigger.Empty)
                      limitIfFlowControl.Trigger = triggers[0];
                   else if (limitIfFlowControl.Trigger is BooleanOperation { Operation: Operation.AND } operation)
                      operation.Triggers.AddRange(triggers);
@@ -54,7 +54,7 @@ public static class GeneralFileParser
             }
          }
       }
-      if (limitIfFlowControl.Trigger != Trigger.Empty) // a trigger in a scope is interpreted as a simple 'if'
+      if (limitIfFlowControl.Trigger != ITrigger.Empty) // a trigger in a scope is interpreted as a simple 'if'
       {
          limitIfFlowControl.SubTokens = program;
          return [limitIfFlowControl];
@@ -63,7 +63,7 @@ public static class GeneralFileParser
    }
 
    // used for limit, AND, NOT, OR, 
-   public static bool ParseTriggerBlock(this EnhancedBlock block, PCFL_Scope scope, PathObj po, List<Trigger> trigger)
+   public static bool ParseTriggerBlock(this EnhancedBlock block, PCFL_Scope scope, PathObj po, List<ITrigger> trigger)
    {
       foreach (var triggerElement in block.GetElements())
       {
@@ -85,12 +85,12 @@ public static class GeneralFileParser
       return trigger.Count > 0;
    }
 
-   public static bool ParseTriggerBlockToAnd(this EnhancedBlock block, PCFL_Scope scope, PathObj po, out Trigger trigger)
+   public static bool ParseTriggerBlockToAnd(this EnhancedBlock block, PCFL_Scope scope, PathObj po, out ITrigger trigger)
    {
-      List<Trigger> triggers = [];
+      List<ITrigger> triggers = [];
       if (!block.ParseTriggerBlock(scope, po, triggers))
       {
-         trigger = Trigger.Empty;
+         trigger = ITrigger.Empty;
          return false;
       }
 
@@ -106,7 +106,7 @@ public static class GeneralFileParser
 
 
    // Ragequit -> Escalates errors
-   public static bool ParseTrigger(LineKvp<string, string> input, PCFL_Scope scope, PathObj po, out Trigger trigger)
+   public static bool ParseTrigger(LineKvp<string, string> input, PCFL_Scope scope, PathObj po, out ITrigger trigger)
    {
       trigger = null!;
       if (!scope.IsValidTrigger(input.Key, out var creator))
@@ -119,7 +119,7 @@ public static class GeneralFileParser
    }
 
    // Mod -> Recovers from errors
-   public static bool ParseTrigger(EnhancedBlock block, PCFL_Scope scope, PathObj po, out Trigger? trigger)
+   public static bool ParseTrigger(EnhancedBlock block, PCFL_Scope scope, PathObj po, out ITrigger? trigger)
    {
       trigger = null!;
       switch (block.Name.ToUpper())

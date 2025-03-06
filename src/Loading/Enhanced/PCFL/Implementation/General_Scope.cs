@@ -21,7 +21,7 @@ public enum ScopeType
 
 public class PCFL_Scope(Dictionary<string, PCFL_Scope.TriggerDelegate> triggers)
 {
-   public delegate Trigger? TriggerDelegate(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po);
+   public delegate ITrigger? TriggerDelegate(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po);
    private readonly Dictionary<string, TriggerDelegate> Triggers = triggers;
 
    public bool IsValidTrigger(string str) => Triggers.ContainsKey(str);
@@ -41,9 +41,9 @@ public class PCFL_Scope(Dictionary<string, PCFL_Scope.TriggerDelegate> triggers)
 
 }
 
-public abstract class All_ScopeSwitch(Trigger trigger) : Trigger
+public abstract class All_ScopeSwitch(ITrigger trigger) : ITrigger
 {
-   public readonly Trigger Trigger = trigger;
+   public readonly ITrigger Trigger = trigger;
 
    public abstract List<ITarget> GetTargets(ITarget target);
 
@@ -57,7 +57,7 @@ public abstract class All_ScopeSwitch(Trigger trigger) : Trigger
       return false;
    }
 
-   public override bool Evaluate(ITarget target)
+   public bool Evaluate(ITarget target)
    {
       foreach (var innerTarget in GetTargets(target))
       {
@@ -68,9 +68,9 @@ public abstract class All_ScopeSwitch(Trigger trigger) : Trigger
    }
 }
 
-public abstract class Any_ScopeSwitch(Trigger trigger) : Trigger
+public abstract class Any_ScopeSwitch(ITrigger trigger) : ITrigger
 {
-   public readonly Trigger Trigger = trigger;
+   public readonly ITrigger Trigger = trigger;
    public abstract List<ITarget> GetTargets(ITarget target);
 
    public bool EvaluateIfMoreOrEqualThan(ITarget target, int n)
@@ -79,7 +79,7 @@ public abstract class Any_ScopeSwitch(Trigger trigger) : Trigger
       return false;
    }
 
-   public override bool Evaluate(ITarget target)
+   public bool Evaluate(ITarget target)
    {
       foreach (var innerTarget in GetTargets(target))
       {

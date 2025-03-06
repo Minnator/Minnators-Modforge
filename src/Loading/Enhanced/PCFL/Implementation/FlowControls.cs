@@ -1,18 +1,18 @@
 ﻿namespace Editor.Loading.Enhanced.PCFL.Implementation;
 
-public class IfFLowControl : PCFL_Token
+public class IfFLowControl : IToken, ITrigger
 {
-   public Trigger Trigger;
-   public List<PCFL_Token> SubTokens; // If Effect
+   public ITrigger Trigger;
+   public List<IToken> SubTokens; // If Effect
 
-   public IfFLowControl(Trigger trigger, List<PCFL_Token> subTokens)
+   public IfFLowControl(ITrigger trigger, List<IToken> subTokens)
    {
       Trigger = trigger;
       SubTokens = subTokens;
    }
 
    // Targets must be sorted alphanumerically
-   public override void Activate(ITarget target)
+   public void Activate(ITarget target)
    {
       if (SubTokens.Count == 0)
          return;
@@ -21,5 +21,10 @@ public class IfFLowControl : PCFL_Token
          foreach (var token in SubTokens)
             token.Activate(target);
 
+   }
+
+   public bool Evaluate(ITarget target)
+   {
+      throw new NotImplementedException();
    }
 }

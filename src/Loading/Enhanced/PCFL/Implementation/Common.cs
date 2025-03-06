@@ -1,4 +1,6 @@
-﻿namespace Editor.Loading.Enhanced.PCFL.Implementation;
+﻿using Editor.Saving;
+
+namespace Editor.Loading.Enhanced.PCFL.Implementation;
 
 public enum PCFL_Type
 {
@@ -122,7 +124,45 @@ public class Value<T>(T value) : Value(typeof(T).ToPCFL_Type())
 }
 
 
-public abstract class PCFL_Token
+public abstract class PCFL_Object{
+
+};
+
+public interface IPCFLObject 
 {
-   public abstract void Activate(ITarget target);
+   public bool ParseWithReplacement(ScriptedTriggerSource parent, EnhancedBlock block, PathObj po) => throw new NotImplementedException();
+   public bool ParseWithReplacement(ScriptedTriggerSource parent, LineKvp<string, string> command, PathObj po) => throw new NotImplementedException();
+   // Scope?
+   public bool Parse(EnhancedBlock block, PathObj po) => throw new NotImplementedException();
+   public bool Parse(LineKvp<string, string> command, PathObj po) => throw new NotImplementedException();
+};
+
+public interface IToken: IPCFLObject
+{
+   public void Activate(ITarget target);
+}
+
+public interface ITrigger: IPCFLObject
+{
+   public static ITrigger Empty { get; }= AlwaysTrigger.TrueTrigger;
+   public bool Evaluate(ITarget target);
+}
+
+public class AlwaysTrigger : ITrigger
+{
+
+   private bool _value;
+
+   private AlwaysTrigger(bool value)
+   {
+      _value = value;
+   }
+
+   public static readonly AlwaysTrigger TrueTrigger = new (true);
+   public static readonly AlwaysTrigger FalseTrigger = new (false);
+   
+   public bool Evaluate(ITarget target)
+   {
+      return _value;
+   }
 }

@@ -10,35 +10,8 @@ public enum Operation
    NOT
 }
 
-public class Trigger
-{
-   public static Trigger Empty { get; } = new();
-   public virtual bool Evaluate(ITarget target) => true;
 
-   public virtual bool ParseWithReplacement(ScriptedTriggerSource parent, EnhancedBlock block, PathObj po)
-   {
-      throw new NotImplementedException();
-   }
-
-   public virtual bool ParseWithReplacement(ScriptedTriggerSource parent, LineKvp<string, string> command, PathObj po)
-   {
-      throw new NotImplementedException();
-   }
-
-   // TODO scope?
-   public virtual bool Parse(EnhancedBlock block, PathObj po)
-   {
-      throw new NotImplementedException();
-   }
-
-   public virtual bool Parse(LineKvp<string, string> command, PathObj po)
-   {
-      throw new NotImplementedException();
-   }
-}
-
-
-public class CalledTrigger(ScriptedTriggerSource triggerSource, Dictionary<string, Value> values) : Trigger
+public class CalledTrigger(ScriptedTriggerSource triggerSource, Dictionary<string, Value> values) : ITrigger
 {
    public Dictionary<string, Value> _values = values;
    public void Activate()
@@ -49,20 +22,20 @@ public class CalledTrigger(ScriptedTriggerSource triggerSource, Dictionary<strin
       }
    }
 
-   public override bool Evaluate(ITarget target)
+   public bool Evaluate(ITarget target)
    {
       return false;
    }
 
 }
 
-public class BooleanOperation(Operation op, List<Trigger> triggers) : Trigger// AND, OR, NOT
+public class BooleanOperation(Operation op, List<ITrigger> triggers) : ITrigger// AND, OR, NOT
 {
    public Operation Operation { get; init; } = op;
 
-   public List<Trigger> Triggers = triggers;
+   public List<ITrigger> Triggers = triggers;
 
-   public override bool Evaluate(ITarget target)
+   public bool Evaluate(ITarget target)
    {
       return Operation switch
       {
@@ -74,11 +47,11 @@ public class BooleanOperation(Operation op, List<Trigger> triggers) : Trigger// 
    }
 
 
-   public static Trigger Parse(EnhancedBlock block, PCFL_Scope scope, PathObj po, Operation op)
+   public static ITrigger Parse(EnhancedBlock block, PCFL_Scope scope, PathObj po, Operation op)
    {
-      List<Trigger> triggers = [];
+      List<ITrigger> triggers = [];
       if (!block.ParseTriggerBlock(scope, po, triggers))
-         return Empty;
+         return ITrigger.Empty;
 
       // if there is one element anyway just simplify
       if (triggers.Count == 1 && op != Operation.NOT)
@@ -99,7 +72,7 @@ public class BooleanOperation(Operation op, List<Trigger> triggers) : Trigger// 
 public class ScriptedTriggerSource
 {
    public Dictionary<string, Value> replacements = [];
-   Trigger trigger;
+   ITrigger trigger;
 
    public ScriptedTriggerSource(EnhancedBlock block, PathObj po)
    {
@@ -114,7 +87,7 @@ public class ScriptedTriggerSource
       // TODO
    }
 
-   public Trigger CreateCallInstance(EnhancedBlock block, PathObj po)
+   public ITrigger CreateCallInstance(EnhancedBlock block, PathObj po)
    {
       Dictionary<string, Value> values = new(replacements);
       var content = block.GetContentElements(true, po)[0]; //maybe recover from multiple contents
@@ -148,7 +121,7 @@ public class ScriptedTriggerSource
       return new CalledTrigger(this, values);
    }
 
-   public Trigger CreateInstance(LineKvp<string, string> command, PathObj po)
+   public ITrigger CreateInstance(LineKvp<string, string> command, PathObj po)
    {
       if (replacements.Count != 0)
       {
