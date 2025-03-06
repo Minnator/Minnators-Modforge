@@ -245,7 +245,8 @@ public class CommandHandler
             result[i] = "  " + result[i];
          OutputBox.AppendText(result[i] + Environment.NewLine);
       }
-
+      if (result.Length == 0)
+         OutputBox.AppendText(Environment.NewLine);
       OutputBox.AppendText("> ");
       OutputBox.ScrollToCaret();
       OutputBox.SelectionStart = OutputBox.Text.Length;

@@ -449,9 +449,9 @@ public static class Globals
 //    - [x] Progress
 //    - [x] DateTime of completion
 //    - [x] IsHidden?
-// - [ ] PopUp like steam
+// - [x] PopUp like steam
 // - [x] Overview of all Achievements
-// - [ ] Encrypted file to save achievements
+// - [x] Encrypted file to save achievements
 // - [ ] Achievement unlocked sound
 
 // - [ ] Audio visualizer via ram usage graph

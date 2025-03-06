@@ -130,7 +130,7 @@ namespace Editor.DataClasses.ConsoleCommands
 
                MagicMister.ExecuteFile(path);
 
-               return [];
+               return [$"Executed file \'{Path.GetFileName(path)}\' in country scope"];
             }
 
             if (args[1].Equals("-p")) // Execute on Province Scope
@@ -142,7 +142,7 @@ namespace Editor.DataClasses.ConsoleCommands
                var file = IO.ReadAllInUTF8(path);
                
 
-               return [];
+               return [$"Executed file \'{Path.GetFileName(path)}\' in province scope"];
             }
 
             // TODO call the parser
