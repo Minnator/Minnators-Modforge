@@ -19,13 +19,18 @@ public enum ScopeType
    Missions
 }
 
-public class PCFL_Scope(Dictionary<string, PCFL_Scope.TriggerDelegate> triggers)
+public class PCFL_Scope
 {
-   public delegate ITrigger? TriggerDelegate(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po);
-   private readonly Dictionary<string, TriggerDelegate> Triggers = triggers;
+   public delegate ITrigger? PCFL_TriggerParseDelegate(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po);
+   public delegate IToken? PCFL_TokenParseDelegate(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po);
+   public Dictionary<string, PCFL_TriggerParseDelegate> Triggers { get; init; } = [];
+   public Dictionary<string, PCFL_TokenParseDelegate> Effects { get; init; } = [];
 
    public bool IsValidTrigger(string str) => Triggers.ContainsKey(str);
-   public bool IsValidTrigger(string str, out TriggerDelegate trigger) => Triggers.TryGetValue(str, out trigger);
+   public bool IsValidTrigger(string str, out PCFL_TriggerParseDelegate pcflParse) => Triggers.TryGetValue(str, out pcflParse);
+
+   public bool IsValidEffect(string str) => Effects.ContainsKey(str);
+   public bool IsValidEffect(string str, out PCFL_TokenParseDelegate pcflParse) => Effects.TryGetValue(str, out pcflParse);
 
    /*
     * Routing
@@ -65,6 +70,20 @@ public abstract class All_ScopeSwitch(ITrigger trigger) : ITrigger
             return false;
       }
       return true;
+   }
+}
+
+public abstract class Every_ScopeSwitch(List<IToken> tokens) : IToken
+{
+   public readonly List<IToken> Tokens = tokens;
+
+   public abstract List<ITarget> GetTargets(ITarget target);
+
+   public void Activate(ITarget target)
+   {
+      foreach (var innerTarget in GetTargets(target))
+         foreach (var token in Tokens)
+            token.Activate(innerTarget);
    }
 }
 

@@ -1,30 +1,33 @@
-﻿using Editor;
+﻿using System.Diagnostics;
+using Editor;
 using Editor.Helper;
 using Editor.Loading.Enhanced.PCFL.Implementation;
 using Editor.Loading.Enhanced.PCFL.Implementation.CountryScope;
 using Editor.Loading.Enhanced.PCFL.Implementation.ProvinceScope;
 using Editor.Saving;
 
-public static class MagicMister
+public static class Executor
 {
-   public static PCFL_Scope ProvinceScope = new(new()
-   {
-      [BaseManpowerTrigger.TRIGGER_NAME] = BaseManpowerTrigger.CreateTrigger,
-   });
-
-   public static PCFL_Scope CountryScope = new(new()
-   {
-      [AllProvince_Scope.TRIGGER_NAME] = AllProvince_Scope.CreateTrigger,
-   });
-
-   public static void ExecuteFile(string filePath)
+   public static void ExecuteFile(string filePath, bool country)
    {
       var po = PathObj.FromPath(filePath, false);
       var content = IO.ReadAllInUTF8(filePath);
+      List<IToken> tokens;
+      ITarget target;
 
-      var tokens = GeneralFileParser.ParseSomeFile(content, CountryScope, po);
-
-      ITarget target = Globals.Countries["TUR"];
+      if (country)
+      {
+         var sw = Stopwatch.StartNew();
+         tokens = GeneralFileParser.ParseSomeFile(content, CountryScope.Scope, po);
+         target = Globals.Countries["TUR"];
+         sw.Stop();
+         Debug.WriteLine($"Parsed {tokens.Count} tokens in {sw.ElapsedMilliseconds}ms");
+      }
+      else
+      {
+         tokens = GeneralFileParser.ParseSomeFile(content, ProvinceScopes.Scope, po);
+         target = Globals.Provinces.First();
+      }
 
       foreach (var token in tokens)
       {

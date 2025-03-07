@@ -123,11 +123,6 @@ public class Value<T>(T value) : Value(typeof(T).ToPCFL_Type())
 
 }
 
-
-public abstract class PCFL_Object{
-
-};
-
 public interface IPCFLObject 
 {
    public bool ParseWithReplacement(ScriptedTriggerSource parent, EnhancedBlock block, PathObj po) => throw new NotImplementedException();
@@ -137,8 +132,15 @@ public interface IPCFLObject
    public bool Parse(LineKvp<string, string> command, PathObj po) => throw new NotImplementedException();
 };
 
+
+public class Empty_Scope : IToken
+{
+   public void Activate(ITarget target) { }
+}
+
 public interface IToken: IPCFLObject
 {
+   public static IToken Empty { get; } = new Empty_Scope();
    public void Activate(ITarget target);
 }
 

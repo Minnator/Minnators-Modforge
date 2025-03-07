@@ -128,7 +128,7 @@ namespace Editor.DataClasses.ConsoleCommands
                if (!File.Exists(path))
                   return [$"File '{path}' not found"];
 
-               MagicMister.ExecuteFile(path);
+               Executor.ExecuteFile(path, true);
 
                return [$"Executed file \'{Path.GetFileName(path)}\' in country scope"];
             }
@@ -136,11 +136,11 @@ namespace Editor.DataClasses.ConsoleCommands
             if (args[1].Equals("-p")) // Execute on Province Scope
             {
                var path = args[0];
-               if (!File.Exists(Path.Combine(Globals.AppDirectory, path)))
+               path = Path.Combine(Globals.AppDirectory, path);
+               if (!File.Exists(path))
                   return [$"File '{path}' not found"];
 
-               var file = IO.ReadAllInUTF8(path);
-               
+               Executor.ExecuteFile(path, false);
 
                return [$"Executed file \'{Path.GetFileName(path)}\' in province scope"];
             }

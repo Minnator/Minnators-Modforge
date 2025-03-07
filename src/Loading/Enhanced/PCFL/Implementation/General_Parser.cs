@@ -45,11 +45,21 @@ public static class GeneralFileParser
                                       level: LogType.Information);
             }
 
+            // 
+            if (ParseToken(block, scope, po, out var token)) 
+               program.Add(token!);
+            else
+            {
+               // Throw error
+            }
+       
          }
          else
          {
             foreach (var kvp in ((EnhancedContent)element).GetLineKvpEnumerator(po))
             {
+               if (ParseToken(kvp, scope, po, out var token))
+                  program.Add(token!);
                // TODO : Parse Effects
             }
          }
@@ -60,6 +70,54 @@ public static class GeneralFileParser
          return [limitIfFlowControl];
       }
       return program;
+   }
+
+   public static bool ParseToken(LineKvp<string, string> input, PCFL_Scope scope, PathObj po, out IToken? token)
+   {
+      token = null!;
+      if (!scope.IsValidEffect(input.Key, out var creator))
+      {
+         _ = new LoadingError(po, $"Invalid Token: {input.Key}", line: input.Line, type: ErrorType.TODO_ERROR);
+         return false;
+      }
+      token = creator(null, input, scope, po)!;
+      return token is not null;
+   }
+
+   public static bool ParseToken(EnhancedBlock input, PCFL_Scope scope, PathObj po, out IToken? token)
+   {
+      // Not finished needs the limit functionality and so on
+      token = null!;
+      if (!scope.IsValidEffect(input.Name, out var creator))
+      {
+         _ = new LoadingError(po, $"Invalid Token: {input.Name}", line: input.StartLine, type: ErrorType.TODO_ERROR); //TODO Error
+         return false;
+      }
+      token = creator(input, null, scope, po)!;
+      return token is not null;
+   }
+
+
+   public static bool ParseTokenBlock(this EnhancedBlock block, PCFL_Scope scope, PathObj po, List<IToken> token)
+   {
+      foreach (var triggerElement in block.GetElements())
+      {
+         if (triggerElement.IsBlock)
+         {
+            ParseToken((EnhancedBlock)triggerElement, scope, po, out var newToken);
+            token.Add(newToken);
+         }
+         else
+         {
+            foreach (var kvp in ((EnhancedContent)triggerElement).GetLineKvpEnumerator(po))
+            {
+               ParseToken(kvp, scope, po, out var newToken);
+               token.Add(newToken);
+            }
+         }
+      }
+
+      return token.Count > 0;
    }
 
    // used for limit, AND, NOT, OR, 
