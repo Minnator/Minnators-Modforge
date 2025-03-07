@@ -427,9 +427,9 @@ namespace Editor.Saving
          }
 
          if (path.IsLocalisation)
-            IO.WriteLocalisationFile(path.ToPath(), sb.ToString(), false);
+            IO.WriteLocalisationFile(path.ToModPath(), sb.ToString(), false);
          else
-            IO.WriteAllInANSI(path.ToPath(), sb.ToString(), false);
+            IO.WriteAllInANSI(path.ToModPath(), sb.ToString(), false);
       }
 
       private static void AddListToStringBuilder(ref StringBuilder sb, List<Saveable> items, char commentChar, int tabs = 0)

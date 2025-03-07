@@ -2,9 +2,13 @@
 using System.Reflection.Metadata;
 using Windows.Media.Devices;
 using Editor.DataClasses.Achievements;
+using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.Saveables;
+using Editor.ErrorHandling;
 using Editor.Forms.PopUps;
 using Editor.Helper;
 using Editor.Loading.Enhanced.PCFL;
+using Editor.Loading.Enhanced.PCFL.Implementation;
 
 namespace Editor.DataClasses.ConsoleCommands
 {
@@ -115,38 +119,50 @@ namespace Editor.DataClasses.ConsoleCommands
       
       private void RunFiles()
       {
-         var runFileUsage = "Usage: run <file1(relative to .exe)> -p|-c";
+         var runFileUsage = "Usage: run <file1(relative to .exe)> --p <provinceId>|--c <TAG>";
          _handler.RegisterCommand(new("run", runFileUsage, args =>
          {
-            if (args.Length != 2)
+            if (args.Length != 3)
                return [runFileUsage];
 
-            if (args[1].Equals("-c")) // Execute on Country Scope
+            if (args[1].Equals("--c")) // Execute on Country Scope
             {
                var path = args[0];
                path = Path.Combine(Globals.AppDirectory, path);
                if (!File.Exists(path))
                   return [$"File '{path}' not found"];
 
-               Executor.ExecuteFile(path, true);
+               var errObj = Country.GeneralParse(args[2], out var country);
 
-               return [$"Executed file \'{Path.GetFileName(path)}\' in country scope"];
+               var errorDesc = "";
+               if (errObj.Then(o => { errorDesc = o.GetDescription(); }))
+               {
+                  Executor.ExecuteFile(path, (ITarget)country);
+                  return [$"Executed file \'{Path.GetFileName(path)}\' in country scope"];
+               }
+
+               return [errorDesc];
             }
 
-            if (args[1].Equals("-p")) // Execute on Province Scope
+            if (args[1].Equals("--p")) // Execute on Province Scope
             {
                var path = args[0];
                path = Path.Combine(Globals.AppDirectory, path);
+
                if (!File.Exists(path))
                   return [$"File '{path}' not found"];
 
-               Executor.ExecuteFile(path, false);
+               var errObj = Province.GeneralParse(args[2], out var province);
 
-               return [$"Executed file \'{Path.GetFileName(path)}\' in province scope"];
+               var errorDesc = "";
+               if (errObj.Then(o => {errorDesc = o.GetDescription();}))
+               {
+                  Executor.ExecuteFile(path, (ITarget)province);
+                  return [$"Executed file \'{Path.GetFileName(path)}\' in province scope"];
+               }
+
+               return [errorDesc];
             }
-
-            // TODO call the parser
-
             return [];
          }, ClearanceLevel.User));
       }

@@ -4,13 +4,21 @@ using System.Reflection.Metadata.Ecma335;
 namespace Editor.Saving;
 
 
-public class PathObj(string[] path, bool isModPathInit)
+public class PathObj
 {
-   public string[] Path = path;
-   public bool IsModPath = isModPathInit;
+   public string[] Path;
+   public bool IsModPath;
+   public readonly bool IsExternal = false;
    public bool IsLocalisation => Path.Contains("localisation");
-
    public static readonly PathObj Empty = new([], false);
+
+   public PathObj(string[] path, bool isModPathInit, bool isExternal = false)
+   {
+      Path = path;
+      IsModPath = isModPathInit;
+      IsExternal = isExternal;
+   }
+
 
    public PathObj Copy(bool modPath, bool addReplacePath = false)
    {
@@ -24,6 +32,8 @@ public class PathObj(string[] path, bool isModPathInit)
    }
 
    public static PathObj FromPath(string path) => FromPath(path, path.StartsWith(Globals.ModPath));
+
+   public static PathObj FromExternalPath(string path) => new(path.Split(System.IO.Path.DirectorySeparatorChar), false, true);
 
    public static PathObj FromPath(string path, bool isModPath)
    {
@@ -45,7 +55,7 @@ public class PathObj(string[] path, bool isModPathInit)
       return System.IO.Path.Combine(IsModPath ? Globals.ModPath : Globals.VanillaPath, System.IO.Path.Combine(Path[..^1]));
    }
 
-   public string ToPath()
+   public string ToModPath()
    {
       return System.IO.Path.Combine(Globals.ModPath, System.IO.Path.Combine(Path));
    }
