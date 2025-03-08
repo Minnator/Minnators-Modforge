@@ -2,6 +2,8 @@
 using System.Text;
 using Editor.DataClasses.Misc;
 using Editor.DataClasses.Saveables;
+using Editor.Loading.Enhanced.PCFL.Implementation;
+using Editor.Saving;
 using static Editor.Saving.SavingUtil;
 
 namespace Editor.DataClasses.GameDataClasses
@@ -18,26 +20,12 @@ namespace Editor.DataClasses.GameDataClasses
    
    public class ProvinceHistoryEntry(Date date) : HistoryEntry(date)
    {
-      public List<Effect> Effects { get; set; } = [];
-
-      public void Apply(Province province)
-      {
-         foreach (var effect in Effects)
-         {
-            effect.ExecuteProvince(province);
-         }
-      }
-
+      public List<IToken> Effects { get; set; } = [];
+      
       public override string ToString()
       {
          var sb = new StringBuilder();
-         sb.AppendLine($"Date: {Date}");
-
-         foreach (var effect in Effects)
-         {
-            sb.AppendLine(effect.ToString());
-         }
-
+         FormatSimpleTokenBlock(Effects, 0, Date, ref sb);
          return sb.ToString();
       }
    }

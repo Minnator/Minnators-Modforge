@@ -114,6 +114,8 @@
          SelectedProvinceSum = new ToolStripLabel();
          toolStripSeparator7 = new ToolStripSeparator();
          MapModeTimesInfo = new ToolStripLabel();
+         toolStripSeparator11 = new ToolStripSeparator();
+         ErrorCountLabel = new ToolStripLabel();
          MainLayoutPanel = new TableLayoutPanel();
          TopStripLayoutPanel = new TableLayoutPanel();
          OwnerCountryNameLabel = new Label();
@@ -843,10 +845,10 @@
          // 
          MainLayoutPanel.SetColumnSpan(BottomToolStrip, 2);
          BottomToolStrip.Dock = DockStyle.None;
-         BottomToolStrip.Items.AddRange(new ToolStripItem[] { RamUsageStrip, CpuUsageStrip, toolStripSeparator1, UndoDepthLabel, RedoDepthLabel, CompactionToolStrip, toolStripSeparator2, SelectedProvinceSum, toolStripSeparator7, MapModeTimesInfo });
+         BottomToolStrip.Items.AddRange(new ToolStripItem[] { RamUsageStrip, CpuUsageStrip, toolStripSeparator1, UndoDepthLabel, RedoDepthLabel, CompactionToolStrip, toolStripSeparator2, SelectedProvinceSum, toolStripSeparator7, MapModeTimesInfo, toolStripSeparator11, ErrorCountLabel });
          BottomToolStrip.Location = new Point(0, 876);
          BottomToolStrip.Name = "BottomToolStrip";
-         BottomToolStrip.Size = new Size(634, 24);
+         BottomToolStrip.Size = new Size(705, 24);
          BottomToolStrip.TabIndex = 0;
          // 
          // RamUsageStrip
@@ -905,6 +907,17 @@
          MapModeTimesInfo.Name = "MapModeTimesInfo";
          MapModeTimesInfo.Size = new Size(260, 21);
          MapModeTimesInfo.Text = "MapModeTimes: Avg: 0ms, Min: 0ms, Max: 0ms";
+         // 
+         // toolStripSeparator11
+         // 
+         toolStripSeparator11.Name = "toolStripSeparator11";
+         toolStripSeparator11.Size = new Size(6, 24);
+         // 
+         // ErrorCountLabel
+         // 
+         ErrorCountLabel.Name = "ErrorCountLabel";
+         ErrorCountLabel.Size = new Size(65, 21);
+         ErrorCountLabel.Text = "ErrorCount";
          // 
          // MainLayoutPanel
          // 
@@ -3145,6 +3158,8 @@
       private ToolStripMenuItem definesEditorToolStripMenuItem;
       private ToolStripMenuItem namesGeneratorToolStripMenuItem;
       private ToolStripMenuItem testTriggerToolStripMenuItem;
+      private ToolStripSeparator toolStripSeparator11;
+      private ToolStripLabel ErrorCountLabel;
    }
 }
 

@@ -1,4 +1,5 @@
-﻿using Editor.ErrorHandling;
+﻿using System.Text;
+using Editor.ErrorHandling;
 using Editor.Helper;
 using Editor.Loading.Enhanced.PCFL.Implementation.ProvinceScope;
 using Editor.Saving;
@@ -85,6 +86,14 @@ public abstract class Every_ScopeSwitch(List<IToken> tokens) : IToken
          foreach (var token in Tokens)
             token.Activate(innerTarget);
    }
+
+   public void GetTokenString(int tabs, ref StringBuilder sb)
+   {
+      SavingUtil.FormatSimpleTokenBlock(tokens, tabs, GetTokenName(), ref sb);
+   }
+   public abstract string GetTokenName();
+   public string GetTokenDescription() => "Scopes to all provinces the current scope owns.";
+   public string GetTokenExample() => "every_owned_province = { <Effect> }";
 }
 
 public abstract class Any_ScopeSwitch(ITrigger trigger) : ITrigger

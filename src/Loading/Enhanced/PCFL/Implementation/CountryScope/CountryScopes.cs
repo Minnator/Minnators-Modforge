@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Text;
 using Editor.DataClasses.Saveables;
 using Editor.Loading.Enhanced.PCFL.Implementation.ProvinceScope;
 using Editor.Saving;
@@ -50,6 +51,8 @@ public class EveryOwnedProvince_Scope(List<IToken> token) : Every_ScopeSwitch(to
       list.Sort();
       return list;
    }
+   
+   public override string GetTokenName() => EFFECT_NAME;
 
    public static IToken CreateToken(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
    {

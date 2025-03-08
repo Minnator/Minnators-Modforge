@@ -292,22 +292,21 @@ namespace Editor.Loading.Enhanced
          ContentOnly
       }
 
-      public static List<IEnhancedElement> LoadBaseOrder(FileContentAllowed fca, out PathObj po, params string[] internalPath)
+      public static List<IEnhancedElement> LoadBaseOrder(this PathObj po)
+      {
+
+         List<EnhancedBlock> blocks = [];
+         List<EnhancedContent> contents = [];
+         (blocks, contents) = GetElements(po);
+
+         return MergeBlocksAndContent(blocks, contents).ToList();
+      }
+
+      public static List<IEnhancedElement> LoadBaseOrder(out PathObj po, params string[] internalPath)
       {
          List<EnhancedBlock> blocks = [];
          List<EnhancedContent> contents = [];
-
-         switch (fca)
-         {
-            case FileContentAllowed.Both:
-            case FileContentAllowed.BlocksOnly:
-            case FileContentAllowed.ContentOnly:
-               (blocks, contents) = GetElements(out po, internalPath);
-               break;
-            default:
-               throw new ArgumentOutOfRangeException(nameof(fca), fca, null);
-         }
-
+         (blocks, contents) = GetElements(out po, internalPath);
          return MergeBlocksAndContent(blocks, contents).ToList();
       }
 

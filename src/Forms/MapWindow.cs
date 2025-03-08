@@ -169,6 +169,7 @@ namespace Editor.Forms
 
          // Activate this window
          Activate();
+         UpdateErrorCounts(LogManager.TotalErrorCount, LogManager.TotalLogCount);
          Globals.ZoomControl.Invalidate();
       }
 
@@ -324,6 +325,9 @@ namespace Editor.Forms
          RamUsageStrip.ToolTipText = "Current RAM usage of the application\nThis is inflated by HeapAllocation from the GC and will free memory if your PC needs some.";
          UndoDepthLabel.ToolTipText = "Undo tree depth\nCompacted \'undos\'(CTRL+Z) / Uncompacted \'undos\'(CTRL+ALT+Z)";
          RedoDepthLabel.ToolTipText = "Redo tree depth\nCompacted \'redos\'(CTRL+Y) / Uncompacted \'redos\'(CTRL+ALT+Y)";
+
+         ErrorCountLabel.ToolTipText = "Num of:\nErrors, Warnings and Critical\nDebug, Information";
+
          CpuUsageStrip.ToolTipText = "Current CPU usage of the application";
          SelectedProvinceSum.ToolTipText = "Sum of currently selected provinces";
       }
@@ -719,6 +723,18 @@ namespace Editor.Forms
       }
 
       #endregion
+
+      public void UpdateErrorCounts(int errors, int infos)
+      {
+         if (Globals.State == State.Loading)
+            return;
+
+         if (InvokeRequired)
+            Invoke(new Action(() => UpdateErrorCounts(errors, infos)));
+         else
+            ErrorCountLabel.Text = $"Errors: {errors} | Infos: {infos}";
+      }
+
       #region History interface interactions
 
       private void RevertInSelectionHistory(object sender, EventArgs e)

@@ -1,0 +1,1008 @@
+Name,Parameters,Examples,Description,Notes,Version Added
+clear_global_event_target,<string>The unique string of the global event target to clear.,clear_global_event_target = my_country,Clears a specific global event target.,,1.8
+clear_global_event_targets,yesBoolean.,clear_global_event_targets = yes,Clears all global event targets.,,1.8
+clr_global_flag,<flag>The unique string of a global flag to clear.,clr_global_flag = my_flag,Clears a defined global flag.,,1.1
+custom_tooltip,<string>An localized string to display in the tooltip,custom_tooltip = my_tooltip_tt,Displays a localized key in the effect tooltip.,,1.1
+enable_council,yesBoolean,enable_council = yes,Starts the Council of Trent.,,1.30
+finish_council,yesBoolean,finish_council = yes,Ends the Council of Trent.,,1.30
+hide_ambient_object,<string>The unique string of the ambient object to hide.,hide_ambient_object = nammi2_hagia_sophia_minarets_entity,Hides a visible ambient object from themap/ambient_objects.txtfile.,,1.19
+log,<string>An string to in the game.log,"log = ""myVariable: [Root.myVariable.GetValue]""",Displays a string in the game.log when executed.,"Accepts all localization commands (i.e. [Root.GetName], etc.)",1.21
+save_event_target_as,<string>A unique string to identify the event target with.,"capital_scope = {
+    save_event_target_as = my_province
+}",Saves the current scope as a key. Is cleared once execution ends (i.e. end of event).,Use event_target:<key> to access the scope.,1.8
+save_global_event_target_as,<string>A unique string to identify the global event target with.,"random_country = {
+    save_global_event_target_as = my_country
+}",Saves the current scope as a key. Persists after execution until cleared via effect.,Use event_target:<key> to access the scope.,1.8
+set_global_flag,<flag>A unique string to identify the global flag with.,set_global_flag = my_flagset_global_flag = my_flag@ROOTset_global_flag = my_flag@event_target:name,Defines a global flag.,Flags can be appended with scopes or event targets,1.1
+show_ambient_object,<string>The unique string of the ambient object to show.,show_ambient_object = nammi2_hagia_sophia_minarets_entity,Displays a hidden ambient object from themap/ambient_objects.txtfile.,,1.19
+country_event,id = <id>The event id to fire.days = <days>Optional. The number of days to wait after the effect is executed to fire the event.random = <days>Optional. The max number of additional days that can be added to thedaysparameter for randomness.tooltip = <string>Optional. The tooltip to display in the effect tooltipcountry_eventis used in.,"country_event = { 
+    id = celestial_empire_events.1
+    days = 30
+    random = 15
+    tooltip = CELESTIAL_EMPIRE_TOOLTIP
+}",Fire a country event for the current country scope.,You cannot fire the same event within itself with a delay of 0.,1.1
+add_country_modifier,name = <name>The event modifier to add.duration = <days>Optional. The number of days to add the country modifier for. -1 means until the end of the game.hidden = yesOptional. Whether the country modifier is hidden in the government view.desc = <string>Optional. The string used to override the automatic duration string.,"add_country_modifier = { 
+    name = the_proper_old_ways
+    duration = -1  
+    desc = PROPER_OLD_WAYS_DESC_TOOLTIP
+    hidden = yes
+}",Adds an event modifier to the current scope as a country modifier.,"durationis optional, but the modifier will be removed after one day if it is not used.",1.1
+extend_country_modifier,name = <name>The event modifier to extend.duration = <days>The number of days to extend the country modifier for. -1 means until the end of the game.,"extend_country_modifier = { 
+    name = the_proper_old_ways
+    duration = 365
+}",Extends an existing event modifier upon the current scope for the specified duration.,,1.35
+remove_country_modifier,<modifier>The event modifier to remove.,remove_country_modifier = the_proper_old_ways,Removes an already assigned country modifier from the current scope.,Can also be used to remove ruler modifier.,1.1
+set_country_flag,<flag>A unique string to identify the country flag with.,set_country_flag = my_flagset_country_flag = my_flag@ROOTset_country_flag = my_flag@event_target:name,Defines a country flag for the current scope.,Flags can be appended with scopes or event targets,1.1
+clr_country_flag,<flag>The unique string of a country flag to clear.,clr_country_flag = my_flag,Clears a defined country flag for the current scope.,,1.1
+change_tag,<scope>The scope to change to.,change_tag = FRAchange_tag = ROOTchange_tag = event_target:my_country,Changes current scope to <scope> tag.,,1.1
+switch_tag,<scope>The scope to switch to.,switch_tag = FRAswitch_tag = ROOTswitch_tag = event_target:my_country,Switches the player view to <scope> tag. Original country becomes controlled by AI.,,1.8
+change_graphical_culture,<gfxculture>The graphical culture to assign.,change_graphical_culture = westerngfx,"Changes the current scope's graphical culture. Graphical culture determines the unit models, advisor portraits, etc. that a country uses.",Graphical cultures are found in/Europa Universalis IV/common/graphicalculturetype.txt.,1.11
+override_country_name,<string>The localisation key to assign.,override_country_name = KINGDOM_OF_GOD,Changes the country name of current scope to <string>.,,1.30
+restore_country_name,yesBoolean.,restore_country_name = yes,Restores the country name of current scope to its original.,,1.30
+change_country_color,color = { <red> <green> <blue> }The RGB value to change to.country = <scope>The country who's color should be used.,"change_country_color = { 
+    color = { 100 100 100 }
+}change_country_color = { country = ROOT }",Changes the country color of current scope to the specified color or to the color of the specified country.,"Eithercountryorcolormust be used, but not both. Can be used withset_country_flag = has_overriden_color_flagto enable the ""Restore our Color"" decision.",1.35
+restore_country_color,yesBoolean.,restore_country_color = yes,Restores the country color of the current scope to its original.,,
+add_adm_power,<int>The amount of power to add.,add_adm_power = 100,Addsadministrative powerto the current scope.,,1.1
+add_dip_power,<int>The amount of power to add.,add_dip_power = 100,Addsdiplomatic powerto the current scope.,,1.1
+add_mil_power,<int>The amount of power to add.,add_mil_power = 100,Addsmilitary powerto the current scope.,,1.1
+set_saved_name,"key = <string>The key that holds the name.type = advisor / simpleThe name generation type. Advisor draws from namelist, simple utilises name parameter.name = <string>The name to hold in the key. Only used with thesimpletype.scope = <scope>The country scope to draw the namelist from. Only used with theadvisortype.","Simple:set_saved_name = {
+    key = simple_name
+    type = simple
+    name = ""My Simple Name""
+}define_ruler = {
+    name = simple_name
+}Advisor:set_saved_name = {
+    key = noble_zealot
+    type = advisor
+    scope = ROOT
+}spawn_rebels = {
+    size = 1
+    leader = noble_zealot
+    type = religious_rebels
+}",Saves a name to a unique key for usage in other effects.,"Usable withdefine_admiral,define_explorer,define_conquistador,define_general,define_ruler,define_consort,define_heir,define_advisorandspawn_rebels.",1.23
+clear_saved_name,<key>The name key to clear.,clear_saved_name = noble_zealot,Clears a saved name key.,Use this after using the saved name in an effect.,1.23
+change_innovativeness,<int>The amount of innovativeness added.,change_innovativeness = 3,Addsinnovativenessto the current scope.,"Range [-100.0, 100.0]capped to [0.0, 100.0]",1.25
+complete_mission,<key>The identifier of the mission.,complete_mission = expand_country_mission,Marks a mission as completed.,"Mission rewards are not given when using this effect. Instead, the mission is simply marked as complete. It will count towards any missions that require it, and it will count as completed in themission_completedtrigger.",1.25
+swap_non_generic_missions,yesBoolean.,swap_non_generic_missions = yes,Reloads the mission tree. Useful for flag-based mission trees.,,?
+adm_power_cost,<int>The amount of power to scale and then subtract.,adm_power_cost = 100,"Scales the amount with the power cost modifier, then takesadministrative powerfrom the current scope.",,1.27
+dip_power_cost,<int>The amount of power to scale and then subtract.,dip_power_cost = 100,"Scales the amount with the power cost modifier, then takesdiplomatic powerfrom the current scope.",,1.27
+mil_power_cost,<int>The amount of power to scale and then subtract.,mil_power_cost = 100,"Scales the amount with the power cost modifier, then takesmilitary powerfrom the current scope.",,1.27
+remove_country,yesBoolean,remove_country = yes,The current country scope gets removed from existence.,"All of the current country scope's provinces become uncolonized, all its subjects become independent, and all its units are disbanded.",1.35
+play_sound,<identifier>,play_sound = heir_die,Plays a sound file.,Sound names are found in/Europa Universalis IV/sound/all_sounds.asset.,1.36
+add_years_of_income,<float>The amount of income to add or subtract.,add_years_of_income = 0.5,Adds ducats equal to the years of income defined.,"1is equal to 1 year of income, based on a country's current monthly income.",1.1
+add_treasury,<int>The amount of ducats to add or subtract.,add_treasury = 50,Adds ducats to the current scope.,,1.1
+add_inflation,<float>The amount of inflation to add or subtract.,add_inflation = 2,Adds inflation to the current scope.,,1.1
+add_mercantilism,<int>The amount of mercantilism to add or subtract.,add_mercantilism = 2,Adds mercantilism to the current scope.,,1.1
+add_owned_provinces_development_ducats,multiplier = <int>age_multiplier = <int>trigger = <scope>custom_tooltip = <string>,"add_owned_provinces_development_ducats = {
+    multiplier = 2
+    age_multiplier = 1
+    trigger = { culture = english }
+    custom_tooltip = ENGLISH_CULTURE_PROV_TT
+}",Adds money scaling with the development of the current country's provinces multiplied bymultiplierandage_multiplier.,triggercontrols which provinces are taken into consideration.,1.35
+add_owned_provinces_development_manpower,multiplier = <int>age_multiplier = <int>trigger = <scope>custom_tooltip = <string>,"add_owned_provinces_development_manpower = {
+    multiplier = 2
+    age_multiplier = 1
+    trigger = { culture = english }
+    custom_tooltip = ENGLISH_CULTURE_PROV_TT
+}",Adds manpower scaling with the development of the current country's provinces multiplied bymultiplierandage_multiplier.,triggercontrols which provinces are taken into consideration.,1.35
+add_tariff_value,<float>The amount of tariff value to add or subtract.,add_tariff_value = 0.1,Adds tariff value to the current scope.,Tariff value is the ducats sent to an overlord by subjects such as colonial nations.,1.4
+loan_size,<int>The value to change to.,loan_size = 24,Changes the loan size of the current scope.,Size is the number of months in monthly income that a single loan is equal to.,1.1
+change_price,trade_goods = <tradegood>The trade good to change.key = <string>The localisation key to display in the Trade Good's price tooltip.value = <float>The percentage to change the value by.duration = <days>The duration for the value to stay changed for.,"change_price = {
+    trade_goods = grain
+    key = grain_shortage
+    value = 0.5
+    duration = 3650
+}",Changes the price of a trade good globally.,Tradegood prices are found in/Europa Universalis IV/common/prices/*.txtThe new price is the base price + (base price * value)durationaccepts -1 for unlimited duration.,1.8
+add_loan,"interest_modifier = <value>Additive interest modifier.fixed_interest = <value>optional, the loan uses this interest amountduration = <integer>The duration in months.","add_loan = {
+	interest_modifier = -0.5
+	fixed_interest = 1.5
+	duration = 60
+}",Takes a loan for the current scope.,,1.26
+raise_war_taxes,yesBoolean,raise_war_taxes = yes,Raises war taxes without spending military power,,1.26
+add_years_of_owned_provinces_production_income,years = <value>Years of production income to grant.trigger = <scope>Which provinces to include for the production income calculation.custom_tooltip = <string>The tooltip to display for this effect,"add_years_of_owned_provinces_production_income = {
+    years = 8
+    trigger = {
+        OR = {
+            trade_goods = cloth
+            trade_goods = silk
+        }
+    }
+    custom_tooltip = MONOPOLY_INCOME_CLOTH_DESC
+}",Grants the current scope immediate ducats based on the production income of the specified provinces over the specified duration.,,1.30
+add_years_of_owned_provinces_manpower,years = <value>Years of manpower to grant.trigger = <scope>Which provinces to include for the manpower calculation.custom_tooltip = <string>The tooltip to display for this effect,"add_years_of_owned_provinces_manpower = {
+	years = 4
+	trigger = {
+		religion = ROOT
+		has_tax_building_trigger = yes
+	}
+	custom_tooltip = liv_land_of_churches_tt
+}",Grants the current scope immediate manpower based on the manpower generation of the specified provinces over the specified duration.,,1.34
+add_years_of_owned_provinces_sailors,years = <value>Years of sailors to grant.trigger = <scope>Which provinces to include for the sailors calculation.custom_tooltip = <string>The tooltip to display for this effect,"add_years_of_owned_provinces_sailors = {
+	years = 10
+	trigger = {
+		culture_group = iberian
+	}
+	custom_tooltip = ""Gain 10 years of Iberian sailors""
+}",Grants the current scope immediate sailors based on the sailor generation of the specified provinces over the specified duration.,,1.34
+set_bankruptcy,<scope>The scope to make bankrupt,set_bankruptcy = FRA,Makes the specified country go bankrupt.,,1.34
+steer_trade,<scope>,steer_trade = FRA,The current country scope steers trade power to the specified country scope.,,1.35
+add_absolutism,<int>The amount of absolutism to add or subtract.,add_absolutism = 10,Adds absolutism to the current scope.,No effect if Absolutism isn't active.,1.20
+add_government_reform,<reform>The name of the reform to enact.,add_government_reform = revolutionary_empire_reform,"IfDharma is active, enacts a government reform, replacing any existing reform at the same tier.If Dharma isnotactive, changes to the legacy government type that this reform has listed as itslegacy_equivalent.",,1.26
+remove_government_reform,<reform>The name of the reform to remove.,remove_government_reform = revolutionary_empire_reform,"IfDharma is active, removes a government reform. If this reform was not in the highest achieved reform tier, the country can pick a new reform for free.",No effect if Dharma isn't active.,1.26
+change_government_reform_progress,<int>The amount of reform progress to add or subtract.,change_government_reform_progress = 100,Adds reform progress to the current scope.,,1.26
+add_legitimacy,"<int>The amount of legitimacy to add or subtract.<scope>The amount of legitimacy to add or subtract, taking the value from the scope's current value.",add_legitimacy = 10add_legitimacy = CAS,Adds legitimacy to the current scope.,No effect if not a governmentmonarchy.,1.1
+add_republican_tradition,<int>The amount of republican tradition to add or subtract.,add_republican_tradition = 10,Adds republican tradition to the current scope.,No effect if not a government usingrepublic.,1.1
+add_scaled_republican_tradition,<int>The amount of republican tradition to add or subtract.,add_scaled_republican_tradition = 10,Adds republican tradition to the current scope.,Scales to the government's election cycle duration.No effect if not a government usingrepublic.,1.7
+add_devotion,<int>The amount of devotion to add or subtract.,add_devotion = 10,Adds devotion to the current scope.,No effect if not a government usinghas_devotion.,1.12
+add_horde_unity,<int>The amount of horde unity to add or subtract.,add_horde_unity = 10,Adds horde unity to the current scope.,No effect if not a government usingnomad.,1.14
+add_meritocracy,<int>The amount of meritocracy to add or subtract.,add_meritocracy = 10,Adds meritocracy to the current scope.,No effect if not a government usinghas_meritocracy.,1.20
+set_meritocracy,<int>The amount of meritocracy to set.,set_meritocracy = 10,Sets the current meritocracy for the current scope.,No effect if not a government usinghas_meritocracy.,1.20
+add_militarised_society,<int>The amount of militarisation to add or subtract.,add_militarised_society = 10,Adds militarisation to the current scope.,No effect if not a government usingmilitarised_society.,1.18
+add_revolutionary_zeal,<int>The amount of revolutionary zeal to add or subtract.,add_revolutionary_zeal = 10,Adds revolutionary zeal to the current scope.,No effect if not a government usingrevolutionary zeal.,1.30
+add_tribal_allegiance,<int>The amount of tribal allegiance to add or subtract.,add_tribal_allegiance = 10,Adds tribal allegiance to the current scope.,No effect if not a government usingtribal_federation_mechanic.,1.23
+adopt_reform_progress,<scope>Adopts the government reform progress from the target country scope.,adopt_reform_progress = FROM,Adopts the government reform progress from the target country scope.,Used when the Papal States is released.,???
+change_statists_vs_orangists,<int>The amount of swing towards statists or orangists.,change_statists_vs_orangists = 0.1,Changes the Organist-Statist balance.,"Positive moves towards Orangist, negative moves towards Statists. In percent form.",1.7
+change_statists_vs_monarchists,<int>The amount of swing towards statists or monarchists.,change_statists_vs_monarchists = 0.1,Changes the Monarchist-Statist balance.,"Positive moves towards Monarchist, negative moves towards Statists. In percent form.",
+change_government,<government>The government to change to.,change_government = dictatorship,Changes the government of the current scope.,Governments are found in/Europa Universalis IV/common/governments/*.txt.,1.1 (1.28.3 - will now always refund reform progress)
+set_government_rank,<int>The rank to change to.,set_government_rank = 3,Changes the government rank of the current scope.,Default range is 1 to 3.,1.12
+add_government_power,mechanic_type = <type>Which government mechanic the power belongs to.power_type = <type>Which power type to add the power to.value = <float>The amount of power to add.,"add_government_power = {
+	mechanic_type = russian_modernization_mechanic
+	power_type = russian_modernization
+	value = 10
+}",Changes the value of the specified power for the specified government mechanic.,Government mechanicscan be found incommon/government_mechanics,1.35Initially added in 1.23 with a different syntax and for hardcoded government mechanics.
+add_government_power_scaled_to_seats,mechanic_type = <type>Which government mechanic the power belongs to.power_type = <type>Which power type to add the power to.value = <float>The amount of power to add.,"add_government_power_scaled_to_seats = {
+	mechanic_type = russian_modernization_mechanic
+	power_type = russian_modernization
+	value = 10
+}",Changes the value of the specified power for the specified government mechanic scaled to the amount of parliament seats the country has.,Government mechanicscan be found incommon/government_mechanics,1.35
+set_government_power,mechanic_type = <type>Which government mechanic the power belongs to.power_type = <type>Which power type to set the value of.value = <float>The amount of power to set to.,"set_government_power = {
+	mechanic_type = russian_modernization_mechanic
+	power_type = russian_modernization
+	value = 10
+}",Sets the specified power for the specified government mechanic to the specified value.,Government mechanicscan be found incommon/government_mechanics,1.35
+freeze_government_power,mechanic_type = <type>Which government mechanic the power belongs to.power_type = <type>Which power type to freeze.,"freeze_government_power = {
+	mechanic_type = russian_modernization_mechanic
+	power_type = russian_modernization
+}","Freezes the specified power of the specified government mechanic, so that it cannot be changed anymore.",Government mechanicscan be found incommon/government_mechanics,1.35
+unfreeze_government_power,mechanic_type = <type>Which government mechanic the power belongs to.power_type = <type>Which power type to freeze.,"unfreeze_government_power = {
+	mechanic_type = russian_modernization_mechanic
+	power_type = russian_modernization
+}","Unfreezes the specified power of the specified government mechanic, so that it can be changed again.",Government mechanicscan be found incommon/government_mechanics,1.35
+regenerate_government_mechanics,yesBoolean.,regenerate_government_mechanics = yes,Regenerates the country's government mechanics.,Used for UI purposes.,1.35
+set_government_and_rank,government = <government>The government to change to.rank = <int>The rank to change to.,"set_government_and_rank = { 
+    government = celestial_empire
+    rank = 3
+}",Changes the current scope's government and rank at the same time.,Governments are found in/Europa Universalis IV/common/governments/*.txt.Will respect that governments have fixed ranks and the maximum ranks for subject types.,1.22 (obsolete as of 1.26?)
+set_legacy_government,government = <government>The pre-Dharma government type to change to.,set_legacy_government = despotic_monarchy,Switches to the given government type.,"No effect ifDharma is active. Use add_government_reform or change_government_via_reform instead. Combine this with effects that change government only if Dharma is active, e.g.change_government_via_reform.",1.26
+dissolve_parliament,yesBoolean.,dissolve_parliament = yes,Disables the Parliament mechanic.,Only effects governments withhas_parliament.,1.15
+reinstate_parliament,yesBoolean.,reinstate_parliament = yes,Re-enables the Parliament mechanic afterdissolve_parliament.,Only effects governments withhas_parliament.,1.15
+start_debate,<identifier>The parliament issue to debate.,start_debate = support_ruling_dynasty,Starts a debate in the parliament for the specified issue.,Parliament issues can be found incommon/parliament_issues.Ongoing debates will be canceled (canceling a debate should NOT activate the prestige loss).,1.35
+end_current_debate,<yes>/<no>Boolean.,remove_enacted_issue = yes,Ends the current debate immediately. Ifyesthen the debate succeeds and the issue gets enacted. Ifnothen the debate fails and the failure penalty is applied.,,1.35
+cancel_current_debate,yesBoolean.,cancel_current_debate = yes,"Cancels the current debate in parliament, allowing a new debate to be started.",,1.35
+remove_enacted_issue,yesBoolean.,remove_enacted_issue = yes,"Removes the currently enacted parliament issue, allowing a new debate to be started.",,1.35
+enact_issue,<identifier>The parliament issue to enact.,enact_issue = support_ruling_dynasty,Enacts the parliament issue and skips the whole process of debating.,Parliament issues can be found incommon/parliament_issues.,1.35
+add_accepted_culture,"<culture>The culture to add.<scope>The culture to add, derived from the scope.",add_accepted_culture = englishadd_accepted_culture = ENGadd_accepted_culture = event_target:my_event_targetadd_accepted_culture = variable:my_variable,Adds a new accepted culture to the current scope.,Cultures are found in/Europa Universalis IV/common/cultures/*.txt.Can utiliseEvent Scope Values.,1.1
+change_primary_culture,"<culture>The culture to change to, from/Europa Universalis IV/common/cultures/.<scope>The culture to change to, derived from the scope.",change_primary_culture = englishchange_primary_culture = ENGchange_primary_culture = event_target:my_event_targetchange_primary_culture = variable:my_variable,Changes the primary culture of the current scope.,Cultures are found in/Europa Universalis IV/common/cultures/*.txt.Can utiliseEvent Scope Values.,1.1
+remove_accepted_culture,"<culture>The culture to remove, from/Europa Universalis IV/common/cultures/.<scope>The culture to remove, derived from the scope.",remove_accepted_culture = englishremove_accepted_culture = ENGremove_accepted_culture = event_target:my_event_targetremove_accepted_culture = variable:my_variable,Removes an accepted culture from the current scope.,Cultures are found in/Europa Universalis IV/common/cultures/*.txt.Can utiliseEvent Scope Values.,1.1
+change_religion,"<religion>The religion to change to.<scope>The religion to change to, derived from the scope.",change_religion = catholicchange_religion = event_target:my_event_targetchange_religion = variable:my_variable,Changes the religion of the current scope.,Religions are found in/Europa Universalis IV/common/religions/*.txtCan utiliseEvent Scope Values.Does not acceptTAGscopes.,1.1
+enable_religion,<religion>The religion to change to.,enable_religion = reformed,Enables an religion that has been restricted with thedateparameter.,Religions are found in/Europa Universalis IV/common/religions/*.txt,1.1
+force_converted,yesBoolean.,force_converted = yes,Sets whether the current scope has been force converted.,,1.1
+add_authority,<int>The amount of authority to add.,add_authority = 10,Adds authority to the current scope. Used in Religious Reforms that useauthority.,No effect if the country does not hold a religion usingauthority.,1.10
+add_doom,<int>The amount of doom to add.,add_doom = 10,Adds doom to the current scope. Used in Religious Reforms that usedoom.,No effect if the country does not hold a religion usingdoom.,1.10
+remove_religious_reforms,<int>The amount of religious reforms to remove.,remove_religious_reforms = 2,Removes taken religious reforms from the current scope.,No effect if the country does not hold a religion usingreligious_reforms.,1.10
+add_fervor,<int>The amount of fervor to add or subtract.,add_fervor = 10,Adds Fervor to the current scope.,No effect if the country does not hold a religion usingfervor.,1.6
+add_karma,<int>The amount of karma to add or subtract.,add_karma = 10,Adds Karma to the current scope.,No effect if the country does not hold a religion usinguses_karma.,1.12
+set_karma,<int>The amount of karma to set.,set_karma = 10,Sets the Karma value for the current scope.,No effect if the country does not hold a religion usinguses_karma.,1.12
+add_church_power,<int>The amount of church power to add or subtract.,add_church_power = 10,Adds Church Power to the current scope.,No effect if the country does not hold a religion usinguses_church_power.,1.12
+add_church_aspect,<aspect>The church aspect to add.,add_church_aspect = adult_baptism_aspect,Adds the defined aspect to the current scope.,Church Aspects are found in/Europa Universalis IV/common/church_aspects/00_church_aspects.txt.No effect if the country does not hold a religion usinguses_church_powerand the aspect set inaspects.Does not work with Blessings.,1.12
+remove_church_aspect,<aspect>The church aspect to remove. You can also userandomhere to pick a random aspect.,remove_church_aspect = adult_baptism_aspect,Removes the defined aspect from the current scope.,Church Aspects are found in/Europa Universalis IV/common/church_aspects/00_church_aspects.txt.No effect if the country does not have the aspect.Does not work with Blessings.,1.12
+set_defender_of_the_faith,who = <scope>The country to set as Defender of the Faith.religion = <religion>Optional. The religion for which to set Defender of the Faith.,"set_defender_of_the_faith = {
+    who = FRA
+    religion = catholic
+}",Sets the defined scope as the Defender of the Faith of the specified religion.,"Ifreligionis not defined, uses the current religion ofwho.Works even for religions that do not normally allow Defender of the Faith.",1.32
+remove_defender_of_the_faith,who = <scope>The country to remove as Defender of the Faith.religion = <religion>Optional. The religion from which to remove Defender of the Faith.,"remove_defender_of_the_faith = {
+    who = FRA
+    religion = catholic
+}",Removes the defined scope as the Defender of the Faith of the specified religion.,"Ifreligionis not defined, uses the current religion ofwho.",1.32
+set_papal_controller,<scope>,set_papal_controller = FRA,Sets the defined scope as the new Papal Controller.,Current Pope will die.,1.35
+transfer_papal_controller,<scope>,transfer_papal_controller = FRA,Sets the defined scope as the new Papal Controller without killing the current Pope.,,1.36
+add_papal_influence,<int>The amount of papal influence to add or subtract.,add_papal_influence = 10,Adds Papal Influence to the current scope.,No effect if the country does not hold a religion usingpapacy.,1.1
+add_reform_desire,<float>The amount reform desire to add or subtract.,add_reform_desire = 0.5,Adds Reform Desire to the country's religion.,,1.1
+excommunicate,<scope>The scope to excommunicate.,excommunicate = FRA,"Excommunicates the defined scope. If already excommunicated, removes excommunication.",,1.12
+set_papacy_active,yesnoBoolean.,set_papacy_active = yes,Enables or disables the Papacy mechanic.,,1.1
+add_piety,<float>The amount of piety to add or subtract.,add_piety = 0.5,Adds Piety to the current scope.,No effect if the country does not hold a religion usinguses_piety.,1.1
+add_curia_treasury,<float>The amount of money to add or subtract to the curia treasury.,add_curia_treasury = 100,Adds money to the curia treasury,,1.30
+set_school_opinion,who = <who>Which country to alter opinion with.opinion = <opinion>Which opinion state to change to.,"set_school_opinion = {
+    who = TUR
+    opinion = -1
+}",Changes the current scope's school opinion towards the defined scope's school.,"-1for negative,0for netural and1for positive.",1.23
+set_religious_school,group = <religious group>Which religious group to take the school from.school = <school>Which school to change to.,"set_religious_school = {
+    group = muslim
+    school = hanafi_school
+}",Changes the current scope's religious school.,Religious Schools are found in/Europa Universalis IV/common/religions/00_religions.txt.,1.23
+add_patriarch_authority,<float>The amount of patriarch authority to add or subtract.,add_patriarch_authority = 0.5,Adds Patriarch Authority to the current scope.,No effect if the country does not hold a religion usinghas_patriarchs.,1.1
+change_personal_deity,<deity>The personal deity to add.,change_personal_deity = odin,Changes the current personal deity for the current scope.,Personal Deities are found in/Europa Universalis IV/common/personal_deities/*.txt.No effect if the country does not hold a religion usingpersonal_deity.,1.6
+add_harmony,<int>The amount of harmony to add or subtract.,add_harmony = 10,Adds Harmony to the current scope.,No effect if the country does not hold a religion usinguses_harmony.,1.20
+add_harmonized_religion,<religion>The religion to harmonize.,add_harmonized_religion = catholic,Adds a religion to the list of Harmonized religions for the current scope.,No effect if the country does not hold a religion usinguses_harmony.,1.20
+add_harmonization_progress,<int>The amount of progress to add or subtract.,add_harmonization_progress = 10,Adds Harmonization Progress for the current harmonization target to the current scope.,No effect if the country does not hold a religion usinguses_harmony.,1.20
+unlock_cult,<cult>The cult to unlock.,unlock_cult = yemoja_cult,Adds the defined cult to the current scope.,Cults can be found in/Europa Universalis IV/common/fetishist_cults/*.txt.No effect if the country does not hold a religion usingfetishist_cult.,1.18
+change_cult,<cult>The cult to change to.,change_cult = yemoja_cult,Changes the current cult for the current scope.,Cults can be found in/Europa Universalis IV/common/fetishist_cults/*.txt.No effect if the country does not hold a religion usingfetishist_cult.,1.32
+add_isolationism,<int>The amount of isolationism to add or subtract.,add_isolationism = 1,Adds Isolationism to the current scope.,No effect if the country does not hold a religion usinguses_isolationism.,1.20
+set_isolationism,<int>The amount of isolationism to set.,set_isolationism = 2,Sets Isolationism for the current scope.,No effect if the country does not hold a religion usinguses_isolationism.,1.20
+add_incident_variable_value,incident = <incident>The incident to change.value = <int>The amount to add to the incident variable.,"add_incident_variable_value = {
+    incident = incident_urbanization
+    value = -1
+}",Changes the value of an Incident for the current scope.,Incidents are found in/Europa Universalis IV/common/isolationism/*.txtNo effect if the country does not hold a religion usinguses_isolationism.,1.20
+set_incident_variable_value,incident = <incident>The incident to change.value = <int>The amount to set the incident variable to.,"set_incident_variable_value = {
+    incident = incident_urbanization
+    value = 1
+}",Sets the value of an Incident for the current scope.,Incidents are found in/Europa Universalis IV/common/isolationism/*.txtNo effect if the country does not hold a religion usinguses_isolationism.,1.20
+add_idea,<idea>The idea to add.,add_idea = military_traditions,Adds an idea for the current scope.,Ideas are found in/Europa Universalis IV/common/ideas/*.txt.Won't work if the idea isn't present in a National Idea set or a taken Ideagroups set for the country.,1.6
+add_idea_group,<ideagroup>The ideagroup to add.,add_idea_group = aristocracy_ideas,Adds an ideagroup for the current scope.,Ideagroups are found in/Europa Universalis IV/common/ideas/*.txt.Won't work if the country doesn't have any free ideagroup slots.,1.6
+add_active_policy,<policy>The policy to add.,add_active_policy = the_statute_of_monopolies,Adds a policy for the current scope.,"Policies are found in/Europa Universalis IV/common/policies/*.txt.Won't work if the policy triggers are not met by the country, or there are no free policy slots.",1.21
+change_technology_group,<technology group>The technology group to change to.,change_technology_group = western,Changes the technology group of the current scope.,"Technology Groups are found in/Europa Universalis IV/common/technology.txt.Doesn't change units, usechange_unit_type.",1.1
+remove_idea,<idea>The idea to remove.,remove_idea = military_traditions,Removes an idea for the current scope.,Ideas are found in/Europa Universalis IV/common/ideas/*.txt.Won't work if the idea isn't held.,1.6
+remove_idea_group,<ideagroup>The ideagroup to remove.,remove_idea_group = military_traditions,Removes an ideagroup for the current scope.,Ideagroups are found in/Europa Universalis IV/common/ideas/*.txt.Won't work if the ideagroup isn't held.,1.6
+set_primitive,yes / noBoolean.,set_primitive = no,Toggles Primitive status for the current scope.,"Primitive status controls whether a country has ships and if they can see Primitive-only mechanics, such as Religious Reforms.",1.18
+swap_free_idea_group,yesBoolean.,swap_free_idea_group = yes,"Re-evaluates the current scope's national idea set assignment, if they match a different set, they will switch to it.",Used after tag changes to change Nationa Idea sets.,1.1
+add_next_institution_embracement,<int>The amount of embracement to add.,add_next_institution_embracement = 10,Adds embracement for the current progressing institution within the current scope.,Institutions are found in/Europa Universalis IV/common/institutions/*.txt.,1.21
+add_next_institution_embracement_scaled,<int>The amount of embracement to add. An integer of 5 equates 1/6th of a province's development in percentage points of increase.,add_next_institution_embracement = 5,"Adds embracement for the current progressing institution within the current scope, scaled to province development.",Institutions are found in/Europa Universalis IV/common/institutions/*.txt.,1.27
+add_adm_tech,<int>The amount of technologies to add.,add_adm_tech = 1,AddsADMtechnologies to the current scope.,You cannot remove technologies.,1.21
+add_dip_tech,<int>The amount of technologies to add.,add_dip_tech = 1,AddsDIPtechnologies to the current scope.,You cannot remove technologies.,1.21
+add_mil_tech,<int>The amount of technologies to add.,add_mil_tech = 1,AddsMILtechnologies to the current scope.,You cannot remove technologies.,1.21
+add_prestige,"<float>The amount to add or subtract.<scope>The value to take fromscope, to add or subtract.",add_prestige = 50,Adds prestige to the current scope.,,1.1
+set_capital,<province_id>Province ID of the new capital.,set_capital = 118,Changes the capital of the scoped country to the selected province ID.,Can also use the scripted effect move_capital_effect = yes in a province scope nested in a country scope to accomplish the same thing as well as remove province form HRE.,1.1
+add_corruption,<float>The amount to add or subtract.,add_corruption = 2,Adds corruption to the current scope.,,1.16
+add_splendor,<int>The amount to add or subtract.,add_splendor = 2,Adds splendor to the current scope.,Splendor is used to purchase Age abilities.,1.20
+create_advisor,<advisor>The advisor to create.,create_advisor = philosopher,Adds the defined advisor to the current scope.,"Defaults the advisor's location to the capital, and religion and culture to the current scope's.",1.1
+kill_advisor,randomKill a random advisor.<advisor>Kill a specific advisor type.<advisor id>Kill a specific advisor id.,kill_advisor = philosopherkill_advisor = randomkill_advisor = 30,Kills a hired advisor for the current scope.,Advisor types are found in/Europa Universalis IV/common/advisortypes/*.txtDisplays the advisor death message box when used.Only works for advisors that have been hired.,1.1
+remove_advisor,randomRemove a random advisor.<advisor>Remove a specific advisor type<advisor id>Remove a specific advisor id.,remove_advisor = philosopherremove_advisor = randomremove_advisor = 30,Removes a hired advisor for the current scope.,Advisor types are found in/Europa Universalis IV/common/advisortypes/*.txtDoes not display the advisor death message box when used.Only works for advisors that have been hired.,1.1
+remove_advisor_by_category,"<type>Removes an advisor by monarch power type:ADM,DIPorMIL.",remove_advisor_by_category = ADM,Removes a hired advisor of a monarch power type for the current scope.,Only works for advisors that have been hired.,1.20
+define_advisor,type = <type>The advisor type to create.skill = <int>The amount of skill the advisor has. Limited to 3 maximum.name = <string>Optional. The name to use.location = <province id>Optional. The province that the advisor comes from.discount = yesOptional. If the SCRIPTED_ADVISOR_DISCOUNT cost reduction applies to this advisor.cost_multiplier = <int>Optional. Modifiers the cost of the advisor.female = yesOptional. Makes this advisor female.culture = <culture> / <scope>Optional. The culture of this advisor.religion = <religion> / <scope>Optional. The religion of this advisor.age = <int>Optional. The age of this advisor.min_age = <int>Optional. The minimum age of this advisor.max_age = <int>Optional. The maximum age of this advisor.,"define_advisor = {
+    type = treasurer
+    name = ""John Smith""
+    skill = 3
+    culture = english
+    religion = catholic
+}define_advisor = {
+    type = treasurer
+    name = rising_star_advisor
+    skill = 2
+    culture = event_target:wrong_religion_province
+    religion = event_target:wrong_religion_province
+}define_advisor = {
+    type = recruitmaster
+    skill = 3
+    discount = yes
+    culture = variable:new_ruler_culture
+}",Adds the defined advisor to the current scope.,"Advisor types are found in/Europa Universalis IV/common/advisortypes/*.txtCan utiliseEvent Scope Valuesfor thecultureandreligionparameters.Thenameparameter can accept a saved name variable, seeset_saved_namefor more context.",1.1
+hire_advisor,type = <type>The advisor type to hire.skill = <int>The amount of skill the advisor has. Limited to 3 maximum.name = <string>Optional. The name to use.location = <province id>Optional. The province that the advisor comes from.discount = yesOptional. If the SCRIPTED_ADVISOR_DISCOUNT cost reduction applies to this advisor.cost_multiplier = <int>Optional. Modifiers the cost of the advisor.female = yesOptional. Makes this advisor female.culture = <culture> / <scope>Optional. The culture of this advisor.religion = <religion> / <scope>Optional. The religion of this advisor.age = <int>Optional. The age of this advisor.min_age = <int>Optional. The minimum age of this advisor.max_age = <int>Optional. The maximum age of this advisor.,"hire_advisor = {
+    type = treasurer
+    name = ""John Smith""
+    skill = 3
+    culture = english
+    religion = catholic
+}hire_advisor = {
+    type = treasurer
+    name = rising_star_advisor
+    skill = 2
+    culture = event_target:wrong_religion_province
+    religion = event_target:wrong_religion_province
+}hire_advisor = {
+    type = recruitmaster
+    skill = 3
+    discount = yes
+    culture = variable:new_ruler_culture
+}","Forcefully hires an advisor, putting it into the court of the current scope. The old advisor gets fired if the space is preoccupied already.","Advisor types are found in/Europa Universalis IV/common/advisortypes/*.txtCan utiliseEvent Scope Valuesfor thecultureandreligionparameters.Thenameparameter can accept a saved name variable, seeset_saved_namefor more context.From a scripting point of view, this effect works exactly likedefine_advisorwith all the same parameters.",1.35
+extend_regency,<int>The amount of years to extend the regency by.,extend_regency = 5,Extends an ongoing regency for the current country scope by the specified amount in years.,,1.31
+regency,<int>The amount of years to extend the regency by.,extend_regency = 5,Extends an ongoing regency for the current country scope by the specified amount in years.,,1.31
+change_national_focus,"Skill type to use.<ADM>
+<DIP>
+<MIL>",change_national_focus = ADM,Changes the national focus of the current country scope.,,1.32
+add_power_projection,type = <name>The power projection modifier to use. Power projection modifiers are located in the static modifiers.amount = <int>The amount of power projection to add.,"add_power_projection = { 
+	type = 25_permanent_power_projection
+	amount = 25 
+}",Adds the amount of power projection to the current scope.,,1.30
+remove_power_projection,key = <name>The power projection modifier to use. Power projection modifiers are located in the static modifiers.amount = <int>Optional. The amount of power projection to remove.,"remove_power_projection = { 
+	key = 25_permanent_power_projection
+	amount = 25 
+}",Removes the amount of power projection from the current scope.,"Ifamountis not defined, the entire amount of the specified key is removed instead.",1.35
+add_stability,<int>The amount to add or subtract.,add_stability = 1,Adds stability to the current scope.,,1.1
+add_war_exhaustion,<int>The amount to add or subtract.,add_war_exhaustion = 2,Adds war exhaustion to the current scope.,,1.1
+add_liberty_desire,<int>The amount to add or subtract.,add_liberty_desire = 10,Adds liberty desire to the current scope.,Used on the subject to raise liberty desire for the overlord.,1.4
+disband_rebels,<type>The rebel type to disband.,disband_rebels = anti_tax_rebels,Disbands all active rebels of the specified type in the provinces of the current scope.,Rebel types are found in/Europa Universalis IV/common/rebel_types/*.txt,1.1
+collapse_nation,yesBoolean,collapse_nation = yes,Gives a percentage of the current scope's owned provinces to random native countries.,,1.10
+add_disaster_modifier,name = <modifier>The event modifier to add.disaster = <disaster>The disaster to apply the modifier to.duration = <days>The duration for the modifier to be active for.,"add_disaster_modifier = {
+    name = ""restrict_serfdom""
+    duration = -1
+    disaster = internal_conflicts
+}","Applies an event modifier to the current scope that is removed when the disaster is over, or the duration runs out.",Disasters are found in/Europa Universalis IV/common/disasters/*.txt,1.10
+add_disaster_progress,disaster = <disaster>The disaster to alter.value = <int>The amount of progress to add or subtract.,"add_disaster_progress = {
+    disaster = internal_conflicts
+    value = 10
+}",Adds progress towards an already declared (conditions for disaster are met since at least a month) disaster,Disasters are found in/Europa Universalis IV/common/disasters/*.txt,1.16
+end_disaster,<disaster>The disaster to end.,end_disaster = internal_conflicts,Immediately ends an active disaster for the current scope.,Disasters are found in/Europa Universalis IV/common/disasters/*.txt,1.9
+add_rebel_progress,rebel_type = <identifier>value = <int>,"add_rebel_progress = {
+    rebel_type = pretender_rebels
+    value = 10
+}",Adds progress to a specified rebel type spawning in the current country.,If no rebel type is defined then progress is added to all rebels.,1.35
+add_army_tradition,<int>The amount of army tradition to add or subtract.,add_army_tradition = 10,Adds Army Tradition to the current scope.,,1.1
+add_navy_tradition,<int>The amount of navy tradition to add or subtract.,add_navy_tradition = 10,Adds Navy Tradition to the current scope.,,1.1
+add_army_professionalism,<float>The amount of army professionalism to add or subtract.,add_army_professionalism = 0.05,Adds Army Professionalism to the current scope.,1 is equal to 100 army professionalism.,1.23
+add_manpower,<float>The amount of manpower to add or subtract.,add_manpower = 1,Adds manpower to the current scope.,1 is equal to 1000 manpower.,1.1
+add_sailors,<int>The amount of sailors to add or subtract.,add_sailors = 10,Adds sailors to the current scope.,1 is equal to 1 sailor.,1.16
+add_yearly_manpower,<float>The amount of manpower to add or subtract.,add_yearly_manpower = 0.5,"Adds manpower to the current scope, as a percentage of total yearly manpower.",1 is equal to 100% of total yearly manpower.,1.4
+add_yearly_sailors,<float>The amount of sailors to add or subtract.,add_yearly_sailors = 10,"Adds sailors to the current scope, as a percentage of total yearly sailors.",1 is equal to 100% of total yearly sailors.,1.16
+create_admiral,tradition = <int>The amount of navy tradition to use in generation.add_fire = <int>(optional) Additional fire pips.add_shock = <int>(optional) Additional shock pips.add_manuever = <int>(optional) Additional manuever pips.add_siege = <int>(optional) Additional siege pips.culture = <identifier>(optional) Give the general a random name from the specified culture.,create_admiral = { tradition = 50 },Generates an new admiral for the current scope.,changed with 1.1,1.1
+create_explorer,<int>The amount of navy tradition to use in generation.,create_explorer = { tradition = 50 },Generates an new explorer for the current scope.,,1.3
+create_conquistador,<int>The amount of army tradition to use in generation.,create_conquistador = { tradition = 50 },Generates an new conquistador for the current scope.,,1.3
+create_general,tradition = <int>The amount of army tradition to use in generation.add_fire = <int>(optional) Additional fire pips.add_shock = <int>(optional) Additional shock pips.add_manuever = <int>(optional) Additional manuever pips.add_siege = <int>(optional) Additional siege pips.culture = <identifier>(optional) Give the general a random name from the specified culture.,create_general = { tradition = 50 },Generates an new general for the current scope.,changed with 1.26,1.1
+change_unit_type,<type>The unit type to change to.,change_unit_type = western,Change the unit type for the current scope.,The unit types correspond to the technology groups found in/Europa Universalis IV/common/technology.txt.,1.1
+kill_leader,type = <type>The leader type to kill.nameis the specific leader name to target.,"kill_leader = {
+    type = random
+}kill_leader = {
+    type = general
+}kill_leader = {
+    type = ""John Smith""
+}",Kills a leader held by the current scope matching the type used.,Possible types:generaladmiralconquistadorexplorerrandom<leader name>,1.1
+define_admiral,shock = <int>The shock pips of the leader.fire = <int>The fire pips of the leader.manuever = <int>The maneuver pips of the leader.siege = <int>The siege pips of the leader.name = <string>Optional. The name of the leader.female = yesOptional. Makes the leader female.trait = <trait>Optional. A trait automatically assigned to the leader.,"define_admiral = {
+    shock = 2
+    fire = 2
+    manuever = 2
+    siege = 2
+}",Creates an admiral with the defined attributes for the current scope.,"Leader traits can be found in/Europa Universalis IV/common/leader_personalities/*.txt.Siege improves Blockade Efficiency for admirals.Thenameparameter can accept a saved name variable, seeset_saved_namefor more context.",1.1
+define_explorer,shock = <int>The shock pips of the leader.fire = <int>The fire pips of the leader.manuever = <int>The maneuver pips of the leader.siege = <int>The siege pips of the leader.name = <string>Optional. The name of the leader.female = yesOptional. Makes the leader female.trait = <trait>Optional. A trait automatically assigned to the leader.,"define_explorer = {
+    shock = 2
+    fire = 2
+    manuever = 2
+    siege = 2
+}",Creates an explorer with the defined attributes for the current scope.,"Leader traits can be found in/Europa Universalis IV/common/leader_personalities/*.txt.Siege improves Blockade Efficiency for explorers.Thenameparameter can accept a saved name variable, seeset_saved_namefor more context.",1.1
+define_conquistador,shock = <int>The shock pips of the leader.fire = <int>The fire pips of the leader.manuever = <int>The maneuver pips of the leader.siege = <int>The siege pips of the leader.name = <string>Optional. The name of the leader.female = yesOptional. Makes the leader female.trait = <trait>Optional. A trait automatically assigned to the leader.,"define_conquistador = {
+    shock = 2
+    fire = 2
+    manuever = 2
+    siege = 2
+}",Creates a conquistador with the defined attributes for the current scope.,"Leader traits can be found in/Europa Universalis IV/common/leader_personalities/*.txt.Thenameparameter can accept a saved name variable, seeset_saved_namefor more context.",1.1
+define_general,shock = <int>The shock pips of the leader.fire = <int>The fire pips of the leader.manuever = <int>The maneuver pips of the leader.siege = <int>The siege pips of the leader.name = <string>Optional. The name of the leader.female = yesOptional. Makes the leader female.trait = <trait>Optional. A trait automatically assigned to the leader.,"define_general = {
+    shock = 2
+    fire = 2
+    manuever = 2
+    siege = 2
+}",Creates a general with the defined attributes for the current scope.,"Leader traits can be found in/Europa Universalis IV/common/leader_personalities/*.txt.Thenameparameter can accept a saved name variable, seeset_saved_namefor more context.",1.1
+add_company_manpower,<percent>Add or subtract company manpower,"random_hired_mercenary_company = {
+   add_company_manpower = -0.25
+}",Changes the defined Mercenary Company's manpower by x percent.,Only works within Mercenary Company scopes.,1.30
+disband_mercenary_company,<scope>Disbands the scoped Mercenary company,"random_hired_mercenary_company = {
+    disband_mercenary_company = THIS
+}",Disbands the scoped Mercenary Company.,,1.30
+disband_all_units,yesBoolean,disband_all_units = yes,"the current country scope disbands all units it has. No matter where they are. Units, which are in battle while this effect fires are ""stack wiped"".",Applies to both land and naval units.,1.35
+disband_all_regiments,yesBoolean,disband_all_regiments = yes,"the current country scope disbands all troops it has. No matter where they are. Units, which are in battle while this effect fires are ""stack wiped"".",Applies only to land units.,1.35
+disband_all_ships,yesBoolean,disband_all_ships = yes,"the current country scope disbands all ships it has. No matter where they are. Units, which are in battle while this effect fires are ""stack wiped"".",,1.35
+create_unit_forcelimit_percentage,type = <type>Which type of unit to build.special_unit_category = <type>Accepts any special unit.force_limit_percentage = <int>percentage of the forcelimit to build.,"create_unit_forcelimit_percentage = {
+    type = heavy_ship
+    special_unit_category = janissaries
+    force_limit_percentage = 0.5
+}",Builds the defined units as a percentage of the owner's forcelimit in the current province scope.,Possible types:infantrycavalryartilleryheavy_shiplight_shipgalleytransportSpecial Units:janissariescawamusketeerbannercossacksstreltsyrajputmarineshussarscaroleanmercenaryrevolutionary_guardterciosamuraiman_of_wargalleoncaravelvoc_indiamengeobukseongalleassmamluksqizilbash,1.35
+set_naval_doctrine,<type>,set_naval_doctrine = merchant_navy,Sets the country's naval doctrine to the specified type.,,1.36
+add_historical_friend,<scope>The country to add the friendship to.,add_historical_friend = FRA,Makes the defined scope a historical friend of the current scope.,,1.12
+add_historical_rival,<scope>The country to add the rivalry to.,add_historical_rival = FRA,Makes the defined scope a historical rival of the current scope.,,1.12
+remove_historical_friend,<scope>The country to remove the friendship from.,remove_historical_friend = FRA,Removes the historical friendship between the defined scope and the current scope.,,1.12
+remove_historical_rival,<scope>The country to remove the rivalry from.,remove_historical_rival = FRA,Removes the historical rivalry between the defined scope and the current scope.,,1.12
+add_rival,<scope>The country to that will be added as rival.,add_rival = FRA,Makes the defined scope a rival of the current scope.,,1.30
+remove_rival,<scope>The country to that will be removed as rival.,remove_rival = FRA,Removes the defined scope as a rival of the current scope.,,1.30
+force_remove_rival,<scope>The country to that will be removed as rival.,force_remove_rival = FRA,Removes the defined scope as a rival of the current scope. That country cannot be picked as a rival again for the next 15 years.,,1.30
+add_trust,who = <scope>The country trust will be added with.value = <int>The amount of trust to add or subtract.mutual = yesOptional. Whether to apply the trust change to both countries.,"add_trust = {
+    who = FRA
+    value = 25
+    mutual = yes
+}",Adds trust with the defined scope for the current scope.,Used in conjunction with the Diplomatic Feedback mechanic from The Cossacks DLC.,1.20
+add_favors,who = <scope>The country favors are added with.value = <int>The amount of favors to add or subtract.,"add_favors = {
+   who = TUR
+   amount = 10
+}",Adds favors with the defined scope for the current scope.,,1.32
+add_opinion,who = <scope>The country the opinion modifier is for.modifier = <modifier>The opinion modifier to use.years = <int>Optional. Whether the modifier expires after a set amount of years.months = <int>Optional. Whether the modifier expires after a set amount of months.multiplier = <float>Optional. The extra amount to add. Multiplies with the opinion value.,"add_opinion = {
+    who = FRA
+    modifier = renounced_as_heretics
+}add_opinion = {
+	who = FRA
+	modifier = aggressive_expansion
+	multiplier = 50
+}",Adds an opinion modifier for the current scope held against the defined scope.,Opinion modifiers are found in/Europa Universalis IV/common/opinion_modifiers/*.txt,1.1
+reverse_add_opinion,who = <scope>The country the opinion modifier is added to.modifier = <modifier>The opinion modifier to use.years = <int>Optional. Whether the modifier expires after a set amount of years.months = <int>Optional. Whether the modifier expires after a set amount of months.multiplier = <float>Optional. The extra amount to add. Multiplies with the opinion value.,"reverse_add_opinion = {
+    who = FRA
+    modifier = renounced_as_heretics
+}reverse_add_opinion = {
+	who = FRA
+	modifier = aggressive_expansion
+	multiplier = 50
+}",Adds an opinion modifier for the defined scope held against the current scope.,Opinion modifiers are found in/Europa Universalis IV/common/opinion_modifiers/*.txt,1.1
+remove_opinion,who = <scope>The country the opinion modifier is held against.modifier = <modifier>The opinion modifier to use.,"remove_opinion = {
+    who = FRA
+    modifier = renounced_as_heretics
+}",Removes an opinion modifier for the current scope held against the defined scope.,Opinion modifiers are found in/Europa Universalis IV/common/opinion_modifiers/*.txt,1.1
+reverse_remove_opinion,who = <scope>The country the opinion modifier holds.modifier = <modifier>The opinion modifier to use.,"reverse_remove_opinion = {
+    who = FRA
+    modifier = renounced_as_heretics
+}",Removes an opinion modifier for the defined scope held against the current scope.,Opinion modifiers are found in/Europa Universalis IV/common/opinion_modifiers/*.txt,1.1
+create_alliance,<scope>The country to create an alliance with.,create_alliance = FRA,Creates an alliance between the current scope and the defined scope.,,1.1
+remove_alliance,<scope>The country to remove an alliance with.,remove_alliance = FRA,Removes an existing alliance between the current scope and the defined scope.,,1.34
+create_guarantee,<scope>The country to create a guarantee with.,create_guarantee = FRA,Creates a guarantee over the defined scope for the current scope.,,1.8
+remove_guarantee,<scope>The country to remove the guarantee from.,remove_guarantee = FRA,Removes guarantee from the defined scope for the current scope.,,1.35
+create_marriage,<scope>The country to create an royal marriage with.,create_marriage = FRA,Creates a royal marriage between the current scope and the defined scope.,,1.1
+create_union,<scope>The country to make into the junior partner.,create_union = FRA,Makes the defined scope a junior partner in a personal union with the current scope.,,1.1
+create_vassal,<scope>The country to create as a vassal.,create_vassal = FRA,Creates the defined vassal out of the scopes territory if possible.,Uses thevassalsubject type.Target country must not exist. Will be created by this command out of the scopes territory.,1.22
+create_march,<scope>The country to make into a march.,create_march = FRA,Makes the defined scope a march subject of the current scope.,Uses themarchsubject type.Target country must already exist.,1.12
+vassalize,<scope>The country to vassalize.,vassalize = FRA,Makes the defined scope a vassal subject of the current scope.,Uses thevassalsubject type.Target country must already exist.,1.1
+create_subject,subject_type = <type>The subject type to use.subject = <scope>The scope to make the subject.,"create_subject = {
+    subject_type = tributary_state
+    subject = FRA
+}",Makes the defined scope into the defined subject type under the current scope.,Subject types are found in/Europa Universalis IV/common/subject_types/*.txt.,1.20
+break_marriage,<scope>The country to break the marriage with.,break_marriage = FRA,Breaks the current scope's royal marriage with the defined scope.,,1.11
+break_alliance,<scope>The country to break the alliance with.,break_alliance = FRA,Breaks the current scope's alliance with the defined scope.,,1.34
+break_union,<scope>The country to break the union with.,break_union = FRA,Breaks the current scope's union with the defined scope.,,1.1
+inherit,<scope>The country to inherit.,inherit = FRA,The current scope inherits all of the defined scope's provinces.,,1.1
+release,<scope>The country to release.,release = FRA,The current scope releases all provinces with the defined scope's cores.,Target country must not exist. Unlike 'create_vassal' the released country will not be a vassal.,1.1
+release_all_subjects,yesBoolean.,release_all_subjects = yes,The current scope grants independence to all their subjects.,,1.10
+release_all_possible_countries,yesBoolean.,release_all_possible_countries = yes,The current scope releases all countries which can be released from its owned provinces.,"If possible, the order should go from the smallest releasable to the largest. If that is not possible then it should be just random.",1.35
+grant_independence,yesBoolean.,grant_independence = yes,The current scope is granted independence from their overlord.,,1.22
+free_vassal,<scope>The country to free.,"every_subject_country = {
+      BUR = { free_vassal = PREV }
+}",Frees a vassal from the current scope.,,1.22
+declare_war,<scope>The country to declare against.,declare_war = FRA,Creates a no casus belli war against the defined scope for the current scope.,,1.1
+declare_war_with_cb,"who = <scope>The country declared against.casus_belli = <cb>The casus belli to use.war_goal_province = <province id>Optional. Defines the province the war was declared for, if required by the casus belli.","declare_war_with_cb = {
+    who = FRA
+    casus_belli = cb_annex
+}","Declares war for the current scope against the defined scope, using the defined casus belli.","war_goal_provinceis has to be specified if the CB has a wargoal of the following types: take_province, take_core, take_border or take_colony(all which allow the player to select a province as the wargoal when declaring the war). The province has to be a valid province for the CB.Casus belli are found in/Europa Universalis IV/common/cb_types/*.txt",1.1
+add_truce_with,<scope>The country to add a truce against.,add_truce_with = FRA,Creates a truce between the defined scope and the current scope.,The truce length is the default white peace truce length.,1.1
+white_peace,<scope>The country to force white peace against.,white_peace = FRA,Forces the defined scope into a white peace truce with the current scope.,,1.1
+form_coalition_against,<scope>The country to form against.,form_coalition_against = FRA,The current scope creates or joins a coalition against the defined scope.,,1.1
+add_casus_belli,target = <scope>The country to add the casus belli against.type = <cb>The casus belli to add.months = <months>The number of months the casus belli lasts for.,"add_casus_belli = {
+    target = FRA
+    type = cb_annex
+    months = 12
+}",Adds a casus belli for the current scope against the defined scope.,Casus belli are found in/Europa Universalis IV/common/cb_types/*.txt,1.1
+reverse_add_casus_belli,target = <scope>The country to that gains the casus belli.type = <cb>The casus belli to add.months = <months>The number of months the casus belli lasts for.,"reverse_add_casus_belli = {
+    target = FRA
+    type = cb_annex
+    months = 12
+}",Adds a casus belli against the current scope for the defined scope.,Casus belli are found in/Europa Universalis IV/common/cb_types/*.txt,1.1
+remove_casus_belli,target = <scope>The country the casus belli is against.type = <cb>The casus belli to remove.,"remove_casus_belli = {
+    target = FRA
+    type = cb_annex
+}",Removes a casus belli held against the defined scope for the current scope.,Casus belli are found in/Europa Universalis IV/common/cb_types/*.txt,1.1
+reverse_remove_casus_belli,target = <scope>The country that holds the casus belli.type = <cb>The casus belli to remove.,"reverse_remove_casus_belli = {
+    target = FRA
+    type = cb_annex
+}",Removes a casus belli held by the defined scope against the current scope.,Casus belli are found in/Europa Universalis IV/common/cb_types/*.txt,1.1
+remove_fow,<months>The number of months to remove fog of war.,"random_rival_country = {
+    limit = { war_with = ROOT }
+    remove_fow = 3
+}","Removes the fog of war in the current scope for the ROOT scope (not PREV scope, as previously written).",,1.1
+remove_hegemon,yesBoolean.<scope>,remove_hegemon = yesremove_hegemon = FRA,Removes hegemony status from the current or specified country scope.,Supports country scope as of 1.35.,1.34
+add_spy_network_from,who = <scope>The country to add spy network for.value = <int>The amount of spy network to add or subtract.,"add_spy_network_from = {
+    who = FRA
+    value = 10
+}",Adds spy network in the current scope for the defined scope.,,1.16
+add_spy_network_in,who = <scope>The country to add spy network in.value = <int>The amount of spy network to add or subtract.,"add_spy_network_in = {
+    who = FRA
+    value = 10
+}",Adds spy network for the current scope in the defined scope.,,1.16
+join_all_offensive_wars_of,<scope>The country to join the offensive wars of.,join_all_offensive_wars_of = NED,Makes the current scope join all offensive wars of the specified scope.,"Fails and throws a script error if the current scope (the tag using this) has a truce with any allies of the defender, even non-co-belligerents.",1.30
+join_all_defensive_wars_of,<scope>The country to join the defensive wars of.,join_all_defensive_wars_of = NED,Makes the current scope join all defensive wars of the specified scope.,,1.30
+add_aggressive_expansion,who = <scope>The country to add aggressive expansion towards.value = <int>apply_calc = yes / no,"add_aggressive_expansion = {
+	who = FRA
+	value = 50
+	apply_calc = yes
+}",The current country scope adds X amount of aggressive expansion towards the specified country.,apply_calcdetermines whether culture & religion modify the value.,1.34
+reverse_add_aggressive_expansion,who = <scope>The country to add aggressive expansion with.value = <int>apply_calc = yes / no,"reverse_add_aggressive_expansion = {
+	who = ENG
+	value = -50
+	apply_calc = no
+}",The specified country adds X amount of aggressive expansion towards the current country scope.,apply_calcdetermines whether culture & religion modify the value.,1.34
+add_subjects_development_ducats,multiplier = <int>age_multiplier = <int>,"add_subjects_development_ducats = {
+	multiplier = 2.5
+	trigger = { is_subject_of_type = vassal }
+}",The current country scope gains ducats equaling the total development owned by subject countries multiplied bymultiplierandage_multiplier.,triggercontrols which subjects get factored into the total development.,1.34
+add_subjects_development_manpower,multiplier = <int>age_multiplier = <int>,"add_subjects_development_manpower = {
+	multiplier = 5
+	trigger = { is_subject_of_type = personal_union }
+}",The current country scope gains manpower equaling 1k times the total development owned by subject countries multiplied bymultiplierandage_multiplier.,triggercontrols which subjects get factored into the total development.,1.34
+change_adm,<int>The amount to add or subtract from the ruler's ADM skill.,change_adm = 1,Adds ADM skill to the current ruler.,,1.1
+change_dip,<int>The amount to add or subtract from the ruler's DIP skill.,change_dip = 1,Adds DIP skill to the current ruler.,,1.1
+change_mil,<int>The amount to add or subtract from the ruler's MIL skill.,change_mil = 1,Adds MIL skill to the current ruler.,,1.1
+add_ruler_personality,<personality>The ruler personality to add.,add_ruler_personality = righteous_personality,Adds the defined personality to the current ruler.,"Ruler personalities are found in/Europa Universalis IV/common/ruler_personalities/00_core.txt.NOTE: Does nothing if the country's religion uses the ancestor mechanic (e.g. Totemist), as this disables the usual ruler personality system.",1.18
+remove_ruler_personality,<personality>The ruler personality to remove.,remove_ruler_personality = righteous_personality,Removes the defined personality from the current ruler.,Ruler personalities are found in/Europa Universalis IV/common/ruler_personalities/00_core.txt.
+clear_scripted_personalities,yesBoolean.,clear_scipted_personalities = yes,Removes all defined personalities from both the ruler and heir.,,1.?
+set_ruler_flag,<flag>A unique string to identify the ruler flag with.,set_ruler_flag = my_flagset_ruler_flag = my_flag@ROOTset_ruler_flag = my_flag@event_target:name,Defines a ruler flag for the current scope's ruler.,Flags can be appended with scopes or event targets,1.7
+clr_ruler_flag,<flag>The unique string of the flag to clear.,clr_ruler_flag = my_flag,Clears a ruler flag for the current scope's ruler.,,1.7
+set_dynasty,<string> / <scope> / original_dynastyThe dynasty to set.,"set_dynasty = ""Smith""set_dynasty = FRAset_dynasty = original_dynasty",Sets the dynasty of the current scope's ruler.,If <string> is used it must exist in dynasty_names of any culture or culture group.,1.1
+set_ruler_culture,<culture>The culture to change to.,set_ruler_culture = englishset_ruler_culture = CASset_ruler_culture = event_target:my_event_targetset_ruler_culture = variable:my_variable,Changes the ruler culture of the current scope.,Cultures are found in/Europa Universalis IV/common/cultures/*.txtCan utiliseEvent Scope Values.,1.23
+set_ruler_religion,<religion>The religion to change to.,set_ruler_religion = catholicset_ruler_religion = CASset_ruler_religion = event_target:my_event_targetset_ruler_religion = variable:my_variable,Changes the ruler religion of the current scope.,Religions are found in/Europa Universalis IV/common/religions/*.txtCan utiliseEvent Scope Values.,1.23
+exile_ruler_as,<string>The unique string to identify the exiled ruler with.,exile_ruler_as = { name = my_exiled_ruler },"Removes the current ruler of the current scope, saving them to the unique string.",,1.12
+set_ruler,<string>The unique string of an exiled ruler.,set_ruler = my_exiled_ruler,Makes the exiled ruler the ruler of the current scope.,,1.12
+kill_ruler,yesBoolean.,kill_ruler = yes,Kills the ruler of the current scope.,,1.1
+convert_female_ruler_to_general,yesBoolean.,convert_female_ruler_to_general = yes,Converts a female ruler into a general.,,1.15
+convert_ruler_to_general,yes / <int>Boolean or Integer.,convert_ruler_to_general = yesconvert_ruler_to_general = 50,Converts a male ruler into a general. If an integer is given then it is used asarmy traditionduring generation.,Supports integer as army tradition as of 1.34.,1.8
+convert_ruler_to_admiral,yes / <int>Boolean or Integer.,convert_ruler_to_admiral = yesconvert_ruler_to_admiral = 50,Converts a male ruler into an admiral. If an integer is given then it is used asnavy traditionduring generation.,,1.35
+add_ruler_modifier,name = <name>The event modifier to add.duration = <days>Optional. The number of days to add the ruler modifier for.hidden = yesOptional. Whether the ruler modifier is hidden in the government view.desc = <stringOptional. The string used to override the automatic duration string.,"add_ruler_modifier = { 
+    name = mad_and_bad
+    duration = -1  
+    desc = MAD_AND_BAD_DESC
+    hidden = yes
+}",Adds an event modifier to the current scope as a ruler modifier.,Ruler modifiers are cleared when the ruler dies.,1.1
+define_ruler_to_general,shock = <int>The shock pips of the leader.fire = <int>The fire pips of the leader.manuever = <int>The maneuver pips of the leader.siege = <int>The siege pips of the leader.,"define_ruler_to_general = {
+    fire = 3
+    shock = 3
+    manuever = 3
+    siege = 3
+}",Creates a general from the ruler for the current scope.,,1.8
+define_leader_to_ruler,type = general / conquistador / admiral / explorerThe leader type to pick a leader from.name = <string>The specific leader to use. Used instead of thetypeparameter.claim = <int>Optional. The starting legitimacy of the ruler.adm = <int>Optional. The minimum ADM skill roll for the ruler.dip = <int>Optional. The minimum DIP skill roll for the ruler.mil = <int>Optional. The minimum MIL skill roll for the ruler.fixed = yesOptional. Makes the ruler skill roll fixed to the defined minimums.,"define_leader_to_ruler = {
+    type = general
+    adm = 3
+    dip = 3
+    mil = 3
+    fixed = yes
+    claim = 100
+}define_leader_to_ruler = {
+    name = ""John Smith""
+}",Creates a ruler from a leader for the current scope.,,1.12
+define_ruler,name = <string>Optional. The name of the ruler.dynasty = <string> / <scope> / original_dynastyOptional. The dynasty of the ruler. Last name for republican leaders.age = <years>Optional. The age of the ruler.min_age = <int>Optional. The minimum age of the ruler.max_age = <int>Optional. The maximum age of the ruler.claim = <int>Optional. The starting legitimacy of the ruler.adm = <int>Optional. The minimum ADM skill roll for the ruler.dip = <int>Optional. The minimum DIP skill roll for the ruler.mil = <int>Optional. The minimum MIL skill roll for the ruler.fixed = yesOptional. Makes the ruler skill roll fixed to the defined minimums.max_random_adm = <int>Optional. The maximum ADM skill roll for the ruler.max_random_dip = <int>Optional. The maximum DIP skill roll for the ruler.max_random_mil = <int>Optional. The maximum MIL skill roll for the ruler.hide_skills = yesOptional. Hides the skill values for this ruler.regency = yesOptional. Makes this ruler as a regent.regency = { estate = estate_church }Optional. Defines an estate as regency.attach_leader = <string>Optional. The name of the leader to generate with the ruler.female = yesOptional. Forces the ruler to be female.male = yesOptional. Forces the ruler to be male.culture = <culture> / <scope>Optional. The culture of the ruler.religion = <religion> / <scope>Optional. The religion of the ruler.,"define_ruler = {
+    name = ""Ntare I Kivimira""
+    dynasty = ""Cambarantama""
+    adm = 5
+    dip = 4
+    mil = 4
+    age = 20
+    claim = 95
+}define_ruler = {
+    culture = event_target:first_ruler_alternative_province
+    hide_skills = yes
+    age = 30
+}define_ruler = {
+    dynasty = ROOT
+    culture = ROOT
+    religion = ROOT
+}define_ruler = {
+    dip = 4
+    adm = 1
+    mil = 1					
+    fixed = yes
+}",Creates the defined ruler for the current scope.,"Thecultureandreligionattributes can utiliseEvent Scope Values.Thenameparameter can accept a saved name variable, seeset_saved_namefor more context.",1.1
+add_queen_personality,<personality>The consort personality to add.,add_queen_personality = righteous_personality,Adds the defined personality to the current consort.,Ruler personalities are found in/Europa Universalis IV/common/ruler_personalities/00_core.txt,1.18
+remove_queen_personality,<personality>The consort personality to remove.,remove_queen_personality = righteous_personality,Removes the defined personality from the current consort.,Ruler personalities are found in/Europa Universalis IV/common/ruler_personalities/00_core.txt,1.18
+set_consort_flag,<flag>A unique string to identify the consort flag with.,set_consort_flag = my_flagset_consort_flag = my_flag@ROOTset_consort_flag = my_flag@event_target:name,Defines a consort flag for the current scope's consort.,Flags can be appended with scopes or event targets,1.18
+clr_consort_flag,<flag>The unique string of the flag to clear.,clr_consort_flag = my_flag,Clears a consort flag for the current scope's consort.,,1.18
+set_consort_culture,<culture>The culture to change to.,set_consort_culture = englishset_consort_culture = CASset_consort_culture = event_target:my_event_targetset_consort_culture = variable:my_variable,Changes the consort culture for the current scope.,Cultures are found in/Europa Universalis IV/common/cultures/*.txtCan utiliseEvent Scope Values.,1.23
+set_consort_religion,<religion>The religion to change to.,set_consort_religion = catholicset_consort_religion = CASset_consort_religion = event_target:my_event_targetset_consort_religion = variable:my_variable,Changes the consort religion for the current scope.,Religions are found in/Europa Universalis IV/common/religions/*.txtCan utiliseEvent Scope Values.,1.23
+change_consort_regent_to_ruler,yesBoolean.,change_consort_regent_to_ruler = yes,Makes a consort regent into the current ruler for the current scope.,,1.18
+remove_consort,yesBoolean.,remove_consort = yes,Removes the current consort for the current scope.,,1.18
+define_consort,name = <string>Optional. The name of the consort.country_of_origin = <scope>Optional. The origin country of the consort.dynasty = <string> / <scope> / original_dynastyOptional. The dynasty of the consort.birth_date = <date>Optional. The birth date of the consort. Can be used instead of theageparameter.age = <years>Optional. The age of the consort.adm = <int>Optional. The ADM skill for the consort.dip = <int>Optional. The DIP skill for the consort.mil = <int>Optional. The MIL skill for the consort.hide_skills = yesOptional. Hides the skill values for this consort.female = yesOptional. Forces the consort to be female.male = yesOptional. Forces the consort to be male.culture = <culture> / <scope>Optional. The culture of the consort.religion = <religion> / <scope>Optional. The religion of the consort.,"define_consort = {
+    country_of_origin = ROOT
+    religion = ROOT
+    culture = ROOT
+}define_consort = {
+    name = ""Kösem Sultan""
+    culture = greek
+    adm = 5
+    dip = 4
+    mil = 5
+    female = yes
+}",Creates the defined consort for the current scope.,"The skill values are not rolled for consorts, meaning the values set are the exact values a consort gets.Thecultureandreligionattributes can utiliseEvent Scope Values.Thenameparameter can accept a saved name variable, seeset_saved_namefor more context.",1.18
+exile_consort_as,<string>The unique string to identify the exiled ruler with.,exile_consort_as = my_exiled_consort,"Removes the current consort of the current scope, saving them to the unique string.",,1.33
+set_consort,<string>The unique string of an exiled ruler.,set_consort = my_exiled_consort,Makes the exiled consort the consort of the current scope.,,1.33
+change_heir_adm,<int>The amount to add or subtract from the heir's ADM skill.,change_heir_adm = 1,Adds ADM skill to the current heir.,,1.14
+change_heir_dip,<int>The amount to add or subtract from the heir's DIP skill.,change_heir_dip = 1,Adds DIP skill to the current heir.,,1.14
+change_heir_mil,<int>The amount to add or subtract from the heir's MIL skill.,change_heir_mil = 1,Adds MIL skill to the current heir.,,1.14
+add_heir_personality,<personality>The heir personality to add.,add_heir_personality = righteous_personality,Adds the defined personality to the current heir.,Ruler personalities are found in/Europa Universalis IV/common/ruler_personalities/00_core.txt,1.18
+remove_heir_personality,<personality>The heir personality to remove.,remove_heir_personality = righteous_personality,Removes the defined personality from the current heir.,Ruler personalities are found in/Europa Universalis IV/common/ruler_personalities/00_core.txt,1.18
+set_heir_flag,<flag>A unique string to identify the heir flag with.,set_heir_flag = my_flagset_heir_flag = my_flag@ROOTset_heir_flag = my_flag@event_target:name,Defines an heir flag for the current scope's heir.,Flags can be appended with scopes or event targets,1.1
+clr_heir_flag,<flag>The unique string of the flag to clear.,clr_heir_flag = my_flag,Clears an heir flag for the current scope's heir.,,1.1
+add_heir_claim,<int>The amount to add or subtract from the claim.,add_heir_claim = 10,Adds to the current scope's heir claim.,,1.1
+add_heir_support,<int>The amount of support to add or subtract to the local heir,add_heir_support = 10,Adds to the local heir's support in an Elective Monarchy.,,1.7
+set_heir_culture,<culture>The culture to change to.,set_heir_culture = englishset_heir_culture = CASset_heir_culture = event_target:my_event_targetset_heir_culture = variable:my_variable,Changes the heir culture of the current scope.,Cultures are found in/Europa Universalis IV/common/cultures/*.txtCan utiliseEvent Scope Values.,1.23
+set_heir_religion,<religion>The religion to change to.,set_heir_religion = catholicset_heir_religion = CASset_heir_religion = event_target:my_event_targetset_heir_religion = variable:my_variable,Changes the heir religion of the current scope.,Religions are found in/Europa Universalis IV/common/religions/*.txtCan utiliseEvent Scope Values.,1.23
+exile_heir_as,<string>The unique string to identify the exiled heir with.,exile_heir_as = my_exiled_heir,"Removes the current heir of the current scope, saving them to the unique string.",,1.12
+set_heir,<string>The unique string of an exiled heir.,set_heir = my_exiled_heir,Makes the exiled heir the heir of the current scope.,,1.12
+kill_heir,allow_new_heir = yes / noOptional. Whether a new heir is allowed to spawn immediately or not. A new heir isnotguaranteed.,kill_heir = {}kill_heir = { allow_new_heir = no },Kills the heir of the current scope.,Displays heir death message.,1.1
+remove_heir,allow_new_heir = yes / noOptional. Whether a new heir is allowed to spawn immediately or not. A new heir isnotguaranteed.,remove_heir = {}remove_heir = { allow_new_heir = no },Removes the heir of the current scope.,Does not display the heir death message.,1.1
+convert_female_heir_to_general,yesBoolean.,convert_female_heir_to_general = yes,Converts a female heir into a general.,,1.15
+convert_heir_to_general,yesBoolean.,convert_heir_to_general = yes,Converts a male heir into a general.,,1.8
+define_heir_to_general,shock = <int>The shock pips of the leader.fire = <int>The fire pips of the leader.manuever = <int>The maneuver pips of the leader.siege = <int>The siege pips of the leader.,"define_heir_to_general = {
+    fire = 3
+    shock = 3
+    manuever = 3
+    siege = 3
+}",Creates a general from the heir of the current scope.,,1.8
+define_heir,"name = <string>Optional. The name of the heir.dynasty = <string> / <scope> / original_dynastyOptional. The dynasty of the heir.age = <years>Optional. The age of the heir.monarch_name = <string>Optional. The monarch name of the heir. This is the name that will be granted to them once the heir's rule starts, which the base game utilizes for regnal numbers.birth_date = <date>Optional. The birth date of the heir. Can be used instead of theageparameter.claim = <int>Optional. The starting legitimacy of the heir.adm = <int>Optional. The minimum ADM skill roll for the heir.dip = <int>Optional. The minimum DIP skill roll for the heir.mil = <int>Optional. The minimum MIL skill roll for the heir.max_random_adm = <int>Optional. The maximum ADM skill roll for the heir.max_random_dip = <int>Optional. The maximum DIP skill roll for the heir.max_random_mil = <int>Optional. The maximum MIL skill roll for the heir.hide_skills = yesOptional. Hides the skill values for this heir.hidden = yesOptional. Hides the skill values for this heir. Legacy version ofhide_skills.no_consort_with_heir = yesOptional. Makes the heir a child not of the consort, i.e. a bastardfemale = yesOptional. Forces the heir to be female.male = yesOptional. Forces the heir to be male.culture = <culture> / <scope>Optional. The culture of the heir.religion = <religion> / <scope>Optional. The religion of the heir.","define_heir = {
+    dynasty = ""Kamegere""
+    claim = 100		
+}define_heir = {
+    male = yes
+    dynasty = ROOT
+    name = ""Viracocha""
+    monarch_name = ""Viracocha III""
+    claim = 100
+    adm = 6
+}define_heir = {
+    dynasty = ROOT
+    age = 13
+    adm = 3
+    dip = 3
+    mil = 3
+    claim = 50
+    female = yes
+    no_consort_with_heir = yes
+}",Creates the defined heir for the current scope.,"Thecultureandreligionattributes can utiliseEvent Scope Values.Thenameparameter can accept a saved name variable, seeset_saved_namefor more context.",1.1
+add_imperial_influence,<int>The amount of influence to add or subtract.,add_imperial_influence = 10,Adds Imperial Influence for the current scope.,No effect if not emperor.,1.1
+add_scaled_imperial_influence,<int>The amount of influence to add or subtract.,add_scaled_imperial_influence = 10,"Adds Imperial Influence for the current scope, scaled by the current Imperial Authority value.",No effect if not emperor.,1.1
+elector,<scope>The country to make elector.yes / noBoolean.,elector = FRAelector = yes,Makes the defined scope an elector of the Holy Roman Empire.,,1.1
+revoke_reform,<reform>The reform to remove.,revoke_reform = reichsreform,Removes an Imperial Reform.,Imperial Reforms are found in/Europa Universalis IV/common/imperial_reforms/00_hre.txt.,1.1
+set_in_empire,yesBoolean.,set_in_empire = yes,Places the current scope and all owned provinces (if valid) in the empire.,,1.12
+hre_inheritable,yesBoolean.,hre_inheritable = yes,Makes the seat of the Emperor inheritable.,,1.1
+imperial_ban_allowed,yesBoolean.,imperial_ban_allowed = yes,Enables the Imperial Ban casus belli.,,1.1
+internal_hre_cb,noBoolean.,internal_hre_cb = no,Disables casus belli creation for HRE members against one another.,,1.1
+set_allow_female_emperor,yesBoolean.,set_allow_female_emperor = yes,Enables female rulers to become emperor.,,1.1
+dismantle_hre,yesBoolean.,dismantle_hre = yes,Disbands the HRE and removes all members from it.,,1.1
+enable_hre_leagues,yesBoolean.,enable_hre_leagues = yes,Enables the Religious Leagues.,,1.8
+set_hre_religion,<religion>Which religion to set.,set_hre_religion = catholic,Makes the defined religion the official religion of the HRE.,,1.8
+set_hre_heretic_religion,<religion>Which religion to set.,set_hre_heretic_religion = catholic,Makes the defined religion the heretic religion of the HRE.,,1.8
+set_hre_religion_locked,yesBoolean.,set_hre_religion_locked = yes,"Locks the official and heretic religion assignments, ending the Religious Leagues.",,1.8
+set_hre_religion_treaty,yesBoolean.,set_hre_religion_treaty = yes,Ends the Religious Leagues with no set religions.,,1.8
+join_league,<scope>Which league to join.,join_league = FRA,Makes the current scope join the League that the defined scope belongs to.,,1.8
+leave_league,<scope>Which league to leave.,leave_league = FRA,Makes the current scope leave the League that the defined scope belongs to.,,1.8
+dismantle_empire_of_china,yes / noBoolean.,dismantle_empire_of_china = yes,Removes the Empire of China and the Mandate system.,,1.20
+set_emperor_of_china,<scope>Which country to set.,set_emperor_of_china = MNG,Sets the current Emperor of China.,,1.20
+add_mandate,<int>The amount of mandate to add or subtract.,add_mandate = 10,Adds mandate to the current scope.,No effect if not the emperor of china.,1.20
+set_mandate,<int>The amount of mandate to set.,set_mandate = 10,Sets the mandate value for the current scope.,No effect if not the emperor of china.,1.20
+set_revolution_target,<scope>The country to set.,set_revolution_target = FRA,Makes the defined scope the new revolutionary target.,Use---to remove the target and not reassign.,1.1
+set_emperor,yes / noBoolean.,set_emperor = yes,"Makes the country scope emperor ifyes, or removes the current emperor ifno.",nowill remove the current emperor regardless of scope.NOTE: No popup for this effect.,1.32
+set_ai_personality,personality = <type>The personality to use.locked = yes / noWhether the personality can be re-evaluated and changed.,"set_ai_personality = {
+    personality = ai_capitalist
+    locked = yes
+}",Makes the current scope (if AI) the defined personality.,AI personalities are found in/Europa Universalis IV/common/ai_personalities/00_ai_personalities.txt.,1.1
+set_ai_attitude,attitude = <type>The attitude to use.who = <scope>Who the attitude is directed against.locked = yes / noWhether the attitude can be re-evaluated and changed.,"set_ai_attitude = {
+    attitude = attitude_friendly
+    who = FRA
+    locked = yes
+}",Makes the current scope (if AI) have the defined attitude against the defined scope.,AI attitudes are found in/Europa Universalis IV/common/ai_attitudes/00_ai_attitudes.txt.,1.1
+province_event,id = <id>The event id to fire.days = <days>Optional. The number of days to wait after the effect is executed to fire the event.random = <days>Optional. The max number of additional days that can be added to thedaysparameter for randomness.tooltip = <string>Optional. The tooltip to display in the effect tooltipcountry_eventis used in.,"province_event = { 
+    id = uprising.1
+    days = 30
+    random = 15
+    tooltip = UPRISING_TOOLTIP
+}",Fire a province event for the current province scope. Appears for the owner of the province scope.,You cannot fire the same event within itself with a delay of 0.,1.1
+add_province_modifier,name = <name>The event modifier to add.duration = <days>Optional. The number of days to add the province modifier for.hidden = yesOptional. Whether the province modifier is hidden in the province view.desc = <string>Optional. The string used to override the automatic duration string.,"add_province_modifier = { 
+    name = annoyed_people
+    duration = -1  
+    desc = annoyed_people_tooltip
+    hidden = yes
+}",Adds an event modifier to the current province scope as a province modifier.,Modifiers added with this effect are cleared automatically when the province changes ownership.,1.1
+add_permanent_province_modifier,name = <name>The event modifier to add.duration = <days>Optional. The number of days to add the province modifier for.hidden = yesOptional. Whether the province modifier is hidden in the province view.desc = <string>Optional. The string used to override the automatic duration string.,"add_permanent_province_modifier = { 
+    name = annoyed_people
+    duration = -1  
+    desc = annoyed_people_tooltip
+    hidden = yes
+}",Adds an event modifier to the current province scope as a province modifier.,Modifiers added with this effect persist through ownership changes.,1.1
+extend_province_modifier,name = <name>The event modifier to extend.duration = <days>,"extend_province_modifier = { 
+    name = annoyed_people
+    duration = 365
+}",Extends the duration of an existing province modifier held by the current province scope.,Modifiers added with this effect persist through ownership changes.,1.1
+remove_province_modifier,<modifier>The event modifier to remove.,remove_province_modifier = annoyed_people,Removes an already assigned province modifier from the current province scope.,,1.1
+add_province_triggered_modifier,<modifier>The province triggered modifier to add.,add_province_triggered_modifier = test_modifier,Adds a province triggered modifier to the current province scope.,,1.24
+remove_province_triggered_modifier,<modifier>The province triggered modifier to remove.,remove_province_triggered_modifier = test_modifier,Removes a province triggered modifier from the current province scope.,,1.24
+set_province_flag,<flag>A unique string to identify the province flag with.,set_province_flag = my_flagset_province_flag = my_flag@ROOTset_province_flag = my_flag@event_target:name,Defines a province flag for the current province scope.,Flags can be appended with scopes or event targets,1.1
+clr_province_flag,<flag>The unique string of a province flag to clear.,clr_province_flag = my_flag,Clears a defined province flag for the current province scope.,,1.1
+change_province_name,<string>The name to change to.,"change_province_name = ""Paris""",Changes the province name of the current province scope to the defined name.,,1.1
+rename_capital,<string>The name to change to.,"rename_capital = ""Paris""",Changes the capital name of the current province scope to the defined name.,The capital name is the second name that appears under the province name within the province window.,1.1
+remove_revolution_from_province_effect,yes / noBoolean.,remove_revolution_from_province_effect = yes,Removes revolutionary ideas from scoped provice.,,
+change_tribal_land,<scope>The scope to give the province as tribal land to.,change_tribal_land = ROOT,Changes the tribal owner of the current province scope province to the defined scope.,"The tooltip for the effect is bugged as the yellow coloring of the country name doesn't properly stop, potentially making unrelated tooltips yellow.",
+add_base_tax,<int>The amount of base tax to add or subtract.,add_base_tax = 1,Adds base tax to the current province scope.,,1.1
+add_base_production,<int>The amount of base production to add or subtract.,add_base_production = 1,Adds base production to the current province scope.,,1.1
+add_base_manpower,<int>The amount of base manpower to add or subtract.,add_base_manpower = 1,Adds base manpower to the current province scope.,,1.1
+add_prosperity,<int>The amount of prosperity to add or subtract.,add_prosperity = 1,Adds prosperity to the current province scope.,,1.20
+add_devastation,<int>The amount of devastation to add or subtract.,add_devastation = 1,Adds devastation to the current province scope.,,1.20
+add_local_autonomy,<int>The amount of local autonomy to add or subtract.,add_local_autonomy = 10,Adds local autonomy to the current province scope.,,1.8
+set_local_autonomy,<int>The amount of local autonomy to set.,set_local_autonomy = 50,Sets local autonomy for the current province scope.,,1.12
+change_trade_goods,<good>The trade good to set.,change_trade_goods = grain,Sets the trade good for the current province scope.,Trade Goods are found in/Europa Universalis IV/common/tradegoods/*.txt.,1.1
+add_scaled_local_adm_power,<int>The amount of administrative power to add or subtract.,add_scaled_local_adm_power = 10,"Adds Administrative power to the owner of the current province scope, scaling with the base tax.",1 power per point of yearly base tax.,1.12
+add_scaled_local_dip_power,<int>The amount of diplomatic power to add or subtract.,add_scaled_local_dip_power = 10,"Adds Diplomatic power to the owner of the current province scope, scaling with the base production.",1 power per point of yearly base production.,1.12
+add_scaled_local_mil_power,<int>The amount of military power to add or subtract.,add_scaled_local_mil_power = 10,"Adds Military power to the owner of the current province scope, scaling with the base manpower.",1 power per point of yearly base manpower.,1.12
+cancel_construction,yesBoolean.,cancel_construction = yes,Cancels any construction ongoing in the current province scope.,"Constructions are coring, religious conversion, cultural conversion, buildings and great projects.",1.6
+add_great_project,type = <project>The great project to add.instant = yes / noDefines will Great Project be built instantly or not.,"add_great_project = {
+    type = kiel_canal
+    instant = no 
+}",Starts construction of a great project in the current province scope.,Great projects are found in/Europa Universalis IV/common/great_projects/*.txt.,1.6
+move_great_project,type = <project>The great project to move.province = <id>The province id to move the project to.instant = yes / noDefines will Great Project be moved instantly or not.,"move_great_project = {
+    type = alhambra
+    province = 370
+    instant = yes
+}",Moves defined great project to desired province in the current province scope. Works only if the great project is moveable.,Great projects are found in/Europa Universalis IV/common/great_projects/*.txt.,1.32
+destroy_great_project,type = <project>The great project to destroy.,"destroy_great_project = {
+    type = chichen_itza
+}",Destroys the great project defined.,Great projects are found in/Europa Universalis IV/common/great_projects/*.txt.,1.32
+add_great_project_tier,type = <project>The Great Project whose tier will be modifiedtier = <int>The amount to modify the tier by,"add_great_project_tier = {
+    type = chichen_itza
+    tier = 1
+}","Addstiertiers to the Great Project referenced bytype. If a negative value is given, that many tiers will be removed instead.",Great projects are found in/Europa Universalis IV/common/great_projects/*.txt.,
+add_construction_progress,<float>The amount of progress to add or subtract.,add_construction_progress = 0.05,Changes the construction progress of a building or great project in the current province scope.,Previously affected great projects only but now applies to any construction as of 1.35.,1.6
+add_building,<building>The building to add.,add_building = temple,Adds the defined building to the current province scope.,Buildings are found in/Europa Universalis IV/common/buildings/*.txt.,1.1
+remove_building,<building>The building to remove.,remove_building = temple,Removes the defined building to the current province scope.,Buildings are found in/Europa Universalis IV/common/buildings/*.txt.,1.1
+add_building_construction,building = <building>The building to construct.speed = <float>The speed percentage of the base building speed to use.cost = <float>The cost percentage of the base building cost to use.,"add_building_construction = {
+    building = temple
+    speed = 0.5
+    cost = 0.5
+}",Starts building construction in the current province scope.,"costandspeedare a percentage of the base value, i.e.0.5is 50% of the base value.",1.11
+set_base_tax,<int>The amount to set base tax to.,set_base_tax = 1,Sets base tax of the current province scope.,,1.27
+set_base_production,<int>The amount to set base production to.,set_base_production = 1,Sets base production of the current province scope.,,1.27
+set_base_manpower,<int>The amount to set base manpower to.,set_base_manpower = 1,Sets base manpower of the current province scope.,,1.27
+add_random_development,<int>The amount of development to add.,add_random_development = 1,"Randomly adds the specified amount of base tax, base production, or base manpower to the current province scope.",,1.36
+create_advisor,<advisor>The advisor to add.,create_advisor = treasurer,Adds the defined advisor for the owner of the current province scope.,Advisors are found in/Europa Universalis IV/common/advisors/*.txt.,1.1
+set_seat_in_parliament,yes / noBoolean.,set_seat_in_parliament = yes,Adds the current province scope to Parliament.,No effect if the owner of the province does not have a government usinghas_parliament.,1.12
+back_current_issue,yes / noBoolean.,back_current_issue = yes,"Backs or blocks the current issue in Parliament, if the current province scope has a seat.",No effect if the owner of the province does not have a government usinghas_parliament.,1.12
+change_culture,<culture>The culture to change to.,change_culture = englishchange_culture = ENGchange_culture = event_target:my_event_targetchange_culture = variable:my_variable,Changes the culture of the current province scope.,Cultures are found in/Europa Universalis IV/common/cultures/*.txt.Can utiliseEvent Scope Values.,1.1
+change_original_culture,<culture>The culture to change original culture to.,change_original_culture = englishchange_original_culture = ENGchange_original_culture = event_target:my_event_targetchange_original_culture = variable:my_variable,Changes theoriginal cultureof the current province scope.,Cultures are found in/Europa Universalis IV/common/cultures/*.txt.Can utiliseEvent Scope Values.,
+add_culture_construction,yesBoolean.speed = <float>The speed percentage of the base conversion speed to use.cost = <float>The cost percentage of the base conversion cost to use.,"add_culture_construction = yesadd_culture_construction = {
+    speed = 0.5
+    cost = 0.5
+}","Starts culture conversion in the current province scope, for the current owner. Target culture is always(?) the primary culture.","Attention: Uses ADM power instead of DIP power.costandspeedare a percentage of the base value, i.e.0.5is 50% of the base value.",1.12
+change_religion,"<religion>The religion to change to.<scope>The religion to change to, derived from the scope.",change_religion = catholicchange_religion = CASchange_religion = event_target:my_event_targetchange_religion = variable:my_variable,Changes the religion of the current province scope.,Religions are found in/Europa Universalis IV/common/religions/*.txtCan utiliseEvent Scope Values.,1.1
+change_to_secondary_religion,yesBoolean.,change_to_secondary_religion = yes,Changes the religion in the current province scope to the syncretic religion of its owner.,,1.14
+send_missionary,yesBoolean.,send_missionary = yes,"Starts religious conversion in the current province scope, for the current owner.",,1.12
+add_cardinal,yesBoolean.,add_cardinal = yes,"Adds a Cardinal to the current province scope, for the current owner.",,1.8
+remove_cardinal,yesBoolean.,remove_cardinal = yes,Removes a Cardinal in the current province scope.,,1.8
+add_reform_center,<religion>The religion to use.,add_reform_center = reformed,Adds a Center of Reformation for the defined religion in the current province scope.,,1.8
+remove_reform_center,<religion>The religion to use.,remove_reform_center = reformed,Removes the Center of Reformation for the defined religion in the current province scope.,,1.8
+set_in_empire,yes / noBoolean.,set_in_empire = yes,Places the current province scope in the Holy Roman Empire.,,1.1
+add_institution_embracement,which = <institution>The institution to add to.value = <int>The amount of embracement to add or subtract.,"add_institution_embracement = {
+    which = feudalism
+    value = 10
+}",Adds institution embracement progress for the defined institution in the current province scope.,The defined institution must be enabled for the owner of the province first.,1.18
+reset_golden_age,yes / noBoolean.,reset_golden_age = yes,Allows the country to click the golden age button again.,No effect if the country is already in golden age.,1.34
+extend_golden_age,<months>,extend_golden_age = 360,Extends the current golden age by X months.,No effect if the country is not in a golden age.,1.34
+add_nationalism,<int>The amount to add or subtract.,add_nationalism = 10,Adds Nationalism to the current province scope.,,1.1
+add_unrest,<int>The amount to add or subtract.,add_unrest = 10,Adds Local Unrest to the current province scope.,Appears underBase Unrest.,1.8
+create_native,<int>The multiplier to use.,create_native = 1,"Spawns (native population * multiplier) natives in the current province scope, rounded up to nearest 1k stack.",Only useful in colonies; will immediately disappear in cities or uncolonized provinces.,1.1
+create_pirate,<int>The size to use.,create_pirate = 1,Spawns pirates in the current province scope.,Only spawnable in sea zones and land provinces with ports.,1.1
+create_revolt,<int>The size to use.,create_revolt = 1,Spawns the most likely rebel type in the current province scope.,,1.1
+<rebel type>,<int>The size to use.,anti_tax_rebels = 1,Spawns the defined rebel type in the current province scope.,Rebel types found in/Europa Universalis IV/common/rebel_types/*.txt.,1.1
+spawn_rebels,type = <type>The size type to use.size = <int>The size to use.culture = <culture> / <scope>Optional. The culture the rebels belong to.religion = <religion> / <scope>Optional. The religion the rebels belong to.unrest = <int>Optional. Adds this amount of unrest to the province the rebels spawn in.win = yesOptional. Changes control of the province the rebels spawn in to the rebels.friend = <scope>Optional. Associate a country with the rebels.leader = <string>Optional. Assigns the rebel leader a specific name. Can useset_saved_name.leader_dynasty = <string>Optional. Assigns the rebel leader a specific dynasty.female = yesOptional. Makes the rebel leader female.use_heir_as_leader = yesOptional. Makes the owner's heir the rebel leader. Removes heir.use_consort_as_leader = yesOptional. Makes the owner's consort the rebel leader. Removes consort.separatists_target = <scope>Optional. Associates the Rebels with a specific target country.estate = <estate>Optional. Associates the Rebels with a specific estate.as_if_faction = yesOptional. Makes the Rebel size scale with its associated estate.should_take_capital = yesOptional. Forces the rebels to always try and take the capital.,"spawn_rebels = {
+    type = noble_rebels
+    size = 1
+}spawn_rebels = {
+    type = pretender_rebels
+    size = 2
+    leader = rebel_preacher
+}spawn_rebels = {
+    type = catholic_rebels
+    size = 2
+    friend = FROM
+}",Spawns the defined rebels in the current province scope.,Rebel types found in/Europa Universalis IV/common/rebel_types/*.txt.,1.1
+create_colony,<int>The initial size of the colony.,"random_empty_neighbor_province = {
+    create_colony = 200
+}",Starts a colony belonging to the owner of the ROOT province scope.,,1.1
+add_colonysize,<int>The amount of settlers to add.,add_colonysize = 10,Adds settlers to the current province scope if a colony.,,1.1
+multiply_colonysize,<float>The multiplier to use.,multiply_colonysize = 2,Multiplies the settler count in the current province scope if a colony.,,1.1
+add_siberian_construction,<int>The initial size of the colony.,add_siberian_construction = 400,Starts a siberian colony in the current province scope.,,1.22
+change_native_ferocity,<int>The amount to add or subtract.,change_native_ferocity = 5,Adds to the Native Ferocity within an uncolonized province.,,1.1
+change_native_hostileness,<int>The amount to add or subtract.,change_native_hostileness = 5,Adds to the Native Hostileness within an uncolonized province.,,1.1
+change_native_size,<int>The amount to add or subtract.,change_native_size = 50,Adds to the amount of natives within an uncolonized province.,,1.1
+discover_country,<scope>The country that gains vision.,"upper_peru_region = {
+    discover_country = FRA
+}",The defined scope gains vision over the current province scope.,"Best used within areas, regions, etc. to add vision.",1.1
+undiscover_country,<scope>The country that loses vision.,"upper_peru_region = {
+    undiscover_country = FRA
+}",The defined scope loses vision over the current province scope.,"Best used within areas, regions, etc. to remove vision.",1.1
+native_policy,<type>The type of Native Policy to set.,native_policy = native_policy_trade,Changes the current scope's native policy to X.,Note when used within a trigger scope this will instead check if the country has the specific native policy active.,1.28
+add_claim,<scope>The country that gains the claim.,"capital_scope = {
+    add_claim = FRA
+}",The defined scope gains a claim on the current province scope.,,1.1
+add_core,<scope>The country that gains the core.,"capital_scope = {
+    add_core = FRA
+}",The defined scope gains a core on the current province scope.,,1.1
+add_core_construction,yesBoolean.speed = <float>The speed percentage of the base coring speed to use.cost = <float>The cost percentage of the base coring cost to use.,"add_core_construction = yesadd_core_construction = {
+    speed = 0.5
+    cost = 1
+}","Starts core construction in the current province scope, for the current owner.Second instance starts core construction at double the speed and full coring cost.",Minimum core construction time is 1 month,1.11
+add_permanent_claim,<scope>The country that gains the permanent claim.,"capital_scope = {
+    add_permanent_claim = FRA
+}",The defined scope gains a permanent claim on the current province scope.,,1.14
+add_territorial_core,<scope>The country that gains the territorial core.,"capital_scope = {
+    add_territorial_core = FRA
+}",The defined scope gains a territorial core on the current province scope.,,1.18
+cede_province,<scope>The country that gains ownership.,"capital_scope = {
+    cede_province = FRA
+}",The defined scope gains ownership of the current province scope.,"previous_ownercan be used to cede ownership to the last previous owner of a province. If you're using an event target, and the event target points to an uncolonized province, this province will become uncolonized.",,1.1
+change_controller,<scope>The country that gains control.,"capital_scope = {
+    change_controller = FRA
+}",The defined scope gains control over the current province scope.,"Control here means occupation, not ownership.",1.1
+decolonize,<scope>The province that gets decolonized.,"1 = {
+    decolonize = THIS
+}",The current scope is decolonized.,Can also accept province IDs.,1.34
+remove_claim,<scope>The country that loses their claim.,"capital_scope = {
+    remove_claim = FRA
+}",The defined scope loses their claim on the current province scope.,Works for both types of claims.,1.1
+remove_core,<scope>The country that loses their core.,"capital_scope = {
+    remove_core = FRA
+}",The defined scope loses their core on the current province scope.,,1.1
+remove_territorial_core,<scope>The country that loses their territorial core.,"capital_scope = {
+    remove_territorial_core = FRA
+}",The defined scope loses their territorial core on the current province scope.,,1.18
+artillery,<scope>The country scope the artillery belongs to,"capital_scope = {
+    artillery = FRA
+}",Spawns an artillery unit in the current province scope for the defined country scope.,Uses the currently selected artillery unit.,1.1
+revolutionary_guard_artillery,<scope>The country scope the revolutionary artillery belongs to,"capital_scope = {
+    revolutionary_guard_artillery = FRA
+}",Spawns a revolutionary artillery unit in the current province scope for the defined country scope.,Uses the currently selected artillery unit.,1.35
+cavalry,<scope>The country scope the cavalry belongs to,"capital_scope = {
+    cavalry = FRA
+}",Spawns an cavalry unit in the current province scope for the defined country scope.,Uses the currently selected cavalry unit.,1.1
+mercenary_cavalry,<scope>The country scope the mercenary cavalry belongs to,"capital_scope = {
+    mercenary_cavalry = FRA
+}",Spawns a mercenary cavalry unit in the current province scope for the defined country scope.,Uses the currently selected cavalry unit.,1.11
+cossack_cavalry,<scope>The country scope the cossack cavalry belongs to,"capital_scope = {
+    cossack_cavalry = ZAZ
+}",Spawns a cossack cavalry unit in the current province scope for the defined country scope.,Uses the currently selected cavalry unit.,1.33
+hussars_cavalry,<scope>The country scope the hussars cavalry belongs to,"capital_scope = {
+    hussars_cavalry = POL
+}",Spawns a hussars cavalry unit in the current province scope for the defined country scope.,Uses the currently selected cavalry unit.,1.35
+revolutionary_guard_cavalry,<scope>The country scope the revolutionary cavalry belongs to,"capital_scope = {
+    revolutionary_guard_cavalry = FRA
+}",Spawns a revolutionary cavalry unit in the current province scope for the defined country scope.,Uses the currently selected cavalry unit.,1.35
+banner_cavalry,<scope>The country scope the banner cavalry belongs to,"capital_scope = {
+    banner_cavalry = MCH
+}",Spawns a banner cavalry unit in the current province scope for the defined country scope.,Uses the currently selected cavalry unit.,1.35
+qizilbash_cavalry,<scope>The country scope the qizilbash cavalry belongs to,"capital_scope = {
+    qizilbash_cavalry = PER
+}",Spawns a qizilbash cavalry unit in the current province scope for the defined country scope.,Uses the currently selected cavalry unit.,1.36
+mamluks_cavalry,<scope>The country scope the mamluks cavalry belongs to,"capital_scope = {
+    mamluks_cavalry = MAM
+}",Spawns a mamluks cavalry unit in the current province scope for the defined country scope.,Uses the currently selected cavalry unit.,1.36
+infantry,<scope>The country scope the infantry belongs to,"capital_scope = {
+    infantry = FRA
+}",Spawns an infantry unit in the current province scope for the defined country scope.,Uses the currently selected infantry unit.,1.1
+mercenary_infantry,<scope>The country scope the mercenary infantry belongs to,"capital_scope = {
+    mercenary_infantry = FRA
+}",Spawns an mercenary infantry unit in the current province scope for the defined country scope.,Uses the currently selected infantry unit.,1.11
+streltsy_infantry,<scope>The country scope the streltsy infantry belongs to,"capital_scope = {
+    streltsy_infantry = FRA
+}",Spawns an streltsy infantry unit in the current province scope for the defined country scope.,Uses the currently selected infantry unit.,1.22
+rajput_infantry,<scope>The country scope the rajput infantry belongs to,"capital_scope = {
+    rajput_infantry = FRA
+}",Spawns a rajput infantry unit in the current province scope for the defined country scope.,Uses the currently selected infantry unit.,1.26
+cawa_infantry,<scope>The country scope the cawa infantry belongs to,"capital_scope = {
+  cawa_infantry = ETH
+}",Spawns a cawa infantry unit in the current province scope for the defined country scope.,Uses the currently selected infantry unit.,1.32
+carolean_infantry,<scope>The country scope the carolean infantry belongs to,"capital_scope = {
+	carolean_infantry = ROOT
+}",Spawns a carolean infantry unit in the current province scope for the defined country scope.,Uses the currently selected infantry unit.,1.34
+marine_infantry,<scope>The country scope the marine infantry belongs to,"capital_scope = {
+    marine_infantry = FRA
+}",Spawns a marine infantry unit in the current province scope for the defined country scope.,Uses the currently selected infantry unit.,1.30
+janissary_infantry,<scope>The country scope the janissary infantry belongs to,"capital_scope = {
+    janissary_infantry = TUR
+}",Spawns a janissary infantry unit in the current province scope for the defined country scope.,Uses the currently selected infantry unit.,1.35
+revolutionary_guard_infantry,<scope>The country scope the revolutionary infantry belongs to,"capital_scope = {
+   revolutionary_guard_infantry=FRA
+}",Spawns a revolutionary infantry unit in the current province scope for the defined country scope.,Uses the currently selected infantry unit.,1.35
+tercio_infantry,<scope>The country scope the tercio infantry belongs to,"capital_scope = {
+    tercio_infantry = SPA
+}",Spawns a tercio infantry unit in the current province scope for the defined country scope.,Uses the currently selected infantry unit.,1.35
+musketeer_infantry,<scope>The country scope the musketeer infantry belongs to,"capital_scope = {
+    musketeer_infantry = FRA
+}",Spawns a musketeer infantry unit in the current province scope for the defined country scope.,Uses the currently selected infantry unit.,1.35
+samurai_infantry,<scope>The country scope the samurai infantry belongs to,"capital_scope = {
+    samurai_infantry = JAP
+}",Spawns a samurai infantry unit in the current province scope for the defined country scope.,Uses the currently selected infantry unit.,1.35
+cossack_infantry,<scope>The country scope the cossack infantry belongs to,"capital_scope = {
+    cossack_infantry = ZAZ
+}",Spawns a cossack infantry unit in the current province scope for the defined country scope.,Uses the currently selected infantry unit.,1.35
+banner_infantry,<scope>The country scope the banner infantry belongs to,"capital_scope = {
+    banner_infantry = MCH
+}",Spawns a banner infantry unit in the current province scope for the defined country scope.,Uses the currently selected infantry unit.,1.35
+qizilbash_infantry,<scope>The country scope the qizilbash infantry belongs to,"capital_scope = {
+    qizilbash_infantry = PER
+}",Spawns a qizilbash infantry unit in the current province scope for the defined country scope.,Uses the currently selected infantry unit.,1.36
+mamluks_infantry,<scope>The country scope the mamluks infantry belongs to,"capital_scope = {
+    mamluks_infantry = MAM
+}",Spawns a mamluks infantry unit in the current province scope for the defined country scope.,Uses the currently selected infantry unit.,1.36
+heavy_ship,<scope>The country scope the ship belongs to,"random_owned_province = {
+    limit = { has_port = yes }
+    heavy_ship = FRA
+}",Spawns a heavy ship unit in the current province scope for the defined country scope.,Uses the defined scope's current heavy ship unit.Requires the current province scope to have a port.,1.1
+man_of_war_heavy,<scope>The country scope the ship belongs to,"capital_scope = {
+    man_of_war_heavy = GBR
+}",Spawns a man of war heavy ship unit in the current province scope for the defined country scope.,Uses the defined scope's current heavy ship unit.Requires the current province scope to have a port.,1.35
+galleon_heavy,<scope>The country scope the ship belongs to,"capital_scope = {
+    galleon_heavy = SPA
+}",Spawns a galleon heavy ship unit in the current province scope for the defined country scope.,Uses the defined scope's current heavy ship unit.Requires the current province scope to have a port.,1.35
+create_flagship,"<scope>The province scope in which the flagship spawns.
+          name = ""Vittoria""
+          type = galley","random_owned_province = {
+    limit = { has_port = yes }
+    ROOT = {
+            create_flagship = {
+                name = ""Vittoria""
+                type = galley
+            }
+    }
+}",Spawns a flagship unit for the current scope in the defined province scope.,"Types light_ship, galley, heavy_ship and transport.Requires the province scope to have a port.",1.28
+light_ship,<scope>The country scope the ship belongs to,"random_owned_province = {
+    limit = { has_port = yes }
+    light_ship = FRA
+}",Spawns an light ship unit in the current province scope for the defined country scope.,Uses the defined scope's current light ship unit.Requires the current province scope to have a port.,1.1
+man_of_war_light,<scope>The country scope the ship belongs to,"capital_scope = {
+    man_of_war_light = GBR
+}",Spawns a man of war light ship unit in the current province scope for the defined country scope.,Uses the defined scope's current light ship unit.Requires the current province scope to have a port.,1.35
+caravel_light,<scope>The country scope the ship belongs to,"capital_scope = {
+    caravel_light = SPA
+}",Spawns a caravel light ship unit in the current province scope for the defined country scope.,Uses the defined scope's current light ship unit.Requires the current province scope to have a port.,1.35
+voc_indiamen_light,<scope>The country scope the ship belongs to,"capital_scope = {
+    voc_indiamen_light = NED
+}",Spawns a voc indiamen light ship unit in the current province scope for the defined country scope.,Uses the defined scope's current light ship unit.Requires the current province scope to have a port.,1.35
+galley,<scope>The country scope the ship belongs to,"random_owned_province = {
+    limit = { has_port = yes }
+    galley = FRA
+}",Spawns an galley ship unit in the current province scope for the defined country scope.,Uses the defined scope's current galley ship unit.Requires the current province scope to have a port.,1.1
+geobukseon_galley,<scope>The country scope the ship belongs to,"capital_scope = {
+    geobukseon_galley = KOR
+}",Spawns a geobukseon galley ship unit in the current province scope for the defined country scope.,Uses the defined scope's current galley ship unit.Requires the current province scope to have a port.,1.35
+galleass_galley,<scope>The country scope the ship belongs to,"capital_scope = {
+    galleass_galley = VEN
+}",Spawns a galleass galley ship unit in the current province scope for the defined country scope.,Uses the defined scope's current galley ship unit.Requires the current province scope to have a port.,1.35
+transport,<scope>The country scope the ship belongs to,"random_owned_province = {
+    limit = { has_port = yes }
+    transport = FRA
+}",Spawns an transport ship unit in the current province scope for the defined country scope.,Uses the defined scope's current transport ship unit.Requires the current province scope to have a port.,1.1
+<unit name>,<scope>The country scope the unit belongs to,"capital_scope = {
+    british_redcoat = FRA
+}",Spawns a specific unit in the current province scope for the defined country scope.,Units can be found in/Europa Universalis IV/common/units/*.txt.,1.1
+kill_leader,<type>The leader type to kill.nameis the specific leader name to target.,"kill_leader = generalkill_leader = randomkill_leader = ""John Smith",Kills a leader in the current province scope if they match the type used.,Only works if the leader is assigned to a unit that is stationed in the current province.Possible types:generaladmiralconquistadorexplorerrandom<leader name>,1.1
+kill_units,who = <scope>Optional. Which country scopes should be affected.type = <type>Optional. Which type of units that should be affected.amount = <int>Optional. The specific amount to kill.,"kill_units = {
+    who = enemy
+}kill_units = {
+    who = owner
+    type = infantry
+}kill_units = {
+    who = controller
+    type = artillery
+    amount = 5
+}",Kills units following the defined parameters in the current province scope.,"In thewhoparameter, you can useenemy,ownerandcontroller.When used with no parameters, will kill all units within the current province scope.Possible types:infantrycavalryartilleryheavy_shiplight_shipgalleytransport<unit_name>",1.12
+add_unit_construction,type = <type>Which type of unit to build.amount = <int>The amount to build.speed = <float>The speed percentage of the base unit construction speed to use.cost = <float>The cost percentage of the base unit construction cost to use.mercenary = yesOptional. Makes the constructed units mercenaries.,"add_unit_construction = {
+    type = light_ship
+    amount = 20
+    speed = 0.1
+    cost = 0
+}",Constructs the defined units in the current province scope.,Possible types:infantrycavalryartilleryheavy_shiplight_shipgalleytransport<unit_name>,1.1
+build_to_forcelimit,<type> = <float>The type is any of the base unit types. The value is the percentage of forcelimit.,"build_to_forcelimit = {
+    heavy_ship = 0.3
+    light_ship = 0.3
+    transport = 0.2
+}",Builds the defined units as a percentage of the owner's forcelimit in the current province scope.,1 is equal to 100% of the owner's forcelimit.Possible types:infantrycavalryartilleryheavy_shiplight_shipgalleytransport<unit_name>,1.1
+remove_loot,who = <scope>The country scope that receives the loot.amount = <int>The amount of loot to take.,"remove_loot = {
+    who = ROOT
+    amount = 5
+}",Removes loot from the current province scope and grants it to the defined country scope.,"Thewhoparameter acceptsenemy, which distributes the loot to all current enemies of the province owner.",1.15
+change_siege,<int>The process adjustment to add or subtract.,change_siege = 5,Changes the siege progress in the current province scope.,,1.1
+clear_rebels,yesBoolean,clear_rebels = yes,Clears all rebels in the current province scope.,,1.29
+recall_merchant,<scope>The country scope to use.,recall_merchant = FRA,Recalls a placed merchant in the current tradenode province scope.,Only works when the current province scope is the location of a tradenode center.,1.1
+add_trade_node_income,<int>The amount to add or subtract.,add_trade_node_income = 10,Gives money to the country based on its trade income in the node.,Only works when the current province scope is the location of a tradenode center.,1.1
+add_trade_modifier,who = <scope>The country scope that receives the modifier.duration = <days>The duration of the modifier.power = <float>The amount of trade power to add or subtract.key = <string>The key to display as the modifier in the tooltip.,"add_trade_modifier = {
+    who = ROOT
+    duration = 5475
+    power = 15
+    key = STRONG_MERCHANTS
+}",Adds a trade modifier for the defined country scope in the current tradenode province scope.,Can be added to any province within a tradenode.,1.1
+remove_trade_modifier,who = <scope>The country scope that has the trade modifier.name = <string>The trade modifier to remove.,"remove_trade_modifier = {
+    who = ROOT
+    key = STRONG_MERCHANTS
+}",Removes a trade modifier for the defined country scope in the current tradenode province scope.,,1.1
+add_to_trade_company,<scope>The country scope to use.,add_to_trade_company = ROOT,Adds province to scopes trade company.will remove state first if it exists.,Will remove state first if it exists.,1.26
+add_trade_company_investment,investment = <investment_key>The investment to make.investor = <scope>The country investing.,"south_lanka_area = {
+    add_trade_company_investment = {
+        investor = ROOT
+        investment = company_warehouse
+    }
+}",Adds a trade company investment in the provinces area.,investment keys are found in common/tradecompany_investments,1.26
+center_of_trade,<int>Center of trade level.,center_of_trade = 2,Creates a center of trade in the province. Only works if there is no existing center of trade.,,1.27
+add_center_of_trade_level,<int>Amount to increase center of trade level.,add_center_of_trade_level = 1,Increases the level of a center of trade in the province. A negative number decreases the level of the center of trade.,,1.27

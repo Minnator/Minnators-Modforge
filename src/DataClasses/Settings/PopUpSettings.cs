@@ -7,6 +7,7 @@ namespace Editor.DataClasses.Settings
    {
       private bool _askWhenSavingAllChanges = true;
       private bool _notifyIfErrorFileCanNotBeOpened = true;
+      private bool _tryContinueExecutionPopUp = true;
 
       [Description("Sets if there will be a Pop up when saving all changes to prevent accidents")]
       [CompareInEquals]
@@ -27,6 +28,10 @@ namespace Editor.DataClasses.Settings
          get => _notifyIfErrorFileCanNotBeOpened;
          set => SetField(ref _notifyIfErrorFileCanNotBeOpened, value);
       }
+
+      [JsonIgnore]
+      [Browsable(false)]
+      public ref bool TryContinueExecutionPopUp => ref _tryContinueExecutionPopUp;
 
       [JsonIgnore]
       [Browsable(false)]

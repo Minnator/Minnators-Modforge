@@ -65,7 +65,7 @@ public readonly struct Tag : IEquatable<Tag>, IComparable
    }
 
    // Add an empty state to the Tag struct
-   public static readonly Tag Empty = new("###");
+   public static readonly Tag Empty = new("---");
 
    public bool IsEmpty()
    {

@@ -1,4 +1,5 @@
-﻿using Editor.Saving;
+﻿using System.Text;
+using Editor.Saving;
 
 namespace Editor.Loading.Enhanced.PCFL.Implementation;
 
@@ -136,12 +137,20 @@ public interface IPCFLObject
 public class Empty_Scope : IToken
 {
    public void Activate(ITarget target) { }
+   public void GetTokenString(int tabs, ref StringBuilder sb){}
+   public string GetTokenName() => string.Empty;
+   public string GetTokenDescription() => string.Empty;
+   public string GetTokenExample() => string.Empty;
 }
 
 public interface IToken: IPCFLObject
 {
    public static IToken Empty { get; } = new Empty_Scope();
    public void Activate(ITarget target);
+   public void GetTokenString(int tabs, ref StringBuilder sb);
+   public string GetTokenName();
+   public string GetTokenDescription();
+   public string GetTokenExample();
 }
 
 public interface ITrigger: IPCFLObject

@@ -1,0 +1,1167 @@
+Value,Type,Description,Scope,Example
+<advisor>,Integer,Returns true if the country has hired anadvisorof the specified type which has at least level X.,Country,statesman = 3
+<building>,Integer,Returns true if the country has at least Xbuildingsfrom the specified building type.,Country,temple = 3
+<idea group>,Integer,Returns true if the country has at least X ideas from the specifiedidea group.,Country,religious_ideas = 3
+<institution>,Integer,Returns true if the support for the specifiedinstitutionin the province is at least X.,Province,printing_press = 50
+<religion>,Integer,Returns true if the country has atoleranceof at least X of the specifiedreligion.Note: No correct localisation.,Country,orthodox = -2
+<subject_type>,Integer,Returns true if the country has at least X subjects of the given type.,Country,vassal = 3
+<trade good>,Integer,Returns true if the country has at least X provinces producing the specifiedtrade good.,Country,gold = 2
+absolutism,Integer,Returns true if the country has at least X absolutism.,Country,absolutism = 50
+accepted_culture,"Identifier, Province scope",Returns true if the country accepts the specifiedculture.,Country,accepted_culture = ROOT
+active_major_mission,Identifier,Returns true if X is the currentmissionof the country. Obsolete since 1.25.,Country,active_major_mission = finish_reconquista
+adm,Integer,Returns true if the country has arulerwith an administrative skill of at least X.,Country,adm = 3
+adm,"Tag, Scope",Returns true if the country has a ruler with at least as high administrative skill as the ruler of the specified country.,Country,adm = GEO
+adm_power,Integer,Returns true if the country has at least Xadministrative power.,Country,adm_power = 600
+adm_power,"Tag, Scope",Returns true if the country has at least as much administrative power as the specified country.,Country,adm_power = FIN
+adm_tech,Integer,Returns true if the country has anadministrative technologyof at least X.,Country,adm_tech = 4
+advisor,Identifier,Returns true if the country has anadvisorof the specified type.,Country,advisor = trader
+advisor_exists,Advisor ID[1],Returns true if theadvisorX exists.,Country,advisor_exists = 225
+ai,Boolean,Returns true if the country is controlled by theAI.,Country,ai = yes
+ai_attitude,Clause,Returns true if the country has the specifiedattitudetowards country X.,Country,"ai_attitude = {
+        who = FROM
+        attitude = attitude_hostile
+    }"
+alliance_with,"Tag, Scope",Returns true if the country has analliancewith X.,Country,alliance_with = FRA
+allows_female_emperor,Boolean,Returns true if females can becomeemperor.,Anywhere,allows_female_emperor = no
+always,Boolean,"Returns true under all circumstances if set to yes, returns false under all circumstances if set to no.",Anywhere,always = no
+area,Identifier,Returns true if the province is part of theareaX.,Province,area = amazon_area
+army_professionalism,Float,Returns true if the country'sarmy professionalismis of at least X.,Country,army_professionalism = 0.10
+army_size,Integer,Returns true if the country has an army of at least X k soldiers.,Country,army_size = 15
+army_size,"Tag, Scope",Returns true if the country has an army with at least as many soldiers as the specified country.,Country,army_size = SPA
+army_size_percentage,Float,Returns true if the total army size of the country is at least X% of itsland force limit.,Country,army_size_percentage = 0.6
+army_strength,Clause,"Returns true, if the country's army strength is at least X times the army strength of the specified country. It is unknown how the strength gets calculated. Both the army size and mil tech play a role, but there might be more factors",Country,"army_strength = {
+        who = FRA
+        value = 0.66
+    }"
+army_tradition,Integer,Returns true if the country has anarmy traditionof at least X.,Country,army_tradition = 75
+army_tradition,"Tag, Scope",Returns true if the country has an at least as high army tradition as the specified country.,Country,army_tradition = RUS
+artillery_fraction,Float,Returns true if the ratio of theartilleryfraction to the army size of the country is at least X.,Country,artillery_fraction = 0.6
+artillery_in_province,Integer,Returns true if there are at least Xartilleryunits in the province.,Province,artillery_in_province = 5
+artillery_in_province,"Tag, Scope",Returns true if there are artillery units from the specified country in the province.,Province,artillery_in_province = OMA
+at_war_with_religious_enemy,Boolean,Returns true if the country is atwarwith any country of a differentreligion.,Country,at_war_with_religious_enemy = yes
+authority,Integer,Returns true if theInticountry has at least X authority.,Country,authority = 5
+authority,"Tag, Scope",Returns true if the Inti country has at least as much authority as the specified country.,Country,authority = MCA
+average_autonomy,Integer,Returns true if the country has an averageautonomyin its provinces of at least X.,Country,average_autonomy = 5
+average_autonomy_above_min,Integer,Needs description,Country,average_autonomy_above_min = 40
+average_effective_unrest,Integer,Needs description,Country,average_effective_unrest = 2
+average_home_autonomy,Integer,Returns true if the country has an averageautonomyin its provinces excluding overseas provinces is at least X.,Country,average_home_autonomy = 5
+average_unrest,Integer,Returns true if the country has an averageunrestin its provinces of at least X.,Country,average_unrest = 2
+base_manpower,Integer,Returns true if thebase manpowerof the province is at least X.,Province,base_manpower = 3
+base_production,Integer,Returns true if thebase productionof the province is at least X.,Province,base_production = 5
+base_tax,Integer,Returns true if thebase taxof the province is at least X.,Province,base_tax = 5
+blockade,Float,Returns true if theblockadepenalty of the country is at least X%.,Country,blockade = 0.75
+border_distance,Clause,Returns true if distance between the borders of the countries is at least X.,Country,"border_distance = {
+        who = FRA
+        distance = 100
+    }"
+calc_true_if,Clause,Returns true if at leastamountnumber of sub-triggers are true. Triggers can be listed explicitly as individual triggers or selected by anall_scope (must be anall_scope to work properly).,Anywhere,"calc_true_if = {
+        all_country = {
+            religion = protestant
+        }
+        amount = 10
+    }"
+can_be_overlord,Identifier,"Returns true, if country meets the conditions defined in the subject type'sis_potential_overlordsection.",Country,MNG = { can_be_overlord = tributary_state }
+can_build,Identifier,Returns true if the specified building can be built in the province.,Province,can_build = armory
+can_create_vassals,yes,Returns true if the country can create a vassal.Warning: Interprets anything after ‘=’ as “yes”.Note: Works only for independent countries.,Country,can_create_vassals = yes
+can_heir_be_child_of_consort,Boolean,Returns true if the country’s heir can potentially be the consort’s child.,Country,can_heir_be_child_of_consort = yes
+can_justify_trade_conflict,"Tag, Scope",Returns true if the country can justify a trade conflict against country X.,Country,can_justify_trade_conflict = FROM
+can_migrate,Boolean,Returns true if the country can migrate to another province. Doesn't return true if the timer is still counting down.,Country,can_migrate = yes
+can_spawn_rebels,Identifier,Returns true if the specifiedrebel factionis a valid rebel faction of the province.,Province,can_spawn_rebels = catholic_rebels
+can_use_peace_treaty,Clause,Returns true if the country can use the specified peace treaty.Appears to only be in use in cbs file.,Country,"can_use_peace_treaty = {
+        who = FROM
+        treaty = po_join_empire
+    }"
+capital,Province ID,Returns true if the country'scapitalis the province with the ID X.,Country,capital = 151
+capital_distance,Clause,Returns true if distance between the capitals of the countries is at least X.,Country,"capital_distance = {
+        who = FRA
+        distance = 100
+    }"
+cavalry_fraction,Float,Returns true if the ratio of thecavalryfraction to the army size of the country is at least X.,Country,cavalry_fraction = 0.5
+cavalry_in_province,Integer,Returns true if there are at least Xcavalryunits in the province.,Province,cavalry_in_province = 10
+cavalry_in_province,"Tag, Scope",Returns true if there are cavalry units from the specified country in the province.,Province,cavalry_in_province = ORI
+check_variable,Clause,Returns true if the specified variable is at least X.,,"check_variable = {
+        which = grand_embassy
+        value = 6
+    }"
+church_power,Integer,Returns true if the country has at least Xchurch power.,Country,church_power = 20
+church_power,"Tag, Scope",Returns true if the country has at least as much church power as the specified country.,Country,church_power = SAX
+claim,"Tag, Scope",Returns true if the country has aclaimor permanent claim on any province owned by country X.,Country,claim = FRA
+coalition_target,"Tag, Scope",Returns true if the country is the target of acoalition.,Country,coalition_target = FRA
+colonial_claim_by_anyone_of_religion,Type needed,Returns true if ...has gotten a colonial grant for the scope's colonial region from any potential pope-like entities.,Scope needed',{Example needed
+colonial_region,Identifier,Returns true if the province is part of thecolonial regionX.,Province,colonial_region = colonial_colombia
+colony,Integer,Returns true if country has at least that many colonial subjects.,Country,colony = 5
+colony_claim,Tag,Returns true if country has claim on colony,Country,colony_claim = SPA
+colonysize,Integer,Returns true if colony is at least size X.,Province,colonysize = 600
+consort_adm,Integer,Returns true if the country has aconsortwith an administrative skill of at least X.,Country,consort_adm = 5
+consort_age,Integer,Returns true if the country’sconsorthas an age of at least X.Note: Always returns false if there is no consort.,Country,consort_age = 43
+consort_culture,"Identifier, Scope","Returns true, if the country's consort has the specified culture. Can utiliseEvent Scope Values.",Country,consort_culture = prussian
+consort_dip,Integer,Returns true if the country has aconsortwith an diplomatic skill of at least X.,Country,consort_dip = 5
+consort_has_personality,Identifier,Returns true if the country’sconsorthas the specifiedpersonality.,Country,consort_has_personality = cruel_personality
+consort_mil,Integer,Returns true if the country has aconsortwith an military skill of at least X.,Country,consort_mil = 5
+consort_religion,"Identifier, Scope","Returns true, if the country's consort has the specified religion. Can utiliseEvent Scope Values.",Country,consort_religion = catholic
+construction_progress,Float,Returns true if the construction progress is at least X%.,Province,construction_progress = 0.5
+continent,"Identifier, Tag, Scope, Province ID",Returns true if the province is located oncontinentX.,Province,continent = north_america
+controlled_by,"Tag, Scope",Returns true if the province is controlled by X.,Province,controlled_by = TUR
+controls,Province ID,Returns true if the province with id X is controlled by the country.,Country,controls = 151
+core_claim,"Tag, Scope",Returns true if the country has acoreon any province owned by country X.,Country,core_claim = FRA
+core_percentage,Float,Returns true if the country hascoredat least X% of its provinces.,Country,core_percentage = 0.55
+corruption,Float,Returns true if the country has acorruptionof at least X.,Country,corruption = 1
+council_position,Identifier,Returns true if X is the country's council position in the Council of Trent.,Country,council_position = concilatory
+country_or_non_sovereign_subject_holds,"Tag, Scope",Returns true if the province is part of the specified country or its non-tributary subjects.,Province,country_or_non_sovereign_subject_holds = ROOT
+country_or_subject_holds,"Tag, Scope",Returns true if the province is part of the specified country or itssubjects.The oldcountry_or_vassal_holdsterm maps to the new one for compatiblity.,Province,country_or_subject_holds = ROOT
+crown_land_share,"Identifier, Integer","Returns true if the % of the country's development is held by the Crown Land. If an estate is declared, returns true if % of Crown Land is higher than land owned by the estate.",Country,crown_land_share = 50crown_land_share = estate_nobles
+culture,"Identifier, Scope",Returns true if the province culture is X.,Province,culture = basque
+culture_group,"Identifier, Scope",Returns true if the country/province has a culture of the specifiedculture group.,CountryProvince,culture_group = iberian
+culture_group_claim,Tag,Returns true if country's primary culture is the same culture group as any province owned by country X.,Country,culture_group_claim = FROM
+current_age,Identifier,"Returns true, if the current age is X.",Anywhere,current_age = age_of_discovery
+current_bribe,Identifier,"Returns true, if the seat in the province wants bribe X. Bribes are found in common/parliament_bribes.",Province,current_bribe = diplomatic_support
+current_debate,Identifier,Returns true if the parliament of the countrydebatesabout X.,Country,current_debate = quartering_of_troops
+current_icon,Identifier,"Returns true, if the country has the specified (orthodox) icon.",Country,current_icon = icon_eleusa
+current_income_balance,Float,Returns true if the current income balance is X.,Country,current_income_balance = 5
+current_institution,Float,"Returns true if the current institution (technically the first unembraced meaning in case you have two unembraced, it would be the older one) progress is at least X",Province,current_institution = 55
+current_institution_growth,Float,"Returns true, if the country/province has a annual (whereas monthly is printed in province screen) institution growth of at least X for the first not embraced institution.","Country, Province",current_institution_growth = 12
+current_size_of_parliament,Integer,Returns true if theparliamentof the country has a least X seats.,Country,current_size_of_parliament = 20
+custom_trigger_tooltip,Clause,Hides the enclosed trigger so that it is still required but cannot be seen by human players and displays the specified tooltip in its place.,Anywhere,"custom_trigger_tooltip = {
+        tooltip = EST_CRUSHED_NOMADIC_TRIBES
+        NOT = { has_country_flag = nomadic_tribes_estate_in_power
+        }
+    }"
+defensive_war_with,"Tag, Scope",Returns true if the country is in a defensivewarwith country X.,Country,defensive_war_with = TUR
+devastation,Integer,Returns true if thedevastationof the province is at least X.,Province,devastation = 1
+development,"Integer, Scope",Returns true if thedevelopmentof the province is at least X. Does not accept base scopes as of 1.32.,Province,development = 9
+development_in_provinces,Clause,"Returns true, if the owned provinces that fulfil the conditions have a total of X development",Country,"development_in_provinces = {
+        value = 200
+        region = korea_region
+    }"
+development_of_overlord_fraction,Float,"Returns true, if the country has X percent of its overlord's development",Country,development_of_overlord_fraction = 0.33
+devotion,Integer,Returns true if the country has at least Xdevotion.,Country,devotion = 75
+devotion,"Tag, Scope",Returns true if the country has at least as much devotion as the specified country.,Country,devotion = KOL
+dip,Integer,Returns true if the country has arulerwith a diplomatic skill of at least X.,Country,dip = 6
+dip,"Tag, Scope",Returns true if the country has a ruler with at least as high diplomatic skill as the ruler of the specified country.,Country,dip = GRM
+dip_power,Integer,Returns true if the country has at least Xdiplomatic power.,Country,dip_power = 600
+dip_power,"Tag, Scope",Returns true if the country has at least as much diplomatic power as the specified country.,Country,dip_power = TEU
+dip_tech,Integer,Returns true if the country has andiplomatic technologyof at least level X.,Country,dip_tech = 4
+diplomatic_reputation,Integer,Returns true if the country has adiplomatic reputationof at least X.,Country,diplomatic_reputation = 10
+diplomatic_reputation,"Tag, Scope",Returns true if the country has at least as much diplomatic reputation as the specified country.,Country,diplomatic_reputation = CAS
+dominant_culture,"Identifier, Capital",Returns true if thedominant culturein the country is X.,Country,dominant_culture = turkish
+dominant_religion,"Identifier, Capital",Returns true if the dominant religion in the country is X.,Country,dominant_religion  = catholic
+doom,Integer,Returns true if the country has at least X doom.,Country,doom = 30
+doom,"Tag, Scope",Returns true if the country has at least as much doom as the specified country.,Country,doom = ROOT
+dynasty,Name,Returns true if the rulingdynastyof the country is X.,Country,"dynasty = ""von Habsburg"""
+dynasty,"Tag, Scope",Returns true if both countries are ruled by the same dynasty.,Country,dynasty = CAS
+empire_of_china_has_active_decree,"Boolean, Identifier","Returns true if the Emperor of China has an active reform, or the specified X reform.",Anywhere,empire_of_china_has_active_decree = increase_tariff_control
+empire_of_china_num_reforms_passed,Integer,Returns true if the Emperor of China has passed at least X reforms.,Anywhere,empire_of_china_num_reforms_passed = 2
+empire_of_china_reform_passed,Identifier(?),"Returns true, if X Empire of China reform is enacted.",Anywhere,empire_of_china_reform_passed = establish_gaituguiliu_decision
+employed_advisor,Clause,Returns true if the country has employed anadvisorwith the specified characteristics.(Any combinations are permitted.),Country,"employed_advisor = {
+        category = ADM | DIP | MIL
+        is_male = yes
+        religion = reformed
+        culture = basque
+        type = treasurer
+            skill = <int>
+            name = ""string""
+            is_discounted = <yes/no>
+    }"
+estate_influence,Clause,Returns true if theestateX in the country has at least Y influence.NOTE:allcan be used instead of a specific estate to check if all active estates of a country have at least Y influence.*NOTE: does not work correctly with negative all estate influence modifiers,Country,"estate_influence = {
+        estate = estate_church
+        influence = 80
+    }"
+estate_led_regency_influence,Integer,"Returns true if theestateleading the regency in the country has at least X influence.NOTE: the generated tooltip is not localized, and is shared with estate_led_regency_loyalty.",Country,estate_led_regency_influence = 50
+estate_led_regency_loyalty,Integer,"Returns true if theestateleading the regency in the country has at least X loyalty.NOTE: the generated tooltip is not localized, and is shared with estate_led_regency_influence.",Country,estate_led_regency_loyalty = 50
+estate_loyalty,Clause,Returns true if theestateX in the country has at least Y loyalty.,Country,"estate_loyalty = {
+        estate = estate_burghers
+        loyalty = 50
+    }"
+estate_territory,Clause,Returns true if theestateX in the country controls at least Y% of the total development.,Country,"estate_territory = {
+        estate = estate_nobles
+        territory = 12
+    }"
+exclude_from_progress,Clause,Merges all triggers in the UI display to prevent long listing. Can be used in conjunction with custom tooltips.,Anywhere,"exclude_from_progress = {
+        any_owned_province = {
+            is_core = ROOT
+            controlled_by = owner
+        }
+    }"
+exiled_same_dynasty_as_current,Boolean,Returns true if an exiled ruler has the same dynasty as the current one.,Country,exiled_same_dynasty_as_current = yes
+exists,Tag,Returns true ifcountryX exists.,Anywhere,exists = MNG
+exists,Boolean,Returns true if the scopedcountryexists.,Country,exists = yes
+expelled_different_minorities,Integer,Returns true if the country has expelled X amount of minority cultures.,Country,expelled_different_minorities = 5
+faction_in_power,Identifier,Returns true if thefactionin power of the country is X.,Country,faction_in_power = eunuchs
+faction_influence,Clause,Returns true if thefactionX of the country has at least Y influence.,Country,"faction_influence = {
+        faction = mr_aristocrats
+        influence = 50
+    }"
+federation_size,Integer,Returns true if thefederationwith the country has at least X members.,Country,federation_size = 5
+fervor,Integer,Returns true if the country has stored at least X fervor points.,Country,fervor = 5
+fort_level,Integer,Returns true if thefortin the province has at least level X.,Province,fort_level = 1
+full_idea_group,Identifier,Returns true if the country has completed the Xidea group.,Country,full_idea_group = naval_ideas
+galley_fraction,Float,Returns true if the ratio of thegalleyfraction to the navy size of the country is at least X.,Country,galley_fraction = 0.33
+galleys_in_province,Integer,Returns true if there are at least Xgalleysin the province.,Province,galleys_in_province = 10
+galleys_in_province,"Tag, Scope",Returns true if there are galleys from the specified country in the province.,Province,galleys_in_province = VEN
+garrison,Integer,Returns true if thegarrisonis at X men.Note: The localisation is misleading.,Province,garrison = 1000
+gives_fleet_basing_rights_to,"Tag, Scope",Returns true if the scoped countrygives fleet basing rights to the specified country.,Country,"FRA = {
+            gives_fleet_basing_rights_to = ROOT
+    }"
+gives_military_access_to,"Tag, Scope",Returns true if the scoped country gives military access to the specified country.,Country,"FRA = {
+            gives_military_access_to = ROOT
+    }"
+gold_income,Float,Returns true if the country has anincomefromGoldof at least X.,Country,gold_income = 6
+gold_income_percentage,Float,Returns true if in the country the proportion ofincomefromGoldis at least X.,Country,gold_income_percentage = 0.1
+governing_capacity_percentage,Float,Returns true if in the country the proportion ofgoverning capacityused is at least X.,Country,governing_capacity_percentage = 0.9
+government,Identifier,"Returns true if the country hasgovernmenttype X, or government reforms that alter specific mechanics (Harem, Dictatorship).Identifier: monarchy, has_harem, republic, dictatorship, theocracy, tribal, native.",Country,government = monarchy
+government_power_frozen,Clause,"Returns true, if the country has the specified government power for the specified government mechanic frozen.",Country,"government_power_frozen = {
+        mechanic_type = russian_modernization_mechanic
+        power_type = russian_modernization
+    }"
+government_rank,Integer,Returns true if the country has agovernment rankof X or higher.,Country,government_rank = 2
+government_reform_progress,Float,Returns true if the country has x or more reform progress saved up.,Country,government_reform_progress = 5
+great_power_rank,Integer,Returns true if the country has agreat powerrank of 2 or worse.,Country,great_power_rank = 2
+grown_by_development,Integer,Returns true if the country's total development has grown by the specified amount,Country,grown_by_development = 50
+grown_by_states,Integer,Returns true if the country's total number of states (not areas) has grown by the specified amount. The states don't have to be fully owned and the provinces don't need full cores.,Country,grown_by_states = 5
+guaranteed_by,"Tag, Scope",Returns true if the country isguaranteedby X.,Country,guaranteed_by = ROOT
+had_active_policy,Clause,"Returns true, if the country still has and had the specified policy for at least X days.",Country,"had_active_policy = {
+        policy = the_combination_act
+        days = 365
+    }"
+had_consort_flag,Clause,Returns true if the consort flag X was last set at least Y days ago,Country,"had_consort_flag = {
+        flag = my_first_consort_flag
+        days = 365
+    }"
+had_country_flag,Clause,Returns true if the country flag X was last set for the country at least Y days ago.,Country,"had_country_flag = {
+        flag = bur_successor
+        days = 180
+    }"
+had_global_flag,Clause,Returns true if the global flag X was last set at least Y days ago.,Anywhere,"had_global_flag = {
+        flag = inc_smallpox
+        days = 9125
+    }"
+had_heir_flag,Clause,Returns true if the heir flag X was last set at least Y days ago,Country,"had_heir_flag = {
+        flag = inc_pacific_exploration
+        days = 270
+    }"
+had_province_flag,Clause,Returns true if the province flag X was last set for the province at least Y days ago.,Province,"had_province_flag = {
+        flag = dutch_revolt
+        days = 1825
+    }"
+had_recent_war,Integer,Returns true if the country fought a war within the last X years.,Country,had_recent_war = 10
+had_ruler_flag,Clause,Returns true if the ruler flag X was last set for the current ruler at least Y days ago,Country,"had_ruler_flag = {
+        flag = helped_rival
+        days = 730
+    }"
+harmonization_progress,Integer,"Returns true, if the country's current harmonization progress is at least at X.",Country,harmonization_progress = 90
+harmony,Integer,"Returns true, if the country has at least X harmony.",Country,harmony = 50
+has_active_debate,Boolean,Returns true if the country has ongoingdebatein parliament.,Country,has_active_debate = yes
+has_active_fervor,Boolean,Returns true if the country has activated afervoreffect.,Country,has_active_fervor = no
+has_active_policy,Identifier,Returns true if country has the specifiedpolicyactive.,Country,has_active_policy = noble_loyalty_act
+has_active_triggered_province_modifier,Identifier,Returns true if province has the specified province triggered modifier. Province triggered modifier does not need to be active.,Province,has_active_triggered_province_modifier = test_modifier
+has_adopted_cult,Identifier,Returns true if the country has adopted the specifiedcult.,Country,has_adopted_cult = roog_cult
+has_advisor,Boolean,Returns true if the country has hired anadvisor.Warning: Interprets every right side argument asyes.,Country,has_advisor = yes
+has_age_ability,Identifier,"Returns true, if the country has the specified age ability.",Country,has_age_ability = ab_justified_wars
+has_any_disaster,Boolean,Returns true if the country is currently in adisaster.,Country,has_any_disaster = no
+has_assimilated_culture,"Identifier, Scope",Returns true if the country hasassimilatedthe specified culture.Only works with base scopes.,Country,has_assimilated_culture = roman
+has_assimilated_culture_group,"Identifier, Scope",Returns true if the country hasassimilatedthe specified culture group.Only works with base scopes.,Country,has_assimilated_culture_group = lost_cultures_group
+has_been_eclipsed_by,"Tag, Scope",Returns true if the country cannot be rivaled by the specified country.,Country,has_been_eclipsed_by = FRA
+has_border_with_religious_enemy,yes,Returns true if the country borders any country of a different religion.Warning: Interprets anything after ‘=’ as “yes”.,Country,has_border_with_religious_enemy = yes
+has_building,Identifier,Returns true if there is the specified building in the province.,Province,has_building = fort_15th
+has_cardinal,Boolean,Returns true if the province has acardinalin the curia.,Province,has_cardinal = yes
+has_casus_belli,Clause,Returns true if the country has acasus belliof type X against country Y.,Country,"has_casus_belli = {
+        type = cb_trade_war_triggered
+        target = TOT
+    }"
+has_casus_belli_against,"Tag, Scope",Returns true if the country has acasus belliagainst country X.,Country,has_casus_belli_against = PREV
+has_center_of_trade_of_level,Integer,Returns true if the country has a center of trade of a least level X.,Country,has_center_of_trade_of_level = 3
+has_changed_nation,Boolean,Returns true if playing as a released vassal.,Global,has_changed_nation = yes
+has_church_aspect,Identifier,Returns true if the country has enabled thechurch aspectX.,Country,has_church_aspect = allow_usury_aspect
+has_climate,Identifier,Returns true if the province hasclimateX.,Province,has_climate = tropical
+has_colonial_parent,Tag,Returns true if the specified country is the colonial parent of the country.,Country,has_colonial_parent = GBR
+has_colonist,Boolean,Returns true if scoped province has an active colonist,Province,has_colonist = yes
+has_commanding_three_star,Boolean,"Returns true, if country has a three star general.",Country,has_commanding_three_star = yes
+has_consort,Boolean,Returns true if the country has aconsort.,Country,has_consort = yes
+has_consort_flag,Identifier,Returns true if the consort flag X is set.,Country,has_consort_flag = royal_couple_shared_adm_interests
+has_consort_regency,Boolean,Returns true if the country has aconsort regency.,Country,has_consort_regency = yes
+has_construction,Identifier,"Returns true if there is the specified construction in progress in the province.Possible values are core, culture, building, merchant, diplomat, missionary, army, navy, canal, great_project, and any specific building and great project name.Note: has loading order issues in 1.35, when used in building triggers",Province,has_construction = core
+has_country_flag,Identifier,Returns true if the flag X is set for the country.,Country,has_country_flag = zan_shirazi_islam_confirmed
+has_country_modifier,Identifier,Returns true if the country has the modifier X.,Country,has_country_modifier = western_embassy_mission
+has_custom_ideas,Boolean,Returns true if the country hascustom ideas.,Country,has_custom_ideas = yes
+has_disaster,Identifier,Returns true if the country is currently in thedisasterX.,Country,has_disaster = time_of_troubles
+has_disaster_progress,Clause,Returns true if thedisasterprogress of the specified disaster is at least X in the country.,Country,"has_disaster_progress = {
+        disaster = time_of_troubles
+        value = 50
+    }"
+has_discovered,"Province ID, Scope",Returns true if the country has discovered the province with the ID X.,Country,has_discovered = 313
+has_discovered,"Tag, Scope",Returns true if the country X has discovered the province.,Province,has_discovered = ROOT
+has_divert_trade,Boolean,Returns true if theprotectoratehas divert trade to its overlord.,(Subject) Country,has_divert_trade = yes
+has_dlc,Identifier,Returns true if theDLCX is enabled. Doesn't work for unit packs and music packs.,Anywhere,"has_dlc = ""The Cossacks"""
+has_eclipsed,"Tag, Scope",Returns true if the country cannot rival the specified country.,Country,has_eclipsed = GBR
+has_embargo_rivals,Boolean,Returns true if thesubject nationis embargoing overlord's rivals.,(Subject) Country,has_embargo_rivals = no
+has_empty_adjacent_province,yes,Returns true if an adjacent province is uncolonized.Warning: Works only with 'yes'.,Province,has_empty_adjacent_province = yes
+has_estate,Identifier,Returns true if the country hasestateX.,Country,has_estate = estate_dhimmi
+has_estate,Boolean,Returns true if the province is controlled by anestate.,Province,has_estate = no
+has_estate,Identifier,Returns true if the province is controlled by theestateX.,Province,has_estate = estate_church
+has_estate_influence_modifier,Clause,Returns true if theestateX in the country has the influence modifier Y.,Country,"has_estate_influence_modifier = {
+        estate = estate_church
+        modifier = EST_VAL_RELIGIOUS_ZEALOTS_TRIUMPH
+    }"
+has_estate_loan,Boolean,Returns true if the country has anestateloan.,Country,has_estate_loan = no
+has_estate_loyalty_modifier,Clause,Returns true if theestateX in the country has the loyalty modifier Y.,Country,"has_estate_loyalty_modifier = {
+        estate = estate_nobles
+        modifier = EST_VAL_NOT_LEGITIMATE
+    }"
+has_estate_privilege,Privilege,Returns true if the country has the listed privilege.,Country,has_estate_privilege = foo
+has_faction,Idenitifer,Returns true if the country has the specified faction.,Country,has_faction = enuchs
+has_factions,Boolean,Returns true if country hasfactions.,Country,has_factions = yes
+has_female_consort,Boolean,Returns true if the country has a femaleconsort.,Country,has_female_consort = yes
+has_female_heir,Boolean,Returns true if the country has a femaleheir.,Country,has_female_heir = yes
+has_first_revolution_started,Boolean,Returns true if arevolutionhas happened in the world.,Anywhere,has_first_revolution_started = yes
+has_flagship,Boolean,Returns true if the country has a flagship.,Country,has_flagship = yes
+has_foreign_consort,Boolean,Returns true if the country has foreignconsort.,Country,has_foreign_consort = no
+has_foreign_heir,Boolean,Returns true if the country has foreignheir.,Country,has_foreign_heir = no
+has_friendly_reformation_center,Boolean,Returns true if the country has a friendlycenter of reformation.,Country,has_friendly_reformation_center = yes
+has_game_started,Boolean,Returns true if the game has started.,Global,has_game_started = no
+has_given_consort_to,"Tag, Scope",Returns true if the scoped country has given aconsortto the specified country.,Country,has_given_consort_to = ROOT
+has_global_flag,Identifier,Returns true if the specified global flag is set.,Anywhere,has_global_flag = japan_has_encountered_the_west
+has_global_modifier_value,Clause,Returns true if the value of the specified modifier is at least X for the country.,Country,"has_global_modifier_value = {
+        which = cavalry_power
+        value = 0.5
+    }"
+has_government_attribute,Identifier,Returns true if any of the country's government reforms have the specified attribute set.,,has_government_attribute = enables_estate_nobles
+has_government_mechanic,Identifier,"Returns true, if the country uses the specified government mechanic.",Country,has_government_mechanic = russian_mechanic
+has_government_power,Clause,"Returns true, if the country has the specified amount of the specified government power for the specified government mechanic.",Country,"has_government_power = {
+        mechanic_type = russian_modernization_mechanic
+        power_type = russian_modernization
+        value = 10
+    }"
+has_great_project,Clause,"Returns true if the country has the specifiedgreat project, or any, at the given tier or above.",Province,"has_great_project = {
+        type = alhambra
+        tier = 3
+    }has_great_project = {
+        type = any
+        tier = 2
+    }"
+has_guaranteed,"Tag, Scope",Returns true if the country hasguaranteedcountry X.,Country,has_guaranteed = TUR
+has_had_golden_age,Boolean,"Returns true, if the country has agolden age.",Country,has_had_golden_age = yes
+has_harmonized_with,"Identifier, Scope","Returns true, if the country has harmonized with the specified religion or religion group.",Country,has_harmonized_with = tengri_pagan_reformed
+has_harsh_treatment,Boolean,Description needed,Scope needed,has_harsh_treatment = yes
+has_heir,"Boolean, Name",Returns true if the country has anheir(named X).,Country,has_heir = yes
+has_heir_flag,Identifier,Returns true if the heir flag X is set.,Country,has_heir_flag = suspected_bastard
+has_heir_leader_from,"Tag, Scope",Returns true if an army in the province is led by an heir from X.,Province,has_heir_leader_from = ROOT
+has_hostile_reformation_center,Boolean,Returns true if the country has a hostilecenter of reformation.,Country,has_hostile_reformation_center = yes
+has_idea,Identifier,Returns true if the country has the Xidea.,Country,has_idea = grand_navy
+has_idea_group,Identifier,Returns true if the country has chosen the Xidea group.,Country,has_idea_group = humanist_ideas
+has_influencing_fort,Boolean,Returns true if the province in the Zone of control of afort.,Province,has_influencing_fort = yes
+has_institution,Identifier,Returns true if the country has the specifiedinstitution.,Country,has_institution = feudalism
+has_latent_trade_goods,Identifier,Returns true if the province has the specified latent trade good.,Province,has_latent_trade_goods = coal
+has_leader,Identifier,"Returns true if the country has the leader ""X"".",Country,"has_leader = ""János Hunyadi"""
+has_leader_with,Clause,"Returns true if the country has aleaderwith at least the specified stats.Also supportsadmiral = yes,general = yesandis_monarch_leader = yes",Country,"has_leader_with = {
+        fire = 3
+        shock = 3
+        manuever = 2
+        siege = 1
+        total_pips = 11
+    }"
+has_leaders,Clause,Returns true if the country has at least X amount of generals. Used to exclude heirs and monarchs from the count.Also supportstype = admiral.,Country,"has_leaders = {
+        value = 1
+            type = general
+        include_monarch = no
+        include_heir = no
+    }"
+has_local_modifier_value,Clause,Returns true if the value of the specified modifier is at least X for the province.,Province,"has_local_modifier_value = {
+        which = local_production_efficiency
+        value = 0.15
+    }"
+has_matching_religion,Identifier,Returns true if the country has the specified religion or syncretic faith.,Country,has_matching_religion = mahayana
+has_matching_religion,Scope,Returns true if the countries have the same religion or syncretic faith.,Country,has_matching_religion = ROOT
+has_merchant,"Tag, Scope",Returns true if the scoped country has an activemerchantin thetrade node.,Province(Trade node),has_merchant = PREV
+has_mission,Identifier,Returns true if the country has the specified mission.,Country,has_mission = rus_patriarchate_mission
+has_missionary,Boolean,Returns true if the province has an activemissionary.,Province,has_missionary = yes
+has_monsoon,Identifier,Returns true if the province hasmonsoonX.,Province,has_monsoon = normal_monsoon
+has_most_province_trade_power,"Tag, Scope",Returns true if the country X has most amount of trade power intrade node.,Province(Trade node),has_most_province_trade_power = ROOT
+has_new_dynasty,Boolean,Returns true if the country has a dynasty which is not the same as the first dynasty in its history file.,Country,has_new_dynasty = yes
+has_opinion,Clause,Returns true if the country has at leastvalueopinion of the country specified bywho.,Country,"has_opinion = {
+        who = ROOT
+        value = 10
+    }"
+has_opinion_modifier,Clause,Returns true if the country has the opinion modifiermodifiertowards the country specified bywho.Can also specify a value of the modifier (but it is not displayed).,Country,"has_opinion_modifier = {
+        who = ROOT
+        modifier = embraced_absolutism
+    }"
+has_or_building_flagship,Boolean,Returns true if the scoped country has or is building aflagship,Country,has_or_building_flagship = yes
+has_owner_accepted_culture,Boolean,Returns true if thecultureof the province is an accepted culture(NOT primary!) of its owner.,Province,has_owner_accepted_culture = yes
+has_owner_culture,Boolean,Returns true if the province has the primarycultureof its owner.,Province,has_owner_culture = no
+has_owner_religion,Boolean,Returns true if the province has thereligionof its owner.,Province,has_owner_religion = yes
+has_owner_secondary_religion,Boolean,Returns true if the province has the secondary religion of its owner.,Province,has_owner_secondary_religion = yes
+has_parliament,Boolean,Returns true if the country has aparliament.,Country,has_parliament = yes
+has_pasha,Boolean,Returns true if the province has apasha.,Province,has_pasha = yes
+has_personal_deity,Identifier,Returns true if the ruler of the country has picked the specifiedpersonal deity.,Country,has_personal_deity = shakti
+has_pillaged_capital_against,"Tag, Scope",Returns true if the country has used thePillage Capitalpeace treaty against the specified country.,Country,has_pillaged_capital_against = FRA
+has_port,Boolean,Returns true if it is a coastal province.,Province,has_port = yes
+has_privateer_share_in_trade_node,Clause,Returns true if the country has a certain percentage of the trade in a given node throughprivateers.,Province(Trade node),"has_privateer_share_in_trade_node = {
+        who = ROOT
+        share = 10
+    }"
+has_privateers,Boolean,Returns true if the country hasprivateersin any trade node.,Country,has_privateers = yes
+has_promote_investments,Identifier,Returns true if the country is promoting investments in the specifiedtrade company(region).,Country,has_promote_investments = trade_company_moluccas
+has_province_flag,Identifier,Returns true if the province has the province flag X.,Province,has_province_flag = bur_succession_province
+has_province_modifier,Identifier,Returns true if province has the province modifier X.,Province,has_province_modifier = local_christian_mission
+has_rebel_faction,Identifier,Returns true if the province is controlled by (the specified) rebel faction.,Province,has_rebel_faction = pretender_rebels
+has_rebel_faction,REB,"Used by Paradox, doesn't seem to work though (in EU4 version 1.25).",Province,has_rebel_faction = REB
+has_reform,Identifier,Returns true if the country has the specific government reform.Does not work in run files,Country,has_reform = ottoman_government
+has_regency,Boolean,Returns true if the country has aregency.,Country,has_regency = no
+has_removed_fow,Boolean,Returns true if the country has lifted the fog of war from the specified country.,Country,FRA = { has_removed_fow = yes }
+has_revolution_in_province,Boolean,Returns true if the revolution is present in the province.,Province,has_revolution_in_province = yes
+has_ruler,Name,"Returns true if the country has a ruler named ""X"".",Country,"has_ruler = ""Pachacuti"""
+has_ruler_flag,Identifier,Returns true if the ruler flag X is set for the country.,Country,has_ruler_flag = helped_rival
+has_ruler_leader_from,"Tag, Scope",Returns true if an army in the province is led by a ruler from X.,Province,has_ruler_leader_from = ROOT
+has_ruler_modifier,Identifier,Returns true the country has the modifier X until the ruler changes.,Country,has_ruler_modifier = inside_man
+has_saved_event_target,Identifier,Returns true if the specified event target has been saved.,Anywhere,has_saved_event_target = muslim_neighbor
+has_saved_global_event_target,Identifier,Returns true if the specified global event target has been saved.,Anywhere,has_saved_global_event_target = EmperorOfChina
+has_scutage,Boolean,Returns true if thevassalpays scutage.,(Subject) Country,has_scutage = yes
+has_seat_in_parliament,Boolean,Returns true if the province has a seat inparliament.,Province,has_seat_in_parliament = no
+has_secondary_religion,Boolean,Returns true if the county has asecondary religion.,Country,has_secondary_religion = yes
+has_send_officers,Boolean,Returns true if theprotectoratehas received officers.,(Subject) Country,has_send_officers = yes
+has_siege,Boolean,Returns true if the province hassiege.,Province,has_siege = yes
+has_spawned_rebels,Identifier,Returns true ifrebelsof the specified type are active in the country.,Country,has_spawned_rebels = particularist_rebels
+has_spawned_supported_rebels,Scope,Returns true ifrebelswhich were supported by the specified country are active in the country.,Country,has_spawned_supported_rebels = FROM
+has_spy_network_from,Clause,Returns true if the country X has aspy networkof at least the specified size in the country.,Country,"has_spy_network_from = {
+        who = ROOT
+        value = 25
+    }"
+has_spy_network_in,Clause,Returns true if the country has aspy networkof at least the specified size in country X.,Country,"has_spy_network_in = {
+        who = ROOT
+        value = 25
+    }"
+has_state_edict,Identifier,Returns true if the state has Xedictenabled.,State,has_state_edict = edict_of_absolutism
+has_state_patriach,Boolean,"Returns true, if the province has any state patriarch.",Province,has_state_patriach = yes
+has_subject_of_type,Identifier,Returns true if the country has at least onesubjectof the specifiedsubjecttype.,Country,has_subject_of_type = tributary_state
+has_subsidize_armies,Boolean,Returns true if the march hassubsidizes armies.,(Subject) Country,has_subsidize_armies = yes
+has_supply_depot,"Tag, Scope",Returns true if the province has a supply depot built by X,Province,has_supply_depot = ROOT
+has_support_loyalists,Boolean,Returns true if thesubject nationreceives support for loyalists.,(Subject) Country,has_support_loyalists = yes
+has_switched_nation,Boolean,Returns true if the player has changed nation by playing as areleased vassal.,Anywhere,has_switched_nation = no
+has_terrain,Identifier,Returns true if the province has terrain X. Terrains are listed in base game file terrains.txt,Province,has_terrain = marsh
+has_trade_company_investment_in_area,Clause,Returns true if the specified investor has the specifiedtrade companyinvestment in the area.,Province,"has_trade_company_investment_in_area  = {
+        investment = officers_mess
+        investor = ROOT
+    }"
+has_trade_modifier,Clause,Returns true the specified country has the trade modifier X in the trade node.,Province(Trade node),"has_trade_modifier = {
+        who = ROOT
+        key = income_bonanza
+    }"
+has_trader,"Tag, Scope",Returns true if the specified country has amerchantin the trade node.,Province(Trade node),has_trader = VEN
+has_truce,Boolean,Returns true if the country has atruce.,Country,has_truce = yes
+has_unembraced_institution,Identifier,Returns true if the country has not embraced the specifiedinstitution.,Country,has_unembraced_institution = feudalism
+has_unified_culture_group,Boolean,"Returns true, if the country or its subjects own all provinces of its culture group.",Country,has_unified_culture_group = yes
+has_unit_type,Identifier,Returns true if the country has selected unit type X as preferable unit.,Country,has_unit_type = polish_winged_hussar
+has_unlocked_cult,Identifier,Returns true if the country has unlocked the specifiedcult.,Country,has_unlocked_cult = jewish_cult
+has_wartaxes,Boolean,Returns true if the country has raisedwar taxes.,Country,has_wartaxes = yes
+has_winter,Identifier,Returns true if the province haswinterX.,Province,has_winter = normal_winter
+has_won_war_against,Clause,Returns true the country has won a war against the specified country during the last X years.,Country,"has_won_war_against = {
+        who = PREV
+        max_years_since = 100
+    }"
+have_had_reform,Identifier,Returns true if the country has previously had the specific government reform.,Country,have_had_reform = ottoman_government
+heavy_ship_fraction,Float,Returns true if the ratio of theheavy shipfraction to the navy size of the country is at least X.,Country,heavy_ship_fraction = 0.33
+heavy_ships_in_province,Integer,Returns true if there are at least Xheavy shipsin the province.,Province,heavy_ships_in_province = 2
+heavy_ships_in_province,"Tag, Scope",Returns true if there are heavy ships from the specified country in the province.,Province,heavy_ships_in_province = TUN
+hegemon_strength,Integer,Returns true if the country has X amount of progress towards hegemony,Country,hegemon_strength = 100
+heir_adm,Integer,Returns true if the country has anheirwith an administrative skill of at least X.,Country,heir_adm = 5
+heir_age,Integer,Returns true if the country has an heir that is at least X years old.Note: Always returns false if there is no heir.,Country,heir_age = 15
+heir_claim,Integer,Returns true if the country has an heir with a claim strength of at least X.,Country,heir_claim = 90
+heir_culture,"Identifier, Scope","Returns true, if the country's heir has the specified culture. Can utiliseEvent Scope Values.",Country,heir_culture = prussian
+heir_dip,Integer,Returns true if the country has anheirwith a diplomatic skill of at least X.,Country,heir_dip = 5
+heir_has_consort_dynasty,Boolean,Returns true if the country’sheirandconsorthave the samedynasty.,Country,heir_has_consort_dynasty = yes
+heir_has_personality,Identifier,Returns true if the country’sheirhas the specifiedpersonality.,Country,heir_has_personality = intricate_web_weaver_personality
+heir_has_ruler_dynasty,Boolean,Returns true if the country’sheirandrulerhave the samedynasty.,Country,heir_has_ruler_dynasty = yes
+heir_mil,Integer,Returns true if the country has anheirwith a military skill of at least X.,Country,heir_mil = 5
+heir_nationality,"Tag, Scope",Returns true if the country has anheirwith nationality X.,Country,heir_nationality = PREV
+heir_religion,"Identifier, Scope","Returns true, if the country's heir has the specified religion. Can utiliseEvent Scope Values.",Country,heir_religion = catholic
+hidden_trigger,Clause,Hides the enclosed triggers so that they are still required but cannot be seen by human players.,Anywhere,"hidden_trigger = {
+        NOT = {
+            estate_influence = {
+                estate = estate_nomadic_tribes
+                influence = 85
+            }
+        }
+    }"
+higher_development_than,"Identifier, Scope",Returns true if the scope has a higher development than the province,Province,"101 = {
+        higher_development_than = 20
+    }"
+highest_value_trade_node,Boolean,Returns true if thetrade nodeis the highest valued trade node in the world.The value is calculated as total trade value minus outgoing trade value.,Province(Trade node),highest_value_trade_node = yes
+historical_friend_with,"Tag, Scope",Returns true if the countries arehistorical friends.,Country,historical_friend_with = FROM
+historical_rival_with,"Tag, Scope",Returns true if the countries arehistorical rivals,Country,historical_rival_with = TEU
+holy_order,Identifier,Returns true if the province has the specific Holy Order active.,Province,holy_order = jesuit_order
+horde_unity,Integer,Returns true if the country has ahorde unityof at least X.,Country,horde_unity = 50
+horde_unity,"Tag, Scope",Returns true if the country has at least as much horde unity as the specified country.,Country,horde_unity = GOL
+hre_heretic_religion,"Identifier, Scope",Returns true if the specified religion is the opposition religion of theHRE.Note: No localisation for the negation.,Anywhere,hre_heretic_religion = catholic
+hre_leagues_enabled,Boolean,Returns truereligious leaguesare enabled.,Anywhere,hre_leagues_enabled = yes
+hre_reform_passed,Identifier,Returns true if the specificimperial reformis enacted.,Anywhere,hre_reform_passed = emperor_privilegia_de_non_appelando
+hre_religion,"Identifier, Scope",Returns true if the specified religion is the dominant faith of the HRE.,Anywhere,hre_religion = catholic
+hre_religion_locked,Boolean,Returns true if an official faith of the HRE has been permanently established.,Anywhere,hre_religion_locked = no
+hre_religion_treaty,Boolean,Returns true if the treaty of religious peace in the HRE has been signed.,Anywhere,hre_religion_treaty = no
+hre_size,Integer,Returns true if theHREcontains at least X members.,Anywhere,hre_size = 10
+humiliated_by,"Tag, Scope",Returns true if the current country scope has been humiliated by the specified country.,Country,"ENG = {
+        humiliated_by = FRA
+    }"
+imperial_influence,Integer,Returns true if the emperor of the HRE has animperial authorityof at least X.,Anywhere,imperial_influence = 25
+imperial_mandate,Integer,"Returns true, if the emperor of China has at least X mandate.",Anywhere,imperial_mandate = 80
+in_golden_age,Boolean,"Returns true, if the country currently is in a golden age.",Country,in_golden_age = yes
+in_league,Identifier,Returns true if the countries is in the Xleague.,Country,in_league = protestant
+incident_variable_value,Clause,"Returns true, if the value of the specified incident is at least X.",Country,"incident_variable_value = {
+        incident = incident_neo_confucianism
+        value = 10
+    }"
+infantry_fraction,Float,Returns true if the ratio of theinfantryfraction to the army size of the country is at least X.,Country,infantry_fraction = 0.6
+infantry_in_province,Integer,Returns true if there are at least Xinfantryunits in the province.,Province,infantry_in_province = 17
+infantry_in_province,"Tag, Scope",Returns true if there are infantry units from the specified country in the province.,Province,infantry_in_province = SHL
+inflation,Float,Returns true if the country has aninflationof at least X,Country,inflation = 10
+inflation,"Tag, Scope",Returns true if the country has at least as much inflation as the country X.,Country,inflation = NOV
+innovativeness,Integer,Returns true if the countries has at least Xinnovativeness.,Country,innovativeness = 15
+institution_difference,Clause,Returns true if the country has embraced at least X moreinstitutionsthan the specified country.,Country,"institution_difference = {
+        who = SWE
+        value = 2
+    }"
+invested_papal_influence,Integer,Returns true if the country has invested at least Xpapal influencein the election of the next papal controller.,Country,invested_papal_influence = 50
+ironman,Boolean,Returns true if theironmanmode is enabled,Anywhere,ironman = yes
+is_advisor_employed,Advisor ID[1],Returns true if theadvisorwith the ID X is employed.,,is_advisor_employed = 562
+is_all_concessions_in_council_taken,Boolean,Returns true if all concessions in the Council of Trent have been taken.,Global,is_all_concessions_in_council_taken = yes
+is_at_war,Boolean,Returns true if the country is atwar.,Country,is_at_war = yes
+is_backing_current_issue,Boolean,Returns true if the province is backing the current issue in theparliament.,Province,is_backing_current_issue = yes
+is_bankrupt,Boolean,Returns true if the country isbankrupt.,Country,is_bankrupt = yes
+is_blockaded,Boolean,Returns true if the province isblockaded.,Province,is_blockaded = yes
+is_blockaded_by,"Tag, Scope",Returns true if the province isblockadedby the specified country.,Province,is_blockaded_by = SPA
+is_capital,Boolean,Returns true if the province is acapital.,Province,is_capital = yes
+is_capital_of,"Tag, Scope",Returns true if the province thecapitalof the specified country.,Province,is_capital_of = ROOT
+is_city,Boolean,"Returns true if the province is acity, i.e. has a population of at least 1000.",Province,is_city = yes
+is_claim,Province ID,Returns true if the country has aclaimon the province with the ID X.,Country,is_claim = 337
+is_claim,"Tag, Scope",Returns true if the specified country has a claim on the province.,Province,is_claim = MCH
+is_client_nation,Boolean,Returns true if the country is aclient state.,Country,is_client_nation = yes
+is_client_nation_of,"Tag, Scope",Returns true if the country is aclient stateof X.,Country,is_client_nation_of = ROOT
+is_colonial_nation,Boolean,Returns true if the country is a non-independentcolonial nation.,Country,is_colonial_nation = yes
+is_colonial_nation_of,"Tag, Scope",Returns true if the country is acolonial nationof X.,Country,is_colonial_nation_of = ROOT
+is_colony,Boolean,Returns true if the province is acolony.,Province,is_colony = yes
+is_core,Province ID,Returns true if the country has acoreon the province with the ID X.,Country,is_core = 950
+is_core,"Tag, Scope",Returns true if the country X has a core on the province.,Province,is_core = NED
+is_council_enabled,Boolean,Returns true if the Council of Trent has started.,Global,is_council_enabled = yes
+is_crusade_target,Boolean,Returns true if the country is the target of acrusade.,Country,is_crusade_target = yes
+is_defender_of_faith,Boolean,Returns true if the country is thedefender of the faith.,Country,is_defender_of_faith = yes
+is_defender_of_faith_of_tier,Integer,"Returns true if the country is thedefender of the faithof at least tier X. Works even without the Emperor DLC, even though the tier is not shown in game in that case.",Country,is_defender_of_faith_of_tier = 4
+is_dynamic_tag,Boolean,"Returns true, if the country is a dynamically created tag (e.g. client states).",Country,is_dynamic_tag = yes
+is_elector,Boolean,Returns true if the country is anelectorof the HRE.,Country,is_elector = yes
+is_emperor,Boolean,Returns true if the country is theemperorof the HRE.,Country,is_emperor = yes
+is_emperor_of_china,Boolean,Returns true if the country is theemperor of China.,Country,is_emperor_of_china = yes
+is_empty,Boolean,Returns true if province is empty,Province,is_empty = yes
+is_enemy,Boolean,Returns true if country X has rivalled the country.,Country,is_enemy = ROOT
+is_excommunicated,Boolean,Returns true if the ruler of the country isexcommunicated.,Country,is_excommunicated = yes
+is_federation_leader,Boolean,Returns true if the country is afederation leader.,Country,is_federation_leader = yes
+is_female,Boolean,Returns true if ruler of the country is female.,Country,is_female = yes
+is_force_converted,Boolean,Returns true if country has beenforce-convertedvia either religious rebels or an Enforce Religion peace treaty.Note: The subject interaction Enforce Religion does not cause the subject to be considered as force-converted.,Country,is_force_converted = no
+is_foreign_claim,Boolean,returns true if the province is a (permanent) claim of any country which is not the owner of the province,Province,is_foreign_claim = yes
+is_former_colonial_nation,Boolean,Returns true if the country is acolonial nationthat has gained independence.,Country,is_former_colonial_nation = no
+is_great_power,Boolean,Returns true if the country is agreat power.,Country,is_great_power = yes
+is_harmonizing_with,"Identifier, Scope","Returns true, if the country is currently harmonizing with the specified religion or religion group.",Country,is_harmonizing_with = tengri_pagan_reformed
+is_hegemon,Boolean,Returns true if the country is considered one of the three Hegemon types.,Country,is_hegemon = yes
+is_hegemon_of_type,Identifier,Returns true if the country holds the specific Hegemony.,Country,is_hegemon_of_type = naval_hegemon
+is_heir_leader,Boolean,Returns true if the heir of the country is ageneral.Note: Proper localisation for the negation only withNOT = ….,Country,is_heir_leader = yes
+is_imperial_ban_allowed,Boolean,Returns true if theemperorhas a casus belli on occupiers of the Empire.Note: Enabled/Disabled withCall for Reichsreform.,Anywhere,is_imperial_ban_allowed = yes
+is_in_capital_area,Boolean,Returns true if the province is connected (i.e. has a land connection including straits) to the capital of its owner.,Province,is_in_capital_area = yes
+is_in_coalition,Boolean,Returns true if the country is in acoalition.,Country,is_in_coalition = no
+is_in_coalition_war,Boolean,Returns true if the country is fighting acoalition war.,Country,is_in_coalition_war = yes
+is_in_deficit,Boolean,Returns true if the country is running a deficit.,Country,is_in_deficit = yes
+is_in_extended_regency,Boolean,Returns true if the country is inside the period an extended regency.,Country,is_in_extended_regency = yes
+is_in_league_war,Boolean,Returns true if the country is in a religiousleaguewar.,Country,is_in_league_war = yes
+is_in_trade_league,Boolean,Returns true if the country is a member of atrade league.,Country,is_in_trade_league = yes
+is_in_trade_league_with,"Tag, Scope",Returns true if the country is a member of the sametrade leagueas country X.,Country,is_in_trade_league_with = VEN
+is_in_war,Clause,Returns true if the country is atwarand the mentioned conditions are fulfilled.Possible conditions are:attacker_leaderdefender_leadercasus_bellidefendersattackersparticipantswar_scorestart_datedurationwar_goal_province,Country,"is_in_war = {
+        attacker_leader = ROOT
+        duration = 1875
+    }"
+is_incident_active,Identifier,"Returns true, if the specified incident is active.",Country,is_incident_active = incident_neo_confucianism
+is_incident_active,"Boolean, any, none","Returns true, if any/none incident is active.",Country,is_incident_active = any
+is_incident_happened,Identifier,"Returns true, if the specified incident already happened.",Country,is_incident_happened = incident_neo_confucianism
+is_incident_possible,Identifier,"Returns true, if the specified incident can possibly happen.",Country,is_incident_possible = incident_neo_confucianism
+is_incident_potential,Identifier,"Returns true, if the specified incident is visible and therefor can happen in the future.",Country,is_incident_potential = incident_neo_confucianism
+is_institution_enabled,Identifier,Returns true if the specifiedinstitutionhas been discovered.,Anywhere,is_institution_enabled = renaissance
+is_institution_origin,Identifier,Returns true if the province is the origin of the specifiedinstitution.,Province,is_institution_origin = printing_press
+is_island,Boolean,"Returns true if the province is anisland, i.e. has no neighboring land province and no reachable province via astrait.",Province,is_island = yes
+is_lacking_institutions,Boolean,Returns true if the country is lacking any institution.,Country,is_lacking_institutions = yes
+is_league_enemy,Scope,Returns true if country X is league enemy of the country('s league).,Country,is_league_enemy = ROOT
+is_league_friend,Scope,"Returns true, if the country is in the same religiousleagueas the specified country.",Country,is_league_friend = ROOT
+is_league_leader,Boolean,Returns true if the country leads a religiousleague.,Country,is_league_leader = yes
+is_lesser_in_union,Boolean,Returns true if the country is the lesser partner in apersonal union.,Country,is_lesser_in_union = no
+is_looted,Boolean,Returns true if the province islooted.,Province,is_looted = yes
+is_march,Boolean,Returns true if the country is amarch.,Country,is_march = yes
+is_mod_active,Identifier,Returns true if the specified mod is currently enabled. Specified via either the mod's name or ID.,Anywhere,"is_mod_active = ""2164202838"""
+is_monarch_leader,Boolean,Returns true if the rulerof the country is ageneral.Note: Proper localisation for the negation only withNOT = ….,Country,is_monarch_leader = yes
+is_month,Integer,Returns true if the current month is at least X (zero based).,Anywhere,is_month = 1 # February or later
+is_neighbor_of,"Tag, Scope",Returns true if the country is neighbor of X. Can now be used in province scope as well as country scope.,CountryProvince,is_neighbor_of  = FRA
+is_node_in_trade_company_region,Boolean,"Returns true, if the province's trade node is in a trade company region.",Province,is_node_in_trade_company_region = yes
+is_nomad,Boolean,Returns true if country's government is nomadic.(Note: Only theSteppe Nomadsgovernment is flagged as nomadic.),Country,is_nomad = yes
+is_orangists_in_power,Boolean,Returns true if in the country theorangistsare in power.,Country,is_orangists_in_power = yes
+is_origin_of_consort,"Tag, Scope",Returns true if the specified country is the origin country of the scoped country’sconsort.,Country,is_origin_of_consort = ROOT
+is_overseas,Boolean,Returns true if the province isoverseas,Province,is_overseas = yes
+is_overseas_subject,Boolean,Returns true if thesubjectisoverseas.,Country (subject),is_overseas_subject = yes
+is_owned_by_trade_company,Boolean,Returns true if the province belongs to atrade company.,Province,is_owned_by_trade_company = yes
+is_papal_controller,Boolean,Returns true if the country is thepapal controller.,Country,is_papal_controller = yes
+is_part_of_hre,Boolean,Returns true if the country/province is part of theHRE.,CountryProvince,is_part_of_hre = yes
+is_permanent_claim,"Tag, Scope",Returns true if the province is apermanent claimof X.,Province,is_permanent_claim = ROOT
+is_playing_custom_nation,Boolean,Returns true if the country is a player-designedcustom nation.,Country,is_playing_custom_nation = yes
+is_possible_march,"Tag, Scope",Returns true ifvassalX is a possiblemarchof the country.,Country,is_possible_march = ROOT
+is_possible_vassal,"Tag, Scope",Returns true if country X is releasable asvassalof the country.,Country,ENG = { is_possible_vassal = CRN }
+is_previous_papal_controller,Boolean,Returns true if the country is the previouspapal controller.,Country,is_previous_papal_controller = yes
+is_prosperous,Boolean,Returns true if the province is prosperous. NOTE: Does not have a tooltip.,Province,is_prosperous  = yes
+is_protectorate,Boolean,Returns true if the country is aprotectorate,Country,is_protectorate = yes
+is_random_new_world,Boolean,Returns true if playing with arandom New World.,Anywhere,is_random_new_world = no
+is_reformation_center,Boolean,Returns true if the province is areformation center.,Global,is_reformation_center = no
+is_religion_enabled,Identifier,Returns true if the specifiedreligionis enabled.,Anywhere,is_religion_enabled = reformed
+is_religion_grant_colonial_claim,"Boolean, Tag, Scope","Returns true if the province has been granted to any country, to no country or to a specific country.",Province,is_religion_grant_colonial_claim = ROOT
+is_religion_reformed,Boolean,Returns true if the country hasreformed their religion.,Country,is_religion_reformed = yes
+is_renting_condottieri_to,Tag,Returns true if the country is rentingcondottierito the specified country.,Country,is_renting_condottieri_to = ENG
+is_revolution_target,Boolean,Returns true if the country is therevolution target.,Country,is_revolution_target = yes
+is_revolutionary,Boolean,Returns true if the country has embraced therevolution.,Country,is_revolutionary = yes
+is_rival,"Tag, Scope",Returns true if country X is arivalof the country.,Country,is_rival = FRA
+is_ruler_commanding_unit,Boolean,"Returns true if the unit is commanded by the owner's ruler, heir or consort.",Unit,is_ruler_commanding_unit = yes
+is_sea,Boolean,Returns true if the province is sea.Mostly used fortrade nodes.,Province,is_sea = yes
+is_state,Boolean,Returns true if the province is in astate.,Province,is_state = yes
+is_state_core,Province ID,Returns true if the country has a statecoreon the province with the ID X.,Country,is_state_core = 950
+is_state_core,"Tag, Scope",Returns true if the country X has a state core on the province.,Province,is_state_core = NED
+is_statists_in_power,Boolean,Returns true if in the country thestatistsare in power.,Province,is_statists_in_power = yes
+is_strongest_trade_power,"Tag, Scope",Returns true if the specified country has the most trade power in the area.,Province(Trade node),is_strongest_trade_power = POR
+is_subject,Boolean,Returns true if the country is asubject.,Country,is_subject = yes
+is_subject_of,Tag,Returns true if the country is asubjectof X.,Country,is_subject_of = FRA
+is_subject_of_type,Identifier,Returns true if the country is asubjectofsubjecttype.,Country,is_subject_of_type = tributary_state
+is_subject_of_type_with_overlord,Clause,"Returns true if the country is asubjectofsubjecttype of the specified overlord.whocan use scopes like ROOT, but the tooltip only works with tags.",Country,"is_subject_of_type_with_overlord = {
+        who = MNG
+        type = tributary_state
+    }"
+is_supporting_independence_of,"Tag, Scope",Returns true if the country is supporting theindependenceof the specified country.,Country,is_supporting_independence_of = SWI
+is_territorial_core,Province ID,Returns true if the country has aterritorial coreon the province with the ID X.,Country,is_territorial_core = 950
+is_territorial_core,"Tag, Scope",Returns true if the country X has a territorial core on the province.,Province,is_territorial_core = NED
+is_territory,Boolean,Returns true if the province is in aterritory.,Province,is_territory = no
+is_threat,"Tag, Scope",Returns true if country X isthreatenedby the country.,Country,is_threat = ROOT
+is_trade_league_leader,Boolean,Returns true if the country is the leader of atrade league.,Country,is_trade_league_leader = yes
+is_tribal,Boolean,"Returns true if the country has atribal government.Essentially the same as ""government = tribal""",Country,is_tribal = yes
+is_variable_equal,Clause,Returns true if the specified variable is equal to X.,,"is_variable_equal = {
+        which = myvar
+        value = 5
+    }"
+is_vassal,Boolean,Returns true if the country is avassal.,Country,is_vassal = yes
+is_wasteland,Boolean,Returns true if the province iswasteland.,Province,is_wasteland = yes
+is_year,Integer,Returns true if the current year is at least X.,Anywhere,is_year = 1750
+island,Boolean,"Returns true if the province is anisland, i.e. has no neighboring land provinces.",Province,island = yes
+isolationism,Integer,"Returns true, if the country has an isolationism level of at least X.",Country,isolationism = 2
+janissary_percentage,Float,Returns true if the country has an army of at least X k janissaries.Available only with theCradle of CivilizationDLC enabled.,Country,janissary_percentage = 0.3
+junior_union_with,"Tag, Scope",Returns true if the country is the junior partner in apersonal unionunder country X.,Country,junior_union_with = ENG
+karma,Integer,Returns true if the country has akarmaof at least X.,Country,karma = -50
+karma,"Tag, Scope",Returns true if the country has at least as much karma as the specified country.,Country,karma = DAI
+knows_country,Tag. Scope,Returns true if the country has knowledge of country X.,Country,knows_country = INC
+land_forcelimit,Integer,Returns true if the country has aland force limitof at least X.,Country,land_forcelimit = 32
+land_forcelimit,"Tag, Scope",Returns true if the country has a land force limit of at least as many regiments as the specified country.,Country,land_forcelimit = ROOT
+land_maintenance,Float,Returns true if the country has set itsland maintenanceto X.,Country,land_maintenance = 0.90
+land_morale,Float,Returns true if the country has amorale of armiesof at least X.,Country,land_morale = 3.5
+land_morale,"Tag, Scope",Returns true if the country has an at least as high morale of armies as the specified country.,Country,land_morale = PRU
+last_mission,Identifier,Returns true if the lastmissionof the country was the specified mission.,Country,NOT = { last_mission = conquer_finland }
+legitimacy,Integer,Returns true if the country has at least Xlegitimacy.,Country,legitimacy = 100
+legitimacy,"Tag, Scope",Returns true if the country has at least as much legitimacy as the specified country.,Country,legitimacy = ENG
+legitimacy_equivalent,Integer,"Returns true, if the country's legitimacy equivalent (legitimacy, republican tradition, devotion, horde unity, meritocracy etc.) is at least X.",Country,legitimacy_equivalent = 80
+legitimacy_equivalent,"Tag, Scope","Returns true, if the country has at least as much legitimacy equivalent (legitimacy, republican tradition, devotion, horde unity, meritocracy etc.) as the specified country.",Country,legitimacy_equivalent = FRA
+legitimacy_or_horde_unity,Integer,Returns true if the country has at least Xlegitimacyorhorde unity.,Country,legitimacy_or_horde_unity = 90
+legitimacy_or_horde_unity,"Tag, Scope",Returns true if the country has at least as much legitimacy or horde unity as the specified country.,Country,legitimacy_or_horde_unity = ROOT
+liberty_desire,Integer,Return true if the subject has aliberty desireof at least X.,Country (subject),liberty_desire = 50
+light_ship_fraction,Float,Returns true if the ratio of thelight shipfraction to the navy size of the country is at least X.,Country,light_ship_fraction = 0.3
+light_ships_in_province,Integer,Returns true if there are at least Xlight shipsin the province.,Province,light_ships_in_province = 10
+light_ships_in_province,"Tag, Scope",Returns true if there are light ships from the specified country in the province.,Province,light_ships_in_province = ROOT
+likely_rebels,Identifier,Returns true if the province has the specifiedrebel factionas likely rebels.,Province,likely_rebels = revolutionary_rebels
+local_autonomy,Integer,Returns true if the province has alocal autonomyof at least X.,Province,local_autonomy = 50
+local_autonomy_above_min,Float,"Returns true, if the province's local autonomy is at least X above the province's minimum local autonomy.",Province,local_autonomy_above_min = 10
+luck,Boolean,Returns true if the country is alucky nation. (AI controlled counties only.),Country,luck = yes
+manpower,Integer,Returns true if the country has at leastX⋅1000{\displaystyle {\text{X}}\cdot 1000}availablemanpower.,Country,manpower = 22
+manpower_percentage,Float,Returns true if the country has amanpowerlevel of at least X%.,Country,manpower_percentage = 0.50
+march_of,"Tag, Scope",Returns true if the country is amarchunder country X.,Country,march_of = PAP
+marriage_with,"Tag, Scope",Returns true if the country has aroyal marriagewith X.,Country,marriage_with = ROOT
+max_manpower,Integer,Returns true if the country has at leastX⋅1000{\displaystyle {\text{X}}\cdot 1000}maximum manpower.,Country,max_manpower = 5
+max_sailors[2],Integer,Returns true if the country has at least X maximum sailors.,Country,max_sailors = 5000
+mercantilism,Float,Returns true if the country'smercantilismis at least X.,Country,mercantilism = 5
+meritocracy,Integer,"Returns true, if the country has a meritocracy value of at least X.",Country,meritocracy = 80
+mil,Integer,Returns true if the country has arulerwith a military skill of at least X.,Country,mil = 6
+mil,"Tag, Scope",Returns true if the country has a ruler with at least as high military skill as the ruler of the specified country.,Country,mil = HJO
+mil_power,Integer,Returns true if the country has at least Xmilitary power.,Country,mil_power = 333
+mil_power,"Tag, Scope",Returns true if the country has at least as much military power as the specified country.,Country,mil_power = MAM
+mil_tech,Integer,Returns true if the country has anmilitary technologyof at least level X.,Country,mil_tech = 4
+militarised_society,Integer,Returns true if the country has amilitarization of countryof at least X.,Country,militarized_society = 20
+military_strength,Clause,"Returns true, if the country's military strength (army size & navy size combined) is at least the size of X times the military strength of the specified country",Country,"military_strength = {
+        who = FROM
+        value = 2.0
+    }"
+mission_completed,Identifier,Returns true if the country has completed mission X.,Country,mission_completed = eng_mighty_army
+monthly_adm,Integer,Returns true if the country gains at least X adm power every month.,Country,monthly_adm = 3
+monthly_dip,Integer,Returns true if the country gains at least X dip power every month.,Country,monthly_dip = 3
+monthly_income,Integer,Returns true if the country has a monthlyincomeof at least X.,Country,monthly_income = 5
+monthly_income,"Tag, Scope",Returns true if the country has an at least as high monthly income as the specified country.,Country,monthly_income = MAM
+monthly_mil,Integer,Returns true if the country gains at least X mil power every month.,Country,monthly_mil = 3
+months_of_ruling,Integer,Returns true if the country has arulerthat has ruled for at least X months.,Country,months_of_ruling = 12
+months_since_defection,Integer,Returns true if the province defected within the last X months.,Province,months_since_defection = 12
+nation_designer_points,Identifier,Returns true if at least X points were used when creating thecustom nation.,Country,nation_designer_points = 802
+national_focus,Identifier,Returns true if country has set thenational focusto X.,Country,national_focus = ADM
+nationalism,Integer,Returns true if province has at least X years ofseparatismremaining.,Province,nationalism = 5
+nationalism_debug,Integer,,Province,nationalism_debug = 1
+native_ferocity,Integer,Returns true if ferocity of natives in the province is at least X.,Province,native_ferocity = 3
+native_hostileness,Integer,Returns true if hostileness of natives in the province is at least X.,Province,native_hostileness = 2
+native_policy,Identifier,Returns true if country has the specified native policy.,Country,native_policy = native_policy_trade
+native_size,Integer,Returns true if size of natives in the province is at least X.,Province,native_size = 30
+naval_forcelimit,Integer,Returns true if the country has anaval force limitof at least X.,Country,naval_forcelimit = 24
+naval_forcelimit,"Tag, Scope",Returns true if the country has a naval force limit of at least as many ships as the specified country.,Country,naval_forcelimit = SWE
+naval_maintenance,Float,Returns true if the country'snaval maintenanceslider is at least X fraction of maximum.,Country,naval_maintenance = 0.33
+naval_morale,Float,Returns true if the country has amorale of naviesof at least X.,Country,naval_morale = 2.5
+naval_morale,"Tag, Scope",Returns true if the country has an at least as high morale of navies as the specified country.,Country,naval_morale = GBR
+naval_strength,Clause,"Returns true, if the country's navy size is at least the size of X times the navy size of the specified country.",Country,"naval_strength = {
+        who = ENG
+        value = 0.5
+    }"
+navy_size,Integer,Returns true if the current scope has a navy of at least Xships.,Country,navy_size = 300
+navy_size,"Tag, Scope",Returns true if the current scope has a navy at least as large as the specified country.,Country,navy_size = SPA
+navy_size_percentage,Integer,Returns true if the ratio of the total navy size of the country to itsnaval force limitis at least X.,Country,navy_size_percentage = 0.50
+navy_tradition,Integer,Returns true if the country has anavy traditionof at least X.,Country,navy_tradition = 95
+navy_tradition,"Tag, Scope",Returns true if the country has an at least as high navy tradition as specified country.,Country,navy_tradition = GBR
+normal_or_historical_nations,Boolean,Returns true if game is set to usenormal or historical nations.,Anywhere,normal_or_historical_nations = yes
+normal_province_values,Boolean,Returns true if game is set to usenormal province values.,Anywhere,normal_province_values = yes
+num_accepted_cultures,Integer,"Returns true, if the country has at least X accepted cultures.",Country,num_accepted_cultures = 1
+num_free_building_slots,Integer,Returns true if the province has at least Xbuilding slotsremaining.,Province,num_free_building_slots = 1
+num_investments_in_trade_company_region,Clause,Returns true if there are at least X trade company investments in the trade company region.,Province,"num_investments_in_trade_company_region = { 
+        investment = company_administration
+        value = 3
+    }"
+num_of_active_blessings,Integer,Returns true if the country has enabled at least Xblessings.,Country,num_of_active_blessings = 5
+num_of_admirals,Integer,Returns true if the country has at least Xadmirals.,Country,num_of_admirals = 2
+num_of_admirals,"Tag, Scope",Returns true if the country has at least as many admirals as the specified country.,Country,num_of_admirals = SPA
+num_of_admirals_with_traits,Integer,Returns true if the country has at least Xadmiralswith traits.,Country,num_of_admirals_with_traits = 1
+num_of_allies,Integer,Return true if the country has at least Xallies.,Country,num_of_allies = 7
+num_of_allies,"Tag, Scope",Returns true if the country has at least as many allies as the specified country.,Country,num_of_allies = ARA
+num_of_artillery,Integer,Returns true if the country has at least X artillery regiments.,Country,num_of_artillery = 12
+num_of_artillery,"Tag, Scope",Returns true if the country has at least as many artillery regiments as the specified country.,Country,num_of_artillery = FRA
+num_of_aspects,Integer,Returns true if the country has at least Xchurch aspects.,Country,num_of_aspects = 2
+num_of_aspects,"Tag, Scope",Returns true if the country has at least as many church aspects as the specified country.,Country,num_of_aspects = SWE
+num_of_banners,Integer,"Returns true, if the country has at least X banner units.",Country,num_of_banners = 3
+num_of_banners,"Tag, Scope",Returns true if the country has at least as many banners as the specified country.,Country,num_of_banners = MCH
+num_of_buildings_in_province,Integer,"Returns true, if the province has at least X buildings",Province,num_of_buildings_in_province = 3
+num_of_captured_ships_with_boarding_doctrine,Integer,Returns true if the country has captured at least X ships while having the ‘Ship Boarding’naval doctrine.,Country,num_of_captured_ships_with_boarding_doctrine = 20
+num_of_caravel,Integer,Returns true if the country has at least X caravel ships.,Country,num_of_caravel = 100
+num_of_caravel,"Tag, Scope",Returns true if the country has at least as many caravel regiments as the specified country.,Country,num_of_caravel = SPA
+num_of_cardinals,Integer,Returns true if the country has at least Xcardinalsin the Holy See.,Country,num_of_cardinals = 3
+num_of_cardinals,"Tag, Scope",Returns true if the country has at least as many cardinals as the specified country.,Country,num_of_cardinals = FRA
+num_of_carolean,Integer,Returns true if the country has at least X carolean regiments.,Country,num_of_carolean = 100
+num_of_carolean,"Tag, Scope",Returns true if the country has at least as many caroleans as the specified country.,Country,num_of_carolean = SWE
+num_of_cavalry,Integer,Returns true if the country has at least X cavalry regiments.,Country,num_of_cavalry = 23
+num_of_cavalry,"Tag, Scope",Returns true if the country has at least as many cavalry regiments as the specified country.,Country,num_of_cavalry = FRA
+num_of_cawa,Integer,Returns true if the country has at least X cawa regiments.,Country,num_of_cawa = 100
+num_of_cawa,"Tag, Scope",Returns true if the country has at least as many cawa as the specified country.,Country,num_of_cawa = ETH
+num_of_centers_of_trade,Integer,Returns true if the country has at least X centers of trade.,Country,num_of_centers_of_trade = 5
+num_of_cities,Integer,Returns true if the country owns at least Xcities.,Country,num_of_cities = 15
+num_of_cities,"Tag, Scope",Returns true if the country owns at least as many cities as the specified country.,Country,num_of_cities = ROOT
+num_of_coalition_members,Integer,Returns true if the country is in acoalitionof at least X members.,Country,num_of_coalition_members = 6
+num_of_colonies,Integer,Returns true if the country has at least X unfinishedcolonies.,Country,num_of_colonies = 2
+num_of_colonists,Integer,Returns true if the country has at least Xcolonists.,Country,num_of_colonists = 2
+num_of_conquistadors,Integer,Returns true if the country has at least Xconquistadors.,Country,num_of_conquistadors = 2
+num_of_conquistadors,"Tag, Scope",Returns true if the country has at least as many conquistadors as the specified country.,Country,num_of_conquistadors = ROOT
+num_of_consorts,Integer,"Returns true, if the ruler of the country had at least X separate consorts.",Country,num_of_consorts = 6
+num_of_continents,Integer,"Returns true, if the country owns provinces on at least X continents. Only provinces owned by the country itself are taken into account, not provinces owned by subjects.",Country,num_of_continents = 3
+num_of_cossacks,Integer,"Returns true, if the country has at least X cossack units.",Country,num_of_cossacks = 3
+num_of_cossacks,"Tag, Scope",Returns true if the country has at least as many cossack regiments as the specified country.,Country,num_of_cossacks = ZAZ
+num_of_custom_nations,Integer,Returns true if there are at least Xcustom nationsin the game.,Country,num_of_custom_nations = 1
+num_of_different_cultures_in_court,Integer,Returns true if there are at least X possible advisors with a different culture to the primary culture of the country in court.,Country,num_of_different_cultures_in_court = 4
+num_of_different_religions_in_court,Integer,Returns true if there are at least X possible advisors with a different religion to the country in court.,Country,num_of_different_religions_in_court = 4
+num_of_diplomatic_relations,Integer,Returns true if the country has at least Xdiplomatic relations.,Country,num_of_diplomatic_relations = 3
+num_of_diplomats,Integer,Returns true if the country has at least Xdiplomats.,Country,num_of_diplomats = 2
+num_of_electors,Integer,Returns true if there are at least Xelectorsof the HRE.,Anywhere,num_of_electors = 7
+num_of_estate_privileges,Clause,Returns true if the country has granted at least Xprivilegesto the specifiedestate.,Country,"num_of_estate_privileges = {
+        estate = estate_brahmins
+        value = 2
+    }"
+num_of_explorers,Integer,Returns true if the country has at least Xexplorers.,Country,num_of_explorers = 1
+num_of_explorers,"Tag, Scope",Returns true if the country has at least as many explorers as the specified country.,Country,num_of_explorers = ENG
+num_of_foreign_hre_provinces,Integer,Returns true if there are at least X provinces owned by non-member states or subjects of non-member states.,Anywhere,num_of_foreign_hre_provinces = 2
+num_of_free_diplomatic_relations,Integer,Returns true if the country has at least X freediplomatic relationsslots.,Country,num_of_free_diplomatic_relations = 1
+num_of_galleass,Integer,Returns true if the country has at least X galleass ship units.,Country,num_of_galleass = 100
+num_of_galleass,"Tag, Scope",Returns true if the country has at least as many galleass ships as the specified country.,Country,num_of_galleass = VEN
+num_of_galleon,Integer,Returns true if the country has at least X galleon ship units.,Country,num_of_galleon = 100
+num_of_galleon,"Tag, Scope",Returns true if the country has at least as many galleon ships as the specified country,Country,num_of_galleon = SPA
+num_of_galley,Integer,Returns true if the country has at least Xgalleys.,Country,num_of_galley = 20
+num_of_galley,"Tag, Scope",Returns true if the country has at least as many galleys as the specified country.,Country,num_of_galley = VEN
+num_of_generals,Integer,Returns true if the country has at least Xgenerals.,Country,num_of_generals = 2
+num_of_generals,"Tag, Scope",Returns true if the country has at least as many generals as the specified country.,Country,num_of_generals = FROM
+num_of_generals_with_traits,Integer,Returns true if the country has at least Xgeneralswith traits.,Country,num_of_generals_with_traits = 1
+num_of_geobukseon,Integer,Returns true if the country has at least X geobukseon units.,Country,num_of_geobukseon = 100
+num_of_geobukseon,"Tag, Scope",Returns true if the country has at least as many geobukseon units as the specified country.,Country,num_of_geobukseon = KOR
+num_of_harmonized,Integer,"Returns true, if the country has harmonized with at least X religions or religion groups.",Country,num_of_harmonized = 2
+num_of_heavy_ship,Integer,Returns true if the country has at least Xheavy ships.,Country,num_of_heavy_ship = 20
+num_of_heavy_ship,"Tag, Scope",Returns true if the country has at least as many heavy ships as the specified country.,Country,num_of_heavy_ship = ENG
+num_of_hussars,Integer,Returns true if the country has at least X hussars.,Country,num_of_hussars = 100
+num_of_hussars,"Tag, Scope",Returns true if the country has at least as many hussars as the specified country.,Country,num_of_hussars = POL
+num_of_infantry,Integer,Returns true if the country has at least X infantry regiments.,Country,num_of_infantry = 300
+num_of_infantry,"Tag, Scope",Returns true if the country has at least as many infantry regiments as the specified country.,Country,num_of_infantry = FROM
+num_of_janissaries,Integer,Returns true if the country has at least X Janissaries.,Country,num_of_janissaries = 10
+num_of_janissaries,"Tag, Scope",Returns true if the country has at least as many janissaries as the specified country.,Country,num_of_janissaries = TUR
+num_of_light_ship,Integer,Returns true if the country has at least Xlight ships.,Country,num_of_light_ship = 20
+num_of_light_ship,"Tag, Scope",Returns true if the country has at least as many light ships as the specified country.,Country,num_of_light_ship = GEN
+num_of_loans,Integer,Returns true if the country has at least Xloans.,Country,num_of_loans = 15
+num_of_loans,"Tag, Scope",Returns true if the country has taken at least as many loans as the specified country.,Country,num_of_loans = LIT
+num_of_mamluks,Integer,Returns true if the country has at least X mamluks regiments.,Country,num_of_mamluks = 100
+num_of_mamluks,"Tag, Scope",Returns true if the country has at least as many mamluks as the specified country.,Country,num_of_mamluks = MAM
+num_of_man_of_war,Integer,Returns true if the country has at least X man of war heavy ships.,Country,num_of_man_of_war = 100
+num_of_man_of_war,"Tag, Scope",Returns true if the country has at least as many man of war ships as the specified country.,Country,num_of_man_of_war = GBR
+num_of_marches,Integer,Returns true if the country has at least Xmarches.,Country,num_of_marches = 2
+num_of_marches,"Tag, Scope",Returns true if the country has at least as many marches as the specified country.,Country,num_of_marches = POL
+num_of_marines,Integer,Returns true if the country has enabled at least X marines.,Country,num_of_marines = 5
+num_of_marines,"Tag, Scope",Returns true if the country has at least as many marines as the specified country.,Country,num_of_marines = GBR
+num_of_mercenaries,Integer,Returns true if the country has at least Xmercenaryregiments.,Country,num_of_mercenaries = 10
+num_of_mercenaries,"Tag, Scope",Returns true if the country has at least as many mercenary regiments as the specified country.,Country,num_of_mercenaries = TUR
+num_of_merchants,Integer,Returns true if the country has at least Xmerchants.,Country,num_of_merchants = 3
+num_of_missionaries,Integer,Returns true if the country has at least Xmissionaries.,Country,num_of_missionaries = 2
+num_of_musketeers,Integer,Returns true if the country has at least X musketeers units.,Country,num_of_musketeers = 10
+num_of_musketeers,"Tag, Scope",Returns true if the country has at least as many musketeers as the specified country.,Country,num_of_musketeers = FRA
+num_of_owned_and_controlled_institutions,Integer,"Returns true, if the country owns and controls at least X provinces that are institution origins.",Country,num_of_owned_and_controlled_institutions = 2
+num_of_owned_provinces_with,Clause,Returns true if at least X provinces of the scoped country match the specified condition(s).,Country,"num_of_owned_provinces_with = {
+        value = 15
+        has_owner_accepted_culture = no
+        NOT = { culture = root }
+        is_overseas = no
+    }"
+num_of_pashas,Integer,Returns true if the country has at least X pashas.,Country,num_of_pashas = 20
+num_of_ports,Integer,Returns true if country owns at least Xhome ports(in lands contiguously connected to the capital).,Country,num_of_ports = 20
+num_of_ports,"Tag, Scope",Returns true if the country has at least as many home ports as the specified country.,Country,num_of_ports = MNG
+num_of_ports_blockading,Integer,Returns true if the country blockades at least X ports.,Country,num_of_ports_blockading = 10
+num_of_powerful_estates,Integer,Returns true if the country has at least Xestateswith at least 70 influence.,Country,num_of_powerful_estates = 2
+num_of_protectorates,Integer,Returns true if the country has at least Xprotectorates. Obsolete since 1.20.,Country,num_of_protectorates = 2
+num_of_protectorates,"Tag, Scope",Returns true if the country has at least as many protectorates as the specified country. Obsolete since 1.20.,Country,num_of_protectorates = POR
+num_of_provinces_in_states,Integer,Returns true if the country has at least X provinces instates.,Country,num_of_provinces_in_states = 14
+num_of_provinces_in_territories,Integer,Returns true if the country has at least X provinces interritories.,Country,num_of_provinces_in_territories = 12
+num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with,Clause,Returns true if there are at least X provinces that fulfill the declared conditions owned by the country and its non-tributary subjects.,Country,"num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+        value = 1
+        colonial_region = colonial_the_carribean
+        is_city = yes
+    }"
+num_of_provinces_owned_or_owned_by_subjects_with,Clause,Returns true if there are at least X provinces that fulfill the declared conditions owned by the country and its subjects.,Country,"num_of_provinces_owned_or_owned_by_subjects_with = {
+        value = 8
+        region = sahel_region
+    }"
+num_of_qizilbash,Integer,Returns true if the country has at least X qizilbash regiments.,Country,num_of_qizilbash = 3
+num_of_qizilbash,"Tag, Scope",Returns true if the country has at least as many qizilbash as the specified country.,Country,num_of_qizilbash = PER
+num_of_rajput,Integer,Returns true if the country has at least Xrajput regiments.,Country,num_of_rajput = 20
+num_of_rajput,"Tag, Scope",Returns true if the country has at least as many rajputs as the specified country.,Country,num_of_rajput = RJP
+num_of_rebel_armies,Integer,Returns true if the number ofrebelarmies in the country is at least X.,Country,num_of_rebel_armies = 3
+num_of_rebel_armies,"Tag, Scope",Returns true if there are at least as many rebel armies in the country as the specified country.,Country,num_of_rebel_armies = SWI
+num_of_rebel_controlled_provinces,Integer,Returns true if the number ofrebelcontrolled provinces in the country is at least X.,Country,num_of_rebel_controlled_provinces = 3
+num_of_rebel_controlled_provinces,"Tag, Scope",Returns true if the country has at least as many rebel-controlled provinces as the specified country.,Country,num_of_rebel_controlled_provinces = TIM
+num_of_regiments_at_full_drill,Integer,Returns true if the country has at least X regiments at full drill,Country,num_of_regiments_at_full_drill = 100
+num_of_religion,Clause,Float value: Returns true if the ratio of the provinces with the specified religion to the total provinces of the country is at least X.Integer value: Returns true if the country has at least X provinces with the specified religion.It is also possible to specify the secondary religion bysecondary = yes.,Country,"num_of_religion = {
+        religion = animism
+        value = 0.3
+    }"
+num_of_revolts,Integer,Returns true if the number of revolts in the country is at least X.The same as ‘num_of_rebel_controlled_provinces’.,Country,num_of_revolts = 3
+num_of_revolts,"Tag, Scope",Returns true if the country has at least as many rebel controlled provinces as the specified country.,Country,num_of_revolts = TIM
+num_of_revolutionary_guard,Integer,Returns true if the country has at least X revolutionary guard units,Country,num_of_revolutionary_guard = 10
+num_of_revolutionary_guard,"Tag, Scope",Returns true if the country has at least as many revolutionary guards as the specified country,Country,num_of_revolutionary_guard = FRA
+num_of_royal_marriages,Integer,Returns true if the country has at least Xroyal marriages.,Country,num_of_royal_marriages  = 2
+num_of_royal_marriages,"Tag, Scope",Returns true if the country has at least as many royal marriages as the specified country.,Country,num_of_royal_marriages = ENG
+num_of_samurai,Integer,Returns true if the country has at least X samurai regiments.,Country,num_of_samurai = 100
+num_of_samurai,"Tag, Scope",Returns true if the country has at least as many samurai regiments as the specified country.,Country,num_of_samurai = JAP
+num_of_special_units,Clause,Returns true if the country has at least X special regiments of <type>Accepts all special units listedhere.,Country,"num_of_special_units = { 
+        special_unit_category = man_of_war
+        type = heavy_ship 
+        value = 40
+    }"
+num_of_states,Integer,Returns true if the country has at least Xstates.,Country,num_of_states = 8
+num_of_streltsy,Integer,"Returns true, if the country has at least X streltsy units.",Country,num_of_streltsy = 3
+num_of_streltsy,"Tag, Scope",Returns true if the country has at least as many streltsy as the specified country.,Country,num_of_streltsy = RUS
+num_of_strong_trade_companies,Integer,Returns true if the country has at least X strongtrade companies.,Country,num_of_strong_trade_companies = 4
+num_of_subjects,Integer,Returns true if the country is the overlord of at least X subject countries of any type.,Country,num_of_subjects = 1
+num_of_tercio,Integer,Returns true if the country has at least X tercio regiments.,Country,num_of_tercio = 10
+num_of_tercio,"Tag, Scope",Returns true if the country has at least as many tercios as the specified country.,Country,num_of_tercio = SPA
+num_of_territories,Integer,"Returns true, if the country has at least X territories (areas that aren't states).",Country,num_of_territories = 10
+num_of_times_expanded_infrastructure,Integer,Returns true if the province has had its infrastructure expanded at least X times.,Province,num_of_times_expanded_infrastructure  = 2
+num_of_times_improved,Integer,Returns true if thedevelopmentof the province was improved at least X times.,Province,num_of_times_improved = 5
+num_of_times_improved_by_owner,Integer,Returns true if thedevelopmentof the province was improved at least X times by the current owner.,Province,num_of_times_improved_by_owner = 5
+num_of_times_used_pillage_capital,Integer,Returns true if the country has used thePillage Capitalpeace treaty at least X times.,Country,num_of_times_used_pillage_capital = 10
+num_of_times_used_transfer_development,Integer,Returns true if the country has used theConcentrate Developmentaction at least X times.,Country,num_of_times_used_transfer_development = 5
+num_of_total_ports,Integer,Returns true if the country owns at least X total ports (anywhere in the world).,Country,num_of_total_ports  = 20
+num_of_total_ports,"Tag, Scope",Returns true if the country owns at least as many total ports as the specified country.,Country,num_of_total_ports = JAP
+num_of_trade_companies,Integer,Returns true if the country has at least Xtrade companies.,Country,num_of_trade_companies = 3
+num_of_trade_embargos,Integer,Returns true if the country has at least X tradeembargos.,Country,num_of_trade_embargos = 3
+num_of_trading_bonuses,Integer,Returns true if the country hasat least X ‘trading in’ bonuses.,Country,num_of_trading_bonuses = 7
+num_of_transport,Integer,Returns true if the country has at least Xtransports.,Country,num_of_transport = 24
+num_of_transport,"Tag, Scope",Returns true if the country has at least as many transports as the specified country.,Country,num_of_transport = DEN
+num_of_trusted_allies,Integer,Returns true if the country has at least Xallieswith 100trust.,Country,num_of_trusted_allies = 3
+num_of_units_in_province,Clause,"Returns true if the specified country has at least X units of the specified type in the province. (typeandwhoare not needed, if not included will default to all.)",Province,"num_of_units_in_province = {
+        who =
+        type =
+        amount =
+    }"
+num_of_unlocked_cults,Integer,Returns true if the country has unlocked at least Xcults.,Country,num_of_unlocked_cults = 13
+num_of_voc_indiamen,Integer,Returns true if the country has at least X voc indiamen units.,Country,num_of_voc_indiamen = 100
+num_of_voc_indiamen,"Tag, Scope",Returns true if the country has at least as many voc indiamen units as the specified country.,Country,num_of_voc_indiamen = NED
+num_of_war_reparations,Integer,Returns true if the country receiveswar reparationsfrom at least X countries.,Country,num_of_war_reparations = 4
+num_of_war_reparations,"Tag, Scope",Returns true if the country receives war reparations from at least as many countries as the specified country.,Country,num_of_war_reparations = ROOT
+num_ships_privateering,Integer,Returns true if country has at least X shipsprivateering.,Country,num_ships_privateering = 20
+num_ships_privateering,"Tag, Scope",Returns true if the country has at least as many ships privateering as the specified country.,Country,num_ships_privateering = HSA
+offensive_war_with,"Tag, Scope",Returns true if the country is in an offensive war with country X.,Country,offensive_war_with = ROOT
+overextension_percentage,Float,Returns true if country has at least X%overextension.,Country,overextension_percentage = 0.75
+overlord_of,"Tag, Scope",Returns true if the country is theoverlordof X.,Country,overlord_of = FRA
+overseas_provinces_percentage,Float,Returns true if the country has X percentage ofoverseasprovinces.,Country,overseas_provinces_percentage = 0.05
+owes_favors,Integer,Returns true if the scoped country owes favours to the specified country.,Country,"owes_favors = { 
+             who = FRA 
+             value = 10 
+    }"
+owned_by,"Tag, Scope",Returns true if the province is owned by the country X.,Province,owned_by = TUR
+owned_by_subject_of,"Tag, Scope",Returns true if the current province scope is owned by a subject of country X.,Province,owned_by_subject_of = FRA
+owns,Province ID,Returns true if the country owns the specified province.,Country,owns = 236
+owns_all_provinces,Clause,Returns true if the country or its non-tributary subjects own all provinces with the specified conditions.,Country,"owns_all_provinces = {
+        continent = asia
+        has_terrain = grasslands
+    }"
+owns_core_province,Province ID,Returns true if the country owns and has acoreon the specified province.,Country,owns_core_province = 217
+owns_or_non_sovereign_subject_of,Province ID,"Returns true, if the country or a subject that is not categorized as ""sovereign"" (e.g. tributary states are excluded) owns the specified province.",Country,owns_or_non_sovereign_subject_of = 151
+owns_or_subject_of,"Province ID, Scope","Returns true, if the country or a subject owns the specified province.",Country,owns_or_subject_of = 151
+papacy_active,Boolean,Returns true if thepapacyis active.,Anywhere,papacy_active = yes
+papal_influence,Integer,Returns true if the country'spapal influenceis at least X.,Country,papal_influence = 100
+papal_influence,"Tag, Scope",Returns true if the country has at least as much papal influence as the specified country.,Country,papal_influence = KID
+patriarch_authority,Float,Returns true if the country'spatriarch authorityis at least X.,Country,patriarch_authority = 0.75
+percentage_backing_issue,Float,Returns true if at least the Xth part of the seats in theparliamentis backing for the current issue.,Country,percentage_backing_issue = 0.5
+personal_union,Integer,Returns true if the country has at least Xpersonal unions.,Country,personal_union = 3
+personality,Identifier,"Returns true if the country has arulerwhichpersonalityis X. Is limited to ai_personalities listed in base game file 'common/ai_personalities/00_ai_personalities.txt'. For ruler personality, use ruler_has_personality",Country,personality = ai_militarist
+piety,Float,Returns true if the country'spietyis at least X.,Country,piety = -0.75
+piety,"Tag, Scope",Returns true if the country has at least as much piety as the specified country.,Country,piety = MOR
+possible_buildings,Integer,"Returns true if the province has at least X building slots, including occupied ones.",Province,possible_buildings = 3
+power_projection,Integer,Returns true if country has aPower_projectionof at least X. Appeared in 1.30,Country,power_projection = 90
+preferred_emperor,"Tag, Scope",Returns true if an elector has the country X is the preferred emperor.,Country (Elector),preferred_emperor = HAB
+prestige,Integer,Return true if the country has aprestigeof at least X.,Country,prestige = 99
+prestige,"Tag, Scope",Returns true if the country has at least as much prestige as the specified country.,Country,prestige = ADA
+previous_owner,"Tag, Scope",Returns true if the previous owner of the province was X.,Province,previous_owner = HUN
+primary_culture,"Identifier, Scope",Returns true if the country's primary culture is X.,Country,primary_culture = dutch
+primitives,Boolean,Returns true if the country isprimitive.,Country,primitives = yes
+privateer_power,Clause,Returns true if the country has at least X trade power fromprivateeringin the trade node.,Province(Trade node),"1744 = { #Antwerpen
+        privateer_power = {
+            country = FROM
+            share = 25
+        }
+    }"
+production_efficiency,Float,Returns true if the country has aproduction efficiencyof at least X.,Country,production_efficiency = 0.10
+production_efficiency,"Tag, Scope",Returns true if the country has an at least as high production efficiency as the specified country.,Country,production_efficiency = AAC
+production_income_percentage,Float,Returns true if the ratio of production income to total income is at least X.,Country,production_income_percentage = 0.10
+production_leader,Clause,Returns true if the country is theproduction leaderof thetrade goodX.,Country,"production_leader = {
+        trade_goods = coffee
+    }"
+province_distance,Clause,"Returns true, if the distance between specified provinces is at least X.",Province,"any_owned_province = {
+        province_distance = {
+            who = 151
+            distance = 50
+        }
+    }"
+province_getting_expelled_minority,Boolean,Returns true if the province is getting minorities.,Province,province_getting_minorities = yes
+province_group,Identifier,Returns true if the province belongs to the specifiedprovince group.,Province,province_group = my_province_group
+province_has_center_of_trade_of_level,Integer,Returns true if the province has a center of trade of at least this level.,Province,province_has_center_of_trade_of_level = 2
+province_id,"Integer,Scope",Returns true if the province has the ID X.,Province,province_id = 1
+province_is_on_an_island,Boolean,Returns true if the province ison an island.,Province,province_is_on_an_island = yes
+province_size,Integer,"Returns true if the province, inprovinces.bmp, contains X pixels.",Province,province_size = 100
+province_trade_power,Integer,Returns true iftrade powergenerated by the province is at least X.,Province,province_trade_power = 5
+provinces_on_capital_continent_of,Scope,Returns true if the country has a province on the continent with the capital of the specified country.,Country,provinces_on_capital_continent_of = ROOT
+pure_unrest,Integer,Returns true if the province has a baseunrestof at least X.,Province,pure_unrest = 2
+range,"Tag, Scope",Returns true if the province is within the range of the specified country.,Province,range = TUR
+real_day_of_year,Integer,"Returns true, if today is at least X (January 1st ≙ 0). Refers to the actual real day (probably takes system time).",Anywhere,Example needed
+real_month_of_year,Integer,Returns true if the month of the year in reality is at least X (January ≙ 0),Anywhere,real_month_of_year = 6 # Mai
+rebel_progress_at_least,Integer,Returns true if the specified rebel faction has at least X progress towards revolting. Will default to any faction if unspecified.,Country,"rebel_progress_at_least = {
+        rebel_type = nationalist_rebels
+        value = 50
+    }"
+receives_fleet_basing_rights_from,"Tag, Scope",Returns true if the scoped country receives fleet basing rights from the specified country.,Country,"owner = {
+            receives_fleet_basing_rights_from = FRA
+    }"
+receives_military_access_from,"Tag, Scope",Returns true if the scoped country receives military access from the specified country.,Country,"owner = {
+            receives_military_access_from = FRA
+    }"
+reform_desire,Float,Returns true if thereform desireis at least X%.,Anywhere,reform_desire = 0.95
+reform_level,Identifier,Retrurn true if the country has reached at least X levels of government reforms.,Country,reform_level = 5
+region,Identifier,Returns true if the province is part of theregionX.,Province,region = west_india_region
+religion,"Identifier, Scope",Returns true if the country/province has religion X.,CountryProvince,religion = catholic
+religion_group,"Identifier, Scope",Returns true if the country/province has a religion of the specifiedreligious group.,Countryprovince,religion_group = christian
+religion_years,Clause,Returns true if the specified religion is enabled for at least X years.,Anywhere,religion_years = { confucianism = 100 }
+religious_school,Clause,"Returns true, if the country has the specified religious school.",Country,"religious_school = {
+        group = muslim
+        school = hanbali_school
+    }"
+religious_unity,Float,Returns true if the country'sreligious unityis at least X.,Country,religious_unity = 0.99
+republican_tradition,Integer,Returns true if country'srepublican traditionis at least X.,Country,republican_tradition = 90
+revanchism,Integer,Returns true if country'srevanchismis at least X.,Country,revanchism = 10
+reverse_has_opinion,Clause,Returns true if the country specified bywhohas at leastvalueopinion of the country.,Country,"reverse_has_opinion = {
+        who = DAN
+        value = 80
+    }"
+reverse_has_opinion_modifier,Clause,Returns true if the country specified bywhohas the opinion modifiermodifiertowards the country.Can also specify a value of the modifier (but it is not displayed).,Country,"reverse_has_opinion_modifier = {
+        who = ROOT
+        modifier = opinion_spurned_pu
+    }"
+revolt_percentage,Float,Returns true if at least the Xth part of the provinces of the country haverevolts.,Country,revolt_percentage = 0.1
+revolution_target_exists,Boolean,Returns true if there is arevolutionary targetin the world.,Global,revolution_target_exists  = yes
+ruler_age,Integer,Returns true if the country has arulerthat is at least X years old.,Country,ruler_age = 40
+ruler_consort_marriage_length,Integer,Needs description,Country,ruler_consort_marriage_length = 10
+ruler_culture,"Identifier, Scope","Returns true, if the country's ruler has the specified culture. Can utiliseEvent Scope Values.",Country,ruler_culture = prussian
+ruler_has_personality,Identifier,Returns true if the country’srulerhas the specifiedpersonality.,Country,ruler_has_personality = malevolent_personality
+ruler_is_foreigner,Boolean,Returns true if the country has foreignruler.,Country,ruler_is_foreigner = no
+ruler_religion,"Identifier, Scope","Returns true, if the country's ruler has the specified religion. Can utiliseEvent Scope Values.",Country,ruler_religion = catholic
+sailors,Integer,Returns true if the country has at least Xsailors.,Country,sailors = 2500
+sailors_percentage,Float,Returns true if the country has asailorlevel of at least X%.,Country,sailors_percentage = 0.50
+same_continent,"Integer, Scope","Returns true, if specified province is on the same continent as the province. If used in country scope, capitals are checked.","Country, Province","FRA = {
+        same_continent = ROOT
+    }all_owned_province = {
+        same_continent = capital
+    }"
+same_home_trade_node_as,Scope,Returns true if the current country scope has the same home trade node as the specified country scope.,Country,same_home_trade_node_as = FRA
+same_trade_node,Scope,Returns true if the current province scope is in the same trade node as the specified province scope.,Province,"capital_scope = {
+        same_trade_node = event_target:my_trade_port
+    }"
+secondary_religion,Identifier,Returns true thesecondary religionof the country is X.,Country,secondary_religion = ibadi
+secondary_religion_group,Identifier,Returns true if the secondary religion of the country is in X religion group.,Country,secondary_religion_group = muslim
+senior_union_with,"Tag, Scope",Returns true if the country is the senior partner in apersonal unionover country X.,Country,senior_union_with = HAB
+sieged_by,"Tag, Scope",Returns true if the province is being besieged by country X.,Province,sieged_by = ROOT
+splendor,Integer,"Returns true, if the country has at least X splendor.",Country,splendor = 800
+stability,Integer,Returns true if the country has astabilityof at least X.,Country,stability = 1
+stability,"Tag, Scope",Returns true if the country has at least as much stability as the specified country.,Country,stability = HAB
+start_date,Date,Returns true if thestart dateof the campaign is X.,Anywhere,start_date = 1776.7.4
+started_in,Date,Returns true if thestart dateof the campaign is X or after.,Anywhere,started_in = 1776.7.4
+statists_vs_orangists,Float,Returns true ifStatistsvsOrangistsis at least X.,Country,statists_vs_orangists = 0.9
+subject_owns,Scope,Returns true if a subject owns the specified province scope,Country,subject_owns = 183
+subsidised_percent_amount,Float,Returns true if thecountryreceivessubsidiesof at least X% of its monthly income.,Country,"subsidised_percent_amount = { 
+        value = 0.5
+    }"
+succession_claim,"Tag, Scope",Returns true if the country hasclaimed the throneof the country X.,Country,succession_claim = FROM
+superregion,Identifier,Returns true if the province belongs to thesuperregionX.,Province,superregion = east_indies_superregion
+tag,"Tag, Scope",Returns true if thecountryis the specified country.,Country,tag = HAB
+tariff_value,Float,Returns true if thecolonial nationpays at least X% tariffs.,Country,tariff_value = 0.25
+tax_income_percentage,Float,Returns true if the ratio of tax income to total income is at least X.,Country,tax_income_percentage = 0.2
+tech_difference,Integer,Returns true if the scoped country is at least X technologies ahead (compared to the country).,Country,"any_neighbor_country = {
+        tech_difference = 3
+    }"
+technology_group,Identifier,Returns true if the country has thetechnology groupX.,Country,technology_group = western
+technology_group,Scope,Returns true if the countries have the same technology group.,Country,technology_group = PREV
+tolerance_to_this,Integer,Returns true if the country has a tolerance of at least X towards the religion of the country or scoped province.,Country Province,tolerance_to_this = 0
+total_base_tax,Integer,Returns true if thebase taxof the country's provinces totals at least X.,Country,total_base_tax = 75
+total_base_tax,"Tag, Scope",Returns true if the country has at least as much total base tax as the specified country.,Country,total_base_tax = MNG
+total_development,Integer,Returns true if the country has atotal developmentof at least X.,Country,total_development = 200
+total_development,"Tag, Scope",Returns true if the country has moretotal developmentthan the specified country.,Country,total_development = HUN
+total_losses_in_won_wars,Clause,Returns true if the country specified bylooserhas lost at least the amount of troops specified bycasualtiesin wars lost against the country specified bywinner. Both have to be primary targets.,Anywhere,"total_losses_in_won_wars = {
+        winner = NPL
+        looser = PRU
+        casualties = 100000
+    }"
+total_number_of_cardinals,Integer,Returns true if the total number ofcardinalsis at least X.,Anywhere,total_number_of_cardinals = 49
+total_own_and_non_tributary_subject_development,Integer,Returns true if the country and itsnon-tributary subjectshave at least X Total development.,Country,total_own_and_non_tributary_subject_development = 300
+total_own_and_non_tributary_subject_development,"Tag, Scope",Returns true if the country and its non-tributary subjects have moreTotal developmentthan the specified country and its non-tributary subjects.,Country,total_own_and_non_tributary_subject_development = FRA
+trade_company_region,Identifier,Returns true if theprovinceis in thetrade companyregion.,Province,trade_company_region = trade_company_moluccas
+trade_company_size,Integer,Returns true if thetrade companyhas at least X provinces.,Province,trade_company_size = 5
+trade_efficiency,Float,Returns true if the country has atrade efficiencyover X.,Country,trade_efficiency = 0.50
+trade_embargo_by,"Tag, Scope",Returns true if country X isembargoingthe country.,Country,trade_embargo_by = HAB
+trade_embargoing,"Tag, Scope",Returns true if the country isembargoingcountry X.,Country,trade_embargoing = HAB
+trade_goods,Identifier,Returns true if the province is producing thetrade goodX.,Province,trade_goods = fur
+trade_goods_produced_amount,Clause,Returns true if country X is producing amount Y oftrade goodZ.,Country,"trade_goods_produced_amount = {
+        trade_goods = grain
+        amount = 25
+    }"
+trade_income_percentage,Float,Returns true if the ratio of trade income to total income is at least X.,Country,trade_income_percentage = 0.10
+trade_league_embargoed_by,"Tag, Scope",Description needed,Country,trade_league_embargoed_by = FROM
+trade_node_value,Float,Returns true iftotal trade valuein the node is at least X.,Province (Trade Node),"1744 = { #Antwerpen
+        trade_node_value = 50
+    }"
+trade_range,"Tag, Scope",Returns true if the trade node is within thetrade rangeof the specified country.,Province(Trade node),trade_range = ENG
+trade_share,Clause,Returns true if the country controls at least X% of thetradein the specifiedtrade node.,Province(Trade node),"1744 = { #Antwerpen
+        trade_share = {
+            country = NED
+            share = 25
+        }
+    }"
+trading_bonus,Clause,Returns true if the country has the ‘trading in’ bonus of the specified trade good.,Country,"trading_bonus = {
+        trade_goods = coffee
+        value = yes
+    }"
+trading_part,Clause,Returns true if the country has access to X% of the world market of the specifiedtrade good.,Country,"trading_part = {
+        trade_goods = cocoa
+        value = 0.05
+    }"
+trading_policy_in_node,Clause,"Returns true, if the country has the specified trading policy in the specified trade node. Can also use ""policy = any"".",Country,"any_active_trade_node = {
+        ROOT = {
+            trading_policy_in_node = {
+                node = PREV
+                policy = propagate_religion
+            }
+        }
+    }"
+transfers_trade_power_to,"Tag, Scope",Returns true if the country transfers trade power to country X.,Country,transfers_trade_power_to = FRA
+transport_fraction,Float,Returns true if the ratio of thetransportfraction to the navy size of the country is at least X.,Country,transport_fraction = 0.55
+transports_in_province,Integer,Returns true if there are at least Xtransportsin the province.,Province,transports_in_province = 10
+transports_in_province,"Tag, Scope",Returns true if there are transports from the specified country in the province.,Province,transports_in_province = TER
+treasury,Integer,Returns true if country's treasury contains at least X ducats.,Country,treasury = 100
+treasury,"Tag, Scope",Returns true if the country has at least as much ducats in its treasury as the specified country.,Country,treasury = ROOT
+tribal_allegiance,Integer,"Returns true, if the country has a tribal allegiance of at least X.",Country,tribal_allegiance = 10
+tribal_development,Integer,"Returns true, if the country or province has at least X tribal development","Province, Country",tribal_development = 50
+tribal_development,"Tag, Scope","Returns true, if the country has more development than the specified country",Country,tribal_development = DAN
+tribal_land_of,"Tag, Scope","Returns true, if the province is tribal land of the specified countryAnything that is not a valid tag will check for 'not tribal land'",Province,tribal_land_of = ROOT
+truce_with,"Tag, Scope",Returns true if the country has atrucewith X.,Country,truce_with = FRA
+trust,"Tag, Scope",Returns true if the current scope has a trust level of at least X with the specified tag.,Country,trust = { who = FRA value = 50 }
+unit_has_leader,yes,Returns true if any unit is in the province has a leader.Warning: Works only with 'yes'.,Province,unit_has_leader = yes
+unit_in_battle,Boolean,Returns true if any unit in the province is in a battle.,Province,unit_in_battle = no
+unit_in_siege,Boolean,Returns true if any unit in the province is in a siege.,Province,unit_in_siege = yes
+unit_type,Identifier,Returns true if the country has units of type X.,Country,unit_type = sub_saharan
+units_in_province,Integer,Returns true if there are at least X units in the province.,Province,units_in_province = 1
+units_in_province,"Tag, Scope",Returns true if the specified country has units in the province.,Province,units_in_province = RUS
+unrest,Integer,"Returns true if theunrestin the province is at least X. If it is used in a country scope, it checks for the global_unrest modifier","Province, Country",unrest = 3
+uses_authority,Boolean,Returns true if the country usesauthoritymechanics.,Country,uses_authority = yes
+uses_blessings,Boolean,Returns true if the country usesblessingsmechanics.,Country,uses_blessings = yes
+uses_church_aspects,Boolean,Returns true if the country useschurch aspectsmechanics.,Country,uses_church_aspects = yes
+uses_cults,Boolean,Returns true if the country usescultsmechanics.,Country,uses_cults = yes
+uses_devotion,Boolean,"Returns true, if the country uses devotion instead of legitimacy.",Country,uses_devotion = yes
+uses_doom,Boolean,Returns true if the country usesdoommechanics.,Country,uses_doom = yes
+uses_fervor,Boolean,Returns true if the country usesfervormechanics.,Country,uses_fervor = yes
+uses_isolationism,Boolean,"Returns true, if the country uses the isolationism mechanic.",Country,uses_isolationism = yes
+uses_karma,Boolean,Returns true if the country useskarmamechanics.,Country,uses_karma = yes
+uses_papacy,Boolean,Returns true if the country usespapacymechanics.,Country,uses_papacy = yes
+uses_patriarch_authority,Boolean,Returns true if the country usespatriarch authoritymechanics.,Country,uses_patriarch_authority = yes
+uses_personal_deities,Boolean,Returns true if the country usespersonal deitiesmechanics.,Country,uses_personal_deities = yes
+uses_piety,Boolean,Returns true if the country usespietymechanics.,Country,uses_piety = yes
+uses_religious_icons,Boolean,"Returns true, if the country uses religious icons.",Country,uses_religious_icons = yes
+uses_syncretic_faiths,Boolean,Returns true if the country usessyncretic faithsmechanics.,Country,uses_syncretic_faiths = yes
+variable_arithmetic_trigger,Clause,"Can use variable effects and triggers to compare or change and compare modifier and trigger values. ""variable_arithmetic_trigger"" sections can include more ""variable_arithmetic_trigger"" sections. This has to be done for effects such as ""change_variable"" or effects of ""if"" sections inside the ""variable_arithmetic_trigger"", since the game may crash otherwise.",Anywhere,"variable_arithmetic_trigger = {
+        custom_tooltip = from_total_development_is_10_times_bigger_than_ours
+        export_to_variable = {
+            which = our_total_development
+            value = trigger_value:total_development
+        }
+        export_to_variable = {
+            which = from_total_development
+            value = trigger_value:total_development
+            who = FROM
+        }
+        multiply_variable = { which = from_total_development value = 10 }
+        
+        check_variable = { which = from_total_development which = our_total_development }
+    }"
+vassal_of,"Tag, Scope",Returns true if the country is avassalof country X.,Country,vassal_of = ROOT
+war_exhaustion,Integer,Returns true if the country has awar exhaustionof at least X.,Country,war_exhaustion = 8
+war_exhaustion,"Tag, Scope",Returns true if the country has at least as much war exhaustion as the specified country.,Country,war_exhaustion = NPL
+war_score,Integer,Returns true if the coutry has awarscoreof at least X%.,Country,war_score = 100
+war_score_against,Clause,Returns true if the coutry has awarscoreof at least X against the specified country.,Country,"war_score_against = {
+        who = INC
+        value = 75
+    }"
+war_with,"Tag, Scope",Returns true if the country is atwarwith country X.,Country,war_with = INC
+was_player,Boolean,Returns true if the country was controlled by a human player.,Country,was_player = no
+was_tag,Country,Returns true if the country was a particular tag.,Country,was_tag = MUG
+will_back_next_reform,Boolean,Returns true if the member of the HRE is backing the nextimperial reform.,Country,will_back_next_reform = yes
+yearly_corruption_increase,Float,Returns true if the country has a yearlycorruptionincrease of at least X.,Country,NOT = { yearly_corruption_increase = 0.001 }
+years_in_union_under,Clause,Returns true if the country is in apersonal unionunder the specified country for at least X years.,Country,"years_in_union_under = {
+        who = ROOT
+        years = 50
+    }"
+years_in_vassalage_under,Clause,Returns true if the country is avassalof the specified country for at least X years.,Country,"years_in_vassalage_under = {
+        who = ROOT
+        years = 10
+    }"
+years_of_income,Float,Returns true if the country's treasury contains ducats of at least X times their yearly income.,Country,years_of_income = 1.0
+years_of_income,"Tag, Scope",Returns true if the country's treasury contains ducats of at least the yearly income of the specified country.,Country,years_of_income = SER
+years_of_manpower,Float,Returns true if the country's manpower pool contains at least X years of manpower.,Country,years_of_manpower = 2.5
+years_of_sailors,Float,Returns true if the country's sailor pool contains at least X years of sailors.,Country,years_of_sailors = 2.5

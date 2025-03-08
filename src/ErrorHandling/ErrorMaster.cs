@@ -54,12 +54,19 @@ namespace Editor.ErrorHandling
       public static List<LogEntry> Debugs = [];
       public static List<LogEntry> Criticals = [];
       private static LogType _currentLogType = LogType.None;
+      public static int InformationCount { get; private set;} = 0;
+      public static int WarningCount { get; private set;} = 0;
+      public static int DebugCount { get; private set;} = 0;
+      public static int ErrorCount { get; private set;} = 0;
+      public static int CriticalCount { get; private set;} = 0;
 
       public static event EventHandler<LogEntry>? LogEntryAdded;
 
       public static List<LogEntry> GetAlLogEntries => [..Informations, ..Warnings, ..Errors, ..Debugs, ..Criticals];
+      public static int TotalLogCount => InformationCount + DebugCount;
+      public static int TotalErrorCount => ErrorCount + CriticalCount + WarningCount;
 
-      public static void AddLogEntries(List<LogEntry> list)
+      private static void AddLogEntries(List<LogEntry> list)
       {
          lock (ActiveEntries)
          {
@@ -193,6 +200,28 @@ namespace Editor.ErrorHandling
       public static void AddLogEntry(LogEntry entry)
       {
          var verbosity = entry.Level;
+         switch (verbosity)
+         {
+            case LogType.None:
+               break;
+            case LogType.Error:
+               ErrorCount++;
+               break;
+            case LogType.Warning:
+               WarningCount++;
+               break;
+            case LogType.Information:
+               InformationCount++;
+               break;
+            case LogType.Debug:
+               DebugCount++;
+               break;
+            case LogType.Critical:
+               CriticalCount++;
+               break;
+
+         }
+         Globals.MapWindow.UpdateErrorCounts(TotalErrorCount, TotalLogCount);
          if (Globals.Settings.Logging.LoggingVerbosity.HasFlag(verbosity))
          {
             if (_currentLogType.HasFlag(verbosity))

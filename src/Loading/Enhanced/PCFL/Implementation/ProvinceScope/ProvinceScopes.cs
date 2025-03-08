@@ -15,6 +15,20 @@ public static class ProvinceScopes
 
       Effects = {
          [BaseManpowerEffect.EFFECT_NAME] = BaseManpowerEffect.CreateEffect,
+         [OwnerEffect.EFFECT_NAME] = OwnerEffect.CreateEffect,
+         [ControllerEffect.EFFECT_NAME] = ControllerEffect.CreateEffect,
+         [AddCoreEffect.EFFECT_NAME] = AddCoreEffect.CreateEffect,
+         [RemoveCoreEffect.EFFECT_NAME] = RemoveCoreEffect.CreateEffect,
+         [BaseProductionEffect.EFFECT_NAME] = BaseProductionEffect.CreateEffect,
+         [BaseTaxEffect.EFFECT_NAME] = BaseTaxEffect.CreateEffect,
+         [UnrestEffect.EFFECT_NAME] = UnrestEffect.CreateEffect,
+         [RevoltEffect.EFFECT_NAME] = RevoltEffect.CreateEffect,
+         [AddBaseManpowerEffect.EFFECT_NAME] = AddBaseManpowerEffect.CreateEffect,
+         [AddBaseProductionEffect.EFFECT_NAME] = AddBaseProductionEffect.CreateEffect,
+         [AddBaseTaxEffect.EFFECT_NAME] = AddBaseTaxEffect.CreateEffect,
+         [ReligionEffect.EFFECT_NAME] = ReligionEffect.CreateEffect,
+         [CultureEffect.EFFECT_NAME] = CultureEffect.CreateEffect,
+
       }
    };
 }

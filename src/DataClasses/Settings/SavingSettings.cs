@@ -28,7 +28,7 @@ namespace Editor.DataClasses.Settings
          get => _alwaysAskBeforeCreatingFiles;
          set => SetField(ref _alwaysAskBeforeCreatingFiles, value);
       }
-
+      
       [Description("Define how often and if the Modforge should ask where to save edited objects.")]
       [CompareInEquals]
       public FileSavingMode FileSavingMode

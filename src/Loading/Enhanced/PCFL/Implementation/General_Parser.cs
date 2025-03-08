@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
+using Editor.DataClasses.GameDataClasses;
 using Editor.ErrorHandling;
 using Editor.Saving;
 
@@ -15,13 +17,16 @@ public static class GeneralFileParser
        * if we are effect we call us again bc we like recursion
        */
 
-      var orderedElement = EnhancedParser.LoadBaseOrder(content, po);
+      return ParseElementsToTokens(EnhancedParser.LoadBaseOrder(content, po), scope, po);
+   }
+
+   public static List<IToken> ParseElementsToTokens(IEnumerable<IEnhancedElement> elements, PCFL_Scope scope, PathObj po)
+   {
+      var limitIfFlowControl = new IfFLowControl(ITrigger.Empty, []);
 
       List<IToken> program = [];
 
-      var limitIfFlowControl = new IfFLowControl(ITrigger.Empty, []);
-
-      foreach (var element in orderedElement)
+      foreach (var element in elements)
       {
          if (element.IsBlock)
          {
@@ -46,13 +51,13 @@ public static class GeneralFileParser
             }
 
             // 
-            if (ParseToken(block, scope, po, out var token)) 
+            if (ParseToken(block, scope, po, out var token))
                program.Add(token!);
             else
             {
                // Throw error
             }
-       
+
          }
          else
          {
@@ -77,7 +82,7 @@ public static class GeneralFileParser
       token = null!;
       if (!scope.IsValidEffect(input.Key, out var creator))
       {
-         _ = new LoadingError(po, $"Invalid Token: {input.Key}", line: input.Line, type: ErrorType.TODO_ERROR);
+         _ = new LoadingError(po, $"Invalid Token: {input.Key}", line: input.Line, type: ErrorType.PCFL_TokenValidationError);
          return false;
       }
       token = creator(null, input, scope, po)!;
@@ -90,7 +95,7 @@ public static class GeneralFileParser
       token = null!;
       if (!scope.IsValidEffect(input.Name, out var creator))
       {
-         _ = new LoadingError(po, $"Invalid Token: {input.Name}", line: input.StartLine, type: ErrorType.TODO_ERROR); //TODO Error
+         _ = new LoadingError(po, $"Invalid Token: {input.Name}", line: input.StartLine, type: ErrorType.PCFL_TokenValidationError); //TODO Error
          return false;
       }
       token = creator(input, null, scope, po)!;
@@ -100,6 +105,7 @@ public static class GeneralFileParser
 
    public static bool ParseTokenBlock(this EnhancedBlock block, PCFL_Scope scope, PathObj po, List<IToken> token)
    {
+      token.AddRange(ParseElementsToTokens(block.GetElements(), scope, po));
       foreach (var triggerElement in block.GetElements())
       {
          if (triggerElement.IsBlock)
@@ -213,8 +219,28 @@ public static class GeneralFileParser
 
    public static bool ParseSingleTriggerValue(ref Value<int> inValue, LineKvp<string, string> command, PathObj po, string triggerName)
    {
-      Debug.Assert(command.Key.Equals(triggerName), $"'{triggerName}' must be the trigger name of a {triggerName} trigger");
       if (!TriggerParser.ParseTriggerOfValue(command.Value, out int parsedValue).Then(o => o.ConvertToLoadingError(po, $"Failed parsing {command.Key} Trigger", command.Line)))
+         return false;
+      inValue.Val = parsedValue;
+      return true;
+   }
+   public static bool ParseSingleTriggerValue(ref Value<string> inValue, LineKvp<string, string> command, PathObj po, string triggerName)
+   {
+      if (!TriggerParser.ParseTriggerOfValue(command.Value, out string parsedValue).Then(o => o.ConvertToLoadingError(po, $"Failed parsing {command.Key} Trigger", command.Line)))
+         return false;
+      inValue.Val = parsedValue;
+      return true;
+   }
+   public static bool ParseSingleTriggerValue(ref Value<bool> inValue, LineKvp<string, string> command, PathObj po, string triggerName)
+   {
+      if (!TriggerParser.ParseTriggerOfValue(command.Value, out bool parsedValue).Then(o => o.ConvertToLoadingError(po, $"Failed parsing {command.Key} Trigger", command.Line)))
+         return false;
+      inValue.Val = parsedValue;
+      return true;
+   }
+   public static bool ParseSingleTriggerValue(ref Value<float> inValue, LineKvp<string, string> command, PathObj po, string triggerName)
+   {
+      if (!TriggerParser.ParseTriggerOfValue(command.Value, out float parsedValue).Then(o => o.ConvertToLoadingError(po, $"Failed parsing {command.Key} Trigger", command.Line)))
          return false;
       inValue.Val = parsedValue;
       return true;
@@ -222,7 +248,6 @@ public static class GeneralFileParser
 
    public static bool ParseSingleTriggerReplaceValue(ScriptedTriggerSource parent, ref Value<int> inValue, LineKvp<string, string> command, PathObj po, string triggerName)
    {
-      Debug.Assert(command.Key.Equals(triggerName), $"'{triggerName}' must be the trigger name of a {triggerName} trigger");
       var error = TriggerParser.ParseTriggerOfValueReplace(command.Value, out var isReplace, out int parsedValue, out var parsedReplace);
       if (!error.Ignore())
       {

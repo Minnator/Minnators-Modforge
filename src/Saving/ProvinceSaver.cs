@@ -155,7 +155,7 @@ namespace Editor.Saving
       {
          sb.AppendLine($"{entry.Date} = {{");
          foreach (var effect in entry.Effects)
-            sb.AppendLine($"{effect.GetEffectString(1)}");
+            effect.GetTokenString(1, ref sb);
          sb.AppendLine("}");
       }
 

@@ -190,13 +190,33 @@ namespace Editor.Loading.Enhanced
                continue;
             }
             var split = line.Split('=');
-            if (split.Length != 2)
+            if (split.Length < 2)
             {
                if (showError)
                   _ = new LoadingError(pathObj, "Expected a key value pair but got only one value", lineNum++, 0);
                continue;
             }
-            yield return new(split[0].Trim(), trimQuotes ? split[1].TrimQuotes() : split[1].Trim(), lineNum);
+            if (split.Length > 2)
+            {
+               var keyBuff = split[0];
+               for (int i = 1; i < split.Length - 1; i++)
+               {
+                  // TODO fix in quotes in parsing of the content
+                  // Replace whitespaces in a single line with \n
+                  // Check if = then after next word finished replace all non quoted whitespaces with a \n unless \n already exists
+                  var splitted = split[i].Trim().Split(' ');
+                  if (splitted.Length != 2)
+                  {
+                     _ = new LoadingError(pathObj, "Fix pls!", lineNum, type: ErrorType.TODO_ERROR);
+                     continue;
+                  }
+                  yield return new(keyBuff, trimQuotes ? splitted[0].TrimQuotes() : splitted[0], lineNum);
+                  keyBuff = splitted[1];
+               }
+               yield return new(keyBuff, trimQuotes ? split[^1].TrimQuotes() : split[^1].Trim(), lineNum);
+            }
+            else
+               yield return new(split[0].Trim(), trimQuotes ? split[1].TrimQuotes() : split[1].Trim(), lineNum);
             lineNum++;
          }
       }

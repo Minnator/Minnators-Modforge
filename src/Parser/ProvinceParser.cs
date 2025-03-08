@@ -7,6 +7,8 @@ using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
 using Editor.Helper;
 using Editor.Loading.Enhanced;
+using Editor.Loading.Enhanced.PCFL.Implementation;
+using Editor.Loading.Enhanced.PCFL.Implementation.ProvinceScope;
 using Editor.Saving;
 
 namespace Editor.Parser;
@@ -106,7 +108,7 @@ public static class ProvinceParser
 
    public static void ParseAllUniqueProvinces()
    {
-      var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "history", "provinces");
+      var files = FilesHelper.GetAllFilesInFolder("*.txt", "history", "provinces");
       var po = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 };
       Parallel.ForEach(files, po, ProcessProvinceFile);
       //foreach (var file in files)
@@ -115,44 +117,33 @@ public static class ProvinceParser
 
    private static void ProcessProvinceFile(string path)
    {
+
+      List<IEnhancedElement> blocks = [];
+      var po = PathObj.FromPath(path);
+      blocks = po.LoadBaseOrder();
+
       var match = IdRegex.Match(Path.GetFileName(path));
       if (!match.Success || !int.TryParse(match.Groups[1].Value, out var id))
       {
-         Globals.ErrorLog.Write($"Could not parse province id from file name: {path}\nCould not match \'<number> <.*>\'");
+         _ = new LoadingError(po, $"Could not parse id from file name {Path.GetFileName(path)}");
          return;
       }
-
       if (!Globals.ProvinceIdToProvince.TryGetValue(id, out var province))
       {
-         Globals.ErrorLog.Write($"Could not find province with id {id}");
+         _ = new LoadingError(po, $"Could not find province with id {id}");
          return;
       } 
-      var pathObj = PathObj.FromPath(path);
-      province.SetPath(ref pathObj);
-      
-      IO.ReadAllInANSI(path, out var rawContent);
-      Parsing.RemoveCommentFromMultilineString(rawContent, out var fileContent);
+      province.SetPath(ref po);
 
-      List<IElement> blocks = [];
-      
-      try
-      {
-         blocks = Parsing.GetElements(0, ref fileContent);
-      }
-      catch (ParsingException e)
-      {
-         Globals.ErrorLog.Write($"Error parsing province file: {path} || {e.Message}");
-         return;
-      }
       foreach (var block in blocks)
-         if (block is Content content)
-            foreach (KeyValuePair<string, string> listWithoutQuote in Parsing.GetKeyValueListWithoutQuotes(content.Value))
-               Eu4ProvAttributeRouting(province, listWithoutQuote.Key, listWithoutQuote.Value, pathObj, -1);
+         if (block is EnhancedContent content)
+            foreach (var line in content.GetLineKvpEnumerator(po, false))
+               Eu4ProvAttributeRouting(province, line.Key, line.Value, po, line.Line);
          else
             // Parse the block, aka the history entries and some special cases
-            ParseProvinceBlockBlock(ref province, (Block)block);
+            ParseProvinceBlockBlock(ref province, (EnhancedBlock)block, po);
 
-      SaveMaster.AddToDictionary(ref pathObj, province);
+      SaveMaster.AddToDictionary(ref po, province);
    }
 
    private static void Eu4ProvAttributeRouting(Province province, string attribute, string value, PathObj po, int lineNum)
@@ -175,7 +166,7 @@ public static class ProvinceParser
       }
    }
 
-   private static void ParseProvinceBlockBlock(ref Province province, Block block)
+   private static void ParseProvinceBlockBlock(ref Province province, EnhancedBlock block, PathObj po)
    {
       if (!Parsing.TryParseDate(block.Name, out var date))
       {
@@ -183,12 +174,14 @@ public static class ProvinceParser
          if (ScopeParser.IsAnyScope(block.Name) || EffectParser.IsScriptedEffect(block.Name))
          {
             //province.Effects.Add(block);
-            EffectFactory.CreateComplexEffect(block.Name, block.GetContent, EffectValueType.Complex);
+            // TODO
+            //EffectFactory.CreateComplexEffect(block.Name, block.GetContent, EffectValueType.Complex);
             return;
          }
 
          switch (block.Name.ToLower())
          {
+            /*
             case "latent_trade_goods":
                {
                   if (Parsing.IsValidTradeGood(block.GetContent))
@@ -212,37 +205,24 @@ public static class ProvinceParser
                province.Effects.Add(block);
                if (EffectParser.ParseSpawnRebels(block.GetContent, out var rebelsEffect))
                   province.Effects.Add(rebelsEffect);
-               */
+               
                return;
+            */
             default:
                Globals.ErrorLog.Write($"Could not parse date: {block.Name}");
                return;
          }
       }
 
-      var che = new ProvinceHistoryEntry(date);
+      var historyEntry = new ProvinceHistoryEntry(date);
 
-      foreach (var element in block.Blocks)
-      {
-         if (element is Content content)
-         {
-            AddEffectsToHistory(ref che, content);
-         }
-         else if (element is Block { HasOnlyContent: true } subBlock)
-         {
-            var ce = EffectFactory.CreateComplexEffect(subBlock.Name, subBlock.GetContent, EffectValueType.Complex);
-            if (subBlock.Blocks.Count == 0)
-               AddEffectsToComplexEffect(ref ce, string.Empty);
-            else
-               AddEffectsToComplexEffect(ref ce, subBlock.GetContentElements[0].Value);
+      var tokens = GeneralFileParser.ParseElementsToTokens(block.GetElements(), ProvinceScopes.Scope, po);
+      historyEntry.Effects.AddRange(tokens);
 
-            che.Effects.Add(ce);
-         }
-      }
-
-      province.History.Add(che);
+      province.History.Add(historyEntry);
    }
 
+   /*
    private static void AddEffectsToComplexEffect(ref ComplexEffect ce, string content)
    {
       var attributes = Parsing.GetKeyValueList(content);
@@ -270,5 +250,5 @@ public static class ProvinceParser
          che.Effects.Add(EffectFactory.CreateSimpleEffect(element.Key, element.Value, type, Scope.Country));//TODO check if it is country scope
       }
    }
-
+   */
 }

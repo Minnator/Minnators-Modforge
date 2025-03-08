@@ -3,6 +3,7 @@ using System.Text;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
 using Editor.DataClasses.Saveables;
+using Editor.Loading.Enhanced.PCFL.Implementation;
 using Editor.Parser;
 
 namespace Editor.Saving
@@ -13,6 +14,43 @@ namespace Editor.Saving
       public static bool SortIntLists = true;
       public static bool SameSpacePerInt = true;
       public static bool OneLinePerString = true;
+
+      public static void SaveValue<T>(string tokenName, T value, int tabs, ref StringBuilder sb)
+      {
+         switch (value)
+         {
+            case int i:
+               AddInt(tabs, i, tokenName, ref sb);
+               break;
+            case float f:
+               AddFloat(tabs, f, tokenName, ref sb);
+               break;
+            case bool b:
+               AddBool(tabs, b, tokenName, ref sb);
+               break;
+            default:
+            {
+               if (value is bool c)
+                  AddBool(tabs, c, tokenName, ref sb);
+               else 
+                  AddString(tabs, value?.ToString() ?? throw new EvilActions("Saving null is bad"), tokenName, ref sb);
+               break;
+            }
+         }
+      }
+
+      public static void FormatTokens(List<IToken> tokens, int tabs, ref StringBuilder sb)
+      {
+         foreach (var effect in tokens)
+            effect.GetTokenString(tabs, ref sb);
+      }
+
+      public static void FormatSimpleTokenBlock(List<IToken> tokens, int tabs, string name, ref StringBuilder sb)
+      {
+         OpenBlock(ref tabs, name, ref sb);
+         FormatTokens(tokens, tabs, ref sb);
+         CloseBlock(ref tabs, ref sb);
+      }
 
       public static string GetYesNo(bool value)
       {
