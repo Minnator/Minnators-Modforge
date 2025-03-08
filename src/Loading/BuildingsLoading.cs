@@ -1,6 +1,9 @@
 ﻿using Editor.DataClasses.GameDataClasses;
 using Editor.Helper;
+using Editor.Loading.Enhanced;
+using Editor.Loading.Enhanced.PCFL.Implementation.ProvinceScope;
 using Editor.Parser;
+using Editor.Saving;
 using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading
@@ -14,23 +17,19 @@ namespace Editor.Loading
          List<Building> buildings = [];
 
          foreach (var file in files)
-            if (File.Exists(file))
-               ParseBuildingsFile(file, ref buildings);
+            ParseBuildingsFile(file, ref buildings);
          
-         foreach (var building in buildings) 
-            Globals.BuildingKeys.Add(building.Name);
-         
-         Globals.Buildings = buildings;
+         RuntimeEffects.GenerateBuildingEffects();
       }
 
       private static void ParseBuildingsFile(string file, ref List<Building> buildings)
       {
-         var content = IO.ReadAllInUTF8(file);
-         var elements = Parsing.GetElements(0, ref content);
+         var po = PathObj.FromPath(file);
 
-         foreach (var element in elements)
-            if (element is Block block) 
-               buildings.Add(new (block.Name));
+         var (blocks, _) = po.LoadBase(EnhancedParser.FileContentAllowed.BlocksOnly);
+
+         foreach (var block in blocks)
+            Globals.Buildings.Add(new (block.Name));
       }
    }
 }

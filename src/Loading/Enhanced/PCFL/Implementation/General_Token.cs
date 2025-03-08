@@ -14,6 +14,7 @@ namespace Editor.Loading.Enhanced.PCFL.Implementation
       public abstract string GetTokenName();
       public abstract string GetTokenDescription();
       public abstract string GetTokenExample();
+      public override string ToString() => GetTokenName();
    }
 
    public abstract class SimpleStringEffect : IToken
@@ -25,6 +26,7 @@ namespace Editor.Loading.Enhanced.PCFL.Implementation
       public abstract string GetTokenName();
       public abstract string GetTokenDescription();
       public abstract string GetTokenExample();
+      public override string ToString() => GetTokenName();
    }
 
    public abstract class SimpleBoolEffect : IToken
@@ -36,6 +38,7 @@ namespace Editor.Loading.Enhanced.PCFL.Implementation
       public abstract string GetTokenName();
       public abstract string GetTokenDescription();
       public abstract string GetTokenExample();
+      public override string ToString() => GetTokenName();
    }
 
    public abstract class SimpleFloatEffect : IToken
@@ -47,6 +50,7 @@ namespace Editor.Loading.Enhanced.PCFL.Implementation
       public abstract string GetTokenName();
       public abstract string GetTokenDescription();
       public abstract string GetTokenExample();
+      public override string ToString() => GetTokenName();
    }
 
    public abstract class SimpleTagEffect : IToken
@@ -71,5 +75,6 @@ namespace Editor.Loading.Enhanced.PCFL.Implementation
       public abstract string GetTokenName();
       public abstract string GetTokenDescription();
       public abstract string GetTokenExample();
+      public override string ToString() => GetTokenName();
    }
 }

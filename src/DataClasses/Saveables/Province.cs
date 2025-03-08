@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.Misc;
 using Editor.ErrorHandling;
 using Editor.Forms.Feature;
 using Editor.Helper;
@@ -516,7 +517,18 @@ namespace Editor.DataClasses.Saveables
 
       #region History
 
-      // TODO
+      public void LoadHistoryForDate(Date date)
+      {
+         var entries = History.Where(x => x.Date <= date);
+         foreach (var entry in entries)
+            foreach (var eff in entry.Effects)
+               eff.Activate(this);
+      }
+
+      public void ResetHistory()
+      {
+
+      }
 
       #endregion
 

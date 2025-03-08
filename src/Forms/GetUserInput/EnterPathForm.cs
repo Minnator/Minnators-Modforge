@@ -29,7 +29,7 @@ namespace Editor.Forms.GetUserInput
       private void SelectVanillaPathButton_Click(object sender, EventArgs e)
       {
          var documentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-         IO.OpenFolderDialog(documentsFolder, "vanilla base game", out var folder);
+         IO.OpenFolderDialog(documentsFolder, "eu4 Folder", out var folder);
 
          VanillaPathTextBox.Text = folder;
       }

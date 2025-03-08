@@ -225,6 +225,8 @@ namespace Editor.Forms
 
          var bookmark = Globals.Bookmarks[BookMarkComboBox.SelectedIndex];
          DateControl.Date = bookmark.Date;
+         ProvinceHistoryManager.LoadDate(bookmark.Date);
+         MapModeManager.RenderCurrent();
       }
 
       #endregion

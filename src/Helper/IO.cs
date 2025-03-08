@@ -29,7 +29,7 @@ internal static class IO
       dialog.InitialDirectory = startPath;
       dialog.CheckFileExists = false;
       dialog.CheckPathExists = true;
-      dialog.Filter = filterText;
+      dialog.FileName = filterText;
 
       if (dialog.ShowDialog() == DialogResult.OK)
          folder = Path.GetDirectoryName(dialog.FileName) ?? Environment.SpecialFolder.MyDocuments.ToString();
@@ -45,7 +45,7 @@ internal static class IO
       dialog.InitialDirectory = startFolder;
       dialog.CheckFileExists = true;
       dialog.CheckPathExists = true;
-      dialog.FileName = filterText;
+      dialog.Filter = filterText;
 
       if (dialog.ShowDialog() == DialogResult.OK)
          file = dialog.FileName;

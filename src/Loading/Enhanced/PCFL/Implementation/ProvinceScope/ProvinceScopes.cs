@@ -36,8 +36,15 @@ public static class ProvinceScopes
          [CapitalEffect.EFFECT_NAME] = CapitalEffect.CreateEffect,
          [TradeGoodsEffect.EFFECT_NAME] = TradeGoodsEffect.CreateEffect,
          [SeatInParliamentEffect.EFFECT_NAME] = SeatInParliamentEffect.CreateEffect,
-         [TribalOwnerEffect.EFFECT_NAME] = SeatInParliamentEffect.CreateEffect,
+         [TribalOwnerEffect.EFFECT_NAME] = TribalOwnerEffect.CreateEffect,
          [AddLocalAutonomyEffect.EFFECT_NAME] = AddLocalAutonomyEffect.CreateEffect,
+         [NativeSizeEffect.EFFECT_NAME] = NativeSizeEffect.CreateEffect,
+         [AddClaimEffect.EFFECT_NAME] = AddClaimEffect.CreateEffect,
+         [RemoveClaimEffect.EFFECT_NAME] = RemoveClaimEffect.CreateEffect,
+         [AddPermanentProvinceModifierEffect.EFFECT_NAME] = AddPermanentProvinceModifierEffect.CreateEffect,
+         [AddTradeCompanyInvestmentModifierEffect.EFFECT_NAME] = AddTradeCompanyInvestmentModifierEffect.CreateEffect,
       }
    };
+
+
 }

@@ -89,12 +89,14 @@ namespace Editor.Loading.Enhanced
          var contentStart = 0;
          var elementIndex = 0;
          byte wasEquals = 0;
+         
+         var prevWordStart = -1;
+         var prevWordEnd = -1;
 
          for (var i = 0; i < lines.Length; i++)
          {
             var length = lines[i].Length;
             var charIndex = 0;
-
             var wordStart = -1;
             var wordEnd = -1;
             isInWord = false;
@@ -140,7 +142,7 @@ namespace Editor.Loading.Enhanced
                      }
 
 
-                     var nameLength = wordEnd - wordStart;
+                     
                      if (currentContent.Length < 1)
                      {
                         _ = new LoadingError(pathObj, "Block name cannot be empty", i, charIndex, level: LogType.Critical);
@@ -149,9 +151,21 @@ namespace Editor.Loading.Enhanced
 
                      if (wordEnd < 0 || wordStart < 0)
                      {
-                        _ = new LoadingError(pathObj, "Block name cannot be empty", i, charIndex, level: LogType.Critical);
-                        return ([], []);
+                        if (prevWordStart < 0 || prevWordEnd < 0)
+                        {
+                           _ = new LoadingError(pathObj, "Block name cannot be empty", i, charIndex, level: LogType.Critical);
+                           return ([], []);
+                        }
+                        wordStart = prevWordStart;
+                        wordEnd = prevWordEnd;
+                        _ = new LoadingError(pathObj, "This is a heinous formatting style. Don't do it, just don't do it!", i, charIndex, level: LogType.Warning);
                      }
+
+                     prevWordStart = -1;
+                     prevWordEnd = -1;
+
+                     var nameLength = wordEnd - wordStart;
+
 
                      Span<char> charSpan = stackalloc char[nameLength];
                      currentContent.CopyTo(wordStart, charSpan, nameLength); // We copy the name of the block from the sb
@@ -216,6 +230,8 @@ namespace Editor.Loading.Enhanced
                         var content = new EnhancedContent(trimmedClosing, currentStr[0] == '\n' ? contentStart + 1 : contentStart,
                                                           elementIndex++); // We create a new content element as there is no block element on the stack
                         blockStack.PeekRef()->ContentElements.Add(content);
+                        wordEnd = -1;
+                        wordEnd = -1;
                         currentContent.Clear();
                      }
 
@@ -301,7 +317,12 @@ namespace Editor.Loading.Enhanced
 
             if (currentContent.Length >= 1 && char.IsWhiteSpace(currentContent[^1]) && currentContent[^1] != '\n')
                currentContent.Remove(currentContent.Length - 1, 1);
-            
+
+            if (wordStart >= 0 && wordEnd >= 0)
+            {
+               prevWordStart = wordStart;
+               prevWordEnd = wordEnd;
+            }
             currentContent.Append('\n');
             wasEquals = 0;
          }

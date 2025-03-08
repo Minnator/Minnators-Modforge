@@ -2839,7 +2839,7 @@
          Name = "MapWindow";
          SizeGripStyle = SizeGripStyle.Show;
          StartPosition = FormStartPosition.Manual;
-         Text = "Minnator's Modforge (Closed Alpha 0.1.0)";
+         Text = "Minnator's Modforge (Alpha 1.2.0)";
          FormClosing += MapWindow_FormClosing;
          KeyDown += MapWindow_KeyDown;
          MapMenuStrip.ResumeLayout(false);

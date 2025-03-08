@@ -83,7 +83,7 @@ namespace Editor.Forms.Feature
          var openFile = new ToolStripMenuItem("Open file");
          var openFolderOfFile = new ToolStripMenuItem("Open folder of file");
          var openFolder = new ToolStripMenuItem("Open folder");
-         var openFileAtLocation = new ToolStripMenuItem("Open File at error location");
+         var openFileAtLocation = new ToolStripMenuItem("Open file at error location");
 
          openFile.Click += (_, args) => ProcessHelper.OpenFile(entry.Path);
          openFileAtLocation.Click += (_, args) =>
