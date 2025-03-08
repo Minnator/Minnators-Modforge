@@ -232,8 +232,19 @@ namespace Editor.Loading.Enhanced
 
                      currentContent.Append(c);
                      break;
-                  case '\r':
+                  case '\r': // WHY TF ARE THERE SINGLE \r IN THE FILES
+                     if (charIndex != length - 1)
+                     {
+                        if(pathObj.IsModPath)
+                           _ = new LoadingError(pathObj, "Unexpected \\r in file.", i, charIndex, level: LogType.Warning);
+                        else
+                           _ = new LoadingError(pathObj, "Unexpected \\r in file. Thanks Paradox!", i, charIndex, level: LogType.Warning);
+                        if (currentContent.Length >= 1 && char.IsWhiteSpace(currentContent[^1]) && currentContent[^1] != '\n')
+                           currentContent.Remove(currentContent.Length - 1, 1);
 
+                        currentContent.Append('\n');
+                        wasEquals = 0;
+                     }
                      break;
                   default:
                      if (!isInQuotes) // We only add whitespace if we are in quotes

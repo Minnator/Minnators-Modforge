@@ -62,6 +62,8 @@ namespace Editor.ErrorHandling
 
       public static event EventHandler<LogEntry>? LogEntryAdded;
 
+      public static object Lock = new();
+
       public static List<LogEntry> GetAlLogEntries => [..Informations, ..Warnings, ..Errors, ..Debugs, ..Criticals];
       public static int TotalLogCount => InformationCount + DebugCount;
       public static int TotalErrorCount => ErrorCount + CriticalCount + WarningCount;
@@ -200,26 +202,29 @@ namespace Editor.ErrorHandling
       public static void AddLogEntry(LogEntry entry)
       {
          var verbosity = entry.Level;
-         switch (verbosity)
+         lock (Lock)
          {
-            case LogType.None:
-               break;
-            case LogType.Error:
-               ErrorCount++;
-               break;
-            case LogType.Warning:
-               WarningCount++;
-               break;
-            case LogType.Information:
-               InformationCount++;
-               break;
-            case LogType.Debug:
-               DebugCount++;
-               break;
-            case LogType.Critical:
-               CriticalCount++;
-               break;
+            switch (verbosity)
+            {
+               case LogType.None:
+                  break;
+               case LogType.Error:
+                  ErrorCount++;
+                  break;
+               case LogType.Warning:
+                  WarningCount++;
+                  break;
+               case LogType.Information:
+                  InformationCount++;
+                  break;
+               case LogType.Debug:
+                  DebugCount++;
+                  break;
+               case LogType.Critical:
+                  CriticalCount++;
+                  break;
 
+            }
          }
          Globals.MapWindow.UpdateErrorCounts(TotalErrorCount, TotalLogCount);
          if (Globals.Settings.Logging.LoggingVerbosity.HasFlag(verbosity))

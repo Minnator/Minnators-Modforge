@@ -46,10 +46,10 @@ namespace Editor.DataClasses.Saveables
       private bool _isSeatInParliament;                          
       private string _capital = string.Empty;                    
       private Culture _culture = Culture.Empty;                   
-      private Religion _religion = GameDataClasses.Religion.Empty;                   
+      private Religion _religion = Religion.Empty;                   
+      private Religion _reformationCenter = Religion.Empty;         
       private TradeGood _tradeGood = TradeGood.Empty;                   
       private string _latentTradeGood = string.Empty;           
-      private string _reformationCenter = string.Empty;         
       private List<Tag> _claims = [];                            
       private List<Tag> _permanentClaims = [];                  
       private List<Tag> _cores = [];                            
@@ -306,7 +306,7 @@ namespace Editor.DataClasses.Saveables
       }
 
       [ToolTippable]
-      public string ReformationCenter
+      public Religion ReformationCenter
       {
          get => _reformationCenter;
          set => SetField(ref _reformationCenter, value);

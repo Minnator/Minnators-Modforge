@@ -74,10 +74,12 @@ public enum ErrorType
    PCFL_TriggerValidationError = 124,
    [ErrorInformation("This occurs as some token has been called or created with illegal arguments", "Verify token attributes and usage")]
    PCFL_TokenValidationError = 125,
+   [ErrorInformation("This occurs because a feature is deprecated and should not be used anymore!", "Check the feature and update to the replacement if applicable!")]
+   PCFL_Deprecated = 126,
    [ErrorInformation("This occurs because a trigger is empty and can be removed", "Check the trigger and remove if necessary")]
    EmptyLimitBlock = 135,
    [ErrorInformation("This occurs because an date is not in a valid format!", "Check the date format and correct it!")]
-   IllegalDateFormat = 101,
+   IllegalDateFormat = 136,
    // ObjectInteraction Error
    [ErrorInformation("This occurs because a key was not found in a dictionary!", "Contact a developer with the latest log exported as a .csv")]
    INTERNAL_KeyNotFound = 300, // ObjectInteraction Error 300-399

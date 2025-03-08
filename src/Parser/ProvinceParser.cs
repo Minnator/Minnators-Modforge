@@ -149,7 +149,7 @@ public static class ProvinceParser
    private static void Eu4ProvAttributeRouting(Province province, string attribute, string value, PathObj po, int lineNum)
    {
       if (string.IsNullOrEmpty(attribute) || string.IsNullOrEmpty(value))
-         _ = new LoadingError(po, "Either key or value for an attribute setter is null or empty!");
+         _ = new LoadingError(po, "Either key or value for an attribute setter is null or empty!", line:lineNum);
       else
       {
          if (!ProvinceActionsAndProperties.TryGetValue(attribute.ToLower(), out var tuple))
@@ -158,7 +158,7 @@ public static class ProvinceParser
             if (building != null)
                province.Buildings.Add(building);
             else
-               _ = new LoadingError(po, $"Could not find attribute {attribute} in province attribute list");
+               _ = new LoadingError(po, $"Could not find attribute {attribute} in province attribute list", line: lineNum);
             return;
          }
          var (action, propertyInfo) = tuple;
