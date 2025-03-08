@@ -320,7 +320,7 @@ namespace Editor.ErrorHandling
                           [CallerMemberName] string memberName = "",
                           [CallerFilePath] string callerPath = "",
                           [CallerLineNumber] int lineNumber = 0) 
-         : base(type, GetErrorMsg(path.ToModPath(), line, charPos, msg), level, addToManager, !path.IsModPath, memberName, callerPath, lineNumber)
+         : base(type, GetErrorMsg(path.GetPath(), line, charPos, msg), level, addToManager, !path.IsModPath, memberName, callerPath, lineNumber)
       {
          Line = line;
          CharPos = charPos;

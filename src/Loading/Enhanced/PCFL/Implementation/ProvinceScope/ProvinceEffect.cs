@@ -319,7 +319,7 @@ public class RevoltEffect : IToken
    private const ScopeType EFFECT_SCOPE = ScopeType.Province;
 
    internal Value<string> type = new(string.Empty);
-   internal Value<int> size = new(-1);
+   internal Value<float> size = new(-1);
    internal Value<string> leader = new(string.Empty);
    internal Value<string> name = new(string.Empty);
 
@@ -387,7 +387,7 @@ public class RevoltEffect : IToken
    public void GetTokenString(int tabs, ref StringBuilder sb)
    {
       SavingUtil.AddString(tabs, type.Val, "type", ref sb);
-      SavingUtil.AddIntIfNotValue(tabs, size.Val, "size", -1, ref sb);
+      SavingUtil.AddFloatIfNotValue(tabs, size.Val, "size", -1, ref sb);
       SavingUtil.AddQuotedString(tabs, leader.Val, "leader", ref sb);
    }
 

@@ -88,6 +88,7 @@ namespace Editor.Loading.Enhanced
          var isInWhiteSpace = false;
          var contentStart = 0;
          var elementIndex = 0;
+         byte wasEquals = 0;
 
          for (var i = 0; i < lines.Length; i++)
          {
@@ -124,7 +125,11 @@ namespace Editor.Loading.Enhanced
 
                      break;
                   case '"':
+                     if (isInQuotes)
+                        if (wasEquals == 2)
+                           wasEquals = 3;
                      isInQuotes = !isInQuotes;
+                     isInWhiteSpace = false;
                      currentContent.Append(c);
                      break;
                   case '{':
@@ -187,6 +192,7 @@ namespace Editor.Loading.Enhanced
                      currentContent.Clear();
                      blockStack.Push(newBlock);
                      contentStart = i;
+                     wasEquals = 0;
 
                      break;
                   case '}':
@@ -215,6 +221,7 @@ namespace Editor.Loading.Enhanced
 
                      blockStack.Pop();
                      contentStart = i;
+                     wasEquals = 0;
                      break;
                   case '#':
                      if (!isInQuotes) // # is in quotes and thus allowed
@@ -238,7 +245,13 @@ namespace Editor.Loading.Enhanced
                               isInWhiteSpace = true;
                               isInWord = false;
                               if (wordStart != -1)
-                                 currentContent.Append(' ');
+                                 if (wasEquals > 2)
+                                 {
+                                    wasEquals = 1;
+                                    currentContent.Append('\t');
+                                 }
+                                 else
+                                    currentContent.Append(' ');
                            }
 
                            break;
@@ -252,12 +265,20 @@ namespace Editor.Loading.Enhanced
                               wordEnd = currentContent.Length + 1;
                               wordStart = currentContent.Length;
                               isInWord = true;
+                              
+                              if (wasEquals == 2)
+                                 wasEquals = 3;
+                              else
+                                 wasEquals = 0;
                            }
                            else
                               wordEnd = currentContent.Length + 1;
                         }
                         else
+                        {
                            isInWord = false;
+                           wasEquals = 2;
+                        }
                      }
 
                      currentContent.Append(c);
@@ -269,8 +290,9 @@ namespace Editor.Loading.Enhanced
 
             if (currentContent.Length >= 1 && char.IsWhiteSpace(currentContent[^1]) && currentContent[^1] != '\n')
                currentContent.Remove(currentContent.Length - 1, 1);
-
+            
             currentContent.Append('\n');
+            wasEquals = 0;
          }
 
          if (!blockStack.IsEmpty)
@@ -280,7 +302,11 @@ namespace Editor.Loading.Enhanced
          }
 
          if (currentContent.Length > 0)
-            contents.Add(new(currentContent.ToString(), contentStart, elementIndex++));
+         {
+            var contentStr = currentContent.ToString();
+            if (!string.IsNullOrWhiteSpace(contentStr))
+               contents.Add(new(contentStr, contentStart, elementIndex++));
+         }
 
          return (blocks, contents);
       }

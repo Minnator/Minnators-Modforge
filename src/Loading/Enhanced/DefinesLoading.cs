@@ -38,9 +38,7 @@ namespace Editor.Loading.Enhanced
             return false;
 
          var (blocks, _) = po.LoadBase(EnhancedParser.FileContentAllowed.BlocksOnly, value);
-
          
-
          if (blocks.Count != 1) 
             _ = new LoadingError(po, "defines.lua must contain exactly one block!", blocks.Count > 1 ? blocks[1].StartLine : 0, -1, ErrorType.InvalidFileStructure);
          // We recover by only using the first block found.
