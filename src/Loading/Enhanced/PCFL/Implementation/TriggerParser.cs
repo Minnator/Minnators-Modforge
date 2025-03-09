@@ -39,34 +39,6 @@ public static class TriggerParser
       return ParseTriggerOfValue(value, out outType);
    }
 
-   public static IErrorHandle ParseTriggerValues(string value, PCFL_Type type, out Value outValue)
-   {
-      IErrorHandle handle;
-      switch (type)
-      {
-         case PCFL_Type.Int:
-            handle = ParseTriggerOfValue(value, out int intObj);
-            outValue = new Value<int>(intObj);
-            break;
-         case PCFL_Type.Float:
-            handle = ParseTriggerOfValue(value, out float floatObj);
-            outValue = new Value<float>(floatObj);
-            break;
-         case PCFL_Type.String:
-            handle = ParseTriggerOfValue(value, out string stringObj);
-            outValue = new Value<string>(stringObj);
-            break;
-         case PCFL_Type.Bool:
-            handle = ParseTriggerOfValue(value, out bool boolObj);
-            outValue = new Value<bool>(boolObj);
-            break;
-         default:
-            throw new ArgumentOutOfRangeException(nameof(type), type, null);
-      }
-
-      return handle;
-   }
-
    public static IErrorHandle ParseTriggerOfValue(string value, out int outType)
    {
       var handle = Converter.ParseInt(value, out var intObj);

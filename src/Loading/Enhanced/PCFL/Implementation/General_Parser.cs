@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using Editor.DataClasses.GameDataClasses;
 using Editor.ErrorHandling;
+using Editor.Helper;
 using Editor.Saving;
 
 namespace Editor.Loading.Enhanced.PCFL.Implementation;
@@ -217,28 +218,40 @@ public static class GeneralFileParser
       return trigger is not null;
    }
 
-   public static bool ParseSingleTriggerValue(ref Value<int> inValue, LineKvp<string, string> command, PathObj po, string triggerName)
+   public static bool ParseSingleTriggerValue(ref Value<int> inValue, LineKvp<string, string> command, PathObj po)
    {
       if (!TriggerParser.ParseTriggerOfValue(command.Value, out int parsedValue).Then(o => o.ConvertToLoadingError(po, $"Failed parsing {command.Key} Trigger", command.Line)))
          return false;
       inValue.Val = parsedValue;
       return true;
    }
+
+   public static bool ParseSingleTriggerVal<T>(ref Value<T> value, LineKvp<string, string> line, PathObj po) where T : notnull
+   {
+      if (Converter.Convert(line.Value, out T obj).Then(o => o.ConvertToLoadingError(po, $"Failed parsing {line.Key} Trigger", line.Line)))
+      {
+         value.Val = obj;
+         return true;
+      }
+      return false;
+   }
+
    public static bool ParseSingleTriggerValue(ref Value<string> inValue, LineKvp<string, string> command, PathObj po, string triggerName)
    {
+      ParseSingleTriggerVal(ref inValue, command, po);
       if (!TriggerParser.ParseTriggerOfValue(command.Value, out string parsedValue).Then(o => o.ConvertToLoadingError(po, $"Failed parsing {command.Key} Trigger", command.Line)))
          return false;
       inValue.Val = parsedValue;
       return true;
    }
-   public static bool ParseSingleTriggerValue(ref Value<bool> inValue, LineKvp<string, string> command, PathObj po, string triggerName)
+   public static bool ParseSingleTriggerValue(ref Value<bool> inValue, LineKvp<string, string> command, PathObj po)
    {
       if (!TriggerParser.ParseTriggerOfValue(command.Value, out bool parsedValue).Then(o => o.ConvertToLoadingError(po, $"Failed parsing {command.Key} Trigger", command.Line)))
          return false;
       inValue.Val = parsedValue;
       return true;
    }
-   public static bool ParseSingleTriggerValue(ref Value<float> inValue, LineKvp<string, string> command, PathObj po, string triggerName)
+   public static bool ParseSingleTriggerValue(ref Value<float> inValue, LineKvp<string, string> command, PathObj po)
    {
       if (!TriggerParser.ParseTriggerOfValue(command.Value, out float parsedValue).Then(o => o.ConvertToLoadingError(po, $"Failed parsing {command.Key} Trigger", command.Line)))
          return false;

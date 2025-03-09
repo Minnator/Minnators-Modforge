@@ -43,6 +43,11 @@ public static class ProvinceScopes
          [RemoveClaimEffect.EFFECT_NAME] = RemoveClaimEffect.CreateEffect,
          [AddPermanentProvinceModifierEffect.EFFECT_NAME] = AddPermanentProvinceModifierEffect.CreateEffect,
          [AddTradeCompanyInvestmentModifierEffect.EFFECT_NAME] = AddTradeCompanyInvestmentModifierEffect.CreateEffect,
+         [NativeHostilnessEffect.EFFECT_NAME] = NativeHostilnessEffect.CreateEffect,
+         [NativeFerocityEffect.EFFECT_NAME] = NativeFerocityEffect.CreateEffect,
+         [RemoveProvinceTriggeredModifierEffect.EFFECT_NAME] = RemoveProvinceTriggeredModifierEffect.CreateEffect,
+         [AddProvinceTriggeredModifierEffect.EFFECT_NAME] = AddProvinceTriggeredModifierEffect.CreateEffect,
+         [AddToTradeCompanyEffect.EFFECT_NAME] = AddToTradeCompanyEffect.CreateEffect,
       }
    };
 

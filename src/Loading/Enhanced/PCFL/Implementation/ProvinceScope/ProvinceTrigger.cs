@@ -24,7 +24,7 @@ public class BaseManpowerTrigger : ITrigger
 
    public bool Parse(LineKvp<string, string> command, PathObj po)
    {
-      return GeneralFileParser.ParseSingleTriggerValue(ref _baseManpower, command, po, TRIGGER_NAME);
+      return GeneralFileParser.ParseSingleTriggerValue(ref _baseManpower, command, po);
    }
 
    public bool ParseWithReplacement(ScriptedTriggerSource parent, LineKvp<string, string> command, PathObj po)
@@ -59,7 +59,7 @@ public class BaseTaxTrigger : ITrigger
 
    public bool Parse(LineKvp<string, string> command, PathObj po)
    {
-      return GeneralFileParser.ParseSingleTriggerValue(ref _baseTax, command, po, TRIGGER_NAME);
+      return GeneralFileParser.ParseSingleTriggerValue(ref _baseTax, command, po);
    }
 
    public bool ParseWithReplacement(ScriptedTriggerSource parent, LineKvp<string, string> command, PathObj po)

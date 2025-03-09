@@ -1,4 +1,5 @@
-﻿using Editor.DataClasses.MapModes;
+﻿using System.Diagnostics;
+using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Misc;
 
 namespace Editor.Helper
@@ -9,6 +10,7 @@ namespace Editor.Helper
 
       public static void LoadDate(Date date)
       {
+         var sw = Stopwatch.StartNew();
          Globals.State = State.Loading;
          if (date < LastDate)
             foreach (var province in Globals.Provinces) 
@@ -17,7 +19,12 @@ namespace Editor.Helper
             province.LoadHistoryForDate(date);
          LastDate = LastDate.Copy(date);
          Globals.State = State.Running;
-          
+         sw.Stop();
+#if DEBUG
+         Debug.WriteLine($"Loading history for {date} took {sw.ElapsedMilliseconds}ms");
+#else
+         MessageBox.Show($"Loading history for {date} took {sw.ElapsedMilliseconds}ms");
+#endif
       }
    }
 }

@@ -577,17 +577,10 @@ public static partial class Parsing
       {
          var name = match.Groups["name"].Value;
 
-         try
-         {
-            var chance = int.Parse(match.Groups["chance"].Value);
+         if (int.TryParse(match.Groups["chance"].Value, out var chance))
             names.Add(new(name, chance));
-         }
-         catch (Exception e)
-         {
+         else
             Globals.ErrorLog.Write($"Could not parse chance: {match.Groups["chance"].Value} in {name} = {match.Groups["chance"].Value}");
-            return;
-         }
-
       }
    }
 

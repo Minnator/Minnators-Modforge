@@ -1,8 +1,10 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Text;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
 using Editor.DataClasses.Saveables;
+using Editor.Helper;
 using Editor.Loading.Enhanced.PCFL.Implementation;
 using Editor.Parser;
 
@@ -236,6 +238,19 @@ namespace Editor.Saving
          AddIntIfNotValue(tabs, num, intName, 0, ref sb);
       }
 
+      public static void AddValue<T>(int tabs, Value<T> value, string name, ref StringBuilder sb) where T : notnull
+      {
+         AddTabs(tabs, ref sb);
+         sb.AppendLine($"{name} = {Converter.GeneralToString(value)}");
+      }
+
+      public static void AddValueIfNot<T> (int tabs, Value<T> value, T notValue, string name, ref StringBuilder sb) where T : notnull
+      {
+         if (!value.Val.Equals(notValue))
+            AddValue(tabs, value, name, ref sb);
+      }
+
+
       public static void AddIntIfNotValue(int tabs, int num, string intName, int val, ref StringBuilder sb)
       {
          if (num != val)
@@ -280,7 +295,12 @@ namespace Editor.Saving
          if (num == 0)
             return;
          AddTabs(tabs, ref sb);
-         sb.AppendLine($"{floatName} = {num.ToString("F2", CultureInfo.InvariantCulture)}");
+         sb.AppendLine($"{floatName} = {FormatFloat(num)}");
+      }
+
+      public static string FormatFloat(float f)
+      {
+         return f.ToString("F2", CultureInfo.InvariantCulture);
       }
 
       public static void AddFloatIfNotValue(int tabs, float num, string floatName, float val, ref StringBuilder sb)
@@ -288,7 +308,7 @@ namespace Editor.Saving
          if (num != val)
          {
             AddTabs(tabs, ref sb);
-            sb.AppendLine($"{floatName} = {num.ToString("F2", CultureInfo.InvariantCulture)}");
+            sb.AppendLine($"{floatName} = {FormatFloat(num)}");
          }
       }
       public static void AddModifiers(int tabs, List<ISaveModifier> modifiers, ref StringBuilder sb)

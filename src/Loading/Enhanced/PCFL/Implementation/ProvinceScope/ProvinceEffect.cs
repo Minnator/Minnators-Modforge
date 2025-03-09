@@ -1,17 +1,17 @@
 ﻿
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
+using System.Drawing;
 using System.Text;
+using System.Text.RegularExpressions;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Saveables;
-using Editor.DataClasses.Settings;
 using Editor.ErrorHandling;
-using Editor.Helper;
-using Editor.Parser;
 using Editor.Saving;
 
 namespace Editor.Loading.Enhanced.PCFL.Implementation.ProvinceScope;
 
-public class AddBaseManpowerEffect : SimpleIntEffect
+public class AddBaseManpowerEffect() : SimpleEffect<int>(1)
 {
    public const string EFFECT_NAME = "add_base_manpower";
    private const string EFFECT_DESCRIPTION = "Adds base manpower to the current province scope.";
@@ -37,7 +37,7 @@ public class AddBaseManpowerEffect : SimpleIntEffect
    public override string GetTokenExample() => EFFECT_EXAMPLE;
 }
 
-public class AddBaseTaxEffect : SimpleIntEffect
+public class AddBaseTaxEffect() : SimpleEffect<int>(1)
 {
    public const string EFFECT_NAME = "add_base_tax";
    private const string EFFECT_DESCRIPTION = "Adds base tax to the current province scope.";
@@ -63,7 +63,7 @@ public class AddBaseTaxEffect : SimpleIntEffect
    public override string GetTokenExample() => EFFECT_EXAMPLE;
 }
 
-public class AddBaseProductionEffect : SimpleIntEffect
+public class AddBaseProductionEffect() : SimpleEffect<int>(1)
 {
    public const string EFFECT_NAME = "add_base_production";
    private const string EFFECT_DESCRIPTION = "Adds base production to the current province scope.";
@@ -89,7 +89,7 @@ public class AddBaseProductionEffect : SimpleIntEffect
    public override string GetTokenExample() => EFFECT_EXAMPLE;
 }
 
-public class BaseManpowerEffect : SimpleIntEffect
+public class BaseManpowerEffect() : SimpleEffect<int>(1)
 {
    public const string EFFECT_NAME = "base_manpower";
    private const string EFFECT_DESCRIPTION = "Sets the base_manpower to the current province scope. ONLY in province histrory files.";
@@ -115,7 +115,7 @@ public class BaseManpowerEffect : SimpleIntEffect
    public override string GetTokenExample() => EFFECT_EXAMPLE;
 }
 
-public class BaseTaxEffect : SimpleIntEffect
+public class BaseTaxEffect() : SimpleEffect<int>(1)
 {
    public const string EFFECT_NAME = "base_tax";
    private const string EFFECT_DESCRIPTION = "Sets base tax to the current province scope. ONLY in province histrory files.";
@@ -141,7 +141,7 @@ public class BaseTaxEffect : SimpleIntEffect
    public override string GetTokenExample() => EFFECT_EXAMPLE;
 }
 
-public class BaseProductionEffect : SimpleIntEffect
+public class BaseProductionEffect() : SimpleEffect<int>(1)
 {
    public const string EFFECT_NAME = "base_production";
    private const string EFFECT_DESCRIPTION = "Sets base production to the current province scope. ONLY in province histrory files.";
@@ -167,7 +167,7 @@ public class BaseProductionEffect : SimpleIntEffect
    public override string GetTokenExample() => EFFECT_EXAMPLE;
 }
 
-public class OwnerEffect : SimpleTagEffect
+public class OwnerEffect() : SimpleEffect<Country>(Country.Empty)
 {
    public const string EFFECT_NAME = "owner";
    private const string EFFECT_DESCRIPTION = "Sets the owner of the province. ONLY valid in province history files";
@@ -185,10 +185,8 @@ public class OwnerEffect : SimpleTagEffect
    public override void Activate(ITarget target)
    {
       Debug.Assert(target is Province, $"'{EFFECT_NAME}' effect is only valid on provinces");
-      if (Tag.TryParse(_value.Val, out var tag) && Globals.Countries.TryGetValue(tag, out var country))
-         ((Province)target).Owner = country;
-      else
-         _ = new ErrorObject(type: ErrorType.PCFL_TokenValidationError, $"value for {EFFECT_NAME} is not of type Tag!");
+      Debug.Assert(Globals.Countries.TryGetValue(_value.Val.Tag, out _), "The country must always exist to use it in execution");
+      ((Province)target).Owner = _value.Val;
    }
 
    public override string GetTokenName() => EFFECT_NAME;
@@ -196,7 +194,7 @@ public class OwnerEffect : SimpleTagEffect
    public override string GetTokenExample() => EFFECT_EXAMPLE;
 }
 
-public class ControllerEffect : SimpleTagEffect
+public class ControllerEffect() : SimpleEffect<Country>(Country.Empty)
 {
    public const string EFFECT_NAME = "controller";
    private const string EFFECT_DESCRIPTION = $"Sets the {EFFECT_NAME} of the province. ONLY valid in province history files";
@@ -214,10 +212,8 @@ public class ControllerEffect : SimpleTagEffect
    public override void Activate(ITarget target)
    {
       Debug.Assert(target is Province, $"'{EFFECT_NAME}' effect is only valid on provinces");
-      if (Tag.TryParse(_value.Val, out var tag) && Globals.Countries.TryGetValue(tag, out var country))
-         ((Province)target).Controller = country;
-      else
-         _ = new ErrorObject(type: ErrorType.PCFL_TokenValidationError, $"value for {EFFECT_NAME} is not of type Tag!");
+      Debug.Assert(Globals.Countries.TryGetValue(_value.Val.Tag, out _), "The country must always exist to use it in execution");
+      ((Province)target).Controller = _value.Val;
    }
 
    public override string GetTokenName() => EFFECT_NAME;
@@ -225,7 +221,7 @@ public class ControllerEffect : SimpleTagEffect
    public override string GetTokenExample() => EFFECT_EXAMPLE;
 }
 
-public class AddCoreEffect : SimpleTagEffect
+public class AddCoreEffect() : SimpleEffect<Country>(Country.Empty)
 {
    public const string EFFECT_NAME = "add_core";
    private const string EFFECT_DESCRIPTION = $"<scope>The country that gains the core.";
@@ -243,10 +239,8 @@ public class AddCoreEffect : SimpleTagEffect
    public override void Activate(ITarget target)
    {
       Debug.Assert(target is Province, $"'{EFFECT_NAME}' effect is only valid on provinces");
-      if (Tag.TryParse(_value.Val, out var tag))
-         ((Province)target).Cores.Add(tag);
-      else
-         _ = new ErrorObject(type: ErrorType.PCFL_TokenValidationError, $"value for {EFFECT_NAME} is not of type Tag!");
+      Debug.Assert(Globals.Countries.TryGetValue(_value.Val.Tag, out _), "The country must always exist to use it in execution");
+      ((Province)target).Cores.Add(_value.Val.Tag);
    }
 
    public override string GetTokenName() => EFFECT_NAME;
@@ -254,7 +248,7 @@ public class AddCoreEffect : SimpleTagEffect
    public override string GetTokenExample() => EFFECT_EXAMPLE;
 }
 
-public class RemoveCoreEffect : SimpleTagEffect
+public class RemoveCoreEffect() : SimpleEffect<Country>(Country.Empty)
 {
    public const string EFFECT_NAME = "remove_core";
    private const string EFFECT_DESCRIPTION = $"<scope>The country that loses their core.";
@@ -272,10 +266,8 @@ public class RemoveCoreEffect : SimpleTagEffect
    public override void Activate(ITarget target)
    {
       Debug.Assert(target is Province, $"'{EFFECT_NAME}' effect is only valid on provinces");
-      if (Tag.TryParse(_value.Val, out var tag))
-         ((Province)target).Cores.Remove(tag);
-      else
-         _ = new ErrorObject(type: ErrorType.PCFL_TokenValidationError, $"value for {EFFECT_NAME} is not of type Tag!");
+      Debug.Assert(Globals.Countries.TryGetValue(_value.Val.Tag, out _), "The country must always exist to use it in execution");
+      ((Province)target).Cores.Remove(_value.Val.Tag);
    }
 
    public override string GetTokenName() => EFFECT_NAME;
@@ -283,7 +275,7 @@ public class RemoveCoreEffect : SimpleTagEffect
    public override string GetTokenExample() => EFFECT_EXAMPLE;
 }
 
-public class UnrestEffect : SimpleIntEffect
+public class UnrestEffect() : SimpleEffect<int>(1)
 {
    public const string EFFECT_NAME = "unrest";
    private const string EFFECT_DESCRIPTION = $"Sets the {EFFECT_NAME} of the province. ONLY valid in province history files";
@@ -309,7 +301,7 @@ public class UnrestEffect : SimpleIntEffect
    public override string GetTokenExample() => EFFECT_EXAMPLE;
 }
 
-public class RevoltRiskEffect : SimpleIntEffect
+public class RevoltRiskEffect() : SimpleEffect<int>(1)
 {
    public const string EFFECT_NAME = "revolt_risk";
    private const string EFFECT_DESCRIPTION = $"Sets the {EFFECT_NAME} of the province. ONLY valid in province history files. DEPRECATED";
@@ -367,25 +359,25 @@ public class RevoltEffect : IToken
             {
                case "type":
                {
-                  if (!GeneralFileParser.ParseSingleTriggerValue(ref type, kvp, po, EFFECT_NAME))
+                  if (!GeneralFileParser.ParseSingleTriggerVal(ref type, kvp, po))
                      return false;
                   break;
                }
                case "size":
                {
-                  if (!GeneralFileParser.ParseSingleTriggerValue(ref size, kvp, po, EFFECT_NAME))
+                  if (!GeneralFileParser.ParseSingleTriggerVal(ref size, kvp, po))
                      return false;
                   break;
                }
                case "leader":
                {
-                  if (!GeneralFileParser.ParseSingleTriggerValue(ref leader, kvp, po, EFFECT_NAME))
+                  if (!GeneralFileParser.ParseSingleTriggerVal(ref leader, kvp, po))
                      return false;
                   break;
                }
                case "name":
                {
-                  if (!GeneralFileParser.ParseSingleTriggerValue(ref name, kvp, po, EFFECT_NAME))
+                  if (!GeneralFileParser.ParseSingleTriggerVal(ref name, kvp, po))
                      return false;
                   break;
                }
@@ -425,7 +417,7 @@ public class RevoltEffect : IToken
    public string GetTokenExample() => EFFECT_EXAMPLE;
 }
 
-public class ReligionEffect : SimpleStringEffect
+public class ReligionEffect() : SimpleEffect<Religion>(Religion.Empty)
 {
    public const string EFFECT_NAME = "religion";
    private const string EFFECT_DESCRIPTION = $"Sets the {EFFECT_NAME} of the province. ONLY valid in province history files.";
@@ -440,21 +432,11 @@ public class ReligionEffect : SimpleStringEffect
       return token.Parse(kvp.Value, po) ? token : null;
    }
 
-   public override bool Parse(LineKvp<string, string> command, PathObj po)
-   {
-      if (Religion.TryParse(command.Value, out _).Then(o => o.ConvertToLoadingError(po, "", line: command.Line)))
-      {
-         _value.Val = command.Value;
-         return true;
-      }
-      return false;
-   }
-
    public override void Activate(ITarget target)
    {
       Debug.Assert(target is Province, $"'{EFFECT_NAME}' effect is only valid on provinces");
-      if (Religion.TryParse(_value.Val, out var religion).Log())
-         ((Province)target).Religion = religion;
+      Debug.Assert(Religion.TryParse(_value.Val.Name, out _).Ignore(), "The religion must always exist to use it in execution");
+      ((Province)target).Religion = _value.Val;
    }
 
    public override string GetTokenName() => EFFECT_NAME;
@@ -462,7 +444,7 @@ public class ReligionEffect : SimpleStringEffect
    public override string GetTokenExample() => EFFECT_EXAMPLE;
 }
 
-public class ReformationCenterEffect : SimpleStringEffect
+public class ReformationCenterEffect() : SimpleEffect<Religion>(Religion.Empty)
 {
    public const string EFFECT_NAME = "reformation_center";
    private const string EFFECT_DESCRIPTION = $"Sets the {EFFECT_NAME} of the province. ONLY valid in province history files.";
@@ -475,24 +457,12 @@ public class ReformationCenterEffect : SimpleStringEffect
       ReligionEffect token = new();
       return token.Parse(kvp.Value, po) ? token : null;
    }
-
-   public override bool Parse(LineKvp<string, string> command, PathObj po)
-   {
-      // TODO check if religion allows the reformation center
-
-      if (Religion.TryParse(command.Value, out _).Then(o => o.ConvertToLoadingError(po, "", line: command.Line)))
-      {
-         _value.Val = command.Value;
-         return true;
-      }
-      return false;
-   }
-
+   
    public override void Activate(ITarget target)
    {
       Debug.Assert(target is Province, $"'{EFFECT_NAME}' effect is only valid on provinces");
-      if (Religion.TryParse(_value.Val, out var religion).Log())
-         ((Province)target).ReformationCenter = religion;
+      Debug.Assert(Religion.TryParse(_value.Val.Name, out _).Ignore(), "The religion must always exist to use it in execution");
+      ((Province)target).ReformationCenter = _value.Val;
    }
 
    public override string GetTokenName() => EFFECT_NAME;
@@ -500,7 +470,7 @@ public class ReformationCenterEffect : SimpleStringEffect
    public override string GetTokenExample() => EFFECT_EXAMPLE;
 }
 
-public class CultureEffect : SimpleStringEffect
+public class CultureEffect() : SimpleEffect<Culture>(Culture.Empty)
 {
    public const string EFFECT_NAME = "culture";
    private const string EFFECT_DESCRIPTION = $"Sets the {EFFECT_NAME} of the province. ONLY valid in province history files.";
@@ -515,21 +485,12 @@ public class CultureEffect : SimpleStringEffect
       return token.Parse(kvp.Value, po) ? token : null;
    }
 
-   public override bool Parse(LineKvp<string, string> command, PathObj po)
-   {
-      if (Culture.TryParse(command.Value, out _).Then(o => o.ConvertToLoadingError(po, "", line: command.Line)))
-      {
-         _value.Val = command.Value;
-         return true;
-      }
-      return false;
-   }
-
    public override void Activate(ITarget target)
    {
       Debug.Assert(target is Province, $"'{EFFECT_NAME}' effect is only valid on provinces");
-      if (Culture.TryParse(_value.Val, out var culture).Log())
-         ((Province)target).Culture = culture;
+      Debug.Assert(Culture.TryParse(_value.Val.Name, out _).Ignore(), "The culture must always exist to use it in execution");  
+      
+      ((Province)target).Culture = _value.Val;
    }
 
    public override string GetTokenName() => EFFECT_NAME;
@@ -537,7 +498,7 @@ public class CultureEffect : SimpleStringEffect
    public override string GetTokenExample() => EFFECT_EXAMPLE;
 }
 
-public class DiscoveredByEffect : SimpleStringEffect
+public class DiscoveredByEffect() : SimpleEffect<string>(string.Empty)
 {
    public const string EFFECT_NAME = "discovered_by";
    private const string EFFECT_DESCRIPTION = $"Grants the specified technology or tag group vision of this province. ONLY valid in province history.";
@@ -571,10 +532,8 @@ public class DiscoveredByEffect : SimpleStringEffect
    public override void Activate(ITarget target)
    {
       Debug.Assert(target is Province, $"'{EFFECT_NAME}' effect is only valid on provinces");
-      if (Tag.TryParse(_value.Val, out _) || Globals.TechnologyGroups.Contains(_value.Val))
-         ((Province)target).DiscoveredBy.Add(_value.Val);
-      else
-         _ = new ErrorObject(type: ErrorType.PCFL_TokenValidationError, $"value {_value.Val} for {EFFECT_NAME} is not of type Tag or technology_group!");
+      Debug.Assert(Globals.Countries.Contains(_value.Val) || Globals.TechnologyGroups.Contains(_value.Val), "The country or tech group must always exist to use it in execution");
+      ((Province)target).DiscoveredBy.Add(_value.Val);
    }
 
    public override string GetTokenName() => EFFECT_NAME;
@@ -582,7 +541,7 @@ public class DiscoveredByEffect : SimpleStringEffect
    public override string GetTokenExample() => EFFECT_EXAMPLE;
 }
 
-public class IsCityEffect : SimpleBoolEffect
+public class IsCityEffect() : SimpleEffect<bool>(false)
 {
    public const string EFFECT_NAME = "is_city";
    private const string EFFECT_DESCRIPTION = $"Whether this province is a proper city, i.e. not a colony. ONLY valid in province history files.";
@@ -608,7 +567,7 @@ public class IsCityEffect : SimpleBoolEffect
    public override string GetTokenExample() => EFFECT_EXAMPLE;
 }
 
-public class HREEffect : SimpleBoolEffect
+public class HREEffect() : SimpleEffect<bool>(false)
 {
    public const string EFFECT_NAME = "hre";
    private const string EFFECT_DESCRIPTION = $"Whether this province is in the HRE or not. ONLY valid in province history files.";
@@ -634,7 +593,7 @@ public class HREEffect : SimpleBoolEffect
    public override string GetTokenExample() => EFFECT_EXAMPLE;
 }
 
-public class SeatInParliamentEffect : SimpleBoolEffect
+public class SeatInParliamentEffect() : SimpleEffect<bool>(false)
 {
    public const string EFFECT_NAME = "seat_in_parliament";
    private const string EFFECT_DESCRIPTION = $"Gives or removes the province's seat in the parliament. ONLY valid in province history files.";
@@ -660,7 +619,7 @@ public class SeatInParliamentEffect : SimpleBoolEffect
    public override string GetTokenExample() => EFFECT_EXAMPLE;
 }
 
-public class CapitalEffect : SimpleStringEffect
+public class CapitalEffect() : SimpleEffect<string>(string.Empty)
 {
    public const string EFFECT_NAME = "capital";
    private const string EFFECT_DESCRIPTION = $"The capital name to use for the province, otherwise the province name is used as the capital name. ONLY valid in province history files.";
@@ -686,7 +645,7 @@ public class CapitalEffect : SimpleStringEffect
    public override string GetTokenExample() => EFFECT_EXAMPLE;
 }
 
-public class TradeGoodsEffect : SimpleStringEffect
+public class TradeGoodsEffect() : SimpleEffect<TradeGood>(TradeGood.Empty)
 {
    public const string EFFECT_NAME = "trade_goods";
    private const string EFFECT_DESCRIPTION = $"The tradegood assigned to this province, from 00_tradegoods.txt. ONLY valid in province history files.";
@@ -700,22 +659,12 @@ public class TradeGoodsEffect : SimpleStringEffect
       TradeGoodsEffect token = new();
       return token.Parse(kvp.Value, po) ? token : null;
    }
-
-   public override bool Parse(LineKvp<string, string> command, PathObj po)
-   {
-      if (TradeGood.TryParse(command.Value, out _).Then(o => o.ConvertToLoadingError(po, " ", line: command.Line)))
-      {
-         _value.Val = command.Value;
-         return true;
-      }
-      return false;
-   }
    
    public override void Activate(ITarget target)
    {
       Debug.Assert(target is Province, $"'{EFFECT_NAME}' effect is only valid on provinces");
-      if (TradeGood.TryParse(_value.Val, out var tradeGood).Log())
-         ((Province)target).TradeGood = tradeGood;
+      Debug.Assert(TradeGood.TryParse(_value.Val.Name, out _).Ignore(), "The trade good must always exist to use it in execution");
+      ((Province)target).TradeGood = _value.Val;
    }
 
    public override string GetTokenName() => EFFECT_NAME;
@@ -723,7 +672,7 @@ public class TradeGoodsEffect : SimpleStringEffect
    public override string GetTokenExample() => EFFECT_EXAMPLE;
 }
 
-public class TribalOwnerEffect : SimpleTagEffect
+public class TribalOwnerEffect() : SimpleEffect<Country>(Country.Empty)
 {
    public const string EFFECT_NAME = "tribal_owner";
    private const string EFFECT_DESCRIPTION = $"Sets the tribal owner of a province.";
@@ -741,10 +690,8 @@ public class TribalOwnerEffect : SimpleTagEffect
    public override void Activate(ITarget target)
    {
       Debug.Assert(target is Province, $"'{EFFECT_NAME}' effect is only valid on provinces");
-      if (Tag.TryParse(_value.Val, out var tag))
-         ((Province)target).TribalOwner = tag;
-      else
-         _ = new ErrorObject(type: ErrorType.PCFL_TokenValidationError, $"value for {EFFECT_NAME} is not of type Tag!");
+      Debug.Assert(Globals.Countries.TryGetValue(_value.Val.Tag, out _), "The country must always exist to use it in execution");
+      ((Province)target).TribalOwner = _value.Val;
    }
 
    public override string GetTokenName() => EFFECT_NAME;
@@ -752,7 +699,7 @@ public class TribalOwnerEffect : SimpleTagEffect
    public override string GetTokenExample() => EFFECT_EXAMPLE;
 }
 
-public class AddLocalAutonomyEffect : SimpleFloatEffect
+public class AddLocalAutonomyEffect() : SimpleEffect<float>(0f)
 {
    public const string EFFECT_NAME = "add_local_autonomy";
    private const string EFFECT_DESCRIPTION = $"Adds local autonomy to the current province scope.";
@@ -778,7 +725,7 @@ public class AddLocalAutonomyEffect : SimpleFloatEffect
    public override string GetTokenExample() => EFFECT_EXAMPLE;
 }
 
-public class NativeSizeEffect : SimpleIntEffect
+public class NativeSizeEffect() : SimpleEffect<int>(0)
 {
    public const string EFFECT_NAME = "native_size";
    private const string EFFECT_DESCRIPTION = $"Sets native_size of the current province scope. ONLY useable in province history!";
@@ -804,7 +751,7 @@ public class NativeSizeEffect : SimpleIntEffect
    public override string GetTokenExample() => EFFECT_EXAMPLE;
 }
 
-public class AddClaimEffect : SimpleTagEffect
+public class AddClaimEffect() : SimpleEffect<Country>(Country.Empty)
 {
    public const string EFFECT_NAME = "add_claim";
    private const string EFFECT_DESCRIPTION = $"The defined scope gains a claim on the current province scope. ";
@@ -822,10 +769,8 @@ public class AddClaimEffect : SimpleTagEffect
    public override void Activate(ITarget target)
    {
       Debug.Assert(target is Province, $"'{EFFECT_NAME}' effect is only valid on provinces");
-      if (Tag.TryParse(_value.Val, out var tag))
-         ((Province)target).Claims.Add(tag);
-      else
-         _ = new ErrorObject(type: ErrorType.PCFL_TokenValidationError, $"value for {EFFECT_NAME} is not of type Tag!");
+      Debug.Assert(Country.TryParse(_value.Val.Tag, out _).Ignore(), "The country must always exist to use it in execution");
+      ((Province)target).Claims.Add(_value.Val.Tag);
    }
 
    public override string GetTokenName() => EFFECT_NAME;
@@ -833,7 +778,7 @@ public class AddClaimEffect : SimpleTagEffect
    public override string GetTokenExample() => EFFECT_EXAMPLE;
 }
 
-public class RemoveClaimEffect : SimpleTagEffect
+public class RemoveClaimEffect() : SimpleEffect<Country>(Country.Empty)
 {
    public const string EFFECT_NAME = "remove_claim";
    private const string EFFECT_DESCRIPTION = $"The defined scope gains a claim on the current province scope. ";
@@ -851,10 +796,8 @@ public class RemoveClaimEffect : SimpleTagEffect
    public override void Activate(ITarget target)
    {
       Debug.Assert(target is Province, $"'{EFFECT_NAME}' effect is only valid on provinces");
-      if (Tag.TryParse(_value.Val, out var tag))
-         ((Province)target).Claims.Remove(tag);
-      else
-         _ = new ErrorObject(type: ErrorType.PCFL_TokenValidationError, $"value for {EFFECT_NAME} is not of type Tag!");
+      Debug.Assert(Country.TryParse(_value.Val.Tag, out _).Ignore(), "The country must always exist to use it in execution");
+      ((Province)target).Claims.Remove(_value.Val.Tag);
    }
 
    public override string GetTokenName() => EFFECT_NAME;
@@ -898,13 +841,13 @@ public class AddPermanentProvinceModifierEffect : IToken
                   }
                case "duration":
                   {
-                     if (!GeneralFileParser.ParseSingleTriggerValue(ref duration, kvp, po, EFFECT_NAME))
+                     if (!GeneralFileParser.ParseSingleTriggerValue(ref duration, kvp, po))
                         return false;
                      break;
                   }
                case "hidden":
                   {
-                     if (!GeneralFileParser.ParseSingleTriggerValue(ref hidden, kvp, po, EFFECT_NAME))
+                     if (!GeneralFileParser.ParseSingleTriggerValue(ref hidden, kvp, po))
                         return false;
                      break;
                   }
@@ -1016,4 +959,133 @@ public class AddTradeCompanyInvestmentModifierEffect : IToken
    public string GetTokenName() => EFFECT_NAME;
    public string GetTokenDescription() => EFFECT_DESCRIPTION;
    public string GetTokenExample() => EFFECT_EXAMPLE;
+}
+
+public class NativeFerocityEffect() : SimpleEffect<int>(0)
+{
+   public const string EFFECT_NAME = "native_ferocity";
+   private const string EFFECT_DESCRIPTION = $"Adds to the Native Ferocity within an uncolonized province. ";
+   private const string EFFECT_EXAMPLE = $"native_ferocity = 5";
+   private const ScopeType EFFECT_SCOPE = ScopeType.Province;
+
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   {
+      Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
+
+      AddClaimEffect token = new();
+      return token.Parse(kvp.Value, po) ? token : null;
+   }
+
+   public override void Activate(ITarget target)
+   {
+      Debug.Assert(target is Province, $"'{EFFECT_NAME}' effect is only valid on provinces");
+
+      ((Province)target).NativeFerocity = _value.Val;
+   }
+
+   public override string GetTokenName() => EFFECT_NAME;
+   public override string GetTokenDescription() => EFFECT_DESCRIPTION;
+   public override string GetTokenExample() => EFFECT_EXAMPLE;
+}
+public class NativeHostilnessEffect() : SimpleEffect<int>(0)
+{
+   public const string EFFECT_NAME = "native_hostileness ";
+   private const string EFFECT_DESCRIPTION = $"Adds to the Native Hostileness within an uncolonized province. ";
+   private const string EFFECT_EXAMPLE = $"native_hostileness = 5";
+   private const ScopeType EFFECT_SCOPE = ScopeType.Province;
+
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   {
+      Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
+
+      NativeHostilnessEffect token = new();
+      return token.Parse(kvp.Value, po) ? token : null;
+   }
+
+   public override void Activate(ITarget target)
+   {
+      Debug.Assert(target is Province, $"'{EFFECT_NAME}' effect is only valid on provinces");
+      ((Province)target).NativeHostileness = _value.Val;
+   }
+
+   public override string GetTokenName() => EFFECT_NAME;
+   public override string GetTokenDescription() => EFFECT_DESCRIPTION;
+   public override string GetTokenExample() => EFFECT_EXAMPLE;
+}
+public class AddProvinceTriggeredModifierEffect() : SimpleEffect<string>(string.Empty)
+{
+   public const string EFFECT_NAME = "add_province_triggered_modifier ";
+   private const string EFFECT_DESCRIPTION = $"Adds a province triggered modifier to the current province scope. ";
+   private const string EFFECT_EXAMPLE = $"add_province_triggered_modifier = test_modifier";
+   private const ScopeType EFFECT_SCOPE = ScopeType.Province;
+
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   {
+      Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
+
+      AddProvinceTriggeredModifierEffect token = new();
+      return token.Parse(kvp.Value, po) ? token : null;
+   }
+
+   public override void Activate(ITarget target)
+   {
+      Debug.Assert(target is Province, $"'{EFFECT_NAME}' effect is only valid on provinces");
+      ((Province)target).ProvinceTriggeredModifiers.Add(_value.Val);
+   }
+
+   public override string GetTokenName() => EFFECT_NAME;
+   public override string GetTokenDescription() => EFFECT_DESCRIPTION;
+   public override string GetTokenExample() => EFFECT_EXAMPLE;
+}
+public class RemoveProvinceTriggeredModifierEffect() : SimpleEffect<string>(string.Empty)
+{
+   public const string EFFECT_NAME = "remove_province_triggered_modifier ";
+   private const string EFFECT_DESCRIPTION = $"Removes a province triggered modifier to the current province scope. ";
+   private const string EFFECT_EXAMPLE = $"remove_province_triggered_modifier = test_modifier";
+   private const ScopeType EFFECT_SCOPE = ScopeType.Province;
+
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   {
+      Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
+
+      RemoveProvinceTriggeredModifierEffect token = new();
+      return token.Parse(kvp.Value, po) ? token : null;
+   }
+
+   public override void Activate(ITarget target)
+   {
+      Debug.Assert(target is Province, $"'{EFFECT_NAME}' effect is only valid on provinces");
+      ((Province)target).ProvinceTriggeredModifiers.Remove(_value.Val);
+   }
+
+   public override string GetTokenName() => EFFECT_NAME;
+   public override string GetTokenDescription() => EFFECT_DESCRIPTION;
+   public override string GetTokenExample() => EFFECT_EXAMPLE;
+}
+
+public class AddToTradeCompanyEffect() : SimpleEffect<Country>(Country.Empty)
+{
+   public const string EFFECT_NAME = "add_to_trade_company";
+   private const string EFFECT_DESCRIPTION = $"The defined scope gains a claim on the current province scope. ";
+   private const string EFFECT_EXAMPLE = $"add_to_trade_company = FRA";
+   private const ScopeType EFFECT_SCOPE = ScopeType.Province;
+
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   {
+      Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
+
+      AddToTradeCompanyEffect token = new();
+      return token.Parse(kvp.Value, po) ? token : null;
+   }
+
+   public override void Activate(ITarget target)
+   {
+      Debug.Assert(target is Province, $"'{EFFECT_NAME}' effect is only valid on provinces");
+      Debug.Assert(Country.TryParse(_value.Val.Tag, out _).Ignore(), "The country must always exist to use it in execution");
+      // TODO
+   }
+
+   public override string GetTokenName() => EFFECT_NAME;
+   public override string GetTokenDescription() => EFFECT_DESCRIPTION;
+   public override string GetTokenExample() => EFFECT_EXAMPLE;
 }

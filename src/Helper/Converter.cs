@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
+using System.Text;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
@@ -8,6 +9,11 @@ using Editor.Saving;
 
 namespace Editor.Helper
 {
+   public interface IStringify
+   {
+      public string Stringify();
+      public string Stringify(int tabs, ref StringBuilder sb);
+   }
 
    public static class Converter
    {
@@ -75,10 +81,26 @@ namespace Editor.Helper
          }
       };
 
+
+      internal static string GeneralToString<T>(T value)
+      {
+         switch (value)
+         {
+            case IStringify stringify:
+               return stringify.Stringify();
+            case float f:
+               return SavingUtil.FormatFloat(f);
+            case bool b:
+               return b ? "yes" : "no";
+         }
+
+         Debug.Assert(value is int || value is string, "value is not of type int or string!");
+         return value.ToString()!;
+      }
+
       internal static IErrorHandle ParseInt(string value, out object result)
       {
-         int result1;
-         if (!int.TryParse(value, out result1))
+         if (!int.TryParse(value, out var result1))
          {
             result = 0;
             return new ErrorObject(ErrorType.TypeConversionError, "Could not parse int!");

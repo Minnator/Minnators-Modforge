@@ -98,11 +98,12 @@ public class ScriptedTriggerSource
             _ = new LoadingError(po, $"Unknown attribute definition in scripted trigger call '{block.Name}' valid are: <{string.Join(',', replacements.Values)}>", type: ErrorType.PCFL_TriggerValidationError);
             continue;
          }
-         if (TriggerParser.ParseTriggerValues(line.Value, value.Type, out var outValue)
-            .Then(o => o.ConvertToLoadingError(po, $"Failed to parse argument '{line.Key}' of '{block.Name}. Should be '{value.Type}'.", line.Line, type: ErrorType.PCFL_TriggerValidationError)))
+         /*
+         if (GeneralFileParser.ParseSingleTriggerVal(ref value.Type,  line, out var outValue))
          {
             continue;
-         }
+         } TODO
+         */
 
          if (!values.ContainsKey(line.Key)) // Done??? >>> Maybe not use key from line but instead from dictionary then Value needs to save the string
          {
@@ -110,7 +111,7 @@ public class ScriptedTriggerSource
             // multiple same keys
             continue;
          }
-         values[line.Key] = outValue;
+         //values[line.Key] = outValue;
       }
       if (values.Count != replacements.Count)
       {

@@ -1,116 +1,27 @@
 ﻿using System.Text;
+using Editor.ErrorHandling;
+using Editor.Helper;
 using Editor.Saving;
 
 namespace Editor.Loading.Enhanced.PCFL.Implementation;
 
-public enum PCFL_Type
-{
-   Int,
-   Float,
-   String,
-   Bool,
-}
-
 public interface ITarget;
 
-public static class PCFL_TypeExtensions
+public abstract class Value(Type type)
 {
-   public static Type ToSystemType(this PCFL_Type type)
-   {
-      return type switch
-      {
-         PCFL_Type.Int => typeof(int),
-         PCFL_Type.Float => typeof(float),
-         PCFL_Type.String => typeof(string),
-         PCFL_Type.Bool => typeof(bool),
-         _ => throw new ArgumentOutOfRangeException(nameof(type), $"Unknown type: {type}")
-      };
-   }
+   public Type Type = type;
+   public abstract void CopyFrom(Value val);
 
-   public static PCFL_Type ToPCFL_Type(this Type type)
-   {
-      return type switch
-      {
-         not null when type == typeof(int) => PCFL_Type.Int,
-         not null when type == typeof(float) => PCFL_Type.Float,
-         not null when type == typeof(string) => PCFL_Type.String,
-         not null when type == typeof(bool) => PCFL_Type.Bool,
-         _ => throw new ArgumentOutOfRangeException(nameof(type), $"Unknown type: {type}")
-      };
-   }
+   public abstract void CopyTo(Value val);
 
-   public static object DefaultValue(this PCFL_Type type)
-   {
-      return type switch
-      {
-         PCFL_Type.Int => 0,
-         PCFL_Type.Float => 0f,
-         PCFL_Type.String => string.Empty,
-         PCFL_Type.Bool => false,
-         _ => throw new ArgumentOutOfRangeException(nameof(type), $"Unknown type: {type}")
-      };
-   }
-
-   private static void CopyValue(Value from, Value to)
-   {
-      if (to.Type != from.Type)
-      {
-         switch (to.Type)
-         {
-            case PCFL_Type.Int:
-               ((Value<int>)to).Val = (int)to.Type.DefaultValue();
-               break;
-            case PCFL_Type.Float:
-               ((Value<float>)to).Val = (float)to.Type.DefaultValue();
-               break;
-            case PCFL_Type.String:
-               ((Value<string>)to).Val = (string)to.Type.DefaultValue();
-               break;
-            case PCFL_Type.Bool:
-               ((Value<bool>)to).Val = (bool)to.Type.DefaultValue();
-               break;
-         }
-      }
-      else
-      {
-         switch (to.Type)
-         {
-            case PCFL_Type.Int:
-               ((Value<int>)to).Val = ((Value<int>)from).Val;
-               break;
-            case PCFL_Type.Float:
-               ((Value<float>)to).Val = ((Value<float>)from).Val;
-               break;
-            case PCFL_Type.String:
-               ((Value<string>)to).Val = ((Value<string>)from).Val;
-               break;
-            case PCFL_Type.Bool:
-               ((Value<bool>)to).Val = ((Value<bool>)from).Val;
-               break;
-         }
-      }
-   }
-
-   public static void CopyTo(this Value from, Value to)
-   {
-      CopyValue(from, to);
-   }
-
-   public static void CopyFrom(this Value to, Value from)
-   {
-      CopyValue(from, to);
-   }
-}
-
-public abstract class Value(PCFL_Type type)
-{
-   public PCFL_Type Type { get; } = type;
+   public abstract void SetDefault();
 }
 
 
-public class Value<T>(T value) : Value(typeof(T).ToPCFL_Type())
+public class Value<T>(T defaultValue) : Value(typeof(T)) where T : notnull
 {
-   public T Val = value;
+   public T Val = defaultValue;
+
    public static Value<T> operator <<(Value<T> a, Value<T> b)
    {
       a.Val = b.Val;
@@ -122,6 +33,20 @@ public class Value<T>(T value) : Value(typeof(T).ToPCFL_Type())
       return a;
    }
 
+   public override void CopyFrom(Value val)
+   {
+      Val = val.Type == Type ? (val as Value<T>)!.Val : defaultValue;
+   }
+
+   public override void CopyTo(Value val)
+   {
+      if (val.Type == Type)
+         (val as Value<T>)!.Val = Val;
+      else
+         val.SetDefault();
+   }
+
+   public override void SetDefault() { Val = defaultValue; }
 }
 
 public interface IPCFLObject 
