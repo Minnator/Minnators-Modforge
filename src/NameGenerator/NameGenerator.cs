@@ -47,6 +47,11 @@ namespace Editor.NameGenerator
       private const int MAX_ITERATIONS_PER_ATTEMPT = 20;
       private bool GenerateName(int minLength, int maxLength, int maxDistance, string? similarTo, Random rnd, out string name)
       {
+         if (!IsTrained)
+         {
+            name = string.Empty;
+            return false;
+         }
          name = Generate(rnd).Replace("#", "");
          if (name.Length < minLength || name.Length > maxLength)
             return false;

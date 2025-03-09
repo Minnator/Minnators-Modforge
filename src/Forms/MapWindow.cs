@@ -575,7 +575,13 @@ namespace Editor.Forms
          _hasRevoltCheckBox.CheckedChanged += ProvinceEditingEvents.OnExtendedCheckBoxCheckedChanged;
          MisProvinceData.Controls.Add(_hasRevoltCheckBox, 3, 6);
 
-         MWAttirbuteCombobox.Items.AddRange([.. Enum.GetNames<ProvAttrGet>()]);
+         MWAttirbuteCombobox.Items.AddRange(typeof(Province).GetProperties()
+                                                            .Where(prop => Attribute.IsDefined(prop, typeof(ToolTippable)))
+                                                            .Select(x => x.Name).ToArray<object>());
+         MWAttirbuteCombobox.SelectedIndexChanged += (sender, args) =>
+         {
+            Selection.SetMagicWandProperty(MWAttirbuteCombobox.Text);
+         };
 
          // NATIVES TAB
          _tribalOwner = ControlFactory.GetTagComboBox(typeof(Province).GetProperty(nameof(Province.TribalOwner))!, Globals.Countries);

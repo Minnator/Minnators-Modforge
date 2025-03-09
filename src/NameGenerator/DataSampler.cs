@@ -91,6 +91,8 @@ namespace Editor.NameGenerator
       {
          if (source.Length < count)
             _ = new LogEntry(LogType.Warning, "Source array for string generator. Sampling will have duplicate strings!");
+         if (source.Length == 0)
+            return new string[count];
 
          var result = new string[count];
          if (random)

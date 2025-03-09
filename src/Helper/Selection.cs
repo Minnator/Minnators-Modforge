@@ -182,8 +182,7 @@ public static class Selection
    // Selection State
    private static SelectionToolType _selectionToolType = SelectionToolType.Single;
    private static SelectionType _selectionType = SelectionType.Province;
-   private static string _mwCompPropName = string.Empty;
-   private static ProvAttrType _mwAttributeType = ProvAttrType.String;
+   private static PropertyInfo? _mwPropInfo = null;
 
    // ------------ Getters ------------ \\
    public static ICollection<Saveable> GetSelectedProvincesAsSaveable() => [.._selectedProvinces];
@@ -1011,9 +1010,14 @@ public static class Selection
 
    #region MagicWand Selection
 
+   public static void SetMagicWandProperty(string propName)
+   {
+      _mwPropInfo = typeof(Province).GetProperty(propName);
+   }
+
    private static void OnMagicWandSelection(Point point)
    {
-      if (!GetProvinceFromMap(point, out _))
+      if (!GetProvinceFromMap(point, out _) || _mwPropInfo == null)
          return;
 
       AddProvincesToSelection(_hoveredCollection);
@@ -1023,7 +1027,7 @@ public static class Selection
 
    private static void MagicWandSelectionMove(Point point)
    {
-      if (!GetProvinceFromMap(point, out var province) || LastHoveredProvince == province)
+      if (!GetProvinceFromMap(point, out var province) || LastHoveredProvince == province || _mwPropInfo == null)
          return;
 
       ClearHighlightedProvinces();
@@ -1041,8 +1045,7 @@ public static class Selection
       HashSet<Province> provinceSet = new();
       provinceQueue.Enqueue(province);
       provinceSet.Add(province);
-      var propertyInfo = Province.Empty.GetPropertyInfo(_mwCompPropName);
-      var property = province.GetProperty(propertyInfo);
+      var property = province.GetProperty(_mwPropInfo);
       var tolerance = Globals.MapWindow.MagicWandTolerance.Value;
       Func<object, object, bool> func;
       switch (property)
@@ -1057,16 +1060,16 @@ public static class Selection
             func = (o1, o2) => o1.Equals(o2);
             break;
       }
-      Debug.Assert(propertyInfo != null, "propInfo != null");
+      Debug.Assert(_mwPropInfo != null, "propInfo != null");
       while (provinceQueue.Count > 0)
       {
-         Province key = provinceQueue.Dequeue();
+         var key = provinceQueue.Dequeue();
          provincesForMagicWand.Add(key);
-         foreach (Province province1 in Globals.AdjacentProvinces[key])
+         foreach (var province1 in Globals.AdjacentProvinces[key])
          {
             if (!provinceSet.Contains(province1) && !Globals.NonLandProvinces.Contains(province1))
             {
-               object propertyValue = province1.GetPropertyValue(_mwCompPropName);
+               var propertyValue = province1.GetProperty(_mwPropInfo);
                if (func(property, propertyValue))
                {
                   provinceQueue.Enqueue(province1);
@@ -1084,7 +1087,7 @@ public static class Selection
    {
       if (!(sender is ComboBox comboBox))
          return;
-      var propertyType = Province.Empty.GetPropertyInfo(comboBox.Text)!.PropertyType;
+      var propertyType = typeof(Province).GetProperty(comboBox.Text)?.PropertyType;
       Globals.MapWindow.MagicWandTolerance.Enabled = propertyType == typeof(int) || propertyType == typeof(float);
    }
 

@@ -989,7 +989,7 @@ public class NativeFerocityEffect() : SimpleEffect<int>(0)
 }
 public class NativeHostilnessEffect() : SimpleEffect<int>(0)
 {
-   public const string EFFECT_NAME = "native_hostileness ";
+   public const string EFFECT_NAME = "native_hostileness";
    private const string EFFECT_DESCRIPTION = $"Adds to the Native Hostileness within an uncolonized province. ";
    private const string EFFECT_EXAMPLE = $"native_hostileness = 5";
    private const ScopeType EFFECT_SCOPE = ScopeType.Province;
@@ -1014,7 +1014,7 @@ public class NativeHostilnessEffect() : SimpleEffect<int>(0)
 }
 public class AddProvinceTriggeredModifierEffect() : SimpleEffect<string>(string.Empty)
 {
-   public const string EFFECT_NAME = "add_province_triggered_modifier ";
+   public const string EFFECT_NAME = "add_province_triggered_modifier";
    private const string EFFECT_DESCRIPTION = $"Adds a province triggered modifier to the current province scope. ";
    private const string EFFECT_EXAMPLE = $"add_province_triggered_modifier = test_modifier";
    private const ScopeType EFFECT_SCOPE = ScopeType.Province;
@@ -1039,7 +1039,7 @@ public class AddProvinceTriggeredModifierEffect() : SimpleEffect<string>(string.
 }
 public class RemoveProvinceTriggeredModifierEffect() : SimpleEffect<string>(string.Empty)
 {
-   public const string EFFECT_NAME = "remove_province_triggered_modifier ";
+   public const string EFFECT_NAME = "remove_province_triggered_modifier";
    private const string EFFECT_DESCRIPTION = $"Removes a province triggered modifier to the current province scope. ";
    private const string EFFECT_EXAMPLE = $"remove_province_triggered_modifier = test_modifier";
    private const ScopeType EFFECT_SCOPE = ScopeType.Province;

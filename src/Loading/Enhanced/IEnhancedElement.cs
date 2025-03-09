@@ -196,11 +196,12 @@ namespace Editor.Loading.Enhanced
                if (split.Length < 2)
                {
                   if (showError)
-                     _ = new LoadingError(pathObj, "Expected a key value pair but got only one value", lineNum++, 0);
+                     _ = new LoadingError(pathObj, "Expected a key value pair but got only one value", lineNum, 0);
                   continue;
                }
                yield return new(split[0].Trim(), trimQuotes ? split[1].TrimQuotes() : split[1].Trim(), lineNum);
             }
+            lineNum++;
          }
       }
 
