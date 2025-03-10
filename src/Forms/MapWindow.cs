@@ -1458,7 +1458,17 @@ namespace Editor.Forms
 
       private void audioTestToolStripMenuItem_Click(object sender, EventArgs e)
       {
+         List<ICollection<Province>> adjacencies = [];
+         var total = 0;
 
+         foreach (var province in Globals.Provinces)
+         {
+            if (province.Neighbors.Count == 0)
+               Debug.WriteLine(province.Id);
+            adjacencies.Add(province.Neighbors);
+            total += province.Neighbors.Count;
+         }
+         Debug.WriteLine($"Total adjacencies {total}");
       }
 
       private void tradegoodEditorToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1524,6 +1534,11 @@ namespace Editor.Forms
          foreach (var province in Globals.Provinces)
             if (province.BaseManpower < 1)
                Debug.WriteLine(province.Id);
+      }
+
+      private void effectsToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         FormsHelper.ShowIfAnyOpen<WikiBrowser>();
       }
    }
 }

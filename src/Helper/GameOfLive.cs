@@ -148,6 +148,12 @@ namespace Editor.Helper
 
       private static void ApplyPopulationDynamicsRule(Province province, Dictionary<Province, int> tempPopulation)
       {
+         if (province.Neighbors.Count == 0)
+         {
+            tempPopulation[province] = 0;
+            return;
+         }
+
          var neighborCounts = Globals.AdjacentProvinces[province]
              .GroupBy(neighbour => Population[neighbour])
              .ToDictionary(g => g.Key, g => g.Count());

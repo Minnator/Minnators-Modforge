@@ -75,6 +75,9 @@
          tradegoodEditorToolStripMenuItem = new ToolStripMenuItem();
          definesEditorToolStripMenuItem = new ToolStripMenuItem();
          namesGeneratorToolStripMenuItem = new ToolStripMenuItem();
+         toolStripSeparator12 = new ToolStripSeparator();
+         wikiToolStripMenuItem = new ToolStripMenuItem();
+         effectsToolStripMenuItem = new ToolStripMenuItem();
          MapModeComboBox = new ToolStripComboBox();
          searchToolStripMenuItem = new ToolStripMenuItem();
          helpToolStripMenuItem = new ToolStripMenuItem();
@@ -579,7 +582,7 @@
          // 
          // additionalToolsToolStripMenuItem
          // 
-         additionalToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { checkForCyclesInTradenodesToolStripMenuItem, randomModifierToolStripMenuItem, deleteProvinceHistoryEntriesToolStripMenuItem, tradegoodEditorToolStripMenuItem, definesEditorToolStripMenuItem, namesGeneratorToolStripMenuItem });
+         additionalToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { checkForCyclesInTradenodesToolStripMenuItem, randomModifierToolStripMenuItem, deleteProvinceHistoryEntriesToolStripMenuItem, tradegoodEditorToolStripMenuItem, definesEditorToolStripMenuItem, namesGeneratorToolStripMenuItem, toolStripSeparator12, wikiToolStripMenuItem });
          additionalToolsToolStripMenuItem.Name = "additionalToolsToolStripMenuItem";
          additionalToolsToolStripMenuItem.Size = new Size(103, 23);
          additionalToolsToolStripMenuItem.Text = "Additional tools";
@@ -625,6 +628,25 @@
          namesGeneratorToolStripMenuItem.Size = new Size(236, 22);
          namesGeneratorToolStripMenuItem.Text = "Names Generator";
          namesGeneratorToolStripMenuItem.Click += namesGeneratorToolStripMenuItem_Click;
+         // 
+         // toolStripSeparator12
+         // 
+         toolStripSeparator12.Name = "toolStripSeparator12";
+         toolStripSeparator12.Size = new Size(233, 6);
+         // 
+         // wikiToolStripMenuItem
+         // 
+         wikiToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { effectsToolStripMenuItem });
+         wikiToolStripMenuItem.Name = "wikiToolStripMenuItem";
+         wikiToolStripMenuItem.Size = new Size(236, 22);
+         wikiToolStripMenuItem.Text = "Wiki";
+         // 
+         // effectsToolStripMenuItem
+         // 
+         effectsToolStripMenuItem.Name = "effectsToolStripMenuItem";
+         effectsToolStripMenuItem.Size = new Size(180, 22);
+         effectsToolStripMenuItem.Text = "Effects";
+         effectsToolStripMenuItem.Click += effectsToolStripMenuItem_Click;
          // 
          // MapModeComboBox
          // 
@@ -3160,6 +3182,9 @@
       private ToolStripMenuItem testTriggerToolStripMenuItem;
       private ToolStripSeparator toolStripSeparator11;
       private ToolStripLabel ErrorCountLabel;
+      private ToolStripSeparator toolStripSeparator12;
+      private ToolStripMenuItem wikiToolStripMenuItem;
+      private ToolStripMenuItem effectsToolStripMenuItem;
    }
 }
 
