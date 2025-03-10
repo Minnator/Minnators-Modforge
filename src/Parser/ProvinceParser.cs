@@ -10,6 +10,7 @@ using Editor.Loading.Enhanced;
 using Editor.Loading.Enhanced.PCFL.Implementation;
 using Editor.Loading.Enhanced.PCFL.Implementation.ProvinceScope;
 using Editor.Saving;
+using Effect = Editor.Loading.Enhanced.PCFL.Implementation.Effect;
 
 namespace Editor.Parser;
 
@@ -216,8 +217,9 @@ public static class ProvinceParser
 
       var historyEntry = new ProvinceHistoryEntry(date);
 
-      var tokens = GeneralFileParser.ParseElementsToTokens(block.GetElements(), ProvinceScopes.Scope, po);
-      historyEntry.Effects.AddRange(tokens);
+      var effect = Effect.ConstructEffect(block.GetElements(), po, ProvinceScopes.Scope, province);
+
+      historyEntry.Effects.AddRange(effect.tokens);
 
       province.History.Add(historyEntry);
    }

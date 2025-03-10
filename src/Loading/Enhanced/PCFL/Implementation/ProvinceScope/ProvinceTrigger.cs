@@ -14,7 +14,7 @@ public class BaseManpowerTrigger : ITrigger
    private Value<int> _baseManpower = new(0); // Default value and type of int
 
 
-   public static ITrigger? CreateTrigger(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static ITrigger? CreateTrigger(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -49,7 +49,7 @@ public class BaseTaxTrigger : ITrigger
    private Value<int> _baseTax = new(0); // Default value and type of int
 
 
-   public static ITrigger? CreateTrigger(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static ITrigger? CreateTrigger(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 

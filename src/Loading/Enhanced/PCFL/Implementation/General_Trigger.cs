@@ -47,10 +47,10 @@ public class BooleanOperation(Operation op, List<ITrigger> triggers) : ITrigger/
    }
 
 
-   public static ITrigger Parse(EnhancedBlock block, PCFL_Scope scope, PathObj po, Operation op)
+   public static ITrigger Parse(EnhancedBlock block, ParsingContext context, PathObj po, Operation op)
    {
       List<ITrigger> triggers = [];
-      if (!block.ParseTriggerBlock(scope, po, triggers))
+      if (!block.ParseTriggerBlock(context, po, triggers))
          return ITrigger.Empty;
 
       // if there is one element anyway just simplify

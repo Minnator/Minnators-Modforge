@@ -20,16 +20,31 @@ public static class Executor // Vader is operating it
     *
     */
 
+   public static void ParseScope()
+   {
+      // check if scope
+      // check if province
+      // check if country
+      // check if area
+      // check if region
+      // check if continent
+      // check if superregion
+      // check if trade node
+      // check if trade company
+      // check if provincegroup
+   }
+
+
    public static void ExecuteFile(string filePath, ITarget target)
    {
       var po = PathObj.FromExternalPath(filePath);
       var content = IO.ReadAllInUTF8(filePath);
 
       var errorCnt = LogManager.TotalErrorCount;
-      var tokens = target switch
+      var effect = target switch
       {
-         Country => GeneralFileParser.ParseSomeFile(content, CountryScope.Scope, po),
-         Province => GeneralFileParser.ParseSomeFile(content, ProvinceScopes.Scope, po),
+         Country => Effect.ConstructEffect(po, CountryScope.Scope, target),
+         Province => Effect.ConstructEffect(po, ProvinceScopes.Scope, target),
          _ => throw new EvilActions("Not yet...")
       };
       if (errorCnt != LogManager.TotalErrorCount)
@@ -43,10 +58,7 @@ public static class Executor // Vader is operating it
       }
 
       Globals.State = State.Loading; //TODO option for compacting
-      foreach (var token in tokens)
-      {
-         token.Activate(target);
-      }
+      effect.Activate();
       Globals.State = State.Running;
       MapModeManager.RenderCurrent();
    }

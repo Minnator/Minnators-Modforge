@@ -138,6 +138,8 @@ namespace Editor.Forms
          //pause gui updates
          SuspendLayout();
 
+         SetProvinceInitials();
+
          InitGui();
          Text = $"{Text} | {Globals.DescriptorData.Name}";
 
@@ -173,6 +175,11 @@ namespace Editor.Forms
          Globals.ZoomControl.Invalidate();
       }
 
+      private void SetProvinceInitials()
+      {
+         foreach (var province in Globals.Provinces)
+            province.SetInit();
+      }
 
       private void RunLoadingScreen()
       {
@@ -327,8 +334,6 @@ namespace Editor.Forms
          RamUsageStrip.ToolTipText = "Current RAM usage of the application\nThis is inflated by HeapAllocation from the GC and will free memory if your PC needs some.";
          UndoDepthLabel.ToolTipText = "Undo tree depth\nCompacted \'undos\'(CTRL+Z) / Uncompacted \'undos\'(CTRL+ALT+Z)";
          RedoDepthLabel.ToolTipText = "Redo tree depth\nCompacted \'redos\'(CTRL+Y) / Uncompacted \'redos\'(CTRL+ALT+Y)";
-
-         ErrorCountLabel.ToolTipText = "Num of:\nErrors, Warnings and Critical\nDebug, Information";
 
          CpuUsageStrip.ToolTipText = "Current CPU usage of the application";
          SelectedProvinceSum.ToolTipText = "Sum of currently selected provinces";
@@ -1539,6 +1544,15 @@ namespace Editor.Forms
       private void effectsToolStripMenuItem_Click(object sender, EventArgs e)
       {
          FormsHelper.ShowIfAnyOpen<WikiBrowser>();
+      }
+
+      private void ErrorCountLabel_MouseEnter(object sender, EventArgs e)
+      {
+#if DEBUG
+         ErrorCountLabel.ToolTipText = $"Critical: {LogManager.CriticalCount}\nErrors: {LogManager.ErrorCount}\nWarnings: {LogManager.WarningCount}\nInformation: {LogManager.InformationCount}\n-----------------\nDebug: {LogManager.DebugCount}";
+#else
+         ErrorCountLabel.ToolTipText = $"Critical: {LogManager.CriticalCount}\nErrors: {LogManager.ErrorCount}\nWarnings: {LogManager.WarningCount}\nInformation: {LogManager.InformationCount}";
+#endif
       }
    }
 }

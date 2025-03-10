@@ -19,7 +19,7 @@ public class AddBaseManpowerEffect() : SimpleEffect<int>(1)
    public static readonly string EffectExample = "add_base_manpower = 3";
    
    
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -45,7 +45,7 @@ public class AddBaseTaxEffect() : SimpleEffect<int>(1)
    public static readonly string EffectExample = "add_base_tax = 3";
    
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -71,7 +71,7 @@ public class AddBaseProductionEffect() : SimpleEffect<int>(1)
    public static readonly string EffectExample = "add_base_production = 3";
    
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -96,7 +96,7 @@ public class BaseManpowerEffect() : SimpleEffect<int>(1)
    public static readonly string EffectDescription = "Sets the base_manpower to the current province scope. ONLY in province histrory files.";
    public static readonly string EffectExample = "base_manpower = 3";
    
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -122,7 +122,7 @@ public class BaseTaxEffect() : SimpleEffect<int>(1)
    public static readonly string EffectExample = "base_tax = 3";
    
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -148,7 +148,7 @@ public class BaseProductionEffect() : SimpleEffect<int>(1)
    public static readonly string EffectExample = "base_production = 3";
    
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -174,7 +174,7 @@ public class OwnerEffect() : SimpleEffect<Country>(Country.Empty)
    public static readonly string EffectExample = $"{EffectName} = TAG";
    
    
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -201,7 +201,7 @@ public class ControllerEffect() : SimpleEffect<Country>(Country.Empty)
    public static readonly string EffectExample = $"{EffectName} = TAG";
    
    
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -228,7 +228,7 @@ public class AddCoreEffect() : SimpleEffect<Country>(Country.Empty)
    public static readonly string EffectExample = $"{EffectName} = TAG";
    
    
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -255,7 +255,7 @@ public class RemoveCoreEffect() : SimpleEffect<Country>(Country.Empty)
    public static readonly string EffectExample = $"{EffectName} = TAG";
    
    
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -282,7 +282,7 @@ public class UnrestEffect() : SimpleEffect<int>(1)
    public static readonly string EffectExample = $"{EffectName} = 2";
    
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -308,7 +308,7 @@ public class RevoltRiskEffect() : SimpleEffect<int>(1)
    public static readonly string EffectExample = $"{EffectName} = 1";
    
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -341,7 +341,7 @@ public class RevoltEffect : IToken
    internal Value<string> Leader = new(string.Empty);
    internal Value<string> Name = new(string.Empty);
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(block is not null, "At this point the block must not be null. This must be filtered earlier in the pipeline");
 
@@ -424,7 +424,7 @@ public class ReligionEffect() : SimpleEffect<Religion>(Religion.Empty)
    public static readonly string EffectExample = $"{EffectName} = <religion>";
    
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -451,7 +451,7 @@ public class ReformationCenterEffect() : SimpleEffect<Religion>(Religion.Empty)
    public static readonly string EffectExample = $"{EffectName} = <religion>";
    
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
       ReligionEffect token = new();
@@ -477,7 +477,7 @@ public class CultureEffect() : SimpleEffect<Culture>(Culture.Empty)
    public static readonly string EffectExample = $"{EffectName} = <culture>";
    
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -505,7 +505,7 @@ public class DiscoveredByEffect() : SimpleEffect<string>(string.Empty)
    public static readonly string EffectExample = $"{EffectName} = <tag | technology_group>";
    
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -548,7 +548,7 @@ public class IsCityEffect() : SimpleEffect<bool>(false)
    public static readonly string EffectExample = $"{EffectName} = <bool>";
    
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -574,7 +574,7 @@ public class HreEffect() : SimpleEffect<bool>(false)
    public static readonly string EffectExample = $"{EffectName} = <bool>";
    
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -600,7 +600,7 @@ public class SeatInParliamentEffect() : SimpleEffect<bool>(false)
    public static readonly string EffectExample = $"{EffectName} = <bool>";
    
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -626,7 +626,7 @@ public class CapitalEffect() : SimpleEffect<string>(string.Empty)
    public static readonly string EffectExample = $"{EffectName} = <string>";
    
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -652,7 +652,7 @@ public class TradeGoodsEffect() : SimpleEffect<TradeGood>(TradeGood.Empty)
    public static readonly string EffectExample = $"{EffectName} = <trade_good>";
    
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -679,7 +679,7 @@ public class TribalOwnerEffect() : SimpleEffect<Country>(Country.Empty)
    public static readonly string EffectExample = $"{EffectName} = <tag>";
    
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -706,7 +706,7 @@ public class AddLocalAutonomyEffect() : SimpleEffect<float>(0f)
    public static readonly string EffectExample = $"{EffectName} = 0.1";
    
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -732,7 +732,7 @@ public class NativeSizeEffect() : SimpleEffect<int>(0)
    public static readonly string EffectExample = $"{EffectName} = 50";
    
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -758,7 +758,7 @@ public class AddClaimEffect() : SimpleEffect<Country>(Country.Empty)
    public static readonly string EffectExample = $"capital_scope = {{\n\tadd_claim = FRA\n}}";
    
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -785,7 +785,7 @@ public class RemoveClaimEffect() : SimpleEffect<Country>(Country.Empty)
    public static readonly string EffectExample = $"capital_scope = {{\n\tremove_claim = FRA\n}}";
    
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -817,7 +817,7 @@ public class AddPermanentProvinceModifierEffect : IToken
    internal Value<int> Duration = new(-1);
    internal Value<bool> Hidden = new(false);
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(block is not null, "At this point the block must not be null. This must be filtered earlier in the pipeline");
 
@@ -903,7 +903,7 @@ public class AddTradeCompanyInvestmentModifierEffect : IToken
    internal Value<string> Investment = new(string.Empty);
    internal Value<string> Investor = new(string.Empty);
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(block is not null, "At this point the block must not be null. This must be filtered earlier in the pipeline");
 
@@ -968,7 +968,7 @@ public class NativeFerocityEffect() : SimpleEffect<int>(0)
    public static readonly string EffectExample = $"native_ferocity = 5";
    
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -993,7 +993,7 @@ public class NativeHostilnessEffect() : SimpleEffect<int>(0)
    public static readonly string EffectExample = $"native_hostileness = 5";
    
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -1018,7 +1018,7 @@ public class AddProvinceTriggeredModifierEffect() : SimpleEffect<string>(string.
    public static readonly string EffectExample = $"add_province_triggered_modifier = test_modifier";
    
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -1043,7 +1043,7 @@ public class RemoveProvinceTriggeredModifierEffect() : SimpleEffect<string>(stri
    public static readonly string EffectExample = $"remove_province_triggered_modifier = test_modifier";
    
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -1069,7 +1069,7 @@ public class AddToTradeCompanyEffect() : SimpleEffect<Country>(Country.Empty)
    public static readonly string EffectExample = $"add_to_trade_company = FRA";
    
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -1095,7 +1095,7 @@ public class ExtraCostEffect() : SimpleEffect<int>(0)
    public static readonly string EffectExample = "extra_cost = 25";
 
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -1120,7 +1120,7 @@ public class CenterOfTradeEffect() : SimpleEffect<int>(0)
    public static readonly string EffectExample = "center_of_trade = 2";
 
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -1145,7 +1145,7 @@ public class RemoveProvinceModifierEffect() : SimpleEffect<string>(string.Empty)
    public static readonly string EffectExample = "remove_province_modifier = example_modifier";
 
 
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -1171,7 +1171,7 @@ public class SetGlobalFlagEffect() : SimpleEffect<string>(string.Empty)
    public static readonly string EffectDescription = "Defines a global flag.";
    public static readonly string EffectExample = "set_global_flag = example_flag";
    
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -1195,7 +1195,7 @@ public class ChangeProvinceNameEffect() : SimpleEffect<string>(string.Empty)
    public static readonly string EffectDescription = "Sets a new province name.";
    public static readonly string EffectExample = "change_province_name = \"New Berlin\"";
    
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -1219,7 +1219,7 @@ public class RenameCapitalEffect() : SimpleEffect<string>(string.Empty)
    public static readonly string EffectDescription = "Sets a new capital name for the province.";
    public static readonly string EffectExample = "rename_capital = \"Mega Berlin\"";
    
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -1243,7 +1243,7 @@ public class AddProsperityEffect() : SimpleEffect<float>(0)
    public static readonly string EffectDescription = "Adds prosperity to the current province scope.";
    public static readonly string EffectExample = "add_prosperity = 25";
    
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -1267,7 +1267,7 @@ public class AddDevastationEffect() : SimpleEffect<float>(0)
    public static readonly string EffectDescription = "Adds devastation to the current province scope.";
    public static readonly string EffectExample = "add_devastation = 25";
    
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -1292,7 +1292,7 @@ public class SetLocalAutonomyEffect() : SimpleEffect<float>(0)
    public static readonly string EffectDescription = "Sets local autonomy to the current province scope.";
    public static readonly string EffectExample = "set_local_autonomy = 25";
    
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -1316,7 +1316,7 @@ public class ChangeTradeGoodsEffect() : SimpleEffect<TradeGood>(TradeGood.Empty)
    public static readonly string EffectDescription = "Sets the trade good for the current province scope.";
    public static readonly string EffectExample = "change_trade_goods = <trade_good>";
    
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -1340,7 +1340,7 @@ public class AddScaledLocalAdmPowerEffect() : SimpleEffect<int>(0)
    public static readonly string EffectDescription = "Awards x adm power per base_tax of the current scope";
    public static readonly string EffectExample = "add_scaled_local_adm_power = <int>";
    
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -1365,7 +1365,7 @@ public class AddScaledLocalDipPowerEffect() : SimpleEffect<int>(0)
    public static readonly string EffectDescription = "Awards x dip power per base_tax of the current scope";
    public static readonly string EffectExample = "add_scaled_local_dip_power = <int>";
    
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -1389,7 +1389,7 @@ public class AddScaledLocalMilPowerEffect() : SimpleEffect<int>(0)
    public static readonly string EffectDescription = "Awards x mil power per base_tax of the current scope";
    public static readonly string EffectExample = "add_scaled_local_mil_power = <int>";
    
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -1413,7 +1413,7 @@ public class CancelConstructionEffect() : SimpleEffect<bool>(false)
    public static readonly string EffectDescription = "Cancels all active construction in the currenct scope";
    public static readonly string EffectExample = "cancel_construction = <bool>";
    
-   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 

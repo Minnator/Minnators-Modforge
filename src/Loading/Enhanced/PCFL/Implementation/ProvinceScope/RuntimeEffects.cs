@@ -23,7 +23,7 @@ namespace Editor.Loading.Enhanced.PCFL.Implementation.ProvinceScope
 
          }
 
-         public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po, Building building)
+         public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po, Building building)
          {
             Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
@@ -47,7 +47,7 @@ namespace Editor.Loading.Enhanced.PCFL.Implementation.ProvinceScope
 
       private static PCFL_Scope.PCFL_TokenParseDelegate GenerateBuildingEffect(Building building)
       {
-         return (block, kvp, scope, po) => BuildingEffect.CreateEffect(block, kvp, scope, po, building);
+         return (block, kvp, context, po) => BuildingEffect.CreateEffect(block, kvp, context, po, building);
       }
 
    }

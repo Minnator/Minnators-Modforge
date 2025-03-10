@@ -13,6 +13,131 @@ using Editor.Saving;
 
 namespace Editor.DataClasses.Saveables
 {
+   internal class ProvinceData
+   {
+      private Country _controller = Country.Empty;
+      private Country _owner = Country.Empty;
+      private Country _tribalOwner = Country.Empty;
+      private int _baseManpower = 1;
+      private int _baseTax = 1;
+      private int _baseProduction = 1;
+      private int _centerOfTrade;
+      private int _extraCost;
+      private int _nativeHostileness;
+      private int _nativeSize;
+      private int _revoltRisk;
+      private int _nationalism;
+      private int _citySize;
+      private float _nativeFerocity;
+      private float _localAutonomy;
+      private float _devastation;
+      private float _prosperity;
+      private bool _isHre;
+      private bool _isCity;
+      private bool _hasRevolt;
+      private bool _isSeatInParliament;
+      private string _capital = string.Empty;
+      private Culture _culture = Culture.Empty;
+      private Religion _religion = Religion.Empty;
+      private Religion _reformationCenter = Religion.Empty;
+      private TradeGood _tradeGood = TradeGood.Empty;
+      private string _latentTradeGood = string.Empty;
+      private List<Tag> _claims = [];
+      private List<Tag> _permanentClaims = [];
+      private List<Tag> _cores = [];
+      private List<string> _discoveredBy = [];
+      private List<Building> _buildings = [];
+      private List<string> _tradeCompanyInvestments = [];
+      private List<ApplicableModifier> _permanentProvinceModifiers = [];
+      private List<ApplicableModifier> _provinceModifiers = [];
+      private List<string> _provinceTriggeredModifiers = [];
+      private List<IElement> _scriptedEffects = [];
+      private List<TradeModifier> _tradeModifiers = [];
+
+      public void SetData(Province province)
+      {
+         province.Controller = _controller;
+         province.Owner = _owner;
+         province.TribalOwner = _tribalOwner;
+         province.BaseManpower = _baseManpower;
+         province.BaseTax = _baseTax;
+         province.BaseProduction = _baseProduction;
+         province.CenterOfTrade = _centerOfTrade;
+         province.ExtraCost = _extraCost;
+         province.NativeHostileness = _nativeHostileness;
+         province.NativeSize = _nativeSize;
+         province.RevoltRisk = _revoltRisk;
+         province.Nationalism = _nationalism;
+         province.CitySize = _citySize;
+         province.NativeFerocity = _nativeFerocity;
+         province.LocalAutonomy = _localAutonomy;
+         province.Devastation = _devastation;
+         province.Prosperity = _prosperity;
+         province.IsHre = _isHre;
+         province.IsCity = _isCity;
+         province.HasRevolt = _hasRevolt;
+         province.IsSeatInParliament = _isSeatInParliament;
+         province.Capital = _capital;
+         province.Culture = _culture;
+         province.Religion = _religion;
+         province.ReformationCenter = _reformationCenter;
+         province.TradeGood = _tradeGood;
+         province.LatentTradeGood = _latentTradeGood;
+         province.Claims = _claims;
+         province.PermanentClaims = _permanentClaims;
+         province.Cores = _cores;
+         province.DiscoveredBy = _discoveredBy;
+         province.Buildings = _buildings;
+         province.TradeCompanyInvestments = _tradeCompanyInvestments;
+         province.PermanentProvinceModifiers = _permanentProvinceModifiers;
+         province.ProvinceModifiers = _provinceModifiers;
+         province.ProvinceTriggeredModifiers = _provinceTriggeredModifiers;
+         province.ScriptedEffects = _scriptedEffects;
+         province.TradeModifiers = _tradeModifiers;
+      }
+
+      public void GetData(Province province)
+      {
+         _controller = province.Controller;
+         _owner = province.Owner;
+         _tribalOwner = province.TribalOwner;
+         _baseManpower = province.BaseManpower;
+         _baseTax = province.BaseTax;
+         _baseProduction = province.BaseProduction;
+         _centerOfTrade = province.CenterOfTrade;
+         _extraCost = province.ExtraCost;
+         _nativeHostileness = province.NativeHostileness;
+         _nativeSize = province.NativeSize;
+         _revoltRisk = province.RevoltRisk;
+         _nationalism = province.Nationalism;
+         _citySize = province.CitySize;
+         _nativeFerocity = province.NativeFerocity;
+         _localAutonomy = province.LocalAutonomy;
+         _devastation = province.Devastation;
+         _prosperity = province.Prosperity;
+         _isHre = province.IsHre;
+         _isCity = province.IsCity;
+         _hasRevolt = province.HasRevolt;
+         _isSeatInParliament = province.IsSeatInParliament;
+         _capital = province.Capital;
+         _culture = province.Culture;
+         _religion = province.Religion;
+         _reformationCenter = province.ReformationCenter;
+         _tradeGood = province.TradeGood;
+         _latentTradeGood = province.LatentTradeGood;
+         _claims = province.Claims;
+         _permanentClaims = province.PermanentClaims;
+         _cores = province.Cores;
+         _discoveredBy = province.DiscoveredBy;
+         _buildings = province.Buildings;
+         _tradeCompanyInvestments = province.TradeCompanyInvestments;
+         _permanentProvinceModifiers = province.PermanentProvinceModifiers;
+         _provinceModifiers = province.ProvinceModifiers;
+         _provinceTriggeredModifiers = province.ProvinceTriggeredModifiers;
+         _scriptedEffects = province.ScriptedEffects;
+         _tradeModifiers = province.TradeModifiers;
+      }
+   }
 
 
    public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<ProvinceHistoryEntry>, ITarget, IComparable
@@ -22,6 +147,8 @@ namespace Editor.DataClasses.Saveables
          Base,
          HistoryEntry,
       }
+
+      private ProvinceData _initialData = new();
 
       #region Data
       private Country _controller = Country.Empty;                       
@@ -63,6 +190,15 @@ namespace Editor.DataClasses.Saveables
       private List<IElement> _scriptedEffects = [];
       private List<TradeModifier> _tradeModifiers = [];
 
+      public void SetInit()
+      {
+         _initialData.GetData(this);
+      }
+
+      public void ResetToInit()
+      {
+         _initialData.SetData(this);
+      }
 
       // ##################### Complex setter #####################
 
@@ -527,7 +663,7 @@ namespace Editor.DataClasses.Saveables
 
       public void ResetHistory()
       {
-
+         _initialData.SetData(this);
       }
 
       #endregion

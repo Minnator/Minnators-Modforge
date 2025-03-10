@@ -17,11 +17,11 @@ namespace Editor.Loading.Enhanced.PCFL.Implementation.CountryScope
          return list;
       }
 
-      public static ITrigger CreateTrigger(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+      public static ITrigger CreateTrigger(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
       {
          Debug.Assert(block is not null, "At this point the block must not be null. This must be filtered earlier in the pipeline");
 
-         if (block.ParseTriggerBlockToAnd(ProvinceScopes.Scope, po, out var trigger))
+         if (block.ParseTriggerBlockToAnd(context, po, out var trigger))
             return new AllProvince_Scope(trigger);
          return ITrigger.Empty;
       }
@@ -30,7 +30,7 @@ namespace Editor.Loading.Enhanced.PCFL.Implementation.CountryScope
    #endregion
 
    #region EffectScopes
-   public class EveryOwnedProvince_Scope(List<IToken> token) : Every_ScopeSwitch(token)
+   public class EveryOwnedProvince_Scope() : TokenScopeSwitch(ProvinceScopes.Scope)
    {
       public const string EFFECT_NAME = "every_owned_province";
 
@@ -44,14 +44,24 @@ namespace Editor.Loading.Enhanced.PCFL.Implementation.CountryScope
       }
 
       public override string GetTokenName() => EFFECT_NAME;
+      public override string GetTokenDescription()
+      {
+         throw new NotImplementedException();
+      }
 
-      public static IToken CreateToken(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po)
+      public override string GetTokenExample()
+      {
+         throw new NotImplementedException();
+      }
+
+      public static IToken CreateToken(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
       {
          Debug.Assert(block is not null, "At this point the block must not be null. This must be filtered earlier in the pipeline");
 
          List<IToken> tokens = [];
-         if (block.ParseTokenBlock(ProvinceScopes.Scope, po, tokens))
-            return new EveryOwnedProvince_Scope(tokens);
+         var switchScope = new EveryOwnedProvince_Scope();
+         if (switchScope.Parse(block, po, context))
+            return switchScope;
          return IToken.Empty;
       }
 

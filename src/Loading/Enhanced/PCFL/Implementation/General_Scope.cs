@@ -1,6 +1,8 @@
 ﻿using System.Text;
+using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
 using Editor.Helper;
+using Editor.Loading.Enhanced.PCFL.Implementation.CountryScope;
 using Editor.Loading.Enhanced.PCFL.Implementation.ProvinceScope;
 using Editor.Saving;
 
@@ -22,10 +24,12 @@ public enum ScopeType
 
 public class PCFL_Scope
 {
-   public delegate ITrigger? PCFL_TriggerParseDelegate(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po);
-   public delegate IToken? PCFL_TokenParseDelegate(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po);
+   public delegate ITrigger? PCFL_TriggerParseDelegate(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po);
+   public delegate IToken? PCFL_TokenParseDelegate(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po);
    public Dictionary<string, PCFL_TriggerParseDelegate> Triggers { get; init; } = [];
    public Dictionary<string, PCFL_TokenParseDelegate> Effects { get; init; } = [];
+
+   public readonly static PCFL_Scope Empty = new(); 
 
    public bool IsValidTrigger(string str) => Triggers.ContainsKey(str);
    public bool IsValidTrigger(string str, out PCFL_TriggerParseDelegate pcflParse) => Triggers.TryGetValue(str, out pcflParse);
@@ -46,6 +50,11 @@ public class PCFL_Scope
 
 
 }
+
+/*
+ * ScopeSwitch 
+ *
+ */
 
 public abstract class All_ScopeSwitch(ITrigger trigger) : ITrigger
 {
@@ -74,9 +83,58 @@ public abstract class All_ScopeSwitch(ITrigger trigger) : ITrigger
    }
 }
 
+public abstract class ScopeSwitch(PCFL_Scope scope) : IPCFLObject
+{
+   public abstract List<ITarget> GetTargets(ITarget target);
+   public ITarget? CurrentTarget { get; protected set; }
+   public readonly PCFL_Scope scope = scope;
+
+   public static readonly ScopeSwitch Empty = new EmptyScopeSwitch();
+
+   public bool Parse(EnhancedBlock block, PathObj po, ParsingContext parseContext)
+   {
+
+      throw new NotImplementedException();
+   }
+}
+
+public class EmptyScopeSwitch() : ScopeSwitch(PCFL_Scope.Empty)
+{
+   public override List<ITarget> GetTargets(ITarget target)
+   {
+      throw new NotImplementedException();
+   }
+}
+
+public abstract class TokenScopeSwitch(PCFL_Scope scope) : ScopeSwitch(scope), IToken
+{
+   public List<IToken> Tokens;
+
+   public bool Parse(EnhancedBlock block, PathObj po, ParsingContext parseContext)
+   {
+      return block.ParseTokenBlock(parseContext.GetNext(this), po, Tokens);
+   }
+
+   public void Activate(ITarget target)
+   {
+      CurrentTarget = target;
+      foreach (var innerTarget in GetTargets(target))
+         foreach (var token in Tokens)
+            token.Activate(innerTarget);
+   }
+
+   public void GetTokenString(int tabs, ref StringBuilder sb)
+   {
+      SavingUtil.FormatSimpleTokenBlock(Tokens, tabs, GetTokenName(), ref sb);
+   }
+   public abstract string GetTokenName();
+   public abstract string GetTokenDescription();
+   public abstract string GetTokenExample();
+}
+
 public abstract class Every_ScopeSwitch(List<IToken> tokens) : IToken
 {
-   public readonly List<IToken> Tokens = tokens;
+   public List<IToken> Tokens = tokens;
    public abstract List<ITarget> GetTargets(ITarget target);
 
    public void Activate(ITarget target)

@@ -644,7 +644,7 @@
          // effectsToolStripMenuItem
          // 
          effectsToolStripMenuItem.Name = "effectsToolStripMenuItem";
-         effectsToolStripMenuItem.Size = new Size(180, 22);
+         effectsToolStripMenuItem.Size = new Size(109, 22);
          effectsToolStripMenuItem.Text = "Effects";
          effectsToolStripMenuItem.Click += effectsToolStripMenuItem_Click;
          // 
@@ -870,7 +870,7 @@
          BottomToolStrip.Items.AddRange(new ToolStripItem[] { RamUsageStrip, CpuUsageStrip, toolStripSeparator1, UndoDepthLabel, RedoDepthLabel, CompactionToolStrip, toolStripSeparator2, SelectedProvinceSum, toolStripSeparator7, MapModeTimesInfo, toolStripSeparator11, ErrorCountLabel });
          BottomToolStrip.Location = new Point(0, 876);
          BottomToolStrip.Name = "BottomToolStrip";
-         BottomToolStrip.Size = new Size(705, 24);
+         BottomToolStrip.Size = new Size(736, 24);
          BottomToolStrip.TabIndex = 0;
          // 
          // RamUsageStrip
@@ -940,6 +940,7 @@
          ErrorCountLabel.Name = "ErrorCountLabel";
          ErrorCountLabel.Size = new Size(65, 21);
          ErrorCountLabel.Text = "ErrorCount";
+         ErrorCountLabel.MouseEnter += ErrorCountLabel_MouseEnter;
          // 
          // MainLayoutPanel
          // 
