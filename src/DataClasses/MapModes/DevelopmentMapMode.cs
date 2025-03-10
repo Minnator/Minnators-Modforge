@@ -21,46 +21,6 @@ public class DevelopmentMapMode : MapMode
       // TODO FIX MAP MODE UPDATES ProvinceEventHandler.OnProvinceBaseProductionChanged += UpdateProvince;
    }
 
-   private void UpdateMinMax(object? sender, EventArgs e)
-   {
-      if (!CalculateMinMax())
-         return;
-
-      if (MapModeManager.CurrentMapMode != this)
-         return;
-      RenderMapMode();
-   }
-
-   /// <summary>
-   /// Returns if a new max was found
-   /// </summary>
-   /// <returns></returns>
-   public bool CalculateMinMax() //TODO this is calculated twice
-   {
-      var newMaxFound = false;
-      var newMax = int.MinValue;
-      foreach (var province in Globals.Provinces)
-      {
-         var totalDev = province.TotalDevelopment;
-         if (totalDev > newMax)
-         {
-            newMax = totalDev;
-            if (newMax > _max)
-            {
-               _max = newMax;
-               newMaxFound = true;
-            }
-         }
-      }
-
-      // If the new max is smaller than the current max, update the max
-      if (newMax < _max)
-      {
-         _max = newMax;
-         newMaxFound = true;
-      }
-      return newMaxFound;
-   }
    
    public override int GetProvinceColor(Province id)
    {
@@ -83,7 +43,7 @@ public class DevelopmentMapMode : MapMode
 
    public override void SetActive()
    {
-      CalculateMinMax();
+      BaseTaxMapMode.CalculateMinMax(ref _max, typeof(Province).GetProperty(nameof(Province.TotalDevelopment))!);
       base.SetActive();
    }
 }

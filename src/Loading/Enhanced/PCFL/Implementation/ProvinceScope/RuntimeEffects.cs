@@ -13,11 +13,15 @@ namespace Editor.Loading.Enhanced.PCFL.Implementation.ProvinceScope
             ProvinceScopes.Scope.Effects.Add(building.Name,GenerateBuildingEffect(building));
       }
 
-      public class BuildingEffect(Building building) : SimpleBoolEffect
+      public class BuildingEffect(Building building) : SimpleEffect<bool>(false) 
       {
          private const string EFFECT_DESCRIPTION = $"Adds or removes the specified building. ONLY valid in province history files.";
          private const string EFFECT_EXAMPLE = $"<building> = <bool>";
-         private const ScopeType EFFECT_SCOPE = ScopeType.Province;
+
+         public BuildingEffect() : this(Building.Empty)
+         {
+
+         }
 
          public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, PCFL_Scope scope, PathObj po, Building building)
          {

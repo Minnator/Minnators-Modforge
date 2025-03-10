@@ -1,5 +1,8 @@
-﻿using Editor.ErrorHandling;
+﻿using System.Diagnostics;
+using System.Reflection;
+using Editor.ErrorHandling;
 using Editor.Loading.Enhanced;
+using Editor.Loading.Enhanced.PCFL.Implementation;
 using Editor.Loading.Enhanced.PCFL.Implementation.ProvinceScope;
 using Editor.Saving;
 using Timer = System.Windows.Forms.Timer;
@@ -16,7 +19,8 @@ namespace Editor.Forms.Feature
 
          SetUpGUI();
 
-         Load += LoadEffects;
+         LoadEffectsFromAssembly();
+
          FormClosing += (sender, args) => _timer.Dispose(); 
       }
 
@@ -26,8 +30,9 @@ namespace Editor.Forms.Feature
          EffectView.FullRowSelect = true;
          EffectView.HotTracking = true;
 
-         EffectView.Columns.Add("Name");
-         EffectView.Columns.Add("Description");
+         EffectView.Columns.Add("NameHeader", "Name", -2);
+         EffectView.Columns.Add("DescriptionHeader", "Description", -2);
+         EffectView.Columns.Add("ExampleHeader", "Example", -2);
 
          _timer.Interval = 300;
 
@@ -48,7 +53,7 @@ namespace Editor.Forms.Feature
          if (string.IsNullOrEmpty(text))
          {
             EffectView.Items.Clear();
-            LoadEffects(sender, eventArgs);
+            LoadEffectsFromAssembly();
             return;
          }
 
@@ -65,22 +70,35 @@ namespace Editor.Forms.Feature
          EffectView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
       }
 
-      private void LoadEffects(object? sender, EventArgs eventArgs)
+      private void LoadEffectsFromAssembly()
       {
          EffectView.BeginUpdate();
-         foreach (var effect in ProvinceScopes.Scope.Effects)
+         var derivedTypes = GetDerivedTypes(typeof(SimpleEffect<>), Assembly.GetExecutingAssembly());
+         foreach (var type in derivedTypes)
          {
-            var item = new ListViewItem(effect.Key);
+            if (type.ContainsGenericParameters)
+               continue;
+
+            var instance = Activator.CreateInstance(type)!;
+            var tokenName = type.GetMethod(typeof(IToken).GetMethod(nameof(IToken.GetTokenName))!.Name);
+            var tokenDesc = type.GetMethod(typeof(IToken).GetMethod(nameof(IToken.GetTokenDescription))!.Name);
+            var tokenExample = type.GetMethod(typeof(IToken).GetMethod(nameof(IToken.GetTokenExample))!.Name);
+
+            var item = new ListViewItem(tokenName?.Invoke(instance, null)?.ToString());
+            item.SubItems.Add(tokenDesc?.Invoke(instance, null)?.ToString());
+            item.SubItems.Add(tokenExample?.Invoke(instance, null)?.ToString());
 
             EffectView.Items.Add(item);
          }
-
-         EffectView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
          EffectView.EndUpdate();
       }
 
-
-
+      private static IEnumerable<Type> GetDerivedTypes(Type genericBaseType, Assembly assembly)
+      {
+         return assembly.GetTypes()
+                        .Where(t => t.BaseType is { IsGenericType: true } &&
+                                    t.BaseType.GetGenericTypeDefinition() == genericBaseType);
+      }
 
    }
 }

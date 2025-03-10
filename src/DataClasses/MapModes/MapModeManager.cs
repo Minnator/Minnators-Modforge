@@ -21,6 +21,9 @@ public enum MapModeType
    Culture,
    CultureGroup,
    Development,
+   BaseTax,
+   BaseProduction,
+   BaseManpower,
    Devastation,
    Diplomatic,
    Fort,
@@ -64,41 +67,41 @@ public static class MapModeManager
 
    public static EventHandler<MapMode> MapModeChanged = delegate { };
 
-   private static readonly Dictionary<string, MapModeType> PropertyRouting = new()
+   private static readonly Dictionary<string, MapModeType[]> PropertyRouting = new()
    {
-      { nameof(Province.IsCity), MapModeType.City },
-      { nameof(Province.CenterOfTrade), MapModeType.CenterOfTrade },
-      { nameof(Province.Religion), MapModeType.Religion },
-      { nameof(Province.Culture), MapModeType.Culture },
-      { nameof(Province.Culture.CultureGroup), MapModeType.CultureGroup },
-      { nameof(Province.Owner), MapModeType.Country },
-      { nameof(Province.Controller), MapModeType.Country },
-      { nameof(Province.TradeGood), MapModeType.TradeGoods },
+      { nameof(Province.IsCity), [MapModeType.City] },
+      { nameof(Province.CenterOfTrade), [MapModeType.CenterOfTrade] },
+      { nameof(Province.Religion), [MapModeType.Religion] },
+      { nameof(Province.Culture), [MapModeType.Culture] },
+      { nameof(Province.Culture.CultureGroup), [MapModeType.CultureGroup] },
+      { nameof(Province.Owner), [MapModeType.Country] },
+      { nameof(Province.Controller), [MapModeType.Country] },
+      { nameof(Province.TradeGood), [MapModeType.TradeGoods] },
       //{ nameof(Province.), MapModeType.TradeNode },
-      { nameof(Province.TradeCompany), MapModeType.TradeCompany },
+      { nameof(Province.TradeCompany), [MapModeType.TradeCompany] },
       //{ nameof(Province.ColonialRegion), MapModeType.ColonialRegions },
-      { nameof(Province.Area), MapModeType.Area },
+      { nameof(Province.Area), [MapModeType.Area] },
       //{ nameof(Province.Region), MapModeType.Regions },
       //{ nameof(Province.SuperRegion), MapModeType.SuperRegion },
-      { nameof(Province.Continent), MapModeType.Continent },
-      { nameof(Province.TotalDevelopment), MapModeType.Development },
-      { nameof(Province.BaseTax), MapModeType.Development},
-      { nameof(Province.BaseProduction), MapModeType.Development},
-      { nameof(Province.BaseManpower), MapModeType.Development},
-      { nameof(Province.LocalAutonomy), MapModeType.Autonomy },
+      { nameof(Province.Continent), [MapModeType.Continent] },
+      { nameof(Province.TotalDevelopment), [MapModeType.Development] },
+      { nameof(Province.BaseTax), [MapModeType.Development, MapModeType.BaseTax] },
+      { nameof(Province.BaseProduction), [MapModeType.Development, MapModeType.BaseProduction] },
+      { nameof(Province.BaseManpower), [MapModeType.Development, MapModeType.BaseManpower] },
+      { nameof(Province.LocalAutonomy), [MapModeType.Autonomy] },
       //{ nameof(Province.), MapModeType.Fort },
-      { nameof(Province.Devastation), MapModeType.Devastation },
-      { nameof(Province.Prosperity), MapModeType.Prosperity },
-      { nameof(Province.IsHre), MapModeType.Hre },
-      { nameof(Province.IsSeatInParliament), MapModeType.ParliamentSeat },
-      { nameof(Province.Capital), MapModeType.HasCapital },
+      { nameof(Province.Devastation), [MapModeType.Devastation] },
+      { nameof(Province.Prosperity), [MapModeType.Prosperity] },
+      { nameof(Province.IsHre), [MapModeType.Hre] },
+      { nameof(Province.IsSeatInParliament), [MapModeType.ParliamentSeat] },
+      { nameof(Province.Capital), [MapModeType.HasCapital] },
       //{ nameof(Province.Diplomatic), MapModeType.Diplomatic },
-      { nameof(Province.Terrain), MapModeType.Terrain },
-      { nameof(Province.AutoTerrain), MapModeType.TerrainOverrides },
-      { nameof(CommonCountry.Color), MapModeType.Country},
+      { nameof(Province.Terrain), [MapModeType.Terrain] },
+      { nameof(Province.AutoTerrain), [MapModeType.TerrainOverrides] },
+      { nameof(CommonCountry.Color), [MapModeType.Country]},
       //{ nameof(Province.Climate), MapModeType.Climate },
       //{ nameof(Province.Weather), MapModeType.Weather },
-      { nameof(Province.Buildings), MapModeType.Fort},
+      { nameof(Province.Buildings), [MapModeType.Fort]},
    };
 
    static MapModeManager()
@@ -117,6 +120,9 @@ public static class MapModeManager
       MapModes.Add(new SuperRegionMapMode());
       MapModes.Add(new ContinentMapMode());
       MapModes.Add(new DevelopmentMapMode());
+      MapModes.Add(new BaseTaxMapMode());
+      MapModes.Add(new BaseProductionMapMode());
+      MapModes.Add(new BaseManpowerMapMode());
       MapModes.Add(new CenterOfTradeMapMode());
       MapModes.Add(new AutonomyMapMode());
       MapModes.Add(new FortMapMode());
@@ -191,7 +197,9 @@ public static class MapModeManager
    public static void RenderMapMode(PropertyInfo propInfo)
    {
       if (PropertyRouting.TryGetValue(propInfo.Name, out var type))
-         UpdateMapMode(type);
+         foreach (var mapModeType in type)
+            if (CurrentMapMode.MapModeType == mapModeType)
+               UpdateMapMode(mapModeType);
    }
 
    public static MapMode GetMapMode(MapModeType type)

@@ -45,6 +45,6 @@ namespace Editor.DataClasses.GameDataClasses
          return new ErrorObject(ErrorType.TempParsingError, "Building not found: " + str);
       }
 
-      public static Building Empty { get; } = new ("UNDEFINED");
+      public static Building Empty { get; } = new ("<building>");
    }
 }

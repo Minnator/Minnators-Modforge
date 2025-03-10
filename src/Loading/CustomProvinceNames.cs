@@ -119,13 +119,13 @@ namespace Editor.Loading
                var provName = match.Groups["value"].Value;
                var capitalName = match.Groups["capital"].Value;
                if (!results.TryAdd(province, [new CultProvLocObject(type, typeValue, provName, capitalName, ObjEditingStatus.Unchanged)]))
-                  _ = new LoadingError(pathObj, $"Duplicate province_names definition for {province} in {file}", lineNum, -1, ErrorType.DuplicateObjectDefinition);
+                  _ = new LoadingError(pathObj, $"Duplicate province_names definition for {province} in {file}", lineNum, -1, ErrorType.DuplicateObjectDefinition, level:LogType.Warning);
                continue;
             }
 
             value = value.TrimQuotes();
             if (!results.TryAdd(province, [new CultProvLocObject(type, typeValue, value, ObjEditingStatus.Unchanged)]))
-               _ = new LoadingError(pathObj, $"Duplicate province_names definition for {province} in {file}", lineNum, -1, ErrorType.DuplicateObjectDefinition);
+               _ = new LoadingError(pathObj, $"Duplicate province_names definition for {province} in {file}", lineNum, -1, ErrorType.DuplicateObjectDefinition, level: LogType.Warning);
 
             lineNum++;
          }

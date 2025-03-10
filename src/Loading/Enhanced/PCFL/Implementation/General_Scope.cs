@@ -77,7 +77,6 @@ public abstract class All_ScopeSwitch(ITrigger trigger) : ITrigger
 public abstract class Every_ScopeSwitch(List<IToken> tokens) : IToken
 {
    public readonly List<IToken> Tokens = tokens;
-
    public abstract List<ITarget> GetTargets(ITarget target);
 
    public void Activate(ITarget target)
@@ -89,11 +88,36 @@ public abstract class Every_ScopeSwitch(List<IToken> tokens) : IToken
 
    public void GetTokenString(int tabs, ref StringBuilder sb)
    {
-      SavingUtil.FormatSimpleTokenBlock(tokens, tabs, GetTokenName(), ref sb);
+      SavingUtil.FormatSimpleTokenBlock(Tokens, tabs, GetTokenName(), ref sb);
    }
    public abstract string GetTokenName();
    public string GetTokenDescription() => "Scopes to all provinces the current scope owns.";
    public string GetTokenExample() => "every_owned_province = { <Effect> }";
+}
+
+public abstract class Random_ScopeSwitch(List<IToken> tokens)
+{
+   public readonly List<IToken> Tokens = tokens;
+   public abstract List<ITarget> GetTargets(ITarget target);
+
+   public void Activate(ITarget target)
+   {
+      var targets = GetTargets(target);
+      if (targets.Count == 0)
+         return;
+      var randomTarget = targets[Globals.Random.Next(targets.Count)];
+      foreach (var token in Tokens)
+         token.Activate(randomTarget);
+   }
+
+   public void GetTokenString(int tabs, ref StringBuilder sb)
+   {
+      SavingUtil.FormatSimpleTokenBlock(Tokens, tabs, GetTokenName(), ref sb);
+   }
+
+   public abstract string GetTokenName();
+   public string GetTokenDescription() => "Scopes to a random province the current scope owns.";
+   public string GetTokenExample() => "random_owned_province = { <Effect> }";
 }
 
 public abstract class Any_ScopeSwitch(ITrigger trigger) : ITrigger
