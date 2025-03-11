@@ -92,13 +92,11 @@ namespace Editor.Forms
       private PropertyCollectionSelector<Province, List<Tag>, Tag> _claimSelector = null!;
       private PropertyCollectionSelector<Province, List<Tag>, Tag> _permaClaimSelector = null!;
       private PropertyCollectionSelector<Province, List<string>, string> _discoveredBy = null!;
+      #endregion
 
       public Screen? StartScreen = null;
 
-      #endregion
-
       public readonly DateControl DateControl = new(Date.MinValue, DateControlLayout.Horizontal);
-      private LoadingScreen _ls = null!;
 
       public MapWindow()
       {
@@ -107,17 +105,11 @@ namespace Editor.Forms
          Globals.Random = new(Globals.Settings.Generator.RandomSeed);
 
          // Load the game data
-         RunLoadingScreen();
-         ThreadHelper.StartBWHeapThread();
+         StartUpManager.StartUp();
 
-         Eu4Cursors.SetEu4CursorIfEnabled(Eu4CursorTypes.Normal, Cursors.Default, this);
 
          if (StartScreen != null)
-         {
-            var screen = Globals.MapWindow.StartScreen;
-            if (screen != null)
-               Location = new(screen.Bounds.X + (screen.Bounds.Width - Width) / 2, screen.Bounds.Y + (screen.Bounds.Height - Height) / 2);
-         }
+            Location = new(StartScreen.Bounds.X + (StartScreen.Bounds.Width - Width) / 2, StartScreen.Bounds.Y + (StartScreen.Bounds.Height - Height) / 2);
 
          //TODO: solve all the issues regarding this
          //DiscordActivityManager.ActivateActivity();
@@ -127,7 +119,6 @@ namespace Editor.Forms
          debugToolStripMenuItem.Visible = true;
 #endif
 
-         AchievementManager.IncreaseAchievementProgress(1, AchievementId.UseForTheFirstTime);
       }
 
       #region Initialize Application and Loadingscreen
@@ -135,58 +126,22 @@ namespace Editor.Forms
       public void Initialize()
       {
          Hide();
-         //pause gui updates
          SuspendLayout();
 
-         SetProvinceInitials();
-
          InitGui();
+
          Text = $"{Text} | {Globals.DescriptorData.Name}";
 
          // MUST BE LAST in the loading sequence
          InitMapModes();
-         HistoryManager.UndoDepthChanged += UpdateUndoDepth!;
-         HistoryManager.RedoDepthChanged += UpdateRedoDepth!;
-
          //Needs to be after loading the game data to populate the gui with it
          InitializeEditGui();
-         //resume gui updates
          // Enable the Application
-         Globals.LoadingLog.Close();
-         ResourceUsageHelper.Initialize(this);
-         HistoryManager.UpdateToolStrip();
-         SetSelectedProvinceSum(0);
-
-         // ALL LOADING COMPLETE - Set the application to running
-
-         DateControl.Date = new(1444, 11, 11);
-         CountryLoading.AssignProvinces();
-         Globals.State = State.Running;
-         MapModeManager.SetCurrentMapMode(MapModeType.Country);
          ResumeLayout();
 
          StartPosition = FormStartPosition.CenterScreen;
-         Globals.ZoomControl.FocusOn(new(3100, 600), 1f);
-         Show();
-
-         // Activate this window
-         Activate();
-         UpdateErrorCounts(LogManager.TotalErrorCount, LogManager.TotalLogCount);
-         Globals.ZoomControl.Invalidate();
       }
 
-      private void SetProvinceInitials()
-      {
-         foreach (var province in Globals.Provinces)
-            province.SetInit();
-      }
-
-      private void RunLoadingScreen()
-      {
-         _ls = new();
-         Eu4Cursors.SetEu4CursorIfEnabled(Eu4CursorTypes.Loading, Cursors.AppStarting, _ls);
-         _ls.ShowDialog();
-      }
 
       #endregion
       #region MapWindow GUI Init
@@ -723,13 +678,13 @@ namespace Editor.Forms
       #endregion
       #region HistoryManager Event Handlers
 
-      private void UpdateRedoDepth(object sender, Func<(int, int)> valueTuple)
+      internal void UpdateRedoDepth(object? sender, Func<(int, int)> valueTuple)
       {
          var (simple, full) = valueTuple();
          RedoDepthLabel.Text = $"Redos [{simple}/{full}]";
       }
 
-      private void UpdateUndoDepth(object? sender, Func<(int, int)> valueTuple)
+      internal void UpdateUndoDepth(object? sender, Func<(int, int)> valueTuple)
       {
          var (simple, full) = valueTuple();
          UndoDepthLabel.Text = $"Undos [{simple}/{full}]";

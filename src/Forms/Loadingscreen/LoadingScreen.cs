@@ -115,6 +115,7 @@ namespace Editor.Forms.Loadingscreen
 
          StartPosition = FormStartPosition.CenterScreen;
 
+
          //create a background worker to load the data
          var bw = new BackgroundWorker();
          bw.WorkerReportsProgress = true;
@@ -207,8 +208,6 @@ namespace Editor.Forms.Loadingscreen
 
       private void LoadingCompleted()
       {
-         StartUpMetrics.EndMetrics();
-         Globals.MapWindow.Initialize();
          Close();
       }
    }

@@ -65,6 +65,7 @@ namespace Editor.Helper
 
       private static void ShutDownInternal()
       {
+         StartUpManager.SetRunTimes();
          ResourceUsageHelper.Dispose();
          HistoryManager.StopTimers();
          AchievementManager.SaveAchievements();

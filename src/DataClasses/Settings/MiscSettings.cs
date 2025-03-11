@@ -27,6 +27,15 @@ namespace Editor.DataClasses.Settings
 #endif
       private EXT_ControlSettings _extControlSettings = new();
       private NameGeneratorSettings _nameGenConfig = new();
+      private TimeSpan _runTime;
+
+      [Description("The time the application has been running across sessions.")]
+      [CompareInEquals]
+      public TimeSpan RunTime
+      {
+         get => _runTime;
+         set => SetField(ref _runTime, value);
+      }
 
       [Description("The language in which the localisation will be shown")]
       [CompareInEquals]
