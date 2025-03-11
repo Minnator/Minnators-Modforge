@@ -217,7 +217,7 @@ public static class ProvinceParser
 
       var historyEntry = new ProvinceHistoryEntry(date);
 
-      var effect = Effect.ConstructEffect(block.GetElements(), po, ProvinceScopes.Scope, province);
+      var effect = Effect.ConstructEffect(block.GetElements(), po, Scopes.Province, province);
 
       historyEntry.Effects.AddRange(effect.tokens);
 

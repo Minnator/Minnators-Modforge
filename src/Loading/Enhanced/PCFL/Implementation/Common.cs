@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 using Editor.ErrorHandling;
 using Editor.Helper;
 using Editor.Saving;
@@ -22,10 +23,40 @@ public abstract class Value(Type type)
    public abstract void SetDefault();
 }
 
+public class RefTargetValue<T> : Value<T> where T : notnull
+{
+   public override T Val { 
+      get 
+      {
+         Debug.Assert(scopeSwitch.CurrentTarget is T, "CurrentTarget must always be of matching type!");
+         return (T)scopeSwitch.CurrentTarget;
+      }
+   }
+   private ScopeSwitch scopeSwitch;
+
+   public static bool TryParseRefTargetValue(ScopeSwitch scopeSwitch, ref Value<T> value)
+   {
+      if (scopeSwitch.scope.ScopeType != typeof(T))
+      {
+
+         return false;
+         //TODO what should happen here parsing error and fallback?
+      }
+      value = new RefTargetValue<T>(scopeSwitch, value.DefaultValue);
+
+      return true;
+   }
+
+   private RefTargetValue(ScopeSwitch scopeSwitch, T defaultValue) : base(defaultValue)
+   {
+      this.scopeSwitch = scopeSwitch;
+   }
+}
 
 public class Value<T>(T defaultValue) : Value(typeof(T)) where T : notnull
 {
-   public T Val = defaultValue;
+   public T DefaultValue = defaultValue;
+   public virtual T Val { get; set; } = defaultValue;
 
    public static Value<T> operator <<(Value<T> a, Value<T> b)
    {
@@ -40,7 +71,7 @@ public class Value<T>(T defaultValue) : Value(typeof(T)) where T : notnull
 
    public override void CopyFrom(Value val)
    {
-      Val = val.Type == Type ? (val as Value<T>)!.Val : defaultValue;
+      Val = val.Type == Type ? (val as Value<T>)!.Val : Val;
    }
 
    public override void CopyTo(Value val)
@@ -51,7 +82,7 @@ public class Value<T>(T defaultValue) : Value(typeof(T)) where T : notnull
          val.SetDefault();
    }
 
-   public override void SetDefault() { Val = defaultValue; }
+   public override void SetDefault() { Val = DefaultValue; }
 }
 
 public interface IPCFLObject 
@@ -59,8 +90,8 @@ public interface IPCFLObject
    public bool ParseWithReplacement(ScriptedTriggerSource parent, EnhancedBlock block, PathObj po) => throw new NotImplementedException();
    public bool ParseWithReplacement(ScriptedTriggerSource parent, LineKvp<string, string> command, PathObj po) => throw new NotImplementedException();
    // Scope?
-   public bool Parse(EnhancedBlock block, PathObj po) => throw new NotImplementedException();
-   public bool Parse(LineKvp<string, string> command, PathObj po) => throw new NotImplementedException();
+   public bool Parse(EnhancedBlock block, PathObj po, ParsingContext context) => throw new NotImplementedException();
+   public bool Parse(LineKvp<string, string> command, PathObj po, ParsingContext context) => throw new NotImplementedException();
 };
 
 
@@ -103,41 +134,39 @@ public class Effect
       this.tokens = tokens;
    }
 
-   private Effect(IEnumerable<IEnhancedElement> elements, PathObj po, PCFL_Scope scope, ITarget root) : this(elements, po, scope, root, ITarget.Empty) {}
-   private Effect(IEnumerable<IEnhancedElement> elements, PathObj po, PCFL_Scope scope, ITarget root , ITarget from)
+   private Effect(IEnumerable<IEnhancedElement> elements, PathObj po, PCFL_Scope scope, ITarget root, bool allowRoot = true) : this(elements, po, scope, root, ITarget.Empty, allowRoot) {}
+   private Effect(IEnumerable<IEnhancedElement> elements, PathObj po, PCFL_Scope scope, ITarget root , ITarget from, bool allowRoot = true)
    {
-      Root = root;
+      Root = allowRoot ? root : ITarget.Empty;
       From = from;
-      tokens = GeneralFileParser.ParseElementsToTokens(elements, new (scope, this), po);
+      tokens = GeneralFileParser.ParseElementsToTokens(elements, new (new SimpleFileScopeSwitch(scope, root), this), po);
    }
 
-   public static Effect ConstructEffect(IEnumerable<IEnhancedElement> elements, PathObj po, PCFL_Scope scope, ITarget root, ITarget from) => new (elements, po, scope, root, from);
-   public static Effect ConstructEffect(IEnumerable<IEnhancedElement> elements, PathObj po, PCFL_Scope scope, ITarget root) => new (elements, po, scope, root);
-   public static Effect ConstructEffect(PathObj po, PCFL_Scope scope, ITarget root) => new(po.LoadBaseOrder(), po, scope, root);
+   public static Effect ConstructEffect(IEnumerable<IEnhancedElement> elements, PathObj po, PCFL_Scope scope, ITarget root, ITarget from, bool allowRoot = true) => new (elements, po, scope, root, from, allowRoot);
+   public static Effect ConstructEffect(IEnumerable<IEnhancedElement> elements, PathObj po, PCFL_Scope scope, ITarget root, bool allowRoot = true) => new (elements, po, scope, root, allowRoot);
+   public static Effect ConstructEffect(PathObj po, PCFL_Scope scope, ITarget root, bool allowRoot = true) => new(po.LoadBaseOrder(), po, scope, root, allowRoot);
    public void Activate()
    {
       foreach (var token in tokens) 
          token.Activate(Root);
    }
-
-   
 }
 
-public struct ParsingContext(PCFL_Scope current, ScopeSwitch prev, ScopeSwitch prevPrev, Effect rootEffect)
+public struct ParsingContext(ScopeSwitch current, ScopeSwitch prev, ScopeSwitch prevPrev, Effect rootEffect)
 {
-   public PCFL_Scope scope = current;
+   public ScopeSwitch This = current;
    public ScopeSwitch Prev = prev;
    public ScopeSwitch PrevPrev = prevPrev;
    public Effect Effect = rootEffect;
 
-   public ParsingContext(PCFL_Scope current, Effect rootEffect) : this (current, ScopeSwitch.Empty, ScopeSwitch.Empty, rootEffect)
+   public ParsingContext(ScopeSwitch current, Effect rootEffect) : this (current, ScopeSwitch.Empty, ScopeSwitch.Empty, rootEffect)
    {
 
    }
 
    public ParsingContext GetNext(ScopeSwitch next)
    {
-      return new(scope, next, Prev, Effect);
+      return new(next, This, Prev, Effect);
    }
 } 
 

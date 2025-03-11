@@ -19,10 +19,10 @@ public class BaseManpowerTrigger : ITrigger
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       BaseManpowerTrigger trigger = new();
-      return trigger.Parse(kvp.Value, po) ? trigger : null;
+      return trigger.Parse(kvp.Value, po, context) ? trigger : null;
    }
 
-   public bool Parse(LineKvp<string, string> command, PathObj po)
+   public bool Parse(LineKvp<string, string> command, PathObj po, ParsingContext context)
    {
       return GeneralFileParser.ParseSingleTriggerValue(ref _baseManpower, command, po);
    }
@@ -54,7 +54,7 @@ public class BaseTaxTrigger : ITrigger
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       BaseManpowerTrigger trigger = new();
-      return trigger.Parse(kvp.Value, po) ? trigger : null;
+      return trigger.Parse(kvp.Value, po, context) ? trigger : null;
    }
 
    public bool Parse(LineKvp<string, string> command, PathObj po)

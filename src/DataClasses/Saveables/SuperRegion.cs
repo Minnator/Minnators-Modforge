@@ -1,9 +1,11 @@
 ﻿using System.Text;
+using Editor.ErrorHandling;
 using Editor.Helper;
+using Editor.Loading.Enhanced.PCFL.Implementation;
 using Editor.Saving;
 
 namespace Editor.DataClasses.Saveables;
-public class SuperRegion : ProvinceCollection<Region>
+public class SuperRegion : ProvinceCollection<Region>, ITarget
 {
    public bool RestrictCharter { get; set; } = false;
    public SuperRegion(string name, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(name, color, status)
@@ -99,4 +101,10 @@ public class SuperRegion : ProvinceCollection<Region>
 
    public new static SuperRegion Empty  { get; } = new (string.Empty, System.Drawing.Color.Empty, ObjEditingStatus.Immutable);
 
+   public static IErrorHandle TryParse(string input, out SuperRegion area)
+   {
+      if (Globals.SuperRegions.TryGetValue(input, out area!))
+         return ErrorHandle.Success;
+      return new ErrorObject(ErrorType.TypeConversionError, $"SuperRegion \"{input}\" not found!", addToManager: false);
+   }
 }

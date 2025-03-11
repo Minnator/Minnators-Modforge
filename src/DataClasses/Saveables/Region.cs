@@ -1,9 +1,11 @@
 ﻿using System.Text;
+using Editor.ErrorHandling;
 using Editor.Helper;
+using Editor.Loading.Enhanced.PCFL.Implementation;
 using Editor.Saving;
 
 namespace Editor.DataClasses.Saveables;
-public class Region : ProvinceCollection<Area>
+public class Region : ProvinceCollection<Area>, ITarget
 {
    public Region(string name, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(name, color, status)
    {
@@ -108,6 +110,15 @@ public class Region : ProvinceCollection<Area>
    public override string GetHeader()
    {
       return "# random_new_world_region is used for RNW. Must be first in this list.\r\nrandom_new_world_region = {\r\n}";
+   }
+
+
+
+   public static IErrorHandle TryParse(string input, out Region area)
+   {
+      if (Globals.Regions.TryGetValue(input, out area!))
+         return ErrorHandle.Success;
+      return new ErrorObject(ErrorType.TypeConversionError, $"Region \"{input}\" not found!", addToManager: false);
    }
 }
 

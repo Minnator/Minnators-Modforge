@@ -1,10 +1,12 @@
 ﻿using System.Text;
+using Editor.ErrorHandling;
 using Editor.Helper;
+using Editor.Loading.Enhanced.PCFL.Implementation;
 using Editor.Saving;
 
 namespace Editor.DataClasses.Saveables
 {
-   public class ProvinceGroup : ProvinceCollection<Province>
+   public class ProvinceGroup : ProvinceCollection<Province>, ITarget
    {
       public ProvinceGroup(string name, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(name, color, status)
       {
@@ -84,6 +86,13 @@ namespace Editor.DataClasses.Saveables
       public override void AddGlobal()
       {
          Globals.ProvinceGroups.Add(Name, this);
+      }
+
+      public static IErrorHandle TryParse(string input, out ProvinceGroup area)
+      {
+         if (Globals.ProvinceGroups.TryGetValue(input, out area!))
+            return ErrorHandle.Success;
+         return new ErrorObject(ErrorType.TypeConversionError, $"ProvinceGroup \"{input}\" not found!", addToManager: false);
       }
    }
 }

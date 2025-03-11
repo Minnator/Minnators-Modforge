@@ -9,7 +9,7 @@ namespace Editor.Loading.Enhanced.PCFL.Implementation
    public abstract class SimpleEffect<T>(T defaultValue) : IToken where T : notnull 
    {
       internal Value<T> _value = new(defaultValue); // Default value and type of T
-      public virtual bool Parse(LineKvp<string, string> command, PathObj po) => GeneralFileParser.ParseSingleTriggerVal(ref _value, command, po);
+      public virtual bool Parse(LineKvp<string, string> command, PathObj po, ParsingContext context) => GeneralFileParser.ParseSingleTriggerVal(ref _value, command, po, context);
       public abstract void Activate(ITarget target);
       public virtual void GetTokenString(int tabs, ref StringBuilder sb) => SavingUtil.AddValue(tabs, _value, GetTokenName(), ref sb);
 

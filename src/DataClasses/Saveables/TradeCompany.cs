@@ -1,10 +1,12 @@
-﻿using Editor.Helper;
+﻿using Editor.ErrorHandling;
+using Editor.Helper;
+using Editor.Loading.Enhanced.PCFL.Implementation;
 using Editor.Saving;
 using static Editor.Saving.SavingUtil;
 
 namespace Editor.DataClasses.Saveables
 {
-   public class TradeCompany : ProvinceCollection<Province>
+   public class TradeCompany : ProvinceCollection<Province>, ITarget
    {
       public TradeCompany(List<TriggeredName> names, string name, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(name, color, status)
       {
@@ -116,6 +118,13 @@ namespace Editor.DataClasses.Saveables
       {
          if (!Globals.TradeCompanies.TryAdd(Name, this))
             MessageBox.Show($"The TradeCompany {Name} does already exist and can not be created.", $"TradeCompany {Name} already exists!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+
+      public static IErrorHandle TryParse(string input, out TradeCompany area)
+      {
+         if (Globals.TradeCompanies.TryGetValue(input, out area!))
+            return ErrorHandle.Success;
+         return new ErrorObject(ErrorType.TypeConversionError, $"TradeCompany \"{input}\" not found!", addToManager: false);
       }
    }
 }

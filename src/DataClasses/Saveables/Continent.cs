@@ -1,9 +1,11 @@
 ﻿using System.Text;
+using Editor.ErrorHandling;
 using Editor.Helper;
+using Editor.Loading.Enhanced.PCFL.Implementation;
 using Editor.Saving;
 
 namespace Editor.DataClasses.Saveables;
-public class Continent : ProvinceCollection<Province>
+public class Continent : ProvinceCollection<Province>, ITarget
 {
    public Continent(string name, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(name, color, status)
    {
@@ -87,4 +89,13 @@ public class Continent : ProvinceCollection<Province>
    }
 
    public new static Continent Empty { get; } = new(string.Empty, System.Drawing.Color.Empty, ObjEditingStatus.Immutable);
+
+
+
+   public static IErrorHandle TryParse(string input, out Continent area)
+   {
+      if (Globals.Continents.TryGetValue(input, out area!))
+         return ErrorHandle.Success;
+      return new ErrorObject(ErrorType.TypeConversionError, $"Continent \"{input}\" not found!", addToManager: false);
+   }
 }

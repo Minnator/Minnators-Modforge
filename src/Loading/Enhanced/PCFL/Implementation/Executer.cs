@@ -43,8 +43,8 @@ public static class Executor // Vader is operating it
       var errorCnt = LogManager.TotalErrorCount;
       var effect = target switch
       {
-         Country => Effect.ConstructEffect(po, CountryScope.Scope, target),
-         Province => Effect.ConstructEffect(po, ProvinceScopes.Scope, target),
+         Country => Effect.ConstructEffect(po, Scopes.Country, target, true),
+         Province => Effect.ConstructEffect(po, Scopes.Province, target, true),
          _ => throw new EvilActions("Not yet...")
       };
       if (errorCnt != LogManager.TotalErrorCount)

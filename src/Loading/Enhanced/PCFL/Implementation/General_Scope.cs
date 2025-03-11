@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
 using Editor.Helper;
@@ -22,14 +23,15 @@ public enum ScopeType
    Missions
 }
 
-public class PCFL_Scope
+public class PCFL_Scope(Type scopeType)
 {
+   public readonly Type ScopeType = scopeType;
    public delegate ITrigger? PCFL_TriggerParseDelegate(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po);
    public delegate IToken? PCFL_TokenParseDelegate(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po);
    public Dictionary<string, PCFL_TriggerParseDelegate> Triggers { get; init; } = [];
    public Dictionary<string, PCFL_TokenParseDelegate> Effects { get; init; } = [];
 
-   public readonly static PCFL_Scope Empty = new(); 
+   public readonly static PCFL_Scope Empty = new(typeof(Type)); 
 
    public bool IsValidTrigger(string str) => Triggers.ContainsKey(str);
    public bool IsValidTrigger(string str, out PCFL_TriggerParseDelegate pcflParse) => Triggers.TryGetValue(str, out pcflParse);
@@ -91,11 +93,7 @@ public abstract class ScopeSwitch(PCFL_Scope scope) : IPCFLObject
 
    public static readonly ScopeSwitch Empty = new EmptyScopeSwitch();
 
-   public bool Parse(EnhancedBlock block, PathObj po, ParsingContext parseContext)
-   {
-
-      throw new NotImplementedException();
-   }
+   public abstract bool Parse(EnhancedBlock block, PathObj po, ParsingContext parseContext);
 }
 
 public class EmptyScopeSwitch() : ScopeSwitch(PCFL_Scope.Empty)
@@ -104,23 +102,69 @@ public class EmptyScopeSwitch() : ScopeSwitch(PCFL_Scope.Empty)
    {
       throw new NotImplementedException();
    }
+
+   public override bool Parse(EnhancedBlock block, PathObj po, ParsingContext parseContext)
+   {
+      throw new NotImplementedException();
+   }
+}
+
+
+public class ProvinceCollectionScopeSwitch<T, Q> : TokenScopeSwitch where T : ProvinceCollection<Q> where Q : ProvinceComposite
+{
+   private readonly T _collection;
+   public ProvinceCollectionScopeSwitch(PCFL_Scope scope, T collection) : base(scope)
+   {
+      Debug.Assert(typeof(Province) == scope.ScopeType, "Scope and target type must always match up!");
+      _collection = collection;
+   }
+
+   public override List<ITarget> GetTargets(ITarget target) => _collection.GetProvinces().Cast<ITarget>().ToList();
+   public override string GetTokenName() => _collection.Name;
+   public override string GetTokenDescription() => $"Scopes to the province of \"{_collection.Name}\"";
+   public override string GetTokenExample() => $"{_collection.Name} = {{ <effects> }}";
+}
+public class SimpleFileScopeSwitch : TokenScopeSwitch
+{
+   public SimpleFileScopeSwitch(PCFL_Scope scope, ITarget target) : base(scope)
+   {
+      Debug.Assert(target.GetType() == scope.ScopeType, "Scope and target type must always match up!");
+      CurrentTarget = target;
+   }
+
+   public override List<ITarget> GetTargets(ITarget target)
+   {
+      throw new NotImplementedException();
+   }
+
+   public override string GetTokenName() => "SimpleFileScopeSwitch";
+   public override string GetTokenDescription() => "Scopes to the current targets of an executable file.";
+   public override string GetTokenExample() => "---";
+
+   public override void Activate(ITarget target)
+   {
+      foreach (var token in Tokens)
+         token.Activate(CurrentTarget!);
+   }
 }
 
 public abstract class TokenScopeSwitch(PCFL_Scope scope) : ScopeSwitch(scope), IToken
 {
-   public List<IToken> Tokens;
+   public readonly List<IToken> Tokens = [];
 
-   public bool Parse(EnhancedBlock block, PathObj po, ParsingContext parseContext)
+   public override bool Parse(EnhancedBlock block, PathObj po, ParsingContext parseContext)
    {
       return block.ParseTokenBlock(parseContext.GetNext(this), po, Tokens);
    }
 
-   public void Activate(ITarget target)
+   public virtual void Activate(ITarget target)
    {
-      CurrentTarget = target;
-      foreach (var innerTarget in GetTargets(target))
+      foreach (var t in GetTargets(target))
+      {
+         CurrentTarget = t;
          foreach (var token in Tokens)
-            token.Activate(innerTarget);
+            token.Activate(CurrentTarget);
+      }
    }
 
    public void GetTokenString(int tabs, ref StringBuilder sb)

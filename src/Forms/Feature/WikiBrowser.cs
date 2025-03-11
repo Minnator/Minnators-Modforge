@@ -59,7 +59,7 @@ namespace Editor.Forms.Feature
 
          EffectView.Items.Clear();
 
-         var keys = ProvinceScopes.Scope.Effects.Keys.Where(x => x.Contains(text)).ToList();
+         var keys = Scopes.Province.Effects.Keys.Where(x => x.Contains(text)).ToList();
          keys.Sort();
 
          EffectView.BeginUpdate();

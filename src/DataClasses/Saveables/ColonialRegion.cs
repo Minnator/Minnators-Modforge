@@ -1,12 +1,14 @@
 ﻿using System.Text;
+using Editor.ErrorHandling;
 using Editor.Helper;
+using Editor.Loading.Enhanced.PCFL.Implementation;
 using Editor.Parser;
 using Editor.Saving;
 using static Editor.Saving.SavingUtil;
 
 namespace Editor.DataClasses.Saveables
 {
-   public class ColonialRegion : ProvinceCollection<Province>
+   public class ColonialRegion : ProvinceCollection<Province>, ITarget
    {
       public ColonialRegion(string name, Color color, ObjEditingStatus status = ObjEditingStatus.Modified) : base(name, color, status)
       {
@@ -124,6 +126,14 @@ namespace Editor.DataClasses.Saveables
       {
          if (!Globals.ColonialRegions.TryAdd(Name, this))
             MessageBox.Show($"The ColonialRegion {Name} does already exist and can not be created.", $"ColonialRegion {Name} already exists!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+
+
+      public static IErrorHandle TryParse(string input, out ColonialRegion area)
+      {
+         if (Globals.ColonialRegions.TryGetValue(input, out area!))
+            return ErrorHandle.Success;
+         return new ErrorObject(ErrorType.TypeConversionError, $"ColonialRegion \"{input}\" not found!", addToManager: false);
       }
    }
 

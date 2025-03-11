@@ -10,7 +10,7 @@ namespace Editor.Loading.Enhanced.PCFL.Implementation.ProvinceScope
       public static void GenerateBuildingEffects()
       {
          foreach (var building in Globals.Buildings) 
-            ProvinceScopes.Scope.Effects.Add(building.Name,GenerateBuildingEffect(building));
+            Scopes.Province.Effects.Add(building.Name,GenerateBuildingEffect(building));
       }
 
       public class BuildingEffect(Building building) : SimpleEffect<bool>(false) 
@@ -28,7 +28,7 @@ namespace Editor.Loading.Enhanced.PCFL.Implementation.ProvinceScope
             Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
             BuildingEffect token = new(building);
-            return token.Parse(kvp.Value, po) ? token : null;
+            return token.Parse(kvp.Value, po, context) ? token : null;
          }
 
          public override void Activate(ITarget target)

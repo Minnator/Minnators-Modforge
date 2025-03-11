@@ -24,7 +24,7 @@ public class AddBaseManpowerEffect() : SimpleEffect<int>(1)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       AddBaseManpowerEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -50,7 +50,7 @@ public class AddBaseTaxEffect() : SimpleEffect<int>(1)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       AddBaseTaxEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -76,7 +76,7 @@ public class AddBaseProductionEffect() : SimpleEffect<int>(1)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       AddBaseProductionEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -101,7 +101,7 @@ public class BaseManpowerEffect() : SimpleEffect<int>(1)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       BaseManpowerEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -127,7 +127,7 @@ public class BaseTaxEffect() : SimpleEffect<int>(1)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       BaseTaxEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -153,7 +153,7 @@ public class BaseProductionEffect() : SimpleEffect<int>(1)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       BaseProductionEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -177,9 +177,9 @@ public class OwnerEffect() : SimpleEffect<Country>(Country.Empty)
    public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
-
+      
       OwnerEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -206,7 +206,7 @@ public class ControllerEffect() : SimpleEffect<Country>(Country.Empty)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       ControllerEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -233,7 +233,7 @@ public class AddCoreEffect() : SimpleEffect<Country>(Country.Empty)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       AddCoreEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -260,7 +260,7 @@ public class RemoveCoreEffect() : SimpleEffect<Country>(Country.Empty)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       RemoveCoreEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -287,7 +287,7 @@ public class UnrestEffect() : SimpleEffect<int>(1)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       UnrestEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -315,7 +315,7 @@ public class RevoltRiskEffect() : SimpleEffect<int>(1)
       _ = new LoadingError(po, $"\"{EffectName}\" is deprecated. Please use \"unrest\" instead.", line:kvp.Value.Line, type:ErrorType.PCFL_Deprecated, level: LogType.Warning);
 
       UnrestEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -346,10 +346,10 @@ public class RevoltEffect : IToken
       Debug.Assert(block is not null, "At this point the block must not be null. This must be filtered earlier in the pipeline");
 
       RevoltEffect token = new();
-      return token.Parse(block, po) ? token : null;
+      return token.Parse(block, po, context) ? token : null;
    }
 
-   public bool Parse(EnhancedBlock block, PathObj po)
+   public bool Parse(EnhancedBlock block, PathObj po, ParsingContext context)
    {
       foreach (var element in block.GetContentElements(true, po))
       {
@@ -359,25 +359,25 @@ public class RevoltEffect : IToken
             {
                case "type":
                {
-                  if (!GeneralFileParser.ParseSingleTriggerVal(ref Type, kvp, po))
+                  if (!GeneralFileParser.ParseSingleTriggerVal(ref Type, kvp, po, context))
                      return false;
                   break;
                }
                case "size":
                {
-                  if (!GeneralFileParser.ParseSingleTriggerVal(ref Size, kvp, po))
+                  if (!GeneralFileParser.ParseSingleTriggerVal(ref Size, kvp, po, context))
                      return false;
                   break;
                }
                case "leader":
                {
-                  if (!GeneralFileParser.ParseSingleTriggerVal(ref Leader, kvp, po))
+                  if (!GeneralFileParser.ParseSingleTriggerVal(ref Leader, kvp, po, context))
                      return false;
                   break;
                }
                case "name":
                {
-                  if (!GeneralFileParser.ParseSingleTriggerVal(ref Name, kvp, po))
+                  if (!GeneralFileParser.ParseSingleTriggerVal(ref Name, kvp, po, context))
                      return false;
                   break;
                }
@@ -429,7 +429,7 @@ public class ReligionEffect() : SimpleEffect<Religion>(Religion.Empty)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       ReligionEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -455,7 +455,7 @@ public class ReformationCenterEffect() : SimpleEffect<Religion>(Religion.Empty)
    {
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
       ReligionEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
    
    public override void Activate(ITarget target)
@@ -482,7 +482,7 @@ public class CultureEffect() : SimpleEffect<Culture>(Culture.Empty)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       CultureEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -510,10 +510,10 @@ public class DiscoveredByEffect() : SimpleEffect<string>(string.Empty)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       DiscoveredByEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
-   public override bool Parse(LineKvp<string, string> command, PathObj po)
+   public override bool Parse(LineKvp<string, string> command, PathObj po, ParsingContext context)
    {
       if (Tag.TryParse(command.Value, out var tag))
       {
@@ -553,7 +553,7 @@ public class IsCityEffect() : SimpleEffect<bool>(false)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       IsCityEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
    
    public override void Activate(ITarget target)
@@ -579,7 +579,7 @@ public class HreEffect() : SimpleEffect<bool>(false)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       HreEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
    
    public override void Activate(ITarget target)
@@ -605,7 +605,7 @@ public class SeatInParliamentEffect() : SimpleEffect<bool>(false)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       SeatInParliamentEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
    
    public override void Activate(ITarget target)
@@ -631,7 +631,7 @@ public class CapitalEffect() : SimpleEffect<string>(string.Empty)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       CapitalEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
    
    public override void Activate(ITarget target)
@@ -657,7 +657,7 @@ public class TradeGoodsEffect() : SimpleEffect<TradeGood>(TradeGood.Empty)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       TradeGoodsEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
    
    public override void Activate(ITarget target)
@@ -684,7 +684,7 @@ public class TribalOwnerEffect() : SimpleEffect<Country>(Country.Empty)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       TribalOwnerEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -711,7 +711,7 @@ public class AddLocalAutonomyEffect() : SimpleEffect<float>(0f)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       AddLocalAutonomyEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -737,7 +737,7 @@ public class NativeSizeEffect() : SimpleEffect<int>(0)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       NativeSizeEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -763,7 +763,7 @@ public class AddClaimEffect() : SimpleEffect<Country>(Country.Empty)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       AddClaimEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -790,7 +790,7 @@ public class RemoveClaimEffect() : SimpleEffect<Country>(Country.Empty)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       RemoveClaimEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -822,10 +822,10 @@ public class AddPermanentProvinceModifierEffect : IToken
       Debug.Assert(block is not null, "At this point the block must not be null. This must be filtered earlier in the pipeline");
 
       AddPermanentProvinceModifierEffect token = new();
-      return token.Parse(block, po) ? token : null;
+      return token.Parse(block, po, context) ? token : null;
    }
 
-   public bool Parse(EnhancedBlock block, PathObj po)
+   public bool Parse(EnhancedBlock block, PathObj po, ParsingContext context)
    {
       foreach (var element in block.GetContentElements(true, po))
       {
@@ -835,25 +835,25 @@ public class AddPermanentProvinceModifierEffect : IToken
             {
                case "name":
                   {
-                     if (!GeneralFileParser.ParseSingleTriggerValue(ref Name, kvp, po, EffectName))
+                     if (!GeneralFileParser.ParseSingleTriggerVal(ref Name, kvp, po, context))
                         return false;
                      break;
                   }
                case "duration":
                   {
-                     if (!GeneralFileParser.ParseSingleTriggerValue(ref Duration, kvp, po))
+                     if (!GeneralFileParser.ParseSingleTriggerVal(ref Duration, kvp, po, context))
                         return false;
                      break;
                   }
                case "hidden":
                   {
-                     if (!GeneralFileParser.ParseSingleTriggerValue(ref Hidden, kvp, po))
+                     if (!GeneralFileParser.ParseSingleTriggerVal(ref Hidden, kvp, po, context))
                         return false;
                      break;
                   }
                case "desc":
                   {
-                     if (!GeneralFileParser.ParseSingleTriggerValue(ref Name, kvp, po, EffectName))
+                     if (!GeneralFileParser.ParseSingleTriggerVal(ref Name, kvp, po, context))
                         return false;
                      break;
                   }
@@ -908,10 +908,10 @@ public class AddTradeCompanyInvestmentModifierEffect : IToken
       Debug.Assert(block is not null, "At this point the block must not be null. This must be filtered earlier in the pipeline");
 
       AddTradeCompanyInvestmentModifierEffect token = new();
-      return token.Parse(block, po) ? token : null;
+      return token.Parse(block, po, context) ? token : null;
    }
 
-   public bool Parse(EnhancedBlock block, PathObj po)
+   public bool Parse(EnhancedBlock block, PathObj po, ParsingContext context)
    {
       foreach (var element in block.GetContentElements(true, po))
       {
@@ -920,11 +920,11 @@ public class AddTradeCompanyInvestmentModifierEffect : IToken
             switch (kvp.Key)
             {
                case "investment":
-                  if (!GeneralFileParser.ParseSingleTriggerValue(ref Investment, kvp, po, EffectName))
+                  if (!GeneralFileParser.ParseSingleTriggerVal(ref Investment, kvp, po, context))
                      return false;
                   break;
                case "investor":
-                  if (!GeneralFileParser.ParseSingleTriggerValue(ref Investor, kvp, po, EffectName))
+                  if (!GeneralFileParser.ParseSingleTriggerVal(ref Investor, kvp, po, context))
                      return false;
                   break;
                default:
@@ -973,7 +973,7 @@ public class NativeFerocityEffect() : SimpleEffect<int>(0)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       NativeFerocityEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -998,7 +998,7 @@ public class NativeHostilnessEffect() : SimpleEffect<int>(0)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       NativeHostilnessEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -1023,7 +1023,7 @@ public class AddProvinceTriggeredModifierEffect() : SimpleEffect<string>(string.
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       AddProvinceTriggeredModifierEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -1048,7 +1048,7 @@ public class RemoveProvinceTriggeredModifierEffect() : SimpleEffect<string>(stri
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       RemoveProvinceTriggeredModifierEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -1074,7 +1074,7 @@ public class AddToTradeCompanyEffect() : SimpleEffect<Country>(Country.Empty)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       AddToTradeCompanyEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -1100,7 +1100,7 @@ public class ExtraCostEffect() : SimpleEffect<int>(0)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       ExtraCostEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -1125,7 +1125,7 @@ public class CenterOfTradeEffect() : SimpleEffect<int>(0)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       CenterOfTradeEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -1150,7 +1150,7 @@ public class RemoveProvinceModifierEffect() : SimpleEffect<string>(string.Empty)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       RemoveProvinceModifierEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -1176,7 +1176,7 @@ public class SetGlobalFlagEffect() : SimpleEffect<string>(string.Empty)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       SetGlobalFlagEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -1200,7 +1200,7 @@ public class ChangeProvinceNameEffect() : SimpleEffect<string>(string.Empty)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       ChangeProvinceNameEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -1224,7 +1224,7 @@ public class RenameCapitalEffect() : SimpleEffect<string>(string.Empty)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       RenameCapitalEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -1248,7 +1248,7 @@ public class AddProsperityEffect() : SimpleEffect<float>(0)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       AddProsperityEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -1272,7 +1272,7 @@ public class AddDevastationEffect() : SimpleEffect<float>(0)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       AddDevastationEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -1297,7 +1297,7 @@ public class SetLocalAutonomyEffect() : SimpleEffect<float>(0)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       SetLocalAutonomyEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -1321,7 +1321,7 @@ public class ChangeTradeGoodsEffect() : SimpleEffect<TradeGood>(TradeGood.Empty)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       ChangeTradeGoodsEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -1345,7 +1345,7 @@ public class AddScaledLocalAdmPowerEffect() : SimpleEffect<int>(0)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       AddScaledLocalAdmPowerEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -1370,7 +1370,7 @@ public class AddScaledLocalDipPowerEffect() : SimpleEffect<int>(0)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       AddScaledLocalDipPowerEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -1394,7 +1394,7 @@ public class AddScaledLocalMilPowerEffect() : SimpleEffect<int>(0)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       AddScaledLocalMilPowerEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)
@@ -1418,7 +1418,7 @@ public class CancelConstructionEffect() : SimpleEffect<bool>(false)
       Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
 
       CancelConstructionEffect token = new();
-      return token.Parse(kvp.Value, po) ? token : null;
+      return token.Parse(kvp.Value, po, context) ? token : null;
    }
 
    public override void Activate(ITarget target)

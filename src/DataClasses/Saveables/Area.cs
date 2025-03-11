@@ -1,10 +1,13 @@
 ﻿using System.Text;
+using Editor.DiscordGame_SDK;
+using Editor.ErrorHandling;
 using Editor.Helper;
+using Editor.Loading.Enhanced.PCFL.Implementation;
 using Editor.Saving;
 
 namespace Editor.DataClasses.Saveables;
 
-public class Area : ProvinceCollection<Province>
+public class Area : ProvinceCollection<Province>, ITarget
 {
 
    // Contains the provinces in the area will be editable as the array is only a few elements long
@@ -114,4 +117,10 @@ public class Area : ProvinceCollection<Province>
       AreaColorChanged += handler;
    }
 
+   public static IErrorHandle TryParse(string input, out Area area)
+   {
+      if (Globals.Areas.TryGetValue(input, out area!))
+         return ErrorHandle.Success;
+      return new ErrorObject(ErrorType.TypeConversionError, $"Area \"{input}\" not found!", addToManager: false);
+   }
 }

@@ -1,20 +1,26 @@
-﻿
+﻿using Editor.DataClasses.Saveables;
+using Editor.Loading.Enhanced.PCFL.Implementation.CountryScope;
 using Editor.Loading.Enhanced.PCFL.Implementation.ProvinceScope;
-using static Editor.Loading.Enhanced.PCFL.Implementation.PCFL_Scope;
+using Region = Editor.DataClasses.Saveables.Region;
 
-namespace Editor.Loading.Enhanced.PCFL.Implementation.ProvinceScope;
+namespace Editor.Loading.Enhanced.PCFL.Implementation;
 
-public static class ProvinceScopes
+public static class Scopes
 {
-   public static PCFL_Scope Scope = new()
+
+   public static PCFL_Scope Province = new(typeof(Province))
    {
       Triggers = {
          [BaseManpowerTrigger.TRIGGER_NAME] = BaseManpowerTrigger.CreateTrigger,
          [BaseTaxTrigger.TRIGGER_NAME] = BaseTaxTrigger.CreateTrigger,
       },
 
+      // Separate effects from Scopes so that owner = {} is not mistaken for owner = <tag>
 
       Effects = {
+         // ------------------- Scopes --------------------
+         [OwnerProvince_Scope.EFFECT_NAME] = OwnerProvince_Scope.CreateToken,
+         // ------------------- Effects -------------------
          [BaseManpowerEffect.EffectName] = BaseManpowerEffect.CreateEffect,
          [OwnerEffect.EffectName] = OwnerEffect.CreateEffect,
          [ControllerEffect.EffectName] = ControllerEffect.CreateEffect,
@@ -65,5 +71,14 @@ public static class ProvinceScopes
       }
    };
 
-
+   public static PCFL_Scope Country = new(typeof(Country))
+   {
+      Triggers = {
+         [AllProvince_Scope.TRIGGER_NAME] = AllProvince_Scope.CreateTrigger,
+      },
+      Effects = {
+         [EveryOwnedProvince_Scope.EFFECT_NAME] = EveryOwnedProvince_Scope.CreateToken,
+         [EveryCoreProvince_Scope.EFFECT_NAME] = EveryCoreProvince_Scope.CreateToken,
+      }
+   };
 }

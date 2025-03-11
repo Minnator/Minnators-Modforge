@@ -1,14 +1,17 @@
-﻿using System.Diagnostics;
-using System.Runtime.InteropServices;
-using Editor.DataClasses.GameDataClasses;
+﻿using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
 using Editor.Helper;
+using Editor.Loading.Enhanced.PCFL.Implementation.CountryScope;
+using Editor.Loading.Enhanced.PCFL.Implementation.ProvinceScope;
 using Editor.Saving;
+using Region = Editor.DataClasses.Saveables.Region;
 
 namespace Editor.Loading.Enhanced.PCFL.Implementation;
 
 public static class GeneralFileParser
 {
+   public static readonly HashSet<string> ScopeKeyWord = ["root", "this", "prev", "prevprev", "from"];
+
    public static List<IToken> ParseSomeFile(string content, ParsingContext context, PathObj po)
    {
       /*
@@ -21,6 +24,55 @@ public static class GeneralFileParser
       return ParseElementsToTokens(EnhancedParser.LoadBaseOrder(content, po), context, po);
    }
 
+
+   public static bool ParseSingleTriggerVal<T>(ref Value<T> value, LineKvp<string, string> line, PathObj po, ParsingContext context) where T : notnull 
+   {
+      switch (line.Value.ToLower())
+      {
+         case "root":
+            if (context.Effect.Root is T valueRoot)
+            {
+               value.Val = valueRoot;
+               return true;
+            }
+            if (Equals(context.Effect.Root, ITarget.Empty))
+               _ = new LoadingError(po, $"\"ROOT\" is not allowed here!", type: ErrorType.PCFL_TriggerValidationError);
+            else
+               _ = new LoadingError(po, $"\"ROOT\" is of type {context.Effect.Root.GetType().Name} but {value.Type.Name} was expected!", type: ErrorType.PCFL_TriggerValidationError);
+            return false;
+         case "this":
+           _ = new LoadingError(po, $"\"THIS\" This only works as a target for an effect. Effects placed within a THIS scope will not work correctly.", type:ErrorType.UnsupportedOperation);
+            return false;
+         case "prev":
+            if (RefTargetValue<T>.TryParseRefTargetValue(context.Prev, ref value))
+               return true;
+            _ = new LoadingError(po, $"\"PREV\" is of type {context.Prev.scope.ScopeType.Name} but {value.Type.Name} was expected!", type: ErrorType.PCFL_TriggerValidationError);
+            return false;
+         case "prevprev":
+            if (RefTargetValue<T>.TryParseRefTargetValue(context.PrevPrev, ref value))
+               return true;
+            _ = new LoadingError(po, $"\"PREVPREV\" is of type {context.PrevPrev.scope.ScopeType.Name} but {value.Type.Name} was expected!", type: ErrorType.PCFL_TriggerValidationError);
+            return false;
+         case "from":
+            if (context.Effect.From is T valueFrom)
+            {
+               value.Val = valueFrom;
+               return true;
+            }
+            if (Equals(context.Effect.Root, ITarget.Empty))
+               _ = new LoadingError(po, $"\"FROM\" is not allowed here!", type: ErrorType.PCFL_TriggerValidationError);
+            else
+               _ = new LoadingError(po, $"\"FROM\" is of type {context.Effect.From.GetType().Name} but {value.Type.Name} was expected!", type: ErrorType.PCFL_TriggerValidationError);
+            return false;
+         default:
+            if (!Converter.Convert(line.Value, out T obj).Then(o => o.ConvertToLoadingError(po, $"Failed parsing {line.Key} Trigger", line.Line)))
+               return false;
+
+            value.Val = obj;
+            break;
+      }
+      return true;
+   }
    public static List<IToken> ParseElementsToTokens(IEnumerable<IEnhancedElement> elements, ParsingContext context, PathObj po)
    {
       var limitIfFlowControl = new IfFLowControl(ITrigger.Empty, []);
@@ -81,7 +133,7 @@ public static class GeneralFileParser
    public static bool ParseToken(LineKvp<string, string> input, ParsingContext context, PathObj po, out IToken? token)
    {
       token = null!;
-      if (!context.scope.IsValidEffect(input.Key, out var creator))
+      if (!context.This.scope.IsValidEffect(input.Key, out var creator))
       {
          _ = new LoadingError(po, $"Invalid Token: {input.Key}", line: input.Line, type: ErrorType.PCFL_TokenValidationError);
          return false;
@@ -94,36 +146,73 @@ public static class GeneralFileParser
    {
       // Not finished needs the limit functionality and so on
       token = null!;
-      if (!context.scope.IsValidEffect(input.Name, out var creator))
+      if (context.This.scope.IsValidEffect(input.Name, out var creator))
       {
-         _ = new LoadingError(po, $"Invalid Token: {input.Name}", line: input.StartLine, type: ErrorType.PCFL_TokenValidationError); //TODO Error
-         return false;
+         token = creator(input, null, context, po)!;
+         return token is not null;
       }
-      token = creator(input, null, context, po)!;
-      return token is not null;
+      if (Country.TryParse(input.Name, out var country).Ignore())
+      {
+         token = new SimpleFileScopeSwitch(Scopes.Country, country);
+         token.Parse(input, po, context);
+         return true;
+      }
+      if (Province.TryParse(input.Name, out var province).Ignore())
+      {
+         token = new SimpleFileScopeSwitch(Scopes.Province, province);
+         token.Parse(input, po, context);
+         return true;
+      }
+      if (Area.TryParse(input.Name, out var area).Ignore())
+      {
+         token = new ProvinceCollectionScopeSwitch<Area, Province>(Scopes.Province, area);
+         token.Parse(input, po, context);
+         return true;
+      }
+      if (Region.TryParse(input.Name, out var region).Ignore())
+      {
+         token = new ProvinceCollectionScopeSwitch<Region, Area>(Scopes.Province, region);
+         token.Parse(input, po, context);
+         return true;
+      }
+      if (SuperRegion.TryParse(input.Name, out var superRegion).Ignore())
+      {
+         token = new ProvinceCollectionScopeSwitch<SuperRegion, Region>(Scopes.Province, superRegion);
+         token.Parse(input, po, context);
+         return true;
+      }
+      if (Continent.TryParse(input.Name, out var continent).Ignore())
+      {
+         token = new ProvinceCollectionScopeSwitch<Continent, Province>(Scopes.Province, continent);
+         token.Parse(input, po, context);
+         return true;
+      }
+      if (TradeCompany.TryParse(input.Name, out var tc).Ignore())
+      {
+         token = new ProvinceCollectionScopeSwitch<TradeCompany, Province>(Scopes.Province, tc);
+         token.Parse(input, po, context);
+         return true;
+      }
+      if (ProvinceGroup.TryParse(input.Name, out var provinceGroup).Ignore())
+      {
+         token = new ProvinceCollectionScopeSwitch<ProvinceGroup, Province>(Scopes.Province, provinceGroup);
+         token.Parse(input, po, context);
+         return true;
+      }
+      if (ColonialRegion.TryParse(input.Name, out var colonialRegion).Ignore())
+      {
+         token = new ProvinceCollectionScopeSwitch<ColonialRegion, Province>(Scopes.Province, colonialRegion);
+         token.Parse(input, po, context);
+         return true;
+      }
+      _ = new LoadingError(po, $"Invalid Token: {input.Name}", line: input.StartLine, type: ErrorType.PCFL_TokenValidationError); //TODO Error
+      return false;
    }
 
 
    public static bool ParseTokenBlock(this EnhancedBlock block, ParsingContext context, PathObj po, List<IToken> token)
    {
       token.AddRange(ParseElementsToTokens(block.GetElements(), context, po));
-      foreach (var triggerElement in block.GetElements())
-      {
-         if (triggerElement.IsBlock)
-         {
-            ParseToken((EnhancedBlock)triggerElement, context, po, out var newToken);
-            token.Add(newToken);
-         }
-         else
-         {
-            foreach (var kvp in ((EnhancedContent)triggerElement).GetLineKvpEnumerator(po))
-            {
-               ParseToken(kvp, context, po, out var newToken);
-               token.Add(newToken);
-            }
-         }
-      }
-
       return token.Count > 0;
    }
 
@@ -174,7 +263,7 @@ public static class GeneralFileParser
    public static bool ParseTrigger(LineKvp<string, string> input, ParsingContext context, PathObj po, out ITrigger trigger)
    {
       trigger = null!;
-      if (!context.scope.IsValidTrigger(input.Key, out var creator))
+      if (!context.This.scope.IsValidTrigger(input.Key, out var creator))
       {
          _ = new LoadingError(po, $"Invalid Trigger: {input.Key}", line: input.Line, type: ErrorType.PCFL_TriggerValidationError);
          return false;
@@ -209,7 +298,7 @@ public static class GeneralFileParser
        *    what is it doing here
       */
 
-      if (!context.scope.IsValidTrigger(block.Name, out var creator))
+      if (!context.This.scope.IsValidTrigger(block.Name, out var creator))
       {
          _ = new LoadingError(po, $"Invalid Trigger: {block.Name}", line: block.StartLine, type: ErrorType.PCFL_TriggerValidationError);
          return false;
@@ -226,19 +315,8 @@ public static class GeneralFileParser
       return true;
    }
 
-   public static bool ParseSingleTriggerVal<T>(ref Value<T> value, LineKvp<string, string> line, PathObj po) where T : notnull
+   public static bool ParseSingleTriggerValue(ref Value<string> inValue, LineKvp<string, string> command, PathObj po)
    {
-      if (Converter.Convert(line.Value, out T obj).Then(o => o.ConvertToLoadingError(po, $"Failed parsing {line.Key} Trigger", line.Line)))
-      {
-         value.Val = obj;
-         return true;
-      }
-      return false;
-   }
-
-   public static bool ParseSingleTriggerValue(ref Value<string> inValue, LineKvp<string, string> command, PathObj po, string triggerName)
-   {
-      ParseSingleTriggerVal(ref inValue, command, po);
       if (!TriggerParser.ParseTriggerOfValue(command.Value, out string parsedValue).Then(o => o.ConvertToLoadingError(po, $"Failed parsing {command.Key} Trigger", command.Line)))
          return false;
       inValue.Val = parsedValue;
