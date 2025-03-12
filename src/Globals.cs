@@ -125,8 +125,14 @@ public static class Globals
    public static int MapHeight;
    public static string MapPath = null!;
 
+   public static int MaxProvinces = 0;
+
    // Defines
    public static BindingDictionary<string, Define> Defines = new();
+
+   // Dates
+   public static Date StartDate;
+   public static Date EndDate;
 
    // Terrain
    public static readonly BindingDictionary<string, Terrain> Terrains = new(new(Terrain.Empty.Name, Terrain.Empty));

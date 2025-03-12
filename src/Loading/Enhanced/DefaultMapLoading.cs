@@ -12,14 +12,14 @@ namespace Editor.Loading.Enhanced
 
          var attributes = EnhancedParsing.GetAttributesFromContentElements(elements, po, "max_provinces", "width", "height");
 
-         Converter.Convert<int>(attributes[0], out int maxProvinces);
+         Converter.Convert<int>(attributes[0], out Globals.MaxProvinces);
          Converter.Convert<int>(attributes[1], out Globals.MapWidth);
          Converter.Convert<int>(attributes[2], out Globals.MapHeight);
 
          foreach (var province in Globals.Provinces)
          {
-            if (province.Id >= maxProvinces) 
-               _ = new LoadingError(po, $"Province {province.Id} is higher than the max_provinces value of {maxProvinces} in default.map!", 0, 0, ErrorType.InvalidProvinceId);
+            if (province.Id >= Globals.MaxProvinces) 
+               _ = new LoadingError(po, $"Province {province.Id} is higher than the max_provinces value of {Globals.MaxProvinces} in default.map!", 0, 0, ErrorType.InvalidProvinceId);
          }
 
          Globals.SeaProvinces.Clear();

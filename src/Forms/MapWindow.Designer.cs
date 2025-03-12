@@ -78,6 +78,7 @@
          toolStripSeparator12 = new ToolStripSeparator();
          wikiToolStripMenuItem = new ToolStripMenuItem();
          effectsToolStripMenuItem = new ToolStripMenuItem();
+         calenderViewToolStripMenuItem = new ToolStripMenuItem();
          MapModeComboBox = new ToolStripComboBox();
          searchToolStripMenuItem = new ToolStripMenuItem();
          helpToolStripMenuItem = new ToolStripMenuItem();
@@ -582,7 +583,7 @@
          // 
          // additionalToolsToolStripMenuItem
          // 
-         additionalToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { checkForCyclesInTradenodesToolStripMenuItem, randomModifierToolStripMenuItem, deleteProvinceHistoryEntriesToolStripMenuItem, tradegoodEditorToolStripMenuItem, definesEditorToolStripMenuItem, namesGeneratorToolStripMenuItem, toolStripSeparator12, wikiToolStripMenuItem });
+         additionalToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { checkForCyclesInTradenodesToolStripMenuItem, randomModifierToolStripMenuItem, deleteProvinceHistoryEntriesToolStripMenuItem, tradegoodEditorToolStripMenuItem, definesEditorToolStripMenuItem, namesGeneratorToolStripMenuItem, toolStripSeparator12, wikiToolStripMenuItem, calenderViewToolStripMenuItem });
          additionalToolsToolStripMenuItem.Name = "additionalToolsToolStripMenuItem";
          additionalToolsToolStripMenuItem.Size = new Size(103, 23);
          additionalToolsToolStripMenuItem.Text = "Additional tools";
@@ -647,6 +648,13 @@
          effectsToolStripMenuItem.Size = new Size(109, 22);
          effectsToolStripMenuItem.Text = "Effects";
          effectsToolStripMenuItem.Click += effectsToolStripMenuItem_Click;
+         // 
+         // calenderViewToolStripMenuItem
+         // 
+         calenderViewToolStripMenuItem.Name = "calenderViewToolStripMenuItem";
+         calenderViewToolStripMenuItem.Size = new Size(236, 22);
+         calenderViewToolStripMenuItem.Text = "Calender View";
+         calenderViewToolStripMenuItem.Click += calenderViewToolStripMenuItem_Click;
          // 
          // MapModeComboBox
          // 
@@ -870,7 +878,7 @@
          BottomToolStrip.Items.AddRange(new ToolStripItem[] { RamUsageStrip, CpuUsageStrip, toolStripSeparator1, UndoDepthLabel, RedoDepthLabel, CompactionToolStrip, toolStripSeparator2, SelectedProvinceSum, toolStripSeparator7, MapModeTimesInfo, toolStripSeparator11, ErrorCountLabel });
          BottomToolStrip.Location = new Point(0, 876);
          BottomToolStrip.Name = "BottomToolStrip";
-         BottomToolStrip.Size = new Size(736, 24);
+         BottomToolStrip.Size = new Size(705, 24);
          BottomToolStrip.TabIndex = 0;
          // 
          // RamUsageStrip
@@ -3186,6 +3194,7 @@
       private ToolStripSeparator toolStripSeparator12;
       private ToolStripMenuItem wikiToolStripMenuItem;
       private ToolStripMenuItem effectsToolStripMenuItem;
+      private ToolStripMenuItem calenderViewToolStripMenuItem;
    }
 }
 

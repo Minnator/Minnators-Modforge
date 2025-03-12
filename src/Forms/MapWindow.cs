@@ -1509,5 +1509,10 @@ namespace Editor.Forms
          ErrorCountLabel.ToolTipText = $"Critical: {LogManager.CriticalCount}\nErrors: {LogManager.ErrorCount}\nWarnings: {LogManager.WarningCount}\nInformation: {LogManager.InformationCount}";
 #endif
       }
+
+      private void calenderViewToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         FormsHelper.ShowIfAnyOpen<CalenderHistoryView>();
+      }
    }
 }

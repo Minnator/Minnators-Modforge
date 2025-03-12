@@ -3,9 +3,11 @@ using Editor.Controls;
 using Editor.DataClasses.Achievements;
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.MapModes;
+using Editor.DataClasses.Misc;
 using Editor.ErrorHandling;
 using Editor.Forms.Loadingscreen;
 using Editor.Loading;
+using Editor.Parser;
 using Timer = System.Windows.Forms.Timer;
 
 namespace Editor.Helper
@@ -16,7 +18,7 @@ namespace Editor.Helper
 
       internal static Timer RuntimeUpdateTimer = new(){Interval = 60000 };
       internal static readonly Stopwatch Sw;
-
+      private static LoadingScreen ls;
       static StartUpManager()
       {
          Sw = new ();
@@ -46,13 +48,15 @@ namespace Editor.Helper
          Globals.MapWindow.SetSelectedProvinceSum(0);
 
          // ALL LOADING COMPLETE - Set the application to running
-         Globals.MapWindow.DateControl.Date = new(1444, 11, 11);
+         ParseStartEndDate();
+         Globals.MapWindow.DateControl.Date = Globals.StartDate;
          CountryLoading.AssignProvinces();
          Globals.MapWindow.UpdateErrorCounts(LogManager.TotalErrorCount, LogManager.TotalLogCount);
          Globals.State = State.Running;
          MapModeManager.SetCurrentMapMode(MapModeType.Country);
          Globals.ZoomControl.FocusOn(new(3100, 600), 1f);
 
+         //ls.Close();
          Globals.MapWindow.Show();
          Globals.MapWindow.Activate();
          Globals.ZoomControl.Invalidate();
@@ -61,10 +65,17 @@ namespace Editor.Helper
          Eu4Cursors.SetEu4CursorIfEnabled(Eu4CursorTypes.Normal, Cursors.Default, Globals.MapWindow);
       }
 
+      private static void ParseStartEndDate()
+      {
+         if (!Date.TryParse(Globals.Defines["NDefines.NGame.START_DATE"].GetValueAsText.TrimQuotes(), out Globals.StartDate).Log()) 
+            Globals.StartDate = new(1444, 11, 11);
+         if (!Date.TryParse(Globals.Defines["NDefines.NGame.END_DATE"].GetValueAsText.TrimQuotes(), out Globals.EndDate).Log())
+            Globals.EndDate = new(1821, 1, 1);
+      }
 
       private static void RunLoadingScreen()
       {
-         LoadingScreen ls = new();
+         ls = new();
          Eu4Cursors.SetEu4CursorIfEnabled(Eu4CursorTypes.Loading, Cursors.AppStarting, ls);
          ls.ShowDialog();
       }

@@ -666,6 +666,28 @@ namespace Editor.DataClasses.Saveables
          _initialData.SetData(this);
       }
 
+      public int GetNumOfHistoryEntriesForRange(Date lower, Date higher)
+      {
+         return GetHistoryEntriesForRange(lower, higher).Count;
+      }
+
+      public List<ProvinceHistoryEntry> GetHistoryEntriesForRange(Date lower, Date higher)
+      {
+         return History.Where(x => x.Date >= lower && x.Date <= higher).ToList();
+      }
+
+      public List<ProvinceHistoryEntry> GetHistoryEntriesForDate(Date date)
+      {
+         return History.Where(x => x.Date == date).ToList();
+      }
+
+      public void GetHistoryEntriesForMonth(int[] daysOfMonth, Date date)
+      {
+         foreach (var entry in History)
+            if (entry.Date.Year == date.Year && entry.Date.Month == date.Month) 
+               daysOfMonth[entry.Date.Day - 1]++;
+      }
+
       #endregion
 
       #region Modifiers

@@ -36,7 +36,7 @@ namespace Editor.DataClasses.Misc
 
       public Date(int year, int month, int day)
       {
-         TimeStamp = year * 365 + SumDaysToMonth(month) + day;
+         TimeStamp = year * 365 + SumDaysToMonth(month) + day - 1;
       }
       public Date(int timeStamp)
       {
@@ -54,6 +54,26 @@ namespace Editor.DataClasses.Misc
       public static Date MaxValue { get; } = new(short.MaxValue, 12, 31);
       [Browsable(false)]
       public static Date Empty { get; } = new(0, 0, 0);
+
+      public string GetNameOfMonth(int month)
+      {
+         return month switch
+         {
+            1 => "January",
+            2 => "February",
+            3 => "March",
+            4 => "April",
+            5 => "May",
+            6 => "June",
+            7 => "July",
+            8 => "August",
+            9 => "September",
+            10 => "October",
+            11 => "November",
+            12 => "December",
+            _ => "Invalid month"
+         };
+      }
 
       public void SetDate(Date date) => TimeStamp = date.TimeStamp;
       public Date Copy() => new(Year, Month, Day);
@@ -75,15 +95,29 @@ namespace Editor.DataClasses.Misc
             if (curMonth + months <= 12)
             {
                curMonth += months;
-               TimeStamp = SumDaysToMonth(curMonth) + curDay;
+               TimeStamp = Year * 365 + SumDaysToMonth(curMonth) + curDay;
                return this;
             }
 
-            months -= 12 - curMonth;
+            months -= 12 - curMonth + 1;
             curMonth = 1;
-            TimeStamp = Year * 365 + SumDaysToMonth(curMonth) + curDay;
-            AddYears(1);
+            TimeStamp = (Year + 1) * 365 + SumDaysToMonth(curMonth) + curDay;
          }
+         while (months < 0)
+         {
+            if (curMonth + months > 0)
+            {
+               curMonth += months;
+               TimeStamp = Year * 365 + SumDaysToMonth(curMonth) + curDay;
+               return this;
+            }
+
+            months += curMonth;
+            curMonth = 12;
+            TimeStamp = Year * 365 + SumDaysToMonth(curMonth) + curDay;
+            AddYears(-1);
+         }
+
          return this;
       }
 
@@ -103,7 +137,7 @@ namespace Editor.DataClasses.Misc
                return this;
             }
 
-            days -= daysInMonth - curDay - 1;
+            days -= daysInMonth - curDay + 1;
             curDay = 1;
             if (curMonth == 12)
             {
@@ -112,6 +146,25 @@ namespace Editor.DataClasses.Misc
             }
             else
                curMonth++;
+            TimeStamp = curYear * 365 + SumDaysToMonth(curMonth) + curDay;
+         }
+         while (days < 0)
+         {
+            if (curDay + days > 0)
+            {
+               curDay += days;
+               TimeStamp = Year * 365 + SumDaysToMonth(curMonth) + curDay;
+               return this;
+            }
+
+            days += curDay;
+            curMonth--;
+            if (curMonth == 0)
+            {
+               curMonth = 12;
+               curYear--;
+            }
+            curDay = DaysInMonth(curMonth);
             TimeStamp = curYear * 365 + SumDaysToMonth(curMonth) + curDay;
          }
          return this;
@@ -130,7 +183,7 @@ namespace Editor.DataClasses.Misc
       private static int GetDay(int month, int remainder)
       {
          Debug.Assert(remainder <= DaysInMonth(month), "Bigger remainder than days in month");
-         return remainder;
+         return remainder + 1;
       }
 
       private static int GetMonth(int timeStamp, out int remainder)
@@ -158,6 +211,11 @@ namespace Editor.DataClasses.Misc
             4 or 6 or 9 or 11 => 30,
             _ => 31
          };
+      }
+
+      public int CurrentDaysInYear()
+      {
+         return TimeStamp % 365;
       }
 
       public static IErrorHandle TryParse(string str, out Date date)
@@ -234,30 +292,26 @@ namespace Editor.DataClasses.Misc
 
       public static Date operator +(Date date, int days)
       {
-         var newDate = new Date(date.Year, date.Month, date.Day);
+         var newDate = new Date(date.TimeStamp);
          newDate.AddDays(days);
          return newDate;
       }
 
       public static Date operator -(Date date, int days)
       {
-         var newDate = new Date(date.Year, date.Month, date.Day);
+         var newDate = new Date(date.TimeStamp);
          newDate.AddDays(-days);
          return newDate;
       }
 
-      public static Date operator +(Date date, Date other)
+      public static int operator +(Date date, Date other)
       {
-         var newDate = new Date(date.Year, date.Month, date.Day);
-         newDate.TimeStamp += other.TimeStamp;
-         return newDate;
+         return date.TimeStamp + other.TimeStamp;
       }
 
-      public static Date operator -(Date date, Date other)
+      public static int operator -(Date date, Date other)
       {
-         var newDate = new Date(date.Year, date.Month, date.Day);
-         newDate.TimeStamp -= other.TimeStamp;
-         return newDate;
+         return date.TimeStamp - other.TimeStamp; ;
       }
 
       public static Date operator ++(Date date)

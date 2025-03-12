@@ -98,4 +98,46 @@ public class ColorProviderRgb(int seed = 1444)
       return Color.FromArgb(red, green, 0);
    }
 
+   public static Color[] SampleColorScale(int sampleCount, Color color1, Color color2)
+   {
+      int rMin = color2.R;
+      int gMin = color2.G;
+      int bMin = color2.B;
+
+      var colorList = new Color [sampleCount];
+      for (var i = 0; i < sampleCount; i++)
+      {
+         var rAverage = rMin + (color1.R - rMin) * i / sampleCount;
+         var gAverage = gMin + (color1.G - gMin) * i / sampleCount;
+         var bAverage = bMin + (color1.B - bMin) * i / sampleCount;
+         colorList[i] = Color.FromArgb(rAverage, gAverage, bAverage);
+      }
+      return colorList;
+   }
+
+   #region Good Color Sacles
+
+   public static Color[] GetGreenBlueScale(int sampleCount)
+   {
+      var color1 = ColorTranslator.FromHtml("#A5CC82");
+      var color2 = ColorTranslator.FromHtml("#00467F");
+
+      return SampleColorScale(sampleCount, color1, color2);
+   }
+
+   #endregion
+
+   public static Color NormalizeColorToScale(int min, int max, int current, Color[] colors)
+   {
+      if (min == max)
+         return colors[0];
+
+      // Normalize the current value to a range between 0 and 1
+      var normalized = (float)(current - min) / (max - min);
+
+      // Interpolate between the colors
+      var colorIndex = (int)Math.Round((normalized * (colors.Length - 1)));
+      return colors[colorIndex];
+   }
+
 }
