@@ -383,6 +383,7 @@
          saveSelectionToolStripMenuItem.ShortcutKeys = Keys.F3;
          saveSelectionToolStripMenuItem.Size = new Size(268, 22);
          saveSelectionToolStripMenuItem.Text = "Save selection to image";
+         saveSelectionToolStripMenuItem.Click += saveSelectionToolStripMenuItem_Click;
          // 
          // toolStripSeparator4
          // 
@@ -822,7 +823,7 @@
          // 
          audioTestToolStripMenuItem.Name = "audioTestToolStripMenuItem";
          audioTestToolStripMenuItem.Size = new Size(221, 22);
-         audioTestToolStripMenuItem.Text = "Audio test";
+         audioTestToolStripMenuItem.Text = "SaveIconStrip";
          audioTestToolStripMenuItem.Click += audioTestToolStripMenuItem_Click;
          // 
          // compactHistoryToolStripMenuItem

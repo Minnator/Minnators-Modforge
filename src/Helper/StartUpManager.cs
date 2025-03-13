@@ -27,6 +27,12 @@ namespace Editor.Helper
             Globals.Settings.Misc.RunTime += Sw.Elapsed;
             Sw.Restart();
          };
+         RuntimeUpdateTimer.Tick += (sender, args) =>
+         {
+            AchievementManager.IncreaseAchievementProgress(1, AchievementId.UsedFor1hour);
+            AchievementManager.IncreaseAchievementProgress(1, AchievementId.UsedFor10hours);
+            AchievementManager.IncreaseAchievementProgress(1, AchievementId.UsedFor100hours);
+         };
       }
 
       public static void StartUp()

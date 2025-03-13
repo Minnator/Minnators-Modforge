@@ -22,6 +22,9 @@ namespace Editor.DataClasses.Achievements
       ExampleAchievement,
 #endif
       UseForTheFirstTime,
+      UsedFor1hour,
+      UsedFor10hours,
+      UsedFor100hours,
    }
 
    public enum AchievementImage
@@ -118,6 +121,34 @@ namespace Editor.DataClasses.Achievements
                                                               AchievementImage.UseForTheFirstTime,
                                                               level: 0
                                                              );
+
+         _achievements[AchievementId.UsedFor1hour] = new (
+                                                         AchievementId.UsedFor1hour,
+                                                         "Getting the hang of it",
+                                                         "Use Minnator's Modforge for 1 hour",
+                                                         new ProgressCondition(60, AchievementId.UsedFor1hour),
+                                                         AchievementImage.Default,
+                                                         level: 1
+                                                        );
+
+         _achievements[AchievementId.UsedFor10hours] = new (
+                                                          AchievementId.UsedFor10hours,
+                                                          "Master of the Forge",
+                                                          "Use Minnator's Modforge for 10 hours",
+                                                          new ProgressCondition(600, AchievementId.UsedFor10hours),
+                                                          AchievementImage.Default,
+                                                          level: 2
+                                                         );
+
+         _achievements[AchievementId.UsedFor100hours] = new (
+                                                           AchievementId.UsedFor100hours,
+                                                           "The Forge is your home",
+                                                           "Use Minnator's Modforge for 100 hours",
+                                                           new ProgressCondition(6000, AchievementId.UsedFor100hours),
+                                                           AchievementImage.Default,
+                                                           level: 3
+                                                          );
+
 
       }
 

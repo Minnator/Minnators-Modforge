@@ -1414,21 +1414,15 @@ namespace Editor.Forms
 
       private void generateTextureAtlasPacedToolStripMenuItem_Click(object sender, EventArgs e)
       {
+         var atlas = GameIconDefinition.CreateTextureAtlas();
+         ImagePopUp.ShowImage(atlas);
+         atlas.Dispose();
       }
 
       private void audioTestToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         List<ICollection<Province>> adjacencies = [];
-         var total = 0;
-
-         foreach (var province in Globals.Provinces)
-         {
-            if (province.Neighbors.Count == 0)
-               Debug.WriteLine(province.Id);
-            adjacencies.Add(province.Neighbors);
-            total += province.Neighbors.Count;
-         }
-         Debug.WriteLine($"Total adjacencies {total}");
+         var icon = GameIconDefinition.Icons[GameIcons.TradeGoods].Icon;
+         icon.Save(Path.Combine(Globals.AppDataPath, "trade_node_strip.png"), ImageFormat.Png);
       }
 
       private void tradegoodEditorToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1513,6 +1507,12 @@ namespace Editor.Forms
       private void calenderViewToolStripMenuItem_Click(object sender, EventArgs e)
       {
          FormsHelper.ShowIfAnyOpen<CalenderHistoryView>();
+      }
+
+      private void saveSelectionToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         var sd = new SelectionDrawerForm();
+         sd.Show();
       }
    }
 }

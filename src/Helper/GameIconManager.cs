@@ -32,6 +32,7 @@ namespace Editor.Helper
 
    public class GameIconStrip : GameIconDefinition
    {
+      public bool IconAsStripe = false;
       public GameIconStrip(GameIcons iconEnum, int numOfFrames) : base(iconEnum, false)
       {
          IconStrip = new Bitmap[numOfFrames];
@@ -40,6 +41,50 @@ namespace Editor.Helper
       }
 
       public Bitmap[] IconStrip { get; set; }
+      public override Bitmap Icon
+      {
+         get
+         {
+            Bitmap bmp;
+            if (IconAsStripe)
+            {
+               bmp = new Bitmap(IconStrip[0].Width * IconStrip.Length, IconStrip[0].Height);
+               for (var i = 0; i < IconStrip.Length; i++)
+               {
+                  var icon = IconStrip[i];
+                  using var g = Graphics.FromImage(bmp);
+                  g.DrawImage(icon, new Rectangle(icon.Width * i, 0, icon.Width, icon.Height), new(0, 0, icon.Width, icon.Height), GraphicsUnit.Pixel);
+               }
+            }
+            else // save a square
+            {
+               var sideLength = (int)Math.Round(Math.Sqrt(IconStrip.Length));
+               bmp = new Bitmap(sideLength * IconStrip[0].Width, sideLength * IconStrip[0].Height);
+
+               for (var i = 0; i < IconStrip.Length; i++)
+               {
+                  var icon = IconStrip[i];
+                  using var g = Graphics.FromImage(bmp);
+                  g.DrawImage(icon, new Rectangle(icon.Width * (i % sideLength), icon.Height * (i / sideLength), icon.Width, icon.Height), new(0, 0, icon.Width, icon.Height), GraphicsUnit.Pixel);
+               }
+            }
+            
+
+            return bmp;
+         }
+      }
+
+      public Bitmap GetIconsStacked
+      {
+         get
+         {
+            var bmp = new Bitmap(IconStrip[0].Width, IconStrip[0].Height);
+            using var g = Graphics.FromImage(bmp);
+            foreach (var icon in IconStrip) 
+               g.DrawImage(icon, new Rectangle(0, 0, icon.Width, icon.Height), new(0, 0, icon.Width, icon.Height), GraphicsUnit.Pixel);
+            return bmp;
+         }
+      }
 
       public static void FromPath(GameIcons iconEnum, string[] path, bool widthByHeightCount)
       {
@@ -71,7 +116,7 @@ namespace Editor.Helper
       private Bitmap _icon;
       public static Dictionary<GameIcons, GameIconDefinition> Icons { get; set; } = new();
       public string[] IconPath { get; set; }
-      public Bitmap Icon
+      public virtual Bitmap Icon
       {
          get => _icon;
          set
@@ -105,7 +150,15 @@ namespace Editor.Helper
                Globals.ErrorLog.Write($"Error: Icon {iconEnum} already exists in Icon Dictionary!");
       }
 
-      public static void CreateSpriteSheetPacked(List<Bitmap> icons, string outputPath)
+      public static Bitmap CreateTextureAtlas(string outPutPath = "")
+      {
+         if (string.IsNullOrEmpty(outPutPath))
+            outPutPath = Path.Combine(Globals.AppDataPath, "icon_atlas.png");
+
+         return CreateSpriteSheetPacked(Icons.Values.Select(x => x.Icon).ToList(), outPutPath);
+      }
+
+      public static Bitmap CreateSpriteSheetPacked(List<Bitmap> icons, string outputPath)
       {
          if (icons == null || icons.Count == 0)
             throw new ArgumentException("The icons list is empty.", nameof(icons));
@@ -135,7 +188,7 @@ namespace Editor.Helper
          totalHeight += rowHeight; // Add height of the last row
 
          // Create the sprite sheet
-         using var spriteSheet = new Bitmap(maxWidth, totalHeight, PixelFormat.Format32bppArgb);
+         var spriteSheet = new Bitmap(maxWidth, totalHeight, PixelFormat.Format32bppArgb);
          using (var g = Graphics.FromImage(spriteSheet))
          {
             g.Clear(Color.Transparent);
@@ -160,6 +213,7 @@ namespace Editor.Helper
             }
          }
          spriteSheet.Save(outputPath, ImageFormat.Png);
+         return spriteSheet;
       }
 
 
