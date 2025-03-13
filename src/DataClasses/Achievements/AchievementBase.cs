@@ -10,9 +10,7 @@ namespace Editor.DataClasses.Achievements
       internal string Name { get; }
       internal string Description { get; }
       internal Bitmap Icon{ get; }
-
       internal int Level { get; }
-
       internal DateTime DateAchieved { get; }
 
       internal bool IsHidden { get; }
@@ -22,6 +20,7 @@ namespace Editor.DataClasses.Achievements
 
       internal void SetAchieved();
       internal float GetProgress();
+      internal float GetProgressValue();
       internal bool CheckCondition();
       internal Bitmap GetIcon();
       internal void Reset();
@@ -29,6 +28,7 @@ namespace Editor.DataClasses.Achievements
 
    public interface IAchievementCondition
    {
+      float GetProgressValue();
       float GetProgress();
       bool IsCompleted();
       void IncreaseProgress(float amount);
@@ -48,6 +48,9 @@ namespace Editor.DataClasses.Achievements
 
       [JsonIgnore]
       public AchievementId Id => _id;
+
+      public float GetProgressValue() => CurrentProgress;
+
       public float GetProgress() => Math.Clamp(CurrentProgress / goal, 0f, 1f);
       public bool IsCompleted() => CurrentProgress >= goal;
       public void IncreaseProgress(float amount)
@@ -103,6 +106,7 @@ namespace Editor.DataClasses.Achievements
 
       public bool CheckCondition() => Condition.IsCompleted();
       public float GetProgress() => Condition.GetProgress();
+      public float GetProgressValue() => Condition.GetProgressValue();
       public void SetAchieved()
       {
          if (!IsAchieved)

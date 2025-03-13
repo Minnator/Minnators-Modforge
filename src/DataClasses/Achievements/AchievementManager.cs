@@ -262,7 +262,7 @@ namespace Editor.DataClasses.Achievements
             Achievements.Add(new AchievementInfo
             {
                Id = achievement.Id,
-               Progress = achievement.GetProgress(),
+               Progress = achievement.GetProgressValue(),
                DateAchieved = achievement.DateAchieved
             });
          }
