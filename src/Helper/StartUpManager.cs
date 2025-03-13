@@ -74,6 +74,9 @@ namespace Editor.Helper
             
             Globals.MapWindow.Show();
             Globals.MapWindow.Activate();
+            
+            FixComboBoxSelection(Globals.MapWindow);
+               
 
             Globals.State = State.Running;
             MapModeManager.SetCurrentMapMode(MapModeType.Country);
@@ -90,6 +93,29 @@ namespace Editor.Helper
             if (_doEvents)
                Application.DoEvents();
             Thread.Sleep(10); // Avoid 100% CPU usage
+         }
+      }
+
+      private static void FixComboBoxSelection(Control parent)
+      {
+         Queue<Control> queue = new();
+         queue.Enqueue(parent);
+
+         while (queue.Count > 0)
+         {
+            var current = queue.Dequeue();
+
+            if (current is ComboBox comboBox)
+            {
+               if (!comboBox.IsHandleCreated)
+                  continue; // Skip if handle is not created
+
+               comboBox.SelectionLength = 0;
+               comboBox.SelectionStart = comboBox.Text.Length;
+            }
+
+            foreach (Control child in current.Controls)
+               queue.Enqueue(child);
          }
       }
 
