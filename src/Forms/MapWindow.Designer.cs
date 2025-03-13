@@ -2863,6 +2863,7 @@
          ClientSize = new Size(1511, 927);
          Controls.Add(MainLayoutPanel);
          Controls.Add(MapMenuStrip);
+         DoubleBuffered = true;
          Icon = (Icon)resources.GetObject("$this.Icon");
          KeyPreview = true;
          MainMenuStrip = MapMenuStrip;

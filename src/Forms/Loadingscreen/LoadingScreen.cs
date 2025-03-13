@@ -23,6 +23,8 @@ namespace Editor.Forms.Loadingscreen
       private readonly CustomProgressBar _progressBar;
       private readonly MemoryStream _ms = null!;
 
+      public event EventHandler? LoadingComplete;
+
       public int LoadingStage
       {
          get => _loadingStage;
@@ -94,6 +96,7 @@ namespace Editor.Forms.Loadingscreen
 
          // Must be last
          ModifierParser.Demilitarize,
+         StartUpManager.SetProvinceInitials,
       ];
 
       public LoadingScreen()
@@ -120,14 +123,12 @@ namespace Editor.Forms.Loadingscreen
          var bw = new BackgroundWorker();
          bw.WorkerReportsProgress = true;
          bw.DoWork += OnBwOnDoWork;
-         bw.RunWorkerCompleted += (s, e) => LoadingCompleted();
+         bw.RunWorkerCompleted += (s, e) => OnLoadingComplete();
          bw.ProgressChanged += (s, e) =>
          {
             LoadingStage++;
          };
          bw.RunWorkerAsync();
-
-         Globals.MapWindow.StartScreen = Screen.FromControl(this);
       }
 
       
@@ -206,9 +207,10 @@ namespace Editor.Forms.Loadingscreen
          }
       }
 
-      private void LoadingCompleted()
+
+      protected virtual void OnLoadingComplete()
       {
-         Close();
+         LoadingComplete?.Invoke(this, EventArgs.Empty);
       }
    }
 }

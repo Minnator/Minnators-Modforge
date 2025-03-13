@@ -94,43 +94,41 @@ namespace Editor.Forms
       private PropertyCollectionSelector<Province, List<string>, string> _discoveredBy = null!;
       #endregion
 
-      public Screen? StartScreen = null;
-
       public readonly DateControl DateControl = new(Date.MinValue, DateControlLayout.Horizontal);
 
       public MapWindow()
       {
-         Globals.State = State.Loading;
+         StartPosition = FormStartPosition.Manual;
+         Hide();
+         Load += OnMainWindowLoad;
+
          Globals.MapWindow = this;
-         Globals.Random = new(Globals.Settings.Generator.RandomSeed);
 
-         // Load the game data
+         Size = new(1527, 966);
+         var _startScreen = Screen.FromPoint(Cursor.Position);
+         Globals.MapWindow.Location = new((_startScreen.WorkingArea.Width - Globals.MapWindow.Width) / 2,
+                                          (_startScreen.WorkingArea.Height - Globals.MapWindow.Height) / 2);
+      }
+
+      private void OnMainWindowLoad(object? sender, EventArgs e)
+      {
          StartUpManager.StartUp();
-
-
-         if (StartScreen != null)
-            Location = new(StartScreen.Bounds.X + (StartScreen.Bounds.Width - Width) / 2, StartScreen.Bounds.Y + (StartScreen.Bounds.Height - Height) / 2);
-
-         //TODO: solve all the issues regarding this
-         //DiscordActivityManager.ActivateActivity();
-
-#if DEBUG
-         debugToolStripMenuItem.Enabled = true;
-         debugToolStripMenuItem.Visible = true;
-#endif
-
       }
 
       #region Initialize Application and Loadingscreen
 
       public void Initialize()
       {
-         Hide();
          SuspendLayout();
 
          InitGui();
 
          Text = $"{Text} | {Globals.DescriptorData.Name}";
+         
+#if DEBUG
+         debugToolStripMenuItem.Enabled = true;
+         debugToolStripMenuItem.Visible = true;
+#endif
 
          // MUST BE LAST in the loading sequence
          InitMapModes();
@@ -138,8 +136,6 @@ namespace Editor.Forms
          InitializeEditGui();
          // Enable the Application
          ResumeLayout();
-
-         StartPosition = FormStartPosition.CenterScreen;
       }
 
 

@@ -19,6 +19,9 @@ namespace Editor.Helper
       internal static Timer RuntimeUpdateTimer = new(){Interval = 60000 };
       internal static readonly Stopwatch Sw;
       private static LoadingScreen ls;
+      
+      private static bool _doEvents = true;
+
       static StartUpManager()
       {
          Sw = new ();
@@ -37,39 +40,59 @@ namespace Editor.Helper
 
       public static void StartUp()
       {
+         Globals.State = State.Loading;
          Sw.Start();
          RuntimeUpdateTimer.Start();
-         RunLoadingScreen();
 
-         SetProvinceInitials();
+         Globals.Random = new(Globals.Settings.Generator.RandomSeed);
 
-         Globals.MapWindow.Initialize();
+         Eu4Cursors.SetEu4CursorIfEnabled(Eu4CursorTypes.Loading, Cursors.AppStarting, ls);
+         ls = new();
+         ls.Show();
 
-         HistoryManager.UndoDepthChanged += Globals.MapWindow.UpdateUndoDepth;
-         HistoryManager.RedoDepthChanged += Globals.MapWindow.UpdateRedoDepth;
+         ls.LoadingComplete += (sender, args) =>
+         {
+            _doEvents = false;
+            // Initialize everything AFTER loading completes
+            
+            Globals.MapWindow.Initialize();
 
-         Globals.LoadingLog.Close();
-         ResourceUsageHelper.Initialize(Globals.MapWindow);
-         HistoryManager.UpdateToolStrip();
-         Globals.MapWindow.SetSelectedProvinceSum(0);
+            HistoryManager.UndoDepthChanged += Globals.MapWindow.UpdateUndoDepth;
+            HistoryManager.RedoDepthChanged += Globals.MapWindow.UpdateRedoDepth;
 
-         // ALL LOADING COMPLETE - Set the application to running
-         ParseStartEndDate();
-         Globals.MapWindow.DateControl.Date = Globals.StartDate;
-         CountryLoading.AssignProvinces();
-         Globals.MapWindow.UpdateErrorCounts(LogManager.TotalErrorCount, LogManager.TotalLogCount);
-         Globals.State = State.Running;
-         MapModeManager.SetCurrentMapMode(MapModeType.Country);
-         Globals.ZoomControl.FocusOn(new(3100, 600), 1f);
+            Globals.LoadingLog.Close();
+            ResourceUsageHelper.Initialize(Globals.MapWindow);
+            HistoryManager.UpdateToolStrip();
+            Globals.MapWindow.SetSelectedProvinceSum(0);
 
-         //ls.Close();
-         Globals.MapWindow.Show();
-         Globals.MapWindow.Activate();
-         Globals.ZoomControl.Invalidate();
+            ParseStartEndDate();
+            Globals.MapWindow.DateControl.Date = Globals.StartDate;
+            CountryLoading.AssignProvinces();
+            Globals.MapWindow.UpdateErrorCounts(LogManager.TotalErrorCount, LogManager.TotalLogCount);
 
-         RaiseOnStartUpFinished();
-         Eu4Cursors.SetEu4CursorIfEnabled(Eu4CursorTypes.Normal, Cursors.Default, Globals.MapWindow);
+            ls.Invoke(() => ls.Close()); // Close safely on UI thread
+            
+            Globals.MapWindow.Show();
+            Globals.MapWindow.Activate();
+
+            Globals.State = State.Running;
+            MapModeManager.SetCurrentMapMode(MapModeType.Country);
+            Globals.ZoomControl.FocusOn(new(3100, 600), 1f);
+
+            RaiseOnStartUpFinished();
+            Eu4Cursors.SetEu4CursorIfEnabled(Eu4CursorTypes.Normal, Cursors.Default, Globals.MapWindow);
+         };
+
+
+         // Keep UI responsive while waiting for LoadingScreen
+         while (ls.Visible)
+         {
+            if (_doEvents)
+               Application.DoEvents();
+            Thread.Sleep(10); // Avoid 100% CPU usage
+         }
       }
+
 
       private static void ParseStartEndDate()
       {
@@ -79,14 +102,7 @@ namespace Editor.Helper
             Globals.EndDate = new(1821, 1, 1);
       }
 
-      private static void RunLoadingScreen()
-      {
-         ls = new();
-         Eu4Cursors.SetEu4CursorIfEnabled(Eu4CursorTypes.Loading, Cursors.AppStarting, ls);
-         ls.ShowDialog();
-      }
-
-      private static void SetProvinceInitials()
+      internal static void SetProvinceInitials()
       {
          foreach (var province in Globals.Provinces)
             province.SetInit();
