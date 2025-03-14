@@ -21,6 +21,86 @@ namespace Editor.Loading.Enhanced
 
       #endregion
 
+      public static MissionSlot GetMissionSlotFromBlock(EnhancedBlock block, PathObj po)
+      {
+         MissionSlot slot = new(block.Name);
+
+         var content = block.GetContentElements(false, po);
+         foreach (var element in content)
+            foreach (var line in element.GetLineKvpEnumerator(po))
+            {
+               switch (line.Key)
+               {
+                  case "slot":
+                     if (!int.TryParse(line.Value, out var num))
+                     {
+                        _ = new LoadingError(po, $"Expected an integer but got '{line.Value}' for a slot value!", element.StartLine, 0, ErrorType.UnexpectedDataType);
+                        continue;
+                     }
+                     slot.Slot = num;
+                     break;
+                  case "generic":
+                     slot.IsGeneric = IsTrue(line.Value, po);
+                     break;
+                  case "has_country_shield":
+                     slot.HasCountryShield = IsTrue(line.Value, po);
+                     break;
+               }
+            }
+
+         if (slot.Slot == -1)
+            _ = new LoadingError(po, $"Slot value is required in a missions slot ('{block.Name}')!", block.StartLine, 0, ErrorType.MissingAttribute);
+
+         foreach (var subBlock in block.SubBlocks)
+            if (!subBlock.Name.Equals("potential") && !subBlock.Name.Equals("potential_on_load")) 
+               slot.Missions.Add(GetMissionFromBlock(subBlock, po));
+
+         slot.File = po.GetFileName();
+
+         return slot;
+      }
+
+      public static Mission GetMissionFromBlock(EnhancedBlock block, PathObj po)
+      {
+         Mission mission = new(){ Name = block.Name };
+
+         var content = block.GetContentElements(false, po);
+         foreach (var element in content)
+            foreach (var line in element.GetLineKvpEnumerator(po))
+            {
+               switch (line.Key)
+               {
+                  case "position":
+                     if (!int.TryParse(line.Value, out var num))
+                     {
+                        _ = new LoadingError(po, $"Expected an integer but got '{line.Value}' for a position value!", element.StartLine, 0, ErrorType.UnexpectedDataType);
+                        continue;
+                     }
+                     mission.Position = num;
+                     break;
+                  case "icon":
+                     mission.Icon = line.Value;
+                     break;
+               }
+            }
+
+         if (block.GetSubBlockByName("required_missions", out var requiredMissionsBlock))
+         {
+            List<string> missions = [];
+            foreach (var contElement in requiredMissionsBlock.ContentElements)
+               foreach (var line in contElement.GetLineEnumerator())
+               {
+                  var reqMissions = line.Item1.Split(' ', StringSplitOptions.TrimEntries);
+                  foreach (var reqMission in reqMissions)
+                     if (!string.IsNullOrWhiteSpace(reqMission))
+                        missions.Add(reqMission);
+               }
+            mission.RequiredMissions = missions.ToArray();
+         }
+
+         return mission;
+      }
+
       public static Price GetPriceFromBlock(EnhancedBlock block, PathObj po)
       {
          var price = new Price(-1);

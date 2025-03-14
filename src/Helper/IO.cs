@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Drawing.Imaging;
+using System.Text;
 using Editor.ErrorHandling;
 using Editor.Saving;
 
@@ -192,6 +193,11 @@ internal static class IO
       }
    }
 
+   public static bool WriteToModforgeData(string data, string internalPath, bool append)
+   {
+      return WriteToFile(Path.Combine(Globals.AppDataPath, internalPath), data, append);
+   }
+
    public static bool WriteLocalisationFile(string path, string content, bool append)
    {
       CreateDirectoryIfRequired(path);
@@ -203,4 +209,9 @@ internal static class IO
    }
    
    public static bool Exists(string path) => !string.IsNullOrEmpty(path) && File.Exists(path);
+
+   public static void SaveBmpToModforgeData(this Bitmap bmp, string internalPath)
+   {
+      bmp.Save(Path.Combine(Globals.AppDataPath, internalPath), ImageFormat.Bmp);
+   }
 }

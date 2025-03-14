@@ -92,6 +92,7 @@ namespace Editor.Forms.Loadingscreen
          ProvinceGroupsLoading.Load,
          GameIconDefinition.Initialize,
          Eu4Cursors.LoadCursors,
+         MissionLoading.LoadMissions,
 
 
          // Must be last

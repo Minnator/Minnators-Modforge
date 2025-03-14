@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Security.Policy;
 using Editor.Controls;
 using Editor.DataClasses.DataStructures;
 using Editor.DataClasses.GameDataClasses;
@@ -129,6 +130,9 @@ public static class Globals
 
    // Defines
    public static BindingDictionary<string, Define> Defines = new();
+
+   // MissionSlots -> they are only parse very roughly for now, as we don't support all effects, scopes and triggers yet
+   public static List<MissionSlot> MissionSlots = [];
 
    // Dates
    public static Date StartDate;

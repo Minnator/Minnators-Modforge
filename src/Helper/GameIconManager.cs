@@ -28,6 +28,24 @@ namespace Editor.Helper
       AcceptedCultures,
       GovernmentReform,
       TradeGoods,
+      ArrowEnd,
+      ArrowHorizontalSkipSlot,
+      ArrowHorizontalTile,
+      ArrowLeftIn,
+      ArrowLeftOut,
+      ArrowRightIn,
+      ArrowRightOut,
+      ArrowVerticalSkipTier,
+      ArrowVerticalTile,
+      MissionEffect,
+      MissionEffectGlow,
+      MissionCurrentPathGlow,
+      MissionIconFrame,
+      MissionIconFrameComplete,
+      MissionIconFrameLocked,
+      MissionPlaceHolder,
+      MissionTrigger,
+      MissionViewHuge,
    }
 
    public class GameIconStrip : GameIconDefinition
@@ -138,6 +156,25 @@ namespace Editor.Helper
          FromPath(GameIcons.GovernmentReform, "gfx", "interface", "ideas_EU4", "reform_progress_growth.dds");
          FromPath(GameIcons.AcceptedCultures, "gfx", "interface", "accepted_cultures.dds");
          GameIconStrip.FromPath(GameIcons.TradeGoods, ["gfx", "interface", "resources.dds"], true);
+         // Mission exporter
+         FromPath(GameIcons.ArrowEnd, "gfx", "interface", "missions", "arrow_end.dds");
+         FromPath(GameIcons.ArrowHorizontalSkipSlot, "gfx", "interface", "missions", "arrow_horizontal_skip_slot.dds");
+         FromPath(GameIcons.ArrowHorizontalTile, "gfx", "interface", "missions", "arrow_horizontal_tile.dds");
+         FromPath(GameIcons.ArrowLeftIn, "gfx", "interface", "missions", "arrow_left_in.dds");
+         FromPath(GameIcons.ArrowLeftOut, "gfx", "interface", "missions", "arrow_left_out.dds");
+         FromPath(GameIcons.ArrowRightIn, "gfx", "interface", "missions", "arrow_right_in.dds");
+         FromPath(GameIcons.ArrowRightOut, "gfx", "interface", "missions", "arrow_right_out.dds");
+         FromPath(GameIcons.ArrowVerticalSkipTier, "gfx", "interface", "missions", "arrow_verticall_skip_tier.dds");
+         FromPath(GameIcons.ArrowVerticalTile, "gfx", "interface", "missions", "arrow_verticall_tile.dds");
+         GameIconStrip.FromPath(GameIcons.MissionEffect, ["gfx", "interface", "missions", "mission_effect.dds"], true);
+         FromPath(GameIcons.MissionEffectGlow, "gfx", "interface", "missions", "mission_effect_glow.dds");
+         FromPath(GameIcons.MissionCurrentPathGlow, "gfx", "interface", "missions", "mission_current_selected_path_glow.dds");
+         FromPath(GameIcons.MissionIconFrame, "gfx", "interface", "missions", "mission_icons_frame.dds");
+         FromPath(GameIcons.MissionIconFrameComplete, "gfx", "interface", "missions", "mission_icons_frame_complete.dds");
+         FromPath(GameIcons.MissionIconFrameLocked, "gfx", "interface", "missions", "mission_icons_frame_locked.dds");
+         FromPath(GameIcons.MissionPlaceHolder, "gfx", "interface", "missions", "mission_placeholder.dds");
+         FromPath(GameIcons.MissionTrigger, "gfx", "interface", "missions", "mission_trigger.dds");
+         FromPath(GameIcons.MissionViewHuge, "gfx", "interface", "missions", "country_mission_view_bg_huge.dds");
       }
 
       public GameIconDefinition(GameIcons iconEnum, bool add = true)

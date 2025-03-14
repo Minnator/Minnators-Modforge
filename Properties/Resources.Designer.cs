@@ -231,6 +231,16 @@ namespace Editor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap missionGlow {
+            get {
+                object obj = ResourceManager.GetObject("missionGlow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap OpenCountryFile {
             get {
                 object obj = ResourceManager.GetObject("OpenCountryFile", resourceCulture);
