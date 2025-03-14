@@ -11,7 +11,6 @@ namespace Editor.Loading.Enhanced
       
       public static void LoadMissions()
       {
-         HashSet<string> missionNames = [];
          HashSet<string> slotNames = [];
 
 
@@ -21,20 +20,22 @@ namespace Editor.Loading.Enhanced
          {
             var po = PathObj.FromPath(file);
 
-            var (blocks, _) = po.LoadBase(EnhancedParser.FileContentAllowed.BlocksOnly);
+            var elements = po.LoadBaseOrder();
 
-            foreach (var block in blocks)
+            foreach (var element in elements)
             {
+               if (element is not EnhancedBlock block) 
+                  continue;
+
                var slot = EnhancedParsing.GetMissionSlotFromBlock(block, po);
                if (!slotNames.Add(slot.Name))
                {
                   _ = new LoadingError(po, $"Mission slot \"{block.Name}\" already exists!", block.StartLine, -1, ErrorType.DuplicateObjectDefinition);
                   continue;
                }
-
                Globals.MissionSlots.Add(slot);
                foreach (var missionName in slot.Missions)
-                  if (!missionNames.Add(missionName.Name)) 
+                  if (Globals.Missions.TryAdd(missionName.Name, missionName)) 
                      _ = new LoadingError(po, $"Mission \"{missionName}\" already exists!", block.StartLine, -1, ErrorType.DuplicateObjectDefinition);
             }
          }
@@ -42,6 +43,11 @@ namespace Editor.Loading.Enhanced
          var exampleView = new MissionView(Globals.MissionSlots[12].Missions[0]);
          var bmp = exampleView.ExportToImage();
          bmp.SaveBmpToModforgeData("missionExample.png");
+
+         //var slottedLayout = MissionLayoutEngine.LayoutFile("Pomerania_Missions.txt");
+         var slots = MissionLayoutEngine.LayoutSlotsOfFile("Pomerania_Missions.txt");
+
+         MissionLayoutEngine.LayoutToImage(slots, MissionView.CompletionType.Completed, MissionView.FrameType.Completed);
       }
    }
 }

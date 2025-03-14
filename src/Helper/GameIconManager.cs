@@ -82,6 +82,7 @@ namespace Editor.Helper
                for (var i = 0; i < IconStrip.Length; i++)
                {
                   var icon = IconStrip[i];
+                  icon.SaveBmpToModforgeData("next_icon_atlas.png");
                   using var g = Graphics.FromImage(bmp);
                   g.DrawImage(icon, new Rectangle(icon.Width * (i % sideLength), icon.Height * (i / sideLength), icon.Width, icon.Height), new(0, 0, icon.Width, icon.Height), GraphicsUnit.Pixel);
                }

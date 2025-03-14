@@ -133,6 +133,7 @@ public static class Globals
 
    // MissionSlots -> they are only parse very roughly for now, as we don't support all effects, scopes and triggers yet
    public static List<MissionSlot> MissionSlots = [];
+   public static Dictionary<string, Mission> Missions = [];
 
    // Dates
    public static Date StartDate;

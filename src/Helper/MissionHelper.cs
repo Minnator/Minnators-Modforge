@@ -4,6 +4,7 @@ using System.Text;
 using Windows.Media.Playback;
 using Editor.DataClasses.GameDataClasses;
 using Editor.ErrorHandling;
+using Editor.Saving;
 
 namespace Editor.Helper
 {
@@ -11,123 +12,190 @@ namespace Editor.Helper
    {
       public static List<MissionSlot> GetSlotsForFile(string fileName)
       {
-         return Globals.MissionSlots.FindAll(slot => slot.File.Equals(fileName));
+         return Globals.MissionSlots.FindAll(slot => slot.PathObj.GetFileName().Equals(fileName));
       }
 
    }
 
    public static class MissionLayoutEngine
    {
-      /// <summary>
-      /// Returns a list of missions and their positions in the file
-      /// </summary>
-      /// <param name="fileName"></param>
-      /// <returns></returns>
-      public static List<KeyValuePair<Mission, Point>>[] LayoutFile(string fileName)
+      public static List<MissionSlot> LayoutSlotsOfFile(string fileName)
       {
          var slots = MissionHelper.GetSlotsForFile(fileName);
          if (slots.Count == 0)
             return [];
 
-         var positions = new List<KeyValuePair<Mission, Point>>[slots.Max(x => x.Slot)];
+         foreach (var missionSlot in slots)
+            SetMissionPositions(missionSlot);
 
-         foreach (var missionSlot in slots) 
-            InsertMissionsIntoSlot(missionSlot, positions);
-
-         return positions;
+         return slots;
       }
 
-      public static void InsertMissionsIntoSlot(MissionSlot slot, List<KeyValuePair<Mission, Point>>[] positions)
+      private static void SetMissionDependencies(MissionSlot slot)
       {
-         /* 3 cases:
-          * 1. All missions are positioned
-          * 2. All missions are unpositioned
-          *    2.1 No prior missions in the slot
-          *    2.2 Prior missions in the slot
-          * 3. Some missions are positioned and some are not
-          */
+         foreach (var mission in slot.Missions)
+            SetMissionDependencyPosition(mission, slot.PathObj);
+      }
 
-         var isSlotEmpty = positions[slot.Slot - 1] == null! || positions[slot.Slot - 1].Count > 0;
+      private static void SetMissionDependencyPosition(Mission mission, PathObj po)
+      {
+         if (mission.RequiredMissions.Length == 0 || mission.Position != -1)
+            return;
 
-         var orderedMissions = slot.Missions.OrderBy(mission => mission.Position).ToList();
-         var numOfUnPositioned = orderedMissions.Count(mission => mission.Position == -1);
-
-
-         if (isSlotEmpty) // we have nomissions in this slot prior
+         var allReqSamePos = true;
+         var reqPos = -2;
+         foreach (var requiredMission in mission.RequiredMissions)
          {
-            if (numOfUnPositioned == orderedMissions.Count) // we have only un-positioned missions
+            if (!Globals.Missions.TryGetValue(requiredMission, out var reqMission))
             {
-               for (var i = 0; i < orderedMissions.Count; i++) 
-                  positions[slot.Slot - 1].Add(new(orderedMissions[i], new(slot.Slot - 1, i + 1)));
+               _ = new LoadingError(po, $"Mission \"{requiredMission}\" not found!", -1, -1, ErrorType.ObjectNotFound);
+               allReqSamePos = false;
+               continue;
             }
-            else // We have a mix: if there is a free slot in the positioned ones we put in one of the un-positioned ones
-            {
-               var leftUnPositioned = numOfUnPositioned;
-               var lastPositioned = 0;
 
-               for (var i = numOfUnPositioned - 1; i < orderedMissions.Count; i++)
+
+            var reqMissionPos = Math.Max(0, reqMission.Position);
+
+            if (reqPos == -2)
+            {
+               reqPos = reqMissionPos;
+            }
+            else if (reqPos != reqMissionPos)
+               allReqSamePos = false;
+         }
+
+         if (allReqSamePos)
+            mission.Position = reqPos + 1;
+         else
+            _ = new ErrorObject(ErrorType.MissingMissionReference,
+                                $"Mission '{mission.Name}' has required missions of different y-positions. Is this intended behavior?", level: LogType.Warning);
+      }
+
+      public static MissionView?[][] SlotsToView(List<MissionSlot> layout, MissionView.CompletionType completion, MissionView.FrameType frame)
+      {
+         var missionViews = new MissionView[layout.Count][];
+         var rows = 0;
+
+         // find the number of rows
+         foreach (var slot in layout)
+            rows = Math.Max(rows, slot.Missions.Max(mission => mission.Position));
+
+         // Convert to 'table'
+         for (var i = 0; i < layout.Count; i++)
+         {
+            missionViews[i] = new MissionView[rows];
+            for (var j = 0; j < layout[i].Missions.Count; j++)
+            {
+               MissionView view = new(layout[i].Missions[j])
                {
-                  if (lastPositioned + 1 != orderedMissions[i].Position) // We have a gap in positioned missions
-                  {
-                     positions[slot.Slot - 1].Add(new(orderedMissions[numOfUnPositioned - leftUnPositioned], new(slot.Slot - 1, lastPositioned + 1)));
-                     leftUnPositioned--;
-                     lastPositioned++;
-                  }
-                  else
-                  {
-                     lastPositioned = orderedMissions[i].Position;
-                     positions[slot.Slot - 1].Add(new(orderedMissions[i], new(slot.Slot - 1, lastPositioned)));
-                  }
-               }
+                  Completion = completion,
+                  Frame = frame
+               };
+               missionViews[i][layout[i].Missions[j].Position - 1] = view;
             }
          }
-         else
-         {
-            if (numOfUnPositioned == orderedMissions.Count) // we have only un-positioned missions
-            {
-               var lastFoundGap = 0;
-               for (var i = 0; i < orderedMissions.Count; i++)
-               {
-                  while (positions[slot.Slot - 1][lastFoundGap].Value.Y == lastFoundGap + 1) // positions are not 0 indexed
-                     lastFoundGap++; // we skip the already positioned missions
 
-                  // we insert the un-positioned mission at the first gap we find
-                  positions[slot.Slot - 1].Insert(lastFoundGap, new(orderedMissions[i], new(slot.Slot - 1, lastFoundGap + 1)));
-               }
+         return missionViews;
+      }
+
+      public static void SetMissionPositions(MissionSlot slot)
+      {
+         var lastPosition = 0;
+
+         foreach (var mission in slot.Missions)
+         {
+            if (mission.Position == -1)
+            {
+               mission.Position = lastPosition + 1;
+               lastPosition++;
             }
             else
             {
-               // insert the positioned missions first 
-               for (var i = numOfUnPositioned; i < orderedMissions.Count; i++)
-               {
-                  if (positions[slot.Slot - 1].Any(x => x.Value.Y == orderedMissions[i].Position))
-                     _ = new LoadingError(null!, $"Mission \"{orderedMissions[i].Name}\" already exists in slot \"{slot.Name}\"!", -1, -1, ErrorType.DuplicateObjectDefinition);
-                  else
-                  {
-                     var numOfSlotsToIndex = 0;
-                     for (var j = 0; j < positions[slot.Slot - 1].Count; j++)
-                     {
-                        if (positions[slot.Slot - 1][j].Value.Y < orderedMissions[i].Position)
-                           numOfSlotsToIndex++;
-                     }
-
-                     positions[slot.Slot - 1].Insert(numOfSlotsToIndex, new(orderedMissions[i], new(slot.Slot - 1, orderedMissions[i].Position)));
-                  }
-
-               }
-
-               // fill up with un-positioned missions
-               var lastFoundGap = 0;
-               for (var i = 0; i < numOfUnPositioned; i++)
-               {
-                  while (positions[slot.Slot - 1][lastFoundGap].Value.Y == lastFoundGap + 1) // positions are not 0 indexed
-                     lastFoundGap++; // we skip the already positioned missions
-
-                  // we insert the un-positioned mission at the first gap we find
-                  positions[slot.Slot - 1].Insert(lastFoundGap, new(orderedMissions[i], new(slot.Slot - 1, lastFoundGap + 1)));
-               }
+               lastPosition = mission.Position;
             }
          }
+      }
+
+      [Flags]
+      private enum ArrowType
+      {
+         None = 0,
+         Left = 1,
+         Middle = 2,
+         Center = 4,
+      }
+
+      public static void LayoutToImage(List<MissionSlot> slots, MissionView.CompletionType completion, MissionView.FrameType frame)
+      {
+         /* Draw Order
+          * Arrows
+          * MissionFrame
+          * CountryShield
+          */
+
+         const int missionIconHeight = 125;
+         const int missionIconWidth = 109;
+         const int missionIconVSpacing = 25;
+         const int missionIconHSpacing = -5;
+
+         var layout = SlotsToView(slots, completion, frame);
+         if (layout.Length == 0)
+            return;
+
+         var expImgWidth = layout.Length * missionIconWidth + (layout.Length - 1) * missionIconHSpacing;
+         var expImgHeight = layout[0].Length * missionIconHeight + (layout[0].Length - 1) * missionIconVSpacing;
+
+         var expImg = new Bitmap(expImgWidth, expImgHeight);
+         using var g = Graphics.FromImage(expImg);
+
+         // create a rect for each mission
+         for (var x = 0; x < layout.Length; x++)
+         {
+            var xCoord = x == 0 ? 0 : x * missionIconWidth + x * missionIconHSpacing;
+
+            for (var y = 0; y < layout[x].Length; y++)
+            {
+               var mission = layout[x][y];
+               if (mission == null) // empty slot
+                  continue;
+
+               var yCoord = y == 0 ? 0 : y * missionIconHeight + y * missionIconVSpacing;
+               var iconRect = new Rectangle(xCoord, yCoord, missionIconWidth, missionIconHeight);
+
+               var arrows = GetOutArrowType(mission.Mission);
+               DrawArrows(g, arrows, iconRect);
+
+
+               using var missionBmp = mission.ExportToImage();
+
+               g.DrawImage(missionBmp, iconRect);
+            }
+         }
+
+         expImg.SaveBmpToModforgeData("missionLayout.png");
+      }
+
+      private static void DrawArrows(Graphics g, ArrowType type, Rectangle missionRect)
+      {
+         //var center
+      }
+
+      private static ArrowType GetOutArrowType(Mission mission)
+      {
+         var arrowType = ArrowType.None;
+         foreach (var reqMissionName in mission.RequiredMissions)
+         {
+            if (!Globals.Missions.TryGetValue(reqMissionName, out var reqMission))
+               continue;
+
+            if (reqMission.Slot.Slot < mission.Slot.Slot)
+               arrowType |= ArrowType.Left;
+            else if (reqMission.Slot.Slot > mission.Slot.Slot)
+               arrowType |= ArrowType.Center;
+            else
+               arrowType |= ArrowType.Middle;
+         }
+         return arrowType;
       }
    }
 }

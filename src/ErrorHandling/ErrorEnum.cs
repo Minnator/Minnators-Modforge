@@ -90,6 +90,8 @@ public enum ErrorType
    [ErrorInformation("An uninitialized object is being referenced!", "Create the object before using it!")]
    INTERNAL_UsageOfUndefinedObject = 301,
    // Misc Error 400-599
+   [ErrorInformation("This occurs because a mission is referenced but not defined!", "Define the mission or remove the reference!")]
+   MissingMissionReference = 401,
    [ErrorInformation("This occurs because given file has an unsupported file ending", "Choose a different file.")]
    NotSupportedAudioExtension = 600, // Audio Error 600-649
    [ErrorInformation("This occurs because your file is not in the correct format and thus can not be parse by the modforge", "Verify that your mod file is formatted correctly and if so contact a developer!")]

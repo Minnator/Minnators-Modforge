@@ -190,7 +190,7 @@ namespace Editor.Loading.Enhanced
                         {
                            var currentBlock = blockStack.PeekRef();
                            currentBlock->ContentElements.Add(content);
-                           currentBlock->SubBlocks.Add(newBlock);
+                           currentBlock->SubBlocks.Add(newBlock); //TODO super rare 1 in 1000 program runs Run condition here?!
 
                         }
                      }

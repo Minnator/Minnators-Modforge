@@ -23,7 +23,7 @@ namespace Editor.Loading.Enhanced
 
       public static MissionSlot GetMissionSlotFromBlock(EnhancedBlock block, PathObj po)
       {
-         MissionSlot slot = new(block.Name);
+         MissionSlot slot = new(block.Name, po);
 
          var content = block.GetContentElements(false, po);
          foreach (var element in content)
@@ -53,16 +53,14 @@ namespace Editor.Loading.Enhanced
 
          foreach (var subBlock in block.SubBlocks)
             if (!subBlock.Name.Equals("potential") && !subBlock.Name.Equals("potential_on_load")) 
-               slot.Missions.Add(GetMissionFromBlock(subBlock, po));
-
-         slot.File = po.GetFileName();
+               slot.Missions.Add(GetMissionFromBlock(slot, subBlock, po));
 
          return slot;
       }
 
-      public static Mission GetMissionFromBlock(EnhancedBlock block, PathObj po)
+      public static Mission GetMissionFromBlock(MissionSlot slot, EnhancedBlock block, PathObj po)
       {
-         Mission mission = new(){ Name = block.Name };
+         Mission mission = new(block.Name, slot);
 
          var content = block.GetContentElements(false, po);
          foreach (var element in content)

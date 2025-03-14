@@ -212,6 +212,6 @@ internal static class IO
 
    public static void SaveBmpToModforgeData(this Bitmap bmp, string internalPath)
    {
-      bmp.Save(Path.Combine(Globals.AppDataPath, internalPath), ImageFormat.Bmp);
+      bmp.Save(Path.Combine(Globals.AppDataPath, internalPath), ImageFormat.Png);
    }
 }
