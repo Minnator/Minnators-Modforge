@@ -39,13 +39,8 @@ namespace Editor.Loading.Enhanced
                      _ = new LoadingError(po, $"Mission \"{missionName}\" already exists!", block.StartLine, -1, ErrorType.DuplicateObjectDefinition);
             }
          }
-
-         var exampleView = new MissionView(Globals.MissionSlots[12].Missions[0]);
-         var bmp = exampleView.ExportToImage();
-         bmp.SaveBmpToModforgeData("missionExample.png");
-
          //var slottedLayout = MissionLayoutEngine.LayoutFile("Pomerania_Missions.txt");
-         var slots = MissionLayoutEngine.LayoutSlotsOfFile("Pomerania_Missions.txt");
+         var slots = MissionLayoutEngine.LayoutSlotsOfFile("Brunei_Missions.txt");
 
          MissionLayoutEngine.LayoutToImage(slots, MissionView.CompletionType.Completed, MissionView.FrameType.Completed);
       }

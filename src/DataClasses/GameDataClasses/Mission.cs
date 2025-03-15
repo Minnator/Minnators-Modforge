@@ -116,7 +116,7 @@ public class MissionView(Mission mission)
 
       for (var i = 0; i < lines.Count; i++)
       {
-         TextRenderer.DrawText(g, lines[i], font, new Point(11 + (int)Math.Round((maxCharsPerLine - lineWidths[i]) / 2.0), 85 + i * 17), Color.Beige);
+         TextRenderer.DrawText(g, lines[i], font, new Point(7 + (int)Math.Round((maxCharsPerLine - lineWidths[i]) / 2.0), 83 + i * 19), Color.Beige);
       }
 
       return image;
