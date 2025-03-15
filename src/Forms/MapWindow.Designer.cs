@@ -105,6 +105,7 @@
          audioTestToolStripMenuItem = new ToolStripMenuItem();
          compactHistoryToolStripMenuItem = new ToolStripMenuItem();
          testTriggerToolStripMenuItem = new ToolStripMenuItem();
+         applyMaskToImageToolStripMenuItem = new ToolStripMenuItem();
          ProvinceCollectionsLayoutPanel = new TableLayoutPanel();
          FocusSelectionCheckBox = new CheckBox();
          BottomToolStrip = new ToolStrip();
@@ -777,7 +778,7 @@
          // 
          // debugToolStripMenuItem
          // 
-         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, collectionSelectorBaseToolStripMenuItem, propertyCollectionSelectorToolStripMenuItem, generateTextureAtlasPacedToolStripMenuItem, audioTestToolStripMenuItem, compactHistoryToolStripMenuItem, testTriggerToolStripMenuItem });
+         debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { testToolStripMenuItem, telescopeToolStripMenuItem, collectionSelectorBaseToolStripMenuItem, propertyCollectionSelectorToolStripMenuItem, generateTextureAtlasPacedToolStripMenuItem, audioTestToolStripMenuItem, compactHistoryToolStripMenuItem, testTriggerToolStripMenuItem, applyMaskToImageToolStripMenuItem });
          debugToolStripMenuItem.Enabled = false;
          debugToolStripMenuItem.Name = "debugToolStripMenuItem";
          debugToolStripMenuItem.Size = new Size(54, 23);
@@ -839,6 +840,13 @@
          testTriggerToolStripMenuItem.Size = new Size(221, 22);
          testTriggerToolStripMenuItem.Text = "Test Trigger";
          testTriggerToolStripMenuItem.Click += testTriggerToolStripMenuItem_Click;
+         // 
+         // applyMaskToImageToolStripMenuItem
+         // 
+         applyMaskToImageToolStripMenuItem.Name = "applyMaskToImageToolStripMenuItem";
+         applyMaskToImageToolStripMenuItem.Size = new Size(221, 22);
+         applyMaskToImageToolStripMenuItem.Text = "Apply Mask To Image";
+         applyMaskToImageToolStripMenuItem.Click += applyMaskToImageToolStripMenuItem_Click;
          // 
          // ProvinceCollectionsLayoutPanel
          // 
@@ -3197,6 +3205,7 @@
       private ToolStripMenuItem wikiToolStripMenuItem;
       private ToolStripMenuItem effectsToolStripMenuItem;
       private ToolStripMenuItem calenderViewToolStripMenuItem;
+      private ToolStripMenuItem applyMaskToImageToolStripMenuItem;
    }
 }
 

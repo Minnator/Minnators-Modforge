@@ -124,7 +124,7 @@ namespace Editor.Forms
          InitGui();
 
          Text = $"{Text} | {Globals.DescriptorData.Name}";
-         
+
 #if DEBUG
          debugToolStripMenuItem.Enabled = true;
          debugToolStripMenuItem.Visible = true;
@@ -1509,6 +1509,15 @@ namespace Editor.Forms
       {
          var sd = new SelectionDrawerForm();
          sd.Show();
+      }
+
+      private void applyMaskToImageToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         var source = GameIconDefinition.ReadImage("S:\\SteamLibrary\\steamapps\\common\\Europa Universalis IV\\gfx\\flags\\BUR.tga");
+         var mask = GameIconDefinition.ReadImage("S:\\SteamLibrary\\steamapps\\common\\Europa Universalis IV\\gfx\\interface\\small_shield_mask.tga");
+         var result = BmpLoading.ApplyMask(source, mask);
+
+         result.SaveBmpToModforgeData("maskedImage.png");
       }
    }
 }

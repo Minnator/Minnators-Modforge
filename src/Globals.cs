@@ -135,6 +135,9 @@ public static class Globals
    public static List<MissionSlot> MissionSlots = [];
    public static Dictionary<string, Mission> Missions = [];
 
+   // SpriteTypes
+   public static Dictionary<string, SpriteType> SpriteTypes = [];
+
    // Dates
    public static Date StartDate;
    public static Date EndDate;

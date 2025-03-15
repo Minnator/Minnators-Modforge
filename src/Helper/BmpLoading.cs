@@ -47,6 +47,67 @@ namespace Editor.Helper
          return (riverSizes, bmp.Palette.Entries);
       }
 
+      public static Bitmap ApplyMask(Bitmap source, Bitmap mask)
+      {
+         var sourceRatio = (double)source.Width / source.Height;
+         var maskRatio = (double)mask.Width / mask.Height;
+         
+         if (source.Width != mask.Width || source.Height != mask.Height)
+         {
+            source = ResizeImage(source, mask.Width, mask.Height);
+         }
+
+         var result = new Bitmap(mask.Width, mask.Height);
+
+         var srcData = source.LockBits(new(0, 0, source.Width, source.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+         var maskData = mask.LockBits(new(0, 0, mask.Width, mask.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+         var resData = result.LockBits(new(0, 0, result.Width, result.Height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+
+         var stride = resData.Stride;
+
+         unsafe
+         {
+            var srcPtr = (byte*)srcData.Scan0;
+            var maskPtr = (byte*)maskData.Scan0;
+            var resPtr = (byte*)resData.Scan0;
+
+            for (var y = 0; y < mask.Height; y++)
+            {
+               for (var x = 0; x < mask.Width; x++)
+               {
+                  var index = (y * stride) + (x * 4);
+
+                  var maskAlpha = maskPtr[index + 3]; // Mask alpha channel
+                  var srcAlpha = srcPtr[index + 3];   // Source alpha channel
+
+                  var finalAlpha = (byte)((maskAlpha * srcAlpha) / 255); // Multiply mask alpha by source alpha
+
+                  resPtr[index] = srcPtr[index];       // Blue
+                  resPtr[index + 1] = srcPtr[index + 1]; // Green
+                  resPtr[index + 2] = srcPtr[index + 2]; // Red
+                  resPtr[index + 3] = finalAlpha;       // Alpha
+               }
+            }
+         }
+
+         source.UnlockBits(srcData);
+         mask.UnlockBits(maskData);
+         result.UnlockBits(resData);
+
+         return result;
+      }
+
+      private static Bitmap ResizeImage(Bitmap image, int width, int height)
+      {
+         var resized = new Bitmap(width, height);
+         using (var g = Graphics.FromImage(resized))
+         {
+            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            g.DrawImage(image, 0, 0, width, height);
+         }
+         return resized;
+      }
+
       public static Bitmap ResizeIndexedBitmap(string input, int width, int height)
       {
          using var bmp = new Bitmap(input);

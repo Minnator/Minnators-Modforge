@@ -39,10 +39,6 @@ namespace Editor.Loading.Enhanced
                      _ = new LoadingError(po, $"Mission \"{missionName}\" already exists!", block.StartLine, -1, ErrorType.DuplicateObjectDefinition);
             }
          }
-         //var slottedLayout = MissionLayoutEngine.LayoutFile("Pomerania_Missions.txt");
-         var slots = MissionLayoutEngine.LayoutSlotsOfFile("Brunei_Missions.txt");
-
-         MissionLayoutEngine.LayoutToImage(slots, MissionView.CompletionType.Completed, MissionView.FrameType.Completed);
       }
    }
 }

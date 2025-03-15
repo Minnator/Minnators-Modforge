@@ -84,6 +84,8 @@ public enum ErrorType
    UnsupportedOperation = 137,
    [ErrorInformation("This occurs because an attribute is missing!", "Check the object and make sure all its attributes are defined")]
    MissingAttribute = 138,
+   [ErrorInformation("This occurs because an object is missing!", "Check the object and make sure it is defined")]
+   MissingObjectDefinition = 139,
    // ObjectInteraction Error
    [ErrorInformation("This occurs because a key was not found in a dictionary!", "Contact a developer with the latest log exported as a .csv")]
    INTERNAL_KeyNotFound = 300, // ObjectInteraction Error 300-399

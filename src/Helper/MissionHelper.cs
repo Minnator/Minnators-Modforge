@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Text;
 using Windows.Media.Playback;
 using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
 using Editor.Saving;
 
@@ -98,7 +99,8 @@ namespace Editor.Helper
                MissionView view = new(slot.Missions[j])
                {
                   Completion = completion,
-                  Frame = frame
+                  Frame = frame,
+                  HasCountryShield = slot.HasCountryShield
                };
                missionViews[i][slot.Missions[j].Position - 1] = view;
             }
@@ -139,7 +141,7 @@ namespace Editor.Helper
       const int MISSION_ICON_V_SPACING = 25;
       const int MISSION_ICON_H_SPACING = -5;
 
-      public static void LayoutToImage(List<MissionSlot> slots, MissionView.CompletionType completion, MissionView.FrameType frame)
+      public static void LayoutToImage(List<MissionSlot> slots, MissionView.CompletionType completion, MissionView.FrameType frame, Country country)
       {
          /* Draw Order
           * Arrows
@@ -195,11 +197,21 @@ namespace Editor.Helper
                // draw the mission frame
                using var missionBmp = mission.ExportToImage();
                g.DrawImage(missionBmp, iconRect);
+
+               // draw the country shield
+               using var flag = country.GetFlagBitmap();
+               using var flagMasked = BmpLoading.ApplyMask(flag, GameIconDefinition.GetIcon(GameIcons.MissionFlagMask));
+               var overlay = GameIconDefinition.GetIcon(GameIcons.SmallShieldOverlay);
+
+               g.DrawImage(flagMasked, new Point(iconRect.X + (iconRect.Width - flagMasked.Width) / 2, iconRect.Top + 3));
+               g.DrawImage(overlay, new Point(iconRect.X + (iconRect.Width - overlay.Width) / 2, iconRect.Top));
             }
          }
 
          expImg.SaveBmpToModforgeData("missionLayout.png");
       }
+
+
 
       // Returns the arrow type for the mission with x and y offset in missions with 1 being just above or next to the mission
       private static (ArrowType, int, int)[] GetArrows(Mission mission)

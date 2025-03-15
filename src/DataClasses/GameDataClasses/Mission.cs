@@ -23,6 +23,7 @@ public class MissionView(Mission mission)
       Completed
    }
 
+   public bool HasCountryShield { get; set; } = false;
    public Mission Mission { get; set; } = mission;
    public FrameType Frame { get; set; } = FrameType.Completed;
    public CompletionType Completion { get; set; } = CompletionType.NotStarted;
@@ -40,7 +41,7 @@ public class MissionView(Mission mission)
       g.Clear(Color.Transparent);
       //g.CompositingMode = CompositingMode.SourceCopy;  // Preserve alpha
 
-      g.DrawImage(missionIcon, 21, 17);
+      g.DrawImage(missionIcon, 25, 20);
       g.DrawImage(backGround, 0, 0);
 
       g.DrawImage(effect, 73, 7);
@@ -163,7 +164,8 @@ public class MissionView(Mission mission)
 
    public static Bitmap GetMissionIcon(MissionView missionView)
    {
-      // TODO
+      if (Globals.SpriteTypes.TryGetValue(missionView.Mission.Icon, out var spriteType))
+         return spriteType.Icon;
       return GameIconDefinition.GetIcon(GameIcons.MissionPlaceHolder);
    }
 }

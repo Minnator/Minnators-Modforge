@@ -93,7 +93,7 @@ namespace Editor.Forms.Loadingscreen
          GameIconDefinition.Initialize,
          Eu4Cursors.LoadCursors,
          MissionLoading.LoadMissions,
-
+         SpriteTypeParsing.Load, // MUST be after missions as it is only supposed to load sprite types used by missions
 
          // Must be last
          ModifierParser.Demilitarize,

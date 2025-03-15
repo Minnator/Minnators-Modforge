@@ -46,6 +46,8 @@ namespace Editor.Helper
       MissionPlaceHolder,
       MissionTrigger,
       MissionViewHuge,
+      MissionFlagMask,
+      SmallShieldOverlay,
    }
 
    public class GameIconStrip : GameIconDefinition
@@ -176,6 +178,8 @@ namespace Editor.Helper
          FromPath(GameIcons.MissionPlaceHolder, "gfx", "interface", "missions", "mission_placeholder.dds");
          FromPath(GameIcons.MissionTrigger, "gfx", "interface", "missions", "mission_trigger.dds");
          FromPath(GameIcons.MissionViewHuge, "gfx", "interface", "missions", "country_mission_view_bg_huge.dds");
+         FromPathAndMod(GameIcons.MissionFlagMask, "gfx", "interface", "small_shield_mask.tga");
+         FromPathAndMod(GameIcons.SmallShieldOverlay, "gfx", "interface", "small_shield_overlay.dds");
       }
 
       public GameIconDefinition(GameIcons iconEnum, bool add = true)
@@ -436,7 +440,20 @@ namespace Editor.Helper
          };
       }
 
-      protected static Bitmap ReadImage(string path) => ImageReader.ReadImage(path);
+      private static GameIconDefinition FromPathAndMod(GameIcons iconEnum, params string[] path)
+      {
+         if (!VerifyInputs(path, iconEnum))
+            return null!;
+
+         FilesHelper.GetFilePathUniquely(out var imgPath, path);
+         return new (iconEnum)
+         {
+            Icon = ReadImage(imgPath),
+            IconPath = path
+         };
+      }
+
+      public static Bitmap ReadImage(string path) => ImageReader.ReadImage(path);
 
       protected static bool VerifyInputs(string[] path, GameIcons iconEnum)
       {
