@@ -79,6 +79,7 @@
          wikiToolStripMenuItem = new ToolStripMenuItem();
          effectsToolStripMenuItem = new ToolStripMenuItem();
          calenderViewToolStripMenuItem = new ToolStripMenuItem();
+         missionExporterToolStripMenuItem = new ToolStripMenuItem();
          MapModeComboBox = new ToolStripComboBox();
          searchToolStripMenuItem = new ToolStripMenuItem();
          helpToolStripMenuItem = new ToolStripMenuItem();
@@ -585,7 +586,7 @@
          // 
          // additionalToolsToolStripMenuItem
          // 
-         additionalToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { checkForCyclesInTradenodesToolStripMenuItem, randomModifierToolStripMenuItem, deleteProvinceHistoryEntriesToolStripMenuItem, tradegoodEditorToolStripMenuItem, definesEditorToolStripMenuItem, namesGeneratorToolStripMenuItem, toolStripSeparator12, wikiToolStripMenuItem, calenderViewToolStripMenuItem });
+         additionalToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { checkForCyclesInTradenodesToolStripMenuItem, randomModifierToolStripMenuItem, deleteProvinceHistoryEntriesToolStripMenuItem, tradegoodEditorToolStripMenuItem, definesEditorToolStripMenuItem, namesGeneratorToolStripMenuItem, toolStripSeparator12, wikiToolStripMenuItem, calenderViewToolStripMenuItem, missionExporterToolStripMenuItem });
          additionalToolsToolStripMenuItem.Name = "additionalToolsToolStripMenuItem";
          additionalToolsToolStripMenuItem.Size = new Size(103, 23);
          additionalToolsToolStripMenuItem.Text = "Additional tools";
@@ -657,6 +658,13 @@
          calenderViewToolStripMenuItem.Size = new Size(236, 22);
          calenderViewToolStripMenuItem.Text = "Calender View";
          calenderViewToolStripMenuItem.Click += calenderViewToolStripMenuItem_Click;
+         // 
+         // missionExporterToolStripMenuItem
+         // 
+         missionExporterToolStripMenuItem.Name = "missionExporterToolStripMenuItem";
+         missionExporterToolStripMenuItem.Size = new Size(236, 22);
+         missionExporterToolStripMenuItem.Text = "Mission Exporter";
+         missionExporterToolStripMenuItem.Click += missionExporterToolStripMenuItem_Click;
          // 
          // MapModeComboBox
          // 
@@ -3206,6 +3214,7 @@
       private ToolStripMenuItem effectsToolStripMenuItem;
       private ToolStripMenuItem calenderViewToolStripMenuItem;
       private ToolStripMenuItem applyMaskToImageToolStripMenuItem;
+      private ToolStripMenuItem missionExporterToolStripMenuItem;
    }
 }
 

@@ -27,6 +27,7 @@ using Editor.Parser;
 using Editor.Properties;
 using Editor.Saving;
 using Editor.src.Forms.Console;
+using Editor.src.Forms.Feature;
 using static Editor.Helper.ProvinceEnumHelper;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 using MapLoading = Editor.Loading.Enhanced.MapLoading;
@@ -1518,6 +1519,11 @@ namespace Editor.Forms
          var result = BmpLoading.ApplyMask(source, mask);
 
          result.SaveBmpToModforgeData("maskedImage.png");
+      }
+
+      private void missionExporterToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         FormsHelper.ShowIfAnyOpen<MissionTreeExporter>();
       }
    }
 }

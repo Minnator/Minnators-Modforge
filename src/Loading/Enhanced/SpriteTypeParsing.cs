@@ -78,7 +78,7 @@ namespace Editor.Loading.Enhanced
          //var slottedLayout = MissionLayoutEngine.LayoutFile("Pomerania_Missions.txt");
          var slots = MissionLayoutEngine.LayoutSlotsOfFile("Brunei_Missions.txt");
 
-         MissionLayoutEngine.LayoutToImage(slots, MissionView.CompletionType.Completed, MissionView.FrameType.Completed, Globals.Countries["BRA"]);
+         MissionLayoutEngine.LayoutSlotsToTransparentImage(slots, MissionView.CompletionType.Completed, MissionView.FrameType.Completed, Globals.Countries["BRA"]);
       }
 
       public static void FilterAllUsedByMissions(Dictionary<string, SpriteType> sprites)

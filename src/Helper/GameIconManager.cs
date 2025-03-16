@@ -48,6 +48,7 @@ namespace Editor.Helper
       MissionViewHuge,
       MissionFlagMask,
       SmallShieldOverlay,
+      CloseButton,
    }
 
    public class GameIconStrip : GameIconDefinition
@@ -177,7 +178,8 @@ namespace Editor.Helper
          FromPath(GameIcons.MissionIconFrameLocked, "gfx", "interface", "missions", "mission_icons_frame_locked.dds");
          FromPath(GameIcons.MissionPlaceHolder, "gfx", "interface", "missions", "mission_placeholder.dds");
          FromPath(GameIcons.MissionTrigger, "gfx", "interface", "missions", "mission_trigger.dds");
-         FromPath(GameIcons.MissionViewHuge, "gfx", "interface", "missions", "country_mission_view_bg_huge.dds");
+         FromPath(GameIcons.MissionViewHuge, "gfx", "interface", "country_mission_view_bg_huge.dds");
+         FromPath(GameIcons.CloseButton, "gfx", "interface", "closebutton.dds");
          FromPathAndMod(GameIcons.MissionFlagMask, "gfx", "interface", "small_shield_mask.tga");
          FromPathAndMod(GameIcons.SmallShieldOverlay, "gfx", "interface", "small_shield_overlay.dds");
       }

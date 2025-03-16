@@ -135,25 +135,97 @@ namespace Editor.Helper
          Right = 2,
          Center = 4,
       }
-
+      
       const int MISSION_ICON_HEIGHT = 125;
       const int MISSION_ICON_WIDTH = 109;
       const int MISSION_ICON_V_SPACING = 25;
       const int MISSION_ICON_H_SPACING = -5;
 
-      public static void LayoutToImage(List<MissionSlot> slots, MissionView.CompletionType completion, MissionView.FrameType frame, Country country)
+      public static Bitmap DrawMissionOnBackGround(Bitmap missionBmp, bool squared, bool showMissionNames, List<MissionSlot> slots, Country missionOwner) 
+         // if squared we only draw the square part of the bg image
+         // if not we draw the entire window with close button and outlines
+      {
+         if (slots.Count == 0)
+            return new (2, 2);
+         
+         var numOfColumns = slots.Max(x => x.Slot);
+         var numOfRows = slots.Max(x => x.Missions.Count == 0 ? 0 : x.Missions.Max(m => m.Position));
+         return DrawMissionOnBackGround(missionBmp, squared, showMissionNames, numOfRows, numOfColumns, missionOwner);
+      }      
+      
+      public static Bitmap DrawMissionOnBackGround(Bitmap missionBmp, bool squared, bool showMissionNames, int numOfRows, int numOfColumns, Country missionOwner) 
+         // if squared we only draw the square part of the bg image
+         // if not we draw the entire window with close button and outlines
+      {
+         var background = GetBackgroundTrimmed(squared, showMissionNames, numOfRows, numOfColumns, $"{missionOwner.AdjectiveLocalisation} Missions", out var offset);
+
+         using var g = Graphics.FromImage(background);
+         g.DrawImage(missionBmp, offset);
+
+         return background;
+      }
+
+      private static Bitmap GetBackgroundTrimmed(bool squared, bool showMissionNames, int numOfRows, int numOfColumns, string missionText, out Point offset)
+      {
+         Rectangle rect;
+         var source = GameIconDefinition.GetIcon(GameIcons.MissionViewHuge);
+         var missionWidth = numOfColumns * MISSION_ICON_WIDTH + (numOfColumns - 1) * MISSION_ICON_H_SPACING;
+         var missionHeight = numOfRows * MISSION_ICON_HEIGHT + (numOfRows - 1) * MISSION_ICON_V_SPACING;
+         int textYOffset;
+
+         if (squared)
+         {
+            if (showMissionNames)
+            {
+               rect = new(14, 138 - 51, 535 + 12, 744 + 4 + 44); // 4 / 12 is the border 44 is the space for the mission names
+               offset = new((rect.Width - missionWidth) / 2, 46 + (rect.Height - 46 - missionHeight) / 2); // 44 is the space for the mission names
+               textYOffset = 5;
+            }  
+            else
+            {
+               rect = new(14, 131, 535 + 12, 744 + 4); // 4 / 12 is the border
+               offset = new((rect.Width - missionWidth) / 2, 2 + (rect.Height - 2 - missionHeight) / 2);
+               textYOffset = -200; // no text so we don't care
+            }
+         }
+         else
+         {
+            rect = new(2, 5, source.Width - 15, source.Height - 17);
+            offset = new(9 + (rect.Width - 9 - missionWidth) / 2, 125 + (rect.Height - 125 - 37 - missionHeight) / 2);
+            textYOffset = 87;
+         }
+
+         Bitmap background = new (rect.Width, rect.Height);
+         using var g = Graphics.FromImage(background);
+         g.DrawImage(source, rect with { X = 0, Y = 0 }, rect, GraphicsUnit.Pixel);
+
+         // Draw mission text if needed
+         if (showMissionNames)
+         {
+            var font = new Font("vic_18", 16, FontStyle.Regular);
+            var textLength = MissionView.MeasureTextWidth(g, missionText, font);
+            g.DrawString(missionText, font, Brushes.Beige, new Point((background.Width - textLength) / 2, textYOffset + 3));
+         }
+
+         if (!squared)
+         {
+            var close = GameIconDefinition.GetIcon(GameIcons.CloseButton);
+            g.DrawImage(close, new Point(520, 5));
+         }
+
+         return background;
+      }
+
+      public static Bitmap LayoutSlotsToTransparentImage(List<MissionSlot> slots, MissionView.CompletionType completion, MissionView.FrameType frame, Country country)
       {
          /* Draw Order
           * Arrows
           * MissionFrame
           * CountryShield
           */
-
-         
-
          var layout = SlotsToView(slots, completion, frame);
          if (layout.Length == 0)
-            return;
+            return new (2, 2);
 
          var expImgWidth = layout.Length * MISSION_ICON_WIDTH + (layout.Length - 1) * MISSION_ICON_H_SPACING;
          var expImgHeight = layout[0].Length * MISSION_ICON_HEIGHT + (layout[0].Length - 1) * MISSION_ICON_V_SPACING;
@@ -208,7 +280,7 @@ namespace Editor.Helper
             }
          }
 
-         expImg.SaveBmpToModforgeData("missionLayout.png");
+         return expImg;
       }
 
 

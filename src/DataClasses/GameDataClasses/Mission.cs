@@ -125,14 +125,19 @@ public class MissionView(Mission mission)
 
 
 
-   private static int MeasureTextWidth(Graphics graphics, string text, Font font)
+   public static int MeasureTextWidth(Graphics graphics, string text, Font font)
    {
       var format = new StringFormat();
       var rect = new RectangleF(0, 0, 1000, 1000);
-      CharacterRange[] ranges = [new(0, text.Length)];
+      CharacterRange[] ranges = [new (0, text.Length)];
       format.SetMeasurableCharacterRanges(ranges);
 
       var regions = graphics.MeasureCharacterRanges(text, font, rect, format);
+      if (regions.Length == 0)
+      {
+         return 0; // or handle the error appropriately
+      }
+
       rect = regions[0].GetBounds(graphics);
 
       return (int)(rect.Right + 1.0f);

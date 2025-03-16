@@ -83,17 +83,17 @@ namespace Editor.DataClasses.Saveables
          province.ReformationCenter = _reformationCenter;
          province.TradeGood = _tradeGood;
          province.LatentTradeGood = _latentTradeGood;
-         province.Claims = _claims;
-         province.PermanentClaims = _permanentClaims;
-         province.Cores = _cores;
-         province.DiscoveredBy = _discoveredBy;
-         province.Buildings = _buildings;
-         province.TradeCompanyInvestments = _tradeCompanyInvestments;
-         province.PermanentProvinceModifiers = _permanentProvinceModifiers;
-         province.ProvinceModifiers = _provinceModifiers;
-         province.ProvinceTriggeredModifiers = _provinceTriggeredModifiers;
-         province.ScriptedEffects = _scriptedEffects;
-         province.TradeModifiers = _tradeModifiers;
+         province.Claims = new(_claims);
+         province.PermanentClaims = new(_permanentClaims);
+         province.Cores = new(_cores);
+         province.DiscoveredBy = new(_discoveredBy);
+         province.Buildings = new(_buildings);
+         province.TradeCompanyInvestments = new(_tradeCompanyInvestments);
+         province.PermanentProvinceModifiers = new(_permanentProvinceModifiers);
+         province.ProvinceModifiers = new(_provinceModifiers);
+         province.ProvinceTriggeredModifiers = new(_provinceTriggeredModifiers);
+         province.ScriptedEffects = new(_scriptedEffects);
+         province.TradeModifiers = new(_tradeModifiers);
       }
 
       public void GetData(Province province)
@@ -125,17 +125,17 @@ namespace Editor.DataClasses.Saveables
          _reformationCenter = province.ReformationCenter;
          _tradeGood = province.TradeGood;
          _latentTradeGood = province.LatentTradeGood;
-         _claims = province.Claims;
-         _permanentClaims = province.PermanentClaims;
-         _cores = province.Cores;
-         _discoveredBy = province.DiscoveredBy;
-         _buildings = province.Buildings;
-         _tradeCompanyInvestments = province.TradeCompanyInvestments;
-         _permanentProvinceModifiers = province.PermanentProvinceModifiers;
-         _provinceModifiers = province.ProvinceModifiers;
-         _provinceTriggeredModifiers = province.ProvinceTriggeredModifiers;
-         _scriptedEffects = province.ScriptedEffects;
-         _tradeModifiers = province.TradeModifiers;
+         _claims = new(province.Claims);
+         _permanentClaims = new(province.PermanentClaims);
+         _cores = new(province.Cores);
+         _discoveredBy = new(province.DiscoveredBy);
+         _buildings = new(province.Buildings);
+         _tradeCompanyInvestments = new(province.TradeCompanyInvestments);
+         _permanentProvinceModifiers = new(province.PermanentProvinceModifiers);
+         _provinceModifiers = new(province.ProvinceModifiers);
+         _provinceTriggeredModifiers = new(province.ProvinceTriggeredModifiers);
+         _scriptedEffects = new(province.ScriptedEffects);
+         _tradeModifiers = new(province.TradeModifiers);
       }
    }
 
@@ -193,11 +193,6 @@ namespace Editor.DataClasses.Saveables
       public void SetInit()
       {
          _initialData.GetData(this);
-      }
-
-      public void ResetToInit()
-      {
-         _initialData.SetData(this);
       }
 
       // ##################### Complex setter #####################
