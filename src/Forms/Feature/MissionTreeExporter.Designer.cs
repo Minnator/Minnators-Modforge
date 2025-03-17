@@ -30,12 +30,17 @@
       {
          System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MissionTreeExporter));
          tableLayoutPanel1 = new TableLayoutPanel();
-         ExportButton = new Button();
          BackgroundCheckBox = new CheckBox();
          SelectMissionFile = new ComboBox();
          MissionNameBox = new CheckBox();
          FullBgBox = new CheckBox();
          PrewViewBox = new PictureBox();
+         MissionEffectIcon = new ComboBox();
+         MissionFrameIcon = new ComboBox();
+         CountrySelection = new ComboBox();
+         SaveTextLabel = new Label();
+         ExportButton = new Button();
+         FileNameTextBox = new TextBox();
          tableLayoutPanel1.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)PrewViewBox).BeginInit();
          SuspendLayout();
@@ -45,16 +50,26 @@
          tableLayoutPanel1.ColumnCount = 2;
          tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 73.5F));
          tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 26.5F));
-         tableLayoutPanel1.Controls.Add(ExportButton, 1, 4);
          tableLayoutPanel1.Controls.Add(BackgroundCheckBox, 1, 1);
          tableLayoutPanel1.Controls.Add(SelectMissionFile, 1, 0);
          tableLayoutPanel1.Controls.Add(MissionNameBox, 1, 2);
          tableLayoutPanel1.Controls.Add(FullBgBox, 1, 3);
          tableLayoutPanel1.Controls.Add(PrewViewBox, 0, 0);
+         tableLayoutPanel1.Controls.Add(MissionEffectIcon, 1, 4);
+         tableLayoutPanel1.Controls.Add(MissionFrameIcon, 1, 5);
+         tableLayoutPanel1.Controls.Add(CountrySelection, 1, 6);
+         tableLayoutPanel1.Controls.Add(SaveTextLabel, 1, 10);
+         tableLayoutPanel1.Controls.Add(ExportButton, 1, 8);
+         tableLayoutPanel1.Controls.Add(FileNameTextBox, 1, 7);
          tableLayoutPanel1.Dock = DockStyle.Fill;
          tableLayoutPanel1.Location = new Point(0, 0);
          tableLayoutPanel1.Name = "tableLayoutPanel1";
-         tableLayoutPanel1.RowCount = 6;
+         tableLayoutPanel1.RowCount = 11;
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
@@ -63,17 +78,6 @@
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
          tableLayoutPanel1.Size = new Size(800, 450);
          tableLayoutPanel1.TabIndex = 0;
-         // 
-         // ExportButton
-         // 
-         ExportButton.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-         ExportButton.Location = new Point(591, 123);
-         ExportButton.Name = "ExportButton";
-         ExportButton.Size = new Size(75, 24);
-         ExportButton.TabIndex = 2;
-         ExportButton.Text = "Export";
-         ExportButton.UseVisualStyleBackColor = true;
-         ExportButton.Click += ExportButton_Click;
          // 
          // BackgroundCheckBox
          // 
@@ -86,6 +90,7 @@
          BackgroundCheckBox.TabIndex = 1;
          BackgroundCheckBox.Text = "Background";
          BackgroundCheckBox.UseVisualStyleBackColor = true;
+         BackgroundCheckBox.CheckedChanged += BackgroundCheckBox_CheckedChanged;
          // 
          // SelectMissionFile
          // 
@@ -102,6 +107,7 @@
          // 
          MissionNameBox.AutoSize = true;
          MissionNameBox.Dock = DockStyle.Fill;
+         MissionNameBox.Enabled = false;
          MissionNameBox.Location = new Point(593, 63);
          MissionNameBox.Margin = new Padding(5, 3, 3, 3);
          MissionNameBox.Name = "MissionNameBox";
@@ -114,6 +120,7 @@
          // 
          FullBgBox.AutoSize = true;
          FullBgBox.Dock = DockStyle.Fill;
+         FullBgBox.Enabled = false;
          FullBgBox.Location = new Point(593, 93);
          FullBgBox.Margin = new Padding(5, 3, 3, 3);
          FullBgBox.Name = "FullBgBox";
@@ -121,6 +128,7 @@
          FullBgBox.TabIndex = 4;
          FullBgBox.Text = "Full window background";
          FullBgBox.UseVisualStyleBackColor = true;
+         FullBgBox.CheckedChanged += FullBgBox_CheckedChanged;
          // 
          // PrewViewBox
          // 
@@ -128,11 +136,72 @@
          PrewViewBox.Dock = DockStyle.Fill;
          PrewViewBox.Location = new Point(3, 3);
          PrewViewBox.Name = "PrewViewBox";
-         tableLayoutPanel1.SetRowSpan(PrewViewBox, 6);
+         tableLayoutPanel1.SetRowSpan(PrewViewBox, 11);
          PrewViewBox.Size = new Size(582, 444);
          PrewViewBox.SizeMode = PictureBoxSizeMode.Zoom;
          PrewViewBox.TabIndex = 5;
          PrewViewBox.TabStop = false;
+         // 
+         // MissionEffectIcon
+         // 
+         MissionEffectIcon.Dock = DockStyle.Fill;
+         MissionEffectIcon.DropDownStyle = ComboBoxStyle.DropDownList;
+         MissionEffectIcon.FormattingEnabled = true;
+         MissionEffectIcon.Location = new Point(591, 123);
+         MissionEffectIcon.Name = "MissionEffectIcon";
+         MissionEffectIcon.Size = new Size(206, 23);
+         MissionEffectIcon.TabIndex = 6;
+         // 
+         // MissionFrameIcon
+         // 
+         MissionFrameIcon.Dock = DockStyle.Fill;
+         MissionFrameIcon.DropDownStyle = ComboBoxStyle.DropDownList;
+         MissionFrameIcon.FormattingEnabled = true;
+         MissionFrameIcon.Location = new Point(591, 153);
+         MissionFrameIcon.Name = "MissionFrameIcon";
+         MissionFrameIcon.Size = new Size(206, 23);
+         MissionFrameIcon.TabIndex = 8;
+         // 
+         // CountrySelection
+         // 
+         CountrySelection.Dock = DockStyle.Fill;
+         CountrySelection.DropDownStyle = ComboBoxStyle.DropDownList;
+         CountrySelection.FormattingEnabled = true;
+         CountrySelection.Location = new Point(591, 183);
+         CountrySelection.Name = "CountrySelection";
+         CountrySelection.Size = new Size(206, 23);
+         CountrySelection.TabIndex = 9;
+         // 
+         // SaveTextLabel
+         // 
+         SaveTextLabel.AutoSize = true;
+         SaveTextLabel.Dock = DockStyle.Fill;
+         SaveTextLabel.Location = new Point(591, 300);
+         SaveTextLabel.Name = "SaveTextLabel";
+         SaveTextLabel.Size = new Size(206, 150);
+         SaveTextLabel.TabIndex = 10;
+         SaveTextLabel.Text = "SaveText";
+         SaveTextLabel.TextAlign = ContentAlignment.MiddleCenter;
+         // 
+         // ExportButton
+         // 
+         ExportButton.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+         ExportButton.Location = new Point(591, 243);
+         ExportButton.Name = "ExportButton";
+         ExportButton.Size = new Size(75, 24);
+         ExportButton.TabIndex = 2;
+         ExportButton.Text = "Export";
+         ExportButton.UseVisualStyleBackColor = true;
+         ExportButton.Click += ExportButton_Click;
+         // 
+         // FileNameTextBox
+         // 
+         FileNameTextBox.Dock = DockStyle.Fill;
+         FileNameTextBox.Location = new Point(591, 213);
+         FileNameTextBox.Name = "FileNameTextBox";
+         FileNameTextBox.PlaceholderText = "Optional filename";
+         FileNameTextBox.Size = new Size(206, 23);
+         FileNameTextBox.TabIndex = 11;
          // 
          // MissionTreeExporter
          // 
@@ -142,6 +211,7 @@
          Controls.Add(tableLayoutPanel1);
          Icon = (Icon)resources.GetObject("$this.Icon");
          Name = "MissionTreeExporter";
+         StartPosition = FormStartPosition.CenterScreen;
          Text = "Mission Tree Exporter";
          tableLayoutPanel1.ResumeLayout(false);
          tableLayoutPanel1.PerformLayout();
@@ -158,5 +228,10 @@
       private CheckBox MissionNameBox;
       private CheckBox FullBgBox;
       private PictureBox PrewViewBox;
+      private ComboBox CountrySelection;
+      private ComboBox MissionEffectIcon;
+      private ComboBox MissionFrameIcon;
+      private Label SaveTextLabel;
+      private TextBox FileNameTextBox;
    }
 }

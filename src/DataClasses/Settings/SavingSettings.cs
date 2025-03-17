@@ -17,6 +17,7 @@ namespace Editor.DataClasses.Settings
       private FileSavingMode _fileSavingMode = FileSavingMode.AskOnce;
       private bool _playCrashSound = true;
       private string _logLocation = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs");
+      private string _missionExportLocation = Path.Combine(Globals.AppDataPath, "MissionExports");
       private string _customWordsLocation = string.Empty;
       private SaveOnExitType _saveOnExit = SaveOnExitType.AskToSave;
       private FormattingSettings _formatting = new();
@@ -77,6 +78,14 @@ namespace Editor.DataClasses.Settings
       {
          get => _formatting;
          set => SetField(ref _formatting, value);
+      }
+
+      [CompareInEquals]
+      [Description("The location where the mission exports will be saved. Default is in \'ModforgeData\\MissionExports\' folder.")]
+      public string MissionExportPath
+      {
+         get => _missionExportLocation;
+         set => SetField(ref _missionExportLocation, value);
       }
    }
 

@@ -145,10 +145,10 @@ public class MissionView(Mission mission)
 
    public static GameIcons GetFrameType(MissionView missionView)
    {
-      return missionView.Completion switch
+      return missionView.Frame switch
       {
-         CompletionType.Completed => GameIcons.MissionIconFrameComplete,
-         CompletionType.Started => GameIcons.MissionIconFrame,
+         FrameType.Completed => GameIcons.MissionIconFrameComplete,
+         FrameType.Unlocked => GameIcons.MissionIconFrame,
          _ => GameIcons.MissionIconFrameLocked
       };
    }

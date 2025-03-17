@@ -214,4 +214,10 @@ internal static class IO
    {
       bmp.Save(Path.Combine(Globals.AppDataPath, internalPath), ImageFormat.Png);
    }
+
+   public static void SaveImage(string path, Bitmap bmp)
+   {
+      CreateDirectoryIfRequired(path);
+      bmp.Save(path, ImageFormat.Png);
+   }
 }
