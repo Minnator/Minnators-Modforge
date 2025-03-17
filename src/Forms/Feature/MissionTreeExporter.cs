@@ -28,7 +28,7 @@ namespace Editor.src.Forms.Feature
 
          SelectMissionFile.Items.AddRange([.. slotNames.ToArray()]);
 
-         SelectMissionFile.SelectedItem = "DH_Gujarati_Missions.txt";
+         SelectMissionFile.SelectedItem = "DH_Bengali_Missions.txt";
       }
 
       private void SelectMissionFile_SelectedIndexChanged(object sender, EventArgs e)

@@ -5,6 +5,7 @@ using Windows.Media.Playback;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
+using Editor.Properties;
 using Editor.Saving;
 
 namespace Editor.Helper
@@ -141,6 +142,8 @@ namespace Editor.Helper
       const int MISSION_ICON_V_SPACING = 25;
       const int MISSION_ICON_H_SPACING = -5;
 
+      private const int MISSION_ROW_HEIGHT_VSP = MISSION_ICON_HEIGHT + MISSION_ICON_V_SPACING;
+
       public static Bitmap DrawMissionOnBackGround(Bitmap missionBmp, bool squared, bool showMissionNames, List<MissionSlot> slots, Country missionOwner) 
          // if squared we only draw the square part of the bg image
          // if not we draw the entire window with close button and outlines
@@ -172,32 +175,67 @@ namespace Editor.Helper
          var missionWidth = numOfColumns * MISSION_ICON_WIDTH + (numOfColumns - 1) * MISSION_ICON_H_SPACING;
          var missionHeight = numOfRows * MISSION_ICON_HEIGHT + (numOfRows - 1) * MISSION_ICON_V_SPACING;
          int textYOffset;
-
+         
          if (squared)
          {
             if (showMissionNames)
             {
                rect = new(14, 138 - 51, 535 + 12, 744 + 4 + 44); // 4 / 12 is the border 44 is the space for the mission names
-               offset = new((rect.Width - missionWidth) / 2, 46 + (rect.Height - 46 - missionHeight) / 2); // 44 is the space for the mission names
+               offset = new((rect.Width - missionWidth) / 2, 46 + (rect.Height - 46 - missionHeight + (numOfRows - 5) * MISSION_ROW_HEIGHT_VSP) / 2); // 44 is the space for the mission names
                textYOffset = 5;
             }  
             else
             {
                rect = new(14, 131, 535 + 12, 744 + 4); // 4 / 12 is the border
-               offset = new((rect.Width - missionWidth) / 2, 2 + (rect.Height - 2 - missionHeight) / 2);
+               offset = new((rect.Width - missionWidth) / 2, 2 + (rect.Height - 2 - missionHeight + (numOfRows - 5) * MISSION_ROW_HEIGHT_VSP) / 2);
                textYOffset = -200; // no text so we don't care
             }
          }
          else
          {
             rect = new(2, 5, source.Width - 15, source.Height - 17);
-            offset = new(9 + (rect.Width - 9 - missionWidth) / 2, 125 + (rect.Height - 125 - 37 - missionHeight) / 2);
+            offset = new(9 + (rect.Width - 9 - missionWidth) / 2, 125 + (rect.Height - 125 - 37 - missionHeight + (numOfRows - 5) * MISSION_ROW_HEIGHT_VSP) / 2);
             textYOffset = 87;
          }
 
-         Bitmap background = new (rect.Width, rect.Height);
-         using var g = Graphics.FromImage(background);
-         g.DrawImage(source, rect with { X = 0, Y = 0 }, rect, GraphicsUnit.Pixel);
+         Bitmap background;
+         Graphics g;
+
+         if (numOfRows <= 5)
+         {
+            background = new (rect.Width, rect.Height);
+            g = Graphics.FromImage(background);
+            g.DrawImage(source, rect with { X = 0, Y = 0 }, rect, GraphicsUnit.Pixel);
+         }
+         else
+         {
+            background = new(rect.Width, rect.Height + (numOfRows - 5) * MISSION_ROW_HEIGHT_VSP);
+            g = Graphics.FromImage(background);
+
+            // we draw the top part
+            // then we insert a tileable part numofrows - 5 times
+            // then we draw the bottom part
+
+            var tilePart = Resources.MissionRowSlotTile ?? new (577, 150);
+            var topPart = rect with { Height = rect.Height - MISSION_ROW_HEIGHT_VSP };
+            var bottomPart = rect with { Y = rect.Bottom - MISSION_ROW_HEIGHT_VSP, Height = MISSION_ROW_HEIGHT_VSP};
+
+            g.DrawImage(source, topPart with { X = 0, Y = 0 }, topPart, GraphicsUnit.Pixel);
+
+            for (var i = 0; i < numOfRows - 5; i++)
+            {
+               var y = topPart.Height + i * MISSION_ROW_HEIGHT_VSP;
+               var tRect = new Rectangle(0, y, tilePart.Width, tilePart.Height);
+               if (squared)
+                  g.DrawImage(tilePart, tRect, new(0, 0, tilePart.Width, tilePart.Height), GraphicsUnit.Pixel);
+               else
+                  g.DrawImage(tilePart, tRect with {X = 12}, new(0, 0, tilePart.Width, tilePart.Height), GraphicsUnit.Pixel);
+            }
+
+            g.DrawImage(source, bottomPart with { X = 0, Y = background.Height - bottomPart.Height }, bottomPart, GraphicsUnit.Pixel);
+         }
+
+
 
          // Draw mission text if needed
          if (showMissionNames)
@@ -212,6 +250,8 @@ namespace Editor.Helper
             var close = GameIconDefinition.GetIcon(GameIcons.CloseButton);
             g.DrawImage(close, new Point(520, 5));
          }
+
+         g.Dispose();
 
          return background;
       }
