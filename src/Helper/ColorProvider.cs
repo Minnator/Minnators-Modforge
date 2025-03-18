@@ -29,6 +29,18 @@ public class ColorProviderRgb(int seed = 1444)
       Color.FromArgb(255, 99, 71)     // Coral
    ];
 
+
+   public static readonly Color[] MatLabPlasmaColors =
+   [
+      //Color.FromArgb( (int)(0.05038205347059877 * 255), (int)(0.029801736499741757 * 255), (int)(0.5279751010495176 * 255) ),
+      Color.FromArgb( (int)(0.32784692303604196 * 255), (int)(0.0066313933705768055 * 255), (int)(0.6402853293744383 * 255) ),
+      Color.FromArgb( (int)(0.5453608398097519 * 255), (int)(0.03836817688235455 * 255), (int)(0.6472432548304646 * 255) ),
+      Color.FromArgb( (int)(0.7246542772727967 * 255), (int)(0.1974236709187686 * 255), (int)(0.5379281037132716 * 255) ),
+      Color.FromArgb( (int)(0.8588363515132411 * 255), (int)(0.35929521887338184 * 255), (int)(0.407891799954962 * 255) ),
+      Color.FromArgb( (int)(0.9557564842476064 * 255), (int)(0.5338287173328614 * 255), (int)(0.2850080723374925 * 255) ),
+      Color.FromArgb( (int)(0.9945257260387773 * 255), (int)(0.7382691276441445 * 255), (int)(0.16745985897148677 * 255) ),
+      Color.FromArgb( (int)(0.9400151278782742 * 255), (int)(0.9751557856205376 * 255), (int)(0.131325887773911 * 255) )
+   ];
    public Color GetRandomColor()
    {
       var color = Color.FromArgb(_rand.Next(256), _rand.Next(256), _rand.Next(256));
@@ -115,7 +127,47 @@ public class ColorProviderRgb(int seed = 1444)
       return colorList;
    }
 
+   public static Color[] SampleColorScale(int sampleCount, params Color[] colors)
+   {
+      if (colors == null || colors.Length < 2)
+         throw new ArgumentException("At least two colors are required.", nameof(colors));
+
+      var colorList = new Color[sampleCount];
+      var segments = colors.Length - 1; // Number of color transitions
+      var step = (float)sampleCount / segments;
+
+      for (var i = 0; i < sampleCount; i++)
+      {
+         var t = i / step;
+         var index = (int)t;
+         var blendFactor = t - index;
+
+         if (index >= segments)
+         {
+            colorList[i] = colors[^1];
+            continue;
+         }
+
+         var c1 = colors[index];
+         var c2 = colors[index + 1];
+
+         var r = (int)(c1.R + (c2.R - c1.R) * blendFactor);
+         var g = (int)(c1.G + (c2.G - c1.G) * blendFactor);
+         var b = (int)(c1.B + (c2.B - c1.B) * blendFactor);
+
+         colorList[i] = Color.FromArgb(r, g, b);
+      }
+      return colorList;
+   }
+
+
+
    #region Good Color Sacles
+
+   public static Color[] GetPlasmaScale(int sampleCount)
+   {
+      return SampleColorScale(sampleCount, MatLabPlasmaColors);
+   }
 
    public static Color[] GetGreenBlueScale(int sampleCount)
    {
@@ -139,5 +191,6 @@ public class ColorProviderRgb(int seed = 1444)
       var colorIndex = (int)Math.Round((normalized * (colors.Length - 1)));
       return colors[colorIndex];
    }
+
 
 }

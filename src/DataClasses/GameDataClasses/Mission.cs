@@ -142,6 +142,23 @@ public class MissionView(Mission mission)
 
       return (int)(rect.Right + 1.0f);
    }
+   public static Size MeasureTextSize(Graphics graphics, string text, Font font)
+   {
+      var format = new StringFormat();
+      var rect = new RectangleF(0, 0, 1000, 1000);
+      CharacterRange[] ranges = [new (0, text.Length)];
+      format.SetMeasurableCharacterRanges(ranges);
+
+      var regions = graphics.MeasureCharacterRanges(text, font, rect, format);
+      if (regions.Length == 0)
+      {
+         return Size.Empty;
+      }
+
+      rect = regions[0].GetBounds(graphics);
+
+      return new Size((int)(rect.Right + 1.0f), (int)(rect.Height));
+   }
 
    public static GameIcons GetFrameType(MissionView missionView)
    {

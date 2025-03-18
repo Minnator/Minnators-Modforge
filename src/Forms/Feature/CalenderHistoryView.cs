@@ -22,6 +22,10 @@ namespace Editor.Forms.Feature
 
       private EntryPerDate[] entries;
 
+      private int _min;
+      private int _max;
+      private Color[] _colors;
+
       public enum CalenderState
       {
          Days,
@@ -45,8 +49,22 @@ namespace Editor.Forms.Feature
 
          LoadDays(true);
 
-         TitleLabel.MouseWheel += OnTitleLabel_MouseWheel;
+         MouseWheel += OnTitleLabel_MouseWheel;
+
+         MinMaxLabel.Paint += MinMaxLabel_Paint;
       }
+
+      private void MinMaxLabel_Paint(object? sender, PaintEventArgs e)
+      {
+         var (rectWidth, remainder) = Math.DivRem(MinMaxLabel.Width, _colors.Length);
+         for (var i = 0; i < _colors.Length; i++) 
+            e.Graphics.FillRectangle(new SolidBrush(_colors[i]), i * rectWidth + remainder/2, 0, rectWidth, MinMaxLabel.Height);
+
+         var textSize = MissionView.MeasureTextSize(e.Graphics, $"Min: {_min} - Max: {_max}", MinMaxLabel.Font);
+
+         e.Graphics.DrawString($"Min: {_min} - Max: {_max}", MinMaxLabel.Font, Brushes.Black, (MinMaxLabel.Width - textSize.Width) / 2, (MinMaxLabel.Height - textSize.Height) / 2);
+      }
+
 
       private void OnTitleLabel_MouseWheel(object? sender, MouseEventArgs e)
       {
@@ -133,50 +151,54 @@ namespace Editor.Forms.Feature
          }
 
          TitleLabel.Text = $"{currentDate.Year} - {currentDate.Month}";
-         if (add)
-         {
-            CalenderPanel.SuspendLayout();
-            CalenderPanel.Controls.Clear();
-            CalenderPanel.Controls.AddRange(_dayButtons);
-            CalenderPanel.ResumeLayout();
-         }
+         
 
          var lowerBound = BinarySearchCache(currentDate.TimeStamp, 0, entries.Length);
          var upperBound = BinarySearchCache(currentDate.TimeStamp + days, lowerBound, entries.Length);
 
          var counts = new int[days];
-         var minCount = int.MaxValue;
-         var maxCount = int.MinValue;
+         _min = int.MaxValue;
+         _max = int.MinValue;
 
          for (var j = 0; j < days; j++)
          {
             var value = GetEntriesForRange(currentDate.TimeStamp + j, lowerBound, upperBound);
-            if (minCount > value)
-               minCount = value;
-            if (maxCount < value)
-               maxCount = value;
+            if (_min > value)
+               _min = value;
+            if (_max < value)
+               _max = value;
             counts[j] = value;
             Debug.WriteLine($"Value {j}: {value}");
          }
 
-         var colors = ColorProviderRgb.GetGreenBlueScale(25);
+         
+         
+         if (add)
+         {
+            _colors = ColorProviderRgb.GetPlasmaScale(25);
+            CalenderPanel.SuspendLayout();
+            CalenderPanel.Controls.Clear();
+            CalenderPanel.Controls.AddRange(_dayButtons);
+            CalenderPanel.ResumeLayout();
 
+            MinMaxLabel.Invalidate();
+         }
          var i = 0;
          for (; i < start; i++)
          {
-            UpdateButton(ColorProviderRgb.NormalizeColorToScale(minCount, maxCount, counts[i], colors), (Button)_dayButtons[i]);
+            UpdateButton(ColorProviderRgb.NormalizeColorToScale(_min, _max, counts[i], _colors), (Button)_dayButtons[i]);
             _dayButtons[i].Enabled = false;
             _dayButtons[i].Visible = true;
          }
          for (; i < end; i++)
          {
-            UpdateButton(ColorProviderRgb.NormalizeColorToScale(minCount, maxCount, counts[i], colors), (Button)_dayButtons[i]);
+            UpdateButton(ColorProviderRgb.NormalizeColorToScale(_min, _max, counts[i], _colors), (Button)_dayButtons[i]);
             _dayButtons[i].Enabled = true;
             _dayButtons[i].Visible = true;
          }
          for (; i < days; i++)
          {
-            UpdateButton(ColorProviderRgb.NormalizeColorToScale(minCount, maxCount, counts[i], colors), (Button)_dayButtons[i]);
+            UpdateButton(ColorProviderRgb.NormalizeColorToScale(_min, _max, counts[i], _colors), (Button)_dayButtons[i]);
             _dayButtons[i].Enabled = false;
             _dayButtons[i].Visible = true;
          }
@@ -214,49 +236,52 @@ namespace Editor.Forms.Feature
          }
          var lowerBound = BinarySearchCache(currentDate.TimeStamp, 0, entries.Length);
          var upperBound = BinarySearchCache(currentDate.TimeStamp + 365, lowerBound, entries.Length);
-         TitleLabel.Text = $"{currentDate.Year}";
-      
-         if (add)
-         {
-            CalenderPanel.SuspendLayout();
-            CalenderPanel.Controls.Clear();
-            CalenderPanel.Controls.AddRange(_monthButtons);
-            CalenderPanel.ResumeLayout();
-         }
+         TitleLabel.Text = $"{currentDate.Year}"; 
 
          var days = currentDate.TimeStamp;
 
          var i = 0;
 
          var counts = new int[12];
-         var minCount = int.MaxValue;
-         var maxCount = int.MinValue;
+         _min = int.MaxValue;
+         _max = int.MinValue;
          for (var j = 0; j < 12; j++)
          {
             var value = GetEntriesForRange(days, days += Date.DaysInMonth(j), lowerBound, upperBound);
-            if (minCount > value)
-               minCount = value;
-            if(maxCount < value)
-               maxCount = value;
+            if (_min > value)
+               _min = value;
+            if(_max < value)
+               _max = value;
             counts[j] = value;
             Debug.WriteLine($"Value {j}: {value}");
          }
 
-         var colors = ColorProviderRgb.GetGreenBlueScale(10);
+         
+
+         if (add)
+         {
+            _colors = ColorProviderRgb.GetPlasmaScale(10);
+            CalenderPanel.SuspendLayout();
+            CalenderPanel.Controls.Clear();
+            CalenderPanel.Controls.AddRange(_monthButtons);
+            CalenderPanel.ResumeLayout();
+
+            MinMaxLabel.Invalidate();
+         }
 
          for (; i < start; i++)
          {
-            UpdateButton(ColorProviderRgb.NormalizeColorToScale(minCount, maxCount, counts[i], colors), (Button)_monthButtons[i]);
+            UpdateButton(ColorProviderRgb.NormalizeColorToScale(_min, _max, counts[i], _colors), (Button)_monthButtons[i]);
             _monthButtons[i].Enabled = false;
          }
          for (; i < end; i++)
          {
-            UpdateButton(ColorProviderRgb.NormalizeColorToScale(minCount, maxCount, counts[i], colors), (Button)_monthButtons[i]);
+            UpdateButton(ColorProviderRgb.NormalizeColorToScale(_min, _max, counts[i], _colors), (Button)_monthButtons[i]);
             _monthButtons[i].Enabled = true;
          }
          for (; i < 12; i++)
          {
-            UpdateButton(ColorProviderRgb.NormalizeColorToScale(minCount, maxCount, counts[i], colors), (Button)_monthButtons[i]);
+            UpdateButton(ColorProviderRgb.NormalizeColorToScale(_min, _max, counts[i], _colors), (Button)_monthButtons[i]);
             _monthButtons[i].Enabled = false;
          }
 
@@ -305,48 +330,51 @@ namespace Editor.Forms.Feature
 
          TitleLabel.Text = $"{currentDate.Year} - {currentDate.Year + 9 * scale}";
 
-         if (add)
-         {
-            CalenderPanel.SuspendLayout();
-            CalenderPanel.Controls.Clear();
-            CalenderPanel.Controls.AddRange(_yearButtons);
-            CalenderPanel.ResumeLayout();
-         }
-
          var lowerBound = BinarySearchCache(currentDate.TimeStamp, 0, entries.Length);
          var upperBound = BinarySearchCache(currentDate.TimeStamp + 365 * number_scale, lowerBound, entries.Length);
          var counts = new int[10];
-         var minCount = int.MaxValue;
-         var maxCount = int.MinValue;
+         _min = int.MaxValue;
+         _max = int.MinValue;
 
          var year = currentDate.TimeStamp;
          for (var j = 0; j < 10; j++)
          {
             var value = GetEntriesForRange(year, year += 365 * scale, lowerBound, upperBound);
-            if (minCount > value)
-               minCount = value;
-            if (maxCount < value)
-               maxCount = value;
+            if (_min > value)
+               _min = value;
+            if (_max < value)
+               _max = value;
             counts[j] = value;
             Debug.WriteLine($"Value {j}: {value}");
          }
 
-         var colors = ColorProviderRgb.GetGreenBlueScale(10);
+         
+
+         if (add)
+         {
+            _colors = ColorProviderRgb.GetPlasmaScale(10);
+            CalenderPanel.SuspendLayout();
+            CalenderPanel.Controls.Clear();
+            CalenderPanel.Controls.AddRange(_yearButtons);
+            CalenderPanel.ResumeLayout();
+
+            MinMaxLabel.Invalidate();
+         }
 
          var i = 0;
          for (; i < start; i++)
          {
-            UpdateButton(ColorProviderRgb.NormalizeColorToScale(minCount, maxCount, counts[i], colors), $"{currentDate.Year + i * scale}", (Button)_yearButtons[i]);
+            UpdateButton(ColorProviderRgb.NormalizeColorToScale(_min, _max, counts[i], _colors), $"{currentDate.Year + i * scale}", (Button)_yearButtons[i]);
             _yearButtons[i].Enabled = false;
          }
          for (; i < end; i++)
          {
-            UpdateButton(ColorProviderRgb.NormalizeColorToScale(minCount, maxCount, counts[i], colors), $"{currentDate.Year + i * scale}", (Button)_yearButtons[i]);
+            UpdateButton(ColorProviderRgb.NormalizeColorToScale(_min, _max, counts[i], _colors), $"{currentDate.Year + i * scale}", (Button)_yearButtons[i]);
             _yearButtons[i].Enabled = true;
          }
          for (; i < 10; i++)
          {
-            UpdateButton(ColorProviderRgb.NormalizeColorToScale(minCount, maxCount, counts[i], colors), $"{currentDate.Year + i * scale}", (Button)_yearButtons[i]);
+            UpdateButton(ColorProviderRgb.NormalizeColorToScale(_min, _max, counts[i], _colors), $"{currentDate.Year + i * scale}", (Button)_yearButtons[i]);
             _yearButtons[i].Enabled = false;
          }
       }

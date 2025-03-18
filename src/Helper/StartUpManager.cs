@@ -85,10 +85,7 @@ namespace Editor.Helper
          lsThread.Join();
 
          Globals.MapWindow.Activate();
-
-         FixComboBoxSelection(Globals.MapWindow);
-
-
+         
          Globals.State = State.Running;
          MapModeManager.SetCurrentMapMode(MapModeType.Country);
          Globals.ZoomControl.FocusOn(new(3100, 600), 1f);
