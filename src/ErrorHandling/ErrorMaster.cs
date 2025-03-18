@@ -291,6 +291,12 @@ namespace Editor.ErrorHandling
       public bool IsVanilla { get; } = false;
       public string DebugInformation { get; } = "";
 
+      public string ShortMessage()
+      {
+         if (IsVanilla)
+            return Message.Replace(Globals.VanillaPath, "Vanilla");
+         return Message.Replace(Globals.ModPath, "Mod");
+      }
       public override string ToString()
       {
          return $"[{Timestamp:yyyy-MM-dd HH:mm:ss}] [{Level}] {Message}";

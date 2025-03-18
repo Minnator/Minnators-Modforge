@@ -154,7 +154,7 @@ namespace Editor.Forms.Feature
          };
          ListViewItem.ListViewSubItem messageItem = new()
          {
-            Text = entry.Message,
+            Text = entry.ShortMessage(),
             BackColor = backColor,
          };
 

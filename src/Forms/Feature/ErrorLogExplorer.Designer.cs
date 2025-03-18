@@ -74,7 +74,7 @@
          MainTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
          MainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          MainTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-         MainTLP.Size = new Size(1569, 450);
+         MainTLP.Size = new Size(1288, 450);
          MainTLP.TabIndex = 0;
          // 
          // TopTLP
@@ -102,7 +102,7 @@
          TopTLP.Name = "TopTLP";
          TopTLP.RowCount = 1;
          TopTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         TopTLP.Size = new Size(1569, 30);
+         TopTLP.Size = new Size(1288, 30);
          TopTLP.TabIndex = 0;
          // 
          // tableLayoutPanel1
@@ -115,19 +115,19 @@
          tableLayoutPanel1.Controls.Add(SearchTextBox, 1, 0);
          tableLayoutPanel1.Controls.Add(SearchTypeBox, 0, 0);
          tableLayoutPanel1.Dock = DockStyle.Fill;
-         tableLayoutPanel1.Location = new Point(1319, 0);
+         tableLayoutPanel1.Location = new Point(1037, 0);
          tableLayoutPanel1.Margin = new Padding(0);
          tableLayoutPanel1.Name = "tableLayoutPanel1";
          tableLayoutPanel1.RowCount = 1;
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         tableLayoutPanel1.Size = new Size(250, 30);
+         tableLayoutPanel1.Size = new Size(251, 30);
          tableLayoutPanel1.TabIndex = 4;
          // 
          // SearchButton
          // 
          SearchButton.Dock = DockStyle.Fill;
          SearchButton.Image = Properties.Resources.Search;
-         SearchButton.Location = new Point(221, 1);
+         SearchButton.Location = new Point(222, 1);
          SearchButton.Margin = new Padding(1);
          SearchButton.Name = "SearchButton";
          SearchButton.Size = new Size(28, 28);
@@ -144,7 +144,7 @@
          SearchTextBox.Margin = new Padding(1, 3, 1, 4);
          SearchTextBox.Name = "SearchTextBox";
          SearchTextBox.PlaceholderText = "Search";
-         SearchTextBox.Size = new Size(118, 23);
+         SearchTextBox.Size = new Size(119, 23);
          SearchTextBox.TabIndex = 1;
          ErrorToolTip.SetToolTip(SearchTextBox, "All items no matter chich checkboxes are checked will be searched.");
          SearchTextBox.KeyPress += SearchTextBox_KeyPress;
@@ -164,7 +164,7 @@
          // 
          SearchSource.Anchor = AnchorStyles.None;
          SearchSource.AutoSize = true;
-         SearchSource.Location = new Point(1232, 5);
+         SearchSource.Location = new Point(950, 5);
          SearchSource.Name = "SearchSource";
          SearchSource.Size = new Size(78, 19);
          SearchSource.TabIndex = 5;
@@ -175,7 +175,7 @@
          // 
          DebugCheckBox.Anchor = AnchorStyles.None;
          DebugCheckBox.AutoSize = true;
-         DebugCheckBox.Location = new Point(887, 5);
+         DebugCheckBox.Location = new Point(676, 5);
          DebugCheckBox.Name = "DebugCheckBox";
          DebugCheckBox.Size = new Size(61, 19);
          DebugCheckBox.TabIndex = 3;
@@ -186,7 +186,7 @@
          // 
          CriticalCheckbox.Anchor = AnchorStyles.None;
          CriticalCheckbox.AutoSize = true;
-         CriticalCheckbox.Location = new Point(70, 5);
+         CriticalCheckbox.Location = new Point(47, 5);
          CriticalCheckbox.Name = "CriticalCheckbox";
          CriticalCheckbox.Size = new Size(63, 19);
          CriticalCheckbox.TabIndex = 6;
@@ -197,7 +197,7 @@
          // 
          ErrorCheckBox.Anchor = AnchorStyles.None;
          ErrorCheckBox.AutoSize = true;
-         ErrorCheckBox.Location = new Point(278, 5);
+         ErrorCheckBox.Location = new Point(207, 5);
          ErrorCheckBox.Name = "ErrorCheckBox";
          ErrorCheckBox.Size = new Size(56, 19);
          ErrorCheckBox.TabIndex = 0;
@@ -208,7 +208,7 @@
          // 
          WarningCheckBox.Anchor = AnchorStyles.None;
          WarningCheckBox.AutoSize = true;
-         WarningCheckBox.Location = new Point(472, 5);
+         WarningCheckBox.Location = new Point(354, 5);
          WarningCheckBox.Name = "WarningCheckBox";
          WarningCheckBox.Size = new Size(76, 19);
          WarningCheckBox.TabIndex = 1;
@@ -219,7 +219,7 @@
          // 
          InfoCheckBox.Anchor = AnchorStyles.None;
          InfoCheckBox.AutoSize = true;
-         InfoCheckBox.Location = new Point(669, 5);
+         InfoCheckBox.Location = new Point(505, 5);
          InfoCheckBox.Name = "InfoCheckBox";
          InfoCheckBox.Size = new Size(89, 19);
          InfoCheckBox.TabIndex = 2;
@@ -232,7 +232,7 @@
          IsVanillaEntryCheckBox.AutoSize = true;
          IsVanillaEntryCheckBox.Checked = true;
          IsVanillaEntryCheckBox.CheckState = CheckState.Checked;
-         IsVanillaEntryCheckBox.Location = new Point(1092, 5);
+         IsVanillaEntryCheckBox.Location = new Point(833, 5);
          IsVanillaEntryCheckBox.Name = "IsVanillaEntryCheckBox";
          IsVanillaEntryCheckBox.Size = new Size(60, 19);
          IsVanillaEntryCheckBox.TabIndex = 7;
@@ -249,7 +249,7 @@
          ErrorView.Location = new Point(3, 33);
          ErrorView.Name = "ErrorView";
          ErrorView.OwnerDraw = true;
-         ErrorView.Size = new Size(1563, 384);
+         ErrorView.Size = new Size(1282, 384);
          ErrorView.TabIndex = 1;
          ErrorView.UseCompatibleStateImageBehavior = false;
          ErrorView.View = View.Details;
@@ -283,7 +283,7 @@
          tableLayoutPanel2.Name = "tableLayoutPanel2";
          tableLayoutPanel2.RowCount = 1;
          tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         tableLayoutPanel2.Size = new Size(1569, 30);
+         tableLayoutPanel2.Size = new Size(1288, 30);
          tableLayoutPanel2.TabIndex = 3;
          // 
          // label1
@@ -292,14 +292,14 @@
          label1.Dock = DockStyle.Fill;
          label1.Location = new Point(3, 0);
          label1.Name = "label1";
-         label1.Size = new Size(1483, 30);
+         label1.Size = new Size(1202, 30);
          label1.TabIndex = 2;
          label1.Text = "Double click rows marked by light gray background to get more detailed info and tips how to fix the issues.";
          label1.TextAlign = ContentAlignment.MiddleLeft;
          // 
          // SaveLogsButton
          // 
-         SaveLogsButton.Location = new Point(1492, 3);
+         SaveLogsButton.Location = new Point(1211, 3);
          SaveLogsButton.Name = "SaveLogsButton";
          SaveLogsButton.Size = new Size(74, 23);
          SaveLogsButton.TabIndex = 3;
@@ -311,7 +311,7 @@
          // 
          AutoScaleDimensions = new SizeF(7F, 15F);
          AutoScaleMode = AutoScaleMode.Font;
-         ClientSize = new Size(1569, 450);
+         ClientSize = new Size(1288, 450);
          Controls.Add(MainTLP);
          Icon = (Icon)resources.GetObject("$this.Icon");
          KeyPreview = true;
