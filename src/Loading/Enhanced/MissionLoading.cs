@@ -35,7 +35,7 @@ namespace Editor.Loading.Enhanced
                }
                Globals.MissionSlots.Add(slot);
                foreach (var missionName in slot.Missions)
-                  if (Globals.Missions.TryAdd(missionName.Name, missionName)) 
+                  if (!Globals.Missions.TryAdd(missionName.Name, missionName)) 
                      _ = new LoadingError(po, $"Mission \"{missionName}\" already exists!", block.StartLine, -1, ErrorType.DuplicateObjectDefinition);
             }
          }

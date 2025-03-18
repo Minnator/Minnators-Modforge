@@ -30,16 +30,22 @@ namespace Editor.Loading.Enhanced
 
             if (blocks[0].Name != "spriteTypes")
             {
+               if (blocks[0].Name == "objectTypes")
+                  continue;
                _ = new LoadingError(po, "Sprite type file must contain a block named \"spriteTypes\"!", -1, -1, ErrorType.InvalidFileStructure);
                continue;
             }
 
             foreach (var spriteTypeBlock in blocks[0].GetSubBlocks(true, po))
+            {
+               if (!spriteTypeBlock.Name.Equals("spriteType"))
+                  continue;
+
                foreach (var element in spriteTypeBlock.ContentElements)
                {
                   var name = string.Empty;
                   string[] internalPath = [];
-                  foreach (var line in element.GetLineKvpEnumerator(po, trimQuotes:true))
+                  foreach (var line in element.GetLineKvpEnumerator(po, trimQuotes: true))
                   {
                      switch (line.Key)
                      {
@@ -47,6 +53,7 @@ namespace Editor.Loading.Enhanced
                            name = line.Value;
                            break;
                         case "texturefile":
+                        case "textureFile":
                            internalPath = line.Value.Split("//");
                            break;
                      }
@@ -64,9 +71,10 @@ namespace Editor.Loading.Enhanced
                      continue;
                   }
 
-                  if (!sprites.TryAdd(name, new (internalPath, name, po.IsModPath))) 
+                  if (!sprites.TryAdd(name, new(internalPath, name, po.IsModPath)))
                      _ = new LoadingError(po, $"Sprite type \"{name}\" already exists!", element.StartLine, -1, ErrorType.DuplicateObjectDefinition);
                }
+            }
          }
 
          // TODO for now only using mission icons so this must be called after missions loading
