@@ -53,14 +53,14 @@ namespace Editor.DataClasses.ConsoleCommands
             {
                if (int.TryParse(args[0], out var stamp))
                   return [$"In: {stamp}", $"Date: {new Date(stamp)}"];
-               if (EnhancedDate.TryParse(args[0], out var date).Ignore())
+               if (Date.TryParse(args[0], out var date).Ignore())
                   return [$"In: {args[0]}", $"Date: {date}"];
                return ["Invalid date format"];
             }
             if (args.Length == 3)
             {
-               EnhancedDate date;
-               if (EnhancedDate.TryParse(args[0], out date).Ignore())
+               Date date;
+               if (Date.TryParse(args[0], out date).Ignore())
                {
                   if (!int.TryParse(args[2], out var amount))
                      return [$"Invalid amount for {args[1]}"];

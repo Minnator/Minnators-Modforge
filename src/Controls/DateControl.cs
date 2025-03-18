@@ -174,67 +174,107 @@ namespace Editor.Controls
       }
       public void OnYearIncrease (object? sender, EventArgs e)
       {
-         Date = ModifierKeys switch
+         switch (ModifierKeys)
          {
-            Keys.Control => Date.AddYears(10),
-            Keys.Shift => Date.AddYears(5),
-            _ => Date.AddYears(1)
-         };
+            case Keys.Control:
+               Date.AddYears(10);
+               break;
+            case Keys.Shift:
+               Date.AddYears(5);
+               break;
+            default:
+               Date.AddYears(1);
+               break;
+         }
+
          _dateTextBox.Text = Date.ToString();
       }
 
       public void OnMonthIncrease (object? sender, EventArgs e)
       {
-         Date = ModifierKeys switch
+         switch (ModifierKeys)
          {
-            Keys.Control => Date.AddMonths(10),
-            Keys.Shift => Date.AddMonths(5),
-            _ => Date.AddMonths(1)
-         };
+            case Keys.Control:
+               Date.AddMonths(10);
+               break;
+            case Keys.Shift:
+               Date.AddMonths(5);
+               break;
+            default:
+               Date.AddMonths(1);
+               break;
+         }
+
          _dateTextBox.Text = Date.ToString();
       }
 
       public void OnDayIncrease (object? sender, EventArgs e)
       {
-         Date = ModifierKeys switch
+
+         switch (ModifierKeys)
          {
-            Keys.Control => Date.AddDays(10),
-            Keys.Shift => Date.AddDays(5),
-            _ => Date.AddDays(1)
-         };
+            case Keys.Control:
+               Date.AddDays(10);
+               break;
+            case Keys.Shift:
+               Date.AddDays(5);
+               break;
+            default:
+               Date.AddDays(1);
+               break;
+         }
+
          _dateTextBox.Text = Date.ToString();
       }
 
       public void OnYearDecrease (object? sender, EventArgs e)
       {
-         Date = ModifierKeys switch
+         switch (ModifierKeys)
          {
-            Keys.Control => Date.AddYears(-10),
-            Keys.Shift => Date.AddYears(-5),
-            _ => Date.AddYears(-1)
-         };
+            case Keys.Control:
+               Date.AddYears(-10);
+               break;
+            case Keys.Shift:
+               Date.AddYears(-5);
+               break;
+            default:
+               Date.AddYears(-1);
+               break;
+         }
          _dateTextBox.Text = Date.ToString();
       }
 
       public void OnMonthDecrease (object? sender, EventArgs e)
       {
-         Date = ModifierKeys switch
+         switch (ModifierKeys)
          {
-            Keys.Control => Date.AddMonths(-10),
-            Keys.Shift => Date.AddMonths(-5),
-            _ => Date.AddMonths(-1)
-         };
+            case Keys.Control:
+               Date.AddMonths(-10);
+               break;
+            case Keys.Shift:
+               Date.AddMonths(-5);
+               break;
+            default:
+               Date.AddMonths(-1);
+               break;
+         }
          _dateTextBox.Text = Date.ToString();
       }
 
       public void OnDayDecrease (object? sender, EventArgs e)
       {
-         Date = ModifierKeys switch
+         switch (ModifierKeys)
          {
-            Keys.Control => Date.AddDays(-10),
-            Keys.Shift => Date.AddDays(-5),
-            _ => Date.AddDays(-1)
-         };
+            case Keys.Control:
+               Date.AddDays(-10);
+               break;
+            case Keys.Shift:
+               Date.AddDays(-5);
+               break;
+            default:
+               Date.AddDays(-1);
+               break;
+         }
          _dateTextBox.Text = Date.ToString();
       }
 

@@ -17,14 +17,9 @@ namespace Editor.Helper
                province.ResetHistory();
          foreach (var province in Globals.Provinces) 
             province.LoadHistoryForDate(date);
-         LastDate = LastDate.Copy(date);
+         LastDate.SetDateSilent(date);
          Globals.State = State.Running;
          sw.Stop();
-#if DEBUG
-         Debug.WriteLine($"Loading history for {date} took {sw.ElapsedMilliseconds}ms");
-#else
-         MessageBox.Show($"Loading history for {date} took {sw.ElapsedMilliseconds}ms");
-#endif
       }
    }
 }
