@@ -191,7 +191,8 @@ public static class ControlFactory
          Margin = new(3, 1, 3, 3),
          Dock = DockStyle.Fill,
          AutoCompleteSource = AutoCompleteSource.ListItems,
-         AutoCompleteMode = AutoCompleteMode.SuggestAppend
+         AutoCompleteMode = AutoCompleteMode.SuggestAppend,
+         ContextMenuStrip = new(),
       };
    }   
    public static BindablePropertyComboBox<CommonCountry, TProperty, TKey> GetBindablePropertyComboBoxCommonCountry<TProperty, TKey>(PropertyInfo propInfo, BindingDictionary<TKey, TProperty> items, bool hasEmptyItemAt0 = true) where TKey : notnull where TProperty : notnull
@@ -201,7 +202,8 @@ public static class ControlFactory
          Margin = new(3, 1, 3, 3),
          Dock = DockStyle.Fill,
          AutoCompleteSource = AutoCompleteSource.ListItems,
-         AutoCompleteMode = AutoCompleteMode.SuggestAppend
+         AutoCompleteMode = AutoCompleteMode.SuggestAppend,
+         ContextMenuStrip = new(),
       };
    }   
    public static BindablePropertyComboBox<HistoryCountry, TProperty, TKey> GetBindablePropertyComboBoxHistoryCountry<TProperty, TKey>(PropertyInfo propInfo,
@@ -214,7 +216,8 @@ public static class ControlFactory
          Margin = new(3, 1, 3, 3),
          Dock = DockStyle.Fill,
          AutoCompleteSource = AutoCompleteSource.ListItems,
-         AutoCompleteMode = AutoCompleteMode.SuggestAppend
+         AutoCompleteMode = AutoCompleteMode.SuggestAppend,
+         ContextMenuStrip = new(),
       };
       if (margin == DefaultMarginType.Slim)
          box.Margin = new(1);
@@ -233,7 +236,8 @@ public static class ControlFactory
             Margin = new(3, 1, 3, 3),
             Dock = DockStyle.Fill,
             AutoCompleteSource = AutoCompleteSource.ListItems,
-            AutoCompleteMode = AutoCompleteMode.SuggestAppend
+            AutoCompleteMode = AutoCompleteMode.SuggestAppend,
+            ContextMenuStrip = new(),
          };
       if (margin == DefaultMarginType.Slim)
          box.Margin = new(1);
@@ -253,7 +257,8 @@ public static class ControlFactory
             Margin = new(3, 1, 3, 3),
             Dock = DockStyle.Fill,
             AutoCompleteSource = AutoCompleteSource.ListItems,
-            AutoCompleteMode = AutoCompleteMode.SuggestAppend
+            AutoCompleteMode = AutoCompleteMode.SuggestAppend,
+            ContextMenuStrip = new(),
          };
       if (margin == DefaultMarginType.Slim)
          box.Margin = new(1);
@@ -384,6 +389,7 @@ public static class ControlFactory
          Margin = new(3, 1, 3, 3),
          Dock = DockStyle.Fill,
          DefaultValue = defaultValue,
+         ContextMenuStrip = new(),
       };
    }
 
@@ -394,6 +400,7 @@ public static class ControlFactory
          Margin = new(3, 1, 3, 3),
          Dock = DockStyle.Fill,
          DefaultValue = defaultValue,
+         ContextMenuStrip = new(),
       };
    }
    
@@ -402,7 +409,8 @@ public static class ControlFactory
       return new(propertyInfo, ref LoadGuiEvents.ProvLoadAction, () => Selection.GetSelectedProvinces)
       {
          Margin = new(3, 1, 3, 3),
-         Dock = DockStyle.Fill
+         Dock = DockStyle.Fill,
+         ContextMenuStrip = new(),
       };
    }
 
@@ -411,7 +419,8 @@ public static class ControlFactory
       return new(propertyInfo, ref LoadGuiEvents.ProvLoadAction, () => Selection.GetSelectedProvinces)
       {
          Margin = new(3, 1, 3, 3),
-         Dock = DockStyle.Fill
+         Dock = DockStyle.Fill,
+         ContextMenuStrip = new(),
       };
    }
    public static PropertyTextBox<Country> GetPropertyTextBoxCountry(PropertyInfo? propertyInfo, DefaultMarginType margin = DefaultMarginType.Default)
@@ -419,7 +428,8 @@ public static class ControlFactory
       PropertyTextBox<Country> box = new(propertyInfo, ref LoadGuiEvents.CountryLoadAction, () => [Selection.SelectedCountry])
       {
          Margin = new(3, 1, 3, 3),
-         Dock = DockStyle.Fill
+         Dock = DockStyle.Fill,
+         ContextMenuStrip = new(),
       };
       if (margin == DefaultMarginType.Slim)
          box.Margin = new(1);

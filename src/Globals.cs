@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Reflection;
 using System.Security.Policy;
 using Editor.Controls;
 using Editor.DataClasses.DataStructures;
@@ -112,6 +113,10 @@ public static class Globals
    // Logs
    public static readonly Log LoadingLog = new(Settings.Saving.LogLocation, "Loading");
    public static readonly Log ErrorLog = new(Settings.Saving.LogLocation, "Error");
+
+   // Clipboard
+   public static object? ClipboardValue = null;
+   public static PropertyInfo? ClipboardPropertyInfo = null;
 
    // Contains the current state of the application
    public static State State = State.Loading;

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using Editor.DataClasses.DataStructures;
 using Editor.DataClasses.Saveables;
@@ -22,6 +23,15 @@ namespace Editor.Controls.PROPERTY
          GetSaveables = getSaveables;
          PropertyInfo = propertyInfo;
          loadHandle += ((IPropertyControl<TSaveable, TProperty>)this).LoadToGui;
+
+         MouseDown += (sender, e) =>
+         {
+            if (CopyPasteHandler.OnMouseDown(sender, e, ModifierKeys))
+            {
+               if (AttributeHelper.GetSharedAttribute(PropertyInfo, out TProperty value, GetSaveables.Invoke()))
+                  SetValue(value);
+            }
+         };
       }
 
       public virtual IErrorHandle GetFromGui(out TProperty value)

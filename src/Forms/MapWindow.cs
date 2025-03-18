@@ -213,6 +213,15 @@ namespace Editor.Forms
          }
       }
 
+      public IEnumerable<Saveable> GetCurrentSaveables()
+      {
+         if (DataTabPanel.SelectedIndex == 0)
+            return Selection.GetSelectedProvinces;
+         if (DataTabPanel.SelectedIndex == 1)
+            return [Selection.SelectedCountry];
+         return [];
+      }
+
       private void UpdateProvinceTab()
       {
          if (DataTabPanel.SelectedIndex != 0)

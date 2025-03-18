@@ -49,7 +49,5 @@ namespace Editor.Controls.PROPERTY
       {
          Checked = value;
       }
-
-
    }
 }
