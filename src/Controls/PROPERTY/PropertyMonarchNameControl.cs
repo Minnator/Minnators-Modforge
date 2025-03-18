@@ -76,6 +76,12 @@ namespace Editor.Controls.PROPERTY
          SetValue([]);
       }
 
+      public IErrorHandle GetFromGui(out TProperty value)
+      {
+         value = [];
+         return ErrorHandle.Success;
+      }
+
       public void SetValue(TProperty value)
       {
          SuspendLayout();

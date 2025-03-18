@@ -28,4 +28,21 @@ public static class CopyPasteHandler
       }
       return false;
    }
+   public static bool OnMouseDownChild(object? sender, MouseEventArgs e, Keys modifierKeys)
+   {
+      if (sender is not Control control || control.Parent is not ICopyable copyPasteControl)
+         return false;
+
+      if (e.Button == MouseButtons.Right && modifierKeys.HasFlag(Keys.Shift))
+      {
+         copyPasteControl.SetClipboard();
+         return false;
+      }
+      if (e.Button == MouseButtons.Left && modifierKeys.HasFlag(Keys.Shift))
+      {
+         copyPasteControl.Paste();
+         return true;
+      }
+      return false;
+   }
 }

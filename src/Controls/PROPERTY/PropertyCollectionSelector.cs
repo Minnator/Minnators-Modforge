@@ -8,7 +8,7 @@ using Editor.Saving;
 
 namespace Editor.Controls.PROPERTY
 {
-   public sealed class PropertyCollectionSelector<TSaveable, TProperty, TPropertyItem> : Control, IPropertyControlList<TSaveable, TProperty, TPropertyItem>
+   public sealed class PropertyCollectionSelector<TSaveable, TProperty, TPropertyItem> : TableLayoutPanel, IPropertyControlList<TSaveable, TProperty, TPropertyItem>
       where TSaveable : Saveable where TProperty : List<TPropertyItem>, new() where TPropertyItem : notnull
    {
       public PropertyInfo PropertyInfo { get; init; }
@@ -19,7 +19,6 @@ namespace Editor.Controls.PROPERTY
       private Bitmap? _image = null;
 
       // Visual part
-      private TableLayoutPanel _tableLayoutPanel;
       private Label _propertyNameLabel;
       private Button _modifyButton;
       private ListBox _previewList;
@@ -59,10 +58,19 @@ namespace Editor.Controls.PROPERTY
                _collectionSelectorBase.SetSelectedItems(AttributeHelper.GetDisplayMember(items, displayMember));
 
          Text = "Modify";
-
+         
          SetImageIcon();
 
          InitializeGui();
+
+         _previewList.MouseDown += (sender, e) =>
+         {
+            if (CopyPasteHandler.OnMouseDownChild(sender, e, ModifierKeys))
+            {
+               if (AttributeHelper.GetSharedAttribute(PropertyInfo, out TProperty value, getSaveables.Invoke()))
+                  SetValue(value);
+            }
+         };
       }
 
       private void ListBoxOnMouseMove(object? sender, MouseEventArgs mouseEventArgs)
@@ -104,24 +112,17 @@ namespace Editor.Controls.PROPERTY
             ShowAlways = true
          };
 
-         _tableLayoutPanel = new()
-         {
-            Dock = DockStyle.Fill,
-            Margin = Padding.Empty,
-            RowCount = 3,
-            ColumnCount = 2,
-            RowStyles =
-            {
-               new (SizeType.Absolute, 40),
-               new (SizeType.Percent, 100),
-               new (SizeType.Absolute, 27),
-            },
-            ColumnStyles =
-            {
-               new (SizeType.Percent, 50),
-               new (SizeType.Percent, 50),
-            },
-         };
+         Dock = DockStyle.Fill;
+         Margin = Padding.Empty;
+         RowCount = 3;
+         ColumnCount = 2;
+
+         RowStyles.Add(new(SizeType.Absolute, 40));
+         RowStyles.Add(new(SizeType.Percent, 100));
+         RowStyles.Add(new(SizeType.Absolute, 27));
+
+         ColumnStyles.Add(new(SizeType.Percent, 50));
+         ColumnStyles.Add(new(SizeType.Percent, 50));
 
          _propertyNameLabel = new()
          {
@@ -164,13 +165,12 @@ namespace Editor.Controls.PROPERTY
                args.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(128, Color.White)), _iconBox.ClientRectangle);
          };
 
-         Controls.Add(_tableLayoutPanel);
 
-         _tableLayoutPanel.Controls.Add(_propertyNameLabel, 0, 0);
-         _tableLayoutPanel.Controls.Add(_modifyButton, 0, 2);
-         _tableLayoutPanel.Controls.Add(_iconBox, 0, 1);
-         _tableLayoutPanel.Controls.Add(_previewList, 1, 0);
-         _tableLayoutPanel.SetRowSpan(_previewList, 3);
+         Controls.Add(_propertyNameLabel, 0, 0);
+         Controls.Add(_modifyButton, 0, 2);
+         Controls.Add(_iconBox, 0, 1);
+         Controls.Add(_previewList, 1, 0);
+         SetRowSpan(_previewList, 3);
 
          _propertyNameLabel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
          _modifyButton.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;

@@ -50,8 +50,9 @@ namespace Editor.Controls.PROPERTY
       }
    }
 
-   public interface IPropertyControlList<T, Q, R> : IPropertyControl where T : Saveable where Q : ICollection<R>, new() where R : notnull
+   public interface IPropertyControlList<T, Q, R> : IPropertyControl, ICopyable where T : Saveable where Q : ICollection<R>, new() where R : notnull
    {
+      public IErrorHandle GetFromGui(out Q value);
       public void LoadToGui(List<T> list, PropertyInfo propInfo, bool force)
       {
          if (force || propInfo.Equals(PropertyInfo))
@@ -61,6 +62,29 @@ namespace Editor.Controls.PROPERTY
                SetDefault();
       }
       protected void SetValue(Q value);
+
+      void ICopyable.SetClipboard()
+      {
+         Globals.ClipboardPropertyInfo = PropertyInfo;
+         GetFromGui(out var value);
+         Globals.ClipboardValue = value;
+      }
+
+      void ICopyable.Paste()
+      {
+         if (Globals.ClipboardPropertyInfo == null || Globals.ClipboardValue == null)
+            return;
+
+         // depending on the tab we are in we either target the selected country or the selected provinces
+
+         var targets = Globals.MapWindow.GetCurrentSaveables().ToList();
+
+         // check if the saveable has the given property
+         if (PropertyInfo.PropertyType != Globals.ClipboardPropertyInfo.PropertyType)
+            return;
+
+         Saveable.SetFieldMultiple(targets, Globals.ClipboardValue, PropertyInfo);
+      }
    }
 
 }

@@ -80,7 +80,7 @@ namespace Editor.Controls.PROPERTY
       public void SetFromGui()
       {
          _timer.Stop();
-         if (Globals.State == State.Running && GetFromGui(out var value).Log())
+         if (Globals.State == State.Running && GetFromGui(out List<string> value).Log())
          {
             if (AttributeHelper.ScrambledListsEquals(_startList, value))
                return;
@@ -104,6 +104,13 @@ namespace Editor.Controls.PROPERTY
       {
          _timer.Stop();
          _textBox.Text = string.Empty;
+      }
+
+      public IErrorHandle GetFromGui(out TProperty value)
+      {
+         var error = GetFromGui(out List<string> list);
+         value = (TProperty)list;
+         return error;
       }
 
       public void SetValue(TProperty value)

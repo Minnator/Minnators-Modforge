@@ -57,6 +57,16 @@ namespace Editor.Controls.PROPERTY
          Enter += OnFocusGot;
          _timer.Interval = 2500;
          _timer.Tick += (_, _) => SetFromGui();
+
+
+         MouseDown += (sender, e) =>
+         {
+            if (CopyPasteHandler.OnMouseDown(sender, e, ModifierKeys))
+            {
+               if (AttributeHelper.GetSharedAttribute(PropertyInfo, out TProperty value, GetSaveables.Invoke()))
+                  SetValue(value);
+            }
+         };
       }
 
       public void SetFromGui()
