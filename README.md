@@ -20,19 +20,24 @@ Here you can find Alpha-releases, more information and help with issues, or repo
 - File formatting and beautyfying
 - Timeline (Any date can bee viewed with the map live updating)
 - Automatic Tradenode topological sorting and cycle detection
-- Full history capabilities to undo and redo any action taken
+- Full history capabilities
+   - Undo, Redo
+   - Tree base history 
+   - Context sensitive history compaction
 - Customizable tooltip for the map
-- Image exporter
-- Map mode exporter
-- Localisation modification for Provinces, Coutnries and EventModifiers
+- Image exporter with various settings for:
+   - Mapmodes
+   - Missions
+- Localisation modification for all modifiable objects
+- Copy, Paste functionality in UI elements
+- Date view with heatmap of history-entries
+- Tradegoods editor
 
 ## What is to come?
-- Lexing, parsing, interpretation capabilites for the pdx modding language
+- Lexing, parsing, interpretation capabilities for the pdx modding language
 - Update the map to use shaders
-- allow creating gif from the map with animated proince color changes when going through the history
-- Command Batching (Context sensitive undo and redo stepsizes)
+- allow creating gif from the map with animated province color changes when going through the history
 - Add a way to create custom map modes
-- Add a tradegoods creation and editing menu
 - Ideas creation via drag and drop
 - Province Creation and editing (editing of provinces.bmp)
 - Filessyncing (Reload files while the program is running)
@@ -46,17 +51,22 @@ Here you can find Alpha-releases, more information and help with issues, or repo
 - Select the the vanilla base game folder
 - Press load and let the program load
 
-## Interacting with the map
-- LMB down ==> Select only the province below the cursor (Deselects all other selected Provinces)
-- STRG + LMB down ==> Add clicked provinces to selection or remove if already added
-- SHIFT + LMB down ==> Rectangle Selection
-- ALT + LMB down ==> Lasso Selection
-- ScrollWheel down ==> Paning
-- MouseWheel up / down ==> Zoom
-- STRG + RMB down ==> MarcoSelection interface
-- STRG + ALT ==> IProvinceCollection Selection Preview
-- ALT + STRG + LMB Click ==> IProvinceCollection add or remove from selection
-- ALT + SHIFT + LMB ==> Magic Wand Selection
+## Useful shortcuts
+| Input                             | Action                                      |
+|-----------------------------------|---------------------------------------------|
+| LMB down                          | Select only the province below the cursor (Deselects all other selected Provinces) |
+| STRG + LMB down                   | Add clicked provinces to selection or remove if already added |
+| SHIFT + LMB down                  | Rectangle Selection                         |
+| ALT + LMB down                    | Lasso Selection                             |
+| ScrollWheel down                  | Panning                                     |
+| MouseWheel up / down              | Zoom                                        |
+| STRG + RMB down                   | MarcoSelection interface                    |
+| STRG + ALT                        | IProvinceCollection Selection Preview       |
+| ALT + STRG + LMB Click            | IProvinceCollection add or remove from selection |
+| ALT + SHIFT + LMB                 | Magic Wand Selection                        |
+| SHIFT + RMB down on UI elements   | Copies the content                          |
+| SHIFT + LMB down on UI elements   | Pastes the content                          |
+
 
 ## MapModes
 - Can be selected and set via the DropDown menu in the TopMenuBar
