@@ -46,23 +46,42 @@ namespace Editor.DataClasses.ConsoleCommands
          }, ClearanceLevel.Debug));
 
          // To Test dates
-         var dateUsage = "Usage: date <date>";
+         var dateUsage = "Usage: date <date> [--m, --d, --y]";
          _handler.RegisterCommand(new("date", dateUsage, args =>
          {
-            if (args.Length == 0)
-               return [dateUsage];
-
-            if (int.TryParse(args[0], out var stamp))
+            if (args.Length == 1)
             {
-               var dateFStamp = new Date(stamp);
-               return [$"Date: {dateFStamp}"];
+               if (int.TryParse(args[0], out var stamp))
+                  return [$"In: {stamp}", $"Date: {new Date(stamp)}"];
+               if (EnhancedDate.TryParse(args[0], out var date).Ignore())
+                  return [$"In: {args[0]}", $"Date: {date}"];
+               return ["Invalid date format"];
+            }
+            if (args.Length == 3)
+            {
+               EnhancedDate date;
+               if (EnhancedDate.TryParse(args[0], out date).Ignore())
+               {
+                  if (!int.TryParse(args[2], out var amount))
+                     return [$"Invalid amount for {args[1]}"];
+
+                  switch (args[1])
+                  {
+                     case "--d":
+                        date.AddDays(amount);
+                        break;
+                     case "--m":
+                        date.AddMonths(amount);
+                        break;
+                     case "--y":
+                        date.AddYears(amount);
+                        break;
+                  }
+                  return [$"Date: {date}"];
+               }
             }
 
-            if (DateTime.TryParse(args[0], out var date))
-            {
-               return [$"Date: {date}"];
-            }
-            return ["Invalid date format"];
+            return [dateUsage];
          }, ClearanceLevel.Debug));
 
          // achievement debug command 

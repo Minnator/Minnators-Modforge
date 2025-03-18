@@ -26,7 +26,7 @@ namespace Editor.DataClasses.Misc
       [Browsable(false)]
       public static EnhancedDate MaxValue { get; } = new(short.MaxValue, 12, 31);
       [Browsable(false)]
-      public static EnhancedDate Empty { get; } = new(0, 0, 0);
+      public static EnhancedDate Empty { get; } = new(1, 1, 1);
 
       public string GetNameOfMonth(int month)
       {
@@ -67,7 +67,7 @@ namespace Editor.DataClasses.Misc
 
       public EnhancedDate(int year, int month, int day)
       {
-         TimeStamp = year * 365 + StartDateOfMonth[month - 1] + day - 1;
+         SetDate(year, month, day);
       }
 
       public EnhancedDate(int timeStamp)
@@ -79,22 +79,65 @@ namespace Editor.DataClasses.Misc
       {
          var (year, remainder) = Math.DivRem(_timeStamp, 365);
          var month = 12;
+         var day = 0;
          for (var i = 1; i < StartDateOfMonth.Length; i++)
          {
             var temp = remainder - StartDateOfMonth[i];
             if (temp < 0){
                month = i;
+               
                break;
             }
-            remainder = temp;
+            day = temp;
          }
-         return (year, month, remainder);
+         return (year, month, day + 1);
       }
 
       public void AddDays(int days)
       {
          TimeStamp += days;
       }
+
+      public void AddMonths(int months)
+      {
+         var (year, month, day) = GetGregorian();
+         var newMonth = month + months;
+
+
+         // 12 + 13 25 - 12 13 - 12 1
+         while (newMonth > 12)
+         {
+            newMonth -= 12;
+            year++;
+         }
+
+         while (newMonth < 1)
+         {
+            newMonth += 12;
+            year--;
+         }
+
+         SetDate(year, newMonth, day);
+      }
+
+      public void AddYears(int years)
+      {
+         TimeStamp += years * 365;
+      }
+
+      public void SetDate(EnhancedDate EnhancedDate) => TimeStamp = EnhancedDate.TimeStamp;
+      public void SetDate(int year, int month, int day)
+      {
+         Debug.Assert(month >= 1 && month <= 12, $"The month {month} is not a valid month");
+         Debug.Assert(day >= 1 && day <= DaysInMonth(month), $"The day {day} is not a valid day in month {month}");
+
+
+         TimeStamp = year * 365 + StartDateOfMonth[month - 1] + day - 1;
+      }
+
+      public EnhancedDate Copy() => new(Year, Month, Day);
+
+      public int DaysBetween(EnhancedDate EnhancedDate) => EnhancedDate.TimeStamp - TimeStamp;
 
       public static IErrorHandle TryParse(string str, out EnhancedDate EnhancedDate)
       {
@@ -207,13 +250,13 @@ namespace Editor.DataClasses.Misc
 
       public static EnhancedDate operator ++(EnhancedDate EnhancedDate)
       {
-         AddDays(1);
+         EnhancedDate.AddDays(1);
          return EnhancedDate;
       }
 
       public static EnhancedDate operator --(EnhancedDate EnhancedDate)
       {
-         AddDays(-1);
+         EnhancedDate.AddDays(-1);
          return EnhancedDate;
       }
 
@@ -249,15 +292,6 @@ namespace Editor.DataClasses.Misc
          }
       }
 
-      public static int DaysInMonth(int month)
-      {
-         return month switch
-         {
-            2 => 28,
-            4 or 6 or 9 or 11 => 30,
-            _ => 31
-         };
-      }
 
       public EventHandler<Date> OnDateChanged = delegate { };
 
