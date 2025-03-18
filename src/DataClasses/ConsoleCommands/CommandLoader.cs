@@ -3,6 +3,7 @@ using System.Reflection.Metadata;
 using Windows.Media.Devices;
 using Editor.DataClasses.Achievements;
 using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.Misc;
 using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
 using Editor.Forms.PopUps;
@@ -41,13 +42,27 @@ namespace Editor.DataClasses.ConsoleCommands
             if (achievement is null)
                return ["Achievement not found"];
             AchievementPopup.Show(achievement);
-            AchievementPopup.Show(achievement);
-            AchievementPopup.Show(achievement);
-            AchievementPopup.Show(achievement);
-            AchievementPopup.Show(achievement);
-            AchievementPopup.Show(achievement);
-            AchievementPopup.Show(achievement);
             return [$"Showing achievement popup for {achievement.Name}"];
+         }, ClearanceLevel.Debug));
+
+         // To Test dates
+         var dateUsage = "Usage: date <date>";
+         _handler.RegisterCommand(new("date", dateUsage, args =>
+         {
+            if (args.Length == 0)
+               return [dateUsage];
+
+            if (int.TryParse(args[0], out var stamp))
+            {
+               var dateFStamp = new Date(stamp);
+               return [$"Date: {dateFStamp}"];
+            }
+
+            if (DateTime.TryParse(args[0], out var date))
+            {
+               return [$"Date: {date}"];
+            }
+            return ["Invalid date format"];
          }, ClearanceLevel.Debug));
 
          // achievement debug command 
