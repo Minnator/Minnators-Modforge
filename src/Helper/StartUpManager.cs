@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Threading;
 using Editor.Controls;
 using Editor.DataClasses.Achievements;
 using Editor.DataClasses.Commands;
@@ -14,17 +15,17 @@ namespace Editor.Helper
 {
    public static class StartUpManager
    {
-      public static event EventHandler OnStartUpFinished = delegate {};
+      public static event EventHandler OnStartUpFinished = delegate { };
 
-      internal static Timer RuntimeUpdateTimer = new(){Interval = 60000 };
+      internal static Timer RuntimeUpdateTimer = new() { Interval = 60000 };
       internal static readonly Stopwatch Sw;
       private static LoadingScreen ls;
-      
+      static ManualResetEvent LoadingDone = new(false);
       private static bool _doEvents = true;
 
       static StartUpManager()
       {
-         Sw = new ();
+         Sw = new();
          RuntimeUpdateTimer.Tick += (sender, args) =>
          {
             Globals.Settings.Misc.RunTime += Sw.Elapsed;
@@ -47,53 +48,54 @@ namespace Editor.Helper
          Globals.Random = new(Globals.Settings.Generator.RandomSeed);
 
          Eu4Cursors.SetEu4CursorIfEnabled(Eu4CursorTypes.Loading, Cursors.AppStarting, ls);
-         ls = new();
-         ls.Show();
 
-         ls.LoadingComplete += (sender, args) =>
+         var lsThread = new Thread(() =>
          {
-            _doEvents = false;
-            // Initialize everything AFTER loading completes
-            
-            Globals.MapWindow.Initialize();
+            ls = new();
 
-            HistoryManager.UndoDepthChanged += Globals.MapWindow.UpdateUndoDepth;
-            HistoryManager.RedoDepthChanged += Globals.MapWindow.UpdateRedoDepth;
+            ls.LoadingComplete += (sender, args) => { LoadingDone.Set(); };
 
-            Globals.LoadingLog.Close();
-            ResourceUsageHelper.Initialize(Globals.MapWindow);
-            HistoryManager.UpdateToolStrip();
-            Globals.MapWindow.SetSelectedProvinceSum(0);
+            Application.Run(ls);
+         });
+         lsThread.SetApartmentState(ApartmentState.STA); // Required for UI threads
+         lsThread.Start();
+         LoadingDone.WaitOne();
 
-            ParseStartEndDate();
-            Globals.MapWindow.DateControl.Date = Globals.StartDate;
-            CountryLoading.AssignProvinces();
-            Globals.MapWindow.UpdateErrorCounts(LogManager.TotalErrorCount, LogManager.TotalLogCount);
+         // Initialize everything AFTER loading completes
+         //Globals.MapWindow.Opacity = 0;
+         Globals.MapWindow.Visible = false;
+         Globals.MapWindow.Initialize();
 
-            ls.Invoke(() => ls.Close()); // Close safely on UI thread
-            
-            Globals.MapWindow.Show();
-            Globals.MapWindow.Activate();
-            
-            FixComboBoxSelection(Globals.MapWindow);
-               
+         HistoryManager.UndoDepthChanged += Globals.MapWindow.UpdateUndoDepth;
+         HistoryManager.RedoDepthChanged += Globals.MapWindow.UpdateRedoDepth;
 
-            Globals.State = State.Running;
-            MapModeManager.SetCurrentMapMode(MapModeType.Country);
-            Globals.ZoomControl.FocusOn(new(3100, 600), 1f);
+         Globals.LoadingLog.Close();
+         ResourceUsageHelper.Initialize(Globals.MapWindow);
+         HistoryManager.UpdateToolStrip();
+         Globals.MapWindow.SetSelectedProvinceSum(0);
 
-            RaiseOnStartUpFinished();
-            Eu4Cursors.SetEu4CursorIfEnabled(Eu4CursorTypes.Normal, Cursors.Default, Globals.MapWindow);
-         };
+         ParseStartEndDate();
+         Globals.MapWindow.DateControl.Date = Globals.StartDate;
+         CountryLoading.AssignProvinces();
+         Globals.MapWindow.UpdateErrorCounts(LogManager.TotalErrorCount, LogManager.TotalLogCount);
 
 
-         // Keep UI responsive while waiting for LoadingScreen
-         while (ls.Visible)
-         {
-            if (_doEvents)
-               Application.DoEvents();
-            Thread.Sleep(10); // Avoid 100% CPU usage
-         }
+         Globals.MapWindow.Show();
+         ls.Invoke(() => ls.Close());
+         lsThread.Join();
+
+         Globals.MapWindow.Activate();
+
+         FixComboBoxSelection(Globals.MapWindow);
+
+
+         Globals.State = State.Running;
+         MapModeManager.SetCurrentMapMode(MapModeType.Country);
+         Globals.ZoomControl.FocusOn(new(3100, 600), 1f);
+
+         RaiseOnStartUpFinished();
+         Eu4Cursors.SetEu4CursorIfEnabled(Eu4CursorTypes.Normal, Cursors.Default, Globals.MapWindow);
+
       }
 
       private static void FixComboBoxSelection(Control parent)
@@ -122,7 +124,7 @@ namespace Editor.Helper
 
       private static void ParseStartEndDate()
       {
-         if (!Date.TryParse(Globals.Defines["NDefines.NGame.START_DATE"].GetValueAsText.TrimQuotes(), out Globals.StartDate).Log()) 
+         if (!Date.TryParse(Globals.Defines["NDefines.NGame.START_DATE"].GetValueAsText.TrimQuotes(), out Globals.StartDate).Log())
             Globals.StartDate = new(1444, 11, 11);
          if (!Date.TryParse(Globals.Defines["NDefines.NGame.END_DATE"].GetValueAsText.TrimQuotes(), out Globals.EndDate).Log())
             Globals.EndDate = new(1821, 1, 1);
@@ -150,4 +152,14 @@ namespace Editor.Helper
          OnStartUpFinished?.Invoke(null, EventArgs.Empty);
       }
    }
+
+   public static class InitializeGui
+   {
+      public static void Load()
+      {
+
+      }
+   }
+
+
 }
