@@ -241,7 +241,7 @@ namespace Editor.Saving
       public static void AddValue<T>(int tabs, Value<T> value, string name, ref StringBuilder sb) where T : notnull
       {
          AddTabs(tabs, ref sb);
-         sb.AppendLine($"{name} = {Converter.GeneralToString(value)}");
+         sb.AppendLine($"{name} = {Converter.GeneralToString(value.Val)}");
       }
 
       public static void AddValueIfNot<T> (int tabs, Value<T> value, T notValue, string name, ref StringBuilder sb) where T : notnull

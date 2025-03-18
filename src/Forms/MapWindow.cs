@@ -1178,7 +1178,8 @@ namespace Editor.Forms
          _acceptedCultures.SetDefault();
 
          // Government
-         _governmentTypeBox.SelectedIndex = 0;
+         if (_governmentTypeBox.Items.Count > 0)
+            _governmentTypeBox.SelectedIndex = 0;
          _governmentRankBox.SetDefault();
          _governmentReforms.SetDefault();
 

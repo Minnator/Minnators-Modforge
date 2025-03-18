@@ -1,9 +1,10 @@
 ﻿using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
+using Editor.Helper;
 
 namespace Editor.DataClasses.GameDataClasses;
 
-public class Culture(string name)
+public class Culture(string name) : IStringify
 {
    public List<KeyValuePair<string, string>> CountryModifiers = [];
    public List<KeyValuePair<string, string>> ProvinceModifiers = [];
@@ -61,6 +62,8 @@ public class Culture(string name)
    {
       return Name;
    }
+
+   public string Stringify() => Name;
 }
 
 public class CultureGroup(string name)

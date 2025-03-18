@@ -1,9 +1,10 @@
 ﻿using System.Runtime.CompilerServices;
 using Editor.ErrorHandling;
+using Editor.Helper;
 
 namespace Editor.DataClasses.GameDataClasses;
 
-public readonly struct Tag : IEquatable<Tag>, IComparable
+public readonly struct Tag : IEquatable<Tag>, IComparable, IStringify
 {
    public Tag(string tagValue)
    {
@@ -17,6 +18,8 @@ public readonly struct Tag : IEquatable<Tag>, IComparable
    {
       return TagValue;
    }
+
+   public string Stringify() => TagValue;
 
    public int CompareTo(object? obj)
    {

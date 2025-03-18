@@ -11,7 +11,11 @@ namespace Editor.Loading.Enhanced.PCFL.Implementation
       internal Value<T> _value = new(defaultValue); // Default value and type of T
       public virtual bool Parse(LineKvp<string, string> command, PathObj po, ParsingContext context) => GeneralFileParser.ParseSingleTriggerVal(ref _value, command, po, context);
       public abstract void Activate(ITarget target);
-      public virtual void GetTokenString(int tabs, ref StringBuilder sb) => SavingUtil.AddValue(tabs, _value, GetTokenName(), ref sb);
+      public virtual void GetTokenString(int tabs, ref StringBuilder sb)
+      {
+         SavingUtil.AddValue(tabs, _value, GetTokenName(), ref sb);
+         sb.Replace('\n', ' ');
+      }
 
       public abstract string GetTokenName();
       public abstract string GetTokenDescription();

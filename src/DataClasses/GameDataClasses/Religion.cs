@@ -1,4 +1,5 @@
 ﻿using Editor.ErrorHandling;
+using Editor.Helper;
 
 namespace Editor.DataClasses.GameDataClasses
 {
@@ -8,7 +9,7 @@ namespace Editor.DataClasses.GameDataClasses
       public List<Religion> Religions { get; set; } = [];
    }
 
-   public class Religion(string name)
+   public class Religion(string name) : IStringify
    {
       public string Name { get; set; } = name;
       public Color Color { get; set; } = Color.Empty;
@@ -22,6 +23,8 @@ namespace Editor.DataClasses.GameDataClasses
       {
          return Name;
       }
+
+      public string Stringify() => Name;
 
       public static IErrorHandle GeneralParse(string? str, out object result)
       {

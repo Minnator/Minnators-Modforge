@@ -476,7 +476,7 @@ public class HistoryCountry : Saveable, IGetSetProperty, IHistoryProvider<Countr
    }
 }
 
-public class CountryFilePath : Saveable
+public class CountryFilePath : Saveable, IStringify
 {
    public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -556,6 +556,8 @@ public class CountryFilePath : Saveable
    {
       return $"{_country.Tag}: [{System.IO.Path.Combine(_filePathArr)}]";
    }
+
+   public string Stringify() => _country.Tag;
 }
 
 public class Country : ProvinceCollection<Province>, ITitleAdjProvider, ITarget

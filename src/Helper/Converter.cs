@@ -1,10 +1,12 @@
-﻿using System.Diagnostics;
+﻿using System.Collections;
+using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
 using Editor.Loading.Enhanced;
+using Editor.Loading.Enhanced.PCFL.Implementation;
 using Editor.Saving;
 
 namespace Editor.Helper
@@ -12,7 +14,6 @@ namespace Editor.Helper
    public interface IStringify
    {
       public string Stringify();
-      public string Stringify(int tabs, ref StringBuilder sb);
    }
 
    public static class Converter
@@ -94,7 +95,12 @@ namespace Editor.Helper
                return b ? "yes" : "no";
          }
 
-         Debug.Assert(value is int || value is string, "value is not of type int or string!");
+         if (value is Country value1)
+         {
+            return value1.Tag;
+         }
+
+         Debug.Assert(value is int || value is string, $"value is not of type int or string but {typeof(T)}!");
          return value.ToString()!;
       }
 
