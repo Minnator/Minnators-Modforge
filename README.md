@@ -13,7 +13,11 @@ Here you can find Alpha-releases, more information and help with issues, or repo
 - Complete Province editing
 - Country Editing
 - Province Collection editing (Areas, Regions, SuperRegions, TradeNodes, TradeCompanies, ColonialRegions, Countries...)
-- (Statistics)
+- Console:
+   - run files as in eu4
+   - standard capabilities
+   - debugging options
+   - statistics
 - Modifiers management and creation
 - Defines editor
 - In depth error log and navigation down to the faulty character in the files
@@ -66,6 +70,11 @@ Here you can find Alpha-releases, more information and help with issues, or repo
 | ALT + SHIFT + LMB                 | Magic Wand Selection                        |
 | SHIFT + RMB down on UI elements   | Copies the content                          |
 | SHIFT + LMB down on UI elements   | Pastes the content                          |
+| F1                                | Open console                                |
+| F10                               | Open Error Log                              |
+| F2                                | Graphical options for map                   |
+| CTRL + F                          | Search                                      |
+| CTRL + SHIFT + Z                  | Open history tree                           |
 
 
 ## MapModes
