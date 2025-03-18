@@ -18,7 +18,7 @@ namespace Editor.Forms.Feature
       private bool allowDown = true;
 
       private CalenderState _state = CalenderState.Days;
-      private Date currentDate = Globals.StartDate - Globals.StartDate.Day;
+      private Date currentDate = Globals.StartDate - Globals.StartDate.Day + 1;
 
       private EntryPerDate[] entries;
 
@@ -314,7 +314,7 @@ namespace Editor.Forms.Feature
          }
 
          var lowerBound = BinarySearchCache(currentDate.TimeStamp, 0, entries.Length);
-         var upperBound = BinarySearchCache(currentDate.TimeStamp + 365 * scale, lowerBound, entries.Length);
+         var upperBound = BinarySearchCache(currentDate.TimeStamp + 365 * number_scale, lowerBound, entries.Length);
          var counts = new int[10];
          var minCount = int.MaxValue;
          var maxCount = int.MinValue;

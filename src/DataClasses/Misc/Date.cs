@@ -103,8 +103,6 @@ namespace Editor.DataClasses.Misc
          var (year, month, day) = GetGregorian();
          var newMonth = month + months;
 
-
-         // 12 + 13 25 - 12 13 - 12 1
          while (newMonth > 12)
          {
             newMonth -= 12;
@@ -132,13 +130,11 @@ namespace Editor.DataClasses.Misc
          Debug.Assert(month >= 1 && month <= 12, $"The month {month} is not a valid month");
          Debug.Assert(day >= 1 && day <= DaysInMonth(month), $"The day {day} is not a valid day in month {month}");
 
-
          TimeStamp = year * 365 + StartDateOfMonth[month - 1] + day - 1;
       }
 
       public Date Copy() => new(Year, Month, Day);
       public Date Copy(Date date) => new(date.Year, date.Month, date.Day);
-
       public int DaysBetween(Date date) => date.TimeStamp - TimeStamp;
 
       public static IErrorHandle TryParse(string str, out Date Date)

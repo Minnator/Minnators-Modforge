@@ -676,12 +676,6 @@ namespace Editor.DataClasses.Saveables
          return History.Where(x => x.Date == date).ToList();
       }
 
-      public void GetHistoryEntriesForMonth(int[] daysOfMonth, Date date)
-      {
-         foreach (var entry in History)
-            if (entry.Date.Year == date.Year && entry.Date.Month == date.Month) 
-               daysOfMonth[entry.Date.Day - 1]++;
-      }
 
       #endregion
 
