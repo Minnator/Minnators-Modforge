@@ -79,13 +79,12 @@ namespace Editor.DataClasses.Misc
       {
          var (year, remainder) = Math.DivRem(_timeStamp, 365);
          var month = 12;
-         var day = 0;
+         var day = remainder;
          for (var i = 1; i < StartDateOfMonth.Length; i++)
          {
             var temp = remainder - StartDateOfMonth[i];
             if (temp < 0){
                month = i;
-               
                break;
             }
             day = temp;

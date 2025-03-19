@@ -420,6 +420,7 @@ public static class Globals
 // - [ ] Implement scripted effects
 // - [ ] Fix map mode exporter
 // - [ ] Add history entry adding / removing
+// - [x] Fix Calendar view [ ] There is more to do optionally
 
 // TODO Update Alpha 1.3 SHADERS
 // - [ ] In Depth deleting with pop up to show what objects are related to the one being deleted

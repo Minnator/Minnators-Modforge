@@ -1,4 +1,6 @@
-﻿namespace Editor.Helper;
+﻿using System.Diagnostics;
+
+namespace Editor.Helper;
 
 public class ColorProviderRgb(int seed = 1444)
 {
@@ -29,11 +31,10 @@ public class ColorProviderRgb(int seed = 1444)
       Color.FromArgb(255, 99, 71)     // Coral
    ];
 
-
+   
    public static readonly Color[] MatLabPlasmaColors =
    [
       //Color.FromArgb( (int)(0.05038205347059877 * 255), (int)(0.029801736499741757 * 255), (int)(0.5279751010495176 * 255) ),
-      Color.FromArgb( (int)(0.32784692303604196 * 255), (int)(0.0066313933705768055 * 255), (int)(0.6402853293744383 * 255) ),
       Color.FromArgb( (int)(0.5453608398097519 * 255), (int)(0.03836817688235455 * 255), (int)(0.6472432548304646 * 255) ),
       Color.FromArgb( (int)(0.7246542772727967 * 255), (int)(0.1974236709187686 * 255), (int)(0.5379281037132716 * 255) ),
       Color.FromArgb( (int)(0.8588363515132411 * 255), (int)(0.35929521887338184 * 255), (int)(0.407891799954962 * 255) ),
@@ -179,10 +180,15 @@ public class ColorProviderRgb(int seed = 1444)
 
    #endregion
 
-   public static Color NormalizeColorToScale(int min, int max, int current, Color[] colors)
+   public static Color NormalizeColorToScale(int min, int max, int current, Color[] colors, bool defaultLow = true)
    {
+      Debug.Assert(colors.Length > 1, "colors.Length > 1");
+
       if (min == max)
-         return colors[0];
+         if (defaultLow)
+            return colors[0];
+         else
+            return colors[^1];
 
       // Normalize the current value to a range between 0 and 1
       var normalized = (float)(current - min) / (max - min);

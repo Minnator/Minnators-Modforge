@@ -10,7 +10,7 @@ public class ModifiableStack<T>
       private set => Array.Resize(ref _items, value);
    }
 
-   public int Count { get; private set; }
+   public int Count { get; private set; } = 0;
 
    public bool IsEmpty => Count == 0;
 

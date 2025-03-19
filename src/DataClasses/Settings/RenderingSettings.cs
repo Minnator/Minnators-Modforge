@@ -22,6 +22,7 @@ namespace Editor.DataClasses.Settings
       private MapSettings _mapSettings = new();
       private MapModeSettings _mapMode = new();
       private SelectionSettings _selection = new();
+      private CalendarViewSettings _calendarView = new();
 
 
       [CompareInEquals]
@@ -62,6 +63,27 @@ namespace Editor.DataClasses.Settings
       {
          get => _selection;
          set => SetField(ref _selection, value);
+      }
+
+      [CompareInEquals]
+      [TypeConverter(typeof(CEmptyStringConverter))]
+      public CalendarViewSettings CalendarView
+      {
+         get => _calendarView;
+         set => SetField(ref _calendarView, value);
+      }
+   }
+
+   public class CalendarViewSettings : PropertySettings
+   {
+      private bool _noLimitOnDateRange = false;
+
+      [Description("If the date range will be limited in the 'Calendar View'")]
+      [CompareInEquals]
+      public bool NoLimitOnDateRange
+      {
+         get => _noLimitOnDateRange;
+         set => SetField(ref _noLimitOnDateRange, value);
       }
    }
 

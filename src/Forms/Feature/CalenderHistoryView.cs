@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Windows.Media.PlayTo;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
+using Editor.DataClasses.Saveables;
 using Editor.Helper;
 
 namespace Editor.Forms.Feature
@@ -26,6 +27,12 @@ namespace Editor.Forms.Feature
       private int _max;
       private Color[] _colors;
 
+      private Color _zeroColor = Color.FromArgb((int)(0.32784692303604196 * 255), (int)(0.0066313933705768055 * 255), (int)(0.6402853293744383 * 255));
+
+      private bool noLimitOnDateRange;
+      private Date _lowerLimit;
+      private Date _upperLimit;
+
       public enum CalenderState
       {
          Days,
@@ -46,12 +53,27 @@ namespace Editor.Forms.Feature
          Debug.WriteLine(Globals.Provinces.Sum(x => x.History.Count));
 
          GenerateCache();
-
+         
+         //noLimitOnDateRange = Globals.Settings.Rendering.CalendarView.NoLimitOnDateRange;
+         noLimitOnDateRange = false;
+         if (noLimitOnDateRange && entries!.Length > 0)
+         {
+            _lowerLimit = new (entries[0].TimeStamp);
+            _upperLimit = new(entries[^1].TimeStamp);
+         }
+         else
+         {
+            _lowerLimit = Globals.StartDate;
+            _upperLimit = Globals.EndDate;
+         }
+         
          LoadDays(true);
 
          MouseWheel += OnTitleLabel_MouseWheel;
 
          MinMaxLabel.Paint += MinMaxLabel_Paint;
+
+         
       }
 
       private void MinMaxLabel_Paint(object? sender, PaintEventArgs e)
@@ -129,7 +151,7 @@ namespace Editor.Forms.Feature
          int start;
          if (currentDate.TimeStamp < Globals.StartDate.TimeStamp)
          {
-            allowDown = false;
+            allowDown = currentDate >= _lowerLimit;
             start = Globals.StartDate.Day - 1;
          }
          else
@@ -139,9 +161,10 @@ namespace Editor.Forms.Feature
          }
          var days = Date.DaysInMonth(currentDate.Month);
          int end;
-         if (currentDate.TimeStamp + days - 1 > Globals.EndDate.TimeStamp)
+         var upperLimit = currentDate.TimeStamp + days - 1;
+         if (upperLimit > Globals.EndDate.TimeStamp)
          {
-            allowUp = false;
+            allowUp = upperLimit >= _upperLimit.TimeStamp;
             end = Globals.EndDate.Day;
          }
          else
@@ -153,8 +176,8 @@ namespace Editor.Forms.Feature
          TitleLabel.Text = $"{currentDate.Year} - {currentDate.Month}";
          
 
-         var lowerBound = BinarySearchCache(currentDate.TimeStamp, 0, entries.Length);
-         var upperBound = BinarySearchCache(currentDate.TimeStamp + days, lowerBound, entries.Length);
+         var lowerBound = BinarySearchCache(currentDate.TimeStamp, 0, entries.Length, out _);
+         var upperBound = BinarySearchCache(currentDate.TimeStamp + days, lowerBound, entries.Length, out _);
 
          var counts = new int[days];
          _min = int.MaxValue;
@@ -163,14 +186,15 @@ namespace Editor.Forms.Feature
          for (var j = 0; j < days; j++)
          {
             var value = GetEntriesForRange(currentDate.TimeStamp + j, lowerBound, upperBound);
-            if (_min > value)
+            if (_min > value && value != 0)
                _min = value;
             if (_max < value)
                _max = value;
             counts[j] = value;
-            Debug.WriteLine($"Value {j}: {value}");
          }
 
+         if (_min == int.MaxValue)
+            _min = _max;
          
          
          if (add)
@@ -179,27 +203,26 @@ namespace Editor.Forms.Feature
             CalenderPanel.SuspendLayout();
             CalenderPanel.Controls.Clear();
             CalenderPanel.Controls.AddRange(_dayButtons);
-            CalenderPanel.ResumeLayout();
-
-            MinMaxLabel.Invalidate();
+            CalenderPanel.ResumeLayout();    
          }
+         MinMaxLabel.Invalidate();
          var i = 0;
          for (; i < start; i++)
          {
-            UpdateButton(ColorProviderRgb.NormalizeColorToScale(_min, _max, counts[i], _colors), (Button)_dayButtons[i]);
-            _dayButtons[i].Enabled = false;
+            UpdateButton(GetButtonColor(counts, i), (Button)_dayButtons[i], true);
+            _dayButtons[i].Enabled = noLimitOnDateRange;
             _dayButtons[i].Visible = true;
          }
          for (; i < end; i++)
          {
-            UpdateButton(ColorProviderRgb.NormalizeColorToScale(_min, _max, counts[i], _colors), (Button)_dayButtons[i]);
+            UpdateButton(GetButtonColor(counts, i), (Button)_dayButtons[i]);
             _dayButtons[i].Enabled = true;
             _dayButtons[i].Visible = true;
          }
          for (; i < days; i++)
          {
-            UpdateButton(ColorProviderRgb.NormalizeColorToScale(_min, _max, counts[i], _colors), (Button)_dayButtons[i]);
-            _dayButtons[i].Enabled = false;
+            UpdateButton(GetButtonColor(counts, i), (Button)_dayButtons[i], true);
+            _dayButtons[i].Enabled = noLimitOnDateRange;
             _dayButtons[i].Visible = true;
          }
          for (; i < _dayButtons.Length; i++)
@@ -214,7 +237,7 @@ namespace Editor.Forms.Feature
          int start;
          if (currentDate.Year <= Globals.StartDate.Year)
          {
-            allowDown = false;
+            allowDown = currentDate.Year > _lowerLimit.Year;
             start = Globals.StartDate.Month - 1;
          }
          else
@@ -226,7 +249,7 @@ namespace Editor.Forms.Feature
          int end;
          if (currentDate.Year >= Globals.EndDate.Year)
          {
-            allowUp = false;
+            allowUp = currentDate.Year < _upperLimit.Year;
             end = Globals.EndDate.Month;
          }
          else
@@ -234,8 +257,8 @@ namespace Editor.Forms.Feature
             allowUp = true;
             end = 12;
          }
-         var lowerBound = BinarySearchCache(currentDate.TimeStamp, 0, entries.Length);
-         var upperBound = BinarySearchCache(currentDate.TimeStamp + 365, lowerBound, entries.Length);
+         var lowerBound = BinarySearchCache(currentDate.TimeStamp, 0, entries.Length, out _);
+         var upperBound = BinarySearchCache(currentDate.TimeStamp + 365, lowerBound, entries.Length, out _);
          TitleLabel.Text = $"{currentDate.Year}"; 
 
          var days = currentDate.TimeStamp;
@@ -247,16 +270,18 @@ namespace Editor.Forms.Feature
          _max = int.MinValue;
          for (var j = 0; j < 12; j++)
          {
-            var value = GetEntriesForRange(days, days += Date.DaysInMonth(j), lowerBound, upperBound);
-            if (_min > value)
+            var value = GetEntriesForRange(days, days += Date.DaysInMonth(j+1), lowerBound, upperBound);
+            Debug.WriteLine(new Date(days));
+            if (_min > value && value != 0)
                _min = value;
             if(_max < value)
                _max = value;
             counts[j] = value;
-            Debug.WriteLine($"Value {j}: {value}");
          }
 
-         
+         if (_min == int.MaxValue)
+            _min = _max;
+
 
          if (add)
          {
@@ -265,38 +290,46 @@ namespace Editor.Forms.Feature
             CalenderPanel.Controls.Clear();
             CalenderPanel.Controls.AddRange(_monthButtons);
             CalenderPanel.ResumeLayout();
-
-            MinMaxLabel.Invalidate();
          }
-
+         MinMaxLabel.Invalidate();
          for (; i < start; i++)
          {
-            UpdateButton(ColorProviderRgb.NormalizeColorToScale(_min, _max, counts[i], _colors), (Button)_monthButtons[i]);
-            _monthButtons[i].Enabled = false;
+            UpdateButton(GetButtonColor(counts, i), (Button)_monthButtons[i], true);
+            _monthButtons[i].Enabled = noLimitOnDateRange;
          }
          for (; i < end; i++)
          {
-            UpdateButton(ColorProviderRgb.NormalizeColorToScale(_min, _max, counts[i], _colors), (Button)_monthButtons[i]);
+            UpdateButton(GetButtonColor(counts, i), (Button)_monthButtons[i]);
             _monthButtons[i].Enabled = true;
          }
          for (; i < 12; i++)
          {
-            UpdateButton(ColorProviderRgb.NormalizeColorToScale(_min, _max, counts[i], _colors), (Button)_monthButtons[i]);
-            _monthButtons[i].Enabled = false;
+            UpdateButton(GetButtonColor(counts, i), (Button)_monthButtons[i], true);
+            _monthButtons[i].Enabled = noLimitOnDateRange;
          }
 
       }
 
-      private int BinarySearchCache(int time, int start, int end)
+      private Color GetButtonColor(int[] counts, int i)
+      {
+         if (counts[i] == 0)
+            return _zeroColor;
+         return ColorProviderRgb.NormalizeColorToScale(_min, _max, counts[i], _colors, false);
+      }
+
+      private int BinarySearchCache(int time, int start, int end, out bool exact)
       {
          var fakeObj = new EntryPerDate(-1, time);
          var upperBound = Array.BinarySearch(entries, start, end - start, fakeObj);
          if (upperBound < 0)
          {
+            exact = false;
             upperBound = ~upperBound;
-            if(upperBound >= entries.Length)
+            if (upperBound >= entries.Length)
                upperBound = entries.Length - 1;
          }
+         else
+            exact = true;
          return upperBound;
       }
 
@@ -305,9 +338,10 @@ namespace Editor.Forms.Feature
          Debug.Assert(currentDate is { Day: 1, Month: 1 }, "Month an day must be 1st of january for this to work!");
          int number_scale = scale * 10;
          int start;
-         if (currentDate.Year / number_scale <= Globals.StartDate.Year / number_scale)
+         int limit = currentDate.Year / number_scale;
+         if (limit <= Globals.StartDate.Year / number_scale)
          {
-            allowDown = false;
+            allowDown = limit > _lowerLimit.Year / number_scale;
             start = (Globals.StartDate.Year % number_scale) / scale;
          }
          else
@@ -317,9 +351,9 @@ namespace Editor.Forms.Feature
          }
 
          int end;
-         if (currentDate.Year / number_scale >= Globals.EndDate.Year / number_scale)
+         if (limit >= Globals.EndDate.Year / number_scale)
          {
-            allowUp = false;
+            allowUp = limit < _lowerLimit.Year / number_scale;
             end = (Globals.EndDate.Year % number_scale) / scale + 1;
          }
          else
@@ -330,8 +364,8 @@ namespace Editor.Forms.Feature
 
          TitleLabel.Text = $"{currentDate.Year} - {currentDate.Year + 9 * scale}";
 
-         var lowerBound = BinarySearchCache(currentDate.TimeStamp, 0, entries.Length);
-         var upperBound = BinarySearchCache(currentDate.TimeStamp + 365 * number_scale, lowerBound, entries.Length);
+         var lowerBound = BinarySearchCache(currentDate.TimeStamp, 0, entries.Length, out _);
+         var upperBound = BinarySearchCache(currentDate.TimeStamp + 365 * number_scale, lowerBound, entries.Length, out _);
          var counts = new int[10];
          _min = int.MaxValue;
          _max = int.MinValue;
@@ -340,15 +374,16 @@ namespace Editor.Forms.Feature
          for (var j = 0; j < 10; j++)
          {
             var value = GetEntriesForRange(year, year += 365 * scale, lowerBound, upperBound);
-            if (_min > value)
+            if (_min > value && value != 0)
                _min = value;
             if (_max < value)
                _max = value;
             counts[j] = value;
-            Debug.WriteLine($"Value {j}: {value}");
          }
 
-         
+
+         if (_min == int.MaxValue)
+            _min = _max;
 
          if (add)
          {
@@ -357,25 +392,24 @@ namespace Editor.Forms.Feature
             CalenderPanel.Controls.Clear();
             CalenderPanel.Controls.AddRange(_yearButtons);
             CalenderPanel.ResumeLayout();
-
-            MinMaxLabel.Invalidate();
          }
+         MinMaxLabel.Invalidate();
 
          var i = 0;
          for (; i < start; i++)
          {
-            UpdateButton(ColorProviderRgb.NormalizeColorToScale(_min, _max, counts[i], _colors), $"{currentDate.Year + i * scale}", (Button)_yearButtons[i]);
-            _yearButtons[i].Enabled = false;
+            UpdateButton(GetButtonColor(counts, i), $"{currentDate.Year + i * scale}", (Button)_yearButtons[i], true);
+            _yearButtons[i].Enabled = noLimitOnDateRange;
          }
          for (; i < end; i++)
          {
-            UpdateButton(ColorProviderRgb.NormalizeColorToScale(_min, _max, counts[i], _colors), $"{currentDate.Year + i * scale}", (Button)_yearButtons[i]);
+            UpdateButton(GetButtonColor(counts, i), $"{currentDate.Year + i * scale}", (Button)_yearButtons[i]);
             _yearButtons[i].Enabled = true;
          }
          for (; i < 10; i++)
          {
-            UpdateButton(ColorProviderRgb.NormalizeColorToScale(_min, _max, counts[i], _colors), $"{currentDate.Year + i * scale}", (Button)_yearButtons[i]);
-            _yearButtons[i].Enabled = false;
+            UpdateButton(GetButtonColor(counts, i), $"{currentDate.Year + i * scale}", (Button)_yearButtons[i], true);
+            _yearButtons[i].Enabled = noLimitOnDateRange;
          }
       }
       
@@ -436,18 +470,27 @@ namespace Editor.Forms.Feature
 
       private void OnDaysButton_Click(object? sender, EventArgs e)
       {
-         // TODO load day
+         var date = currentDate.Copy();
+         date.AddDays((int)((Button)sender!).Tag!);
+         var entries = GetEntries(date);
+
+         var contextMenu = ConstructContextMenu(entries);
+
+         var button = (Button)sender;
+         contextMenu.Show(button, button.PointToClient(Cursor.Position));
       }
 
-      private void UpdateButton(Color backColor, string content, Button button)
+      private void UpdateButton(Color backColor, string content, Button button, bool altForeGround = false)
       {
          button.BackColor = backColor;
          button.Text = content;
+         button.ForeColor = altForeGround ? Color.Red : Color.Black;
       }
 
-      private void UpdateButton(Color backColor, Button button)
+      private void UpdateButton(Color backColor, Button button, bool altForeGround = false)
       {
          button.BackColor = backColor;
+         button.ForeColor = altForeGround ? Color.Red : Color.Black;
       }
 
       private void OnMonthsButton_Click(object? sender, EventArgs e)
@@ -508,24 +551,60 @@ namespace Editor.Forms.Feature
          }
       }
 
+      private ContextMenuStrip ConstructContextMenu(List<(Province,HistoryEntry)> entries)
+      {
+         var contextMenu = new ContextMenuStrip();
+         foreach (var (province, entry) in entries)
+         {
+            var item = new ToolStripMenuItem($"({province.Id}, '{province.TitleLocalisation}'): {entry.ToString()?.Replace('\n', ' ')}");
+            contextMenu.Items.Add(item);
+         }
+         return contextMenu;
+      }
+
       private int GetEntriesForRange(int dateLower, int dateUpper, int startIndex, int endIndex)
       {
-         var resultLower = BinarySearchCache(dateLower, startIndex, endIndex);
-         var resultUpper = BinarySearchCache(dateUpper, resultLower, endIndex);
-         return entries[resultUpper].Count - entries[resultLower].Count;
+         var resultLower = BinarySearchCache(dateLower, startIndex, endIndex, out _);
+         var resultUpper = BinarySearchCache(dateUpper, resultLower, endIndex, out _);
+         if (resultLower == 0)
+            if(resultUpper == 0)
+               return 0;
+            else 
+               return entries[resultUpper - 1].Count;
+         return entries[resultUpper-1].Count - entries[resultLower-1].Count;
       }
 
       private int GetEntriesForRange(int date, int startIndex, int endIndex)
       {
-         var result = BinarySearchCache(date, startIndex, endIndex);
+         var result = BinarySearchCache(date, startIndex, endIndex, out var exact);
+         if (!exact)
+            return 0;
          if (result == 0)
             return entries[0].Count;
+         
          return entries[result].Count - entries[result-1].Count;
       }
 
       private int GetEntriesForRange(int dateLower, int dateUpper)
       {
          return GetEntriesForRange(dateLower, dateUpper, 0, entries.Length);
+      }
+
+      private List<(Province, HistoryEntry)> GetEntries(Date date)
+      {
+         var result = new List<(Province, HistoryEntry)>();
+         foreach (var province in Globals.Provinces)
+         {
+            foreach (var entry in province.History)
+            {
+               if (entry.Date > date)
+                  break;
+               if(entry.Date == date)
+                  result.Add((province,entry));
+            }
+         }
+
+         return result;
       }
 
       private void GenerateCache()

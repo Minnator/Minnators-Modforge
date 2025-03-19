@@ -45,6 +45,22 @@ namespace Editor.DataClasses.ConsoleCommands
             return [$"Showing achievement popup for {achievement.Name}"];
          }, ClearanceLevel.Debug));
 
+         // get num of historyEntries for the given day
+         var historyCountUsage = "Usage: history_count <date>";
+         _handler.RegisterCommand(new("history_count", historyCountUsage, args =>
+         {
+            if (args.Length != 1)
+               return [historyCountUsage];
+
+            if (Date.TryParse(args[0], out var date).Ignore())
+            {
+               var count = Globals.Provinces.Sum(x => x.History.Count(y => y.Date.Equals(date)));
+               return [$"History entries on {date}: {count}"];
+            }
+
+            return ["Invalid province id"];
+         }, ClearanceLevel.Debug));
+
          // dump history of province
          var dumpHistoryUsage = "Usage: dump_history <provinceId>";
          _handler.RegisterCommand(new("dump_history", dumpHistoryUsage, args =>
