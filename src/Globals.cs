@@ -396,7 +396,7 @@ public static class Globals
 // - [x] Loading bar when saving using threads
 // - [x] Fixed Colors not being saved in the settings
 // - [████▒▒▒▒▒▒▒▒] Generalize Loading
-// - [█▒▒▒▒▒▒▒▒▒▒▒] PDX language support
+// - [█████▒▒▒▒▒▒▒] PDX language support
 // - [x] Fix Country Color not live updating
 // - [x] Fix Search not finding country tags
 // - [x] Fix TagComboBox behavior
@@ -406,16 +406,20 @@ public static class Globals
 // - [x] Fix Advanced Selection Menu (should be reworked / improved again)
 // - [x] Fix CollectionSelectorBase
 // - [x] Fix 'Crashing' when autocompacting after only doing redestribute
-// - [ ] Fix province history stuff
-//    - [ ] Implement Scopes
-//    - [ ] Implement Effects
-//    - [ ] Implement Triggers
-//    - [ ] Implement Effect execution
-//    - [ ] Implement Trigger verification
+// - [x] Fix province history stuff
+//    - [x] Implement Scopes
+//    - [-] Implement Effects
+//    - [-] Implement Triggers
+//    - [x] Implement Effect execution
+//    - [x] Implement Trigger verification
 // - [x] Fix Country Decorator and description
 // - [x] Fix Localisation editing causing EvilAction during saving of SaveableObjects
 // - [x] Fix Terrain soundType saving
 // - [x] Fix Comment chars can now be defined for each SaveableType
+// - [ ] Fix province being edited when going back and forth in history
+// - [ ] Implement scripted effects
+// - [ ] Fix map mode exporter
+// - [ ] Add history entry adding / removing
 
 // TODO Update Alpha 1.3 SHADERS
 // - [ ] In Depth deleting with pop up to show what objects are related to the one being deleted

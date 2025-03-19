@@ -7,7 +7,7 @@ using Editor.Saving;
 
 namespace Editor.DataClasses.GameDataClasses;
 
-public class Price(float price) : Saveable
+public class Price(float price) : Saveable, IStringify
 {
    private TradeGood _tradeGood = TradeGood.Empty;
 
@@ -49,6 +49,8 @@ public class Price(float price) : Saveable
    {
       return $"Save price for: {_tradeGood.Name}";
    }
+
+   public string Stringify() => _tradeGood.Name;
 }
 
 public class TradeGood(string name) : Saveable

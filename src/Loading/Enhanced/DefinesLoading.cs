@@ -90,7 +90,7 @@ namespace Editor.Loading.Enhanced
                break;
             var (_,content) = po.LoadBase(EnhancedParser.FileContentAllowed.ContentOnly, value);
             
-            Debug.Assert(content.Count == 1, "There must only be one content element in a define.lua file in the mod part!");
+            Debug.Assert(content.Count <= 1, "There must only be one content element in a define.lua file in the mod part!");
             
             // Should be only one but in case of maleformed file recover by reading all contents
             foreach(var contents in content){

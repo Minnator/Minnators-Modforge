@@ -22,6 +22,8 @@ public class Consts
    public const string VANILLA_PATH = @"S:\SteamLibrary\steamapps\common\Europa Universalis IV";
    //public const string VANILLA_PATH = @"C:\Program Files (x86)\Steam\steamapps\common\Europa Universalis IV";
 
+   // History Bugs
+   //public const string MOD_PATH = @"C:\Users\david\Downloads\Extended-Timeline--Super-Expanded-mainy\Extended-Timeline--Super-Expanded-mainy";
 
    //public const string MOD_PATH = @"C:\Users\david\Downloads\Neuer Ordner"; 
    //public const string VANILLA_PATH = @"C:\Program Files (x86)\Steam\steamapps\common\Europa Universalis IV";

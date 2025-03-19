@@ -96,9 +96,9 @@ namespace Editor.Helper
          }
 
          if (value is Country value1)
-         {
             return value1.Tag;
-         }
+         if (value is TradeGood tg)
+            return tg.Name;
 
          Debug.Assert(value is int || value is string, $"value is not of type int or string but {typeof(T)}!");
          return value.ToString()!;

@@ -145,6 +145,7 @@ public static class ProvinceParser
             ParseProvinceBlockBlock(ref province, (EnhancedBlock)block, po);
 
       SaveMaster.AddToDictionary(ref po, province);
+      province.History.Sort();
    }
 
    private static void Eu4ProvAttributeRouting(Province province, string attribute, string value, PathObj po, int lineNum)

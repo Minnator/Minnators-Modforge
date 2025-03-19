@@ -13,9 +13,32 @@ namespace Editor.DataClasses.GameDataClasses
       public List<T> History { get; set; }
    }
 
-   public abstract class HistoryEntry(Date date)
+   public abstract class HistoryEntry(Date date) : IComparable<Date>, IComparable<HistoryEntry>
    {
       public Date Date { get; } = date;
+
+      public int CompareTo(HistoryEntry? other)
+      {
+         if (ReferenceEquals(this, other))
+         {
+            return 0;
+         }
+
+         if (other is null)
+         {
+            return 1;
+         }
+
+         return Date.CompareTo(other.Date);
+      }
+
+      public int CompareTo(Date? other)
+      {
+         if (other is null)
+            return 1;
+
+         return Date.CompareTo(other);
+      }
    }
    
    public class ProvinceHistoryEntry(Date date) : HistoryEntry(date)

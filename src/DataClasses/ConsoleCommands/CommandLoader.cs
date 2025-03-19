@@ -45,6 +45,29 @@ namespace Editor.DataClasses.ConsoleCommands
             return [$"Showing achievement popup for {achievement.Name}"];
          }, ClearanceLevel.Debug));
 
+         // dump history of province
+         var dumpHistoryUsage = "Usage: dump_history <provinceId>";
+         _handler.RegisterCommand(new("dump_history", dumpHistoryUsage, args =>
+         {
+            if (args.Length != 1)
+               return [dumpHistoryUsage];
+
+            if (Province.TryParse(args[0], out var province).Ignore())
+            {
+               var history = province.History;
+               if (history.Count == 0)
+                  return ["No history entries found"];
+
+               var output = new string[history.Count];
+               for (var i = 0; i < history.Count; i++)
+                  output[i] = $"{history[i].Date} - {history[i].ToString()}";
+
+               return ["History: ", .. output];
+            }
+
+            return ["Invalid province id"];
+         }, ClearanceLevel.Debug));
+
          // To Test dates
          var dateUsage = "Usage: date <date> [--m, --d, --y]";
          _handler.RegisterCommand(new("date", dateUsage, args =>
