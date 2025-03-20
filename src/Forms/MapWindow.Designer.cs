@@ -107,8 +107,7 @@
          compactHistoryToolStripMenuItem = new ToolStripMenuItem();
          testTriggerToolStripMenuItem = new ToolStripMenuItem();
          applyMaskToImageToolStripMenuItem = new ToolStripMenuItem();
-         ProvinceCollectionsLayoutPanel = new TableLayoutPanel();
-         FocusSelectionCheckBox = new CheckBox();
+         MainLayoutPanel = new TableLayoutPanel();
          BottomToolStrip = new ToolStrip();
          RamUsageStrip = new ToolStripLabel();
          CpuUsageStrip = new ToolStripLabel();
@@ -122,18 +121,6 @@
          MapModeTimesInfo = new ToolStripLabel();
          toolStripSeparator11 = new ToolStripSeparator();
          ErrorCountLabel = new ToolStripLabel();
-         MainLayoutPanel = new TableLayoutPanel();
-         TopStripLayoutPanel = new TableLayoutPanel();
-         OwnerCountryNameLabel = new Label();
-         ProvinceNameLabel = new Label();
-         SelectionTypeBox = new ComboBox();
-         label24 = new Label();
-         BookMarkComboBox = new ComboBox();
-         tableLayoutPanel5 = new TableLayoutPanel();
-         MagicWandTolerance = new NumericUpDown();
-         MWAttirbuteCombobox = new ComboBox();
-         label15 = new Label();
-         label14 = new Label();
          MainSplitContainer = new SplitContainer();
          DataTabPanel = new TabControl();
          ProvincePage = new TabPage();
@@ -259,17 +246,27 @@
          ProvinceGroupsPage = new TabPage();
          ProvinceCollectionsPanel = new Panel();
          ProvinceCollectionsTab = new TableLayoutPanel();
+         ProvinceCollectionsLayoutPanel = new TableLayoutPanel();
          GroupCollectionOptions = new TableLayoutPanel();
+         FocusSelectionCheckBox = new CheckBox();
          MapLayoutPanel = new TableLayoutPanel();
          MMButtonsTLPanel = new TableLayoutPanel();
+         TopStripLayoutPanel = new TableLayoutPanel();
+         MagicWandTolerance = new NumericUpDown();
+         OwnerCountryNameLabel = new Label();
+         MWAttirbuteCombobox = new ComboBox();
+         ProvinceNameLabel = new Label();
+         label15 = new Label();
+         SelectionTypeBox = new ComboBox();
+         label14 = new Label();
+         label24 = new Label();
+         BookMarkComboBox = new ComboBox();
+         ShowHistoryCheckBox = new CheckBox();
          GeneralToolTip = new ToolTip(components);
          toolTip1 = new ToolTip(components);
          MapMenuStrip.SuspendLayout();
-         BottomToolStrip.SuspendLayout();
          MainLayoutPanel.SuspendLayout();
-         TopStripLayoutPanel.SuspendLayout();
-         tableLayoutPanel5.SuspendLayout();
-         ((System.ComponentModel.ISupportInitialize)MagicWandTolerance).BeginInit();
+         BottomToolStrip.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)MainSplitContainer).BeginInit();
          MainSplitContainer.Panel1.SuspendLayout();
          MainSplitContainer.Panel2.SuspendLayout();
@@ -324,6 +321,8 @@
          ProvinceCollectionsTab.SuspendLayout();
          GroupCollectionOptions.SuspendLayout();
          MapLayoutPanel.SuspendLayout();
+         TopStripLayoutPanel.SuspendLayout();
+         ((System.ComponentModel.ISupportInitialize)MagicWandTolerance).BeginInit();
          SuspendLayout();
          // 
          // MapMenuStrip
@@ -856,41 +855,26 @@
          applyMaskToImageToolStripMenuItem.Text = "Apply Mask To Image";
          applyMaskToImageToolStripMenuItem.Click += applyMaskToImageToolStripMenuItem_Click;
          // 
-         // ProvinceCollectionsLayoutPanel
+         // MainLayoutPanel
          // 
-         ProvinceCollectionsLayoutPanel.AutoScroll = true;
-         ProvinceCollectionsLayoutPanel.ColumnCount = 1;
-         ProvinceCollectionsLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-         ProvinceCollectionsLayoutPanel.Dock = DockStyle.Fill;
-         ProvinceCollectionsLayoutPanel.Location = new Point(0, 0);
-         ProvinceCollectionsLayoutPanel.Margin = new Padding(0);
-         ProvinceCollectionsLayoutPanel.Name = "ProvinceCollectionsLayoutPanel";
-         ProvinceCollectionsLayoutPanel.RowCount = 8;
-         ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
-         ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
-         ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
-         ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 182F));
-         ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
-         ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
-         ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
-         ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
-         ProvinceCollectionsLayoutPanel.Size = new Size(401, 785);
-         ProvinceCollectionsLayoutPanel.TabIndex = 0;
-         // 
-         // FocusSelectionCheckBox
-         // 
-         FocusSelectionCheckBox.AutoSize = true;
-         FocusSelectionCheckBox.Location = new Point(269, 3);
-         FocusSelectionCheckBox.Name = "FocusSelectionCheckBox";
-         FocusSelectionCheckBox.Size = new Size(108, 19);
-         FocusSelectionCheckBox.TabIndex = 0;
-         FocusSelectionCheckBox.Text = "Focus Selection";
-         FocusSelectionCheckBox.UseVisualStyleBackColor = true;
-         FocusSelectionCheckBox.CheckedChanged += FocusSelectionCheckBox_CheckedChanged;
+         MainLayoutPanel.ColumnCount = 1;
+         MainLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         MainLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+         MainLayoutPanel.Controls.Add(BottomToolStrip, 0, 2);
+         MainLayoutPanel.Controls.Add(MainSplitContainer, 0, 1);
+         MainLayoutPanel.Controls.Add(TopStripLayoutPanel, 0, 0);
+         MainLayoutPanel.Dock = DockStyle.Fill;
+         MainLayoutPanel.Location = new Point(0, 27);
+         MainLayoutPanel.Name = "MainLayoutPanel";
+         MainLayoutPanel.RowCount = 3;
+         MainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
+         MainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         MainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 24F));
+         MainLayoutPanel.Size = new Size(1511, 900);
+         MainLayoutPanel.TabIndex = 3;
          // 
          // BottomToolStrip
          // 
-         MainLayoutPanel.SetColumnSpan(BottomToolStrip, 2);
          BottomToolStrip.Dock = DockStyle.None;
          BottomToolStrip.Items.AddRange(new ToolStripItem[] { RamUsageStrip, CpuUsageStrip, toolStripSeparator1, UndoDepthLabel, RedoDepthLabel, CompactionToolStrip, toolStripSeparator2, SelectedProvinceSum, toolStripSeparator7, MapModeTimesInfo, toolStripSeparator11, ErrorCountLabel });
          BottomToolStrip.Location = new Point(0, 876);
@@ -967,171 +951,8 @@
          ErrorCountLabel.Text = "ErrorCount";
          ErrorCountLabel.MouseEnter += ErrorCountLabel_MouseEnter;
          // 
-         // MainLayoutPanel
-         // 
-         MainLayoutPanel.ColumnCount = 2;
-         MainLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 400F));
-         MainLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-         MainLayoutPanel.Controls.Add(BottomToolStrip, 0, 2);
-         MainLayoutPanel.Controls.Add(TopStripLayoutPanel, 1, 0);
-         MainLayoutPanel.Controls.Add(tableLayoutPanel5, 0, 0);
-         MainLayoutPanel.Controls.Add(MainSplitContainer, 0, 1);
-         MainLayoutPanel.Dock = DockStyle.Fill;
-         MainLayoutPanel.Location = new Point(0, 27);
-         MainLayoutPanel.Name = "MainLayoutPanel";
-         MainLayoutPanel.RowCount = 3;
-         MainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
-         MainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         MainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 24F));
-         MainLayoutPanel.Size = new Size(1511, 900);
-         MainLayoutPanel.TabIndex = 3;
-         // 
-         // TopStripLayoutPanel
-         // 
-         TopStripLayoutPanel.ColumnCount = 6;
-         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.5384617F));
-         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.5384617F));
-         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25.6410255F));
-         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25.6410255F));
-         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25.6410255F));
-         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 210F));
-         TopStripLayoutPanel.Controls.Add(OwnerCountryNameLabel, 2, 0);
-         TopStripLayoutPanel.Controls.Add(ProvinceNameLabel, 3, 0);
-         TopStripLayoutPanel.Controls.Add(SelectionTypeBox, 1, 0);
-         TopStripLayoutPanel.Controls.Add(label24, 0, 0);
-         TopStripLayoutPanel.Controls.Add(BookMarkComboBox, 5, 0);
-         TopStripLayoutPanel.Dock = DockStyle.Fill;
-         TopStripLayoutPanel.Location = new Point(400, 0);
-         TopStripLayoutPanel.Margin = new Padding(0);
-         TopStripLayoutPanel.Name = "TopStripLayoutPanel";
-         TopStripLayoutPanel.RowCount = 1;
-         TopStripLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         TopStripLayoutPanel.Size = new Size(1111, 26);
-         TopStripLayoutPanel.TabIndex = 2;
-         // 
-         // OwnerCountryNameLabel
-         // 
-         OwnerCountryNameLabel.AutoSize = true;
-         OwnerCountryNameLabel.Dock = DockStyle.Fill;
-         OwnerCountryNameLabel.Location = new Point(209, 0);
-         OwnerCountryNameLabel.Name = "OwnerCountryNameLabel";
-         OwnerCountryNameLabel.Size = new Size(225, 26);
-         OwnerCountryNameLabel.TabIndex = 0;
-         OwnerCountryNameLabel.Text = "Owner: -";
-         OwnerCountryNameLabel.TextAlign = ContentAlignment.MiddleCenter;
-         // 
-         // ProvinceNameLabel
-         // 
-         ProvinceNameLabel.AutoSize = true;
-         ProvinceNameLabel.Dock = DockStyle.Fill;
-         ProvinceNameLabel.Location = new Point(440, 0);
-         ProvinceNameLabel.Name = "ProvinceNameLabel";
-         ProvinceNameLabel.Size = new Size(225, 26);
-         ProvinceNameLabel.TabIndex = 1;
-         ProvinceNameLabel.Text = "Province: -";
-         ProvinceNameLabel.TextAlign = ContentAlignment.MiddleCenter;
-         // 
-         // SelectionTypeBox
-         // 
-         SelectionTypeBox.Dock = DockStyle.Fill;
-         SelectionTypeBox.DropDownStyle = ComboBoxStyle.DropDownList;
-         SelectionTypeBox.FormattingEnabled = true;
-         SelectionTypeBox.Location = new Point(106, 1);
-         SelectionTypeBox.Margin = new Padding(3, 1, 3, 1);
-         SelectionTypeBox.Name = "SelectionTypeBox";
-         SelectionTypeBox.Size = new Size(97, 23);
-         SelectionTypeBox.TabIndex = 4;
-         GeneralToolTip.SetToolTip(SelectionTypeBox, "Press \"Alt + Ctrl + LMB\" to use the selection type");
-         // 
-         // label24
-         // 
-         label24.AutoSize = true;
-         label24.Dock = DockStyle.Fill;
-         label24.Location = new Point(3, 0);
-         label24.Name = "label24";
-         label24.Size = new Size(97, 26);
-         label24.TabIndex = 5;
-         label24.Text = "Selection type";
-         label24.TextAlign = ContentAlignment.MiddleCenter;
-         // 
-         // BookMarkComboBox
-         // 
-         BookMarkComboBox.Dock = DockStyle.Fill;
-         BookMarkComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-         BookMarkComboBox.FormattingEnabled = true;
-         BookMarkComboBox.Location = new Point(902, 1);
-         BookMarkComboBox.Margin = new Padding(3, 1, 3, 1);
-         BookMarkComboBox.Name = "BookMarkComboBox";
-         BookMarkComboBox.Size = new Size(206, 23);
-         BookMarkComboBox.TabIndex = 6;
-         // 
-         // tableLayoutPanel5
-         // 
-         tableLayoutPanel5.ColumnCount = 4;
-         tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-         tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
-         tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-         tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
-         tableLayoutPanel5.Controls.Add(MagicWandTolerance, 3, 0);
-         tableLayoutPanel5.Controls.Add(MWAttirbuteCombobox, 1, 0);
-         tableLayoutPanel5.Controls.Add(label15, 2, 0);
-         tableLayoutPanel5.Controls.Add(label14, 0, 0);
-         tableLayoutPanel5.Dock = DockStyle.Fill;
-         tableLayoutPanel5.Location = new Point(0, 0);
-         tableLayoutPanel5.Margin = new Padding(0);
-         tableLayoutPanel5.Name = "tableLayoutPanel5";
-         tableLayoutPanel5.RowCount = 1;
-         tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-         tableLayoutPanel5.Size = new Size(400, 26);
-         tableLayoutPanel5.TabIndex = 5;
-         // 
-         // MagicWandTolerance
-         // 
-         MagicWandTolerance.Dock = DockStyle.Fill;
-         MagicWandTolerance.Location = new Point(280, 2);
-         MagicWandTolerance.Margin = new Padding(0, 2, 0, 0);
-         MagicWandTolerance.Name = "MagicWandTolerance";
-         MagicWandTolerance.Size = new Size(120, 23);
-         MagicWandTolerance.TabIndex = 3;
-         GeneralToolTip.SetToolTip(MagicWandTolerance, "Sets the tolerance for values which it can be applied to");
-         // 
-         // MWAttirbuteCombobox
-         // 
-         MWAttirbuteCombobox.Dock = DockStyle.Fill;
-         MWAttirbuteCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
-         MWAttirbuteCombobox.FormattingEnabled = true;
-         MWAttirbuteCombobox.Location = new Point(80, 0);
-         MWAttirbuteCombobox.Margin = new Padding(0);
-         MWAttirbuteCombobox.Name = "MWAttirbuteCombobox";
-         MWAttirbuteCombobox.Size = new Size(120, 23);
-         MWAttirbuteCombobox.TabIndex = 2;
-         GeneralToolTip.SetToolTip(MWAttirbuteCombobox, "Magic Wand: \"LSHIFT + ALT\" \r\nSets the attribute the MagicWand tool will use");
-         // 
-         // label15
-         // 
-         label15.AutoSize = true;
-         label15.Dock = DockStyle.Fill;
-         label15.Location = new Point(203, 0);
-         label15.Name = "label15";
-         label15.Size = new Size(74, 26);
-         label15.TabIndex = 1;
-         label15.Text = "tolerance";
-         label15.TextAlign = ContentAlignment.MiddleCenter;
-         // 
-         // label14
-         // 
-         label14.AutoSize = true;
-         label14.Dock = DockStyle.Fill;
-         label14.Location = new Point(3, 0);
-         label14.Name = "label14";
-         label14.Size = new Size(74, 26);
-         label14.TabIndex = 0;
-         label14.Text = "attribute";
-         label14.TextAlign = ContentAlignment.MiddleCenter;
-         // 
          // MainSplitContainer
          // 
-         MainLayoutPanel.SetColumnSpan(MainSplitContainer, 2);
          MainSplitContainer.Dock = DockStyle.Fill;
          MainSplitContainer.Location = new Point(3, 29);
          MainSplitContainer.Name = "MainSplitContainer";
@@ -2817,6 +2638,27 @@
          ProvinceCollectionsTab.Size = new Size(401, 810);
          ProvinceCollectionsTab.TabIndex = 0;
          // 
+         // ProvinceCollectionsLayoutPanel
+         // 
+         ProvinceCollectionsLayoutPanel.AutoScroll = true;
+         ProvinceCollectionsLayoutPanel.ColumnCount = 1;
+         ProvinceCollectionsLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         ProvinceCollectionsLayoutPanel.Dock = DockStyle.Fill;
+         ProvinceCollectionsLayoutPanel.Location = new Point(0, 0);
+         ProvinceCollectionsLayoutPanel.Margin = new Padding(0);
+         ProvinceCollectionsLayoutPanel.Name = "ProvinceCollectionsLayoutPanel";
+         ProvinceCollectionsLayoutPanel.RowCount = 8;
+         ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
+         ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
+         ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
+         ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 182F));
+         ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
+         ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
+         ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
+         ProvinceCollectionsLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
+         ProvinceCollectionsLayoutPanel.Size = new Size(401, 785);
+         ProvinceCollectionsLayoutPanel.TabIndex = 0;
+         // 
          // GroupCollectionOptions
          // 
          GroupCollectionOptions.ColumnCount = 3;
@@ -2833,11 +2675,22 @@
          GroupCollectionOptions.Size = new Size(401, 25);
          GroupCollectionOptions.TabIndex = 0;
          // 
+         // FocusSelectionCheckBox
+         // 
+         FocusSelectionCheckBox.AutoSize = true;
+         FocusSelectionCheckBox.Location = new Point(269, 3);
+         FocusSelectionCheckBox.Name = "FocusSelectionCheckBox";
+         FocusSelectionCheckBox.Size = new Size(108, 19);
+         FocusSelectionCheckBox.TabIndex = 0;
+         FocusSelectionCheckBox.Text = "Focus Selection";
+         FocusSelectionCheckBox.UseVisualStyleBackColor = true;
+         FocusSelectionCheckBox.CheckedChanged += FocusSelectionCheckBox_CheckedChanged;
+         // 
          // MapLayoutPanel
          // 
-         MapLayoutPanel.ColumnCount = 1;
+         MapLayoutPanel.ColumnCount = 2;
          MapLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-         MapLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+         MapLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200F));
          MapLayoutPanel.Controls.Add(MMButtonsTLPanel, 0, 1);
          MapLayoutPanel.Dock = DockStyle.Fill;
          MapLayoutPanel.Location = new Point(0, 0);
@@ -2846,13 +2699,13 @@
          MapLayoutPanel.RowCount = 2;
          MapLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
          MapLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-         MapLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
          MapLayoutPanel.Size = new Size(1086, 844);
          MapLayoutPanel.TabIndex = 0;
          // 
          // MMButtonsTLPanel
          // 
          MMButtonsTLPanel.ColumnCount = 10;
+         MapLayoutPanel.SetColumnSpan(MMButtonsTLPanel, 2);
          MMButtonsTLPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
          MMButtonsTLPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
          MMButtonsTLPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
@@ -2871,6 +2724,154 @@
          MMButtonsTLPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
          MMButtonsTLPanel.Size = new Size(1086, 30);
          MMButtonsTLPanel.TabIndex = 0;
+         // 
+         // TopStripLayoutPanel
+         // 
+         TopStripLayoutPanel.ColumnCount = 11;
+         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 70F));
+         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 125F));
+         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 70F));
+         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 70F));
+         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 70F));
+         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 90F));
+         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
+         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 80F));
+         TopStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200F));
+         TopStripLayoutPanel.Controls.Add(MagicWandTolerance, 3, 0);
+         TopStripLayoutPanel.Controls.Add(OwnerCountryNameLabel, 6, 0);
+         TopStripLayoutPanel.Controls.Add(MWAttirbuteCombobox, 1, 0);
+         TopStripLayoutPanel.Controls.Add(ProvinceNameLabel, 7, 0);
+         TopStripLayoutPanel.Controls.Add(label15, 2, 0);
+         TopStripLayoutPanel.Controls.Add(SelectionTypeBox, 5, 0);
+         TopStripLayoutPanel.Controls.Add(label14, 0, 0);
+         TopStripLayoutPanel.Controls.Add(label24, 4, 0);
+         TopStripLayoutPanel.Controls.Add(BookMarkComboBox, 10, 0);
+         TopStripLayoutPanel.Controls.Add(ShowHistoryCheckBox, 9, 0);
+         TopStripLayoutPanel.Dock = DockStyle.Fill;
+         TopStripLayoutPanel.Location = new Point(0, 0);
+         TopStripLayoutPanel.Margin = new Padding(0);
+         TopStripLayoutPanel.Name = "TopStripLayoutPanel";
+         TopStripLayoutPanel.RowCount = 1;
+         TopStripLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         TopStripLayoutPanel.Size = new Size(1511, 26);
+         TopStripLayoutPanel.TabIndex = 2;
+         // 
+         // MagicWandTolerance
+         // 
+         MagicWandTolerance.Dock = DockStyle.Fill;
+         MagicWandTolerance.Location = new Point(265, 2);
+         MagicWandTolerance.Margin = new Padding(0, 2, 0, 0);
+         MagicWandTolerance.Name = "MagicWandTolerance";
+         MagicWandTolerance.Size = new Size(70, 23);
+         MagicWandTolerance.TabIndex = 3;
+         GeneralToolTip.SetToolTip(MagicWandTolerance, "Sets the tolerance for values which it can be applied to");
+         // 
+         // OwnerCountryNameLabel
+         // 
+         OwnerCountryNameLabel.AutoSize = true;
+         OwnerCountryNameLabel.Dock = DockStyle.Fill;
+         OwnerCountryNameLabel.Location = new Point(498, 0);
+         OwnerCountryNameLabel.Name = "OwnerCountryNameLabel";
+         OwnerCountryNameLabel.Size = new Size(239, 26);
+         OwnerCountryNameLabel.TabIndex = 0;
+         OwnerCountryNameLabel.Text = "Owner: -";
+         OwnerCountryNameLabel.TextAlign = ContentAlignment.MiddleCenter;
+         // 
+         // MWAttirbuteCombobox
+         // 
+         MWAttirbuteCombobox.Dock = DockStyle.Fill;
+         MWAttirbuteCombobox.DropDownStyle = ComboBoxStyle.DropDownList;
+         MWAttirbuteCombobox.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+         MWAttirbuteCombobox.FormattingEnabled = true;
+         MWAttirbuteCombobox.Location = new Point(70, 0);
+         MWAttirbuteCombobox.Margin = new Padding(0);
+         MWAttirbuteCombobox.Name = "MWAttirbuteCombobox";
+         MWAttirbuteCombobox.Size = new Size(125, 23);
+         MWAttirbuteCombobox.Sorted = true;
+         MWAttirbuteCombobox.TabIndex = 2;
+         GeneralToolTip.SetToolTip(MWAttirbuteCombobox, "Magic Wand: \"LSHIFT + ALT\" \r\nSets the attribute the MagicWand tool will use");
+         // 
+         // ProvinceNameLabel
+         // 
+         ProvinceNameLabel.AutoSize = true;
+         ProvinceNameLabel.Dock = DockStyle.Fill;
+         ProvinceNameLabel.Location = new Point(743, 0);
+         ProvinceNameLabel.Name = "ProvinceNameLabel";
+         ProvinceNameLabel.Size = new Size(239, 26);
+         ProvinceNameLabel.TabIndex = 1;
+         ProvinceNameLabel.Text = "Province: -";
+         ProvinceNameLabel.TextAlign = ContentAlignment.MiddleCenter;
+         // 
+         // label15
+         // 
+         label15.AutoSize = true;
+         label15.Dock = DockStyle.Fill;
+         label15.Location = new Point(198, 0);
+         label15.Name = "label15";
+         label15.Size = new Size(64, 26);
+         label15.TabIndex = 1;
+         label15.Text = "Tolerance";
+         label15.TextAlign = ContentAlignment.MiddleCenter;
+         // 
+         // SelectionTypeBox
+         // 
+         SelectionTypeBox.Dock = DockStyle.Fill;
+         SelectionTypeBox.DropDownStyle = ComboBoxStyle.DropDownList;
+         SelectionTypeBox.FormattingEnabled = true;
+         SelectionTypeBox.Location = new Point(408, 1);
+         SelectionTypeBox.Margin = new Padding(3, 1, 3, 1);
+         SelectionTypeBox.Name = "SelectionTypeBox";
+         SelectionTypeBox.Size = new Size(84, 23);
+         SelectionTypeBox.TabIndex = 4;
+         GeneralToolTip.SetToolTip(SelectionTypeBox, "Press \"Alt + Ctrl + LMB\" to use the selection type");
+         // 
+         // label14
+         // 
+         label14.AutoSize = true;
+         label14.Dock = DockStyle.Fill;
+         label14.Location = new Point(3, 0);
+         label14.Name = "label14";
+         label14.Size = new Size(64, 26);
+         label14.TabIndex = 0;
+         label14.Text = "Attribute";
+         label14.TextAlign = ContentAlignment.MiddleCenter;
+         // 
+         // label24
+         // 
+         label24.AutoSize = true;
+         label24.Dock = DockStyle.Fill;
+         label24.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+         label24.Location = new Point(338, 0);
+         label24.Name = "label24";
+         label24.Size = new Size(64, 26);
+         label24.TabIndex = 5;
+         label24.Text = "Selection type";
+         label24.TextAlign = ContentAlignment.MiddleCenter;
+         // 
+         // BookMarkComboBox
+         // 
+         BookMarkComboBox.Dock = DockStyle.Fill;
+         BookMarkComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+         BookMarkComboBox.FormattingEnabled = true;
+         BookMarkComboBox.Location = new Point(1313, 1);
+         BookMarkComboBox.Margin = new Padding(3, 1, 3, 1);
+         BookMarkComboBox.Name = "BookMarkComboBox";
+         BookMarkComboBox.Size = new Size(195, 23);
+         BookMarkComboBox.TabIndex = 6;
+         // 
+         // ShowHistoryCheckBox
+         // 
+         ShowHistoryCheckBox.AutoSize = true;
+         ShowHistoryCheckBox.Dock = DockStyle.Fill;
+         ShowHistoryCheckBox.Location = new Point(1233, 3);
+         ShowHistoryCheckBox.Name = "ShowHistoryCheckBox";
+         ShowHistoryCheckBox.Size = new Size(74, 20);
+         ShowHistoryCheckBox.TabIndex = 7;
+         ShowHistoryCheckBox.Text = "History";
+         ShowHistoryCheckBox.UseVisualStyleBackColor = true;
+         ShowHistoryCheckBox.CheckedChanged += ShowHistoryCheckBox_CheckedChanged;
          // 
          // MapWindow
          // 
@@ -2893,15 +2894,10 @@
          KeyDown += MapWindow_KeyDown;
          MapMenuStrip.ResumeLayout(false);
          MapMenuStrip.PerformLayout();
-         BottomToolStrip.ResumeLayout(false);
-         BottomToolStrip.PerformLayout();
          MainLayoutPanel.ResumeLayout(false);
          MainLayoutPanel.PerformLayout();
-         TopStripLayoutPanel.ResumeLayout(false);
-         TopStripLayoutPanel.PerformLayout();
-         tableLayoutPanel5.ResumeLayout(false);
-         tableLayoutPanel5.PerformLayout();
-         ((System.ComponentModel.ISupportInitialize)MagicWandTolerance).EndInit();
+         BottomToolStrip.ResumeLayout(false);
+         BottomToolStrip.PerformLayout();
          MainSplitContainer.Panel1.ResumeLayout(false);
          MainSplitContainer.Panel2.ResumeLayout(false);
          ((System.ComponentModel.ISupportInitialize)MainSplitContainer).EndInit();
@@ -2973,6 +2969,9 @@
          GroupCollectionOptions.ResumeLayout(false);
          GroupCollectionOptions.PerformLayout();
          MapLayoutPanel.ResumeLayout(false);
+         TopStripLayoutPanel.ResumeLayout(false);
+         TopStripLayoutPanel.PerformLayout();
+         ((System.ComponentModel.ISupportInitialize)MagicWandTolerance).EndInit();
          ResumeLayout(false);
          PerformLayout();
       }
@@ -2981,14 +2980,6 @@
 
       private System.Windows.Forms.MenuStrip MapMenuStrip;
       private System.Windows.Forms.ToolStripMenuItem filesToolStripMenuItem;
-      private System.Windows.Forms.ToolStrip BottomToolStrip;
-      private System.Windows.Forms.ToolStripLabel SelectedProvinceSum;
-      internal System.Windows.Forms.ToolStripLabel RamUsageStrip;
-      internal System.Windows.Forms.ToolStripLabel CpuUsageStrip;
-      private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-      private System.Windows.Forms.ToolStripLabel UndoDepthLabel;
-      private System.Windows.Forms.ToolStripLabel RedoDepthLabel;
-      private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
       private System.Windows.Forms.ToolStripMenuItem historyToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem selectionHistoryToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem DeleteHistoryToolStripMenuItem;
@@ -2999,79 +2990,12 @@
       private System.Windows.Forms.ToolStripMenuItem openCustomizerToolStripMenuItem;
       private System.Windows.Forms.ToolStripMenuItem ShowToolTipMenuItem;
       private TableLayoutPanel MainLayoutPanel;
-      private TableLayoutPanel TopStripLayoutPanel;
       private ToolStripMenuItem searchToolStripMenuItem;
-      private Label OwnerCountryNameLabel;
-      private Label ProvinceNameLabel;
-      private TabControl DataTabPanel;
-      private TabPage ProvincePage;
-      private TabPage CountryPage;
-      private TabPage ProvinceGroupsPage;
-      private TableLayoutPanel ProvinceEditingLayout;
-      private GroupBox groupBox6;
-      private TableLayoutPanel TradePanel;
-      private Label label11;
-      private Label label12;
-      private Label label13;
-      private Label label1;
-      private Label label2;
-      private Label label5;
-      private Label label3;
-      private Label label4;
-      private Label label6;
-      private Label label7;
-      private Label label8;
-      private TabControl OptionalsTabControl;
-      private TabPage NativesTab;
-      private TabPage TradeCompanyTab;
-      private TabPage ModifiersTab;
-      private GroupBox groupBox5;
-      private TableLayoutPanel FloatLayoutPanel;
-      private Label label9;
-      private Label label10;
-      private Label DevastationLabel;
-      private Label label14;
-      private Label label15;
       private ToolStripMenuItem saveSelectionToolStripMenuItem;
-      private TableLayoutPanel NativesLayoutPanel;
-      private Label label16;
-      private Label label17;
-      private Label label18;
-      private Label label19;
-      private TableLayoutPanel ProvinceCustomToolStripLayoutPanel;
-      private Button SaveAllProvincesButton;
-      private Button SaveCurrentSelectionButton;
-      private TableLayoutPanel TradeCompaniesLayoutPanel;
-      private Label label20;
-      public TableLayoutPanel ModifiersLayoutPanel;
-      private Label label21;
-      private Label label22;
-      private Label label23;
-      private TableLayoutPanel tableLayoutPanel3;
-      private TextBox DurationTextBox;
-      private ListView ModifiersListView;
-      private Button AddModifierButton;
-      private Button DeleteModifierButton;
-      private TableLayoutPanel ProvinceCollectionsLayoutPanel;
       public ToolTip GeneralToolTip;
-      private Panel ProvinceCollectionsPanel;
-      public CheckBox FocusSelectionCheckBox;
       private ToolStripMenuItem quickSettingsToolStripMenuItem;
-      private TableLayoutPanel ProvinceCollectionsTab;
-      private TableLayoutPanel GroupCollectionOptions;
-      private TableLayoutPanel tableLayoutPanel5;
-      private Label label24;
-      public ComboBox SelectionTypeBox;
       private ToolStripMenuItem graphicalElementsManagerToolStripMenuItem;
-      public ComboBox MWAttirbuteCombobox;
-      public NumericUpDown MagicWandTolerance;
       private ToolStripMenuItem mapModeHotkeysToolStripMenuItem;
-      private GroupBox LocalisationGroupBox;
-      private TableLayoutPanel LocTableLayoutPanel;
-      private Label label25;
-      private Label label26;
-      private TableLayoutPanel ModTypeSubLayout;
-      private Button OpenAddModifierForm;
       private ToolStripMenuItem alpha12ToolStripMenuItem;
       private ToolStripMenuItem tradegoodsEditingToolStripMenuItem;
       private ToolStripMenuItem cusotmMapmodesToolStripMenuItem;
@@ -3094,7 +3018,6 @@
       private ToolTip toolTip1;
       private ToolStripMenuItem additionalToolsToolStripMenuItem;
       private ToolStripMenuItem checkForCyclesInTradenodesToolStripMenuItem;
-      private SplitContainer MainSplitContainer;
       private ToolStripMenuItem helpToolStripMenuItem;
       private ToolStripMenuItem debugToolStripMenuItem;
       private ToolStripMenuItem testToolStripMenuItem;
@@ -3102,34 +3025,121 @@
       private ToolStripMenuItem randomModifierToolStripMenuItem;
       private ToolStripSeparator toolStripSeparator3;
       private ToolStripMenuItem CreateFilesByDefault;
-      private Label label39;
-      private Label label37;
-      private ToolStripSeparator toolStripSeparator7;
-      private ToolStripLabel MapModeTimesInfo;
-      private Button OpenProvinceFolder;
-      private Button AdvancedProvinceEditing;
-      private TableLayoutPanel CountryMainTLP;
-      private TableLayoutPanel MapLayoutPanel;
-      private TableLayoutPanel MMButtonsTLPanel;
       private ToolStripMenuItem infoToolStripMenuItem;
       private ToolStripMenuItem clearCrashLogsToolStripMenuItem;
-      private TableLayoutPanel MisProvinceData;
-      private Label label47;
-      private GroupBox MiscProvGroupBox;
       private ToolStripMenuItem deleteProvinceHistoryEntriesToolStripMenuItem;
-      private Label label48;
-      private Label label49;
-      private Label label50;
-      private Label label51;
       private ToolStripSeparator toolStripSeparator8;
       private ToolStripSeparator toolStripSeparator9;
       private ToolStripMenuItem TutorialBrowser;
       private ToolStripMenuItem browseEditedObjectsToolStripMenuItem;
       private ToolStripMenuItem gameOfLiveToolStripMenuItem;
       private ToolStripMenuItem viewErrorlogToolStripMenuItem;
-      private Panel ProvinceScrollPanel;
+      private Controls.ToggleButton ProvinceHistoryEntryToggleButton;
+      private Controls.ToggleButton CountryHistoryEntryToggleButton;
+      private ToolStripMenuItem saveErrorLogsToolStripMenuItem;
+      private ToolStripMenuItem saveErrorLogAscsvToolStripMenuItem;
+      private ToolStripMenuItem clearCrashLogsToolStripMenuItem1;
+      private ToolStripMenuItem openCrashLogFolderToolStripMenuItem;
+      private ToolStripMenuItem openLastCrashLogsToolStripMenuItem;
+      private ToolStripMenuItem collectionSelectorBaseToolStripMenuItem;
+      private ToolStripMenuItem propertyCollectionSelectorToolStripMenuItem;
+      private ToolStripMenuItem generateTextureAtlasPacedToolStripMenuItem;
+      private ToolStripMenuItem audioTestToolStripMenuItem;
+      private ToolStripMenuItem tradegoodEditorToolStripMenuItem;
+      private ToolStripMenuItem compactHistoryToolStripMenuItem;
+      private ToolStripMenuItem compactHistoryToolStripMenuItem1;
+      private ToolStripSeparator toolStripSeparator10;
+      private ToolStripMenuItem toolStripMenuItem4;
+      private ToolStripMenuItem AchievementsToolStripMenuItem;
+      private ToolStripMenuItem definesEditorToolStripMenuItem;
+      private ToolStripMenuItem namesGeneratorToolStripMenuItem;
+      private ToolStripMenuItem testTriggerToolStripMenuItem;
+      private ToolStripSeparator toolStripSeparator12;
+      private ToolStripMenuItem wikiToolStripMenuItem;
+      private ToolStripMenuItem effectsToolStripMenuItem;
+      private ToolStripMenuItem calenderViewToolStripMenuItem;
+      private ToolStripMenuItem applyMaskToImageToolStripMenuItem;
+      private ToolStripMenuItem missionExporterToolStripMenuItem;
+      private ToolStrip BottomToolStrip;
+      internal ToolStripLabel RamUsageStrip;
+      internal ToolStripLabel CpuUsageStrip;
+      private ToolStripSeparator toolStripSeparator1;
+      private ToolStripLabel UndoDepthLabel;
+      private ToolStripLabel RedoDepthLabel;
+      public ToolStripLabel CompactionToolStrip;
+      private ToolStripSeparator toolStripSeparator2;
+      private ToolStripLabel SelectedProvinceSum;
+      private ToolStripSeparator toolStripSeparator7;
+      private ToolStripLabel MapModeTimesInfo;
+      private ToolStripSeparator toolStripSeparator11;
+      private ToolStripLabel ErrorCountLabel;
+      private SplitContainer MainSplitContainer;
+      private TabControl DataTabPanel;
+      private TabPage ProvincePage;
       private TableLayoutPanel ProvinceFooterMainTLP;
+      private Panel ProvinceScrollPanel;
+      private TableLayoutPanel ProvinceEditingLayout;
+      private TabControl OptionalsTabControl;
+      private TabPage NativesTab;
+      private TableLayoutPanel NativesLayoutPanel;
+      private Label label16;
+      private Label label17;
+      private Label label18;
+      private Label label19;
+      private TabPage TradeCompanyTab;
+      private TableLayoutPanel TradeCompaniesLayoutPanel;
+      private Label label20;
+      private TabPage ModifiersTab;
+      public TableLayoutPanel ModifiersLayoutPanel;
+      private ListView ModifiersListView;
+      private Label label21;
+      private Label label22;
+      private Label label23;
+      private TableLayoutPanel tableLayoutPanel3;
+      private TextBox DurationTextBox;
+      private Button DeleteModifierButton;
+      private Button AddModifierButton;
+      private TableLayoutPanel ModTypeSubLayout;
+      private Button OpenAddModifierForm;
+      private GroupBox groupBox5;
+      private TableLayoutPanel FloatLayoutPanel;
+      private Label label9;
+      private Label label10;
+      private Label DevastationLabel;
+      private GroupBox groupBox6;
+      private TableLayoutPanel TradePanel;
+      private Label label11;
+      private Label label12;
+      private Label label13;
+      private GroupBox LocalisationGroupBox;
+      private TableLayoutPanel LocTableLayoutPanel;
+      private Label label39;
+      private Label label25;
+      private Label label26;
+      private Label label37;
+      private GroupBox MiscProvGroupBox;
+      private TableLayoutPanel MisProvinceData;
+      private Label label6;
+      private Label label5;
+      private Label label8;
+      private Label label7;
+      private Label label2;
+      private Label label4;
+      private Label label3;
+      private Label label1;
+      private Label label47;
+      private Label label48;
+      private Label label49;
+      private Label label50;
+      private Label label51;
+      private TableLayoutPanel ProvinceCustomToolStripLayoutPanel;
       private Button OpenProvinceFile;
+      private Button AdvancedProvinceEditing;
+      private Button OpenProvinceFolder;
+      private Button SaveCurrentSelectionButton;
+      private Button SaveAllProvincesButton;
+      private TabPage CountryPage;
+      private TableLayoutPanel CountryMainTLP;
       private Panel CountryScrollPanel;
       private TableLayoutPanel CountryMainTableLayoutPanel;
       private GroupBox groupBox8;
@@ -3142,12 +3152,11 @@
       internal TextBox NameTextBox;
       internal TextBox ChanceTextBox;
       private Button AddNewMonarchNameButton;
+      public CheckBox ShowMonachrNamesCB;
       private TabPage ShipNamesTab;
       private TabPage ArmyNamesTab;
       private TabPage FleetNamesTab;
       private TabPage LeaderNamesTab;
-      private TableLayoutPanel CulturesTLP;
-      private Label label43;
       private GroupBox GovernmentGroupBox;
       private TableLayoutPanel GovernmentLayoutPanel;
       private Label label36;
@@ -3155,13 +3164,13 @@
       private GroupBox groupBox7;
       private TableLayoutPanel TagAndColorTLP;
       private Label label34;
-      private Label label30;
       private Label label27;
-      private Label label29;
       private Label label31;
       private Label label33;
       private Label label32;
       private Label label44;
+      private Label label30;
+      private Label label29;
       private Label label45;
       private TableLayoutPanel CapitalTLP;
       private Button SetCapitalToSelected;
@@ -3173,48 +3182,38 @@
       private TableLayoutPanel DevelopmenTLP;
       private Label label46;
       private Button button4;
+      private GroupBox HistoryCountryCultures;
+      private TableLayoutPanel CulturesTLP;
+      private Label label43;
+      private TableLayoutPanel CountryCustomToolStripLayoutPanel;
+      private Button SaveSelectedCountriesButton;
+      private Button OpenCommonCountryFolder;
+      private Button SaveAllCountries;
+      private Button OpenCountryFileButton;
+      private Button OpenCountryAdvancedEditor;
+      private Button OpenHistoryCountryFolder;
       private TableLayoutPanel CountryHeaderTLP;
       private Label CountryNameLabel;
       private Button AddNewCountryButton;
-      private TableLayoutPanel CountryCustomToolStripLayoutPanel;
-      private Button OpenCountryAdvancedEditor;
-      private Button OpenCountryFileButton;
-      private Button SaveSelectedCountriesButton;
-      private Button SaveAllCountries;
-      private Button OpenCommonCountryFolder;
-      private Controls.ToggleButton ProvinceHistoryEntryToggleButton;
-      private Controls.ToggleButton CountryHistoryEntryToggleButton;
+      private TabPage ProvinceGroupsPage;
+      private Panel ProvinceCollectionsPanel;
+      private TableLayoutPanel ProvinceCollectionsTab;
+      private TableLayoutPanel ProvinceCollectionsLayoutPanel;
+      private TableLayoutPanel GroupCollectionOptions;
+      public CheckBox FocusSelectionCheckBox;
+      private TableLayoutPanel MapLayoutPanel;
+      private TableLayoutPanel MMButtonsTLPanel;
+      public NumericUpDown MagicWandTolerance;
+      public ComboBox MWAttirbuteCombobox;
+      private Label label15;
+      private Label label14;
+      private TableLayoutPanel TopStripLayoutPanel;
+      private Label OwnerCountryNameLabel;
+      private Label ProvinceNameLabel;
+      public ComboBox SelectionTypeBox;
+      private Label label24;
       private ComboBox BookMarkComboBox;
-      private Button OpenHistoryCountryFolder;
-      private ToolStripMenuItem saveErrorLogsToolStripMenuItem;
-      private ToolStripMenuItem saveErrorLogAscsvToolStripMenuItem;
-      private ToolStripMenuItem clearCrashLogsToolStripMenuItem1;
-      private ToolStripMenuItem openCrashLogFolderToolStripMenuItem;
-      private ToolStripMenuItem openLastCrashLogsToolStripMenuItem;
-      private ToolStripMenuItem collectionSelectorBaseToolStripMenuItem;
-      private ToolStripMenuItem propertyCollectionSelectorToolStripMenuItem;
-      private GroupBox HistoryCountryCultures;
-      private ToolStripMenuItem generateTextureAtlasPacedToolStripMenuItem;
-      private ToolStripMenuItem audioTestToolStripMenuItem;
-      private ToolStripMenuItem tradegoodEditorToolStripMenuItem;
-      private ToolStripMenuItem compactHistoryToolStripMenuItem;
-      private ToolStripMenuItem compactHistoryToolStripMenuItem1;
-      public ToolStripLabel CompactionToolStrip;
-      public CheckBox ShowMonachrNamesCB;
-      private ToolStripSeparator toolStripSeparator10;
-      private ToolStripMenuItem toolStripMenuItem4;
-      private ToolStripMenuItem AchievementsToolStripMenuItem;
-      private ToolStripMenuItem definesEditorToolStripMenuItem;
-      private ToolStripMenuItem namesGeneratorToolStripMenuItem;
-      private ToolStripMenuItem testTriggerToolStripMenuItem;
-      private ToolStripSeparator toolStripSeparator11;
-      private ToolStripLabel ErrorCountLabel;
-      private ToolStripSeparator toolStripSeparator12;
-      private ToolStripMenuItem wikiToolStripMenuItem;
-      private ToolStripMenuItem effectsToolStripMenuItem;
-      private ToolStripMenuItem calenderViewToolStripMenuItem;
-      private ToolStripMenuItem applyMaskToImageToolStripMenuItem;
-      private ToolStripMenuItem missionExporterToolStripMenuItem;
+      private CheckBox ShowHistoryCheckBox;
    }
 }
 

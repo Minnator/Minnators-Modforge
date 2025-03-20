@@ -93,9 +93,13 @@ namespace Editor.Forms
       private PropertyCollectionSelector<Province, List<Tag>, Tag> _claimSelector = null!;
       private PropertyCollectionSelector<Province, List<Tag>, Tag> _permaClaimSelector = null!;
       private PropertyCollectionSelector<Province, List<string>, string> _discoveredBy = null!;
+
+      private ProvinceHistoryEntryTreeView _provinceHistoryTreeView = null!;
       #endregion
 
       public readonly DateControl DateControl = new(Date.MinValue, DateControlLayout.Horizontal);
+
+      public bool ShowHistoryEntries = false;
 
       public MapWindow()
       {
@@ -139,6 +143,23 @@ namespace Editor.Forms
          ResumeLayout();
       }
 
+      private void RenderHistoryIfNeeded()
+      {
+         MapLayoutPanel.SuspendLayout();
+         if (ShowHistoryEntries)
+         {
+            MapLayoutPanel.SetColumnSpan(Globals.ZoomControl, 1);
+            MapLayoutPanel.Controls.Add(_provinceHistoryTreeView, 1, 0);
+         }
+         else
+         {
+            MapLayoutPanel.Controls.Remove(_provinceHistoryTreeView);
+            MapLayoutPanel.SetColumnSpan(Globals.ZoomControl, 2);
+         }
+
+         MapLayoutPanel.ResumeLayout();
+      }
+
 
       #endregion
       #region MapWindow GUI Init
@@ -159,11 +180,17 @@ namespace Editor.Forms
             Margin = new(0),
          };
 
+         _provinceHistoryTreeView = ControlFactory.GetProvinceHistoryTreeView();
+         _provinceHistoryTreeView.Dock = DockStyle.Fill;
+         _provinceHistoryTreeView.Margin = new(0);
+         MapLayoutPanel.Controls.Add(_provinceHistoryTreeView, 1, 0);
+
          MapLayoutPanel.Controls.Add(Globals.ZoomControl, 0, 0);
+         RenderHistoryIfNeeded();
          Selection.Initialize();
          GuiDrawing.Initialize();
 
-         TopStripLayoutPanel.Controls.Add(DateControl, 4, 0);
+         TopStripLayoutPanel.Controls.Add(DateControl, 8, 0);
          DateControl.OnDateChanged += OnDateChanged;
 
          SelectionTypeBox.Items.AddRange([.. Enum.GetNames<SelectionType>()]);
@@ -1534,6 +1561,12 @@ namespace Editor.Forms
       private void missionExporterToolStripMenuItem_Click(object sender, EventArgs e)
       {
          FormsHelper.ShowIfAnyOpen<MissionTreeExporter>();
+      }
+
+      private void ShowHistoryCheckBox_CheckedChanged(object sender, EventArgs e)
+      {
+         ShowHistoryEntries = ShowHistoryCheckBox.Checked;
+         RenderHistoryIfNeeded();
       }
    }
 }

@@ -7,6 +7,7 @@ using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Saveables;
 using Editor.Events;
 using Editor.Helper;
+using Editor.Saving;
 using Newtonsoft.Json.Linq;
 using static System.Net.Mime.MediaTypeNames;
 using Button = System.Windows.Forms.Button;
@@ -34,6 +35,21 @@ public static class ControlFactory
    }
 
    #endregion
+
+   public static ProvinceHistoryEntryTreeView GetProvinceHistoryTreeView()
+   {
+      return new(typeof(Province).GetProperty(nameof(Province.History)), ref LoadGuiEvents.ProvLoadAction, () => Selection.GetSelectedProvinces);
+   }
+
+   public static PropertyTreeView<Province, TProperty, TItem> GetPropertyTreeView<TProperty, TItem>(
+      PropertyInfo? propertyInfo,
+      ref LoadGuiEvents.LoadAction<Province> loadHandle)
+      where TProperty : List<TItem>
+   {
+      return new(propertyInfo,
+                 ref loadHandle,
+                 () => Selection.GetSelectedProvinces);
+   }
 
    public static PropertyQuickAssignControl<CommonCountry, TProperty, TItem> GetPropertyQuickAssignControlCC<TProperty, TItem>(List<TItem> source,
       PropertyInfo prop,
