@@ -250,6 +250,7 @@
          GroupCollectionOptions = new TableLayoutPanel();
          FocusSelectionCheckBox = new CheckBox();
          MapLayoutPanel = new TableLayoutPanel();
+         MapSplitContainer = new SplitContainer();
          MMButtonsTLPanel = new TableLayoutPanel();
          TopStripLayoutPanel = new TableLayoutPanel();
          MagicWandTolerance = new NumericUpDown();
@@ -321,6 +322,8 @@
          ProvinceCollectionsTab.SuspendLayout();
          GroupCollectionOptions.SuspendLayout();
          MapLayoutPanel.SuspendLayout();
+         ((System.ComponentModel.ISupportInitialize)MapSplitContainer).BeginInit();
+         MapSplitContainer.SuspendLayout();
          TopStripLayoutPanel.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)MagicWandTolerance).BeginInit();
          SuspendLayout();
@@ -2688,9 +2691,10 @@
          // 
          // MapLayoutPanel
          // 
-         MapLayoutPanel.ColumnCount = 2;
+         MapLayoutPanel.ColumnCount = 1;
          MapLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
          MapLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200F));
+         MapLayoutPanel.Controls.Add(MapSplitContainer, 0, 0);
          MapLayoutPanel.Controls.Add(MMButtonsTLPanel, 0, 1);
          MapLayoutPanel.Dock = DockStyle.Fill;
          MapLayoutPanel.Location = new Point(0, 0);
@@ -2701,6 +2705,19 @@
          MapLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          MapLayoutPanel.Size = new Size(1086, 844);
          MapLayoutPanel.TabIndex = 0;
+         // 
+         // MapSplitContainer
+         // 
+         MapSplitContainer.Dock = DockStyle.Fill;
+         MapSplitContainer.Location = new Point(0, 0);
+         MapSplitContainer.Margin = new Padding(0);
+         MapSplitContainer.Name = "MapSplitContainer";
+         MapSplitContainer.Panel1MinSize = 600;
+         MapSplitContainer.Panel2Collapsed = true;
+         MapSplitContainer.Panel2MinSize = 75;
+         MapSplitContainer.Size = new Size(1086, 814);
+         MapSplitContainer.SplitterDistance = 600;
+         MapSplitContainer.TabIndex = 0;
          // 
          // MMButtonsTLPanel
          // 
@@ -2969,6 +2986,8 @@
          GroupCollectionOptions.ResumeLayout(false);
          GroupCollectionOptions.PerformLayout();
          MapLayoutPanel.ResumeLayout(false);
+         ((System.ComponentModel.ISupportInitialize)MapSplitContainer).EndInit();
+         MapSplitContainer.ResumeLayout(false);
          TopStripLayoutPanel.ResumeLayout(false);
          TopStripLayoutPanel.PerformLayout();
          ((System.ComponentModel.ISupportInitialize)MagicWandTolerance).EndInit();
@@ -3214,6 +3233,7 @@
       private Label label24;
       private ComboBox BookMarkComboBox;
       private CheckBox ShowHistoryCheckBox;
+      private SplitContainer MapSplitContainer;
    }
 }
 

@@ -22,6 +22,8 @@ namespace Editor.Controls.PROPERTY
       {
          BorderStyle = BorderStyle.FixedSingle;
          Margin = new(3, 0, 0, 0);
+
+         MouseDown += OnLeftMouseButtonDown;
       }
 
       public override void SetValue(List<ProvinceHistoryEntry> value)
@@ -38,6 +40,7 @@ namespace Editor.Controls.PROPERTY
                entryNode.Nodes.Add(effectNode);
                sb.Clear();
             }
+
             Nodes.Add(entryNode);
          }
 
@@ -52,6 +55,36 @@ namespace Editor.Controls.PROPERTY
           */
 
          Invalidate();
+      }
+
+      public HistoryEntry? GetSelectedEntry()
+      {
+         var saveables = getSaveables();
+         if (saveables.Count != 1)
+            return null;
+
+         var entry = GetNodeAt(PointToClient(Cursor.Position));
+
+         if (entry is null)
+            return null;
+
+         var index = Nodes.IndexOf(entry);
+         if (index == -1) 
+            return null;
+         return saveables[0].History[index];
+      }
+
+      public void OnLeftMouseButtonDown(object? sender, MouseEventArgs e)
+      {
+         if (e.Button == MouseButtons.Left)
+         {
+            var entry = GetSelectedEntry();
+            if (entry is not null)
+            {
+
+               ProvinceHistoryManager.LoadDate(entry.Date);
+            }
+         }
       }
    }
 

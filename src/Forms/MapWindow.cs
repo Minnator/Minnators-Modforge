@@ -143,21 +143,31 @@ namespace Editor.Forms
          ResumeLayout();
       }
 
+      private void SetDynamicContent(Control control, int width = -1)
+      {
+         MapSplitContainer.SuspendLayout();
+         MapSplitContainer.Panel2Collapsed = false;
+         MapSplitContainer.IsSplitterFixed = false;
+         MapSplitContainer.SplitterDistance = width == -1 ? MapSplitContainer.Width - 300 : MapSplitContainer.Width - width;
+         MapSplitContainer.Panel2.Controls.Add(control);
+         MapSplitContainer.ResumeLayout();
+      }
+
+      private void RemoveDynamicContent()
+      {
+         MapSplitContainer.SuspendLayout();
+         MapSplitContainer.Panel2Collapsed = true;
+         MapSplitContainer.Panel2.Controls.Clear();
+         MapSplitContainer.IsSplitterFixed = true;
+         MapSplitContainer.ResumeLayout();
+      }
+
       private void RenderHistoryIfNeeded()
       {
-         MapLayoutPanel.SuspendLayout();
          if (ShowHistoryEntries)
-         {
-            MapLayoutPanel.SetColumnSpan(Globals.ZoomControl, 1);
-            MapLayoutPanel.Controls.Add(_provinceHistoryTreeView, 1, 0);
-         }
+            SetDynamicContent(_provinceHistoryTreeView);
          else
-         {
-            MapLayoutPanel.Controls.Remove(_provinceHistoryTreeView);
-            MapLayoutPanel.SetColumnSpan(Globals.ZoomControl, 2);
-         }
-
-         MapLayoutPanel.ResumeLayout();
+            RemoveDynamicContent();
       }
 
 
@@ -185,7 +195,7 @@ namespace Editor.Forms
          _provinceHistoryTreeView.Margin = new(0);
          MapLayoutPanel.Controls.Add(_provinceHistoryTreeView, 1, 0);
 
-         MapLayoutPanel.Controls.Add(Globals.ZoomControl, 0, 0);
+         MapSplitContainer.Panel1.Controls.Add(Globals.ZoomControl);
          RenderHistoryIfNeeded();
          Selection.Initialize();
          GuiDrawing.Initialize();
@@ -199,6 +209,11 @@ namespace Editor.Forms
          BookMarkComboBox.Items.AddRange([.. Globals.Bookmarks]);
          BookMarkComboBox.SelectedIndexChanged += OnBookMarkChanged;
 
+         // TODO why does this only work when doing it like this? Why do the map mode buttons not render unless this is done once
+         ShowHistoryEntries = true;
+         RenderHistoryIfNeeded();
+         ShowHistoryEntries = false;
+         RenderHistoryIfNeeded();
 
          // Initalize Settings Events and Listeners
          SettingsHelper.InitializeEvent();
@@ -212,7 +227,6 @@ namespace Editor.Forms
          var bookmark = Globals.Bookmarks[BookMarkComboBox.SelectedIndex];
          DateControl.Date = bookmark.Date;
          ProvinceHistoryManager.LoadDate(bookmark.Date);
-         MapModeManager.RenderCurrent();
       }
 
       #endregion
@@ -893,6 +907,8 @@ namespace Editor.Forms
 
       private static void OnDateChanged(object? sender, Date date)
       {
+         if (Globals.State == State.Loading)
+            return;
          ProvinceHistoryManager.LoadDate(date);
       }
 
