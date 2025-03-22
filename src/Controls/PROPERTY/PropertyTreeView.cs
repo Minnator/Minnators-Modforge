@@ -9,11 +9,15 @@ using System.Text;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Saveables;
 using Newtonsoft.Json.Linq;
+using System.Drawing.Imaging;
 
 namespace Editor.Controls.PROPERTY
 {
-   public class ProvinceHistoryEntryTreeView : PropertyTreeView<Province, List<ProvinceHistoryEntry>, ProvinceHistoryEntry>
+   public sealed class ProvinceHistoryEntryTreeView : PropertyTreeView<Province, List<ProvinceHistoryEntry>, ProvinceHistoryEntry>
    {
+      private ContextMenuStrip _itemMenuStrip;
+      private ProvinceHistoryEntry? _clickedEntry;
+
       public ProvinceHistoryEntryTreeView(
          PropertyInfo? propertyInfo,
          ref LoadGuiEvents.LoadAction<Province> loadHandle,
@@ -23,7 +27,106 @@ namespace Editor.Controls.PROPERTY
          BorderStyle = BorderStyle.FixedSingle;
          Margin = new(3, 0, 0, 0);
 
+         var deleteButton = new ToolStripButton
+         {
+            Text = "Delete Entry",
+            Name = "DeleteEntry",
+            DisplayStyle = ToolStripItemDisplayStyle.Text
+         };
+         deleteButton.Click += DeleteEntry;
+
+         _itemMenuStrip = new ();
+         var modifyButton = new ToolStripButton
+         {
+            Text = "Modify Value",
+            Name = "ModifyValue",
+            DisplayStyle = ToolStripItemDisplayStyle.Text
+         };
+         modifyButton.Click += ModifyValue;
+
+         var addNewHistoryEntry = new ToolStripButton
+         {
+            Text = "Add New Entry",
+            Name = "AddNewEntry", 
+            DisplayStyle = ToolStripItemDisplayStyle.Text
+         };
+         addNewHistoryEntry.Click += AddNewEntry;
+
+         _itemMenuStrip.Items.Add(modifyButton);
+         _itemMenuStrip.Items.Add(deleteButton);
+         _itemMenuStrip.Items.Add(addNewHistoryEntry);
+
+         _itemMenuStrip.Opening += (sender, args) =>
+         {
+            _clickedEntry = GetEntryBelowCursor();
+            if (_clickedEntry is null)
+            {
+               _itemMenuStrip.Items[0].Enabled = getSaveables().Count == 1;
+               _itemMenuStrip.Items[1].Enabled = false;
+            }
+            else
+            {
+               _itemMenuStrip.Items[0].Enabled = true;
+               _itemMenuStrip.Items[1].Enabled = true;
+            }
+
+         };
+
+         ContextMenuStrip = _itemMenuStrip;
+
          MouseDown += OnLeftMouseButtonDown;
+      }
+
+      private void ModifyValue(object? sender, EventArgs e)
+      {
+         
+      }
+
+      private void AddNewEntry(object? sender, EventArgs e)
+      {
+         var saveables = getSaveables();
+         if (saveables.Count != 1)
+            return;
+
+         ProvinceHistoryEntry entry;
+         int index;
+         if (_clickedEntry == null)
+         {
+            entry = new(new(Globals.MapWindow.DateControl.Date.TimeStamp));
+            index = saveables[0].History.BinarySearch(entry);
+         }
+         else
+         {
+            entry = new(new(_clickedEntry.Date.TimeStamp + 1));
+            index = saveables[0].History.BinarySearch(_clickedEntry);
+         }
+
+         if (index < 0)
+            index = ~index;
+         else
+            index++;
+
+         if (index == saveables[0].History.Count)
+            Saveable.SetFieldEditCollection<Province, List<ProvinceHistoryEntry>, ProvinceHistoryEntry>(getSaveables.Invoke(), [entry], [], PropertyInfo);
+         else
+            Saveable.InsertInFieldCollection<Province, List<ProvinceHistoryEntry>, ProvinceHistoryEntry>(getSaveables.Invoke()[0], entry, index, PropertyInfo);
+      }
+
+      private void DeleteEntry(object? sender, EventArgs e)
+      {
+         if (_clickedEntry is null)
+            return;
+
+         var saveables = getSaveables();
+         if (saveables.Count != 1)
+            return;
+
+         Saveable.SetFieldEditCollection<Province, List<ProvinceHistoryEntry>, ProvinceHistoryEntry>(getSaveables.Invoke(), [], [_clickedEntry], PropertyInfo);
+      }
+
+      public void LoadValueToGui()
+      {
+
       }
 
       public override void SetValue(List<ProvinceHistoryEntry> value)
@@ -57,7 +160,7 @@ namespace Editor.Controls.PROPERTY
          Invalidate();
       }
 
-      public HistoryEntry? GetSelectedEntry()
+      public ProvinceHistoryEntry? GetEntryBelowCursor()
       {
          var saveables = getSaveables();
          if (saveables.Count != 1)
@@ -78,10 +181,9 @@ namespace Editor.Controls.PROPERTY
       {
          if (e.Button == MouseButtons.Left)
          {
-            var entry = GetSelectedEntry();
+            var entry = GetEntryBelowCursor();
             if (entry is not null)
             {
-
                ProvinceHistoryManager.LoadDate(entry.Date);
             }
          }

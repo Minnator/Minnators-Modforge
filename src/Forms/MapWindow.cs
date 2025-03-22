@@ -1,12 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Drawing.Imaging;
-using System.Media;
-using System.Reflection;
 using System.Runtime;
 using System.Text;
 using Editor.Controls;
 using Editor.Controls.PROPERTY;
-using Editor.DataClasses.Achievements;
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
@@ -15,22 +12,15 @@ using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
 using Editor.Events;
 using Editor.Forms.Feature;
-using Editor.Forms.Feature.Crash_Reporter;
 using Editor.Forms.Feature.SavingClasses;
 using Editor.Forms.GetUserInput;
-using Editor.Forms.Loadingscreen;
 using Editor.Forms.PopUps;
 using Editor.Helper;
-using Editor.Loading;
-using Editor.NameGenerator;
 using Editor.Parser;
-using Editor.Properties;
 using Editor.Saving;
 using Editor.src.Forms.Console;
 using Editor.src.Forms.Feature;
-using static Editor.Helper.ProvinceEnumHelper;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
-using MapLoading = Editor.Loading.Enhanced.MapLoading;
 using Region = Editor.DataClasses.Saveables.Region;
 
 namespace Editor.Forms
@@ -1584,5 +1574,18 @@ namespace Editor.Forms
          ShowHistoryEntries = ShowHistoryCheckBox.Checked;
          RenderHistoryIfNeeded();
       }
+
+      #region HISTORY ENTRIES
+
+      /*
+       * Add context menu strip on items in the history list
+       * Add context menu on HistoryEntry tree
+       * LMB double-click on HistoryEntry tree to edit the value
+       * ENTF on selected to delete entry / token
+       */
+
+
+
+      #endregion
    }
 }

@@ -22,6 +22,7 @@ namespace Editor.Forms.Loadingscreen
    {
       private readonly CustomProgressBar _progressBar;
       private readonly MemoryStream _ms = null!;
+      private readonly BackgroundWorker bw;
 
       public event EventHandler? LoadingComplete;
 
@@ -122,7 +123,7 @@ namespace Editor.Forms.Loadingscreen
 
 
          //create a background worker to load the data
-         var bw = new BackgroundWorker();
+         bw = new ();
          bw.WorkerReportsProgress = true;
          bw.DoWork += OnBwOnDoWork;
          bw.RunWorkerCompleted += (s, e) => OnLoadingComplete();
@@ -137,6 +138,7 @@ namespace Editor.Forms.Loadingscreen
       ~LoadingScreen()
       {
          _ms.Dispose();
+         bw.Dispose();
       }
       
       private void LoadingScreen_LoadingStageChanged(object? sender, int e)

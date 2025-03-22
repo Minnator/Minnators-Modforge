@@ -48,6 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="ProjectOverview\NewFile1.txt" />
+    <None Remove="src\Loading\Enhanced\PCFL\Implementation\Custom_Effects" />
+    <None Remove="src\Loading\Enhanced\PCFL\Implementation\NewFile1.txt" />
     <None Remove="src\Loading\Enhanced\PCFL\Implementation\NewFile4.txt" />
     <None Remove="src\Loading\Enhanced\PCFL\Implementation\ParseTrigger.c" />
     <None Remove="src\Loading\Enhanced\PCFL\Implementation\ProvinceScope\NewFile1.txt" />

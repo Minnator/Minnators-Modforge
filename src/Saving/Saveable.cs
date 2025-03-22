@@ -108,7 +108,7 @@ public abstract class Saveable : IDisposable
       Debug.Assert(field is not null && value is not null, "field is not null && value is not null in SetIfModifiedEnumerable");
       if (field.SequenceEqual(value))
          return false;
-      return InternalFieldSet(ref field, value, GetPropertyInfo(propertyName!)!);
+      return SetFieldInternal(ref field, value, GetPropertyInfo(propertyName!)!);
    }
 
    public void SetProperty<T>(string propertyName, T value)
@@ -147,7 +147,7 @@ public abstract class Saveable : IDisposable
    /// </summary>
    /// <typeparam name="T"></typeparam>
    /// <param name="info"></param>
-   /// <param name="value"></param>
+   /// <param name="value"></param>SetFieldEditCollection
    private void SetFieldSilent<T>(PropertyInfo info, T value, bool update = true)
    {
       lock (this)
@@ -179,6 +179,31 @@ public abstract class Saveable : IDisposable
          target.OnPropertyChanged(property.Name);
    }
 
+   public static void InsertInFieldCollection<TSaveable, TProperty, TItem>(TSaveable target,
+                                                                           TItem add,
+                                                                          int index,
+                                                                           PropertyInfo property) where TSaveable : Saveable where TProperty : List<TItem>
+   {
+      if (Globals.State != State.Running)
+         return;
+
+      HistoryManager.AddCommand(new CInsertInListProperty<TSaveable, TProperty, TItem>(property, [target], add, [index]));
+      target.OnPropertyChanged(property.Name);
+   }
+   public static void InsertInFieldCollection<TSaveable, TProperty, TItem>(ICollection<TSaveable> targets,
+                                                                           TItem add,
+                                                                           List<int> index,
+                                                                           PropertyInfo property) where TSaveable : Saveable where TProperty : List<TItem>
+   {
+      if (Globals.State != State.Running)
+         return;
+
+      HistoryManager.AddCommand(new CInsertInListProperty<TSaveable, TProperty, TItem>(property, [.. targets], add, index));
+      foreach (var target in targets)
+         target.OnPropertyChanged(property.Name);
+   }
+
+
    /// <summary>
    /// 
    /// </summary>
@@ -197,6 +222,17 @@ public abstract class Saveable : IDisposable
       }
       foreach(var target in targets)
          target.OnPropertyChanged(property.Name);
+   }
+
+   public static void SetFieldSilentExternal<TS, TObject, T>(TS target, TObject changedObject, T value, PropertyInfo property) where TS : Saveable
+   {
+      lock (target)
+      {
+         target.Suppressed = true;
+         property.SetValue(changedObject, value);
+         target.Suppressed = false;
+      }
+      LoadGuiEvents.TriggerGuiUpdate(typeof(TS), property);
    }
 
    public static void SetFieldMultipleSilent<TS, T>(ICollection<TS> targets, T value, PropertyInfo property) where TS : Saveable
@@ -254,7 +290,7 @@ public abstract class Saveable : IDisposable
    {
       if (EqualityComparer<T>.Default.Equals(field, value)) 
          return false;
-      return InternalFieldSet(ref field, value, GetPropertyInfo(propertyName!)!);
+      return SetFieldInternal(ref field, value, GetPropertyInfo(propertyName!)!);
    }
 
    /// <summary>
@@ -266,7 +302,7 @@ public abstract class Saveable : IDisposable
    /// <param name="value"></param>
    /// <param name="property"></param>
    /// <returns></returns>
-   protected virtual bool InternalFieldSet<T>(ref T field, T value, PropertyInfo property)
+   protected virtual bool SetFieldInternal<T>(ref T field, T value, PropertyInfo property)
    {
       if (Globals.State == State.Running && !Suppressed)
       {
@@ -277,6 +313,23 @@ public abstract class Saveable : IDisposable
       return true;
    }
 
+   public virtual bool SetFieldExternal<TValue, TObject>(ref TValue field, TValue value, TObject target, [CallerMemberName] string? propertyName = null)
+   {
+      if (EqualityComparer<TValue>.Default.Equals(field, value))
+         return false;
+      return SetFieldInternal(ref field, value, GetPropertyInfo(propertyName!)!);
+   }
+
+   private bool SetFieldExternalButInternal<TValue, TObject>(ref TValue field, TValue value, TObject target, PropertyInfo property)
+   {
+      if (Globals.State == State.Running && !Suppressed)
+      {
+         HistoryManager.AddCommand(new CModifyProperty<TValue>(property, this, value, field));
+         OnPropertyChanged(property.Name);
+      }
+      field = value;
+      return true;
+   }
 
    public void SetPath(ref PathObj path)
    {

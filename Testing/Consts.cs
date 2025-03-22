@@ -27,4 +27,7 @@ public class Consts
 
    //public const string MOD_PATH = @"C:\Users\david\Downloads\Neuer Ordner"; 
    //public const string VANILLA_PATH = @"C:\Program Files (x86)\Steam\steamapps\common\Europa Universalis IV";
+
+
+   //public const string MOD_PATH = @"C:\Users\david\Downloads\Heavenly-Hall-main\Heavenly-Hall-main"; 
 }

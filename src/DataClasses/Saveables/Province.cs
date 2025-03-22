@@ -483,8 +483,12 @@ namespace Editor.DataClasses.Saveables
 
       #endregion
 
-      public List<ProvinceHistoryEntry> History { get; set; } = [];
-      
+      public List<ProvinceHistoryEntry> History
+      {
+         get => _history;
+         set => SetIfModifiedEnumerable<List<ProvinceHistoryEntry>, ProvinceHistoryEntry>(ref _history, value);
+      }
+
 
       #region MMF Data
       public int TotalDevelopment => _baseManpower + _baseTax + _baseProduction;
@@ -497,6 +501,7 @@ namespace Editor.DataClasses.Saveables
       private Memory<Point> _pixels;
       private Memory<Point> _borders;
       private Dictionary<Province, Memory<Point>> _provinceBorders = new();
+      private List<ProvinceHistoryEntry> _history = [];
 
       public Memory<Point> Pixels
       {
@@ -765,7 +770,7 @@ namespace Editor.DataClasses.Saveables
       /// <param name="value"></param>
       /// <param name="property"></param>
       /// <returns></returns>
-      protected override bool InternalFieldSet<T>(ref T field, T value, PropertyInfo property)
+      protected override bool SetFieldInternal<T>(ref T field, T value, PropertyInfo property)
       {
          if (Globals.State == State.Running && !Suppressed)
          {

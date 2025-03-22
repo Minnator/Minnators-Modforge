@@ -28,6 +28,7 @@
       /// </summary>
       private void InitializeComponent()
       {
+         components = new System.ComponentModel.Container();
          System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MissionTreeExporter));
          tableLayoutPanel1 = new TableLayoutPanel();
          BackgroundCheckBox = new CheckBox();
@@ -39,8 +40,10 @@
          MissionFrameIcon = new ComboBox();
          CountrySelection = new ComboBox();
          SaveTextLabel = new Label();
-         ExportButton = new Button();
          FileNameTextBox = new TextBox();
+         ExportButton = new Button();
+         CopyButton = new Button();
+         toolTip1 = new ToolTip(components);
          tableLayoutPanel1.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)PrewViewBox).BeginInit();
          SuspendLayout();
@@ -58,13 +61,15 @@
          tableLayoutPanel1.Controls.Add(MissionEffectIcon, 1, 4);
          tableLayoutPanel1.Controls.Add(MissionFrameIcon, 1, 5);
          tableLayoutPanel1.Controls.Add(CountrySelection, 1, 6);
-         tableLayoutPanel1.Controls.Add(SaveTextLabel, 1, 10);
-         tableLayoutPanel1.Controls.Add(ExportButton, 1, 8);
+         tableLayoutPanel1.Controls.Add(SaveTextLabel, 1, 11);
          tableLayoutPanel1.Controls.Add(FileNameTextBox, 1, 7);
+         tableLayoutPanel1.Controls.Add(ExportButton, 1, 9);
+         tableLayoutPanel1.Controls.Add(CopyButton, 1, 8);
          tableLayoutPanel1.Dock = DockStyle.Fill;
          tableLayoutPanel1.Location = new Point(0, 0);
          tableLayoutPanel1.Name = "tableLayoutPanel1";
-         tableLayoutPanel1.RowCount = 11;
+         tableLayoutPanel1.RowCount = 12;
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
@@ -76,6 +81,7 @@
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
          tableLayoutPanel1.Size = new Size(800, 450);
          tableLayoutPanel1.TabIndex = 0;
          // 
@@ -136,7 +142,7 @@
          PrewViewBox.Dock = DockStyle.Fill;
          PrewViewBox.Location = new Point(3, 3);
          PrewViewBox.Name = "PrewViewBox";
-         tableLayoutPanel1.SetRowSpan(PrewViewBox, 11);
+         tableLayoutPanel1.SetRowSpan(PrewViewBox, 12);
          PrewViewBox.Size = new Size(582, 444);
          PrewViewBox.SizeMode = PictureBoxSizeMode.Zoom;
          PrewViewBox.TabIndex = 5;
@@ -176,23 +182,12 @@
          // 
          SaveTextLabel.AutoSize = true;
          SaveTextLabel.Dock = DockStyle.Fill;
-         SaveTextLabel.Location = new Point(591, 300);
+         SaveTextLabel.Location = new Point(591, 330);
          SaveTextLabel.Name = "SaveTextLabel";
-         SaveTextLabel.Size = new Size(206, 150);
+         SaveTextLabel.Size = new Size(206, 120);
          SaveTextLabel.TabIndex = 10;
          SaveTextLabel.Text = "SaveText";
          SaveTextLabel.TextAlign = ContentAlignment.MiddleCenter;
-         // 
-         // ExportButton
-         // 
-         ExportButton.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-         ExportButton.Location = new Point(591, 243);
-         ExportButton.Name = "ExportButton";
-         ExportButton.Size = new Size(75, 24);
-         ExportButton.TabIndex = 2;
-         ExportButton.Text = "Export";
-         ExportButton.UseVisualStyleBackColor = true;
-         ExportButton.Click += ExportButton_Click;
          // 
          // FileNameTextBox
          // 
@@ -202,6 +197,28 @@
          FileNameTextBox.PlaceholderText = "Optional filename";
          FileNameTextBox.Size = new Size(206, 23);
          FileNameTextBox.TabIndex = 11;
+         // 
+         // ExportButton
+         // 
+         ExportButton.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+         ExportButton.Location = new Point(591, 273);
+         ExportButton.Name = "ExportButton";
+         ExportButton.Size = new Size(75, 24);
+         ExportButton.TabIndex = 2;
+         ExportButton.Text = "Export";
+         ExportButton.UseVisualStyleBackColor = true;
+         ExportButton.Click += ExportButton_Click;
+         // 
+         // CopyButton
+         // 
+         CopyButton.Location = new Point(591, 243);
+         CopyButton.Name = "CopyButton";
+         CopyButton.Size = new Size(75, 23);
+         CopyButton.TabIndex = 12;
+         CopyButton.Text = "Copy";
+         toolTip1.SetToolTip(CopyButton, "The copied image does not have transparency");
+         CopyButton.UseVisualStyleBackColor = true;
+         CopyButton.Click += CopyButton_Click;
          // 
          // MissionTreeExporter
          // 
@@ -233,5 +250,7 @@
       private ComboBox MissionFrameIcon;
       private Label SaveTextLabel;
       private TextBox FileNameTextBox;
+      private Button CopyButton;
+      private ToolTip toolTip1;
    }
 }

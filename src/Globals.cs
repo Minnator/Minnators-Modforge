@@ -439,6 +439,8 @@ public static class Globals
 // - [-] Add a tradegoods creation and editing menu
 // - [ ] Loosing hover when selecting and deselecting a province
 
+// - [ ] Save comments when parsing files
+
 // - [ ] Grid for pixels
 // - [ ] Tools:
 //    - [ ] Pen

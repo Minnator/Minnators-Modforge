@@ -2,6 +2,7 @@
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Saveables;
 using Editor.Helper;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 using CheckBox = System.Windows.Forms.CheckBox;
 
 namespace Editor.src.Forms.Feature
@@ -52,31 +53,32 @@ namespace Editor.src.Forms.Feature
 
       }
 
-      public void ExportMissionTree()
+      public Bitmap? ExportMissionTree(out string fileName)
       {
          //var slottedLayout = MissionLayoutEngine.LayoutFile("Pomerania_Missions.txt");
          var slots = MissionLayoutEngine.LayoutSlotsOfFile(SelectMissionFile.Text);
+         fileName = string.Empty;
          if (slots.Count == 0)
-            return;
-         
+            return null;
+
          var targetCountry = CountrySelection.SelectedIndex == -1 ? Globals.Countries["REB"] : Globals.Countries[CountrySelection.Text];
          var effect = (MissionView.CompletionType)MissionEffectIcon.SelectedIndex;
          var frame = (MissionView.FrameType)MissionFrameIcon.SelectedIndex;
          var missionView = MissionLayoutEngine.LayoutSlotsToTransparentImage(slots, effect, frame, targetCountry);
 
-         var fileName = string.IsNullOrWhiteSpace(FileNameTextBox.Text) ? $"{targetCountry.Tag}_{RemoveTxt(SelectMissionFile.Text)}.png" : $"{FileNameTextBox.Text}.png";
+         fileName = string.IsNullOrWhiteSpace(FileNameTextBox.Text) ? $"{targetCountry.Tag}_{RemoveTxt(SelectMissionFile.Text)}.png" : $"{FileNameTextBox.Text}.png";
 
          if (BackgroundCheckBox.Checked)
          {
             var mWBackground = MissionLayoutEngine.DrawMissionOnBackGround(missionView, !FullBgBox.Checked, MissionNameBox.Checked, slots, targetCountry);
             PrewViewBox.Image = mWBackground;
-            IO.SaveImage(Path.Combine(Globals.Settings.Saving.MissionExportPath, fileName), mWBackground);
          }
          else
          {
-            IO.SaveImage(Path.Combine(Globals.Settings.Saving.MissionExportPath, fileName), missionView);
             PrewViewBox.Image = missionView;
+            return missionView;
          }
+         return null;
       }
 
       private string RemoveTxt(string fileName)
@@ -88,7 +90,10 @@ namespace Editor.src.Forms.Feature
 
       private void ExportButton_Click(object sender, EventArgs e)
       {
-         ExportMissionTree();
+         var image = ExportMissionTree(out var fileName);
+         if (image is null)
+            return;
+         IO.SaveImage(Path.Combine(Globals.Settings.Saving.MissionExportPath, fileName), image);
       }
 
       private void BackgroundCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -102,6 +107,15 @@ namespace Editor.src.Forms.Feature
 
       private void FullBgBox_CheckedChanged(object sender, EventArgs e)
       {
+      }
+
+      private void CopyButton_Click(object sender, EventArgs e)
+      {
+         var image = ExportMissionTree(out _);
+         if (image is null)
+            return;
+
+         Clipboard.SetImage(image);
       }
    }
 }
