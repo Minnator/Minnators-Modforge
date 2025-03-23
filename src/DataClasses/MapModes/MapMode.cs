@@ -26,7 +26,7 @@ public abstract class MapMode
       if (ShowOccupation)
          MapDrawing.DrawOccupations(false, Globals.ZoomControl);
 
-      MapDrawing.DrawAllBorders(Color.Black.ToArgb(), Globals.ZoomControl);
+      MapDrawing.DrawAllBorders(Color.Black.ToArgb(), Globals.ZoomControl, MapModeManager.ColorCache);
       Selection.RePaintSelection();
       Globals.ZoomControl.Invalidate();
       MapModeManager.PreviousLandOnly = IsLandOnly;

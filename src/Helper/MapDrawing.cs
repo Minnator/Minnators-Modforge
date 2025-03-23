@@ -38,40 +38,45 @@ public static class MapDrawing
          DrawPixels(points, color, zoomControl);
    }
 
-   public static void DrawOnMap(ICollection<Province> provinces, ZoomControl zoomControl, PixelsOrBorders pixelOrBorders)
+   public static void DrawOnMap(ICollection<Province> provinces, ZoomControl zoomControl, PixelsOrBorders pixelOrBorders, Dictionary<Province, int> cache)
    {
       if (provinces.Count == 0)
          return;
 
       if (provinces.Count > Environment.ProcessorCount)
-         DrawProvincesParallel(provinces, zoomControl, pixelOrBorders);
+         DrawProvincesParallel(provinces, zoomControl, pixelOrBorders, cache);
       else
          foreach (var province in provinces)
             switch (pixelOrBorders)
             {
                case PixelsOrBorders.Pixels:
-                  DrawPixels(province.Pixels, MapModeManager.ColorCache[province], zoomControl);
+                  DrawPixels(province.Pixels, cache[province], zoomControl);
                   break;
                case PixelsOrBorders.Borders:
                   if (Globals.Settings.Rendering.Map.MergeBorders == RenderingSettings.BorderMergeType.None)
-                     DrawPixels(province.Borders, MapModeManager.ColorCache[province], zoomControl);
+                     DrawPixels(province.Borders, cache[province], zoomControl);
                   else
-                     DrawPixelsMerged(province, MapModeManager.ColorCache[province], zoomControl);
+                     DrawPixelsMerged(province, cache[province], zoomControl, cache);
                   break;
                case PixelsOrBorders.Both:
-                  DrawPixels(province.Pixels, MapModeManager.ColorCache[province], zoomControl);
-                  DrawPixels(province.Borders, MapModeManager.ColorCache[province], zoomControl);
+                  DrawPixels(province.Pixels, cache[province], zoomControl);
+                  DrawPixels(province.Borders, cache[province], zoomControl);
                   break;
             }
    }
 
-   public static void DrawOnMap(ICollection<Province> provinces, int color, ZoomControl zoomControl, PixelsOrBorders pixelOrBorders)
+   public static void DrawOnMap(ICollection<Province> provinces, ZoomControl zoomControl, PixelsOrBorders pixelOrBorders)
+   {
+      DrawOnMap(provinces, zoomControl, pixelOrBorders, MapModeManager.ColorCache);
+   }
+
+   public static void DrawOnMap(ICollection<Province> provinces, int color, ZoomControl zoomControl, PixelsOrBorders pixelOrBorders, Dictionary<Province, int> cache)
    {
       if (provinces.Count == 0)
          return;
 
       if (provinces.Count > Environment.ProcessorCount)
-         DrawProvincesParallel(provinces, color, zoomControl, pixelOrBorders);
+         DrawProvincesParallel(provinces, color, zoomControl, pixelOrBorders, cache);
       else
          foreach (var province in provinces)
             switch (pixelOrBorders)
@@ -83,7 +88,7 @@ public static class MapDrawing
                   if (Globals.Settings.Rendering.Map.MergeBorders == RenderingSettings.BorderMergeType.None)
                      DrawPixels(province.Borders, color, zoomControl);
                   else
-                     DrawPixelsMerged(province, color, zoomControl);
+                     DrawPixelsMerged(province, color, zoomControl, cache);
                   break;
                case PixelsOrBorders.Both:
                   DrawPixels(province.Pixels, color, zoomControl);
@@ -92,7 +97,12 @@ public static class MapDrawing
             }
    }
 
-   public static void DrawOnMap(Province province, int color, ZoomControl zoomControl, PixelsOrBorders pixelOrBorders)
+   public static void DrawOnMap(ICollection<Province> provinces, int color, ZoomControl zoomControl, PixelsOrBorders pixelOrBorders)
+   {
+      DrawOnMap(provinces, color, zoomControl, pixelOrBorders, MapModeManager.ColorCache);
+   }
+
+   public static void DrawOnMap(Province province, int color, ZoomControl zoomControl, PixelsOrBorders pixelOrBorders, Dictionary<Province, int> cache)
    {
       switch (pixelOrBorders)
       {
@@ -103,7 +113,7 @@ public static class MapDrawing
             if (Globals.Settings.Rendering.Map.MergeBorders == RenderingSettings.BorderMergeType.None)
                DrawPixels(province.Borders, color, zoomControl);
             else
-               DrawPixelsMerged(province, color, zoomControl);
+               DrawPixelsMerged(province, color, zoomControl, cache);
             break;
          case PixelsOrBorders.Both:
             DrawPixels(province.Pixels, color, zoomControl);
@@ -112,14 +122,18 @@ public static class MapDrawing
       }
    }
 
+   public static void DrawOnMap(Province province, int color, ZoomControl zoomControl, PixelsOrBorders pixelOrBorders)
+   {
+      DrawOnMap(province, color, zoomControl, pixelOrBorders, MapModeManager.ColorCache);
+   }
 
-   public static void DrawOnMap(ICollection<Province> provinces, Func<Province, int> func, ZoomControl zoomControl, PixelsOrBorders pixelOrBorders)
+   public static void DrawOnMap(ICollection<Province> provinces, Func<Province, int> func, ZoomControl zoomControl, PixelsOrBorders pixelOrBorders, Dictionary<Province, int> cache)
    {
       if (provinces.Count == 0)
          return;
 
       if (provinces.Count > Environment.ProcessorCount)
-         DrawProvincesParallel(provinces, func, zoomControl, pixelOrBorders);
+         DrawProvincesParallel(provinces, func, zoomControl, pixelOrBorders, cache);
       else
          foreach (var province in provinces)
             switch (pixelOrBorders)
@@ -131,7 +145,7 @@ public static class MapDrawing
                   if (Globals.Settings.Rendering.Map.MergeBorders == RenderingSettings.BorderMergeType.None)
                      DrawPixels(province.Borders, func.Invoke(province), zoomControl);
                   else
-                     DrawPixelsMerged(province, func.Invoke(province), zoomControl);
+                     DrawPixelsMerged(province, func.Invoke(province), zoomControl, cache);
                   break;
                case PixelsOrBorders.Both:
                   DrawPixels(province.Pixels, func.Invoke(province), zoomControl);
@@ -163,7 +177,7 @@ public static class MapDrawing
             DrawPixels(province.Borders, color, zoomControl);
    }
 
-   private static void DrawProvincesParallel(ICollection<Province> provinces, Func<Province, int> func, ZoomControl zoomControl, PixelsOrBorders pixelsOrBorders)
+   private static void DrawProvincesParallel(ICollection<Province> provinces, Func<Province, int> func, ZoomControl zoomControl, PixelsOrBorders pixelsOrBorders, Dictionary<Province, int> cache)
    {
       Parallel.ForEach(provinces, province => // Cpu core affinity?
       {
@@ -176,7 +190,7 @@ public static class MapDrawing
                if (Globals.Settings.Rendering.Map.MergeBorders == RenderingSettings.BorderMergeType.None)
                   DrawPixels(province.Borders, func.Invoke(province), zoomControl);
                else
-                  DrawPixelsMerged(province, func.Invoke(province), zoomControl);
+                  DrawPixelsMerged(province, func.Invoke(province), zoomControl, cache);
                break;
             case PixelsOrBorders.Both:
                DrawPixels(province.Pixels, func.Invoke(province), zoomControl);
@@ -191,39 +205,39 @@ public static class MapDrawing
    /// </summary>
    /// <param name="color"></param>
    /// <param name="zoomControl"></param>
-   public static void DrawAllBorders(int color, ZoomControl zoomControl)
+   public static void DrawAllBorders(int color, ZoomControl zoomControl, Dictionary<Province, int> cache)
    {
       Parallel.ForEach(Globals.Provinces, province =>
       {
-         DrawPixelsMerged(province, color, zoomControl);
+         DrawPixelsMerged(province, color, zoomControl, cache);
       });
    }
 
    // Invalidation rects needs to bet taken care of
-   private static void DrawProvincesParallel(ICollection<Province> provinces, ZoomControl zoomControl, PixelsOrBorders pixelsOrBorders)
+   private static void DrawProvincesParallel(ICollection<Province> provinces, ZoomControl zoomControl, PixelsOrBorders pixelsOrBorders, Dictionary<Province, int> cache)
    {
       Parallel.ForEach(provinces, province => // Cpu core affinity?
       {
          switch (pixelsOrBorders)
          {
             case PixelsOrBorders.Pixels:
-               DrawPixels(province.Pixels, MapModeManager.ColorCache[province], zoomControl);
+               DrawPixels(province.Pixels, cache[province], zoomControl);
                break;
             case PixelsOrBorders.Borders:
                if (Globals.Settings.Rendering.Map.MergeBorders == RenderingSettings.BorderMergeType.None)
-                  DrawPixels(province.Borders, MapModeManager.ColorCache[province], zoomControl);
+                  DrawPixels(province.Borders, cache[province], zoomControl);
                else
-                  DrawPixelsMerged(province, MapModeManager.ColorCache[province], zoomControl);
+                  DrawPixelsMerged(province, cache[province], zoomControl, cache);
                break;
             case PixelsOrBorders.Both:
-               DrawPixels(province.Pixels, MapModeManager.ColorCache[province], zoomControl);
-               DrawPixels(province.Borders, MapModeManager.ColorCache[province], zoomControl);
+               DrawPixels(province.Pixels, cache[province], zoomControl);
+               DrawPixels(province.Borders, cache[province], zoomControl);
                break;
          }
       });
    }
    // Invalidation rects needs to bet taken care of
-   private static void DrawProvincesParallel(ICollection<Province> provinces, int color, ZoomControl zoomControl, PixelsOrBorders pixelsOrBorders)
+   private static void DrawProvincesParallel(ICollection<Province> provinces, int color, ZoomControl zoomControl, PixelsOrBorders pixelsOrBorders, Dictionary<Province, int> cache)
    {
       Parallel.ForEach(provinces, province => // Cpu core affinity?
       {
@@ -236,7 +250,7 @@ public static class MapDrawing
                if (Globals.Settings.Rendering.Map.MergeBorders == RenderingSettings.BorderMergeType.None)
                   DrawPixels(province.Borders, color, zoomControl);
                else
-                  DrawPixelsMerged(province, color, zoomControl);
+                  DrawPixelsMerged(province, color, zoomControl, cache);
                break;
             case PixelsOrBorders.Both:
                DrawPixels(province.Pixels, color, zoomControl);
@@ -247,11 +261,11 @@ public static class MapDrawing
    }
 
    /// EXPERIMENTAL
-   private static void DrawPixelsMerged(Province province, int color, ZoomControl zoomControl)
+   private static void DrawPixelsMerged(Province province, int color, ZoomControl zoomControl, Dictionary<Province, int> cache)
    {
-      var provColor = MapModeManager.ColorCache[province];
+      var provColor = cache[province];
       foreach (var neighbours in province.ProvinceBorders)
-         if (provColor != MapModeManager.ColorCache[neighbours.Key])
+         if (provColor != cache[neighbours.Key])
             DrawPixels(neighbours.Value, color, zoomControl);
          else
             DrawPixels(neighbours.Value, provColor, zoomControl);

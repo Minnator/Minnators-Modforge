@@ -29,6 +29,8 @@ namespace Editor.Forms.Feature
 
          FormClosing += OnFormClose;
 
+         LayerListView.FullRowSelect = true;
+
          LayerListView.ItemMoved += ListBoxOnItemMoved;
 
          LayerListView.KeyDown += (s, e) =>
@@ -88,7 +90,7 @@ namespace Editor.Forms.Feature
 
       private void SelectFolderButton(object sender, EventArgs e)
       {
-         IO.OpenFolderDialog(Globals.ModPath, "select a folder where to save the image", out var path);
+         IO.OpenFolderDialog(Globals.Settings.Saving.MapModeExportPath, "select a folder where to save the image", out var path);
          Globals.Settings.Saving.MapModeExportPath = path;
       }
 
@@ -249,7 +251,7 @@ namespace Editor.Forms.Feature
       public Rectangle RenderToMap(ZoomControl control)
       {
          List<Province> provinceList = ProvinceGetter();
-         MapDrawing.DrawOnMap(provinceList, GetColor, control, pixelsOrBorders);
+         MapDrawing.DrawOnMap(provinceList, GetColor, control, pixelsOrBorders, );
          return Geometry.GetBounds(provinceList);
       }
 
