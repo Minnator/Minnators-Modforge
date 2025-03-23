@@ -163,6 +163,9 @@
   <data name="HistoryEntriesEnabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\src\Resources\HistoryEntriesEnabled.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\src\Resources\ProvinceFileCreator.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="LoadingGif" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\src\Resources\lol.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

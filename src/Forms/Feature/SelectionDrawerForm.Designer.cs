@@ -164,6 +164,7 @@
          // OptionComboBox
          // 
          OptionComboBox.Dock = DockStyle.Fill;
+         OptionComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
          OptionComboBox.FormattingEnabled = true;
          OptionComboBox.Location = new Point(3, 3);
          OptionComboBox.Name = "OptionComboBox";
@@ -180,11 +181,13 @@
          AddButton.TabIndex = 1;
          AddButton.Text = "Add";
          AddButton.UseVisualStyleBackColor = true;
+         AddButton.Click += AddButton_Click;
          // 
          // ImageSizeBox
          // 
          SettingsTBL.SetColumnSpan(ImageSizeBox, 2);
          ImageSizeBox.Dock = DockStyle.Fill;
+         ImageSizeBox.DropDownStyle = ComboBoxStyle.DropDownList;
          ImageSizeBox.FormattingEnabled = true;
          ImageSizeBox.Location = new Point(3, 392);
          ImageSizeBox.Name = "ImageSizeBox";

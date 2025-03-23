@@ -5,6 +5,7 @@ using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Saveables;
 using Editor.DataClasses.Settings;
 using Editor.Helper;
+using Editor.Properties;
 
 namespace Editor.Forms.Feature
 {
@@ -29,6 +30,41 @@ namespace Editor.Forms.Feature
          FormClosing += OnFormClose;
 
          LayerListView.ItemMoved += ListBoxOnItemMoved;
+
+         LayerListView.KeyDown += (s, e) =>
+         {
+            if (e.KeyCode == Keys.Delete)
+            {
+               if (LayerListView.SelectedIndices.Count == 1)
+               {
+                  layers.RemoveAt(LayerListView.SelectedIndices[0]);
+                  LayerListView.Items.RemoveAt(LayerListView.SelectedIndices[0]);
+                  RenderImage();
+               }
+            }
+         };
+
+         LayerListView.MouseDoubleClick += (s, e) =>
+         {
+            if (LayerListView.SelectedItems.Count == 1)
+            {
+               var layer = layers[LayerListView.SelectedIndices[0]];
+               var popup = new PopUpForm(layer)
+               {
+                  StartPosition = FormStartPosition.CenterParent,
+                  TopMost = true
+               };
+
+               // Set the owner to the always-on-top form
+               popup.ShowDialog(this);
+               RenderImage();
+            }
+         };
+
+         OptionComboBox.Items.AddRange([.. Enum.GetNames(typeof(DrawingOptions))]);
+         ImageSizeBox.Items.AddRange([.. Enum.GetNames(typeof(ImageSize))]);
+         ImageSizeBox.SelectedIndex = 0;
+
       }
 
       private void ListBoxOnItemMoved(object? sender, SwappEventArgs e)
@@ -167,11 +203,9 @@ namespace Editor.Forms.Feature
       private DrawingOptions _options;
 
       public MapMode MapMode { get; set; } = MapModeManager.IdMapMode;
-
       public RenderingSettings.BorderMergeType Style { get; set; } = RenderingSettings.BorderMergeType.Merge;
-
       public PixelsOrBorders pixelsOrBorders { get; set; } = PixelsOrBorders.Both;
-
+      public byte Opacity { get; set; } = 0;
       public Color Shading { get; set; } = Color.FromArgb(0, 0, 0, 0);
 
 
@@ -203,12 +237,12 @@ namespace Editor.Forms.Feature
 
       private int GetColor(Province province)
       {
-         var factor = Shading.A / 255.0f;
+         var factor = Opacity / 255.0f;
          var inverse = 1f - factor;
          var color = Color.FromArgb(MapMode.GetProvinceColor(province));
-         var R = (byte)(color.R * factor + Shading.R * inverse);
-         var G = (byte)(color.G * factor + Shading.G * inverse);
-         var B = (byte)(color.B * factor + Shading.B * inverse);
+         var R = (byte)(color.R * inverse + Shading.R * factor);
+         var G = (byte)(color.G * inverse + Shading.G * factor);
+         var B = (byte)(color.B * inverse + Shading.B * factor);
          return (R << 16 | G << 8 | B);
       }
 
@@ -220,5 +254,22 @@ namespace Editor.Forms.Feature
       }
 
       public override string ToString() => Options.ToString();
+   }
+
+   public class PopUpForm : Form
+   {
+      private PropertyGrid _propGrid;
+
+      public PopUpForm(object selectedObject)
+      {
+         var propertyGrid = new PropertyGrid();
+         propertyGrid.Dock = DockStyle.Fill;
+         _propGrid = propertyGrid;
+
+         Controls.Add(_propGrid);
+         _propGrid.SelectedObject = selectedObject;
+
+         Text = selectedObject.GetType().Name;
+      }
    }
 }
