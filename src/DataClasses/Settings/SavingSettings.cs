@@ -21,6 +21,7 @@ namespace Editor.DataClasses.Settings
       private string _customWordsLocation = string.Empty;
       private SaveOnExitType _saveOnExit = SaveOnExitType.AskToSave;
       private FormattingSettings _formatting = new();
+      private string _mapModeExportPath = Path.Combine(Globals.AppDataPath, "MapModeExports");
 
       [Description("<true> Asks for a filename or location beofre creating a new file\n<false> creates files with default names")]
       [CompareInEquals]
@@ -86,6 +87,14 @@ namespace Editor.DataClasses.Settings
       {
          get => _missionExportLocation;
          set => SetField(ref _missionExportLocation, value);
+      }
+
+      [CompareInEquals]
+      [Description("The location where the map mode exports will be saved. Default is in \'ModforgeData\\MapModeExports\' folder.")]
+      public string MapModeExportPath
+      {
+         get => _mapModeExportPath;
+         set => SetField(ref _mapModeExportPath, value);
       }
    }
 

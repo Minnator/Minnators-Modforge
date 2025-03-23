@@ -102,6 +102,15 @@ public static class Geometry
       return new(minX, minY, maxX - minX + 1, maxY - minY + 1);
    }
 
+   public static Rectangle GetBounds(Rectangle r1, Rectangle r2)
+   {
+      var x = Math.Min(r1.X, r2.X);
+      var y = Math.Min(r1.Y, r2.Y);
+      var width = Math.Max(r1.X + r1.Width, r2.X + r2.Width) - x;
+      var height = Math.Max(r1.Y + r1.Height, r2.Y + r2.Height) - y;
+      return new (x, y, width, height);
+   }
+
    // Returns the bounding rectangle of the given points
    public static Rectangle GetBounds (Point[] points)
    {

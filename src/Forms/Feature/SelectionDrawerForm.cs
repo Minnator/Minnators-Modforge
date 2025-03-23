@@ -3,14 +3,15 @@ using Editor.Controls;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Saveables;
+using Editor.DataClasses.Settings;
 using Editor.Helper;
 
 namespace Editor.Forms.Feature
 {
    public partial class SelectionDrawerForm : Form
    {
-      private SelectionExportSettings ExportSettings { get; set; } = new();
       private ZoomControl ZoomControl { get; set; } = new(new(Globals.MapWidth, Globals.MapHeight, PixelFormat.Format32bppArgb));
+      private List<DrawingLayer> layers = [];
 
       public SelectionDrawerForm()
       {
@@ -18,10 +19,7 @@ namespace Editor.Forms.Feature
 
          MainLayoutPanel.Controls.Add(ZoomControl, 1, 0);
          ZoomControl.FocusOn(new Rectangle(0, 0, Globals.MapWidth, Globals.MapHeight));
-
-         ExportSettingsPropertyGrid.PropertyValueChanged += ExportSettingsPropertyChanged;
-         ExportSettingsPropertyGrid.SelectedObject = ExportSettings;
-
+         
          MapModeManager.MapModeChanged += OnMapModeChanged;
          Selection.OnProvinceGroupDeselected += RenderOnEvent;
          Selection.OnProvinceGroupSelected += RenderOnEvent;
@@ -30,188 +28,198 @@ namespace Editor.Forms.Feature
             TopMost = true;
 
          FormClosing += OnFormClose;
+
+         LayerListView.ItemMoved += ListBoxOnItemMoved;
       }
-      
+
+      private void ListBoxOnItemMoved(object? sender, SwappEventArgs e)
+      {
+         var layer = layers[e.From];
+         layers.RemoveAt(e.From);
+         layers.Insert(e.To, layer);
+         RenderImage();
+      }
+
       private void OnMapModeChanged(object? s, MapMode e) => RenderImage();
+
       private void RenderOnEvent(object? s, List<Province> e) => RenderImage();
 
       private void OnFormClose(object? sender, EventArgs e)
       {
-         ExportSettingsPropertyGrid.PropertyValueChanged -= ExportSettingsPropertyChanged;
-         ExportSettingsPropertyGrid.SelectedObject = null;
-
          Selection.OnProvinceGroupDeselected -= RenderOnEvent;
          Selection.OnProvinceGroupSelected -= RenderOnEvent;
-
-         MapModeManager.MapModeChanged -= OnMapModeChanged!;
-      }
-
-      private void ExportSettingsPropertyChanged(object? s, PropertyValueChangedEventArgs e)
-      {
-         ExportSettings = (SelectionExportSettings)ExportSettingsPropertyGrid.SelectedObject;
-         RenderImage();
+         MapModeManager.MapModeChanged -= OnMapModeChanged;
       }
 
       private void SelectFolderButton(object sender, EventArgs e)
       {
          IO.OpenFolderDialog(Globals.ModPath, "select a folder where to save the image", out var path);
-         PathTextBox.Text = path;
+         Globals.Settings.Saving.MapModeExportPath = path;
       }
 
       private void RenderImage()
       {
          MapDrawing.Clear(ZoomControl, Color.DimGray);
-         switch (ExportSettings.PrimaryProvinceDrawing)
+         var rectangle = Rectangle.Empty;
+         foreach (var layer in layers)
          {
-            case PrimaryProvinceDrawing.None:
-               break;
-            case PrimaryProvinceDrawing.Selection:
-               MapDrawing.DrawOnMap(Selection.GetSelectedProvinces, ZoomControl, PixelsOrBorders.Both);
-               break;
-            case PrimaryProvinceDrawing.Land:
-               MapDrawing.DrawOnMap(Globals.LandProvinces, ZoomControl, PixelsOrBorders.Both);
-               break;
-            case PrimaryProvinceDrawing.All:
-               MapDrawing.DrawOnMap(Globals.Provinces, ZoomControl, PixelsOrBorders.Both);
-               break;
+            var map = layer.RenderToMap(ZoomControl);
+            if (rectangle == Rectangle.Empty)
+               rectangle = map;
+            rectangle = Geometry.GetBounds(rectangle, map);
          }
-
-         DrawSecondary(ExportSettings.SecondaryProvinceDrawing);
-
-         DrawSecondary(ExportSettings.TertiaryProvinceDrawing);
-
-         switch (ExportSettings.BorderDrawing)
-         {
-            case BorderDrawing.None:
-               break;
-            case BorderDrawing.Selection:
-               MapDrawing.DrawOnMap(Selection.GetSelectedProvinces, ZoomControl, PixelsOrBorders.Borders);
-               break;
-            case BorderDrawing.All:
-               MapDrawing.DrawAllBorders(Color.Black.ToArgb(), ZoomControl);
-               break;
-         }
-
          if (Selection.Count == 0)
             return;
-
-         ZoomControl.FocusOn(Geometry.GetBounds(Selection.GetSelectedProvinces));
+         ZoomControl.FocusOn(rectangle);
          ZoomControl.Invalidate();
-      }
-
-      private void DrawSecondary(SecondaryProvinceDrawing secondary)
-      {
-         switch (secondary)
-         {
-            case SecondaryProvinceDrawing.None:
-               break;
-            case SecondaryProvinceDrawing.NeighboringProvinces:
-               var neighboringProvinces = Geometry.GetAllNeighboringProvinces(Selection.GetSelectedProvinces);
-               MapDrawing.DrawOnMap(neighboringProvinces, MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
-               break;
-            case SecondaryProvinceDrawing.NeighboringCountries:
-               var neighboringCountries = Geometry.GetAllNeighboringCountries(Selection.GetSelectedProvinces);
-               List<Province> allCountryProvinces = [];
-               foreach (var country in neighboringCountries)
-               {
-                  var provinces = Globals.Countries[country].GetProvinces().ToList();
-                  foreach (var province in provinces)
-                     allCountryProvinces.Add(province);
-               }
-               MapDrawing.DrawOnMap(allCountryProvinces, MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
-               break;
-            case SecondaryProvinceDrawing.CoastalOutline:
-               HashSet<Province> coastalProvinces = [];
-               foreach (var province in Globals.NonLandProvinces)
-               {
-                  foreach (var neighbor in province.Neighbors)
-                  {
-                     if (Globals.LandProvinces.Contains(neighbor))
-                     {
-                        coastalProvinces.Add(province);
-                        break;
-                     }
-                  }
-               }
-               MapDrawing.DrawOnMap(coastalProvinces, MapModeManager.GetMapMode(MapModeType.Province).GetSeaProvinceColor, ZoomControl, PixelsOrBorders.Both);
-               break;
-            case SecondaryProvinceDrawing.SeaProvinces:
-               MapDrawing.DrawOnMap(Globals.SeaProvinces, MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
-               break;
-            case SecondaryProvinceDrawing.All:
-               MapDrawing.DrawOnMap(Globals.Provinces, MapModeManager.GetMapModeColor, ZoomControl, PixelsOrBorders.Both);
-               break;
-         }
       }
 
       private void SaveButton_Click(object sender, EventArgs e)
       {
-         using var bmp = ZoomControl.Map;
-         switch (ExportSettings.ImageSize)
+         if (string.IsNullOrWhiteSpace(PathTextBox.Text) || LayerListView.Items.Count == 0)
+            return;
+         using (var map = ZoomControl.Map)
          {
-            case ImageSize.Original:
-               bmp.Save(Path.Combine(PathTextBox.Text, $"{MapModeManager.CurrentMapMode.MapModeType}.png"), ImageFormat.Png);
-               break;
-            case ImageSize.Selection:
-               var rect = Geometry.GetBounds(Selection.GetSelectedProvinces);
-               var bitmap = new Bitmap(rect.Width, rect.Height, PixelFormat.Format24bppRgb);
-               // copy the selected area to the new bitmap
-               using (var g = Graphics.FromImage(bitmap))
+            var path = Path.Combine(Globals.Settings.Saving.MapModeExportPath, PathTextBox.Text + ".png");
+            if (!Directory.Exists(Path.GetDirectoryName(path)))
+               MessageBox.Show("The directory does not exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+            else
+            {
+               switch (GetImageSize())
                {
-                  g.DrawImage(bmp, rect with { X = 0, Y = 0 }, rect, GraphicsUnit.Pixel);
+                  case ImageSize.ImageSizeSelection:
+                     var bounds = Geometry.GetBounds(Selection.GetSelectedProvinces);
+                     var bitmap = new Bitmap(bounds.Width, bounds.Height, PixelFormat.Format24bppRgb);
+                     using (var graphics = Graphics.FromImage(bitmap))
+                        graphics.DrawImage(map, bounds with
+                        {
+                           X = 0,
+                           Y = 0
+                        }, bounds, GraphicsUnit.Pixel);
+                     bitmap.Save(path, ImageFormat.Png);
+                     bitmap?.Dispose();
+                     break;
+                  case ImageSize.ImageSizeOriginal:
+                     map.Save(path, ImageFormat.Png);
+                     break;
                }
-               bitmap.Save(Path.Combine(PathTextBox.Text, $"{MapModeManager.CurrentMapMode.MapModeType}.png"), ImageFormat.Png);
-               bitmap?.Dispose();
-               break;
+            }
          }
+      }
+
+      private ImageSize GetImageSize()
+      {
+         ImageSize result;
+         return !Enum.TryParse<ImageSize>(ImageSizeBox.Text, true, out result) ? ImageSize.ImageSizeOriginal : result;
+      }
+
+      private DrawingOptions GetDrawingOption()
+      {
+         DrawingOptions result;
+         return !Enum.TryParse<DrawingOptions>(OptionComboBox.Text, true, out result) ? DrawingOptions.Selection : result;
       }
 
       private void SelectionDrawerForm_FormClosing(object? sender, FormClosingEventArgs e)
       {
          ZoomControl.Dispose();
       }
+
+      private void AddButton_Click(object sender, EventArgs e)
+      {
+         if (OptionComboBox.SelectedItem == null)
+            return;
+         LayerListView.Items.Add(new ListViewItem(OptionComboBox.Text));
+         layers.Add(new DrawingLayer(GetDrawingOption()));
+         RenderImage();
+      }
    }
 
    public enum ImageSize
    {
-      Original,
-      Selection,
+      ImageSizeOriginal,
+      ImageSizeSelection,
 
    }
 
-   public enum BorderDrawing
+   public enum DrawingOptions
    {
-      None,
+      Country,
+      Area,
+      Region,
+      SuperRegion,
+      ProvinceCollections,
+      ColonialRegion,
+      TradeNode,
+      TradeCompanyRegion,
       Selection,
-      All
-   }
-
-   public enum PrimaryProvinceDrawing
-   {
-      None,
-      Selection,
-      Land,
-      All
-   }
-
-   public enum SecondaryProvinceDrawing
-   {
-      None,
       NeighboringProvinces,
       NeighboringCountries,
       SeaProvinces,
       CoastalOutline,
-      All
+      AllCoast,
+      AllLand,
+      AllSea,
+      Everything,
    }
 
-
-   public class SelectionExportSettings
+   public class DrawingLayer
    {
-      public BorderDrawing BorderDrawing { get; set; }
-      public PrimaryProvinceDrawing PrimaryProvinceDrawing { get; set; }
-      public SecondaryProvinceDrawing SecondaryProvinceDrawing { get; set; }
-      public SecondaryProvinceDrawing TertiaryProvinceDrawing { get; set; }
-      public ImageSize ImageSize { get; set; }
-      public Color BackColor { get; set; } = Color.Black;
+      private Func<List<Province>> ProvinceGetter;
+      private DrawingOptions _options;
+
+      public MapMode MapMode { get; set; } = MapModeManager.IdMapMode;
+
+      public RenderingSettings.BorderMergeType Style { get; set; } = RenderingSettings.BorderMergeType.Merge;
+
+      public PixelsOrBorders pixelsOrBorders { get; set; } = PixelsOrBorders.Both;
+
+      public Color Shading { get; set; } = Color.FromArgb(0, 0, 0, 0);
+
+
+
+      public DrawingOptions Options
+      {
+         get => _options;
+         set
+         {
+            _options = value;
+            SetProvinceGetter();
+         }
+      }
+
+      public DrawingLayer(DrawingOptions options) => Options = options;
+
+      private void SetProvinceGetter()
+      {
+         switch (Options)
+         {
+            case DrawingOptions.Selection:
+               ProvinceGetter = Selection.GetSelectedProvincesFunc;
+               break;
+            default:
+               ProvinceGetter = Selection.GetSelectedProvincesFunc;
+               break;
+         }
+      }
+
+      private int GetColor(Province province)
+      {
+         var factor = Shading.A / 255.0f;
+         var inverse = 1f - factor;
+         var color = Color.FromArgb(MapMode.GetProvinceColor(province));
+         var R = (byte)(color.R * factor + Shading.R * inverse);
+         var G = (byte)(color.G * factor + Shading.G * inverse);
+         var B = (byte)(color.B * factor + Shading.B * inverse);
+         return (R << 16 | G << 8 | B);
+      }
+
+      public Rectangle RenderToMap(ZoomControl control)
+      {
+         List<Province> provinceList = ProvinceGetter();
+         MapDrawing.DrawOnMap(provinceList, GetColor, control, pixelsOrBorders);
+         return Geometry.GetBounds(provinceList);
+      }
+
+      public override string ToString() => Options.ToString();
    }
 }

@@ -30,7 +30,6 @@
       {
          System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectionDrawerForm));
          MainLayoutPanel = new TableLayoutPanel();
-         ExportSettingsPropertyGrid = new PropertyGrid();
          tableLayoutPanel2 = new TableLayoutPanel();
          button1 = new Button();
          PathTextBox = new TextBox();
@@ -47,7 +46,6 @@
          MainLayoutPanel.ColumnCount = 2;
          MainLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 250F));
          MainLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-         MainLayoutPanel.Controls.Add(ExportSettingsPropertyGrid, 0, 0);
          MainLayoutPanel.Controls.Add(tableLayoutPanel2, 1, 1);
          MainLayoutPanel.Controls.Add(tableLayoutPanel3, 0, 1);
          MainLayoutPanel.Dock = DockStyle.Fill;
@@ -58,14 +56,6 @@
          MainLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          MainLayoutPanel.Size = new Size(889, 447);
          MainLayoutPanel.TabIndex = 0;
-         // 
-         // ExportSettingsPropertyGrid
-         // 
-         ExportSettingsPropertyGrid.Dock = DockStyle.Fill;
-         ExportSettingsPropertyGrid.Location = new Point(3, 3);
-         ExportSettingsPropertyGrid.Name = "ExportSettingsPropertyGrid";
-         ExportSettingsPropertyGrid.Size = new Size(244, 411);
-         ExportSettingsPropertyGrid.TabIndex = 1;
          // 
          // tableLayoutPanel2
          // 
@@ -164,7 +154,6 @@
       #endregion
 
       private TableLayoutPanel MainLayoutPanel;
-      private PropertyGrid ExportSettingsPropertyGrid;
       private TableLayoutPanel tableLayoutPanel2;
       private Button button1;
       private TextBox PathTextBox;

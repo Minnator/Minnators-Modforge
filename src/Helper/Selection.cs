@@ -187,6 +187,7 @@ public static class Selection
    // ------------ Getters ------------ \\
    public static ICollection<Saveable> GetSelectedProvincesAsSaveable() => [.._selectedProvinces];
    public static List<Province> GetSelectedProvinces => _selectedProvinces.ToList();
+   public static List<Province> GetSelectedProvincesFunc() => _selectedProvinces.ToList();
    public static int[] GetSelectedProvincesIds => _selectedProvinces.Select(p => p.Id).ToArray();
    public static List<Province> SelectionPreview => [.._selectionPreview];
    public static int Count => _selectedProvinces.Count;
