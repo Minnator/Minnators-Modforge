@@ -13,6 +13,7 @@ namespace Editor.Forms.Feature
    {
       private ZoomControl ZoomControl { get; set; } = new(new(Globals.MapWidth, Globals.MapHeight, PixelFormat.Format32bppArgb));
       private List<DrawingLayer> layers = [];
+
       public SelectionDrawerForm()
       {
          InitializeComponent();
@@ -58,8 +59,10 @@ namespace Editor.Forms.Feature
                };
 
                // Set the owner to the always-on-top form
+               popup.PropertyChanged += (s, e) => RenderImage();
                popup.ShowDialog(this);
                RenderImage();
+
             }
          };
 
@@ -204,12 +207,23 @@ namespace Editor.Forms.Feature
       private Func<List<Province>> ProvinceGetter;
       private DrawingOptions _options;
 
-      public MapMode MapMode { get; set; } = MapModeManager.IdMapMode;
+      private MapModeType mapMode;
+      public MapModeType MapMode
+      {
+         get => mapMode;
+         set
+         {
+            mapMode = value;
+            _mode = MapModeManager.GetMapMode(value);
+         }
+      }
+
+      private MapMode _mode;
       public RenderingSettings.BorderMergeType Style { get; set; } = RenderingSettings.BorderMergeType.Merge;
       public PixelsOrBorders pixelsOrBorders { get; set; } = PixelsOrBorders.Both;
       public byte Opacity { get; set; } = 0;
-      public Color Shading { get; set; } = Color.FromArgb(0, 0, 0, 0);
-
+      public Color Shading { get; set; } = Color.White;
+      public Color BorderColor { get; set; } = Color.Black;
 
 
       public DrawingOptions Options
@@ -222,7 +236,11 @@ namespace Editor.Forms.Feature
          }
       }
 
-      public DrawingLayer(DrawingOptions options) => Options = options;
+      public DrawingLayer(DrawingOptions options)
+      {
+         MapMode = MapModeType.Province;
+         Options = options;
+      }
 
       private void SetProvinceGetter()
       {
@@ -241,7 +259,7 @@ namespace Editor.Forms.Feature
       {
          var factor = Opacity / 255.0f;
          var inverse = 1f - factor;
-         var color = Color.FromArgb(MapMode.GetProvinceColor(province));
+         var color = Color.FromArgb(_mode.GetProvinceColor(province));
          var R = (byte)(color.R * inverse + Shading.R * factor);
          var G = (byte)(color.G * inverse + Shading.G * factor);
          var B = (byte)(color.B * inverse + Shading.B * factor);
@@ -249,9 +267,31 @@ namespace Editor.Forms.Feature
       }
 
       public Rectangle RenderToMap(ZoomControl control)
-      {
-         List<Province> provinceList = ProvinceGetter();
-         MapDrawing.DrawOnMap(provinceList, GetColor, control, pixelsOrBorders, );
+      { 
+         var provinceList = ProvinceGetter();
+         Dictionary<Province, int> cache = new (provinceList.Count);
+         //MapModeManager.ConstructClearCache(Globals.Provinces, _mode, cache);
+         var defaultColor = Color.LightGray.ToArgb();
+         foreach (var province in Globals.Provinces.Except(provinceList))
+            cache[province] = defaultColor;
+         MapModeManager.ConstructCache(provinceList, _mode, cache);
+
+
+         switch (pixelsOrBorders)
+         {
+            case PixelsOrBorders.Pixels:
+               MapDrawing.DrawOnMap(provinceList, GetColor, control, PixelsOrBorders.Both, cache);
+               break;
+            case PixelsOrBorders.Borders:
+               MapDrawing.DrawOnMap(provinceList, BorderColor.ToArgb(), control, PixelsOrBorders.Borders, cache);
+               break;
+            case PixelsOrBorders.Both:
+               MapDrawing.DrawOnMap(provinceList, GetColor, control, PixelsOrBorders.Pixels, cache);
+               MapDrawing.DrawOnMap(provinceList, BorderColor.ToArgb(), control, PixelsOrBorders.Borders, cache);
+               break;
+         }
+
+         
          return Geometry.GetBounds(provinceList);
       }
 
@@ -262,6 +302,8 @@ namespace Editor.Forms.Feature
    {
       private PropertyGrid _propGrid;
 
+      public event EventHandler? PropertyChanged;
+
       public PopUpForm(object selectedObject)
       {
          var propertyGrid = new PropertyGrid();
@@ -270,8 +312,19 @@ namespace Editor.Forms.Feature
 
          Controls.Add(_propGrid);
          _propGrid.SelectedObject = selectedObject;
+         _propGrid.PropertyValueChanged += OnPropertyChanged;
 
          Text = selectedObject.GetType().Name;
+      }
+
+      public void OnPropertyChanged(object? sender, EventArgs e)
+      {
+         OnPropertyChanged();
+      }
+
+      protected virtual void OnPropertyChanged()
+      {
+         PropertyChanged?.Invoke(this, EventArgs.Empty);
       }
    }
 }

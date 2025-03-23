@@ -176,6 +176,18 @@ public static class MapModeManager
       CurrentMapMode.RenderMapMode();
    }
 
+
+   public static void ConstructClearCache(ICollection<Province> provinces, MapMode mapMode, Dictionary<Province, int> cache)
+   {
+      cache.Clear();
+      ConstructCache(provinces, mapMode, cache);
+   }
+   public static void ConstructCache(ICollection<Province> provinces, MapMode mapMode, Dictionary<Province, int> cache)
+   {
+      foreach (var province in provinces)
+         cache[province] = mapMode.GetProvinceColor(province);
+   }
+
    public static void ConstructCache()
    {
       if (CurrentMapMode.IsLandOnly)
