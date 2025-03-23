@@ -12,7 +12,6 @@ namespace Editor.Forms.Feature
    {
       private ZoomControl ZoomControl { get; set; } = new(new(Globals.MapWidth, Globals.MapHeight, PixelFormat.Format32bppArgb));
       private List<DrawingLayer> layers = [];
-
       public SelectionDrawerForm()
       {
          InitializeComponent();

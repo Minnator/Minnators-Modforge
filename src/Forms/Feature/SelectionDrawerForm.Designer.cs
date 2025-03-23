@@ -36,9 +36,15 @@
          tableLayoutPanel3 = new TableLayoutPanel();
          CancelButton = new Button();
          SaveButton = new Button();
+         SettingsTBL = new TableLayoutPanel();
+         OptionComboBox = new ComboBox();
+         AddButton = new Button();
+         ImageSizeBox = new ComboBox();
+         LayerListView = new Controls.DragAndDropListView();
          MainLayoutPanel.SuspendLayout();
          tableLayoutPanel2.SuspendLayout();
          tableLayoutPanel3.SuspendLayout();
+         SettingsTBL.SuspendLayout();
          SuspendLayout();
          // 
          // MainLayoutPanel
@@ -48,6 +54,7 @@
          MainLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
          MainLayoutPanel.Controls.Add(tableLayoutPanel2, 1, 1);
          MainLayoutPanel.Controls.Add(tableLayoutPanel3, 0, 1);
+         MainLayoutPanel.Controls.Add(SettingsTBL, 0, 0);
          MainLayoutPanel.Dock = DockStyle.Fill;
          MainLayoutPanel.Location = new Point(0, 0);
          MainLayoutPanel.Name = "MainLayoutPanel";
@@ -134,6 +141,70 @@
          SaveButton.UseVisualStyleBackColor = true;
          SaveButton.Click += SaveButton_Click;
          // 
+         // SettingsTBL
+         // 
+         SettingsTBL.ColumnCount = 2;
+         SettingsTBL.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 58.3333321F));
+         SettingsTBL.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 41.6666679F));
+         SettingsTBL.Controls.Add(OptionComboBox, 0, 0);
+         SettingsTBL.Controls.Add(AddButton, 1, 0);
+         SettingsTBL.Controls.Add(ImageSizeBox, 0, 2);
+         SettingsTBL.Controls.Add(LayerListView, 0, 1);
+         SettingsTBL.Dock = DockStyle.Fill;
+         SettingsTBL.Location = new Point(0, 0);
+         SettingsTBL.Margin = new Padding(0);
+         SettingsTBL.Name = "SettingsTBL";
+         SettingsTBL.RowCount = 3;
+         SettingsTBL.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
+         SettingsTBL.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+         SettingsTBL.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
+         SettingsTBL.Size = new Size(250, 417);
+         SettingsTBL.TabIndex = 4;
+         // 
+         // OptionComboBox
+         // 
+         OptionComboBox.Dock = DockStyle.Fill;
+         OptionComboBox.FormattingEnabled = true;
+         OptionComboBox.Location = new Point(3, 3);
+         OptionComboBox.Name = "OptionComboBox";
+         OptionComboBox.Size = new Size(139, 23);
+         OptionComboBox.TabIndex = 0;
+         // 
+         // AddButton
+         // 
+         AddButton.Dock = DockStyle.Fill;
+         AddButton.Location = new Point(147, 2);
+         AddButton.Margin = new Padding(2);
+         AddButton.Name = "AddButton";
+         AddButton.Size = new Size(101, 24);
+         AddButton.TabIndex = 1;
+         AddButton.Text = "Add";
+         AddButton.UseVisualStyleBackColor = true;
+         // 
+         // ImageSizeBox
+         // 
+         SettingsTBL.SetColumnSpan(ImageSizeBox, 2);
+         ImageSizeBox.Dock = DockStyle.Fill;
+         ImageSizeBox.FormattingEnabled = true;
+         ImageSizeBox.Location = new Point(3, 392);
+         ImageSizeBox.Name = "ImageSizeBox";
+         ImageSizeBox.Size = new Size(244, 23);
+         ImageSizeBox.TabIndex = 2;
+         // 
+         // LayerListView
+         // 
+         LayerListView.AllowDrop = true;
+         SettingsTBL.SetColumnSpan(LayerListView, 2);
+         LayerListView.Dock = DockStyle.Fill;
+         LayerListView.FullRowSelect = true;
+         LayerListView.Location = new Point(3, 31);
+         LayerListView.MultiSelect = false;
+         LayerListView.Name = "LayerListView";
+         LayerListView.Size = new Size(244, 355);
+         LayerListView.TabIndex = 3;
+         LayerListView.UseCompatibleStateImageBehavior = false;
+         LayerListView.View = View.List;
+         // 
          // SelectionDrawerForm
          // 
          AutoScaleDimensions = new SizeF(7F, 15F);
@@ -148,6 +219,7 @@
          tableLayoutPanel2.ResumeLayout(false);
          tableLayoutPanel2.PerformLayout();
          tableLayoutPanel3.ResumeLayout(false);
+         SettingsTBL.ResumeLayout(false);
          ResumeLayout(false);
       }
 
@@ -160,5 +232,10 @@
       private TableLayoutPanel tableLayoutPanel3;
       private Button SaveButton;
       private new Button CancelButton;
+      private TableLayoutPanel SettingsTBL;
+      private ComboBox OptionComboBox;
+      private Button AddButton;
+      private ComboBox ImageSizeBox;
+      private Controls.DragAndDropListView LayerListView;
    }
 }
