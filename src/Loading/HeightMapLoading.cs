@@ -10,13 +10,13 @@ namespace Editor.Loading
       public static unsafe void Load()
       {
          return;
-         if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, "map", "world_normal.bmp"))
+         if (!PathManager.GetModOrVanillaPath(out var path, out var isModPath, "map", "world_normal.bmp"))
          {
             Globals.ErrorLog.Write("Could not find heightmap.bmp");
             return;
          }
 
-         if (!FilesHelper.GetModOrVanillaPath(out var file, out _, "map", "terrain.bmp"))
+         if (!PathManager.GetModOrVanillaPath(out var file, out _, "map", "terrain.bmp"))
          {
             Globals.ErrorLog.Write("Could not find terrain.bmp");
             return;

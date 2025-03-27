@@ -15,7 +15,7 @@ namespace Editor.Loading
 
       public static void Load()
       {
-         var (modFiles, vanillaFiles) = FilesHelper.GetFilesFromModAndVanillaUniquelySeparated("*.txt", "common", "event_modifiers");
+         var (modFiles, vanillaFiles) = PathManager.GetFilesFromModAndVanillaUniquelySeparated("*.txt", "common", "event_modifiers");
          Dictionary<string, EventModifier> modifiers = new();
          
          foreach (var file in modFiles)

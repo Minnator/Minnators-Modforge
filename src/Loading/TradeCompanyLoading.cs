@@ -13,7 +13,7 @@ namespace Editor.Loading
 
       public static void Load()
       {
-         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "trade_companies");
+         var files = PathManager.GetFilesFromModAndVanillaUniquely("*.txt", "common", "trade_companies");
           
          Dictionary<string, TradeCompany> tradeCompanies = [];
 

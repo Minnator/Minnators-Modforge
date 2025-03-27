@@ -12,7 +12,7 @@ namespace Editor.Loading
    {
       public static void Load()
       {
-         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "colonial_regions");
+         var files = PathManager.GetFilesFromModAndVanillaUniquely("*.txt", "common", "colonial_regions");
          foreach (var file in files) 
             FirstStep(file);
       }

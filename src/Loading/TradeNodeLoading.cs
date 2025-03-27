@@ -11,7 +11,7 @@ namespace Editor.Loading
    {
       public static void Load()
       {
-         if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, "common", "tradenodes", "00_tradenodes.txt"))
+         if (!PathManager.GetModOrVanillaPath(out var path, out var isModPath, "common", "tradenodes", "00_tradenodes.txt"))
          {
             Globals.ErrorLog.Write("Error: 00_tradenodes.txt not found!");
             return;

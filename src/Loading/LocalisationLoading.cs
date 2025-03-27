@@ -10,10 +10,10 @@ public partial class LocalisationLoading
    private static readonly Regex Regex = LocalisationRegex();
    public static void Load()
    {
-      var replaceFiles = FilesHelper.GetFilesFromModAndVanillaUniquely($"*_l_{Globals.Settings.Misc.Language.ToString().ToLower()}.yml", "localisation", "replace");
+      var replaceFiles = PathManager.GetFilesFromModAndVanillaUniquely($"*_l_{Globals.Settings.Misc.Language.ToString().ToLower()}.yml", "localisation", "replace");
 
-      var vanillaFiles = FilesHelper.GetAllFilesInFolder( Path.Combine(Globals.VanillaPath, "localisation"), $"*_l_{Globals.Settings.Misc.Language.ToString().ToLower()}.yml");
-      var modFiles = FilesHelper.GetFilesInFolder( Path.Combine(Globals.ModPath, "localisation"), $"*_l_{Globals.Settings.Misc.Language.ToString().ToLower()}.yml");
+      var vanillaFiles = PathManager.GetAllFilesInFolder( Path.Combine(Globals.VanillaPath, "localisation"), $"*_l_{Globals.Settings.Misc.Language.ToString().ToLower()}.yml");
+      var modFiles = PathManager.GetFilesInFolder( Path.Combine(Globals.ModPath, "localisation"), $"*_l_{Globals.Settings.Misc.Language.ToString().ToLower()}.yml");
       
       HashSet<LocObject> vanillaLocalisation = [];
       HashSet<LocObject> modLocalisation = [];

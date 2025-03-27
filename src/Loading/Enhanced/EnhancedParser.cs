@@ -57,7 +57,7 @@ namespace Editor.Loading.Enhanced
 
       public static bool GetModOrVanillaPath(out PathObj pathObj, params string[] internalPath)
       {
-         if (FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, internalPath))
+         if (PathManager.GetModOrVanillaPath(out var path, out var isModPath, internalPath))
          {
             pathObj = PathObj.FromPath(path, isModPath);
             return true;

@@ -10,7 +10,7 @@ namespace Editor.Loading
    {
       public static void Load()
       {
-         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "units");
+         var files = PathManager.GetFilesFromModAndVanillaUniquely("*.txt", "common", "units");
 
          Parallel.ForEach(files, (file) =>
          {

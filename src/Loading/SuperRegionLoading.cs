@@ -17,7 +17,7 @@ public static class SuperRegionLoading
 
    public static void Load()
    {
-      if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, "map", "superregion.txt"))
+      if (!PathManager.GetModOrVanillaPath(out var path, out var isModPath, "map", "superregion.txt"))
       {
          Globals.ErrorLog.Write("Error: superregion.txt not found!");
          return;

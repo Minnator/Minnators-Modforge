@@ -7,7 +7,7 @@ namespace Editor.Loading
    {
       public static void Load()
       {
-         if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, "map", "rivers.bmp"))
+         if (!PathManager.GetModOrVanillaPath(out var path, out var isModPath, "map", "rivers.bmp"))
          {
             Globals.ErrorLog.Write("Could not find rivers.bmp");
             return;

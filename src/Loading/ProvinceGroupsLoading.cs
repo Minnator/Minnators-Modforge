@@ -10,7 +10,7 @@ namespace Editor.Loading
    {
       public static void Load()
       {
-         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "map", "province_groups");
+         var files = PathManager.GetFilesFromModAndVanillaUniquely("*.txt", "map", "province_groups");
 
          foreach (var file in files) 
             LoadProvinceGroupsFromFile(file);

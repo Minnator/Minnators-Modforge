@@ -34,7 +34,7 @@ namespace Editor.Loading
       private bool IsPathInList(List<string[]> paths, string[] path)
       {
          foreach (var optimizedPath in paths)
-            if (FilesHelper.CheckIfPathInPath(path, optimizedPath))
+            if (PathManager.CheckIfPathInPath(path, optimizedPath))
                return true;
          return false;
       }
@@ -56,7 +56,7 @@ namespace Editor.Loading
    {
       public static void Load()
       {
-         var file = FilesHelper.GetAllFilesInFolder(Globals.ModPath, "*.mod");
+         var file = PathManager.GetAllFilesInFolder(Globals.ModPath, "*.mod");
          if (file.Count == 0)
          {
             Globals.ErrorLog.Write("Could not find Descriptor File!");

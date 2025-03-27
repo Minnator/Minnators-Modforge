@@ -18,7 +18,7 @@ namespace Editor.Loading
 
       public static void Load()
       {
-         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "country_tags");
+         var files = PathManager.GetFilesFromModAndVanillaUniquely("*.txt", "common", "country_tags");
 
 
          foreach (var file in files) 
@@ -49,7 +49,7 @@ namespace Editor.Loading
 
       private static void LoadCountryHistories()
       {
-         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "history", "countries");
+         var files = PathManager.GetFilesFromModAndVanillaUniquely("*.txt", "history", "countries");
 
          Parallel.ForEach(files, new (),file =>
          {
@@ -351,7 +351,7 @@ namespace Editor.Loading
 
          Parallel.ForEach(Globals.Countries.Values, new () { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 }, country =>
          {
-            FilesHelper.GetFilePathUniquely(out var path, "common", Path.Combine(country.CountryFilePath.FilePathArr));
+            PathManager.GetFilePathUniquely(out var path, "common", Path.Combine(country.CountryFilePath.FilePathArr));
             if (!IO.ReadAllInANSI(path, out var content))
             {
 

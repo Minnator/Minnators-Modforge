@@ -13,6 +13,7 @@ using DefinesLoading = Editor.Loading.Enhanced.DefinesLoading;
 using DefinitionLoading = Editor.Loading.Enhanced.DefinitionLoading;
 using MapLoading = Editor.Loading.Enhanced.MapLoading;
 using RegionLoading = Editor.Loading.Enhanced.RegionLoading;
+using ScriptedEffectLoading = Editor.Loading.ScriptedEffectLoading;
 using SuperRegionLoading = Editor.Loading.Enhanced.SuperRegionLoading;
 using TradeNodeLoading = Editor.Loading.TradeNodeLoading;
 

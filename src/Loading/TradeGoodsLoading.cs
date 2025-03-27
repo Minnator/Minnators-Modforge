@@ -18,12 +18,12 @@ namespace Editor.Loading
 
       public static void Load()
       {
-         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "tradegoods");
+         var files = PathManager.GetFilesFromModAndVanillaUniquely("*.txt", "common", "tradegoods");
 
          foreach (var file in files) 
             EnhancedTradeGoodParse(file);
 
-         files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "prices");
+         files = PathManager.GetFilesFromModAndVanillaUniquely("*.txt", "common", "prices");
 
          foreach (var file in files)
             EnhancedPriceParse(file);

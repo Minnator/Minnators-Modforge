@@ -27,7 +27,7 @@ namespace Editor.Loading.Enhanced
       private static bool LoadVanilla()
       {
 
-         if (!FilesHelper.GetVanillaPath(out var filepath,"common", "defines.lua"))
+         if (!PathManager.GetVanillaPath(out var filepath,"common", "defines.lua"))
          {
             _ = new LoadingError(null!, "Vanilla defines.lua not found!", -1, -1, ErrorType.FileNotFound, LogType.Critical);
             return false;
@@ -81,7 +81,7 @@ namespace Editor.Loading.Enhanced
 
       private static void LoadMod()
       {
-         var files = FilesHelper.GetAllFilesInFolder(searchPattern:"*.lua", Globals.ModPath, "common", "defines");
+         var files = PathManager.GetAllFilesInFolder(searchPattern:"*.lua", Globals.ModPath, "common", "defines");
 
          foreach (var file in files)
          {

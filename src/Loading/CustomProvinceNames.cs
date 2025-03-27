@@ -23,7 +23,7 @@ namespace Editor.Loading
 
       public static void Load()
       {
-         var files = FilesHelper.GetFilesFromModAndVanillaUniquelySeparated("*.txt", "common", "province_names");
+         var files = PathManager.GetFilesFromModAndVanillaUniquelySeparated("*.txt", "common", "province_names");
 
          Dictionary<Province, HashSet<CultProvLocObject>> totalDict = [];
          Dictionary<Province, HashSet<CultProvLocObject>> collisionsDict = [];

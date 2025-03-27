@@ -9,7 +9,7 @@ using Editor.Saving;
 
 namespace Editor.Helper;
 
-public static partial class FilesHelper
+public static partial class PathManager
 {
    private const string ID_FROM_FILE_NAME_PATTERN = @"^\d+";
 

@@ -797,11 +797,11 @@ public class Country : ProvinceCollection<Province>, ITitleAdjProvider, ITarget
    public override void AddToEvent(EventHandler<ProvinceCollectionEventArguments<Province>> eventHandler) => ItemsModified += eventHandler;
    public override void RemoveGlobal() => Globals.Countries.Remove(Name);
    public override void AddGlobal() => Globals.Countries.Add(Tag, this);
-   public bool GetFlagPath(out string path) => FilesHelper.GetModOrVanillaPath(out path, out _, "gfx", "flags", $"{Tag}.tga");
+   public bool GetFlagPath(out string path) => PathManager.GetModOrVanillaPath(out path, out _, "gfx", "flags", $"{Tag}.tga");
    public Bitmap GetFlagBitmap()
    {
       if (!GetFlagPath(out var path))
-         return FilesHelper.GetDefaultFlagPath();
+         return PathManager.GetDefaultFlagPath();
       return ImageReader.ReadImage(path);
    }
    public List<Country> GetNeighbours()

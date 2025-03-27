@@ -13,7 +13,7 @@ public static class AreaLoading
 {
    public static void Load()
    {
-      if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, "map", "area.txt"))
+      if (!PathManager.GetModOrVanillaPath(out var path, out var isModPath, "map", "area.txt"))
       {
          Globals.ErrorLog.Write("Error: area.txt not found!");
          return;

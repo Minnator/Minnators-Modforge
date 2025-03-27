@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Reflection.Metadata;
+using System.Text;
 using Windows.Media.Devices;
 using Editor.DataClasses.Achievements;
 using Editor.DataClasses.GameDataClasses;
@@ -8,8 +9,11 @@ using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
 using Editor.Forms.PopUps;
 using Editor.Helper;
+using Editor.Loading.Enhanced;
 using Editor.Loading.Enhanced.PCFL;
 using Editor.Loading.Enhanced.PCFL.Implementation;
+using Editor.Saving;
+using ScriptedEffect = Editor.Loading.Enhanced.ScriptedEffect;
 
 namespace Editor.DataClasses.ConsoleCommands
 {
@@ -60,6 +64,30 @@ namespace Editor.DataClasses.ConsoleCommands
 
             return ["Invalid province id"];
          }, ClearanceLevel.Debug));
+
+         // Scripted Effect parsgin
+         var scriptedEffectUsage = "Usage: parse_scripted_effect <file>";
+         _handler.RegisterCommand(new("parse_scripted_effect", scriptedEffectUsage, args =>
+         {
+            if (args.Length != 1)
+               return [scriptedEffectUsage];
+
+            var path = Path.Combine(Globals.AppDirectory, args[0]);
+            if (!File.Exists(path))
+               return [$"File '{path}' not found"];
+
+            var effs = ScriptedEffectLoading.LoadParseFile(path);
+            var sb = new StringBuilder($"Parsed scripted effects from '{args[0]}':");
+            sb.AppendLine();
+            foreach (var eff in effs)
+            {
+               sb.AppendLine(eff.Name);
+               SavingUtil.AddElements(1, eff.EnhancedElements, ref sb);
+               sb.AppendLine();
+            }
+
+            return sb.ToString().Split("\r\n");
+         }, ClearanceLevel.Debug, "scr_eff"));
 
          // dump history of province
          var dumpHistoryUsage = "Usage: dump_history <provinceId>";

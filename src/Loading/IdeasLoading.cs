@@ -14,7 +14,7 @@ namespace Editor.Loading
       /// </summary>
       public static void Load()
       {
-         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "ideas");
+         var files = PathManager.GetFilesFromModAndVanillaUniquely("*.txt", "common", "ideas");
          if (files.Count == 0)
             return;
 

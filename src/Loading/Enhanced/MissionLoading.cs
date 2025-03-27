@@ -14,7 +14,7 @@ namespace Editor.Loading.Enhanced
          HashSet<string> slotNames = [];
 
 
-         var files = FilesHelper.GetAllFilesInFolder(searchPattern: "*.txt", "missions");
+         var files = PathManager.GetAllFilesInFolder(searchPattern: "*.txt", "missions");
          
          foreach (var file in files)
          {

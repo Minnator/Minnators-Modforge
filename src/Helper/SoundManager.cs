@@ -48,23 +48,23 @@ namespace Editor.Helper
          switch (sound)
          {
             case DefaultSounds.G_OKClick:
-               if (!Sounds.ContainsKey(sound) && FilesHelper.GetVanillaPath(out var path, "sound", "general_ok_button_click.wav"))
+               if (!Sounds.ContainsKey(sound) && PathManager.GetVanillaPath(out var path, "sound", "general_ok_button_click.wav"))
                   Sounds.Add(sound, new(File.ReadAllBytes(path)));
                break;
             case DefaultSounds.G_CancelClick:
-               if (!Sounds.ContainsKey(sound) && FilesHelper.GetVanillaPath(out path, "sound", "general_back_button_click.wav"))
+               if (!Sounds.ContainsKey(sound) && PathManager.GetVanillaPath(out path, "sound", "general_back_button_click.wav"))
                   Sounds.Add(sound, new(File.ReadAllBytes(path)));
                break;
             case DefaultSounds.CloseWindow:
-               if (!Sounds.ContainsKey(sound) && FilesHelper.GetVanillaPath(out path, "sound", "close_window.wav"))
+               if (!Sounds.ContainsKey(sound) && PathManager.GetVanillaPath(out path, "sound", "close_window.wav"))
                   Sounds.Add(sound, new(File.ReadAllBytes(path)));
                break;
             case DefaultSounds.TabChanged:
-               if (!Sounds.ContainsKey(sound) && FilesHelper.GetVanillaPath(out path, "sound", "old", "unused", "switch_tab.wav"))
+               if (!Sounds.ContainsKey(sound) && PathManager.GetVanillaPath(out path, "sound", "old", "unused", "switch_tab.wav"))
                   Sounds.Add(sound, new(File.ReadAllBytes(path)));
                break;
             case DefaultSounds.PopUp:
-               if (!Sounds.ContainsKey(sound) && FilesHelper.GetVanillaPath(out path, "sound", "event_pop_up.wav"))
+               if (!Sounds.ContainsKey(sound) && PathManager.GetVanillaPath(out path, "sound", "event_pop_up.wav"))
                   Sounds.Add(sound, new(File.ReadAllBytes(path)));
                break;
             default:

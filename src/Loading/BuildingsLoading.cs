@@ -13,7 +13,7 @@ namespace Editor.Loading
    {
       public static void Load()
       {
-         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "buildings");
+         var files = PathManager.GetFilesFromModAndVanillaUniquely("*.txt", "common", "buildings");
          List<Building> buildings = [];
 
          foreach (var file in files)

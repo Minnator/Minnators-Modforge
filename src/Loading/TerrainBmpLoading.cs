@@ -12,13 +12,13 @@ namespace Editor.Loading
 
       public static void Load()
       {
-         if (!FilesHelper.GetModOrVanillaPath(out var file, out _, "map", "terrain.bmp"))
+         if (!PathManager.GetModOrVanillaPath(out var file, out _, "map", "terrain.bmp"))
          {
             Globals.ErrorLog.Write("Could not find terrain.bmp");
             return;
          }
 
-         if (!FilesHelper.GetModOrVanillaPath(out var trees, out _, "map", "trees.bmp"))
+         if (!PathManager.GetModOrVanillaPath(out var trees, out _, "map", "trees.bmp"))
          {
             Globals.ErrorLog.Write("Could not find trees.bmp");
             return;

@@ -11,7 +11,7 @@ namespace Editor.Loading
       public static string PreDharmaMapping = string.Empty;
       public static void Load()
       {
-         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "governments");
+         var files = PathManager.GetFilesFromModAndVanillaUniquely("*.txt", "common", "governments");
 
          List<Government> governments = [];
          foreach (var file in files)

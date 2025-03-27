@@ -30,4 +30,6 @@ public class Consts
 
 
    //public const string MOD_PATH = @"C:\Users\david\Downloads\Heavenly-Hall-main\Heavenly-Hall-main"; 
+   // Chess
+   //public const string MOD_PATH = @"S:\SteamLibrary\steamapps\workshop\content\236850\3450080222"; 
 }

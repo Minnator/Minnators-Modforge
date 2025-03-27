@@ -10,7 +10,7 @@ namespace Editor.Loading
    {
       public static void Load()
       {
-         FilesHelper.GetFilesUniquelyAndCombineToOne(out var rawContent, "common", "tradecompany_investments");
+         PathManager.GetFilesUniquelyAndCombineToOne(out var rawContent, "common", "tradecompany_investments");
          Parsing.RemoveCommentFromMultilineString(ref rawContent, out var content);
 
          var elements = Parsing.GetElements(0, content);

@@ -15,7 +15,7 @@ public static class ContinentLoading
 
    public static void Load()
    {
-      if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, "map", "continent.txt"))
+      if (!PathManager.GetModOrVanillaPath(out var path, out var isModPath, "map", "continent.txt"))
       {
          Globals.ErrorLog.Write("Error: continent.txt not found!");
          return;

@@ -10,7 +10,7 @@ namespace Editor.Loading
    {
       public static void Load()
       {
-         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "bookmarks");
+         var files = PathManager.GetFilesFromModAndVanillaUniquely("*.txt", "common", "bookmarks");
          if (files.Count == 0)
             return;
 

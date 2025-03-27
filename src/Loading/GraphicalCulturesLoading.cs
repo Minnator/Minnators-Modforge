@@ -9,7 +9,7 @@ namespace Editor.Loading
 
       public static void Load()
       {
-         if (!FilesHelper.GetFilePathUniquely(out var path, "common", "graphicalculturetype.txt"))
+         if (!PathManager.GetFilePathUniquely(out var path, "common", "graphicalculturetype.txt"))
          {
             Globals.ErrorLog.Write("Could not find graphicalculturetype.txt");
             return;

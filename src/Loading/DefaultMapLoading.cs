@@ -11,7 +11,7 @@ public static class DefaultMapLoading
 {
    public static void Load()
    {
-      if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, "map", "default.map"))
+      if (!PathManager.GetModOrVanillaPath(out var path, out var isModPath, "map", "default.map"))
       {
          Globals.ErrorLog.Write("Error: default.map not found!");
          return;

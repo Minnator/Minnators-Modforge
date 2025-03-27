@@ -12,7 +12,7 @@ namespace Editor.Loading
 
       public static void Load()
       {
-         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "government_reforms");
+         var files = PathManager.GetFilesFromModAndVanillaUniquely("*.txt", "common", "government_reforms");
 
          //TODO parallelize
          Parallel.ForEach(files, ParseGovernmentReformsFile);

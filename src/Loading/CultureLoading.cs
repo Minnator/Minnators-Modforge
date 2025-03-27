@@ -11,7 +11,7 @@ public static class CultureLoading
 {
    public static void Load()
    {
-      FilesHelper.GetFilesUniquelyAndCombineToOne(out var culturesContent, "common", "cultures");
+      PathManager.GetFilesUniquelyAndCombineToOne(out var culturesContent, "common", "cultures");
 
       Parsing.RemoveCommentFromMultilineString(ref culturesContent, out var commentLessContent);
 

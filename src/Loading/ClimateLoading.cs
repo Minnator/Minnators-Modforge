@@ -11,7 +11,7 @@ namespace Editor.Loading
    {
       public static void Load()
       {
-         if (!FilesHelper.GetFilePathUniquely(out var path, "map", "climate.txt"))
+         if (!PathManager.GetFilePathUniquely(out var path, "map", "climate.txt"))
          {
             _ = new ErrorObject(ErrorType.RequiredFileNotFound, "Can not locate climate.txt");
             return;

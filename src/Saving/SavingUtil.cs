@@ -5,6 +5,7 @@ using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
 using Editor.DataClasses.Saveables;
 using Editor.Helper;
+using Editor.Loading.Enhanced;
 using Editor.Loading.Enhanced.PCFL.Implementation;
 using Editor.Parser;
 
@@ -363,12 +364,12 @@ namespace Editor.Saving
          }
       }
 
-      public static void AddElements(int tabs, ICollection<IElement> elements, ref StringBuilder sb)
+      public static void AddElements(int tabs, List<IEnhancedElement> elements, ref StringBuilder sb)
       {
          foreach (var element in elements) 
-            element.FormatElement(tabs, ref sb);
+            element.GetFormattedString(tabs, ref sb);
       }
-
+      
       /// <summary>
       /// this ignores all dates for the 1.1.1
       /// </summary>

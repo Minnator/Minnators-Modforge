@@ -15,7 +15,7 @@ namespace Editor.Loading
 
       public static void Load()
       {
-         if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, "map", "adjacencies.csv"))
+         if (!PathManager.GetModOrVanillaPath(out var path, out var isModPath, "map", "adjacencies.csv"))
          {
             Globals.ErrorLog.Write("Could not find adjacencies.csv");
             return;

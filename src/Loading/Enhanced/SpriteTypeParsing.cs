@@ -14,7 +14,7 @@ namespace Editor.Loading.Enhanced
       {
          Dictionary<string, SpriteType> sprites = [];
 
-         var files = FilesHelper.GetAllFilesInFolder(searchPattern: "*.gfx", "interface");
+         var files = PathManager.GetAllFilesInFolder(searchPattern: "*.gfx", "interface");
 
          foreach (var file in files)
          {

@@ -109,7 +109,7 @@ public static class ProvinceParser
 
    public static void ParseAllUniqueProvinces()
    {
-      var files = FilesHelper.GetAllFilesInFolder("*.txt", "history", "provinces");
+      var files = PathManager.GetAllFilesInFolder("*.txt", "history", "provinces");
       var po = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 };
       Parallel.ForEach(files, po, ProcessProvinceFile);
       //foreach (var file in files)

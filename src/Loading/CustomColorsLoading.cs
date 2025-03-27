@@ -9,7 +9,7 @@ namespace Editor.Loading
       
       public static void Load()
       {
-         if (!FilesHelper.GetFilePathUniquely(out var path, "common", "custom_country_colors", "00_custom_country_colors.txt"))
+         if (!PathManager.GetFilePathUniquely(out var path, "common", "custom_country_colors", "00_custom_country_colors.txt"))
          {
             Globals.ErrorLog.Write("Could not find custom_colors.txt");
             return;

@@ -12,7 +12,7 @@ namespace Editor.Loading
       /// </summary>
       public static void Load()
       {
-         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt", "common", "scripted_effects");
+         var files = PathManager.GetFilesFromModAndVanillaUniquely("*.txt", "common", "scripted_effects");
          HashSet<string> scriptedEffects = [];
 
          Parallel.ForEach(files, file =>

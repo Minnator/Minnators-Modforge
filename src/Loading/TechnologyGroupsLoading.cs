@@ -10,7 +10,7 @@ namespace Editor.Loading
    {
       public static void Load()
       {
-         FilesHelper.GetFilePathUniquely(out var path, "common", "technology.txt");
+         PathManager.GetFilePathUniquely(out var path, "common", "technology.txt");
          if (!IO.ReadAllInANSI(path, out var content))
          {
             Globals.ErrorLog.Write("Could not read \"technology.txt\"!");

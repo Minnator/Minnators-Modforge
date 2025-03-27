@@ -112,7 +112,7 @@ namespace Editor.Helper
       {
          if(!VerifyInputs(path, iconEnum))
             return;
-         FilesHelper.GetVanillaPath(out var vPath, path);
+         PathManager.GetVanillaPath(out var vPath, path);
 
          var rawImage = ReadImage(vPath);
          var numOfFrames = rawImage.Width/ rawImage.Height;
@@ -447,7 +447,7 @@ namespace Editor.Helper
          if (!VerifyInputs(path, iconEnum))
             return null!;
 
-         FilesHelper.GetFilePathUniquely(out var imgPath, path);
+         PathManager.GetFilePathUniquely(out var imgPath, path);
          return new (iconEnum)
          {
             Icon = ReadImage(imgPath),
@@ -478,7 +478,7 @@ namespace Editor.Helper
       {
          if (!VerifyInputs(path, iconEnum))
             return;
-         FilesHelper.GetVanillaPath(out var vPath, path);
+         PathManager.GetVanillaPath(out var vPath, path);
 
          var rawImage = ReadImage(vPath);
 

@@ -9,7 +9,7 @@ namespace Editor.Loading
    {
       public static void Load()
       {
-         var files = FilesHelper.GetFilesFromModAndVanillaUniquely("*.txt","common", "government_mechanics");
+         var files = PathManager.GetFilesFromModAndVanillaUniquely("*.txt","common", "government_mechanics");
 
          foreach (var file in files)
          {

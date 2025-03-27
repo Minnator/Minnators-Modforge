@@ -16,7 +16,7 @@ public static partial class RegionLoading
 
    public static void Load()
    {
-      if (!FilesHelper.GetModOrVanillaPath(out var path, out var isModPath, "map", "region.txt"))
+      if (!PathManager.GetModOrVanillaPath(out var path, out var isModPath, "map", "region.txt"))
       {
          Globals.ErrorLog.Write("Error: region.txt not found!");
          return;

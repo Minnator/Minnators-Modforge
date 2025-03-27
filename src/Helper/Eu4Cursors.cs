@@ -10,13 +10,13 @@ namespace Editor.Helper
       {
          try
          {
-            if (!FilesHelper.GetVanillaPath(out var file, "gfx", "cursors", "busy.ani"))
+            if (!PathManager.GetVanillaPath(out var file, "gfx", "cursors", "busy.ani"))
                return;
             Cursors.TryAdd(Eu4CursorTypes.Loading, AdvancedCursors.Create(file));
-            if (!FilesHelper.GetVanillaPath(out file, "gfx", "cursors", "normal.cur"))
+            if (!PathManager.GetVanillaPath(out file, "gfx", "cursors", "normal.cur"))
                return;
             Cursors.TryAdd(Eu4CursorTypes.Normal, AdvancedCursors.Create(file));
-            if (!FilesHelper.GetVanillaPath(out file, "gfx", "cursors", "dragselect.ani"))
+            if (!PathManager.GetVanillaPath(out file, "gfx", "cursors", "dragselect.ani"))
                return;
             Cursors.TryAdd(Eu4CursorTypes.Select, AdvancedCursors.Create(file));
          }

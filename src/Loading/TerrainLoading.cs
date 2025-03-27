@@ -12,7 +12,7 @@ public static class TerrainLoading
 {
    public static void Load()
    {
-      if (!FilesHelper.GetFilePathUniquely(out var path, "map", "terrain.txt"))
+      if (!PathManager.GetFilePathUniquely(out var path, "map", "terrain.txt"))
       {
          Globals.ErrorLog.Write("Failed to find terrain.txt");
          return;
