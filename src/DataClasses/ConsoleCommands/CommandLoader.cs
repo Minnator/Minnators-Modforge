@@ -66,25 +66,43 @@ namespace Editor.DataClasses.ConsoleCommands
          }, ClearanceLevel.Debug));
 
          // Scripted Effect parsgin
-         var scriptedEffectUsage = "Usage: parse_scripted_effect <file>";
+         var scriptedEffectUsage = "Usage: parse_scripted_effect <file> [-t]";
          _handler.RegisterCommand(new("parse_scripted_effect", scriptedEffectUsage, args =>
          {
-            if (args.Length != 1)
+            if (args.Length != 2)
                return [scriptedEffectUsage];
 
             var path = Path.Combine(Globals.AppDirectory, args[0]);
             if (!File.Exists(path))
                return [$"File '{path}' not found"];
 
-            var effs = ScriptedEffectLoading.LoadParseFile(path);
-            var sb = new StringBuilder($"Parsed scripted effects from '{args[0]}':");
-            sb.AppendLine();
-            foreach (var eff in effs)
+            StringBuilder sb = null!;
+
+            switch (args[1])
             {
-               sb.AppendLine(eff.Name);
-               SavingUtil.AddElements(1, eff.EnhancedElements, ref sb);
-               sb.AppendLine();
+               case "-t":
+                  if (ScriptedEffectImpl.ParseScriptedEffectDefinition([Path.Combine(Globals.AppDirectory, args[0])], out var result))
+                  {
+                     sb = new($"Parsed scripted effects from '{args[0]}':");
+                     sb.AppendLine();
+                     foreach (var eff in result)
+                     {
+                        sb.AppendLine(eff);
+                        //SavingUtil.AddElements(1, eff.EnhancedElements, ref sb);
+                        //sb.AppendLine();
+                     }
+                  }
+                  else
+                  {
+                     sb = new ($"Detected cycle in '{args[0]}':");
+                     sb.AppendLine();
+                     sb.Append(string.Join(" -> ", result));
+                  }
+                  break;
             }
+
+            if (sb is null)
+               return [scriptedEffectUsage];
 
             return sb.ToString().Split("\r\n");
          }, ClearanceLevel.Debug, "scr_eff"));

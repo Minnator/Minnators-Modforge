@@ -54,7 +54,7 @@ namespace Editor.Loading.Enhanced
       {
          List<ScriptedEffect> scriptEffects = [];
 
-         var po = PathObj.FromExternalPath(file);
+         var po = PathObj.FromPath(file);
          var elements = po.LoadBaseOrder();
 
          foreach (var element in elements)
@@ -85,17 +85,7 @@ namespace Editor.Loading.Enhanced
             visited.Remove(scriptedEffect.Name);
          }
       }
-
-      private static void ResolveReferences(Dictionary<string, ScriptedEffect> validScriptedEffects, PathObj po)
-      {
-         // Topological sort
-         // 
-
-         Dictionary<string, List<string>> objects = [];
-
-
-      }
-
+      
       private static List<IEnhancedElement> ResolveRecursive(IEnhancedElement element, HashSet<string> visited, Dictionary<string, ScriptedEffect> validScriptedEffects, PathObj po)
       {
          if (element is EnhancedBlock block)

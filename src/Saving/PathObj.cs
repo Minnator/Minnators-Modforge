@@ -31,9 +31,19 @@ public class PathObj
       return new(pathParts, modPath);
    }
 
-   public static PathObj FromPath(string path) => FromPath(path, path.StartsWith(Globals.ModPath));
+   public static PathObj FromPath(string path)
+   {
+      if (path.StartsWith(Globals.VanillaPath))
+         return FromPath(path, false);
+      if (path.StartsWith(Globals.ModPath))
+         return FromPath(path, true);
 
-   public static PathObj FromExternalPath(string path) => new(path.Split(Path.DirectorySeparatorChar), false, true);
+      return FromExternalPath(path);
+   }
+
+   private static PathObj FromExternalPath(string path) => new(path.Split(Path.DirectorySeparatorChar), false, true);
+
+
 
    public static PathObj FromPath(string path, bool isModPath)
    {

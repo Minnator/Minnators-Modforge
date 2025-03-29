@@ -52,16 +52,18 @@ namespace Editor.Loading.Enhanced
          return ContentElements;
       }
 
-      public List<LineKvp<string, string>> GetContentLines()
+
+
+      public List<LineKvp<string, string>> GetContentLines(PathObj po)
       {
-         Debug.Assert(SubBlockCount == 0, "This method must not be called for blocks containing other blocks!");
+         //Debug.Assert(SubBlockCount == 0, "This method must not be called for blocks containing other blocks!");
 
          var lines = new List<LineKvp<string, string>>();
 
          // We do not need to call MergeBlocksAndContent here as we only have content elements which are added in order of occurrence in the file
-         foreach (var content in ContentElements)
+         foreach (var content in GetContentElements(true, po))
          {
-            var enumerator = content.GetLineKvpEnumerator(PathObj.Empty, false);
+            var enumerator = content.GetLineKvpEnumerator(po);
             foreach (var kvp in enumerator)
                lines.Add(kvp);
          }
@@ -107,6 +109,10 @@ namespace Editor.Loading.Enhanced
          return GetAllBlockByName(name, SubBlocks, out blocks);
       }
 
+      /// <summary>
+      /// Returns the elements of this block in the order they appear in the file
+      /// </summary>
+      /// <returns></returns>
       public IEnumerable<IEnhancedElement> GetElements() => EnhancedParser.MergeBlocksAndContent(SubBlocks, ContentElements);
 
       public static bool GetBlockByName(string name, ICollection<EnhancedBlock> blocks, out EnhancedBlock result)

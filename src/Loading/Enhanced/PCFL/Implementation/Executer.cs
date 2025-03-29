@@ -37,7 +37,7 @@ public static class Executor // Vader is operating it
 
    public static void ExecuteFile(string filePath, ITarget target)
    {
-      var po = PathObj.FromExternalPath(filePath);
+      var po = PathObj.FromPath(filePath);
       var content = IO.ReadAllInUTF8(filePath);
 
       var errorCnt = LogManager.TotalErrorCount;
