@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 using Editor.ErrorHandling;
 using Editor.Parser;
 using Editor.Saving;
@@ -31,7 +32,7 @@ namespace Editor.Loading.Enhanced
       public List<EnhancedBlock> SubBlocks { get; set; } = [];
       public int SubBlockCount => SubBlocks.Count;
       public int ContentElementCount => ContentElements.Count;
-
+      public int Count => SubBlockCount + ContentElementCount;
 
       public List<EnhancedBlock> GetSubBlocks(bool onlyBlocks, PathObj po)
       {
@@ -49,6 +50,23 @@ namespace Editor.Loading.Enhanced
             _ = new LoadingError(po, $"Expected no subBlocks in block: {Name}!", StartLine, 0, ErrorType.UnexpectedBlockElement);
          }
          return ContentElements;
+      }
+
+      public List<LineKvp<string, string>> GetContentLines()
+      {
+         Debug.Assert(SubBlockCount == 0, "This method must not be called for blocks containing other blocks!");
+
+         var lines = new List<LineKvp<string, string>>();
+
+         // We do not need to call MergeBlocksAndContent here as we only have content elements which are added in order of occurrence in the file
+         foreach (var content in ContentElements)
+         {
+            var enumerator = content.GetLineKvpEnumerator(PathObj.Empty, false);
+            foreach (var kvp in enumerator)
+               lines.Add(kvp);
+         }
+
+         return lines;
       }
 
       protected void AppendContent(int tabs, StringBuilder sb)

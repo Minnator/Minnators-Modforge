@@ -269,6 +269,12 @@ namespace Editor.Saving
          sb.AppendLine($"{stringName} = {s}");
       }
 
+      public static void AddLineKvp(int tabs, LineKvp<string, string> kvp, ref StringBuilder sb)
+      {
+         AddTabs(tabs, ref sb);
+         sb.AppendLine($"{kvp.Key} = {kvp.Value}");
+      }
+
       public static void AddQuotedString(int tabs, string s, string stringName, ref StringBuilder sb)
       {
          if (string.IsNullOrEmpty(s))

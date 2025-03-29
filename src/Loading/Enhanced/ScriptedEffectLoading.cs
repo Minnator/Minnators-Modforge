@@ -6,7 +6,7 @@ using Editor.Saving;
 
 namespace Editor.Loading.Enhanced
 {
-   public class ScriptedEffect(string name, List<IEnhancedElement> elements, ref PathObj po)
+   public class ScriptedEffect(string name, List<IEnhancedElement> elements, ref PathObj po) 
    {
       public PathObj Po { get; } = po;
       public string Name { get; } = name;
@@ -14,6 +14,7 @@ namespace Editor.Loading.Enhanced
 
       // Temporary
       public List<IEnhancedElement> EnhancedElements { get; set; } = elements;
+      public List<string> References = [];
       
       public string DebugString()
       {
@@ -85,6 +86,16 @@ namespace Editor.Loading.Enhanced
          }
       }
 
+      private static void ResolveReferences(Dictionary<string, ScriptedEffect> validScriptedEffects, PathObj po)
+      {
+         // Topological sort
+         // 
+
+         Dictionary<string, List<string>> objects = [];
+
+
+      }
+
       private static List<IEnhancedElement> ResolveRecursive(IEnhancedElement element, HashSet<string> visited, Dictionary<string, ScriptedEffect> validScriptedEffects, PathObj po)
       {
          if (element is EnhancedBlock block)
@@ -101,9 +112,7 @@ namespace Editor.Loading.Enhanced
             {
                if (!visited.Add(block.Name))
                   throw new ($"Cyclic dependency detected in scripted effect {block.Name}");
-               visited.Add(block.Name);
                var effs = scriptedEffect.EnhancedElements;
-               visited.Remove(block.Name);
                return effs;
             }
          }

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Editor.DataClasses.DataStructures;
 using Editor.ErrorHandling;
@@ -170,7 +171,7 @@ namespace Editor.Loading.Enhanced
                      Span<char> charSpan = stackalloc char[nameLength];
                      currentContent.CopyTo(wordStart, charSpan, nameLength); // We copy the name of the block from the sb
                      currentContent.Remove(wordStart, currentContent.Length - wordStart); // we remove anything after the name start
-                     var newBlock = new EnhancedBlock(new(charSpan), i, elementIndex++); // we create a new block
+                     EnhancedBlock newBlock;
 
                      wordStart = -1;
                      wordEnd = -1;
@@ -179,8 +180,8 @@ namespace Editor.Loading.Enhanced
 
                      if (trimmed.Length > 0) // We have remaining content in the currentContent which we need to add to the previous block element
                      {
-                        var content = new EnhancedContent(trimmed, contentStart,
-                                                          elementIndex++); // We create a new content element as there is no block element on the stack
+                        var content = new EnhancedContent(trimmed, contentStart, elementIndex++); // We create a new content element as there is no block element on the stack
+                        newBlock = new (new(charSpan), i, elementIndex++); // we create a new block
                         if (blockStack.IsEmpty)
                         {
                            contents.Add(content);
@@ -196,7 +197,7 @@ namespace Editor.Loading.Enhanced
                      }
                      else // No Content to be added, only add the new Block which was started
                      {
-
+                        newBlock = new (new(charSpan), i, elementIndex++); // we create a new block
                         if (blockStack.IsEmpty)
                            blocks.Add(newBlock);
                         else
@@ -511,5 +512,22 @@ namespace Editor.Loading.Enhanced
       public T Key { get; }
       public TQ Value { get; }
       public int Line { get; }
+
+      public void Deconstruct(out T key, out TQ value, out int line)
+      {
+         key = Key;
+         value = Value;
+         line = Line;
+      }
+
+      public override string ToString() => $"{Key} = {Value}";
+      public static implicit operator LineKvp<T, TQ>((T key, TQ value, int line) tuple) => new(tuple.key, tuple.value, tuple.line);
+
+      public override bool Equals([NotNullWhen(true)] object? obj)
+      {
+         if (obj is LineKvp<T, TQ> kvp)
+            return Key.Equals(kvp.Key) && Value.Equals(kvp.Value) && Line == kvp.Line;
+         return false;
+      }
    }
 }
