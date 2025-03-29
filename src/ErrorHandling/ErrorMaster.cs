@@ -221,9 +221,9 @@ namespace Editor.ErrorHandling
                   DebugCount++;
                   break;
                case LogType.Critical:
+                  MessageBox.Show($"Editing or Saving objects can result in irreversible damage or loss of data!\nCheck the ErrorLog (F10) for further insights\n\n{entry.Message}", "Critical Error occured", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                   CriticalCount++;
                   break;
-
             }
          }
          Globals.MapWindow.UpdateErrorCounts(TotalErrorCount, TotalLogCount);

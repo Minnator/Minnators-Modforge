@@ -140,8 +140,13 @@ namespace Editor.Loading.Enhanced
                scriptEffects.Add(scrEff);
             }
          }
-         return ToplologicalSorting(scriptEffects, out result);
+         if (!ToplologicalSorting(scriptEffects, out result))
+         {
+            // Handle Cycle?
+            return false;
+         }
          //return scriptEffects;
+         return true;
       }
 
       private static bool ToplologicalSorting(List<ScriptedEffectImpl> scriptEffects, out List<string> result)
@@ -184,7 +189,7 @@ namespace Editor.Loading.Enhanced
 
          if (!Sorting.TopologicalSortWithCycle(dependencyDict, out result, true))
          {
-            _ = new LoadingError(PathObj.Empty, $"Cyclic dependency detected in scripted effects: {string.Join(", ", result)}");
+            _ = new LoadingError(PathObj.Empty, $"Cyclic dependency detected in scripted effects: {string.Join(", ", result)}", level:LogType.Critical);
             return false;
          }
 
