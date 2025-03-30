@@ -417,7 +417,7 @@ public static class Globals
 // - [x] Fix Terrain soundType saving
 // - [x] Fix Comment chars can now be defined for each SaveableType
 // - [ ] Fix province being edited when going back and forth in history
-// - [ ] Implement scripted effects
+// - [x] Implement scripted effects
 // - [ ] Fix map mode exporter
 // - [ ] Add history entry adding / removing
 // - [x] Fix Calendar view [ ] There is more to do optionally
@@ -435,7 +435,7 @@ public static class Globals
 // - [ ] Add a way to create custom map modes
 // - [ ] File syncing/Hotreloading
 // - [ ] Ideas making via drag and drop
-// - [ ] Heat map for history entries in editor for them when selecting dates?
+// - [x] Heat map for history entries in editor for them when selecting dates?
 // - [-] Add a tradegoods creation and editing menu
 // - [ ] Loosing hover when selecting and deselecting a province
 

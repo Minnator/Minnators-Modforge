@@ -10,7 +10,7 @@ namespace Editor.Loading.Enhanced.PCFL.Implementation.ProvinceScope
       public static void GenerateBuildingEffects()
       {
          foreach (var building in Globals.Buildings) 
-            Scopes.Province.Effects.Add(building.Name,GenerateBuildingEffect(building));
+            Scopes.Province.Effects.Add(building.Name, GenerateBuildingEffect(building));
       }
 
       public class BuildingEffect(Building building) : SimpleEffect<bool>(false) 

@@ -30,18 +30,25 @@ public class PCFL_Scope(Type scopeType)
    public delegate IToken? PCFL_TokenParseDelegate(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po);
    public Dictionary<string, PCFL_TriggerParseDelegate> Triggers { get; init; } = [];
    public Dictionary<string, PCFL_TokenParseDelegate> Effects { get; init; } = [];
-
+   
    public readonly static PCFL_Scope Empty = new(typeof(Type)); 
 
    public bool IsValidTrigger(string str) => Triggers.ContainsKey(str);
    public bool IsValidTrigger(string str, out PCFL_TriggerParseDelegate pcflParse) => Triggers.TryGetValue(str, out pcflParse);
 
-   public bool IsValidEffect(string str) => Effects.ContainsKey(str);
-   public bool IsValidEffect(string str, out PCFL_TokenParseDelegate pcflParse) => Effects.TryGetValue(str, out pcflParse);
+   public bool IsValidEffect(string str) => Effects.ContainsKey(str) || Scopes.ScriptedEffects.ContainsKey(str);
+   public bool IsValidEffect(string str, out PCFL_TokenParseDelegate pcflParse)
+   {
+      if(Effects.TryGetValue(str, out pcflParse))
+         return true;
+      if (Scopes.ScriptedEffects.TryGetValue(str, out pcflParse))
+         return true;
+      return false;
+   }
 
    /*
     * Routing
-    * Trigger 
+    * Trigger
     * Effect
     */
    /*

@@ -13,7 +13,6 @@ using Editor.Loading.Enhanced;
 using Editor.Loading.Enhanced.PCFL;
 using Editor.Loading.Enhanced.PCFL.Implementation;
 using Editor.Saving;
-using ScriptedEffect = Editor.Loading.Enhanced.ScriptedEffect;
 
 namespace Editor.DataClasses.ConsoleCommands
 {

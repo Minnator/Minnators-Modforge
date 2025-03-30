@@ -156,6 +156,15 @@ public static class ProvinceParser
       {
          if (!ProvinceActionsAndProperties.TryGetValue(attribute.ToLower(), out var tuple))
          {
+            //TODO rethink this usage of effects maybe?
+            if (Scopes.ScriptedEffects.TryGetValue(attribute.ToLower(), out var scriptedEffect))
+            {
+               var effect = new Effect(province, ITarget.Empty, []);
+               scriptedEffect.Invoke(null, new(attribute, value, lineNum), new(new SimpleFileScopeSwitch(Scopes.Province, province), effect), po);
+               effect.Activate();
+               return;
+            }
+
             var building = Globals.Buildings.Find(x => x.Name.Equals(attribute.ToLower()));
             if (building != null)
                province.Buildings.Add(building);
