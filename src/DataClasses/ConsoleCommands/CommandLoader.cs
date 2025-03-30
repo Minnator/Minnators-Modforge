@@ -66,43 +66,46 @@ namespace Editor.DataClasses.ConsoleCommands
          }, ClearanceLevel.Debug));
 
          // Scripted Effect parsgin
-         var scriptedEffectUsage = "Usage: parse_scripted_effect <file> [-t]";
+         var scriptedEffectUsage = "Usage: parse_scripted_effect <file> [-t, -c]";
          _handler.RegisterCommand(new("parse_scripted_effect", scriptedEffectUsage, args =>
          {
-            if (args.Length != 2)
-               return [scriptedEffectUsage];
-
-            var path = Path.Combine(Globals.AppDirectory, args[0]);
-            if (!File.Exists(path))
-               return [$"File '{path}' not found"];
-
             StringBuilder sb = null!;
-
-            switch (args[1])
+            if (args.Length == 2)
             {
-               case "-t":
-                  if (ScriptedEffectImpl.ParseScriptedEffectDefinition([Path.Combine(Globals.AppDirectory, args[0])], out var result))
-                  {
-                     sb = new($"Parsed scripted effects from '{args[0]}':");
-                     sb.AppendLine();
-                     foreach (var eff in result)
-                     {
-                        sb.AppendLine(eff);
-                        //SavingUtil.AddElements(1, eff.EnhancedElements, ref sb);
-                        //sb.AppendLine();
-                     }
-                  }
-                  else
-                  {
-                     sb = new ($"Detected cycle in '{args[0]}':");
-                     sb.AppendLine();
-                     sb.Append(string.Join(" -> ", result));
-                  }
-                  break;
-            }
+               var path = Path.Combine(Globals.AppDirectory, args[0]);
+               if (!File.Exists(path))
+                  return [$"File '{path}' not found"];
 
-            if (sb is null)
-               return [scriptedEffectUsage];
+
+               switch (args[1])
+               {
+                  case "-t":
+                     if (ScriptedEffectImpl.ParseScriptedEffectDefinition([Path.Combine(Globals.AppDirectory, args[0])], out var result))
+                     {
+                        sb = new($"Parsed scripted effects from '{args[0]}':");
+                        sb.AppendLine();
+                        foreach (var eff in result)
+                        {
+                           sb.AppendLine(eff);
+                           //SavingUtil.AddElements(1, eff.EnhancedElements, ref sb);
+                           //sb.AppendLine();
+                        }
+                     }
+                     else
+                     {
+                        sb = new($"Detected cycle in '{args[0]}':");
+                        sb.AppendLine();
+                        sb.Append(string.Join(" -> ", result));
+                     }
+                     break;
+                  case "-c":
+
+                     break;
+               }
+
+               if (sb is null)
+                  return [scriptedEffectUsage];
+            }   
 
             return sb.ToString().Split("\r\n");
          }, ClearanceLevel.Debug, "scr_eff"));
@@ -256,8 +259,8 @@ namespace Editor.DataClasses.ConsoleCommands
                var errorDesc = "";
                if (errObj.Then(o => { errorDesc = o.GetDescription(); }))
                {
-                  Executor.ExecuteFile(path, (ITarget)country);
-                  return [$"Executed file \'{Path.GetFileName(path)}\' in country scope"];
+                  var (parsing, execution) = Executor.ExecuteFile(path, (ITarget)country);
+                  return [$"Executed file \'{Path.GetFileName(path)}\' in country scope", $"Parsed in {parsing} ms\nExecuted in {execution} ms"];
                }
 
                return [errorDesc];
@@ -270,14 +273,14 @@ namespace Editor.DataClasses.ConsoleCommands
 
                if (!File.Exists(path))
                   return [$"File '{path}' not found"];
-
                var errObj = Province.GeneralParse(args[2], out var province);
 
                var errorDesc = "";
                if (errObj.Then(o => {errorDesc = o.GetDescription();}))
                {
-                  Executor.ExecuteFile(path, (ITarget)province);
-                  return [$"Executed file \'{Path.GetFileName(path)}\' in province scope"];
+                  var sw = Stopwatch.StartNew();
+                  var (parsing, execution) = Executor.ExecuteFile(path, (ITarget)province);
+                  return [$"Executed file \'{Path.GetFileName(path)}\' in province scope", $"Parsed in {parsing} ms", $"Executed in {execution} ms", $"MapMode rendering {sw.ElapsedMilliseconds - parsing - execution}"];
                }
 
                return [errorDesc];

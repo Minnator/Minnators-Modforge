@@ -35,11 +35,11 @@ public static class Executor // Vader is operating it
    }
 
 
-   public static void ExecuteFile(string filePath, ITarget target)
+   public static (int parsing, int execution) ExecuteFile(string filePath, ITarget target)
    {
-      var po = PathObj.FromPath(filePath);
-      var content = IO.ReadAllInUTF8(filePath);
+      var sw = Stopwatch.StartNew();
 
+      var po = PathObj.FromPath(filePath);
       var errorCnt = LogManager.TotalErrorCount;
       var effect = target switch
       {
@@ -52,14 +52,19 @@ public static class Executor // Vader is operating it
          var retVal = ImprovedMessageBox.Show("Execution failed due to an error in the file. Please check the error log (F10) for more information!", "Execution failed", ref Globals.Settings.PopUps.TryContinueExecutionPopUp, MessageBoxButtons.RetryCancel, MessageBoxIcon.Exclamation);
 
          if (retVal != DialogResult.Retry)
-            return;
+            return ((int)sw.ElapsedMilliseconds, -1);
 
          // continue
       }
 
       Globals.State = State.Loading; //TODO option for compacting
+      var parsing = (int)sw.ElapsedMilliseconds;
+      sw.Restart();
       effect.Activate();
+      var execution = (int)sw.ElapsedMilliseconds;
       Globals.State = State.Running;
       MapModeManager.RenderCurrent();
+
+      return (parsing, execution);
    }
 }

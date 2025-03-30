@@ -14,13 +14,13 @@ namespace Editor.Loading.Enhanced
 {
    public class ScriptedEffectUsage : IToken
    {
-      private IToken[] _tokens;
+      public IToken[] Tokens { get; init; }
       public List<LineKvp<string, string>> ReplacementValues { get; init; }
       public string Name { get; init; }
 
       public void Activate(ITarget target)
       {
-         foreach (var token in _tokens)
+         foreach (var token in Tokens)
          {
             token.Activate(target);
          }
@@ -57,15 +57,22 @@ namespace Editor.Loading.Enhanced
       }
    }
 
-   public partial class ScriptedEffectImpl(EnhancedBlock block, ref PathObj po)
+   public partial class ScriptedEffectImpl
    {
-      public string name = block.Name;
+      public string name;
       public Dictionary<string, int[]> replacePos;
       public string effect; // with all references $...$ removed
 
-      public EnhancedBlock Block = block;
-      public PathObj Po = po;
+      public EnhancedBlock Block;
+      public PathObj Po;
 
+      public ScriptedEffectImpl(EnhancedBlock block, ref PathObj po)
+      {
+         name = block.Name;
+         Block = block;
+         Po = po;
+         effect = block.GetContent();
+      }
 
       // Save the string
       // With possibility of replacement => easier in string or stringbuilder
@@ -88,15 +95,16 @@ namespace Editor.Loading.Enhanced
             }
 
             var kvps = block.GetContentLines(po);
-            if (ReplaceValues(kvps, po, out var replaced))
+            if (ReplaceValues(kvps, out var replaced))
             {
                return new ScriptedEffectUsage
                {
-                  // TODO parse 'replaced' to tokens
+                  Tokens = GeneralFileParser.ParseElementsToTokens(EnhancedParser.LoadBaseOrder(replaced, po), context, po).ToArray(),
                   Name = name,
                   ReplacementValues = kvps
                };
             }
+            return null;
          }
          else
          {
@@ -109,7 +117,7 @@ namespace Editor.Loading.Enhanced
 
             return new ScriptedEffectUsage
             {
-               // TODO parse 'replaced' to tokens
+               Tokens = GeneralFileParser.ParseElementsToTokens(EnhancedParser.LoadBaseOrder(effect, po), context, po).ToArray(),
                Name = name,
                ReplacementValues = []
             };
@@ -119,14 +127,12 @@ namespace Editor.Loading.Enhanced
          // in case of kvp check if value == yes and no replace values 
          // Returns list of parsed tokens of scripted Effect as ScriptedEffectUsage
          // Throw error if parsing fails due to wrong context
-
-         return new ScriptedEffectUsage();
       }
 
       public static bool ParseScriptedEffectDefinition(List<string> files, out List<string> result)
       {
          // Get all scripted effects from the files, now that we have the names of them we can resolve them if they contain each other
-         List<ScriptedEffectImpl> scriptEffects = [];
+         HashSet<ScriptedEffectImpl> scriptEffects = [];
          //var files = PathManager.GetAllFilesInFolder(internalPath: ["common", "scripted_effects"]);
 
          foreach (var file in files)
@@ -136,20 +142,40 @@ namespace Editor.Loading.Enhanced
 
             foreach (var block in blocks)
             {
+               if (!Scopes.IsEffectKeyUnused(block.Name))
+               {
+                  _ = new ErrorObject(ErrorType.DuplicateObjectDefinition,
+                                      $"'{block.Name}' is not a valid scripted effect name. It is reserved for vanilla effects!", LogType.Critical);
+                  continue;
+               }
                var scrEff = new ScriptedEffectImpl(block, ref po);
-               scriptEffects.Add(scrEff);
+               if (!scriptEffects.Add(scrEff))
+                  _ = new LoadingError(po, $"Scripted effect '{scrEff.name}' is defined multiple times.");
             }
          }
-         if (!ToplologicalSorting(scriptEffects, out result))
-         {
-            // Handle Cycle?
+         if (!TopologicalSorting(scriptEffects, out result))
             return false;
+
+         ReplaceReferences(scriptEffects, result);
+
+
+         foreach (var scriptEff in scriptEffects)
+         {
+            scriptEff.SetReplaceSources();
+            Scopes.AddToAllScopes(scriptEff.name, scriptEff.CreateEffect);
          }
+         
          //return scriptEffects;
          return true;
       }
 
-      private static bool ToplologicalSorting(List<ScriptedEffectImpl> scriptEffects, out List<string> result)
+      private static void ReplaceReferences(HashSet<ScriptedEffectImpl> effects, List<string> orderedEffects)
+      {
+         // TODO
+      }
+
+
+      private static bool TopologicalSorting(ICollection<ScriptedEffectImpl> scriptEffects, out List<string> result)
       {
          HashSet<string> effectDict = new(scriptEffects.Select(x => x.name));
          Dictionary<string, List<string>> dependencyDict = new();
@@ -189,138 +215,97 @@ namespace Editor.Loading.Enhanced
 
          if (!Sorting.TopologicalSortWithCycle(dependencyDict, out result, true))
          {
-            _ = new LoadingError(PathObj.Empty, $"Cyclic dependency detected in scripted effects: {string.Join(", ", result)}", level:LogType.Critical);
+            _ = new LoadingError(PathObj.Empty, $"Cyclic dependency detected in scripted effects: {string.Join(", ", result)}\n\nScripted Effects won't work, until the cycle is resolved.", level:LogType.Critical);
             return false;
          }
 
          return true;
       }
 
-      private static void ResolveEffectReferences(List<ScriptedEffect> scriptedEffects)
-      {
-         // lookup table for the scripted effects
-         var effectDict = scriptedEffects.ToDictionary(x => x.Name, x => x);
-         HashSet<string> visited = [];
-
-         foreach (var scriptedEffect in scriptedEffects)
-         {
-            visited.Add(scriptedEffect.Name);
-            var effElements = new List<IEnhancedElement>();
-            foreach (var element in scriptedEffect.EnhancedElements)
-               effElements.AddRange(ResolveRecursive(element, visited, effectDict, scriptedEffect.Po));
-            scriptedEffect.EnhancedElements = effElements;
-            visited.Remove(scriptedEffect.Name);
-         }
-      }
-
-      private static List<IEnhancedElement> ResolveRecursive(IEnhancedElement element, HashSet<string> visited, Dictionary<string, ScriptedEffect> validScriptedEffects, PathObj po)
-      {
-         if (element is EnhancedBlock block)
-         {
-            // no scripted Effect but a block we need to resolve
-            if (!validScriptedEffects.TryGetValue(block.Name, out var scriptedEffect))
-            {
-               List<IEnhancedElement> blockContent = [];
-               foreach (var bE in block.GetElements())
-                  blockContent.AddRange(ResolveRecursive(bE, visited, validScriptedEffects, po));
-               return blockContent;
-            }
-            else
-            {
-               if (!visited.Add(block.Name))
-                  throw new($"Cyclic dependency detected in scripted effect {block.Name}");
-               var effs = scriptedEffect.EnhancedElements;
-               return effs;
-            }
-         }
-         else
-         {
-            var sb = new StringBuilder();
-            var lineNum = -1;
-            List<IEnhancedElement> effs = [];
-            foreach (var line in ((EnhancedContent)element).GetLineKvpEnumerator(po, false))
-            {
-               lineNum = line.Line;
-
-               if (!validScriptedEffects.TryGetValue(line.Key, out var scriptedEffect))
-               {
-                  sb.Append($"{line.Key} = {line.Value}");
-               }
-               else
-               {
-                  if (!visited.Add(line.Key))
-                     throw new($"Cyclic dependency detected in scripted effect {line.Key}");
-                  visited.Add(line.Key);
-                  effs.Add(new EnhancedContent(sb.ToString(), lineNum, -1));
-                  sb.Clear();
-                  foreach (var eff in scriptedEffect.EnhancedElements)
-                     effs.AddRange(ResolveRecursive(eff, visited, validScriptedEffects, scriptedEffect.Po));
-                  visited.Remove(line.Key);
-               }
-            }
-
-            if (sb.Length > 0)
-               effs.Add(new EnhancedContent(sb.ToString(), lineNum, -1));
-            return effs;
-         }
-      }
-
 
       // Contains the key and the index to the replacement value in a backwards order
       private List<(string key, int index)> _replaceSources = [];
 
-      // TODO fix
-      private void SetReplaceSources(List<LineKvp<string, string>> values, PathObj po)
+
+
+      private void SetReplaceSources()
       {
-         var expectedValues = new string[values.Count];
+         // Method 1
+         /*Match match;
+         
+         while ((match = ReplaceRegex().Match(effect)).Success)
+         {
+            effect = effect.Remove(match.Index, match.Length);
+            _replaceSources.Add((match.Value[1..^1], match.Index));
+         }*/
+         // Method 2
+         var offset = 0;
+         StringBuilder sb = new(effect);
+         foreach (Match newMatch in ReplaceRegex().Matches(effect))
+         {
+            if (!newMatch.Groups[1].Success)
+               continue;
+            var originalIndex = newMatch.Index - offset;
+            _replaceSources.Add((newMatch.Groups[1].Value, originalIndex));
+            sb.Remove(originalIndex, newMatch.Length);
+            offset += newMatch.Length;
+         }
 
-         for (var i = 0; i < values.Count; i++)
-            expectedValues[i] = values[i].Key;
+         effect = sb.ToString();
 
-         var matches = ReplaceRegex().Matches(effect);
+         /*
+         test = $test"$
+num = $NUM$
+num = $NUM$
+text2 = "$NUM$"
 
-         for (var i = matches.Count - 1; i >= 0; i--)
+         for (var i = matches.Count - 1; i >= 0; i--) //$NUM$
          {
             var match = matches[i];
-            if (expectedValues.Contains(match.Value))
-            {
-               // the value is one of the expected values
-               // we trim the $ to be able to use .Equals() in later usage
-               _replaceSources.Add((match.Value[1..^1], match.Index));
-            }
-            else
-            {
-               _ = new LoadingError(po, $"Unknown argument '{match.Value}' detected in scripted effect '{name}' call.");
-            }
+            _replaceSources.Add((match.Value[1..^1], match.Index));
          }
+         */
       }
 
-      public bool ReplaceValues(List<LineKvp<string, string>> values, PathObj po, out string replaced)
+      public bool ReplaceValues(List<LineKvp<string, string>> values, out string replaced)
       {
          Debug.Assert(values.Count != 0, "This should never be called for non block scripted effects!");
          
          var sb = new StringBuilder(effect);
          var returnVal = true;
-
+         var wasUsed = new bool[values.Count];
+         var offset = 0;
          // The list is backwards so we can go forward and just replace the values
          for (var i = 0; i < _replaceSources.Count; i++)
          {
             var (key, index) = _replaceSources[i];
-            var replacement = values.FirstOrDefault(x => x.Key.Equals(key));
-            if (replacement.Key == null)
+            var repIndex = values.FindIndex(x => x.Key.Equals(key));
+            if (repIndex < 0)
             {
-               _ = new LoadingError(po, $"Missing argument in scripted effect ({name}) call: '{key}'");
+               _ = new LoadingError(Po, $"Missing argument in scripted effect ({name}) call: '{key}'");
                returnVal = false;
                continue;
             }
-            sb.Remove(index, key.Length).Insert(index, replacement.Value);
+            wasUsed[repIndex] = true;
+            var value = values[repIndex].Value;
+            sb.Insert(index + offset, value);
+            offset += value.Length;
+         }
+
+         for (var i = 0; i < values.Count; i++)
+         {
+            if (!wasUsed[i])
+            {
+               _ = new LoadingError(Po, $"Unused argument in scripted effect ({name}) call: '{values[i].Key}' with value '{values[i].Value}'");
+               returnVal = false;
+            }
          }
 
          replaced = sb.ToString();
          return returnVal;
       }
 
-      [GeneratedRegex(@"\$\w+\$")]
+      [GeneratedRegex(@"\$(\w+)\$|"".*""")]
       private static partial Regex ReplaceRegex();
    }
 }

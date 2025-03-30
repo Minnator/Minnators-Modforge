@@ -1,12 +1,52 @@
 ﻿using Editor.DataClasses.Saveables;
+using Editor.ErrorHandling;
 using Editor.Loading.Enhanced.PCFL.Implementation.CountryScope;
 using Editor.Loading.Enhanced.PCFL.Implementation.ProvinceScope;
+using static Editor.Loading.Enhanced.PCFL.Implementation.PCFL_Scope;
 using Region = Editor.DataClasses.Saveables.Region;
 
 namespace Editor.Loading.Enhanced.PCFL.Implementation;
 
 public static class Scopes
 {
+
+   public static bool AddToAllScopes(string name, PCFL_TokenParseDelegate func)
+   {
+      if (Province.Effects.ContainsKey(name) || Province.Effects.ContainsKey(name))
+      {
+         _ = new ErrorObject(ErrorType.DuplicateObjectDefinition, $"An effect with the name '{name}' has already been added to parsing!");
+         return false;
+      }
+
+      Province.Effects.Add(name, func);
+      Country.Effects.Add(name, func);
+      return true;
+   }
+
+   public static bool AddToAllScopes(string name, PCFL_TriggerParseDelegate func)
+   {
+      if (Province.Triggers.ContainsKey(name) || Province.Triggers.ContainsKey(name))
+      {
+         _ = new ErrorObject(ErrorType.DuplicateObjectDefinition, $"A trigger with the name '{name}' has already been added to parsing!");
+         return false;
+      }
+      
+      Province.Triggers.Add(name, func);
+      Country.Triggers.Add(name, func);
+      return true;
+   }
+
+   public static bool IsEffectKeyUnused(string key)
+   {
+      return !Province.Effects.ContainsKey(key)
+             && !Country.Effects.ContainsKey(key);
+   }
+
+   public static bool IsTriggerKeyUnused(string key)
+   {
+      return !Province.Triggers.ContainsKey(key)
+             && !Country.Triggers.ContainsKey(key);
+   }
 
    public static PCFL_Scope Province = new(typeof(Province))
    {
