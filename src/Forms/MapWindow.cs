@@ -1532,7 +1532,8 @@ namespace Editor.Forms
 
       private void effectsToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         FormsHelper.ShowIfAnyOpen<WikiBrowser>();
+         var browser = new WikiBrowser(WikiHelper.LoadEffectsFromAssembly);
+         browser.ShowDialog();
       }
 
       private void ErrorCountLabel_MouseEnter(object sender, EventArgs e)
@@ -1587,5 +1588,12 @@ namespace Editor.Forms
 
 
       #endregion
+
+      private void scriptedEffectsToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+
+         var browser = new WikiBrowser(WikiHelper.LoadScriptedEffects);
+         browser.ShowDialog();
+      }
    }
 }

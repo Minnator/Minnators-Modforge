@@ -32,15 +32,18 @@
          tableLayoutPanel1 = new TableLayoutPanel();
          SearchTextBox = new TextBox();
          EffectView = new ListView();
+         OnlySearchFirstColumn = new CheckBox();
          tableLayoutPanel1.SuspendLayout();
          SuspendLayout();
          // 
          // tableLayoutPanel1
          // 
-         tableLayoutPanel1.ColumnCount = 1;
+         tableLayoutPanel1.ColumnCount = 2;
          tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 83.5403748F));
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 180F));
          tableLayoutPanel1.Controls.Add(SearchTextBox, 0, 0);
          tableLayoutPanel1.Controls.Add(EffectView, 0, 1);
+         tableLayoutPanel1.Controls.Add(OnlySearchFirstColumn, 1, 0);
          tableLayoutPanel1.Dock = DockStyle.Fill;
          tableLayoutPanel1.Location = new Point(0, 0);
          tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -56,18 +59,31 @@
          SearchTextBox.Location = new Point(3, 3);
          SearchTextBox.Name = "SearchTextBox";
          SearchTextBox.PlaceholderText = "Search...";
-         SearchTextBox.Size = new Size(960, 23);
+         SearchTextBox.Size = new Size(780, 23);
          SearchTextBox.TabIndex = 0;
          // 
          // EffectView
          // 
          EffectView.Activation = ItemActivation.OneClick;
+         tableLayoutPanel1.SetColumnSpan(EffectView, 2);
          EffectView.Dock = DockStyle.Fill;
          EffectView.Location = new Point(3, 33);
          EffectView.Name = "EffectView";
          EffectView.Size = new Size(960, 598);
          EffectView.TabIndex = 2;
          EffectView.UseCompatibleStateImageBehavior = false;
+         // 
+         // OnlySearchFirstColumn
+         // 
+         OnlySearchFirstColumn.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+         OnlySearchFirstColumn.AutoSize = true;
+         OnlySearchFirstColumn.Location = new Point(789, 3);
+         OnlySearchFirstColumn.Name = "OnlySearchFirstColumn";
+         OnlySearchFirstColumn.Size = new Size(174, 24);
+         OnlySearchFirstColumn.TabIndex = 3;
+         OnlySearchFirstColumn.Text = "Only search first column";
+         OnlySearchFirstColumn.UseVisualStyleBackColor = true;
+         OnlySearchFirstColumn.CheckedChanged += OnlySearchFirstColumn_CheckedChanged;
          // 
          // WikiBrowser
          // 
@@ -89,5 +105,6 @@
       private TableLayoutPanel tableLayoutPanel1;
       private TextBox SearchTextBox;
       private ListView EffectView;
+      private CheckBox OnlySearchFirstColumn;
    }
 }

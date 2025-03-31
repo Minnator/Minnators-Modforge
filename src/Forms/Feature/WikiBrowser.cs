@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 using Editor.ErrorHandling;
+using Editor.Helper;
 using Editor.Loading.Enhanced;
 using Editor.Loading.Enhanced.PCFL.Implementation;
 using Editor.Loading.Enhanced.PCFL.Implementation.ProvinceScope;
@@ -13,15 +14,21 @@ namespace Editor.Forms.Feature
    {
       private Timer _timer = new();
 
-      public WikiBrowser()
+      public Action<ListView>? LoadItemsAction = null;
+
+      public WikiBrowser() : this(null) { }
+
+      public WikiBrowser(Action<ListView>? loadItemsAction)
       {
          InitializeComponent();
+         LoadItemsAction = loadItemsAction;
 
          SetUpGUI();
 
-         LoadEffectsFromAssembly();
+         if (LoadItemsAction != null)
+            LoadItemsAction.Invoke(EffectView);
 
-         FormClosing += (sender, args) => _timer.Dispose(); 
+         FormClosing += (sender, args) => _timer.Dispose();
       }
 
       private void SetUpGUI()
@@ -29,10 +36,6 @@ namespace Editor.Forms.Feature
          EffectView.View = View.Details;
          EffectView.FullRowSelect = true;
          EffectView.HotTracking = true;
-
-         EffectView.Columns.Add("NameHeader", "Name", -2);
-         EffectView.Columns.Add("DescriptionHeader", "Description", -2);
-         EffectView.Columns.Add("ExampleHeader", "Example", -2);
 
          _timer.Interval = 300;
 
@@ -53,52 +56,65 @@ namespace Editor.Forms.Feature
          if (string.IsNullOrEmpty(text))
          {
             EffectView.Items.Clear();
-            LoadEffectsFromAssembly();
+            if (LoadItemsAction != null)
+               LoadItemsAction.Invoke(EffectView);
             return;
          }
 
+         List<ListViewItem> listViewItems;
+         if (OnlySearchFirstColumn.Checked)
+            listViewItems = SearchFirstColumn(text);
+         else
+            listViewItems = SearchAllColumns(text);
+         listViewItems = listViewItems.OrderBy(item => item.Text).ToList();
+
          EffectView.Items.Clear();
 
-         var keys = Scopes.Province.Effects.Keys.Where(x => x.Contains(text)).ToList();
-         keys.Sort();
-
          EffectView.BeginUpdate();
-         foreach (var key in keys)
-            EffectView.Items.Add(new ListViewItem(key));
+         foreach (var item in listViewItems)
+            EffectView.Items.Add(item);
          EffectView.EndUpdate();
 
          EffectView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+         EffectView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
       }
 
-      private void LoadEffectsFromAssembly()
+      private List<ListViewItem> SearchAllColumns(string key)
       {
-         EffectView.BeginUpdate();
-         var derivedTypes = GetDerivedTypes(typeof(SimpleEffect<>), Assembly.GetExecutingAssembly());
-         foreach (var type in derivedTypes)
+         key = key.ToLower();
+         var result = new List<ListViewItem>();
+         foreach (ListViewItem item in EffectView.Items)
          {
-            if (type.ContainsGenericParameters)
-               continue;
+            var found = false;
+            foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
+            {
+               if (subItem.Text.ToLower().Contains(key))
+               {
+                  found = true;
+                  break;
+               }
+            }
 
-            var instance = Activator.CreateInstance(type)!;
-            var tokenName = type.GetMethod(typeof(IToken).GetMethod(nameof(IToken.GetTokenName))!.Name);
-            var tokenDesc = type.GetMethod(typeof(IToken).GetMethod(nameof(IToken.GetTokenDescription))!.Name);
-            var tokenExample = type.GetMethod(typeof(IToken).GetMethod(nameof(IToken.GetTokenExample))!.Name);
-
-            var item = new ListViewItem(tokenName?.Invoke(instance, null)?.ToString());
-            item.SubItems.Add(tokenDesc?.Invoke(instance, null)?.ToString());
-            item.SubItems.Add(tokenExample?.Invoke(instance, null)?.ToString());
-
-            EffectView.Items.Add(item);
+            if (found)
+               result.Add(item);
          }
-         EffectView.EndUpdate();
-      }
 
-      private static IEnumerable<Type> GetDerivedTypes(Type genericBaseType, Assembly assembly)
+         return result;
+      }
+      private List<ListViewItem> SearchFirstColumn(string key)
       {
-         return assembly.GetTypes()
-                        .Where(t => t.BaseType is { IsGenericType: true } &&
-                                    t.BaseType.GetGenericTypeDefinition() == genericBaseType);
+         key = key.ToLower();
+         var result = new List<ListViewItem>();
+         foreach (ListViewItem item in EffectView.Items)
+            if (item.Text.ToLower().Contains(key))
+               result.Add(item);
+
+         return result;
       }
 
+      private void OnlySearchFirstColumn_CheckedChanged(object sender, EventArgs e)
+      {
+         OnTextChange(null, EventArgs.Empty);
+      }
    }
 }

@@ -10,6 +10,7 @@ using Editor.DataClasses.Settings;
 using Editor.Forms;
 using Editor.Helper;
 using Editor.Loading;
+using Editor.Loading.Enhanced;
 using Region = Editor.DataClasses.Saveables.Region;
 
 namespace Editor;
@@ -259,8 +260,8 @@ public static class Globals
    public static HashSet<LocObject> Localisation = [];
    public static Dictionary<Province, CultProvLocContainer> CustomProvinceNames = [];
    public static HashSet<LocObject> LocalisationCollisions { get; set; } = [];
-   
-   public static HashSet<string> ScriptedEffectNames {get; set; } = [];
+
+   public static HashSet<ScriptedEffectImpl> ScriptedEffects = [];
    public static List<Building> Buildings { get; set; } = [];
    public static HashSet<string> BuildingKeys { get; set; }= [];
 
@@ -420,6 +421,10 @@ public static class Globals
 // - [x] Implement scripted effects
 // - [ ] Fix map mode exporter
 // - [ ] Add history entry adding / removing
+//    - [ ] New Tab in UI for history editing
+//    - [ ] 2 Editing States for provinces / countries => History Editing and Scenario Editing
+//    - [ ] Paste Effects from string to entries
+//    - [ ] Ui has 3 columns: Name, Control to modify value, checkbox with add/remove or non delta value
 // - [x] Fix Calendar view [ ] There is more to do optionally
 
 // TODO Update Alpha 1.3 SHADERS

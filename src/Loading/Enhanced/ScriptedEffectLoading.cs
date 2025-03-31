@@ -60,11 +60,11 @@ namespace Editor.Loading.Enhanced
    public partial class ScriptedEffectImpl
    {
       public string name;
-      public Dictionary<string, int[]> replacePos;
+      public Dictionary<string, int[]> ReplacePos;
       public string effect; // with all references $...$ removed
 
       // Contains the key and the index to the replacement value in a backwards order
-      private List<(string key, int index)> _replaceSources = [];
+      public List<(string key, int index)> _replaceSources = [];
 
       public EnhancedBlock Block;
       public PathObj Po;
@@ -173,6 +173,7 @@ namespace Editor.Loading.Enhanced
             scriptEff.SetReplaceSources();
             Scopes.ScriptedEffects.TryAdd(scriptEff.name, scriptEff.CreateEffect);
          }
+         Globals.ScriptedEffects = scriptEffects;
          
          return true;
       }

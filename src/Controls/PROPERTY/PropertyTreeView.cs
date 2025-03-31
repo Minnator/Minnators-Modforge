@@ -120,8 +120,9 @@ namespace Editor.Controls.PROPERTY
          var saveables = getSaveables();
          if (saveables.Count != 1)
             return;
-
-         Saveable.SetFieldEditCollection<Province, List<ProvinceHistoryEntry>, ProvinceHistoryEntry>(getSaveables.Invoke(), [], [_clickedEntry], PropertyInfo);
+         var index = saveables[0].History.BinarySearch(_clickedEntry);
+         
+         Saveable.RemoveInFieldCollection<Province, List<ProvinceHistoryEntry>, ProvinceHistoryEntry>(saveables[0], index, PropertyInfo);
       }
 
       public void LoadValueToGui()

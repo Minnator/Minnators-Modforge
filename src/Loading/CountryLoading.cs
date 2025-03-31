@@ -268,13 +268,14 @@ namespace Editor.Loading
             {
                continue;
             }
-
+            /*
             if (Globals.ScriptedEffectNames.Contains(block.Name))
             {
                //var effect = EffectFactory.CreateScriptedEffect(block.Name, block.GetContent, EffectValueType.Complex);
                che.Effects.Add(block);
                continue;
             }
+            */
             switch (block.Name)
             {
                case "monarch":

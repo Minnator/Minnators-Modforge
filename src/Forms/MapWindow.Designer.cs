@@ -78,6 +78,7 @@
          toolStripSeparator12 = new ToolStripSeparator();
          wikiToolStripMenuItem = new ToolStripMenuItem();
          effectsToolStripMenuItem = new ToolStripMenuItem();
+         scriptedEffectsToolStripMenuItem = new ToolStripMenuItem();
          calenderViewToolStripMenuItem = new ToolStripMenuItem();
          missionExporterToolStripMenuItem = new ToolStripMenuItem();
          MapModeComboBox = new ToolStripComboBox();
@@ -249,6 +250,8 @@
          ProvinceCollectionsLayoutPanel = new TableLayoutPanel();
          GroupCollectionOptions = new TableLayoutPanel();
          FocusSelectionCheckBox = new CheckBox();
+         ProvinceHistoryTab = new TabPage();
+         ProvHistoryLayout = new TableLayoutPanel();
          MapLayoutPanel = new TableLayoutPanel();
          MapSplitContainer = new SplitContainer();
          MMButtonsTLPanel = new TableLayoutPanel();
@@ -321,6 +324,7 @@
          ProvinceCollectionsPanel.SuspendLayout();
          ProvinceCollectionsTab.SuspendLayout();
          GroupCollectionOptions.SuspendLayout();
+         ProvinceHistoryTab.SuspendLayout();
          MapLayoutPanel.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)MapSplitContainer).BeginInit();
          MapSplitContainer.SuspendLayout();
@@ -642,7 +646,7 @@
          // 
          // wikiToolStripMenuItem
          // 
-         wikiToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { effectsToolStripMenuItem });
+         wikiToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { effectsToolStripMenuItem, scriptedEffectsToolStripMenuItem });
          wikiToolStripMenuItem.Name = "wikiToolStripMenuItem";
          wikiToolStripMenuItem.Size = new Size(236, 22);
          wikiToolStripMenuItem.Text = "Wiki";
@@ -650,9 +654,16 @@
          // effectsToolStripMenuItem
          // 
          effectsToolStripMenuItem.Name = "effectsToolStripMenuItem";
-         effectsToolStripMenuItem.Size = new Size(109, 22);
+         effectsToolStripMenuItem.Size = new Size(180, 22);
          effectsToolStripMenuItem.Text = "Effects";
          effectsToolStripMenuItem.Click += effectsToolStripMenuItem_Click;
+         // 
+         // scriptedEffectsToolStripMenuItem
+         // 
+         scriptedEffectsToolStripMenuItem.Name = "scriptedEffectsToolStripMenuItem";
+         scriptedEffectsToolStripMenuItem.Size = new Size(180, 22);
+         scriptedEffectsToolStripMenuItem.Text = "Scripted Effects";
+         scriptedEffectsToolStripMenuItem.Click += scriptedEffectsToolStripMenuItem_Click;
          // 
          // calenderViewToolStripMenuItem
          // 
@@ -978,6 +989,7 @@
          DataTabPanel.Controls.Add(ProvincePage);
          DataTabPanel.Controls.Add(CountryPage);
          DataTabPanel.Controls.Add(ProvinceGroupsPage);
+         DataTabPanel.Controls.Add(ProvinceHistoryTab);
          DataTabPanel.Dock = DockStyle.Fill;
          DataTabPanel.Location = new Point(0, 0);
          DataTabPanel.Margin = new Padding(0);
@@ -2689,6 +2701,32 @@
          FocusSelectionCheckBox.UseVisualStyleBackColor = true;
          FocusSelectionCheckBox.CheckedChanged += FocusSelectionCheckBox_CheckedChanged;
          // 
+         // ProvinceHistoryTab
+         // 
+         ProvinceHistoryTab.Controls.Add(ProvHistoryLayout);
+         ProvinceHistoryTab.Location = new Point(4, 24);
+         ProvinceHistoryTab.Name = "ProvinceHistoryTab";
+         ProvinceHistoryTab.Padding = new Padding(3);
+         ProvinceHistoryTab.Size = new Size(407, 816);
+         ProvinceHistoryTab.TabIndex = 3;
+         ProvinceHistoryTab.Text = "Prov. History";
+         ProvinceHistoryTab.UseVisualStyleBackColor = true;
+         // 
+         // ProvHistoryLayout
+         // 
+         ProvHistoryLayout.AutoScroll = true;
+         ProvHistoryLayout.ColumnCount = 1;
+         ProvHistoryLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         ProvHistoryLayout.Dock = DockStyle.Fill;
+         ProvHistoryLayout.Location = new Point(3, 3);
+         ProvHistoryLayout.Margin = new Padding(0);
+         ProvHistoryLayout.Name = "ProvHistoryLayout";
+         ProvHistoryLayout.RowCount = 2;
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
+         ProvHistoryLayout.Size = new Size(401, 810);
+         ProvHistoryLayout.TabIndex = 1;
+         // 
          // MapLayoutPanel
          // 
          MapLayoutPanel.ColumnCount = 1;
@@ -2985,6 +3023,7 @@
          ProvinceCollectionsTab.ResumeLayout(false);
          GroupCollectionOptions.ResumeLayout(false);
          GroupCollectionOptions.PerformLayout();
+         ProvinceHistoryTab.ResumeLayout(false);
          MapLayoutPanel.ResumeLayout(false);
          ((System.ComponentModel.ISupportInitialize)MapSplitContainer).EndInit();
          MapSplitContainer.ResumeLayout(false);
@@ -3234,6 +3273,9 @@
       private ComboBox BookMarkComboBox;
       private CheckBox ShowHistoryCheckBox;
       private SplitContainer MapSplitContainer;
+      private TabPage ProvinceHistoryTab;
+      private TableLayoutPanel ProvHistoryLayout;
+      private ToolStripMenuItem scriptedEffectsToolStripMenuItem;
    }
 }
 

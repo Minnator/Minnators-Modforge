@@ -190,6 +190,18 @@ public abstract class Saveable : IDisposable
       HistoryManager.AddCommand(new CInsertInListProperty<TSaveable, TProperty, TItem>(property, [target], add, [index]));
       target.OnPropertyChanged(property.Name);
    }
+
+   public static void RemoveInFieldCollection<TSaveable, TProperty, TItem>(TSaveable target,
+                                                                           int index,
+                                                                           PropertyInfo property) where TSaveable : Saveable where TProperty : List<TItem>
+   {
+      if (Globals.State != State.Running)
+         return;
+
+      HistoryManager.AddCommand(new CRemoveInListProperty<TSaveable, TProperty, TItem>(property, [target], [index]));
+      target.OnPropertyChanged(property.Name);
+   }
+
    public static void InsertInFieldCollection<TSaveable, TProperty, TItem>(ICollection<TSaveable> targets,
                                                                            TItem add,
                                                                            List<int> index,
