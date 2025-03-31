@@ -2,6 +2,7 @@
 using System.Numerics;
 using System.Reflection;
 using Editor.Controls.PROPERTY;
+using Editor.Controls.PRV_HIST;
 using Editor.DataClasses.DataStructures;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Saveables;
@@ -35,6 +36,56 @@ public static class ControlFactory
    }
 
    #endregion
+
+   public static PrvHistNumeric GetPrvHistNumeric(string label)
+   {
+      return new(label)
+      {
+         Dock = DockStyle.Fill,
+         Margin = new(0)
+      };
+   }
+
+   public static PrvHistComboBox GetPrvHistComboBox(string label)
+   {
+      return new(label)
+      {
+         Dock = DockStyle.Fill,
+         Margin = new(0)
+      };
+   }
+
+   public static PrvHistCheckBox GetPrvHistCheckBox(string label)
+   {
+      return new(label)
+      {
+         Dock = DockStyle.Fill,
+         Margin = new(0)
+      };
+   }
+
+   public static PrvHistTagBox GetPrvHistTagBox(string label)
+   {
+      return new(label)
+      {
+         Dock = DockStyle.Fill,
+         Margin = new(0)
+      };
+   }
+
+   public static PrvHistSeparator GetDefaultSeparator() => GetPrvHistSeparator(Color.Black, 2);
+
+   public static PrvHistSeparator GetPrvHistSeparator(Color color, int thickness)
+   {
+      return new()
+      {
+         Color = color,
+         Thickness = thickness,
+         Dock = DockStyle.Fill,
+         Margin = new(0)
+      };
+   }
+
 
    public static ProvinceHistoryEntryTreeView GetProvinceHistoryTreeView()
    {
@@ -190,9 +241,9 @@ public static class ControlFactory
       };
    }
 
-   public static TagComboBox GetTagComboBox(string propName, bool ignoreEmpty = false)
+   public static TagComboBox GetTagComboBox(bool ignoreEmpty = false)
    {
-      return new(propName)
+      return new()
       {
          Margin = new(3, 1, 3, 3),
          Dock = DockStyle.Fill,
@@ -336,7 +387,7 @@ public static class ControlFactory
 
    public static ItemList GetItemList(string propName, ItemTypes itemType, List<string> items, string title)
    {
-      ComboBox box = itemType == ItemTypes.Tag ? GetTagComboBox("", true) : GetExtendedComboBox(propName, items);
+      ComboBox box = itemType == ItemTypes.Tag ? GetTagComboBox(true) : GetExtendedComboBox(propName, items);
       var list = new ItemList(propName, itemType, box);
       if (itemType != ItemTypes.Tag)
          list.InitializeItems(items);
@@ -359,7 +410,7 @@ public static class ControlFactory
 
       if (strings.Count > 1)
          return GetItemList(propName, itemType, strings, title);
-      return new (propName, itemType, GetTagComboBox(string.Empty, true));
+      return new (propName, itemType, GetTagComboBox(true));
    }
 
    public static ItemButton GetItemButton(string item, ItemTypes type)

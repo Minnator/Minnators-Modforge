@@ -15,14 +15,6 @@ namespace Editor.Events
 
    public static class ProvinceEditingEvents
    {
-      public static void OnTagComboBoxSelectedIndexChanged(object? sender, EventArgs e)
-      {
-         if (Globals.State == State.Running)
-            if (sender is TagComboBox { SelectedItem: not null } box)
-               Saveable.SetFieldMultiple(Selection.GetSelectedProvincesAsSaveable(), box.SelectedItem.ToString(),
-                  typeof(Province).GetProperty(box.PropertyName)!);
-      }
-
       public static void OnExtendedComboBoxSelectedIndexChanged(object? sender, EventArgs e)
       {
          if (Globals.State == State.Running)

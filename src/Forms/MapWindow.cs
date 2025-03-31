@@ -4,6 +4,7 @@ using System.Runtime;
 using System.Text;
 using Editor.Controls;
 using Editor.Controls.PROPERTY;
+using Editor.Controls.PRV_HIST;
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
@@ -87,6 +88,12 @@ namespace Editor.Forms
       private ProvinceHistoryEntryTreeView _provinceHistoryTreeView = null!;
       #endregion
 
+      #region ProvHistory Editing
+
+      
+
+      #endregion
+
       public readonly DateControl DateControl = new(Date.MinValue, DateControlLayout.Horizontal);
 
       public bool ShowHistoryEntries = false;
@@ -167,8 +174,8 @@ namespace Editor.Forms
       {
          InitializeComponent();
 
-         HistoryManager.UndoEvent += (sender, args) => UpdateGui();
-         HistoryManager.RedoEvent += (sender, args) => UpdateGui();
+         HistoryManager.UndoEvent += (_, _) => UpdateGui();
+         HistoryManager.RedoEvent += (_, _) => UpdateGui();
 
          Globals.ZoomControl = new(new(Globals.MapWidth, Globals.MapHeight))
          {
@@ -311,6 +318,7 @@ namespace Editor.Forms
          InitializeProvinceEditGui();
          InitializeProvinceCollectionEditGui();
          InitializeCountryEditGui();
+         InitializeProvinceHistoryGui();
          InitializeMapModeButtons();
          InitializeInfoStrip();
       }
@@ -973,7 +981,7 @@ namespace Editor.Forms
          ResourceUsageHelper.Dispose();
       }
 
-
+      #region CountyEditGUI
 
       // ------------------- COUNTRY EDITING TAB ------------------- \\
       public TagComboBox _tagSelectionBox = null!;
@@ -1018,7 +1026,7 @@ namespace Editor.Forms
       {
          Selection.OnCountrySelected += CountryGuiEvents.OnCountrySelected;
          Selection.OnCountryDeselected += CountryGuiEvents.OnCountryDeselected;
-         _tagSelectionBox = new(null!)
+         _tagSelectionBox = new()
          {
             Margin = new(2),
             Dock = DockStyle.Fill,
@@ -1313,6 +1321,90 @@ namespace Editor.Forms
       {
          Selection.SelectedCountry.SpreadDevInSelectedCountryIfValid((int)_countryDevelopmentNumeric.Value);
       }
+
+      #endregion
+
+      #region ProvinceEditGUI
+
+      private PrvHistNumeric _prvHistTaxNumeric = null!;
+      private PrvHistNumeric _prvHistPrdNumeric = null!;
+      private PrvHistNumeric _prvHistMnpNumeric = null!;
+
+      private PrvHistCheckBox _prvHistIsCityCheckBox = null!;
+      private PrvHistCheckBox _prvHistIsHreCheckBox = null!;
+      private PrvHistCheckBox _prvHistIsParliamentSeatCheckbox = null!;
+      private PrvHistCheckBox _prvHistIasRevoltCheckBox = null!;
+
+      private PrvHistTagBox _prvHistOwnerTagBox = null!;
+      private PrvHistTagBox _prvHistControllerTagBox = null!;
+
+      private PrvHistComboBox _prvHistReligionComboBox = null!;
+      private PrvHistComboBox _prvHistCultureComboBox = null!;
+      private PrvHistComboBox _prvHistTradeGoodsComboBox = null!;
+      private PrvHistComboBox _prvHistTradeCenterComboBox = null!;
+
+      private PrvHistSeparator[] _prvHistSeparators = null!;
+      
+
+      // ------------------- PROVINCE EDITING TAB ------------------- \\
+      private void InitializeProvinceHistoryGui()
+      {
+         ProvHistoryLayout.Paint += TableLayoutBorder_Paint;
+
+         _prvHistSeparators = new PrvHistSeparator[5];
+         for (var i = 0; i < _prvHistSeparators.Length; i++)
+            _prvHistSeparators[i] = ControlFactory.GetDefaultSeparator();
+
+         var blockOffset = 0;
+         _prvHistTaxNumeric = ControlFactory.GetPrvHistNumeric(nameof(Province.BaseTax));
+         _prvHistPrdNumeric = ControlFactory.GetPrvHistNumeric(nameof(Province.BaseProduction));
+         _prvHistMnpNumeric = ControlFactory.GetPrvHistNumeric(nameof(Province.BaseManpower));
+
+         ProvHistoryLayout.Controls.Add(_prvHistTaxNumeric, 0, blockOffset + 0);
+         ProvHistoryLayout.Controls.Add(_prvHistPrdNumeric, 0, blockOffset + 1);
+         ProvHistoryLayout.Controls.Add(_prvHistMnpNumeric, 0, blockOffset + 2);
+
+         _prvHistIsCityCheckBox = ControlFactory.GetPrvHistCheckBox(nameof(Province.IsCity));
+         _prvHistIsHreCheckBox = ControlFactory.GetPrvHistCheckBox(nameof(Province.IsHre));
+         _prvHistIsParliamentSeatCheckbox = ControlFactory.GetPrvHistCheckBox(nameof(Province.IsSeatInParliament));
+         _prvHistIasRevoltCheckBox = ControlFactory.GetPrvHistCheckBox(nameof(Province.HasRevolt));
+
+         ProvHistoryLayout.Controls.Add(_prvHistSeparators[0], 0, blockOffset + 3);
+         blockOffset += 4;
+
+         ProvHistoryLayout.Controls.Add(_prvHistIsCityCheckBox, 0, blockOffset + 0);
+         ProvHistoryLayout.Controls.Add(_prvHistIsHreCheckBox, 0, blockOffset + 1);
+         ProvHistoryLayout.Controls.Add(_prvHistIsParliamentSeatCheckbox, 0, blockOffset + 2);
+         ProvHistoryLayout.Controls.Add(_prvHistIasRevoltCheckBox, 0, blockOffset + 3);
+
+         ProvHistoryLayout.Controls.Add(_prvHistSeparators[1], 0, blockOffset + 4);
+         blockOffset += 5;
+
+         _prvHistOwnerTagBox = ControlFactory.GetPrvHistTagBox(nameof(Province.Owner));   
+         _prvHistControllerTagBox = ControlFactory.GetPrvHistTagBox(nameof(Province.Controller));
+
+         ProvHistoryLayout.Controls.Add(_prvHistOwnerTagBox, 0, blockOffset + 0);
+         ProvHistoryLayout.Controls.Add(_prvHistControllerTagBox, 0, blockOffset + 1);
+
+         ProvHistoryLayout.Controls.Add(_prvHistSeparators[2], 0, blockOffset + 2);
+         blockOffset += 3;
+
+         _prvHistReligionComboBox = ControlFactory.GetPrvHistComboBox(nameof(Province.Religion));
+         _prvHistCultureComboBox = ControlFactory.GetPrvHistComboBox(nameof(Province.Culture));
+         _prvHistTradeGoodsComboBox = ControlFactory.GetPrvHistComboBox(nameof(Province.TradeGood));
+         _prvHistTradeCenterComboBox = ControlFactory.GetPrvHistComboBox(nameof(Province.CenterOfTrade));
+
+         ProvHistoryLayout.Controls.Add(_prvHistReligionComboBox, 0, blockOffset + 0);
+         ProvHistoryLayout.Controls.Add(_prvHistCultureComboBox, 0, blockOffset + 1);
+         ProvHistoryLayout.Controls.Add(_prvHistTradeGoodsComboBox, 0, blockOffset + 2);
+         ProvHistoryLayout.Controls.Add(_prvHistTradeCenterComboBox, 0, blockOffset + 3);
+
+         ProvHistoryLayout.Controls.Add(_prvHistSeparators[3], 0, blockOffset + 4);
+         blockOffset += 5;
+
+      }
+
+      #endregion
 
 
       private void infoToolStripMenuItem_Click(object sender, EventArgs e)

@@ -654,14 +654,14 @@
          // effectsToolStripMenuItem
          // 
          effectsToolStripMenuItem.Name = "effectsToolStripMenuItem";
-         effectsToolStripMenuItem.Size = new Size(180, 22);
+         effectsToolStripMenuItem.Size = new Size(155, 22);
          effectsToolStripMenuItem.Text = "Effects";
          effectsToolStripMenuItem.Click += effectsToolStripMenuItem_Click;
          // 
          // scriptedEffectsToolStripMenuItem
          // 
          scriptedEffectsToolStripMenuItem.Name = "scriptedEffectsToolStripMenuItem";
-         scriptedEffectsToolStripMenuItem.Size = new Size(180, 22);
+         scriptedEffectsToolStripMenuItem.Size = new Size(155, 22);
          scriptedEffectsToolStripMenuItem.Text = "Scripted Effects";
          scriptedEffectsToolStripMenuItem.Click += scriptedEffectsToolStripMenuItem_Click;
          // 
@@ -2721,8 +2721,25 @@
          ProvHistoryLayout.Location = new Point(3, 3);
          ProvHistoryLayout.Margin = new Padding(0);
          ProvHistoryLayout.Name = "ProvHistoryLayout";
-         ProvHistoryLayout.RowCount = 2;
-         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
+         ProvHistoryLayout.RowCount = 19;
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 5F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 5F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 5F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 5F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 153F));
          ProvHistoryLayout.Size = new Size(401, 810);
          ProvHistoryLayout.TabIndex = 1;
