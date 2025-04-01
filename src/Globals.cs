@@ -147,6 +147,7 @@ public static class Globals
    // Dates
    public static Date StartDate;
    public static Date EndDate;
+   public static bool IsInHistory => false; // TODO TODO
 
    // Terrain
    public static readonly BindingDictionary<string, Terrain> Terrains = new(new(Terrain.Empty.Name, Terrain.Empty));

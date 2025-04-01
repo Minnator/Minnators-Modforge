@@ -189,9 +189,9 @@ namespace Editor.Loading.Enhanced
                         }
                         else // We add the content to the previous block element
                         {
-                           var currentBlock = blockStack.PeekRef();
-                           currentBlock->ContentElements.Add(content);
-                           currentBlock->SubBlocks.Add(newBlock); //TODO super rare 1 in 1000 program runs Run condition here?!
+                           var currentBlock = blockStack.Peek();
+                           currentBlock.ContentElements.Add(content);
+                           currentBlock.SubBlocks.Add(newBlock); //TODO super rare 1 in 1000 program runs Run condition here?!
 
                         }
                      }
@@ -201,7 +201,7 @@ namespace Editor.Loading.Enhanced
                         if (blockStack.IsEmpty)
                            blocks.Add(newBlock);
                         else
-                           blockStack.PeekRef()->SubBlocks.Add(newBlock);
+                           blockStack.Peek().SubBlocks.Add(newBlock);
                      }
 
                      currentContent.Clear();
@@ -230,7 +230,7 @@ namespace Editor.Loading.Enhanced
                      {
                         var content = new EnhancedContent(trimmedClosing, currentStr[0] == '\n' ? contentStart + 1 : contentStart,
                                                           elementIndex++); // We create a new content element as there is no block element on the stack
-                        blockStack.PeekRef()->ContentElements.Add(content);
+                        blockStack.Peek().ContentElements.Add(content);
                         wordEnd = -1;
                         wordEnd = -1;
                         currentContent.Clear();
@@ -330,7 +330,7 @@ namespace Editor.Loading.Enhanced
 
          if (!blockStack.IsEmpty)
          {
-            _ = new LoadingError(pathObj, "Unmatched opening brace", blockStack.PeekRef()->StartLine + 1, 0, level: LogType.Critical);
+            _ = new LoadingError(pathObj, "Unmatched opening brace", blockStack.Peek().StartLine + 1, 0, level: LogType.Critical);
             return ([], []);
          }
 

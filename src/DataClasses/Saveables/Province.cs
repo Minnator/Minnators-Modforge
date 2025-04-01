@@ -13,129 +13,155 @@ using Editor.Saving;
 
 namespace Editor.DataClasses.Saveables
 {
-   internal class ProvinceData
+   public class ProvinceData
    {
-      private Country _controller = Country.Empty;
-      private Country _owner = Country.Empty;
-      private Country _tribalOwner = Country.Empty;
-      private int _baseManpower = 1;
-      private int _baseTax = 1;
-      private int _baseProduction = 1;
-      private int _centerOfTrade;
-      private int _extraCost;
-      private int _nativeHostileness;
-      private int _nativeSize;
-      private int _revoltRisk;
-      private int _nationalism;
-      private int _citySize;
-      private float _nativeFerocity;
-      private float _localAutonomy;
-      private float _devastation;
-      private float _prosperity;
-      private bool _isHre;
-      private bool _isCity;
-      private bool _hasRevolt;
-      private bool _isSeatInParliament;
-      private string _capital = string.Empty;
-      private Culture _culture = Culture.Empty;
-      private Religion _religion = Religion.Empty;
-      private Religion _reformationCenter = Religion.Empty;
-      private TradeGood _tradeGood = TradeGood.Empty;
-      private string _latentTradeGood = string.Empty;
-      private List<Tag> _claims = [];
-      private List<Tag> _permanentClaims = [];
-      private List<Tag> _cores = [];
-      private List<string> _discoveredBy = [];
-      private List<Building> _buildings = [];
-      private List<string> _tradeCompanyInvestments = [];
-      private List<ApplicableModifier> _permanentProvinceModifiers = [];
-      private List<ApplicableModifier> _provinceModifiers = [];
-      private List<string> _provinceTriggeredModifiers = [];
-      private List<IElement> _scriptedEffects = [];
-      private List<TradeModifier> _tradeModifiers = [];
+      /*
+       * When editing _initData => Create Command to change _initData via Saveable.SetField<T> without causing GUI update
+       * BUT after this we have to RecalculateSate if we are in history if not we update the state of the _initData field
+       * After this we call a GUI update if necessary
+       *
+       * When editing the state we do not fire GUI updates as RecalculateState will do this for us and should be the only
+       * one to edit the state
+       *
+       * When editing HistoryEntries HEHandler creates/edits/removes them via commands once finished we activate the entry
+       * and call RecalculateState to update the state and GUI
+       *
+       * Scenario GUI uses _initData to display and modify
+       * Mapmodes, ToolTip use State data to render
+       *
+       * ==> Scenario can be updated using Scenario GUI
+       *     HistoryEntries can be updated using History GUI
+       */
+
+      public Country Controller = Country.Empty;
+      public Country Owner = Country.Empty;
+      public Country TribalOwner = Country.Empty;
+      public int BaseManpower = 1;
+
+      public int BaseTax = 1;
+      public int BaseProduction = 1;
+      public int CenterOfTrade;
+      public int ExtraCost;
+      public int NativeHostileness;
+      public int NativeSize;
+      public int RevoltRisk;
+      public int Nationalism;
+      public int CitySize;
+      public float NativeFerocity;
+      public float LocalAutonomy;
+      public float Devastation;
+      public float Prosperity;
+      public bool IsHre;
+      public bool IsCity;
+      public bool HasRevolt;
+      public bool IsSeatInParliament;
+      public string Capital = string.Empty;
+      public Culture Culture = Culture.Empty;
+      public Religion Religion = Religion.Empty;
+      public Religion ReformationCenter = Religion.Empty;
+      public TradeGood TradeGood = TradeGood.Empty;
+      public string LatentTradeGood = string.Empty;
+      public List<Tag> Claims = [];
+      public List<Tag> PermanentClaims = [];
+      public List<Tag> Cores = [];
+      public List<string> DiscoveredBy = [];
+      public List<Building> Buildings = [];
+      public List<string> TradeCompanyInvestments = [];
+      public List<ApplicableModifier> PermanentProvinceModifiers = [];
+      public List<ApplicableModifier> ProvinceModifiers = [];
+      public List<string> ProvinceTriggeredModifiers = [];
+      public List<IElement> ScriptedEffects = [];
+      public List<TradeModifier> TradeModifiers = [];
+
+      // special backup in case of override_province_name
+      public string BackupTitle = string.Empty;
 
       public void SetData(Province province)
       {
-         province.Controller = _controller;
-         province.Owner = _owner;
-         province.TribalOwner = _tribalOwner;
-         province.BaseManpower = _baseManpower;
-         province.BaseTax = _baseTax;
-         province.BaseProduction = _baseProduction;
-         province.CenterOfTrade = _centerOfTrade;
-         province.ExtraCost = _extraCost;
-         province.NativeHostileness = _nativeHostileness;
-         province.NativeSize = _nativeSize;
-         province.RevoltRisk = _revoltRisk;
-         province.Nationalism = _nationalism;
-         province.CitySize = _citySize;
-         province.NativeFerocity = _nativeFerocity;
-         province.LocalAutonomy = _localAutonomy;
-         province.Devastation = _devastation;
-         province.Prosperity = _prosperity;
-         province.IsHre = _isHre;
-         province.IsCity = _isCity;
-         province.HasRevolt = _hasRevolt;
-         province.IsSeatInParliament = _isSeatInParliament;
-         province.Capital = _capital;
-         province.Culture = _culture;
-         province.Religion = _religion;
-         province.ReformationCenter = _reformationCenter;
-         province.TradeGood = _tradeGood;
-         province.LatentTradeGood = _latentTradeGood;
-         province.Claims = new(_claims);
-         province.PermanentClaims = new(_permanentClaims);
-         province.Cores = new(_cores);
-         province.DiscoveredBy = new(_discoveredBy);
-         province.Buildings = new(_buildings);
-         province.TradeCompanyInvestments = new(_tradeCompanyInvestments);
-         province.PermanentProvinceModifiers = new(_permanentProvinceModifiers);
-         province.ProvinceModifiers = new(_provinceModifiers);
-         province.ProvinceTriggeredModifiers = new(_provinceTriggeredModifiers);
-         province.ScriptedEffects = new(_scriptedEffects);
-         province.TradeModifiers = new(_tradeModifiers);
+         province.Controller = Controller;
+         province.Owner = Owner;
+         province.TribalOwner = TribalOwner;
+         province.BaseManpower = BaseManpower;
+         province.BaseTax = BaseTax;
+         province.BaseProduction = BaseProduction;
+         province.CenterOfTrade = CenterOfTrade;
+         province.ExtraCost = ExtraCost;
+         province.NativeHostileness = NativeHostileness;
+         province.NativeSize = NativeSize;
+         province.RevoltRisk = RevoltRisk;
+         province.Nationalism = Nationalism;
+         province.CitySize = CitySize;
+         province.NativeFerocity = NativeFerocity;
+         province.LocalAutonomy = LocalAutonomy;
+         province.Devastation = Devastation;
+         province.Prosperity = Prosperity;
+         province.IsHre = IsHre;
+         province.IsCity = IsCity;
+         province.HasRevolt = HasRevolt;
+         province.IsSeatInParliament = IsSeatInParliament;
+         province.Capital = Capital;
+         province.Culture = Culture;
+         province.Religion = Religion;
+         province.ReformationCenter = ReformationCenter;
+         province.TradeGood = TradeGood;
+         province.LatentTradeGood = LatentTradeGood;
+         province.Claims = new(Claims);
+         province.PermanentClaims = new(PermanentClaims);
+         province.Cores = new(Cores);
+         province.DiscoveredBy = new(DiscoveredBy);
+         province.Buildings = new(Buildings);
+         province.TradeCompanyInvestments = new(TradeCompanyInvestments);
+         province.PermanentProvinceModifiers = new(PermanentProvinceModifiers);
+         province.ProvinceModifiers = new(ProvinceModifiers);
+         province.ProvinceTriggeredModifiers = new(ProvinceTriggeredModifiers);
+         province.ScriptedEffects = new(ScriptedEffects);
+         province.TradeModifiers = new(TradeModifiers);
+         if (!province.TitleKey.Equals(BackupTitle))
+            Localisation.AddOrModifyLocObjectSilent(province.TitleKey, BackupTitle);
       }
 
       public void GetData(Province province)
       {
-         _controller = province.Controller;
-         _owner = province.Owner;
-         _tribalOwner = province.TribalOwner;
-         _baseManpower = province.BaseManpower;
-         _baseTax = province.BaseTax;
-         _baseProduction = province.BaseProduction;
-         _centerOfTrade = province.CenterOfTrade;
-         _extraCost = province.ExtraCost;
-         _nativeHostileness = province.NativeHostileness;
-         _nativeSize = province.NativeSize;
-         _revoltRisk = province.RevoltRisk;
-         _nationalism = province.Nationalism;
-         _citySize = province.CitySize;
-         _nativeFerocity = province.NativeFerocity;
-         _localAutonomy = province.LocalAutonomy;
-         _devastation = province.Devastation;
-         _prosperity = province.Prosperity;
-         _isHre = province.IsHre;
-         _isCity = province.IsCity;
-         _hasRevolt = province.HasRevolt;
-         _isSeatInParliament = province.IsSeatInParliament;
-         _capital = province.Capital;
-         _culture = province.Culture;
-         _religion = province.Religion;
-         _reformationCenter = province.ReformationCenter;
-         _tradeGood = province.TradeGood;
-         _latentTradeGood = province.LatentTradeGood;
-         _claims = new(province.Claims);
-         _permanentClaims = new(province.PermanentClaims);
-         _cores = new(province.Cores);
-         _discoveredBy = new(province.DiscoveredBy);
-         _buildings = new(province.Buildings);
-         _tradeCompanyInvestments = new(province.TradeCompanyInvestments);
-         _permanentProvinceModifiers = new(province.PermanentProvinceModifiers);
-         _provinceModifiers = new(province.ProvinceModifiers);
-         _provinceTriggeredModifiers = new(province.ProvinceTriggeredModifiers);
-         _scriptedEffects = new(province.ScriptedEffects);
-         _tradeModifiers = new(province.TradeModifiers);
+         Controller = province.Controller;
+         Owner = province.Owner;
+         TribalOwner = province.TribalOwner;
+         BaseManpower = province.BaseManpower;
+         BaseTax = province.BaseTax;
+         BaseProduction = province.BaseProduction;
+         CenterOfTrade = province.CenterOfTrade;
+         ExtraCost = province.ExtraCost;
+         NativeHostileness = province.NativeHostileness;
+         NativeSize = province.NativeSize;
+         RevoltRisk = province.RevoltRisk;
+         Nationalism = province.Nationalism;
+         CitySize = province.CitySize;
+         NativeFerocity = province.NativeFerocity;
+         LocalAutonomy = province.LocalAutonomy;
+         Devastation = province.Devastation;
+         Prosperity = province.Prosperity;
+         IsHre = province.IsHre;
+         IsCity = province.IsCity;
+         HasRevolt = province.HasRevolt;
+         IsSeatInParliament = province.IsSeatInParliament;
+         Capital = province.Capital;
+         Culture = province.Culture;
+         Religion = province.Religion;
+         ReformationCenter = province.ReformationCenter;
+         TradeGood = province.TradeGood;
+         LatentTradeGood = province.LatentTradeGood;
+         Claims = new(province.Claims);
+         PermanentClaims = new(province.PermanentClaims);
+         Cores = new(province.Cores);
+         DiscoveredBy = new(province.DiscoveredBy);
+         Buildings = new(province.Buildings);
+         TradeCompanyInvestments = new(province.TradeCompanyInvestments);
+         PermanentProvinceModifiers = new(province.PermanentProvinceModifiers);
+         ProvinceModifiers = new(province.ProvinceModifiers);
+         ProvinceTriggeredModifiers = new(province.ProvinceTriggeredModifiers);
+         ScriptedEffects = new(province.ScriptedEffects);
+         TradeModifiers = new(province.TradeModifiers);
+
+         BackupTitle = province.TitleLocalisation;
       }
    }
 
@@ -148,7 +174,7 @@ namespace Editor.DataClasses.Saveables
          HistoryEntry,
       }
 
-      private ProvinceData _initialData = new();
+      public ProvinceData _initialData = new();
 
       #region Data
       private Country _controller = Country.Empty;
@@ -252,7 +278,10 @@ namespace Editor.DataClasses.Saveables
       public Country Controller
       {
          get => _controller;
-         set => SetField(ref _controller, value);
+         set
+         {
+            SetField(ref _controller, value);
+         }
       }
 
       [ToolTippable]
@@ -273,7 +302,17 @@ namespace Editor.DataClasses.Saveables
       public int BaseTax
       {
          get => _baseTax;
-         set => SetField(ref _baseTax, Math.Max(0, value));
+         set => SetField(ref _baseTax, value);
+      }
+
+
+      private int _initBaseTax;
+
+      [ToolTippable]
+      public int InitBaseTax
+      {
+         get => _initBaseTax;
+         set => SetField(ref _initBaseTax, ref _baseTax, Math.Max(0, value));
       }
 
       [ToolTippable]
@@ -489,6 +528,25 @@ namespace Editor.DataClasses.Saveables
          set => SetIfModifiedEnumerable<List<ProvinceHistoryEntry>, ProvinceHistoryEntry>(ref _history, value);
       }
 
+      public bool SetField<T>(ref T field, ref T state, T value, [CallerMemberName] string? propertyName = null)
+      {
+         
+         if (!Suppressed)
+         {
+            if (!Globals.IsInHistory)
+               state = field = value;
+            else
+               RecalculateState();
+         }
+         
+
+         return base.SetField(ref field, value, propertyName);
+      }
+
+      public void RecalculateState()
+      {
+
+      }
 
       #region MMF Data
       public int TotalDevelopment => _baseManpower + _baseTax + _baseProduction;
@@ -502,6 +560,7 @@ namespace Editor.DataClasses.Saveables
       private Memory<Point> _borders;
       private Dictionary<Province, Memory<Point>> _provinceBorders = new();
       private List<ProvinceHistoryEntry> _history = [];
+      private int _baseTax1 = 0;
 
       public Memory<Point> Pixels
       {

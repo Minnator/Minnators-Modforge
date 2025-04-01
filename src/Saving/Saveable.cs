@@ -298,7 +298,7 @@ public abstract class Saveable : IDisposable
    /// <param name="value"></param>
    /// <param name="propertyName"></param>
    /// <returns></returns>
-   protected virtual bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+   public virtual bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
    {
       if (EqualityComparer<T>.Default.Equals(field, value)) 
          return false;
@@ -329,7 +329,7 @@ public abstract class Saveable : IDisposable
    {
       if (EqualityComparer<TValue>.Default.Equals(field, value))
          return false;
-      return SetFieldInternal(ref field, value, GetPropertyInfo(propertyName!)!);
+      return SetFieldExternalButInternal(ref field, value, target, GetPropertyInfo(propertyName!)!);
    }
 
    private bool SetFieldExternalButInternal<TValue, TObject>(ref TValue field, TValue value, TObject target, PropertyInfo property)

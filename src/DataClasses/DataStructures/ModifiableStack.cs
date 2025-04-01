@@ -36,7 +36,7 @@ public class ModifiableStack<T>
    }
 
 #pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
-   public unsafe T* PeekRef() // This is a pointer to the last element in the stack so that it can be modified
+   /*public unsafe T* PeekRef() // This is a pointer to the last element in the stack so that it can be modified
    {
       if (Count == 0)
          throw new InvalidOperationException("The stack is empty");
@@ -45,6 +45,7 @@ public class ModifiableStack<T>
          return ptr;
       }
    }
+   */
 #pragma warning restore CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
 
    public void Clear()

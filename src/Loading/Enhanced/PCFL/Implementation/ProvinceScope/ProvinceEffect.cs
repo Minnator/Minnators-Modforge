@@ -1206,7 +1206,7 @@ public class ChangeProvinceNameEffect() : SimpleEffect<string>(string.Empty)
    public override void Activate(ITarget target)
    {
       Debug.Assert(target is Province, $"'{EffectName}' effect is only valid on provinces");
-      Localisation.AddOrModifyLocObject(((Province)target).TitleKey, _value.Val);
+      Localisation.AddOrModifyLocObjectSilent(((Province)target).TitleKey, _value.Val);
    }
 
    public override string GetTokenName() => EffectName;

@@ -57,6 +57,25 @@ public static class Localisation
       }
    }
 
+   public static void AddOrModifyLocObjectSilent(string key, string value)
+   {
+      if (!GetLocObject(key, out var locObject))
+      {
+         if (!string.IsNullOrEmpty(value))
+            Globals.Localisation.Add(new(key, value));
+      }
+      else
+      {
+         if (locObject == null)
+            return;
+         if (locObject.Path.IsModPath && string.IsNullOrEmpty(value))
+         {
+            // TODO delete locObject
+         }
+         locObject.SilentSet(value);
+      }
+   }
+
 }
 
 public interface ITitleAdjProvider
