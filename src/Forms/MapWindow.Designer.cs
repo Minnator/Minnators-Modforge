@@ -79,6 +79,12 @@
          wikiToolStripMenuItem = new ToolStripMenuItem();
          effectsToolStripMenuItem = new ToolStripMenuItem();
          scriptedEffectsToolStripMenuItem = new ToolStripMenuItem();
+         pDXWikiToolStripMenuItem = new ToolStripMenuItem();
+         scopesToolStripMenuItem = new ToolStripMenuItem();
+         triggerToolStripMenuItem = new ToolStripMenuItem();
+         effectsToolStripMenuItem1 = new ToolStripMenuItem();
+         modifierToolStripMenuItem = new ToolStripMenuItem();
+         toolStripSeparator13 = new ToolStripSeparator();
          calenderViewToolStripMenuItem = new ToolStripMenuItem();
          missionExporterToolStripMenuItem = new ToolStripMenuItem();
          MapModeComboBox = new ToolStripComboBox();
@@ -592,7 +598,7 @@
          // 
          // additionalToolsToolStripMenuItem
          // 
-         additionalToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { checkForCyclesInTradenodesToolStripMenuItem, randomModifierToolStripMenuItem, deleteProvinceHistoryEntriesToolStripMenuItem, tradegoodEditorToolStripMenuItem, definesEditorToolStripMenuItem, namesGeneratorToolStripMenuItem, toolStripSeparator12, wikiToolStripMenuItem, calenderViewToolStripMenuItem, missionExporterToolStripMenuItem });
+         additionalToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { checkForCyclesInTradenodesToolStripMenuItem, randomModifierToolStripMenuItem, deleteProvinceHistoryEntriesToolStripMenuItem, tradegoodEditorToolStripMenuItem, definesEditorToolStripMenuItem, namesGeneratorToolStripMenuItem, toolStripSeparator12, wikiToolStripMenuItem, pDXWikiToolStripMenuItem, toolStripSeparator13, calenderViewToolStripMenuItem, missionExporterToolStripMenuItem });
          additionalToolsToolStripMenuItem.Name = "additionalToolsToolStripMenuItem";
          additionalToolsToolStripMenuItem.Size = new Size(103, 23);
          additionalToolsToolStripMenuItem.Text = "Additional tools";
@@ -664,6 +670,46 @@
          scriptedEffectsToolStripMenuItem.Size = new Size(155, 22);
          scriptedEffectsToolStripMenuItem.Text = "Scripted Effects";
          scriptedEffectsToolStripMenuItem.Click += scriptedEffectsToolStripMenuItem_Click;
+         // 
+         // pDXWikiToolStripMenuItem
+         // 
+         pDXWikiToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { scopesToolStripMenuItem, triggerToolStripMenuItem, effectsToolStripMenuItem1, modifierToolStripMenuItem });
+         pDXWikiToolStripMenuItem.Name = "pDXWikiToolStripMenuItem";
+         pDXWikiToolStripMenuItem.Size = new Size(236, 22);
+         pDXWikiToolStripMenuItem.Text = "PDX Wiki";
+         // 
+         // scopesToolStripMenuItem
+         // 
+         scopesToolStripMenuItem.Name = "scopesToolStripMenuItem";
+         scopesToolStripMenuItem.Size = new Size(180, 22);
+         scopesToolStripMenuItem.Text = "Scopes";
+         scopesToolStripMenuItem.Click += scopesToolStripMenuItem_Click;
+         // 
+         // triggerToolStripMenuItem
+         // 
+         triggerToolStripMenuItem.Name = "triggerToolStripMenuItem";
+         triggerToolStripMenuItem.Size = new Size(180, 22);
+         triggerToolStripMenuItem.Text = "Trigger";
+         triggerToolStripMenuItem.Click += triggerToolStripMenuItem_Click;
+         // 
+         // effectsToolStripMenuItem1
+         // 
+         effectsToolStripMenuItem1.Name = "effectsToolStripMenuItem1";
+         effectsToolStripMenuItem1.Size = new Size(180, 22);
+         effectsToolStripMenuItem1.Text = "Effects";
+         effectsToolStripMenuItem1.Click += effectsToolStripMenuItem1_Click;
+         // 
+         // modifierToolStripMenuItem
+         // 
+         modifierToolStripMenuItem.Name = "modifierToolStripMenuItem";
+         modifierToolStripMenuItem.Size = new Size(180, 22);
+         modifierToolStripMenuItem.Text = "Modifier";
+         modifierToolStripMenuItem.Click += modifierToolStripMenuItem_Click;
+         // 
+         // toolStripSeparator13
+         // 
+         toolStripSeparator13.Name = "toolStripSeparator13";
+         toolStripSeparator13.Size = new Size(233, 6);
          // 
          // calenderViewToolStripMenuItem
          // 
@@ -3293,6 +3339,12 @@
       private TabPage ProvinceHistoryTab;
       private TableLayoutPanel ProvHistoryLayout;
       private ToolStripMenuItem scriptedEffectsToolStripMenuItem;
+      private ToolStripMenuItem pDXWikiToolStripMenuItem;
+      private ToolStripMenuItem scopesToolStripMenuItem;
+      private ToolStripMenuItem triggerToolStripMenuItem;
+      private ToolStripMenuItem effectsToolStripMenuItem1;
+      private ToolStripMenuItem modifierToolStripMenuItem;
+      private ToolStripSeparator toolStripSeparator13;
    }
 }
 

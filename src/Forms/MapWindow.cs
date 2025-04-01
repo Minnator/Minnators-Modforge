@@ -90,7 +90,7 @@ namespace Editor.Forms
 
       #region ProvHistory Editing
 
-      
+
 
       #endregion
 
@@ -1344,7 +1344,7 @@ namespace Editor.Forms
       private PrvHistComboBox _prvHistTradeCenterComboBox = null!;
 
       private PrvHistSeparator[] _prvHistSeparators = null!;
-      
+
 
       // ------------------- PROVINCE EDITING TAB ------------------- \\
       private void InitializeProvinceHistoryGui()
@@ -1380,7 +1380,7 @@ namespace Editor.Forms
          ProvHistoryLayout.Controls.Add(_prvHistSeparators[1], 0, blockOffset + 4);
          blockOffset += 5;
 
-         _prvHistOwnerTagBox = ControlFactory.GetPrvHistTagBox(nameof(Province.Owner));   
+         _prvHistOwnerTagBox = ControlFactory.GetPrvHistTagBox(nameof(Province.Owner));
          _prvHistControllerTagBox = ControlFactory.GetPrvHistTagBox(nameof(Province.Controller));
 
          ProvHistoryLayout.Controls.Add(_prvHistOwnerTagBox, 0, blockOffset + 0);
@@ -1687,6 +1687,26 @@ namespace Editor.Forms
          var browser = new WikiBrowser(WikiHelper.LoadScriptedEffects);
          browser.SetContextMenu(WikiHelper.ScriptedEffectContextMenu());
          browser.ShowDialog();
+      }
+
+      private void scopesToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         ProcessHelper.OpenLink("https://eu4.paradoxwikis.com/Scopes");
+      }
+
+      private void triggerToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         ProcessHelper.OpenLink("https://eu4.paradoxwikis.com/Triggers");
+      }
+
+      private void effectsToolStripMenuItem1_Click(object sender, EventArgs e)
+      {
+         ProcessHelper.OpenLink("https://eu4.paradoxwikis.com/Effects");
+      }
+
+      private void modifierToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         ProcessHelper.OpenLink("https://eu4.paradoxwikis.com/Modifier_list");
       }
    }
 }
