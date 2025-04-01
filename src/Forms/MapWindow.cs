@@ -526,7 +526,7 @@ namespace Editor.Forms
          MisProvinceData.Controls.Add(_terrainComboBox, 1, 5);
 
 
-         _taxNumeric = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.BaseTax)), 0);
+         _taxNumeric = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.ScenarioBaseTax)), 0);
          _taxNumeric.Minimum = 0;
          _taxNumeric.Maximum = 1000;
          MisProvinceData.Controls.Add(_taxNumeric, 3, 0);
@@ -1631,7 +1631,7 @@ namespace Editor.Forms
       private void ErrorCountLabel_MouseEnter(object sender, EventArgs e)
       {
 #if DEBUG
-         ErrorCountLabel.ToolTipText = $"Critical: {LogManager.CriticalCount}\nErrors: {LogManager.ErrorCount}\nWarnings: {LogManager.WarningCount}\nInformation: {LogManager.InformationCount}\n-----------------\nDebug: {LogManager.DebugCount}";
+         ErrorCountLabel.ToolTipText = $"Critical: {LogManager.ModCriticalCount}\nErrors: {LogManager.ModErrorCount}\nWarnings: {LogManager.ModWarningCount}\nInformation: {LogManager.ModInformationCount}\n-----------------\nDebug: {LogManager.ModDebugCount}";
 #else
          ErrorCountLabel.ToolTipText = $"Critical: {LogManager.CriticalCount}\nErrors: {LogManager.ErrorCount}\nWarnings: {LogManager.WarningCount}\nInformation: {LogManager.InformationCount}";
 #endif

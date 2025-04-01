@@ -66,8 +66,10 @@ public abstract class Saveable : IDisposable
    //public abstract void AddToPropertyChanged(EventHandler<string> handler);
    //public abstract void RemoveFromPropertyChanged(EventHandler<string> handler);
 
-   public PropertyInfo? GetPropertyInfo(string propertyName)
+   public PropertyInfo? GetPropertyInfo(string? propertyName)
    {
+      Debug.Assert(propertyName != null, "propertyName != null");
+
       return GetType().GetProperty(propertyName);
    }
 
@@ -83,9 +85,9 @@ public abstract class Saveable : IDisposable
       return (T)info.GetValue(this);
    }
 
-   public T GetProperty<T>(string propertyName)
+   public T GetProperty<T>(string? propertyName)
    {
-      Debug.Assert(GetPropertyInfo(propertyName) != null, $"Property {propertyName} not found in {GetType().Name}");
+      Debug.Assert(propertyName != null && GetPropertyInfo(propertyName) != null, $"Property {propertyName} not found in {GetType().Name}");
       return (T)GetProperty(GetPropertyInfo(propertyName)!);
    }
 
@@ -304,6 +306,8 @@ public abstract class Saveable : IDisposable
          return false;
       return SetFieldInternal(ref field, value, GetPropertyInfo(propertyName!)!);
    }
+
+
 
    /// <summary>
    /// Is always called when a value in a saveable is changed (If the property calls SetField)

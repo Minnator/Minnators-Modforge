@@ -675,7 +675,7 @@ public class Country : ProvinceCollection<Province>, ITitleAdjProvider, ITarget
          devPartsOut[2].Add(devParts[2]);
       }
 
-      SetFieldMultiple(provinces, devPartsOut[0], typeof(Province).GetProperty(nameof(Province.BaseTax))!);
+      SetFieldMultiple(provinces, devPartsOut[0], typeof(Province).GetProperty(nameof(Province.ScenarioBaseTax))!);
       SetFieldMultiple(provinces, devPartsOut[1], typeof(Province).GetProperty(nameof(Province.BaseProduction))!);
       SetFieldMultiple(provinces, devPartsOut[2], typeof(Province).GetProperty(nameof(Province.BaseManpower))!);
 
@@ -714,7 +714,7 @@ public class Country : ProvinceCollection<Province>, ITitleAdjProvider, ITarget
          switch (devToImprov)
          {
             case 0:
-                  prov.BaseTax += dev;
+                  prov.ScenarioBaseTax += dev;
                break;
             case 1:
                   prov.BaseProduction += dev;
@@ -723,7 +723,7 @@ public class Country : ProvinceCollection<Province>, ITitleAdjProvider, ITarget
                   prov.BaseManpower += dev;
                break;
             default:
-               prov.BaseTax += dev;
+               prov.ScenarioBaseTax += dev;
                break;
          }
          return prov; 
@@ -732,7 +732,7 @@ public class Country : ProvinceCollection<Province>, ITitleAdjProvider, ITarget
       var devParts = MathHelper.SplitIntoNRandomPieces(3, dev, Globals.Settings.Generator.DevGeneratingSettings.MinDevelopmentInGeneration,
          Globals.Settings.Generator.DevGeneratingSettings.MaxDevelopmentInGeneration);
 
-      prov.BaseTax += devParts[0];
+      prov.ScenarioBaseTax += devParts[0];
       prov.BaseProduction += devParts[1];
       prov.BaseManpower += devParts[2];
 

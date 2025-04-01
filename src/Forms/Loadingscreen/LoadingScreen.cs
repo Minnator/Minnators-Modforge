@@ -100,7 +100,6 @@ namespace Editor.Forms.Loadingscreen
          // Must be last
          ModifierParser.Demilitarize,
          StartUpManager.SetProvinceInitials,
-         InitializeGui.Load
       ];
 
       public LoadingScreen()

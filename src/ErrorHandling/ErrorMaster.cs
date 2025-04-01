@@ -60,6 +60,15 @@ namespace Editor.ErrorHandling
       public static int ErrorCount { get; private set;} = 0;
       public static int CriticalCount { get; private set;} = 0;
 
+      public static int ModInformationCount => Informations.Count(x => !x.IsVanilla);
+      public static int ModWarningCount => Warnings.Count(x => !x.IsVanilla);
+      public static int ModDebugCount => Debugs.Count(x => !x.IsVanilla);
+      public static int ModErrorCount => Errors.Count(x => !x.IsVanilla);
+      public static int ModCriticalCount => Criticals.Count(x => !x.IsVanilla);
+
+      public static int TotalModLogCount => ModInformationCount + ModDebugCount;
+      public static int TotalModErrorCount => ModErrorCount + ModCriticalCount + ModWarningCount;
+
       public static event EventHandler<LogEntry>? LogEntryAdded;
 
       public static object Lock = new();

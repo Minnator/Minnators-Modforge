@@ -77,7 +77,6 @@ namespace Editor.Helper
          ParseStartEndDate();
          Globals.MapWindow.DateControl.Date = Globals.StartDate;
          CountryLoading.AssignProvinces();
-         Globals.MapWindow.UpdateErrorCounts(LogManager.TotalErrorCount, LogManager.TotalLogCount);
 
 
          Globals.MapWindow.Show();
@@ -87,35 +86,12 @@ namespace Editor.Helper
          Globals.MapWindow.Activate();
          
          Globals.State = State.Running;
+         Globals.MapWindow.UpdateErrorCounts(LogManager.TotalModErrorCount, LogManager.TotalModLogCount);
          MapModeManager.SetCurrentMapMode(MapModeType.Country);
          Globals.ZoomControl.FocusOn(new(3100, 600), 1f);
 
          RaiseOnStartUpFinished();
          Eu4Cursors.SetEu4CursorIfEnabled(Eu4CursorTypes.Normal, Cursors.Default, Globals.MapWindow);
-
-      }
-
-      private static void FixComboBoxSelection(Control parent)
-      {
-         Queue<Control> queue = new();
-         queue.Enqueue(parent);
-
-         while (queue.Count > 0)
-         {
-            var current = queue.Dequeue();
-
-            if (current is ComboBox comboBox)
-            {
-               if (!comboBox.IsHandleCreated)
-                  continue; // Skip if handle is not created
-
-               comboBox.SelectionLength = 0;
-               comboBox.SelectionStart = comboBox.Text.Length;
-            }
-
-            foreach (Control child in current.Controls)
-               queue.Enqueue(child);
-         }
       }
 
 
@@ -149,14 +125,4 @@ namespace Editor.Helper
          OnStartUpFinished?.Invoke(null, EventArgs.Empty);
       }
    }
-
-   public static class InitializeGui
-   {
-      public static void Load()
-      {
-
-      }
-   }
-
-
 }

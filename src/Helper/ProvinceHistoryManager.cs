@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Misc;
+using Editor.DataClasses.Saveables;
 
 namespace Editor.Helper
 {
@@ -10,7 +11,6 @@ namespace Editor.Helper
 
       public static void LoadDate(Date date, bool render = true)
       {
-         var sw = Stopwatch.StartNew();
          if (date != LastDate)
          {
             Globals.State = State.Loading;
@@ -22,11 +22,40 @@ namespace Editor.Helper
             LastDate.SetDateSilent(date);
             Globals.State = State.Running;
          }
-         sw.Stop();
-         Debug.WriteLine($"Loading history for {date} took {sw.ElapsedMilliseconds}ms");
          if (render)
             MapModeManager.RenderCurrent();
       }
 
+      public static void LoadDate(Date date, Province province, bool render = true)
+      {
+         if (date != LastDate)
+         {
+            Globals.State = State.Loading;
+            if (date < LastDate)
+               province.ResetHistory();
+            province.LoadHistoryForDate(date);
+            LastDate.SetDateSilent(date);
+            Globals.State = State.Running;
+         }
+         if (render)
+            MapModeManager.RenderCurrent();
+      }
+
+      public static void LoadDate(Date date, ICollection<Province> provinces, bool render = true)
+      {
+         if (date != LastDate)
+         {
+            Globals.State = State.Loading;
+            if (date < LastDate)
+               foreach (var province in provinces) 
+                  province.ResetHistory();
+            foreach (var province in provinces) 
+               province.LoadHistoryForDate(date);
+            LastDate.SetDateSilent(date);
+            Globals.State = State.Running;
+         }
+         if (render)
+            MapModeManager.RenderCurrent();
+      }
    }
 }

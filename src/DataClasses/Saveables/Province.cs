@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
 using Editor.ErrorHandling;
+using Editor.Events;
 using Editor.Forms.Feature;
 using Editor.Helper;
 using Editor.Loading.Enhanced.PCFL.Implementation;
@@ -31,6 +33,10 @@ namespace Editor.DataClasses.Saveables
        *
        * ==> Scenario can be updated using Scenario GUI
        *     HistoryEntries can be updated using History GUI
+       *
+       *
+       * PTGC (Pdx to GUI converter
+       * Control content <=> pcfl Tokens
        */
 
       public Country Controller = Country.Empty;
@@ -176,6 +182,12 @@ namespace Editor.DataClasses.Saveables
 
       public ProvinceData _initialData = new();
 
+      #region InitData
+
+      private int _scenarioBaseTax = 0;
+
+      #endregion
+
       #region Data
       private Country _controller = Country.Empty;
       private Country _owner = Country.Empty;
@@ -297,22 +309,13 @@ namespace Editor.DataClasses.Saveables
          get => _baseManpower;
          set => SetField(ref _baseManpower, Math.Max(1, value));
       }
-
+      
       [ToolTippable]
-      public int BaseTax
+      public int BaseTax { get => _baseTax; set => _baseTax = value; }
+      public int ScenarioBaseTax
       {
-         get => _baseTax;
-         set => SetField(ref _baseTax, value);
-      }
-
-
-      private int _initBaseTax;
-
-      [ToolTippable]
-      public int InitBaseTax
-      {
-         get => _initBaseTax;
-         set => SetField(ref _initBaseTax, ref _baseTax, Math.Max(0, value));
+         get => _scenarioBaseTax;
+         set => SetField(ref _scenarioBaseTax, ref _baseTax, Math.Max(0, value));
       }
 
       [ToolTippable]
@@ -528,23 +531,50 @@ namespace Editor.DataClasses.Saveables
          set => SetIfModifiedEnumerable<List<ProvinceHistoryEntry>, ProvinceHistoryEntry>(ref _history, value);
       }
 
-      public bool SetField<T>(ref T field, ref T state, T value, [CallerMemberName] string? propertyName = null)
+      public bool SetField<T>(ref T scenario, ref T state, T value, [CallerMemberName] string? propertyName = null)
       {
-         
-         if (!Suppressed)
+         // Everytime it is set
+         if (EqualityComparer<T>.Default.Equals(scenario, value))
+            return false;
+         var property = GetPropertyInfo(propertyName);
+         Debug.Assert(property != null, nameof(property) + " != null");
+
+         // If Suppressed we don't create a command
+         if (Globals.State == State.Running && !Suppressed)
+         {
+            HistoryManager.AddCommand(new CModifyProperty<T>(property, this, value, scenario));
+         }
+         else
          {
             if (!Globals.IsInHistory)
-               state = field = value;
+               state = scenario = value;
             else
+            {
+               scenario = value;
                RecalculateState();
+            }
          }
-         
 
-         return base.SetField(ref field, value, propertyName);
+         // Command
+         // Set scenario
+         // Render scenario
+         // Recalculate state
+         // Render state
+
+         return true;
       }
 
       public void RecalculateState()
       {
+         ResetToScenario();
+         if (Globals.IsInHistory || Globals.State != State.Running) // Is the state correct
+            ProvinceHistoryManager.LoadDate(Globals.MapWindow.DateControl.Date, this, false);
+      }
+
+      private void ResetToScenario()
+      {
+         BaseTax = ScenarioBaseTax;
+         // TODO maybe execute scripted effects?
 
       }
 

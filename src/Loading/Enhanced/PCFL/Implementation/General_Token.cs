@@ -14,7 +14,6 @@ namespace Editor.Loading.Enhanced.PCFL.Implementation
       public virtual void GetTokenString(int tabs, ref StringBuilder sb)
       {
          SavingUtil.AddValue(tabs, _value, GetTokenName(), ref sb);
-         sb.Replace('\n', ' ');
       }
 
       public abstract string GetTokenName();

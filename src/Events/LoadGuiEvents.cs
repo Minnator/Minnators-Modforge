@@ -50,6 +50,13 @@ namespace Editor.Events
          else if (type == typeof(Country))
             CountryLoadAction.Invoke([Selection.SelectedCountry], info, false);
 
+         // TODO maybe change but it is a workaround
+         if (info.Name.StartsWith("Scenario"))
+         {
+            var newinfo = type.GetProperty(info.Name[8..])!;
+            if (newinfo != null)
+               info = newinfo;
+         }
 
          MapModeManager.RenderMapMode(info);
       }

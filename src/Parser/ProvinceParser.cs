@@ -35,7 +35,7 @@ public static class ProvinceParser
  {
      { "add_base_manpower",                  (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.BaseManpower))!) },
      { "add_base_production",                (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.BaseProduction))!) },
-     { "add_base_tax",                       (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.BaseTax))!) },
+     { "add_base_tax",                       (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.ScenarioBaseTax))!) },
      { "add_claim",                          (Add<Tag>,                    Province.Empty.GetPropertyInfo(nameof(Province.Claims))!) },
      { "add_core",                           (Add<Tag>,                    Province.Empty.GetPropertyInfo(nameof(Province.Cores))!) },
      { "add_local_autonomy",                 (Set<float>,                  Province.Empty.GetPropertyInfo(nameof(Province.LocalAutonomy))!) },
@@ -48,7 +48,7 @@ public static class ProvinceParser
      { "add_trade_company_investment",       (Add<string>,                 Province.Empty.GetPropertyInfo(nameof(Province.TradeCompanyInvestments))!) },
      { "base_manpower",                      (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.BaseManpower))!) },
      { "base_production",                    (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.BaseProduction))!) },
-     { "base_tax",                           (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.BaseTax))!) },
+     { "base_tax",                           (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.ScenarioBaseTax))!) },
      { "capital",                            (Set<string>,                 Province.Empty.GetPropertyInfo(nameof(Province.Capital))!) },
      { "center_of_trade",                    (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.CenterOfTrade))!) },
      { "citysize",                           (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.CitySize))!) },

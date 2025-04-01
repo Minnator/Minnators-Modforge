@@ -54,7 +54,7 @@ namespace Editor.Saving
          AddCollection("add_core", p.GetPropertyValue(nameof(Province.Cores)), ref sb);
          AddItem("owner", p.GetPropertyValue(nameof(Province.Owner)), ref sb);
          AddItem("controller", p.GetPropertyValue(nameof(Province.Controller)), ref sb);
-         AddItem("base_tax", p.GetPropertyValue(nameof(Province.BaseTax)), ref sb);
+         AddItem("base_tax", p.GetPropertyValue(nameof(Province.ScenarioBaseTax)), ref sb);
          AddItem("base_production", p.GetPropertyValue(nameof(Province.BaseProduction)), ref sb);
          AddItem("base_manpower", p.GetPropertyValue(nameof(Province.BaseManpower)), ref sb);
          sb.AppendLine();

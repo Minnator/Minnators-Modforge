@@ -15,8 +15,13 @@ namespace Editor.DataClasses.GameDataClasses
 
    public abstract class HistoryEntry(Date date) : IComparable<Date>, IComparable<HistoryEntry>
    {
+      public List<IToken> Effects { get; set; } = [];
       public Date Date { get; } = date;
-
+      public virtual void Activate(ITarget target)
+      {
+         foreach (var eff in Effects) 
+            eff.Activate(target);
+      }
       public int CompareTo(HistoryEntry? other)
       {
          if (ReferenceEquals(this, other))
@@ -43,7 +48,6 @@ namespace Editor.DataClasses.GameDataClasses
    
    public class ProvinceHistoryEntry(Date date) : HistoryEntry(date)
    {
-      public List<IToken> Effects { get; set; } = [];
       
       public override string ToString()
       {

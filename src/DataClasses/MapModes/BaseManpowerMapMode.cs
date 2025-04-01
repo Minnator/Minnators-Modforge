@@ -20,7 +20,7 @@ namespace Editor.DataClasses.MapModes
       {
          if (Globals.Provinces.TryGetValue(provinceId, out var province))
             return $"Base manpower: {province.BaseManpower}";
-         return "nBaseTax: Unknown";
+         return "BaseTax: Unknown";
       }
 
       public override void SetActive()
@@ -29,6 +29,5 @@ namespace Editor.DataClasses.MapModes
          base.SetActive();
       }
       public override MapModeType MapModeType { get; } = MapModeType.BaseManpower;
-
    }
 }

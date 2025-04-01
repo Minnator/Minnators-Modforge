@@ -147,6 +147,7 @@ public static class Globals
    // Dates
    public static Date StartDate;
    public static Date EndDate;
+   // Should always false during initial app loading
    public static bool IsInHistory => false; // TODO TODO
 
    // Terrain
