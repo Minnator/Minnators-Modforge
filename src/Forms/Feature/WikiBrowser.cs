@@ -1,11 +1,4 @@
-﻿using System.Diagnostics;
-using System.Reflection;
-using Editor.ErrorHandling;
-using Editor.Helper;
-using Editor.Loading.Enhanced;
-using Editor.Loading.Enhanced.PCFL.Implementation;
-using Editor.Loading.Enhanced.PCFL.Implementation.ProvinceScope;
-using Editor.Saving;
+﻿
 using Timer = System.Windows.Forms.Timer;
 
 namespace Editor.Forms.Feature
@@ -36,6 +29,7 @@ namespace Editor.Forms.Feature
          EffectView.View = View.Details;
          EffectView.FullRowSelect = true;
          EffectView.HotTracking = true;
+         EffectView.MouseUp += EffectView_MouseUp;
 
          _timer.Interval = 300;
 
@@ -115,6 +109,24 @@ namespace Editor.Forms.Feature
       private void OnlySearchFirstColumn_CheckedChanged(object sender, EventArgs e)
       {
          OnTextChange(null, EventArgs.Empty);
+      }
+      
+      private void EffectView_MouseUp(object? sender, MouseEventArgs e)
+      {
+         if (e.Button == MouseButtons.Right)
+         {
+            var hitTest = EffectView.HitTest(e.Location);
+            if (hitTest.Item != null && EffectView.ContextMenuStrip != null)
+            {
+               EffectView.ContextMenuStrip.Tag = hitTest.Item; // Store clicked item
+               EffectView.ContextMenuStrip.Show(EffectView, e.Location);
+            }
+         }
+      }
+
+      public void SetContextMenu(ContextMenuStrip contextMenuStrip)
+      {
+         EffectView.ContextMenuStrip = contextMenuStrip;
       }
    }
 }

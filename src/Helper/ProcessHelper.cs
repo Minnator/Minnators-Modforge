@@ -150,6 +150,8 @@ namespace Editor.Helper
          return false;
       }
 
+      public static bool OpenFile(PathObj po) => OpenFile(po.GetPath());
+
       public static bool OpenFile(string path)
       {
          if (File.Exists(path))

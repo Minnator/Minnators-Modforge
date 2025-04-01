@@ -62,6 +62,7 @@ namespace Editor.Loading.Enhanced
       public string name;
       public Dictionary<string, int[]> ReplacePos;
       public string effect; // with all references $...$ removed
+      public int StartLine = -1;
 
       // Contains the key and the index to the replacement value in a backwards order
       public List<(string key, int index)> _replaceSources = [];
@@ -75,6 +76,20 @@ namespace Editor.Loading.Enhanced
          Block = block;
          Po = po;
          effect = block.GetContent();
+      }
+
+      public string GetUsage()
+      {
+         if (_replaceSources.Count == 0)
+            return $"{name} = yes";
+
+         var sb = new StringBuilder();
+         var tabs = 0;
+         SavingUtil.OpenBlock(ref tabs, name, ref sb);
+         foreach (var (key, _) in _replaceSources.DistinctBy(x => x.key))
+            SavingUtil.AddString(1, "<value>", key, ref sb);
+         SavingUtil.CloseBlock(ref tabs, ref sb);
+         return sb.ToString();
       }
 
       // Save the string
@@ -157,7 +172,10 @@ namespace Editor.Loading.Enhanced
                                       $"'{block.Name}' is already used as a scripted effect name.", LogType.Critical);
                   continue;
                }
-               var scrEff = new ScriptedEffectImpl(block, ref po);
+               var scrEff = new ScriptedEffectImpl(block, ref po)
+               {
+                  StartLine = block.StartLine
+               };
                if (!scriptEffects.Add(scrEff))
                   _ = new LoadingError(po, $"Scripted effect '{scrEff.name}' is defined multiple times.");
             }

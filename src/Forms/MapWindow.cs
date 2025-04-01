@@ -1685,6 +1685,7 @@ namespace Editor.Forms
       {
 
          var browser = new WikiBrowser(WikiHelper.LoadScriptedEffects);
+         browser.SetContextMenu(WikiHelper.ScriptedEffectContextMenu());
          browser.ShowDialog();
       }
    }

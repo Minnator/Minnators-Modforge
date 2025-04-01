@@ -1,6 +1,8 @@
 ﻿using Editor.Loading.Enhanced.PCFL.Implementation;
 using System.Linq;
 using System.Reflection;
+using Editor.Loading.Enhanced;
+using Editor.src.Forms.PopUps;
 
 namespace Editor.Helper
 {
@@ -60,10 +62,70 @@ namespace Editor.Helper
             item.SubItems.Add($"'{string.Join("', '", scrEff._replaceSources.DistinctBy(x => x.key).Select(x => x.key))}'");
             item.SubItems.Add(scrEff._replaceSources.Count.ToString());
             item.SubItems.Add(scrEff.Po.GetFileName());
-
+            
             view.Items.Add(item);
          }
          view.EndUpdate();
       }
+
+      public static ContextMenuStrip ScriptedEffectContextMenu()
+      {
+         var contextMenu = new ContextMenuStrip();
+
+         var openFileItem = new ToolStripMenuItem("Open File");
+         openFileItem.Click += (sender, args) =>
+         {
+            if (GetClickedItem(sender) is not { } item)
+               return;
+
+            var scrpEff = Globals.ScriptedEffects.FirstOrDefault(x => x.name.Equals(item.SubItems[0].Text), null);
+            if (scrpEff is null)
+               return;
+
+            ProcessHelper.OpenFileAtLine(scrpEff.Po.GetPath(), scrpEff.StartLine, -1);
+         };
+
+         var showFullString = new ToolStripMenuItem("Show Full String");
+         showFullString.Click += (sender, args) =>
+         {
+            if (GetClickedItem(sender) is not { } item)
+               return;
+
+            var scrpEff = Globals.ScriptedEffects.FirstOrDefault(x => x.name.Equals(item.SubItems[0].Text), null);
+            if (scrpEff is null)
+               return;
+
+            StringPopUp.ShowDialog(scrpEff.effect, scrpEff.name);
+         };
+
+         var copyUsage = new ToolStripMenuItem("Copy Usage");
+         copyUsage.Click += (sender, args) =>
+         {
+            if (GetClickedItem(sender) is not { } item)
+               return;
+
+            var scrpEff = Globals.ScriptedEffects.FirstOrDefault(x => x.name.Equals(item.SubItems[0].Text), null);
+            if (scrpEff is null)
+               return;
+
+            Clipboard.SetText(scrpEff.GetUsage());
+            
+         };
+
+         contextMenu.Items.Add(openFileItem);
+         contextMenu.Items.Add(showFullString);
+         contextMenu.Items.Add(copyUsage);
+
+         return contextMenu;
+      }
+      private static ListViewItem? GetClickedItem(object? sender)
+      {
+         if (sender is ToolStripMenuItem menuItem && menuItem.GetCurrentParent() is ContextMenuStrip contextMenu)
+            return contextMenu.Tag as ListViewItem;
+
+         return null;
+      }
+
+
    }
 }

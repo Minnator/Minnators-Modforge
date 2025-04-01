@@ -376,7 +376,7 @@ public static class Globals
 // - [x] Added Parsing of climate.txt
 // - [x] Added Weather map mode
 // - [x] Added Climate map mode
-// - [ ] Allow deselecting using modifier key
+// - [x] Allow deselecting using modifier key
 // - [x] Added Search Engine to the ErrorBrowsing
 // - [x] Added a setting how unsaved changes should be handled when closing the application
 // - [x] Added Context Menu to open file/folder of files in ErrorBrowsing
@@ -418,7 +418,7 @@ public static class Globals
 // - [x] Fix Localisation editing causing EvilAction during saving of SaveableObjects
 // - [x] Fix Terrain soundType saving
 // - [x] Fix Comment chars can now be defined for each SaveableType
-// - [ ] Fix province being edited when going back and forth in history
+// - [x] Fix province being edited when going back and forth in history
 // - [x] Implement scripted effects
 // - [ ] Fix map mode exporter
 // - [ ] Add history entry adding / removing
