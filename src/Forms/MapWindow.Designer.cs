@@ -2763,12 +2763,11 @@
          ProvHistoryLayout.AutoScroll = true;
          ProvHistoryLayout.ColumnCount = 1;
          ProvHistoryLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-         ProvHistoryLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
          ProvHistoryLayout.Dock = DockStyle.Fill;
          ProvHistoryLayout.Location = new Point(3, 3);
          ProvHistoryLayout.Margin = new Padding(0);
          ProvHistoryLayout.Name = "ProvHistoryLayout";
-         ProvHistoryLayout.RowCount = 24;
+         ProvHistoryLayout.RowCount = 26;
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
@@ -2776,6 +2775,8 @@
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 5F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 5F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 5F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));

@@ -1348,6 +1348,8 @@ namespace Editor.Forms
       private PrvHistComboBox _prvHistTradeGoodsComboBox = null!;
       private PrvHistComboBox _prvHistTradeCenterComboBox = null!;
 
+      private PrvHistCollectionUi _prvHistCores = null!;
+
       private PrvHistSeparator[] _prvHistSeparators = null!;
 
 
@@ -1384,6 +1386,12 @@ namespace Editor.Forms
 
          ProvHistoryLayout.Controls.Add(_prvHistSeparators[1], 0, blockOffset + 3);
          blockOffset += 4;
+
+         _prvHistCores = ControlFactory.GetPrvHistCollectionUi(nameof(Province.Cores));
+
+         ProvHistoryLayout.Controls.Add(_prvHistCores, 0, blockOffset + 0);
+         ProvHistoryLayout.Controls.Add(_prvHistSeparators[5], 0, blockOffset + 1);
+         blockOffset += 2;
 
          _prvHistIsCityCheckBox = ControlFactory.GetPrvHistBoolUi(nameof(Province.IsCity), false);
          _prvHistIsHreCheckBox = ControlFactory.GetPrvHistBoolUi(nameof(Province.IsHre), false);

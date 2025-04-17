@@ -1,5 +1,95 @@
-﻿namespace Editor.Controls.PRV_HIST
+﻿using System.Diagnostics;
+using Editor.Forms.Feature;
+
+namespace Editor.Controls.PRV_HIST
 {
+   public class PrvHistCollectionUi : PrvHistSetAddUi
+   {
+      public TableLayoutPanel Tlp { get; }
+      public Button EditButton { get; }
+      private Label _shortInfoLabel;
+
+      public PrvHistCollectionUi(string text, bool hasSetBox = true) 
+         : base(text, new TableLayoutPanel
+         {
+            ColumnCount = 2,
+            RowCount = 1,
+            Dock = DockStyle.Fill,
+         }, hasSetBox)
+      {
+         Tlp = (TableLayoutPanel)Controls[2]; // keep a reference directly
+         Tlp.ColumnStyles.Clear();
+         Tlp.RowStyles.Clear();
+         Tlp.ColumnStyles.Add(new(SizeType.Absolute, 30));
+         Tlp.ColumnStyles.Add(new(SizeType.Percent, 100));
+         Tlp.RowStyles.Add(new(SizeType.Percent, 100));
+         Tlp.Dock = DockStyle.Fill;
+
+         EditButton = new()
+         {
+            Dock = DockStyle.Fill,
+            Text = "...",
+            Font = new("Arial", 8, FontStyle.Regular),
+            Padding = new(0),
+            Margin = new(0),
+         };
+
+         EditButton.Click += EditButton_Click;
+
+         _shortInfoLabel = new()
+         {
+            Text = "Short Info",
+            Dock = DockStyle.Fill,
+            TextAlign = ContentAlignment.MiddleLeft,
+            Font = new("Arial", 8, FontStyle.Regular),
+            Padding = new(0, 3, 0, 3),
+            Margin = new(0, 3, 0, 3),
+         };
+
+         Tlp.Controls.Add(EditButton, 0, 0);
+         Tlp.Controls.Add(_shortInfoLabel, 1, 0);
+
+         SetShortInfo();
+      }
+
+      public string ShortInfoText
+      {
+         get => _shortInfoLabel.Text;
+         set => _shortInfoLabel.Text = value;
+      }
+
+      private void EditButton_Click(object? sender, EventArgs e)
+      {
+         var form = new ListDeltaSetSelection("Edit", ["Test1", "Test2", "Test3", "Test5"], ["Test4"], SetCheckBox.Checked);
+         form.ShowDialog();
+
+         if (form.IsSetCheckBoxChecked)
+         {
+            Debug.WriteLine("Items to set:");
+            foreach (var toSet in form.GetSet)
+               Debug.WriteLine(toSet);
+         }
+         else
+         {
+            var delta = form.GetDelta();
+
+            Debug.WriteLine("Items to add:");
+            foreach (var toSet in delta.added)
+               Debug.WriteLine(toSet);
+            Debug.WriteLine("Items to remove:");
+            foreach (var toSet in delta.removed)
+               Debug.WriteLine(toSet);
+         }
+
+         SetShortInfo();
+      }
+
+      private void SetShortInfo()
+      {
+         //TODO once list is gettable in here
+      }
+   }
+
    public class PrvHistFloatUi : PrvHistSetAddUi
    {
       public NumericUpDown FloatNumeric { get; }

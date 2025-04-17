@@ -72,6 +72,17 @@ public static class ControlFactory
       return ui;
    }
 
+   public static PrvHistCollectionUi GetPrvHistCollectionUi(string label)
+   {
+      var ui = new PrvHistCollectionUi(label)
+      {
+         Dock = DockStyle.Fill,
+         Margin = new(0)
+      };
+      SetSetAddGeneralToolTip(ui.SetCheckBox);
+      return ui;
+   }
+
    public static PrvHistFloatUi GetPrvHistFloatUi(string label, float value = 0, float min = 0, float max = 100)
    {
       var ui = new PrvHistFloatUi(label, value, min, max)
