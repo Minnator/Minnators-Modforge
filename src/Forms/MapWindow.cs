@@ -1326,14 +1326,19 @@ namespace Editor.Forms
 
       #region ProvinceEditGUI
 
-      private PrvHistNumeric _prvHistTaxNumeric = null!;
-      private PrvHistNumeric _prvHistPrdNumeric = null!;
-      private PrvHistNumeric _prvHistMnpNumeric = null!;
+      private PrvHistIntUi _prvHistTaxNumeric = null!;
+      private PrvHistIntUi _prvHistPrdNumeric = null!;
+      private PrvHistIntUi _prvHistMnpNumeric = null!;
+      private PrvHistIntUi _prvHistExtraCostNumeric = null!;
 
-      private PrvHistCheckBox _prvHistIsCityCheckBox = null!;
-      private PrvHistCheckBox _prvHistIsHreCheckBox = null!;
-      private PrvHistCheckBox _prvHistIsParliamentSeatCheckbox = null!;
-      private PrvHistCheckBox _prvHistIasRevoltCheckBox = null!;
+      private PrvHistFloatUi _prvHistAutonomyNumeric = null!;
+      private PrvHistFloatUi _prvHistDevastationNumeric = null!;
+      private PrvHistFloatUi _prvHistProsperityNumeric = null!;
+      
+      private PrvHistSetAddUi _prvHistIsCityCheckBox = null!;
+      private PrvHistSetAddUi _prvHistIsHreCheckBox = null!;
+      private PrvHistSetAddUi _prvHistIsParliamentSeatCheckbox = null!;
+      private PrvHistSetAddUi _prvHistIasRevoltCheckBox = null!;
 
       private PrvHistTagBox _prvHistOwnerTagBox = null!;
       private PrvHistTagBox _prvHistControllerTagBox = null!;
@@ -1351,33 +1356,46 @@ namespace Editor.Forms
       {
          ProvHistoryLayout.Paint += TableLayoutBorder_Paint;
 
-         _prvHistSeparators = new PrvHistSeparator[5];
+         _prvHistSeparators = new PrvHistSeparator[6];
          for (var i = 0; i < _prvHistSeparators.Length; i++)
             _prvHistSeparators[i] = ControlFactory.GetDefaultSeparator();
 
          var blockOffset = 0;
-         _prvHistTaxNumeric = ControlFactory.GetPrvHistNumeric(nameof(Province.BaseTax));
-         _prvHistPrdNumeric = ControlFactory.GetPrvHistNumeric(nameof(Province.BaseProduction));
-         _prvHistMnpNumeric = ControlFactory.GetPrvHistNumeric(nameof(Province.BaseManpower));
+         _prvHistTaxNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.BaseTax));
+         _prvHistPrdNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.BaseProduction));
+         _prvHistMnpNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.BaseManpower));
+         _prvHistExtraCostNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.ExtraCost));
 
          ProvHistoryLayout.Controls.Add(_prvHistTaxNumeric, 0, blockOffset + 0);
          ProvHistoryLayout.Controls.Add(_prvHistPrdNumeric, 0, blockOffset + 1);
          ProvHistoryLayout.Controls.Add(_prvHistMnpNumeric, 0, blockOffset + 2);
+         ProvHistoryLayout.Controls.Add(_prvHistExtraCostNumeric, 0, blockOffset + 3);
 
-         _prvHistIsCityCheckBox = ControlFactory.GetPrvHistCheckBox(nameof(Province.IsCity));
-         _prvHistIsHreCheckBox = ControlFactory.GetPrvHistCheckBox(nameof(Province.IsHre));
-         _prvHistIsParliamentSeatCheckbox = ControlFactory.GetPrvHistCheckBox(nameof(Province.IsSeatInParliament));
-         _prvHistIasRevoltCheckBox = ControlFactory.GetPrvHistCheckBox(nameof(Province.HasRevolt));
+         ProvHistoryLayout.Controls.Add(_prvHistSeparators[0], 0, blockOffset + 4);
+         blockOffset += 5;
 
-         ProvHistoryLayout.Controls.Add(_prvHistSeparators[0], 0, blockOffset + 3);
+         _prvHistDevastationNumeric = ControlFactory.GetPrvHistFloatUi(nameof(Province.Devastation));
+         _prvHistAutonomyNumeric = ControlFactory.GetPrvHistFloatUi(nameof(Province.LocalAutonomy));
+         _prvHistProsperityNumeric = ControlFactory.GetPrvHistFloatUi(nameof(Province.Prosperity));
+
+         ProvHistoryLayout.Controls.Add(_prvHistDevastationNumeric, 0, blockOffset + 0);
+         ProvHistoryLayout.Controls.Add(_prvHistAutonomyNumeric, 0, blockOffset + 1);
+         ProvHistoryLayout.Controls.Add(_prvHistProsperityNumeric, 0, blockOffset + 2);
+
+         ProvHistoryLayout.Controls.Add(_prvHistSeparators[1], 0, blockOffset + 3);
          blockOffset += 4;
 
+         _prvHistIsCityCheckBox = ControlFactory.GetPrvHistBoolUi(nameof(Province.IsCity), false);
+         _prvHistIsHreCheckBox = ControlFactory.GetPrvHistBoolUi(nameof(Province.IsHre), false);
+         _prvHistIsParliamentSeatCheckbox = ControlFactory.GetPrvHistBoolUi(nameof(Province.IsSeatInParliament), false);
+         _prvHistIasRevoltCheckBox = ControlFactory.GetPrvHistBoolUi(nameof(Province.HasRevolt), false);
+         
          ProvHistoryLayout.Controls.Add(_prvHistIsCityCheckBox, 0, blockOffset + 0);
          ProvHistoryLayout.Controls.Add(_prvHistIsHreCheckBox, 0, blockOffset + 1);
          ProvHistoryLayout.Controls.Add(_prvHistIsParliamentSeatCheckbox, 0, blockOffset + 2);
          ProvHistoryLayout.Controls.Add(_prvHistIasRevoltCheckBox, 0, blockOffset + 3);
 
-         ProvHistoryLayout.Controls.Add(_prvHistSeparators[1], 0, blockOffset + 4);
+         ProvHistoryLayout.Controls.Add(_prvHistSeparators[2], 0, blockOffset + 4);
          blockOffset += 5;
 
          _prvHistOwnerTagBox = ControlFactory.GetPrvHistTagBox(nameof(Province.Owner));
@@ -1386,7 +1404,7 @@ namespace Editor.Forms
          ProvHistoryLayout.Controls.Add(_prvHistOwnerTagBox, 0, blockOffset + 0);
          ProvHistoryLayout.Controls.Add(_prvHistControllerTagBox, 0, blockOffset + 1);
 
-         ProvHistoryLayout.Controls.Add(_prvHistSeparators[2], 0, blockOffset + 2);
+         ProvHistoryLayout.Controls.Add(_prvHistSeparators[3], 0, blockOffset + 2);
          blockOffset += 3;
 
          _prvHistReligionComboBox = ControlFactory.GetPrvHistComboBox(nameof(Province.Religion));
@@ -1399,7 +1417,7 @@ namespace Editor.Forms
          ProvHistoryLayout.Controls.Add(_prvHistTradeGoodsComboBox, 0, blockOffset + 2);
          ProvHistoryLayout.Controls.Add(_prvHistTradeCenterComboBox, 0, blockOffset + 3);
 
-         ProvHistoryLayout.Controls.Add(_prvHistSeparators[3], 0, blockOffset + 4);
+         ProvHistoryLayout.Controls.Add(_prvHistSeparators[4], 0, blockOffset + 4);
          blockOffset += 5;
 
       }

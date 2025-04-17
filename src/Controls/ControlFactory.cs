@@ -18,6 +18,7 @@ namespace Editor.Controls;
 
 public static class ControlFactory
 {
+   private const string SET_ADD_TT = "If checked the history entry will SET the value.\nIf unchecked the history entry will ADD the value.";
    #region enums
 
    public enum ImageButtonType
@@ -37,6 +38,11 @@ public static class ControlFactory
 
    #endregion
 
+   private static void SetSetAddGeneralToolTip(Control control, string text = SET_ADD_TT)
+   {
+      Globals.MapWindow.GeneralToolTip.SetToolTip(control, text);
+   }
+
    public static PrvHistNumeric GetPrvHistNumeric(string label)
    {
       return new(label)
@@ -55,6 +61,51 @@ public static class ControlFactory
       };
    }
 
+   public static PrvHistIntUi GetPrvHistIntUi(string label, int value = 0, int min = 0, int max = 100)
+   {
+      var ui = new PrvHistIntUi(label, value, min, max)
+      {
+         Dock = DockStyle.Fill,
+         Margin = new(0)
+      };
+      SetSetAddGeneralToolTip(ui.SetCheckBox);
+      return ui;
+   }
+
+   public static PrvHistFloatUi GetPrvHistFloatUi(string label, float value = 0, float min = 0, float max = 100)
+   {
+      var ui = new PrvHistFloatUi(label, value, min, max)
+      {
+         Dock = DockStyle.Fill,
+         Margin = new(0)
+      };
+      SetSetAddGeneralToolTip(ui.SetCheckBox);
+      return ui;
+   }
+
+
+   public static PrvHistSetAddUi GetPrvHistUi(string label, Control control, bool hasSetBox = false)
+   {
+      var ui = new PrvHistSetAddUi(label, control, hasSetBox)
+      {
+         Dock = DockStyle.Fill,
+         Margin = new(0)
+      };
+      if (hasSetBox)
+         SetSetAddGeneralToolTip(ui.SetCheckBox);
+      return ui;
+   }
+
+   public static PrvHistBoolUi GetPrvHistBoolUi(string label, bool isChecked)
+   {
+      var ui = new PrvHistBoolUi(label, isChecked)
+      {
+         Dock = DockStyle.Fill,
+         Margin = new(0)
+      };
+      return ui;
+   }
+   
    public static PrvHistCheckBox GetPrvHistCheckBox(string label)
    {
       return new(label)

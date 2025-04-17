@@ -681,28 +681,28 @@
          // scopesToolStripMenuItem
          // 
          scopesToolStripMenuItem.Name = "scopesToolStripMenuItem";
-         scopesToolStripMenuItem.Size = new Size(180, 22);
+         scopesToolStripMenuItem.Size = new Size(119, 22);
          scopesToolStripMenuItem.Text = "Scopes";
          scopesToolStripMenuItem.Click += scopesToolStripMenuItem_Click;
          // 
          // triggerToolStripMenuItem
          // 
          triggerToolStripMenuItem.Name = "triggerToolStripMenuItem";
-         triggerToolStripMenuItem.Size = new Size(180, 22);
+         triggerToolStripMenuItem.Size = new Size(119, 22);
          triggerToolStripMenuItem.Text = "Trigger";
          triggerToolStripMenuItem.Click += triggerToolStripMenuItem_Click;
          // 
          // effectsToolStripMenuItem1
          // 
          effectsToolStripMenuItem1.Name = "effectsToolStripMenuItem1";
-         effectsToolStripMenuItem1.Size = new Size(180, 22);
+         effectsToolStripMenuItem1.Size = new Size(119, 22);
          effectsToolStripMenuItem1.Text = "Effects";
          effectsToolStripMenuItem1.Click += effectsToolStripMenuItem1_Click;
          // 
          // modifierToolStripMenuItem
          // 
          modifierToolStripMenuItem.Name = "modifierToolStripMenuItem";
-         modifierToolStripMenuItem.Size = new Size(180, 22);
+         modifierToolStripMenuItem.Size = new Size(119, 22);
          modifierToolStripMenuItem.Text = "Modifier";
          modifierToolStripMenuItem.Click += modifierToolStripMenuItem_Click;
          // 
@@ -2763,11 +2763,17 @@
          ProvHistoryLayout.AutoScroll = true;
          ProvHistoryLayout.ColumnCount = 1;
          ProvHistoryLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         ProvHistoryLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
          ProvHistoryLayout.Dock = DockStyle.Fill;
          ProvHistoryLayout.Location = new Point(3, 3);
          ProvHistoryLayout.Margin = new Padding(0);
          ProvHistoryLayout.Name = "ProvHistoryLayout";
-         ProvHistoryLayout.RowCount = 19;
+         ProvHistoryLayout.RowCount = 24;
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 5F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));

@@ -153,7 +153,7 @@ namespace Editor.Helper
          for (var i = 1; i < lists.Count; i++)
             if (!ScrambledListsEquals(lists[i], new Dictionary<Q, int>(compDictionary)))
                return false;
-
+         
          return true;
       }
 
