@@ -187,6 +187,7 @@
          label49 = new Label();
          label50 = new Label();
          label51 = new Label();
+         label28 = new Label();
          ProvinceCustomToolStripLayoutPanel = new TableLayoutPanel();
          OpenProvinceFile = new Button();
          AdvancedProvinceEditing = new Button();
@@ -258,6 +259,7 @@
          FocusSelectionCheckBox = new CheckBox();
          ProvinceHistoryTab = new TabPage();
          ProvHistoryLayout = new TableLayoutPanel();
+         label41 = new Label();
          MapLayoutPanel = new TableLayoutPanel();
          MapSplitContainer = new SplitContainer();
          MMButtonsTLPanel = new TableLayoutPanel();
@@ -331,6 +333,7 @@
          ProvinceCollectionsTab.SuspendLayout();
          GroupCollectionOptions.SuspendLayout();
          ProvinceHistoryTab.SuspendLayout();
+         ProvHistoryLayout.SuspendLayout();
          MapLayoutPanel.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)MapSplitContainer).BeginInit();
          MapSplitContainer.SuspendLayout();
@@ -1091,16 +1094,18 @@
          ProvinceEditingLayout.ColumnCount = 2;
          ProvinceEditingLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
          ProvinceEditingLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-         ProvinceEditingLayout.Controls.Add(OptionalsTabControl, 0, 5);
-         ProvinceEditingLayout.Controls.Add(groupBox5, 0, 3);
-         ProvinceEditingLayout.Controls.Add(groupBox6, 1, 3);
-         ProvinceEditingLayout.Controls.Add(LocalisationGroupBox, 1, 4);
-         ProvinceEditingLayout.Controls.Add(MiscProvGroupBox, 0, 0);
+         ProvinceEditingLayout.Controls.Add(OptionalsTabControl, 0, 6);
+         ProvinceEditingLayout.Controls.Add(groupBox5, 0, 4);
+         ProvinceEditingLayout.Controls.Add(groupBox6, 1, 4);
+         ProvinceEditingLayout.Controls.Add(LocalisationGroupBox, 1, 5);
+         ProvinceEditingLayout.Controls.Add(MiscProvGroupBox, 0, 1);
+         ProvinceEditingLayout.Controls.Add(label28, 0, 0);
          ProvinceEditingLayout.Dock = DockStyle.Top;
          ProvinceEditingLayout.Location = new Point(0, 0);
          ProvinceEditingLayout.Margin = new Padding(0);
          ProvinceEditingLayout.Name = "ProvinceEditingLayout";
-         ProvinceEditingLayout.RowCount = 7;
+         ProvinceEditingLayout.RowCount = 8;
+         ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
          ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 200F));
          ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 110F));
          ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 110F));
@@ -1108,7 +1113,7 @@
          ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 112F));
          ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 200F));
          ProvinceEditingLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-         ProvinceEditingLayout.Size = new Size(388, 862);
+         ProvinceEditingLayout.Size = new Size(388, 882);
          ProvinceEditingLayout.TabIndex = 0;
          // 
          // OptionalsTabControl
@@ -1118,7 +1123,7 @@
          OptionalsTabControl.Controls.Add(TradeCompanyTab);
          OptionalsTabControl.Controls.Add(ModifiersTab);
          OptionalsTabControl.Dock = DockStyle.Fill;
-         OptionalsTabControl.Location = new Point(3, 625);
+         OptionalsTabControl.Location = new Point(3, 645);
          OptionalsTabControl.Name = "OptionalsTabControl";
          OptionalsTabControl.SelectedIndex = 0;
          OptionalsTabControl.Size = new Size(382, 194);
@@ -1409,7 +1414,7 @@
          // 
          groupBox5.Controls.Add(FloatLayoutPanel);
          groupBox5.Dock = DockStyle.Fill;
-         groupBox5.Location = new Point(3, 420);
+         groupBox5.Location = new Point(3, 440);
          groupBox5.Margin = new Padding(3, 0, 3, 0);
          groupBox5.Name = "groupBox5";
          groupBox5.Padding = new Padding(0);
@@ -1474,7 +1479,7 @@
          // 
          groupBox6.Controls.Add(TradePanel);
          groupBox6.Dock = DockStyle.Fill;
-         groupBox6.Location = new Point(197, 420);
+         groupBox6.Location = new Point(197, 440);
          groupBox6.Margin = new Padding(3, 0, 3, 0);
          groupBox6.Name = "groupBox6";
          groupBox6.Padding = new Padding(0);
@@ -1539,7 +1544,7 @@
          // 
          LocalisationGroupBox.Controls.Add(LocTableLayoutPanel);
          LocalisationGroupBox.Dock = DockStyle.Fill;
-         LocalisationGroupBox.Location = new Point(197, 510);
+         LocalisationGroupBox.Location = new Point(197, 530);
          LocalisationGroupBox.Margin = new Padding(3, 0, 3, 0);
          LocalisationGroupBox.Name = "LocalisationGroupBox";
          LocalisationGroupBox.Padding = new Padding(3, 0, 3, 3);
@@ -1619,7 +1624,7 @@
          ProvinceEditingLayout.SetColumnSpan(MiscProvGroupBox, 2);
          MiscProvGroupBox.Controls.Add(MisProvinceData);
          MiscProvGroupBox.Dock = DockStyle.Fill;
-         MiscProvGroupBox.Location = new Point(3, 3);
+         MiscProvGroupBox.Location = new Point(3, 23);
          MiscProvGroupBox.Name = "MiscProvGroupBox";
          MiscProvGroupBox.Padding = new Padding(3, 0, 3, 0);
          MiscProvGroupBox.Size = new Size(382, 194);
@@ -1805,6 +1810,19 @@
          label51.TabIndex = 10;
          label51.Text = "Has Revolt";
          label51.TextAlign = ContentAlignment.MiddleLeft;
+         // 
+         // label28
+         // 
+         label28.AutoSize = true;
+         ProvinceEditingLayout.SetColumnSpan(label28, 2);
+         label28.Dock = DockStyle.Fill;
+         label28.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+         label28.Location = new Point(3, 0);
+         label28.Name = "label28";
+         label28.Size = new Size(382, 20);
+         label28.TabIndex = 13;
+         label28.Text = "Province Scenario Editing";
+         label28.TextAlign = ContentAlignment.MiddleCenter;
          // 
          // ProvinceCustomToolStripLayoutPanel
          // 
@@ -2763,11 +2781,13 @@
          ProvHistoryLayout.AutoScroll = true;
          ProvHistoryLayout.ColumnCount = 1;
          ProvHistoryLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+         ProvHistoryLayout.Controls.Add(label41, 0, 0);
          ProvHistoryLayout.Dock = DockStyle.Fill;
          ProvHistoryLayout.Location = new Point(3, 3);
          ProvHistoryLayout.Margin = new Padding(0);
          ProvHistoryLayout.Name = "ProvHistoryLayout";
-         ProvHistoryLayout.RowCount = 36;
+         ProvHistoryLayout.RowCount = 37;
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
@@ -2806,6 +2826,18 @@
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
          ProvHistoryLayout.Size = new Size(401, 810);
          ProvHistoryLayout.TabIndex = 1;
+         // 
+         // label41
+         // 
+         label41.AutoSize = true;
+         label41.Dock = DockStyle.Fill;
+         label41.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+         label41.Location = new Point(3, 0);
+         label41.Name = "label41";
+         label41.Size = new Size(395, 20);
+         label41.TabIndex = 0;
+         label41.Text = "Province History Editing";
+         label41.TextAlign = ContentAlignment.MiddleCenter;
          // 
          // MapLayoutPanel
          // 
@@ -3043,6 +3075,7 @@
          ProvinceScrollPanel.ResumeLayout(false);
          ProvinceScrollPanel.PerformLayout();
          ProvinceEditingLayout.ResumeLayout(false);
+         ProvinceEditingLayout.PerformLayout();
          OptionalsTabControl.ResumeLayout(false);
          NativesTab.ResumeLayout(false);
          NativesLayoutPanel.ResumeLayout(false);
@@ -3104,6 +3137,8 @@
          GroupCollectionOptions.ResumeLayout(false);
          GroupCollectionOptions.PerformLayout();
          ProvinceHistoryTab.ResumeLayout(false);
+         ProvHistoryLayout.ResumeLayout(false);
+         ProvHistoryLayout.PerformLayout();
          MapLayoutPanel.ResumeLayout(false);
          ((System.ComponentModel.ISupportInitialize)MapSplitContainer).EndInit();
          MapSplitContainer.ResumeLayout(false);
@@ -3362,6 +3397,8 @@
       private ToolStripMenuItem effectsToolStripMenuItem1;
       private ToolStripMenuItem modifierToolStripMenuItem;
       private ToolStripSeparator toolStripSeparator13;
+      private Label label28;
+      private Label label41;
    }
 }
 

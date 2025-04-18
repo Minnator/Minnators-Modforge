@@ -66,7 +66,7 @@ namespace Editor.DataClasses.Saveables
       public Religion Religion = Religion.Empty;
       public Religion ReformationCenter = Religion.Empty;
       public TradeGood TradeGood = TradeGood.Empty;
-      public string LatentTradeGood = string.Empty;
+      public TradeGood LatentTradeGood = TradeGood.Empty;
       public List<Tag> Claims = [];
       public List<Tag> PermanentClaims = [];
       public List<Tag> Cores = [];
@@ -174,7 +174,7 @@ namespace Editor.DataClasses.Saveables
 
    public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<ProvinceHistoryEntry>, ITarget, IComparable
    {
-      public enum modifiyingOperation
+      public enum ModifyingOperation
       {
          Base,
          HistoryEntry,
@@ -182,13 +182,55 @@ namespace Editor.DataClasses.Saveables
 
       public ProvinceData _initialData = new();
 
-      #region InitData
+      #region Init Scenario Data
 
-      private int _scenarioBaseTax = 0;
+      private int _scenarioBaseTax;
+      private int _scenarioBaseProduction;
+      private int _scenarioBaseManpower;
+      private int _scenarioCenterOfTrade;
+      private int _scenarioExtraCost;
+      private int _scenarioNativeHostileness;
+      private int _scenarioNativeSize;
+      private int _scenarioRevoltRisk;
+      private int _scenarioNationalism;
+      private int _scenarioCitySize;
+
+      private float _scenarioNativeFerocity;
+      private float _scenarioLocalAutonomy;
+      private float _scenarioDevastation;
+      private float _scenarioProsperity;
+
+      private bool _scenarioIsHre;
+      private bool _scenarioIsCity;
+      private bool _scenarioHasRevolt;
+      private bool _scenarioIsSeatInParliament;
+
+      private string _scenarioCapital = string.Empty;
+
+      private Country _scenarioController = Country.Empty;
+      private Country _scenarioOwner = Country.Empty;
+      private Country _scenarioTribalOwner = Country.Empty;
+      
+      private Culture _scenarioCulture = Culture.Empty;
+      private Religion _scenarioReligion = Religion.Empty;
+      private Religion _scenarioReformationCenter = Religion.Empty;
+      private TradeGood _scenarioTradeGood = TradeGood.Empty;
+      private TradeGood _scenarioLatentTradeGood = TradeGood.Empty;
+      private List<string> _scenarioDiscoveredBy = [];
+      private List<string> _scenarioTradeCompanyInvestments = [];
+      private List<string> _scenarioProvinceTriggeredModifiers = [];
+      private List<Tag> _scenarioClaims = [];
+      private List<Tag> _scenarioPermanentClaims = [];
+      private List<Tag> _scenarioCores = [];
+      private List<Building> _scenarioBuildings = [];
+      private List<ApplicableModifier> _scenarioPermanentProvinceModifiers = [];
+      private List<ApplicableModifier> _scenarioProvinceModifiers = [];
+      private List<IElement> _scenarioScriptedEffects = [];
+      private List<TradeModifier> _scenarioTradeModifiers = [];
 
       #endregion
 
-      #region Data
+      #region State Data
       private Country _controller = Country.Empty;
       private Country _owner = Country.Empty;
       private Country _tribalOwner = Country.Empty;
@@ -215,7 +257,7 @@ namespace Editor.DataClasses.Saveables
       private Religion _religion = Religion.Empty;
       private Religion _reformationCenter = Religion.Empty;
       private TradeGood _tradeGood = TradeGood.Empty;
-      private string _latentTradeGood = string.Empty;
+      private TradeGood _latentTradeGood = TradeGood.Empty;
       private List<Tag> _claims = [];
       private List<Tag> _permanentClaims = [];
       private List<Tag> _cores = [];
@@ -260,6 +302,11 @@ namespace Editor.DataClasses.Saveables
             }
          }
       }
+      public Country ScenarioOwner
+      {
+         get => _scenarioOwner;
+         set => SetField(ref _scenarioOwner, ref _owner, value);
+      }
 
 
       #endregion
@@ -287,29 +334,28 @@ namespace Editor.DataClasses.Saveables
          set => SetIfModifiedEnumerable<List<Tag>, Tag>(ref _cores, value);
       }
       [ToolTippable]
-      public Country Controller
-      {
-         get => _controller;
-         set
-         {
-            SetField(ref _controller, value);
-         }
+      public Country Controller { get => _controller; set => _controller = value; }
+      public Country ScenarioController {
+         get => _scenarioController;
+         set => SetField(ref _scenarioController, ref _controller, value);
       }
 
       [ToolTippable]
-      public Country TribalOwner
+      public Country TribalOwner { get => _tribalOwner; set => _tribalOwner = value; }
+      public Country ScenarioTribalOwner
       {
-         get => _tribalOwner;
-         set => SetField(ref _tribalOwner, value);
+         get => _scenarioTribalOwner;
+         set => SetField(ref _scenarioTribalOwner, ref _tribalOwner, value);
       }
 
       [ToolTippable]
-      public int BaseManpower
+      public int BaseManpower { get => _baseManpower; set => _baseManpower = Math.Max(0, value); }
+      public int ScenarioBaseManpower
       {
-         get => _baseManpower;
-         set => SetField(ref _baseManpower, Math.Max(1, value));
+         get => _scenarioBaseManpower;
+         set => SetField(ref _scenarioBaseManpower, ref _baseManpower, Math.Max(0, value));
       }
-      
+
       [ToolTippable]
       public int BaseTax { get => _baseTax; set => _baseTax = value; }
       public int ScenarioBaseTax
@@ -319,87 +365,99 @@ namespace Editor.DataClasses.Saveables
       }
 
       [ToolTippable]
-      public int BaseProduction
+      public int BaseProduction { get => _baseProduction; set => _baseProduction = Math.Max(0, value); }
+      public int ScenarioBaseProduction
       {
-         get => _baseProduction;
-         set => SetField(ref _baseProduction, Math.Max(0, value));
+         get => _scenarioBaseProduction;
+         set => SetField(ref _scenarioBaseProduction, ref _baseProduction, Math.Max(0, value));
       }
 
       [ToolTippable]
-      public int CenterOfTrade
+      public int CenterOfTrade { get => _centerOfTrade; set => _centerOfTrade = Math.Max(0, value); }
+      public int ScenarioCenterOfTrade
       {
-         get => _centerOfTrade;
-         set => SetField(ref _centerOfTrade, Math.Max(0, value));
+         get => _scenarioCenterOfTrade;
+         set => SetField(ref _scenarioCenterOfTrade, ref _centerOfTrade, Math.Max(0, value));
       }
 
       [ToolTippable]
-      public int ExtraCost
+      public int ExtraCost { get => _extraCost; set => _extraCost = Math.Max(0, value); }
+      public int ScenarioExtraCost
       {
-         get => _extraCost;
-         set => SetField(ref _extraCost, Math.Max(0, value));
+         get => _scenarioExtraCost;
+         set => SetField(ref _scenarioExtraCost, ref _extraCost, Math.Max(0, value));
       }
 
       [ToolTippable]
-      public float NativeFerocity
+      public float NativeFerocity { get => _nativeFerocity; set => _nativeFerocity = Math.Max(0, value); }
+      public float ScenarioNativeFerocity
       {
-         get => _nativeFerocity;
-         set => SetField(ref _nativeFerocity, value);
+         get => _scenarioNativeFerocity;
+         set => SetField(ref _scenarioNativeFerocity, ref _nativeFerocity, Math.Max(0, value));
       }
 
       [ToolTippable]
-      public int NativeHostileness
+      public int NativeHostileness { get => _nativeHostileness; set => _nativeHostileness = Math.Max(0, value); }
+      public int ScenarioNativeHostileness
       {
-         get => _nativeHostileness;
-         set => SetField(ref _nativeHostileness, value);
+         get => _scenarioNativeHostileness;
+         set => SetField(ref _scenarioNativeHostileness, ref _nativeHostileness, Math.Max(0, value));
       }
 
       [ToolTippable]
-      public int NativeSize
+      public int NativeSize { get => _nativeSize; set => _nativeSize = Math.Max(0, value); }
+      public int ScenarioNativeSize
       {
-         get => _nativeSize;
-         set => SetField(ref _nativeSize, value);
+         get => _scenarioNativeSize;
+         set => SetField(ref _scenarioNativeSize, ref _nativeSize, Math.Max(0, value));
       }
 
       [ToolTippable]
-      public int RevoltRisk
+      public int RevoltRisk { get => _revoltRisk; set => _revoltRisk = Math.Max(0, value); }
+      public int ScenarioRevoltRisk
       {
-         get => _revoltRisk;
-         set => SetField(ref _revoltRisk, value);
+         get => _scenarioRevoltRisk;
+         set => SetField(ref _scenarioRevoltRisk, ref _revoltRisk, Math.Max(0, value));
       }
 
       [ToolTippable]
-      public int CitySize
+      public int CitySize { get => _citySize; set => _citySize = Math.Max(0, value); }
+      public int ScenarioCitySize
       {
-         get => _citySize;
-         set => SetField(ref _citySize, value);
+         get => _scenarioCitySize;
+         set => SetField(ref _scenarioCitySize, ref _citySize, Math.Max(0, value));
       }
 
       [ToolTippable]
-      public int Nationalism
+      public int Nationalism { get => _nationalism; set => _nationalism = Math.Max(0, value); }
+      public int ScenarioNationalism
       {
-         get => _nationalism;
-         set => SetField(ref _nationalism, value);
+         get => _scenarioNationalism;
+         set => SetField(ref _scenarioNationalism, ref _nationalism, Math.Max(0, value));
       }
 
       [ToolTippable]
-      public float LocalAutonomy
+      public float LocalAutonomy { get => _localAutonomy; set => _localAutonomy = Math.Max(0, value); }
+      public float ScenarioLocalAutonomy
       {
-         get => _localAutonomy;
-         set => SetField(ref _localAutonomy, value);
+         get => _scenarioLocalAutonomy;
+         set => SetField(ref _scenarioLocalAutonomy, ref _localAutonomy, Math.Max(0, value));
       }
 
       [ToolTippable]
-      public float Devastation
+      public float Devastation { get => _devastation; set => _devastation = Math.Max(0, value); }
+      public float ScenarioDevastation
       {
-         get => _devastation;
-         set => SetField(ref _devastation, value);
+         get => _scenarioDevastation;
+         set => SetField(ref _scenarioDevastation, ref _devastation, Math.Max(0, value));
       }
 
       [ToolTippable]
-      public float Prosperity
+      public float Prosperity { get => _prosperity; set => _prosperity = Math.Max(0, value); }
+      public float ScenarioProsperity
       {
-         get => _prosperity;
-         set => SetField(ref _prosperity, value);
+         get => _scenarioProsperity;
+         set => SetField(ref _scenarioProsperity, ref _prosperity, Math.Max(0, value));
       }
 
       [GameIcon(GameIcons.DiscoverAchievement)]
@@ -410,24 +468,27 @@ namespace Editor.DataClasses.Saveables
       }
 
       [ToolTippable]
-      public string Capital
+      public string Capital { get => _capital; set => _capital = value; }
+      public string ScenarioCapital
       {
-         get => _capital;
-         set => SetField(ref _capital, value);
+         get => _scenarioCapital;
+         set => SetField(ref _scenarioCapital, ref _capital, value);
       }
 
       [ToolTippable]
-      public Culture Culture
+      public Culture Culture { get => _culture; set => _culture = value; }
+      public Culture ScenarioCulture
       {
-         get => _culture;
-         set => SetField(ref _culture, value);
+         get => _scenarioCulture;
+         set => SetField(ref _scenarioCulture, ref _culture, value);
       }
 
       [ToolTippable]
-      public Religion Religion
+      public Religion Religion { get => _religion; set => _religion = value; }
+      public Religion ScenarioReligion
       {
-         get => _religion;
-         set => SetField(ref _religion, value);
+         get => _scenarioReligion;
+         set => SetField(ref _scenarioReligion, ref _religion, value);
       }
 
       [GameIcon(GameIcons.Building, false)]
@@ -438,52 +499,59 @@ namespace Editor.DataClasses.Saveables
       }
 
       [ToolTippable]
-      public bool IsHre
+      public bool IsHre { get => _isHre; set => _isHre = value; }
+      public bool ScenarioIsHre
       {
-         get => _isHre;
-         set => SetField(ref _isHre, value);
+         get => _scenarioIsHre;
+         set => SetField(ref _scenarioIsHre, ref _isHre, value);
       }
 
       [ToolTippable]
-      public bool IsCity
+      public bool IsCity { get => _isCity; set => _isCity = value; }
+      public bool ScenarioIsCity
       {
-         get => _isCity;
-         set => SetField(ref _isCity, value);
+         get => _scenarioIsCity;
+         set => SetField(ref _scenarioIsCity, ref _isCity, value);
       }
 
       [ToolTippable]
-      public bool IsSeatInParliament
+      public bool IsSeatInParliament { get => _isSeatInParliament; set => _isSeatInParliament = value; }
+      public bool ScenarioIsSeatInParliament
       {
-         get => _isSeatInParliament;
-         set => SetField(ref _isSeatInParliament, value);
+         get => _scenarioIsSeatInParliament;
+         set => SetField(ref _scenarioIsSeatInParliament, ref _isSeatInParliament, value);
       }
 
       [ToolTippable]
-      public TradeGood TradeGood
+      public TradeGood TradeGood { get => _tradeGood; set => _tradeGood = value; }
+      public TradeGood ScenarioTradeGood
       {
-         get => _tradeGood;
-         set => SetField(ref _tradeGood, value);
+         get => _scenarioTradeGood;
+         set => SetField(ref _scenarioTradeGood, ref _tradeGood, value);
       }
 
       [ToolTippable]
-      public string LatentTradeGood
+      public TradeGood LatentTradeGood { get => _latentTradeGood; set => _latentTradeGood = value; }
+      public TradeGood ScenarioLatentTradeGood
       {
-         get => _latentTradeGood;
-         set => SetField(ref _latentTradeGood, value);
+         get => _scenarioLatentTradeGood;
+         set => SetField(ref _scenarioLatentTradeGood, ref _latentTradeGood, value);
       }
 
       [ToolTippable]
-      public bool HasRevolt
+      public bool HasRevolt { get => _hasRevolt; set => _hasRevolt = value; }
+      public bool ScenarioHasRevolt
       {
-         get => _hasRevolt;
-         set => SetField(ref _hasRevolt, value);
+         get => _scenarioHasRevolt;
+         set => SetField(ref _scenarioHasRevolt, ref _hasRevolt, value);
       }
 
       [ToolTippable]
-      public Religion ReformationCenter
+      public Religion ReformationCenter { get => _reformationCenter; set => _reformationCenter = value; }
+      public Religion ScenarioReformationCenter
       {
-         get => _reformationCenter;
-         set => SetField(ref _reformationCenter, value);
+         get => _scenarioReformationCenter;
+         set => SetField(ref _scenarioReformationCenter, ref _reformationCenter, value);
       }
 
       public List<string> TradeCompanyInvestments

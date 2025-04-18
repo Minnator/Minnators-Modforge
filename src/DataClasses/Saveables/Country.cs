@@ -676,8 +676,8 @@ public class Country : ProvinceCollection<Province>, ITitleAdjProvider, ITarget
       }
 
       SetFieldMultiple(provinces, devPartsOut[0], typeof(Province).GetProperty(nameof(Province.ScenarioBaseTax))!);
-      SetFieldMultiple(provinces, devPartsOut[1], typeof(Province).GetProperty(nameof(Province.BaseProduction))!);
-      SetFieldMultiple(provinces, devPartsOut[2], typeof(Province).GetProperty(nameof(Province.BaseManpower))!);
+      SetFieldMultiple(provinces, devPartsOut[1], typeof(Province).GetProperty(nameof(Province.ScenarioBaseProduction))!);
+      SetFieldMultiple(provinces, devPartsOut[2], typeof(Province).GetProperty(nameof(Province.ScenarioBaseManpower))!);
 
    }
 
@@ -717,10 +717,10 @@ public class Country : ProvinceCollection<Province>, ITitleAdjProvider, ITarget
                   prov.ScenarioBaseTax += dev;
                break;
             case 1:
-                  prov.BaseProduction += dev;
+                  prov.ScenarioBaseProduction += dev;
                break;
             case 2:
-                  prov.BaseManpower += dev;
+                  prov.ScenarioBaseManpower += dev;
                break;
             default:
                prov.ScenarioBaseTax += dev;
@@ -733,8 +733,8 @@ public class Country : ProvinceCollection<Province>, ITitleAdjProvider, ITarget
          Globals.Settings.Generator.DevGeneratingSettings.MaxDevelopmentInGeneration);
 
       prov.ScenarioBaseTax += devParts[0];
-      prov.BaseProduction += devParts[1];
-      prov.BaseManpower += devParts[2];
+      prov.ScenarioBaseProduction += devParts[1];
+      prov.ScenarioBaseManpower += devParts[2];
 
       return prov;
    }

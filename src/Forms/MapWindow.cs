@@ -442,9 +442,9 @@ namespace Editor.Forms
          SaveCurrentSelectionButton.MouseEnter += OnSavingSelectionEnter;
          OpenProvinceFile.MouseEnter += OnOpenProvinceFileEnter;
 
-         _ownerTagBox = ControlFactory.GetTagComboBox(typeof(Province).GetProperty(nameof(Province.Owner))!, Globals.Countries);
+         _ownerTagBox = ControlFactory.GetTagComboBox(typeof(Province).GetProperty(nameof(Province.ScenarioOwner))!, Globals.Countries);
          MisProvinceData.Controls.Add(_ownerTagBox, 1, 0);
-         _controllerTagBox = ControlFactory.GetTagComboBox(typeof(Province).GetProperty(nameof(Province.Controller))!, Globals.Countries);
+         _controllerTagBox = ControlFactory.GetTagComboBox(typeof(Province).GetProperty(nameof(Province.ScenarioController))!, Globals.Countries);
          MisProvinceData.Controls.Add(_controllerTagBox, 1, 1);
 
          _coreSelector = new(typeof(Province).GetProperty(nameof(Province.Cores)),
@@ -506,18 +506,18 @@ namespace Editor.Forms
 
          _discoveredBy.Location = new(0, 18);
 
-         _tradeCenterComboBox = ControlFactory.SimpleComboBoxProvince<int>(typeof(Province).GetProperty(nameof(Province.CenterOfTrade))!);
+         _tradeCenterComboBox = ControlFactory.SimpleComboBoxProvince<int>(typeof(Province).GetProperty(nameof(Province.ScenarioCenterOfTrade))!);
          _tradeCenterComboBox.Items.AddRange(["0", "1", "2", "3"]);
          _tradeCenterComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
          TradePanel.Controls.Add(_tradeCenterComboBox, 1, 0);
 
-         _tradeGoodsComboBox = ControlFactory.GetBindablePropertyComboBox(typeof(Province).GetProperty(nameof(Province.TradeGood))!, Globals.TradeGoods);
+         _tradeGoodsComboBox = ControlFactory.GetBindablePropertyComboBox(typeof(Province).GetProperty(nameof(Province.ScenarioTradeGood))!, Globals.TradeGoods);
          TradePanel.Controls.Add(_tradeGoodsComboBox, 1, 1);
 
-         _cultureComboBox = ControlFactory.GetBindablePropertyComboBox(typeof(Province).GetProperty(nameof(Province.Culture))!, Globals.Cultures);
+         _cultureComboBox = ControlFactory.GetBindablePropertyComboBox(typeof(Province).GetProperty(nameof(Province.ScenarioCulture))!, Globals.Cultures);
          MisProvinceData.Controls.Add(_cultureComboBox, 1, 3);
 
-         _religionComboBox = ControlFactory.GetBindablePropertyComboBox(typeof(Province).GetProperty(nameof(Province.Religion))!, Globals.Religions);
+         _religionComboBox = ControlFactory.GetBindablePropertyComboBox(typeof(Province).GetProperty(nameof(Province.ScenarioReligion))!, Globals.Religions);
          MisProvinceData.Controls.Add(_religionComboBox, 1, 2);
 
          // TODO GEDANKEN MACHEN Wie man das hier am besten macht
@@ -531,52 +531,52 @@ namespace Editor.Forms
          _taxNumeric.Maximum = 1000;
          MisProvinceData.Controls.Add(_taxNumeric, 3, 0);
 
-         _prdNumeric = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.BaseProduction)), 0);
+         _prdNumeric = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.ScenarioBaseProduction)), 0);
          _prdNumeric.Minimum = 0;
          _prdNumeric.Maximum = 1000;
          MisProvinceData.Controls.Add(_prdNumeric, 3, 1);
 
-         _mnpNumeric = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.BaseManpower)), 0);
+         _mnpNumeric = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.ScenarioBaseManpower)), 0);
          _mnpNumeric.Minimum = 0;
          _mnpNumeric.Maximum = 1000;
          MisProvinceData.Controls.Add(_mnpNumeric, 3, 2);
 
-         _autonomyNumeric = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.LocalAutonomy)), 0.0f);
+         _autonomyNumeric = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.ScenarioLocalAutonomy)), 0.0f);
          _autonomyNumeric.Minimum = 0;
          _autonomyNumeric.Maximum = 100;
          FloatLayoutPanel.Controls.Add(_autonomyNumeric, 1, 0);
 
-         _devastationNumeric = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.Devastation)), 0.0f);
+         _devastationNumeric = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.ScenarioDevastation)), 0.0f);
          _devastationNumeric.Minimum = 0;
          _devastationNumeric.Maximum = 100;
          FloatLayoutPanel.Controls.Add(_devastationNumeric, 1, 1);
 
-         _prosperityNumeric = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.Prosperity)), 0.0f);
+         _prosperityNumeric = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.ScenarioProsperity)), 0.0f);
          _prosperityNumeric.Minimum = 0;
          _prosperityNumeric.Maximum = 100;
          FloatLayoutPanel.Controls.Add(_prosperityNumeric, 1, 2);
 
-         _extraCostNumeric = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.ExtraCost)), 0);
+         _extraCostNumeric = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.ScenarioExtraCost)), 0);
          _extraCostNumeric.Minimum = 0;
          _extraCostNumeric.Maximum = 1000;
          TradePanel.Controls.Add(_extraCostNumeric, 1, 2);
 
-         _capitalNameTextBox = ControlFactory.GetPropertyTextBox(typeof(Province).GetProperty(nameof(Province.Capital)));
+         _capitalNameTextBox = ControlFactory.GetPropertyTextBox(typeof(Province).GetProperty(nameof(Province.ScenarioCapital)));
          MisProvinceData.Controls.Add(_capitalNameTextBox, 1, 4);
 
-         _isCityCheckBox = ControlFactory.GetExtendedCheckBoxProvince(typeof(Province).GetProperty(nameof(Province.IsCity))!);
+         _isCityCheckBox = ControlFactory.GetExtendedCheckBoxProvince(typeof(Province).GetProperty(nameof(Province.ScenarioIsCity))!);
          _isCityCheckBox.CheckedChanged += ProvinceEditingEvents.OnExtendedCheckBoxCheckedChanged;
          MisProvinceData.Controls.Add(_isCityCheckBox, 3, 3);
 
-         _isHreCheckBox = ControlFactory.GetExtendedCheckBoxProvince(typeof(Province).GetProperty(nameof(Province.IsHre))!);
+         _isHreCheckBox = ControlFactory.GetExtendedCheckBoxProvince(typeof(Province).GetProperty(nameof(Province.ScenarioIsHre))!);
          _isHreCheckBox.CheckedChanged += ProvinceEditingEvents.OnExtendedCheckBoxCheckedChanged;
          MisProvinceData.Controls.Add(_isHreCheckBox, 3, 4);
 
-         _isParliamentSeatCheckbox = ControlFactory.GetExtendedCheckBoxProvince(typeof(Province).GetProperty(nameof(Province.IsSeatInParliament))!);
+         _isParliamentSeatCheckbox = ControlFactory.GetExtendedCheckBoxProvince(typeof(Province).GetProperty(nameof(Province.ScenarioIsSeatInParliament))!);
          _isParliamentSeatCheckbox.CheckedChanged += ProvinceEditingEvents.OnExtendedCheckBoxCheckedChanged;
          MisProvinceData.Controls.Add(_isParliamentSeatCheckbox, 3, 5);
 
-         _hasRevoltCheckBox = ControlFactory.GetExtendedCheckBoxProvince(typeof(Province).GetProperty(nameof(Province.HasRevolt))!);
+         _hasRevoltCheckBox = ControlFactory.GetExtendedCheckBoxProvince(typeof(Province).GetProperty(nameof(Province.ScenarioHasRevolt))!);
          _hasRevoltCheckBox.CheckedChanged += ProvinceEditingEvents.OnExtendedCheckBoxCheckedChanged;
          MisProvinceData.Controls.Add(_hasRevoltCheckBox, 3, 6);
 
@@ -589,18 +589,18 @@ namespace Editor.Forms
          };
 
          // NATIVES TAB
-         _tribalOwner = ControlFactory.GetTagComboBox(typeof(Province).GetProperty(nameof(Province.TribalOwner))!, Globals.Countries);
+         _tribalOwner = ControlFactory.GetTagComboBox(typeof(Province).GetProperty(nameof(Province.ScenarioTribalOwner))!, Globals.Countries);
          NativesLayoutPanel.Controls.Add(_tribalOwner, 1, 0);
 
-         _nativesSizeTextBox = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.NativeSize)), 0, 100);
+         _nativesSizeTextBox = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.ScenarioNativeSize)), 0, 100);
          _nativesSizeTextBox.Maximum = 10000;
          NativesLayoutPanel.Controls.Add(_nativesSizeTextBox, 1, 1);
 
-         _nativeFerocityTextBox = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.NativeFerocity)), 0f, 100);
+         _nativeFerocityTextBox = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.ScenarioNativeFerocity)), 0f, 100);
          _nativeFerocityTextBox.Maximum = 10000;
          NativesLayoutPanel.Controls.Add(_nativeFerocityTextBox, 1, 3);
 
-         _nativeHostilityTextBox = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.NativeHostileness)), 0, 100);
+         _nativeHostilityTextBox = ControlFactory.GetPropertyNumeric(typeof(Province).GetProperty(nameof(Province.ScenarioNativeHostileness)), 0, 100);
          _nativeHostilityTextBox.Maximum = 10000;
          NativesLayoutPanel.Controls.Add(_nativeHostilityTextBox, 1, 2);
 
@@ -1373,7 +1373,7 @@ namespace Editor.Forms
          for (var i = 0; i < _prvHistSeparators.Length; i++)
             _prvHistSeparators[i] = ControlFactory.GetDefaultSeparator();
 
-         var blockOffset = 0;
+         var blockOffset = 1;
          _prvHistTaxNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.BaseTax));
          _prvHistPrdNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.BaseProduction));
          _prvHistMnpNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.BaseManpower));
@@ -1438,8 +1438,8 @@ namespace Editor.Forms
 
          _prvHistReligionComboBox = ControlFactory.GetPrvHistDropDownUi(nameof(Province.Religion));
          _prvHistCultureComboBox = ControlFactory.GetPrvHistDropDownUi(nameof(Province.Culture));
-         _prvHistTradeGoodsComboBox = ControlFactory.GetPrvHistDropDownUi(nameof(Province.TradeGood));
-         _prvHistTradeCenterComboBox = ControlFactory.GetPrvHistDropDownUi(nameof(Province.CenterOfTrade));
+         _prvHistTradeGoodsComboBox = ControlFactory.GetPrvHistDropDownUi(nameof(Province.TradeGood), true);
+         _prvHistTradeCenterComboBox = ControlFactory.GetPrvHistDropDownUi(nameof(Province.CenterOfTrade), true);
 
          ProvHistoryLayout.Controls.Add(_prvHistReligionComboBox, 0, blockOffset + 0);
          ProvHistoryLayout.Controls.Add(_prvHistCultureComboBox, 0, blockOffset + 1);
@@ -1682,9 +1682,6 @@ namespace Editor.Forms
 
       private void testTriggerToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         foreach (var province in Globals.Provinces)
-            if (province.BaseManpower < 1)
-               Debug.WriteLine(province.Id);
       }
 
       private void effectsToolStripMenuItem_Click(object sender, EventArgs e)
