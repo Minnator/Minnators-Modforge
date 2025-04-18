@@ -1330,25 +1330,36 @@ namespace Editor.Forms
       private PrvHistIntUi _prvHistPrdNumeric = null!;
       private PrvHistIntUi _prvHistMnpNumeric = null!;
       private PrvHistIntUi _prvHistExtraCostNumeric = null!;
+      private PrvHistIntUi _prvHistNativesSizeNumeric = null!;
+      private PrvHistIntUi _prvHistNativesHostilityNumeric = null!;
 
       private PrvHistFloatUi _prvHistAutonomyNumeric = null!;
       private PrvHistFloatUi _prvHistDevastationNumeric = null!;
       private PrvHistFloatUi _prvHistProsperityNumeric = null!;
+      private PrvHistFloatUi _prvHistNativesFerocityNumeric = null!;
       
       private PrvHistSetAddUi _prvHistIsCityCheckBox = null!;
       private PrvHistSetAddUi _prvHistIsHreCheckBox = null!;
       private PrvHistSetAddUi _prvHistIsParliamentSeatCheckbox = null!;
       private PrvHistSetAddUi _prvHistIasRevoltCheckBox = null!;
 
-      private PrvHistTagBox _prvHistOwnerTagBox = null!;
-      private PrvHistTagBox _prvHistControllerTagBox = null!;
+      private PrvHistDropDownUi _prvHistOwnerTagBox = null!;
+      private PrvHistDropDownUi _prvHistControllerTagBox = null!;
+      private PrvHistDropDownUi _prvHistTribalOwnerComboBox = null!;
 
-      private PrvHistComboBox _prvHistReligionComboBox = null!;
-      private PrvHistComboBox _prvHistCultureComboBox = null!;
-      private PrvHistComboBox _prvHistTradeGoodsComboBox = null!;
-      private PrvHistComboBox _prvHistTradeCenterComboBox = null!;
+      private PrvHistDropDownUi _prvHistReligionComboBox = null!;
+      private PrvHistDropDownUi _prvHistCultureComboBox = null!;
+      private PrvHistDropDownUi _prvHistTradeGoodsComboBox = null!;
+      private PrvHistDropDownUi _prvHistTradeCenterComboBox = null!;
 
+      private PrvHistCollectionUi _prvHistClaimSelector = null!;
+      private PrvHistCollectionUi _prvHistPermaClaimSelector = null!;
       private PrvHistCollectionUi _prvHistCores = null!;
+      private PrvHistCollectionUi _prvHistBuildings = null!;
+      private PrvHistCollectionUi _prvHistDiscoveredBy = null!;
+
+      private PrvHistTextBoxUi _prvHistLocTextBox = null!;
+      private PrvHistTextBoxUi _prvHistCapitalTextBox = null!;
 
       private PrvHistSeparator[] _prvHistSeparators = null!;
 
@@ -1358,7 +1369,7 @@ namespace Editor.Forms
       {
          ProvHistoryLayout.Paint += TableLayoutBorder_Paint;
 
-         _prvHistSeparators = new PrvHistSeparator[6];
+         _prvHistSeparators = new PrvHistSeparator[7];
          for (var i = 0; i < _prvHistSeparators.Length; i++)
             _prvHistSeparators[i] = ControlFactory.GetDefaultSeparator();
 
@@ -1388,10 +1399,20 @@ namespace Editor.Forms
          blockOffset += 4;
 
          _prvHistCores = ControlFactory.GetPrvHistCollectionUi(nameof(Province.Cores));
+         _prvHistClaimSelector = ControlFactory.GetPrvHistCollectionUi(nameof(Province.Claims));
+         _prvHistPermaClaimSelector = ControlFactory.GetPrvHistCollectionUi(nameof(Province.PermanentClaims));
+         _prvHistBuildings = ControlFactory.GetPrvHistCollectionUi(nameof(Province.Buildings));
+         _prvHistDiscoveredBy = ControlFactory.GetPrvHistCollectionUi(nameof(Province.DiscoveredBy));
+
 
          ProvHistoryLayout.Controls.Add(_prvHistCores, 0, blockOffset + 0);
-         ProvHistoryLayout.Controls.Add(_prvHistSeparators[5], 0, blockOffset + 1);
-         blockOffset += 2;
+         ProvHistoryLayout.Controls.Add(_prvHistClaimSelector, 0, blockOffset + 1);
+         ProvHistoryLayout.Controls.Add(_prvHistPermaClaimSelector, 0, blockOffset + 2);
+         ProvHistoryLayout.Controls.Add(_prvHistBuildings, 0, blockOffset + 3);
+         ProvHistoryLayout.Controls.Add(_prvHistDiscoveredBy, 0, blockOffset + 4);
+
+         ProvHistoryLayout.Controls.Add(_prvHistSeparators[5], 0, blockOffset + 5);
+         blockOffset += 6;
 
          _prvHistIsCityCheckBox = ControlFactory.GetPrvHistBoolUi(nameof(Province.IsCity), false);
          _prvHistIsHreCheckBox = ControlFactory.GetPrvHistBoolUi(nameof(Province.IsHre), false);
@@ -1406,8 +1427,8 @@ namespace Editor.Forms
          ProvHistoryLayout.Controls.Add(_prvHistSeparators[2], 0, blockOffset + 4);
          blockOffset += 5;
 
-         _prvHistOwnerTagBox = ControlFactory.GetPrvHistTagBox(nameof(Province.Owner));
-         _prvHistControllerTagBox = ControlFactory.GetPrvHistTagBox(nameof(Province.Controller));
+         _prvHistOwnerTagBox = ControlFactory.GetPrvHistDropDownUi(nameof(Province.Owner));
+         _prvHistControllerTagBox = ControlFactory.GetPrvHistDropDownUi(nameof(Province.Controller));
 
          ProvHistoryLayout.Controls.Add(_prvHistOwnerTagBox, 0, blockOffset + 0);
          ProvHistoryLayout.Controls.Add(_prvHistControllerTagBox, 0, blockOffset + 1);
@@ -1415,10 +1436,10 @@ namespace Editor.Forms
          ProvHistoryLayout.Controls.Add(_prvHistSeparators[3], 0, blockOffset + 2);
          blockOffset += 3;
 
-         _prvHistReligionComboBox = ControlFactory.GetPrvHistComboBox(nameof(Province.Religion));
-         _prvHistCultureComboBox = ControlFactory.GetPrvHistComboBox(nameof(Province.Culture));
-         _prvHistTradeGoodsComboBox = ControlFactory.GetPrvHistComboBox(nameof(Province.TradeGood));
-         _prvHistTradeCenterComboBox = ControlFactory.GetPrvHistComboBox(nameof(Province.CenterOfTrade));
+         _prvHistReligionComboBox = ControlFactory.GetPrvHistDropDownUi(nameof(Province.Religion));
+         _prvHistCultureComboBox = ControlFactory.GetPrvHistDropDownUi(nameof(Province.Culture));
+         _prvHistTradeGoodsComboBox = ControlFactory.GetPrvHistDropDownUi(nameof(Province.TradeGood));
+         _prvHistTradeCenterComboBox = ControlFactory.GetPrvHistDropDownUi(nameof(Province.CenterOfTrade));
 
          ProvHistoryLayout.Controls.Add(_prvHistReligionComboBox, 0, blockOffset + 0);
          ProvHistoryLayout.Controls.Add(_prvHistCultureComboBox, 0, blockOffset + 1);
@@ -1428,6 +1449,24 @@ namespace Editor.Forms
          ProvHistoryLayout.Controls.Add(_prvHistSeparators[4], 0, blockOffset + 4);
          blockOffset += 5;
 
+         _prvHistLocTextBox = ControlFactory.GetPrvHistTextBoxUi(nameof(Province.TitleLocalisation));
+         _prvHistCapitalTextBox = ControlFactory.GetPrvHistTextBoxUi(nameof(Province.Capital));
+
+         ProvHistoryLayout.Controls.Add(_prvHistLocTextBox, 0, blockOffset + 0);
+         ProvHistoryLayout.Controls.Add(_prvHistCapitalTextBox, 0, blockOffset + 1);
+
+         ProvHistoryLayout.Controls.Add(_prvHistSeparators[6], 0, blockOffset + 2);
+         blockOffset += 3;
+
+         _prvHistTribalOwnerComboBox = ControlFactory.GetPrvHistDropDownUi(nameof(Province.TribalOwner));
+         _prvHistNativesSizeNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.NativeSize));
+         _prvHistNativesHostilityNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.NativeHostileness));
+         _prvHistNativesFerocityNumeric = ControlFactory.GetPrvHistFloatUi(nameof(Province.NativeFerocity));
+
+         ProvHistoryLayout.Controls.Add(_prvHistTribalOwnerComboBox, 0, blockOffset + 0);
+         ProvHistoryLayout.Controls.Add(_prvHistNativesSizeNumeric, 0, blockOffset + 1);
+         ProvHistoryLayout.Controls.Add(_prvHistNativesHostilityNumeric, 0, blockOffset + 2);
+         ProvHistoryLayout.Controls.Add(_prvHistNativesFerocityNumeric, 0, blockOffset + 3);
       }
 
       #endregion

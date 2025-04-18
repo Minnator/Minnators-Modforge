@@ -42,8 +42,6 @@ namespace Editor.Controls.PRV_HIST
             Dock = DockStyle.Fill,
             TextAlign = ContentAlignment.MiddleLeft,
             Font = new("Arial", 8, FontStyle.Regular),
-            Padding = new(0, 3, 0, 3),
-            Margin = new(0, 3, 0, 3),
          };
 
          Tlp.Controls.Add(EditButton, 0, 0);
@@ -107,6 +105,35 @@ namespace Editor.Controls.PRV_HIST
          FloatNumeric.Minimum = (decimal)min;
          FloatNumeric.Maximum = (decimal)max;
          FloatNumeric.Value = (decimal)value;
+      }
+   }
+
+   public class PrvHistTextBoxUi : PrvHistSetAddUi
+   {
+      public TextBox TextBox { get; }
+
+      public PrvHistTextBoxUi(string text)
+         : base(text, new TextBox
+         {
+            Dock = DockStyle.Fill,
+         }, false)
+      {
+         TextBox = (TextBox)Controls[2]; // keep a reference directly
+      }
+   }
+
+   public class PrvHistDropDownUi : PrvHistSetAddUi
+   {
+      public ComboBox DropDown { get; }
+
+      public PrvHistDropDownUi(string text, bool isDropDownList = false)
+         : base(text, new ComboBox
+         {
+            Dock = DockStyle.Fill,
+         }, false)
+      {
+         DropDown = (ComboBox)Controls[2]; // keep a reference directly
+         DropDown.DropDownStyle = isDropDownList ? ComboBoxStyle.DropDownList : ComboBoxStyle.DropDown;
       }
    }
 

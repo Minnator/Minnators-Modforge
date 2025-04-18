@@ -43,24 +43,6 @@ public static class ControlFactory
       Globals.MapWindow.GeneralToolTip.SetToolTip(control, text);
    }
 
-   public static PrvHistNumeric GetPrvHistNumeric(string label)
-   {
-      return new(label)
-      {
-         Dock = DockStyle.Fill,
-         Margin = new(0)
-      };
-   }
-
-   public static PrvHistComboBox GetPrvHistComboBox(string label)
-   {
-      return new(label)
-      {
-         Dock = DockStyle.Fill,
-         Margin = new(0)
-      };
-   }
-
    public static PrvHistIntUi GetPrvHistIntUi(string label, int value = 0, int min = 0, int max = 100)
    {
       var ui = new PrvHistIntUi(label, value, min, max)
@@ -69,6 +51,16 @@ public static class ControlFactory
          Margin = new(0)
       };
       SetSetAddGeneralToolTip(ui.SetCheckBox);
+      return ui;
+   }
+
+   public static PrvHistTextBoxUi GetPrvHistTextBoxUi(string label)
+   {
+      var ui = new PrvHistTextBoxUi(label)
+      {
+         Dock = DockStyle.Fill,
+         Margin = new(0)
+      };
       return ui;
    }
 
@@ -116,23 +108,15 @@ public static class ControlFactory
       };
       return ui;
    }
-   
-   public static PrvHistCheckBox GetPrvHistCheckBox(string label)
-   {
-      return new(label)
-      {
-         Dock = DockStyle.Fill,
-         Margin = new(0)
-      };
-   }
 
-   public static PrvHistTagBox GetPrvHistTagBox(string label)
+   public static PrvHistDropDownUi GetPrvHistDropDownUi(string label, bool isDropDownList = false)
    {
-      return new(label)
+      var ui = new PrvHistDropDownUi(label, isDropDownList)
       {
          Dock = DockStyle.Fill,
          Margin = new(0)
       };
+      return ui;
    }
 
    public static PrvHistSeparator GetDefaultSeparator() => GetPrvHistSeparator(Color.Black, 2);
