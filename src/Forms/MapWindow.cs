@@ -203,7 +203,8 @@ namespace Editor.Forms
          SelectionTypeBox.Items.AddRange([.. Enum.GetNames<SelectionType>()]);
          SelectionTypeBox.SelectedIndex = 0;
 
-         BookMarkComboBox.Items.AddRange([.. Globals.Bookmarks]);
+         BookMarkComboBox.Items.AddRange(["Scenario", ..Globals.Bookmarks]);
+         BookMarkComboBox.SelectedIndex = 0;
          BookMarkComboBox.SelectedIndexChanged += OnBookMarkChanged;
 
          // TODO why does this only work when doing it like this? Why do the map mode buttons not render unless this is done once
@@ -212,14 +213,20 @@ namespace Editor.Forms
          ShowHistoryEntries = false;
          RenderHistoryIfNeeded();
 
-         // Initalize Settings Events and Listeners
+         // Initialize Settings Events and Listeners
          SettingsHelper.InitializeEvent();
       }
 
       private void OnBookMarkChanged(object? sender, EventArgs e)
       {
-         if (BookMarkComboBox.SelectedIndex == -1)
+         Debug.Assert(BookMarkComboBox.SelectedIndex != -1, "BookMarkComboBox.SelectedIndex == -1 must never be reached!");
+         if (BookMarkComboBox.SelectedIndex == 0)
+         {
+            DateControl.Date = Globals.StartDate;
+            ProvinceHistoryManager.ResetProvinceHistory();
+            MapModeManager.RenderCurrent();
             return;
+         }
 
          var bookmark = Globals.Bookmarks[BookMarkComboBox.SelectedIndex];
          DateControl.Date = bookmark.Date;

@@ -64,7 +64,7 @@ namespace Editor.Saving
          sb.AppendLine();
          AddItem("culture", p.GetPropertyValue(nameof(Province.ScenarioCulture)), ref sb);
          AddItem("religion", p.GetPropertyValue(nameof(Province.ScenarioReligion)), ref sb);
-         SavingUtil.AddQuotedString(0, p.GetPropertyValue(nameof(Province.ScenarioCapital)).ToString(), "capital", ref sb);
+         SavingUtil.AddQuotedString(0, p.GetPropertyValue(nameof(Province.ScenarioCapital)).ToString()!, "capital", ref sb);
          sb.AppendLine();
          AddItem("hre", p.GetPropertyValue(nameof(Province.ScenarioIsHre)), ref sb);
          AddItem("is_city", p.GetPropertyValue(nameof(Province.ScenarioIsCity)), ref sb);
