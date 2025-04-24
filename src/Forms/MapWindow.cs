@@ -203,7 +203,7 @@ namespace Editor.Forms
          SelectionTypeBox.Items.AddRange([.. Enum.GetNames<SelectionType>()]);
          SelectionTypeBox.SelectedIndex = 0;
 
-         BookMarkComboBox.Items.AddRange(["Scenario", ..Globals.Bookmarks]);
+         BookMarkComboBox.Items.AddRange(["Scenario", .. Globals.Bookmarks]);
          BookMarkComboBox.SelectedIndex = 0;
          BookMarkComboBox.SelectedIndexChanged += OnBookMarkChanged;
 
@@ -1184,6 +1184,17 @@ namespace Editor.Forms
          MonarchNamesTLP.Controls.Add(_monarchNames, 0, 1);
       }
 
+
+      private void MonarchNamesImportButton_Click(object sender, EventArgs e)
+      {
+         var numToImport = UserNumberInputForm.ShowGet("Culture to monarch importer", "Num of names", "The number of monarchs which will be created from names in the countries culture", Selection.SelectedCountry.HistoryCountry.PrimaryCulture.TotalNameCount, 0, -1);
+
+         if (numToImport == -1)
+            return;
+
+         MonarchName.GenerateFromCulture(Selection.SelectedCountry, numToImport);
+      }
+
       private void ClearDecorationDataCountry()
       {
          CountryFlagLabel.SetCountry(Country.Empty);
@@ -1344,7 +1355,7 @@ namespace Editor.Forms
       private PrvHistFloatUi _prvHistDevastationNumeric = null!;
       private PrvHistFloatUi _prvHistProsperityNumeric = null!;
       private PrvHistFloatUi _prvHistNativesFerocityNumeric = null!;
-      
+
       private PrvHistSetAddUi _prvHistIsCityCheckBox = null!;
       private PrvHistSetAddUi _prvHistIsHreCheckBox = null!;
       private PrvHistSetAddUi _prvHistIsParliamentSeatCheckbox = null!;
@@ -1425,7 +1436,7 @@ namespace Editor.Forms
          _prvHistIsHreCheckBox = ControlFactory.GetPrvHistBoolUi(nameof(Province.IsHre), false);
          _prvHistIsParliamentSeatCheckbox = ControlFactory.GetPrvHistBoolUi(nameof(Province.IsSeatInParliament), false);
          _prvHistIasRevoltCheckBox = ControlFactory.GetPrvHistBoolUi(nameof(Province.HasRevolt), false);
-         
+
          ProvHistoryLayout.Controls.Add(_prvHistIsCityCheckBox, 0, blockOffset + 0);
          ProvHistoryLayout.Controls.Add(_prvHistIsHreCheckBox, 0, blockOffset + 1);
          ProvHistoryLayout.Controls.Add(_prvHistIsParliamentSeatCheckbox, 0, blockOffset + 2);
@@ -1777,5 +1788,6 @@ namespace Editor.Forms
       {
          ProcessHelper.OpenLink("https://eu4.paradoxwikis.com/Modifier_list");
       }
+
    }
 }

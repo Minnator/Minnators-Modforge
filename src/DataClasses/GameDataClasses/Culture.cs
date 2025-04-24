@@ -21,6 +21,18 @@ public class Culture(string name) : IStringify
    public int DynastyNamesCount => DynastyNames.Length;
    public int TotalNameCount => MaleNamesCount + FemaleNamesCount + DynastyNamesCount;
    public static Culture Empty { get; } = new ("unknown") { Color = Color.DimGray };
+
+   public string[] Names
+   {
+      get
+      {
+         var allNames = new string[MaleNamesCount + FemaleNamesCount + DynastyNamesCount];
+         Array.Copy(MaleNames, allNames, MaleNamesCount);
+         Array.Copy(FemaleNames, 0, allNames, MaleNamesCount, FemaleNamesCount);
+         Array.Copy(DynastyNames, 0, allNames, MaleNamesCount + FemaleNamesCount, DynastyNamesCount);
+         return allNames;
+      }
+   }
    public List<Province> GetProvinces()
    {
       List<Province> provinces = [];

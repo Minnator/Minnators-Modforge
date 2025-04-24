@@ -24,14 +24,17 @@
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="src\Formatters\**" />
     <Compile Remove="src\Forms\Feature\AdvancedSelections\.vshistory\**" />
     <Compile Remove="src\Forms\Feature\Crash Reporter\.vshistory\**" />
     <Compile Remove="src\Forms\Feature\SavingClasses\.vshistory\**" />
     <Compile Remove="src\Forms\Feature\ToolTipCustomizer\.vshistory\**" />
+    <EmbeddedResource Remove="src\Formatters\**" />
     <EmbeddedResource Remove="src\Forms\Feature\AdvancedSelections\.vshistory\**" />
     <EmbeddedResource Remove="src\Forms\Feature\Crash Reporter\.vshistory\**" />
     <EmbeddedResource Remove="src\Forms\Feature\SavingClasses\.vshistory\**" />
     <EmbeddedResource Remove="src\Forms\Feature\ToolTipCustomizer\.vshistory\**" />
+    <None Remove="src\Formatters\**" />
     <None Remove="src\Forms\Feature\AdvancedSelections\.vshistory\**" />
     <None Remove="src\Forms\Feature\Crash Reporter\.vshistory\**" />
     <None Remove="src\Forms\Feature\SavingClasses\.vshistory\**" />
@@ -81,7 +84,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\Controls\Initialisation\" />
-    <Folder Include="src\Formatters\" />
     <Folder Include="src\Loading\TreeClasses\" />
     <Folder Include="src\ParadoxLanguage\ANTLR\" />
   </ItemGroup>

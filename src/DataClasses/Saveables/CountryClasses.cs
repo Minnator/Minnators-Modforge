@@ -1,9 +1,14 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Text;
+using System.Xml.Linq;
+using Editor.Controls.PROPERTY;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Parser;
+using Editor.Saving;
+using Newtonsoft.Json.Linq;
 using static Editor.Saving.SavingUtil;
 
 namespace Editor.DataClasses.Saveables
@@ -101,10 +106,42 @@ namespace Editor.DataClasses.Saveables
          InternalAdd(newName, ref countryMonarchNames);
          Selection.SelectedCountry.CommonCountry.MonarchNames = countryMonarchNames;
       }
+
+      public static MonarchName[] GenerateFromCulture(Country country, int amount, bool addToCountry = true)
+      {
+         var monarchs = new MonarchName[amount];
+
+         if (country == Country.Empty)
+            return monarchs;
+
+         if (country.HistoryCountry.PrimaryCulture == Culture.Empty)
+         {
+            MessageBox.Show("No primary culture set for this country. Cannot generate monarch names.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return monarchs;
+         }
+
+         if (country.HistoryCountry.PrimaryCulture.TotalNameCount == 0)
+         {
+            MessageBox.Show("No names set for this culture. Cannot generate monarch names.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return monarchs;
+         }
+
+         var mNames = RandomUtil.GetRandomItems(amount, country.HistoryCountry.PrimaryCulture.Names);
+         for (var i = 0; i < mNames.Length; i++)
+         {
+            var chance = RandomUtil.GaussianInt(20, -15, 100);
+            var ordinal = RandomUtil.GaussianInt(3, 0, 25);
+
+            monarchs[i] = new MonarchName(mNames[i], ordinal, chance);
+         }
+
+         if (addToCountry)
+         {
+            Saveable.SetFieldEditCollection<CommonCountry, List<MonarchName>, MonarchName >(country.CommonCountry, monarchs, [], typeof(CommonCountry).GetProperty(nameof(CommonCountry.MonarchNames))!);
+         }
+         return monarchs;
+      }
    }
-
-   
-
    public enum PersonType
    {
       Monarch,

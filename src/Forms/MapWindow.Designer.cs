@@ -209,6 +209,7 @@
          ChanceTextBox = new TextBox();
          AddNewMonarchNameButton = new Button();
          ShowMonachrNamesCB = new CheckBox();
+         MonarchNamesImportButton = new Button();
          ShipNamesTab = new TabPage();
          ArmyNamesTab = new TabPage();
          FleetNamesTab = new TabPage();
@@ -2046,6 +2047,7 @@
          tableLayoutPanel6.Controls.Add(ChanceTextBox, 1, 1);
          tableLayoutPanel6.Controls.Add(AddNewMonarchNameButton, 2, 1);
          tableLayoutPanel6.Controls.Add(ShowMonachrNamesCB, 3, 1);
+         tableLayoutPanel6.Controls.Add(MonarchNamesImportButton, 3, 0);
          tableLayoutPanel6.Dock = DockStyle.Fill;
          tableLayoutPanel6.Location = new Point(0, 0);
          tableLayoutPanel6.Margin = new Padding(0);
@@ -2123,6 +2125,20 @@
          GeneralToolTip.SetToolTip(ShowMonachrNamesCB, "ShowMonarchNames");
          ShowMonachrNamesCB.UseVisualStyleBackColor = true;
          ShowMonachrNamesCB.CheckedChanged += ShowMonarchNamesCB_CheckedChanged;
+         // 
+         // MonarchNamesImportButton
+         // 
+         MonarchNamesImportButton.Dock = DockStyle.Fill;
+         MonarchNamesImportButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+         MonarchNamesImportButton.Image = Properties.Resources.DotsCentered;
+         MonarchNamesImportButton.Location = new Point(331, 0);
+         MonarchNamesImportButton.Margin = new Padding(0);
+         MonarchNamesImportButton.Name = "MonarchNamesImportButton";
+         MonarchNamesImportButton.Size = new Size(25, 15);
+         MonarchNamesImportButton.TabIndex = 9;
+         MonarchNamesImportButton.Text = "...";
+         MonarchNamesImportButton.UseVisualStyleBackColor = true;
+         MonarchNamesImportButton.Click += MonarchNamesImportButton_Click;
          // 
          // ShipNamesTab
          // 
@@ -3399,6 +3415,7 @@
       private ToolStripSeparator toolStripSeparator13;
       private Label label28;
       private Label label41;
+      private Button MonarchNamesImportButton;
    }
 }
 
