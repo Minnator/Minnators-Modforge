@@ -21,6 +21,7 @@ using Editor.Parser;
 using Editor.Saving;
 using Editor.src.Forms.Console;
 using Editor.src.Forms.Feature;
+using Editor.src.Forms.GetUserInput;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 using Region = Editor.DataClasses.Saveables.Region;
 
@@ -1187,12 +1188,16 @@ namespace Editor.Forms
 
       private void MonarchNamesImportButton_Click(object sender, EventArgs e)
       {
-         var numToImport = UserNumberInputForm.ShowGet("Culture to monarch importer", "Num of names", "The number of monarchs which will be created from names in the countries culture", Selection.SelectedCountry.HistoryCountry.PrimaryCulture.TotalNameCount, 0, -1);
+         var objs = new NIntInputForm.NIntInputObj[2];
+         objs[0] = new("Num to monarch names import", 1, -1, Selection.SelectedCountry.HistoryCountry.PrimaryCulture.TotalNameCount / 4f, false);
+         objs[1] = new("Female fraction", 0, 1, 0.1f, true);
 
-         if (numToImport == -1)
+         var numToImport = NIntInputForm.ShowGet(objs, "Monarch names from culture");
+
+         if (Math.Abs(numToImport[0] - (-1f)) < 0.04)
             return;
 
-         MonarchName.GenerateFromCulture(Selection.SelectedCountry, numToImport);
+         MonarchName.GenerateFromCulture(Selection.SelectedCountry, (int)Math.Round(numToImport[0]), numToImport[1]);
       }
 
       private void ClearDecorationDataCountry()

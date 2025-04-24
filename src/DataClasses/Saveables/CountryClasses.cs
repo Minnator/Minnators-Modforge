@@ -107,7 +107,7 @@ namespace Editor.DataClasses.Saveables
          Selection.SelectedCountry.CommonCountry.MonarchNames = countryMonarchNames;
       }
 
-      public static MonarchName[] GenerateFromCulture(Country country, int amount, bool addToCountry = true)
+      public static MonarchName[] GenerateFromCulture(Country country, int amount, float femalePercentage, bool addToCountry = true)
       {
          var monarchs = new MonarchName[amount];
 
@@ -126,13 +126,22 @@ namespace Editor.DataClasses.Saveables
             return monarchs;
          }
 
-         var mNames = RandomUtil.GetRandomItems(amount, country.HistoryCountry.PrimaryCulture.Names);
+         var numOfMales = (int)(amount * (1 - femalePercentage));
+         var numOfFemales = amount - numOfMales;
+
+         var mNames = new string[amount];
+         RandomUtil.FillWithRandomItems(numOfMales, 0, country.HistoryCountry.PrimaryCulture.MaleNames, mNames, false);
+         RandomUtil.FillWithRandomItems(numOfFemales, numOfMales - 1, country.HistoryCountry.PrimaryCulture.FemaleNames, mNames, true);
          for (var i = 0; i < mNames.Length; i++)
          {
-            var chance = RandomUtil.GaussianInt(20, -15, 100);
+            int chance;
+            if (i < numOfMales)
+               chance = RandomUtil.GaussianInt(20, 0, 100);
+            else
+               chance = RandomUtil.GaussianInt(-10, -40, 0);
             var ordinal = RandomUtil.GaussianInt(3, 0, 25);
 
-            monarchs[i] = new MonarchName(mNames[i], ordinal, chance);
+            monarchs[i] = new (mNames[i], ordinal, chance);
          }
 
          if (addToCountry)

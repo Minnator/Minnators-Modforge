@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using Antlr4.Runtime.Tree;
 
 namespace Editor.Helper;
 
@@ -127,6 +128,36 @@ public static class RandomUtil
          resultList.Add(collection[index]);
       }
       return resultList.ToArray();
+   }
+
+   public static void FillWithRandomItems<T>(int count, int start, IList<T> source, T[] target, bool unique)
+   {
+      if (source.Count == 0)
+         return;
+
+      Debug.Assert(count > 0, "count > 0");
+      if (count <= 0)
+         throw new ArgumentOutOfRangeException(nameof(count), "Count must be greater than 0");
+      Debug.Assert(start >= 0 && start + count != target.Length, "start >= 0 && start < length");
+
+      if (unique)
+      {
+         Debug.Assert(source.Count >= count, "source.Count >= count otherwise unique can not be applied!");
+         var collCopy = new List<T>(source);
+         for (var i = start; i < count; i++)
+         {
+            var index = Globals.Random.Next(0, collCopy.Count);
+            target[i] = collCopy[index];
+            collCopy.RemoveAt(index);
+         }
+         return;
+      }
+
+      for (var i = start; i < count; i++)
+      {
+         var index = Globals.Random.Next(0, source.Count);
+         target[i] = source[index];
+      }
    }
 
    public static T[] GetRandomItems<T>(int count, IList<T> collection, ICollection<T> exclude, bool unique = false)
