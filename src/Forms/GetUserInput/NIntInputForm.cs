@@ -68,7 +68,7 @@ namespace Editor.src.Forms.GetUserInput
                Dock = DockStyle.Fill,
                Minimum = (decimal)obj.Min,
                Maximum = (decimal)obj.Max == -1 ? MaxValue : (decimal)obj.Max,
-               Value = (decimal)obj.Default,
+               Value = (decimal)Math.Max(obj.Default, obj.Min),
                DecimalPlaces = obj.IsFloat ? 2 : 0,
             };
 

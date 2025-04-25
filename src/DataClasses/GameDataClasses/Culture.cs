@@ -33,6 +33,29 @@ public class Culture(string name) : IStringify
          return allNames;
       }
    }
+
+   public string[] SampleXNames(int amount, float femalePercentage)
+   {
+      var numOfMales = (int)(amount * (1 - femalePercentage));
+      var numOfFemales = amount - 1 - numOfMales;
+
+      var names = new string[amount];
+
+      var imn = Math.Min(MaleNamesCount, numOfMales);
+      if (imn > 0)
+         RandomUtil.FillWithRandomItems(imn, 0, MaleNames, names, false);
+      var ifn = Math.Min(FemaleNamesCount, numOfFemales);
+      if (ifn > 0)
+         RandomUtil.FillWithRandomItems(ifn, imn, FemaleNames, names, false);
+      var end = imn + ifn;
+      if (end != amount)
+      {
+         MessageBox.Show($"Not enough names to generate monarchs in culture {Name}\nOnly generated {end} Names.", "Generation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+         return names[..end];
+      }
+      return names;
+   }
+
    public List<Province> GetProvinces()
    {
       List<Province> provinces = [];

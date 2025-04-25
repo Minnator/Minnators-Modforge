@@ -1,9 +1,13 @@
 ﻿using System.Reflection;
+using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.Saveables;
 using Editor.DataClasses.Settings;
 using Editor.ErrorHandling;
 using Editor.Events;
 using Editor.Helper;
+using Editor.Properties;
 using Editor.Saving;
+using Editor.src.Forms.GetUserInput;
 using Timer = System.Windows.Forms.Timer;
 
 namespace Editor.Controls.PROPERTY
@@ -18,6 +22,7 @@ namespace Editor.Controls.PROPERTY
       // Controls
       private TextBox _textBox;
       private Label _label;
+      private Button _buttonImport;
 
       public PropertyNamesEditor(PropertyInfo? propertyInfo, ref LoadGuiEvents.LoadAction<TSaveable> loadHandle, Func<List<TSaveable>> getSaveables, string desc)
       {
@@ -30,7 +35,9 @@ namespace Editor.Controls.PROPERTY
          _timer.Tick += (_, _) => SetFromGui();
 
          Dock = DockStyle.Fill;
-         ColumnCount = 1;
+         ColumnCount = 2;
+         ColumnStyles.Add(new(SizeType.Percent, 100));
+         ColumnStyles.Add(new(SizeType.Absolute, 27));
          RowStyles.Add(new(SizeType.Absolute, 40));
          RowStyles.Add(new(SizeType.Percent, 100));
          Margin = new(0);
@@ -53,17 +60,50 @@ namespace Editor.Controls.PROPERTY
             ScrollBars = ScrollBars.Vertical
          };
 
+         _buttonImport = new()
+         {
+            Height = 20,
+            Width = 20,
+            Anchor = AnchorStyles.None,
+            Dock = DockStyle.None,
+            Margin = new(1),
+            Image = Resources.ImportSmall,
+            ImageAlign = ContentAlignment.MiddleCenter,
+         };
+
          Controls.Add(_label, 0, 0);
          Controls.Add(_textBox, 0, 1);
+         Controls.Add(_buttonImport, 1, 0);
+         SetColumnSpan(_textBox, 2);
 
          _textBox.KeyPress += TextBox_KeyPress;
          _textBox.Leave += (_, _) => SetFromGui();
+         _buttonImport.Click += ButtonImport_Click;
 
          Globals.Settings.Gui.PropertyChanged += (sender, prop) =>
          {
             if (prop.PropertyName?.Equals(nameof(GuiSettings.TextBoxCommandCreationInterval)) ?? false) 
                _timer.Interval = Globals.Settings.Gui.TextBoxCommandCreationInterval;
          };
+      }
+
+      private void ButtonImport_Click(object? sender, EventArgs e)
+      {
+         var nInputObjs = new NIntInputForm.NIntInputObj[2];
+         nInputObjs[0] = new("Number of names to import", 0, -1, 15, false);
+         nInputObjs[1] = new("Female name fraction", 0, 1, 0.1f, true);
+         var result = NIntInputForm.ShowGet(nInputObjs, $"Import {PropertyInfo.Name} from Culture");
+
+         if (Selection.SelectedCountry != Country.Empty && Selection.SelectedCountry.HistoryCountry.PrimaryCulture != Culture.Empty)
+         {
+            var names = Selection.SelectedCountry.HistoryCountry.PrimaryCulture.SampleXNames((int)result[0], result[1]).ToList();
+            if (GetFromGui(out List<string> current).Log())
+            {
+               current.AddRange(names);
+               _textBox.Text = string.Join(", ", current);
+               SetFromGui();
+            }
+         }
       }
       
       private void TextBox_KeyPress(object? sender, KeyPressEventArgs e)
