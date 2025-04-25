@@ -2806,14 +2806,11 @@
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
-         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
-         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 5F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 5F));
-         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
@@ -2832,6 +2829,9 @@
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 5F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
+         ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
          ProvHistoryLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 5F));
