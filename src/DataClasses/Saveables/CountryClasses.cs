@@ -114,13 +114,15 @@ namespace Editor.DataClasses.Saveables
          if (country == Country.Empty)
             return monarchs;
 
-         if (country.HistoryCountry.PrimaryCulture == Culture.Empty)
+         var culture = country.HistoryCountry.PrimaryCulture;
+
+         if (culture == Culture.Empty)
          {
             MessageBox.Show("No primary culture set for this country. Cannot generate monarch names.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return monarchs;
          }
 
-         if (country.HistoryCountry.PrimaryCulture.TotalNameCount == 0)
+         if (culture.TotalNameCount == 0)
          {
             MessageBox.Show("No names set for this culture. Cannot generate monarch names.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return monarchs;
@@ -130,15 +132,32 @@ namespace Editor.DataClasses.Saveables
          var numOfFemales = amount - numOfMales;
 
          var mNames = new string[amount];
-         RandomUtil.FillWithRandomItems(numOfMales, 0, country.HistoryCountry.PrimaryCulture.MaleNames, mNames, false);
-         RandomUtil.FillWithRandomItems(numOfFemales, numOfMales - 1, country.HistoryCountry.PrimaryCulture.FemaleNames, mNames, true);
+         if (culture.MaleNames.Length >= numOfMales)
+            RandomUtil.FillWithRandomItems(numOfMales, 0, culture.MaleNames, mNames, false);
+         else if (culture.FemaleNamesCount >= amount)
+            RandomUtil.FillWithRandomItems(numOfMales, 0, culture.FemaleNames, mNames, false);
+         else
+         {
+            MessageBox.Show($"Not enough names to generate monarchs in culture {culture.Name}");
+            return [];
+         }
+         if (culture.FemaleNamesCount >= numOfFemales)
+            RandomUtil.FillWithRandomItems(numOfFemales, numOfMales - 1, culture.FemaleNames, mNames, false);
+         else if (culture.MaleNamesCount >= amount)
+            RandomUtil.FillWithRandomItems(numOfFemales, numOfMales - 1, culture.MaleNames, mNames, false);
+         else
+         {
+            MessageBox.Show($"Not enough names to generate monarchs in culture {culture.Name}");
+            return [];
+         }
+
          for (var i = 0; i < mNames.Length; i++)
          {
             int chance;
             if (i < numOfMales)
                chance = RandomUtil.GaussianInt(20, 0, 100);
             else
-               chance = RandomUtil.GaussianInt(-10, -40, 0);
+               chance = RandomUtil.GaussianInt(-10, -40, -1);
             var ordinal = RandomUtil.GaussianInt(3, 0, 25);
 
             monarchs[i] = new (mNames[i], ordinal, chance);
@@ -146,7 +165,7 @@ namespace Editor.DataClasses.Saveables
 
          if (addToCountry)
          {
-            Saveable.SetFieldEditCollection<CommonCountry, List<MonarchName>, MonarchName >(country.CommonCountry, monarchs, [], typeof(CommonCountry).GetProperty(nameof(CommonCountry.MonarchNames))!);
+            Saveable.SetFieldEditCollection<CommonCountry, List<MonarchName>, MonarchName>(country.CommonCountry, monarchs, [], typeof(CommonCountry).GetProperty(nameof(CommonCountry.MonarchNames))!);
          }
          return monarchs;
       }

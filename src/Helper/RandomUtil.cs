@@ -153,7 +153,7 @@ public static class RandomUtil
          return;
       }
 
-      for (var i = start; i < count; i++)
+      for (var i = start; i <= count + start; i++)
       {
          var index = Globals.Random.Next(0, source.Count);
          target[i] = source[index];
