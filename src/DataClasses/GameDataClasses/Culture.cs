@@ -36,6 +36,8 @@ public class Culture(string name) : IStringify
 
    public string[] SampleXNames(int amount, float femalePercentage)
    {
+      if (amount <= 0)
+         return Array.Empty<string>();
       var numOfMales = (int)(amount * (1 - femalePercentage));
       var numOfFemales = amount - 1 - numOfMales;
 

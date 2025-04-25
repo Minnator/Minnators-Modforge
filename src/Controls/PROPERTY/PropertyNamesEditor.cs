@@ -94,6 +94,9 @@ namespace Editor.Controls.PROPERTY
          nInputObjs[1] = new("Female name fraction", 0, 1, 0.1f, true);
          var result = NIntInputForm.ShowGet(nInputObjs, $"Import {PropertyInfo.Name} from Culture");
 
+         if (result[0] < 0 || result[1] < 0)
+            return;
+
          if (Selection.SelectedCountry != Country.Empty && Selection.SelectedCountry.HistoryCountry.PrimaryCulture != Culture.Empty)
          {
             var names = Selection.SelectedCountry.HistoryCountry.PrimaryCulture.SampleXNames((int)result[0], result[1]).ToList();
