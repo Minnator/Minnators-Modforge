@@ -315,24 +315,29 @@ namespace Editor.DataClasses.Saveables
       # region SimpleSetter
 
       [GameIcon(GameIcons.Claim)]
-      public List<Tag> Claims
+      public List<Tag> Claims { get => _claims; set => _claims = value; }
+      public List<Tag> ScenarioClaims
       {
-         get => _claims;
-         set => SetIfModifiedEnumerable<List<Tag>, Tag>(ref _claims, value);
+         get => _scenarioClaims;
+         set => SetIfModifiedEnumerable<List<Tag>, Tag>(ref _scenarioClaims, ref _claims, value, nameof(Claims));
       }
 
       [GameIcon(GameIcons.Claim)]
-      public List<Tag> PermanentClaims
+      public List<Tag> PermanentClaims { get => _permanentClaims; set => _permanentClaims = value; }
+      public List<Tag> ScenarioPermanentClaims
       {
-         get => _permanentClaims;
-         set => SetIfModifiedEnumerable<List<Tag>, Tag>(ref _permanentClaims, value);
+         get => _scenarioPermanentClaims;
+         set => SetIfModifiedEnumerable<List<Tag>, Tag>(ref _scenarioPermanentClaims, ref _permanentClaims, value, nameof(PermanentClaims));
       }
+
       [GameIcon(GameIcons.Core, false)]
-      public List<Tag> Cores
+      public List<Tag> Cores { get => _cores; set => _cores = value; }
+      public List<Tag> ScenarioCores
       {
-         get => _cores;
-         set => SetIfModifiedEnumerable<List<Tag>, Tag>(ref _cores, value);
+         get => _scenarioCores;
+         set => SetIfModifiedEnumerable<List<Tag>, Tag>(ref _scenarioCores, ref _cores, value, nameof(Cores));
       }
+
       [ToolTippable]
       public Country Controller { get => _controller; set => _controller = value; }
       public Country ScenarioController {
@@ -461,10 +466,11 @@ namespace Editor.DataClasses.Saveables
       }
 
       [GameIcon(GameIcons.DiscoverAchievement)]
-      public List<string> DiscoveredBy
+      public List<string> DiscoveredBy { get => _discoveredBy; set => _discoveredBy = value; }
+      public List<string> ScenarioDiscoveredBy
       {
-         get => _discoveredBy;
-         set => SetIfModifiedEnumerable<List<string>, string>(ref _discoveredBy, value);
+         get => _scenarioDiscoveredBy;
+         set => SetIfModifiedEnumerable<List<string>, string>(ref _scenarioDiscoveredBy, ref _discoveredBy, value);
       }
 
       [ToolTippable]
@@ -492,10 +498,11 @@ namespace Editor.DataClasses.Saveables
       }
 
       [GameIcon(GameIcons.Building, false)]
-      public List<Building> Buildings
+      public List<Building> Buildings { get => _buildings; set => _buildings = value; }
+      public List<Building> ScenarioBuildings
       {
-         get => _buildings;
-         set => SetIfModifiedEnumerable<List<Building>, Building>(ref _buildings, value);
+         get => _scenarioBuildings;
+         set => SetIfModifiedEnumerable<List<Building>, Building>(ref _scenarioBuildings, ref _buildings, value);
       }
 
       [ToolTippable]
@@ -554,40 +561,46 @@ namespace Editor.DataClasses.Saveables
          set => SetField(ref _scenarioReformationCenter, ref _reformationCenter, value);
       }
 
-      public List<string> TradeCompanyInvestments
+      public List<string> TradeCompanyInvestments { get => _tradeCompanyInvestments; set => _tradeCompanyInvestments = value; }
+      public List<string> ScenarioTradeCompanyInvestments
       {
-         get => _tradeCompanyInvestments;
-         set => SetIfModifiedEnumerable<List<string>, string>(ref _tradeCompanyInvestments, value);
+         get => _scenarioTradeCompanyInvestments;
+         set => SetIfModifiedEnumerable<List<string>, string>(ref _scenarioTradeCompanyInvestments, ref _tradeCompanyInvestments, value);
       }
 
-      public List<ApplicableModifier> ProvinceModifiers
+      public List<ApplicableModifier> ProvinceModifiers { get => _provinceModifiers; set => _provinceModifiers = value; }
+      public List<ApplicableModifier> ScenarioProvinceModifiers
       {
-         get => _provinceModifiers;
-         set => SetIfModifiedEnumerable<List<ApplicableModifier>, ApplicableModifier>(ref _provinceModifiers, value);
+         get => _scenarioProvinceModifiers;
+         set => SetIfModifiedEnumerable<List<ApplicableModifier>, ApplicableModifier>(ref _scenarioProvinceModifiers, ref _provinceModifiers, value);
       }
 
-      public List<ApplicableModifier> PermanentProvinceModifiers
+      public List<ApplicableModifier> PermanentProvinceModifiers { get => _permanentProvinceModifiers; set => _permanentProvinceModifiers = value; }
+      public List<ApplicableModifier> ScenarioPermanentProvinceModifiers
       {
-         get => _permanentProvinceModifiers;
-         set => SetIfModifiedEnumerable<List<ApplicableModifier>, ApplicableModifier>(ref _permanentProvinceModifiers, value);
+         get => _scenarioPermanentProvinceModifiers;
+         set => SetIfModifiedEnumerable<List<ApplicableModifier>, ApplicableModifier>(ref _scenarioPermanentProvinceModifiers, ref _permanentProvinceModifiers, value);
       }
 
-      public List<string> ProvinceTriggeredModifiers
+      public List<string> ProvinceTriggeredModifiers { get => _provinceTriggeredModifiers; set => _provinceTriggeredModifiers = value; }
+      public List<string> ScenarioProvinceTriggeredModifiers
       {
-         get => _provinceTriggeredModifiers;
-         set => SetIfModifiedEnumerable<List<string>, string>(ref _provinceTriggeredModifiers, value);
+         get => _scenarioProvinceTriggeredModifiers;
+         set => SetIfModifiedEnumerable<List<string>, string>(ref _scenarioProvinceTriggeredModifiers, ref _provinceTriggeredModifiers, value);
+      }
+      
+      public List<IElement> ScriptedEffects { get => _scriptedEffects; set => _scriptedEffects = value; }
+      public List<IElement> ScenarioScriptedEffects
+      {
+         get => _scenarioScriptedEffects;
+         set => SetIfModifiedEnumerable<List<IElement>, IElement>(ref _scenarioScriptedEffects, ref _scriptedEffects, value);
       }
 
-      public List<IElement> ScriptedEffects
+      public List<TradeModifier> TradeModifiers { get => _tradeModifiers; set => _tradeModifiers = value; }
+      public List<TradeModifier> ScenarioTradeModifiers
       {
-         get => _scriptedEffects;
-         set => SetIfModifiedEnumerable<List<IElement>, IElement>(ref _scriptedEffects, value);
-      }
-
-      public List<TradeModifier> TradeModifiers
-      {
-         get => _tradeModifiers;
-         set => SetIfModifiedEnumerable<List<TradeModifier>, TradeModifier>(ref _tradeModifiers, value);
+         get => _scenarioTradeModifiers;
+         set => SetIfModifiedEnumerable<List<TradeModifier>, TradeModifier>(ref _scenarioTradeModifiers, ref _tradeModifiers, value);
       }
 
 
@@ -628,6 +641,37 @@ namespace Editor.DataClasses.Saveables
          // Render scenario
          // Recalculate state
          // Render state
+
+         return true;
+      }
+
+      public bool SetIfModifiedEnumerable<T, Q>(ref T scenario, ref T state, T value, [CallerMemberName] string? propertyName = null) where T : IEnumerable<Q>
+      {
+         Debug.Assert(scenario is not null && value is not null, "field is not null && value is not null in SetIfModifiedEnumerable");
+         if (scenario.SequenceEqual(value))
+            return false;
+
+         var property = GetPropertyInfo(propertyName);
+         Debug.Assert(property != null, nameof(property) + " != null");
+
+         if (Globals.State == State.Running && !Suppressed)
+         {
+            HistoryManager.AddCommand(new CModifyProperty<T>(property, this, value, scenario));
+         }
+         else
+         {
+            if (!Globals.IsInHistory)
+            {
+               // We are in scenario editing so we also have to set the state as we are currently displaying the scenario
+               state = scenario = value;
+            }
+            else
+            {
+
+               scenario = value;
+               RecalculateState();
+            }
+         }
 
          return true;
       }

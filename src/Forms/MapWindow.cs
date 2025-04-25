@@ -229,7 +229,7 @@ namespace Editor.Forms
             return;
          }
 
-         var bookmark = Globals.Bookmarks[BookMarkComboBox.SelectedIndex];
+         var bookmark = Globals.Bookmarks[BookMarkComboBox.SelectedIndex-1];
          DateControl.Date = bookmark.Date;
          ProvinceHistoryManager.LoadDate(bookmark.Date);
       }
@@ -455,7 +455,7 @@ namespace Editor.Forms
          _controllerTagBox = ControlFactory.GetTagComboBox(typeof(Province).GetProperty(nameof(Province.ScenarioController))!, Globals.Countries);
          MisProvinceData.Controls.Add(_controllerTagBox, 1, 1);
 
-         _coreSelector = new(typeof(Province).GetProperty(nameof(Province.Cores)),
+         _coreSelector = new(typeof(Province).GetProperty(nameof(Province.ScenarioCores)),
                              ref LoadGuiEvents.ProvLoadAction,
                              () => Selection.GetSelectedProvinces,
                              Globals.Countries.Keys.ToList(),
@@ -466,7 +466,7 @@ namespace Editor.Forms
          };
          ProvinceEditingLayout.Controls.Add(_coreSelector, 0, 2);
 
-         _discoveredBy = new(typeof(Province).GetProperty(nameof(Province.DiscoveredBy)),
+         _discoveredBy = new(typeof(Province).GetProperty(nameof(Province.ScenarioDiscoveredBy)),
                              ref LoadGuiEvents.ProvLoadAction,
                              () => Selection.GetSelectedProvinces,
                              [.. Globals.Countries.Keys.Select(x => x.TagValue).ToList(), .. Globals.TechnologyGroups.Keys],
@@ -478,7 +478,7 @@ namespace Editor.Forms
          ProvinceEditingLayout.Controls.Add(_discoveredBy, 0, 4);
 
 
-         _buildingsSelector = new(typeof(Province).GetProperty(nameof(Province.Buildings)),
+         _buildingsSelector = new(typeof(Province).GetProperty(nameof(Province.ScenarioBuildings)),
                                   ref LoadGuiEvents.ProvLoadAction,
                                   () => Selection.GetSelectedProvinces,
                                   Globals.Buildings,
@@ -489,7 +489,7 @@ namespace Editor.Forms
          };
          ProvinceEditingLayout.Controls.Add(_buildingsSelector, 1, 2);
 
-         _claimSelector = new(typeof(Province).GetProperty(nameof(Province.Claims)),
+         _claimSelector = new(typeof(Province).GetProperty(nameof(Province.ScenarioClaims)),
                               ref LoadGuiEvents.ProvLoadAction,
                               () => Selection.GetSelectedProvinces,
                               Globals.Countries.Keys.ToList(),
@@ -500,7 +500,7 @@ namespace Editor.Forms
          };
          ProvinceEditingLayout.Controls.Add(_claimSelector, 0, 1);
 
-         _permaClaimSelector = new(typeof(Province).GetProperty(nameof(Province.PermanentClaims)),
+         _permaClaimSelector = new(typeof(Province).GetProperty(nameof(Province.ScenarioPermanentClaims)),
                                    ref LoadGuiEvents.ProvLoadAction,
                                    () => Selection.GetSelectedProvinces,
                                    Globals.Countries.Keys.ToList(),
@@ -613,7 +613,7 @@ namespace Editor.Forms
          NativesLayoutPanel.Controls.Add(_nativeHostilityTextBox, 1, 2);
 
          // TRADE_COMPANIES TAB
-         _tradeCompanyInvestments = ControlFactory.GetExtendedComboBox(nameof(Province.TradeCompanyInvestments));
+         _tradeCompanyInvestments = ControlFactory.GetExtendedComboBox(nameof(Province.ScenarioTradeCompanyInvestments));
          _tradeCompanyInvestments.Items.AddRange([.. Globals.TradeCompanyInvestments.Keys]);
          _tradeCompanyInvestments.OnDataChanged += ProvinceEditingEvents.OnExtendedComboBoxSelectedIndexChanged;
          TradeCompaniesLayoutPanel.Controls.Add(_tradeCompanyInvestments, 1, 0);

@@ -78,14 +78,14 @@ namespace Editor.Saving
          AddItem("native_ferocity", p.GetPropertyValue(nameof(Province.ScenarioNativeFerocity)), ref sb);
          AddItem("native_hostileness", p.GetPropertyValue(nameof(Province.ScenarioNativeHostileness)), ref sb);
          AddItem("tribal_owner", p.GetPropertyValue(nameof(Province.ScenarioTribalOwner)), ref sb);
-         foreach (var building in p.Buildings)
+         foreach (var building in p.ScenarioBuildings)
             AddItem(building.Name, "yes", ref sb);
-         AddCollection("add_claim", p.GetPropertyValue(nameof(Province.Claims)), ref sb);
-         AddCollection("add_permanent_claim", p.GetPropertyValue(nameof(Province.PermanentClaims)), ref sb);
+         AddCollection("add_claim", p.GetPropertyValue(nameof(Province.ScenarioClaims)), ref sb);
+         AddCollection("add_permanent_claim", p.GetPropertyValue(nameof(Province.ScenarioPermanentClaims)), ref sb);
          sb.AppendLine();
-         AddCollection("discovered_by", p.GetPropertyValue(nameof(Province.DiscoveredBy)), ref sb);
+         AddCollection("discovered_by", p.GetPropertyValue(nameof(Province.ScenarioDiscoveredBy)), ref sb);
          sb.AppendLine();
-         AddCollection("add_province_triggered_modifier", p.ProvinceTriggeredModifiers, ref sb);
+         AddCollection("add_province_triggered_modifier", p.ScenarioProvinceTriggeredModifiers, ref sb);
          sb.AppendLine();
          AddEffects(p, ref sb);
       }
