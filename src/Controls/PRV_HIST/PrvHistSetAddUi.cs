@@ -7,7 +7,9 @@ using Editor.Forms.Feature;
 using static Editor.Forms.PopUps.CreateCountryForm;
 using Editor.Loading.Enhanced.PCFL.Implementation;
 using Editor.ErrorHandling;
+using Editor.Helper;
 using static Editor.Loading.Enhanced.PCFL.Implementation.PCFL_Scope;
+using Editor.DataClasses.DataStructures;
 
 namespace Editor.Controls.PRV_HIST
 {
@@ -96,7 +98,7 @@ namespace Editor.Controls.PRV_HIST
       }
    }
 
-   public class PrvHistFloatUi : PrvHistSetAddUi, IPrvHisSetOptSimplePropControl<float>
+   public class PrvHistFloatUi : PrvHistSetAddUi, IPrvHisSetOptSinglePropControl<float>
    {
       public NumericUpDown FloatNumeric { get; }
       public PCFL_TokenParseDelegate EffectDelegate { get; init; }
@@ -158,22 +160,103 @@ namespace Editor.Controls.PRV_HIST
       }
    }
 
-   public class PrvHistDropDownUi : PrvHistSetAddUi
+   public class BindablePrvHistDropDownUi<TProperty, TKey> : PrvHistDropDownUi<TProperty> where TProperty : notnull where TKey : notnull
+   {
+      private readonly BindingDictionary<TKey, TProperty> _items;
+      public BindablePrvHistDropDownUi(string text,
+                                       PropertyInfo info,
+                                       PCFL_TokenParseDelegate effect,
+                                       BindingDictionary<TKey, TProperty> items,
+                                       bool isTagBox,
+                                       bool isDropDownList = false)
+         : base(text, info, effect, isTagBox, isDropDownList)
+      {
+         _items = items;
+         DropDown.DataSource = new BindingSource(_items, null);
+         _items.AddControl(DropDown);
+      }
+
+      ~BindablePrvHistDropDownUi()
+      {
+         _items.RemoveControl(DropDown);
+      }
+      
+      public new void SetDefault()
+      {
+         var item = _items.EmptyItem.Key.ToString() ?? string.Empty;
+         DropDown.SelectedText = item;
+         DropDown.SelectedIndex = -1;
+         DropDown.Text = item;
+      }
+
+      public new IErrorHandle GetFromGui(out TProperty value)
+      {
+         var handle = Converter.Convert(DropDown.Text, out TKey key);
+         if (!handle.Ignore())
+         {
+            value = default!;
+            return handle;
+         }
+         if (_items.TryGetValue(key, out value!))
+            return handle;
+         return new ErrorObject(ErrorType.INTERNAL_KeyNotFound, "Key not found in dictionary", LogType.Critical, addToManager: false);
+      }
+   }
+
+   public class PrvHistDropDownUi<TProperty> : PrvHistSetAddUi, IPrvHistSingleEffectPropControl<TProperty>
    {
       public ComboBox DropDown { get; }
-
-      public PrvHistDropDownUi(string text, bool isDropDownList = false)
-         : base(text, new ComboBox
+      public PCFL_TokenParseDelegate EffectDelegate { get; init; }
+      public PropertyInfo PropertyInfo { get; init; }
+      public PrvHistDropDownUi(string text,
+                               PropertyInfo info,
+                               PCFL_TokenParseDelegate effect,
+                               bool isTagBox,
+                               bool isDropDownList = false)
+         : base(text, isTagBox ? new TagComboBox
+         {
+            Dock = DockStyle.Fill,
+         }: new ComboBox
          {
             Dock = DockStyle.Fill,
          }, false)
       {
-         DropDown = (ComboBox)Controls[2]; // keep a reference directly
+         PropertyInfo = info;
+         EffectDelegate = effect;
+         LoadGuiEvents.ProvHistoryLoadAction += ((IPropertyControl<Province, TProperty>)this).LoadToGui;
+
+         if (isTagBox)
+            DropDown = (TagComboBox)Controls[2]; // keep a reference directly
+         else
+            DropDown = (ComboBox)Controls[2]; // keep a reference directly 
          DropDown.DropDownStyle = isDropDownList ? ComboBoxStyle.DropDownList : ComboBoxStyle.DropDown;
+      }
+
+      public void SetFromGui()
+      {
+         if (Globals.State != State.Running || !GetFromGui(out var value).Log())
+            return;
+         // TODO add a history command
+      }
+      public void SetDefault()
+      {
+         DropDown.SelectedText = "";
+         DropDown.SelectedIndex = -1;
+         DropDown.Text = "";
+      }
+
+      public void SetValue(TProperty value)
+      {
+         Debug.Assert(value != null, "value is null but must never be null");
+         DropDown.Text = value.ToString();
+      }
+      public IErrorHandle GetFromGui(out TProperty value)
+      {
+         return Converter.Convert(DropDown.Text, out value);
       }
    }
 
-   public class PrvHistIntUi : PrvHistSetAddUi, IPrvHisSetOptSimplePropControl<int>
+   public class PrvHistIntUi : PrvHistSetAddUi, IPrvHisSetOptSinglePropControl<int>
    {
       public NumericUpDown IntNumeric { get; }
       public PCFL_TokenParseDelegate EffectDelegate { get; init; }
@@ -219,7 +302,7 @@ namespace Editor.Controls.PRV_HIST
       }
    }   
    
-   public class PrvHistBoolUi : PrvHistSetAddUi, IPrvHistSimpleEffectPropControl<bool>
+   public class PrvHistBoolUi : PrvHistSetAddUi, IPrvHistSingleEffectPropControl<bool>
    {
       public CheckBox BoolCheckBox { get; }
       public PCFL_TokenParseDelegate EffectDelegate { get; init; }

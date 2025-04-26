@@ -1396,14 +1396,14 @@ namespace Editor.Forms
       private PrvHistSetAddUi _prvHistIsParliamentSeatCheckbox = null!;
       // private PrvHistSetAddUi _prvHistIasRevoltCheckBox = null!; to complex for the quick UI
 
-      private PrvHistDropDownUi _prvHistOwnerTagBox = null!;
-      private PrvHistDropDownUi _prvHistControllerTagBox = null!;
-      private PrvHistDropDownUi _prvHistTribalOwnerComboBox = null!;
+      private BindablePrvHistDropDownUi<Country, Tag> _prvHistOwnerTagBox = null!;
+      private BindablePrvHistDropDownUi<Country, Tag> _prvHistControllerTagBox = null!;
+      private BindablePrvHistDropDownUi<Country, Tag> _prvHistTribalOwnerComboBox = null!;
 
-      private PrvHistDropDownUi _prvHistReligionComboBox = null!;
-      private PrvHistDropDownUi _prvHistCultureComboBox = null!;
-      private PrvHistDropDownUi _prvHistTradeGoodsComboBox = null!;
-      private PrvHistDropDownUi _prvHistTradeCenterComboBox = null!;
+      private BindablePrvHistDropDownUi<Religion, string> _prvHistReligionComboBox = null!;
+      private BindablePrvHistDropDownUi<Culture, string> _prvHistCultureComboBox = null!;
+      private BindablePrvHistDropDownUi<TradeGood, string> _prvHistTradeGoodsComboBox = null!;
+      private PrvHistDropDownUi<int> _prvHistTradeCenterComboBox = null!;
 
       private PrvHistCollectionUi _prvHistClaimSelector = null!;
       private PrvHistCollectionUi _prvHistPermaClaimSelector = null!;
@@ -1428,8 +1428,16 @@ namespace Editor.Forms
 
          var blockOffset = 1;
 
-         _prvHistOwnerTagBox = ControlFactory.GetPrvHistDropDownUi(nameof(Province.Owner));
-         _prvHistControllerTagBox = ControlFactory.GetPrvHistDropDownUi(nameof(Province.Controller));
+         _prvHistOwnerTagBox = ControlFactory.GetBindablePrvHistDropDownUi(nameof(Province.Owner),
+                                                                           typeof(Province).GetProperty(nameof(Province.Owner))!,
+                                                                           Globals.Countries,
+                                                                           Scopes.Province.Effects[OwnerEffect.EffectName],
+                                                                           true);
+         _prvHistControllerTagBox = ControlFactory.GetBindablePrvHistDropDownUi(nameof(Province.Controller),
+                                                                                typeof(Province).GetProperty(nameof(Province.Controller))!,
+                                                                                Globals.Countries,
+                                                                                Scopes.Province.Effects[ControllerEffect.EffectName],
+                                                                                true);
 
          ProvHistoryLayout.Controls.Add(_prvHistOwnerTagBox, 0, blockOffset + 0);
          ProvHistoryLayout.Controls.Add(_prvHistControllerTagBox, 0, blockOffset + 1);
@@ -1457,10 +1465,28 @@ namespace Editor.Forms
          ProvHistoryLayout.Controls.Add(_prvHistSeparators[0], 0, blockOffset + 3);
          blockOffset += 4;
 
-         _prvHistReligionComboBox = ControlFactory.GetPrvHistDropDownUi(nameof(Province.Religion));
-         _prvHistCultureComboBox = ControlFactory.GetPrvHistDropDownUi(nameof(Province.Culture));
-         _prvHistTradeGoodsComboBox = ControlFactory.GetPrvHistDropDownUi(nameof(Province.TradeGood), true);
-         _prvHistTradeCenterComboBox = ControlFactory.GetPrvHistDropDownUi(nameof(Province.CenterOfTrade), true);
+         _prvHistReligionComboBox = ControlFactory.GetBindablePrvHistDropDownUi(nameof(Province.Religion),
+                                                                                typeof(Province).GetProperty(nameof(Province.Religion))!,
+                                                                                Globals.Religions,
+                                                                                Scopes.Province.Effects[ReligionEffect.EffectName],
+                                                                                false);
+         _prvHistCultureComboBox = ControlFactory.GetBindablePrvHistDropDownUi(nameof(Province.Culture),
+                                                                               typeof(Province).GetProperty(nameof(Province.Culture))!,
+                                                                               Globals.Cultures,
+                                                                               Scopes.Province.Effects[CultureEffect.EffectName],
+                                                                               false);
+         _prvHistTradeGoodsComboBox = ControlFactory.GetBindablePrvHistDropDownUi(nameof(Province.TradeGood),
+                                                                                  typeof(Province).GetProperty(nameof(Province.TradeGood))!,
+                                                                                  Globals.TradeGoods,
+                                                                                  Scopes.Province.Effects[TradeGoodsEffect.EffectName],
+                                                                                  false,
+                                                                                  true);
+         _prvHistTradeCenterComboBox = ControlFactory.GetPrvHistDropDownUi<int>(nameof(Province.CenterOfTrade),
+                                                                                typeof(Province).GetProperty(nameof(Province.CenterOfTrade))!,
+                                                                                Scopes.Province.Effects[CenterOfTradeEffect.EffectName],
+                                                                                false,
+                                                                                true);
+         _prvHistTradeCenterComboBox.DropDown.Items.AddRange([.."0", "1", "2", "3"]);
 
          ProvHistoryLayout.Controls.Add(_prvHistReligionComboBox, 0, blockOffset + 0);
          ProvHistoryLayout.Controls.Add(_prvHistCultureComboBox, 0, blockOffset + 1);
@@ -1543,15 +1569,21 @@ namespace Editor.Forms
          ProvHistoryLayout.Controls.Add(_prvHistSeparators[5], 0, blockOffset + 5);
          blockOffset += 6;
 
-         _prvHistTribalOwnerComboBox = ControlFactory.GetPrvHistDropDownUi(nameof(Province.TribalOwner));
+         _prvHistTribalOwnerComboBox = ControlFactory.GetBindablePrvHistDropDownUi(nameof(Province.TribalOwner),
+                                                                               typeof(Province).GetProperty(nameof(Province.TribalOwner))!,
+                                                                               Globals.Countries,
+                                                                               Scopes.Province.Effects[TribalOwnerEffect.EffectName],
+                                                                               true);
          _prvHistNativesSizeNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.NativeSize),
                                                                      typeof(Province).GetProperty(nameof(Province.NativeSize))!,
                                                                      Scopes.Province.Effects[NativeSizeEffect.EffectName],
-                                                                     Scopes.Province.Effects[NativeSizeEffect.EffectName]);
+                                                                     Scopes.Province.Effects[NativeSizeEffect.EffectName],
+                                                                     hasSet: false);
          _prvHistNativesHostilityNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.NativeHostileness),
                                                                          typeof(Province).GetProperty(nameof(Province.NativeHostileness))!,
                                                                          Scopes.Province.Effects[NativeHostilnessEffect.EffectName],
-                                                                         Scopes.Province.Effects[NativeHostilnessEffect.EffectName]);
+                                                                         Scopes.Province.Effects[NativeHostilnessEffect.EffectName],
+                                                                         hasSet: false);
          _prvHistNativesFerocityNumeric = ControlFactory.GetPrvHistFloatUi(nameof(Province.NativeFerocity),
                                                                          typeof(Province).GetProperty(nameof(Province.NativeFerocity))!,
                                                                          Scopes.Province.Effects[NativeFerocityEffect.EffectName],

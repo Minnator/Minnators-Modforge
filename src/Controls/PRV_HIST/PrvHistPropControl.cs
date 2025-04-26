@@ -17,12 +17,12 @@ namespace Editor.Controls.PRV_HIST;
  */
 
 
-public interface IPrvHistSimpleEffectPropControl<TProperty> : IPropertyControl<Province, TProperty> where TProperty : notnull
+public interface IPrvHistSingleEffectPropControl<TProperty> : IPropertyControl<Province, TProperty> where TProperty : notnull
 {
    public PCFL_TokenParseDelegate EffectDelegate { get; init; } 
 }
 
-public interface IPrvHisSetOptSimplePropControl<TProperty> : IPrvHistSimpleEffectPropControl<TProperty> where TProperty : notnull
+public interface IPrvHisSetOptSinglePropControl<TProperty> : IPrvHistSingleEffectPropControl<TProperty> where TProperty : notnull
 {
    public PCFL_TokenParseDelegate SetEffectDelegate { get; init; }
 }

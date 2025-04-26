@@ -44,7 +44,7 @@ public static class ControlFactory
    {
       Globals.MapWindow.GeneralToolTip.SetToolTip(control, text);
    }
-
+   
    public static PrvHistIntUi GetPrvHistIntUi(string label,
                                               PropertyInfo info,
                                               PCFL_TokenParseDelegate effect,
@@ -125,9 +125,25 @@ public static class ControlFactory
       return ui;
    }
 
-   public static PrvHistDropDownUi GetPrvHistDropDownUi(string label, bool isDropDownList = false)
+
+   public static BindablePrvHistDropDownUi<TProperty, TKey> GetBindablePrvHistDropDownUi<TProperty, TKey>(string label,
+                                          PropertyInfo info,
+                                          BindingDictionary<TKey, TProperty> items,
+                                          PCFL_TokenParseDelegate effect,
+                                          bool isTagBox,
+                                          bool isDropDownList = false) where TKey : notnull where TProperty : notnull
    {
-      var ui = new PrvHistDropDownUi(label, isDropDownList)
+      var ui = new BindablePrvHistDropDownUi<TProperty, TKey>(label, info, effect, items, isTagBox, isDropDownList)
+      {
+         Dock = DockStyle.Fill,
+         Margin = new(0)
+      };
+      return ui;
+   }
+
+   public static PrvHistDropDownUi<TProperty> GetPrvHistDropDownUi<TProperty>(string label, PropertyInfo info, PCFL_TokenParseDelegate effect, bool isTagBox, bool isDropDownList = false)
+   {
+      var ui = new PrvHistDropDownUi<TProperty>(label, info, effect, isTagBox, isDropDownList)
       {
          Dock = DockStyle.Fill,
          Margin = new(0)
