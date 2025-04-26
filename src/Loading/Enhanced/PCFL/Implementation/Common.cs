@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text;
+using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
 using Editor.Helper;
 using Editor.Saving;
@@ -134,6 +135,8 @@ public class Effect
       this.tokens = tokens;
    }
 
+   public static Effect Empty => new (Province.Empty, ITarget.Empty, []);
+
    private Effect(IEnumerable<IEnhancedElement> elements, PathObj po, PCFL_Scope scope, ITarget root, bool allowRoot = true) : this(elements, po, scope, root, ITarget.Empty, allowRoot) {}
    private Effect(IEnumerable<IEnhancedElement> elements, PathObj po, PCFL_Scope scope, ITarget root , ITarget from, bool allowRoot = true)
    {
@@ -168,6 +171,9 @@ public struct ParsingContext(ScopeSwitch current, ScopeSwitch prev, ScopeSwitch 
    {
       return new(next, This, Prev, Effect);
    }
+
+   public static ParsingContext Empty => new (ScopeSwitch.Empty, Effect.Empty);
+   public static ParsingContext ProvinceEmpty => new (new SimpleFileScopeSwitch(Scopes.Province, Province.Empty), Effect.Empty);
 } 
 
 public class AlwaysTrigger : ITrigger

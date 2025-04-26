@@ -16,6 +16,16 @@ namespace Editor.Events
       public static LoadAction<HistoryCountry> HistoryCountryLoadAction = delegate { };
       public static LoadAction<CommonCountry> CommonCountryLoadAction = delegate { };
       public static LoadAction<Country> CountryLoadAction = delegate { };
+      public static LoadAction<Province> ProvHistoryLoadAction = delegate { };
+
+      public static void ReloadHistoryProvinces()
+      {
+         if (Selection.GetSelectedProvinces.Count < 1)
+            return;
+         Globals.State = State.Loading;
+         ProvHistoryLoadAction.Invoke(Selection.GetSelectedProvinces, null!, true);
+         Globals.State = State.Running;
+      }
 
       public static void ReloadProvinces()
       {
