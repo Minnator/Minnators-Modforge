@@ -10,6 +10,7 @@ using Editor.Helper;
 using Editor.Loading.Enhanced.PCFL.Implementation;
 using Editor.Loading.Enhanced.PCFL.Implementation.ProvinceScope;
 using Editor.Saving;
+using static Editor.Loading.Enhanced.PCFL.Implementation.PCFL_Scope;
 
 namespace Editor.Controls.PRV_HIST;
 
@@ -23,43 +24,28 @@ namespace Editor.Controls.PRV_HIST;
 
 public interface IPrvHistSimpleEffectPropControl<TProperty> : IPropertyControl<Province, TProperty> where TProperty : notnull
 {
-   public SimpleEffect<TProperty> Effect { get; init; } 
-   internal void ParseEffectValue(string value) => Effect.Parse(new(Effect.GetTokenName(), value, -1), PathObj.Empty, ParsingContext.ProvinceEmpty);
+   public PCFL_TokenParseDelegate EffectDelegate { get; init; } 
 }
 
 public interface IPrvHisSetOptSimplePropControl<TProperty> : IPrvHistSimpleEffectPropControl<TProperty> where TProperty : notnull
 {
-   public SimpleEffect<TProperty> SetEffect { get; init; }
-   internal void ParseEffectValue(string value, bool set)
-   {
-      if (set)
-         SetEffect.Parse(new(SetEffect.GetTokenName(), value, -1), PathObj.Empty, ParsingContext.ProvinceEmpty);
-      else
-         Effect.Parse(new(Effect.GetTokenName(), value, -1), PathObj.Empty, ParsingContext.ProvinceEmpty);
-   }
+   public PCFL_TokenParseDelegate SetEffectDelegate { get; init; }
 }
 
 public abstract class PrvHistDualEffectPropControl<TProperty> : IPropertyControl<Province, TProperty> where TProperty : notnull
 {
-   protected PrvHistDualEffectPropControl(PropertyInfo propertyInfo, SimpleEffect<TProperty> addEffect, SimpleEffect<TProperty> removeEffect)
+   protected PrvHistDualEffectPropControl(PropertyInfo propertyInfo, PCFL_TokenParseDelegate addEffectDelegate, PCFL_TokenParseDelegate removeEffectDelegate)
    {
       PropertyInfo = propertyInfo;
-      AddEffect = addEffect;
-      RemoveEffect = removeEffect;
+      AddEffectDelegate = addEffectDelegate;
+      RemoveEffectDelegate = removeEffectDelegate;
       // Register the load action for the property control so we can trigger it on province selection, history entry or date change
       LoadGuiEvents.ProvHistoryLoadAction += ((IPropertyControl<Province, TProperty>)this).LoadToGui;
    }
 
    public PropertyInfo PropertyInfo { get; init; }
-   public SimpleEffect<TProperty> AddEffect { get; init; }
-   public SimpleEffect<TProperty> RemoveEffect { get; init; }
-
-   internal bool ParseAddEffectValue(string value, bool add)
-   {
-      if (add)
-         return AddEffect.Parse(new(AddEffect.GetTokenName(), value, -1), PathObj.Empty, ParsingContext.ProvinceEmpty);
-      return RemoveEffect.Parse(new(RemoveEffect.GetTokenName(), value, -1), PathObj.Empty, ParsingContext.ProvinceEmpty);
-   }
+   public PCFL_TokenParseDelegate AddEffectDelegate { get; init; }
+   public PCFL_TokenParseDelegate RemoveEffectDelegate { get; init; }
 
    internal ICollection<Saveable> GetSaveables() => Selection.GetSelectedProvincesAsSaveable();
 
@@ -76,12 +62,12 @@ public abstract class PrvHistDualEffectPropControl<TProperty> : IPropertyControl
 
 public abstract class PrvHisSetOptDualEffPropControl<TProperty> : PrvHistDualEffectPropControl<TProperty> where TProperty : notnull
 {
-   public SimpleEffect<TProperty> SetEffect { get; init; } 
+   public PCFL_TokenParseDelegate SetEffectDelegate { get; init; } 
    public PrvHisSetOptDualEffPropControl(PropertyInfo propertyInfo,
-                                         SimpleEffect<TProperty> setEffect,
-                                         SimpleEffect<TProperty> addEffect,
-                                         SimpleEffect<TProperty> removeEffect) : base(propertyInfo, addEffect, removeEffect)
+                                         PCFL_TokenParseDelegate setEffectDelegate,
+                                         PCFL_TokenParseDelegate addEffectDelegate,
+                                         PCFL_TokenParseDelegate removeEffectDelegate) : base(propertyInfo, addEffectDelegate, removeEffectDelegate)
    {
-      SetEffect = setEffect;
+      SetEffectDelegate = setEffectDelegate;
    }
 }

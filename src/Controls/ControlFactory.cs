@@ -12,6 +12,7 @@ using Editor.Loading.Enhanced.PCFL.Implementation;
 using Editor.Saving;
 using Newtonsoft.Json.Linq;
 using static System.Net.Mime.MediaTypeNames;
+using static Editor.Loading.Enhanced.PCFL.Implementation.PCFL_Scope;
 using Button = System.Windows.Forms.Button;
 using Image = System.Drawing.Image;
 
@@ -44,9 +45,9 @@ public static class ControlFactory
       Globals.MapWindow.GeneralToolTip.SetToolTip(control, text);
    }
 
-   public static PrvHistIntUi GetPrvHistIntUi(string label, int value = 0, int min = 0, int max = 100)
+   public static PrvHistIntUi GetPrvHistIntUi(string label, PropertyInfo info, PCFL_TokenParseDelegate effect, PCFL_TokenParseDelegate setEffect, int value = 0, int min = 0, int max = 100)
    {
-      var ui = new PrvHistIntUi(label, value, min, max)
+      var ui = new PrvHistIntUi(label, info, effect, setEffect, value, min, max)
       {
          Dock = DockStyle.Fill,
          Margin = new(0)
@@ -100,7 +101,7 @@ public static class ControlFactory
       return ui;
    }
 
-   public static PrvHistBoolUi GetPrvHistBoolUi(string label, PropertyInfo propInfo, SimpleEffect<bool> effect, bool isChecked)
+   public static PrvHistBoolUi GetPrvHistBoolUi(string label, PropertyInfo propInfo, PCFL_TokenParseDelegate effect, bool isChecked)
    {
       var ui = new PrvHistBoolUi(label, propInfo, effect, isChecked)
       {

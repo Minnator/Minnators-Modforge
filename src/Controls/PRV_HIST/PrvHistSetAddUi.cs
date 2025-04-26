@@ -7,6 +7,7 @@ using Editor.Forms.Feature;
 using static Editor.Forms.PopUps.CreateCountryForm;
 using Editor.Loading.Enhanced.PCFL.Implementation;
 using Editor.ErrorHandling;
+using static Editor.Loading.Enhanced.PCFL.Implementation.PCFL_Scope;
 
 namespace Editor.Controls.PRV_HIST
 {
@@ -144,38 +145,59 @@ namespace Editor.Controls.PRV_HIST
       }
    }
 
-   public class PrvHistIntUi : PrvHistSetAddUi
+   public class PrvHistIntUi : PrvHistSetAddUi, IPrvHisSetOptSimplePropControl<int>
    {
       public NumericUpDown IntNumeric { get; }
+      public PCFL_TokenParseDelegate EffectDelegate { get; init; }
+      public PCFL_TokenParseDelegate SetEffectDelegate { get; init; }
+      public PropertyInfo PropertyInfo { get; init; }
 
-      public PrvHistIntUi(string text, int value = 0, int min = 0, int max = 100)
+      public PrvHistIntUi(string text, PropertyInfo info, PCFL_TokenParseDelegate effect, PCFL_TokenParseDelegate setEffect, int value = 0, int min = 0, int max = 100)
          : base(text, new NumericUpDown
          {
             Dock = DockStyle.Fill,
             TextAlign = HorizontalAlignment.Right
          })
       {
+         PropertyInfo = info;
+         EffectDelegate = effect;
+         SetEffectDelegate = setEffect;
+         LoadGuiEvents.ProvHistoryLoadAction += ((IPropertyControl<Province, int>)this).LoadToGui;
+
          IntNumeric = (NumericUpDown)Controls[2]; // keep a reference directly
          IntNumeric.Minimum = min;
          IntNumeric.Maximum = max;
          IntNumeric.Value = value;
+      }
+      public void SetFromGui()
+      {
+         if (Globals.State != State.Running || !GetFromGui(out var value).Log())
+            return;
+         // TODO add a history command
+      }
+      public void SetDefault() => IntNumeric.Value = IntNumeric.Minimum;
+      public void SetValue(int value) => IntNumeric.Value = value;
+      public IErrorHandle GetFromGui(out int value)
+      {
+         value = (int)IntNumeric.Value;
+         return ErrorHandle.Success;
       }
    }   
    
    public class PrvHistBoolUi : PrvHistSetAddUi, IPrvHistSimpleEffectPropControl<bool>
    {
       public CheckBox BoolCheckBox { get; }
-      public SimpleEffect<bool> Effect { get; init; }
+      public PCFL_TokenParseDelegate EffectDelegate { get; init; }
       public PropertyInfo PropertyInfo { get; init; }
 
-      public PrvHistBoolUi(string text, PropertyInfo info, SimpleEffect<bool> effect, bool isChecked = false)
+      public PrvHistBoolUi(string text, PropertyInfo info, PCFL_TokenParseDelegate effect, bool isChecked = false)
          : base(text, new CheckBox
          {
             Dock = DockStyle.Fill,
          }, false)
       {
          PropertyInfo = info;
-         Effect = effect;
+         EffectDelegate = effect;
          LoadGuiEvents.ProvHistoryLoadAction += ((IPropertyControl<Province, bool>)this).LoadToGui;
          
          BoolCheckBox = (CheckBox)Controls[2]; // keep a reference directly
@@ -198,8 +220,7 @@ namespace Editor.Controls.PRV_HIST
          return ErrorHandle.Success;
       }
    }
-
-
+   
    public class PrvHistSetAddUi : TableLayoutPanel
    {
       public Label Label { get; set; }

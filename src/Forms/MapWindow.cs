@@ -17,6 +17,7 @@ using Editor.Forms.Feature.SavingClasses;
 using Editor.Forms.GetUserInput;
 using Editor.Forms.PopUps;
 using Editor.Helper;
+using Editor.Loading.Enhanced.PCFL.Implementation;
 using Editor.Loading.Enhanced.PCFL.Implementation.ProvinceScope;
 using Editor.Parser;
 using Editor.Saving;
@@ -295,7 +296,7 @@ namespace Editor.Forms
             LoadGuiEvents.ReloadProvinces();
          }
       }
-
+      // TODO OVERTHINK THIS AND HOW IT IS CALLED, MOREOVER HOW THE CALLER OF THIS IS CALLED AND WHY IT IS INITIATED THAT WAY
       private void UpdatePrvHistTab()
       {
          if (DataTabPanel.SelectedIndex != 3)
@@ -1436,9 +1437,18 @@ namespace Editor.Forms
          ProvHistoryLayout.Controls.Add(_prvHistSeparators[3], 0, blockOffset + 2);
          blockOffset += 3;
 
-         _prvHistTaxNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.BaseTax));
-         _prvHistPrdNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.BaseProduction));
-         _prvHistMnpNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.BaseManpower));
+         _prvHistTaxNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.BaseTax),
+                                                             typeof(Province).GetProperty(nameof(Province.BaseTax))!,
+                                                             Scopes.Province.Effects[AddBaseTaxEffect.EffectName],
+                                                             Scopes.Province.Effects[BaseTaxEffect.EffectName]);
+         _prvHistPrdNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.BaseProduction),
+                                                             typeof(Province).GetProperty(nameof(Province.BaseProduction))!,
+                                                             Scopes.Province.Effects[AddBaseProductionEffect.EffectName],
+                                                             Scopes.Province.Effects[BaseProductionEffect.EffectName]);
+         _prvHistMnpNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.BaseManpower),
+                                                             typeof(Province).GetProperty(nameof(Province.BaseManpower))!,
+                                                             Scopes.Province.Effects[AddBaseManpowerEffect.EffectName],
+                                                             Scopes.Province.Effects[BaseManpowerEffect.EffectName]);
 
          ProvHistoryLayout.Controls.Add(_prvHistTaxNumeric, 0, blockOffset + 0);
          ProvHistoryLayout.Controls.Add(_prvHistPrdNumeric, 0, blockOffset + 1);
@@ -1462,15 +1472,15 @@ namespace Editor.Forms
 
          _prvHistIsCityCheckBox = ControlFactory.GetPrvHistBoolUi(nameof(Province.IsCity),
                                                                   typeof(Province).GetProperty(nameof(Province.IsCity))!,
-                                                                  new IsCityEffect(),
+                                                                  Scopes.Province.Effects[IsCityEffect.EffectName],
                                                                   false);
          _prvHistIsHreCheckBox = ControlFactory.GetPrvHistBoolUi(nameof(Province.IsHre),
                                                                  typeof(Province).GetProperty(nameof(Province.IsHre))!,
-                                                                 new HreEffect(),
+                                                                 Scopes.Province.Effects[HreEffect.EffectName],
                                                                  false);
          _prvHistIsParliamentSeatCheckbox = ControlFactory.GetPrvHistBoolUi(nameof(Province.IsSeatInParliament),
                                                                             typeof(Province).GetProperty(nameof(Province.IsSeatInParliament))!,
-                                                                            new SeatInParliamentEffect(),
+                                                                            Scopes.Province.Effects[SeatInParliamentEffect.EffectName],
                                                                             false);
 
          ProvHistoryLayout.Controls.Add(_prvHistIsCityCheckBox, 0, blockOffset + 0);
@@ -1492,7 +1502,10 @@ namespace Editor.Forms
          _prvHistDevastationNumeric = ControlFactory.GetPrvHistFloatUi(nameof(Province.Devastation));
          _prvHistAutonomyNumeric = ControlFactory.GetPrvHistFloatUi(nameof(Province.LocalAutonomy));
          _prvHistProsperityNumeric = ControlFactory.GetPrvHistFloatUi(nameof(Province.Prosperity));
-         _prvHistExtraCostNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.ExtraCost));
+         _prvHistExtraCostNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.ExtraCost),
+                                                                   typeof(Province).GetProperty(nameof(Province.ExtraCost))!,
+                                                                   Scopes.Province.Effects[ExtraCostEffect.EffectName],
+                                                                   Scopes.Province.Effects[ExtraCostEffect.EffectName]);
 
          ProvHistoryLayout.Controls.Add(_prvHistDevastationNumeric, 0, blockOffset + 0);
          ProvHistoryLayout.Controls.Add(_prvHistAutonomyNumeric, 0, blockOffset + 1);
@@ -1519,8 +1532,14 @@ namespace Editor.Forms
          blockOffset += 6;
 
          _prvHistTribalOwnerComboBox = ControlFactory.GetPrvHistDropDownUi(nameof(Province.TribalOwner));
-         _prvHistNativesSizeNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.NativeSize));
-         _prvHistNativesHostilityNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.NativeHostileness));
+         _prvHistNativesSizeNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.NativeSize),
+                                                                     typeof(Province).GetProperty(nameof(Province.NativeSize))!,
+                                                                     Scopes.Province.Effects[NativeSizeEffect.EffectName],
+                                                                     Scopes.Province.Effects[NativeSizeEffect.EffectName]);
+         _prvHistNativesHostilityNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.NativeHostileness),
+                                                                         typeof(Province).GetProperty(nameof(Province.NativeHostileness))!,
+                                                                         Scopes.Province.Effects[NativeHostilnessEffect.EffectName],
+                                                                         Scopes.Province.Effects[NativeHostilnessEffect.EffectName]);
          _prvHistNativesFerocityNumeric = ControlFactory.GetPrvHistFloatUi(nameof(Province.NativeFerocity));
 
          ProvHistoryLayout.Controls.Add(_prvHistTribalOwnerComboBox, 0, blockOffset + 0);
