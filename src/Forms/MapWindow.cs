@@ -17,6 +17,7 @@ using Editor.Forms.Feature.SavingClasses;
 using Editor.Forms.GetUserInput;
 using Editor.Forms.PopUps;
 using Editor.Helper;
+using Editor.Loading.Enhanced.PCFL.Implementation.ProvinceScope;
 using Editor.Parser;
 using Editor.Saving;
 using Editor.src.Forms.Console;
@@ -24,6 +25,7 @@ using Editor.src.Forms.Feature;
 using Editor.src.Forms.GetUserInput;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 using Region = Editor.DataClasses.Saveables.Region;
+using RevoltEffect = Editor.Loading.Enhanced.PCFL.Implementation.ProvinceScope.RevoltEffect;
 
 namespace Editor.Forms
 {
@@ -256,6 +258,9 @@ namespace Editor.Forms
             case 2:
                //UpdateProvinceCollectionTab();
                break;
+            case 3:
+               UpdatePrvHistTab();
+               break;
          }
       }
 
@@ -288,6 +293,29 @@ namespace Editor.Forms
          {
             DataTabPanel.TabPages[0].Enabled = true;
             LoadGuiEvents.ReloadProvinces();
+         }
+      }
+
+      private void UpdatePrvHistTab()
+      {
+         if (DataTabPanel.SelectedIndex != 3)
+            return;
+
+         if (Selection.Count == 0)
+         {
+            if (!DataTabPanel.TabPages[3].Enabled)
+               return;
+            DataTabPanel.TabPages[3].SuspendLayout();
+            Globals.State = State.Loading;
+            ClearProvinceGui();
+            Globals.State = State.Running;
+            DataTabPanel.TabPages[3].Enabled = false;
+            DataTabPanel.TabPages[3].ResumeLayout();
+         }
+         else
+         {
+            DataTabPanel.TabPages[3].Enabled = true;
+            LoadGuiEvents.ReloadHistoryProvinces();
          }
       }
 
@@ -423,6 +451,7 @@ namespace Editor.Forms
          DataTabPanel.TabPages[0].Enabled = false;
          Selection.OnProvinceSelectionChange += (sender, i) => UpdateTabIfSelected(0);
          Selection.OnCountrySelectionChange += (sender, i) => UpdateTabIfSelected(1);
+         Selection.OnProvinceSelectionChange += (sender, i) => UpdateTabIfSelected(3);
 
          DataTabPanel.SelectedIndexChanged += (sender, args) => UpdateGui();
 
@@ -1364,7 +1393,7 @@ namespace Editor.Forms
       private PrvHistSetAddUi _prvHistIsCityCheckBox = null!;
       private PrvHistSetAddUi _prvHistIsHreCheckBox = null!;
       private PrvHistSetAddUi _prvHistIsParliamentSeatCheckbox = null!;
-      private PrvHistSetAddUi _prvHistIasRevoltCheckBox = null!;
+      // private PrvHistSetAddUi _prvHistIasRevoltCheckBox = null!; to complex for the quick UI
 
       private PrvHistDropDownUi _prvHistOwnerTagBox = null!;
       private PrvHistDropDownUi _prvHistControllerTagBox = null!;
@@ -1431,18 +1460,25 @@ namespace Editor.Forms
          ProvHistoryLayout.Controls.Add(_prvHistSeparators[4], 0, blockOffset + 4);
          blockOffset += 5;
 
-         _prvHistIsCityCheckBox = ControlFactory.GetPrvHistBoolUi(nameof(Province.IsCity), false);
-         _prvHistIsHreCheckBox = ControlFactory.GetPrvHistBoolUi(nameof(Province.IsHre), false);
-         _prvHistIsParliamentSeatCheckbox = ControlFactory.GetPrvHistBoolUi(nameof(Province.IsSeatInParliament), false);
-         _prvHistIasRevoltCheckBox = ControlFactory.GetPrvHistBoolUi(nameof(Province.HasRevolt), false);
+         _prvHistIsCityCheckBox = ControlFactory.GetPrvHistBoolUi(nameof(Province.IsCity),
+                                                                  typeof(Province).GetProperty(nameof(Province.IsCity))!,
+                                                                  new IsCityEffect(),
+                                                                  false);
+         _prvHistIsHreCheckBox = ControlFactory.GetPrvHistBoolUi(nameof(Province.IsHre),
+                                                                 typeof(Province).GetProperty(nameof(Province.IsHre))!,
+                                                                 new HreEffect(),
+                                                                 false);
+         _prvHistIsParliamentSeatCheckbox = ControlFactory.GetPrvHistBoolUi(nameof(Province.IsSeatInParliament),
+                                                                            typeof(Province).GetProperty(nameof(Province.IsSeatInParliament))!,
+                                                                            new SeatInParliamentEffect(),
+                                                                            false);
 
          ProvHistoryLayout.Controls.Add(_prvHistIsCityCheckBox, 0, blockOffset + 0);
          ProvHistoryLayout.Controls.Add(_prvHistIsHreCheckBox, 0, blockOffset + 1);
          ProvHistoryLayout.Controls.Add(_prvHistIsParliamentSeatCheckbox, 0, blockOffset + 2);
-         ProvHistoryLayout.Controls.Add(_prvHistIasRevoltCheckBox, 0, blockOffset + 3);
 
-         ProvHistoryLayout.Controls.Add(_prvHistSeparators[2], 0, blockOffset + 4);
-         blockOffset += 5;
+         ProvHistoryLayout.Controls.Add(_prvHistSeparators[2], 0, blockOffset + 3);
+         blockOffset += 4;
 
          _prvHistLocTextBox = ControlFactory.GetPrvHistTextBoxUi(nameof(Province.TitleLocalisation));
          _prvHistCapitalTextBox = ControlFactory.GetPrvHistTextBoxUi(nameof(Province.Capital));

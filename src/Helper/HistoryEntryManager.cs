@@ -59,7 +59,7 @@ public static class HistoryEntryManager
             if (index < province.History.Count)
                nextDist = province.History[index].Date.TimeStamp - entry.Date.TimeStamp;
 
-            if (prevDist < nextDist)
+            if (prevDist < nextDist || nextDist == int.MaxValue)
                province.History[index - 1].Effects.AddRange(entry.Effects);
             else // if they are equal we add it to the next entry
                province.History[index].Effects.AddRange(entry.Effects);

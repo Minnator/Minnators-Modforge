@@ -2,6 +2,7 @@
 using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Misc;
 using Editor.DataClasses.Saveables;
+using Editor.Events;
 
 namespace Editor.Helper
 {
@@ -28,6 +29,7 @@ namespace Editor.Helper
          }
          if (render)
             MapModeManager.RenderCurrent();
+         LoadGuiEvents.ProvHistoryLoadAction.Invoke(Selection.GetSelectedProvinces, null!, true);
       }
 
       public static void LoadDate(Date date, Province province, bool render = true)
@@ -43,6 +45,7 @@ namespace Editor.Helper
          }
          if (render)
             MapModeManager.RenderCurrent();
+         LoadGuiEvents.ProvHistoryLoadAction.Invoke(Selection.GetSelectedProvinces, null!, true);
       }
 
       public static void LoadDate(Date date, ICollection<Province> provinces, bool render = true)
@@ -59,6 +62,7 @@ namespace Editor.Helper
          }
          if (render)
             MapModeManager.RenderCurrent();
+         LoadGuiEvents.ProvHistoryLoadAction.Invoke(Selection.GetSelectedProvinces, null!, true);
       }
    }
 }

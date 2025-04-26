@@ -1,5 +1,12 @@
 ﻿using System.Diagnostics;
+using Editor.Controls.PROPERTY;
+using Editor.DataClasses.Saveables;
+using Editor.Events;
+using System.Reflection;
 using Editor.Forms.Feature;
+using static Editor.Forms.PopUps.CreateCountryForm;
+using Editor.Loading.Enhanced.PCFL.Implementation;
+using Editor.ErrorHandling;
 
 namespace Editor.Controls.PRV_HIST
 {
@@ -155,18 +162,40 @@ namespace Editor.Controls.PRV_HIST
       }
    }   
    
-   public class PrvHistBoolUi : PrvHistSetAddUi
+   public class PrvHistBoolUi : PrvHistSetAddUi, IPrvHistSimpleEffectPropControl<bool>
    {
       public CheckBox BoolCheckBox { get; }
+      public SimpleEffect<bool> Effect { get; init; }
+      public PropertyInfo PropertyInfo { get; init; }
 
-      public PrvHistBoolUi(string text, bool isChecked = false)
+      public PrvHistBoolUi(string text, PropertyInfo info, SimpleEffect<bool> effect, bool isChecked = false)
          : base(text, new CheckBox
          {
             Dock = DockStyle.Fill,
          }, false)
       {
+         PropertyInfo = info;
+         Effect = effect;
+         LoadGuiEvents.ProvHistoryLoadAction += ((IPropertyControl<Province, bool>)this).LoadToGui;
+         
          BoolCheckBox = (CheckBox)Controls[2]; // keep a reference directly
          BoolCheckBox.Checked = isChecked;
+
+         BoolCheckBox.CheckedChanged += (_, _) => SetFromGui();
+      }
+
+      public void SetFromGui()
+      {
+         if (Globals.State != State.Running || !GetFromGui(out var value).Log())
+            return;
+         // TODO add a history command
+      }
+      public void SetDefault() => BoolCheckBox.Checked = false;
+      public void SetValue(bool value) => BoolCheckBox.Checked = value;
+      public IErrorHandle GetFromGui(out bool value)
+      {
+         value = BoolCheckBox.Checked;
+         return ErrorHandle.Success;
       }
    }
 

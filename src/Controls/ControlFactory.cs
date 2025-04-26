@@ -8,6 +8,7 @@ using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Saveables;
 using Editor.Events;
 using Editor.Helper;
+using Editor.Loading.Enhanced.PCFL.Implementation;
 using Editor.Saving;
 using Newtonsoft.Json.Linq;
 using static System.Net.Mime.MediaTypeNames;
@@ -99,9 +100,9 @@ public static class ControlFactory
       return ui;
    }
 
-   public static PrvHistBoolUi GetPrvHistBoolUi(string label, bool isChecked)
+   public static PrvHistBoolUi GetPrvHistBoolUi(string label, PropertyInfo propInfo, SimpleEffect<bool> effect, bool isChecked)
    {
-      var ui = new PrvHistBoolUi(label, isChecked)
+      var ui = new PrvHistBoolUi(label, propInfo, effect, isChecked)
       {
          Dock = DockStyle.Fill,
          Margin = new(0)
