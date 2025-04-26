@@ -45,9 +45,16 @@ public static class ControlFactory
       Globals.MapWindow.GeneralToolTip.SetToolTip(control, text);
    }
 
-   public static PrvHistIntUi GetPrvHistIntUi(string label, PropertyInfo info, PCFL_TokenParseDelegate effect, PCFL_TokenParseDelegate setEffect, int value = 0, int min = 0, int max = 100)
+   public static PrvHistIntUi GetPrvHistIntUi(string label,
+                                              PropertyInfo info,
+                                              PCFL_TokenParseDelegate effect,
+                                              PCFL_TokenParseDelegate setEffect,
+                                              int value = 0,
+                                              int min = 0,
+                                              int max = 100,
+                                              bool hasSet = true)
    {
-      var ui = new PrvHistIntUi(label, info, effect, setEffect, value, min, max)
+      var ui = new PrvHistIntUi(label, info, effect, setEffect, value, min, max, hasSet)
       {
          Dock = DockStyle.Fill,
          Margin = new(0)
@@ -77,9 +84,16 @@ public static class ControlFactory
       return ui;
    }
 
-   public static PrvHistFloatUi GetPrvHistFloatUi(string label, float value = 0, float min = 0, float max = 100)
+   public static PrvHistFloatUi GetPrvHistFloatUi(string label,
+                                                  PropertyInfo propInfo,
+                                                  PCFL_TokenParseDelegate effect,
+                                                  PCFL_TokenParseDelegate setEffect,
+                                                  float value = 0,
+                                                  float min = 0,
+                                                  float max = 100,
+                                                  bool hasSet = true)
    {
-      var ui = new PrvHistFloatUi(label, value, min, max)
+      var ui = new PrvHistFloatUi(label, propInfo, effect, setEffect, value, min, max, hasSet)
       {
          Dock = DockStyle.Fill,
          Margin = new(0)

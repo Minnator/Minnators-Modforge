@@ -96,23 +96,51 @@ namespace Editor.Controls.PRV_HIST
       }
    }
 
-   public class PrvHistFloatUi : PrvHistSetAddUi
+   public class PrvHistFloatUi : PrvHistSetAddUi, IPrvHisSetOptSimplePropControl<float>
    {
       public NumericUpDown FloatNumeric { get; }
+      public PCFL_TokenParseDelegate EffectDelegate { get; init; }
+      public PCFL_TokenParseDelegate SetEffectDelegate { get; init; }
+      public PropertyInfo PropertyInfo { get; init; }
 
-      public PrvHistFloatUi(string text, float value = 0, float min = 0, float max = 100)
+      public PrvHistFloatUi(string text,
+                            PropertyInfo info,
+                            PCFL_TokenParseDelegate effect,
+                            PCFL_TokenParseDelegate setEffect,
+                            float value = 0,
+                            float min = 0,
+                            float max = 100,
+                            bool hasSet = true)
          : base(text, new NumericUpDown
          {
             Dock = DockStyle.Fill,
             TextAlign = HorizontalAlignment.Right,
             DecimalPlaces = 2,
             Increment = 0.05m,
-         })
+         }, hasSet)
       {
+         PropertyInfo = info;
+         EffectDelegate = effect;
+         SetEffectDelegate = setEffect;
+         LoadGuiEvents.ProvHistoryLoadAction += ((IPropertyControl<Province, float>)this).LoadToGui;
+
          FloatNumeric = (NumericUpDown)Controls[2]; // keep a reference directly
          FloatNumeric.Minimum = (decimal)min;
          FloatNumeric.Maximum = (decimal)max;
          FloatNumeric.Value = (decimal)value;
+      }
+      public void SetFromGui()
+      {
+         if (Globals.State != State.Running || !GetFromGui(out var value).Log())
+            return;
+         // TODO add a history command
+      }
+      public void SetDefault() => FloatNumeric.Value = FloatNumeric.Minimum;
+      public void SetValue(float value) => FloatNumeric.Value = (decimal)value;
+      public IErrorHandle GetFromGui(out float value)
+      {
+         value = (float)FloatNumeric.Value;
+         return ErrorHandle.Success;
       }
    }
 
@@ -152,12 +180,19 @@ namespace Editor.Controls.PRV_HIST
       public PCFL_TokenParseDelegate SetEffectDelegate { get; init; }
       public PropertyInfo PropertyInfo { get; init; }
 
-      public PrvHistIntUi(string text, PropertyInfo info, PCFL_TokenParseDelegate effect, PCFL_TokenParseDelegate setEffect, int value = 0, int min = 0, int max = 100)
+      public PrvHistIntUi(string text,
+                          PropertyInfo info,
+                          PCFL_TokenParseDelegate effect,
+                          PCFL_TokenParseDelegate setEffect,
+                          int value = 0,
+                          int min = 0,
+                          int max = 100,
+                          bool hasSet = true)
          : base(text, new NumericUpDown
          {
             Dock = DockStyle.Fill,
             TextAlign = HorizontalAlignment.Right
-         })
+         }, hasSet)
       {
          PropertyInfo = info;
          EffectDelegate = effect;

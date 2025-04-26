@@ -1499,13 +1499,25 @@ namespace Editor.Forms
          ProvHistoryLayout.Controls.Add(_prvHistSeparators[6], 0, blockOffset + 2);
          blockOffset += 3;
 
-         _prvHistDevastationNumeric = ControlFactory.GetPrvHistFloatUi(nameof(Province.Devastation));
-         _prvHistAutonomyNumeric = ControlFactory.GetPrvHistFloatUi(nameof(Province.LocalAutonomy));
-         _prvHistProsperityNumeric = ControlFactory.GetPrvHistFloatUi(nameof(Province.Prosperity));
+         _prvHistDevastationNumeric = ControlFactory.GetPrvHistFloatUi(nameof(Province.Devastation),
+                                                                       typeof(Province).GetProperty(nameof(Province.Devastation))!,
+                                                                       Scopes.Province.Effects[AddDevastationEffect.EffectName],
+                                                                       Scopes.Province.Effects[AddDevastationEffect.EffectName],
+                                                                       hasSet: false);
+         _prvHistAutonomyNumeric = ControlFactory.GetPrvHistFloatUi(nameof(Province.LocalAutonomy),
+                                                                    typeof(Province).GetProperty(nameof(Province.LocalAutonomy))!,
+                                                                    Scopes.Province.Effects[AddLocalAutonomyEffect.EffectName],
+                                                                    Scopes.Province.Effects[SetLocalAutonomyEffect.EffectName]);
+         _prvHistProsperityNumeric = ControlFactory.GetPrvHistFloatUi(nameof(Province.Prosperity),
+                                                                      typeof(Province).GetProperty(nameof(Province.Prosperity))!,
+                                                                      Scopes.Province.Effects[AddProsperityEffect.EffectName],
+                                                                      Scopes.Province.Effects[AddProsperityEffect.EffectName],
+                                                                      hasSet:false);
          _prvHistExtraCostNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.ExtraCost),
                                                                    typeof(Province).GetProperty(nameof(Province.ExtraCost))!,
                                                                    Scopes.Province.Effects[ExtraCostEffect.EffectName],
-                                                                   Scopes.Province.Effects[ExtraCostEffect.EffectName]);
+                                                                   Scopes.Province.Effects[ExtraCostEffect.EffectName],
+                                                                   hasSet: false);
 
          ProvHistoryLayout.Controls.Add(_prvHistDevastationNumeric, 0, blockOffset + 0);
          ProvHistoryLayout.Controls.Add(_prvHistAutonomyNumeric, 0, blockOffset + 1);
@@ -1540,7 +1552,11 @@ namespace Editor.Forms
                                                                          typeof(Province).GetProperty(nameof(Province.NativeHostileness))!,
                                                                          Scopes.Province.Effects[NativeHostilnessEffect.EffectName],
                                                                          Scopes.Province.Effects[NativeHostilnessEffect.EffectName]);
-         _prvHistNativesFerocityNumeric = ControlFactory.GetPrvHistFloatUi(nameof(Province.NativeFerocity));
+         _prvHistNativesFerocityNumeric = ControlFactory.GetPrvHistFloatUi(nameof(Province.NativeFerocity),
+                                                                         typeof(Province).GetProperty(nameof(Province.NativeFerocity))!,
+                                                                         Scopes.Province.Effects[NativeFerocityEffect.EffectName],
+                                                                         Scopes.Province.Effects[NativeFerocityEffect.EffectName],
+                                                                         hasSet: false);
 
          ProvHistoryLayout.Controls.Add(_prvHistTribalOwnerComboBox, 0, blockOffset + 0);
          ProvHistoryLayout.Controls.Add(_prvHistNativesSizeNumeric, 0, blockOffset + 1);
