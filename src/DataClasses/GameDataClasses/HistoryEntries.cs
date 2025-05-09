@@ -44,6 +44,27 @@ namespace Editor.DataClasses.GameDataClasses
 
          return Date.CompareTo(other);
       }
+
+      public override string ToString()
+      {
+         var sb = new StringBuilder();
+         FormatSimpleTokenBlock(Effects, 0, Date, ref sb);
+         return sb.ToString();
+      }
+
+      public override bool Equals(object? obj)
+      {
+         if (obj is null)
+            return false;
+         if (ReferenceEquals(this, obj))
+            return true;
+         return GetHashCode() == obj.GetHashCode();
+      }
+
+      public override int GetHashCode()
+      {
+         return Date.GetHashCode() ^ Effects.GetHashCode() ^ 7;
+      }
    }
    
    public class ProvinceHistoryEntry(Date date) : HistoryEntry(date)

@@ -79,6 +79,37 @@ public static class HistoryEntryManager
       }
    }
 
+   public static void RemoveEntry(Province province, ProvinceHistoryEntry entry, HECreationType type)
+   {
+      var index = province.History.BinarySearch(entry);
+      if (index < 0)
+         index = ~index;
+
+      switch (type)
+      {
+         case HECreationType.Snap:
+            //TODO
+
+            break;
+         case HECreationType.Exact:
+            // we could have several with the same date so we need to verify which one we want to remove
+            if (index > 0) // we check if the previous entry is the same date
+            {
+               if (province.History[index - 1].Date == entry.Date)
+               {
+                  if (province.History[index - 1].GetHashCode() == entry.GetHashCode())
+                     province.History.RemoveAt(index - 1);
+                  else
+                     province.History.RemoveAt(index);
+               }
+            }
+            else
+               province.History.RemoveAt(index);
+
+            break;
+      }
+   }
+
    public static bool MergeEntries(List<Province> provinces) => MergeEntries(provinces, Date.MinValue, Date.MaxValue);
    public static bool MergeEntries(List<Province> provinces, Date from, Date to) => provinces.All(x => MergeEntries(x, from, to));
    public static bool MergeEntries(Province province) => MergeEntries(province, Date.MinValue, Date.MaxValue);
