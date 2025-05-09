@@ -50,7 +50,7 @@ namespace Editor.Controls.PROPERTY
             _rawStringMode = true;
          }
          else
-            Debug.Assert(displayMember != null && displayMember.GetValue(source[0]) != null, $"{typeof(TItem)} does not define a display member \"{displayMember}\"");
+            Debug.Assert(displayMember != null! && displayMember.GetValue(source[0]) != null, $"{typeof(TItem)} does not define a display member \"{displayMember}\"");
 
 
          _source = source.ToList();

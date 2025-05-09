@@ -1,6 +1,6 @@
 ﻿namespace Editor.Forms.Feature
 {
-   partial class ListDeltaSetSelection
+   partial class ListDeltaSetSelection<T>
    {
       /// <summary>
       /// Required designer variable.
@@ -28,13 +28,15 @@
       /// </summary>
       private void InitializeComponent()
       {
-         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ListDeltaSetSelection));
+         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ListDeltaSetSelection<T>));
          tableLayoutPanel1 = new TableLayoutPanel();
          SourceListBox = new ListBox();
          DeltaLabel = new Label();
          ConfirmButton = new Button();
          IsSetCheckBox = new CheckBox();
          SelectionListBox = new ListBox();
+         SelectionSearchBox = new ComboBox();
+         SourceSearchBox = new ComboBox();
          label1 = new Label();
          label2 = new Label();
          tableLayoutPanel1.SuspendLayout();
@@ -46,17 +48,20 @@
          tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 383F));
          tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 301F));
          tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100F));
-         tableLayoutPanel1.Controls.Add(SourceListBox, 0, 1);
-         tableLayoutPanel1.Controls.Add(DeltaLabel, 0, 2);
-         tableLayoutPanel1.Controls.Add(ConfirmButton, 2, 2);
-         tableLayoutPanel1.Controls.Add(IsSetCheckBox, 1, 2);
-         tableLayoutPanel1.Controls.Add(SelectionListBox, 1, 1);
+         tableLayoutPanel1.Controls.Add(SourceListBox, 0, 2);
+         tableLayoutPanel1.Controls.Add(DeltaLabel, 0, 3);
+         tableLayoutPanel1.Controls.Add(ConfirmButton, 2, 3);
+         tableLayoutPanel1.Controls.Add(IsSetCheckBox, 1, 3);
+         tableLayoutPanel1.Controls.Add(SelectionListBox, 1, 2);
+         tableLayoutPanel1.Controls.Add(SelectionSearchBox, 1, 1);
+         tableLayoutPanel1.Controls.Add(SourceSearchBox, 0, 1);
          tableLayoutPanel1.Controls.Add(label1, 1, 0);
          tableLayoutPanel1.Controls.Add(label2, 0, 0);
          tableLayoutPanel1.Dock = DockStyle.Fill;
          tableLayoutPanel1.Location = new Point(0, 0);
          tableLayoutPanel1.Name = "tableLayoutPanel1";
          tableLayoutPanel1.RowCount = 3;
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
@@ -139,6 +144,19 @@
          label2.TabIndex = 6;
          label2.Text = "Source List";
          label2.TextAlign = ContentAlignment.MiddleCenter;
+         //
+         // SelectionSearchBox
+         //
+         tableLayoutPanel1.SetColumnSpan(SelectionSearchBox, 2);
+         SelectionSearchBox.Dock = DockStyle.Fill;
+         SelectionSearchBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+         SelectionSearchBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+         //
+         // SourceSearchBox
+         //
+         SourceSearchBox.Dock = DockStyle.Fill;
+         SourceSearchBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+         SourceSearchBox.AutoCompleteSource = AutoCompleteSource.ListItems;
          // 
          // ListDeltaSetSelection
          // 
@@ -147,7 +165,6 @@
          ClientSize = new Size(784, 461);
          Controls.Add(tableLayoutPanel1);
          FormBorderStyle = FormBorderStyle.FixedSingle;
-         Icon = (Icon)resources.GetObject("$this.Icon");
          KeyPreview = true;
          MaximizeBox = false;
          MinimizeBox = false;
@@ -165,6 +182,8 @@
       private ListBox SelectionListBox;
       private CheckBox IsSetCheckBox;
       private Button ConfirmButton;
+      private ComboBox SelectionSearchBox;
+      private ComboBox SourceSearchBox;
       private Label DeltaLabel;
       private Label label1;
       private Label label2;

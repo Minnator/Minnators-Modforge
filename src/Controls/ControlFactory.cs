@@ -73,9 +73,14 @@ public static class ControlFactory
       return ui;
    }
 
-   public static PrvHistCollectionUi GetPrvHistCollectionUi(string label)
+   public static PrvHistCollectionUi<TProperty, TItem> GetPrvHistCollectionUi<TProperty, TItem>(string label,
+                                                                                                PropertyInfo info, 
+                                                                                                PCFL_TokenParseDelegate addEffect,
+                                                                                                PCFL_TokenParseDelegate removeEffect,
+                                                                                                List<TItem> source,
+                                                                                                bool hasSetBox = true) where TProperty : List<TItem>, new() where TItem : notnull 
    {
-      var ui = new PrvHistCollectionUi(label)
+      var ui = new PrvHistCollectionUi<TProperty, TItem>(label, info, addEffect, removeEffect, source, hasSetBox)
       {
          Dock = DockStyle.Fill,
          Margin = new(0)

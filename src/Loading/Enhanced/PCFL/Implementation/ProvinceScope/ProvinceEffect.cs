@@ -240,7 +240,7 @@ public class AddCoreEffect() : SimpleEffect<Country>(Country.Empty)
    {
       Debug.Assert(target is Province, $"'{EffectName}' effect is only valid on provinces");
       Debug.Assert(Globals.Countries.TryGetValue(_value.Val.Tag, out _), "The country must always exist to use it in execution");
-      ((Province)target).Cores.Add(_value.Val.Tag);
+      ((Province)target).Cores = [.. ((Province)target).Cores, _value.Val.Tag];
    }
 
    public override string GetTokenName() => EffectName;
@@ -267,7 +267,9 @@ public class RemoveCoreEffect() : SimpleEffect<Country>(Country.Empty)
    {
       Debug.Assert(target is Province, $"'{EffectName}' effect is only valid on provinces");
       Debug.Assert(Globals.Countries.TryGetValue(_value.Val.Tag, out _), "The country must always exist to use it in execution");
-      ((Province)target).Cores.Remove(_value.Val.Tag);
+      List<Tag> coresTemp = new(((Province)target).Cores);
+      coresTemp.Remove(_value.Val.Tag);
+      ((Province)target).Cores = coresTemp;
    }
 
    public override string GetTokenName() => EffectName;
@@ -798,6 +800,60 @@ public class RemoveClaimEffect() : SimpleEffect<Country>(Country.Empty)
       Debug.Assert(target is Province, $"'{EffectName}' effect is only valid on provinces");
       Debug.Assert(Country.TryParse(_value.Val.Tag, out _).Ignore(), "The country must always exist to use it in execution");
       ((Province)target).Claims.Remove(_value.Val.Tag);
+   }
+
+   public override string GetTokenName() => EffectName;
+   public override string GetTokenDescription() => EffectDescription;
+   public override string GetTokenExample() => EffectExample;
+}
+
+public class AddPermanentClaimEffect() : SimpleEffect<Country>(Country.Empty)
+{
+   public static readonly string EffectName = "add_permanent_claim";
+   public static readonly string EffectDescription = $"Adds a permanent claim to the current province scope.";
+   public static readonly string EffectExample = $"add_permanent_claim = {{\n\tname = <string>\n}}";
+   
+
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
+   {
+      Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
+
+      AddPermanentClaimEffect token = new();
+      return token.Parse(kvp.Value, po, context) ? token : null;
+   }
+
+   public override void Activate(ITarget target)
+   {
+      Debug.Assert(target is Province, $"'{EffectName}' effect is only valid on provinces");
+      Debug.Assert(Country.TryParse(_value.Val.Tag, out _).Ignore(), "The country must always exist to use it in execution");
+      ((Province)target).PermanentClaims.Add(_value.Val.Tag);
+   }
+
+   public override string GetTokenName() => EffectName;
+   public override string GetTokenDescription() => EffectDescription;
+   public override string GetTokenExample() => EffectExample;
+}
+
+public class RemovePermanentClaimEffect() : SimpleEffect<Country>(Country.Empty)
+{
+   public static readonly string EffectName = "remove_permanent_claim";
+   public static readonly string EffectDescription = $"Removes a permanent claim from the current province scope.";
+   public static readonly string EffectExample = $"remove_permanent_claim = {{\n\tname = <string>\n}}";
+   
+
+   public static IToken? CreateEffect(EnhancedBlock? block, LineKvp<string, string>? kvp, ParsingContext context, PathObj po)
+   {
+      Debug.Assert(kvp is not null, "At this point the kvp must not be null. This must be filtered earlier in the pipeline");
+
+      RemovePermanentClaimEffect token = new();
+      return token.Parse(kvp.Value, po, context) ? token : null;
+   }
+
+   public override void Activate(ITarget target)
+   {
+      Debug.Assert(target is Province, $"'{EffectName}' effect is only valid on provinces");
+      Debug.Assert(Country.TryParse(_value.Val.Tag, out _).Ignore(), "The country must always exist to use it in execution");
+      ((Province)target).PermanentClaims.Remove(_value.Val.Tag);
    }
 
    public override string GetTokenName() => EffectName;

@@ -27,42 +27,23 @@ public interface IPrvHisSetOptSinglePropControl<TProperty> : IPrvHistSingleEffec
    public PCFL_TokenParseDelegate SetEffectDelegate { get; init; }
 }
 
-public abstract class PrvHistDualEffectPropControl<TProperty> : IPropertyControl<Province, TProperty> where TProperty : notnull
+public interface IPrvHistDualEffectPropControl<TProperty, TItem> : IPropertyControlList<Province, TProperty, TItem>
+   where TProperty : ICollection<TItem>, new() where TItem : notnull
 {
-   protected PrvHistDualEffectPropControl(PropertyInfo propertyInfo, PCFL_TokenParseDelegate addEffectDelegate, PCFL_TokenParseDelegate removeEffectDelegate)
-   {
-      PropertyInfo = propertyInfo;
-      AddEffectDelegate = addEffectDelegate;
-      RemoveEffectDelegate = removeEffectDelegate;
-      // Register the load action for the property control so we can trigger it on province selection, history entry or date change
-      LoadGuiEvents.ProvHistoryLoadAction += ((IPropertyControl<Province, TProperty>)this).LoadToGui;
-   }
-
-   public PropertyInfo PropertyInfo { get; init; }
    public PCFL_TokenParseDelegate AddEffectDelegate { get; init; }
    public PCFL_TokenParseDelegate RemoveEffectDelegate { get; init; }
-
-   internal ICollection<Saveable> GetSaveables() => Selection.GetSelectedProvincesAsSaveable();
-
-   public virtual void SetFromGui()
+   public new void LoadToGui(List<Province> list, PropertyInfo propInfo, bool force)
    {
-      if (Globals.State != State.Running || !GetFromGui(out var value).Log())
-         return;
-      // TODO implement a history command
+      if (force || propInfo.Equals(PropertyInfo))
+         if (AttributeHelper.GetSharedAttributeList<Province, TProperty, TItem>(PropertyInfo, out var value, list))
+            SetValue(value);
+         else
+            SetDefault();
    }
-   public abstract void SetDefault();
-   public abstract IErrorHandle GetFromGui(out TProperty value);
-   public abstract void SetValue(TProperty value);
 }
 
-public abstract class PrvHisSetOptDualEffPropControl<TProperty> : PrvHistDualEffectPropControl<TProperty> where TProperty : notnull
+public interface IPrvHisSetOptDualEffPropControl<TProperty, TItem> : IPrvHistDualEffectPropControl<TProperty, TItem>
+   where TProperty : ICollection<TItem>, new() where TItem : notnull
 {
    public PCFL_TokenParseDelegate SetEffectDelegate { get; init; } 
-   public PrvHisSetOptDualEffPropControl(PropertyInfo propertyInfo,
-                                         PCFL_TokenParseDelegate setEffectDelegate,
-                                         PCFL_TokenParseDelegate addEffectDelegate,
-                                         PCFL_TokenParseDelegate removeEffectDelegate) : base(propertyInfo, addEffectDelegate, removeEffectDelegate)
-   {
-      SetEffectDelegate = setEffectDelegate;
-   }
 }

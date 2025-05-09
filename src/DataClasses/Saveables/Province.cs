@@ -319,7 +319,7 @@ namespace Editor.DataClasses.Saveables
       public List<Tag> ScenarioClaims
       {
          get => _scenarioClaims;
-         set => SetIfModifiedEnumerable<List<Tag>, Tag>(ref _scenarioClaims, ref _claims, value, nameof(Claims));
+         set => SetIfModifiedEnumerable<List<Tag>, Tag>(ref _scenarioClaims, ref _claims, value);
       }
 
       [GameIcon(GameIcons.Claim)]
@@ -327,7 +327,7 @@ namespace Editor.DataClasses.Saveables
       public List<Tag> ScenarioPermanentClaims
       {
          get => _scenarioPermanentClaims;
-         set => SetIfModifiedEnumerable<List<Tag>, Tag>(ref _scenarioPermanentClaims, ref _permanentClaims, value, nameof(PermanentClaims));
+         set => SetIfModifiedEnumerable<List<Tag>, Tag>(ref _scenarioPermanentClaims, ref _permanentClaims, value);
       }
 
       [GameIcon(GameIcons.Core, false)]
@@ -335,7 +335,7 @@ namespace Editor.DataClasses.Saveables
       public List<Tag> ScenarioCores
       {
          get => _scenarioCores;
-         set => SetIfModifiedEnumerable<List<Tag>, Tag>(ref _scenarioCores, ref _cores, value, nameof(Cores));
+         set => SetIfModifiedEnumerable<List<Tag>, Tag>(ref _scenarioCores, ref _cores, value);
       }
 
       [ToolTippable]
@@ -612,6 +612,13 @@ namespace Editor.DataClasses.Saveables
          set => SetIfModifiedEnumerable<List<ProvinceHistoryEntry>, ProvinceHistoryEntry>(ref _history, value);
       }
 
+
+         // Command
+         // Set scenario
+         // Render scenario
+         // Recalculate state
+         // Render state
+
       public bool SetField<T>(ref T scenario, ref T state, T value, [CallerMemberName] string? propertyName = null)
       {
          // Everytime it is set
@@ -635,13 +642,6 @@ namespace Editor.DataClasses.Saveables
                RecalculateState();
             }
          }
-
-         // Command
-         // Set scenario
-         // Render scenario
-         // Recalculate state
-         // Render state
-
          return true;
       }
 
@@ -667,12 +667,10 @@ namespace Editor.DataClasses.Saveables
             }
             else
             {
-
                scenario = value;
                RecalculateState();
             }
          }
-
          return true;
       }
 
@@ -686,8 +684,34 @@ namespace Editor.DataClasses.Saveables
       private void ResetToScenario()
       {
          BaseTax = ScenarioBaseTax;
-         // TODO maybe execute scripted effects?
-
+         BaseProduction = ScenarioBaseProduction;
+         BaseManpower = ScenarioBaseManpower;
+         CenterOfTrade = ScenarioCenterOfTrade;
+         ExtraCost = ScenarioExtraCost;
+         NativeHostileness = ScenarioNativeHostileness;
+         NativeSize = ScenarioNativeSize;
+         NativeFerocity = ScenarioNativeFerocity;
+         TribalOwner = ScenarioTribalOwner;
+         Owner = ScenarioOwner;
+         Controller = ScenarioController;
+         Cores = ScenarioCores;
+         Claims = ScenarioClaims;
+         PermanentClaims = ScenarioPermanentClaims;
+         Devastation = ScenarioDevastation;
+         Prosperity = ScenarioProsperity;
+         LocalAutonomy = ScenarioLocalAutonomy;
+         Religion = ScenarioReligion;
+         Culture = ScenarioCulture;
+         ReformationCenter = ScenarioReformationCenter;
+         TradeGood = ScenarioTradeGood;
+         LatentTradeGood = ScenarioLatentTradeGood;
+         IsCity = ScenarioIsCity;
+         IsHre = ScenarioIsHre;
+         IsSeatInParliament = ScenarioIsSeatInParliament;
+         HasRevolt = ScenarioHasRevolt;
+         Buildings = ScenarioBuildings;
+         TradeCompanyInvestments = ScenarioTradeCompanyInvestments;
+         DiscoveredBy = ScenarioDiscoveredBy;
       }
 
       #region MMF Data

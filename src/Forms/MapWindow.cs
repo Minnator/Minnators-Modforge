@@ -1405,11 +1405,11 @@ namespace Editor.Forms
       private BindablePrvHistDropDownUi<TradeGood, string> _prvHistTradeGoodsComboBox = null!;
       private PrvHistDropDownUi<int> _prvHistTradeCenterComboBox = null!;
 
-      private PrvHistCollectionUi _prvHistClaimSelector = null!;
-      private PrvHistCollectionUi _prvHistPermaClaimSelector = null!;
-      private PrvHistCollectionUi _prvHistCores = null!;
-      private PrvHistCollectionUi _prvHistBuildings = null!;
-      private PrvHistCollectionUi _prvHistDiscoveredBy = null!;
+      private PrvHistCollectionUi<List<Tag>, Tag> _prvHistClaimSelector = null!;
+      private PrvHistCollectionUi<List<Tag>, Tag> _prvHistPermaClaimSelector = null!;
+      private PrvHistCollectionUi<List<Tag>, Tag> _prvHistCores = null!;
+      private PrvHistCollectionUi<List<Building>, Building> _prvHistBuildings = null!;
+      private PrvHistCollectionUi<List<string>, string> _prvHistDiscoveredBy = null!;
 
       private PrvHistTextBoxUi _prvHistLocTextBox = null!;
       private PrvHistTextBoxUi _prvHistCapitalTextBox = null!;
@@ -1553,11 +1553,33 @@ namespace Editor.Forms
          ProvHistoryLayout.Controls.Add(_prvHistSeparators[1], 0, blockOffset + 4);
          blockOffset += 5;
 
-         _prvHistCores = ControlFactory.GetPrvHistCollectionUi(nameof(Province.Cores));
-         _prvHistClaimSelector = ControlFactory.GetPrvHistCollectionUi(nameof(Province.Claims));
-         _prvHistPermaClaimSelector = ControlFactory.GetPrvHistCollectionUi(nameof(Province.PermanentClaims));
-         _prvHistBuildings = ControlFactory.GetPrvHistCollectionUi(nameof(Province.Buildings));
-         _prvHistDiscoveredBy = ControlFactory.GetPrvHistCollectionUi(nameof(Province.DiscoveredBy));
+         _prvHistCores = ControlFactory.GetPrvHistCollectionUi<List<Tag>, Tag>(nameof(Province.Cores),
+                                                               typeof(Province).GetProperty(nameof(Province.Cores))!,
+                                                               Scopes.Province.Effects[AddCoreEffect.EffectName],
+                                                               Scopes.Province.Effects[RemoveCoreEffect.EffectName],
+                                                               Globals.Countries.Values.Select(x => x.Tag).ToList());
+         _prvHistClaimSelector = ControlFactory.GetPrvHistCollectionUi<List<Tag>, Tag>(nameof(Province.Claims),
+                                                                                               typeof(Province).GetProperty(nameof(Province.Claims))!,
+                                                                                               Scopes.Province.Effects[AddClaimEffect.EffectName],
+                                                                                               Scopes.Province.Effects[RemoveClaimEffect.EffectName],
+                                                                                               Globals.Countries.Values.Select(x => x.Tag).ToList());
+
+         _prvHistPermaClaimSelector = ControlFactory.GetPrvHistCollectionUi<List<Tag>, Tag>(nameof(Province.PermanentClaims),
+                                                                                                    typeof(Province).GetProperty(nameof(Province.PermanentClaims))!,
+                                                                                                    Scopes.Province.Effects[AddPermanentClaimEffect.EffectName],
+                                                                                                    Scopes.Province.Effects[RemovePermanentClaimEffect.EffectName],
+                                                                                                    Globals.Countries.Values.Select(x => x.Tag).ToList());
+         _prvHistBuildings = ControlFactory.GetPrvHistCollectionUi<List<Building>, Building>(nameof(Province.Buildings),
+                                                                                             typeof(Province).GetProperty(nameof(Province.Buildings))!,
+                                                                                                 Scopes.Province.Effects[ExtraCostEffect.EffectName],
+                                                                                             Scopes.Province.Effects[ExtraCostEffect.EffectName],
+                                                                                                 Globals.Buildings.ToList());
+         
+         _prvHistDiscoveredBy = ControlFactory.GetPrvHistCollectionUi<List<string>,string>(nameof(Province.DiscoveredBy),
+                                                                      typeof(Province).GetProperty(nameof(Province.DiscoveredBy))!,
+                                                                                    Scopes.Province.Effects[DiscoveredByEffect.EffectName],
+                                                                                    Scopes.Province.Effects[DiscoveredByEffect.EffectName],
+                                                                                    [.. Globals.Countries.Keys.Select(x => x.TagValue).ToList(), .. Globals.TechnologyGroups.Keys]);
 
 
          ProvHistoryLayout.Controls.Add(_prvHistCores, 0, blockOffset + 0);

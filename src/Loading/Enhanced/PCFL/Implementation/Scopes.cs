@@ -64,6 +64,8 @@ public static class Scopes
          [NativeSizeEffect.EffectName] = NativeSizeEffect.CreateEffect,
          [AddClaimEffect.EffectName] = AddClaimEffect.CreateEffect,
          [RemoveClaimEffect.EffectName] = RemoveClaimEffect.CreateEffect,
+         [AddPermanentClaimEffect.EffectName] = AddPermanentClaimEffect.CreateEffect,
+         [RemovePermanentClaimEffect.EffectName] = RemovePermanentClaimEffect.CreateEffect,
          [AddPermanentProvinceModifierEffect.EffectName] = AddPermanentProvinceModifierEffect.CreateEffect,
          [AddTradeCompanyInvestmentModifierEffect.EffectName] = AddTradeCompanyInvestmentModifierEffect.CreateEffect,
          [NativeHostilnessEffect.EffectName] = NativeHostilnessEffect.CreateEffect,

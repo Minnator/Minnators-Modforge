@@ -10,16 +10,27 @@ using Editor.ErrorHandling;
 using Editor.Helper;
 using static Editor.Loading.Enhanced.PCFL.Implementation.PCFL_Scope;
 using Editor.DataClasses.DataStructures;
+using Newtonsoft.Json.Linq;
+using Editor.Saving;
 
 namespace Editor.Controls.PRV_HIST
 {
-   public class PrvHistCollectionUi : PrvHistSetAddUi
+   public class PrvHistCollectionUi<TProperty, TItem> : PrvHistSetAddUi, IPrvHistDualEffectPropControl<TProperty, TItem>
+      where TProperty : List<TItem>, new() where TItem : notnull
    {
       public TableLayoutPanel Tlp { get; }
       public Button EditButton { get; }
       private Label _shortInfoLabel;
+      private ListDeltaSetSelection<TItem>? _form;
 
-      public PrvHistCollectionUi(string text, bool hasSetBox = true) 
+      public PCFL_TokenParseDelegate AddEffectDelegate { get; init; }
+      public PCFL_TokenParseDelegate RemoveEffectDelegate { get; init; }
+      public PropertyInfo PropertyInfo { get; init; }
+
+      private readonly TItem[] _source;
+      private List<TItem> _startList = [];
+
+      public PrvHistCollectionUi(string text, PropertyInfo info, PCFL_TokenParseDelegate addEffect, PCFL_TokenParseDelegate removeEffect, List<TItem> source, bool hasSetBox = true) 
          : base(text, new TableLayoutPanel
          {
             ColumnCount = 2,
@@ -27,6 +38,13 @@ namespace Editor.Controls.PRV_HIST
             Dock = DockStyle.Fill,
          }, hasSetBox)
       {
+         PropertyInfo = info;
+         AddEffectDelegate = addEffect;
+         RemoveEffectDelegate = removeEffect;
+         LoadGuiEvents.ProvHistoryLoadAction += ((IPrvHistDualEffectPropControl<TProperty, TItem>)this).LoadToGui;
+         _source = source.ToArray();
+
+
          Tlp = (TableLayoutPanel)Controls[2]; // keep a reference directly
          Tlp.ColumnStyles.Clear();
          Tlp.RowStyles.Clear();
@@ -68,33 +86,82 @@ namespace Editor.Controls.PRV_HIST
 
       private void EditButton_Click(object? sender, EventArgs e)
       {
-         var form = new ListDeltaSetSelection("Edit", ["Test1", "Test2", "Test3", "Test5"], ["Test4"], SetCheckBox.Checked);
-         form.ShowDialog();
+         _form = new("Edit", _source, GetCurrentShared().ToArray(), SetCheckBox.Checked);
+         _form.ShowDialog();
 
-         if (form.IsSetCheckBoxChecked)
-         {
-            Debug.WriteLine("Items to set:");
-            foreach (var toSet in form.GetSet)
-               Debug.WriteLine(toSet);
-         }
-         else
-         {
-            var delta = form.GetDelta();
-
-            Debug.WriteLine("Items to add:");
-            foreach (var toSet in delta.added)
-               Debug.WriteLine(toSet);
-            Debug.WriteLine("Items to remove:");
-            foreach (var toSet in delta.removed)
-               Debug.WriteLine(toSet);
-         }
-
-         SetShortInfo();
+         if (GetFromGui(out var value).Log())
+            SetFromGui(value);
       }
 
       private void SetShortInfo()
       {
          //TODO once list is gettable in here
+      }
+
+
+      public void SetFromGui(List<TItem> value)
+      {
+         if (Globals.State == State.Running)
+         {
+            if (AttributeHelper.ScrambledListsEquals(_startList, value))
+               return;
+            //TODO make it more performant
+            var remove = _startList.Except(value).ToHashSet();
+            var add = value.Except(_startList).ToHashSet();
+            // History Command
+         }
+      }
+
+      private List<TItem> GetCurrentShared()
+      {
+         if (Selection.Count <= 1)
+            return _startList;
+
+         if (AttributeHelper.GetSharedAttributeList<Province, TProperty, TItem>(PropertyInfo, out var value, Selection.GetSelectedProvinces))
+            return value;
+         return [];
+      }
+
+      public IErrorHandle GetFromGui(out TProperty value)
+      {
+         Debug.Assert(_form != null, "_form != null");
+
+         List<TItem> current = [];
+         foreach (var str in _form.Selection)
+            if (Converter.Convert<TItem>(str, PropertyInfo, out var partValue).Log())
+               current.Add(partValue);
+
+         if (_form.IsSetCheckBoxChecked)
+         {
+            var toSet = _form.GetSet;
+
+            //TODO Create Command
+         }
+         else
+         {
+            var delta = _form.GetDelta();
+            //TODO Create Command
+         }
+
+         SetShortInfo();
+
+         value = (TProperty)current;
+         return ErrorHandle.Success;
+      }
+
+      public void SetFromGui()
+      {
+         throw new EvilActions("Lol, Why do this? We don't do this here. Use the method with a parameter or do a world conquest to fix this.");
+      }
+
+      public void SetDefault()
+      {
+         SetValue((TProperty)new List<TItem>());
+      }
+
+      public void SetValue(TProperty value)
+      {
+         _startList = value;
       }
    }
 

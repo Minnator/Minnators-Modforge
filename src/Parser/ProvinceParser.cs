@@ -87,7 +87,9 @@ public static class ProvinceParser
       Debug.Assert(propertyInfo.GetValue(saveable) is ICollection<T>, $"{propertyInfo.Name} ({propertyInfo.PropertyType}) is not type ICollection<{typeof(T)}>");
       if (!Converter.Convert<T>(value, out T obj).Then((obj) => obj.ConvertToLoadingError(po, $"Could not convert value \"{value}\" to {typeof(T)}", lineNum)))
          return;
-      ((ICollection<T>)propertyInfo.GetValue(saveable))!.Add(obj);
+
+      var current = new List<T>((ICollection<T>)propertyInfo.GetValue(saveable)!) { obj };
+      propertyInfo.SetValue(saveable, current);
    }
 
    private static void Remove<T>(Saveable saveable, PropertyInfo propertyInfo, string value, PathObj po, int lineNum)
