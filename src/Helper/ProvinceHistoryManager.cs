@@ -28,7 +28,7 @@ namespace Editor.Helper
             CurrentLoadedDate.SetDateSilent(Date.MinValue);
             foreach (var province in Globals.Provinces) 
                province.LoadHistoryForDate(date);
-            CurrentLoadedDate.SetDateSilent(date);
+            CurrentLoadedDate.SetDate(date);
             Globals.State = state;
          }
          if (render)
@@ -47,7 +47,6 @@ namespace Editor.Helper
          province.LoadHistoryForDate(date);
          CurrentLoadedDate.SetDateSilent(date);
          Globals.State = state;
-
       }
 
       public static IEnumerable<ProvinceHistoryEntry> EnumerateFromToDate(List<ProvinceHistoryEntry> entries, Date date, Date endDate)

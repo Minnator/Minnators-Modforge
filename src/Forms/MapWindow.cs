@@ -211,6 +211,22 @@ namespace Editor.Forms
          BookMarkComboBox.SelectedIndex = 0;
          BookMarkComboBox.SelectedIndexChanged += OnBookMarkChanged;
 
+         ProvinceHistoryManager.CurrentLoadedDate.OnDateChanged += (sender, date) =>
+         {
+            if (Globals.Bookmarks.All(x => x.Date != ProvinceHistoryManager.CurrentLoadedDate))
+            {
+               // TODO fix the color update
+               BookMarkComboBox.ForeColor = Color.DarkSlateGray;
+            }
+            else
+            {
+               var index = Globals.Bookmarks.FindIndex(x => x.Date == date);
+               BookMarkComboBox.SelectedIndex = index;
+               BookMarkComboBox.ForeColor = Color.Black;
+            }
+            BookMarkComboBox.Invalidate();
+         };
+
          // TODO why does this only work when doing it like this? Why do the map mode buttons not render unless this is done once
          ShowHistoryEntries = true;
          RenderHistoryIfNeeded();
@@ -226,14 +242,11 @@ namespace Editor.Forms
          Debug.Assert(BookMarkComboBox.SelectedIndex != -1, "BookMarkComboBox.SelectedIndex == -1 must never be reached!");
          if (BookMarkComboBox.SelectedIndex == 0)
          {
-            DateControl.Date = Date.MinValue;
-            ProvinceHistoryManager.ResetProvinceHistory();
-            MapModeManager.RenderCurrent();
+            ProvinceHistoryManager.LoadDate(Date.MinValue);
             return;
          }
 
          var bookmark = Globals.Bookmarks[BookMarkComboBox.SelectedIndex-1];
-         DateControl.Date = bookmark.Date;
          ProvinceHistoryManager.LoadDate(bookmark.Date);
       }
 
