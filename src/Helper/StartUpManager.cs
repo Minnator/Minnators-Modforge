@@ -102,13 +102,7 @@ namespace Editor.Helper
          if (!Date.TryParse(Globals.Defines["NDefines.NGame.END_DATE"].GetValueAsText.TrimQuotes(), out Globals.EndDate).Log())
             Globals.EndDate = new(1821, 1, 1);
       }
-
-      internal static void SetProvinceInitials()
-      {
-         foreach (var province in Globals.Provinces)
-            province.SetInit();
-      }
-
+      
       internal static void SetRunTimes()
       {
          Sw.Stop();

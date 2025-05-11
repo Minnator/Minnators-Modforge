@@ -99,7 +99,6 @@ namespace Editor.Forms.Loadingscreen
 
          // Must be last
          ModifierParser.Demilitarize,
-         StartUpManager.SetProvinceInitials,
       ];
 
       public LoadingScreen()

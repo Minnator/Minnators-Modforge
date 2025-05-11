@@ -3401,7 +3401,6 @@
       private Label ProvinceNameLabel;
       public ComboBox SelectionTypeBox;
       private Label label24;
-      private ComboBox BookMarkComboBox;
       private CheckBox ShowHistoryCheckBox;
       private SplitContainer MapSplitContainer;
       private TabPage ProvinceHistoryTab;
@@ -3416,6 +3415,7 @@
       private Label label28;
       private Label label41;
       private Button MonarchNamesImportButton;
+      public ComboBox BookMarkComboBox;
    }
 }
 

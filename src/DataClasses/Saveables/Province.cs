@@ -15,163 +15,6 @@ using Editor.Saving;
 
 namespace Editor.DataClasses.Saveables
 {
-   public class ProvinceData
-   {
-      /*
-       * When editing _initData => Create Command to change _initData via Saveable.SetField<T> without causing GUI update
-       * BUT after this we have to RecalculateSate if we are in history if not we update the state of the _initData field
-       * After this we call a GUI update if necessary
-       *
-       * When editing the state we do not fire GUI updates as RecalculateState will do this for us and should be the only
-       * one to edit the state
-       *
-       * When editing HistoryEntries HEHandler creates/edits/removes them via commands once finished we activate the entry
-       * and call RecalculateState to update the state and GUI
-       *
-       * Scenario GUI uses _initData to display and modify
-       * Mapmodes, ToolTip use State data to render
-       *
-       * ==> Scenario can be updated using Scenario GUI
-       *     HistoryEntries can be updated using History GUI
-       *
-       *
-       * PTGC (Pdx to GUI converter
-       * Control content <=> pcfl Tokens
-       */
-
-      public Country Controller = Country.Empty;
-      public Country Owner = Country.Empty;
-      public Country TribalOwner = Country.Empty;
-      public int BaseManpower = 1;
-
-      public int BaseTax = 1;
-      public int BaseProduction = 1;
-      public int CenterOfTrade;
-      public int ExtraCost;
-      public int NativeHostileness;
-      public int NativeSize;
-      public int RevoltRisk;
-      public int Nationalism;
-      public int CitySize;
-      public float NativeFerocity;
-      public float LocalAutonomy;
-      public float Devastation;
-      public float Prosperity;
-      public bool IsHre;
-      public bool IsCity;
-      public bool HasRevolt;
-      public bool IsSeatInParliament;
-      public string Capital = string.Empty;
-      public Culture Culture = Culture.Empty;
-      public Religion Religion = Religion.Empty;
-      public Religion ReformationCenter = Religion.Empty;
-      public TradeGood TradeGood = TradeGood.Empty;
-      public TradeGood LatentTradeGood = TradeGood.Empty;
-      public List<Tag> Claims = [];
-      public List<Tag> PermanentClaims = [];
-      public List<Tag> Cores = [];
-      public List<string> DiscoveredBy = [];
-      public List<Building> Buildings = [];
-      public List<string> TradeCompanyInvestments = [];
-      public List<ApplicableModifier> PermanentProvinceModifiers = [];
-      public List<ApplicableModifier> ProvinceModifiers = [];
-      public List<string> ProvinceTriggeredModifiers = [];
-      public List<IElement> ScriptedEffects = [];
-      public List<TradeModifier> TradeModifiers = [];
-
-      // special backup in case of override_province_name
-      public string BackupTitle = string.Empty;
-
-      public void SetData(Province province)
-      {
-         province.Controller = Controller;
-         province.Owner = Owner;
-         province.TribalOwner = TribalOwner;
-         province.BaseManpower = BaseManpower;
-         province.BaseTax = BaseTax;
-         province.BaseProduction = BaseProduction;
-         province.CenterOfTrade = CenterOfTrade;
-         province.ExtraCost = ExtraCost;
-         province.NativeHostileness = NativeHostileness;
-         province.NativeSize = NativeSize;
-         province.RevoltRisk = RevoltRisk;
-         province.Nationalism = Nationalism;
-         province.CitySize = CitySize;
-         province.NativeFerocity = NativeFerocity;
-         province.LocalAutonomy = LocalAutonomy;
-         province.Devastation = Devastation;
-         province.Prosperity = Prosperity;
-         province.IsHre = IsHre;
-         province.IsCity = IsCity;
-         province.HasRevolt = HasRevolt;
-         province.IsSeatInParliament = IsSeatInParliament;
-         province.Capital = Capital;
-         province.Culture = Culture;
-         province.Religion = Religion;
-         province.ReformationCenter = ReformationCenter;
-         province.TradeGood = TradeGood;
-         province.LatentTradeGood = LatentTradeGood;
-         province.Claims = new(Claims);
-         province.PermanentClaims = new(PermanentClaims);
-         province.Cores = new(Cores);
-         province.DiscoveredBy = new(DiscoveredBy);
-         province.Buildings = new(Buildings);
-         province.TradeCompanyInvestments = new(TradeCompanyInvestments);
-         province.PermanentProvinceModifiers = new(PermanentProvinceModifiers);
-         province.ProvinceModifiers = new(ProvinceModifiers);
-         province.ProvinceTriggeredModifiers = new(ProvinceTriggeredModifiers);
-         province.ScriptedEffects = new(ScriptedEffects);
-         province.TradeModifiers = new(TradeModifiers);
-         if (!province.TitleKey.Equals(BackupTitle))
-            Localisation.AddOrModifyLocObjectSilent(province.TitleKey, BackupTitle);
-      }
-
-      public void GetData(Province province)
-      {
-         Controller = province.Controller;
-         Owner = province.Owner;
-         TribalOwner = province.TribalOwner;
-         BaseManpower = province.BaseManpower;
-         BaseTax = province.BaseTax;
-         BaseProduction = province.BaseProduction;
-         CenterOfTrade = province.CenterOfTrade;
-         ExtraCost = province.ExtraCost;
-         NativeHostileness = province.NativeHostileness;
-         NativeSize = province.NativeSize;
-         RevoltRisk = province.RevoltRisk;
-         Nationalism = province.Nationalism;
-         CitySize = province.CitySize;
-         NativeFerocity = province.NativeFerocity;
-         LocalAutonomy = province.LocalAutonomy;
-         Devastation = province.Devastation;
-         Prosperity = province.Prosperity;
-         IsHre = province.IsHre;
-         IsCity = province.IsCity;
-         HasRevolt = province.HasRevolt;
-         IsSeatInParliament = province.IsSeatInParliament;
-         Capital = province.Capital;
-         Culture = province.Culture;
-         Religion = province.Religion;
-         ReformationCenter = province.ReformationCenter;
-         TradeGood = province.TradeGood;
-         LatentTradeGood = province.LatentTradeGood;
-         Claims = new(province.Claims);
-         PermanentClaims = new(province.PermanentClaims);
-         Cores = new(province.Cores);
-         DiscoveredBy = new(province.DiscoveredBy);
-         Buildings = new(province.Buildings);
-         TradeCompanyInvestments = new(province.TradeCompanyInvestments);
-         PermanentProvinceModifiers = new(province.PermanentProvinceModifiers);
-         ProvinceModifiers = new(province.ProvinceModifiers);
-         ProvinceTriggeredModifiers = new(province.ProvinceTriggeredModifiers);
-         ScriptedEffects = new(province.ScriptedEffects);
-         TradeModifiers = new(province.TradeModifiers);
-
-         BackupTitle = province.TitleLocalisation;
-      }
-   }
-
-
    public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<ProvinceHistoryEntry>, ITarget, IComparable
    {
       public enum ModifyingOperation
@@ -179,8 +22,6 @@ namespace Editor.DataClasses.Saveables
          Base,
          HistoryEntry,
       }
-
-      public ProvinceData _initialData = new();
 
       #region Init Scenario Data
 
@@ -242,7 +83,7 @@ namespace Editor.DataClasses.Saveables
       private int _nativeHostileness;
       private int _nativeSize;
       private int _revoltRisk;
-      private int _nationalism;
+      private int _nationalism;  
       private int _citySize;
       private float _nativeFerocity;
       private float _localAutonomy;
@@ -270,10 +111,6 @@ namespace Editor.DataClasses.Saveables
       private List<IElement> _scriptedEffects = [];
       private List<TradeModifier> _tradeModifiers = [];
 
-      public void SetInit()
-      {
-         _initialData.GetData(this);
-      }
 
       // ##################### Complex setter #####################
 
@@ -888,7 +725,44 @@ namespace Editor.DataClasses.Saveables
 
       public void ResetHistory()
       {
-         _initialData.SetData(this);
+         Owner = ScenarioOwner;
+         Controller = ScenarioController;
+         TribalOwner = ScenarioTribalOwner;
+         BaseTax = ScenarioBaseTax;
+         BaseProduction = ScenarioBaseProduction;
+         BaseManpower = ScenarioBaseManpower;
+         CenterOfTrade = ScenarioCenterOfTrade;
+         ExtraCost = ScenarioExtraCost;
+         NativeHostileness = ScenarioNativeHostileness;
+         NativeSize = ScenarioNativeSize;
+         NativeFerocity = ScenarioNativeFerocity;
+         Devastation = ScenarioDevastation;
+         Prosperity = ScenarioProsperity;
+         LocalAutonomy = ScenarioLocalAutonomy;
+         Religion = ScenarioReligion;
+         Culture = ScenarioCulture;
+         ReformationCenter = ScenarioReformationCenter;
+         TradeGood = ScenarioTradeGood;
+         LatentTradeGood = ScenarioLatentTradeGood;
+         IsCity = ScenarioIsCity;
+         IsHre = ScenarioIsHre;
+         IsSeatInParliament = ScenarioIsSeatInParliament;
+         HasRevolt = ScenarioHasRevolt;
+         Buildings = ScenarioBuildings;
+         TradeCompanyInvestments = ScenarioTradeCompanyInvestments;
+         DiscoveredBy = ScenarioDiscoveredBy;
+         Claims = ScenarioClaims;
+         PermanentClaims = ScenarioPermanentClaims;
+         Cores = ScenarioCores;
+         ProvinceModifiers = ScenarioProvinceModifiers;
+         PermanentProvinceModifiers = ScenarioPermanentProvinceModifiers;
+         ProvinceTriggeredModifiers = ScenarioProvinceTriggeredModifiers;
+         TradeModifiers = ScenarioTradeModifiers;
+         ScriptedEffects = ScenarioScriptedEffects;
+         RevoltRisk = ScenarioRevoltRisk;
+         CitySize = ScenarioCitySize;
+         Nationalism = ScenarioNationalism;
+         Capital = ScenarioCapital;
       }
 
       public int GetNumOfHistoryEntriesForRange(Date lower, Date higher)

@@ -259,7 +259,7 @@ public abstract class Saveable : IDisposable
          property.SetValue(changedObject, value);
          target.Suppressed = false;
       }
-      LoadGuiEvents.TriggerGuiUpdate(typeof(TS), property);
+      LoadGuiEvents.TriggerGuiUpdate(property.DeclaringType!, property);
    }
 
    public static void SetFieldMultipleSilent<TS, T>(ICollection<TS> targets, T value, PropertyInfo property) where TS : Saveable
@@ -273,7 +273,7 @@ public abstract class Saveable : IDisposable
             target.Suppressed = false;
          }
       }
-      LoadGuiEvents.TriggerGuiUpdate(typeof(TS), property);
+      LoadGuiEvents.TriggerGuiUpdate(property.DeclaringType!, property);
    }
 
    public static void SetFieldMultipleDifferentSilent<TS, T>(ICollection<TS> targets, List<T> values, PropertyInfo property)
@@ -290,7 +290,7 @@ public abstract class Saveable : IDisposable
             target.Suppressed = false;
          }
       }
-      LoadGuiEvents.TriggerGuiUpdate(typeof(TS), property);
+      LoadGuiEvents.TriggerGuiUpdate(property.DeclaringType!, property);
    }
 
    protected static void SetFieldMultiple<TS, T>(ICollection<TS> targets, List<T> value, PropertyInfo property) where TS : Saveable

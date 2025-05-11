@@ -52,7 +52,17 @@ namespace Editor.Events
       public static void TriggerGuiUpdate(Type type, PropertyInfo info)
       {
          if (type == typeof(Province))
+         {
+            // TODO maybe change but it is a workaround
+            if (info.Name.StartsWith("Scenario"))
+            {
+               var name = info.Name[8..];
+               var newinfo = typeof(Province).GetProperty(name)!;
+               if (newinfo != null)
+                  info = newinfo;
+            }
             ProvLoadAction.Invoke(Selection.GetSelectedProvinces, info, false);
+         }
          else if (type == typeof(HistoryCountry))
             HistoryCountryLoadAction.Invoke([Selection.SelectedCountry.HistoryCountry], info, false);
          else if (type == typeof(CommonCountry))
@@ -60,13 +70,7 @@ namespace Editor.Events
          else if (type == typeof(Country))
             CountryLoadAction.Invoke([Selection.SelectedCountry], info, false);
 
-         // TODO maybe change but it is a workaround
-         if (info.Name.StartsWith("Scenario"))
-         {
-            var newinfo = type.GetProperty(info.Name[8..])!;
-            if (newinfo != null)
-               info = newinfo;
-         }
+         
 
          MapModeManager.RenderMapMode(info);
       }
