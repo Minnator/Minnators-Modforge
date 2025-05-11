@@ -21,12 +21,13 @@ namespace Editor.DataClasses.Misc
       public int Day => GetGregorian().day;
 
       [Browsable(false)]
-      public static Date MinValue { get; } = new(short.MinValue, 1, 1);
+      public static Date MinValue => new(int.MinValue);
 
       [Browsable(false)]
-      public static Date MaxValue { get; } = new(short.MaxValue, 12, 31);
+      public static Date MaxValue => new(int.MaxValue);
+
       [Browsable(false)]
-      public static Date Empty { get; } = new(1, 1, 1);
+      public static Date Empty => new(1, 1, 1);
 
       public string GetNameOfMonth(int month)
       {

@@ -69,7 +69,6 @@ namespace Editor.DataClasses.GameDataClasses
    
    public class ProvinceHistoryEntry(Date date) : HistoryEntry(date)
    {
-      
       public override string ToString()
       {
          var sb = new StringBuilder();

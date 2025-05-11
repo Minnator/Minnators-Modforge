@@ -148,7 +148,7 @@ public static class Globals
    public static Date StartDate;
    public static Date EndDate;
    // Should always false during initial app loading
-   public static bool IsInHistory => StartDate == MapWindow.DateControl.Date;
+   public static bool IsInHistory => MapWindow.BookMarkComboBox?.Text.Equals("Scenario") ?? false;
 
    // Terrain
    public static readonly BindingDictionary<string, Terrain> Terrains = new(new(Terrain.Empty.Name, Terrain.Empty));
