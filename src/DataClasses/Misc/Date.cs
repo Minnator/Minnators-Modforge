@@ -133,7 +133,7 @@ namespace Editor.DataClasses.Misc
          TimeStamp = year * 365 + StartDateOfMonth[month - 1] + day - 1;
       }
 
-      public Date Copy() => new(Year, Month, Day);
+      public Date Copy() => new(TimeStamp);
       public Date Copy(Date date) => new(date.Year, date.Month, date.Day);
       public int DaysBetween(Date date) => date.TimeStamp - TimeStamp;
 

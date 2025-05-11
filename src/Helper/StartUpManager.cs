@@ -75,7 +75,7 @@ namespace Editor.Helper
          Globals.MapWindow.SetSelectedProvinceSum(0);
 
          ParseStartEndDate();
-         Globals.MapWindow.DateControl.Date = Globals.StartDate;
+         Globals.MapWindow.DateControl.Date = Date.MinValue;
          CountryLoading.AssignProvinces();
 
 

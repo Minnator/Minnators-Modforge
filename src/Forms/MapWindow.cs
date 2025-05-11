@@ -226,7 +226,7 @@ namespace Editor.Forms
          Debug.Assert(BookMarkComboBox.SelectedIndex != -1, "BookMarkComboBox.SelectedIndex == -1 must never be reached!");
          if (BookMarkComboBox.SelectedIndex == 0)
          {
-            DateControl.Date = Globals.StartDate;
+            DateControl.Date = Date.MinValue;
             ProvinceHistoryManager.ResetProvinceHistory();
             MapModeManager.RenderCurrent();
             return;

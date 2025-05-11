@@ -20,6 +20,7 @@ namespace Editor.Helper
       {
          if (date != CurrentLoadedDate)
          {
+            var state = Globals.State;
             Globals.State = State.Loading;
             if (date < CurrentLoadedDate)
                ResetProvinceHistory();
@@ -28,7 +29,7 @@ namespace Editor.Helper
             foreach (var province in Globals.Provinces) 
                province.LoadHistoryForDate(date);
             CurrentLoadedDate.SetDateSilent(date);
-            Globals.State = State.Running;
+            Globals.State = state;
          }
          if (render)
             MapModeManager.RenderCurrent();
@@ -36,21 +37,17 @@ namespace Editor.Helper
             LoadGuiEvents.ProvHistoryLoadAction.Invoke(Selection.GetSelectedProvinces, null!, true);
       }
 
-      public static void LoadDate(Date date, Province province, bool render = true)
+      public static void ReloadDate(Province province)
       {
-         if (date != CurrentLoadedDate)
-         {
-            Globals.State = State.Loading;
-            if (date < CurrentLoadedDate)
-               province.ResetHistory();
-            province.LoadHistoryForDate(date);
-            CurrentLoadedDate.SetDateSilent(date);
-            Globals.State = State.Running;
-         }
-         if (render)
-            MapModeManager.RenderCurrent();
-         if (Selection.GetSelectedProvinces.Count > 0)
-            LoadGuiEvents.ProvHistoryLoadAction.Invoke(Selection.GetSelectedProvinces, null!, true);
+         var state = Globals.State;
+         Globals.State = State.Loading;
+         province.ResetHistory();
+         var date = CurrentLoadedDate.Copy();
+         CurrentLoadedDate.SetDateSilent(Date.MinValue);
+         province.LoadHistoryForDate(date);
+         CurrentLoadedDate.SetDateSilent(date);
+         Globals.State = state;
+
       }
 
       public static IEnumerable<ProvinceHistoryEntry> EnumerateFromToDate(List<ProvinceHistoryEntry> entries, Date date, Date endDate)

@@ -513,42 +513,8 @@ namespace Editor.DataClasses.Saveables
 
       public void RecalculateState()
       {
-         ResetToScenario();
          if (Globals.IsInHistory || Globals.State != State.Running) // Is the state correct
-            ProvinceHistoryManager.LoadDate(Globals.MapWindow.DateControl.Date, this, false);
-      }
-
-      private void ResetToScenario()
-      {
-         BaseTax = ScenarioBaseTax;
-         BaseProduction = ScenarioBaseProduction;
-         BaseManpower = ScenarioBaseManpower;
-         CenterOfTrade = ScenarioCenterOfTrade;
-         ExtraCost = ScenarioExtraCost;
-         NativeHostileness = ScenarioNativeHostileness;
-         NativeSize = ScenarioNativeSize;
-         NativeFerocity = ScenarioNativeFerocity;
-         TribalOwner = ScenarioTribalOwner;
-         Owner = ScenarioOwner;
-         Controller = ScenarioController;
-         Cores = ScenarioCores;
-         Claims = ScenarioClaims;
-         PermanentClaims = ScenarioPermanentClaims;
-         Devastation = ScenarioDevastation;
-         Prosperity = ScenarioProsperity;
-         LocalAutonomy = ScenarioLocalAutonomy;
-         Religion = ScenarioReligion;
-         Culture = ScenarioCulture;
-         ReformationCenter = ScenarioReformationCenter;
-         TradeGood = ScenarioTradeGood;
-         LatentTradeGood = ScenarioLatentTradeGood;
-         IsCity = ScenarioIsCity;
-         IsHre = ScenarioIsHre;
-         IsSeatInParliament = ScenarioIsSeatInParliament;
-         HasRevolt = ScenarioHasRevolt;
-         Buildings = ScenarioBuildings;
-         TradeCompanyInvestments = ScenarioTradeCompanyInvestments;
-         DiscoveredBy = ScenarioDiscoveredBy;
+            ProvinceHistoryManager.ReloadDate(this);
       }
 
       #region MMF Data
@@ -717,7 +683,7 @@ namespace Editor.DataClasses.Saveables
 
       public void LoadHistoryForDate(Date date)
       {
-         Debug.Assert(date > ProvinceHistoryManager.CurrentLoadedDate, "date > ProvinceHistoryManager.CurrentLoadedDate");
+         Debug.Assert(date >= ProvinceHistoryManager.CurrentLoadedDate, "date > ProvinceHistoryManager.CurrentLoadedDate");
          foreach (var entry in ProvinceHistoryManager.EnumerateFromToDate(History, ProvinceHistoryManager.CurrentLoadedDate, date))
             foreach (var eff in entry.Effects)
                eff.Activate(this);
