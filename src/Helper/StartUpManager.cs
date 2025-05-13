@@ -87,6 +87,7 @@ namespace Editor.Helper
          
          Globals.State = State.Running;
          Globals.MapWindow.UpdateErrorCounts(LogManager.TotalModErrorCount, LogManager.TotalModLogCount);
+         Globals.MapWindow.DateControl.SetDate(Globals.StartDate);
          MapModeManager.SetCurrentMapMode(MapModeType.Country);
          Globals.ZoomControl.FocusOn(new(3100, 600), 1f);
 

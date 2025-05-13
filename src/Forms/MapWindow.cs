@@ -26,7 +26,6 @@ using Editor.src.Forms.Feature;
 using Editor.src.Forms.GetUserInput;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 using Region = Editor.DataClasses.Saveables.Region;
-using RevoltEffect = Editor.Loading.Enhanced.PCFL.Implementation.ProvinceScope.RevoltEffect;
 
 namespace Editor.Forms
 {
@@ -90,12 +89,6 @@ namespace Editor.Forms
       private PropertyCollectionSelector<Province, List<string>, string> _discoveredBy = null!;
 
       private ProvinceHistoryEntryTreeView _provinceHistoryTreeView = null!;
-      #endregion
-
-      #region ProvHistory Editing
-
-
-
       #endregion
 
       public readonly DateControl DateControl = new(Date.MinValue, DateControlLayout.Horizontal);
