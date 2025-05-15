@@ -1,19 +1,26 @@
 ﻿using System.Diagnostics;
 using Editor.DataClasses.Misc;
+using Editor.Helper;
 using Editor.Parser;
-using Editor.Saving;
 using Timer = System.Windows.Forms.Timer;
 
 namespace Editor.Controls
 {
    public class DateTextBox : TextBox
    {
+      private object _dateLockObject = new();
+      private Timer timer = new()
+      {
+         Interval = Globals.Settings.Gui.TextBoxCommandCreationInterval / 2,
+      };
+
       public DateTextBox()
       {
          PreviewKeyDown += SuppressTab_PreviewKeyDown;
+         timer.Tick += (_, _) => ConfirmDate();
       }
 
-      private bool IsValidInput(int numOfField, string input, string? month = null)
+      private static bool IsValidInput(int numOfField, string input, string? month = null)
       {
          switch (numOfField)
          {
@@ -38,131 +45,198 @@ namespace Editor.Controls
          return true;
       }
 
-      private int IncreaseByOne(int numOfField, string current, string? month = null)
+      private void IncreaseByOne(int numOfField)
       {
          switch (numOfField)
          {
             case 0: // Year field
-               if (int.TryParse(current, out var year))
-                  return Math.Min(9999, year + 1);
+               IncreaseYear();
                break;
             case 1: // Month field
-               if (int.TryParse(current, out var intMonth))
-                  return Math.Min(intMonth + 1, 12);
+               IncreaseMonth();
                break;
             case 2: // Day field
-               Debug.Assert(month != null && int.TryParse(month, out _), "month != null && int.TryParse(month, out _)");
-               if (int.TryParse(current, out var intDay))
-                  return intDay + 1 > Date.DaysInMonth(int.Parse(month)) ? intDay : intDay + 1;
+               IncreaseDay();
                break;
             default:
                throw new ArgumentOutOfRangeException(nameof(numOfField), "Invalid field number");
          }
-         return -1;
       }
 
-      private int DecreaseByOne(int numOfField, string current, string? month = null)
+      private void DecreaseByOne(int numOfField)
       {
          switch (numOfField)
          {
             case 0: // Year field
-               if (int.TryParse(current, out var year))
-                  return Math.Max(1, year - 1);
+               IncreaseYear(false);
                break;
             case 1: // Month field
-               if (int.TryParse(current, out var intMonth))
-                  return Math.Max(intMonth - 1, 1);
+               IncreaseMonth(false);
                break;
             case 2: // Day field
-               Debug.Assert(month != null && int.TryParse(month, out _), "month != null && int.TryParse(month, out _)");
-               if (int.TryParse(current, out var intDay))
-                  return intDay - 1 < 1 ? intDay : intDay - 1;
+               IncreaseDay(false);
                break;
             default:
                throw new ArgumentOutOfRangeException(nameof(numOfField), "Invalid field number");
          }
-         return -1;
       }
 
-      private (int fieldPos, string content, int start, int end) GetFieldNumber(int pos)
+      private void IncreaseDay(bool increase = true)
       {
-         var upperFieldBound = Text.IndexOf('.', pos);
-         upperFieldBound = upperFieldBound == -1 ? Text.Length : upperFieldBound;
-         var lowerFieldBound = Text.LastIndexOf('.', SelectionStart) + 1;
-         var content = Text[lowerFieldBound.. upperFieldBound].Trim();
+         var (_, day, lowerBound, upperBound) = GetFieldContent(2);
+         var (_, month, monthLower, monthUpper) = GetFieldContent(1);
+
+         day = increase ? day + 1 : day - 1;
+
+         if (day > Date.DaysInMonth(month))
+         {
+            IncreaseMonth();
+            day = 1;
+         }
+         else if (day < 1)
+         {
+            day = Date.DaysInMonth(month);
+            IncreaseMonth(false);
+         }
+
+         (_, _, lowerBound, upperBound) = GetFieldContent(2);
+         Text = Text.Remove(lowerBound).Insert(lowerBound, day++.ToString());
+         (_, _, lowerBound, upperBound) = GetFieldContent(2);
+         SelectionStart = lowerBound;
+         SelectionLength = upperBound - lowerBound;
+      }
+
+      private void IncreaseMonth(bool increase = true)
+      {
+         var (_, month, lowerBound, upperBound) = GetFieldContent(1);
+         var (_, day, lowerDay, upperDay) = GetFieldContent(2);
+
+         month = increase ? month + 1 : month - 1;
+
+         if (month > 12)
+         {
+            month = 1;
+            IncreaseYear();
+         }
+         else if (month < 1)
+         {
+            month = 12;
+            IncreaseYear(false);
+         }
+         var daysInMonth = Date.DaysInMonth(month);
+         if (day > daysInMonth)
+         {
+            day = daysInMonth;
+            Text = Text.Remove(lowerDay, upperDay - lowerDay).Insert(lowerDay, day.ToString());
+         }
+         Text = Text.Remove(lowerBound, upperBound - lowerBound).Insert(lowerBound, month.ToString());
+         (_, _, lowerBound, upperBound) = GetFieldContent(1);
+
+         SelectionStart = lowerBound;
+         SelectionLength = upperBound - lowerBound;
+      }
+
+      private void IncreaseYear(bool increase = true)
+      {
+         var (_, year, start, end) = GetFieldContent(0);
+         year = increase ? year + 1 : year - 1;
+         year = Math.Min(9999, Math.Max(2, year));
+         Text = Text.Remove(start, end - start).Insert(start, year.ToString());
+         (_, _, start, end) = GetFieldContent(0);
+
+         SelectionStart = start;
+         SelectionLength = end - start;
+      }
+
+      private (int fieldPos, int content, int start, int end) GetFieldContent(int fieldPos)
+      {
+         var lower = Text.IndexOf('.');
+         var upper = Text.LastIndexOf('.');
+
+         switch (fieldPos)
+         {
+            case 0:
+               var content = Text[..lower].Trim();
+               Debug.Assert(int.TryParse(content, out _), "Year is not in 'int' format!");
+               return (fieldPos, int.Parse(content), 0, lower);
+            case 1:
+               content = Text[(lower + 1)..(upper)].Trim();
+               Debug.Assert(int.TryParse(content, out _), "Month is not in 'int' format!");
+               return (fieldPos, int.Parse(content), lower + 1, upper);
+            case 2:
+               content = Text[(upper + 1)..].Trim();
+               Debug.Assert(int.TryParse(content, out _), "Day is not in 'int' format!");
+               return (fieldPos, int.Parse(content), upper + 1, Text.Length);
+            default:
+               throw new ArgumentOutOfRangeException(nameof(fieldPos), "Invalid field number");
+         }
+      }
+
+      private int GetFieldNumber(int pos)
+      {
+         var lower = Text.IndexOf('.');
+         var upper = Text.LastIndexOf('.');
 
          var fieldPos = 0;
-         for (var i = 0; i < upperFieldBound; i++)
-            if (Text[i] == '.')
-               fieldPos++;
+         if (lower <= pos)
+            fieldPos++;
+         if (upper <= pos)
+            fieldPos++;
 
-         return (fieldPos, content, lowerFieldBound, upperFieldBound);
+         return fieldPos;
       }
 
-      private string GetMonth(int start)
+      private void ConfirmDate()
       {
-         var upperFieldBound = Text.LastIndexOf('.', start);
-         var lowerFieldBound = Text.LastIndexOf('.', upperFieldBound - 1) + 1;
-         var content = Text[(lowerFieldBound).. (upperFieldBound == -1 ? Text.Length : upperFieldBound)].Trim();
-         return content;
-      }
-
-      private (int day, int dayLower) GetDay()
-      {
-         var lowerBound = Text.LastIndexOf('.', Text.Length - 1) + 1;
-         var content = Text[(lowerBound)..].Trim();
-         if (int.TryParse(content, out var day))
-            return (day, lowerBound);
-         throw new EvilActions("Only numbers should ever be in this field!");
-      }
-
-      private (int day, int dayLower) UpdateDay(int month)
-      {
-         var (day, lower) = GetDay();
-         day = day > Date.DaysInMonth(month) ? Date.DaysInMonth(month) : day;
-         return (day, lower);
+         if (Date.TryParse(Text, out var date).Ignore())
+         {
+            ProvinceHistoryManager.LoadDate(date);
+            timer.Stop();
+         }
       }
 
       protected override void OnKeyDown(KeyEventArgs e)
-      {
-         if (e.KeyCode == Keys.Up)
+      {  
+         if (e.KeyCode == Keys.Enter)
          {
-            var (fieldPos, content, start, end) = GetFieldNumber(SelectionStart);
-
-            if (fieldPos == 0)
-            {
-               Text = Text.Remove(start, end - start).Insert(start, IncreaseByOne(fieldPos, content).ToString());
-            }
-            else if (fieldPos == 1) // Year, Month
-            {
-               var newMonth = IncreaseByOne(fieldPos, content);
-               Text = Text.Remove(start, end - start).Insert(start, newMonth.ToString());
-               var (newDay, lower) = UpdateDay(newMonth);
-               Text = Text.Remove(lower).Insert(lower, newDay.ToString());
-            }
-            else // day
-            {
-               var month = GetMonth(SelectionStart);
-               Text = Text.Remove(start, end - start).Insert(start, IncreaseByOne(fieldPos, content, month).ToString());
-            }
-            SelectionStart = start;
-            SelectionLength = end - start;
+            ConfirmDate();
 
             e.SuppressKeyPress = true;
             e.Handled = true;
+
+            timer.Stop();
+         }
+
+         if (e.KeyCode == Keys.Up)
+         {
+            var fieldPos = GetFieldNumber(SelectionStart);
+
+            IncreaseByOne(fieldPos);
+            
+            e.SuppressKeyPress = true;
+            e.Handled = true;
+
+            timer.Stop();
+            timer.Start();
             return;
          }
          if (e.KeyCode == Keys.Down)
          {
-            // Down arrow pressed
+            var fieldPos = GetFieldNumber(SelectionStart);
+
+            DecreaseByOne(fieldPos);
+
             e.SuppressKeyPress = true;
             e.Handled = true;
+            timer.Stop();
+            timer.Start();
             return;
          }
 
 
          if (!char.IsDigit((char)e.KeyValue) && e.KeyCode != Keys.Tab && e.KeyCode != Keys.OemPeriod)
          {
+            e.SuppressKeyPress = true;
             e.Handled = true;
             return;
          }
@@ -197,6 +271,8 @@ namespace Editor.Controls
                SelectionStart = nextFieldStart;
                SelectionLength = nextFieldLength;
             }
+            timer.Stop();
+            timer.Start();
          }
       }
 
@@ -210,6 +286,8 @@ namespace Editor.Controls
             if (end == -1) end = Text.Length;
             SelectionStart = 0;
             SelectionLength = end;
+
+            timer.Start();
          });
       }
 
