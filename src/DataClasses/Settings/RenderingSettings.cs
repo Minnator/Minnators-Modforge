@@ -139,6 +139,7 @@ namespace Editor.DataClasses.Settings
       private int _minVisiblePixels = 80;
       private BorderMergeType _mergeBorders = BorderMergeType.Merge;
       private Color _mapBorderColor = Color.Black;
+      private bool _noDelayMapUpdate = true;
 
       [Description("If the map border will be shown")]
       [CompareInEquals]
@@ -146,6 +147,14 @@ namespace Editor.DataClasses.Settings
       {
          get => _showMapBorder;
          set => SetField(ref _showMapBorder, value);
+      }
+
+      [Description("CAN cause flickering! If the map will be updated without delay when scrolling over the date")]
+      [CompareInEquals]
+      public bool NoDelayMapUpdate
+      {
+         get => _noDelayMapUpdate;
+         set => SetField(ref _noDelayMapUpdate, value);
       }
 
       [Description("The color of the map border")]

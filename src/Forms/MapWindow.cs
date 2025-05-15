@@ -91,7 +91,7 @@ namespace Editor.Forms
       private ProvinceHistoryEntryTreeView _provinceHistoryTreeView = null!;
       #endregion
 
-      public readonly DateControl DateControl = new(Date.MinValue, DateControlLayout.Horizontal);
+      public readonly DateControl DateControl = new(Date.MinValue);
 
       public bool ShowHistoryEntries = false;
 

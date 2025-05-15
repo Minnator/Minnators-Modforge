@@ -1,8 +1,10 @@
 ﻿using System.Diagnostics;
+using System.Drawing;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Parser;
 using static System.Net.Mime.MediaTypeNames;
+using Font = System.Drawing.Font;
 using Timer = System.Windows.Forms.Timer;
 
 namespace Editor.Controls
@@ -14,54 +16,41 @@ namespace Editor.Controls
       {
          Interval = Globals.Settings.Gui.TextBoxCommandCreationInterval / 2,
       };
+      private Timer _quickTimer = new()
+      {
+         Interval = Globals.Settings.Gui.TextBoxCommandCreationInterval / 10,
+      };
 
       public DateTextBox()
       {
          PreviewKeyDown += SuppressTab_PreviewKeyDown;
          timer.Tick += (_, _) => ConfirmDate();
+         _quickTimer.Tick += (_, _) => ConfirmDate();
       }
 
 
-      private void IncreaseByOne(int numOfField)
+      private void IncreaseByOne(int numOfField, bool increase)
       {
          switch (numOfField)
          {
             case 0: // Year field
-               IncreaseYear();
+               IncreaseYear(increase);
                break;
             case 1: // Month field
-               IncreaseMonth();
+               IncreaseMonth(increase);
                break;
             case 2: // Day field
-               IncreaseDay();
+               IncreaseDay(increase);
                break;
             default:
                throw new ArgumentOutOfRangeException(nameof(numOfField), "Invalid field number");
          }
       }
-
-      private void DecreaseByOne(int numOfField)
-      {
-         switch (numOfField)
-         {
-            case 0: // Year field
-               IncreaseYear(false);
-               break;
-            case 1: // Month field
-               IncreaseMonth(false);
-               break;
-            case 2: // Day field
-               IncreaseDay(false);
-               break;
-            default:
-               throw new ArgumentOutOfRangeException(nameof(numOfField), "Invalid field number");
-         }
-      }
-
+      
       private void IncreaseDay(bool increase = true)
       {
          var (_, day, lowerBound, upperBound) = GetFieldContent(2);
-         var (_, month, monthLower, monthUpper) = GetFieldContent(1);
+         var (_, month, _, _) = GetFieldContent(1);
 
          day = increase ? day + 1 : day - 1;
 
@@ -155,7 +144,7 @@ namespace Editor.Controls
          }
       }
 
-      private (int fieldPos, int content, int start, int end) GetFieldContent(int fieldPos, ref string text)
+      private static (int fieldPos, int content, int start, int end) GetFieldContent(int fieldPos, ref string text)
       {
          var lower = text.IndexOf('.');
          var upper = text.LastIndexOf('.');
@@ -247,6 +236,30 @@ namespace Editor.Controls
          e.Handled = true;
       }
 
+      protected override void OnMouseWheel(MouseEventArgs e)
+      {
+         if (e.Delta > 0)
+         {
+            var fieldPos = GetFieldNumber(SelectionStart);
+            IncreaseByOne(fieldPos, true);
+         }
+         else if (e.Delta < 0)
+         {
+            var fieldPos = GetFieldNumber(SelectionStart);
+            IncreaseByOne(fieldPos, false);
+         }
+
+         if (Globals.Settings.Rendering.Map.NoDelayMapUpdate)
+         {
+            ConfirmDate();
+            _quickTimer.Stop();
+            return;
+         }
+
+         _quickTimer.Stop();
+         _quickTimer.Start();
+      }
+
       protected override void OnKeyDown(KeyEventArgs e)
       {  
          if (e.KeyCode == Keys.Enter)
@@ -278,7 +291,7 @@ namespace Editor.Controls
          {
             var fieldPos = GetFieldNumber(SelectionStart);
 
-            IncreaseByOne(fieldPos);
+            IncreaseByOne(fieldPos, true);
             
             e.SuppressKeyPress = true;
             e.Handled = true;
@@ -291,7 +304,7 @@ namespace Editor.Controls
          {
             var fieldPos = GetFieldNumber(SelectionStart);
 
-            DecreaseByOne(fieldPos);
+            IncreaseByOne(fieldPos, false);
 
             e.SuppressKeyPress = true;
             e.Handled = true;
@@ -384,55 +397,119 @@ namespace Editor.Controls
       }
    }
 
+   public sealed class ArrowButton : Button
+   {
+      public enum ArrowOrientation
+      {
+         Up,
+         Down,
+         Left,
+         Right
+      }
 
-   public enum DateControlLayout
-   {
-      Horizontal,
-      Vertical
+      public readonly bool HasBorder;
+      public bool FilledArrow { get; set; } = false;
+      public ArrowOrientation Orientation { get; set; } = ArrowOrientation.Right;
+      public Color BorderColor { get; set; } = Color.Black;
+      // Renders either an up, down, left or right arrow depending on the orientation enum
+      
+      public ArrowButton(ArrowOrientation orientation, bool hasBorder = true)
+      {
+         HasBorder = hasBorder;
+         Orientation = orientation;
+         Dock = DockStyle.Fill;
+         Margin = new(1);
+         Padding = new(0);
+      }
+
+      protected override void OnPaint(PaintEventArgs e)
+      {
+         var g = e.Graphics;
+         g.Clear(BackColor);
+         g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+         var isHovered = ClientRectangle.Contains(PointToClient(Cursor.Position));
+         var arrowColor = isHovered ? Color.DeepSkyBlue : ForeColor;
+
+         var rect = ClientRectangle;
+         using var brush = new SolidBrush(arrowColor);
+
+         if (HasBorder)
+            ControlPaint.DrawBorder(g, rect, BorderColor, ButtonBorderStyle.Solid);
+
+         var center = new Point(rect.Width / 2, rect.Height / 2);
+         var size = Math.Min(rect.Width, rect.Height) / 3;
+
+         Point[] points = Orientation switch
+         {
+            ArrowOrientation.Up =>
+               [new(center.X - size, center.Y + size), center with { Y = center.Y - size }, new(center.X + size, center.Y + size)],
+            ArrowOrientation.Down =>
+               [new(center.X - size, center.Y - size), center with { Y = center.Y + size }, new(center.X + size, center.Y - size)],
+            ArrowOrientation.Left =>
+               [new(center.X + size, center.Y + size), center with { X = center.X - size }, new(center.X + size, center.Y - size)],
+            ArrowOrientation.Right =>
+               [new(center.X - size, center.Y + size), center with { X = center.X + size }, new(center.X - size, center.Y - size)],
+            _ => throw new ArgumentOutOfRangeException(nameof(Orientation), "Invalid arrow orientation")
+         };
+         if (FilledArrow)
+            g.FillPolygon(brush, points);
+         else
+         {
+            using var pen = new Pen(arrowColor);
+            g.DrawLines(pen, points);
+         }
+      }
+
+      protected override void OnMouseEnter(EventArgs e)
+      {
+         base.OnMouseEnter(e);
+         Invalidate();
+      }
+
+      protected override void OnMouseLeave(EventArgs e)
+      {
+         base.OnMouseLeave(e);
+         Invalidate();
+      }
    }
-   public class DateControl : Control
+
+   public sealed class DateControl : Control
    {
-      private TableLayoutPanel _tableLayoutPanel= new ();
+      private TableLayoutPanel _tableLayoutPanel;
       public static event EventHandler<Date> OnDateChanged = delegate { };
 
       private readonly DateTextBox _dateTextBox = new ()
       {
-         Dock = DockStyle.Fill,
          TextAlign = HorizontalAlignment.Center,
-         Margin = new(0,1,0,0),
+         Margin = new(0,2,0,0),
          Padding = new(0),
+         BorderStyle = BorderStyle.None,
+         Size = new(78, 25),
+         Anchor = AnchorStyles.None,
+         // monospaced font
+         Font = new Font("Segoe Ui", 11),
+         BackColor = DefaultBackColor,
       };
       
-      private readonly DecreaseButton _yearDecreaseButton = new ();
-      private readonly DecreaseButton _monthDecreaseButton = new ();
-      private readonly DecreaseButton _dayDecreaseButton = new ();
+      private readonly ArrowButton _yearDecreaseButton = new (ArrowButton.ArrowOrientation.Left, false);
+      private readonly ArrowButton _monthDecreaseButton = new (ArrowButton.ArrowOrientation.Left, false);
+      private readonly ArrowButton _dayDecreaseButton = new (ArrowButton.ArrowOrientation.Left, false);
 
-      private readonly IncreaseButton _yearIncreaseButton = new ();
-      private readonly IncreaseButton _monthIncreaseButton = new ();
-      private readonly IncreaseButton _dayIncreaseButton = new ();
+      private readonly ArrowButton _yearIncreaseButton = new (ArrowButton.ArrowOrientation.Right, false);
+      private readonly ArrowButton _monthIncreaseButton = new (ArrowButton.ArrowOrientation.Right, false);
+      private readonly ArrowButton _dayIncreaseButton = new (ArrowButton.ArrowOrientation.Right, false);
 
       private readonly Timer _inputTimer = new()
       {
          Interval = Globals.Settings.Gui.TextBoxCommandCreationInterval,
          Enabled = false,
       };
-
+      
       public DateControl(Date date)
       {
          Date = date;
-         Date = Date.MinValue;
-         DateControlLayout = DateControlLayout.Horizontal;
+
          InitHorizontal();
-      }
-
-      public DateControl(Date date, DateControlLayout layout) : this(date)
-      {
-         DateControlLayout = layout;
-
-         if (DateControlLayout == DateControlLayout.Vertical) 
-            InitVertical();
-         else
-            InitHorizontal();
 
          _dateTextBox.TextChanged += OnDateTextChanged;
 
@@ -443,92 +520,54 @@ namespace Editor.Controls
          _monthDecreaseButton.Click += OnMonthDecrease;
          _dayDecreaseButton.Click += OnDayDecrease;
 
-         Date.OnDateChanged += (sender, d) =>
+         Date.OnDateChanged += (_, d) =>
          {
             SetDate(d);
          };
          
-         Size = _tableLayoutPanel.Size;
          Margin = new(0);
-         Padding = new(0);
-         _tableLayoutPanel.Margin = new(0, 1, 0, 0);
+         Padding = new(1);
+         Dock = DockStyle.Fill;
          Controls.Add(_tableLayoutPanel);
       }
 
-
-      private void InitVertical()
-      {
-         _tableLayoutPanel = new()
-         {
-            RowStyles =
-            {
-               new(SizeType.Absolute, 20),
-               new(SizeType.Absolute, 27),
-               new(SizeType.Absolute, 20),
-            },
-            ColumnStyles =
-            {
-               new(SizeType.Absolute, 40),
-               new(SizeType.Absolute, 20),
-               new(SizeType.Absolute, 20),
-            },
-            Size = new(100, 67),
-            Padding = new(0),
-            Margin = new(0),
-         };
-
-         _tableLayoutPanel.Controls.Add(_dateTextBox, 0, 1);
-         _tableLayoutPanel.SetColumnSpan(_dateTextBox, 3);
-
-         _tableLayoutPanel.Controls.Add(_yearIncreaseButton, 0, 0);
-         _tableLayoutPanel.Controls.Add(_monthIncreaseButton, 1, 0);
-         _tableLayoutPanel.Controls.Add(_dayIncreaseButton, 2, 0);
-
-         _tableLayoutPanel.Controls.Add(_yearDecreaseButton, 0, 2);
-         _tableLayoutPanel.Controls.Add(_monthDecreaseButton, 1, 2);
-         _tableLayoutPanel.Controls.Add(_dayDecreaseButton, 2, 2);
-      }
 
       private void InitHorizontal()
       {
          _tableLayoutPanel = new()
          {
+            RowCount = 1,
+            ColumnCount = 9,
             RowStyles =
             {
                new(SizeType.Absolute, 25),
             },
             ColumnStyles =
             {
-               new(SizeType.Absolute, 20),
-               new(SizeType.Absolute, 20),
-               new(SizeType.Absolute, 20),
-               new(SizeType.Absolute, 90), //Date
-               new(SizeType.Absolute, 20),
-               new(SizeType.Absolute, 20),
-               new(SizeType.Absolute, 20),
+               new(SizeType.Percent, 50),
+               new(SizeType.Absolute, 12),
+               new(SizeType.Absolute, 12),
+               new(SizeType.Absolute, 12),
+               new(SizeType.Absolute, 80), //Date
+               new(SizeType.Absolute, 12),
+               new(SizeType.Absolute, 12),
+               new(SizeType.Absolute, 12),
+               new(SizeType.Percent, 50),
             },
-            Size = new(210, 25),
+            Dock = DockStyle.Fill,
             Padding = new(0),
             Margin = new(0),
          };
+         
+         _tableLayoutPanel.Controls.Add(_dayDecreaseButton, 1, 0);
+         _tableLayoutPanel.Controls.Add(_monthDecreaseButton, 2, 0);
+         _tableLayoutPanel.Controls.Add(_yearDecreaseButton, 3, 0);
 
-         _tableLayoutPanel.Controls.Add(_monthDecreaseButton, 1, 0);
-         _tableLayoutPanel.Controls.Add(_dayDecreaseButton, 0, 0);
-         _tableLayoutPanel.Controls.Add(_yearDecreaseButton, 2, 0);
+         _tableLayoutPanel.Controls.Add(_dateTextBox, 4, 0);
 
-         _tableLayoutPanel.Controls.Add(_dateTextBox, 3, 0);
-
-         _tableLayoutPanel.Controls.Add(_yearIncreaseButton, 4, 0);
-         _tableLayoutPanel.Controls.Add(_monthIncreaseButton, 5, 0);
-         _tableLayoutPanel.Controls.Add(_dayIncreaseButton, 6, 0);
-
-         _yearDecreaseButton.Text = "<";
-         _monthDecreaseButton.Text = "<";
-         _dayDecreaseButton.Text = "<";
-
-         _yearIncreaseButton.Text = ">";
-         _monthIncreaseButton.Text = ">";
-         _dayIncreaseButton.Text = ">";
+         _tableLayoutPanel.Controls.Add(_yearIncreaseButton, 5, 0);
+         _tableLayoutPanel.Controls.Add(_monthIncreaseButton, 6, 0);
+         _tableLayoutPanel.Controls.Add(_dayIncreaseButton, 7, 0);
       }
 
       private Date _date = Date.MinValue;
@@ -543,9 +582,6 @@ namespace Editor.Controls
             _dateTextBox.Text = _date;
          }
       } 
-
-      public DateControlLayout DateControlLayout { get; set; }
-
 
       public void SetDate(Date date)
       {
@@ -574,6 +610,7 @@ namespace Editor.Controls
          }
 
          _dateTextBox.Text = Date.ToString();
+         ProvinceHistoryManager.LoadDate(Date);
       }
 
       public void OnMonthIncrease (object? sender, EventArgs e)
@@ -592,6 +629,7 @@ namespace Editor.Controls
          }
 
          _dateTextBox.Text = Date.ToString();
+         ProvinceHistoryManager.LoadDate(Date);
       }
 
       public void OnDayIncrease (object? sender, EventArgs e)
@@ -628,6 +666,7 @@ namespace Editor.Controls
                break;
          }
          _dateTextBox.Text = Date.ToString();
+         ProvinceHistoryManager.LoadDate(Date);
       }
 
       public void OnMonthDecrease (object? sender, EventArgs e)
@@ -645,6 +684,7 @@ namespace Editor.Controls
                break;
          }
          _dateTextBox.Text = Date.ToString();
+         ProvinceHistoryManager.LoadDate(Date);
       }
 
       public void OnDayDecrease (object? sender, EventArgs e)
@@ -662,31 +702,9 @@ namespace Editor.Controls
                break;
          }
          _dateTextBox.Text = Date.ToString();
+         ProvinceHistoryManager.LoadDate(Date);
       }
 
    }
 
-   public sealed class DecreaseButton : Button
-   {
-      public DecreaseButton()
-      {
-         Text = "-";
-         Dock = DockStyle.Fill;
-         TextAlign = ContentAlignment.MiddleCenter;
-         Margin = new (0);
-         Padding = new (0);
-      }
-   }
-
-   public sealed class IncreaseButton : Button
-   {
-      public IncreaseButton()
-      {
-         Text = "+";
-         Dock = DockStyle.Fill;
-         TextAlign = ContentAlignment.MiddleCenter;
-         Margin = new(0);
-         Padding = new(0);
-      }
-   }
 }
