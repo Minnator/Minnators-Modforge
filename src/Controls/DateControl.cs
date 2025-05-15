@@ -2,6 +2,7 @@
 using Editor.DataClasses.Misc;
 using Editor.Helper;
 using Editor.Parser;
+using static System.Net.Mime.MediaTypeNames;
 using Timer = System.Windows.Forms.Timer;
 
 namespace Editor.Controls
@@ -20,30 +21,6 @@ namespace Editor.Controls
          timer.Tick += (_, _) => ConfirmDate();
       }
 
-      private static bool IsValidInput(int numOfField, string input, string? month = null)
-      {
-         switch (numOfField)
-         {
-            case 0: // Year field, must be between 1 and 9999
-               if (int.TryParse(input, out var year))
-                  return year is >= 1 and <= 9999;
-               break;
-            case 1: // Month field, must be between 1 and 12
-               if (int.TryParse(input, out var intMonth))
-                  return intMonth is >= 1 and <= 12;
-               break;
-            case 2: // Day field, must be between 1 and the Date.DaysInMonth
-               if (int.TryParse(input, out var intDay))
-               {
-                  Debug.Assert(month != null && int.TryParse(month, out _), "month != null && int.TryParse(month, out _)");
-                  return intDay >= 1 && intDay <= Date.DaysInMonth(int.Parse(month));
-               }
-               break;
-            default:
-               throw new ArgumentOutOfRangeException(nameof(numOfField), "Invalid field number");
-         }
-         return true;
-      }
 
       private void IncreaseByOne(int numOfField)
       {
@@ -157,16 +134,46 @@ namespace Editor.Controls
          {
             case 0:
                var content = Text[..lower].Trim();
-               Debug.Assert(int.TryParse(content, out _), "Year is not in 'int' format!");
+               Debug.Assert(int.TryParse(content, out _) || !string.IsNullOrEmpty(content), "Year is not in 'int' format!");
+               if (string.IsNullOrEmpty(content))
+                  content = "2";
                return (fieldPos, int.Parse(content), 0, lower);
             case 1:
                content = Text[(lower + 1)..(upper)].Trim();
-               Debug.Assert(int.TryParse(content, out _), "Month is not in 'int' format!");
+               Debug.Assert(int.TryParse(content, out _) || !string.IsNullOrEmpty(content), "Month is not in 'int' format!");
+               if (string.IsNullOrEmpty(content))
+                  content = "1";
                return (fieldPos, int.Parse(content), lower + 1, upper);
             case 2:
                content = Text[(upper + 1)..].Trim();
-               Debug.Assert(int.TryParse(content, out _), "Day is not in 'int' format!");
+               Debug.Assert(int.TryParse(content, out _) || !string.IsNullOrEmpty(content), "Day is not in 'int' format!");
+               if (string.IsNullOrEmpty(content))
+                  content = "1";
                return (fieldPos, int.Parse(content), upper + 1, Text.Length);
+            default:
+               throw new ArgumentOutOfRangeException(nameof(fieldPos), "Invalid field number");
+         }
+      }
+
+      private (int fieldPos, int content, int start, int end) GetFieldContent(int fieldPos, ref string text)
+      {
+         var lower = text.IndexOf('.');
+         var upper = text.LastIndexOf('.');
+
+         switch (fieldPos)
+         {
+            case 0:
+               var content = text[..lower].Trim();
+               Debug.Assert(int.TryParse(content, out _), "Year is not in 'int' format!");
+               return (fieldPos, int.Parse(content), 0, lower);
+            case 1:
+               content = text[(lower + 1)..(upper)].Trim();
+               Debug.Assert(int.TryParse(content, out _), "Month is not in 'int' format!");
+               return (fieldPos, int.Parse(content), lower + 1, upper);
+            case 2:
+               content = text[(upper + 1)..].Trim();
+               Debug.Assert(int.TryParse(content, out _), "Day is not in 'int' format!");
+               return (fieldPos, int.Parse(content), upper + 1, text.Length);
             default:
                throw new ArgumentOutOfRangeException(nameof(fieldPos), "Invalid field number");
          }
@@ -186,6 +193,20 @@ namespace Editor.Controls
          return fieldPos;
       }
 
+      private int GetFieldNumber(int pos, string text)
+      {
+         var lower = text.IndexOf('.');
+         var upper = text.LastIndexOf('.');
+
+         var fieldPos = 0;
+         if (lower <= pos)
+            fieldPos++;
+         if (upper <= pos)
+            fieldPos++;
+
+         return fieldPos;
+      }
+
       private void ConfirmDate()
       {
          if (Date.TryParse(Text, out var date).Ignore())
@@ -193,6 +214,37 @@ namespace Editor.Controls
             ProvinceHistoryManager.LoadDate(date);
             timer.Stop();
          }
+         else
+         {
+            Text = Globals.StartDate.ToString();
+         }
+      }
+
+      private void EnforceValueBounds(KeyEventArgs e)
+      {
+         var newString = Text.Remove(SelectionStart, SelectionLength).Insert(SelectionStart, ((char)e.KeyValue).ToString());
+         var fieldPos = GetFieldNumber(SelectionStart, newString);
+         var (_, content, start, end) = GetFieldContent(fieldPos, ref newString);
+
+         switch (fieldPos)
+         {
+            case 0:
+               content = Math.Min(9999, Math.Max(2, content));
+               break;
+            case 1:
+               content = Math.Min(12, Math.Max(1, content));
+               break;
+            case 2:
+               content = Math.Min(Date.DaysInMonth(content), Math.Max(1, content));
+               break;
+         }
+         Text = newString.Remove(start, end - start).Insert(start, content.ToString());
+         (_, _, _, end) = GetFieldContent(fieldPos);
+         SelectionStart = end;
+         SelectionLength = 0;
+
+         e.SuppressKeyPress = true;
+         e.Handled = true;
       }
 
       protected override void OnKeyDown(KeyEventArgs e)
@@ -205,6 +257,21 @@ namespace Editor.Controls
             e.Handled = true;
 
             timer.Stop();
+         }
+
+         if (e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back)
+         {
+            if (SelectionLength == 0)
+               return;
+
+            var selectedText = Text[SelectionStart..SelectionLength];
+            var numOfPoints = selectedText.Count(c => c == '.');
+            if (numOfPoints > 0)
+            {
+               Text = Text.Remove(SelectionStart, SelectionLength);
+               Text = Text.Insert(SelectionStart, new string('.', numOfPoints));
+               SelectionStart = SelectionStart++;
+            }
          }
 
          if (e.KeyCode == Keys.Up)
@@ -230,14 +297,6 @@ namespace Editor.Controls
             e.Handled = true;
             timer.Stop();
             timer.Start();
-            return;
-         }
-
-
-         if (!char.IsDigit((char)e.KeyValue) && e.KeyCode != Keys.Tab && e.KeyCode != Keys.OemPeriod)
-         {
-            e.SuppressKeyPress = true;
-            e.Handled = true;
             return;
          }
 
@@ -273,7 +332,20 @@ namespace Editor.Controls
             }
             timer.Stop();
             timer.Start();
+
+            e.Handled = true;
+            return;
          }
+
+         if (!char.IsDigit((char)e.KeyValue) && e.KeyCode != Keys.Tab && e.KeyCode != Keys.OemPeriod)
+         {
+            e.SuppressKeyPress = true;
+            e.Handled = true;
+            return;
+         }
+
+         // Key isDigit
+         EnforceValueBounds(e);
       }
 
       protected override void OnGotFocus(EventArgs e)
