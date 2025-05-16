@@ -202,6 +202,7 @@ namespace Editor.Controls
          {
             ProvinceHistoryManager.LoadDate(date);
             timer.Stop();
+            _quickTimer.Stop();
          }
          else
          {
@@ -570,22 +571,11 @@ namespace Editor.Controls
          _tableLayoutPanel.Controls.Add(_dayIncreaseButton, 7, 0);
       }
 
-      private Date _date = Date.MinValue;
-      public Date Date
-      {
-         get => _date;
-         set
-         {
-            if (_date == value)
-               return;
-            _date = value;
-            _dateTextBox.Text = _date;
-         }
-      } 
+      public Date Date { get; set; }
 
       public void SetDate(Date date)
       {
-         Date = date;
+         Date.SetDate(date);
          _dateTextBox.Text = Date.ToString();
       }
 

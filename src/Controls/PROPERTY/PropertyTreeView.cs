@@ -124,12 +124,7 @@ namespace Editor.Controls.PROPERTY
          
          Saveable.RemoveInFieldCollection<Province, List<ProvinceHistoryEntry>, ProvinceHistoryEntry>(saveables[0], index, PropertyInfo);
       }
-
-      public void LoadValueToGui()
-      {
-
-      }
-
+      
       public override void SetValue(List<ProvinceHistoryEntry> value)
       {
          Nodes.Clear();

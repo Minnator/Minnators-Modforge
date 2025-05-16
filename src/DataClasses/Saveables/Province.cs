@@ -683,7 +683,7 @@ namespace Editor.DataClasses.Saveables
 
       public void LoadHistoryForDate(Date date)
       {
-         Debug.Assert(date >= ProvinceHistoryManager.CurrentLoadedDate, "date > ProvinceHistoryManager.CurrentLoadedDate");
+         Debug.Assert(date > ProvinceHistoryManager.CurrentLoadedDate, "date > ProvinceHistoryManager.CurrentLoadedDate");
          foreach (var entry in ProvinceHistoryManager.EnumerateFromToDate(History, ProvinceHistoryManager.CurrentLoadedDate, date))
             foreach (var eff in entry.Effects)
                eff.Activate(this);
