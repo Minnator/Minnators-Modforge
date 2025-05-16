@@ -227,7 +227,7 @@ public static class ProvinceParser
          }
       }
 
-      var historyEntry = new ProvinceHistoryEntry(date);
+      var historyEntry = new ProvinceHistoryEntry(date, HistoryEntryManager.PHEIndex++);
 
       var effect = Effect.ConstructEffect(block.GetElements(), po, Scopes.Province, province);
 

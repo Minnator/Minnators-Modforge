@@ -3,18 +3,20 @@ using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
 using Editor.DataClasses.Saveables;
 using Editor.Loading.Enhanced.PCFL.Implementation;
+using Editor.Saving;
 
 namespace Editor.Helper;
 
 public static class HistoryEntryManager
 {
-   public enum HECreationType
+   public static int PHEIndex;
+   public enum HEAddingResult
    {
-      Snap, // We add it to the nearest history entry (Median distance for several entries)
-      Exact, // We add it to the exact date
+      New,
+      Appended,
    }
 
-   public static bool AddEntry(Province province, Date date, IToken newEffect, HECreationType type, bool warnIfNotLandProvince = true)
+   public static bool AddEntry(Province province, Date date, IToken newEffect, bool warnIfNotLandProvince = true)
    {
       if (warnIfNotLandProvince && !Globals.LandProvinces.Contains(province))
       {
@@ -22,92 +24,65 @@ public static class HistoryEntryManager
          return false;
       }
 
-      var entry = new ProvinceHistoryEntry(date);
+      var entry = new ProvinceHistoryEntry(date, PHEIndex++);
       entry.Effects.Add(newEffect);
-      InsertEntry(province, entry, type);
+      InsertEntry(province, entry);
       return true;
    }
 
-   public static void AddEntry(List<Province> provinces, Date date, IToken newEffect, HECreationType type)
-   {
-      var hadNonLandProvince = true;
-      foreach (var province in provinces)
-         if (!AddEntry(province, date, newEffect, type, hadNonLandProvince))
-            hadNonLandProvince = false;
-   }
-   
-   public static void InsertEntry(Province province, ProvinceHistoryEntry entry, HECreationType type)
+   public static (HEAddingResult heAddingResult, int PHEId) InsertEntry(Province province, ProvinceHistoryEntry entry)
    {
       var index = province.History.BinarySearch(entry);
       if (index < 0)
          index = ~index;
 
-      switch (type)
-      {
-         case HECreationType.Snap:
-            if (province.History.Count == 0)
-            {
-               province.History.Add(entry);
-               break;
-            }
-
-            var prevDist = int.MaxValue;
-            var nextDist = int.MaxValue;
-
-            if (index > 0)
-               prevDist = province.History[index - 1].Date.TimeStamp - entry.Date.TimeStamp;
-            if (index < province.History.Count)
-               nextDist = province.History[index].Date.TimeStamp - entry.Date.TimeStamp;
-
-            if (prevDist < nextDist || nextDist == int.MaxValue)
-               province.History[index - 1].Effects.AddRange(entry.Effects);
-            else // if they are equal we add it to the next entry
-               province.History[index].Effects.AddRange(entry.Effects);
-            break;
-         case HECreationType.Exact:
-            if (index > 0) // we check if the previous entry is the same date
-            {
-               if (province.History[index - 1].Date == entry.Date)
-                  province.History[index - 1].Effects.AddRange(entry.Effects);
-            }
-            else
-               province.History.Insert(index, entry);
-
-            break;
-         default:
-            throw new ArgumentOutOfRangeException(nameof(type), type, null);
-      }
+      while (index > 0 && province.History[index - 1].Date == entry.Date) 
+         index--;
+      province.History.Insert(index, entry);
+      return (HEAddingResult.New, entry.PHEId);
    }
 
-   public static void RemoveEntry(Province province, ProvinceHistoryEntry entry, HECreationType type)
+   public static void RemoveEntry(Province province, List<IToken> effects, int hEIndex, Date date)
+   {
+      var dummyEntry = new ProvinceHistoryEntry(date, hEIndex);
+      dummyEntry.Effects.AddRange(effects);
+      RemoveEntry(province, dummyEntry, hEIndex, HEAddingResult.Appended);
+   }
+
+   public static void RemoveEntry(Province province, ProvinceHistoryEntry entry, int hEIndex, HEAddingResult ar)
    {
       var index = province.History.BinarySearch(entry);
       if (index < 0)
          index = ~index;
 
-      switch (type)
+      // We need to make sure that we find the correct one if we have several with the same date.
+      var searchIndex = index;
+      while (searchIndex < province.History.Count && province.History[searchIndex].Date == entry.Date)
       {
-         case HECreationType.Snap:
-            //TODO
-
-            break;
-         case HECreationType.Exact:
-            // we could have several with the same date so we need to verify which one we want to remove
-            if (index > 0) // we check if the previous entry is the same date
-            {
-               if (province.History[index - 1].Date == entry.Date)
-               {
-                  if (province.History[index - 1].GetHashCode() == entry.GetHashCode())
-                     province.History.RemoveAt(index - 1);
-                  else
-                     province.History.RemoveAt(index);
-               }
-            }
+         if (province.History[searchIndex].PHEId == hEIndex)
+         {
+            if (ar == HEAddingResult.New) 
+               province.History.RemoveAt(searchIndex);
             else
-               province.History.RemoveAt(index);
-
-            break;
+               province.History[searchIndex].Effects.RemoveAll(entry.Effects.Contains);
+            return;
+         }
+         searchIndex++;
       }
+      searchIndex = index;
+      while (searchIndex > 0 && province.History[searchIndex - 1].Date == entry.Date)
+      {
+         if (province.History[searchIndex - 1].PHEId == hEIndex)
+         {
+            if (ar == HEAddingResult.New)
+               province.History.RemoveAt(searchIndex);
+            else
+               province.History[searchIndex].Effects.RemoveAll(entry.Effects.Contains);
+            return;
+         }
+         searchIndex--;
+      }
+      throw new EvilActions($"Could not find specified 'ProvinceHistoryEntry' to remove: {hEIndex}");
    }
 
    public static bool MergeEntries(List<Province> provinces) => MergeEntries(provinces, Date.MinValue, Date.MaxValue);

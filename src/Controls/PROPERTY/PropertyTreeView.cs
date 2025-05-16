@@ -92,12 +92,12 @@ namespace Editor.Controls.PROPERTY
          int index;
          if (_clickedEntry == null)
          {
-            entry = new(new(Globals.MapWindow.DateControl.Date.TimeStamp));
+            entry = new(new(Globals.MapWindow.DateControl.Date.TimeStamp), HistoryEntryManager.PHEIndex++);
             index = saveables[0].History.BinarySearch(entry);
          }
          else
          {
-            entry = new(new(_clickedEntry.Date.TimeStamp + 1));
+            entry = new(new(_clickedEntry.Date.TimeStamp + 1), HistoryEntryManager.PHEIndex++);
             index = saveables[0].History.BinarySearch(_clickedEntry);
          }
 

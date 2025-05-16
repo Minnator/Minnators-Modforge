@@ -67,8 +67,10 @@ namespace Editor.DataClasses.GameDataClasses
       }
    }
    
-   public class ProvinceHistoryEntry(Date date) : HistoryEntry(date)
+   public class ProvinceHistoryEntry(Date date, int id) : HistoryEntry(date)
    {
+      public int PHEId { get; set; } = id;
+
       public override string ToString()
       {
          var sb = new StringBuilder();
