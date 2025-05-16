@@ -362,6 +362,7 @@
          // gCToolStripMenuItem
          // 
          gCToolStripMenuItem.Name = "gCToolStripMenuItem";
+         gCToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.G;
          gCToolStripMenuItem.Size = new Size(268, 22);
          gCToolStripMenuItem.Text = "Garbage Collection";
          gCToolStripMenuItem.Click += gCToolStripMenuItem_Click;

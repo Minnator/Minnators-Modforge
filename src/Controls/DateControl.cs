@@ -239,20 +239,24 @@ namespace Editor.Controls
 
       protected override void OnMouseWheel(MouseEventArgs e)
       {
+         var mousePos = PointToClient(MousePosition);
+         var charIndex = GetCharIndexFromPosition(mousePos);
+
          if (e.Delta > 0)
          {
-            var fieldPos = GetFieldNumber(SelectionStart);
+            var fieldPos = GetFieldNumber(charIndex);
             IncreaseByOne(fieldPos, true);
          }
          else if (e.Delta < 0)
          {
-            var fieldPos = GetFieldNumber(SelectionStart);
+            var fieldPos = GetFieldNumber(charIndex);
             IncreaseByOne(fieldPos, false);
          }
 
          if (Globals.Settings.Rendering.Map.NoDelayMapUpdate)
          {
             ConfirmDate();
+            timer.Stop();
             _quickTimer.Stop();
             return;
          }

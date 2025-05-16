@@ -100,34 +100,33 @@ public partial class LocalisationLoading
    {
       HashSet<LocObject> filteredLoc = new(12000);
 
-      FilterByKey(() => Globals.Countries.Values.Select(x => x.TitleKey), Globals.Localisation, filteredLoc);
-      FilterByKey(() => Globals.Countries.Values.Select(x => x.AdjectiveKey), Globals.Localisation, filteredLoc);
+      FilterByKey(Globals.Countries.Values.Select(x => x.TitleKey), Globals.Localisation, filteredLoc);
+      FilterByKey(Globals.Countries.Values.Select(x => x.AdjectiveKey), Globals.Localisation, filteredLoc);
       
-      FilterByKey(() => Globals.Provinces.Select(x => x.TitleKey), Globals.Localisation, filteredLoc);
-      FilterByKey(() => Globals.Provinces.Select(x => x.AdjectiveKey), Globals.Localisation, filteredLoc);
+      FilterByKey(Globals.Provinces.Select(x => x.TitleKey), Globals.Localisation, filteredLoc);
+      FilterByKey(Globals.Provinces.Select(x => x.AdjectiveKey), Globals.Localisation, filteredLoc);
 
-      FilterByKey(() => Globals.Areas.Keys, Globals.Localisation, filteredLoc);
-      FilterByKey(() => Globals.Regions.Keys, Globals.Localisation, filteredLoc);
-      FilterByKey(() => Globals.SuperRegions.Keys, Globals.Localisation, filteredLoc);
-      FilterByKey(() => Globals.TradeNodes.Keys, Globals.Localisation, filteredLoc);
-      FilterByKey(() => Globals.TradeCompanies.Keys, Globals.Localisation, filteredLoc);
-      FilterByKey(() => Globals.CultureGroups.Keys, Globals.Localisation, filteredLoc);
-      FilterByKey(() => Globals.ColonialRegions.Keys, Globals.Localisation, filteredLoc);
+      FilterByKey(Globals.Areas.Keys, Globals.Localisation, filteredLoc);
+      FilterByKey(Globals.Regions.Keys, Globals.Localisation, filteredLoc);
+      FilterByKey(Globals.SuperRegions.Keys, Globals.Localisation, filteredLoc);
+      FilterByKey(Globals.TradeNodes.Keys, Globals.Localisation, filteredLoc);
+      FilterByKey(Globals.TradeCompanies.Keys, Globals.Localisation, filteredLoc);
+      FilterByKey(Globals.CultureGroups.Keys, Globals.Localisation, filteredLoc);
+      FilterByKey(Globals.ColonialRegions.Keys, Globals.Localisation, filteredLoc);
 
-      FilterByKey(() => Globals.Cultures.Keys, Globals.Localisation, filteredLoc);
-      FilterByKey(() => Globals.Religions.Keys, Globals.Localisation, filteredLoc);
+      FilterByKey(Globals.Cultures.Keys, Globals.Localisation, filteredLoc);
+      FilterByKey(Globals.Religions.Keys, Globals.Localisation, filteredLoc);
 
-      FilterByKey(() => Globals.Missions.Keys, Globals.Localisation, filteredLoc);
-      FilterByKey(() => Globals.MissionSlots.Select(x => x.Name), Globals.Localisation, filteredLoc);
+      FilterByKey(Globals.Missions.Keys, Globals.Localisation, filteredLoc);
+      FilterByKey(Globals.MissionSlots.Select(x => x.Name), Globals.Localisation, filteredLoc);
 
       Globals.Localisation.Clear();
       Globals.Localisation = filteredLoc;
-      Debug.WriteLine(filteredLoc.Count);
    }
 
-   private static void FilterByKey(Func<IEnumerable<string>> keyProvider, HashSet<LocObject> source, HashSet<LocObject> target)
+   private static void FilterByKey(IEnumerable<string> keyProvider, HashSet<LocObject> source, HashSet<LocObject> target)
    {
-      foreach (var key in keyProvider.Invoke())
+      foreach (var key in keyProvider)
       {
          SearchLoc.Key = key;
          if (source.TryGetValue(SearchLoc, out var locObj)) 
