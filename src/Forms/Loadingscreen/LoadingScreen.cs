@@ -96,6 +96,7 @@ namespace Editor.Forms.Loadingscreen
          Eu4Cursors.LoadCursors,
          MissionLoading.LoadMissions,
          SpriteTypeParsing.Load, // MUST be after missions as it is only supposed to load sprite types used by missions
+         LocalisationLoading.FilterLocObjs,
 
          // Must be last
          ModifierParser.Demilitarize,
