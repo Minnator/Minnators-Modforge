@@ -10,6 +10,7 @@ namespace Editor.Helper
    public static class ProvinceHistoryManager
    {
       public static Date CurrentLoadedDate = Date.MinValue;
+      public static bool IsLoading { get; private set; } = false;
 
       public static void ResetProvinceHistory()
       {
@@ -20,6 +21,7 @@ namespace Editor.Helper
       {
          if (date != CurrentLoadedDate)
          {
+            IsLoading = true;
             var state = Globals.State;
             Globals.State = State.Loading;
             if (date < CurrentLoadedDate)
@@ -30,6 +32,7 @@ namespace Editor.Helper
                province.LoadHistoryForDate(date);
             CurrentLoadedDate.SetDate(date);
             Globals.State = state;
+            IsLoading = false;
          }
          if (render)
             MapModeManager.RenderCurrent();
@@ -41,6 +44,7 @@ namespace Editor.Helper
 
       public static void ReloadDate(Province province)
       {
+         IsLoading = true;
          var state = Globals.State;
          Globals.State = State.Loading;
          province.ResetHistory();
@@ -50,6 +54,7 @@ namespace Editor.Helper
          province.LoadHistoryForDate(date);
          CurrentLoadedDate.SetDateSilent(date);
          Globals.State = state;
+         IsLoading = false;
       }
 
       public static IEnumerable<ProvinceHistoryEntry> EnumerateFromToDate(List<ProvinceHistoryEntry> entries, Date date, Date endDate)

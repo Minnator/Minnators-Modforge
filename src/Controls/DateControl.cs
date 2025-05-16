@@ -271,6 +271,8 @@ namespace Editor.Controls
             e.Handled = true;
 
             timer.Stop();
+            _quickTimer.Stop();
+            return;
          }
 
          if (e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back)

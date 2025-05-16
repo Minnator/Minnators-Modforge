@@ -213,7 +213,7 @@ namespace Editor.Forms
             }
             else
             {
-               var index = Globals.Bookmarks.FindIndex(x => x.Date == date);
+               var index = Globals.Bookmarks.FindIndex(x => x.Date == date) + 1;
                BookMarkComboBox.SelectedIndex = index;
                BookMarkComboBox.ForeColor = Color.Black;
             }
@@ -233,6 +233,9 @@ namespace Editor.Forms
       private void OnBookMarkChanged(object? sender, EventArgs e)
       {
          Debug.Assert(BookMarkComboBox.SelectedIndex != -1, "BookMarkComboBox.SelectedIndex == -1 must never be reached!");
+         if (ProvinceHistoryManager.IsLoading)
+            return;
+         
          if (BookMarkComboBox.SelectedIndex == 0)
          {
             ProvinceHistoryManager.LoadDate(Date.MinValue);
