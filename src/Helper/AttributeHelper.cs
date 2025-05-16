@@ -157,19 +157,20 @@ namespace Editor.Helper
          return true;
       }
 
-      public static string GetStringWithoutCamelCase(string camelString)
+      public static string GetStringWithoutCamelCase(string camelString, bool stripScenario = true)
       {
+         if (stripScenario && camelString.StartsWith("Scenario"))
+            camelString = camelString[8..];
          var sb = new StringBuilder();
-         var first = true;
-         foreach (var c in camelString)
+         for (var i = 0; i < camelString.Length; i++)
          {
+            var c = camelString[i];
             if (char.IsUpper(c))
-               if (!first)
+               if (i != 0)
                   sb.Append(' ');
-               else
-                  first = false;
             sb.Append(c);
          }
+
          return sb.ToString();
       }
 

@@ -151,24 +151,24 @@ namespace Editor.DataClasses.Saveables
       // ##################### Simple setter #####################
       # region SimpleSetter
 
-      [GameIcon(GameIcons.Claim)]
       public List<Tag> Claims { get => _claims; set => _claims = value; }
+      [GameIcon(GameIcons.Claim)]
       public List<Tag> ScenarioClaims
       {
          get => _scenarioClaims;
          set => SetIfModifiedEnumerable<List<Tag>, Tag>(ref _scenarioClaims, ref _claims, value);
       }
 
-      [GameIcon(GameIcons.Claim)]
       public List<Tag> PermanentClaims { get => _permanentClaims; set => _permanentClaims = value; }
+      [GameIcon(GameIcons.Claim)]
       public List<Tag> ScenarioPermanentClaims
       {
          get => _scenarioPermanentClaims;
          set => SetIfModifiedEnumerable<List<Tag>, Tag>(ref _scenarioPermanentClaims, ref _permanentClaims, value);
       }
 
-      [GameIcon(GameIcons.Core, false)]
       public List<Tag> Cores { get => _cores; set => _cores = value; }
+      [GameIcon(GameIcons.Core, false)]
       public List<Tag> ScenarioCores
       {
          get => _scenarioCores;
@@ -302,8 +302,8 @@ namespace Editor.DataClasses.Saveables
          set => SetField(ref _scenarioProsperity, ref _prosperity, Math.Max(0, value));
       }
 
-      [GameIcon(GameIcons.DiscoverAchievement)]
       public List<string> DiscoveredBy { get => _discoveredBy; set => _discoveredBy = value; }
+      [GameIcon(GameIcons.DiscoverAchievement)]
       public List<string> ScenarioDiscoveredBy
       {
          get => _scenarioDiscoveredBy;
@@ -334,8 +334,8 @@ namespace Editor.DataClasses.Saveables
          set => SetField(ref _scenarioReligion, ref _religion, value);
       }
 
-      [GameIcon(GameIcons.Building, false)]
       public List<Building> Buildings { get => _buildings; set => _buildings = value; }
+      [GameIcon(GameIcons.Building, false)]
       public List<Building> ScenarioBuildings
       {
          get => _scenarioBuildings;
