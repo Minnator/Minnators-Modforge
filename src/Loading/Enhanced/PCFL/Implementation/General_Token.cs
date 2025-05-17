@@ -8,12 +8,30 @@ namespace Editor.Loading.Enhanced.PCFL.Implementation
 
    public abstract class SimpleEffect<T>(T defaultValue) : IToken where T : notnull 
    {
-      internal Value<T> _value = new(defaultValue); // Default value and type of T
+      public Value<T> _value = new(defaultValue); // Default value and type of T
       public virtual bool Parse(LineKvp<string, string> command, PathObj po, ParsingContext context) => GeneralFileParser.ParseSingleTriggerVal(ref _value, command, po, context);
       public abstract void Activate(ITarget target);
       public virtual void GetTokenString(int tabs, ref StringBuilder sb)
       {
          SavingUtil.AddValue(tabs, _value, GetTokenName(), ref sb);
+      }
+
+      public override bool Equals(object? obj)
+      {
+         if (obj is null)
+            return false;
+         if (ReferenceEquals(this, obj))
+            return true;
+
+         if (obj is not SimpleEffect<T> other)
+            return false;
+
+         return _value.Equals(other._value);
+      }
+
+      public override int GetHashCode()
+      {
+         return _value.GetHashCode() ^ GetTokenName().GetHashCode();
       }
 
       public abstract string GetTokenName();

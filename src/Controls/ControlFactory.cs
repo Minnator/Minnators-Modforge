@@ -47,8 +47,8 @@ public static class ControlFactory
    
    public static PrvHistIntUi GetPrvHistIntUi(string label,
                                               PropertyInfo info,
-                                              PCFL_TokenParseDelegate effect,
-                                              PCFL_TokenParseDelegate setEffect,
+                                              Func<int, IToken> effect,
+                                              Func<int, IToken> setEffect,
                                               int value = 0,
                                               int min = 0,
                                               int max = 100,

@@ -27,6 +27,8 @@ namespace Editor.Controls.PROPERTY
          BorderStyle = BorderStyle.FixedSingle;
          Margin = new(3, 0, 0, 0);
 
+         LoadGuiEvents.ProvHistoryLoadAction += ((IPropertyControl<Province, List<ProvinceHistoryEntry>>)this).LoadToGui;
+
          var deleteButton = new ToolStripButton
          {
             Text = "Delete Entry",

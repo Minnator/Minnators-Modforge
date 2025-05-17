@@ -196,6 +196,7 @@ namespace Editor.Forms
 
          TopStripLayoutPanel.Controls.Add(DateControl, 8, 0);
          DateControl.OnDateChanged += OnDateChanged;
+         GeneralToolTip.SetToolTip(DateControl.DateTextBox, "Use 'Tab' to jump between year / month / day.\nUse 'ArrowUp' & 'ArrowDown' to in- decrease the selected year / month / day.\nUse the mouse to hover over the year / month / day to increase it.\nUse 'Shift' or 'Ctrl' to in- decrease the year / month / day using the buttons.");
 
          SelectionTypeBox.Items.AddRange([.. Enum.GetNames<SelectionType>()]);
          SelectionTypeBox.SelectedIndex = 0;
@@ -219,8 +220,7 @@ namespace Editor.Forms
             }
             BookMarkComboBox.Invalidate();
          };
-
-         // TODO why does this only work when doing it like this? Why do the map mode buttons not render unless this is done once
+         // TODO why do I have to do this to make the map mode buttons render?
          ShowHistoryEntries = true;
          RenderHistoryIfNeeded();
          ShowHistoryEntries = false;
@@ -1456,16 +1456,16 @@ namespace Editor.Forms
 
          _prvHistTaxNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.BaseTax),
                                                              typeof(Province).GetProperty(nameof(Province.BaseTax))!,
-                                                             Scopes.Province.Effects[AddBaseTaxEffect.EffectName],
-                                                             Scopes.Province.Effects[BaseTaxEffect.EffectName]);
+                                                             value => new AddBaseTaxEffect { _value = { Val = value } },
+                                                             value => new BaseTaxEffect { _value = { Val = value } });
          _prvHistPrdNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.BaseProduction),
                                                              typeof(Province).GetProperty(nameof(Province.BaseProduction))!,
-                                                             Scopes.Province.Effects[AddBaseProductionEffect.EffectName],
-                                                             Scopes.Province.Effects[BaseProductionEffect.EffectName]);
+                                                             value => new AddBaseProductionEffect { _value = { Val = value } },
+                                                             value => new BaseProductionEffect { _value = { Val = value } });
          _prvHistMnpNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.BaseManpower),
                                                              typeof(Province).GetProperty(nameof(Province.BaseManpower))!,
-                                                             Scopes.Province.Effects[AddBaseManpowerEffect.EffectName],
-                                                             Scopes.Province.Effects[BaseManpowerEffect.EffectName]);
+                                                             value => new AddBaseManpowerEffect { _value = { Val = value } },
+                                                             value => new BaseManpowerEffect { _value = { Val = value } });
 
          ProvHistoryLayout.Controls.Add(_prvHistTaxNumeric, 0, blockOffset + 0);
          ProvHistoryLayout.Controls.Add(_prvHistPrdNumeric, 0, blockOffset + 1);
@@ -1550,8 +1550,8 @@ namespace Editor.Forms
                                                                       hasSet:false);
          _prvHistExtraCostNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.ExtraCost),
                                                                    typeof(Province).GetProperty(nameof(Province.ExtraCost))!,
-                                                                   Scopes.Province.Effects[ExtraCostEffect.EffectName],
-                                                                   Scopes.Province.Effects[ExtraCostEffect.EffectName],
+                                                                   value => new ExtraCostEffect { _value = { Val = value } },
+                                                                   value => new ExtraCostEffect { _value = { Val = value } },
                                                                    hasSet: false);
 
          ProvHistoryLayout.Controls.Add(_prvHistDevastationNumeric, 0, blockOffset + 0);
@@ -1607,13 +1607,13 @@ namespace Editor.Forms
                                                                                true);
          _prvHistNativesSizeNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.NativeSize),
                                                                      typeof(Province).GetProperty(nameof(Province.NativeSize))!,
-                                                                     Scopes.Province.Effects[NativeSizeEffect.EffectName],
-                                                                     Scopes.Province.Effects[NativeSizeEffect.EffectName],
+                                                                     value => new NativeSizeEffect { _value = { Val = value } },
+                                                                     value => new NativeSizeEffect { _value = { Val = value } },
                                                                      hasSet: false);
          _prvHistNativesHostilityNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.NativeHostileness),
-                                                                         typeof(Province).GetProperty(nameof(Province.NativeHostileness))!,
-                                                                         Scopes.Province.Effects[NativeHostilnessEffect.EffectName],
-                                                                         Scopes.Province.Effects[NativeHostilnessEffect.EffectName],
+                                                                         typeof(Province).GetProperty(nameof(Province.NativeHostileness))!, 
+                                                                         value => new NativeHostilnessEffect { _value = { Val = value } },
+                                                                         value => new NativeHostilnessEffect { _value = { Val = value } },
                                                                          hasSet: false);
          _prvHistNativesFerocityNumeric = ControlFactory.GetPrvHistFloatUi(nameof(Province.NativeFerocity),
                                                                          typeof(Province).GetProperty(nameof(Province.NativeFerocity))!,

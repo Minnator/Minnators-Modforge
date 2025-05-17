@@ -3,6 +3,7 @@ using Editor.Controls.PROPERTY;
 using Editor.DataClasses.Saveables;
 using Editor.Events;
 using System.Reflection;
+using Editor.DataClasses.Commands;
 using Editor.Forms.Feature;
 using static Editor.Forms.PopUps.CreateCountryForm;
 using Editor.Loading.Enhanced.PCFL.Implementation;
@@ -12,6 +13,7 @@ using static Editor.Loading.Enhanced.PCFL.Implementation.PCFL_Scope;
 using Editor.DataClasses.DataStructures;
 using Newtonsoft.Json.Linq;
 using Editor.Saving;
+using Timer = System.Windows.Forms.Timer;
 
 namespace Editor.Controls.PRV_HIST
 {
@@ -323,17 +325,23 @@ namespace Editor.Controls.PRV_HIST
       }
    }
 
-   public class PrvHistIntUi : PrvHistSetAddUi, IPrvHisSetOptSinglePropControl<int>
+   public class PrvHistIntUi : PrvHistSetAddUi, IPrvHisSetOptSinglePropControlNew<int>
    {
       public NumericUpDown IntNumeric { get; }
-      public PCFL_TokenParseDelegate EffectDelegate { get; init; }
-      public PCFL_TokenParseDelegate SetEffectDelegate { get; init; }
+      public Func<int, IToken> SetEffectToken { get; init; }
+      public Func<int, IToken> EffectToken { get; init; }
       public PropertyInfo PropertyInfo { get; init; }
+      private Timer _timer = new()
+      {
+         Interval = Globals.Settings.Gui.TextBoxCommandCreationInterval
+      };
+
+      private int _lastValue = -1;
 
       public PrvHistIntUi(string text,
                           PropertyInfo info,
-                          PCFL_TokenParseDelegate effect,
-                          PCFL_TokenParseDelegate setEffect,
+                          Func<int, IToken> effect,
+                          Func<int, IToken> setEffect,
                           int value = 0,
                           int min = 0,
                           int max = 100,
@@ -345,23 +353,77 @@ namespace Editor.Controls.PRV_HIST
          }, hasSet)
       {
          PropertyInfo = info;
-         EffectDelegate = effect;
-         SetEffectDelegate = setEffect;
+         SetEffectToken = setEffect;
+         EffectToken = effect;
          LoadGuiEvents.ProvHistoryLoadAction += ((IPropertyControl<Province, int>)this).LoadToGui;
 
          IntNumeric = (NumericUpDown)Controls[2]; // keep a reference directly
          IntNumeric.Minimum = min;
          IntNumeric.Maximum = max;
          IntNumeric.Value = value;
+
+         IntNumeric.KeyDown += NumericOnKeyDown;
+         IntNumeric.Enter += NumericOnEnter;
+         IntNumeric.Leave += NumericOnLeave;
+
+         _timer.Tick += (_, _) =>
+         {
+            SetFromGui();
+            _timer.Stop();
+         };
       }
+
+      private void NumericOnKeyDown(object? sender, KeyEventArgs e)
+      {
+         if (e.KeyCode == Keys.Enter)
+         {
+            SetFromGui();
+            _timer.Stop();
+            e.Handled = true;
+         }
+      }
+
+      private void NumericOnEnter (object? sender, EventArgs e)
+      {
+         _timer.Stop();
+         _timer.Start();
+      }
+
+      private void NumericOnLeave (object? sender, EventArgs e)
+      {
+         _timer.Stop();
+         SetFromGui();
+      }
+
       public void SetFromGui()
       {
-         if (Globals.State != State.Running || !GetFromGui(out var value).Log())
+         if (Globals.State != State.Running || !GetFromGui(out var value).Log() || _lastValue == value)
             return;
-         // TODO add a history command
+
+         IToken token;
+         if (SetCheckBox.Checked)
+         {
+            token = SetEffectToken(value);
+            // Set delegate
+         }
+         else
+         {
+            token = EffectToken(value);
+            // Add delegate
+         }
+         var command = new PrvHistoryEntryCommand(Selection.GetSelectedProvinces, [token], ProvinceHistoryManager.CurrentLoadedDate, out var changed);
+         if(changed)
+            HistoryManager.AddCommand(command);
+
+         _lastValue = value;
       }
-      public void SetDefault() => IntNumeric.Value = IntNumeric.Minimum;
-      public void SetValue(int value) => IntNumeric.Value = value;
+      public void SetDefault()
+      {
+         IntNumeric.Value = IntNumeric.Minimum; 
+         _lastValue = (int)IntNumeric.Value;
+      }
+
+      public void SetValue(int value) => IntNumeric.Value = _lastValue = value;
       public IErrorHandle GetFromGui(out int value)
       {
          value = (int)IntNumeric.Value;

@@ -3,6 +3,7 @@ using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
 using Editor.DataClasses.Saveables;
 using Editor.Loading.Enhanced.PCFL.Implementation;
+using Editor.Parser;
 using Editor.Saving;
 
 namespace Editor.Helper;
@@ -14,6 +15,59 @@ public static class HistoryEntryManager
    {
       New,
       Appended,
+   }
+
+
+
+   // If a same token is found, replace the token otherwise add to the End unless it is in the forbidden tokens
+   /// <summary>
+   /// -1 Do nothing\n-2 Error\n-3 Append to end
+   /// </summary>
+   /// <param name="entry"></param>
+   /// <param name="token"></param>
+   /// <returns></returns>
+   public static int MergeTokenToEntry(this ProvinceHistoryEntry entry, IToken token)
+   {
+      switch (token.GetTokenName())
+      {
+         case "add_core":
+         case "remove_core":
+         case "add_claim":
+         case "remove_claim":
+         case "add_permanent_claim":
+         case "remove_permanent_claim":
+         case "discovered_by":
+         case "remove_discovered_by":
+         case "add_building":
+         case "remove_permanent_province_modifier":
+         case "remove_province_modifier":
+         case "remove_province_triggered_modifier":
+         case "add_permanent_province_modifier":
+         case "add_province_modifier":
+         case "add_province_triggered_modifier":
+         case "add_to_trade_company":
+         case "add_trade_company_investment":
+
+            for (var i = 0; i < entry.Effects.Count; i++)
+            {
+               if (entry.Effects[i].GetTokenName().Equals(token.GetTokenName()))
+                  if (entry.Effects[i].Equals(token))
+                     return -1;
+            }
+            return -3;
+         // we need to merge
+         default:
+            for (var i = 0; i < entry.Effects.Count; i++)
+            {
+               if (entry.Effects[i].GetTokenName().Equals(token.GetTokenName()))
+               {
+                  if (entry.Effects[i].Equals(token))
+                     return -1;
+                  return i;
+               }
+            }
+            return -3;
+      }
    }
 
    public static bool AddEntry(Province province, Date date, IToken newEffect, bool warnIfNotLandProvince = true)
@@ -46,22 +100,28 @@ public static class HistoryEntryManager
    {
       var dummyEntry = new ProvinceHistoryEntry(date, hEIndex);
       dummyEntry.Effects.AddRange(effects);
-      RemoveEntry(province, dummyEntry, hEIndex, HEAddingResult.Appended);
+      RemoveEntry(province, dummyEntry, HEAddingResult.Appended);
    }
 
-   public static void RemoveEntry(Province province, ProvinceHistoryEntry entry, int hEIndex, HEAddingResult ar)
+   public static void RemoveEntry(Province province, ProvinceHistoryEntry entry, HEAddingResult ar = HEAddingResult.New)
    {
       var index = province.History.BinarySearch(entry);
       if (index < 0)
          index = ~index;
 
+      RemoveEntry(province, index, ar);
+   }
+
+   public static void RemoveEntry(Province province, int index, HEAddingResult ar = HEAddingResult.New)
+   {
+      var entry = province.History[index];
       // We need to make sure that we find the correct one if we have several with the same date.
       var searchIndex = index;
       while (searchIndex < province.History.Count && province.History[searchIndex].Date == entry.Date)
       {
-         if (province.History[searchIndex].PHEId == hEIndex)
+         if (province.History[searchIndex].PHEId == entry.PHEId)
          {
-            if (ar == HEAddingResult.New) 
+            if (ar == HEAddingResult.New)
                province.History.RemoveAt(searchIndex);
             else
                province.History[searchIndex].Effects.RemoveAll(entry.Effects.Contains);
@@ -72,7 +132,7 @@ public static class HistoryEntryManager
       searchIndex = index;
       while (searchIndex > 0 && province.History[searchIndex - 1].Date == entry.Date)
       {
-         if (province.History[searchIndex - 1].PHEId == hEIndex)
+         if (province.History[searchIndex - 1].PHEId == entry.PHEId)
          {
             if (ar == HEAddingResult.New)
                province.History.RemoveAt(searchIndex);
@@ -82,7 +142,7 @@ public static class HistoryEntryManager
          }
          searchIndex--;
       }
-      throw new EvilActions($"Could not find specified 'ProvinceHistoryEntry' to remove: {hEIndex}");
+      throw new EvilActions($"Could not find specified 'ProvinceHistoryEntry' to remove: {entry.PHEId}");
    }
 
    public static bool MergeEntries(List<Province> provinces) => MergeEntries(provinces, Date.MinValue, Date.MaxValue);

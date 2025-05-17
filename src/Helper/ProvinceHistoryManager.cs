@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
-using Editor.DataClasses.Misc;
 using Editor.DataClasses.Saveables;
 using Editor.Events;
+using Date = Editor.DataClasses.Misc.Date;
 
 namespace Editor.Helper
 {
@@ -25,9 +25,10 @@ namespace Editor.Helper
             var state = Globals.State;
             Globals.State = State.Loading;
             if (date < CurrentLoadedDate)
+            {
                ResetProvinceHistory();
-            if (date < CurrentLoadedDate)
                CurrentLoadedDate.SetDateSilent(Date.MinValue);
+            }
             foreach (var province in Globals.Provinces) 
                province.LoadHistoryForDate(date);
             CurrentLoadedDate.SetDate(date);
@@ -42,14 +43,14 @@ namespace Editor.Helper
          Globals.MapWindow.DateControl.SetDate(CurrentLoadedDate);
       }
 
-      public static void ReloadDate(Province province)
+      public static void ReloadDate(Province province, bool force = false)
       {
          IsLoading = true;
          var state = Globals.State;
          Globals.State = State.Loading;
          province.ResetHistory();
          var date = CurrentLoadedDate.Copy();
-         if (date < CurrentLoadedDate)
+         if (date < CurrentLoadedDate || force)
             CurrentLoadedDate.SetDateSilent(Date.MinValue);
          province.LoadHistoryForDate(date);
          CurrentLoadedDate.SetDateSilent(date);
@@ -69,6 +70,24 @@ namespace Editor.Helper
          }
       }
 
+
+      public static int BinarySearchDateExact(List<ProvinceHistoryEntry> entries, Date date, int startIndex = 0)
+      {
+         var low = startIndex;
+         var high = entries.Count - 1;
+         while (low <= high)
+         {
+            var index = low + (high - low) / 2;
+            if (entries[index].Date < date)
+               low = index + 1;
+            else if (entries[index].Date > date)
+               high = index - 1;
+            else
+               return index;
+         }
+         return -1;
+      }
+
       private static int BinarySearchDate(List<ProvinceHistoryEntry> entries, Date date)
       {
          var low = 0;
@@ -78,7 +97,7 @@ namespace Editor.Helper
             var index = low + (high - low) / 2;
             if (entries[index].Date <= date)
                low = index + 1;
-            else if (entries[index].Date > date)
+            else
                high = index - 1;
          }
          return low;

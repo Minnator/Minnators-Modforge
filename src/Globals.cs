@@ -359,6 +359,7 @@ public static class Globals
 // - [x] Fix log location and remove all dumps to download
 // - [x] Expose Setting to disable Discord Integration to settings menu
 // - [x] Added Support for Replace_Path
+// - [ ] Add DiscoveredBy MapMode
 
 #endregion
 

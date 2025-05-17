@@ -4,6 +4,7 @@ using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
 using Editor.Events;
 using Editor.Helper;
+using Editor.Loading.Enhanced.PCFL.Implementation;
 using Editor.Saving;
 using static Editor.Loading.Enhanced.PCFL.Implementation.PCFL_Scope;
 
@@ -22,9 +23,18 @@ public interface IPrvHistSingleEffectPropControl<TProperty> : IPropertyControl<P
    public PCFL_TokenParseDelegate EffectDelegate { get; init; } 
 }
 
+public interface IPrvHistSingleEffectPropControlNew<TProperty> : IPropertyControl<Province, TProperty> where TProperty : notnull
+{
+   public Func<int, IToken> EffectToken { get; init; } 
+}
+
 public interface IPrvHisSetOptSinglePropControl<TProperty> : IPrvHistSingleEffectPropControl<TProperty> where TProperty : notnull
 {
    public PCFL_TokenParseDelegate SetEffectDelegate { get; init; }
+}
+public interface IPrvHisSetOptSinglePropControlNew<TProperty> : IPrvHistSingleEffectPropControlNew<TProperty> where TProperty : notnull
+{
+   public Func<int, IToken> SetEffectToken { get; init; }
 }
 
 public interface IPrvHistDualEffectPropControl<TProperty, TItem> : IPropertyControlList<Province, TProperty, TItem>

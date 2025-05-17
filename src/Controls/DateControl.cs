@@ -11,7 +11,6 @@ namespace Editor.Controls
 {
    public class DateTextBox : TextBox
    {
-      private object _dateLockObject = new();
       private Timer timer = new()
       {
          Interval = Globals.Settings.Gui.TextBoxCommandCreationInterval / 2,
@@ -357,6 +356,7 @@ namespace Editor.Controls
             return;
          }
 
+         // Also ignore numpad method already exists // allow arrow keys
          if (!char.IsDigit((char)e.KeyValue) && e.KeyCode != Keys.Tab && e.KeyCode != Keys.OemPeriod)
          {
             e.SuppressKeyPress = true;
@@ -485,7 +485,7 @@ namespace Editor.Controls
       private TableLayoutPanel _tableLayoutPanel;
       public static event EventHandler<Date> OnDateChanged = delegate { };
 
-      private readonly DateTextBox _dateTextBox = new ()
+      public readonly DateTextBox DateTextBox = new ()
       {
          TextAlign = HorizontalAlignment.Center,
          Margin = new(0,2,0,0),
@@ -518,7 +518,7 @@ namespace Editor.Controls
 
          InitHorizontal();
 
-         _dateTextBox.TextChanged += OnDateTextChanged;
+         DateTextBox.TextChanged += OnDateTextChanged;
 
          _yearIncreaseButton.Click += OnYearIncrease;
          _monthIncreaseButton.Click += OnMonthIncrease;
@@ -570,7 +570,7 @@ namespace Editor.Controls
          _tableLayoutPanel.Controls.Add(_monthDecreaseButton, 2, 0);
          _tableLayoutPanel.Controls.Add(_yearDecreaseButton, 3, 0);
 
-         _tableLayoutPanel.Controls.Add(_dateTextBox, 4, 0);
+         _tableLayoutPanel.Controls.Add(DateTextBox, 4, 0);
 
          _tableLayoutPanel.Controls.Add(_yearIncreaseButton, 5, 0);
          _tableLayoutPanel.Controls.Add(_monthIncreaseButton, 6, 0);
@@ -582,7 +582,7 @@ namespace Editor.Controls
       public void SetDate(Date date)
       {
          Date.SetDate(date);
-         _dateTextBox.Text = Date.ToString();
+         DateTextBox.Text = Date.ToString();
       }
 
       private void OnDateTextChanged(object? sender, EventArgs e)
@@ -605,7 +605,7 @@ namespace Editor.Controls
                break;
          }
 
-         _dateTextBox.Text = Date.ToString();
+         DateTextBox.Text = Date.ToString();
          ProvinceHistoryManager.LoadDate(Date);
       }
 
@@ -624,7 +624,7 @@ namespace Editor.Controls
                break;
          }
 
-         _dateTextBox.Text = Date.ToString();
+         DateTextBox.Text = Date.ToString();
          ProvinceHistoryManager.LoadDate(Date);
       }
 
@@ -644,7 +644,7 @@ namespace Editor.Controls
                break;
          }
 
-         _dateTextBox.Text = Date.ToString();
+         DateTextBox.Text = Date.ToString();
       }
 
       public void OnYearDecrease (object? sender, EventArgs e)
@@ -661,7 +661,7 @@ namespace Editor.Controls
                Date.AddYears(-1);
                break;
          }
-         _dateTextBox.Text = Date.ToString();
+         DateTextBox.Text = Date.ToString();
          ProvinceHistoryManager.LoadDate(Date);
       }
 
@@ -679,7 +679,7 @@ namespace Editor.Controls
                Date.AddMonths(-1);
                break;
          }
-         _dateTextBox.Text = Date.ToString();
+         DateTextBox.Text = Date.ToString();
          ProvinceHistoryManager.LoadDate(Date);
       }
 
@@ -697,7 +697,7 @@ namespace Editor.Controls
                Date.AddDays(-1);
                break;
          }
-         _dateTextBox.Text = Date.ToString();
+         DateTextBox.Text = Date.ToString();
          ProvinceHistoryManager.LoadDate(Date);
       }
 

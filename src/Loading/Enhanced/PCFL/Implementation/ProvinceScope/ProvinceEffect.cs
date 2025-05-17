@@ -417,6 +417,24 @@ public class RevoltEffect : IToken
    public string GetTokenName() => EffectName;
    public string GetTokenDescription() => EffectDescription;
    public string GetTokenExample() => EffectExample;
+
+   public override bool Equals(object? obj)
+   {
+      if (obj is null)
+         return false;
+      if (ReferenceEquals(this, obj))
+         return true;
+
+      if (obj is not RevoltEffect other)
+         return false;
+
+      return Type.Equals(other.Type) && Size.Equals(other.Size) && Leader.Equals(other.Leader) && Name.Equals(other.Name);
+   }
+
+   public override int GetHashCode()
+   {
+      return Type.GetHashCode() ^ Size.GetHashCode() ^ Leader.GetHashCode() ^ Name.GetHashCode();
+   }
 }
 
 public class ReligionEffect() : SimpleEffect<Religion>(Religion.Empty)

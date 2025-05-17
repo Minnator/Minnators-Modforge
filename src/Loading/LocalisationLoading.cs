@@ -120,6 +120,8 @@ public partial class LocalisationLoading
       FilterByKey(Globals.Missions.Keys, Globals.Localisation, filteredLoc);
       FilterByKey(Globals.MissionSlots.Select(x => x.Name), Globals.Localisation, filteredLoc);
 
+      FilterByKey(Globals.Bookmarks.Select(x => x.TitleKey), Globals.Localisation, filteredLoc);
+
       Globals.Localisation.Clear();
       Globals.Localisation = filteredLoc;
    }

@@ -259,7 +259,7 @@ namespace Editor.DataClasses.Commands
       public override string GetDescription()
       {
          if (_indices.Length == 1)
-            return $"Removed 1 item at '{_indices[1]}' for {_property.Name}";
+            return $"Removed 1 item at '{_indices[0]}' for {_property.Name}";
          return $"Removed {_indices.Length} items into {_indices.Length} objects for {_property.Name}";
       }
 
