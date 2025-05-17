@@ -11,6 +11,8 @@ namespace Editor.Controls
 {
    public class DateTextBox : TextBox
    {
+      public const string DEFAULT_MIN_VALUE_STRING = "----.--.--";
+
       private Timer timer = new()
       {
          Interval = Globals.Settings.Gui.TextBoxCommandCreationInterval / 2,
@@ -218,7 +220,7 @@ namespace Editor.Controls
          switch (fieldPos)
          {
             case 0:
-               content = Math.Min(9999, Math.Max(2, content));
+               content = Math.Min(9999, Math.Max(1, content));
                break;
             case 1:
                content = Math.Min(12, Math.Max(1, content));
@@ -240,6 +242,9 @@ namespace Editor.Controls
       {
          var mousePos = PointToClient(MousePosition);
          var charIndex = GetCharIndexFromPosition(mousePos);
+
+         if (Text.Equals(DEFAULT_MIN_VALUE_STRING))
+            Text = "2.1.1";
 
          if (e.Delta > 0)
          {
@@ -374,6 +379,8 @@ namespace Editor.Controls
          // Select the first field (before the first dot)
          BeginInvoke(() =>
          {
+            if (Text.Equals(DEFAULT_MIN_VALUE_STRING))
+               Text = "2.1.1";
             var end = Text.IndexOf('.');
             if (end == -1) end = Text.Length;
             SelectionStart = 0;
@@ -483,7 +490,6 @@ namespace Editor.Controls
    public sealed class DateControl : Control
    {
       private TableLayoutPanel _tableLayoutPanel;
-      public static event EventHandler<Date> OnDateChanged = delegate { };
 
       public readonly DateTextBox DateTextBox = new ()
       {
@@ -582,7 +588,10 @@ namespace Editor.Controls
       public void SetDate(Date date)
       {
          Date.SetDate(date);
-         DateTextBox.Text = Date.ToString();
+         if (date == Date.MinValue)
+            DateTextBox.Text = DateTextBox.DEFAULT_MIN_VALUE_STRING;
+         else
+            DateTextBox.Text = Date.ToString();
       }
 
       private void OnDateTextChanged(object? sender, EventArgs e)

@@ -197,7 +197,6 @@ namespace Editor.Forms
          GuiDrawing.Initialize();
 
          TopStripLayoutPanel.Controls.Add(DateControl, 8, 0);
-         DateControl.OnDateChanged += OnDateChanged;
          GeneralToolTip.SetToolTip(DateControl.DateTextBox, "Use 'Tab' to jump between year / month / day.\nUse 'ArrowUp' & 'ArrowDown' to in- decrease the selected year / month / day.\nUse the mouse to hover over the year / month / day to increase it.\nUse 'Shift' or 'Ctrl' to in- decrease the year / month / day using the buttons.");
 
          SelectionTypeBox.Items.AddRange([.. Enum.GetNames<SelectionType>()]);
@@ -951,14 +950,7 @@ namespace Editor.Forms
                ? $"Open the selected province file ({Selection.GetSelectedProvinces[0].TitleLocalisation})"
                : $"Open the selected province files ({Selection.Count})");
       }
-
-      private static void OnDateChanged(object? sender, Date date)
-      {
-         if (Globals.State == State.Loading)
-            return;
-         ProvinceHistoryManager.LoadDate(date);
-      }
-
+      
       public void UpdateHoveredInfo(Province? province)
       {
          if (province == null)
