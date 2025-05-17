@@ -18,23 +18,15 @@ namespace Editor.Controls.PRV_HIST;
  */
 
 
+
 public interface IPrvHistSingleEffectPropControl<TProperty> : IPropertyControl<Province, TProperty> where TProperty : notnull
 {
-   public PCFL_TokenParseDelegate EffectDelegate { get; init; } 
-}
-
-public interface IPrvHistSingleEffectPropControlNew<TProperty> : IPropertyControl<Province, TProperty> where TProperty : notnull
-{
-   public Func<int, IToken> EffectToken { get; init; } 
+   public Func<TProperty, IToken> EffectToken { get; init; } 
 }
 
 public interface IPrvHisSetOptSinglePropControl<TProperty> : IPrvHistSingleEffectPropControl<TProperty> where TProperty : notnull
 {
-   public PCFL_TokenParseDelegate SetEffectDelegate { get; init; }
-}
-public interface IPrvHisSetOptSinglePropControlNew<TProperty> : IPrvHistSingleEffectPropControlNew<TProperty> where TProperty : notnull
-{
-   public Func<int, IToken> SetEffectToken { get; init; }
+   public Func<TProperty, IToken> SetEffectToken { get; init; }
 }
 
 public interface IPrvHistDualEffectPropControl<TProperty, TItem> : IPropertyControlList<Province, TProperty, TItem>

@@ -1035,7 +1035,7 @@ public class AddTradeCompanyInvestmentModifierEffect : IToken
    public string GetTokenExample() => EffectExample;
 }
 
-public class NativeFerocityEffect() : SimpleEffect<int>(0)
+public class NativeFerocityEffect() : SimpleEffect<float>(0)
 {
    public static readonly string EffectName = "native_ferocity";
    public static readonly string EffectDescription = $"Adds to the Native Ferocity within an uncolonized province. ";

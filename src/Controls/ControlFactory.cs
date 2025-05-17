@@ -91,8 +91,8 @@ public static class ControlFactory
 
    public static PrvHistFloatUi GetPrvHistFloatUi(string label,
                                                   PropertyInfo propInfo,
-                                                  PCFL_TokenParseDelegate effect,
-                                                  PCFL_TokenParseDelegate setEffect,
+                                                  Func<float, IToken> effect,
+                                                  Func<float, IToken> setEffect,
                                                   float value = 0,
                                                   float min = 0,
                                                   float max = 100,
@@ -107,20 +107,7 @@ public static class ControlFactory
       return ui;
    }
 
-
-   public static PrvHistSetAddUi GetPrvHistUi(string label, Control control, bool hasSetBox = false)
-   {
-      var ui = new PrvHistSetAddUi(label, control, hasSetBox)
-      {
-         Dock = DockStyle.Fill,
-         Margin = new(0)
-      };
-      if (hasSetBox)
-         SetSetAddGeneralToolTip(ui.SetCheckBox);
-      return ui;
-   }
-
-   public static PrvHistBoolUi GetPrvHistBoolUi(string label, PropertyInfo propInfo, PCFL_TokenParseDelegate effect, bool isChecked)
+   public static PrvHistBoolUi GetPrvHistBoolUi(string label, PropertyInfo propInfo, Func<bool, IToken> effect, bool isChecked)
    {
       var ui = new PrvHistBoolUi(label, propInfo, effect, isChecked)
       {
@@ -134,7 +121,7 @@ public static class ControlFactory
    public static BindablePrvHistDropDownUi<TProperty, TKey> GetBindablePrvHistDropDownUi<TProperty, TKey>(string label,
                                           PropertyInfo info,
                                           BindingDictionary<TKey, TProperty> items,
-                                          PCFL_TokenParseDelegate effect,
+                                          Func<TProperty, IToken> effect,
                                           bool isTagBox,
                                           bool isDropDownList = false) where TKey : notnull where TProperty : notnull
    {
@@ -146,7 +133,7 @@ public static class ControlFactory
       return ui;
    }
 
-   public static PrvHistDropDownUi<TProperty> GetPrvHistDropDownUi<TProperty>(string label, PropertyInfo info, PCFL_TokenParseDelegate effect, bool isTagBox, bool isDropDownList = false)
+   public static PrvHistDropDownUi<TProperty> GetPrvHistDropDownUi<TProperty>(string label, PropertyInfo info, Func<TProperty, IToken> effect, bool isTagBox, bool isDropDownList = false)
    {
       var ui = new PrvHistDropDownUi<TProperty>(label, info, effect, isTagBox, isDropDownList)
       {

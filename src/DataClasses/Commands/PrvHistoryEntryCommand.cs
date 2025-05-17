@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using Editor.Saving;
 using System.Reflection;
+using System.Text;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Misc;
@@ -117,6 +118,7 @@ namespace Editor.DataClasses.Commands
       public override void Undo()
       {
          base.Undo();
+         Debug.Assert(_tokens.Length > 0, "_tokens.Length > 0");
          foreach (var (province, created, tokenLocations) in _tokens)
          {
             var oldEntryIndex = ProvinceHistoryManager.BinarySearchDateExact(province.History, _date);
@@ -128,8 +130,8 @@ namespace Editor.DataClasses.Commands
             else
             {
                var oldEntry = province.History[oldEntryIndex];
-
-               for (var i = tokenLocations.Length; i >= 0; i--)
+               Debug.Assert(tokenLocations.Length > 0, "tokenLocations.Length > 0");
+               for (var i = tokenLocations.Length - 1; i >= 0; i--)
                {
                   var (location, token) = tokenLocations[i];
                   var oldEffect = oldEntry.Effects[location];
@@ -162,12 +164,23 @@ namespace Editor.DataClasses.Commands
 
       public override string GetDescription()
       {
-         throw new NotImplementedException();
+         return $"Added {_tokens[0].tokenLocations.Length} tokens to {_tokens.Length} provinces";
       }
 
       public override string GetDebugInformation(int indent)
       {
-         throw new NotImplementedException();
+         var sb = new StringBuilder();
+         sb.AppendLine($"{new string(' ', indent)}PrvHistoryEntryCommand");
+         sb.AppendLine($"{new string(' ', indent + 2)}Date: {_date}");
+         foreach (var (province, _, tokenLocations) in _tokens)
+         {
+            sb.AppendLine($"{new string(' ', indent + 2)}Province: {province}");
+            foreach (var (index, token) in tokenLocations)
+            {
+               sb.AppendLine($"{new string(' ', indent + 4)}Index: {index}, Token: {token}");
+            }
+         }
+         return sb.ToString();
       }
    }
 }

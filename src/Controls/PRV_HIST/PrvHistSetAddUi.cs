@@ -14,6 +14,8 @@ using Editor.DataClasses.DataStructures;
 using Newtonsoft.Json.Linq;
 using Editor.Saving;
 using Timer = System.Windows.Forms.Timer;
+using Antlr4.Runtime;
+using IToken = Editor.Loading.Enhanced.PCFL.Implementation.IToken;
 
 namespace Editor.Controls.PRV_HIST
 {
@@ -170,14 +172,20 @@ namespace Editor.Controls.PRV_HIST
    public class PrvHistFloatUi : PrvHistSetAddUi, IPrvHisSetOptSinglePropControl<float>
    {
       public NumericUpDown FloatNumeric { get; }
-      public PCFL_TokenParseDelegate EffectDelegate { get; init; }
-      public PCFL_TokenParseDelegate SetEffectDelegate { get; init; }
+      public Func<float, IToken> EffectToken { get; init; }
+      public Func<float, IToken> SetEffectToken { get; init; }
       public PropertyInfo PropertyInfo { get; init; }
+
+      private float _lastValue = -1;
+      private Timer _timer = new()
+      {
+         Interval = Globals.Settings.Gui.TextBoxCommandCreationInterval
+      };
 
       public PrvHistFloatUi(string text,
                             PropertyInfo info,
-                            PCFL_TokenParseDelegate effect,
-                            PCFL_TokenParseDelegate setEffect,
+                            Func<float, IToken> effect,
+                            Func<float, IToken> setEffect,
                             float value = 0,
                             float min = 0,
                             float max = 100,
@@ -191,33 +199,92 @@ namespace Editor.Controls.PRV_HIST
          }, hasSet)
       {
          PropertyInfo = info;
-         EffectDelegate = effect;
-         SetEffectDelegate = setEffect;
+         EffectToken = effect;
+         SetEffectToken = setEffect;
          LoadGuiEvents.ProvHistoryLoadAction += ((IPropertyControl<Province, float>)this).LoadToGui;
 
          FloatNumeric = (NumericUpDown)Controls[2]; // keep a reference directly
          FloatNumeric.Minimum = (decimal)min;
          FloatNumeric.Maximum = (decimal)max;
          FloatNumeric.Value = (decimal)value;
+
+         FloatNumeric.KeyDown += NumericOnKeyDown;
+         FloatNumeric.Enter += NumericOnEnter;
+         FloatNumeric.Leave += NumericOnLeave;
       }
       public void SetFromGui()
       {
-         if (Globals.State != State.Running || !GetFromGui(out var value).Log())
-            return;
-         // TODO add a history command
+         if (Globals.State != State.Running || !GetFromGui(out var value).Log() || Math.Abs(value - _lastValue) < 0.005f)
+            return; 
+         
+         IToken token;
+         if (SetCheckBox.Checked)
+         {
+            token = SetEffectToken(value);
+            // Set delegate
+         }
+         else
+         {
+            token = EffectToken(value);
+            // Add delegate
+         }
+         var command = new PrvHistoryEntryCommand(Selection.GetSelectedProvinces, [token], ProvinceHistoryManager.CurrentLoadedDate, out var changed);
+         if (changed)
+            HistoryManager.AddCommand(command);
+
+         _lastValue = value;
       }
-      public void SetDefault() => FloatNumeric.Value = FloatNumeric.Minimum;
-      public void SetValue(float value) => FloatNumeric.Value = (decimal)value;
+      public void SetDefault()
+      {
+         FloatNumeric.Value = FloatNumeric.Minimum;
+         _lastValue = (float)FloatNumeric.Value;
+      }
+
+      public void SetValue(float value)
+      {
+         FloatNumeric.Value = (decimal)value;
+         _lastValue = value;
+      }
+
       public IErrorHandle GetFromGui(out float value)
       {
          value = (float)FloatNumeric.Value;
          return ErrorHandle.Success;
       }
+
+      private void NumericOnKeyDown(object? sender, KeyEventArgs e)
+      {
+         if (e.KeyCode == Keys.Enter)
+         {
+            SetFromGui();
+            _timer.Stop();
+            e.Handled = true;
+         }
+      }
+
+      private void NumericOnEnter(object? sender, EventArgs e)
+      {
+         _timer.Stop();
+         _timer.Start();
+      }
+
+      private void NumericOnLeave(object? sender, EventArgs e)
+      {
+         _timer.Stop();
+         SetFromGui();
+      }
+
    }
 
-   public class PrvHistTextBoxUi : PrvHistSetAddUi
+   public class PrvHistTextBoxUi : PrvHistSetAddUi, IPrvHistSingleEffectPropControl<string>
    {
       public TextBox TextBox { get; }
+      private string _lastValue = string.Empty;
+      public Func<string, IToken> EffectToken { get; init; }
+      private Timer _timer = new()
+      {
+         Interval = Globals.Settings.Gui.TextBoxCommandCreationInterval
+      };
 
       public PrvHistTextBoxUi(string text)
          : base(text, new TextBox
@@ -226,7 +293,58 @@ namespace Editor.Controls.PRV_HIST
          }, false)
       {
          TextBox = (TextBox)Controls[2]; // keep a reference directly
+
+         _timer.Tick += (_, _) =>
+         {
+            SetFromGui();
+         };
+
+         TextBox.KeyDown += (_, e) =>
+         {
+            _timer.Stop();
+            if (e.KeyCode == Keys.Enter)
+            {
+               SetFromGui();
+               e.Handled = true;
+               return;
+            }
+            _timer.Start();
+         };
       }
+
+      public PropertyInfo PropertyInfo { get; init; }
+      public void SetFromGui()
+      {
+         if (Globals.State != State.Running || !GetFromGui(out var value).Log() || _lastValue == value)
+            return;
+
+         var command = new PrvHistoryEntryCommand(Selection.GetSelectedProvinces, [EffectToken(value)], ProvinceHistoryManager.CurrentLoadedDate, out var changed);
+         if (changed)
+            HistoryManager.AddCommand(command);
+
+         _lastValue = value;
+         _timer.Stop();
+      }
+
+      public void SetDefault()
+      {
+         TextBox.Text = string.Empty;
+         _lastValue = string.Empty;
+      }
+
+      public IErrorHandle GetFromGui(out string value)
+      {
+         value = TextBox.Text;
+         return ErrorHandle.Success;
+      }
+
+      public void SetValue(string value)
+      {
+         Debug.Assert(value != null, "value is null but must never be null");
+         TextBox.Text = value;
+         _lastValue = value;
+      }
+
    }
 
    public class BindablePrvHistDropDownUi<TProperty, TKey> : PrvHistDropDownUi<TProperty> where TProperty : notnull where TKey : notnull
@@ -234,7 +352,7 @@ namespace Editor.Controls.PRV_HIST
       private readonly BindingDictionary<TKey, TProperty> _items;
       public BindablePrvHistDropDownUi(string text,
                                        PropertyInfo info,
-                                       PCFL_TokenParseDelegate effect,
+                                       Func<TProperty, IToken> effect,
                                        BindingDictionary<TKey, TProperty> items,
                                        bool isTagBox,
                                        bool isDropDownList = false)
@@ -272,14 +390,16 @@ namespace Editor.Controls.PRV_HIST
       }
    }
 
-   public class PrvHistDropDownUi<TProperty> : PrvHistSetAddUi, IPrvHistSingleEffectPropControl<TProperty>
+   public class PrvHistDropDownUi<TProperty> : PrvHistSetAddUi, IPrvHistSingleEffectPropControl<TProperty> where TProperty : notnull
    {
       public ComboBox DropDown { get; }
-      public PCFL_TokenParseDelegate EffectDelegate { get; init; }
+      public Func<TProperty, IToken> EffectToken { get; init; }
       public PropertyInfo PropertyInfo { get; init; }
+      private int _lastIndex = -1;
+
       public PrvHistDropDownUi(string text,
                                PropertyInfo info,
-                               PCFL_TokenParseDelegate effect,
+                               Func<TProperty, IToken> effect,
                                bool isTagBox,
                                bool isDropDownList = false)
          : base(text, isTagBox ? new TagComboBox
@@ -291,7 +411,7 @@ namespace Editor.Controls.PRV_HIST
          }, false)
       {
          PropertyInfo = info;
-         EffectDelegate = effect;
+         EffectToken = effect;
          LoadGuiEvents.ProvHistoryLoadAction += ((IPropertyControl<Province, TProperty>)this).LoadToGui;
 
          if (isTagBox)
@@ -299,13 +419,20 @@ namespace Editor.Controls.PRV_HIST
          else
             DropDown = (ComboBox)Controls[2]; // keep a reference directly 
          DropDown.DropDownStyle = isDropDownList ? ComboBoxStyle.DropDownList : ComboBoxStyle.DropDown;
+
+         DropDown.SelectedIndexChanged += (_, _) => SetFromGui();
       }
 
       public void SetFromGui()
       {
-         if (Globals.State != State.Running || !GetFromGui(out var value).Log())
+         if (Globals.State != State.Running || !GetFromGui(out var value).Log() || _lastIndex == DropDown.SelectedIndex)
             return;
-         // TODO add a history command
+
+         var command = new PrvHistoryEntryCommand(Selection.GetSelectedProvinces, [EffectToken(value)], ProvinceHistoryManager.CurrentLoadedDate, out var changed);
+         if (changed)
+            HistoryManager.AddCommand(command);
+
+         _lastIndex = DropDown.SelectedIndex;
       }
       public void SetDefault()
       {
@@ -325,7 +452,7 @@ namespace Editor.Controls.PRV_HIST
       }
    }
 
-   public class PrvHistIntUi : PrvHistSetAddUi, IPrvHisSetOptSinglePropControlNew<int>
+   public class PrvHistIntUi : PrvHistSetAddUi, IPrvHisSetOptSinglePropControl<int>
    {
       public NumericUpDown IntNumeric { get; }
       public Func<int, IToken> SetEffectToken { get; init; }
@@ -434,17 +561,17 @@ namespace Editor.Controls.PRV_HIST
    public class PrvHistBoolUi : PrvHistSetAddUi, IPrvHistSingleEffectPropControl<bool>
    {
       public CheckBox BoolCheckBox { get; }
-      public PCFL_TokenParseDelegate EffectDelegate { get; init; }
+      public Func<bool, IToken> EffectToken { get; init; }
       public PropertyInfo PropertyInfo { get; init; }
 
-      public PrvHistBoolUi(string text, PropertyInfo info, PCFL_TokenParseDelegate effect, bool isChecked = false)
+      public PrvHistBoolUi(string text, PropertyInfo info, Func<bool, IToken> effect, bool isChecked = false)
          : base(text, new CheckBox
          {
             Dock = DockStyle.Fill,
          }, false)
       {
          PropertyInfo = info;
-         EffectDelegate = effect;
+         EffectToken = effect;
          LoadGuiEvents.ProvHistoryLoadAction += ((IPropertyControl<Province, bool>)this).LoadToGui;
          
          BoolCheckBox = (CheckBox)Controls[2]; // keep a reference directly
@@ -457,7 +584,10 @@ namespace Editor.Controls.PRV_HIST
       {
          if (Globals.State != State.Running || !GetFromGui(out var value).Log())
             return;
-         // TODO add a history command
+
+         var command = new PrvHistoryEntryCommand(Selection.GetSelectedProvinces, [EffectToken(value)], ProvinceHistoryManager.CurrentLoadedDate, out var changed);
+         if (changed)
+            HistoryManager.AddCommand(command);
       }
       public void SetDefault() => BoolCheckBox.Checked = false;
       public void SetValue(bool value) => BoolCheckBox.Checked = value;
