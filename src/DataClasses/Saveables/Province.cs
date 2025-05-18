@@ -17,12 +17,6 @@ namespace Editor.DataClasses.Saveables
 {
    public class Province : ProvinceComposite, ITitleAdjProvider, IHistoryProvider<ProvinceHistoryEntry>, ITarget, IComparable
    {
-      public enum ModifyingOperation
-      {
-         Base,
-         HistoryEntry,
-      }
-
       #region Init Scenario Data
 
       private int _scenarioBaseTax;
@@ -60,9 +54,9 @@ namespace Editor.DataClasses.Saveables
       private List<string> _scenarioDiscoveredBy = [];
       private List<string> _scenarioTradeCompanyInvestments = [];
       private List<string> _scenarioProvinceTriggeredModifiers = [];
-      private List<Tag> _scenarioClaims = [];
-      private List<Tag> _scenarioPermanentClaims = [];
-      private List<Tag> _scenarioCores = [];
+      private List<Country> _scenarioClaims = [];
+      private List<Country> _scenarioPermanentClaims = [];
+      private List<Country> _scenarioCores = [];
       private List<Building> _scenarioBuildings = [];
       private List<ApplicableModifier> _scenarioPermanentProvinceModifiers = [];
       private List<ApplicableModifier> _scenarioProvinceModifiers = [];
@@ -99,9 +93,9 @@ namespace Editor.DataClasses.Saveables
       private Religion _reformationCenter = Religion.Empty;
       private TradeGood _tradeGood = TradeGood.Empty;
       private TradeGood _latentTradeGood = TradeGood.Empty;
-      private List<Tag> _claims = [];
-      private List<Tag> _permaClaims = [];
-      private List<Tag> _cores = [];
+      private List<Country> _claims = [];
+      private List<Country> _permaClaims = [];
+      private List<Country> _cores = [];
       private List<string> _discoveredBy = [];
       private List<Building> _buildings = [];
       private List<string> _tradeCompanyInvestments = [];
@@ -151,28 +145,28 @@ namespace Editor.DataClasses.Saveables
       // ##################### Simple setter #####################
       # region SimpleSetter
 
-      public List<Tag> Claims { get => _claims; set => _claims = value; }
+      public List<Country> Claims { get => _claims; set => _claims = value; }
       [GameIcon(GameIcons.Claim)]
-      public List<Tag> ScenarioClaims
+      public List<Country> ScenarioClaims
       {
          get => _scenarioClaims;
-         set => SetIfModifiedEnumerable<List<Tag>, Tag>(ref _scenarioClaims, ref _claims, value);
+         set => SetIfModifiedEnumerable<List<Country>, Country>(ref _scenarioClaims, ref _claims, value);
       }
 
-      public List<Tag> PermaClaims { get => _permaClaims; set => _permaClaims = value; }
+      public List<Country> PermaClaims { get => _permaClaims; set => _permaClaims = value; }
       [GameIcon(GameIcons.Claim)]
-      public List<Tag> ScenarioPermanentClaims
+      public List<Country> ScenarioPermanentClaims
       {
          get => _scenarioPermanentClaims;
-         set => SetIfModifiedEnumerable<List<Tag>, Tag>(ref _scenarioPermanentClaims, ref _permaClaims, value);
+         set => SetIfModifiedEnumerable<List<Country>, Country>(ref _scenarioPermanentClaims, ref _permaClaims, value);
       }
 
-      public List<Tag> Cores { get => _cores; set => _cores = value; }
+      public List<Country> Cores { get => _cores; set => _cores = value; }
       [GameIcon(GameIcons.Core, false)]
-      public List<Tag> ScenarioCores
+      public List<Country> ScenarioCores
       {
          get => _scenarioCores;
-         set => SetIfModifiedEnumerable<List<Tag>, Tag>(ref _scenarioCores, ref _cores, value);
+         set => SetIfModifiedEnumerable<List<Country>, Country>(ref _scenarioCores, ref _cores, value);
       }
 
       [ToolTippable]

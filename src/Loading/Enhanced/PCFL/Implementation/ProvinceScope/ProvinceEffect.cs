@@ -240,7 +240,7 @@ public class AddCoreEffect() : SimpleEffect<Country>(Country.Empty)
    {
       Debug.Assert(target is Province, $"'{EffectName}' effect is only valid on provinces");
       Debug.Assert(Globals.Countries.TryGetValue(_value.Val.Tag, out _), "The country must always exist to use it in execution");
-      ((Province)target).Cores = [.. ((Province)target).Cores, _value.Val.Tag];
+      ((Province)target).Cores = [.. ((Province)target).Cores, _value.Val];
    }
 
    public override string GetTokenName() => EffectName;
@@ -267,8 +267,8 @@ public class RemoveCoreEffect() : SimpleEffect<Country>(Country.Empty)
    {
       Debug.Assert(target is Province, $"'{EffectName}' effect is only valid on provinces");
       Debug.Assert(Globals.Countries.TryGetValue(_value.Val.Tag, out _), "The country must always exist to use it in execution");
-      List<Tag> coresTemp = new(((Province)target).Cores);
-      coresTemp.Remove(_value.Val.Tag);
+      List<Country> coresTemp = new(((Province)target).Cores);
+      coresTemp.Remove(_value.Val);
       ((Province)target).Cores = coresTemp;
    }
 

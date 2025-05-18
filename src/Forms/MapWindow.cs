@@ -85,9 +85,9 @@ namespace Editor.Forms
       private PropertyLabel<Province> ProvAdjLabel = null!;
 
       private PropertyCollectionSelector<Province, List<Building>, Building> _buildingsSelector = null!;
-      private PropertyCollectionSelector<Province, List<Tag>, Tag> _coreSelector = null!;
-      private PropertyCollectionSelector<Province, List<Tag>, Tag> _claimSelector = null!;
-      private PropertyCollectionSelector<Province, List<Tag>, Tag> _permaClaimSelector = null!;
+      private PropertyCollectionSelector<Province, List<Country>, Country> _coreSelector = null!;
+      private PropertyCollectionSelector<Province, List<Country>, Country> _claimSelector = null!;
+      private PropertyCollectionSelector<Province, List<Country>, Country> _permaClaimSelector = null!;
       private PropertyCollectionSelector<Province, List<string>, string> _discoveredBy = null!;
 
       private ProvinceHistoryEntryTreeView _provinceHistoryTreeView = null!;
@@ -498,8 +498,8 @@ namespace Editor.Forms
          _coreSelector = new(typeof(Province).GetProperty(nameof(Province.ScenarioCores)),
                              ref LoadGuiEvents.ProvLoadAction,
                              () => Selection.GetSelectedProvinces,
-                             Globals.Countries.Keys.ToList(),
-                             typeof(Tag).GetProperty("TagValue")!)
+                             Globals.Countries.Values.ToList(),
+                             typeof(Country).GetProperty("Tag")!)
          {
             Dock = DockStyle.Fill,
             Margin = new(1),
@@ -532,8 +532,8 @@ namespace Editor.Forms
          _claimSelector = new(typeof(Province).GetProperty(nameof(Province.ScenarioClaims)),
                               ref LoadGuiEvents.ProvLoadAction,
                               () => Selection.GetSelectedProvinces,
-                              Globals.Countries.Keys.ToList(),
-                              typeof(Tag).GetProperty("TagValue")!)
+                              Globals.Countries.Values.ToList(),
+                              typeof(Country).GetProperty("Tag")!)
          {
             Dock = DockStyle.Fill,
             Margin = new(1),
@@ -543,8 +543,8 @@ namespace Editor.Forms
          _permaClaimSelector = new(typeof(Province).GetProperty(nameof(Province.ScenarioPermanentClaims)),
                                    ref LoadGuiEvents.ProvLoadAction,
                                    () => Selection.GetSelectedProvinces,
-                                   Globals.Countries.Keys.ToList(),
-                                   typeof(Tag).GetProperty("TagValue")!)
+                                   Globals.Countries.Values.ToList(),
+                                   typeof(Country).GetProperty("Tag")!)
          {
             Dock = DockStyle.Fill,
             Margin = new(1),
@@ -1408,9 +1408,9 @@ namespace Editor.Forms
       private BindablePrvHistDropDownUi<TradeGood, string> _prvHistTradeGoodsComboBox = null!;
       private PrvHistDropDownUi<int> _prvHistTradeCenterComboBox = null!;
 
-      private PrvHistCollectionUi<List<Tag>, Tag> _prvHistClaimSelector = null!;
-      private PrvHistCollectionUi<List<Tag>, Tag> _prvHistPermaClaimSelector = null!;
-      private PrvHistCollectionUi<List<Tag>, Tag> _prvHistCores = null!;
+      private PrvHistCollectionUi<List<Country>, Country> _prvHistClaimSelector = null!;
+      private PrvHistCollectionUi<List<Country>, Country> _prvHistPermaClaimSelector = null!;
+      private PrvHistCollectionUi<List<Country>, Country> _prvHistCores = null!;
       private PrvHistCollectionUi<List<Building>, Building> _prvHistBuildings = null!;
       private PrvHistCollectionUi<List<string>, string> _prvHistDiscoveredBy = null!;
 
@@ -1571,25 +1571,25 @@ namespace Editor.Forms
          ProvHistoryLayout.Controls.Add(_prvHistSeparators[1], 0, blockOffset + 4);
          blockOffset += 5;
 
-         _prvHistCores = ControlFactory.GetPrvHistCollectionUi<List<Tag>, Tag>(DataClasses.GameDataClasses.Tag.Empty,
-                                                                               nameof(Province.Cores),
-                                                                               typeof(Province).GetProperty(nameof(Province.Cores))!,
-                                                                               value => new AddCoreEffect { _value = { Val = value } },
-                                                                               value => new RemoveCoreEffect { _value = { Val = value } },
-                                                                               Globals.Countries.Values.Select(x => x.Tag).ToList());
-         _prvHistClaimSelector = ControlFactory.GetPrvHistCollectionUi<List<Tag>, Tag>(DataClasses.GameDataClasses.Tag.Empty,
-                                                                                       nameof(Province.Claims),
-                                                                                       typeof(Province).GetProperty(nameof(Province.Claims))!,
-                                                                                       value => new AddClaimEffect { _value = { Val = value } },
-                                                                                       value => new RemoveClaimEffect { _value = { Val = value } },
-                                                                                       Globals.Countries.Values.Select(x => x.Tag).ToList());
+         _prvHistCores = ControlFactory.GetPrvHistCollectionUi<List<Country>, Country>(Country.Empty,
+                                                                                       nameof(Province.Cores),
+                                                                                       typeof(Province).GetProperty(nameof(Province.Cores))!,
+                                                                                       value => new AddCoreEffect { _value = { Val = value } },
+                                                                                       value => new RemoveCoreEffect { _value = { Val = value } },
+                                                                                       Globals.Countries.Values.ToList());
+         _prvHistClaimSelector = ControlFactory.GetPrvHistCollectionUi<List<Country>, Country>(Country.Empty,
+                                                                                               nameof(Province.Claims),
+                                                                                               typeof(Province).GetProperty(nameof(Province.Claims))!,
+                                                                                               value => new AddClaimEffect { _value = { Val = value } },
+                                                                                               value => new RemoveClaimEffect { _value = { Val = value } },
+                                                                                               Globals.Countries.Values.ToList());
 
-         _prvHistPermaClaimSelector = ControlFactory.GetPrvHistCollectionUi<List<Tag>, Tag>(DataClasses.GameDataClasses.Tag.Empty,
-                                                                                            nameof(Province.PermaClaims),
-                                                                                            typeof(Province).GetProperty(nameof(Province.PermaClaims))!,
-                                                                                            value => new AddPermanentClaimEffect { _value = { Val = value } },
-                                                                                            value => new RemovePermanentClaimEffect { _value = { Val = value } },
-                                                                                            Globals.Countries.Values.Select(x => x.Tag).ToList());
+         _prvHistPermaClaimSelector = ControlFactory.GetPrvHistCollectionUi<List<Country>, Country>(Country.Empty,
+                                                                                                    nameof(Province.PermaClaims),
+                                                                                                    typeof(Province).GetProperty(nameof(Province.PermaClaims))!,
+                                                                                                    value => new AddPermanentClaimEffect { _value = { Val = value } },
+                                                                                                    value => new RemovePermanentClaimEffect { _value = { Val = value } },
+                                                                                                    Globals.Countries.Values.ToList());
          _prvHistBuildings = ControlFactory.GetPrvHistCollectionUi<List<Building>, Building>(Building.Empty, 
                                                                                              nameof(Province.Buildings),
                                                                                              typeof(Province).GetProperty(nameof(Province.Buildings))!,

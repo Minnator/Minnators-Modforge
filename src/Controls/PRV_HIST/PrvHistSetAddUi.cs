@@ -236,9 +236,9 @@ namespace Editor.Controls.PRV_HIST
             var fToken = entries[i]?.Effects.FindAll(x => x.GetTokenName().Equals(tokenName));
             if (fToken != null && fToken?.Count > 0)
             {
-               if (fToken is not List<SimpleEffect<TItem>> sEffects)
+               if (!fToken.All(x => x is SimpleEffect<TItem>))
                   continue;
-               
+               var sEffects = fToken.Cast<SimpleEffect<TItem>>().ToList();
                if (hasSetInitVal == false)
                {
                   value = (TProperty)(List<TItem>) [];
@@ -268,7 +268,6 @@ namespace Editor.Controls.PRV_HIST
 
       public override void LoadCurrent(TProperty value)
       {
-         _startList = value;
          Debug.Assert(value != null, "value is null but must never be null");
          var sb = new StringBuilder();
          foreach (var item in value)
