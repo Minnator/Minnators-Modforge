@@ -40,7 +40,7 @@ public static class ProvinceParser
      { "add_core",                           (Add<Tag>,                    Province.Empty.GetPropertyInfo(nameof(Province.ScenarioCores))!) },
      { "add_local_autonomy",                 (Set<float>,                  Province.Empty.GetPropertyInfo(nameof(Province.ScenarioLocalAutonomy))!) },
      { "add_nationalism",                    (Set<int>,                    Province.Empty.GetPropertyInfo(nameof(Province.ScenarioNationalism))!) },
-     { "add_permanent_claim",                (Add<Tag>,                    Province.Empty.GetPropertyInfo(nameof(Province.PermanentClaims))!) },
+     { "add_permanent_claim",                (Add<Tag>,                    Province.Empty.GetPropertyInfo(nameof(Province.PermaClaims))!) },
      { "add_permanent_province_modifier",    (Add<ApplicableModifier>,     Province.Empty.GetPropertyInfo(nameof(Province.PermanentProvinceModifiers))!) },
      { "add_province_modifier",              (Add<ApplicableModifier>,     Province.Empty.GetPropertyInfo(nameof(Province.ProvinceModifiers))!) },
      { "add_province_triggered_modifier",    (Add<string>,                 Province.Empty.GetPropertyInfo(nameof(Province.ProvinceTriggeredModifiers))!) },

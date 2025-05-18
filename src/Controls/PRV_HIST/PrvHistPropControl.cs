@@ -19,7 +19,7 @@ namespace Editor.Controls.PRV_HIST;
 
 
 
-public interface IPrvHistSingleEffectPropControl<TProperty> : IPropertyControl<Province, TProperty> where TProperty : notnull
+public interface IPrvHistSingleEffectPropControl<TProperty> where TProperty : notnull
 {
    public Func<TProperty, IToken> EffectToken { get; init; } 
 }
@@ -27,13 +27,14 @@ public interface IPrvHistSingleEffectPropControl<TProperty> : IPropertyControl<P
 public interface IPrvHisSetOptSinglePropControl<TProperty> : IPrvHistSingleEffectPropControl<TProperty> where TProperty : notnull
 {
    public Func<TProperty, IToken> SetEffectToken { get; init; }
+
 }
 
 public interface IPrvHistDualEffectPropControl<TProperty, TItem> : IPropertyControlList<Province, TProperty, TItem>
    where TProperty : ICollection<TItem>, new() where TItem : notnull
 {
-   public PCFL_TokenParseDelegate AddEffectDelegate { get; init; }
-   public PCFL_TokenParseDelegate RemoveEffectDelegate { get; init; }
+   public Func<TItem, IToken> AddEffectToken { get; init; }
+   public Func<TItem, IToken> RemoveEffectToken { get; init; }
    public new void LoadToGui(List<Province> list, PropertyInfo propInfo, bool force)
    {
       if (force || propInfo.Equals(PropertyInfo))

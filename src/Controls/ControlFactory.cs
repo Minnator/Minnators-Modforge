@@ -74,9 +74,9 @@ public static class ControlFactory
    }
 
    public static PrvHistCollectionUi<TProperty, TItem> GetPrvHistCollectionUi<TProperty, TItem>(string label,
-                                                                                                PropertyInfo info, 
-                                                                                                PCFL_TokenParseDelegate addEffect,
-                                                                                                PCFL_TokenParseDelegate removeEffect,
+                                                                                                PropertyInfo info,
+                                                                                                Func<TItem, IToken> addEffect,
+                                                                                                Func<TItem, IToken> removeEffect,
                                                                                                 List<TItem> source,
                                                                                                 bool hasSetBox = true) where TProperty : List<TItem>, new() where TItem : notnull 
    {

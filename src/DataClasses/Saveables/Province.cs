@@ -86,7 +86,7 @@ namespace Editor.DataClasses.Saveables
       private int _nationalism;  
       private int _citySize;
       private float _nativeFerocity;
-      private float _localAutonomy;
+      private float _autonomy;
       private float _devastation;
       private float _prosperity;
       private bool _isHre;
@@ -100,7 +100,7 @@ namespace Editor.DataClasses.Saveables
       private TradeGood _tradeGood = TradeGood.Empty;
       private TradeGood _latentTradeGood = TradeGood.Empty;
       private List<Tag> _claims = [];
-      private List<Tag> _permanentClaims = [];
+      private List<Tag> _permaClaims = [];
       private List<Tag> _cores = [];
       private List<string> _discoveredBy = [];
       private List<Building> _buildings = [];
@@ -159,12 +159,12 @@ namespace Editor.DataClasses.Saveables
          set => SetIfModifiedEnumerable<List<Tag>, Tag>(ref _scenarioClaims, ref _claims, value);
       }
 
-      public List<Tag> PermanentClaims { get => _permanentClaims; set => _permanentClaims = value; }
+      public List<Tag> PermaClaims { get => _permaClaims; set => _permaClaims = value; }
       [GameIcon(GameIcons.Claim)]
       public List<Tag> ScenarioPermanentClaims
       {
          get => _scenarioPermanentClaims;
-         set => SetIfModifiedEnumerable<List<Tag>, Tag>(ref _scenarioPermanentClaims, ref _permanentClaims, value);
+         set => SetIfModifiedEnumerable<List<Tag>, Tag>(ref _scenarioPermanentClaims, ref _permaClaims, value);
       }
 
       public List<Tag> Cores { get => _cores; set => _cores = value; }
@@ -279,11 +279,11 @@ namespace Editor.DataClasses.Saveables
       }
 
       [ToolTippable]
-      public float LocalAutonomy { get => _localAutonomy; set => _localAutonomy = Math.Max(0, value); }
+      public float Autonomy { get => _autonomy; set => _autonomy = Math.Max(0, value); }
       public float ScenarioLocalAutonomy
       {
          get => _scenarioLocalAutonomy;
-         set => SetField(ref _scenarioLocalAutonomy, ref _localAutonomy, Math.Max(0, value));
+         set => SetField(ref _scenarioLocalAutonomy, ref _autonomy, Math.Max(0, value));
       }
 
       [ToolTippable]
@@ -704,7 +704,7 @@ namespace Editor.DataClasses.Saveables
          NativeFerocity = ScenarioNativeFerocity;
          Devastation = ScenarioDevastation;
          Prosperity = ScenarioProsperity;
-         LocalAutonomy = ScenarioLocalAutonomy;
+         Autonomy = ScenarioLocalAutonomy;
          Religion = ScenarioReligion;
          Culture = ScenarioCulture;
          ReformationCenter = ScenarioReformationCenter;
@@ -714,17 +714,17 @@ namespace Editor.DataClasses.Saveables
          IsHre = ScenarioIsHre;
          IsSeatInParliament = ScenarioIsSeatInParliament;
          HasRevolt = ScenarioHasRevolt;
-         Buildings = ScenarioBuildings;
-         TradeCompanyInvestments = ScenarioTradeCompanyInvestments;
-         DiscoveredBy = ScenarioDiscoveredBy;
-         Claims = ScenarioClaims;
-         PermanentClaims = ScenarioPermanentClaims;
-         Cores = ScenarioCores;
-         ProvinceModifiers = ScenarioProvinceModifiers;
-         PermanentProvinceModifiers = ScenarioPermanentProvinceModifiers;
-         ProvinceTriggeredModifiers = ScenarioProvinceTriggeredModifiers;
-         TradeModifiers = ScenarioTradeModifiers;
-         ScriptedEffects = ScenarioScriptedEffects;
+         Buildings = new(ScenarioBuildings);
+         TradeCompanyInvestments = new(ScenarioTradeCompanyInvestments);
+         DiscoveredBy = new(ScenarioDiscoveredBy);
+         Claims = new(ScenarioClaims);
+         PermaClaims = new(ScenarioPermanentClaims);
+         Cores = new(ScenarioCores);
+         ProvinceModifiers = new(ScenarioProvinceModifiers);
+         PermanentProvinceModifiers = new(ScenarioPermanentProvinceModifiers);
+         ProvinceTriggeredModifiers = new(ScenarioProvinceTriggeredModifiers);
+         TradeModifiers = new(ScenarioTradeModifiers);
+         ScriptedEffects = new(ScenarioScriptedEffects);
          RevoltRisk = ScenarioRevoltRisk;
          CitySize = ScenarioCitySize;
          Nationalism = ScenarioNationalism;

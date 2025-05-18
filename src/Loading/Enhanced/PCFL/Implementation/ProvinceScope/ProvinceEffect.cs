@@ -737,7 +737,7 @@ public class AddLocalAutonomyEffect() : SimpleEffect<float>(0f)
    public override void Activate(ITarget target)
    {
       Debug.Assert(target is Province, $"'{EffectName}' effect is only valid on provinces");
-      ((Province)target).LocalAutonomy += _value.Val;
+      ((Province)target).Autonomy += _value.Val;
    }
 
    public override string GetTokenName() => EffectName;
@@ -844,7 +844,7 @@ public class AddPermanentClaimEffect() : SimpleEffect<Country>(Country.Empty)
    {
       Debug.Assert(target is Province, $"'{EffectName}' effect is only valid on provinces");
       Debug.Assert(Country.TryParse(_value.Val.Tag, out _).Ignore(), "The country must always exist to use it in execution");
-      ((Province)target).PermanentClaims.Add(_value.Val.Tag);
+      ((Province)target).PermaClaims.Add(_value.Val.Tag);
    }
 
    public override string GetTokenName() => EffectName;
@@ -871,7 +871,7 @@ public class RemovePermanentClaimEffect() : SimpleEffect<Country>(Country.Empty)
    {
       Debug.Assert(target is Province, $"'{EffectName}' effect is only valid on provinces");
       Debug.Assert(Country.TryParse(_value.Val.Tag, out _).Ignore(), "The country must always exist to use it in execution");
-      ((Province)target).PermanentClaims.Remove(_value.Val.Tag);
+      ((Province)target).PermaClaims.Remove(_value.Val.Tag);
    }
 
    public override string GetTokenName() => EffectName;
@@ -1377,7 +1377,7 @@ public class SetLocalAutonomyEffect() : SimpleEffect<float>(0)
    public override void Activate(ITarget target)
    {
       Debug.Assert(target is Province, $"'{EffectName}' effect is only valid on provinces");
-      ((Province)target).LocalAutonomy = _value.Val;
+      ((Province)target).Autonomy = _value.Val;
    }
 
    public override string GetTokenName() => EffectName;

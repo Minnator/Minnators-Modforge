@@ -18,7 +18,7 @@ public class AutonomyMapMode : MapMode
    {
       if (Globals.SeaProvinces.Contains(id))
          return id.Color.ToArgb();
-      return Globals.ColorProvider.GetColorOnGreenRedShade(100, 0, id.LocalAutonomy).ToArgb();
+      return Globals.ColorProvider.GetColorOnGreenRedShade(100, 0, id.Autonomy).ToArgb();
    }
 
    public override MapModeType MapModeType => MapModeType.Autonomy;
@@ -26,7 +26,7 @@ public class AutonomyMapMode : MapMode
    public override string GetSpecificToolTip(Province provinceId)
    {
       if (Globals.Provinces.TryGetValue(provinceId, out var province))
-         return $"Autonomy: [{province.LocalAutonomy}%]";
+         return $"Autonomy: [{province.Autonomy}%]";
       return "Autonomy: [Unknown]";
    }
 

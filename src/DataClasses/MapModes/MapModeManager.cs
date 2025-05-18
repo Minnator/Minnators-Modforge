@@ -88,7 +88,7 @@ public static class MapModeManager
       { nameof(Province.BaseTax), [MapModeType.Development, MapModeType.BaseTax] },
       { nameof(Province.BaseProduction), [MapModeType.Development, MapModeType.BaseProduction] },
       { nameof(Province.BaseManpower), [MapModeType.Development, MapModeType.BaseManpower] },
-      { nameof(Province.LocalAutonomy), [MapModeType.Autonomy] },
+      { nameof(Province.Autonomy), [MapModeType.Autonomy] },
       //{ nameof(Province.), MapModeType.Fort },
       { nameof(Province.Devastation), [MapModeType.Devastation] },
       { nameof(Province.Prosperity), [MapModeType.Prosperity] },

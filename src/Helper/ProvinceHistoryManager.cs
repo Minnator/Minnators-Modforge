@@ -88,6 +88,25 @@ namespace Editor.Helper
          return -1;
       }
 
+      public static (ProvinceHistoryEntry?[] indexes, bool all) BinarySearchDateExactMultiple(List<List<ProvinceHistoryEntry>> entries, Date date, int startIndex = 0)
+      {
+         var result = new ProvinceHistoryEntry?[entries.Count];
+         var all = true;
+         for (var i = 0; i < entries.Count; i++)
+         {
+            var resIndex = BinarySearchDateExact(entries[i], date, startIndex);
+
+            if (resIndex == -1)
+            {
+               all = false;
+               result[i] = null;
+               continue;
+            }
+            result[i]= entries[i][resIndex];
+         }
+         return (result, all);
+      }
+
       private static int BinarySearchDate(List<ProvinceHistoryEntry> entries, Date date)
       {
          var low = 0;
