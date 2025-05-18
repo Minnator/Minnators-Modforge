@@ -44,9 +44,3 @@ public interface IPrvHistDualEffectPropControl<TProperty, TItem> : IPropertyCont
             SetDefault();
    }
 }
-
-public interface IPrvHisSetOptDualEffPropControl<TProperty, TItem> : IPrvHistDualEffectPropControl<TProperty, TItem>
-   where TProperty : ICollection<TItem>, new() where TItem : notnull
-{
-   public PCFL_TokenParseDelegate SetEffectDelegate { get; init; } 
-}

@@ -1,24 +1,20 @@
 ﻿using System.Diagnostics;
-using Editor.Controls.PROPERTY;
-using Editor.DataClasses.Saveables;
-using Editor.Events;
 using System.Reflection;
 using System.Text;
+using Editor.Controls.PROPERTY;
 using Editor.DataClasses.Commands;
-using Editor.Forms.Feature;
-using static Editor.Forms.PopUps.CreateCountryForm;
-using Editor.Loading.Enhanced.PCFL.Implementation;
-using Editor.ErrorHandling;
-using Editor.Helper;
-using static Editor.Loading.Enhanced.PCFL.Implementation.PCFL_Scope;
 using Editor.DataClasses.DataStructures;
-using Newtonsoft.Json.Linq;
-using Editor.Saving;
-using Timer = System.Windows.Forms.Timer;
-using Antlr4.Runtime;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
+using Editor.DataClasses.Saveables;
+using Editor.ErrorHandling;
+using Editor.Events;
+using Editor.Forms.Feature;
+using Editor.Helper;
+using Editor.Loading.Enhanced.PCFL.Implementation;
+using Editor.Saving;
 using IToken = Editor.Loading.Enhanced.PCFL.Implementation.IToken;
+using Timer = System.Windows.Forms.Timer;
 
 namespace Editor.Controls.PRV_HIST
 {
@@ -32,13 +28,13 @@ namespace Editor.Controls.PRV_HIST
 
       public Func<TItem, IToken> AddEffectToken { get; init; }
       public Func<TItem, IToken> RemoveEffectToken { get; init; }
-      public override PropertyInfo PropertyInfo { get; init; }
-
+      public sealed override PropertyInfo PropertyInfo { get; init; }
+      private readonly TItem _defaultValue;
       private readonly TItem[] _source;
       private List<TItem> _startList = [];
 
-      public PrvHistCollectionUi(string text, PropertyInfo info, Func<TItem, IToken> addEffect, Func<TItem, IToken> removeEffect, List<TItem> source, bool hasSetBox = false) 
-         : base(text, new TableLayoutPanel
+      public PrvHistCollectionUi(TItem defaultValue, string text, PropertyInfo info, Func<TItem, IToken> addEffect, Func<TItem, IToken> removeEffect, List<TItem> source, bool hasSetBox = false) 
+         : base(null!, text, new TableLayoutPanel
          {
             ColumnCount = 2,
             RowCount = 1,
@@ -48,7 +44,9 @@ namespace Editor.Controls.PRV_HIST
          PropertyInfo = info;
          AddEffectToken = addEffect;
          RemoveEffectToken = removeEffect;
+         _defaultValue = defaultValue;
          LoadGuiEvents.ProvHistoryLoadAction += ((IPrvHistDualEffectPropControl<TProperty, TItem>)this).LoadToGui;
+         Debug.Assert(_startList != null);
          LoadGuiEvents.ProvHistoryLoadAction += (_, _, _) => SetShortInfo();
          _source = source.ToArray();
 
@@ -122,8 +120,6 @@ namespace Editor.Controls.PRV_HIST
 
          _shortInfoLabel.Text = sb.ToString();
       }
-
-
       public void SetFromGui(List<TItem> value)
       {
          if (Globals.State == State.Running)
@@ -184,14 +180,98 @@ namespace Editor.Controls.PRV_HIST
       public override void SetValue(TProperty value)
       {
          _startList = value;
-         LoadCurrent(value);
+      }
+
+      protected override IToken GetDefaultEffectToken() => AddEffectToken(_defaultValue);
+      protected IToken GetDefaultRemoveEffectToken() => RemoveEffectToken(_defaultValue);
+
+      public new void LoadToGui(List<Province> list, PropertyInfo propInfo, bool force)
+      {
+         if (force || PropertyInfo.Equals(propInfo))
+         {
+
+            var (entries, shareEntry) = ProvinceHistoryManager.BinarySearchDateExactMultiple(
+                                                                                             list.Select(x => x.History.ToList()).ToList(),
+                                                                                             ProvinceHistoryManager.CurrentLoadedDate);
+
+            TProperty? sharedValue = null;
+            if (shareEntry)
+               if (ShareEntriesValue(entries, GetDefaultEffectToken().GetTokenName(), out sharedValue))
+                  SetValue(sharedValue!);
+               else if (ShareEntriesValue(entries, GetDefaultRemoveEffectToken().GetTokenName(), out sharedValue))
+                  SetValue(sharedValue!);
+            if (AttributeHelper.GetSharedAttribute(PropertyInfo, out TProperty value, list))
+            {
+               LoadCurrent(value);
+               if (sharedValue == null)
+                  SetDefault();
+            }
+
+            else
+            {
+               SetDefault();
+               ResetCurrent();
+            }
+
+            return;
+         }
+         SetDefault();
+         ResetCurrent();
+      }
+
+      protected override bool ShareEntriesValue(ProvinceHistoryEntry?[] entries, string tokenName, out TProperty? value) 
+      {
+         if (entries.Length == 0)
+         {
+            value = null!;
+            return false;
+         }
+
+         var allContainToken = true;
+         var hasSetInitVal = false;
+         value = null!;
+
+         for (var i = 0; i < entries.Length; i++)
+         {
+            var fToken = entries[i]?.Effects.FindAll(x => x.GetTokenName().Equals(tokenName));
+            if (fToken != null && fToken?.Count > 0)
+            {
+               if (fToken is not List<SimpleEffect<TItem>> sEffects)
+                  continue;
+               
+               if (hasSetInitVal == false)
+               {
+                  value = (TProperty)(List<TItem>) [];
+                  foreach (var sEffect in sEffects)
+                     if (sEffect._value.Val is { } item)
+                        value.Add(item);
+
+                  hasSetInitVal = true;
+               }
+               else
+               {
+                  if (value.Count != sEffects.Count || !AttributeHelper.ScrambledListsEquals(value, sEffects.Select(x => x._value.Val).ToList()))
+                  {
+                     allContainToken = false;
+                     break;
+                  }
+               }
+
+               continue;
+            }
+            allContainToken = false;
+            break;
+         }
+
+         return allContainToken;
       }
 
       public override void LoadCurrent(TProperty value)
       {
+         _startList = value;
          Debug.Assert(value != null, "value is null but must never be null");
          var sb = new StringBuilder();
-         foreach (var item in _startList)
+         foreach (var item in value)
          {
             sb.Append(item.ToString()?.ToUpper());
             sb.Append(", ");
@@ -201,39 +281,26 @@ namespace Editor.Controls.PRV_HIST
 
          if (sb.Length > MAX_CHARS_IN_INFO)
          {
-            CurrentLabel.Font = new("Arial", SMALL_SCALE_FONT);
+            CurrentLabel!.Font = new("Arial", SMALL_SCALE_FONT);
          }
          else
-            CurrentLabel.Font = new("Arial", BIG_SCALE_FONT);
+            CurrentLabel!.Font = new("Arial", BIG_SCALE_FONT);
 
          SetCurrentLabel(sb.ToString());
       }
 
-      public override void ResetCurrent()
-      {
-         SetCurrentLabel(string.Empty);
-      }
-
-      public void SetClipboard()
-      {
-         
-      }
-
-      public void Paste()
-      {
-
-      }
+      public override void ResetCurrent() => SetCurrentLabel(string.Empty);
+      public void SetClipboard() { }
+      public void Paste() { }
    }
 
-   public class PrvHistFloatUi : PrvHistSetAddUi<float>, IPrvHisSetOptSinglePropControl<float>
+   public class PrvHistFloatUi : PrvHistSetAddUiBoth<float>
    {
       public NumericUpDown FloatNumeric { get; }
-      public Func<float, IToken> EffectToken { get; init; }
-      public Func<float, IToken> SetEffectToken { get; init; }
-      public override PropertyInfo PropertyInfo { get; init; }
+      public sealed override PropertyInfo PropertyInfo { get; init; }
 
       private float _lastValue = -1;
-      private Timer _timer = new()
+      private readonly Timer _timer = new()
       {
          Interval = Globals.Settings.Gui.TextBoxCommandCreationInterval
       };
@@ -246,7 +313,7 @@ namespace Editor.Controls.PRV_HIST
                             float min = 0,
                             float max = 100,
                             bool hasSet = true)
-         : base(text, new NumericUpDown
+         : base(effect, setEffect, text, new NumericUpDown
          {
             Dock = DockStyle.Fill,
             TextAlign = HorizontalAlignment.Right,
@@ -255,8 +322,6 @@ namespace Editor.Controls.PRV_HIST
          }, hasSet)
       {
          PropertyInfo = info;
-         EffectToken = effect;
-         SetEffectToken = setEffect;
          LoadGuiEvents.ProvHistoryLoadAction += ((IPropertyControl<Province, float>)this).LoadToGui;
 
          FloatNumeric = (NumericUpDown)Controls[2]; // keep a reference directly
@@ -271,19 +336,9 @@ namespace Editor.Controls.PRV_HIST
       public override void SetFromGui()
       {
          if (Globals.State != State.Running || !GetFromGui(out var value).Log() || Math.Abs(value - _lastValue) < 0.005f)
-            return; 
-         
-         IToken token;
-         if (SetCheckBox.Checked)
-         {
-            token = SetEffectToken(value);
-            // Set delegate
-         }
-         else
-         {
-            token = EffectToken(value);
-            // Add delegate
-         }
+            return;
+
+         var token = SetCheckBox.Checked ? SetEffectToken(value) : EffectToken(value);
          var command = new PrvHistoryEntryCommand(Selection.GetSelectedProvinces, [token], ProvinceHistoryManager.CurrentLoadedDate, out var changed);
          if (changed)
             HistoryManager.AddCommand(command);
@@ -300,7 +355,6 @@ namespace Editor.Controls.PRV_HIST
       {
          FloatNumeric.Value = (decimal)value;
          _lastValue = value;
-         LoadCurrent(value);
       }
 
       public override IErrorHandle GetFromGui(out float value)
@@ -331,33 +385,27 @@ namespace Editor.Controls.PRV_HIST
          SetFromGui();
       }
 
-      public override void LoadCurrent(float value)
-      {
-         SetCurrentLabel(value.ToString("0.00"));
-      }
-
-      public override void ResetCurrent()
-      {
-         SetCurrentLabel("0.00");
-      }
+      public override void LoadCurrent(float value) => SetCurrentLabel(value.ToString("0.00"));
+      public override void ResetCurrent() => SetCurrentLabel("0.00");
+      protected override IToken GetDefaultEffectToken() => SetEffectToken(0f);
    }
-
-   public class PrvHistTextBoxUi : PrvHistSetAddUi<string>, IPrvHistSingleEffectPropControl<string>
+   public class PrvHistTextBoxUi : PrvHistSetAddUi<string>
    {
       public TextBox TextBox { get; }
       private string _lastValue = string.Empty;
-      public Func<string, IToken> EffectToken { get; init; }
-      private Timer _timer = new()
+      public sealed override PropertyInfo PropertyInfo { get; init; }
+      private readonly Timer _timer = new()
       {
          Interval = Globals.Settings.Gui.TextBoxCommandCreationInterval
       };
 
-      public PrvHistTextBoxUi(string text)
-         : base(text, new TextBox
+      public PrvHistTextBoxUi(string text, Func<string, IToken> effectToken, PropertyInfo propInfo)
+         : base(effectToken, text, new TextBox
          {
             Dock = DockStyle.Fill,
          }, false)
       {
+         PropertyInfo = propInfo;
          TextBox = (TextBox)Controls[2]; // keep a reference directly
 
          _timer.Tick += (_, _) =>
@@ -378,7 +426,6 @@ namespace Editor.Controls.PRV_HIST
          };
       }
 
-      public override PropertyInfo PropertyInfo { get; init; }
       public override void SetFromGui()
       {
          if (Globals.State != State.Running || !GetFromGui(out var value).Log() || _lastValue == value)
@@ -409,30 +456,23 @@ namespace Editor.Controls.PRV_HIST
          Debug.Assert(value != null, "value is null but must never be null");
          TextBox.Text = value;
          _lastValue = value;
-         LoadCurrent(value);
       }
 
-      public override void LoadCurrent(string value)
-      {
-         SetCurrentLabel($"\"{value}\"");
-      }
-
-      public override void ResetCurrent()
-      {
-         SetCurrentLabel(string.Empty);
-      }
+      public override void LoadCurrent(string value) => SetCurrentLabel($"\"{value}\"");
+      public override void ResetCurrent() => SetCurrentLabel(string.Empty);
+      protected override IToken GetDefaultEffectToken() => EffectToken(string.Empty);
    }
-
    public class BindablePrvHistDropDownUi<TProperty, TKey> : PrvHistDropDownUi<TProperty> where TProperty : notnull where TKey : notnull
    {
       private readonly BindingDictionary<TKey, TProperty> _items;
       public BindablePrvHistDropDownUi(string text,
                                        PropertyInfo info,
+                                       TProperty defaultValue,
                                        Func<TProperty, IToken> effect,
                                        BindingDictionary<TKey, TProperty> items,
                                        bool isTagBox,
                                        bool isDropDownList = false)
-         : base(text, info, effect, isTagBox, isDropDownList)
+         : base(text, info, defaultValue, effect, isTagBox, isDropDownList)
       {
          _items = items;
          DropDown.DataSource = new BindingSource(_items, null);
@@ -465,20 +505,20 @@ namespace Editor.Controls.PRV_HIST
          return new ErrorObject(ErrorType.INTERNAL_KeyNotFound, "Key not found in dictionary", LogType.Critical, addToManager: false);
       }
    }
-
-   public class PrvHistDropDownUi<TProperty> : PrvHistSetAddUi<TProperty>, IPrvHistSingleEffectPropControl<TProperty> where TProperty : notnull
+   public class PrvHistDropDownUi<TProperty> : PrvHistSetAddUi<TProperty> where TProperty : notnull
    {
       public ComboBox DropDown { get; }
-      public Func<TProperty, IToken> EffectToken { get; init; }
-      public override PropertyInfo PropertyInfo { get; init; }
+      public sealed override PropertyInfo PropertyInfo { get; init; }
       private int _lastIndex = -1;
+      private readonly TProperty _defaultValue;
 
       public PrvHistDropDownUi(string text,
                                PropertyInfo info,
+                               TProperty defaultValue,
                                Func<TProperty, IToken> effect,
                                bool isTagBox,
                                bool isDropDownList = false)
-         : base(text, isTagBox ? new TagComboBox
+         : base(effect, text, isTagBox ? new TagComboBox
          {
             Dock = DockStyle.Fill,
          }: new ComboBox
@@ -486,8 +526,8 @@ namespace Editor.Controls.PRV_HIST
             Dock = DockStyle.Fill,
          }, false)
       {
+         _defaultValue = defaultValue;
          PropertyInfo = info;
-         EffectToken = effect;
          LoadGuiEvents.ProvHistoryLoadAction += ((IPropertyControl<Province, TProperty>)this).LoadToGui;
 
          if (isTagBox)
@@ -521,12 +561,10 @@ namespace Editor.Controls.PRV_HIST
       {
          Debug.Assert(value != null, "value is null but must never be null");
          DropDown.Text = value.ToString();
-         LoadCurrent(value);
       }
-      public override IErrorHandle GetFromGui(out TProperty value)
-      {
-         return Converter.Convert(DropDown.Text, out value);
-      }
+      public override IErrorHandle GetFromGui(out TProperty value) => Converter.Convert(DropDown.Text, out value);
+      public override void ResetCurrent() => SetCurrentLabel(string.Empty);
+      protected override IToken GetDefaultEffectToken() => EffectToken(_defaultValue);
 
       public override void LoadCurrent(TProperty value)
       {
@@ -534,19 +572,12 @@ namespace Editor.Controls.PRV_HIST
          SetCurrentLabel(value.ToString() ?? string.Empty);
       }
 
-      public override void ResetCurrent()
-      {
-         SetCurrentLabel(string.Empty);
-      }
    }
-
-   public class PrvHistIntUi : PrvHistSetAddUi<int>, IPrvHisSetOptSinglePropControl<int>
+   public class PrvHistIntUi : PrvHistSetAddUiBoth<int>
    {
-      public NumericUpDown IntNumeric { get; }
-      public Func<int, IToken> SetEffectToken { get; init; }
-      public Func<int, IToken> EffectToken { get; init; }
-      public override PropertyInfo PropertyInfo { get; init; }
-      private Timer _timer = new()
+      private NumericUpDown IntNumeric { get; }
+      public sealed override PropertyInfo PropertyInfo { get; init; }
+      private readonly Timer _timer = new()
       {
          Interval = Globals.Settings.Gui.TextBoxCommandCreationInterval
       };
@@ -561,15 +592,13 @@ namespace Editor.Controls.PRV_HIST
                           int min = 0,
                           int max = 100,
                           bool hasSet = true)
-         : base(text, new NumericUpDown
+         : base(effect, setEffect, text, new NumericUpDown
          {
             Dock = DockStyle.Fill,
             TextAlign = HorizontalAlignment.Right
          }, hasSet)
       {
          PropertyInfo = info;
-         SetEffectToken = setEffect;
-         EffectToken = effect;
          LoadGuiEvents.ProvHistoryLoadAction += ((IPropertyControl<Province, int>)this).LoadToGui;
 
          IntNumeric = (NumericUpDown)Controls[2]; // keep a reference directly
@@ -615,17 +644,7 @@ namespace Editor.Controls.PRV_HIST
          if (Globals.State != State.Running || !GetFromGui(out var value).Log() || _lastValue == value)
             return;
 
-         IToken token;
-         if (SetCheckBox.Checked)
-         {
-            token = SetEffectToken(value);
-            // Set delegate
-         }
-         else
-         {
-            token = EffectToken(value);
-            // Add delegate
-         }
+         var token = SetCheckBox.Checked ? SetEffectToken(value) : EffectToken(value);
          var command = new PrvHistoryEntryCommand(Selection.GetSelectedProvinces, [token], ProvinceHistoryManager.CurrentLoadedDate, out var changed);
          if(changed)
             HistoryManager.AddCommand(command);
@@ -638,10 +657,10 @@ namespace Editor.Controls.PRV_HIST
          _lastValue = (int)IntNumeric.Value;
       }
       
-      public override void SetValue(int value)
-      {
-         IntNumeric.Value = _lastValue = value;
-      }
+      public override void SetValue(int value) => IntNumeric.Value = _lastValue = value;
+      public override void LoadCurrent(int value) => SetCurrentLabel(value.ToString());
+      public override void ResetCurrent() => LoadCurrent(0);
+      protected override IToken GetDefaultEffectToken() => SetEffectToken(0); 
 
       public override IErrorHandle GetFromGui(out int value)
       {
@@ -649,62 +668,20 @@ namespace Editor.Controls.PRV_HIST
          return ErrorHandle.Success;
       }
 
-      public override void LoadCurrent(int value)
-      {
-         SetCurrentLabel(value.ToString());
-      }
-
-      public override void ResetCurrent()
-      {
-         LoadCurrent(0);
-      }
-
-      public void LoadToGui(List<Province> list, PropertyInfo propInfo, bool force)
-      {
-         if (force || PropertyInfo.Equals(propInfo))
-         {
-
-            var (entries, shareEntry) = ProvinceHistoryManager.BinarySearchDateExactMultiple(
-                                                                                             list.Select(x => x.History.ToList()).ToList(),
-                                                                                             ProvinceHistoryManager.CurrentLoadedDate);
-            if (shareEntry)
-            {
-               var dummy = SetEffectToken.Invoke(0);
-               if (ShareEntriesValue(entries, dummy.GetTokenName(), out var sharedValue))
-                  SetValue(sharedValue);
-               else
-               {
-                  dummy = EffectToken.Invoke(sharedValue);
-                  if (ShareEntriesValue(entries, dummy.GetTokenName(), out sharedValue)) 
-                     SetValue(sharedValue);
-               }
-               
-            }
-            if (AttributeHelper.GetSharedAttribute(PropertyInfo, out int value, list))
-               LoadCurrent(value);
-            else
-            {
-               SetDefault();
-               ResetCurrent();
-            }
-         }
-      }
    }   
-   
-   public class PrvHistBoolUi : PrvHistSetAddUi<bool>, IPrvHistSingleEffectPropControl<bool>
+   public class PrvHistBoolUi : PrvHistSetAddUi<bool>
    {
       public CheckBox BoolCheckBox { get; }
-      public Func<bool, IToken> EffectToken { get; init; }
-      public override PropertyInfo PropertyInfo { get; init; }
+      public sealed override PropertyInfo PropertyInfo { get; init; }
+      protected override IToken GetDefaultEffectToken() => EffectToken(false); 
 
-      public PrvHistBoolUi(string text, PropertyInfo info, Func<bool, IToken> effect, bool isChecked = false)
-         : base(text, new CheckBox
+      public PrvHistBoolUi(Func<bool, IToken> effect, string text, PropertyInfo info, bool isChecked = false)
+         : base(effect, text, new CheckBox
          {
             Dock = DockStyle.Fill,
          }, false)
       {
          PropertyInfo = info;
-         EffectToken = effect;
 
          LoadGuiEvents.ProvHistoryLoadAction += ((IPropertyControl<Province, bool>)this).LoadToGui;
          {
@@ -717,7 +694,6 @@ namespace Editor.Controls.PRV_HIST
          BoolCheckBox.CheckedChanged += (_, _) => SetFromGui();
       }
 
-
       public override void SetFromGui()
       {
          if (Globals.State != State.Running || !GetFromGui(out var value).Log())
@@ -728,10 +704,11 @@ namespace Editor.Controls.PRV_HIST
             HistoryManager.AddCommand(command);
       }
       public override void SetDefault() => BoolCheckBox.Checked = false;
+      public override void LoadCurrent(bool value) => SetCurrentLabel(value ? "YES" : "NO");
+      public override void ResetCurrent() => SetCurrentLabel("NO");
       public override void SetValue(bool value)
       {
-         BoolCheckBox.Checked = value; //TODO
-         LoadCurrent(value);
+         BoolCheckBox.Checked = value; 
       }
 
       public override IErrorHandle GetFromGui(out bool value)
@@ -739,29 +716,27 @@ namespace Editor.Controls.PRV_HIST
          value = BoolCheckBox.Checked;
          return ErrorHandle.Success;
       }
-
-      public override void LoadCurrent(bool value)
+   }
+   public abstract class PrvHistSetAddUiBoth<T> : PrvHistSetAddUi<T>, IPrvHisSetOptSinglePropControl<T> where T : notnull
+   {
+      public Func<T, IToken> SetEffectToken { get; init; }
+      protected PrvHistSetAddUiBoth(Func<T, IToken> effectToken, Func<T, IToken> setEffectToken, string text, Control control, bool hasSetBox, bool hasCurrentLabel = true) : base(effectToken, text, control, hasSetBox, hasCurrentLabel)
       {
-         SetCurrentLabel(value ? "YES" : "NO");
-      }
-
-      public override void ResetCurrent()
-      {
-         SetCurrentLabel("NO");
+         SetEffectToken = setEffectToken;
       }
    }
-   
-   public abstract class PrvHistSetAddUi<T> : TableLayoutPanel, IPropertyControl<Province, T>
+   public abstract class PrvHistSetAddUi<T> : TableLayoutPanel, IPropertyControl<Province, T>, IPrvHistSingleEffectPropControl<T> where T : notnull
    {
       private Label Label { get; set; }
-      protected Label CurrentLabel { get; set; }
+      protected Label? CurrentLabel { get; set; }
       public CheckBox SetCheckBox { get; set; }
       protected string CurPrefix = "Cur: ";
       public string CurSuffix = "";
-      private IPropertyControl<Province, T> _propertyControlImplementation;
+      public Func<T, IToken> EffectToken { get; init; }
 
-      public PrvHistSetAddUi(string text, Control control, bool hasSetBox, bool hasCurrentLabel = true)
+      public PrvHistSetAddUi(Func<T, IToken> effectToken, string text, Control control, bool hasSetBox, bool hasCurrentLabel = true)
       {
+         EffectToken = effectToken;
          AutoSize = false;
 
          ColumnCount = 4;
@@ -820,6 +795,7 @@ namespace Editor.Controls.PRV_HIST
          }
       }
 
+      protected abstract IToken GetDefaultEffectToken();
       public abstract void LoadCurrent(T value);
       public abstract void ResetCurrent();
 
@@ -882,6 +858,30 @@ namespace Editor.Controls.PRV_HIST
          set { base.AutoSize = value; }
       }
 
+      public void LoadToGui(List<Province> list, PropertyInfo propInfo, bool force)
+      {
+         if (force || PropertyInfo.Equals(propInfo))
+         {
+
+            var (entries, shareEntry) = ProvinceHistoryManager.BinarySearchDateExactMultiple(
+                                                                                             list.Select(x => x.History.ToList()).ToList(),
+                                                                                             ProvinceHistoryManager.CurrentLoadedDate);
+            if (shareEntry)
+               if (ShareEntriesValue(entries, GetDefaultEffectToken().GetTokenName(), out var sharedValue))
+                  SetValue(sharedValue!);
+            if (AttributeHelper.GetSharedAttribute(PropertyInfo, out T value, list))
+            {
+               LoadCurrent(value);
+               if (!shareEntry)
+                  SetDefault();
+            }
+            else
+            {
+               SetDefault();
+               ResetCurrent();
+            }
+         }
+      }
       public abstract PropertyInfo PropertyInfo { get; init; }
       public abstract void SetFromGui();
       public abstract void SetDefault();

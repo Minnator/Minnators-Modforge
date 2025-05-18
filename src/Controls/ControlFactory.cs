@@ -63,9 +63,9 @@ public static class ControlFactory
       return ui;
    }
 
-   public static PrvHistTextBoxUi GetPrvHistTextBoxUi(string label)
+   public static PrvHistTextBoxUi GetPrvHistTextBoxUi(string label, Func<string, IToken> effectFunc, PropertyInfo info)
    {
-      var ui = new PrvHistTextBoxUi(label)
+      var ui = new PrvHistTextBoxUi(label, effectFunc, info)
       {
          Dock = DockStyle.Fill,
          Margin = new(0)
@@ -73,14 +73,15 @@ public static class ControlFactory
       return ui;
    }
 
-   public static PrvHistCollectionUi<TProperty, TItem> GetPrvHistCollectionUi<TProperty, TItem>(string label,
+   public static PrvHistCollectionUi<TProperty, TItem> GetPrvHistCollectionUi<TProperty, TItem>(TItem defaultItem,
+                                                                                                string label,
                                                                                                 PropertyInfo info,
                                                                                                 Func<TItem, IToken> addEffect,
                                                                                                 Func<TItem, IToken> removeEffect,
                                                                                                 List<TItem> source,
                                                                                                 bool hasSetBox = true) where TProperty : List<TItem>, new() where TItem : notnull 
    {
-      var ui = new PrvHistCollectionUi<TProperty, TItem>(label, info, addEffect, removeEffect, source, hasSetBox)
+      var ui = new PrvHistCollectionUi<TProperty, TItem>(defaultItem, label, info, addEffect, removeEffect, source, hasSetBox)
       {
          Dock = DockStyle.Fill,
          Margin = new(0)
@@ -109,7 +110,7 @@ public static class ControlFactory
 
    public static PrvHistBoolUi GetPrvHistBoolUi(string label, PropertyInfo propInfo, Func<bool, IToken> effect, bool isChecked)
    {
-      var ui = new PrvHistBoolUi(label, propInfo, effect, isChecked)
+      var ui = new PrvHistBoolUi(effect, label, propInfo, isChecked)
       {
          Dock = DockStyle.Fill,
          Margin = new(0)
@@ -120,12 +121,13 @@ public static class ControlFactory
 
    public static BindablePrvHistDropDownUi<TProperty, TKey> GetBindablePrvHistDropDownUi<TProperty, TKey>(string label,
                                           PropertyInfo info,
+                                          TProperty defaultValue,
                                           BindingDictionary<TKey, TProperty> items,
                                           Func<TProperty, IToken> effect,
                                           bool isTagBox,
                                           bool isDropDownList = false) where TKey : notnull where TProperty : notnull
    {
-      var ui = new BindablePrvHistDropDownUi<TProperty, TKey>(label, info, effect, items, isTagBox, isDropDownList)
+      var ui = new BindablePrvHistDropDownUi<TProperty, TKey>(label, info, defaultValue, effect, items, isTagBox, isDropDownList)
       {
          Dock = DockStyle.Fill,
          Margin = new(0)
@@ -133,9 +135,9 @@ public static class ControlFactory
       return ui;
    }
 
-   public static PrvHistDropDownUi<TProperty> GetPrvHistDropDownUi<TProperty>(string label, PropertyInfo info, Func<TProperty, IToken> effect, bool isTagBox, bool isDropDownList = false)
+   public static PrvHistDropDownUi<TProperty> GetPrvHistDropDownUi<TProperty>(string label, PropertyInfo info, TProperty defaultValue, Func<TProperty, IToken> effect, bool isTagBox, bool isDropDownList = false)
    {
-      var ui = new PrvHistDropDownUi<TProperty>(label, info, effect, isTagBox, isDropDownList)
+      var ui = new PrvHistDropDownUi<TProperty>(label, info, defaultValue, effect, isTagBox, isDropDownList)
       {
          Dock = DockStyle.Fill,
          Margin = new(0)

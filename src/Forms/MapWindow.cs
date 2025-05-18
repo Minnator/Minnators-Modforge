@@ -1438,11 +1438,13 @@ namespace Editor.Forms
 
          _prvHistOwnerTagBox = ControlFactory.GetBindablePrvHistDropDownUi(nameof(Province.Owner),
                                                                            typeof(Province).GetProperty(nameof(Province.Owner))!,
+                                                                           Country.Empty,
                                                                            Globals.Countries,
                                                                            value => new OwnerEffect() { _value = { Val = value } },
                                                                            true);
          _prvHistControllerTagBox = ControlFactory.GetBindablePrvHistDropDownUi(nameof(Province.Controller),
                                                                                 typeof(Province).GetProperty(nameof(Province.Controller))!,
+                                                                                Country.Empty,
                                                                                 Globals.Countries,
                                                                                 value => new ControllerEffect() { _value = { Val = value } },
                                                                                 true);
@@ -1475,22 +1477,26 @@ namespace Editor.Forms
 
          _prvHistReligionComboBox = ControlFactory.GetBindablePrvHistDropDownUi(nameof(Province.Religion),
                                                                                 typeof(Province).GetProperty(nameof(Province.Religion))!,
+                                                                                Religion.Empty,
                                                                                 Globals.Religions,
                                                                                 value => new ReligionEffect() { _value = { Val = value } },
                                                                                 false);
          _prvHistCultureComboBox = ControlFactory.GetBindablePrvHistDropDownUi(nameof(Province.Culture),
                                                                                typeof(Province).GetProperty(nameof(Province.Culture))!,
+                                                                               Culture.Empty,
                                                                                Globals.Cultures,
                                                                                value => new CultureEffect() { _value = { Val = value } },
                                                                                false);
          _prvHistTradeGoodsComboBox = ControlFactory.GetBindablePrvHistDropDownUi(nameof(Province.TradeGood),
                                                                                   typeof(Province).GetProperty(nameof(Province.TradeGood))!,
+                                                                                  TradeGood.Empty,
                                                                                   Globals.TradeGoods,
                                                                                   value => new TradeGoodsEffect() { _value = { Val = value } },
                                                                                   false,
                                                                                   true);
          _prvHistTradeCenterComboBox = ControlFactory.GetPrvHistDropDownUi<int>(nameof(Province.CenterOfTrade),
                                                                                 typeof(Province).GetProperty(nameof(Province.CenterOfTrade))!,
+                                                                                0,
                                                                                 value => new CenterOfTradeEffect() { _value = { Val = value } },
                                                                                 false,
                                                                                 true);
@@ -1524,8 +1530,12 @@ namespace Editor.Forms
          ProvHistoryLayout.Controls.Add(_prvHistSeparators[2], 0, blockOffset + 3);
          blockOffset += 4;
 
-         _prvHistLocTextBox = ControlFactory.GetPrvHistTextBoxUi(nameof(Province.TitleLocalisation));
-         _prvHistCapitalTextBox = ControlFactory.GetPrvHistTextBoxUi(nameof(Province.Capital));
+         _prvHistLocTextBox = ControlFactory.GetPrvHistTextBoxUi(nameof(Province.TitleLocalisation), 
+                                                                 value => IToken.Empty, 
+                                                                 typeof(Province).GetProperty(nameof(Province.TitleLocalisation))!);
+         _prvHistCapitalTextBox = ControlFactory.GetPrvHistTextBoxUi(nameof(Province.Capital),
+                                                                     value => IToken.Empty, //TODO what shall we do here @JUJU
+                                                                     typeof(Province).GetProperty(nameof(Province.Capital))!);
 
          ProvHistoryLayout.Controls.Add(_prvHistLocTextBox, 0, blockOffset + 0);
          ProvHistoryLayout.Controls.Add(_prvHistCapitalTextBox, 0, blockOffset + 1);
@@ -1561,33 +1571,38 @@ namespace Editor.Forms
          ProvHistoryLayout.Controls.Add(_prvHistSeparators[1], 0, blockOffset + 4);
          blockOffset += 5;
 
-         _prvHistCores = ControlFactory.GetPrvHistCollectionUi<List<Tag>, Tag>(nameof(Province.Cores),
-                                                               typeof(Province).GetProperty(nameof(Province.Cores))!,
-                                                               value => new AddCoreEffect { _value = { Val = value } },
-                                                               value => new RemoveCoreEffect { _value = { Val = value } },
-                                                               Globals.Countries.Values.Select(x => x.Tag).ToList());
-         _prvHistClaimSelector = ControlFactory.GetPrvHistCollectionUi<List<Tag>, Tag>(nameof(Province.Claims),
-                                                                                               typeof(Province).GetProperty(nameof(Province.Claims))!,
-                                                                                               value => new AddClaimEffect { _value = { Val = value } },
-                                                                                               value => new RemoveClaimEffect { _value = { Val = value } },
-                                                                                               Globals.Countries.Values.Select(x => x.Tag).ToList());
+         _prvHistCores = ControlFactory.GetPrvHistCollectionUi<List<Tag>, Tag>(DataClasses.GameDataClasses.Tag.Empty,
+                                                                               nameof(Province.Cores),
+                                                                               typeof(Province).GetProperty(nameof(Province.Cores))!,
+                                                                               value => new AddCoreEffect { _value = { Val = value } },
+                                                                               value => new RemoveCoreEffect { _value = { Val = value } },
+                                                                               Globals.Countries.Values.Select(x => x.Tag).ToList());
+         _prvHistClaimSelector = ControlFactory.GetPrvHistCollectionUi<List<Tag>, Tag>(DataClasses.GameDataClasses.Tag.Empty,
+                                                                                       nameof(Province.Claims),
+                                                                                       typeof(Province).GetProperty(nameof(Province.Claims))!,
+                                                                                       value => new AddClaimEffect { _value = { Val = value } },
+                                                                                       value => new RemoveClaimEffect { _value = { Val = value } },
+                                                                                       Globals.Countries.Values.Select(x => x.Tag).ToList());
 
-         _prvHistPermaClaimSelector = ControlFactory.GetPrvHistCollectionUi<List<Tag>, Tag>(nameof(Province.PermaClaims),
-                                                                                                    typeof(Province).GetProperty(nameof(Province.PermaClaims))!,
-                                                                                                    value => new AddPermanentClaimEffect { _value = { Val = value } },
-                                                                                                    value => new RemovePermanentClaimEffect { _value = { Val = value } },
-                                                                                                    Globals.Countries.Values.Select(x => x.Tag).ToList());
-         _prvHistBuildings = ControlFactory.GetPrvHistCollectionUi<List<Building>, Building>(nameof(Province.Buildings),
+         _prvHistPermaClaimSelector = ControlFactory.GetPrvHistCollectionUi<List<Tag>, Tag>(DataClasses.GameDataClasses.Tag.Empty,
+                                                                                            nameof(Province.PermaClaims),
+                                                                                            typeof(Province).GetProperty(nameof(Province.PermaClaims))!,
+                                                                                            value => new AddPermanentClaimEffect { _value = { Val = value } },
+                                                                                            value => new RemovePermanentClaimEffect { _value = { Val = value } },
+                                                                                            Globals.Countries.Values.Select(x => x.Tag).ToList());
+         _prvHistBuildings = ControlFactory.GetPrvHistCollectionUi<List<Building>, Building>(Building.Empty, 
+                                                                                             nameof(Province.Buildings),
                                                                                              typeof(Province).GetProperty(nameof(Province.Buildings))!,
                                                                                              value => new AddCoreEffect {  }, // TODO
                                                                                              value => new RemoveCoreEffect {  },
-                                                                                                 Globals.Buildings.ToList());
+                                                                                             Globals.Buildings.ToList());
          
-         _prvHistDiscoveredBy = ControlFactory.GetPrvHistCollectionUi<List<string>,string>(nameof(Province.DiscoveredBy),
-                                                                      typeof(Province).GetProperty(nameof(Province.DiscoveredBy))!,
-                                                                      value => new DiscoveredByEffect { _value = { Val = value } },
-                                                                      value => new DiscoveredByEffect { _value = { Val = value } },
-                                                                                    [.. Globals.Countries.Keys.Select(x => x.TagValue).ToList(), .. Globals.TechnologyGroups.Keys]);
+         _prvHistDiscoveredBy = ControlFactory.GetPrvHistCollectionUi<List<string>,string>(string.Empty,
+                                                                                           nameof(Province.DiscoveredBy),
+                                                                                           typeof(Province).GetProperty(nameof(Province.DiscoveredBy))!,
+                                                                                           value => new DiscoveredByEffect { _value = { Val = value } },
+                                                                                           value => new DiscoveredByEffect { _value = { Val = value } },
+                                                                                           [.. Globals.Countries.Keys.Select(x => x.TagValue).ToList(), .. Globals.TechnologyGroups.Keys]);
 
 
          ProvHistoryLayout.Controls.Add(_prvHistCores, 0, blockOffset + 0);
@@ -1600,10 +1615,11 @@ namespace Editor.Forms
          blockOffset += 6;
 
          _prvHistTribalOwnerComboBox = ControlFactory.GetBindablePrvHistDropDownUi(nameof(Province.TribalOwner),
-                                                                               typeof(Province).GetProperty(nameof(Province.TribalOwner))!,
-                                                                               Globals.Countries,
-                                                                               value => new TribalOwnerEffect() { _value = { Val = value } },
-                                                                               true);
+                                                                                   typeof(Province).GetProperty(nameof(Province.TribalOwner))!,
+                                                                                   Country.Empty,
+                                                                                   Globals.Countries,
+                                                                                   value => new TribalOwnerEffect() { _value = { Val = value } },
+                                                                                   true);
          _prvHistNativesSizeNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.NativeSize),
                                                                      typeof(Province).GetProperty(nameof(Province.NativeSize))!,
                                                                      value => new NativeSizeEffect { _value = { Val = value } },
