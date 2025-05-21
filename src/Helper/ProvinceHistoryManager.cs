@@ -19,11 +19,11 @@ namespace Editor.Helper
       }
       public static void LoadDate(Date date, bool render = true)
       {
+         var state = Globals.State;
+         Globals.State = State.Loading;
          if (date != CurrentLoadedDate)
          {
             IsLoading = true;
-            var state = Globals.State;
-            Globals.State = State.Loading;
             if (date < CurrentLoadedDate)
             {
                ResetProvinceHistory();
@@ -32,7 +32,6 @@ namespace Editor.Helper
             foreach (var province in Globals.Provinces) 
                province.LoadHistoryForDate(date);
             CurrentLoadedDate.SetDate(date);
-            Globals.State = state;
             IsLoading = false;
          }
          if (render)
@@ -40,6 +39,7 @@ namespace Editor.Helper
          if (Selection.GetSelectedProvinces.Count > 0)
             LoadGuiEvents.ProvHistoryLoadAction.Invoke(Selection.GetSelectedProvinces, null!, true);
 
+         Globals.State = state;
          Globals.MapWindow.DateControl.SetDate(CurrentLoadedDate);
       }
 

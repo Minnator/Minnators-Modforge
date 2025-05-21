@@ -224,14 +224,14 @@ namespace Editor.Forms
          {
             if (Globals.Bookmarks.All(x => x.Date != ProvinceHistoryManager.CurrentLoadedDate))
             {
-               BookMarkComboBox.BackColor = Color.DarkSlateGray; 
+               BookMarkComboBox.BackColor = Color.DarkGray; 
                BookMarkComboBox.Refresh();
             }
             else
             {
                var index = Globals.Bookmarks.FindIndex(x => x.Date == date) + 1;
                BookMarkComboBox.SelectedIndex = index;
-               BookMarkComboBox.BackColor = SystemColors.ControlLight;
+               BookMarkComboBox.BackColor = SystemColors.Control;
             }
             BookMarkComboBox.Invalidate();
          };
@@ -1607,8 +1607,8 @@ namespace Editor.Forms
          _prvHistBuildings = ControlFactory.GetPrvHistCollectionUi<List<Building>, Building>(Building.Empty,
                                                                                              nameof(Province.Buildings),
                                                                                              typeof(Province).GetProperty(nameof(Province.Buildings))!,
-                                                                                             value => new AddCoreEffect { }, // TODO
-                                                                                             value => new RemoveCoreEffect { },
+                                                                                             value => new RuntimeEffects.BuildingEffect(value) {_value = {Val = true }},
+                                                                                             value => new RuntimeEffects.BuildingEffect(value) {_value = {Val = false }},
                                                                                              Globals.Buildings.ToList());
 
          _prvHistDiscoveredBy = ControlFactory.GetPrvHistCollectionUi<List<string>, string>(string.Empty,
