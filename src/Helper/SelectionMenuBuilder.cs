@@ -20,13 +20,11 @@ namespace Editor.Helper
          menu.Items.Add(GetCultureGroupSelector());
          menu.Items.Add(GetCultureSelector());
          menu.Items.Add(GetTradeNodeSelector());
-         
-         /*
-         foreach (ToolStripMenuItem item in menu.Items)
+         menu.Items.Add(new ToolStripSeparator());
+         menu.Items.Add(ControlFactory.GetToolStripMenuItem("Copy Province Ids", (sender, args) =>
          {
-            Debug.WriteLine($"{item.Text} --> {item.Enabled}");
-         }
-         */
+            Clipboard.SetText(string.Join(' ', Selection.GetSelectedProvinces.Select(x => x.Id).Order()));
+         }));
 
          return menu;
       }

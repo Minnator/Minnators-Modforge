@@ -76,6 +76,13 @@ namespace Editor.Loading.Enhanced
          return GetElements(pathObj, content);
       }
 
+      public static (List<EnhancedBlock>, List<EnhancedContent>) GetElements(string input)
+      {
+         if (string.IsNullOrWhiteSpace(input))
+            return ([], []);
+         return GetElements(PathObj.Empty, input);
+      }  
+
       private static unsafe (List<EnhancedBlock>, List<EnhancedContent>) GetElements(PathObj pathObj, string input)
       {
          var lines = input.Split('\n');

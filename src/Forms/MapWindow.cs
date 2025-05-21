@@ -236,14 +236,14 @@ namespace Editor.Forms
          Debug.Assert(BookMarkComboBox.SelectedIndex != -1, "BookMarkComboBox.SelectedIndex == -1 must never be reached!");
          if (ProvinceHistoryManager.IsLoading)
             return;
-         
+
          if (BookMarkComboBox.SelectedIndex == 0)
          {
             ProvinceHistoryManager.LoadDate(Date.MinValue);
             return;
          }
 
-         var bookmark = Globals.Bookmarks[BookMarkComboBox.SelectedIndex-1];
+         var bookmark = Globals.Bookmarks[BookMarkComboBox.SelectedIndex - 1];
          ProvinceHistoryManager.LoadDate(bookmark.Date);
       }
 
@@ -950,7 +950,7 @@ namespace Editor.Forms
                ? $"Open the selected province file ({Selection.GetSelectedProvinces[0].TitleLocalisation})"
                : $"Open the selected province files ({Selection.Count})");
       }
-      
+
       public void UpdateHoveredInfo(Province? province)
       {
          if (province == null)
@@ -1500,7 +1500,7 @@ namespace Editor.Forms
                                                                                 value => new CenterOfTradeEffect() { _value = { Val = value } },
                                                                                 false,
                                                                                 true);
-         _prvHistTradeCenterComboBox.DropDown.Items.AddRange([.."0", "1", "2", "3"]);
+         _prvHistTradeCenterComboBox.DropDown.Items.AddRange([.. "0", "1", "2", "3"]);
 
          ProvHistoryLayout.Controls.Add(_prvHistReligionComboBox, 0, blockOffset + 0);
          ProvHistoryLayout.Controls.Add(_prvHistCultureComboBox, 0, blockOffset + 1);
@@ -1530,8 +1530,8 @@ namespace Editor.Forms
          ProvHistoryLayout.Controls.Add(_prvHistSeparators[2], 0, blockOffset + 3);
          blockOffset += 4;
 
-         _prvHistLocTextBox = ControlFactory.GetPrvHistTextBoxUi(nameof(Province.TitleLocalisation), 
-                                                                 value => IToken.Empty, 
+         _prvHistLocTextBox = ControlFactory.GetPrvHistTextBoxUi(nameof(Province.TitleLocalisation),
+                                                                 value => IToken.Empty,
                                                                  typeof(Province).GetProperty(nameof(Province.TitleLocalisation))!);
          _prvHistCapitalTextBox = ControlFactory.GetPrvHistTextBoxUi(nameof(Province.Capital),
                                                                      value => IToken.Empty, //TODO what shall we do here @JUJU
@@ -1556,7 +1556,7 @@ namespace Editor.Forms
                                                                       typeof(Province).GetProperty(nameof(Province.Prosperity))!,
                                                                       value => new AddProsperityEffect() { _value = { Val = value } },
                                                                       value => new AddProsperityEffect() { _value = { Val = value } },
-                                                                      hasSet:false);
+                                                                      hasSet: false);
          _prvHistExtraCostNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.ExtraCost),
                                                                    typeof(Province).GetProperty(nameof(Province.ExtraCost))!,
                                                                    value => new ExtraCostEffect { _value = { Val = value } },
@@ -1590,14 +1590,14 @@ namespace Editor.Forms
                                                                                                     value => new AddPermanentClaimEffect { _value = { Val = value } },
                                                                                                     value => new RemovePermanentClaimEffect { _value = { Val = value } },
                                                                                                     Globals.Countries.Values.ToList());
-         _prvHistBuildings = ControlFactory.GetPrvHistCollectionUi<List<Building>, Building>(Building.Empty, 
+         _prvHistBuildings = ControlFactory.GetPrvHistCollectionUi<List<Building>, Building>(Building.Empty,
                                                                                              nameof(Province.Buildings),
                                                                                              typeof(Province).GetProperty(nameof(Province.Buildings))!,
-                                                                                             value => new AddCoreEffect {  }, // TODO
-                                                                                             value => new RemoveCoreEffect {  },
+                                                                                             value => new AddCoreEffect { }, // TODO
+                                                                                             value => new RemoveCoreEffect { },
                                                                                              Globals.Buildings.ToList());
-         
-         _prvHistDiscoveredBy = ControlFactory.GetPrvHistCollectionUi<List<string>,string>(string.Empty,
+
+         _prvHistDiscoveredBy = ControlFactory.GetPrvHistCollectionUi<List<string>, string>(string.Empty,
                                                                                            nameof(Province.DiscoveredBy),
                                                                                            typeof(Province).GetProperty(nameof(Province.DiscoveredBy))!,
                                                                                            value => new DiscoveredByEffect { _value = { Val = value } },
@@ -1626,7 +1626,7 @@ namespace Editor.Forms
                                                                      value => new NativeSizeEffect { _value = { Val = value } },
                                                                      hasSet: false);
          _prvHistNativesHostilityNumeric = ControlFactory.GetPrvHistIntUi(nameof(Province.NativeHostileness),
-                                                                         typeof(Province).GetProperty(nameof(Province.NativeHostileness))!, 
+                                                                         typeof(Province).GetProperty(nameof(Province.NativeHostileness))!,
                                                                          value => new NativeHostilnessEffect { _value = { Val = value } },
                                                                          value => new NativeHostilnessEffect { _value = { Val = value } },
                                                                          hasSet: false);
@@ -1944,5 +1944,9 @@ namespace Editor.Forms
          ProcessHelper.OpenLink("https://eu4.paradoxwikis.com/Modifier_list");
       }
 
+      private void iDCollectionEditorToolStripMenuItem_Click(object sender, EventArgs e)
+      {
+         FormsHelper.ShowIfAnyOpen<IdCollectionEditor>();
+      }
    }
 }

@@ -75,6 +75,7 @@
          tradegoodEditorToolStripMenuItem = new ToolStripMenuItem();
          definesEditorToolStripMenuItem = new ToolStripMenuItem();
          namesGeneratorToolStripMenuItem = new ToolStripMenuItem();
+         iDCollectionEditorToolStripMenuItem = new ToolStripMenuItem();
          toolStripSeparator12 = new ToolStripSeparator();
          wikiToolStripMenuItem = new ToolStripMenuItem();
          effectsToolStripMenuItem = new ToolStripMenuItem();
@@ -603,7 +604,7 @@
          // 
          // additionalToolsToolStripMenuItem
          // 
-         additionalToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { checkForCyclesInTradenodesToolStripMenuItem, randomModifierToolStripMenuItem, deleteProvinceHistoryEntriesToolStripMenuItem, tradegoodEditorToolStripMenuItem, definesEditorToolStripMenuItem, namesGeneratorToolStripMenuItem, toolStripSeparator12, wikiToolStripMenuItem, pDXWikiToolStripMenuItem, toolStripSeparator13, calenderViewToolStripMenuItem, missionExporterToolStripMenuItem });
+         additionalToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { checkForCyclesInTradenodesToolStripMenuItem, randomModifierToolStripMenuItem, deleteProvinceHistoryEntriesToolStripMenuItem, tradegoodEditorToolStripMenuItem, definesEditorToolStripMenuItem, namesGeneratorToolStripMenuItem, iDCollectionEditorToolStripMenuItem, toolStripSeparator12, wikiToolStripMenuItem, pDXWikiToolStripMenuItem, toolStripSeparator13, calenderViewToolStripMenuItem, missionExporterToolStripMenuItem });
          additionalToolsToolStripMenuItem.Name = "additionalToolsToolStripMenuItem";
          additionalToolsToolStripMenuItem.Size = new Size(103, 23);
          additionalToolsToolStripMenuItem.Text = "Additional tools";
@@ -649,6 +650,13 @@
          namesGeneratorToolStripMenuItem.Size = new Size(236, 22);
          namesGeneratorToolStripMenuItem.Text = "Names Generator";
          namesGeneratorToolStripMenuItem.Click += namesGeneratorToolStripMenuItem_Click;
+         // 
+         // iDCollectionEditorToolStripMenuItem
+         // 
+         iDCollectionEditorToolStripMenuItem.Name = "iDCollectionEditorToolStripMenuItem";
+         iDCollectionEditorToolStripMenuItem.Size = new Size(236, 22);
+         iDCollectionEditorToolStripMenuItem.Text = "ID Collection Editor";
+         iDCollectionEditorToolStripMenuItem.Click += iDCollectionEditorToolStripMenuItem_Click;
          // 
          // toolStripSeparator12
          // 
@@ -3417,6 +3425,7 @@
       private Label label41;
       private Button MonarchNamesImportButton;
       public ComboBox BookMarkComboBox;
+      private ToolStripMenuItem iDCollectionEditorToolStripMenuItem;
    }
 }
 
