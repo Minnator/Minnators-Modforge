@@ -204,20 +204,34 @@ namespace Editor.Forms
 
          BookMarkComboBox.Items.AddRange(["Scenario", .. Globals.Bookmarks]);
          BookMarkComboBox.SelectedIndex = 0;
-         BookMarkComboBox.SelectedIndexChanged += OnBookMarkChanged;
+         BookMarkComboBox.SelectedIndexChanged += OnBookMarkChanged; 
+         BookMarkComboBox.DrawMode = DrawMode.OwnerDrawFixed; 
+         BookMarkComboBox.DrawItem += (s, e) => {
+            e.DrawBackground();
+
+            var isSelected = (e.State & DrawItemState.Selected) == DrawItemState.Selected;
+            var text = BookMarkComboBox.Items[e.Index]!.ToString();
+
+            using var backgroundBrush = new SolidBrush(isSelected ? Color.DarkBlue : e.BackColor);
+            using var textBrush = new SolidBrush(isSelected ? Color.White : e.ForeColor);
+
+            e.Graphics.FillRectangle(backgroundBrush, e.Bounds);
+            e.Graphics.DrawString(text, e.Font!, textBrush, e.Bounds);
+         };
+
 
          ProvinceHistoryManager.CurrentLoadedDate.OnDateChanged += (sender, date) =>
          {
             if (Globals.Bookmarks.All(x => x.Date != ProvinceHistoryManager.CurrentLoadedDate))
             {
-               // TODO fix the color update
-               BookMarkComboBox.ForeColor = Color.DarkSlateGray;
+               BookMarkComboBox.BackColor = Color.DarkSlateGray; 
+               BookMarkComboBox.Refresh();
             }
             else
             {
                var index = Globals.Bookmarks.FindIndex(x => x.Date == date) + 1;
                BookMarkComboBox.SelectedIndex = index;
-               BookMarkComboBox.ForeColor = Color.Black;
+               BookMarkComboBox.BackColor = SystemColors.ControlLight;
             }
             BookMarkComboBox.Invalidate();
          };
