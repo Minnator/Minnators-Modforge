@@ -13,7 +13,8 @@ public class Deselection : ISelectionModifier
 
    public void Execute(ProvinceSource source, Operations operation, PropertyInfo attr, object value)
    {
-      HistoryManager.AddCommand(new CCollectionSelection(GetProvinceViaOperation.GetProvinces(operation, attr, value, GetProvinceViaOperation.GetProvincesToCheck(source)), true));
+      Selection.AddOrRemoveAllFromSelection(GetProvinceViaOperation.GetProvinces(operation, attr, value, GetProvinceViaOperation.GetProvincesToCheck(source)));
+      Globals.ZoomControl.Invalidate();
    }
 
 
@@ -25,8 +26,8 @@ public class Select : ISelectionModifier
 
    public void Execute(ProvinceSource source, Operations operation, PropertyInfo attr, object value)
    {
-
-      HistoryManager.AddCommand(new CCollectionSelection(GetProvinceViaOperation.GetProvinces(operation, attr, value, GetProvinceViaOperation.GetProvincesToCheck(source))));
+      Selection.AddOrRemoveAllFromSelection(GetProvinceViaOperation.GetProvinces(operation, attr, value, GetProvinceViaOperation.GetProvincesToCheck(source)));
+      Globals.ZoomControl.Invalidate();
    }
 }
 

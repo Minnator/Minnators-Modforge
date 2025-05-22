@@ -67,7 +67,6 @@
          toolTipCustomizerToolStripMenuItem = new ToolStripMenuItem();
          openCustomizerToolStripMenuItem = new ToolStripMenuItem();
          ShowToolTipMenuItem = new ToolStripMenuItem();
-         toolStripMenuItem3 = new ToolStripMenuItem();
          additionalToolsToolStripMenuItem = new ToolStripMenuItem();
          checkForCyclesInTradenodesToolStripMenuItem = new ToolStripMenuItem();
          randomModifierToolStripMenuItem = new ToolStripMenuItem();
@@ -345,7 +344,7 @@
          // 
          // MapMenuStrip
          // 
-         MapMenuStrip.Items.AddRange(new ToolStripItem[] { filesToolStripMenuItem, historyToolStripMenuItem, toolTipCustomizerToolStripMenuItem, toolStripMenuItem3, additionalToolsToolStripMenuItem, MapModeComboBox, searchToolStripMenuItem, helpToolStripMenuItem, toolStripMenuItem4, debugToolStripMenuItem });
+         MapMenuStrip.Items.AddRange(new ToolStripItem[] { filesToolStripMenuItem, historyToolStripMenuItem, toolTipCustomizerToolStripMenuItem, additionalToolsToolStripMenuItem, MapModeComboBox, searchToolStripMenuItem, helpToolStripMenuItem, toolStripMenuItem4, debugToolStripMenuItem });
          MapMenuStrip.Location = new Point(0, 0);
          MapMenuStrip.Name = "MapMenuStrip";
          MapMenuStrip.Padding = new Padding(7, 2, 0, 2);
@@ -594,13 +593,6 @@
          ShowToolTipMenuItem.Size = new Size(166, 22);
          ShowToolTipMenuItem.Text = "Show ToolTip";
          ShowToolTipMenuItem.Click += ShowToolTipMenuItem_Click;
-         // 
-         // toolStripMenuItem3
-         // 
-         toolStripMenuItem3.Enabled = false;
-         toolStripMenuItem3.Name = "toolStripMenuItem3";
-         toolStripMenuItem3.Size = new Size(65, 23);
-         toolStripMenuItem3.Text = "Statistics";
          // 
          // additionalToolsToolStripMenuItem
          // 
@@ -3207,7 +3199,6 @@
       private ToolStripMenuItem terrainEditingToolStripMenuItem;
       private ToolStripMenuItem positionsEditingToolStripMenuItem;
       private ToolStripMenuItem toolStripMenuItem2;
-      private ToolStripMenuItem toolStripMenuItem3;
       private ToolStripSeparator toolStripSeparator5;
       private ToolStripSeparator toolStripSeparator4;
       private ToolStripMenuItem toolStripMenuItem1;

@@ -23,7 +23,7 @@ namespace Editor.DataClasses.Commands
       // Command needs to check how the entry should be changed and if some of the tokens need to be replaced
       public PrvHistoryEntryCommand(List<Province> provinces, List<IToken> tokens, Date date, out bool changed, bool executeOnInit = true)
       {
-         _date = date;
+         _date = new (date.TimeStamp);
          _tokens = new (Province, bool, KeyValuePair<int, IToken>[])[provinces.Count];
          changed = false;
 

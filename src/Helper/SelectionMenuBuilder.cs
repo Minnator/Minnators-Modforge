@@ -37,8 +37,13 @@ namespace Editor.Helper
                return;
 
             if (Selection.LastHoveredProvince.Area != Area.Empty)
-               HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.Area), CommandHistoryType.ComplexSelection);
-            
+            {
+               Selection.AddOrRemoveAllFromSelection(Selection.LastHoveredProvince.Area.GetProvinces());
+               Globals.ZoomControl.Invalidate();
+            }
+
+
+
          });
       }
 
@@ -51,7 +56,10 @@ namespace Editor.Helper
 
             if (Selection.LastHoveredProvince.Area != Area.Empty)
                if (Selection.LastHoveredProvince.Area.Region != Region.Empty)
-                     HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.Area.Region.GetProvinces()), CommandHistoryType.ComplexSelection);
+               {
+                  Selection.AddOrRemoveAllFromSelection(Selection.LastHoveredProvince.Area.Region.GetProvinces());
+                  Globals.ZoomControl.Invalidate();
+               }
          });
       }
 
@@ -65,7 +73,10 @@ namespace Editor.Helper
             if (Selection.LastHoveredProvince.Area != Area.Empty)
                if (Selection.LastHoveredProvince.Area.Region != Region.Empty)
                   if (Selection.LastHoveredProvince.Area.Region.SuperRegion != SuperRegion.Empty)
-                        HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.Area.Region.SuperRegion.GetProvinces()), CommandHistoryType.ComplexSelection);
+                  {
+                     Selection.AddOrRemoveAllFromSelection(Selection.LastHoveredProvince.Area.Region.SuperRegion.GetProvinces());
+                     Globals.ZoomControl.Invalidate();
+                  }
          });
       }
 
@@ -77,7 +88,10 @@ namespace Editor.Helper
                return;
 
             if (Selection.LastHoveredProvince.Continent != Continent.Empty)
-                  HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.Continent), CommandHistoryType.ComplexSelection);
+            {
+               Selection.AddOrRemoveAllFromSelection(Selection.LastHoveredProvince.Continent.GetProvinces());
+               Globals.ZoomControl.Invalidate();
+            }
          });
       }
 
@@ -89,7 +103,10 @@ namespace Editor.Helper
                return;
 
             if (Globals.Countries.TryGetValue (Selection.LastHoveredProvince.Owner, out var country))
-                  HistoryManager.AddCommand(new CCollectionSelection(country), CommandHistoryType.ComplexSelection);
+            {
+               Selection.AddOrRemoveAllFromSelection(Selection.LastHoveredProvince.Owner.GetProvinces());
+               Globals.ZoomControl.Invalidate();
+            }
          });
       }
 
@@ -100,7 +117,10 @@ namespace Editor.Helper
             if (Selection.LastHoveredProvince == Province.Empty)
                return;
 
-            HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.Culture.CultureGroup.GetProvinces()), CommandHistoryType.ComplexSelection);
+            {
+               Selection.AddOrRemoveAllFromSelection(Selection.LastHoveredProvince.Culture.CultureGroup.GetProvinces());
+               Globals.ZoomControl.Invalidate();
+            }
          });
       }
 
@@ -111,7 +131,10 @@ namespace Editor.Helper
             if (Selection.LastHoveredProvince == Province.Empty)
                return;
 
-            HistoryManager.AddCommand(new CCollectionSelection(Selection.LastHoveredProvince.Culture.GetProvinces()), CommandHistoryType.ComplexSelection);
+            {
+               Selection.AddOrRemoveAllFromSelection(Selection.LastHoveredProvince.Culture.GetProvinces());
+               Globals.ZoomControl.Invalidate();
+            }
          });
       }
 
@@ -123,8 +146,9 @@ namespace Editor.Helper
             if (Selection.LastHoveredProvince == Province.Empty)
                return;
 
-            var node = TradeNodeHelper.GetTradeNodeByProvince(Selection.LastHoveredProvince);
-            HistoryManager.AddCommand(new CCollectionSelection([.. node.GetProvinces()]), CommandHistoryType.ComplexSelection);
+            var node = TradeNodeHelper.GetTradeNodeByProvince(Selection.LastHoveredProvince); 
+            Selection.AddOrRemoveAllFromSelection(node.GetProvinces());
+            Globals.ZoomControl.Invalidate();
          });
       }
    }
