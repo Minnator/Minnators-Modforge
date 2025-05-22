@@ -229,8 +229,7 @@ namespace Editor.Forms
             e.Graphics.FillRectangle(backgroundBrush, e.Bounds);
             e.Graphics.DrawString(text, e.Font!, textBrush, e.Bounds);
          };
-
-
+         
          ProvinceHistoryManager.CurrentLoadedDate.OnDateChanged += (sender, date) =>
          {
             if (Globals.Bookmarks.All(x => x.Date != ProvinceHistoryManager.CurrentLoadedDate))
@@ -1683,11 +1682,25 @@ namespace Editor.Forms
          {
             if (!dateInputForm.GetDate(out var date))
                return;
-
+            List<int> remSrtIndex = [] ;
+            List<int> remLength = [] ;
+            List<Province> saveables = [];
             foreach (var province in Globals.Provinces)
+            {
                for (var i = province.History.Count - 1; i >= 0; i--)
-                  if (province.History[i].Date >= date)
-                     province.History.RemoveAt(i);
+                  if (province.History[i].Date < date)
+                  {
+                     remSrtIndex.Add(i);
+                     remLength.Add(province.History.Count - ++i);
+                     saveables.Add(province);
+                     break;
+                  }
+            }
+
+            Saveable.RemoveCountInFieldCollection<Province, List<ProvinceHistoryEntry>, ProvinceHistoryEntry>(saveables.ToArray(),
+                                                                                                              remSrtIndex.ToArray(),
+                                                                                                              remLength.ToArray(),
+                                                                                                              typeof(Province).GetProperty(nameof(Province.History))!);
          }
 
       }

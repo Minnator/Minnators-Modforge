@@ -384,4 +384,91 @@ namespace Editor.DataClasses.Commands
       }
    }
 
+   public class CRemoveInListPropertyCount<TSaveable, TCollection, TValue> : SaveableCommandBasic
+   where TCollection : List<TValue>
+   where TSaveable : Saveable
+   {
+      private readonly TSaveable[] _targets;
+      private readonly PropertyInfo _property;
+      private readonly int[] _indices;
+      private readonly int[] _counts;
+      private readonly TValue[][] _values;
+
+      public CRemoveInListPropertyCount(PropertyInfo property, TSaveable[] targets, int[] indices, int[] counts, bool executeOnInit = true)
+      {
+         Debug.Assert(indices.Length == targets.Length, "indices.Count == targets.Count");
+         Debug.Assert(counts.Length == targets.Length, "counts.Count == targets.Count");
+
+         _targets = targets.ToArray();
+         _indices = indices.ToArray();
+         _counts = counts.ToArray();
+         _property = property;
+
+         _values = new TValue[_targets.Length][];
+         for (var i = 0; i < _targets.Length; i++)
+         {
+            var collection = (TCollection)_property.GetValue(_targets[i])!;
+            _values[i] = collection.GetRange(_indices[i], _counts[i]).ToArray();
+         }
+
+         if (executeOnInit)
+            Execute();
+      }
+
+      public override List<int> GetTargetHash() => [.. _targets.Select(x => x.GetHashCode())];
+
+      public void InternalExecute()
+      {
+         for (var i = 0; i < _targets.Length; i++)
+         {
+            var collection = (TCollection)_property.GetValue(_targets[i])!;
+            collection.RemoveRange(_indices[i], _counts[i]);
+         }
+
+         LoadGuiEvents.TriggerGuiUpdate(typeof(TSaveable), _property);
+      }
+
+      public override void Undo()
+      {
+         base.Undo();
+         for (var i = 0; i < _targets.Length; i++)
+         {
+            var collection = (TCollection)_property.GetValue(_targets[i])!;
+            collection.InsertRange(_indices[i], _values[i]);
+         }
+
+         LoadGuiEvents.TriggerGuiUpdate(_property.DeclaringType, _property);
+      }
+
+      public override void Redo()
+      {
+         base.Redo();
+         InternalExecute();
+      }
+
+      public override void Execute()
+      {
+         base.Execute(_targets);
+         InternalExecute();
+      }
+
+      public override string GetDescription()
+      {
+         if (_targets.Length == 1)
+            return $"Removed {_counts[0]} item(s) at '{_indices[0]}' for {_property.Name}";
+         return $"Removed multiple items from {_targets.Length} objects for {_property.Name}";
+      }
+
+      public override string GetDebugInformation(int indent)
+      {
+         var sb = new StringBuilder();
+         sb.Append(' ', indent);
+         sb.AppendLine($"Modified {_property.Name}:");
+         for (var i = 0; i < _targets.Length; i++)
+            sb.AppendLine($"Removed {_counts[i]} item(s) at {_indices[i]}");
+
+         return sb.ToString();
+      }
+   }
+
 }

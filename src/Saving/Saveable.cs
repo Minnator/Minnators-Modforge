@@ -232,6 +232,19 @@ public abstract class Saveable : IDisposable
       target.OnPropertyChanged(outerProperty.Name);
    }
 
+   public static void RemoveCountInFieldCollection<TSaveable, TProperty, TItem>(TSaveable[] target,
+                                                                                int[] indices,
+                                                                                int[] counts,
+                                                                                PropertyInfo info) where TSaveable : Saveable where TProperty : List<TItem>
+   {
+      if (Globals.State != State.Running)
+         return;
+
+      HistoryManager.AddCommand(new CRemoveInListPropertyCount<TSaveable, TProperty, TItem>(info, target, indices, counts));
+      foreach (var t in target)
+         t.OnPropertyChanged(info.Name);
+   }
+
    public static void InsertInFieldCollection<TSaveable, TProperty, TItem>(ICollection<TSaveable> targets,
                                                                            TItem add,
                                                                            List<int> index,
@@ -241,6 +254,7 @@ public abstract class Saveable : IDisposable
          return;
 
       HistoryManager.AddCommand(new CInsertInListProperty<TSaveable, TProperty, TItem>(property, [.. targets], add, index));
+
       foreach (var target in targets)
          target.OnPropertyChanged(property.Name);
    }

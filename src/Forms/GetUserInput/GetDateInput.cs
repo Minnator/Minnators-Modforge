@@ -46,13 +46,13 @@ namespace Editor.Forms.GetUserInput
       public void SetDays(int month)
       {
          DayBox.Items.Clear();
-         for (var i = 1; i <= Date.DaysInMonth((byte)month); i++)
+         for (var i = 1; i <= Date.DaysInMonth(month); i++)
             DayBox.Items.Add(i);
       }
 
       public bool GetDate(out Date date)
       {
-         return Date.TryParse($"{DayBox.Text}.{MonthBox.Text}.{YearBox.Text}", out date).Log();
+         return Date.TryParse($"{YearBox.Text}.{MonthBox.Text}.{DayBox.Text}", out date).Log();
       }
 
       // block non digit input and leading zeros for the year
