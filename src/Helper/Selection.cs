@@ -356,7 +356,9 @@ public static class Selection
    public static void RemoveProvincesFromSelection(ICollection<Province> provinces)
    {
       _selectedProvinces.ExceptWith(provinces);
-      DrawOuterBorder(provinces, _selectedProvinces, _borderColor, true);
+
+      foreach (var province in provinces)
+         RedrawSelection(province);
       OnProvinceGroupDeselected(Globals.ZoomControl, provinces.ToList());
       OnProvinceSelectionChange.Invoke(Globals.ZoomControl, _selectedProvinces.Count);
    }
@@ -383,18 +385,16 @@ public static class Selection
 
    public static void AddOrRemoveAllFromSelection(ICollection<Province> provinces)
    {
-      var containsAny = false;
+      List<Province> toRemove = [];
       foreach (var province in provinces)
       {
-         containsAny = _selectedProvinces.Contains(province);
-         if (containsAny)
-            break;
+         if (_selectedProvinces.Contains(province))
+            toRemove.Add(province);
       }
 
-      if (containsAny)
-         RemoveProvincesFromSelection(provinces);
-      else
-         AddProvincesToSelection(provinces);
+      if (toRemove.Count > 0)
+         RemoveProvincesFromSelection(toRemove);
+      AddProvincesToSelection(provinces.Except(toRemove).ToList());
    }
 
    public static void RemoveProvinceFromSelection(Province province, bool fireEvent = true)

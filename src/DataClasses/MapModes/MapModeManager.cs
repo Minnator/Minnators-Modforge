@@ -10,6 +10,7 @@ public enum MapModeType
    None = 0,
 #if DEBUG
    DEBUG = 999,
+   BadApple,
 #endif
    Area,
    Autonomy,
@@ -45,7 +46,6 @@ public enum MapModeType
    Weather,
    GameOfLive,
    RGB,
-   BadApple
 }
 
 

@@ -10,13 +10,16 @@ using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Saveables;
 using Newtonsoft.Json.Linq;
 using System.Drawing.Imaging;
+using System.Xml.Linq;
+using Editor.Loading.Enhanced.PCFL.Implementation;
 
 namespace Editor.Controls.PROPERTY
 {
    public sealed class ProvinceHistoryEntryTreeView : PropertyTreeView<Province, List<ProvinceHistoryEntry>, ProvinceHistoryEntry>
    {
-      private ContextMenuStrip _itemMenuStrip;
+      private readonly ContextMenuStrip _itemMenuStrip;
       private ProvinceHistoryEntry? _clickedEntry;
+      private int _clickedTokenIndex = -1;
 
       public ProvinceHistoryEntryTreeView(
          PropertyInfo? propertyInfo,
@@ -28,65 +31,42 @@ namespace Editor.Controls.PROPERTY
          Margin = new(3, 0, 0, 0);
 
          LoadGuiEvents.ProvHistoryLoadAction += ((IPropertyControl<Province, List<ProvinceHistoryEntry>>)this).LoadToGui;
+         
+         _itemMenuStrip = new()
+         {
+            ShowImageMargin = false,
+            AutoSize = true,
+         };
 
          var deleteButton = new ToolStripButton
          {
             Text = "Delete Entry",
             Name = "DeleteEntry",
-            DisplayStyle = ToolStripItemDisplayStyle.Text
+            DisplayStyle = ToolStripItemDisplayStyle.Text,
+            AutoSize = true,
          };
          deleteButton.Click += DeleteEntry;
-
-         _itemMenuStrip = new ();
-         var modifyButton = new ToolStripButton
-         {
-            Text = "Modify Value",
-            Name = "ModifyValue",
-            DisplayStyle = ToolStripItemDisplayStyle.Text
-         };
-         modifyButton.Click += ModifyValue;
 
          var addNewHistoryEntry = new ToolStripButton
          {
             Text = "Add New Entry",
             Name = "AddNewEntry", 
-            DisplayStyle = ToolStripItemDisplayStyle.Text
+            DisplayStyle = ToolStripItemDisplayStyle.Text,
+            AutoSize = true,
          };
          addNewHistoryEntry.Click += AddNewEntry;
 
-         _itemMenuStrip.Items.Add(modifyButton);
          _itemMenuStrip.Items.Add(deleteButton);
          _itemMenuStrip.Items.Add(addNewHistoryEntry);
-
-         _itemMenuStrip.Opening += (sender, args) =>
-         {
-            _clickedEntry = GetEntryBelowCursor();
-            if (_clickedEntry is null)
-            {
-               _itemMenuStrip.Items[0].Enabled = getSaveables().Count == 1;
-               _itemMenuStrip.Items[1].Enabled = false;
-            }
-            else
-            {
-               _itemMenuStrip.Items[0].Enabled = true;
-               _itemMenuStrip.Items[1].Enabled = true;
-            }
-
-         };
-
-         ContextMenuStrip = _itemMenuStrip;
-
-         MouseDown += OnLeftMouseButtonDown;
-      }
-
-      private void ModifyValue(object? sender, EventArgs e)
-      {
          
+         //ContextMenuStrip = _itemMenuStrip;
+
+         NodeMouseClick += OnNodeMouseClick;
       }
 
       private void AddNewEntry(object? sender, EventArgs e)
       {
-         var saveables = getSaveables();
+         var saveables = GetSaveables();
          if (saveables.Count != 1)
             return;
 
@@ -109,9 +89,9 @@ namespace Editor.Controls.PROPERTY
             index++;
 
          if (index == saveables[0].History.Count)
-            Saveable.SetFieldEditCollection<Province, List<ProvinceHistoryEntry>, ProvinceHistoryEntry>(getSaveables.Invoke(), [entry], [], PropertyInfo);
+            Saveable.SetFieldEditCollection<Province, List<ProvinceHistoryEntry>, ProvinceHistoryEntry>(GetSaveables.Invoke(), [entry], [], PropertyInfo);
          else
-            Saveable.InsertInFieldCollection<Province, List<ProvinceHistoryEntry>, ProvinceHistoryEntry>(getSaveables.Invoke()[0], entry, index, PropertyInfo);
+            Saveable.InsertInFieldCollection<Province, List<ProvinceHistoryEntry>, ProvinceHistoryEntry>(GetSaveables.Invoke()[0], entry, index, PropertyInfo);
       }
 
       private void DeleteEntry(object? sender, EventArgs e)
@@ -119,12 +99,23 @@ namespace Editor.Controls.PROPERTY
          if (_clickedEntry is null)
             return;
 
-         var saveables = getSaveables();
+         var saveables = GetSaveables();
          if (saveables.Count != 1)
             return;
          var index = saveables[0].History.BinarySearch(_clickedEntry);
-         
-         Saveable.RemoveInFieldCollection<Province, List<ProvinceHistoryEntry>, ProvinceHistoryEntry>(saveables[0], index, PropertyInfo);
+
+         if (index == -1)
+         {
+            Saveable.RemoveInFieldCollection<Province, List<ProvinceHistoryEntry>, ProvinceHistoryEntry>(saveables[0], index, PropertyInfo);
+            return;
+         }
+
+         Saveable.RemoveInNestedFieldCollection<Province, ProvinceHistoryEntry, List<IToken>, IToken>(saveables[0],
+                                                                                                      _clickedTokenIndex,
+                                                                                                      index,
+                                                                                                      typeof(ProvinceHistoryEntry)
+                                                                                                         .GetProperty(nameof(ProvinceHistoryEntry.Effects))!,
+                                                                                                      PropertyInfo);
       }
       
       public override void SetValue(List<ProvinceHistoryEntry> value)
@@ -157,41 +148,45 @@ namespace Editor.Controls.PROPERTY
 
          Invalidate();
       }
-
-      public ProvinceHistoryEntry? GetEntryBelowCursor()
+      
+      // Returns the province history entry below the cursor also if it is not directly clicked but one of its children in which case we return the index of the child
+      private (ProvinceHistoryEntry? entry, int index) GetEntryBelowCursorAll(TreeNodeMouseClickEventArgs e)
       {
-         var saveables = getSaveables();
-         if (saveables.Count != 1)
-            return null;
-
-         var entry = GetNodeAt(PointToClient(Cursor.Position));
-
-         if (entry is null)
-            return null;
-
-         var index = Nodes.IndexOf(entry);
-         if (index == -1) 
-            return null;
-         return saveables[0].History[index];
-      }
-
-      public void OnLeftMouseButtonDown(object? sender, MouseEventArgs e)
-      {
-         if (e.Button == MouseButtons.Left)
+         int index;
+         var saveables = GetSaveables();
+         if (e.Node.Parent is { } parent)
          {
-            var entry = GetEntryBelowCursor();
-            if (entry is not null)
-            {
-               ProvinceHistoryManager.LoadDate(entry.Date);
-            }
+            index = Nodes.IndexOf(parent);
+            return (saveables[0].History[index], parent.Nodes.IndexOf(e.Node));
+         }
+
+         index = Nodes.IndexOf(e.Node);
+         if (index == -1)
+            return (null, -1);
+         return (saveables[0].History[index], -1);
+      }
+      private void OnNodeMouseClick(object? sender, TreeNodeMouseClickEventArgs e)
+      {
+         (_clickedEntry, _clickedTokenIndex) = GetEntryBelowCursorAll(e);
+         if (e.Button == MouseButtons.Right)
+         {
+            _itemMenuStrip.Items[0].Enabled = _clickedTokenIndex > 0;
+            _itemMenuStrip.Items[0].Text = _itemMenuStrip.Items[0].Enabled
+                                              ? $"Delete Entry {_clickedEntry!.Effects[_clickedTokenIndex].GetTokenName()}"
+                                              : "Delete Entry";
+            _itemMenuStrip.PerformLayout();
+            
+            SelectedNode = e.Node;
+            _itemMenuStrip.Show(PointToScreen(e.Location));
          }
       }
+
    }
 
    public class PropertyTreeView<TSaveable, TProperty, TItem> : TreeView, IPropertyControl<TSaveable, TProperty> where TSaveable : Saveable where TProperty : List<TItem>
    {
       public PropertyInfo PropertyInfo { get; init; }
-      protected readonly Func<List<TSaveable>> getSaveables;
+      protected readonly Func<List<TSaveable>> GetSaveables;
 
       private bool _renderTextNoTree = false;
 
@@ -202,7 +197,7 @@ namespace Editor.Controls.PROPERTY
 
          PropertyInfo = propertyInfo;
          loadHandle += ((IPropertyControl<TSaveable, TProperty>)this).LoadToGui;
-         this.getSaveables = getSaveables;
+         this.GetSaveables = getSaveables;
       }
 
       public virtual void SetFromGui()

@@ -12,6 +12,7 @@ namespace Editor.DataClasses.Settings
       private bool _selectionDrawerAlwaysOnTop = true;
       private int _textBoxCommandCreationInterval = 5000;
       private int _numOfPreloadedMonarchNameElements = 50;
+      private bool _showHistoryOnStart = false;
 
       [Description("Determines if the country flag should be shown in the country editor.")]
       [CompareInEquals]
@@ -27,6 +28,14 @@ namespace Editor.DataClasses.Settings
       {
          get => _jumpToSelectedProvinceCollection;
          set => SetField(ref _jumpToSelectedProvinceCollection, value);
+      }
+
+      [Description("Determines if the history should be shown on startup. This is only relevant if the history is not empty.")]
+      [CompareInEquals]
+      public bool ShowHistoryOnStart
+      {
+         get => _showHistoryOnStart;
+         set => SetField(ref _showHistoryOnStart, value);
       }
 
       [Description("The mapmodes which are available in the hotkey buttons where inxex 0 ist the button on the left and ^1 is the one on the right.")]

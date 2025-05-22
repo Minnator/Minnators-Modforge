@@ -275,4 +275,113 @@ namespace Editor.DataClasses.Commands
          return sb.ToString();
       }
    }
+
+   public class CRemoveInNestedListProperty<TSaveable, TOuterItem, TCollection, TValue> : SaveableCommandBasic
+   where TCollection : List<TValue>
+   where TSaveable : Saveable
+   {
+      private readonly TSaveable[] _targets;
+      private readonly PropertyInfo _outerListProperty; // e.g. Entries
+      private readonly PropertyInfo _innerListProperty; // e.g. Tokens
+      private readonly int[] _outerIndices;
+      private readonly int[] _innerIndices;
+      private readonly TValue[] _value;
+
+      public CRemoveInNestedListProperty(
+         PropertyInfo outerListProperty,
+         PropertyInfo innerListProperty,
+         List<TSaveable> targets,
+         List<int> outerIndices,
+         List<int> innerIndices,
+         bool executeOnInit = true)
+      {
+         Debug.Assert(outerIndices.Count == targets.Count, "outerIndices.Count == targets.Count");
+         Debug.Assert(innerIndices.Count == targets.Count, "innerIndices.Count == targets.Count");
+
+         _targets = targets.ToArray();
+         _outerIndices = outerIndices.ToArray();
+         _innerIndices = innerIndices.ToArray();
+         _outerListProperty = outerListProperty;
+         _innerListProperty = innerListProperty;
+
+         _value = new TValue[targets.Count];
+         for (var i = 0; i < _targets.Length; i++)
+         {
+            var outerList = (IList)_outerListProperty.GetValue(_targets[i])!;
+            var outerItem = outerList[_outerIndices[i]];
+            var innerList = (TCollection)_innerListProperty.GetValue(outerItem)!;
+            _value[i] = innerList[_innerIndices[i]];
+         }
+
+         if (executeOnInit)
+            Execute();
+      }
+
+      public override List<int> GetTargetHash() => [.. _targets.Select(x => x.GetHashCode())];
+
+      private TCollection GetInnerList(int i)
+      {
+         var outerList = (IList)_outerListProperty.GetValue(_targets[i])!;
+         var outerItem = outerList[_outerIndices[i]];
+         return (TCollection)_innerListProperty.GetValue(outerItem)!;
+      }
+
+      public void InternalExecute()
+      {
+         for (var i = 0; i < _targets.Length; i++)
+         {
+            var list = GetInnerList(i);
+            var index = _innerIndices[i];
+            Debug.Assert(ReferenceEquals(list[index], _value[i]), "Mismatch at removal");
+            list.RemoveAt(index);
+         }
+
+         LoadGuiEvents.TriggerGuiUpdate(typeof(TSaveable), _innerListProperty);
+      }
+
+      public override void Undo()
+      {
+         base.Undo();
+         for (var i = 0; i < _targets.Length; i++)
+         {
+            var list = GetInnerList(i);
+            list.Insert(_innerIndices[i], _value[i]);
+         }
+
+         LoadGuiEvents.TriggerGuiUpdate(_innerListProperty.DeclaringType, _innerListProperty);
+      }
+
+      public override void Redo()
+      {
+         base.Redo();
+         InternalExecute();
+      }
+
+      public override void Execute()
+      {
+         base.Execute(_targets);
+         InternalExecute();
+
+         LoadGuiEvents.TriggerGuiUpdate(typeof(TSaveable), typeof(TSaveable).GetProperty(_outerListProperty.Name)!);
+      }
+
+      public override string GetDescription()
+      {
+         if (_innerIndices.Length == 1)
+            return $"Removed 1 item at '{_innerIndices[0]}' in nested property '{_innerListProperty.Name}'";
+         return $"Removed {_innerIndices.Length} items in nested property '{_innerListProperty.Name}'";
+      }
+
+      public override string GetDebugInformation(int indent)
+      {
+         var sb = new StringBuilder();
+         sb.Append(' ', indent);
+         sb.Append($"Modified {_innerListProperty.Name}:");
+         sb.AppendLine();
+         for (var i = 0; i < _value.Length; i++)
+            sb.AppendLine($"Removed {_value[i]} at [{_outerIndices[i]}][{_innerIndices[i]}]");
+         return sb.ToString();
+      }
+   }
+
 }

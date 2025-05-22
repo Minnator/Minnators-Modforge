@@ -62,6 +62,10 @@ namespace Editor.Events
                   info = newinfo;
             }
             ProvLoadAction.Invoke(Selection.GetSelectedProvinces, info, false);
+            if (info.Name == "History")
+            {
+               ProvHistoryLoadAction.Invoke(Selection.GetSelectedProvinces, info, false);
+            }
          }
          else if (type == typeof(HistoryCountry))
             HistoryCountryLoadAction.Invoke([Selection.SelectedCountry.HistoryCountry], info, false);

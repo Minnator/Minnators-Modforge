@@ -9,6 +9,7 @@ namespace Editor.Forms.Feature
    {
       public Search()
       {
+         StartPosition = FormStartPosition.CenterParent;
          InitializeComponent();
       }
 

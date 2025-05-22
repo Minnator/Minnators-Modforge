@@ -3044,6 +3044,7 @@
          BookMarkComboBox.Name = "BookMarkComboBox";
          BookMarkComboBox.Size = new Size(195, 23);
          BookMarkComboBox.TabIndex = 6;
+         GeneralToolTip.SetToolTip(BookMarkComboBox, "If the background is greyed out, there is now bookmark for the currenty day");
          // 
          // ShowHistoryCheckBox
          // 

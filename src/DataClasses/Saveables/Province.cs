@@ -117,20 +117,14 @@ namespace Editor.DataClasses.Saveables
             if (_owner == value)
                return;
 
+            if (_owner != Country.Empty)
+               _owner.Remove(this);
+            if (value == Country.Empty)
+               return;
+            value.Add(this);
+            _owner = value;
             if (Globals.State == State.Running)
-            {
-               if (Globals.Countries.TryGetValue(_owner, out var valueOldOwner))
-                  valueOldOwner.Remove(this);
-               if (!Globals.Countries.TryGetValue(value, out var owner))
-                  return;
-               _owner = value;
-               owner.Add(this);
                SetField(ref _owner, value);
-            }
-            else
-            {
-               _owner = value;
-            }
          }
       }
       public Country ScenarioOwner

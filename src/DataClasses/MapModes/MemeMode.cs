@@ -3,6 +3,7 @@ using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Saveables;
 using Timer = System.Windows.Forms.Timer;
 
+#if DEBUG
 namespace Editor.DataClasses.MapModes
 {
    public class MemeMode : MapMode
@@ -84,3 +85,4 @@ namespace Editor.DataClasses.MapModes
       }
    }
 }
+#endif

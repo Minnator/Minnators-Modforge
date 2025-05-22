@@ -217,6 +217,21 @@ public abstract class Saveable : IDisposable
       target.OnPropertyChanged(property.Name);
    }
 
+   public static void RemoveInNestedFieldCollection<TSaveable, TOuter, TProperty, TItem>(TSaveable target,
+                                                                           int innerIndex,
+                                                                           int outerIndex,
+                                                                           PropertyInfo innerProperty,
+                                                                           PropertyInfo outerProperty) where TSaveable : Saveable
+                                                                                                       where TProperty : List<TItem>
+   {
+      if (Globals.State != State.Running)
+         return;
+
+      HistoryManager.AddCommand(new CRemoveInNestedListProperty<TSaveable, TOuter, TProperty, TItem>(outerProperty, innerProperty, [target], [outerIndex], [innerIndex]));
+
+      target.OnPropertyChanged(outerProperty.Name);
+   }
+
    public static void InsertInFieldCollection<TSaveable, TProperty, TItem>(ICollection<TSaveable> targets,
                                                                            TItem add,
                                                                            List<int> index,

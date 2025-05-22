@@ -186,6 +186,17 @@ namespace Editor.Forms
             Margin = new(0),
          };
 
+         Selection.OnProvinceSelectionChange += (sender, i) =>
+         {
+            if (ShowHistoryCheckBox.Checked)
+            {
+               ShowHistoryEntries = i <= 1;
+               ShowHistoryCheckBox.Checked = ShowHistoryEntries;
+               if (i == 0) 
+                  _provinceHistoryTreeView.Nodes.Clear();
+            }
+         };
+
          _provinceHistoryTreeView = ControlFactory.GetProvinceHistoryTreeView();
          _provinceHistoryTreeView.Dock = DockStyle.Fill;
          _provinceHistoryTreeView.Margin = new(0);
@@ -212,7 +223,7 @@ namespace Editor.Forms
             var isSelected = (e.State & DrawItemState.Selected) == DrawItemState.Selected;
             var text = BookMarkComboBox.Items[e.Index]!.ToString();
 
-            using var backgroundBrush = new SolidBrush(isSelected ? Color.DarkBlue : e.BackColor);
+            using var backgroundBrush = new SolidBrush(e.BackColor);
             using var textBrush = new SolidBrush(isSelected ? Color.White : e.ForeColor);
 
             e.Graphics.FillRectangle(backgroundBrush, e.Bounds);
@@ -238,7 +249,7 @@ namespace Editor.Forms
          // TODO why do I have to do this to make the map mode buttons render?
          ShowHistoryEntries = true;
          RenderHistoryIfNeeded();
-         ShowHistoryEntries = false;
+         ShowHistoryCheckBox.Checked = ShowHistoryEntries = Globals.Settings.Gui.ShowHistoryOnStart;
          RenderHistoryIfNeeded();
 
          // Initialize Settings Events and Listeners
@@ -1007,15 +1018,15 @@ namespace Editor.Forms
                      e.SuppressKeyPress = true;
                      e.Handled = true;
                      break;
+                  case Keys.H:
+                     ShowHistoryCheckBox.Checked = !ShowHistoryCheckBox.Checked;
+                     break;
                   // Tabs
                   case Keys.D1:
-                     DataTabPanel.SelectedIndex = 0;
-                     break;
                   case Keys.D2:
-                     DataTabPanel.SelectedIndex = 1;
-                     break;
                   case Keys.D3:
-                     DataTabPanel.SelectedIndex = 2;
+                  case Keys.D4:
+                     DataTabPanel.SelectedIndex = e.KeyCode - Keys.D1;
                      break;
                }
          }
