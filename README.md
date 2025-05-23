@@ -1,6 +1,7 @@
 # Minnator's Modforge
 
 This is a tool created for visual editing of the EU4 map and its contents.
+The latest Version is Aplha 2.0.x and is available for download.
 It is still in development but is making steady progress.
 
 ## Official Discord Server
@@ -10,18 +11,18 @@ Here you can find Alpha-releases, more information and help with issues, or repo
 ## Current capabilities:
 - Fully interactive map
 - Map modes
-- Complete Province editing
+- Complete Province Scenario editing
+- Complete Province History entry editing
 - Country Editing
 - Province Collection editing (Areas, Regions, SuperRegions, TradeNodes, TradeCompanies, ColonialRegions, Countries...)
 - Console:
    - run files as in eu4
    - standard capabilities
    - debugging options
-   - statistics
 - Modifiers management and creation
 - Defines editor
 - In depth error log and navigation down to the faulty character in the files
-- File formatting and beautyfying
+- File formatting and beautyfing
 - Timeline (Any date can bee viewed with the map live updating)
 - Automatic Tradenode topological sorting and cycle detection
 - Full history capabilities
@@ -41,11 +42,11 @@ Here you can find Alpha-releases, more information and help with issues, or repo
 - Lexing, parsing, interpretation capabilities for the pdx modding language
 - Update the map to use shaders
 - allow creating gif from the map with animated province color changes when going through the history
-- Add a way to create custom map modes
-- Ideas creation via drag and drop
-- Province Creation and editing (editing of provinces.bmp)
-- Filessyncing (Reload files while the program is running)
-- Visual editing for positions.txt, straits, great projects, channels, tradenodes...
+- Custom Map Mode creation
+- Ideas creation
+- Province Creation and editing (editing of `provinces.bmp`)
+- File syncing (Reload files while the program is running)
+- Visual editing for `positions.txt`, straits, great projects, channels, tradenodes...
 - Mission tree creator (Drag and drop, AI?)
 
 ## How to install and run the Modforge
@@ -75,6 +76,8 @@ Here you can find Alpha-releases, more information and help with issues, or repo
 | F2                                | Graphical options for map                   |
 | CTRL + F                          | Search                                      |
 | CTRL + SHIFT + Z                  | Open history tree                           |
+| CTRL + 1 / 2/ 3/ 4                | Open regarding edit ui tab                  |
+| CTRL + G                          | Garbage Collection                          |
 
 
 ## MapModes
@@ -88,6 +91,14 @@ In the event of a crash, a log containing important diagnostic information will 
 
 ## Information
 This project is developed in my free time, so updates may not be frequent. If you are developing your own tool and are interested in using some of my systems or visuals, please ask for permission first. I’d be happy to discuss if and how they can be shared.
+
+## Performance
+I have put a focus on performance but due to my limited knowledge at the start of the project some areas might not be as performant as others due to the amount of work it would take to change them. I will try to improve them over time.
+Overall depending on your mod size it should use between 320 - 420 MB of RAM.
+Depending on your CPU the map performance can be impacted.
+
+## Contributing
+Currently I am not looking for any contributors, but if you are interested in helping out, feel free to reach out to me on Discord.
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
