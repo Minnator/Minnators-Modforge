@@ -1,14 +1,10 @@
 ﻿using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
-using Editor.DataClasses.GameDataClasses;
+using Editor.ErrorHandling;
 using Editor.Helper;
 using Editor.Loading.Enhanced.PCFL.Implementation;
 using Editor.Saving;
-using Windows.Devices.Power;
-using Editor.ErrorHandling;
-using Editor.Parser;
-using Windows.UI.Popups;
 
 namespace Editor.Loading.Enhanced
 {

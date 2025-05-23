@@ -118,17 +118,17 @@ namespace Editor.Forms.Feature
             {
                sb.Append('\t', tabs);
                startOfLine = false;
+               perLine++;
             } 
             else if (perLine == 20)
             {
                sb.AppendLine();
                sb.Append('\t', tabs);
-               perLine = 0;
+               perLine = 1;
                startOfLine = true;
             }
             else if (!startOfLine)
             {
-               sb.Append(' ');
                perLine++;
             }
 
@@ -137,6 +137,7 @@ namespace Editor.Forms.Feature
             else
                sb.Append(number);
 
+            sb.Append(' ');
          }
       }
    }

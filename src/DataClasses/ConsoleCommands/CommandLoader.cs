@@ -1,18 +1,6 @@
 ﻿using System.Diagnostics;
-using System.Reflection.Metadata;
-using System.Text;
-using Windows.Media.Devices;
-using Editor.DataClasses.Achievements;
-using Editor.DataClasses.GameDataClasses;
-using Editor.DataClasses.Misc;
 using Editor.DataClasses.Saveables;
-using Editor.ErrorHandling;
-using Editor.Forms.PopUps;
-using Editor.Helper;
-using Editor.Loading.Enhanced;
-using Editor.Loading.Enhanced.PCFL;
 using Editor.Loading.Enhanced.PCFL.Implementation;
-using Editor.Saving;
 
 namespace Editor.DataClasses.ConsoleCommands
 {

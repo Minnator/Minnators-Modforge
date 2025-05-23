@@ -8,7 +8,6 @@ using Editor.Controls.PRV_HIST;
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.MapModes;
-using Editor.DataClasses.Misc;
 using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
 using Editor.Events;
@@ -24,7 +23,6 @@ using Editor.Saving;
 using Editor.src.Forms.Console;
 using Editor.src.Forms.Feature;
 using Editor.src.Forms.GetUserInput;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using Date = Editor.DataClasses.Misc.Date;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 using Region = Editor.DataClasses.Saveables.Region;
@@ -95,7 +93,7 @@ namespace Editor.Forms
 
       public readonly DateControl DateControl = new(Date.MinValue);
 
-      public bool ShowHistoryEntries = false;
+      public bool ShowHistoryEntries;
 
       public MapWindow()
       {
@@ -106,9 +104,9 @@ namespace Editor.Forms
          Globals.MapWindow = this;
 
          Size = new(1527, 966);
-         var _startScreen = Screen.FromPoint(Cursor.Position);
-         Globals.MapWindow.Location = new((_startScreen.WorkingArea.Width - Globals.MapWindow.Width) / 2,
-                                          (_startScreen.WorkingArea.Height - Globals.MapWindow.Height) / 2);
+         var startScreen = Screen.FromPoint(Cursor.Position);
+         Globals.MapWindow.Location = new((startScreen.WorkingArea.Width - Globals.MapWindow.Width) / 2,
+                                          (startScreen.WorkingArea.Height - Globals.MapWindow.Height) / 2);
       }
 
       private void OnMainWindowLoad(object? sender, EventArgs e)

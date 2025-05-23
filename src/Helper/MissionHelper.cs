@@ -1,8 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Text;
-using Windows.Media.Playback;
-using Editor.DataClasses.GameDataClasses;
+﻿using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Saveables;
 using Editor.ErrorHandling;
 using Editor.Properties;

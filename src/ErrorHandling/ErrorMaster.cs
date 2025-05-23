@@ -1,6 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Text;
-using Antlr4.Runtime;
 using Editor.Helper;
 using Editor.Saving;
 
@@ -347,21 +346,21 @@ namespace Editor.ErrorHandling
          Path = path.GetPath();
       }
 
-      /// <summary>
-      /// Object Construction Exception
-      /// </summary>
-      /// <param name="path"></param>
-      /// <param name="msg"></param>
-      /// <param name="type"></param>
-      /// <param name="context"></param>
-      public LoadingError(PathObj path,
-                          string msg,
-                          ErrorType type,
-                          ParserRuleContext context,
-                          [CallerMemberName] string memberName = "",
-                          [CallerFilePath] string callerPath = "") : this(path, msg, context.Start.Line, context.Start.Column, type, memberName: memberName, callerPath: callerPath)
-      {
-      }
+      ///// <summary>
+      ///// Object Construction Exception
+      ///// </summary>
+      ///// <param name="path"></param>
+      ///// <param name="msg"></param>
+      ///// <param name="type"></param>
+      ///// <param name="context"></param>
+      //public LoadingError(PathObj path,
+      //                    string msg,
+      //                    ErrorType type,
+      //                    ParserRuleContext context,
+      //                    [CallerMemberName] string memberName = "",
+      //                    [CallerFilePath] string callerPath = "") : this(path, msg, context.Start.Line, context.Start.Column, type, memberName: memberName, callerPath: callerPath)
+      //{
+      //}
 
    }
 

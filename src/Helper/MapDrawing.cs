@@ -1,12 +1,9 @@
 ﻿using System.Collections.Concurrent;
-using Editor.Controls;
-using Editor.DataClasses.GameDataClasses;
-using Editor.DataClasses.MapModes;
 using System.Runtime.InteropServices;
-using static Editor.Controls.GDIHelper;
-using Windows.Media.Devices;
+using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Saveables;
 using Editor.DataClasses.Settings;
+using static Editor.Controls.GDIHelper;
 using ZoomControl = Editor.Controls.ZoomControl;
 
 namespace Editor.Helper;

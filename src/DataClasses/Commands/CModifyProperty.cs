@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using System.Reflection;
-using Windows.Foundation.Collections;
 using Editor.Saving;
-using Newtonsoft.Json.Linq;
 
 namespace Editor.DataClasses.Commands
 {
