@@ -179,6 +179,11 @@ namespace Editor.Controls.PROPERTY
             SelectedNode = e.Node;
             _itemMenuStrip.Show(PointToScreen(e.Location));
          }
+         else if (e.Button == MouseButtons.Left && _clickedEntry != null)
+         {
+            SelectedNode = e.Node;
+            ProvinceHistoryManager.LoadDate(_clickedEntry.Date);
+         }
       }
 
    }

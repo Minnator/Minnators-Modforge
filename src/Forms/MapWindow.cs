@@ -1427,7 +1427,7 @@ namespace Editor.Forms
 
       private BindablePrvHistDropDownUi<Religion, string> _prvHistReligionComboBox = null!;
       private BindablePrvHistDropDownUi<Culture, string> _prvHistCultureComboBox = null!;
-      private BindablePrvHistDropDownUi<TradeGood, string> _prvHistTradeGoodsComboBox = null!;
+      private PrvHistDropDownUi<TradeGood> _prvHistTradeGoodsComboBox = null!;
       private PrvHistDropDownUi<int> _prvHistTradeCenterComboBox = null!;
 
       private PrvHistCollectionUi<List<Country>, Country> _prvHistClaimSelector = null!;
@@ -1509,19 +1509,19 @@ namespace Editor.Forms
                                                                                Globals.Cultures,
                                                                                value => new CultureEffect() { _value = { Val = value } },
                                                                                false);
-         _prvHistTradeGoodsComboBox = ControlFactory.GetBindablePrvHistDropDownUi(nameof(Province.TradeGood),
+         _prvHistTradeGoodsComboBox = ControlFactory.GetPrvHistDropDownUi(nameof(Province.TradeGood),
                                                                                   typeof(Province).GetProperty(nameof(Province.TradeGood))!,
                                                                                   TradeGood.Empty,
-                                                                                  Globals.TradeGoods,
                                                                                   value => new TradeGoodsEffect() { _value = { Val = value } },
                                                                                   false,
                                                                                   true);
-         _prvHistTradeCenterComboBox = ControlFactory.GetPrvHistDropDownUi<int>(nameof(Province.CenterOfTrade),
-                                                                                typeof(Province).GetProperty(nameof(Province.CenterOfTrade))!,
-                                                                                0,
-                                                                                value => new CenterOfTradeEffect() { _value = { Val = value } },
-                                                                                false,
-                                                                                true);
+         _prvHistTradeGoodsComboBox.DropDown.Items.AddRange([.. Globals.TradeGoods.Keys.Except([TradeGood.Empty.Name]).ToList()]);
+         _prvHistTradeCenterComboBox = ControlFactory.GetPrvHistDropDownUi(nameof(Province.CenterOfTrade),
+                                                                          typeof(Province).GetProperty(nameof(Province.CenterOfTrade))!,
+                                                                          0,
+                                                                          value => new CenterOfTradeEffect() { _value = { Val = value } },
+                                                                          false,
+                                                                          true);
          _prvHistTradeCenterComboBox.DropDown.Items.AddRange([.. "0", "1", "2", "3"]);
 
          ProvHistoryLayout.Controls.Add(_prvHistReligionComboBox, 0, blockOffset + 0);

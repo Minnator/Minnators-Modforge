@@ -491,6 +491,7 @@ namespace Editor.Controls.PRV_HIST
          DropDown.Text = item;
       }
 
+
       public new IErrorHandle GetFromGui(out TProperty value)
       {
          var handle = Converter.Convert(DropDown.Text, out TKey key);
