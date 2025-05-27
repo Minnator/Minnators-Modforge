@@ -170,7 +170,7 @@ namespace Editor.Controls.PROPERTY
          (_clickedEntry, _clickedTokenIndex) = GetEntryBelowCursorAll(e);
          if (e.Button == MouseButtons.Right)
          {
-            _itemMenuStrip.Items[0].Enabled = _clickedTokenIndex > 0;
+            _itemMenuStrip.Items[0].Enabled = _clickedTokenIndex >= 0;
             _itemMenuStrip.Items[0].Text = _itemMenuStrip.Items[0].Enabled
                                               ? $"Delete Entry {_clickedEntry!.Effects[_clickedTokenIndex].GetTokenName()}"
                                               : "Delete Entry";
