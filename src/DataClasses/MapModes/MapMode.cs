@@ -1,6 +1,4 @@
-﻿using Editor.DataClasses.GameDataClasses;
-using Editor.DataClasses.Saveables;
-using Editor.Events;
+﻿using Editor.DataClasses.Saveables;
 using Editor.Helper;
 
 namespace Editor.DataClasses.MapModes;

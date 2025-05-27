@@ -1,6 +1,6 @@
 ﻿namespace Editor.Forms.Feature
 {
-   partial class ListDeltaSetSelection<T>
+   partial class ListDeltaSetSelection
    {
       /// <summary>
       /// Required designer variable.
@@ -28,17 +28,15 @@
       /// </summary>
       private void InitializeComponent()
       {
-         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ListDeltaSetSelection<T>));
          tableLayoutPanel1 = new TableLayoutPanel();
-         SourceListBox = new ListBox();
          DeltaLabel = new Label();
          ConfirmButton = new Button();
-         IsSetCheckBox = new CheckBox();
-         SelectionListBox = new ListBox();
          SelectionSearchBox = new ComboBox();
          SourceSearchBox = new ComboBox();
          label1 = new Label();
          label2 = new Label();
+         SelectionListView = new ListView();
+         SourceListView = new ListView();
          tableLayoutPanel1.SuspendLayout();
          SuspendLayout();
          // 
@@ -48,15 +46,14 @@
          tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 383F));
          tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 301F));
          tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100F));
-         tableLayoutPanel1.Controls.Add(SourceListBox, 0, 2);
          tableLayoutPanel1.Controls.Add(DeltaLabel, 0, 3);
          tableLayoutPanel1.Controls.Add(ConfirmButton, 2, 3);
-         tableLayoutPanel1.Controls.Add(IsSetCheckBox, 1, 3);
-         tableLayoutPanel1.Controls.Add(SelectionListBox, 1, 2);
          tableLayoutPanel1.Controls.Add(SelectionSearchBox, 1, 1);
          tableLayoutPanel1.Controls.Add(SourceSearchBox, 0, 1);
          tableLayoutPanel1.Controls.Add(label1, 1, 0);
          tableLayoutPanel1.Controls.Add(label2, 0, 0);
+         tableLayoutPanel1.Controls.Add(SelectionListView, 1, 2);
+         tableLayoutPanel1.Controls.Add(SourceListView, 0, 2);
          tableLayoutPanel1.Dock = DockStyle.Fill;
          tableLayoutPanel1.Location = new Point(0, 0);
          tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -68,23 +65,14 @@
          tableLayoutPanel1.Size = new Size(784, 461);
          tableLayoutPanel1.TabIndex = 0;
          // 
-         // SourceListBox
-         // 
-         SourceListBox.Dock = DockStyle.Fill;
-         SourceListBox.FormattingEnabled = true;
-         SourceListBox.ItemHeight = 15;
-         SourceListBox.Location = new Point(3, 33);
-         SourceListBox.Name = "SourceListBox";
-         SourceListBox.Size = new Size(377, 395);
-         SourceListBox.TabIndex = 1;
-         // 
          // DeltaLabel
          // 
          DeltaLabel.AutoSize = true;
+         tableLayoutPanel1.SetColumnSpan(DeltaLabel, 2);
          DeltaLabel.Dock = DockStyle.Fill;
          DeltaLabel.Location = new Point(3, 431);
          DeltaLabel.Name = "DeltaLabel";
-         DeltaLabel.Size = new Size(377, 30);
+         DeltaLabel.Size = new Size(678, 30);
          DeltaLabel.TabIndex = 4;
          DeltaLabel.Text = "Added: 0 | Removed: 0 | Total: 0";
          DeltaLabel.TextAlign = ContentAlignment.MiddleLeft;
@@ -100,27 +88,26 @@
          ConfirmButton.UseVisualStyleBackColor = true;
          ConfirmButton.Click += ConfirmButton_Click;
          // 
-         // IsSetCheckBox
+         // SelectionSearchBox
          // 
-         IsSetCheckBox.AutoSize = true;
-         IsSetCheckBox.Dock = DockStyle.Right;
-         IsSetCheckBox.Location = new Point(572, 434);
-         IsSetCheckBox.Name = "IsSetCheckBox";
-         IsSetCheckBox.Size = new Size(109, 24);
-         IsSetCheckBox.TabIndex = 2;
-         IsSetCheckBox.Text = "Set/Delta(Delta)";
-         IsSetCheckBox.UseVisualStyleBackColor = true;
+         SelectionSearchBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+         SelectionSearchBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+         tableLayoutPanel1.SetColumnSpan(SelectionSearchBox, 2);
+         SelectionSearchBox.Dock = DockStyle.Fill;
+         SelectionSearchBox.Location = new Point(386, 33);
+         SelectionSearchBox.Name = "SelectionSearchBox";
+         SelectionSearchBox.Size = new Size(395, 23);
+         SelectionSearchBox.TabIndex = 5;
          // 
-         // SelectionListBox
+         // SourceSearchBox
          // 
-         tableLayoutPanel1.SetColumnSpan(SelectionListBox, 2);
-         SelectionListBox.Dock = DockStyle.Fill;
-         SelectionListBox.FormattingEnabled = true;
-         SelectionListBox.ItemHeight = 15;
-         SelectionListBox.Location = new Point(386, 33);
-         SelectionListBox.Name = "SelectionListBox";
-         SelectionListBox.Size = new Size(395, 395);
-         SelectionListBox.TabIndex = 0;
+         SourceSearchBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+         SourceSearchBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+         SourceSearchBox.Dock = DockStyle.Fill;
+         SourceSearchBox.Location = new Point(3, 33);
+         SourceSearchBox.Name = "SourceSearchBox";
+         SourceSearchBox.Size = new Size(377, 23);
+         SourceSearchBox.TabIndex = 6;
          // 
          // label1
          // 
@@ -144,19 +131,39 @@
          label2.TabIndex = 6;
          label2.Text = "Source List";
          label2.TextAlign = ContentAlignment.MiddleCenter;
-         //
-         // SelectionSearchBox
-         //
-         tableLayoutPanel1.SetColumnSpan(SelectionSearchBox, 2);
-         SelectionSearchBox.Dock = DockStyle.Fill;
-         SelectionSearchBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-         SelectionSearchBox.AutoCompleteSource = AutoCompleteSource.ListItems;
-         //
-         // SourceSearchBox
-         //
-         SourceSearchBox.Dock = DockStyle.Fill;
-         SourceSearchBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-         SourceSearchBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+         // 
+         // SelectionListView
+         // 
+         SelectionListView.Activation = ItemActivation.OneClick;
+         SelectionListView.BorderStyle = BorderStyle.FixedSingle;
+         tableLayoutPanel1.SetColumnSpan(SelectionListView, 2);
+         SelectionListView.Dock = DockStyle.Fill;
+         SelectionListView.HeaderStyle = ColumnHeaderStyle.None;
+         SelectionListView.Location = new Point(386, 63);
+         SelectionListView.MultiSelect = false;
+         SelectionListView.Name = "SelectionListView";
+         SelectionListView.ShowItemToolTips = true;
+         SelectionListView.Size = new Size(395, 365);
+         SelectionListView.Sorting = SortOrder.Ascending;
+         SelectionListView.TabIndex = 7;
+         SelectionListView.UseCompatibleStateImageBehavior = false;
+         SelectionListView.View = View.Details;
+         // 
+         // SourceListView
+         // 
+         SourceListView.Activation = ItemActivation.OneClick;
+         SourceListView.BorderStyle = BorderStyle.FixedSingle;
+         SourceListView.Dock = DockStyle.Fill;
+         SourceListView.HeaderStyle = ColumnHeaderStyle.None;
+         SourceListView.Location = new Point(3, 63);
+         SourceListView.MultiSelect = false;
+         SourceListView.Name = "SourceListView";
+         SourceListView.ShowItemToolTips = true;
+         SourceListView.Size = new Size(377, 365);
+         SourceListView.Sorting = SortOrder.Ascending;
+         SourceListView.TabIndex = 8;
+         SourceListView.UseCompatibleStateImageBehavior = false;
+         SourceListView.View = View.Details;
          // 
          // ListDeltaSetSelection
          // 
@@ -178,14 +185,13 @@
       #endregion
 
       private TableLayoutPanel tableLayoutPanel1;
-      private ListBox SourceListBox;
-      private ListBox SelectionListBox;
-      private CheckBox IsSetCheckBox;
       private Button ConfirmButton;
       private ComboBox SelectionSearchBox;
       private ComboBox SourceSearchBox;
       private Label DeltaLabel;
       private Label label1;
       private Label label2;
+      private ListView SelectionListView;
+      private ListView SourceListView;
    }
 }

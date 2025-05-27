@@ -35,12 +35,4 @@ public interface IPrvHistDualEffectPropControl<TProperty, TItem> : IPropertyCont
 {
    public Func<TItem, IToken> AddEffectToken { get; init; }
    public Func<TItem, IToken> RemoveEffectToken { get; init; }
-   public new void LoadToGui(List<Province> list, PropertyInfo propInfo, bool force)
-   {
-      if (force || propInfo.Equals(PropertyInfo))
-         if (AttributeHelper.GetSharedAttributeList<Province, TProperty, TItem>(PropertyInfo, out var value, list))
-            SetValue(value);
-         else
-            SetDefault();
-   }
 }

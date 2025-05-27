@@ -190,7 +190,7 @@ namespace Editor.Forms
             {
                ShowHistoryEntries = i <= 1;
                ShowHistoryCheckBox.Checked = ShowHistoryEntries;
-               if (i == 0) 
+               if (i == 0)
                   _provinceHistoryTreeView.Nodes.Clear();
             }
          };
@@ -213,9 +213,10 @@ namespace Editor.Forms
 
          BookMarkComboBox.Items.AddRange(["Scenario", .. Globals.Bookmarks]);
          BookMarkComboBox.SelectedIndex = 0;
-         BookMarkComboBox.SelectedIndexChanged += OnBookMarkChanged; 
-         BookMarkComboBox.DrawMode = DrawMode.OwnerDrawFixed; 
-         BookMarkComboBox.DrawItem += (s, e) => {
+         BookMarkComboBox.SelectedIndexChanged += OnBookMarkChanged;
+         BookMarkComboBox.DrawMode = DrawMode.OwnerDrawFixed;
+         BookMarkComboBox.DrawItem += (s, e) =>
+         {
             e.DrawBackground();
 
             var isSelected = (e.State & DrawItemState.Selected) == DrawItemState.Selected;
@@ -227,12 +228,12 @@ namespace Editor.Forms
             e.Graphics.FillRectangle(backgroundBrush, e.Bounds);
             e.Graphics.DrawString(text, e.Font!, textBrush, e.Bounds);
          };
-         
+
          ProvinceHistoryManager.CurrentLoadedDate.OnDateChanged += (sender, date) =>
          {
             if (Globals.Bookmarks.All(x => x.Date != ProvinceHistoryManager.CurrentLoadedDate))
             {
-               BookMarkComboBox.BackColor = Color.DarkGray; 
+               BookMarkComboBox.BackColor = Color.DarkGray;
                BookMarkComboBox.Refresh();
             }
             else
@@ -296,6 +297,7 @@ namespace Editor.Forms
                break;
          }
       }
+
 
       public IEnumerable<Saveable> GetCurrentSaveables()
       {
@@ -514,6 +516,13 @@ namespace Editor.Forms
 
          _ownerTagBox = ControlFactory.GetTagComboBox(typeof(Province).GetProperty(nameof(Province.ScenarioOwner))!, Globals.Countries);
          MisProvinceData.Controls.Add(_ownerTagBox, 1, 0);
+         _ownerTagBox.SelectedIndexChanged += (sender, args) =>
+         {
+            if (Globals.Settings.Misc.OwnerChangesController)
+            {
+               _controllerTagBox.SetValue(Globals.Countries[_ownerTagBox.SelectedIndex]);
+            }
+         };
          _controllerTagBox = ControlFactory.GetTagComboBox(typeof(Province).GetProperty(nameof(Province.ScenarioController))!, Globals.Countries);
          MisProvinceData.Controls.Add(_controllerTagBox, 1, 1);
 
@@ -864,7 +873,7 @@ namespace Editor.Forms
 
       private void SaveCurrentMapModeToolStripMenuItem_Click(object sender, EventArgs e)
       {
-         var pictures = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+         var pictures = Globals.Settings.Saving.MapModeExportPath;
          var form = new GetSavingFileForm(pictures, "Where to save the map mode as an image to", ".png");
          form.SetPlaceHolderText(MapModeManager.CurrentMapMode.MapModeType.ToString());
          form.RequireModDirectory = false;
@@ -1035,6 +1044,12 @@ namespace Editor.Forms
                break;
          }
       }
+
+      private void MainWindow_OnMouseClick(object? sender, MouseEventArgs e)
+      {
+      }
+
+
       private void MapWindow_FormClosing(object sender, FormClosingEventArgs e)
       {
          if (!ShutDownMaster.DoWeShutDown())
@@ -1464,6 +1479,14 @@ namespace Editor.Forms
                                                                            Globals.Countries,
                                                                            value => new OwnerEffect() { _value = { Val = value } },
                                                                            true);
+         _prvHistOwnerTagBox.DropDown.SelectedIndexChanged += (sender, args) =>
+         {
+            if (Globals.Settings.Misc.OwnerChangesController)
+            {
+               _prvHistControllerTagBox.SetValue(Globals.Countries[_prvHistOwnerTagBox.DropDown.SelectedIndex]);
+               _prvHistControllerTagBox.SetFromGui();
+            }
+         };
          _prvHistControllerTagBox = ControlFactory.GetBindablePrvHistDropDownUi(nameof(Province.Controller),
                                                                                 typeof(Province).GetProperty(nameof(Province.Controller))!,
                                                                                 Country.Empty,
@@ -1615,8 +1638,8 @@ namespace Editor.Forms
          _prvHistBuildings = ControlFactory.GetPrvHistCollectionUi<List<Building>, Building>(Building.Empty,
                                                                                              nameof(Province.Buildings),
                                                                                              typeof(Province).GetProperty(nameof(Province.Buildings))!,
-                                                                                             value => new RuntimeEffects.BuildingEffect(value) {_value = {Val = true }},
-                                                                                             value => new RuntimeEffects.BuildingEffect(value) {_value = {Val = false }},
+                                                                                             value => new RuntimeEffects.BuildingEffect(value) { _value = { Val = true } },
+                                                                                             value => new RuntimeEffects.BuildingEffect(value) { _value = { Val = false } },
                                                                                              Globals.Buildings.ToList(), false);
 
          _prvHistDiscoveredBy = ControlFactory.GetPrvHistCollectionUi<List<string>, string>(string.Empty,
@@ -1680,8 +1703,8 @@ namespace Editor.Forms
          {
             if (!dateInputForm.GetDate(out var date))
                return;
-            List<int> remSrtIndex = [] ;
-            List<int> remLength = [] ;
+            List<int> remSrtIndex = [];
+            List<int> remLength = [];
             List<Province> saveables = [];
             foreach (var province in Globals.Provinces)
             {
@@ -1983,6 +2006,38 @@ namespace Editor.Forms
       private void iDCollectionEditorToolStripMenuItem_Click(object sender, EventArgs e)
       {
          FormsHelper.ShowIfAnyOpen<IdCollectionEditor>();
+      }
+
+      private Province _copiedProvince = Province.Empty;
+
+      private void CopyButton_Click(object sender, EventArgs e)
+      {
+         if (Selection.Count != 1)
+         {
+            MessageBox.Show("Please select exactly one province to copy.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+         }
+         _copiedProvince = Selection.GetSelectedProvinces[0];
+      }
+
+      private void PasteButton_Click(object sender, EventArgs e)
+      {
+         if (_copiedProvince == Province.Empty)
+         {
+            MessageBox.Show("No province copied to paste.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+         }
+         if (Selection.Count == 0)
+         {
+            MessageBox.Show("Please select at least one province to paste the copied data into.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+         }
+         foreach (var province in Selection.GetSelectedProvinces)
+         {
+            if (province == _copiedProvince)
+               continue; // Skip if the same province is selected
+            province.SetAllValues(_copiedProvince);
+         }
       }
    }
 }

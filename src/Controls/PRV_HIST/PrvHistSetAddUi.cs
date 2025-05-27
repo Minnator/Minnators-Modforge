@@ -24,7 +24,7 @@ namespace Editor.Controls.PRV_HIST
       private TableLayoutPanel Tlp { get; }
       private Button EditButton { get; }
       private readonly Label _shortInfoLabel;
-      private ListDeltaSetSelection<TItem>? _form;
+      private ListDeltaSetSelection? _form;
 
       public Func<TItem, IToken> AddEffectToken { get; init; }
       public Func<TItem, IToken> RemoveEffectToken { get; init; }
@@ -55,7 +55,7 @@ namespace Editor.Controls.PRV_HIST
          Tlp.ColumnStyles.Clear();
          Tlp.RowStyles.Clear();
          Tlp.ColumnStyles.Add(new(SizeType.Absolute, 30));
-         Tlp.ColumnStyles.Add(new(SizeType.Percent, 100));
+         Tlp.ColumnStyles.Add(new(SizeType.Percent, 100)); 
          Tlp.RowStyles.Add(new(SizeType.Percent, 100));
          Tlp.Dock = DockStyle.Fill;
 
@@ -86,8 +86,8 @@ namespace Editor.Controls.PRV_HIST
 
       private void EditButton_Click(object? sender, EventArgs e)
       {
-         _form = new("Edit", _source, GetCurrentShared().ToArray(), SetCheckBox.Checked);
-         _form.ShowDialog();
+         //_form = new("Edit", _source.Select(x => x.ToString()).ToArray()!, GetCurrentShared().Select(x => x.ToString()).ToArray()!);
+         //_form.ShowDialog();
 
          if (GetFromGui(out var value).Log())
             SetFromGui(value);
@@ -120,6 +120,7 @@ namespace Editor.Controls.PRV_HIST
 
          _shortInfoLabel.Text = sb.ToString();
       }
+
       public void SetFromGui(List<TItem> value)
       {
          if (Globals.State == State.Running)
@@ -159,7 +160,7 @@ namespace Editor.Controls.PRV_HIST
          Debug.Assert(_form != null, "_form != null");
 
          List<TItem> current = [];
-         foreach (var str in _form.Selection)
+         foreach (var str in _form.SelectionList)
             if (Converter.Convert<TItem>(str, PropertyInfo, out var partValue).Log())
                current.Add(partValue);
 
@@ -200,6 +201,7 @@ namespace Editor.Controls.PRV_HIST
                   SetValue(sharedValue!);
                else if (ShareEntriesValue(entries, GetDefaultRemoveEffectToken().GetTokenName(), out sharedValue))
                   SetValue(sharedValue!);
+
             if (AttributeHelper.GetSharedAttribute(PropertyInfo, out TProperty value, list))
             {
                LoadCurrent(value);
@@ -265,6 +267,31 @@ namespace Editor.Controls.PRV_HIST
 
          return allContainToken;
       }
+
+      public (List<SimpleEffect<TItem>> add, List<SimpleEffect<TItem>> rmv) GetSharedValueTokens(ProvinceHistoryEntry?[] entries)
+      {
+         List<SimpleEffect<TItem>> add = [];
+         List<SimpleEffect<TItem>> rmv = [];
+
+         var addName = GetDefaultEffectToken().GetTokenName();
+         var rmvName = GetDefaultRemoveEffectToken().GetTokenName();
+
+         var lists = entries.Select(entry => entry?.Effects ?? []);
+         var common = lists.Aggregate((a, b) => a.Intersect(b).ToList());
+
+         foreach (var token in common)
+         {
+            if (token.GetTokenName().Equals(addName) && token is SimpleEffect<TItem> addToken)
+               add.Add(addToken);
+            else if (token.GetTokenName().Equals(rmvName) && token is SimpleEffect<TItem> rmvToken)
+               rmv.Add(rmvToken);
+         }
+
+         return (add, rmv);
+      }
+
+
+      
 
       public override void LoadCurrent(TProperty value)
       {
@@ -561,6 +588,7 @@ namespace Editor.Controls.PRV_HIST
       {
          Debug.Assert(value != null, "value is null but must never be null");
          DropDown.Text = value.ToString();
+         //DropDown.SelectedIndex = DropDown.FindStringExact(value.ToString() ?? string.Empty);
       }
       public override IErrorHandle GetFromGui(out TProperty value) => Converter.Convert(DropDown.Text, out value);
       public override void ResetCurrent() => SetCurrentLabel(string.Empty);

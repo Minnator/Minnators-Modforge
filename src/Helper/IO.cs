@@ -23,8 +23,7 @@ internal static class IO
    public static void OpenFolderDialog(string startPath, string filterText, out string folder)
    {
       folder = string.Empty;
-      if (!Path.Exists(startPath))
-         return;
+      CreateDirectoryIfRequired(startPath);
 
       using var dialog = new OpenFileDialog();
       dialog.InitialDirectory = startPath;
@@ -39,8 +38,7 @@ internal static class IO
    public static void OpenFileSelection(string startFolder, string filterText, out string file)
    {
       file = string.Empty;
-      if (!Path.Exists(startFolder))
-         return;
+      CreateDirectoryIfRequired(startFolder);
 
       using var dialog = new OpenFileDialog();
       dialog.InitialDirectory = startFolder;
@@ -171,7 +169,16 @@ internal static class IO
          if (!Directory.Exists(directoryPath))
             Directory.CreateDirectory(directoryPath!);
       }
+      if (IsProbablyDirectory(filePath) && !Directory.Exists(filePath)) 
+         Directory.CreateDirectory(filePath);
       return true;
+   }
+
+   private static bool IsProbablyDirectory(string path)
+   {
+      return path.EndsWith(Path.DirectorySeparatorChar) ||
+             path.EndsWith(Path.AltDirectorySeparatorChar) ||
+             string.IsNullOrEmpty(Path.GetExtension(path));
    }
 
    public static bool WriteToFile(string path, string data, bool append)

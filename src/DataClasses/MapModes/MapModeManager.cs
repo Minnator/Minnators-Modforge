@@ -136,6 +136,7 @@ public static class MapModeManager
       MapModes.Add(new ReligionMapMode());
       MapModes.Add(new DevastationMapMode());
       MapModes.Add(new ProsperityMapMode());
+      MapModes.Add(new ProvinceGroupMapMode());
       MapModes.Add(new HreMapMode());
       MapModes.Add(new ParliamentSeatMapMode());
       MapModes.Add(new CityMapMode());

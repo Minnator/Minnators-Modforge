@@ -194,6 +194,8 @@
          OpenProvinceFolder = new Button();
          SaveCurrentSelectionButton = new Button();
          SaveAllProvincesButton = new Button();
+         CopyButton = new Button();
+         PasteButton = new Button();
          CountryPage = new TabPage();
          CountryMainTLP = new TableLayoutPanel();
          CountryScrollPanel = new Panel();
@@ -1829,7 +1831,8 @@
          // ProvinceCustomToolStripLayoutPanel
          // 
          ProvinceCustomToolStripLayoutPanel.BackColor = Color.LightGray;
-         ProvinceCustomToolStripLayoutPanel.ColumnCount = 7;
+         ProvinceCustomToolStripLayoutPanel.ColumnCount = 8;
+         ProvinceCustomToolStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
          ProvinceCustomToolStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
          ProvinceCustomToolStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
          ProvinceCustomToolStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
@@ -1837,12 +1840,13 @@
          ProvinceCustomToolStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
          ProvinceCustomToolStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
          ProvinceCustomToolStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
-         ProvinceCustomToolStripLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
          ProvinceCustomToolStripLayoutPanel.Controls.Add(OpenProvinceFile, 2, 0);
-         ProvinceCustomToolStripLayoutPanel.Controls.Add(AdvancedProvinceEditing, 5, 0);
-         ProvinceCustomToolStripLayoutPanel.Controls.Add(OpenProvinceFolder, 6, 0);
+         ProvinceCustomToolStripLayoutPanel.Controls.Add(AdvancedProvinceEditing, 6, 0);
+         ProvinceCustomToolStripLayoutPanel.Controls.Add(OpenProvinceFolder, 7, 0);
          ProvinceCustomToolStripLayoutPanel.Controls.Add(SaveCurrentSelectionButton, 1, 0);
          ProvinceCustomToolStripLayoutPanel.Controls.Add(SaveAllProvincesButton, 0, 0);
+         ProvinceCustomToolStripLayoutPanel.Controls.Add(CopyButton, 3, 0);
+         ProvinceCustomToolStripLayoutPanel.Controls.Add(PasteButton, 4, 0);
          ProvinceCustomToolStripLayoutPanel.Dock = DockStyle.Fill;
          ProvinceCustomToolStripLayoutPanel.Location = new Point(0, 782);
          ProvinceCustomToolStripLayoutPanel.Margin = new Padding(0);
@@ -1911,6 +1915,34 @@
          SaveAllProvincesButton.Size = new Size(40, 30);
          SaveAllProvincesButton.TabIndex = 0;
          SaveAllProvincesButton.UseVisualStyleBackColor = true;
+         // 
+         // CopyButton
+         // 
+         CopyButton.BackgroundImage = (Image)resources.GetObject("CopyButton.BackgroundImage");
+         CopyButton.BackgroundImageLayout = ImageLayout.Center;
+         CopyButton.Dock = DockStyle.Fill;
+         CopyButton.Location = new Point(122, 2);
+         CopyButton.Margin = new Padding(0);
+         CopyButton.Name = "CopyButton";
+         CopyButton.Size = new Size(40, 30);
+         CopyButton.TabIndex = 6;
+         GeneralToolTip.SetToolTip(CopyButton, "Copies a province if only ONE is selected");
+         CopyButton.UseVisualStyleBackColor = true;
+         CopyButton.Click += CopyButton_Click;
+         // 
+         // PasteButton
+         // 
+         PasteButton.BackgroundImage = (Image)resources.GetObject("PasteButton.BackgroundImage");
+         PasteButton.BackgroundImageLayout = ImageLayout.Center;
+         PasteButton.Dock = DockStyle.Fill;
+         PasteButton.Location = new Point(162, 2);
+         PasteButton.Margin = new Padding(0);
+         PasteButton.Name = "PasteButton";
+         PasteButton.Size = new Size(40, 30);
+         PasteButton.TabIndex = 7;
+         GeneralToolTip.SetToolTip(PasteButton, "Pastes the copied province into all selected provinces");
+         PasteButton.UseVisualStyleBackColor = true;
+         PasteButton.Click += PasteButton_Click;
          // 
          // CountryPage
          // 
@@ -3077,6 +3109,7 @@
          Text = "Minnator's Modforge (Alpha 1.2.0)";
          FormClosing += MapWindow_FormClosing;
          KeyDown += MapWindow_KeyDown;
+         MouseClick += MainWindow_OnMouseClick;
          MapMenuStrip.ResumeLayout(false);
          MapMenuStrip.PerformLayout();
          MainLayoutPanel.ResumeLayout(false);
@@ -3418,6 +3451,8 @@
       private Button MonarchNamesImportButton;
       public ComboBox BookMarkComboBox;
       private ToolStripMenuItem iDCollectionEditorToolStripMenuItem;
+      private Button CopyButton;
+      private Button PasteButton;
    }
 }
 

@@ -6,13 +6,14 @@ using Editor.DataClasses.Saveables;
 using Editor.DataClasses.Settings;
 using Editor.Helper;
 using Editor.Properties;
+using Region = Editor.DataClasses.Saveables.Region;
 
 namespace Editor.Forms.Feature
 {
    public partial class SelectionDrawerForm : Form
    {
       private ZoomControl ZoomControl { get; set; } = new(new(Globals.MapWidth, Globals.MapHeight, PixelFormat.Format32bppArgb));
-      private List<DrawingLayer> layers = [];
+      private List<DrawingLayer> Layers = [];
 
       public SelectionDrawerForm()
       {
@@ -40,7 +41,7 @@ namespace Editor.Forms.Feature
             {
                if (LayerListView.SelectedIndices.Count == 1)
                {
-                  layers.RemoveAt(LayerListView.SelectedIndices[0]);
+                  Layers.RemoveAt(LayerListView.SelectedIndices[0]);
                   LayerListView.Items.RemoveAt(LayerListView.SelectedIndices[0]);
                   RenderImage();
                }
@@ -51,7 +52,7 @@ namespace Editor.Forms.Feature
          {
             if (LayerListView.SelectedItems.Count == 1)
             {
-               var layer = layers[LayerListView.SelectedIndices[0]];
+               var layer = Layers[LayerListView.SelectedIndices[0]];
                var popup = new PopUpForm(layer)
                {
                   StartPosition = FormStartPosition.CenterParent,
@@ -67,16 +68,18 @@ namespace Editor.Forms.Feature
          };
 
          OptionComboBox.Items.AddRange([.. Enum.GetNames(typeof(DrawingOptions))]);
+         MapModeselection.Items.AddRange([.. Enum.GetNames(typeof(MapModeType))]);
          ImageSizeBox.Items.AddRange([.. Enum.GetNames(typeof(ImageSize))]);
          ImageSizeBox.SelectedIndex = 0;
+         MapModeselection.SelectedIndex = 0;
 
       }
 
       private void ListBoxOnItemMoved(object? sender, SwappEventArgs e)
       {
-         var layer = layers[e.From];
-         layers.RemoveAt(e.From);
-         layers.Insert(e.To, layer);
+         var layer = Layers[e.From];
+         Layers.RemoveAt(e.From);
+         Layers.Insert(e.To, layer);
          RenderImage();
       }
 
@@ -101,9 +104,9 @@ namespace Editor.Forms.Feature
       {
          MapDrawing.Clear(ZoomControl, Color.DimGray);
          var rectangle = Rectangle.Empty;
-         foreach (var layer in layers)
+         foreach (var layer in Layers)
          {
-            var map = layer.RenderToMap(ZoomControl);
+            var map = layer.RenderToMap(ZoomControl, MapModeManager.GetMapMode(layer.MapMode));
             if (rectangle == Rectangle.Empty)
                rectangle = map;
             rectangle = Geometry.GetBounds(rectangle, map);
@@ -118,45 +121,44 @@ namespace Editor.Forms.Feature
       {
          if (string.IsNullOrWhiteSpace(PathTextBox.Text) || LayerListView.Items.Count == 0)
             return;
-         using (var map = ZoomControl.Map)
+
+         using var map = ZoomControl.Map;
+         var path = Path.Combine(Globals.Settings.Saving.MapModeExportPath, PathTextBox.Text + ".png");
+         if (!Directory.Exists(Path.GetDirectoryName(path)))
+            MessageBox.Show("The directory does not exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+
+         else
          {
-            var path = Path.Combine(Globals.Settings.Saving.MapModeExportPath, PathTextBox.Text + ".png");
-            if (!Directory.Exists(Path.GetDirectoryName(path)))
-               MessageBox.Show("The directory does not exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-            else
+            switch (GetImageSize())
             {
-               switch (GetImageSize())
-               {
-                  case ImageSize.ImageSizeSelection:
-                     var bounds = Geometry.GetBounds(Selection.GetSelectedProvinces);
-                     var bitmap = new Bitmap(bounds.Width, bounds.Height, PixelFormat.Format24bppRgb);
-                     using (var graphics = Graphics.FromImage(bitmap))
-                        graphics.DrawImage(map, bounds with
-                        {
-                           X = 0,
-                           Y = 0
-                        }, bounds, GraphicsUnit.Pixel);
-                     bitmap.Save(path, ImageFormat.Png);
-                     bitmap?.Dispose();
-                     break;
-                  case ImageSize.ImageSizeOriginal:
-                     map.Save(path, ImageFormat.Png);
-                     break;
-               }
+               case ImageSize.ImageSizeSelection:
+                  var bounds = Geometry.GetBounds(Selection.GetSelectedProvinces);
+                  var bitmap = new Bitmap(bounds.Width, bounds.Height, PixelFormat.Format24bppRgb);
+                  using (var graphics = Graphics.FromImage(bitmap))
+                     graphics.DrawImage(map, bounds with
+                     {
+                        X = 0,
+                        Y = 0
+                     }, bounds, GraphicsUnit.Pixel);
+                  bitmap.Save(path, ImageFormat.Png);
+                  bitmap?.Dispose();
+                  break;
+               case ImageSize.ImageSizeOriginal:
+                  map.Save(path, ImageFormat.Png);
+                  break;
             }
          }
       }
 
+
       private ImageSize GetImageSize()
       {
-         ImageSize result;
-         return !Enum.TryParse<ImageSize>(ImageSizeBox.Text, true, out result) ? ImageSize.ImageSizeOriginal : result;
+         return !Enum.TryParse(ImageSizeBox.Text, true, out ImageSize result) ? ImageSize.ImageSizeOriginal : result;
       }
 
       private DrawingOptions GetDrawingOption()
       {
-         DrawingOptions result;
-         return !Enum.TryParse<DrawingOptions>(OptionComboBox.Text, true, out result) ? DrawingOptions.Selection : result;
+         return !Enum.TryParse(OptionComboBox.Text, true, out DrawingOptions result) ? DrawingOptions.Selection : result;
       }
 
       private void SelectionDrawerForm_FormClosing(object? sender, FormClosingEventArgs e)
@@ -169,7 +171,7 @@ namespace Editor.Forms.Feature
          if (OptionComboBox.SelectedItem == null)
             return;
          LayerListView.Items.Add(new ListViewItem(OptionComboBox.Text));
-         layers.Add(new DrawingLayer(GetDrawingOption()));
+         Layers.Add(new (GetDrawingOption(), Enum.Parse<MapModeType>(MapModeselection.Text)));
          RenderImage();
       }
    }
@@ -236,18 +238,157 @@ namespace Editor.Forms.Feature
          }
       }
 
-      public DrawingLayer(DrawingOptions options)
+      public DrawingLayer(DrawingOptions options, MapModeType mode)
       {
-         MapMode = MapModeType.Province;
+         MapMode = mode;
          Options = options;
       }
-
+      
       private void SetProvinceGetter()
       {
          switch (Options)
          {
             case DrawingOptions.Selection:
                ProvinceGetter = Selection.GetSelectedProvincesFunc;
+               break;
+            case DrawingOptions.Country:
+               ProvinceGetter = () =>
+               {
+                  HashSet<Country> countries = [];
+                  foreach (var province in Selection.GetSelectedProvinces)
+                     countries.Add(province.Owner);
+                  return countries.SelectMany(collection => collection.GetProvinces()).ToList();
+               };
+               break;
+            case DrawingOptions.Area:
+               ProvinceGetter = () =>
+               {
+                  HashSet<Area> areas = [];
+                  foreach (var province in Selection.GetSelectedProvinces)
+                     areas.Add(province.Area);
+                  return areas.SelectMany(collection => collection.GetProvinces()).ToList();
+               };
+               break;
+            case DrawingOptions.Region:
+               ProvinceGetter = () =>
+               {
+                  HashSet<Region> regions = [];
+                  foreach (var province in Selection.GetSelectedProvinces)
+                     regions.Add(province.Area.Region);
+                  return regions.SelectMany(collection => collection.GetProvinces()).ToList();
+               };
+               break;
+            case DrawingOptions.SuperRegion:
+               ProvinceGetter = () =>
+               {
+                  HashSet<SuperRegion> srs = [];
+                  foreach (var province in Selection.GetSelectedProvinces)
+                     srs.Add(province.Area.Region.SuperRegion);
+                  return srs.SelectMany(collection => collection.GetProvinces()).ToList();
+               };
+               break;
+            case DrawingOptions.ProvinceCollections:
+               ProvinceGetter = () =>
+               {
+                  HashSet<ProvinceGroup> groups = [];
+                  foreach (var province in Selection.GetSelectedProvinces)
+                     foreach (var group in Globals.ProvinceGroups.Values)
+                        if (!groups.Contains(group) && group.GetProvinces().Contains(province))
+                              groups.Add(group);
+                  return groups.SelectMany(collection => collection.GetProvinces()).ToList();
+               };
+               break;
+            case DrawingOptions.ColonialRegion:
+               ProvinceGetter = () =>
+               {
+                  HashSet<ColonialRegion> regions = [];
+                  foreach (var province in Selection.GetSelectedProvinces)
+                     foreach (var group in Globals.ColonialRegions.Values)
+                        if (!regions.Contains(group) && group.GetProvinces().Contains(province))
+                           regions.Add(group);
+                  return regions.SelectMany(collection => collection.GetProvinces()).ToList();
+               };
+               break;
+            case DrawingOptions.TradeNode:
+               ProvinceGetter = () =>
+               {
+                  HashSet<TradeNode> nodes = [];
+                  foreach (var province in Selection.GetSelectedProvinces)
+                     foreach (var group in Globals.TradeNodes.Values)
+                        if (!nodes.Contains(group) && group.GetProvinces().Contains(province))
+                           nodes.Add(group);
+                  return nodes.SelectMany(collection => collection.GetProvinces()).ToList();
+               };
+               break;
+            case DrawingOptions.TradeCompanyRegion:
+               ProvinceGetter = () =>
+               {
+                  HashSet<TradeCompany> companies = [];
+                  foreach (var province in Selection.GetSelectedProvinces)
+                     foreach (var group in Globals.TradeCompanies.Values)
+                        if (!companies.Contains(group) && group.GetProvinces().Contains(province))
+                           companies.Add(group);
+                  return companies.SelectMany(collection => collection.GetProvinces()).ToList();
+               };
+               break;
+            case DrawingOptions.NeighboringProvinces:
+               ProvinceGetter = () =>
+               {
+                  HashSet<Province> provinces = [];
+                  foreach (var province in Selection.GetSelectedProvinces)
+                     provinces.UnionWith(province.Neighbors);
+                  return provinces.ToList();
+               };
+               break;
+            case DrawingOptions.NeighboringCountries:
+               ProvinceGetter = () =>
+               {
+                  HashSet<Country> countries = [];
+                  foreach (var province in Selection.GetSelectedProvinces)
+                     countries.UnionWith(province.Neighbors.Select(p => p.Owner));
+                  return countries.SelectMany(country => country.GetProvinces()).ToList();
+               };
+               break;
+            case DrawingOptions.SeaProvinces:
+               ProvinceGetter = () =>
+               {
+                  HashSet<Province> coastalProvinces = [];
+                  foreach (var province in Selection.GetSelectedProvinces)
+                     if (Globals.SeaProvinces.Contains(province))
+                        coastalProvinces.Add(province);
+                  return coastalProvinces.ToList();
+               };
+               break;
+            case DrawingOptions.CoastalOutline:
+               ProvinceGetter = () =>
+               {
+                  HashSet<Province> coastalProvinces = [];
+                  foreach (var province in Selection.GetSelectedProvinces)
+                     foreach (var nei in province.Neighbors)
+                        if (Globals.SeaProvinces.Contains(nei))
+                           coastalProvinces.Add(province);
+                  return coastalProvinces.ToList();
+               };
+               break;
+            case DrawingOptions.AllCoast:
+               ProvinceGetter = () =>
+               {
+                  HashSet<Province> coastalProvinces = [];
+                  foreach (var province in Globals.LandProvinces)
+                     foreach (var nei in province.Neighbors)
+                        if (Globals.SeaProvinces.Contains(nei))
+                           return coastalProvinces.ToList();
+                  return coastalProvinces.ToList();
+               };
+               break;
+            case DrawingOptions.AllLand:
+               ProvinceGetter = () => Globals.LandProvinces.ToList();
+               break;
+            case DrawingOptions.AllSea:
+               ProvinceGetter = () => Globals.SeaProvinces.ToList();
+               break;
+            case DrawingOptions.Everything:
+               ProvinceGetter = () => Globals.Provinces.ToList();
                break;
             default:
                ProvinceGetter = Selection.GetSelectedProvincesFunc;
@@ -266,7 +407,7 @@ namespace Editor.Forms.Feature
          return (R << 16 | G << 8 | B);
       }
 
-      public Rectangle RenderToMap(ZoomControl control)
+      public Rectangle RenderToMap(ZoomControl control, MapMode mode)
       { 
          var provinceList = ProvinceGetter();
          Dictionary<Province, int> cache = new (provinceList.Count);
@@ -274,7 +415,7 @@ namespace Editor.Forms.Feature
          var defaultColor = Color.LightGray.ToArgb();
          foreach (var province in Globals.Provinces.Except(provinceList))
             cache[province] = defaultColor;
-         MapModeManager.ConstructCache(provinceList, _mode, cache);
+         MapModeManager.ConstructCache(provinceList, mode, cache);
 
 
          switch (pixelsOrBorders)

@@ -13,12 +13,15 @@ namespace Editor.DataClasses.MapModes
       }
 
       public override MapModeType MapModeType => MapModeType.ProvinceGroup;
+      public override bool IsLandOnly => false;
+      
 
       public override int GetProvinceColor(Province id)
       {
          foreach (var provinceGroup in Globals.ProvinceGroups.Values)
          {
-            if (provinceGroup.GetProvinceIds().Contains(id.Id))
+            var ids = provinceGroup.GetProvinceIds();
+            if (ids.Contains(id.Id))
                return provinceGroup.Color.ToArgb();
          }
          return Color.DimGray.ToArgb();

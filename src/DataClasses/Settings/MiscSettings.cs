@@ -28,6 +28,9 @@ namespace Editor.DataClasses.Settings
       private EXT_ControlSettings _extControlSettings = new();
       private NameGeneratorSettings _nameGenConfig = new();
       private TimeSpan _runTime;
+      private bool _ownerChangesController;
+      private bool _copyScenario = true;
+      private bool _copyHistory = false;
 
       [Description("The time the application has been running across sessions.")]
       [CompareInEquals]
@@ -35,6 +38,30 @@ namespace Editor.DataClasses.Settings
       {
          get => _runTime;
          set => SetField(ref _runTime, value);
+      }
+
+      [Description("Determines if the owner changes the controller.")]
+      [CompareInEquals]
+      public bool OwnerChangesController
+      {
+         get => _ownerChangesController;
+         set => SetField(ref _ownerChangesController, value);
+      }
+
+      [Description("Determines if the scenario should be copied when pasting a province to another")]
+      [CompareInEquals]
+      public bool CopyScenario
+      {
+         get => _copyScenario;
+         set => SetField(ref _copyScenario, value);
+      }
+
+      [Description("Determines if the history should be copied when pasting a province to another")]
+      [CompareInEquals]
+      public bool CopyHistory
+      {
+         get => _copyHistory;
+         set => SetField(ref _copyHistory, value);
       }
 
       [Description("The language in which the localisation will be shown")]

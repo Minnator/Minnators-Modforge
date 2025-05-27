@@ -1,6 +1,9 @@
-﻿using Editor.DataClasses.GameDataClasses;
+﻿using System.Xml.Linq;
+using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Saveables;
+using Editor.ErrorHandling;
 using Editor.Helper;
+using Editor.Loading.Enhanced;
 using Editor.Parser;
 using Editor.Saving;
 
@@ -10,10 +13,9 @@ namespace Editor.Loading
    {
       public static void Load()
       {
-         var files = PathManager.GetFilesFromModAndVanillaUniquely("*.txt", "map", "province_groups");
-
-         foreach (var file in files) 
-            LoadProvinceGroupsFromFile(file);
+         PathManager.GetFilePathUniquely(out var path, "map", "province_groups.txt");
+         
+         LoadProvinceGroupsFromFile(path);
       }
 
       private static void LoadProvinceGroupsFromFile(string file)
@@ -21,20 +23,17 @@ namespace Editor.Loading
          var pObject = PathObj.FromPath(file);
          Dictionary<string, ProvinceGroup> provinceGroups = [];
 
-         var elements = Parsing.GetElements(0, file);
-         if (elements.Count == 0)
+         var ( blocks, contents) = pObject.GetElements();
+         if (blocks.Count == 0)
             return; // No province groups, they are optional, so no error
+         
+         if (contents.Count > 0)
+            _ = new LoadingError(pObject, "No content allowed in 'province_groups.txt'");
 
-         foreach (var element in elements)
+         foreach (var block in blocks)
          {
-            if (element is not Block block)
-            {
-               Globals.ErrorLog.Write($"Error in {file}: Invalid content: {element}; {file} must not contain any content elements!");
-               continue;
-            }
-
-            var groupName = block.Name;
-            provinceGroups.Add(groupName, new (groupName, Globals.ColorProvider.GetRandomColor(), ref pObject, Parsing.GetProvincesFromString(block.GetContent)));
+            var provinces = EnhancedParsing.GetProvincesFromContent(block.ContentElements, pObject);
+            provinceGroups.Add(block.Name, new (block.Name, Globals.ColorProvider.GetRandomColor(), ref pObject, provinces));
          }
          
          SaveMaster.AddRangeToDictionary(pObject, provinceGroups.Values);

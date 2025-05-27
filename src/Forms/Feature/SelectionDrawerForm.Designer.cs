@@ -38,9 +38,10 @@
          SaveButton = new Button();
          SettingsTBL = new TableLayoutPanel();
          OptionComboBox = new ComboBox();
-         AddButton = new Button();
          ImageSizeBox = new ComboBox();
          LayerListView = new Controls.DragAndDropListView();
+         MapModeselection = new ComboBox();
+         AddButton = new Button();
          MainLayoutPanel.SuspendLayout();
          tableLayoutPanel2.SuspendLayout();
          tableLayoutPanel3.SuspendLayout();
@@ -99,6 +100,7 @@
          PathTextBox.Location = new Point(1, 4);
          PathTextBox.Margin = new Padding(1, 4, 1, 1);
          PathTextBox.Name = "PathTextBox";
+         PathTextBox.PlaceholderText = "Filename";
          PathTextBox.Size = new Size(607, 23);
          PathTextBox.TabIndex = 1;
          // 
@@ -144,17 +146,19 @@
          // SettingsTBL
          // 
          SettingsTBL.ColumnCount = 2;
-         SettingsTBL.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 58.3333321F));
-         SettingsTBL.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 41.6666679F));
+         SettingsTBL.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         SettingsTBL.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
          SettingsTBL.Controls.Add(OptionComboBox, 0, 0);
-         SettingsTBL.Controls.Add(AddButton, 1, 0);
-         SettingsTBL.Controls.Add(ImageSizeBox, 0, 2);
-         SettingsTBL.Controls.Add(LayerListView, 0, 1);
+         SettingsTBL.Controls.Add(ImageSizeBox, 0, 3);
+         SettingsTBL.Controls.Add(LayerListView, 0, 2);
+         SettingsTBL.Controls.Add(MapModeselection, 1, 0);
+         SettingsTBL.Controls.Add(AddButton, 0, 1);
          SettingsTBL.Dock = DockStyle.Fill;
          SettingsTBL.Location = new Point(0, 0);
          SettingsTBL.Margin = new Padding(0);
          SettingsTBL.Name = "SettingsTBL";
-         SettingsTBL.RowCount = 3;
+         SettingsTBL.RowCount = 4;
+         SettingsTBL.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
          SettingsTBL.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
          SettingsTBL.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
          SettingsTBL.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
@@ -168,20 +172,8 @@
          OptionComboBox.FormattingEnabled = true;
          OptionComboBox.Location = new Point(3, 3);
          OptionComboBox.Name = "OptionComboBox";
-         OptionComboBox.Size = new Size(139, 23);
+         OptionComboBox.Size = new Size(119, 23);
          OptionComboBox.TabIndex = 0;
-         // 
-         // AddButton
-         // 
-         AddButton.Dock = DockStyle.Fill;
-         AddButton.Location = new Point(147, 2);
-         AddButton.Margin = new Padding(2);
-         AddButton.Name = "AddButton";
-         AddButton.Size = new Size(101, 24);
-         AddButton.TabIndex = 1;
-         AddButton.Text = "Add";
-         AddButton.UseVisualStyleBackColor = true;
-         AddButton.Click += AddButton_Click;
          // 
          // ImageSizeBox
          // 
@@ -200,13 +192,36 @@
          SettingsTBL.SetColumnSpan(LayerListView, 2);
          LayerListView.Dock = DockStyle.Fill;
          LayerListView.FullRowSelect = true;
-         LayerListView.Location = new Point(3, 31);
+         LayerListView.Location = new Point(3, 59);
          LayerListView.MultiSelect = false;
          LayerListView.Name = "LayerListView";
-         LayerListView.Size = new Size(244, 355);
+         LayerListView.Size = new Size(244, 327);
          LayerListView.TabIndex = 3;
          LayerListView.UseCompatibleStateImageBehavior = false;
          LayerListView.View = View.List;
+         // 
+         // MapModeselection
+         // 
+         MapModeselection.Dock = DockStyle.Fill;
+         MapModeselection.DropDownStyle = ComboBoxStyle.DropDownList;
+         MapModeselection.FormattingEnabled = true;
+         MapModeselection.Location = new Point(128, 3);
+         MapModeselection.Name = "MapModeselection";
+         MapModeselection.Size = new Size(119, 23);
+         MapModeselection.TabIndex = 4;
+         // 
+         // AddButton
+         // 
+         SettingsTBL.SetColumnSpan(AddButton, 2);
+         AddButton.Dock = DockStyle.Fill;
+         AddButton.Location = new Point(2, 30);
+         AddButton.Margin = new Padding(2);
+         AddButton.Name = "AddButton";
+         AddButton.Size = new Size(246, 24);
+         AddButton.TabIndex = 1;
+         AddButton.Text = "Add";
+         AddButton.UseVisualStyleBackColor = true;
+         AddButton.Click += AddButton_Click;
          // 
          // SelectionDrawerForm
          // 
@@ -240,5 +255,6 @@
       private Button AddButton;
       private ComboBox ImageSizeBox;
       private Controls.DragAndDropListView LayerListView;
+      private ComboBox MapModeselection;
    }
 }

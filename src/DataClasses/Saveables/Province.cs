@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using Editor.DataClasses.Commands;
 using Editor.DataClasses.GameDataClasses;
+using Editor.DataClasses.MapModes;
 using Editor.DataClasses.Misc;
 using Editor.ErrorHandling;
 using Editor.Events;
@@ -123,8 +124,6 @@ namespace Editor.DataClasses.Saveables
                return;
             value.Add(this);
             _owner = value;
-            if (Globals.State == State.Running)
-               SetField(ref _owner, value);
          }
       }
       public Country ScenarioOwner
@@ -164,7 +163,11 @@ namespace Editor.DataClasses.Saveables
       }
 
       [ToolTippable]
-      public Country Controller { get => _controller; set => _controller = value; }
+      public Country Controller
+      {
+         get => _controller; 
+         set => _controller = value;
+      }
       public Country ScenarioController {
          get => _scenarioController;
          set => SetField(ref _scenarioController, ref _controller, value);
@@ -717,6 +720,58 @@ namespace Editor.DataClasses.Saveables
          CitySize = ScenarioCitySize;
          Nationalism = ScenarioNationalism;
          Capital = ScenarioCapital;
+      }
+
+      public void SetAllValues(Province other)
+      {
+         if (Globals.Settings.Misc.CopyScenario)
+         {
+            ScenarioOwner = other.ScenarioOwner;
+            ScenarioController = other.ScenarioController;
+            ScenarioTribalOwner = other.ScenarioTribalOwner;
+            ScenarioBaseTax = other.ScenarioBaseTax;
+            ScenarioBaseProduction = other.ScenarioBaseProduction;
+            ScenarioBaseManpower = other.ScenarioBaseManpower;
+            ScenarioCenterOfTrade = other.ScenarioCenterOfTrade;
+            ScenarioExtraCost = other.ScenarioExtraCost;
+            ScenarioNativeHostileness = other.ScenarioNativeHostileness;
+            ScenarioNativeSize = other.ScenarioNativeSize;
+            ScenarioNativeFerocity = other.ScenarioNativeFerocity;
+            ScenarioDevastation = other.ScenarioDevastation;
+            ScenarioProsperity = other.ScenarioProsperity;
+            ScenarioLocalAutonomy = other.ScenarioLocalAutonomy;
+            ScenarioReligion = other.ScenarioReligion;
+            ScenarioCulture = other.ScenarioCulture;
+            ScenarioReformationCenter = other.ScenarioReformationCenter;
+            ScenarioTradeGood = other.ScenarioTradeGood;
+            ScenarioLatentTradeGood = other.ScenarioLatentTradeGood;
+            ScenarioIsCity = other.ScenarioIsCity;
+            ScenarioIsHre = other.ScenarioIsHre;
+            ScenarioIsSeatInParliament = other.ScenarioIsSeatInParliament;
+            ScenarioHasRevolt = other.ScenarioHasRevolt;
+            ScenarioRevoltRisk = other.ScenarioRevoltRisk;
+            ScenarioCitySize = other.ScenarioCitySize;
+            ScenarioNationalism = other.ScenarioNationalism;
+            ScenarioCapital = other.ScenarioCapital;
+            ScenarioBuildings = new(other.ScenarioBuildings);
+            ScenarioTradeCompanyInvestments = new(other.ScenarioTradeCompanyInvestments);
+            ScenarioDiscoveredBy = new(other.ScenarioDiscoveredBy);
+            ScenarioClaims = new(other.ScenarioClaims);
+            ScenarioPermanentClaims = new(other.ScenarioPermanentClaims);
+            ScenarioCores = new(other.ScenarioCores);
+            ScenarioProvinceModifiers = new(other.ScenarioProvinceModifiers);
+            ScenarioPermanentProvinceModifiers = new(other.ScenarioPermanentProvinceModifiers);
+            ScenarioProvinceTriggeredModifiers = new(other.ScenarioProvinceTriggeredModifiers);
+            ScenarioTradeModifiers = new(other.ScenarioTradeModifiers);
+            ScenarioScriptedEffects = new(other.ScenarioScriptedEffects);
+         }
+
+         if (Globals.Settings.Misc.CopyHistory)
+         {
+            History = new(other.History);
+         }
+
+         MapModeManager.RenderCurrent();
       }
 
       public int GetNumOfHistoryEntriesForRange(Date lower, Date higher)
