@@ -37,6 +37,7 @@
          button2 = new Button();
          SelectionListBox = new ListBox();
          SourceListBox = new ListBox();
+         RemoveCancelsAdd = new CheckBox();
          tableLayoutPanel1.SuspendLayout();
          SuspendLayout();
          // 
@@ -47,18 +48,20 @@
          tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 75F));
          tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 75F));
          tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-         tableLayoutPanel1.Controls.Add(ConfirmButton, 3, 3);
+         tableLayoutPanel1.Controls.Add(ConfirmButton, 3, 4);
          tableLayoutPanel1.Controls.Add(SourceSearchBox, 0, 1);
          tableLayoutPanel1.Controls.Add(label2, 0, 0);
          tableLayoutPanel1.Controls.Add(label1, 3, 0);
-         tableLayoutPanel1.Controls.Add(button1, 2, 2);
-         tableLayoutPanel1.Controls.Add(button2, 1, 2);
+         tableLayoutPanel1.Controls.Add(button1, 2, 3);
+         tableLayoutPanel1.Controls.Add(button2, 1, 3);
          tableLayoutPanel1.Controls.Add(SelectionListBox, 3, 2);
          tableLayoutPanel1.Controls.Add(SourceListBox, 0, 2);
+         tableLayoutPanel1.Controls.Add(RemoveCancelsAdd, 1, 2);
          tableLayoutPanel1.Dock = DockStyle.Fill;
          tableLayoutPanel1.Location = new Point(0, 0);
          tableLayoutPanel1.Name = "tableLayoutPanel1";
-         tableLayoutPanel1.RowCount = 3;
+         tableLayoutPanel1.RowCount = 4;
+         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
@@ -141,6 +144,7 @@
          SelectionListBox.ItemHeight = 15;
          SelectionListBox.Location = new Point(470, 63);
          SelectionListBox.Name = "SelectionListBox";
+         tableLayoutPanel1.SetRowSpan(SelectionListBox, 2);
          SelectionListBox.Size = new Size(311, 365);
          SelectionListBox.Sorted = true;
          SelectionListBox.TabIndex = 11;
@@ -152,9 +156,22 @@
          SourceListBox.ItemHeight = 15;
          SourceListBox.Location = new Point(3, 63);
          SourceListBox.Name = "SourceListBox";
+         tableLayoutPanel1.SetRowSpan(SourceListBox, 2);
          SourceListBox.Size = new Size(311, 365);
          SourceListBox.Sorted = true;
          SourceListBox.TabIndex = 12;
+         // 
+         // RemoveCancelsAdd
+         // 
+         RemoveCancelsAdd.AutoSize = true;
+         tableLayoutPanel1.SetColumnSpan(RemoveCancelsAdd, 2);
+         RemoveCancelsAdd.Dock = DockStyle.Fill;
+         RemoveCancelsAdd.Location = new Point(320, 63);
+         RemoveCancelsAdd.Name = "RemoveCancelsAdd";
+         RemoveCancelsAdd.Size = new Size(144, 24);
+         RemoveCancelsAdd.TabIndex = 13;
+         RemoveCancelsAdd.Text = "Remove cancels add";
+         RemoveCancelsAdd.UseVisualStyleBackColor = true;
          // 
          // ListDeltaSetSelection
          // 
@@ -184,5 +201,6 @@
       private Button button2;
       private ListBox SelectionListBox;
       private ListBox SourceListBox;
+      private CheckBox RemoveCancelsAdd;
    }
 }

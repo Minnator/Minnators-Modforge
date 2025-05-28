@@ -220,7 +220,7 @@ namespace Editor.DataClasses.Commands
 
       private readonly List<DataStruct> _tokens;
 
-      public PrvHistoryListCommand(Func<T, IToken> creator, List<T> items, string addName, string removeName, List<Province> provinces, Date date, bool isAdd,
+      public PrvHistoryListCommand(Func<T, IToken> creator, List<T> items, string addName, string removeName, List<Province> provinces, Date date, bool isAdd, bool rmvCancelAdd,
                                    out bool changed, bool executeOnInit = true)
       {
          _tokens = new(items.Count);
@@ -247,7 +247,7 @@ namespace Editor.DataClasses.Commands
 
             var found = new bool[items.Count];
 
-            for (var i = 0; i < entry.Effects.Count; i++)
+            for (var i = entry.Effects.Count - 1; i >= 0; i--)
             {
                if (entry.Effects[i] is not SimpleEffect<T> effect)
                {
@@ -259,35 +259,29 @@ namespace Editor.DataClasses.Commands
 
                Debug.Assert(value != null, "value != null");
 
+               bool adding = isAdd;
+
+               if(action == addName)
+                  adding = !isAdd;
+               else if(action != removeName)
+                  continue;
+
                for (var j = 0; j < items.Count; j++)
                {
                   if (!value.Equals(items[j]))
-                  {
                      continue;
-                  }
 
-                  if (action == addName)
+
+                  if (adding)
                   {
-                     if (!isAdd || found[j])
-                     {
-                        removals.Add(new(i, entry.Effects[i]));
-                     }
-                     else
-                     {
+                     if (rmvCancelAdd && !found[j])
                         found[j] = true;
-                     }
+                     removals.Add(new(i, entry.Effects[i]));
                   }
-                  else if (action == removeName)
-                  {
-                     if (isAdd || found[j])
-                     {
-                        removals.Add(new(i, entry.Effects[i]));
-                     }
-                     else
-                     {
-                        found[j] = true;
-                     }
-                  }
+                  else if (found[j])
+                     removals.Add(new(i, entry.Effects[i]));
+                  else
+                     found[j] = true;
                }
             }
 

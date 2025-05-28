@@ -22,6 +22,7 @@ namespace Editor.Forms.Feature
       private Timer _searchTimer;
 
       public List<string> SelectionList => _selectionListList;
+      public bool RemoveCancelAdd => RemoveCancelsAdd.Checked;
 
       public ListDeltaSetSelection(string text, string[] source)
       {

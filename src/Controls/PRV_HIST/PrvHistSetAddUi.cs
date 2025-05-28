@@ -177,6 +177,7 @@ namespace Editor.Controls.PRV_HIST
                                                            Selection.GetSelectedProvinces,
                                                            ProvinceHistoryManager.CurrentLoadedDate,
                                                            _form.IsAdd,
+                                                           _form.RemoveCancelAdd,
                                                            out var changed);
 
             if (changed)
