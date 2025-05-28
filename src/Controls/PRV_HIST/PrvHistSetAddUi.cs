@@ -84,10 +84,53 @@ namespace Editor.Controls.PRV_HIST
          SetShortInfo();
       }
 
+      
+      public static void CombineEffects<T>(T target, string add_effect, string remove_effect, bool isAdd, HistoryEntry entry, bool smartMerge=true) // smartMerge patent pending trademark...
+      {
+         var found = false;
+
+         for (var i = entry.Effects.Count-1; i >= 0; i--)
+         {
+            if (entry.Effects[i] is not SimpleEffect<T> effect)
+               continue;
+
+            var action = effect.GetTokenName();
+
+            var value = effect._value.Val;
+
+            Debug.Assert(value != null, "value != null");
+
+            if (!value.Equals(target))
+               continue;
+
+            if (action == add_effect)
+            {
+               if (!isAdd || found)
+                  entry.Effects.RemoveAt(i);
+               else
+                  found = true;
+            }
+            else if (action == remove_effect)
+            {
+               if (isAdd || found)
+                  entry.Effects.RemoveAt(i);
+               else
+                  found = true;
+            }
+         }
+         if (!found)
+         {
+            //Add new effect
+         }
+      }
+
       private void EditButton_Click(object? sender, EventArgs e)
       {
-         //_form = new("Edit", _source.Select(x => x.ToString()).ToArray()!, GetCurrentShared().Select(x => x.ToString()).ToArray()!);
-         //_form.ShowDialog();
+         _form = new("Edit", _source.Select(x => x.ToString()).ToArray()!);
+         _form.ShowDialog();
+
+         if (_form.SelectionList.Count == 0)
+            return;
 
          if (GetFromGui(out var value).Log())
             SetFromGui(value);
@@ -123,21 +166,19 @@ namespace Editor.Controls.PRV_HIST
 
       public void SetFromGui(List<TItem> value)
       {
-         if (Globals.State == State.Running)
-         {
-            if (AttributeHelper.ScrambledListsEquals(_startList, value))
-               return;
-            //TODO make it more performant
-            var remove = _startList.Except(value).ToHashSet();
-            var add = value.Except(_startList).ToHashSet();
+         if (Globals.State == State.Running){
+            Debug.Assert(_form != null, "_form != null");
 
-            List<IToken> tokens = [];
-            foreach (var item in remove)
-               tokens.Add(RemoveEffectToken(item));
-            foreach (var item in add)
-               tokens.Add(AddEffectToken(item));
+            var creator = _form.IsAdd ? AddEffectToken : RemoveEffectToken;
+            var command = new PrvHistoryListCommand<TItem>(creator,
+                                                           value,
+                                                           GetDefaultEffectToken().GetTokenName(),
+                                                           GetDefaultRemoveEffectToken().GetTokenName(),
+                                                           Selection.GetSelectedProvinces,
+                                                           ProvinceHistoryManager.CurrentLoadedDate,
+                                                           _form.IsAdd,
+                                                           out var changed);
 
-            var command = new PrvHistoryEntryCommand(Selection.GetSelectedProvinces, tokens, ProvinceHistoryManager.CurrentLoadedDate, out var changed);
             if (changed)
                HistoryManager.AddCommand(command);
 
@@ -159,7 +200,7 @@ namespace Editor.Controls.PRV_HIST
       {
          Debug.Assert(_form != null, "_form != null");
 
-         List<TItem> current = [];
+        List<TItem> current = [];
          foreach (var str in _form.SelectionList)
             if (Converter.Convert<TItem>(str, PropertyInfo, out var partValue).Log())
                current.Add(partValue);

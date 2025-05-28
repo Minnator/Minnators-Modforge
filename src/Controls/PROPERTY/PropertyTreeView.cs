@@ -1,17 +1,13 @@
-﻿using Editor.Saving;
-using System.Numerics;
+﻿using System.Diagnostics;
 using System.Reflection;
-using Editor.ErrorHandling;
-using Editor.Events;
-using Editor.Helper;
-using System.Diagnostics;
 using System.Text;
 using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Saveables;
-using Newtonsoft.Json.Linq;
-using System.Drawing.Imaging;
-using System.Xml.Linq;
+using Editor.ErrorHandling;
+using Editor.Events;
+using Editor.Helper;
 using Editor.Loading.Enhanced.PCFL.Implementation;
+using Editor.Saving;
 
 namespace Editor.Controls.PROPERTY
 {
@@ -185,7 +181,6 @@ namespace Editor.Controls.PROPERTY
             ProvinceHistoryManager.LoadDate(_clickedEntry.Date);
          }
       }
-
    }
 
    public class PropertyTreeView<TSaveable, TProperty, TItem> : TreeView, IPropertyControl<TSaveable, TProperty> where TSaveable : Saveable where TProperty : List<TItem>

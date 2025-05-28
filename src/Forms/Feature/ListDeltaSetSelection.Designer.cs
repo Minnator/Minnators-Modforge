@@ -29,31 +29,32 @@
       private void InitializeComponent()
       {
          tableLayoutPanel1 = new TableLayoutPanel();
-         DeltaLabel = new Label();
          ConfirmButton = new Button();
-         SelectionSearchBox = new ComboBox();
          SourceSearchBox = new ComboBox();
-         label1 = new Label();
          label2 = new Label();
-         SelectionListView = new ListView();
-         SourceListView = new ListView();
+         label1 = new Label();
+         button1 = new Button();
+         button2 = new Button();
+         SelectionListBox = new ListBox();
+         SourceListBox = new ListBox();
          tableLayoutPanel1.SuspendLayout();
          SuspendLayout();
          // 
          // tableLayoutPanel1
          // 
-         tableLayoutPanel1.ColumnCount = 3;
-         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 383F));
-         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 301F));
-         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100F));
-         tableLayoutPanel1.Controls.Add(DeltaLabel, 0, 3);
-         tableLayoutPanel1.Controls.Add(ConfirmButton, 2, 3);
-         tableLayoutPanel1.Controls.Add(SelectionSearchBox, 1, 1);
+         tableLayoutPanel1.ColumnCount = 4;
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 75F));
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 75F));
+         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+         tableLayoutPanel1.Controls.Add(ConfirmButton, 3, 3);
          tableLayoutPanel1.Controls.Add(SourceSearchBox, 0, 1);
-         tableLayoutPanel1.Controls.Add(label1, 1, 0);
          tableLayoutPanel1.Controls.Add(label2, 0, 0);
-         tableLayoutPanel1.Controls.Add(SelectionListView, 1, 2);
-         tableLayoutPanel1.Controls.Add(SourceListView, 0, 2);
+         tableLayoutPanel1.Controls.Add(label1, 3, 0);
+         tableLayoutPanel1.Controls.Add(button1, 2, 2);
+         tableLayoutPanel1.Controls.Add(button2, 1, 2);
+         tableLayoutPanel1.Controls.Add(SelectionListBox, 3, 2);
+         tableLayoutPanel1.Controls.Add(SourceListBox, 0, 2);
          tableLayoutPanel1.Dock = DockStyle.Fill;
          tableLayoutPanel1.Location = new Point(0, 0);
          tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -64,18 +65,6 @@
          tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
          tableLayoutPanel1.Size = new Size(784, 461);
          tableLayoutPanel1.TabIndex = 0;
-         // 
-         // DeltaLabel
-         // 
-         DeltaLabel.AutoSize = true;
-         tableLayoutPanel1.SetColumnSpan(DeltaLabel, 2);
-         DeltaLabel.Dock = DockStyle.Fill;
-         DeltaLabel.Location = new Point(3, 431);
-         DeltaLabel.Name = "DeltaLabel";
-         DeltaLabel.Size = new Size(678, 30);
-         DeltaLabel.TabIndex = 4;
-         DeltaLabel.Text = "Added: 0 | Removed: 0 | Total: 0";
-         DeltaLabel.TextAlign = ContentAlignment.MiddleLeft;
          // 
          // ConfirmButton
          // 
@@ -88,17 +77,6 @@
          ConfirmButton.UseVisualStyleBackColor = true;
          ConfirmButton.Click += ConfirmButton_Click;
          // 
-         // SelectionSearchBox
-         // 
-         SelectionSearchBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-         SelectionSearchBox.AutoCompleteSource = AutoCompleteSource.ListItems;
-         tableLayoutPanel1.SetColumnSpan(SelectionSearchBox, 2);
-         SelectionSearchBox.Dock = DockStyle.Fill;
-         SelectionSearchBox.Location = new Point(386, 33);
-         SelectionSearchBox.Name = "SelectionSearchBox";
-         SelectionSearchBox.Size = new Size(395, 23);
-         SelectionSearchBox.TabIndex = 5;
-         // 
          // SourceSearchBox
          // 
          SourceSearchBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
@@ -106,20 +84,8 @@
          SourceSearchBox.Dock = DockStyle.Fill;
          SourceSearchBox.Location = new Point(3, 33);
          SourceSearchBox.Name = "SourceSearchBox";
-         SourceSearchBox.Size = new Size(377, 23);
+         SourceSearchBox.Size = new Size(311, 23);
          SourceSearchBox.TabIndex = 6;
-         // 
-         // label1
-         // 
-         label1.AutoSize = true;
-         tableLayoutPanel1.SetColumnSpan(label1, 2);
-         label1.Dock = DockStyle.Fill;
-         label1.Location = new Point(386, 0);
-         label1.Name = "label1";
-         label1.Size = new Size(395, 30);
-         label1.TabIndex = 5;
-         label1.Text = "Selection List";
-         label1.TextAlign = ContentAlignment.MiddleCenter;
          // 
          // label2
          // 
@@ -127,43 +93,68 @@
          label2.Dock = DockStyle.Fill;
          label2.Location = new Point(3, 0);
          label2.Name = "label2";
-         label2.Size = new Size(377, 30);
+         label2.Size = new Size(311, 30);
          label2.TabIndex = 6;
          label2.Text = "Source List";
          label2.TextAlign = ContentAlignment.MiddleCenter;
          // 
-         // SelectionListView
+         // label1
          // 
-         SelectionListView.Activation = ItemActivation.OneClick;
-         SelectionListView.BorderStyle = BorderStyle.FixedSingle;
-         tableLayoutPanel1.SetColumnSpan(SelectionListView, 2);
-         SelectionListView.Dock = DockStyle.Fill;
-         SelectionListView.HeaderStyle = ColumnHeaderStyle.None;
-         SelectionListView.Location = new Point(386, 63);
-         SelectionListView.MultiSelect = false;
-         SelectionListView.Name = "SelectionListView";
-         SelectionListView.ShowItemToolTips = true;
-         SelectionListView.Size = new Size(395, 365);
-         SelectionListView.Sorting = SortOrder.Ascending;
-         SelectionListView.TabIndex = 7;
-         SelectionListView.UseCompatibleStateImageBehavior = false;
-         SelectionListView.View = View.Details;
+         label1.AutoSize = true;
+         label1.Dock = DockStyle.Fill;
+         label1.Location = new Point(470, 0);
+         label1.Name = "label1";
+         tableLayoutPanel1.SetRowSpan(label1, 2);
+         label1.Size = new Size(311, 60);
+         label1.TabIndex = 5;
+         label1.Text = "Selection List";
+         label1.TextAlign = ContentAlignment.MiddleCenter;
          // 
-         // SourceListView
+         // button1
          // 
-         SourceListView.Activation = ItemActivation.OneClick;
-         SourceListView.BorderStyle = BorderStyle.FixedSingle;
-         SourceListView.Dock = DockStyle.Fill;
-         SourceListView.HeaderStyle = ColumnHeaderStyle.None;
-         SourceListView.Location = new Point(3, 63);
-         SourceListView.MultiSelect = false;
-         SourceListView.Name = "SourceListView";
-         SourceListView.ShowItemToolTips = true;
-         SourceListView.Size = new Size(377, 365);
-         SourceListView.Sorting = SortOrder.Ascending;
-         SourceListView.TabIndex = 8;
-         SourceListView.UseCompatibleStateImageBehavior = false;
-         SourceListView.View = View.Details;
+         button1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+         button1.Location = new Point(393, 407);
+         button1.Margin = new Padding(1);
+         button1.Name = "button1";
+         button1.Size = new Size(73, 23);
+         button1.TabIndex = 9;
+         button1.Text = "Remove";
+         button1.UseVisualStyleBackColor = true;
+         button1.Click += button1_Click;
+         // 
+         // button2
+         // 
+         button2.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+         button2.Location = new Point(318, 407);
+         button2.Margin = new Padding(1);
+         button2.Name = "button2";
+         button2.Size = new Size(73, 23);
+         button2.TabIndex = 10;
+         button2.Text = "Add";
+         button2.UseVisualStyleBackColor = true;
+         button2.Click += button2_Click;
+         // 
+         // SelectionListBox
+         // 
+         SelectionListBox.Dock = DockStyle.Fill;
+         SelectionListBox.FormattingEnabled = true;
+         SelectionListBox.ItemHeight = 15;
+         SelectionListBox.Location = new Point(470, 63);
+         SelectionListBox.Name = "SelectionListBox";
+         SelectionListBox.Size = new Size(311, 365);
+         SelectionListBox.Sorted = true;
+         SelectionListBox.TabIndex = 11;
+         // 
+         // SourceListBox
+         // 
+         SourceListBox.Dock = DockStyle.Fill;
+         SourceListBox.FormattingEnabled = true;
+         SourceListBox.ItemHeight = 15;
+         SourceListBox.Location = new Point(3, 63);
+         SourceListBox.Name = "SourceListBox";
+         SourceListBox.Size = new Size(311, 365);
+         SourceListBox.Sorted = true;
+         SourceListBox.TabIndex = 12;
          // 
          // ListDeltaSetSelection
          // 
@@ -186,12 +177,12 @@
 
       private TableLayoutPanel tableLayoutPanel1;
       private Button ConfirmButton;
-      private ComboBox SelectionSearchBox;
       private ComboBox SourceSearchBox;
-      private Label DeltaLabel;
       private Label label1;
       private Label label2;
-      private ListView SelectionListView;
-      private ListView SourceListView;
+      private Button button1;
+      private Button button2;
+      private ListBox SelectionListBox;
+      private ListBox SourceListBox;
    }
 }
