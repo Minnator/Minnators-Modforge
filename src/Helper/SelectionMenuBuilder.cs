@@ -38,12 +38,9 @@ namespace Editor.Helper
 
             if (Selection.LastHoveredProvince.Area != Area.Empty)
             {
-               Selection.AddOrRemoveAllFromSelection(Selection.LastHoveredProvince.Area.GetProvinces());
+               Selection.AddProvincesToSelection(Selection.LastHoveredProvince.Area.GetProvinces());
                Globals.ZoomControl.Invalidate();
             }
-
-
-
          });
       }
 
@@ -57,7 +54,7 @@ namespace Editor.Helper
             if (Selection.LastHoveredProvince.Area != Area.Empty)
                if (Selection.LastHoveredProvince.Area.Region != Region.Empty)
                {
-                  Selection.AddOrRemoveAllFromSelection(Selection.LastHoveredProvince.Area.Region.GetProvinces());
+                  Selection.AddProvincesToSelection(Selection.LastHoveredProvince.Area.Region.GetProvinces());
                   Globals.ZoomControl.Invalidate();
                }
          });
@@ -74,7 +71,7 @@ namespace Editor.Helper
                if (Selection.LastHoveredProvince.Area.Region != Region.Empty)
                   if (Selection.LastHoveredProvince.Area.Region.SuperRegion != SuperRegion.Empty)
                   {
-                     Selection.AddOrRemoveAllFromSelection(Selection.LastHoveredProvince.Area.Region.SuperRegion.GetProvinces());
+                     Selection.AddProvincesToSelection(Selection.LastHoveredProvince.Area.Region.SuperRegion.GetProvinces());
                      Globals.ZoomControl.Invalidate();
                   }
          });
@@ -89,7 +86,7 @@ namespace Editor.Helper
 
             if (Selection.LastHoveredProvince.Continent != Continent.Empty)
             {
-               Selection.AddOrRemoveAllFromSelection(Selection.LastHoveredProvince.Continent.GetProvinces());
+               Selection.AddProvincesToSelection(Selection.LastHoveredProvince.Continent.GetProvinces());
                Globals.ZoomControl.Invalidate();
             }
          });
@@ -104,7 +101,7 @@ namespace Editor.Helper
 
             if (Globals.Countries.TryGetValue (Selection.LastHoveredProvince.Owner, out var country))
             {
-               Selection.AddOrRemoveAllFromSelection(Selection.LastHoveredProvince.Owner.GetProvinces());
+               Selection.AddProvincesToSelection(Selection.LastHoveredProvince.Owner.GetProvinces());
                Globals.ZoomControl.Invalidate();
             }
          });
@@ -118,7 +115,7 @@ namespace Editor.Helper
                return;
 
             {
-               Selection.AddOrRemoveAllFromSelection(Selection.LastHoveredProvince.Culture.CultureGroup.GetProvinces());
+               Selection.AddProvincesToSelection(Selection.LastHoveredProvince.Culture.CultureGroup.GetProvinces());
                Globals.ZoomControl.Invalidate();
             }
          });
@@ -132,7 +129,7 @@ namespace Editor.Helper
                return;
 
             {
-               Selection.AddOrRemoveAllFromSelection(Selection.LastHoveredProvince.Culture.GetProvinces());
+               Selection.AddProvincesToSelection(Selection.LastHoveredProvince.Culture.GetProvinces());
                Globals.ZoomControl.Invalidate();
             }
          });
@@ -147,7 +144,7 @@ namespace Editor.Helper
                return;
 
             var node = TradeNodeHelper.GetTradeNodeByProvince(Selection.LastHoveredProvince); 
-            Selection.AddOrRemoveAllFromSelection(node.GetProvinces());
+            Selection.AddProvincesToSelection(node.GetProvinces());
             Globals.ZoomControl.Invalidate();
          });
       }
