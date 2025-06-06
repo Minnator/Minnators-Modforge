@@ -82,7 +82,7 @@ namespace Editor.Controls.PROPERTY
          _timer.Stop();
          // TODO: First get all the property values and then set them using the collection setters
          if (Globals.State == State.Running && GetFromGui(out var value).Log())
-            Saveable.SetFieldMultipleSilent(GetSaveables.Invoke(), value, PropertyInfo);
+            Saveable.SetFieldMultiple(GetSaveables.Invoke(), value, PropertyInfo);
       }
    }
 }

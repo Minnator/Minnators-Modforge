@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Diagnostics;
-using System.Xml.Linq;
 using Editor.DataClasses.Settings;
-using Editor.Forms.PopUps;
 using Editor.Helper;
-using Editor.Saving;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 using Timer = System.Windows.Forms.Timer;
 
 namespace Editor.DataClasses.Commands;

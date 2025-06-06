@@ -15,13 +15,17 @@ namespace Editor.Helper
       {
          LogManager.ChangeVerbosity(Globals.Settings.Logging.LoggingVerbosity);
 
-         Globals.Settings.Rendering.Map.MapBorderColor = Color.FromArgb(Globals.Settings.Rendering.Map.MapBorderColor.R, Globals.Settings.Rendering.Map.MapBorderColor.G, Globals.Settings.Rendering.Map.MapBorderColor.B);
+         Globals.Settings.Rendering.Map.MapBorderColor = Color.FromArgb(Globals.Settings.Rendering.Map.MapBorderColor.R,
+                                                                        Globals.Settings.Rendering.Map.MapBorderColor.G,
+                                                                        Globals.Settings.Rendering.Map.MapBorderColor.B);
       }
 
 
       public static void InitializeEvent()
       {
          Globals.Settings.Rendering.PropertyChanged += OnRenderSettingsChanged;
+         Globals.Settings.Rendering.Map.PropertyChanged += OnMapSettingsChanged;
+         Globals.Settings.Rendering.Selection.PropertyChanged += OnSelectionSettingsChanged;
          Globals.Settings.Misc.PropertyChanged += OnMiscSettingsChanged;
          Globals.Settings.Logging.PropertyChanged += OnLoggingSettingsChanged;
          Globals.Settings.Gui.PropertyChanged += OnGuiSettingsChanged;
@@ -79,6 +83,45 @@ namespace Editor.Helper
                   default:
                      throw new ArgumentOutOfRangeException();
                }
+
+               break;
+         }
+      }
+
+      private static void OnMapSettingsChanged(object? sender, PropertyChangedEventArgs args)
+      {
+         switch (args.PropertyName)
+         {
+            case nameof(MapSettings.MergeBorders):
+               MapModeManager.RenderCurrent();
+               break;
+            case nameof(MapSettings.MapBorderColor):
+               Globals.ZoomControl.BorderColor = Globals.Settings.Rendering.Map.MapBorderColor;
+               Globals.ZoomControl.Invalidate();
+               break;
+            case nameof(MapSettings.MapBorderWidth):
+               Globals.ZoomControl.BorderWidth = Globals.Settings.Rendering.Map.MapBorderWidth;
+               Globals.ZoomControl.Invalidate();
+               break;
+            case nameof(MapSettings.ShowMapBorder):
+               Globals.ZoomControl.Border = Globals.Settings.Rendering.Map.ShowMapBorder;
+               Globals.ZoomControl.Invalidate();
+               break;
+            case nameof(MapSettings.MinVisiblePixels):
+               Globals.ZoomControl.MinVisiblePixels = Globals.Settings.Rendering.Map.MinVisiblePixels;
+               Globals.ZoomControl.ZoomingControl_Resize(null!, null!);
+               break;
+         }
+      }
+
+      private static void OnSelectionSettingsChanged(object? sender, PropertyChangedEventArgs args)
+      {
+         switch (args.PropertyName)
+         {
+            case nameof(SelectionSettings.SelectionPreviewMerging):
+            case nameof(SelectionSettings.SelectionMerging):
+               Selection.RePaintSelection();
+               Globals.ZoomControl.Invalidate();
                break;
          }
       }
@@ -87,22 +130,6 @@ namespace Editor.Helper
       {
          switch (args.PropertyName)
          {
-            case nameof(Settings.Rendering.Map.MapBorderColor):
-               Globals.ZoomControl.BorderColor = Globals.Settings.Rendering.Map.MapBorderColor;
-               Globals.ZoomControl.Invalidate();
-               break;
-            case nameof(Settings.Rendering.Map.MapBorderWidth):
-               Globals.ZoomControl.BorderWidth = Globals.Settings.Rendering.Map.MapBorderWidth;
-               Globals.ZoomControl.Invalidate();
-               break;
-            case nameof(Settings.Rendering.Map.ShowMapBorder):
-               Globals.ZoomControl.Border = Globals.Settings.Rendering.Map.ShowMapBorder;
-               Globals.ZoomControl.Invalidate();
-               break;
-            case nameof(Settings.Rendering.Map.MinVisiblePixels):
-               Globals.ZoomControl.MinVisiblePixels = Globals.Settings.Rendering.Map.MinVisiblePixels;
-               Globals.ZoomControl.ZoomingControl_Resize(null!, null!);
-               break;
             case nameof(Settings.Rendering.EasterEggs.GameOfLiveSurvivalRules):
                GameOfLive.Rules = Globals.Settings.Rendering.EasterEggs.GameOfLiveSurvivalRules;
                GameOfLive.RunGameOfLive(Globals.Settings.Rendering.EasterEggs.GameOfLiveGenerations);
@@ -120,6 +147,7 @@ namespace Editor.Helper
                GameIconDefinition.UpdatePaddings();
                break;
          }
+
          Globals.ZoomControl.Invalidate();
       }
    }

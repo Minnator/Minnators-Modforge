@@ -375,8 +375,8 @@ public static class Selection
       else
       {
          _selectedProvinces.UnionWith(provinces);
-         if (Globals.Settings.Rendering.Map.MergeBorders != RenderingSettings.BorderMergeType.None)
-            SelectBorders(provinces);
+         //if (Globals.Settings.Rendering.Map.MergeBorders != RenderingSettings.BorderMergeType.None)
+         SelectBorders(provinces);
       }
 
       OnProvinceGroupSelected(Globals.ZoomControl, provinces.ToList());

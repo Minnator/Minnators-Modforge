@@ -123,7 +123,7 @@ namespace Editor.DataClasses.Settings
          set => SetField(ref _selectionMerging, value);
       }
 
-      [Description("How borders of provinces will be merged when previewing the selection of provinces")]
+      [Description("How borders of provinces will be merged when previewing the selection of provinces. Merge not supported")]
       [CompareInEquals]
       public BorderMergeType SelectionPreviewMerging
       {
@@ -166,7 +166,7 @@ namespace Editor.DataClasses.Settings
          set => SetField(ref _mapBorderColor, value);
       }
 
-      [Description("If borders of provinces will be merged")]
+      [Description("If borders of provinces will be merged. MergeAndLight not supported")]
       [CompareInEquals]
       public BorderMergeType MergeBorders
       {

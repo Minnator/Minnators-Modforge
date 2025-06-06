@@ -204,10 +204,20 @@ public static class MapDrawing
    /// <param name="zoomControl"></param>
    public static void DrawAllBorders(int color, ZoomControl zoomControl, Dictionary<Province, int> cache)
    {
-      Parallel.ForEach(Globals.Provinces, province =>
+      if (Globals.Settings.Rendering.Map.MergeBorders != RenderingSettings.BorderMergeType.None)
       {
-         DrawPixelsMerged(province, color, zoomControl, cache);
-      });
+         Parallel.ForEach(Globals.Provinces, province =>
+         {
+            DrawPixelsMerged(province, color, zoomControl, cache);
+         });
+      }
+      else
+      {
+         Parallel.ForEach(Globals.Provinces, province =>
+         {
+            DrawPixels(province.Borders, color, zoomControl);
+         });
+      }
    }
 
    // Invalidation rects needs to bet taken care of
