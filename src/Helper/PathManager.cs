@@ -101,10 +101,10 @@ public static partial class PathManager
       return result;
       }
 
-   public static bool CheckIfPathInPath(string[] path, string[] checkPath)
+   public static bool CheckIfPathInPath(string[] replacedPaths, string[] checkPath)
    {
-      for (var i = 0; i < Math.Min(path.Length, checkPath.Length); i++)
-         if (!path[i].Equals(checkPath[i]))
+      for (var i = 0; i < Math.Min(replacedPaths.Length, checkPath.Length); i++)
+         if (!replacedPaths[i].Equals(checkPath[i]) || replacedPaths.Length >= checkPath.Length)
             return false;
       return true;
    }
