@@ -874,7 +874,7 @@ namespace Editor.Forms
       private void SaveCurrentMapModeToolStripMenuItem_Click(object sender, EventArgs e)
       {
          var pictures = Globals.Settings.Saving.MapModeExportPath;
-         var form = new GetSavingFileForm(pictures, "Where to save the map mode as an image to", ".png");
+         var form = new GetSavingFileForm(pictures, "Where to save the map mode as an image to", ".png", "Map");
          form.SetPlaceHolderText(MapModeManager.CurrentMapMode.MapModeType.ToString());
          form.RequireModDirectory = false;
          form.ShowDialog();
@@ -2038,6 +2038,11 @@ namespace Editor.Forms
                continue; // Skip if the same province is selected
             province.SetAllValues(_copiedProvince);
          }
+      }
+
+      private void toolStripMenuItem1_Click(object sender, EventArgs e)
+      {
+         SaveMaster.SaveAllChanges();
       }
    }
 }

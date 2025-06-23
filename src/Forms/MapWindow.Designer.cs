@@ -417,6 +417,7 @@
          toolStripMenuItem1.ShortcutKeys = Keys.Control | Keys.S;
          toolStripMenuItem1.Size = new Size(268, 22);
          toolStripMenuItem1.Text = "Save All";
+         toolStripMenuItem1.Click += toolStripMenuItem1_Click;
          // 
          // saveManualToolStripMenuItem
          // 

@@ -9,20 +9,22 @@ namespace Editor.Forms.Feature.SavingClasses
       private string Ending { get; set; }
       public bool RequireModDirectory { get; set; } = true;
       public bool UseGrouping { get; set; } = false;
-      public GetSavingFileForm(string initPath, string desc, string ending)
+      public string Type { get; set; } 
+      public GetSavingFileForm(string initPath, string desc, string ending, string type)
       {
          StartPosition = FormStartPosition.CenterParent;
          InitializeComponent();
          InitPath = initPath;
          DescriptionLabel.Text = desc;
          Ending = ending;
+         Type = type;
 
          PathTextBox.PlaceholderText = $"modforge_{InitPath.Split(Path.DirectorySeparatorChar)[^1]}{ending}";
       }
 
       private void OpenFileDialogButton_Click(object sender, EventArgs e)
       {
-         IO.OpenFileSelection(Path.Combine(Globals.ModPath, InitPath), "PNG files (*.png)|*.png", out var path);
+         IO.OpenFileSelection(Path.Combine(Globals.ModPath, InitPath), $"{Type} files (*{Ending})|*{Ending}", out var path);
          ExistingFilePath.Text = path;
       }
 

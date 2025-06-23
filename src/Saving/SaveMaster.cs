@@ -118,13 +118,18 @@ namespace Editor.Saving
 
       public static void SavePaths(ref HashSet<PathObj> localToBeHandled, SaveableType saveableType = SaveableType.All)
       {
-         var progressPopUp = ProgressBarPopUp.GetProgressBar(localToBeHandled.Count);
-         progressPopUp.DescriptionLabel.Text = "Saving files...";
          var localPaths = localToBeHandled;
 
+         if (localPaths.Contains(PathObj.Empty))
+            AddNewSaveables(saveableType, ref localPaths);
+
+         var progressPopUp = ProgressBarPopUp.GetProgressBar(localToBeHandled.Count);
+         progressPopUp.DescriptionLabel.Text = "Saving files...";
          progressPopUp.Load += (_, _) =>
          {
-            Task.Run(() => ProcessSavePaths(progressPopUp, ref localPaths, saveableType));
+            var thread = new Thread(() => ProcessSavePaths(progressPopUp, ref localPaths, saveableType));
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
          };
 
          progressPopUp.ShowDialog();
@@ -134,8 +139,6 @@ namespace Editor.Saving
 
       private static void ProcessSavePaths(ProgressBarPopUp progressPopUp, ref HashSet<PathObj> pathsToHandle, SaveableType saveableType)
       {
-         if (pathsToHandle.Contains(PathObj.Empty))
-            AddNewSaveables(saveableType, ref pathsToHandle);
 
          foreach (var path in pathsToHandle)
          {
@@ -185,7 +188,7 @@ namespace Editor.Saving
 
             if (!pathGrouping.TryGetValue(groupingString, out path))
             {
-               GetNewFileAt(preDefaultPath, filenameKVP, fileEnding, out var pathString, out var useGrouping, false, saveable.GetSavePromptString());
+               GetNewFileAt(saveable.WhatAmI().ToString(), preDefaultPath, filenameKVP, fileEnding, out var pathString, out var useGrouping, false, saveable.GetSavePromptString());
                path = new(pathString, true);
                if (useGrouping)
                   pathGrouping.Add(groupingString, path);
@@ -321,7 +324,7 @@ namespace Editor.Saving
          }
          else
          {
-            if (!GetNewFileAt(defaultPath, fileNameKVP, fileEnding, out var stringPath, out _))
+            if (!GetNewFileAt(saveable.WhatAmI().ToString(), defaultPath, fileNameKVP, fileEnding, out var stringPath, out _))
                throw new EvilActions($"Not able to make directory: {defaultPath}!");
 
             path = new(stringPath, true);
@@ -464,7 +467,7 @@ namespace Editor.Saving
          SaveFile(path);
       }
 
-      private static bool GetNewFileAt(string[] folderPath, KeyValuePair<string, bool> filename, string ending, out string[] path, out bool usedGrouping, bool overrideValue = false, string savePromptString = ": )")
+      private static bool GetNewFileAt(string type, string[] folderPath, KeyValuePair<string, bool> filename, string ending, out string[] path, out bool usedGrouping, bool overrideValue = false, string savePromptString = ": )")
       {
          path = folderPath;
          usedGrouping = false;
@@ -476,7 +479,7 @@ namespace Editor.Saving
             if (filename.Value || overrideValue)
                goto DefaultPath;
 
-            var form = new GetSavingFileForm(Path.Combine(folderPath), $"Please enter your input for: {savePromptString}", ending);
+            var form = new GetSavingFileForm(Path.Combine(folderPath), $"Please enter your input for: {savePromptString}", ending, type);
             if (form.ShowDialog() == DialogResult.OK)
             {
                path = form.NewPath.Split(Path.DirectorySeparatorChar);
