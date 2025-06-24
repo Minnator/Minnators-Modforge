@@ -239,8 +239,6 @@ namespace Editor.Saving
          {
             if (!newSaveables.Any())
                throw new EvilActions("There needs to be at least one element added to the path.");
-            if (path.GetPath().Contains("THIS_IS_A_NEW_FILE_l_english"))
-               Debugger.Break();
             
             if (!AllSaveableFiles.TryGetValue(path, out var saveables))
             {
