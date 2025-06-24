@@ -239,11 +239,15 @@ namespace Editor.Saving
          {
             if (!newSaveables.Any())
                throw new EvilActions("There needs to be at least one element added to the path.");
+            if (path.GetPath().Contains("THIS_IS_A_NEW_FILE_l_english"))
+               Debugger.Break();
+            
             if (!AllSaveableFiles.TryGetValue(path, out var saveables))
             {
                AllSaveableFiles.Add(path, []);
                saveables = AllSaveableFiles[path];
             }
+            Debug.Assert(saveables.All(saveable => saveable.Path.Equals(path)));
             saveables.AddRange(newSaveables);
          }
       }
@@ -483,7 +487,8 @@ namespace Editor.Saving
             if (form.ShowDialog() == DialogResult.OK)
             {
                path = form.NewPath.Split(Path.DirectorySeparatorChar);
-               path[^1] = SavingUtil.ApplyModPrefix(path[^1]);
+               if (form.CreatedNewFile)
+                  path[^1] = SavingUtil.ApplyModPrefix(path[^1]);
                usedGrouping = form.UseGrouping;
                return true;
             }

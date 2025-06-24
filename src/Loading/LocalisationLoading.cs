@@ -46,6 +46,7 @@ public partial class LocalisationLoading
                        () => new HashSet<LocObject>(),
                        (filePath, _, localHashSet) =>
                        {
+                          var localLocalHashSet = new HashSet<LocObject>();
                           IO.ReadAllLinesANSI(filePath, out var lines);
                           var pathObj = PathObj.FromPath(filePath);
 
@@ -60,7 +61,7 @@ public partial class LocalisationLoading
                              var locObj = new LocObject(match.Groups["key"].Value, value, ObjEditingStatus.Unchanged);
                              locObj.SetPath(ref pathObj);
 
-                             if (localHashSet.TryGetValue(locObj, out var existingValue))
+                             if (localLocalHashSet.TryGetValue(locObj, out var existingValue))
                              {
                                 if (existingValue.Value == value)
                                    continue;
@@ -71,13 +72,14 @@ public partial class LocalisationLoading
                              }
                              else
                              {
-                                localHashSet.Add(locObj);
+                                localLocalHashSet.Add(locObj);
                              }
                           }
 
-                          if (pathObj.IsModPath && localHashSet.Count > 0)
-                             SaveMaster.AddRangeToDictionary(pathObj, localHashSet);
+                          if (pathObj.IsModPath && localLocalHashSet.Count > 0)
+                             SaveMaster.AddRangeToDictionary(pathObj, localLocalHashSet);
 
+                          localHashSet.UnionWith(localLocalHashSet);
                           return localHashSet;
                        },
                        localHashSet =>

@@ -10,6 +10,7 @@ namespace Editor.Forms.Feature.SavingClasses
       public bool RequireModDirectory { get; set; } = true;
       public bool UseGrouping { get; set; } = false;
       public string Type { get; set; } 
+      public bool CreatedNewFile => !ExistingFile.Checked;
       public GetSavingFileForm(string initPath, string desc, string ending, string type)
       {
          StartPosition = FormStartPosition.CenterParent;
