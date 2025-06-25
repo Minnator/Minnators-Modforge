@@ -1095,6 +1095,8 @@ namespace Editor.Forms
       private PropertyQuickAssignControl<HistoryCountry, List<Tag>, Tag> _historicFriends = null!;
       private PropertyQuickAssignControl<HistoryCountry, List<string>, string> _estatePrivileges = null!;
 
+      private BindablePropertyComboBox<HistoryCountry, Religion, string> _countryReligionComboBox = null!;
+
       private PropertyTextBox<Country> CountryLoc = null!;
       private PropertyTextBox<Country> CountryADJLoc = null!;
 
@@ -1146,6 +1148,10 @@ namespace Editor.Forms
             _governmentReforms.SetItems(government.AllReforms.Select(x => x.Name).ToList());
          };
 
+         _countryReligionComboBox = ControlFactory.GetBindablePropertyComboBoxHistoryCountry(typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.Religion))!,
+                                                                                 Globals.Religions,
+                                                                                 margin: ControlFactory.DefaultMarginType.Slim);
+
 
          _governmentRankBox = ControlFactory.GetListPropertyComboBoxHistoryCountry(typeof(HistoryCountry).GetProperty(nameof(HistoryCountry.GovernmentRank))!,
                                                                                    Enumerable.Range(1, Define.GetValue<int>("NDefines.NCountry.MAX_GOV_RANK")).Select(i => i).ToList());
@@ -1170,6 +1176,7 @@ namespace Editor.Forms
          TagAndColorTLP.Controls.Add(_graphicalCultureBox, 1, 2);
          TagAndColorTLP.Controls.Add(_unitTypeBox, 3, 2);
          TagAndColorTLP.Controls.Add(_techGroupBox, 1, 3);
+         TagAndColorTLP.Controls.Add(_countryReligionComboBox, 3, 4);
          CapitalTLP.Controls.Add(_capitalTextBox, 0, 0);
          TagAndColorTLP.Controls.Add(_focusComboBox, 1, 4);
          CountryHeaderTLP.Controls.Add(CountryFlagLabel, 0, 0);

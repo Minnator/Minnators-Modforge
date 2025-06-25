@@ -233,7 +233,7 @@ public class HistoryCountry : Saveable, IGetSetProperty, IHistoryProvider<Countr
    private string _secondaryReligion = string.Empty; //
    private Government _government = Government.Empty; //
    private Culture _primaryCulture = Culture.Empty; //
-   private string _religion = string.Empty; //
+   private Religion _religion = Religion.Empty; //
    private string _religiousSchool = string.Empty; //
    private TechnologyGroup _unitType = TechnologyGroup.Empty; //
    private List<GovernmentReform> _governmentReforms = []; //
@@ -327,7 +327,7 @@ public class HistoryCountry : Saveable, IGetSetProperty, IHistoryProvider<Countr
       set => SetField(ref _primaryCulture, value);
    }
 
-   public string Religion
+   public Religion Religion
    {
       get => _religion;
       set => SetField(ref _religion, value);
@@ -432,7 +432,7 @@ public class HistoryCountry : Saveable, IGetSetProperty, IHistoryProvider<Countr
       AddInt(0, GovernmentRank, "government_rank", ref sb);
       AddString(0, PrimaryCulture.Name, "primary_culture", ref sb);
       AddStringList(0, "add_accepted_culture", AcceptedCultures.Select(x => x.Name).ToList(), ref sb);
-      AddString(0, Religion, "religion", ref sb);
+      AddString(0, Religion.Name, "religion", ref sb);
       AddString(0, SecondaryReligion, "secondary_religion", ref sb);
       AddString(0, TechnologyGroup.ToString(), "technology_group", ref sb);
       AddString(0, UnitType.Name, "unit_type", ref sb);

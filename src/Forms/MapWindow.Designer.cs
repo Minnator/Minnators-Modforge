@@ -233,6 +233,7 @@
          label45 = new Label();
          CapitalTLP = new TableLayoutPanel();
          SetCapitalToSelected = new Button();
+         label52 = new Label();
          tableLayoutPanel1 = new TableLayoutPanel();
          button1 = new Button();
          label35 = new Label();
@@ -2298,6 +2299,7 @@
          TagAndColorTLP.Controls.Add(label29, 0, 1);
          TagAndColorTLP.Controls.Add(label45, 2, 1);
          TagAndColorTLP.Controls.Add(CapitalTLP, 3, 1);
+         TagAndColorTLP.Controls.Add(label52, 2, 4);
          TagAndColorTLP.Dock = DockStyle.Fill;
          TagAndColorTLP.Location = new Point(1, 17);
          TagAndColorTLP.Margin = new Padding(0);
@@ -2436,6 +2438,17 @@
          GeneralToolTip.SetToolTip(SetCapitalToSelected, "Set the capital to the only selected province");
          SetCapitalToSelected.UseVisualStyleBackColor = true;
          SetCapitalToSelected.Click += SetCapitalToSelected_Click;
+         // 
+         // label52
+         // 
+         label52.AutoSize = true;
+         label52.Dock = DockStyle.Fill;
+         label52.Location = new Point(189, 100);
+         label52.Name = "label52";
+         label52.Size = new Size(87, 25);
+         label52.TabIndex = 14;
+         label52.Text = "Religion";
+         label52.TextAlign = ContentAlignment.MiddleLeft;
          // 
          // tableLayoutPanel1
          // 
@@ -3454,6 +3467,7 @@
       private ToolStripMenuItem iDCollectionEditorToolStripMenuItem;
       private Button CopyButton;
       private Button PasteButton;
+      private Label label52;
    }
 }
 

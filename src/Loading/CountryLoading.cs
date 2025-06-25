@@ -136,7 +136,10 @@ namespace Editor.Loading
                      country.HistoryCountry.Government = government;
                   break;
                case "religion":
-                  country.HistoryCountry.Religion = val;
+                  if (Globals.Religions.TryGetValue(val, out var religion))
+                     country.HistoryCountry.Religion = religion;
+                  else
+                     Globals.ErrorLog.Write($"Unknown religion in {country.Tag}: {val}");
                   break;
                case "technology_group":
                   country.HistoryCountry.TechnologyGroup = new(val);
