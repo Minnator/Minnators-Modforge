@@ -4,7 +4,7 @@ This is a tool created for visual editing of the EU4 map and its contents.
 The latest Version is Aplha 2.0.x and is available for download.
 It is still in development but is making steady progress.
 
-![Lines of Code](https://tokei.rs/b1/github/Minnator/Minnators-Modforge)
+![Lines of Code](https://tokei.rs/b1/github/Minnator/Minnators-Modforge) ![Repo Size](https://img.shields.io/github/repo-size/Minnator/Minnators-Modforge) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/Minnator/Minnators-Modforge) ![GitHub all releases](https://img.shields.io/github/downloads/Minnator/Minnators-Modforge/total)
 
 ## Official Discord Server
 Here you can find Alpha-releases, more information and help with issues, or report bugs:
