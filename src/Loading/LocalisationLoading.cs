@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Text;
 using System.Text.RegularExpressions;
 using Editor.Helper;
 using Editor.Saving;
@@ -115,11 +116,11 @@ public partial class LocalisationLoading
       FilterByKey(Globals.Cultures.Keys, Globals.Localisation, filteredLoc);
       FilterByKey(Globals.Religions.Keys, Globals.Localisation, filteredLoc);
 
-      FilterByKey(Globals.Missions.Keys, Globals.Localisation, filteredLoc);
+      FilterByKey(Globals.Missions.Values.Select(x => x.TitleKey), Globals.Localisation, filteredLoc);
       FilterByKey(Globals.MissionSlots.Select(x => x.Name), Globals.Localisation, filteredLoc);
 
       FilterByKey(Globals.Bookmarks.Select(x => x.TitleKey), Globals.Localisation, filteredLoc);
-
+      
       Globals.Localisation.Clear();
       Globals.Localisation = filteredLoc;
    }
