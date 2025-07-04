@@ -6,6 +6,9 @@ It is still in development but is making steady progress.
 
 ![Lines of Code](https://tokei.rs/b1/github/Minnator/Minnators-Modforge) ![Repo Size](https://img.shields.io/github/repo-size/Minnator/Minnators-Modforge) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/Minnator/Minnators-Modforge) ![GitHub all releases](https://img.shields.io/github/downloads/Minnator/Minnators-Modforge/total)
 
+## An overview of how it looks and what's possible can be found here:
+[PDX Forum post](https://forum.paradoxplaza.com/forum/threads/mod-editing-tool-and-map-missions-exporter-minnators-modforge.1809782/)
+
 ## Official Discord Server
 Here you can find Alpha-releases, more information and help with issues, or report bugs:
 [Discord Server](https://discord.gg/22AhD5qkme)
