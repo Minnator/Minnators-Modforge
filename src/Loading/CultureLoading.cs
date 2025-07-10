@@ -1,11 +1,14 @@
-﻿using Editor.DataClasses.GameDataClasses;
+﻿using System.Diagnostics;
+using System.Xml.Linq;
+using Editor.DataClasses.GameDataClasses;
 using Editor.DataClasses.Misc;
 using Editor.Helper;
+using Editor.Loading.Enhanced;
 using Editor.Parser;
+using Editor.Saving;
 using Parsing = Editor.Parser.Parsing;
 
 namespace Editor.Loading;
-
 
 public static class CultureLoading
 {
@@ -13,31 +16,60 @@ public static class CultureLoading
    {
       PathManager.GetFilesUniquelyAndCombineToOne(out var culturesContent, "common", "cultures");
 
-      Parsing.RemoveCommentFromMultilineString(ref culturesContent, out var commentLessContent);
+      var (modFiles, vanillaFiles) = PathManager.GetFilesFromModAndVanillaUniquelySeparated("*.txt", "common", "cultures");
 
-      var blocks = Parsing.GetElements(0, ref commentLessContent);
+      // we load the vanilla files first to override if necessary with mod data
+      Globals.CultureGroups = [];
+      var groupsDict = new Dictionary<string, CultureGroup>();
 
-      var groups = GetCultureGroups(ref blocks, Globals.ColorProvider);
-      Globals.CultureGroups = groups;
+      foreach (var file in vanillaFiles)
+      {
+         var po = PathObj.FromPath(file, false);
+         var (blocks, _) = po.LoadBase(EnhancedParser.FileContentAllowed.BlocksOnly);
+
+         var cultureGroups = GetCultureGroups(blocks, Globals.ColorProvider);
+         foreach (var group in cultureGroups)
+            groupsDict.TryAdd(group.Key, group.Value);
+      }
+
+      foreach (var file in modFiles)
+      {
+         var po = PathObj.FromPath(file);
+         var (blocks, _) = po.LoadBase(EnhancedParser.FileContentAllowed.BlocksOnly);
+
+         var cultureGroups = GetCultureGroups(blocks, Globals.ColorProvider);
+         foreach (var group in cultureGroups)
+         {
+            if (!groupsDict.TryAdd(group.Key, group.Value))
+            {
+               var existing = groupsDict[group.Key];
+               // if the group already exists, we merge the cultures but on the obj of the mod
+               group.Value.Cultures.AddRange(existing.Cultures);
+               groupsDict[group.Key] = group.Value;
+            }
+         }
+      }
+
+      Globals.CultureGroups = groupsDict;
    }
 
-   private static Dictionary<string, CultureGroup> GetCultureGroups(ref List<IElement> blocks, ColorProviderRgb colorProvider)
+   private static Dictionary<string, CultureGroup> GetCultureGroups(List<EnhancedBlock> blocks, ColorProviderRgb colorProvider)
    {
       Dictionary<string, CultureGroup> cultureGroupDict = [];
-      
-      Parallel.ForEach(blocks, element =>
+
+
+      foreach (var block in blocks)
       {
-         if (element is not Block block)
-            return;
          var group = new CultureGroup(block.Name)
          {
             Color = colorProvider.GetRandomColor()
          };
-         var contents = block.GetContentElements;
-         var cultures = block.GetBlockElements;
+         var contents = block.ContentElements;
+         var cultures = block.SubBlocks;
 
          foreach (var cult in cultures)
          {
+
             if (cult.Name.Equals("country") || cult.Name.Equals("province"))
                continue;
             if (cult.Name.Equals("male_names") || cult.Name.Equals("female_names") || cult.Name.Equals("dynasty_names"))
@@ -49,31 +81,34 @@ public static class CultureLoading
                   Color = colorProvider.GetRandomColor(),
                   CultureGroup = group
                };
-               SetCultureAttributes(ref culture, cult.GetBlockElements);
-               SetCultureContent(ref culture, cult.GetContentElements);
+               SetCultureAttributes(ref culture, cult.SubBlocks);
+               SetCultureContent(ref culture, cult.ContentElements);
                group.Cultures.Add(culture);
                lock (Globals.Cultures)
                {
                   if (!Globals.Cultures.TryAdd(culture.Name, culture))
+                  {
+                     var existingCulture = Globals.Cultures[culture.Name];
                      Globals.Cultures[culture.Name] = culture;
+                  }
                }
             }
          }
+
          SetCultureGroupAttributes(ref group, contents);
          lock (cultureGroupDict)
          {
             if (!cultureGroupDict.TryAdd(group.Name, group))
             {
-               Globals.ErrorLog.Write($"Duplicate culture group name: {group.Name}");
-               cultureGroupDict[group.Name] = group;
+               cultureGroupDict[group.Name].Cultures.AddRange(group.Cultures);
             }
          }
-      });
-      
+      }
+
       return cultureGroupDict;
    }
 
-   private static void SetCultureContent(ref Culture culture, List<Content> cultGetContentElements)
+   private static void SetCultureContent(ref Culture culture, List<EnhancedContent> cultGetContentElements)
    {
       if (cultGetContentElements.Count == 0)
          return;
@@ -84,26 +119,26 @@ public static class CultureLoading
                culture.Primaries.Add(item.Value);
    }
 
-   private static void SetCultureGroupNames(ref CultureGroup group, Block block)
+   private static void SetCultureGroupNames(ref CultureGroup group, EnhancedBlock block)
    {
-      if (block.Blocks.Count == 0)
+      if (block.SubBlocks.Count == 0)
          return;
-      var content = ((Content)block.Blocks[0]).Value;
+      var content = block.ContentElements[0];
       switch (block.Name)
       {
          case "male_names":
-            group.MaleNames = [.. Parsing.GetStringList(content)];
+            group.MaleNames = [.. EnhancedParsing.GetStringListFromContent(content, PathObj.Empty)];
             break;
          case "female_names":
-            group.FemaleNames = [.. Parsing.GetStringList(content)];
+            group.FemaleNames = [.. EnhancedParsing.GetStringListFromContent(content, PathObj.Empty)];
             break;
          case "dynasty_names":
-            group.DynastyNames = [.. Parsing.GetStringList(content)];
+            group.DynastyNames = [.. EnhancedParsing.GetStringListFromContent(content, PathObj.Empty)];
             break;
       }
    }
 
-   private static void SetCultureGroupAttributes(ref CultureGroup group, List<Content> contents)
+   private static void SetCultureGroupAttributes(ref CultureGroup group, List<EnhancedContent> contents)
    {
       foreach (var content in contents)
       {
@@ -134,13 +169,13 @@ public static class CultureLoading
       }
    }
 
-   private static void SetCultureAttributes(ref Culture culture, List<Block> blocks)
+   private static void SetCultureAttributes(ref Culture culture, List<EnhancedBlock> blocks)
    {
       foreach (var block in blocks)
       {
-         if (block.Blocks.Count == 0)
+         if (block.SubBlocks.Count == 0)
             continue;
-         var content = ((Content)block.Blocks[0]).Value;
+         var content = block.ContentElements[0].Value;
          Parsing.RemoveCommentFromMultilineString(ref content, out var removed);
          switch (block.Name.ToLower())
          {

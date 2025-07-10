@@ -8,7 +8,7 @@ public class Culture(string name) : IStringify
 {
    public List<KeyValuePair<string, string>> CountryModifiers = [];
    public List<KeyValuePair<string, string>> ProvinceModifiers = [];
-   public string Name { get; set; } = name;
+   public string Name { get; } = name;
    public string[] MaleNames = [];
    public string[] FemaleNames = [];
    public string[] DynastyNames = [];
@@ -37,7 +37,7 @@ public class Culture(string name) : IStringify
    public string[] SampleXNames(int amount, float femalePercentage)
    {
       if (amount <= 0)
-         return Array.Empty<string>();
+         return [];
       var numOfMales = (int)(amount * (1 - femalePercentage));
       var numOfFemales = amount - 1 - numOfMales;
 
@@ -100,6 +100,19 @@ public class Culture(string name) : IStringify
       return Name;
    }
 
+   public override int GetHashCode()
+   {
+      return HashCode.Combine(Name, CultureGroup.Name);
+   }
+
+   public override bool Equals(object? obj)
+   {
+      if (obj is not Culture other)
+         return false;
+
+      return string.Equals(Name, other.Name, StringComparison.Ordinal) && string.Equals(CultureGroup.Name, other.CultureGroup.Name, StringComparison.Ordinal);
+   }
+
    public string Stringify() => Name;
 }
 
@@ -108,7 +121,7 @@ public class CultureGroup(string name)
    public List<KeyValuePair<string, string>> CountryModifiers = [];
    public List<KeyValuePair<string, string>> ProvinceModifiers = [];
    public List<Culture> Cultures = [];
-   public string Name = name;
+   public readonly string Name = name;
    public string Gfx = string.Empty;
    public string SecondGfx = string.Empty;
    public Color Color = Color.Empty;
@@ -142,5 +155,18 @@ public class CultureGroup(string name)
    public override string ToString()
    {
       return Name;
+   }
+
+   public override int GetHashCode()
+   {
+      return Name.GetHashCode();
+   }
+
+   public override bool Equals(object? obj)
+   {
+      if (obj is not CultureGroup other)
+         return false;
+
+      return string.Equals(Name, other.Name, StringComparison.Ordinal);
    }
 }

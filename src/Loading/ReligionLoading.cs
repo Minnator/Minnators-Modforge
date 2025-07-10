@@ -26,8 +26,8 @@ namespace Editor.Loading
 
          foreach (var group in religionGroups)
             foreach (var religion in group.Religions)
-               if (!Globals.Religions.TryAdd(religion.Name, religion)) 
-                  MessageBox.Show($"Religion {religion.Name} already exists in the dictionary");
+               if (!Globals.Religions.TryAdd(religion.Name, religion))
+                  Globals.Religions[religion.Name] = religion;
       }
 
       private static void ParseReligionFile(string file, ref List<ReligiousGroup> religionGroups)

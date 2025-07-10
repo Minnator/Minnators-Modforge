@@ -61,7 +61,7 @@ public static partial class PathManager
    public static List<string> GetFilesFromModAndVanillaUniquely(string searchPattern = "*.txt", params string[] internalPath)
    {
       var (modFiles, vanillaFiles) = GetFilesFromModAndVanillaUniquelySeparated(searchPattern, internalPath);
-      return modFiles.Concat(vanillaFiles).ToList();
+      return vanillaFiles.Concat(modFiles).ToList();
    }
 
    public static Bitmap GetDefaultFlagPath()
@@ -75,7 +75,7 @@ public static partial class PathManager
    /// <param name="searchPattern"></param>
    /// <param name="internalPath"></param>
    /// <returns></returns>
-   public static (List<string>, List<string>) GetFilesFromModAndVanillaUniquelySeparated(string searchPattern, params string[] internalPath)
+   public static (List<string> modFiles, List<string> vanillaFiles) GetFilesFromModAndVanillaUniquelySeparated(string searchPattern, params string[] internalPath)
    {
       var folderPath = Path.Combine(internalPath);
       var modPath = Path.Combine(Globals.ModPath, folderPath);

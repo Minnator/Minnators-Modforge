@@ -17,7 +17,7 @@ public class Consts
 
    //public const string MOD_PATH = @"O:\Users\david\Documents\Paradox Interactive\Europa Universalis V\mod\zombH";
    //public const string MOD_PATH = @"C:\Users\david\Downloads\Zemia-EU4-3d0b20da7dbbc95c41556399c9e381e3ac572a2d\Zemia-EU4-3d0b20da7dbbc95c41556399c9e381e3ac572a2d\zemia";
-   public const string MOD_PATH = @"C:\Users\david\Dokumente\Paradox Interactive\Europa Universalis IV\mod\FUCK";
+   //public const string MOD_PATH = @"C:\Users\david\Dokumente\Paradox Interactive\Europa Universalis IV\mod\FUCK";
    //public const string MOD_PATH = @"C:\Users\david\Dokumente\Paradox Interactive\Europa Universalis IV\mod\GLP";
    //public const string MOD_PATH = @"C:\Users\david\Dokumente\Paradox Interactive\Europa Universalis IV\mod\The Intitute of Quality";
    public const string VANILLA_PATH = @"S:\SteamLibrary\steamapps\common\Europa Universalis IV";
@@ -33,4 +33,5 @@ public class Consts
    //public const string MOD_PATH = @"C:\Users\david\Downloads\Heavenly-Hall-main\Heavenly-Hall-main"; 
    // Chess
    //public const string MOD_PATH = @"S:\SteamLibrary\steamapps\workshop\content\236850\3450080222"; 
+   public const string MOD_PATH = @"S:\SteamLibrary\steamapps\workshop\content\236850\3521832978"; 
 }
